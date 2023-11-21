@@ -27,11 +27,17 @@
   </p>
   <% if consent_request.file_count > 0 %>
     <p>
-      You still own about <%= number_with_delimiter(consent_request.file_count) %> files in the old
-      <%= community.name %> folder. Please use the picker to
-      select the ones you're willing to move. Gather will handle the move once you select the files.
+      <% if consent_request.file_count == 1 %>
+        You still own 1 file in the old
+        <%= community.name %> folder.
+        Please use the picker to select it. Gather will handle the move once you select the file.
+      <% else %>
+        You still own <%= number_with_delimiter(consent_request.file_count) %> files in the old
+        <%= community.name %> folder.
+        Please use the picker to select the ones you're willing to move. Gather will handle the move once you select the files.
+      <% end %>
     </p>
-    <% if consent_request.ingest_file_ids.size == 1 %>
+    <% if consent_request.ingest_file_ids.size == 1 && consent_request.file_count > 1 %>
       <p>
         <strong>Note:</strong> You can hold the "Shift" key while selecting files to select more than one.
       </p>

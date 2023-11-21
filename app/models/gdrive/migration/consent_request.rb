@@ -13,6 +13,10 @@ module GDrive
         update!(ingest_requested_at: nil, ingest_file_ids: nil, ingest_status: nil)
       end
 
+      def ingest_done?
+        ingest_status == "done"
+      end
+
       private
 
       def generate_token

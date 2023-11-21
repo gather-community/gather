@@ -8,6 +8,7 @@ export default class extends Controller<HTMLFormElement> {
     rootFolderId: String,
     ingestUrl: String,
     ingestStatusUrl: String,
+    ingestInitialStatus: String,
     testMode: Boolean,
     searchToken: String,
     communityName: String,
@@ -20,6 +21,7 @@ export default class extends Controller<HTMLFormElement> {
   declare rootFolderIdValue: string;
   declare ingestUrlValue: string;
   declare ingestStatusUrlValue: string;
+  declare ingestInitialStatusValue: string;
   declare testModeValue: boolean;
   declare searchTokenValue: string;
   declare communityNameValue: string;
@@ -34,6 +36,12 @@ export default class extends Controller<HTMLFormElement> {
     gapi.load("picker", () => {
       this.gapiLoaded = true;
     });
+
+    // If ingestion is in progress, we want to behave as if the
+    // user had clicked the ingestion button.
+    if (this.ingestInitialStatusValue === 'new' || this.ingestInitialStatusValue === 'in_progress') {
+      this.startPollingForIngestStatus();
+    }
   }
 
   get appId(): string {
@@ -62,9 +70,7 @@ export default class extends Controller<HTMLFormElement> {
 
   async callback(data: {docs:[{id: string}], action: string}): Promise<void> {
     if (data.action === google.picker.Action.PICKED) {
-      this.instructionsTarget.style.display = 'none';
-      this.loaderTarget.style.display = 'block';
-      await jsonFetch(this.ingestUrlValue, {
+      jsonFetch(this.ingestUrlValue, {
         method: "PUT",
         body: {file_ids: data.docs.map((f) => f.id)}
       });
@@ -73,6 +79,8 @@ export default class extends Controller<HTMLFormElement> {
   }
 
   startPollingForIngestStatus(): void {
+    this.instructionsTarget.style.display = 'none';
+    this.loaderTarget.style.display = 'block';
     this.pollingInterval = setInterval(this.pollForIngestStatus.bind(this), 2000);
   }
 
@@ -81,7 +89,7 @@ export default class extends Controller<HTMLFormElement> {
       method: "GET"
     });
 
-    if (result.status == "done") {
+    if (result.status === "done") {
       clearInterval(this.pollingInterval);
       this.loaderTarget.style.display = 'none';
       this.instructionsTarget.innerHTML = result.instructions;

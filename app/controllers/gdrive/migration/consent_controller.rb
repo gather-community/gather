@@ -103,15 +103,12 @@ module GDrive
         end
 
         result = {status: @consent_request.ingest_status}
-        if @consent_request.ingest_status == "done"
+        if @consent_request.ingest_done?
           result[:instructions] = render_to_string(partial: "instructions",
             locals: {consent_request: @consent_request, community: current_community})
         end
-        render json: result
 
-        if @consent_request.ingest_status.present?
-          @consent_request.clear_ingestion
-        end
+        render(json: result)
       end
 
       private

@@ -84,6 +84,7 @@ module GDrive
       def ingest
         @consent_request = ConsentRequest.find_by!(token: params[:token])
         @consent_request.update!(
+          status: "started",
           ingest_requested_at: Time.current,
           ingest_file_ids: params[:file_ids],
           ingest_status: "new"
@@ -95,15 +96,20 @@ module GDrive
         @consent_request = ConsentRequest.find_by!(token: params[:token])
 
         # Fake!
-        if @consent_request.ingest_status.present?
+        if @consent_request.ingest_status == "new"
           @consent_request.update!(
             ingest_status: "done",
             file_count: @consent_request.file_count - @consent_request.ingest_file_ids.size
           )
         end
 
+        if @consent_request.ingest_overdue?
+          ErrorReporter.instance.report(StandardError.new("GDrive file ingest overdue"), data: {consent_request_id: @consent_request.id})
+          @consent_request.set_ingest_failed
+        end
+
         result = {status: @consent_request.ingest_status}
-        if @consent_request.ingest_done?
+        if @consent_request.ingest_done? || @consent_request.ingest_failed?
           result[:instructions] = render_to_string(partial: "instructions",
             locals: {consent_request: @consent_request, community: current_community})
         end

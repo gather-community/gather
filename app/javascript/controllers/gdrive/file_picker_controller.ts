@@ -37,8 +37,8 @@ export default class extends Controller<HTMLFormElement> {
       this.gapiLoaded = true;
     });
 
-    // If ingestion is in progress, we want to behave as if the
-    // user had clicked the ingestion button.
+    // If ingest is in progress, we want to behave as if the
+    // user had clicked the ingest button.
     if (this.ingestInitialStatusValue === 'new' || this.ingestInitialStatusValue === 'in_progress') {
       this.startPollingForIngestStatus();
     }
@@ -89,7 +89,7 @@ export default class extends Controller<HTMLFormElement> {
       method: "GET"
     });
 
-    if (result.status === "done") {
+    if (result.status === 'done' || result.status === 'failed') {
       clearInterval(this.pollingInterval);
       this.loaderTarget.style.display = 'none';
       this.instructionsTarget.innerHTML = result.instructions;

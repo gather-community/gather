@@ -9,12 +9,28 @@ module GDrive
 
       before_create :generate_token
 
-      def clear_ingestion
+      def clear_ingest
         update!(ingest_requested_at: nil, ingest_file_ids: nil, ingest_status: nil)
       end
 
       def ingest_done?
         ingest_status == "done"
+      end
+
+      def ingest_pending?
+        ingest_status == "new" || ingest_status == "in_progress"
+      end
+
+      def ingest_failed?
+        ingest_status == "failed"
+      end
+
+      def ingest_overdue?
+        ingest_pending? && ingest_requested_at < Time.current - 5.minutes
+      end
+
+      def set_ingest_failed
+        update!(status: "ingest_failed", ingest_status: "failed")
       end
 
       private

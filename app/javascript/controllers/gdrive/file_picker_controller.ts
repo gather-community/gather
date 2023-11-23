@@ -10,8 +10,8 @@ export default class extends Controller<HTMLFormElement> {
     ingestStatusUrl: String,
     ingestInitialStatus: String,
     testMode: Boolean,
-    searchToken: String,
     communityName: String,
+    orgUserId: String,
   };
 
   static targets = ["instructions", "loader"];
@@ -23,8 +23,8 @@ export default class extends Controller<HTMLFormElement> {
   declare ingestStatusUrlValue: string;
   declare ingestInitialStatusValue: string;
   declare testModeValue: boolean;
-  declare searchTokenValue: string;
   declare communityNameValue: string;
+  declare orgUserIdValue: string;
   declare gapiLoaded: boolean;
 
   declare readonly instructionsTarget: HTMLElement
@@ -53,7 +53,7 @@ export default class extends Controller<HTMLFormElement> {
     view.setIncludeFolders(true);
     view.setSelectFolderEnabled(true);
     view.setMode(google.picker.DocsViewMode.LIST);
-    view.setQuery(`owner:me ${this.searchTokenValue}`);
+    view.setQuery(`owner:me to:${this.orgUserIdValue}`);
 
     const picker = new google.picker.PickerBuilder()
       .enableFeature(google.picker.Feature.NAV_HIDDEN)
@@ -61,7 +61,7 @@ export default class extends Controller<HTMLFormElement> {
       .setAppId(this.appId)
       .setOAuthToken(this.accessTokenValue)
       .addView(view)
-      .setTitle(`Please select files ending with ${this.searchTokenValue}. Hold the Shift key to select multiple.`)
+      .setTitle(`Please select all files. Hold the Shift key to select multiple.`)
       .setMaxItems(100)
       .setCallback(this.callback.bind(this))
       .build();

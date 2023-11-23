@@ -61,7 +61,7 @@ export default class extends Controller<HTMLFormElement> {
       .setAppId(this.appId)
       .setOAuthToken(this.accessTokenValue)
       .addView(view)
-      .setTitle(`Please select all files. Hold the Shift key to select multiple.`)
+      .setTitle(`Please select all files. Hold the SHIFT key while clicking to select multiple files.`)
       .setMaxItems(100)
       .setCallback(this.callback.bind(this))
       .build();

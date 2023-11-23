@@ -95,6 +95,8 @@ module GDrive
 
       def ingest_status
         @consent_request = ConsentRequest.find_by!(token: params[:token])
+        main_config = MainConfig.find_by!(community: current_community)
+        org_user_id = main_config.org_user_id
 
         # Fake!
         if @consent_request.ingest_status == "new"
@@ -112,7 +114,7 @@ module GDrive
         result = {status: @consent_request.ingest_status}
         if @consent_request.ingest_done? || @consent_request.ingest_failed?
           result[:instructions] = render_to_string(partial: "instructions",
-            locals: {consent_request: @consent_request, community: current_community})
+            locals: {consent_request: @consent_request, community: current_community, org_user_id: org_user_id})
         end
 
         render(json: result)

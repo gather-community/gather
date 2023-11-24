@@ -9,6 +9,22 @@ module GDrive
 
       before_create :generate_token
 
+      def pending?
+        status == "new" || status == "in_progress"
+      end
+
+      def in_progress?
+        status == "in_progress"
+      end
+
+      def done?
+        status == "done"
+      end
+
+      def opted_out?
+        status == "opted_out"
+      end
+
       def clear_ingest
         update!(ingest_requested_at: nil, ingest_file_ids: nil, ingest_status: nil)
       end

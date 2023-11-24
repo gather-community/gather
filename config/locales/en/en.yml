@@ -47,6 +47,7 @@ en:
       create: "Save"
       go_back: "Go Back"
       import: "Import"
+      opt_out: "Opt Out"
       update: "Save"
       save_and_invite: "Save & Invite"
       sign_in: "Sign In"

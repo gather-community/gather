@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_15_131407) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_24_203053) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -320,11 +320,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_15_131407) do
     t.datetime "ingest_requested_at"
     t.string "ingest_status"
     t.bigint "operation_id", null: false
-    t.string "status", limit: 16, null: false
+    t.text "opt_out_reason"
+    t.string "status", limit: 16, default: "new", null: false
     t.string "token", null: false
     t.datetime "updated_at", null: false
     t.index ["cluster_id"], name: "index_gdrive_migration_consent_requests_on_cluster_id"
     t.index ["operation_id"], name: "index_gdrive_migration_consent_requests_on_operation_id"
+    t.check_constraint "ingest_status::text = ANY (ARRAY['new'::character varying, 'in_progress'::character varying, 'done'::character varying, 'failed'::character varying]::text[])", name: "ingest_status_enum"
+    t.check_constraint "status::text = ANY (ARRAY['new'::character varying, 'in_progress'::character varying, 'done'::character varying, 'opted_out'::character varying]::text[])", name: "status_enum"
   end
 
   create_table "gdrive_migration_files", force: :cascade do |t|

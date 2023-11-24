@@ -29,6 +29,9 @@
     If you have questions or concerns, you can reach out to <%= link_to(@operation.contact_name, "mailto:#{@operation.contact_email}") %>,
     who is coordinating the reorganization process.
   </p>
+  <p>
+    If you'd rather not help with this effort, you can <%= link_to("opt out", gdrive_migration_consent_opt_out_path) %>.
+  </p>
 
-  <%= link_to("Yes, I am ready help!", gdrive_migration_consent_step1_url, class: "btn btn-primary") %>
+  <%= link_to("Yes, I am ready help!", gdrive_migration_consent_auth_url, class: "btn btn-primary") %>
 </div>

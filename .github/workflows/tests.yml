@@ -28,7 +28,9 @@ jobs:
           --health-retries 5
     steps:
       - name: Install packages
-        run: sudo apt-get install libvips
+        run: |
+          sudo apt-get update
+          sudo apt-get install libvips
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Setup Ruby

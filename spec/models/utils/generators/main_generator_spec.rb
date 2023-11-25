@@ -15,7 +15,6 @@ describe Utils::Generators::MainGenerator, :without_tenant, :perform_jobs do
     FeatureFlag
     FeatureFlagUser
     GDrive::Config
-    GDrive::FileIngestionBatch
     GDrive::MainConfig
     GDrive::MigrationConfig
     GDrive::Item

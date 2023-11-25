@@ -441,7 +441,7 @@ en:
 
   meal_mailer:
     meal_reminder:
-      subject: "Meal Reminder: %{title} on %{datetime} at %{location}"
+      subject: "Meal Reminder: %{datetime} - %{title} at %{location}"
       body:
         diner_count:
           one: "There is %{count} diner signed up from your household."

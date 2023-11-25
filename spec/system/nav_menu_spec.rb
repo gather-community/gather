@@ -50,23 +50,6 @@ describe "nav menu" do
     end
   end
 
-  context "when visiting page on apex domain with community in query string" do
-    let(:actor) { create(:admin, community: community) }
-
-    before do
-      use_apex_domain
-
-      # Only GDrive controllers currently do this.
-      create(:feature_flag, name: "gdrive", status: true)
-    end
-
-    scenario "shows home community subdomain" do
-      # This page does not redirect to a subdomain
-      visit("/gdrive/migration/consent?community_id=#{community.id}")
-      expect(find(".main-nav ul.nav li a", text: "People")["href"]).to eq("http://foo.gatherdev.org:31337/users")
-    end
-  end
-
   context "when visiting page on other community subdomain" do
     before do
       use_subdomain("bar")

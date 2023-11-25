@@ -56,7 +56,7 @@ module ApplicationControllable::RequestPreprocessing
   # Not run on every request.
   def ensure_apex_domain
     return if subdomain.blank?
-    url_builder = Settings.url.protocol == "https" ? URI::HTTPS : URI::HTTP
+    url_builder = (Settings.url.protocol == "https") ? URI::HTTPS : URI::HTTP
     url_params = Settings.url.to_h
     url_params[:path], url_params[:query] = request.fullpath.split("?")
     redirect_to(url_builder.build(url_params).to_s, allow_other_host: true)
@@ -216,13 +216,9 @@ module ApplicationControllable::RequestPreprocessing
     render_error_page(:not_found) if current_community.nil?
   end
 
-  def set_current_community_from_query_string
-    self.current_community ||= Community.find(params[:community_id])
-  end
-
   def redirect_to_same_path_in_community(community)
     host = "#{community.slug}.#{Settings.url.host}"
-    url_builder = Settings.url.protocol == "https" ? URI::HTTPS : URI::HTTP
+    url_builder = (Settings.url.protocol == "https") ? URI::HTTPS : URI::HTTP
     url_params = Settings.url.to_h.merge(host: host)
     url_params[:path], url_params[:query] = request.fullpath.split("?")
     redirect_to(url_builder.build(url_params).to_s, allow_other_host: true)

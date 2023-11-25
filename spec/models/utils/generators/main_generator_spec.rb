@@ -21,6 +21,7 @@ describe Utils::Generators::MainGenerator, :without_tenant, :perform_jobs do
     GDrive::ItemGroup
     GDrive::SyncedPermission
     GDrive::Token
+    GDrive::Migration::ConsentRequest
     GDrive::Migration::File
     GDrive::Migration::Operation
     GDrive::Migration::Scan

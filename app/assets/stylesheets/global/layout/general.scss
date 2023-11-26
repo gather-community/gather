@@ -68,6 +68,11 @@ p.subtitle {
   margin-top: -10px;
 }
 
+// For simple pages where you don't want super long strings of text on laptop/desktop views
+.simple {
+  max-width: 800px;
+}
+
 // The .hide and .hidden classes provided by Bootstrap both have !important, which is problematic
 // if you want to hide something but show it later with JS.
 .hiding {

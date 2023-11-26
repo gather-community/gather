@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_26_115807) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_24_203053) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -283,18 +283,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_26_115807) do
     t.check_constraint "(type::text = 'GDrive::MainConfig'::text) = (org_user_id IS NOT NULL)", name: "org_user_id_non_null_if_main"
   end
 
-  create_table "gdrive_file_ingestion_batches", force: :cascade do |t|
-    t.bigint "cluster_id", null: false
-    t.datetime "created_at", null: false
-    t.bigint "gdrive_config_id", null: false
-    t.jsonb "http_errors"
-    t.jsonb "picked", null: false
-    t.string "status", default: "new", null: false
-    t.datetime "updated_at", null: false
-    t.index ["cluster_id"], name: "index_gdrive_file_ingestion_batches_on_cluster_id"
-    t.index ["gdrive_config_id"], name: "index_gdrive_file_ingestion_batches_on_gdrive_config_id"
-  end
-
   create_table "gdrive_item_groups", force: :cascade do |t|
     t.string "access_level", null: false
     t.bigint "cluster_id", null: false
@@ -323,6 +311,25 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_26_115807) do
     t.check_constraint "kind::text = ANY (ARRAY['drive'::character varying, 'folder'::character varying, 'file'::character varying]::text[])", name: "kind_enum"
   end
 
+  create_table "gdrive_migration_consent_requests", force: :cascade do |t|
+    t.bigint "cluster_id", null: false
+    t.datetime "created_at", null: false
+    t.integer "file_count", null: false
+    t.string "google_email", limit: 255, null: false
+    t.jsonb "ingest_file_ids"
+    t.datetime "ingest_requested_at"
+    t.string "ingest_status"
+    t.bigint "operation_id", null: false
+    t.text "opt_out_reason"
+    t.string "status", limit: 16, default: "new", null: false
+    t.string "token", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cluster_id"], name: "index_gdrive_migration_consent_requests_on_cluster_id"
+    t.index ["operation_id"], name: "index_gdrive_migration_consent_requests_on_operation_id"
+    t.check_constraint "ingest_status::text = ANY (ARRAY['new'::character varying, 'in_progress'::character varying, 'done'::character varying, 'failed'::character varying]::text[])", name: "ingest_status_enum"
+    t.check_constraint "status::text = ANY (ARRAY['new'::character varying, 'in_progress'::character varying, 'done'::character varying, 'opted_out'::character varying]::text[])", name: "status_enum"
+  end
+
   create_table "gdrive_migration_files", force: :cascade do |t|
     t.bigint "cluster_id", null: false
     t.datetime "created_at", null: false
@@ -348,6 +355,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_26_115807) do
   create_table "gdrive_migration_operations", force: :cascade do |t|
     t.integer "cluster_id", null: false
     t.bigint "config_id", null: false
+    t.string "contact_email", null: false
+    t.string "contact_name", null: false
     t.datetime "created_at", null: false
     t.string "dest_folder_id", limit: 255
     t.string "filename_tag", limit: 8, null: false
@@ -421,6 +430,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_26_115807) do
   create_table "group_mailman_lists", force: :cascade do |t|
     t.jsonb "additional_members"
     t.jsonb "additional_senders"
+    t.boolean "all_cmty_members_can_send", default: true, null: false
     t.bigint "cluster_id", null: false
     t.datetime "created_at", null: false
     t.bigint "domain_id", null: false
@@ -1169,13 +1179,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_26_115807) do
   add_foreign_key "feature_flag_users", "users"
   add_foreign_key "gdrive_configs", "clusters"
   add_foreign_key "gdrive_configs", "communities"
-  add_foreign_key "gdrive_file_ingestion_batches", "clusters"
-  add_foreign_key "gdrive_file_ingestion_batches", "gdrive_configs"
   add_foreign_key "gdrive_item_groups", "clusters"
   add_foreign_key "gdrive_item_groups", "gdrive_items", column: "item_id"
   add_foreign_key "gdrive_item_groups", "groups"
   add_foreign_key "gdrive_items", "clusters"
   add_foreign_key "gdrive_items", "gdrive_configs"
+  add_foreign_key "gdrive_migration_consent_requests", "clusters"
+  add_foreign_key "gdrive_migration_consent_requests", "gdrive_migration_operations", column: "operation_id"
   add_foreign_key "gdrive_migration_files", "clusters"
   add_foreign_key "gdrive_migration_files", "gdrive_migration_operations", column: "operation_id"
   add_foreign_key "gdrive_migration_operations", "gdrive_configs", column: "config_id"

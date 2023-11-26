@@ -2,8 +2,8 @@
 
 require "rails_helper"
 
-describe GDrive::FileIngestionBatch do
+describe GDrive::Migration::ConsentRequest do
   it "has a valid factory" do
-    create(:gdrive_file_ingestion_batch)
+    create(:gdrive_migration_consent_request)
   end
 end

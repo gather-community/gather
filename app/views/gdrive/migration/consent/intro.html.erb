@@ -1,24 +1,37 @@
-<% content_for(:title, "Touchstone Cohousing File Reorganization") %>
+<% content_for(:title, "#{@community.name} File Reorganization") %>
 
-<p>
-  <a href="#">Touchstone Cohousing</a> is using <a href="https://gather.coop">Gather</a>
-  to reorganize its Google Drive files.
-  Previously, the community's files were owned by whoever created them. This can lead
-  to accidental deletion of files when someone leaves the community.
-  To prevent this, the community is moving all its files into a Shared Drive owned by the
-  community.
-</p>
-<p class="cta">
-  You own about 4 files in Touchstone Cohousing's
-  <a href="#">old Google Drive folder</a>. We need your permission to move them into the
-  new Shared Drive.
-</p>
-<p>
-  You will still retain access to the files as long as you are a member of the community.
-  If you have questions you can reach out to <a href="mailto:example@gmail.com">Tom Smyth</a>,
-  who is coordination the reorganization process.
-</p>
+<div class="simple">
+  <h2>Introduction</h2>
+  <p>
+    <%= @community.name %> is using <a href="https://gather.coop">Gather</a>
+    to reorganize its Google Drive files.
+    Before, the community's files were owned by whoever created them. This can lead
+    to accidental deletion of files when someone leaves the community.
+    To prevent this, the community is moving all its files into a drive owned by the
+    community.
+  </p>
+  <p class="cta">
+    <% if @consent_request.file_count > 2 %>
+      You own about <%= @consent_request.file_count %> files in the
+      <%= link_to("old Google Drive folder", @operation.src_folder_url) %>
+      for <%= @community.name %>.
+    <% else %>
+      You own at least one file in the
+      <%= link_to("old Google Drive folder", @operation.src_folder_url) %>
+      for <%= @community.name %>.
+    <% end %>
+    We need your permission to move them into the new drive.
+  </p>
+  <p>
+    You will still retain access to the files if you are a member of the community.
+  </p>
+  <p>
+    If you have questions or concerns, you can reach out to <%= link_to(@operation.contact_name, "mailto:#{@operation.contact_email}") %>,
+    who is coordinating the reorganization process.
+  </p>
+  <p>
+    If you'd rather not help with this effort, you can <%= link_to("opt out", gdrive_migration_consent_opt_out_path) %>.
+  </p>
 
-<%= link_to("Yes, I am ready help!",
-    gdrive_migration_consent_step1_url(host: Settings.url.host, community_id: current_community.id),
-    class: "btn btn-primary") %>
+  <%= link_to("Yes, I am ready help!", gdrive_migration_consent_auth_url, class: "btn btn-primary") %>
+</div>

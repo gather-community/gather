@@ -33,6 +33,10 @@ module GDrive
       wrap_api_method { service.list_drives(...) }
     end
 
+    def create_drive(...)
+      wrap_api_method { service.create_drive(...) }
+    end
+
     def list_permissions(...)
       wrap_api_method { service.list_permissions(...) }
     end

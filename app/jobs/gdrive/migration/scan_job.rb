@@ -2,7 +2,7 @@
 
 module GDrive
   module Migration
-    # Ingests selected files by starring them and noting any unowned files.
+    # Scans for all files in the source drive folder.
     class ScanJob < BaseJob
       PAGE_SIZE = 100
       MIN_ERRORS_TO_CANCEL = 5
@@ -10,8 +10,6 @@ module GDrive
 
       # If we get a not found error trying to find one of these, we should just terminate gracefully.
       DISAPPEARABLE_CLASSES = %w[GDrive::Migration::Operation GDrive::Migration::Scan GDrive::Migration::ScanTask].freeze
-
-      retry_on Google::Apis::ServerError
 
       attr_accessor :cluster_id, :scan_task, :scan, :operation
 

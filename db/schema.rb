@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_24_203053) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_26_003234) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -322,6 +322,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_24_203053) do
     t.bigint "operation_id", null: false
     t.text "opt_out_reason"
     t.string "status", limit: 16, default: "new", null: false
+    t.string "temp_drive_id"
     t.string "token", null: false
     t.datetime "updated_at", null: false
     t.index ["cluster_id"], name: "index_gdrive_migration_consent_requests_on_cluster_id"
@@ -350,6 +351,21 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_24_203053) do
     t.index ["operation_id"], name: "index_gdrive_migration_files_on_operation_id"
     t.check_constraint "error_type::text = ANY (ARRAY['forbidden'::character varying::text, 'not_found'::character varying::text, 'cant_edit'::character varying::text])", name: "error_type_enum"
     t.check_constraint "status::text = ANY (ARRAY['pending'::character varying::text, 'errored'::character varying::text, 'declined'::character varying::text, 'transferred'::character varying::text, 'copied'::character varying::text, 'ignored'::character varying::text])", name: "status_enum"
+  end
+
+  create_table "gdrive_migration_folder_maps", force: :cascade do |t|
+    t.bigint "cluster_id", null: false
+    t.datetime "created_at", null: false
+    t.string "dest_id"
+    t.string "dest_parent_id"
+    t.string "name", null: false
+    t.bigint "operation_id", null: false
+    t.string "src_id", null: false
+    t.string "src_parent_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cluster_id"], name: "index_gdrive_migration_folder_maps_on_cluster_id"
+    t.index ["operation_id", "src_id"], name: "index_gdrive_migration_folder_maps_on_operation_id_and_src_id", unique: true
+    t.index ["operation_id"], name: "index_gdrive_migration_folder_maps_on_operation_id"
   end
 
   create_table "gdrive_migration_operations", force: :cascade do |t|
@@ -1188,6 +1204,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_24_203053) do
   add_foreign_key "gdrive_migration_consent_requests", "gdrive_migration_operations", column: "operation_id"
   add_foreign_key "gdrive_migration_files", "clusters"
   add_foreign_key "gdrive_migration_files", "gdrive_migration_operations", column: "operation_id"
+  add_foreign_key "gdrive_migration_folder_maps", "clusters"
+  add_foreign_key "gdrive_migration_folder_maps", "gdrive_migration_operations", column: "operation_id"
   add_foreign_key "gdrive_migration_operations", "gdrive_configs", column: "config_id"
   add_foreign_key "gdrive_migration_scan_tasks", "gdrive_migration_scans", column: "scan_id"
   add_foreign_key "gdrive_migration_scans", "clusters"

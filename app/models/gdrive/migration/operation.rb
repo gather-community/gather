@@ -12,6 +12,8 @@ module GDrive
         inverse_of: :operation, dependent: :destroy
       has_many :consent_requests, class_name: "GDrive::Migration::ConsentRequest",
         inverse_of: :operation, dependent: :destroy
+      has_many :folder_maps, class_name: "GDrive::Migration::FolderMap",
+        inverse_of: :operation, dependent: :destroy
 
       def src_folder_url
         "https://drive.google.com/drive/u/0/folders/#{src_folder_id}"

@@ -40,6 +40,8 @@ describe GDrive::Migration::ScanJob do
       expect(folder_ids).to contain_exactly("1FBirfPXk-5qaMO1BkvlyhaC8JARE_FRq",
         "1PJwkZgkByPMcbkfzneq65Cx1CnDNMVR_", "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV")
 
+      expect(GDrive::Migration::FolderMap.count).to eq(2)
+
       page_tokens = GDrive::Migration::ScanTask.all.map(&:page_token).compact
       expect(page_tokens.size).to eq(1)
 
@@ -51,7 +53,7 @@ describe GDrive::Migration::ScanJob do
       expect(enqueued_task_ids).to match_array(GDrive::Migration::ScanTask.all.map(&:id))
 
       expect(GDrive::Migration::File.all.map(&:name))
-        .to contain_exactly("File Root.1", "File Root.2", "Test A", "Test B")
+        .to contain_exactly("File Root.1", "File Root.2")
 
       scan.reload
       expect(scan.scanned_file_count).to eq(4)
@@ -163,7 +165,7 @@ describe GDrive::Migration::ScanJob do
       expect(enqueued_task_ids).to match_array(GDrive::Migration::ScanTask.all.map(&:id))
 
       expect(GDrive::Migration::File.all.map(&:name))
-        .to contain_exactly("File Root.1", "File Root.2", "Test A", "Test B")
+        .to contain_exactly("File Root.1", "File Root.2")
 
       scan.reload
       expect(scan.scanned_file_count).to eq(4)

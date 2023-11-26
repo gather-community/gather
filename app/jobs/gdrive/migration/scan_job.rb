@@ -65,20 +65,22 @@ module GDrive
 
       def process_file(gdrive_file)
         scan.increment!(:scanned_file_count)
-        migration_file = operation.files.find_or_create_by!(external_id: gdrive_file.id) do |file|
-          file.name = gdrive_file.name
-          file.mime_type = gdrive_file.mime_type
-          file.owner = gdrive_file.owners[0].email_address
-          file.status = "pending"
-          file.icon_link = gdrive_file.icon_link
-          file.web_view_link = gdrive_file.web_view_link
-          file.modified_at = gdrive_file.modified_time
-        end
-        if migration_file.folder?
+        if gdrive_file.mime_type == GDrive::FOLDER_MIME_TYPE
           return if scan.delta?
           scan_task = scan.scan_tasks.create!(folder_id: gdrive_file.id)
+          FolderMap.create!(operation: operation, src_parent_id: scan_task.folder_id,
+            src_id: gdrive_file.id, name: gdrive_file.name)
           ScanJob.perform_later(cluster_id: cluster_id, scan_task_id: scan_task.id)
         else
+          migration_file = operation.files.find_or_create_by!(external_id: gdrive_file.id) do |file|
+            file.name = gdrive_file.name
+            file.mime_type = gdrive_file.mime_type
+            file.owner = gdrive_file.owners[0].email_address
+            file.status = "pending"
+            file.icon_link = gdrive_file.icon_link
+            file.web_view_link = gdrive_file.web_view_link
+            file.modified_at = gdrive_file.modified_time
+          end
           ensure_filename_tag(gdrive_file, migration_file)
         end
       end

@@ -18,10 +18,6 @@ module GDrive
       def src_folder_url
         "https://drive.google.com/drive/u/0/folders/#{src_folder_id}"
       end
-
-      def filename_suffix
-        @filename_suffix ||= "[🚚#{filename_tag}]"
-      end
     end
   end
 end

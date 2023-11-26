@@ -68,7 +68,7 @@ module GDrive
         if gdrive_file.mime_type == GDrive::FOLDER_MIME_TYPE
           return if scan.delta?
           scan_task = scan.scan_tasks.create!(folder_id: gdrive_file.id)
-          FolderMap.create!(operation: operation, src_parent_id: scan_task.folder_id,
+          FolderMap.create!(operation: operation, src_parent_id: self.scan_task.folder_id,
             src_id: gdrive_file.id, name: gdrive_file.name)
           ScanJob.perform_later(cluster_id: cluster_id, scan_task_id: scan_task.id)
         else
@@ -81,20 +81,6 @@ module GDrive
             file.web_view_link = gdrive_file.web_view_link
             file.modified_at = gdrive_file.modified_time
           end
-          ensure_filename_tag(gdrive_file, migration_file)
-        end
-      end
-
-      def ensure_filename_tag(gdrive_file, migration_file)
-        return if gdrive_file.name.ends_with?(operation.filename_suffix)
-
-        if gdrive_file.capabilities.can_edit
-          return if scan.dry_run?
-          new_name = "#{gdrive_file.name} #{operation.filename_suffix}"
-          wrapper.update_file(gdrive_file.id, Google::Apis::DriveV3::File.new(name: new_name))
-        else
-          add_file_error(migration_file, :cant_edit,
-            "#{wrapper.google_user_id} did not have edit permission")
         end
       end
 

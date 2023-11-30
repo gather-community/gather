@@ -10,7 +10,7 @@ describe GDrive::Migration::ScanJob do
   let!(:migration_config) { create(:gdrive_migration_config) }
   let!(:operation) do
     create(:gdrive_migration_operation, config: migration_config, dest_folder_id: "0AEFsHNu6aSRGUk9PVA",
-      filename_tag: "TS", src_folder_id: "1FBirfPXk-5qaMO1BkvlyhaC8JARE_FRq")
+      src_folder_id: "1FBirfPXk-5qaMO1BkvlyhaC8JARE_FRq")
   end
   let!(:scan) { create(:gdrive_migration_scan, operation: operation) }
   let!(:existing_file) do

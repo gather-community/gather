@@ -43,7 +43,7 @@ describe GDrive::Migration::IngestJob do
   let!(:migration_token) { create(:gdrive_token, gdrive_config: migration_config, google_user_id: consenter_email) }
   let!(:operation) do
     create(:gdrive_migration_operation, config: migration_config, dest_folder_id: "0AExZ3-Cu5q7uUk9PVA",
-      filename_tag: "TS", src_folder_id: "1FBirfPXk-5qaMO1BkvlyhaC8JARE_FRq")
+      src_folder_id: "1FBirfPXk-5qaMO1BkvlyhaC8JARE_FRq")
   end
   let!(:folder_map_a) do
     create(:gdrive_migration_folder_map, operation: operation, src_id: "1PJwkZgkByPMcbkfzneq65Cx1CnDNMVR_",

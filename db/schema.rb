@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_28_143150) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_30_131141) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -373,7 +373,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_28_143150) do
     t.string "contact_name", null: false
     t.datetime "created_at", null: false
     t.string "dest_folder_id", limit: 255
-    t.string "filename_tag", limit: 8, null: false
     t.string "src_folder_id", limit: 255
     t.string "status", default: "new", null: false
     t.datetime "updated_at", null: false

@@ -111,12 +111,13 @@ module GDrive
       end
 
       def opt_out
-        @uningested_files = File.where(owner: @consent_request.google_email, status: "pending")
+        @uningested_files = @consent_request.operation.files.where(owner: @consent_request.google_email, status: "pending")
           .order(:name).page(params[:page])
       end
 
       def confirm_opt_out
         @consent_request.update!(status: "opted_out", opt_out_reason: params[:gdrive_migration_consent_request][:opt_out_reason])
+        @consent_request.operation.files.where(owner: @consent_request.google_email, status: "pending").update_all(status: "declined")
         redirect_to gdrive_migration_consent_opt_out_complete_path
       end
 

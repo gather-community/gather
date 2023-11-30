@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_26_003234) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_28_143150) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -265,9 +265,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_26_003234) do
   end
 
   create_table "gdrive_configs", force: :cascade do |t|
-    t.string "api_key"
-    t.string "client_id"
-    t.string "client_secret"
+    t.string "api_key", null: false
+    t.string "client_id", null: false
+    t.string "client_secret", null: false
     t.bigint "cluster_id", null: false
     t.bigint "community_id", null: false
     t.datetime "created_at", null: false
@@ -277,9 +277,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_26_003234) do
     t.index ["cluster_id"], name: "index_gdrive_configs_on_cluster_id"
     t.index ["community_id", "type"], name: "index_gdrive_configs_on_community_id_and_type", unique: true
     t.index ["org_user_id"], name: "index_gdrive_configs_on_org_user_id"
-    t.check_constraint "(type::text = 'GDrive::MainConfig'::text) = (api_key IS NOT NULL)", name: "api_key_non_null_if_main"
-    t.check_constraint "(type::text = 'GDrive::MainConfig'::text) = (client_id IS NOT NULL)", name: "client_id_non_null_if_main"
-    t.check_constraint "(type::text = 'GDrive::MainConfig'::text) = (client_secret IS NOT NULL)", name: "client_secret_non_null_if_main"
     t.check_constraint "(type::text = 'GDrive::MainConfig'::text) = (org_user_id IS NOT NULL)", name: "org_user_id_non_null_if_main"
   end
 
@@ -343,6 +340,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_26_003234) do
     t.text "name", null: false
     t.bigint "operation_id", null: false
     t.string "owner", null: false
+    t.string "parent_id", null: false
     t.string "status", null: false
     t.datetime "updated_at", null: false
     t.string "web_view_link", null: false

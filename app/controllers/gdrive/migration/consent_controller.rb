@@ -96,14 +96,6 @@ module GDrive
         main_config = MainConfig.find_by!(community: current_community)
         org_user_id = main_config.org_user_id
 
-        # Fake!
-        if @consent_request.ingest_status == "new"
-          @consent_request.update!(
-            ingest_status: "done",
-            file_count: @consent_request.file_count - @consent_request.ingest_file_ids.size
-          )
-        end
-
         if @consent_request.ingest_overdue?
           ErrorReporter.instance.report(StandardError.new("GDrive file ingest overdue"), data: {consent_request_id: @consent_request.id})
           @consent_request.set_ingest_failed

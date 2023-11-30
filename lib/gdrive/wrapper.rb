@@ -25,6 +25,10 @@ module GDrive
       wrap_api_method { service.get_file(...) }
     end
 
+    def create_file(...)
+      wrap_api_method { service.create_file(...) }
+    end
+
     def update_file(...)
       wrap_api_method { service.update_file(...) }
     end

@@ -68,11 +68,16 @@ module GDrive
         if gdrive_file.mime_type == GDrive::FOLDER_MIME_TYPE
           return if scan.delta?
           scan_task = scan.scan_tasks.create!(folder_id: gdrive_file.id)
+          dest_parent_id = lookup_dest_parent_id
+          dest_folder = Google::Apis::DriveV3::File.new(name: gdrive_file.name, parents: [dest_parent_id],
+            mime_type: GDrive::FOLDER_MIME_TYPE)
+          dest_folder = wrapper.create_file(dest_folder, fields: "id", supports_all_drives: true)
           FolderMap.create!(operation: operation, src_parent_id: self.scan_task.folder_id,
-            src_id: gdrive_file.id, name: gdrive_file.name)
+            src_id: gdrive_file.id, dest_parent_id: dest_parent_id, dest_id: dest_folder.id,
+            name: gdrive_file.name)
           ScanJob.perform_later(cluster_id: cluster_id, scan_task_id: scan_task.id)
         else
-          migration_file = operation.files.find_or_create_by!(external_id: gdrive_file.id) do |file|
+          operation.files.find_or_create_by!(external_id: gdrive_file.id) do |file|
             file.name = gdrive_file.name
             file.parent_id = gdrive_file.parents[0]
             file.mime_type = gdrive_file.mime_type
@@ -83,6 +88,12 @@ module GDrive
             file.modified_at = gdrive_file.modified_time
           end
         end
+      end
+
+      def lookup_dest_parent_id
+        return operation.dest_folder_id if scan_task.folder_id == operation.src_folder_id
+        parent_map = FolderMap.find_by!(operation: operation, src_id: scan_task.folder_id)
+        parent_map.dest_id
       end
 
       def add_file_error(migration_file, type, message)

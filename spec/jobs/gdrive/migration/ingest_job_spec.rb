@@ -34,7 +34,7 @@ describe GDrive::Migration::IngestJob do
   # - Delete any casettes under spec/cassettes/gdrive/migration/ingest_job that you want to adjust.
   #
   # Before committing:
-  # - Remove tokens and real email addresses.
+  # - Remove tokens and real email addresses using global find and replace.
 
   let(:consenter_email) { "consenter@example.com" }
   let!(:main_config) { create(:gdrive_main_config, org_user_id: "admin@example.org") }

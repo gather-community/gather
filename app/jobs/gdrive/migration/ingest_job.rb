@@ -26,9 +26,6 @@ module GDrive
 
       private
 
-      class FolderMapNotFoundError < StandardError
-      end
-
       # This is a separate class method so we can stub it in tests.
       def self.random_request_id
         SecureRandom.uuid
@@ -49,54 +46,19 @@ module GDrive
         consent_request.update!(temp_drive_id: temp_drive.id)
       end
 
-      # Ensures that the ancestor tree we mapped for the given file also exists
-      # in the new drive. Creates it if not.
-      # Runs recursively. Returns the dest folder ID, or nil if a matching
-      # FolderMap couldn't be found.
-      def ensure_duplicated_ancestor_tree(src_folder_id)
-        return operation.dest_folder_id if src_folder_id == operation.src_folder_id
-
-        map = FolderMap.find_by(src_id: src_folder_id)
-        if map.nil?
-          raise FolderMapNotFoundError, "No map found for #{src_folder_id}"
-        end
-
-        if map.dest_id
-          map.dest_id
-        else
-          # If no dest ID, it hasn't been created yet so we need to create it.
-          # We first need to get the parent_id in the destination tree.
-          # If the source folder parent is the operation src_folder_id, we don't need to
-          # recurse because we know the destination parent ID is just
-          # the operation dest_folder_id.
-          dest_parent_id = if map.src_parent_id == operation.src_folder_id
-            operation.dest_folder_id
-          else
-            ensure_duplicated_ancestor_tree(map.src_parent_id)
-          end
-          return nil if dest_parent_id.nil?
-
-          dest_folder = Google::Apis::DriveV3::File.new(name: map.name, parents: [dest_parent_id],
-            mime_type: GDrive::FOLDER_MIME_TYPE)
-          dest_folder = main_wrapper.create_file(dest_folder, fields: "id", supports_all_drives: true)
-          map.update!(dest_parent_id: dest_parent_id, dest_id: dest_folder.id)
-          dest_folder.id
-        end
-      end
-
       def ingest_files
         consent_request.ingest_file_ids.each do |file_id|
           migration_file = File.find_by(external_id: file_id)
           next if migration_file.nil?
 
           begin
-            dest_parent_id = ensure_duplicated_ancestor_tree(migration_file.parent_id)
-          rescue FolderMapNotFoundError => error
-            migration_file.set_error(type: "folder_map_not_found", message: error.to_s)
+            dest_parent_id = AncestorTreeDuplicator.instance.ensure_tree(operation, main_wrapper, migration_file.parent_id)
+          rescue AncestorTreeDuplicator::TargetNotInMigrationFolderError
+            migration_file.set_error(type: "not_in_migration_folder", message: "File #{file_id} not in migration folder")
             next
           end
 
-          next if dest_parent_id.nil?
+          raise "dest_parent_id should never be nil" if dest_parent_id.nil?
 
           # Move the file to the temp drive by removing the old parent and adding the temp drive.
           # This transfers ownership.

@@ -15,13 +15,13 @@ describe Utils::Generators::MainGenerator, :without_tenant, :perform_jobs do
     FeatureFlag
     FeatureFlagUser
     GDrive::Config
-    GDrive::FileIngestionBatch
     GDrive::MainConfig
     GDrive::MigrationConfig
     GDrive::Item
     GDrive::ItemGroup
     GDrive::SyncedPermission
     GDrive::Token
+    GDrive::Migration::ConsentRequest
     GDrive::Migration::File
     GDrive::Migration::Operation
     GDrive::Migration::Scan

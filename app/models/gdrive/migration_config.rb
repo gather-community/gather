@@ -5,10 +5,6 @@ module GDrive
   class MigrationConfig < Config
     has_many :operations, class_name: "GDrive::Migration::Operation", foreign_key: :config_id,
       inverse_of: :config, dependent: :destroy
-    has_many :file_ingestion_batches, class_name: "GDrive::FileIngestionBatch",
-      foreign_key: :gdrive_config_id,
-      inverse_of: :gdrive_config,
-      dependent: :destroy
 
     # drive.file is the restricted, non-sensitive scope.
     def drive_api_scope

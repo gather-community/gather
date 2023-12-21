@@ -109,6 +109,8 @@ en:
         description: "Description"
         value: "Amount"
         member_type_ids: "Member Types"
+      gdrive/migration/consent_request:
+        opt_out_reason: "Opt Out Reason"
       groups/group:
         availability: "Availability"
         can_request_jobs: "Can request jobs?"

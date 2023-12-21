@@ -86,11 +86,11 @@ module GDrive
       end
 
       def ensure_filename_tag(gdrive_file, migration_file)
-        return if gdrive_file.name.ends_with?(filename_suffix)
+        return if gdrive_file.name.ends_with?(operation.filename_suffix)
 
         if gdrive_file.capabilities.can_edit
           return if scan.dry_run?
-          new_name = "#{gdrive_file.name}#{filename_suffix}"
+          new_name = "#{gdrive_file.name} #{operation.filename_suffix}"
           wrapper.update_file(gdrive_file.id, Google::Apis::DriveV3::File.new(name: new_name))
         else
           add_file_error(migration_file, :cant_edit,
@@ -162,10 +162,6 @@ module GDrive
         # the files because we have drive (not drive.file) scope on that app.
         main_config = MainConfig.find_by(community: migration_config.community)
         @wrapper = Wrapper.new(config: main_config, google_user_id: main_config.org_user_id)
-      end
-
-      def filename_suffix
-        @filename_suffix ||= " [🚚#{operation.filename_tag}]"
       end
 
       def with_lock(&block)

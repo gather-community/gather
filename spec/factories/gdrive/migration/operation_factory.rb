@@ -6,5 +6,7 @@ FactoryBot.define do
     src_folder_id { "abc123" }
     dest_folder_id { "123abc" }
     filename_tag { "FOO" }
+    contact_name { "John Johns" }
+    contact_email { "foo@example.com" }
   end
 end

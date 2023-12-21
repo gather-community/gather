@@ -25,6 +25,13 @@
   #content {
     line-height: $content-line-height;
 
+
+    // Needed to make flowing columns layouts stay within viewport.
+    // For example, on the directory. Without this, setting overflow:hidden
+    // on individual cards doesn't work—they just expand and go outside the viewport.
+    width: 100%;
+
+
     // make content fill horizontal space
     flex: 1;
   }
@@ -66,6 +73,11 @@
 
 p.subtitle {
   margin-top: -10px;
+}
+
+// For simple pages where you don't want super long strings of text on laptop/desktop views
+.simple {
+  max-width: 800px;
 }
 
 // The .hide and .hidden classes provided by Bootstrap both have !important, which is problematic

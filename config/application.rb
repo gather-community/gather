@@ -38,19 +38,26 @@ module Gather
 
     config.add_autoload_paths_to_load_path = false
 
+    # Use default logging formatter so that PID and timestamp are not suppressed.
+    # Without this line, the default is ActiveSupport::Logger::SimpleFormatter, which
+    # prints only the message.
+    # The default Rails config does this only for prod, but we prefer to have the same
+    # formatter for all environments.
+    config.log_formatter = ::Logger::Formatter.new
+
     # Don't autoload these directories.
     Rails.autoloaders.main.ignore(Rails.root.join("lib", "graphics"))
     Rails.autoloaders.main.ignore(Rails.root.join("lib", "random_data"))
 
     if Rails.env.production? && Settings.error_reporting == "email"
       config.middleware.use(ExceptionNotification::Rack,
-                            email: {
-                              email_prefix: "[Gather ERROR] ",
-                              sender_address: Settings.email.from,
-                              exception_recipients: Settings.email.webmaster,
-                              sections: %w[request session environment backtrace exception_data],
-                              background_sections: %w[backtrace exception_data data]
-                            })
+        email: {
+          email_prefix: "[Gather ERROR] ",
+          sender_address: Settings.email.from,
+          exception_recipients: Settings.email.webmaster,
+          sections: %w[request session environment backtrace exception_data],
+          background_sections: %w[backtrace exception_data data]
+        })
     end
 
     # We need to temporarily disable scoping in ActsAsTenant so that it doesn't raise NoTenantSet errors
@@ -97,7 +104,7 @@ module Gather
 
     config.cache_store = :redis_cache_store, {url: Settings.redis.url}
 
-    config.hosts << /([a-z0-9\-]+\.)?#{Settings.url.host}/
+    config.hosts << /([a-z0-9-]+\.)?#{Settings.url.host}/
 
     # Currently, fr is only available for testing purposes.
     I18n.available_locales = %i[en fr]

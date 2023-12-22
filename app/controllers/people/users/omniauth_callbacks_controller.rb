@@ -44,7 +44,7 @@ module People
       def failure
         unless browser.bot?
           Rails.logger.info("OAuth failed: #{failure_message}")
-          ErrorReporter.instance.report(StandardError.new("OAuth failure"), env: request.env, data: {failure_message: failure_message})
+          Gather::ErrorReporter.instance.report(StandardError.new("OAuth failure"), env: request.env, data: {failure_message: failure_message})
         end
         fail_with_msg("of an unspecified error. The administrators have been notified")
       end

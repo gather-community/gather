@@ -17,7 +17,14 @@ module GDrive
           self.main_wrapper = Wrapper.new(config: main_config, google_user_id: main_config.org_user_id)
           migration_config = consent_request.config
           self.migration_wrapper = Wrapper.new(config: migration_config, google_user_id: @consent_request.google_email)
-          self.ancestor_tree_duplicator = AncestorTreeDuplicator.new(wrapper: main_wrapper, operation: operation)
+          self.ancestor_tree_duplicator = AncestorTreeDuplicator.new(wrapper: main_wrapper,
+            operation: operation)
+
+          Rails.logger.info("Starting ingest job",
+            consent_request_id: consent_request.id,
+            file_ids: consent_request.ingest_file_ids,
+            operation_id: operation.id)
+
           ensure_temp_drive
           ingest_files
           files_remaining = File.pending.owned_by(consent_request.google_email).count
@@ -37,7 +44,7 @@ module GDrive
         return if consent_request.temp_drive_id.present?
 
         temp_drive = Google::Apis::DriveV3::Drive.new(name: "Migration Temp Drive #{consent_request.id}")
-        Rails.logger.info("Creating temp drive '#{temp_drive.name}")
+        Rails.logger.info("Creating temp drive", name: temp_drive.name)
 
         # This could only fail if our permissons are bad, which means the whole operation is broken.
         # So we let it bubble up and stop the job.
@@ -45,7 +52,7 @@ module GDrive
 
         # This could only fail if our permissons are bad, which means the whole operation is broken.
         # So we let it bubble up and stop the job.
-        Rails.logger.info("Adding temp drive write permission for #{consent_request.google_email}")
+        Rails.logger.info("Adding temp drive write permission", consenter: consent_request.google_email)
         permission = Google::Apis::DriveV3::Permission.new(type: "user", email_address: consent_request.google_email,
           role: "writer")
         main_wrapper.create_permission(temp_drive.id, permission, supports_all_drives: true, send_notification_email: false)
@@ -55,6 +62,7 @@ module GDrive
 
       def ingest_files
         consent_request.ingest_file_ids.each do |file_id|
+          Rails.logger.info("Ingesting file", file_id: file_id)
           migration_file = File.find_by(external_id: file_id)
           next if migration_file.nil?
 
@@ -66,13 +74,17 @@ module GDrive
             # We need to handle these possibilities and fail gracefully.
             dest_parent_id = ancestor_tree_duplicator.ensure_tree(migration_file.parent_id)
           rescue AncestorTreeDuplicator::ParentFolderInaccessible => error
-            migration_file.set_error(type: "ancestor_inaccessible", message: "Parent of folder #{error.folder_id}, one of file #{file_id}'s ancestors, is inaccessible")
+            Rails.logger.error("Ancestor inaccessible", file_id: file_id, folder_id: error.folder_id)
+            migration_file.set_error(type: "ancestor_inaccessible",
+              message: "Parent of folder #{error.folder_id}, one of file #{file_id}'s ancestors, is inaccessible")
             next
           rescue Google::Apis::ClientError => error
+            Rails.logger.error("Client error ensuring tree", file_id: file_id, message: error.to_s)
             migration_file.set_error(type: "client_error_ensuring_tree", message: error.to_s)
             next
           end
 
+          Rails.logger.error("dest_parent_id was nil, aborting", file_id: file_id)
           raise "dest_parent_id should never be nil" if dest_parent_id.nil?
 
           # Move the file to the temp drive by removing the old parent and adding the temp drive.

@@ -29,6 +29,8 @@ module GDrive
       # If raises Google::Apis::ClientError, this is most likely because the workspace user
       # doesn't have access to src_folder or src_folder doesn't exist.
       def ensure_tree(src_folder_id)
+        Rails.logger.info("Ensuring ancestor tree", src_folder_id: src_folder_id)
+
         return operation.dest_folder_id if src_folder_id == operation.src_folder_id
 
         # Check for an existing and valid map before we create a new one
@@ -36,8 +38,11 @@ module GDrive
           if folder_exists?(map.dest_id)
             return map.dest_id
           else
+            Rails.logger.warn("Folder map dest folder missing", src_folder_id: src_folder_id, dest_folder_id: map.dest_id)
             map.destroy
           end
+        else
+          Rails.logger.warn("Folder map not found", src_folder_id: src_folder_id)
         end
 
         # If we get to this point, we either had no map at all or an invalid map, so we need to
@@ -53,6 +58,7 @@ module GDrive
         # if it has no parents, like if somehow src_folder_id is the person's My Drive. Either way
         # it's unrecoverable.
         if src_folder.parents.blank?
+          Rails.logger.error("Source folder parent inaccessible", src_folder_id: src_folder_id)
           raise ParentFolderInaccessible.new(folder_id: src_folder_id)
         else
           src_parent_id = src_folder.parents[0]
@@ -61,12 +67,16 @@ module GDrive
 
           # Try to find a matching folder. If we fail, create one.
           unless (dest_folder = find_folder_by_parent_id_and_name(dest_parent_id, src_folder.name))
+            Rails.logger.warn("Dest folder not found, creating", src_folder_id: src_folder_id,
+              dest_parent_id: dest_parent_id, name: src_folder.name)
             dest_folder = Google::Apis::DriveV3::File.new(name: src_folder.name, parents: [dest_parent_id],
               mime_type: GDrive::FOLDER_MIME_TYPE)
             # This should not fail b/c we just confirmed that the parent exists, and we are working inside
             # the shared drive.
             dest_folder = wrapper.create_file(dest_folder, fields: "id", supports_all_drives: true)
           end
+
+          Rails.logger.info("Creating folder map", src_folder_id: src_folder_id, dest_folder_id: dest_folder.id)
           FolderMap.create!(operation: operation, name: src_folder.name,
             src_parent_id: src_parent_id, src_id: src_folder_id,
             dest_parent_id: dest_parent_id, dest_id: dest_folder.id)

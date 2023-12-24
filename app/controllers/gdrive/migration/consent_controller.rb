@@ -16,7 +16,7 @@ module GDrive
       # We can't use a subdomain on these pages due to Google API restrictions.
       prepend_before_action :set_current_community_from_callback_state, only: :callback
 
-      before_action :load_and_check_consent_request, except: [:callback, :opt_out_complete]
+      before_action :load_and_check_consent_request, except: [:callback, :ingest_status, :opt_out_complete]
 
       def intro
         @operation = @consent_request.operation
@@ -89,10 +89,16 @@ module GDrive
           ingest_file_ids: params[:file_ids],
           ingest_status: "new"
         )
+        IngestJob.perform_later(
+          cluster_id: current_cluster.id,
+          community_id: current_community.id,
+          consent_request_id: @consent_request.id
+        )
         head :no_content
       end
 
       def ingest_status
+        @consent_request = ConsentRequest.find_by!(token: params[:token])
         main_config = MainConfig.find_by!(community: current_community)
         org_user_id = main_config.org_user_id
 

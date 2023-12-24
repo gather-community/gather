@@ -2,11 +2,12 @@
 
 module Gather
   # Wraps another logger class to allow passing structured data.
-  class StructuredLogger < ::Logger
+  class StructuredLogger < ActiveSupport::Logger
     attr_accessor :base_logger
 
     def initialize(base_logger)
       self.base_logger = base_logger
+      self.level = base_logger.level
     end
 
     def debug(message_or_progname = nil, data = nil, &block)

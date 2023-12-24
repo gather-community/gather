@@ -5,8 +5,8 @@ FactoryBot.define do
     association(:operation, factory: :gdrive_migration_operation)
     src_id { "123" }
     src_parent_id { "789" }
-    dest_id { nil }
-    dest_parent_id { nil }
+    dest_id { "456" }
+    dest_parent_id { "012" }
     name { "MyString" }
   end
 end

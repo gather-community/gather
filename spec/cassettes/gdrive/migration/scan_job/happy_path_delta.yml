@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: https://www.googleapis.com/drive/v3/files?fields=files(id,name,parents,mimeType,webViewLink,iconLink,modifiedTime,owners(emailAddress),capabilities(canEdit)),nextPageToken&includeItemsFromAllDrives=true&orderBy=folder,name&pageSize=4&q=%271FBirfPXk-5qaMO1BkvlyhaC8JARE_FRq%27%20in%20parents&supportsAllDrives=true
+    uri: https://www.googleapis.com/drive/v3/files?fields=files(id,name,parents,mimeType,webViewLink,iconLink,modifiedTime,owners(emailAddress),capabilities(canEdit)),nextPageToken&includeItemsFromAllDrives=true&orderBy=folder,name&pageSize=4&q=%271FBirfPXk-5qaMO1BkvlyhaC8JARE_FRq%27%20in%20parents%20and%20trashed%20=%20false&supportsAllDrives=true
     body:
       encoding: UTF-8
       string: ''

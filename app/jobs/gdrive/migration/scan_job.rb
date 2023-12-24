@@ -34,7 +34,7 @@ module GDrive
 
       def do_scan_task
         file_list = wrapper.list_files(
-          q: "'#{scan_task.folder_id}' in parents",
+          q: "'#{scan_task.folder_id}' in parents and trashed = false",
           fields: "files(id,name,parents,mimeType,webViewLink,iconLink,modifiedTime,owners(emailAddress),capabilities(canEdit)),nextPageToken",
           order_by: "folder,name",
           supports_all_drives: true,

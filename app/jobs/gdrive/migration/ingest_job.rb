@@ -64,7 +64,10 @@ module GDrive
         consent_request.ingest_file_ids.each do |file_id|
           Rails.logger.info("Ingesting file", file_id: file_id)
           migration_file = File.find_by(external_id: file_id)
-          next if migration_file.nil?
+
+          if migration_file.nil?
+            migration_file = build_new_migration_file(file_id)
+          end
 
           begin
             # This could fail if
@@ -75,17 +78,31 @@ module GDrive
             dest_parent_id = ancestor_tree_duplicator.ensure_tree(migration_file.parent_id)
           rescue AncestorTreeDuplicator::ParentFolderInaccessible => error
             Rails.logger.error("Ancestor inaccessible", file_id: file_id, folder_id: error.folder_id)
-            migration_file.set_error(type: "ancestor_inaccessible",
-              message: "Parent of folder #{error.folder_id}, one of file #{file_id}'s ancestors, is inaccessible")
+
+            # No need to set an error on an unpersisted File, b/c those ones are from files the user
+            # picked but we don't have records of, so we are just trying them but they may not be valid.
+            if migration_file.persisted?
+              migration_file.set_error(type: "ancestor_inaccessible",
+                message: "Parent of folder #{error.folder_id}, one of file #{file_id}'s ancestors, is inaccessible")
+            end
+
             next
           rescue Google::Apis::ClientError => error
             Rails.logger.error("Client error ensuring tree", file_id: file_id, message: error.to_s)
-            migration_file.set_error(type: "client_error_ensuring_tree", message: error.to_s)
+
+            # No need to set an error on an unpersisted File, b/c those ones are from files the user
+            # picked but we don't have records of, so we are just trying them but they may not be valid.
+            if migration_file.persisted?
+              migration_file.set_error(type: "client_error_ensuring_tree", message: error.to_s)
+            end
+
             next
           end
 
-          Rails.logger.error("dest_parent_id was nil, aborting", file_id: file_id)
-          raise "dest_parent_id should never be nil" if dest_parent_id.nil?
+          if dest_parent_id.nil?
+            Rails.logger.error("dest_parent_id was nil, aborting", file_id: file_id)
+            raise "dest_parent_id should never be nil"
+          end
 
           # Move the file to the temp drive by removing the old parent and adding the temp drive.
           # This transfers ownership.
@@ -94,6 +111,7 @@ module GDrive
           # - The file got deleted or moved or permissions changed between when the user
           #   picked it and when the job runs, very unlikely.
           # So we let it bubble up and stop the job.
+          Rails.logger.info("Moving file to temp drive.", file_id: file_id)
           migration_wrapper.update_file(file_id, add_parents: consent_request.temp_drive_id,
             remove_parents: migration_file.parent_id, supports_all_drives: true)
 
@@ -103,11 +121,43 @@ module GDrive
           # - dest_parent got deleted. This is not likely because AncestorTreeDuplicator should have caught this
           #   and recreated it and updated the folder map, unless dest_parent is the destination root,
           #   which would mean something really weird is going on and we should let the client error bubble up.
+          Rails.logger.info("Moving file to final destination.", file_id: file_id, dest_parent_id: dest_parent_id)
           main_wrapper.update_file(file_id, add_parents: dest_parent_id,
             remove_parents: consent_request.temp_drive_id, supports_all_drives: true)
 
+          # This will also save the migration_file if it was an unpersisted one.
           migration_file.update!(status: "transferred")
         end
+      end
+
+      # Builds, but does not save, a migration file record based on the given ID.
+      # We then proceed through ingestion with this unpersisted object, only saving it if
+      # ingestion is successful. Returns nil if getting the file fails.
+      def build_new_migration_file(file_id)
+        Rails.logger.info("No matching File record for file. Attempting to create.", file_id: file_id)
+
+        gdrive_file = main_wrapper.get_file(file_id,
+          fields: "name,parents,mimeType,webViewLink,iconLink,modifiedTime,owners(emailAddress),capabilities(canEdit)")
+
+        if gdrive_file.parents.blank?
+          Rails.logger.error("File has no accessible parents", file_id: file_id)
+          return nil
+        end
+
+        operation.files.build(
+          external_id: file_id,
+          name: gdrive_file.name,
+          parent_id: gdrive_file.parents[0],
+          mime_type: gdrive_file.mime_type,
+          owner: gdrive_file.owners[0].email_address,
+          status: "pending",
+          icon_link: gdrive_file.icon_link,
+          web_view_link: gdrive_file.web_view_link,
+          modified_at: gdrive_file.modified_time
+        )
+      rescue Google::Apis::ClientError => error
+        Rails.logger.error("Client error looking up file", file_id: file_id, message: error.to_s)
+        nil
       end
     end
   end

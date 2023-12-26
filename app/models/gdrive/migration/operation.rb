@@ -15,6 +15,8 @@ module GDrive
       has_many :folder_maps, class_name: "GDrive::Migration::FolderMap",
         inverse_of: :operation, dependent: :destroy
 
+      delegate :community, :community_id, to: :config
+
       def src_folder_url
         "https://drive.google.com/drive/u/0/folders/#{src_folder_id}"
       end

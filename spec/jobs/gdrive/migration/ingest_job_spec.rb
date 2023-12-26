@@ -104,7 +104,7 @@ describe GDrive::Migration::IngestJob do
 
     it "creates temp drive, creates and reuses parent folders, double-moves files, updates statuses" do
       VCR.use_cassette("gdrive/migration/ingest_job/happy_path") do
-        described_class.perform_now(cluster_id: Defaults.cluster.id, community_id: Defaults.community.id,
+        described_class.perform_now(cluster_id: Defaults.cluster.id,
           consent_request_id: consent_request.id)
         consent_request.reload
 
@@ -128,7 +128,7 @@ describe GDrive::Migration::IngestJob do
           ingest_file_ids: [file_c_1.external_id, file_root_1.external_id],
           ingest_status: "new"
         )
-        described_class.perform_now(cluster_id: Defaults.cluster.id, community_id: Defaults.community.id,
+        described_class.perform_now(cluster_id: Defaults.cluster.id,
           consent_request_id: consent_request.id)
 
         consent_request.reload
@@ -166,7 +166,7 @@ describe GDrive::Migration::IngestJob do
 
     it "should find and use the dest folder" do
       VCR.use_cassette("gdrive/migration/ingest_job/no_folder_map_but_folder_exists") do
-        described_class.perform_now(cluster_id: Defaults.cluster.id, community_id: Defaults.community.id,
+        described_class.perform_now(cluster_id: Defaults.cluster.id,
           consent_request_id: consent_request.id)
         file_b_1.reload
         expect(file_b_1).to be_transferred
@@ -199,7 +199,7 @@ describe GDrive::Migration::IngestJob do
 
     it "should create the dest folder" do
       VCR.use_cassette("gdrive/migration/ingest_job/no_folder_map_and_no_folder") do
-        described_class.perform_now(cluster_id: Defaults.cluster.id, community_id: Defaults.community.id,
+        described_class.perform_now(cluster_id: Defaults.cluster.id,
           consent_request_id: consent_request.id)
         file_b_1.reload
         expect(file_b_1).to be_transferred
@@ -224,7 +224,7 @@ describe GDrive::Migration::IngestJob do
 
     it "should fail gracefully and store error message" do
       VCR.use_cassette("gdrive/migration/ingest_job/no_folder_map_and_outside_tree") do
-        described_class.perform_now(cluster_id: Defaults.cluster.id, community_id: Defaults.community.id,
+        described_class.perform_now(cluster_id: Defaults.cluster.id,
           consent_request_id: consent_request.id)
         file_b_1.reload
         expect(file_b_1).to be_errored
@@ -258,7 +258,7 @@ describe GDrive::Migration::IngestJob do
 
     it "should find and use the dest folder" do
       VCR.use_cassette("gdrive/migration/ingest_job/bad_dest_id_but_folder_exists") do
-        described_class.perform_now(cluster_id: Defaults.cluster.id, community_id: Defaults.community.id,
+        described_class.perform_now(cluster_id: Defaults.cluster.id,
           consent_request_id: consent_request.id)
         file_b_1.reload
         expect(file_b_1).to be_transferred
@@ -292,7 +292,7 @@ describe GDrive::Migration::IngestJob do
 
     it "should create the dest folder" do
       VCR.use_cassette("gdrive/migration/ingest_job/bad_dest_id_and_no_folder") do
-        described_class.perform_now(cluster_id: Defaults.cluster.id, community_id: Defaults.community.id,
+        described_class.perform_now(cluster_id: Defaults.cluster.id,
           consent_request_id: consent_request.id)
         file_b_1.reload
         expect(file_b_1).to be_transferred
@@ -316,7 +316,7 @@ describe GDrive::Migration::IngestJob do
 
     it "should fail gracefully" do
       VCR.use_cassette("gdrive/migration/ingest_job/file_with_missing_parent") do
-        described_class.perform_now(cluster_id: Defaults.cluster.id, community_id: Defaults.community.id,
+        described_class.perform_now(cluster_id: Defaults.cluster.id,
           consent_request_id: consent_request.id)
         file_b_1.reload
         expect(file_b_1).to be_errored
@@ -344,7 +344,7 @@ describe GDrive::Migration::IngestJob do
 
     it "should still migrate file and create File record" do
       VCR.use_cassette("gdrive/migration/ingest_job/file_with_no_record_but_its_in_tree") do
-        described_class.perform_now(cluster_id: Defaults.cluster.id, community_id: Defaults.community.id,
+        described_class.perform_now(cluster_id: Defaults.cluster.id,
           consent_request_id: consent_request.id)
 
         new_file = GDrive::Migration::File.find_by(external_id: "13LqTKL6yZq7MkpNKp1de2SromgPJ5m6cVbWx_hcnFoQ")
@@ -376,7 +376,7 @@ describe GDrive::Migration::IngestJob do
 
     it "should still migrate file and create File record" do
       VCR.use_cassette("gdrive/migration/ingest_job/file_with_no_record_and_not_in_tree") do
-        described_class.perform_now(cluster_id: Defaults.cluster.id, community_id: Defaults.community.id,
+        described_class.perform_now(cluster_id: Defaults.cluster.id,
           consent_request_id: consent_request.id)
 
         consent_request.reload

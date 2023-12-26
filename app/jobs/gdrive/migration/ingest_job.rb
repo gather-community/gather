@@ -9,11 +9,11 @@ module GDrive
       attr_accessor :consent_request, :operation, :main_wrapper, :migration_wrapper,
         :ancestor_tree_duplicator
 
-      def perform(cluster_id:, community_id:, consent_request_id:)
+      def perform(cluster_id:, consent_request_id:)
         ActsAsTenant.with_tenant(Cluster.find(cluster_id)) do
           self.consent_request = ConsentRequest.find(consent_request_id)
           self.operation = consent_request.operation
-          main_config = MainConfig.find_by!(community_id: community_id)
+          main_config = MainConfig.find_by!(community_id: operation.community_id)
           self.main_wrapper = Wrapper.new(config: main_config, google_user_id: main_config.org_user_id)
           migration_config = consent_request.config
           self.migration_wrapper = Wrapper.new(config: migration_config, google_user_id: @consent_request.google_email)

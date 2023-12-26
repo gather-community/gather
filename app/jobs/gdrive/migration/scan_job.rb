@@ -2,7 +2,7 @@
 
 module GDrive
   module Migration
-    # Ingests selected files by starring them and noting any unowned files.
+    # Scans for all files in the source drive folder.
     class ScanJob < BaseJob
       PAGE_SIZE = 100
       MIN_ERRORS_TO_CANCEL = 5
@@ -10,8 +10,6 @@ module GDrive
 
       # If we get a not found error trying to find one of these, we should just terminate gracefully.
       DISAPPEARABLE_CLASSES = %w[GDrive::Migration::Operation GDrive::Migration::Scan GDrive::Migration::ScanTask].freeze
-
-      retry_on Google::Apis::ServerError
 
       attr_accessor :cluster_id, :scan_task, :scan, :operation
 
@@ -36,8 +34,8 @@ module GDrive
 
       def do_scan_task
         file_list = wrapper.list_files(
-          q: "'#{scan_task.folder_id}' in parents",
-          fields: "files(id,name,mimeType,webViewLink,iconLink,modifiedTime,owners(emailAddress),capabilities(canEdit)),nextPageToken",
+          q: "'#{scan_task.folder_id}' in parents and trashed = false",
+          fields: "files(id,name,parents,mimeType,webViewLink,iconLink,modifiedTime,owners(emailAddress),capabilities(canEdit)),nextPageToken",
           order_by: "folder,name",
           supports_all_drives: true,
           page_token: scan_task.page_token,
@@ -67,35 +65,35 @@ module GDrive
 
       def process_file(gdrive_file)
         scan.increment!(:scanned_file_count)
-        migration_file = operation.files.find_or_create_by!(external_id: gdrive_file.id) do |file|
-          file.name = gdrive_file.name
-          file.mime_type = gdrive_file.mime_type
-          file.owner = gdrive_file.owners[0].email_address
-          file.status = "pending"
-          file.icon_link = gdrive_file.icon_link
-          file.web_view_link = gdrive_file.web_view_link
-          file.modified_at = gdrive_file.modified_time
-        end
-        if migration_file.folder?
+        if gdrive_file.mime_type == GDrive::FOLDER_MIME_TYPE
           return if scan.delta?
           scan_task = scan.scan_tasks.create!(folder_id: gdrive_file.id)
+          dest_parent_id = lookup_dest_parent_id
+          dest_folder = Google::Apis::DriveV3::File.new(name: gdrive_file.name, parents: [dest_parent_id],
+            mime_type: GDrive::FOLDER_MIME_TYPE)
+          dest_folder = wrapper.create_file(dest_folder, fields: "id", supports_all_drives: true)
+          FolderMap.create!(operation: operation, src_parent_id: self.scan_task.folder_id,
+            src_id: gdrive_file.id, dest_parent_id: dest_parent_id, dest_id: dest_folder.id,
+            name: gdrive_file.name)
           ScanJob.perform_later(cluster_id: cluster_id, scan_task_id: scan_task.id)
         else
-          ensure_filename_tag(gdrive_file, migration_file)
+          operation.files.find_or_create_by!(external_id: gdrive_file.id) do |file|
+            file.name = gdrive_file.name
+            file.parent_id = gdrive_file.parents[0]
+            file.mime_type = gdrive_file.mime_type
+            file.owner = gdrive_file.owners[0].email_address
+            file.status = "pending"
+            file.icon_link = gdrive_file.icon_link
+            file.web_view_link = gdrive_file.web_view_link
+            file.modified_at = gdrive_file.modified_time
+          end
         end
       end
 
-      def ensure_filename_tag(gdrive_file, migration_file)
-        return if gdrive_file.name.ends_with?(operation.filename_suffix)
-
-        if gdrive_file.capabilities.can_edit
-          return if scan.dry_run?
-          new_name = "#{gdrive_file.name} #{operation.filename_suffix}"
-          wrapper.update_file(gdrive_file.id, Google::Apis::DriveV3::File.new(name: new_name))
-        else
-          add_file_error(migration_file, :cant_edit,
-            "#{wrapper.google_user_id} did not have edit permission")
-        end
+      def lookup_dest_parent_id
+        return operation.dest_folder_id if scan_task.folder_id == operation.src_folder_id
+        parent_map = FolderMap.find_by!(operation: operation, src_id: scan_task.folder_id)
+        parent_map.dest_id
       end
 
       def add_file_error(migration_file, type, message)

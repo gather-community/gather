@@ -75,7 +75,7 @@ http_interactions:
   recorded_at: Sat, 11 Mar 2023 19:39:02 GMT
 - request:
     method: get
-    uri: https://www.googleapis.com/drive/v3/files?fields=files(id,name,mimeType,iconLink,webViewLink)&includeItemsFromAllDrives=true&orderBy=folder,name&q=%270AGH_tsBj1z-0Uk9PVA%27%20in%20parents&supportsAllDrives=true
+    uri: https://www.googleapis.com/drive/v3/files?fields=files(id,name,mimeType,iconLink,webViewLink)&includeItemsFromAllDrives=true&orderBy=folder,name&q=%270AGH_tsBj1z-0Uk9PVA%27%20in%20parents%20and%20trashed%20=%20false&supportsAllDrives=true
     body:
       encoding: UTF-8
       string: ''
@@ -222,7 +222,7 @@ http_interactions:
   recorded_at: Sat, 11 Mar 2023 19:39:04 GMT
 - request:
     method: get
-    uri: https://www.googleapis.com/drive/v3/files?fields=files(id,name,mimeType,iconLink,webViewLink)&includeItemsFromAllDrives=true&orderBy=folder,name&q=%2710pCGogEYyi7EY1wQIHUDFtNfsbNJkpUl%27%20in%20parents&supportsAllDrives=true
+    uri: https://www.googleapis.com/drive/v3/files?fields=files(id,name,mimeType,iconLink,webViewLink)&includeItemsFromAllDrives=true&orderBy=folder,name&q=%2710pCGogEYyi7EY1wQIHUDFtNfsbNJkpUl%27%20in%20parents%20and%20trashed%20=%20false&supportsAllDrives=true
     body:
       encoding: UTF-8
       string: ''

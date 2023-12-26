@@ -25,12 +25,24 @@ module GDrive
       wrap_api_method { service.get_file(...) }
     end
 
+    def create_file(...)
+      wrap_api_method { service.create_file(...) }
+    end
+
     def update_file(...)
       wrap_api_method { service.update_file(...) }
     end
 
     def list_drives(...)
       wrap_api_method { service.list_drives(...) }
+    end
+
+    def create_drive(...)
+      wrap_api_method { service.create_drive(...) }
+    end
+
+    def delete_drive(...)
+      wrap_api_method { service.delete_drive(...) }
     end
 
     def list_permissions(...)

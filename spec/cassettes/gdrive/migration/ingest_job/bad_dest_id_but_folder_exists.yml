@@ -1,0 +1,517 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://www.googleapis.com/drive/v3/drives?requestId=ce0fd796-b4ed-4b6c-be57-20ef4de74bc7
+    body:
+      encoding: UTF-8
+      string: '{"name":"Migration Temp Drive 537716653"}'
+    headers:
+      User-Agent:
+      - unknown/0.0.0 google-apis-drive_v3/0.46.0 Mac OS X/13.1 (gzip)
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip,deflate
+      Date:
+      - Sun, 17 Dec 2023 14:43:55 GMT
+      X-Goog-Api-Client:
+      - gl-ruby/3.2.2 gdcl/1.46.0
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer ya29.a0AfB_byArAuieDOVsl70OueFD9xqqEFIGM9uqtLKX0hA3uzdAXEsilBpx6bASlxoWX8l6oYXGbfbSNWZChuyUaPKy4lqjKypsi937ottSyLZQQ47Xow2kLfcKKgYXTUq0yVuWHcLdPeBe4MIVrXGVrtWamVNTeQjsZ0xxzowaCgYKAeQSARESFQHGX2Mi8PHAl_roRhWz3e0_r02kDQ0174
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Date:
+      - Sun, 17 Dec 2023 14:43:58 GMT
+      Vary:
+      - Origin, X-Origin
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Encoding:
+      - gzip
+      Server:
+      - ESF
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: |
+        {
+          "kind": "drive#drive",
+          "id": "0AAlR_RskXvWzUk9PVA",
+          "name": "Migration Temp Drive 537716653"
+        }
+    http_version:
+  recorded_at: Sun, 17 Dec 2023 14:43:58 GMT
+- request:
+    method: post
+    uri: https://www.googleapis.com/drive/v3/files/0AAlR_RskXvWzUk9PVA/permissions?sendNotificationEmail=false&supportsAllDrives=true
+    body:
+      encoding: UTF-8
+      string: '{"emailAddress":"example@gmail.com","role":"writer","type":"user"}'
+    headers:
+      User-Agent:
+      - unknown/0.0.0 google-apis-drive_v3/0.46.0 Mac OS X/13.1 (gzip)
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip,deflate
+      Date:
+      - Sun, 17 Dec 2023 14:43:58 GMT
+      X-Goog-Api-Client:
+      - gl-ruby/3.2.2 gdcl/1.46.0
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer ya29.a0AfB_byArAuieDOVsl70OueFD9xqqEFIGM9uqtLKX0hA3uzdAXEsilBpx6bASlxoWX8l6oYXGbfbSNWZChuyUaPKy4lqjKypsi937ottSyLZQQ47Xow2kLfcKKgYXTUq0yVuWHcLdPeBe4MIVrXGVrtWamVNTeQjsZ0xxzowaCgYKAeQSARESFQHGX2Mi8PHAl_roRhWz3e0_r02kDQ0174
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Date:
+      - Sun, 17 Dec 2023 14:43:59 GMT
+      Pragma:
+      - no-cache
+      Vary:
+      - Origin, X-Origin
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Encoding:
+      - gzip
+      Server:
+      - ESF
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: |
+        {
+          "kind": "drive#permission",
+          "id": "12363746022515177322",
+          "type": "user",
+          "role": "writer"
+        }
+    http_version:
+  recorded_at: Sun, 17 Dec 2023 14:43:59 GMT
+- request:
+    method: get
+    uri: https://www.googleapis.com/drive/v3/files/xyz?fields=id,mimeType&supportsAllDrives=true
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      User-Agent:
+      - unknown/0.0.0 google-apis-drive_v3/0.46.0 Mac OS X/13.1 (gzip)
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip,deflate
+      Date:
+      - Sun, 17 Dec 2023 14:43:59 GMT
+      X-Goog-Api-Client:
+      - gl-ruby/3.2.2 gdcl/1.46.0
+      Authorization:
+      - Bearer ya29.a0AfB_byArAuieDOVsl70OueFD9xqqEFIGM9uqtLKX0hA3uzdAXEsilBpx6bASlxoWX8l6oYXGbfbSNWZChuyUaPKy4lqjKypsi937ottSyLZQQ47Xow2kLfcKKgYXTUq0yVuWHcLdPeBe4MIVrXGVrtWamVNTeQjsZ0xxzowaCgYKAeQSARESFQHGX2Mi8PHAl_roRhWz3e0_r02kDQ0174
+      Content-Type:
+      - application/x-www-form-urlencoded
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Expires:
+      - Sun, 17 Dec 2023 14:43:59 GMT
+      Vary:
+      - Origin, X-Origin
+      Cache-Control:
+      - private, max-age=0
+      Date:
+      - Sun, 17 Dec 2023 14:43:59 GMT
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Encoding:
+      - gzip
+      Server:
+      - ESF
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: |
+        {
+          "error": {
+            "code": 404,
+            "message": "File not found: xyz.",
+            "errors": [
+              {
+                "message": "File not found: xyz.",
+                "domain": "global",
+                "reason": "notFound",
+                "location": "fileId",
+                "locationType": "parameter"
+              }
+            ]
+          }
+        }
+    http_version:
+  recorded_at: Sun, 17 Dec 2023 14:43:59 GMT
+- request:
+    method: get
+    uri: https://www.googleapis.com/drive/v3/files/1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV?fields=id,name,parents&supportsAllDrives=true
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      User-Agent:
+      - unknown/0.0.0 google-apis-drive_v3/0.46.0 Mac OS X/13.1 (gzip)
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip,deflate
+      Date:
+      - Sun, 17 Dec 2023 14:43:59 GMT
+      X-Goog-Api-Client:
+      - gl-ruby/3.2.2 gdcl/1.46.0
+      Authorization:
+      - Bearer ya29.a0AfB_byArAuieDOVsl70OueFD9xqqEFIGM9uqtLKX0hA3uzdAXEsilBpx6bASlxoWX8l6oYXGbfbSNWZChuyUaPKy4lqjKypsi937ottSyLZQQ47Xow2kLfcKKgYXTUq0yVuWHcLdPeBe4MIVrXGVrtWamVNTeQjsZ0xxzowaCgYKAeQSARESFQHGX2Mi8PHAl_roRhWz3e0_r02kDQ0174
+      Content-Type:
+      - application/x-www-form-urlencoded
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Vary:
+      - Origin, X-Origin
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Date:
+      - Sun, 17 Dec 2023 14:44:00 GMT
+      Pragma:
+      - no-cache
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Encoding:
+      - gzip
+      Server:
+      - ESF
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: |
+        {
+          "id": "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV",
+          "name": "Folder B",
+          "parents": [
+            "1PJwkZgkByPMcbkfzneq65Cx1CnDNMVR_"
+          ]
+        }
+    http_version:
+  recorded_at: Sun, 17 Dec 2023 14:43:59 GMT
+- request:
+    method: get
+    uri: https://www.googleapis.com/drive/v3/files/1REPQUYEGym1APlylgINdZFO1Lh85eDq4?fields=id,mimeType&supportsAllDrives=true
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      User-Agent:
+      - unknown/0.0.0 google-apis-drive_v3/0.46.0 Mac OS X/13.1 (gzip)
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip,deflate
+      Date:
+      - Sun, 17 Dec 2023 14:43:59 GMT
+      X-Goog-Api-Client:
+      - gl-ruby/3.2.2 gdcl/1.46.0
+      Authorization:
+      - Bearer ya29.a0AfB_byArAuieDOVsl70OueFD9xqqEFIGM9uqtLKX0hA3uzdAXEsilBpx6bASlxoWX8l6oYXGbfbSNWZChuyUaPKy4lqjKypsi937ottSyLZQQ47Xow2kLfcKKgYXTUq0yVuWHcLdPeBe4MIVrXGVrtWamVNTeQjsZ0xxzowaCgYKAeQSARESFQHGX2Mi8PHAl_roRhWz3e0_r02kDQ0174
+      Content-Type:
+      - application/x-www-form-urlencoded
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Pragma:
+      - no-cache
+      Vary:
+      - Origin, X-Origin
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Date:
+      - Sun, 17 Dec 2023 14:44:00 GMT
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Encoding:
+      - gzip
+      Server:
+      - ESF
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: |
+        {
+          "id": "1REPQUYEGym1APlylgINdZFO1Lh85eDq4",
+          "mimeType": "application/vnd.google-apps.folder"
+        }
+    http_version:
+  recorded_at: Sun, 17 Dec 2023 14:44:00 GMT
+- request:
+    method: get
+    uri: https://www.googleapis.com/drive/v3/files?fields=files(id)&includeItemsFromAllDrives=true&q=%271REPQUYEGym1APlylgINdZFO1Lh85eDq4%27%20in%20parents%20and%20mimeType%20=%20%27application/vnd.google-apps.folder%27%20and%20trashed%20=%20false%20and%20name%20=%20%27Folder%20B%27&supportsAllDrives=true
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      User-Agent:
+      - unknown/0.0.0 google-apis-drive_v3/0.46.0 Mac OS X/13.1 (gzip)
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip,deflate
+      Date:
+      - Sun, 17 Dec 2023 14:44:00 GMT
+      X-Goog-Api-Client:
+      - gl-ruby/3.2.2 gdcl/1.46.0
+      Authorization:
+      - Bearer ya29.a0AfB_byArAuieDOVsl70OueFD9xqqEFIGM9uqtLKX0hA3uzdAXEsilBpx6bASlxoWX8l6oYXGbfbSNWZChuyUaPKy4lqjKypsi937ottSyLZQQ47Xow2kLfcKKgYXTUq0yVuWHcLdPeBe4MIVrXGVrtWamVNTeQjsZ0xxzowaCgYKAeQSARESFQHGX2Mi8PHAl_roRhWz3e0_r02kDQ0174
+      Content-Type:
+      - application/x-www-form-urlencoded
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Date:
+      - Sun, 17 Dec 2023 14:44:00 GMT
+      Pragma:
+      - no-cache
+      Vary:
+      - Origin, X-Origin
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Encoding:
+      - gzip
+      Server:
+      - ESF
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: |
+        {
+          "files": [
+            {
+              "id": "1CUk2Z1Qg52TcjWYFvUuqngL3brXa0Xv2"
+            }
+          ]
+        }
+    http_version:
+  recorded_at: Sun, 17 Dec 2023 14:44:00 GMT
+- request:
+    method: patch
+    uri: https://www.googleapis.com/drive/v3/files/1cB-qwVowTr6cFIEHa-E3M-fpk6JMMmpUW1JIITP6TUE?addParents=0AAlR_RskXvWzUk9PVA&removeParents=1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV&supportsAllDrives=true
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      User-Agent:
+      - unknown/0.0.0 google-apis-drive_v3/0.46.0 Mac OS X/13.1 (gzip)
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip,deflate
+      Date:
+      - Sun, 17 Dec 2023 14:44:00 GMT
+      X-Goog-Api-Client:
+      - gl-ruby/3.2.2 gdcl/1.46.0
+      Authorization:
+      - Bearer ya29.a0AfB_byDvSGIQZ-33ROYcbqwxOXU15zsTkOhlwKbMlKuxX6dldJ1m4dAnP0ROPZxWTknQ5Gcq_JDcthhaa1pEPb1pQC7Scq1h6PHbIIysI3ZxeMuKIChhpdbUD99T-Y0x-D8TeonwGXdWT6WfRee1L3KlpTF1UjjRluDynAaCgYKAZESARMSFQHGX2Mi7NILXNamVKVOuu3PVPTcXA0173
+      Content-Type:
+      - application/x-www-form-urlencoded
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Date:
+      - Sun, 17 Dec 2023 14:44:01 GMT
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Vary:
+      - Origin, X-Origin
+      Pragma:
+      - no-cache
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Encoding:
+      - gzip
+      Server:
+      - ESF
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: |
+        {
+          "kind": "drive#file",
+          "id": "1cB-qwVowTr6cFIEHa-E3M-fpk6JMMmpUW1JIITP6TUE",
+          "name": "File B.1",
+          "mimeType": "application/vnd.google-apps.document",
+          "teamDriveId": "0AAlR_RskXvWzUk9PVA",
+          "driveId": "0AAlR_RskXvWzUk9PVA"
+        }
+    http_version:
+  recorded_at: Sun, 17 Dec 2023 14:44:01 GMT
+- request:
+    method: patch
+    uri: https://www.googleapis.com/drive/v3/files/1cB-qwVowTr6cFIEHa-E3M-fpk6JMMmpUW1JIITP6TUE?addParents=1CUk2Z1Qg52TcjWYFvUuqngL3brXa0Xv2&removeParents=0AAlR_RskXvWzUk9PVA&supportsAllDrives=true
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      User-Agent:
+      - unknown/0.0.0 google-apis-drive_v3/0.46.0 Mac OS X/13.1 (gzip)
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip,deflate
+      Date:
+      - Sun, 17 Dec 2023 14:44:01 GMT
+      X-Goog-Api-Client:
+      - gl-ruby/3.2.2 gdcl/1.46.0
+      Authorization:
+      - Bearer ya29.a0AfB_byArAuieDOVsl70OueFD9xqqEFIGM9uqtLKX0hA3uzdAXEsilBpx6bASlxoWX8l6oYXGbfbSNWZChuyUaPKy4lqjKypsi937ottSyLZQQ47Xow2kLfcKKgYXTUq0yVuWHcLdPeBe4MIVrXGVrtWamVNTeQjsZ0xxzowaCgYKAeQSARESFQHGX2Mi8PHAl_roRhWz3e0_r02kDQ0174
+      Content-Type:
+      - application/x-www-form-urlencoded
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Date:
+      - Sun, 17 Dec 2023 14:44:02 GMT
+      Vary:
+      - Origin, X-Origin
+      Pragma:
+      - no-cache
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Encoding:
+      - gzip
+      Server:
+      - ESF
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: |
+        {
+          "kind": "drive#file",
+          "id": "1cB-qwVowTr6cFIEHa-E3M-fpk6JMMmpUW1JIITP6TUE",
+          "name": "File B.1",
+          "mimeType": "application/vnd.google-apps.document",
+          "teamDriveId": "0AExZ3-Cu5q7uUk9PVA",
+          "driveId": "0AExZ3-Cu5q7uUk9PVA"
+        }
+    http_version:
+  recorded_at: Sun, 17 Dec 2023 14:44:02 GMT
+recorded_with: VCR 4.0.0

@@ -16,7 +16,7 @@ module GDrive
       # We can't use a subdomain on these pages due to Google API restrictions.
       prepend_before_action :set_current_community_from_callback_state, only: :callback
 
-      before_action :load_and_check_consent_request, except: [:callback, :opt_out_complete]
+      before_action :load_and_check_consent_request, except: [:callback, :ingest_status, :opt_out_complete]
 
       def intro
         @operation = @consent_request.operation
@@ -89,23 +89,21 @@ module GDrive
           ingest_file_ids: params[:file_ids],
           ingest_status: "new"
         )
+        IngestJob.perform_later(
+          cluster_id: current_cluster.id,
+          community_id: current_community.id,
+          consent_request_id: @consent_request.id
+        )
         head :no_content
       end
 
       def ingest_status
+        @consent_request = ConsentRequest.find_by!(token: params[:token])
         main_config = MainConfig.find_by!(community: current_community)
         org_user_id = main_config.org_user_id
 
-        # Fake!
-        if @consent_request.ingest_status == "new"
-          @consent_request.update!(
-            ingest_status: "done",
-            file_count: @consent_request.file_count - @consent_request.ingest_file_ids.size
-          )
-        end
-
         if @consent_request.ingest_overdue?
-          ErrorReporter.instance.report(StandardError.new("GDrive file ingest overdue"), data: {consent_request_id: @consent_request.id})
+          Gather::ErrorReporter.instance.report(StandardError.new("GDrive file ingest overdue"), data: {consent_request_id: @consent_request.id})
           @consent_request.set_ingest_failed
         end
 
@@ -119,12 +117,13 @@ module GDrive
       end
 
       def opt_out
-        @uningested_files = File.where(owner: @consent_request.google_email, status: "pending")
+        @uningested_files = @consent_request.operation.files.where(owner: @consent_request.google_email, status: "pending")
           .order(:name).page(params[:page])
       end
 
       def confirm_opt_out
         @consent_request.update!(status: "opted_out", opt_out_reason: params[:gdrive_migration_consent_request][:opt_out_reason])
+        @consent_request.operation.files.where(owner: @consent_request.google_email, status: "pending").update_all(status: "declined")
         redirect_to gdrive_migration_consent_opt_out_complete_path
       end
 

@@ -132,7 +132,7 @@ module GDrive
 
       # Builds, but does not save, a migration file record based on the given ID.
       # We then proceed through ingestion with this unpersisted object, only saving it if
-      # ingestion is successful. Returns nil if getting the file fails.
+      # ingestion is successful. Returns nil if getting the file fails or if it's a folder.
       def build_new_migration_file(file_id)
         Rails.logger.info("No matching File record for file. Attempting to create.", file_id: file_id)
 
@@ -141,6 +141,11 @@ module GDrive
 
         if gdrive_file.parents.blank?
           Rails.logger.error("File has no accessible parents", file_id: file_id)
+          return nil
+        elsif gdrive_file.mime_type == GDrive::FOLDER_MIME_TYPE
+          # This shouldn't normally happen since we don't allow picking folders in the picker
+          # but just in case.
+          Rails.logger.error("File is a folder, skipping", file_id: file_id)
           return nil
         end
 

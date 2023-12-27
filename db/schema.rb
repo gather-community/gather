@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_12_20_131553) do
+ActiveRecord::Schema[7.0].define(version: 2023_12_27_154339) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -375,15 +375,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_20_131553) do
     t.datetime "created_at", null: false
     t.string "dest_folder_id", limit: 255
     t.string "src_folder_id", limit: 255
+    t.string "start_page_token"
     t.string "status", default: "new", null: false
     t.datetime "updated_at", null: false
+    t.string "webhook_channel_id"
     t.index ["config_id"], name: "index_gdrive_migration_operations_on_config_id"
   end
 
   create_table "gdrive_migration_scan_tasks", force: :cascade do |t|
     t.integer "cluster_id", null: false
     t.datetime "created_at", null: false
-    t.string "folder_id", limit: 128, null: false
+    t.string "folder_id", limit: 128
     t.text "page_token"
     t.bigint "scan_id", null: false
     t.datetime "updated_at", null: false

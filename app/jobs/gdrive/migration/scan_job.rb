@@ -14,6 +14,7 @@ module GDrive
       attr_accessor :cluster_id, :scan_task, :scan, :operation
 
       def perform(cluster_id:, scan_task_id:)
+        Rails.logger.info("ScanJob starting", scan_task_id: scan_task_id)
         self.cluster_id = cluster_id
         ActsAsTenant.with_tenant(Cluster.find(cluster_id)) do
           self.scan_task = ScanTask.find(scan_task_id)
@@ -26,7 +27,7 @@ module GDrive
       rescue ActiveRecord::RecordNotFound => error
         class_name = error.message.match(/Couldn't find (.+) with/).captures[0]
         raise unless DISAPPEARABLE_CLASSES.include?(class_name)
-        Rails.logger.info(error.message)
+        Rails.logger.error(error.message)
         Rails.logger.info("Exiting gracefully")
       end
 
@@ -47,7 +48,10 @@ module GDrive
         # has hit too many errors and cancelled the scan.
         file_list.files.each do |gdrive_file|
           ensure_scan_status_in_progress_unless_cancelled
-          break if scan.cancelled?
+          if scan.cancelled?
+            Rails.logger.info("Scan has been cancelled, exiting loop")
+            break
+          end
           process_file(gdrive_file)
         end
 
@@ -64,6 +68,8 @@ module GDrive
       end
 
       def process_file(gdrive_file)
+        Rails.logger.info("Processing file", id: gdrive_file.id, name: gdrive_file.name,
+          type: gdrive_file.mime_type, owner: gdrive_file.owners[0].email_address)
         scan.increment!(:scanned_file_count)
         if gdrive_file.mime_type == GDrive::FOLDER_MIME_TYPE
           return if scan.delta?
@@ -78,6 +84,7 @@ module GDrive
           ScanJob.perform_later(cluster_id: cluster_id, scan_task_id: scan_task.id)
         else
           operation.files.find_or_create_by!(external_id: gdrive_file.id) do |file|
+            Rails.logger.info("File not found, creating")
             file.name = gdrive_file.name
             file.parent_id = gdrive_file.parents[0]
             file.mime_type = gdrive_file.mime_type
@@ -92,11 +99,13 @@ module GDrive
 
       def lookup_dest_parent_id
         return operation.dest_folder_id if scan_task.folder_id == operation.src_folder_id
+        Rails.logger.info("Looking up dest_parent_id")
         parent_map = FolderMap.find_by!(operation: operation, src_id: scan_task.folder_id)
         parent_map.dest_id
       end
 
       def add_file_error(migration_file, type, message)
+        Rails.logger.error("File error", id: migration_file.id, type: type, message: message)
         migration_file.update!(status: "errored", error_type: type, error_message: message)
         scan.increment!(:error_count)
         if scan.error_count >= MIN_ERRORS_TO_CANCEL &&
@@ -107,6 +116,7 @@ module GDrive
 
       def scan_next_page(file_list)
         if file_list.next_page_token
+          Rails.logger.info("Creating scan task for next page")
           new_task = scan.scan_tasks.create!(
             folder_id: scan_task.folder_id,
             page_token: file_list.next_page_token
@@ -128,6 +138,7 @@ module GDrive
 
       def cancel_scan(reason:)
         with_lock do
+          Rails.logger.info("Cancelling scan", reason: reason)
           scan.update!(status: "cancelled", cancel_reason: reason)
         end
       end
@@ -146,6 +157,7 @@ module GDrive
           # We need to check again if cancelled in case another job has cancelled
           # the operation.
           if ScanTask.where(scan: scan).none? && !scan.reload.cancelled?
+            Rails.logger.info("No more scan task exists for this scan, marking complete")
             scan.update!(status: "complete")
           end
         end

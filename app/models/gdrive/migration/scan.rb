@@ -10,6 +10,8 @@ module GDrive
       belongs_to :operation, inverse_of: :scans
       has_many :scan_tasks, inverse_of: :scan, dependent: :destroy
 
+      scope :changes, -> { where(scope: "changes") }
+
       def new?
         status == "new"
       end

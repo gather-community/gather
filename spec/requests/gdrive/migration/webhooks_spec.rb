@@ -34,6 +34,25 @@ describe "gdrive auth callback" do
     end
   end
 
+  context "if new change scan already exists" do
+    let!(:scan) { create(:gdrive_migration_scan, operation: operation, scope: "changes", status: "new") }
+
+    it "doesn't schedule job" do
+      expect do
+        post("/gdrive/migration/changes", headers: {
+          "x-goog-channel-id" => "12cd",
+          "x-goog-channel-token" => "56ab"
+        })
+        expect(response.status).to eq(204)
+      end.not_to have_enqueued_job(GDrive::Migration::ScanJob)
+
+      ActsAsTenant.with_tenant(Defaults.cluster) do
+        expect(GDrive::Migration::Scan.count).to eq(1)
+        expect(GDrive::Migration::ScanTask.count).to eq(0)
+      end
+    end
+  end
+
   context "with missing operation" do
     it "returns 404" do
       expect do

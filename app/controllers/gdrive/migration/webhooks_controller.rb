@@ -28,9 +28,17 @@ module GDrive
           return render_not_found
         end
 
-        scan = operation.scans.create!(scope: "changes")
-        scan_task = scan.scan_tasks.create!(page_token: operation.start_page_token)
-        ScanJob.perform_later(cluster_id: current_cluster.id, scan_task_id: scan_task.id)
+        ScanJob.with_lock(operation.id) do
+          # No need to start a new scan if there is already one that hasn't started running.
+          # Background jobs only get started every few seconds so this should debounce
+          # things if a lot of webhook pings are coming in.
+          # We do this in a critical section so that we don't have any race conditions.
+          if !operation.scans.changes.any?(&:new?)
+            scan = operation.scans.create!(scope: "changes")
+            scan_task = scan.scan_tasks.create!(page_token: operation.start_page_token)
+            ScanJob.perform_later(cluster_id: current_cluster.id, scan_task_id: scan_task.id)
+          end
+        end
       end
 
       private

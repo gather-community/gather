@@ -13,6 +13,15 @@ module GDrive
 
       attr_accessor :cluster_id, :scan_task, :scan, :operation
 
+      def self.with_lock(operation_id, &block)
+        # We use the operation and not the scan as the context since there could be a race condition
+        # between several scans running at the same time for the same operation.
+        lock_name = "gdrive-migration-scan-operation-#{operation_id}"
+        Operation.with_advisory_lock!(lock_name, timeout_seconds: 120, disable_query_cache: true) do
+          block.call
+        end
+      end
+
       def perform(cluster_id:, scan_task_id:)
         Rails.logger.info("ScanJob starting", scan_task_id: scan_task_id)
         self.cluster_id = cluster_id
@@ -129,7 +138,7 @@ module GDrive
         # We need a critical section here because otherwise we could have a
         # separate job that updates status to cancelled after we check
         # but before we set to "in_progress". We would then wipe out the cancellation.
-        with_lock do
+        self.class.with_lock(operation.id) do
           unless scan.reload.cancelled?
             scan.update!(status: "in_progress")
           end
@@ -137,7 +146,7 @@ module GDrive
       end
 
       def cancel_scan(reason:)
-        with_lock do
+        self.class.with_lock(operation.id) do
           Rails.logger.info("Cancelling scan", reason: reason)
           scan.update!(status: "cancelled", cancel_reason: reason)
         end
@@ -152,7 +161,7 @@ module GDrive
         # is another ScanJob running at the same time, it must have already
         # deleted its ScanTask, so there is not a chance of us thinking we are
         # not the last one when in fact we are.
-        with_lock do
+        self.class.with_lock(operation.id) do
           scan_task.destroy
           # We need to check again if cancelled in case another job has cancelled
           # the operation.
@@ -172,15 +181,6 @@ module GDrive
         # the files because we have drive (not drive.file) scope on that app.
         main_config = MainConfig.find_by(community: migration_config.community)
         @wrapper = Wrapper.new(config: main_config, google_user_id: main_config.org_user_id)
-      end
-
-      def with_lock(&block)
-        # We use the operation and not the scan as the context since there could be a race condition
-        # between several scans running at the same time for the same operation.
-        lock_name = "gdrive-migration-scan-operation-#{operation.id}"
-        Operation.with_advisory_lock!(lock_name, timeout_seconds: 120, disable_query_cache: true) do
-          block.call
-        end
       end
     end
   end

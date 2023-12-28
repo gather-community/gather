@@ -379,6 +379,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_27_154339) do
     t.string "status", default: "new", null: false
     t.datetime "updated_at", null: false
     t.string "webhook_channel_id"
+    t.string "webhook_secret"
     t.index ["config_id"], name: "index_gdrive_migration_operations_on_config_id"
   end
 

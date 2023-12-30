@@ -8,17 +8,17 @@ http_interactions:
       string: ''
     headers:
       User-Agent:
-      - unknown/0.0.0 google-apis-drive_v3/0.32.0 Mac OS X/13.1 (gzip)
+      - unknown/0.0.0 google-apis-drive_v3/0.46.0 Mac OS X/13.1 (gzip)
       Accept:
       - "*/*"
       Accept-Encoding:
       - gzip,deflate
       Date:
-      - Fri, 01 Dec 2023 13:06:55 GMT
+      - Fri, 29 Dec 2023 23:16:53 GMT
       X-Goog-Api-Client:
-      - gl-ruby/3.2.2 gdcl/1.32.0
+      - gl-ruby/3.2.2 gdcl/1.46.0
       Authorization:
-      - Bearer ya29.xxx
+      - Bearer ya29.a0AfB_byCv-60d131HAAFOuEe0Uk5WLxUbJObHxo1JmgK7sudyu8KxHr_O-Hm1fF_GKSCMXEa7Pm1lRF7n7kWSeXAML49vJKB_JQtvw3dGzBCKe1DJIR877Oi7OR5jLmd3ad7hDUasg34gHhatsfQDzaxySKhsNjrPOHoRmLUaCgYKAY8SARESFQHGX2MiaTN8U4-K4dJcO6KDbQ_woQ0174
       Content-Type:
       - application/x-www-form-urlencoded
   response:
@@ -32,10 +32,10 @@ http_interactions:
       - Mon, 01 Jan 1990 00:00:00 GMT
       Vary:
       - Origin, X-Origin
+      Date:
+      - Fri, 29 Dec 2023 23:16:54 GMT
       Cache-Control:
       - no-cache, no-store, max-age=0, must-revalidate
-      Date:
-      - Fri, 01 Dec 2023 13:06:55 GMT
       Content-Type:
       - application/json; charset=UTF-8
       Content-Encoding:
@@ -68,10 +68,10 @@ http_interactions:
                   "emailAddress": "example@gmail.com"
                 }
               ],
-              "webViewLink": "https://docs.google.com/document/d/1StDG48lKzbEnlmE5BboPBQCfhSlqxDrReceXiKes1mo/edit?usp=drivesdk",
-              "id": "1StDG48lKzbEnlmE5BboPBQCfhSlqxDrReceXiKes1mo",
-              "name": "File B.2",
-              "modifiedTime": "2023-07-01T04:18:49.486Z",
+              "webViewLink": "https://docs.google.com/document/d/1IufP1TQKUf9ZlU0q-pIdY52Hg5arZc2KYGHqT-dK4nY/edit?usp=drivesdk",
+              "id": "1IufP1TQKUf9ZlU0q-pIdY52Hg5arZc2KYGHqT-dK4nY",
+              "name": "File B.1",
+              "modifiedTime": "2023-12-29T23:12:37.671Z",
               "capabilities": {
                 "canEdit": true
               }
@@ -79,5 +79,70 @@ http_interactions:
           ]
         }
     http_version:
-  recorded_at: Fri, 01 Dec 2023 13:06:55 GMT
+  recorded_at: Fri, 29 Dec 2023 23:16:54 GMT
+- request:
+    method: post
+    uri: https://www.googleapis.com/drive/v3/changes/watch?includeCorpusRemovals=true&includeItemsFromAllDrives=false&includeRemoved=true&pageToken=12345&spaces=drive
+    body:
+      encoding: UTF-8
+      string: '{"address":"https://gatherdev.org:31337/gdrive/migration/changes","id":"b0801a4c-4437-4284-b723-035c7c7f87f8","token":"7ca1eda696d682802edf3d3056ca03fd","type":"web_hook"}'
+    headers:
+      User-Agent:
+      - unknown/0.0.0 google-apis-drive_v3/0.46.0 Mac OS X/13.1 (gzip)
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip,deflate
+      Date:
+      - Fri, 29 Dec 2023 23:16:54 GMT
+      X-Goog-Api-Client:
+      - gl-ruby/3.2.2 gdcl/1.46.0
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer ya29.a0AfB_byCv-60d131HAAFOuEe0Uk5WLxUbJObHxo1JmgK7sudyu8KxHr_O-Hm1fF_GKSCMXEa7Pm1lRF7n7kWSeXAML49vJKB_JQtvw3dGzBCKe1DJIR877Oi7OR5jLmd3ad7hDUasg34gHhatsfQDzaxySKhsNjrPOHoRmLUaCgYKAY8SARESFQHGX2MiaTN8U4-K4dJcO6KDbQ_woQ0174
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Pragma:
+      - no-cache
+      Vary:
+      - Origin, X-Origin
+      Date:
+      - Fri, 29 Dec 2023 23:16:54 GMT
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Encoding:
+      - gzip
+      Server:
+      - ESF
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: |
+        {
+          "kind": "api#channel",
+          "id": "b0801a4c-4437-4284-b723-035c7c7f87f8",
+          "resourceId": "030dP89w23Mzw28mQBrIu00iMXg",
+          "resourceUri": "https://www.googleapis.com/drive/v3/changes?alt=json&includeCorpusRemovals=true&includeItemsFromAllDrives=false&includeRemoved=true&pageToken=12345&spaces=drive",
+          "token": "7ca1eda696d682802edf3d3056ca03fd",
+          "expiration": "1703895414000"
+        }
+    http_version:
+  recorded_at: Fri, 29 Dec 2023 23:16:54 GMT
 recorded_with: VCR 4.0.0

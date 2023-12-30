@@ -19,6 +19,10 @@ module GDrive
 
       delegate :community, :community_id, to: :config
 
+      def webhook_registered?
+        webhook_channel_id.present?
+      end
+
       def src_folder_url
         "https://drive.google.com/drive/u/0/folders/#{src_folder_id}"
       end

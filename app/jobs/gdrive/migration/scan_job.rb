@@ -22,14 +22,25 @@ module GDrive
         end
       end
 
+      def self.enqueue_change_scan_job(operation)
+        scan = operation.scans.create!(scope: "changes")
+        scan_task = scan.scan_tasks.create!(page_token: operation.start_page_token)
+        ScanJob.perform_later(cluster_id: operation.cluster_id, scan_task_id: scan_task.id)
+      end
+
       def perform(cluster_id:, scan_task_id:)
-        Rails.logger.info("ScanJob starting", scan_task_id: scan_task_id)
         self.cluster_id = cluster_id
         ActsAsTenant.with_tenant(Cluster.find(cluster_id)) do
           self.scan_task = ScanTask.find(scan_task_id)
           self.scan = scan_task.scan
           self.operation = scan.operation
+          Rails.logger.info("ScanJob starting", operation_id: operation.id, scan_task_id: scan_task_id)
           return if scan.cancelled?
+
+          # We save the start page token now so that we can look back through any changes that we miss
+          # during the scan operation.
+          save_start_page_token if scan.full?
+
           do_scan_task
           check_for_completeness
         end
@@ -41,6 +52,23 @@ module GDrive
       end
 
       private
+
+      def save_start_page_token
+        # Only do this once per operation
+        self.class.with_lock(operation.id) do
+          return if operation.reload.start_page_token.present?
+
+          Rails.logger.info("Getting start_page_token", operation_id: operation.id)
+          start_page_token = wrapper.get_changes_start_page_token
+          operation.update!(
+            # We can setup the channel ID and the secret now too
+            # as they are just random tokens and won't change.
+            webhook_channel_id: SecureRandom.uuid,
+            webhook_secret: SecureRandom.hex,
+            start_page_token: start_page_token
+          )
+        end
+      end
 
       def do_scan_task
         file_list = wrapper.list_files(
@@ -168,8 +196,38 @@ module GDrive
           if ScanTask.where(scan: scan).none? && !scan.reload.cancelled?
             Rails.logger.info("No more scan task exists for this scan, marking complete")
             scan.update!(status: "complete")
+
+            # We can register for this now since we are finished scanning.
+            # We saved the start page token earlier so that we will get any changes
+            # we missed during scanning.
+            register_webhook
+
+            # If main scan job is finishing, we should run a change scan because changes
+            # may have been piling up (and we ignore them during the main scan)
+            self.class.enqueue_change_scan_job(operation)
           end
         end
+      end
+
+      def register_webhook
+        Rails.logger.info("Registering webhook", operation_id: operation.id)
+        webhook_url_settings = Settings.gdrive&.migration&.changes_webhook_url
+        url = Rails.application.routes.url_helpers.gdrive_migration_changes_webhook_url(
+          host: webhook_url_settings&.host || Settings.url.host,
+          port: webhook_url_settings&.port || Settings.url.port,
+          protocol: "https"
+        )
+        wrapper.watch_change(operation.start_page_token,
+          Google::Apis::DriveV3::Channel.new(
+            id: operation.webhook_channel_id,
+            token: operation.webhook_secret,
+            address: url,
+            type: "web_hook"
+          ),
+          include_items_from_all_drives: false,
+          include_corpus_removals: true,
+          include_removed: true,
+          spaces: "drive")
       end
 
       def wrapper

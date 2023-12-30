@@ -7,5 +7,17 @@ FactoryBot.define do
     dest_folder_id { "123abc" }
     contact_name { "John Johns" }
     contact_email { "foo@example.com" }
+
+    trait :webhook_registered do
+      webhook_channel_id { "b0801a4c-4437-4284-b723-035c7c7f87f8" }
+      webhook_secret { "7ca1eda696d682802edf3d3056ca03fd" }
+      start_page_token { "12345" }
+    end
+
+    trait :webhook_not_registered do
+      webhook_channel_id { nil }
+      webhook_secret { nil }
+      start_page_token { nil }
+    end
   end
 end

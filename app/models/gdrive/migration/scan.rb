@@ -10,7 +10,9 @@ module GDrive
       belongs_to :operation, inverse_of: :scans
       has_many :scan_tasks, inverse_of: :scan, dependent: :destroy
 
+      scope :full, -> { where(scope: "full") }
       scope :changes, -> { where(scope: "changes") }
+      scope :pending, -> { where(status: %w[new in_progress]) }
 
       def new?
         status == "new"
@@ -26,6 +28,10 @@ module GDrive
 
       def complete?
         status == "complete"
+      end
+
+      def full?
+        scope == "full"
       end
 
       def delta?

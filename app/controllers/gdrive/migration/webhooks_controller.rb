@@ -34,9 +34,7 @@ module GDrive
           # things if a lot of webhook pings are coming in.
           # We do this in a critical section so that we don't have any race conditions.
           if !operation.scans.changes.any?(&:new?)
-            scan = operation.scans.create!(scope: "changes")
-            scan_task = scan.scan_tasks.create!(page_token: operation.start_page_token)
-            ScanJob.perform_later(cluster_id: current_cluster.id, scan_task_id: scan_task.id)
+            ScanJob.enqueue_change_scan_job(operation)
           end
         end
       end

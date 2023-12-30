@@ -13,8 +13,8 @@ describe GDrive::Migration::ScanJob do
   #   - Gather Migration Test Source Folder
   #     - Folder A
   #       - Folder C
-  #       - File A.1
   #     - Folder B
+  #       - File B.1
   #     - File Root.1
   #     - File Root.2
   #     - File Root.3
@@ -34,98 +34,130 @@ describe GDrive::Migration::ScanJob do
   let!(:token) { create(:gdrive_token, gdrive_config: main_config, google_user_id: main_config.org_user_id) }
   let!(:migration_config) { create(:gdrive_migration_config) }
   let!(:operation) do
-    create(:gdrive_migration_operation, config: migration_config,
+    create(:gdrive_migration_operation, :webhook_registered, config: migration_config,
       src_folder_id: "1FBirfPXk-5qaMO1BkvlyhaC8JARE_FRq",
       dest_folder_id: "0AExZ3-Cu5q7uUk9PVA")
   end
-  let!(:scan) { create(:gdrive_migration_scan, operation: operation) }
 
-  describe "happy path" do
-    let!(:existing_file_record) do
-      # This file already exists and shouldn't cause unique key collisions.
-      create(:gdrive_migration_file, operation: operation, name: "File Root.1",
-        parent_id: operation.src_folder_id,
-        external_id: "1BNTJU85JIJiJerG6f3OddvbiD7McNRmexzeuLwYFjNw")
-    end
-    let(:folder_a_id) { "1PJwkZgkByPMcbkfzneq65Cx1CnDNMVR_" }
-    let(:folder_b_id) { "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV" }
+  describe "full scan" do
+    let!(:scan) { create(:gdrive_migration_scan, operation: operation, scope: "full") }
 
-    before do
-      stub_const("#{described_class.name}::PAGE_SIZE", 4)
-    end
+    describe "first run" do
+      let!(:operation) do
+        create(:gdrive_migration_operation, :webhook_not_registered, config: migration_config,
+          src_folder_id: "1FBirfPXk-5qaMO1BkvlyhaC8JARE_FRq",
+          dest_folder_id: "0AExZ3-Cu5q7uUk9PVA")
+      end
+      let!(:existing_file_record) do
+        # This file already exists and shouldn't cause unique key collisions.
+        create(:gdrive_migration_file, operation: operation, name: "File Root.1",
+          parent_id: operation.src_folder_id,
+          external_id: "1wALtADTYpUwEgeenScUMGghzPMIYXuDnP4Orv-alKno")
+      end
+      let(:folder_a_id) { "1PJwkZgkByPMcbkfzneq65Cx1CnDNMVR_" }
+      let(:folder_b_id) { "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV" }
 
-    it "paginates, tags un-tagged files, creates missing file records, creates folders, schedules other scans, deletes task" do
-      VCR.use_cassette("gdrive/migration/scan_job/happy_path") do
-        scan_task = scan.scan_tasks.create!(folder_id: operation.src_folder_id)
-        expect { described_class.perform_now(cluster_id: Defaults.cluster.id, scan_task_id: scan_task.id) }
-          .to have_enqueued_job(described_class).exactly(3).times
+      before do
+        stub_const("#{described_class.name}::PAGE_SIZE", 4)
+      end
 
-        # Original task should be deleted, tasks for sub-folders should get added, and a new task for the next
-        # page of the top folder should get added too.
-        folder_ids = GDrive::Migration::ScanTask.all.map(&:folder_id)
-        expect(folder_ids).to contain_exactly(operation.src_folder_id,
-          folder_a_id, folder_b_id)
+      it "paginates, tags un-tagged files, creates missing file records, creates folders, schedules other scans, deletes task" do
+        VCR.use_cassette("gdrive/migration/scan_job/first_run") do
+          scan_task = scan.scan_tasks.create!(folder_id: operation.src_folder_id)
+          expect { described_class.perform_now(cluster_id: Defaults.cluster.id, scan_task_id: scan_task.id) }
+            .to have_enqueued_job(described_class).exactly(3).times
 
-        expect(GDrive::Migration::FolderMap.count).to eq(2)
+          # Original task should be deleted, tasks for sub-folders should get added, and a new task for the next
+          # page of the top folder should get added too.
+          folder_ids = GDrive::Migration::ScanTask.all.map(&:folder_id)
+          expect(folder_ids).to contain_exactly(operation.src_folder_id,
+            folder_a_id, folder_b_id)
 
-        page_tokens = GDrive::Migration::ScanTask.all.map(&:page_token).compact
-        expect(page_tokens.size).to eq(1)
+          expect(GDrive::Migration::FolderMap.count).to eq(2)
 
-        task_count = GDrive::Migration::ScanTask.count
-        expect(task_count).to eq(3)
-        enqueued_task_ids = ActiveJob::Base.queue_adapter.enqueued_jobs[-task_count..].map do |j|
-          j["arguments"][0]["scan_task_id"]
+          page_tokens = GDrive::Migration::ScanTask.all.map(&:page_token).compact
+          expect(page_tokens.size).to eq(1)
+
+          task_count = GDrive::Migration::ScanTask.count
+          expect(task_count).to eq(3)
+          enqueued_task_ids = ActiveJob::Base.queue_adapter.enqueued_jobs[-task_count..].map do |j|
+            j["arguments"][0]["scan_task_id"]
+          end
+          expect(enqueued_task_ids).to match_array(GDrive::Migration::ScanTask.all.map(&:id))
+
+          expect(GDrive::Migration::File.all.map(&:name))
+            .to contain_exactly("File Root.1", "File Root.2")
+
+          scan.reload
+          expect(scan.scanned_file_count).to eq(4)
+          expect(scan.status).to eq("in_progress")
+
+          scan_task = scan.scan_tasks.create!(folder_id: folder_a_id)
+          expect { described_class.perform_now(cluster_id: Defaults.cluster.id, scan_task_id: scan_task.id) }
+            .to have_enqueued_job(described_class).once
         end
-        expect(enqueued_task_ids).to match_array(GDrive::Migration::ScanTask.all.map(&:id))
+      end
+    end
 
-        expect(GDrive::Migration::File.all.map(&:name))
-          .to contain_exactly("File Root.1", "File Root.2")
+    describe "when there are no more scan tasks left" do
+      let!(:operation) do
+        create(:gdrive_migration_operation, :webhook_registered, config: migration_config,
+          src_folder_id: "1FBirfPXk-5qaMO1BkvlyhaC8JARE_FRq",
+          dest_folder_id: "0AExZ3-Cu5q7uUk9PVA",
+          webhook_channel_id: "b0801a4c-4437-4284-b723-035c7c7f87f8",
+          start_page_token: "12345")
+      end
+      let(:folder_b_id) { "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV" }
+      let!(:scan_task) { scan.scan_tasks.create!(folder_id: folder_b_id) }
+      subject!(:job) { described_class.new(cluster_id: Defaults.cluster.id, scan_task_id: scan_task.id) }
+
+      it "marks operation complete and registers webhook" do
+        VCR.use_cassette("gdrive/migration/scan_job/no_more_tasks") do
+          expect { perform_job }.to have_enqueued_job(described_class)
+        end
+
+        expect(scan.reload.status).to eq("complete")
+        expect(GDrive::Migration::Scan.count).to eq(2)
+        expect(GDrive::Migration::ScanTask.count).to eq(1)
+        scan_task = GDrive::Migration::ScanTask.first
+        expect(scan_task.page_token).to eq("12345")
+        expect(scan_task.scan.scope).to eq("changes")
+      end
+    end
+
+    describe "auth error" do
+      let(:folder_b_id) { "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV" }
+      let!(:scan_task) { scan.scan_tasks.create!(folder_id: folder_b_id) }
+      subject!(:job) { described_class.new(cluster_id: Defaults.cluster.id, scan_task_id: scan_task.id) }
+
+      it "cancels operation" do
+        VCR.use_cassette("gdrive/migration/scan_job/auth_error") do
+          perform_job
+        end
+
+        expect { scan_task.reload }.to raise_error(ActiveRecord::RecordNotFound)
 
         scan.reload
-        expect(scan.scanned_file_count).to eq(4)
-        expect(scan.status).to eq("in_progress")
-
-        scan_task = scan.scan_tasks.create!(folder_id: folder_a_id)
-        expect { described_class.perform_now(cluster_id: Defaults.cluster.id, scan_task_id: scan_task.id) }
-          .to have_enqueued_job(described_class).once
+        expect(scan.status).to eq("cancelled")
+        expect(scan.cancel_reason).to eq("auth_error")
       end
     end
-  end
 
-  describe "when there are no more scan tasks left" do
-    let(:folder_b_id) { "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV" }
-    let!(:scan_task) { scan.scan_tasks.create!(folder_id: folder_b_id) }
-    subject!(:job) { described_class.new(cluster_id: Defaults.cluster.id, scan_task_id: scan_task.id) }
+    describe "scan task disappears" do
+      let!(:scan_task) { scan.scan_tasks.create!(folder_id: operation.src_folder_id) }
+      subject!(:job) { described_class.new(cluster_id: Defaults.cluster.id, scan_task_id: scan_task.id) }
 
-    it "marks operation complete" do
-      VCR.use_cassette("gdrive/migration/scan_job/no_more_tasks") do
+      before do
+        scan_task.destroy
+      end
+
+      it "terminates gracefully and makes no network calls" do
         perform_job
       end
-
-      expect(GDrive::Migration::ScanTask.count).to eq(0)
-      expect(scan.reload.status).to eq("complete")
     end
   end
 
-  describe "auth error" do
-    let(:folder_b_id) { "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV" }
-    let!(:scan_task) { scan.scan_tasks.create!(folder_id: folder_b_id) }
-    subject!(:job) { described_class.new(cluster_id: Defaults.cluster.id, scan_task_id: scan_task.id) }
-
-    it "cancels operation" do
-      VCR.use_cassette("gdrive/migration/scan_job/auth_error") do
-        perform_job
-      end
-
-      expect { scan_task.reload }.to raise_error(ActiveRecord::RecordNotFound)
-
-      scan.reload
-      expect(scan.status).to eq("cancelled")
-      expect(scan.cancel_reason).to eq("auth_error")
-    end
-  end
-
-  describe "delta scan" do
+  describe "changes scan" do
     let!(:scan) { create(:gdrive_migration_scan, operation: operation, scope: "delta") }
     let!(:scan_task) { scan.scan_tasks.create!(folder_id: operation.src_folder_id) }
     subject!(:job) { described_class.new(cluster_id: Defaults.cluster.id, scan_task_id: scan_task.id) }
@@ -160,19 +192,6 @@ describe GDrive::Migration::ScanJob do
       scan.reload
       expect(scan.scanned_file_count).to eq(4)
       expect(scan.status).to eq("in_progress")
-    end
-  end
-
-  describe "ScanTask disappears" do
-    let!(:scan_task) { scan.scan_tasks.create!(folder_id: operation.src_folder_id) }
-    subject!(:job) { described_class.new(cluster_id: Defaults.cluster.id, scan_task_id: scan_task.id) }
-
-    before do
-      scan_task.destroy
-    end
-
-    it "terminates gracefully and makes no network calls" do
-      perform_job
     end
   end
 end

@@ -31,7 +31,7 @@ describe GDrive::Migration::ScanJob do
   # - Remove token and real email addresses using global find and replace.
 
   let!(:main_config) { create(:gdrive_main_config, org_user_id: "admin@example.org") }
-  let!(:token) { create(:gdrive_token, gdrive_config: main_config, google_user_id: main_config.org_user_id) }
+  let!(:token) { create(:gdrive_token, gdrive_config: main_config, google_user_id: main_config.org_user_id, access_token: "ya29.a0AfB_byBRJRSsYLU-cI8Pw6zBGiaWa80EvNT3qod5hwwfs-AwkyLvamq0LwA-SJO_IQQHOZJPpq15-VNKk5TQj8LIM0ig26Fja1FcyL_XEDEJ_K20iyEzLOs16AHDNqQhTrhOXMwZxkkuNpokRAkIr2LRJMeb5fwvGG4MeKMaCgYKAXESARESFQHGX2MiXuTVMS8n3nCznNFLOEXxkg0174") }
   let!(:migration_config) { create(:gdrive_migration_config) }
   let!(:operation) do
     create(:gdrive_migration_operation, :webhook_registered, config: migration_config,
@@ -62,7 +62,7 @@ describe GDrive::Migration::ScanJob do
       end
 
       it "paginates, tags un-tagged files, creates missing file records, creates folders, schedules other scans, deletes task" do
-        VCR.use_cassette("gdrive/migration/scan_job/first_run") do
+        VCR.use_cassette("gdrive/migration/scan_job/full/first_run") do
           scan_task = scan.scan_tasks.create!(folder_id: operation.src_folder_id)
           expect { described_class.perform_now(cluster_id: Defaults.cluster.id, scan_task_id: scan_task.id) }
             .to have_enqueued_job(described_class).exactly(3).times
@@ -112,7 +112,7 @@ describe GDrive::Migration::ScanJob do
       subject!(:job) { described_class.new(cluster_id: Defaults.cluster.id, scan_task_id: scan_task.id) }
 
       it "marks operation complete and registers webhook" do
-        VCR.use_cassette("gdrive/migration/scan_job/no_more_tasks") do
+        VCR.use_cassette("gdrive/migration/scan_job/full/no_more_tasks") do
           expect { perform_job }.to have_enqueued_job(described_class)
         end
 
@@ -131,7 +131,7 @@ describe GDrive::Migration::ScanJob do
       subject!(:job) { described_class.new(cluster_id: Defaults.cluster.id, scan_task_id: scan_task.id) }
 
       it "cancels operation" do
-        VCR.use_cassette("gdrive/migration/scan_job/auth_error") do
+        VCR.use_cassette("gdrive/migration/scan_job/full/auth_error") do
           perform_job
         end
 
@@ -158,40 +158,41 @@ describe GDrive::Migration::ScanJob do
   end
 
   describe "changes scan" do
-    let!(:scan) { create(:gdrive_migration_scan, operation: operation, scope: "delta") }
-    let!(:scan_task) { scan.scan_tasks.create!(folder_id: operation.src_folder_id) }
+    let!(:operation) do
+      create(:gdrive_migration_operation, :webhook_registered, config: migration_config,
+        src_folder_id: "1FBirfPXk-5qaMO1BkvlyhaC8JARE_FRq",
+        dest_folder_id: "0AExZ3-Cu5q7uUk9PVA",
+        webhook_channel_id: "0009c409-6bf4-473b-ba04-6b0557219502")
+    end
+    let!(:scan) { create(:gdrive_migration_scan, operation: operation, scope: "changes") }
     subject!(:job) { described_class.new(cluster_id: Defaults.cluster.id, scan_task_id: scan_task.id) }
 
-    before do
-      stub_const("#{described_class.name}::PAGE_SIZE", 4)
-    end
+    describe "with changeset containing 3 folders and page size of 2" do
+      let!(:scan_task) { scan.scan_tasks.create!(page_token: "12683") }
 
-    it "paginates but does not schedule other scans" do
-      VCR.use_cassette("gdrive/migration/scan_job/happy_path_delta") do
-        expect { perform_job }.to have_enqueued_job(described_class).exactly(1).times
+      before do
+        stub_const("#{described_class.name}::PAGE_SIZE", 2)
       end
 
-      # Original task should be deleted new task for the next
-      # page of the top folder should get added too. But no new folders should get scanned.
-      folder_ids = GDrive::Migration::ScanTask.all.map(&:folder_id)
-      expect(folder_ids).to contain_exactly(operation.src_folder_id)
+      it "paginates but does not schedule other folder scans" do
+        VCR.use_cassette("gdrive/migration/scan_job/changes/pagination") do
+          expect { perform_job }.to have_enqueued_job(described_class).exactly(1).times
+        end
 
-      page_tokens = GDrive::Migration::ScanTask.all.map(&:page_token).compact
-      expect(page_tokens.size).to eq(1)
+        # Original task should be deleted new and task for the next
+        # page of the changes should get added too. But no new folders should get scanned.
+        scan_tasks = GDrive::Migration::ScanTask.all
+        expect(scan_tasks.size).to eq(1)
+        expect(scan_tasks[0].folder_id).to be_nil
+        expect(scan_tasks[0].page_token).not_to be_nil
+        enqueued_task_ids = ActiveJob::Base.queue_adapter.enqueued_jobs[-scan_tasks.size..].map do |j|
+          j["arguments"][0]["scan_task_id"]
+        end
+        expect(enqueued_task_ids).to eq([scan_tasks[0].id])
 
-      task_count = GDrive::Migration::ScanTask.count
-      expect(task_count).to eq(1)
-      enqueued_task_ids = ActiveJob::Base.queue_adapter.enqueued_jobs[-task_count..].map do |j|
-        j["arguments"][0]["scan_task_id"]
+        scan.reload
+        expect(scan.status).to eq("in_progress")
       end
-      expect(enqueued_task_ids).to match_array(GDrive::Migration::ScanTask.all.map(&:id))
-
-      expect(GDrive::Migration::File.all.map(&:name))
-        .to contain_exactly("File Root.1", "File Root.2")
-
-      scan.reload
-      expect(scan.scanned_file_count).to eq(4)
-      expect(scan.status).to eq("in_progress")
     end
   end
 end

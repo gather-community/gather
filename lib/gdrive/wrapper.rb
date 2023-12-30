@@ -69,6 +69,10 @@ module GDrive
       wrap_api_method { service.watch_change(...) }
     end
 
+    def list_changes(...)
+      wrap_api_method { service.list_changes(...) }
+    end
+
     def has_credentials?
       fetch_credentials_from_store.present?
     end

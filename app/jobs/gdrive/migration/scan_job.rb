@@ -7,6 +7,7 @@ module GDrive
       PAGE_SIZE = 100
       MIN_ERRORS_TO_CANCEL = 5
       MAX_ERROR_RATIO = 0.05
+      FILE_FIELDS = "id,name,parents,mimeType,webViewLink,iconLink,modifiedTime,owners(emailAddress),capabilities(canEdit)"
 
       # If we get a not found error trying to find one of these, we should just terminate gracefully.
       DISAPPEARABLE_CLASSES = %w[GDrive::Migration::Operation GDrive::Migration::Scan GDrive::Migration::ScanTask].freeze
@@ -71,32 +72,33 @@ module GDrive
       end
 
       def do_scan_task
-        file_list = wrapper.list_files(
-          q: "'#{scan_task.folder_id}' in parents and trashed = false",
-          fields: "files(id,name,parents,mimeType,webViewLink,iconLink,modifiedTime,owners(emailAddress),capabilities(canEdit)),nextPageToken",
-          order_by: "folder,name",
-          supports_all_drives: true,
-          page_token: scan_task.page_token,
-          page_size: PAGE_SIZE,
-          include_items_from_all_drives: true
-        )
+        files, next_page_token = if scan.full?
+          list_files_from_folder(scan_task.folder_id)
+        else
+          list_files_from_changes
+        end
+
+        # Update scan status now and then each time we go through loop.
+        # We do it here just in case we are skipping all the files we fetched on the
+        # first page.
+        ensure_scan_status_in_progress_unless_cancelled
 
         # Process files one by one, but check after each one if another task thread
         # has hit too many errors and cancelled the scan.
-        file_list.files.each do |gdrive_file|
-          ensure_scan_status_in_progress_unless_cancelled
+        files.each do |gdrive_file|
           if scan.cancelled?
             Rails.logger.info("Scan has been cancelled, exiting loop")
             break
           end
           process_file(gdrive_file)
+          ensure_scan_status_in_progress_unless_cancelled
         end
 
         # We don't need a critical section/advisory lock here because in the worst case, if there is a
         # race condition we might schedule an extra job, but when it actually runs it will notice
         # the cancelled state before it gets very far.
         unless scan.reload.cancelled?
-          scan_next_page(file_list)
+          scan_next_page(next_page_token)
         end
       rescue Google::Apis::AuthorizationError
         # If we hit an auth error, it is probably not going to resolve itself, and it
@@ -104,21 +106,61 @@ module GDrive
         cancel_scan(reason: "auth_error")
       end
 
+      def list_files_from_folder(folder_id)
+        list = wrapper.list_files(
+          q: "'#{scan_task.folder_id}' in parents and trashed = false",
+          fields: "files(#{FILE_FIELDS}),nextPageToken",
+          order_by: "folder,name",
+          include_items_from_all_drives: true,
+          supports_all_drives: true,
+          page_token: scan_task.page_token,
+          page_size: PAGE_SIZE
+        )
+        [list.files, list.next_page_token]
+      end
+
+      def list_files_from_changes
+        list = wrapper.list_changes(
+          scan_task.page_token,
+          fields: "changes(file(#{FILE_FIELDS},driveId)),nextPageToken",
+          # Even though on change scans we only care about files from My Drive,
+          # we need to include items from all drives because that is how we find out whether
+          # something is in a shared drive or not. For some reason, the API still returns changes
+          # from shared drives regardless of these booleans—it just doesn't tell us what
+          # drive they're from /shrug.
+          include_items_from_all_drives: true,
+          supports_all_drives: true,
+          page_size: PAGE_SIZE,
+          include_corpus_removals: true,
+          include_removed: true,
+          spaces: "drive"
+        )
+
+        # If drive_id is present, it means this is a changes scan and we've pulled in
+        # a change to a Shared Drive item, which we don't care about.
+        [list.changes.select { |c| c.file.drive_id.nil? }.map(&:file), list.next_page_token]
+      end
+
       def process_file(gdrive_file)
         Rails.logger.info("Processing file", id: gdrive_file.id, name: gdrive_file.name,
           type: gdrive_file.mime_type, owner: gdrive_file.owners[0].email_address)
         scan.increment!(:scanned_file_count)
+
         if gdrive_file.mime_type == GDrive::FOLDER_MIME_TYPE
-          return if scan.delta?
-          scan_task = scan.scan_tasks.create!(folder_id: gdrive_file.id)
           dest_parent_id = lookup_dest_parent_id
           dest_folder = Google::Apis::DriveV3::File.new(name: gdrive_file.name, parents: [dest_parent_id],
             mime_type: GDrive::FOLDER_MIME_TYPE)
           dest_folder = wrapper.create_file(dest_folder, fields: "id", supports_all_drives: true)
-          FolderMap.create!(operation: operation, src_parent_id: self.scan_task.folder_id,
+
+          FolderMap.create!(operation: operation, src_parent_id: gdrive_file.parents[0],
             src_id: gdrive_file.id, dest_parent_id: dest_parent_id, dest_id: dest_folder.id,
             name: gdrive_file.name)
-          ScanJob.perform_later(cluster_id: cluster_id, scan_task_id: scan_task.id)
+
+          return if scan.changes?
+
+          Rails.logger.info("Scheduling scan task for folder", folder_id: gdrive_file.id)
+          new_scan_task = scan.scan_tasks.create!(folder_id: gdrive_file.id)
+          ScanJob.perform_later(cluster_id: cluster_id, scan_task_id: new_scan_task.id)
         else
           operation.files.find_or_create_by!(external_id: gdrive_file.id) do |file|
             Rails.logger.info("File not found, creating")
@@ -151,12 +193,13 @@ module GDrive
         end
       end
 
-      def scan_next_page(file_list)
-        if file_list.next_page_token
+      def scan_next_page(next_page_token)
+        if next_page_token
           Rails.logger.info("Creating scan task for next page")
           new_task = scan.scan_tasks.create!(
+            # This may be nil if we are doing a changes scan.
             folder_id: scan_task.folder_id,
-            page_token: file_list.next_page_token
+            page_token: next_page_token
           )
           ScanJob.perform_later(cluster_id: cluster_id, scan_task_id: new_task.id)
         end

@@ -34,8 +34,8 @@ module GDrive
         scope == "full"
       end
 
-      def delta?
-        scope == "delta"
+      def changes?
+        scope == "changes"
       end
     end
   end

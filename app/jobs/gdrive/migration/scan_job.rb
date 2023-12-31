@@ -147,7 +147,7 @@ module GDrive
         scan.increment!(:scanned_file_count)
 
         if gdrive_file.mime_type == GDrive::FOLDER_MIME_TYPE
-          dest_parent_id = lookup_dest_parent_id
+          dest_parent_id = lookup_dest_folder_id(gdrive_file.parents[0])
           dest_folder = Google::Apis::DriveV3::File.new(name: gdrive_file.name, parents: [dest_parent_id],
             mime_type: GDrive::FOLDER_MIME_TYPE)
           dest_folder = wrapper.create_file(dest_folder, fields: "id", supports_all_drives: true)
@@ -158,7 +158,7 @@ module GDrive
 
           return if scan.changes?
 
-          Rails.logger.info("Scheduling scan task for folder", folder_id: gdrive_file.id)
+          Rails.logger.info("Scheduling scan task for subfolder", folder_id: gdrive_file.id)
           new_scan_task = scan.scan_tasks.create!(folder_id: gdrive_file.id)
           ScanJob.perform_later(cluster_id: cluster_id, scan_task_id: new_scan_task.id)
         else
@@ -176,11 +176,11 @@ module GDrive
         end
       end
 
-      def lookup_dest_parent_id
-        return operation.dest_folder_id if scan_task.folder_id == operation.src_folder_id
-        Rails.logger.info("Looking up dest_parent_id")
-        parent_map = FolderMap.find_by!(operation: operation, src_id: scan_task.folder_id)
-        parent_map.dest_id
+      def lookup_dest_folder_id(src_id)
+        return operation.dest_folder_id if src_id == operation.src_folder_id
+        Rails.logger.info("Looking up dest folder id")
+        folder_map = FolderMap.find_by!(operation: operation, src_id: src_id)
+        folder_map.dest_id
       end
 
       def add_file_error(migration_file, type, message)
@@ -240,14 +240,16 @@ module GDrive
             Rails.logger.info("No more scan task exists for this scan, marking complete")
             scan.update!(status: "complete")
 
-            # We can register for this now since we are finished scanning.
-            # We saved the start page token earlier so that we will get any changes
-            # we missed during scanning.
-            register_webhook
+            if scan.full?
+              # We can register for this now since we are finished scanning.
+              # We saved the start page token earlier so that we will get any changes
+              # we missed during scanning.
+              register_webhook
 
-            # If main scan job is finishing, we should run a change scan because changes
-            # may have been piling up (and we ignore them during the main scan)
-            self.class.enqueue_change_scan_job(operation)
+              # If main scan job is finishing, we should run a change scan because changes
+              # may have been piling up (and we ignore them during the main scan)
+              self.class.enqueue_change_scan_job(operation)
+            end
           end
         end
       end

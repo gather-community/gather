@@ -147,14 +147,7 @@ module GDrive
         scan.increment!(:scanned_file_count)
 
         if gdrive_file.mime_type == GDrive::FOLDER_MIME_TYPE
-          dest_parent_id = lookup_dest_folder_id(gdrive_file.parents[0])
-          dest_folder = Google::Apis::DriveV3::File.new(name: gdrive_file.name, parents: [dest_parent_id],
-            mime_type: GDrive::FOLDER_MIME_TYPE)
-          dest_folder = wrapper.create_file(dest_folder, fields: "id", supports_all_drives: true)
-
-          FolderMap.create!(operation: operation, src_parent_id: gdrive_file.parents[0],
-            src_id: gdrive_file.id, dest_parent_id: dest_parent_id, dest_id: dest_folder.id,
-            name: gdrive_file.name)
+          return unless process_new_folder(gdrive_file)
 
           return if scan.changes?
 
@@ -176,11 +169,25 @@ module GDrive
         end
       end
 
+      def process_new_folder(gdrive_file)
+        dest_parent_id = lookup_dest_folder_id(gdrive_file.parents[0])
+
+        return false if dest_parent_id.nil?
+
+        dest_folder = Google::Apis::DriveV3::File.new(name: gdrive_file.name, parents: [dest_parent_id],
+          mime_type: GDrive::FOLDER_MIME_TYPE)
+        dest_folder = wrapper.create_file(dest_folder, fields: "id", supports_all_drives: true)
+
+        FolderMap.create!(operation: operation, src_parent_id: gdrive_file.parents[0],
+          src_id: gdrive_file.id, dest_parent_id: dest_parent_id, dest_id: dest_folder.id,
+          name: gdrive_file.name)
+      end
+
       def lookup_dest_folder_id(src_id)
         return operation.dest_folder_id if src_id == operation.src_folder_id
         Rails.logger.info("Looking up dest folder id")
-        folder_map = FolderMap.find_by!(operation: operation, src_id: src_id)
-        folder_map.dest_id
+        folder_map = FolderMap.find_by(operation: operation, src_id: src_id)
+        folder_map&.dest_id
       end
 
       def add_file_error(migration_file, type, message)

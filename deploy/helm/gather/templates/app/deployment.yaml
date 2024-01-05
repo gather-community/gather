@@ -1,0 +1,95 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "gather.app.name" . }}
+  labels:
+    {{- include "common.labels.standard" . | nindent 4 }}
+spec:
+  {{- if not .Values.app.autoscaling.enabled }}
+  replicas: {{ .Values.app.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "gather.app.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.app.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "gather.app.labels" . | nindent 8 }}
+        {{- with .Values.app.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.app.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "gather.app.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.app.podSecurityContext | nindent 8 }}
+      containers:
+        - name: gather-app
+          securityContext:
+            {{- toYaml .Values.app.securityContext | nindent 12 }}
+          image: "{{ .Values.app.image.repository }}:{{ .Values.app.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.app.image.pullPolicy }}
+          env:
+            - name: SETTINGS__ELASTICSEARCH__HOST:
+              value: {{ include "gather.elasticsearch.fullname" . }}
+            - name: SETTINGS__REDIS__URL:
+              value: {{ include "gather.elasticsearch.fullname" . }}
+            - name: SETTINGS__DATABASE__HOST
+              value: {{ include "gather.postgresql.fullname" . }}
+            - name: SETTINGS__DATABASE__USERNAME
+              value: {{ .Values.postgresql.auth.username }}
+            - name: SETTINGS__DATABASE__PASSWORD
+              value: {{ .Values.postgresql.auth.password }}
+            - name: SETTINGS__DATABASE__DATABASE
+              value: {{ .Values.postgresql.auth.database }}
+            - name: SETTINGS__OAUTH__GOOGLE__CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                    name: {{ .Values.app.identity.oidcSecret }}
+                    key: client_id
+            - name: SETTINGS__OAUTH__GOOGLE__CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                    name: {{ .Values.app.identity.oidcSecret }}
+                    key: client_secret
+          ports:
+            - name: http
+              containerPort: {{ .Values.app.service.port }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          resources:
+            {{- toYaml .Values.app.resources | nindent 12 }}
+          {{- with .Values.app.volumeMounts }}
+          volumeMounts:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      {{- with .Values.app.volumes }}
+      volumes:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.app.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.app.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.app.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

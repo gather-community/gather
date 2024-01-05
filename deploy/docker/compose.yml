@@ -1,0 +1,91 @@
+name: gather-stack
+
+services:
+  gather:
+    build:
+      context: ../../
+      dockerfile: Dockerfile
+    restart: always
+    env_file:
+      - .env.local
+      - .env.gather
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - gather
+    profiles:
+      - full
+
+  postgres:
+    image: postgres:16.1
+    container_name: pg
+    restart: always
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-dev}" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    env_file: .env
+    environment:
+      PGSSLMODE: "disable"
+    ports:
+      - "5432:5432"
+    networks:
+      - gather
+    logging:
+      driver: none
+    profiles:
+      - full
+      - data
+
+  elasticsearch:
+    container_name: elasticsearch
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.1
+    environment:
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - bootstrap.memory_lock=true
+      - xpack.security.enabled=false
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    profiles:
+      - full
+      - data
+    
+  redis:
+    image: redis:7.2.3
+    restart: always
+    env_file: .env
+    ports:
+      - '6379:6379'
+    command: redis-server
+    profiles:
+      - full
+      - data
+  
+  minio:
+    image: docker.io/bitnami/minio:2023
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    networks:
+      - gather
+    env_file: .env
+    profiles:
+      - full
+      - data
+  
+  mailcatcher:
+    restart: on-failure
+    image: dockage/mailcatcher:0.9.0
+    ports:
+      - "1080:1080"
+      - "1025:1025"
+    profiles:
+      - full
+      - data
+
+networks:
+  gather:

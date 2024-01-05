@@ -21,11 +21,9 @@ module GDrive
       def callback
         authorize(current_community, :setup?, policy_class: SetupPolicy)
 
-        # We call redirect up here since we still want to redirect if later guard clauses bail us out.
-        redirect_to(gdrive_home_url)
-
         if params[:error] == "access_denied"
           flash[:error] = "It looks like you cancelled the Google authentication flow."
+          redirect_to(gdrive_home_url)
           return
         end
 
@@ -34,12 +32,16 @@ module GDrive
           callback_url: gdrive_setup_auth_callback_url(host: Settings.url.host))
         credentials = fetch_credentials_from_callback_request(wrapper, request)
         authenticated_google_id = fetch_email_of_authenticated_account(credentials)
+
         if config.org_user_id != authenticated_google_id
           flash[:error] = "You signed into Google with #{authenticated_google_id}. " \
             "Please sign in with #{config.org_user_id} instead."
+          redirect_to(gdrive_home_url)
           return
         end
+
         wrapper.store_credentials(credentials)
+        redirect_to(gdrive_home_url)
       end
 
       def revoke

@@ -210,5 +210,28 @@ describe GDrive::Migration::ScanJob do
         expect(GDrive::Migration::FolderMap.find_by(src_id: "1O8uSlJ3ByzNOkidjnUS9BBx9gAHt6Wyl")).not_to be_nil
       end
     end
+
+    describe "with changeset containing a change to an existing folder" do
+      let!(:scan_task) { scan.scan_tasks.create!(page_token: "12738") }
+      let!(:folder_map_a) do
+        create(:gdrive_migration_folder_map, operation: operation, name: "Folder A",
+          src_id: "1PJwkZgkByPMcbkfzneq65Cx1CnDNMVR_", src_parent_id: operation.src_folder_id,
+          dest_id: "1fN1rrzq4J28Nv5a0qB2ihbG6bhGs9MjQ", dest_parent_id: operation.dest_folder_id)
+      end
+
+      it "updates folder map and copy on dest drive, completes scan" do
+        VCR.use_cassette("gdrive/migration/scan_job/changes/updated_folder") do
+          expect { perform_job }.not_to have_enqueued_job(described_class)
+        end
+
+        expect(GDrive::Migration::Scan.count).to eq(1)
+        expect(GDrive::Migration::ScanTask.count).to eq(0)
+        scan.reload
+        expect(scan.status).to eq("complete")
+        expect(GDrive::Migration::FolderMap.count).to eq(1)
+        folder_map = GDrive::Migration::FolderMap.first
+        expect(folder_map.name).to eq("Folder A3")
+      end
+    end
   end
 end

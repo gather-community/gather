@@ -147,7 +147,11 @@ module GDrive
         scan.increment!(:scanned_file_count)
 
         if gdrive_file.mime_type == GDrive::FOLDER_MIME_TYPE
-          return unless process_new_folder(gdrive_file)
+          if (folder_map = FolderMap.find_by(src_id: gdrive_file.id))
+            process_existing_folder(folder_map, gdrive_file)
+          else
+            return unless process_new_folder(gdrive_file)
+          end
 
           return if scan.changes?
 
@@ -181,6 +185,43 @@ module GDrive
         FolderMap.create!(operation: operation, src_parent_id: gdrive_file.parents[0],
           src_id: gdrive_file.id, dest_parent_id: dest_parent_id, dest_id: dest_folder.id,
           name: gdrive_file.name)
+      end
+
+      def process_existing_folder(folder_map, gdrive_file)
+        return if gdrive_file.name == folder_map.name && gdrive_file.parents[0] == folder_map.src_parent_id
+
+        folder_map.name = gdrive_file.name
+        dest_folder_add_parents = []
+        dest_folder_remove_parents = []
+        old_src_parent_id = folder_map.src_parent_id
+        new_src_parent_id = gdrive_file.parents[0]
+
+        if new_src_parent_id != old_src_parent_id
+          old_dest_parent_id = folder_map.dest_parent_id
+
+          # If we can't find a FolderMap for the new src parent, it means we have not
+          # seen the folder to which the target folder got moved. This shouldn't happen
+          # unless the folder got moved out of the migration tree, which can certainly happen.
+          # In that case, we don't care about the folder anymore, so we should delete its FolderMap.
+          # This also means that any files that were in the folder are also no longer in the migration tree,
+          # but the moving of those files should also be reported as separate changes. If the folder change
+          # comes first, then the file change will see that the FolderMap is gone and the files will be ___.
+          # If the file changes come first,
+          new_dest_parent_id = lookup_dest_folder_id(src_parent_id)
+
+          dest_folder_add_parents << new_dest_parent_id
+          dest_folder_remove_parents << old_dest_parent_id
+
+          folder_map.src_parent_id = new_src_parent_id
+          folder_map.dest_parent_id = new_dest_parent_id
+        end
+
+        wrapper.update_file(folder_map.dest_id,
+          Google::Apis::DriveV3::File.new(name: gdrive_file.name),
+          add_parents: dest_folder_add_parents,
+          remove_parents: dest_folder_remove_parents,
+          supports_all_drives: true)
+        folder_map.save!
       end
 
       def lookup_dest_folder_id(src_id)

@@ -10,7 +10,7 @@ module Groups
 
     def index
       authorize(sample_group)
-      prepare_lenses(:"groups/sort", :"groups/user")
+      prepare_lenses(:"groups/sort", :"groups/user", community: {clearable: false})
       @groups = policy_scope(Group).with_member_counts
         .in_community(current_community).deactivated_last.hidden_last
       @groups = lenses[:sort].by_type? ? @groups.by_type : @groups.by_name

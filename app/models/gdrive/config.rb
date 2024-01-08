@@ -10,5 +10,9 @@ module GDrive
       foreign_key: :gdrive_config_id,
       inverse_of: :gdrive_config,
       dependent: :destroy
+
+    def migration?
+      type == "GDrive::MigrationConfig"
+    end
   end
 end

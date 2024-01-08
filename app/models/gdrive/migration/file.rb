@@ -24,6 +24,21 @@ module GDrive
       def errored?
         status == "errored"
       end
+
+      def pending?
+        status == "pending"
+      end
+
+      def transferred?
+        status == "transferred"
+      end
+
+      def set_error(type:, message: nil)
+        self.error_type = type
+        self.error_message = message
+        self.status = "errored"
+        save!
+      end
     end
   end
 end

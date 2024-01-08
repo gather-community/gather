@@ -9,6 +9,8 @@ module GDrive
 
       before_create :generate_token
 
+      delegate :config, to: :operation
+
       def pending?
         status == "new" || status == "in_progress"
       end

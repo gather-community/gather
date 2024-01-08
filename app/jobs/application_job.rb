@@ -32,7 +32,7 @@ class ApplicationJob < ActiveJob::Base
     if Rails.env.development? || (Rails.env.test? && ENV["RESCUE_FROM_JOB_EXCEPTIONS"].blank?)
       raise exception
     else
-      ErrorReporter.instance.report(exception, data: {job: to_yaml})
+      Gather::ErrorReporter.instance.report(exception, data: {job: to_yaml})
     end
   end
 

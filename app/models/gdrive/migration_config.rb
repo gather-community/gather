@@ -10,20 +10,5 @@ module GDrive
     def drive_api_scope
       "https://www.googleapis.com/auth/drive.file"
     end
-
-    # Unlike for MainConfig, this is the same for all communities, so we load it from settings.
-    def api_key
-      Settings.gdrive.migration.auth.api_key
-    end
-
-    # Unlike for MainConfig, this is the same for all communities, so we load it from settings.
-    def client_id
-      Settings.gdrive.migration.auth.client_id
-    end
-
-    # Unlike for MainConfig, this is the same for all communities, so we load it from settings.
-    def client_secret
-      Settings.gdrive.migration.auth.client_secret
-    end
   end
 end

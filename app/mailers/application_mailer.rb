@@ -11,7 +11,7 @@ class ApplicationMailer < ActionMailer::Base
 
   # Overrides default mail method.
   #
-  # Allows users or households in the `to` field.
+  # Allows strings, users, or households in the `to` field.
   # It is up to the mailer system, not the background job system,
   # to figure out how to send mail to a household or user,
   # and whether users have opted out of a given type of mail.
@@ -42,6 +42,8 @@ class ApplicationMailer < ActionMailer::Base
         recipient.users.flat_map do |u|
           resolve_user_email(u, via_household: true, include_inactive: include_inactive)
         end
+      elsif recipient.is_a?(String)
+        recipient
       else
         raise ArgumentError, "Invalid recipient type: #{recipient}"
       end

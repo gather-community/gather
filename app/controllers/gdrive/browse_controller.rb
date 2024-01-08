@@ -122,7 +122,7 @@ module GDrive
     end
 
     def list_files(wrapper, parent_id)
-      wrapper.list_files(q: "'#{parent_id}' in parents",
+      wrapper.list_files(q: "'#{parent_id}' in parents and trashed = false",
         fields: "files(id,name,mimeType,iconLink,webViewLink)",
         order_by: "folder,name",
         supports_all_drives: true,

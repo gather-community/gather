@@ -50,10 +50,11 @@ export default class extends Controller<HTMLFormElement> {
 
   showPicker(): void {
     const view = new google.picker.DocsView(google.picker.ViewId.DOCS);
-    view.setIncludeFolders(true);
-    view.setSelectFolderEnabled(true);
+    view.setIncludeFolders(false);
+    view.setSelectFolderEnabled(false);
+    view.setOwnedByMe(true);
     view.setMode(google.picker.DocsViewMode.LIST);
-    view.setQuery(`owner:me to:${this.orgUserIdValue}`);
+    view.setQuery(`to:${this.orgUserIdValue}`);
 
     const picker = new google.picker.PickerBuilder()
       .enableFeature(google.picker.Feature.NAV_HIDDEN)

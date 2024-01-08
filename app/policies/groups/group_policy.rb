@@ -11,7 +11,7 @@ module Groups
         elsif active_admin?
           scope.in_community(user.community)
         elsif active?
-          scope.in_community(user.community).visible_or_managed_by(user).active
+          scope.visible_or_managed_by(user).active
         else
           scope.none
         end
@@ -23,7 +23,7 @@ module Groups
     end
 
     def show?
-      active? && (appropriate_admin? || manager? || !group.hidden? && record_tied_to_user_community?)
+      active? && (appropriate_admin? || manager? || !group.hidden?)
     end
 
     def create?
@@ -43,11 +43,12 @@ module Groups
     end
 
     def join?
-      group.everybody? && membership&.opt_out? || group.open? && membership.nil?
+      record_tied_to_user_community? && ((group.everybody? && membership&.opt_out?) || (group.open? && membership.nil?))
     end
 
     def leave?
-      group.everybody? && (membership.nil? || !membership.opt_out?) || !group.everybody? && !membership.nil?
+      (record_tied_to_user_community? && group.everybody? && (membership.nil? || !membership.opt_out?)) ||
+        (!group.everybody? && !membership.nil?)
     end
 
     def destroy?

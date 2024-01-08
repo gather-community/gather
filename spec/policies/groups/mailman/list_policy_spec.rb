@@ -39,10 +39,10 @@ describe Groups::Mailman::ListPolicy do
     end
 
     permissions :sync? do
-      it "permits any user in any of the list's group's communities" do
+      it "permits any user who can view the list" do
         expect(subject).to permit(user, list)
         expect(subject).to permit(user_cmtyC, list)
-        expect(subject).not_to permit(user_cmtyB, list)
+        expect(subject).to permit(user_cmtyB, list)
       end
     end
   end

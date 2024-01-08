@@ -40,13 +40,13 @@ describe Groups::GroupPolicy do
     end
 
     permissions :show? do
-      context "for closed group" do
+      context "for most availabilities, e.g. closed" do
         let(:availability) { "closed" }
 
-        it "permits any user in any of the group's communities" do
+        it "permits any user" do
           expect(subject).to permit(user, group)
           expect(subject).to permit(user_cmtyC, group)
-          expect(subject).not_to permit(user_cmtyB, group)
+          expect(subject).to permit(user_cmtyB, group)
         end
       end
 
@@ -139,6 +139,12 @@ describe Groups::GroupPolicy do
           it { expect(subject).not_to permit(user, group) }
         end
       end
+
+      context "with group not affiliated with own community" do
+        let(:mbr_kind) { nil }
+        let(:communities) { [communityC] }
+        it { expect(subject).not_to permit(user, group) }
+      end
     end
 
     # This permission does not depend on user role. It just depends on the user's membership type
@@ -151,8 +157,16 @@ describe Groups::GroupPolicy do
         let(:availability) { "everybody" }
 
         context "with user with no membership" do
-          let(:mbr_kind) { nil }
-          it { expect(subject).to permit(user, group) }
+          context "with group tied to own community" do
+            let(:mbr_kind) { nil }
+            it { expect(subject).to permit(user, group) }
+          end
+
+          context "with group not tied to own community" do
+            let(:mbr_kind) { nil }
+            let(:communities) { [communityC] }
+            it { expect(subject).not_to permit(user, group) }
+          end
         end
 
         context "with user with manager membership" do
@@ -226,17 +240,17 @@ describe Groups::GroupPolicy do
 
     context "for manager of hidden group" do
       let!(:actor) { create(:group_membership, group: hidden_group, kind: "manager").user }
-      it { is_expected.to contain_exactly(cmty_group, hidden_group) }
+      it { is_expected.to contain_exactly(cmty_group, hidden_group, cluster_group) }
     end
 
     context "for joiner of hidden group" do
       let!(:actor) { create(:group_membership, group: hidden_group, kind: "joiner").user }
-      it { is_expected.to contain_exactly(cmty_group) }
+      it { is_expected.to contain_exactly(cmty_group, cluster_group) }
     end
 
     context "for regular user" do
       let(:actor) { user }
-      it { is_expected.to contain_exactly(cmty_group) }
+      it { is_expected.to contain_exactly(cmty_group, cluster_group) }
     end
 
     context "for inactive user" do

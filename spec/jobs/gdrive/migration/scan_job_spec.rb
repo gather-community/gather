@@ -31,7 +31,7 @@ describe GDrive::Migration::ScanJob do
   # - Remove token and real email addresses using global find and replace.
 
   let!(:main_config) { create(:gdrive_main_config, org_user_id: "admin@example.org") }
-  let!(:token) { create(:gdrive_token, gdrive_config: main_config, google_user_id: main_config.org_user_id, access_token: "ya29.a0AfB_byD5TlEtrxgf6myfLpWnylvl9LCHm2w6_0ROEIZ1nQhUhQX9hKc7KqPTTKBZw-1Wh4NQmMx-9AFncDsOQLXKtA0JMY-SxcWAAE8DI1XvSkLvsusZvh5DXKsZQxGuq1nZQSpFV-LV08avwuBHzbARLuLyIKN7I4rOY8UaCgYKAcYSARESFQHGX2Mi7cTowqPINzTtvXmvcqJaNg0174") }
+  let!(:token) { create(:gdrive_token, gdrive_config: main_config, google_user_id: main_config.org_user_id, access_token: "ya29.a0AfB_byCDWn5mS_twLK66TSq0OsFeTM5haJ47_j5FM7_gh9MBvCxkj-pLSd5U-jpZ82yanlPKPURtqcNskPrzG2GcC0-gzxswCTpXl63glCQaRmI5KlSSFMrnNx2rvdtGnqkHh3vdrKeDvvHOU1mmYsyM93EVLQ0-2-jvtSkaCgYKAQESARESFQHGX2MiBz2XG4OxA94kaO416ZU5PQ0174") }
   let!(:migration_config) { create(:gdrive_migration_config) }
   let!(:operation) do
     create(:gdrive_migration_operation, :webhook_registered, config: migration_config,
@@ -196,7 +196,7 @@ describe GDrive::Migration::ScanJob do
     end
 
     describe "with changeset containing one new folder" do
-      let!(:scan_task) { scan.scan_tasks.create!(page_token: "12699") }
+      let!(:scan_task) { scan.scan_tasks.create!(page_token: "13141") }
 
       it "creates folder map and a copy on dest drive, completes scan" do
         VCR.use_cassette("gdrive/migration/scan_job/changes/new_folder") do
@@ -207,7 +207,7 @@ describe GDrive::Migration::ScanJob do
         expect(GDrive::Migration::ScanTask.count).to eq(0)
         scan.reload
         expect(scan.status).to eq("complete")
-        expect(GDrive::Migration::FolderMap.find_by(src_id: "1O8uSlJ3ByzNOkidjnUS9BBx9gAHt6Wyl")).not_to be_nil
+        expect(GDrive::Migration::FolderMap.find_by(src_id: "1XTSlSd3Bw4dkRN1OTY2lhepebfL_hZBy")).not_to be_nil
       end
     end
 

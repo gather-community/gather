@@ -12,7 +12,7 @@ module GDrive
       # If we get a not found error trying to find one of these, we should just terminate gracefully.
       DISAPPEARABLE_CLASSES = %w[GDrive::Migration::Operation GDrive::Migration::Scan GDrive::Migration::ScanTask].freeze
 
-      attr_accessor :cluster_id, :scan_task, :scan, :operation
+      attr_accessor :cluster_id, :scan_task, :scan, :operation, :ancestor_tree_duplicator
 
       def self.with_lock(operation_id, &block)
         # We use the operation and not the scan as the context since there could be a race condition
@@ -37,6 +37,8 @@ module GDrive
           self.operation = scan.operation
           Rails.logger.info("ScanJob starting", operation_id: operation.id, scan_task_id: scan_task_id)
           return if scan.cancelled?
+
+          self.ancestor_tree_duplicator = AncestorTreeDuplicator.new(wrapper: wrapper, operation: operation)
 
           # We save the start page token now so that we can look back through any changes that we miss
           # during the scan operation.
@@ -174,7 +176,10 @@ module GDrive
       end
 
       def process_new_folder(gdrive_file)
-        dest_parent_id = lookup_dest_folder_id(gdrive_file.parents[0])
+        # We don't need to check for the existence of an already mapped folder when we are
+        # doing the initial scan since we will have just created it.
+        dest_parent_id = ancestor_tree_duplicator.ensure_tree(gdrive_file.parents[0],
+          skip_check_for_already_mapped_folder: scan.full?)
 
         return false if dest_parent_id.nil?
 

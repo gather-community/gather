@@ -175,13 +175,24 @@ module GDrive
         end
       end
 
+      # Returns whether or not the process succeeded.
       def process_new_folder(gdrive_file)
-        # We don't need to check for the existence of an already mapped folder when we are
-        # doing the initial scan since we will have just created it.
-        dest_parent_id = ancestor_tree_duplicator.ensure_tree(gdrive_file.parents[0],
-          skip_check_for_already_mapped_folder: scan.full?)
-
-        return false if dest_parent_id.nil?
+        begin
+          # We don't need to check for the existence of an already mapped folder when we are
+          # doing the initial scan since we will have just created it.
+          dest_parent_id = ancestor_tree_duplicator.ensure_tree(gdrive_file.parents[0],
+            skip_check_for_already_mapped_folder: scan.full?)
+        rescue AncestorTreeDuplicator::ParentFolderInaccessible => error
+          Rails.logger.error("Ancestor inaccessible", file_id: gdrive_file.id, folder_id: error.folder_id)
+          # We don't need to take any action here because a new folder with an inaccessible parent should
+          # just be ignored as it's probably outside the migration tree.
+          return false
+        rescue Google::Apis::ClientError => error
+          Rails.logger.error("Client error ensuring tree", file_id: file_id, message: error.to_s)
+          # We don't need to take any action here because a client error on a new folder means
+          # we should probably just ignore it.
+          return false
+        end
 
         dest_folder = Google::Apis::DriveV3::File.new(name: gdrive_file.name, parents: [dest_parent_id],
           mime_type: GDrive::FOLDER_MIME_TYPE)
@@ -190,6 +201,7 @@ module GDrive
         FolderMap.create!(operation: operation, src_parent_id: gdrive_file.parents[0],
           src_id: gdrive_file.id, dest_parent_id: dest_parent_id, dest_id: dest_folder.id,
           name: gdrive_file.name)
+        true
       end
 
       def process_existing_folder(folder_map, gdrive_file)

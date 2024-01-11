@@ -224,7 +224,7 @@ module GDrive
           # but the moving of those files should also be reported as separate changes. If the folder change
           # comes first, then the file change will see that the FolderMap is gone and the files will be ___.
           # If the file changes come first,
-          new_dest_parent_id = lookup_dest_folder_id(src_parent_id)
+          new_dest_parent_id = lookup_dest_folder_id(new_src_parent_id)
 
           dest_folder_add_parents << new_dest_parent_id
           dest_folder_remove_parents << old_dest_parent_id
@@ -233,12 +233,19 @@ module GDrive
           folder_map.dest_parent_id = new_dest_parent_id
         end
 
-        wrapper.update_file(folder_map.dest_id,
-          Google::Apis::DriveV3::File.new(name: gdrive_file.name),
-          add_parents: dest_folder_add_parents,
-          remove_parents: dest_folder_remove_parents,
-          supports_all_drives: true)
-        folder_map.save!
+        begin
+          # This could fail if we don't have access to the dest folder anymore, or if the
+          # add or remove parents values are invalid. This could all happen if our records are out of date somehow.
+          wrapper.update_file(folder_map.dest_id,
+            Google::Apis::DriveV3::File.new(name: gdrive_file.name),
+            add_parents: dest_folder_add_parents,
+            remove_parents: dest_folder_remove_parents,
+            supports_all_drives: true)
+          folder_map.save!
+        rescue Google::Apis::ClientError => error
+          Rails.logger.error("Client error updating folder", folder_id: gdrive_file.id, message: error.to_s)
+          false
+        end
       end
 
       def lookup_dest_folder_id(src_id)

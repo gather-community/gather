@@ -32,7 +32,7 @@ describe GDrive::Migration::ScanJob do
   # - Remove token and real email addresses using global find and replace.
 
   let!(:main_config) { create(:gdrive_main_config, org_user_id: "admin@example.org") }
-  let!(:token) { create(:gdrive_token, gdrive_config: main_config, google_user_id: main_config.org_user_id, access_token: "ya29.a0AfB_byBbRuiqJ65J-DyklXdmeNywL_Z8plBNsZM6oPoK2dXWyZwP_NxhR1h_59vPZgtKrSrJ_QABmi123C5qSDruSGe08tMCqhFR267xseNPtAzbn-TQvfSOUa8Fv3jsWygGAikMymr1cvJgPyt0XOsMuXZLFHz-HE09jvsaCgYKAdcSARESFQHGX2Mie6_4F-HdR8z0DE7zSMEljQ0174") }
+  let!(:token) { create(:gdrive_token, gdrive_config: main_config, google_user_id: main_config.org_user_id, access_token: "ya29.a0AfB_byB6FfN9UvJCQtuRJ21aEiBlVZSuAjYPNZVgrPLzvNH9cvb9jychfQLqE2NNP13jVcLBy79R2As8uQA6jV-CwB-pONtW3kuMSnHDnSXmSoxTu-jcZQAcTL2HfI5_RZjvIwY-X2cFhThcVvb1ous_WNLToU6udgddWxEaCgYKAUASARESFQHGX2MiFmCFf1oETp9bR-kUKHNXGw0174") }
   let!(:migration_config) { create(:gdrive_migration_config) }
   let!(:operation) do
     create(:gdrive_migration_operation, :webhook_registered, config: migration_config,
@@ -345,6 +345,65 @@ describe GDrive::Migration::ScanJob do
         expect(folder_map_b.name).to eq("Folder B")
 
         expect(GDrive::Migration::File.count).to eq(0)
+      end
+    end
+
+    describe "with changeset containing a new file" do
+      let!(:scan_task) { scan.scan_tasks.create!(page_token: "13307") }
+      let!(:folder_map_a) do
+        create(:gdrive_migration_folder_map, operation: operation, name: "Folder A",
+          src_id: "1K9Sq95eB4IUQ_JHrRpNsyNg9PAjvC7Qo", src_parent_id: operation.src_folder_id,
+          dest_id: "1J1k3DcfL1kQFmzrnlyiRQvgNs2WNjL-w", dest_parent_id: operation.dest_folder_id)
+      end
+
+      it "creates file record, completes scan" do
+        VCR.use_cassette("gdrive/migration/scan_job/changes/file_created") do
+          expect { perform_job }.not_to have_enqueued_job(described_class)
+        end
+
+        expect(GDrive::Migration::Scan.count).to eq(1)
+        expect(GDrive::Migration::ScanTask.count).to eq(0)
+        scan.reload
+        expect(scan.status).to eq("complete")
+
+        expect(GDrive::Migration::File.count).to eq(1)
+        file_c_2 = GDrive::Migration::File.first
+        expect(file_c_2.parent_id).to eq(folder_map_a.src_id)
+        expect(file_c_2.name).to eq("File A.2")
+      end
+    end
+
+    describe "with changeset containing a renamed and moved file" do
+      let!(:scan_task) { scan.scan_tasks.create!(page_token: "13304") }
+      let!(:folder_map_a) do
+        create(:gdrive_migration_folder_map, operation: operation, name: "Folder A",
+          src_id: "1K9Sq95eB4IUQ_JHrRpNsyNg9PAjvC7Qo", src_parent_id: operation.src_folder_id,
+          dest_id: "1J1k3DcfL1kQFmzrnlyiRQvgNs2WNjL-w", dest_parent_id: operation.dest_folder_id)
+      end
+      let!(:folder_map_c) do
+        create(:gdrive_migration_folder_map, operation: operation, name: "Folder C",
+          src_id: "15wQB70b0BevG-YLdkMEuhN3tsV9hrV8y", src_parent_id: folder_map_a.src_id,
+          dest_id: "1hEcRA06GLBUvvan0unzXJ31Utw6Bk9YN", dest_parent_id: folder_map_a.dest_id)
+      end
+      # This file will be renamed and moved to Folder A.
+      let!(:file_c_1) do
+        create(:gdrive_migration_file, operation: operation, external_id: "1mohxjSbIM_XvHG16aFlBT0yBFxP6sujpCNyOrxUjq1Y",
+          name: "File C.1", parent_id: folder_map_c.src_id)
+      end
+
+      it "updates file record, completes scan" do
+        VCR.use_cassette("gdrive/migration/scan_job/changes/file_moved_and_renamed") do
+          expect { perform_job }.not_to have_enqueued_job(described_class)
+        end
+
+        expect(GDrive::Migration::Scan.count).to eq(1)
+        expect(GDrive::Migration::ScanTask.count).to eq(0)
+        scan.reload
+        expect(scan.status).to eq("complete")
+
+        file_c_1.reload
+        expect(file_c_1.parent_id).to eq(folder_map_a.src_id)
+        expect(file_c_1.name).to eq("File C.1 foo")
       end
     end
   end

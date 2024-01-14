@@ -21,6 +21,10 @@ module GDrive
         mime_type == GDrive::FOLDER_MIME_TYPE
       end
 
+      def acted_on?
+        !pending?
+      end
+
       def errored?
         status == "errored"
       end

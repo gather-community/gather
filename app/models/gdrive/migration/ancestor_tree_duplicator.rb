@@ -32,7 +32,7 @@ module GDrive
       # If skip_check_for_already_mapped_folder is specified, we will assume the destination
       # folder exists if a FolderMap exists. This is safer if we are confident that the
       # dest folder was recently created, as when we are doing the initial scan.
-      def ensure_tree(src_folder_id, skip_check_for_already_mapped_folder:)
+      def ensure_tree(src_folder_id, skip_check_for_already_mapped_folder: false)
         Rails.logger.info("Ensuring ancestor tree", src_folder_id: src_folder_id)
 
         return operation.dest_folder_id if src_folder_id == operation.src_folder_id

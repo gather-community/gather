@@ -124,7 +124,7 @@ module GDrive
       def list_files_from_changes
         list = wrapper.list_changes(
           scan_task.page_token,
-          fields: "changes(file(#{FILE_FIELDS},driveId)),nextPageToken",
+          fields: "changes(fileId,file(#{FILE_FIELDS},driveId)),nextPageToken",
           # Even though on change scans we only care about files from My Drive,
           # we need to include items from all drives because that is how we find out whether
           # something is in a shared drive or not. For some reason, the API still returns changes
@@ -138,9 +138,24 @@ module GDrive
           spaces: "drive"
         )
 
-        # If drive_id is present, it means this is a changes scan and we've pulled in
-        # a change to a Shared Drive item, which we don't care about.
-        [list.changes.select { |c| c.file.drive_id.nil? }.map(&:file), list.next_page_token]
+        gdrive_files = []
+        list.changes.each do |change|
+          # If no file is present at all, it means we no longer have access to this file
+          # and we should delete any reference we have to it.
+          if change.file.nil?
+            Rails.logger.info("Received change with no file info, deleting references",
+              file_id: change.file_id)
+            delete_references_to(change.file_id)
+            next
+          end
+
+          # If drive_id is present, it means this is a changes scan and we've pulled in
+          # a change to a Shared Drive item, which we don't care about.
+          next if change.file.drive_id.present?
+
+          gdrive_files << change.file
+        end
+        [gdrive_files, list.next_page_token]
       end
 
       def process_file(gdrive_file)
@@ -175,7 +190,9 @@ module GDrive
         end
       end
 
-      # Returns whether or not the process succeeded.
+      # Creates dest folder to match given src folder.
+      # Creates folder map.
+      # Returns the new folder map, or nil if any API calls on source file fail.
       def process_new_folder(gdrive_file)
         begin
           # We don't need to check for the existence of an already mapped folder when we are
@@ -186,12 +203,12 @@ module GDrive
           Rails.logger.error("Ancestor inaccessible", file_id: gdrive_file.id, folder_id: error.folder_id)
           # We don't need to take any action here because a new folder with an inaccessible parent should
           # just be ignored as it's probably outside the migration tree.
-          return false
+          return nil
         rescue Google::Apis::ClientError => error
           Rails.logger.error("Client error ensuring tree", file_id: file_id, message: error.to_s)
           # We don't need to take any action here because a client error on a new folder means
           # we should probably just ignore it.
-          return false
+          return nil
         end
 
         dest_folder = Google::Apis::DriveV3::File.new(name: gdrive_file.name, parents: [dest_parent_id],
@@ -201,7 +218,6 @@ module GDrive
         FolderMap.create!(operation: operation, src_parent_id: gdrive_file.parents[0],
           src_id: gdrive_file.id, dest_parent_id: dest_parent_id, dest_id: dest_folder.id,
           name: gdrive_file.name)
-        true
       end
 
       def process_existing_folder(folder_map, gdrive_file)
@@ -213,18 +229,23 @@ module GDrive
         old_src_parent_id = folder_map.src_parent_id
         new_src_parent_id = gdrive_file.parents[0]
 
+        # This means src folder moved!
         if new_src_parent_id != old_src_parent_id
           old_dest_parent_id = folder_map.dest_parent_id
 
-          # If we can't find a FolderMap for the new src parent, it means we have not
-          # seen the folder to which the target folder got moved. This shouldn't happen
-          # unless the folder got moved out of the migration tree, which can certainly happen.
-          # In that case, we don't care about the folder anymore, so we should delete its FolderMap.
-          # This also means that any files that were in the folder are also no longer in the migration tree,
-          # but the moving of those files should also be reported as separate changes. If the folder change
-          # comes first, then the file change will see that the FolderMap is gone and the files will be ___.
-          # If the file changes come first,
-          new_dest_parent_id = lookup_dest_folder_id(new_src_parent_id)
+          begin
+            new_dest_parent_id = ancestor_tree_duplicator.ensure_tree(new_src_parent_id)
+          rescue AncestorTreeDuplicator::ParentFolderInaccessible => error
+            # If getting the new dest folder ID fails, it likely means the the src folder
+            # has been moved out of the migration tree or is otherwise inaccessible.
+            # This shouldn't happen, I think, b/c we should get no file data in that case
+            # and that is handled further up. But just in case, log and skip.
+            Rails.logger.error("Ancestor inaccessible, skipping", file_id: gdrive_file.id, folder_id: error.folder_id)
+            return nil
+          rescue Google::Apis::ClientError => error
+            Rails.logger.error("Client error ensuring tree, skipping", file_id: file_id, message: error.to_s)
+            return nil
+          end
 
           dest_folder_add_parents << new_dest_parent_id
           dest_folder_remove_parents << old_dest_parent_id
@@ -244,15 +265,35 @@ module GDrive
           folder_map.save!
         rescue Google::Apis::ClientError => error
           Rails.logger.error("Client error updating folder", folder_id: gdrive_file.id, message: error.to_s)
-          false
         end
       end
 
-      def lookup_dest_folder_id(src_id)
+      def delete_references_to(id)
+        FolderMap.where(src_id: id).destroy_all
+        File.where(external_id: id).destroy_all
+      end
+
+      # Gets the dest_id of the given src_folder_id.
+      # Calls process_new_folder to create dest folder if it doesn't exist.
+      # Returns nil on failure.
+      # Failure can happen if no matching folder map is found and we can't access the src folder
+      # or one of its ancestors.
+      def get_new_dest_folder_id(src_folder_id)
         return operation.dest_folder_id if src_id == operation.src_folder_id
-        Rails.logger.info("Looking up dest folder id")
-        folder_map = FolderMap.find_by(operation: operation, src_id: src_id)
-        folder_map&.dest_id
+        if (folder_map = FolderMap.find_by(operation: operation, src_id: src_id))
+          folder_map.dest_id
+        else
+          Rails.logger.info("Couldn't find folder map for src folder, processing it as new folder",
+            src_folder_id: src_folder_id)
+          begin
+            gdrive_file = wrapper.get_file(src_folder_id, fields: FILE_FIELDS)
+          rescue Google::Apis::ClientError => error
+            Rails.logger.error("Client error getting src folder", src_folder_id: src_folder_id, message: error.to_s)
+            return nil
+          end
+          folder_map = process_new_folder(gdrive_file)
+          folder_map&.dest_id
+        end
       end
 
       def add_file_error(migration_file, type, message)

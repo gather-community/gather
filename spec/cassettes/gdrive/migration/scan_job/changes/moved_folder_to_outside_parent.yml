@@ -1,0 +1,73 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://www.googleapis.com/drive/v3/changes?fields=changes(fileId,file(id,name,parents,mimeType,webViewLink,iconLink,modifiedTime,owners(emailAddress),capabilities(canEdit),driveId)),nextPageToken&includeCorpusRemovals=true&includeItemsFromAllDrives=true&includeRemoved=true&pageSize=100&pageToken=13283&spaces=drive&supportsAllDrives=true
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      User-Agent:
+      - unknown/0.0.0 google-apis-drive_v3/0.46.0 Mac OS X/13.1 (gzip)
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip,deflate
+      Date:
+      - Sun, 14 Jan 2024 05:02:15 GMT
+      X-Goog-Api-Client:
+      - gl-ruby/3.2.2 gdcl/1.46.0
+      Authorization:
+      - Bearer ya29.a0AfB_byAF4xXUjLmBZxuG5JMguALlB1o3Ay3b2UNh7ZTMhEc8cVRnEIo_wBnT3U2IeZu6MT-A50SDqqj-xQVrTcwgvcZ0mkmI0LXLTxp3JHHea7QEZukCX2Q-j46g8BxoD_8dw-LzMDhBm3LiEIm5BcfPnqGVfGEZwpbNigUaCgYKAcwSARESFQHGX2MiW4xb5ifKMlXyzXwFU7Mgtw0174
+      Content-Type:
+      - application/x-www-form-urlencoded
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Vary:
+      - Origin, X-Origin
+      Date:
+      - Sun, 14 Jan 2024 05:02:15 GMT
+      Pragma:
+      - no-cache
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Encoding:
+      - gzip
+      Server:
+      - ESF
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: |
+        {
+          "changes": [
+            {
+              "fileId": "15wQB70b0BevG-YLdkMEuhN3tsV9hrV8y"
+            },
+            {
+              "fileId": "1mohxjSbIM_XvHG16aFlBT0yBFxP6sujpCNyOrxUjq1Y"
+            },
+            {
+              "fileId": "1K9Sq95eB4IUQ_JHrRpNsyNg9PAjvC7Qo"
+            }
+          ]
+        }
+    http_version:
+  recorded_at: Sun, 14 Jan 2024 05:02:15 GMT
+recorded_with: VCR 4.0.0

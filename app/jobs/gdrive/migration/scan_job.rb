@@ -159,7 +159,7 @@ module GDrive
       end
 
       def process_file(gdrive_file)
-        Rails.logger.info("Processing file", id: gdrive_file.id, name: gdrive_file.name,
+        Rails.logger.info("Processing item", id: gdrive_file.id, name: gdrive_file.name,
           type: gdrive_file.mime_type, owner: gdrive_file.owners[0].email_address)
         scan.increment!(:scanned_file_count)
 
@@ -216,7 +216,13 @@ module GDrive
       end
 
       def process_existing_folder(folder_map, gdrive_file)
-        return if gdrive_file.name == folder_map.name && gdrive_file.parents[0] == folder_map.src_parent_id
+        return if !gdrive_file.trashed && gdrive_file.name == folder_map.name && gdrive_file.parents[0] == folder_map.src_parent_id
+
+        if gdrive_file.trashed
+          Rails.logger.info("Folder is in trash, deleting folder map", src_id: folder_map.src_id, dest_id: folder_map.dest_id)
+          folder_map.destroy
+          return
+        end
 
         folder_map.name = gdrive_file.name
         dest_add_parents = []
@@ -236,10 +242,10 @@ module GDrive
             # This shouldn't happen, I think, b/c we should get no file data in that case
             # and that is handled further up. But just in case, log and skip.
             Rails.logger.error("Ancestor inaccessible, skipping", file_id: gdrive_file.id, folder_id: error.folder_id)
-            return nil
+            return
           rescue Google::Apis::ClientError => error
             Rails.logger.error("Client error ensuring tree, skipping", file_id: gdrive_file.id, message: error.to_s)
-            return nil
+            return
           end
 
           dest_add_parents << new_dest_parent_id
@@ -259,7 +265,7 @@ module GDrive
             supports_all_drives: true)
           folder_map.save!
         rescue Google::Apis::ClientError => error
-          Rails.logger.error("Client error updating folder", folder_id: gdrive_file.id, message: error.to_s)
+          Rails.logger.error("Client error updating dest folder", folder_id: gdrive_file.id, message: error.to_s)
         end
       end
 
@@ -289,6 +295,7 @@ module GDrive
 
         # parents.nil? means the item is no longer accessible.
         if gdrive_file.trashed || gdrive_file.parents.nil?
+          Rails.logger.info("File is in trash, deleting record", file_id: gdrive_file.id)
           migration_file.destroy
           return
         end

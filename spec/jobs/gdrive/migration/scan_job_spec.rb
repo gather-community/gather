@@ -171,7 +171,8 @@ describe GDrive::Migration::ScanJob do
       create(:gdrive_migration_operation, :webhook_registered, config: migration_config,
         src_folder_id: "1FBirfPXk-5qaMO1BkvlyhaC8JARE_FRq",
         dest_folder_id: "0AExZ3-Cu5q7uUk9PVA",
-        webhook_channel_id: "0009c409-6bf4-473b-ba04-6b0557219502")
+        webhook_channel_id: "0009c409-6bf4-473b-ba04-6b0557219502",
+        start_page_token: "12683")
     end
     let!(:scan) { create(:gdrive_migration_scan, operation: operation, scope: "changes") }
     subject!(:job) { described_class.new(cluster_id: Defaults.cluster.id, scan_task_id: scan_task.id) }
@@ -201,13 +202,16 @@ describe GDrive::Migration::ScanJob do
 
         scan.reload
         expect(scan.status).to eq("in_progress")
+
+        operation.reload
+        expect(operation.start_page_token).to eq("12683")
       end
     end
 
     describe "with changeset containing one new folder" do
       let!(:scan_task) { scan.scan_tasks.create!(page_token: "13141") }
 
-      it "creates folder map and a copy on dest drive, completes scan" do
+      it "creates folder map and a copy on dest drive, completes scan, stores new start_page_token" do
         VCR.use_cassette("gdrive/migration/scan_job/changes/folder_created") do
           expect { perform_job }.not_to have_enqueued_job(described_class)
         end
@@ -217,6 +221,9 @@ describe GDrive::Migration::ScanJob do
         scan.reload
         expect(scan.status).to eq("complete")
         expect(GDrive::Migration::FolderMap.find_by(src_id: "1XTSlSd3Bw4dkRN1OTY2lhepebfL_hZBy")).not_to be_nil
+
+        operation.reload
+        expect(operation.start_page_token).to eq("13142")
       end
     end
 

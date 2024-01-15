@@ -74,7 +74,7 @@ module GDrive
       end
 
       def do_scan_task
-        files, next_page_token = if scan.full?
+        files, next_page_token, new_start_page_token = if scan.full?
           list_files_from_folder(scan_task.folder_id)
         else
           list_files_from_changes
@@ -100,7 +100,13 @@ module GDrive
         # race condition we might schedule an extra job, but when it actually runs it will notice
         # the cancelled state before it gets very far.
         unless scan.reload.cancelled?
-          scan_next_page(next_page_token)
+          if next_page_token
+            scan_next_page(next_page_token)
+          elsif new_start_page_token
+            Rails.logger.info("Reached end of changes, updating start page token",
+              new_start_page_token: new_start_page_token)
+            operation.update!(start_page_token: new_start_page_token)
+          end
         end
       rescue Google::Apis::AuthorizationError
         # If we hit an auth error, it is probably not going to resolve itself, and it
@@ -119,14 +125,14 @@ module GDrive
           page_token: scan_task.page_token,
           page_size: PAGE_SIZE
         )
-        [list.files, list.next_page_token]
+        [list.files, list.next_page_token, nil]
       end
 
       def list_files_from_changes
         Rails.logger.info("Listing files from changes", page_token: scan_task.page_token)
         list = wrapper.list_changes(
           scan_task.page_token,
-          fields: "changes(fileId,file(#{FILE_FIELDS},driveId)),nextPageToken",
+          fields: "changes(fileId,file(#{FILE_FIELDS},driveId)),nextPageToken,newStartPageToken",
           # Even though on change scans we only care about files from My Drive,
           # we need to include items from all drives because that is how we find out whether
           # something is in a shared drive or not. For some reason, the API still returns changes
@@ -157,7 +163,7 @@ module GDrive
 
           gdrive_files << change.file
         end
-        [gdrive_files, list.next_page_token]
+        [gdrive_files, list.next_page_token, list.new_start_page_token]
       end
 
       def process_file(gdrive_file)
@@ -343,15 +349,13 @@ module GDrive
       end
 
       def scan_next_page(next_page_token)
-        if next_page_token
-          Rails.logger.info("Creating scan task for next page")
-          new_task = scan.scan_tasks.create!(
-            # This may be nil if we are doing a changes scan.
-            folder_id: scan_task.folder_id,
-            page_token: next_page_token
-          )
-          ScanJob.perform_later(cluster_id: cluster_id, scan_task_id: new_task.id)
-        end
+        Rails.logger.info("Creating scan task for next page")
+        new_task = scan.scan_tasks.create!(
+          # This may be nil if we are doing a changes scan.
+          folder_id: scan_task.folder_id,
+          page_token: next_page_token
+        )
+        ScanJob.perform_later(cluster_id: cluster_id, scan_task_id: new_task.id)
       end
 
       def ensure_scan_status_in_progress_unless_cancelled

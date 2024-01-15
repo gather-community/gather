@@ -32,7 +32,7 @@ describe GDrive::Migration::ScanJob do
   # - Remove token and real email addresses using global find and replace.
 
   let!(:main_config) { create(:gdrive_main_config, org_user_id: "admin@example.org") }
-  let!(:token) { create(:gdrive_token, gdrive_config: main_config, google_user_id: main_config.org_user_id, access_token: "ya29.a0AfB_byC_uGSkDYohhuFCoayMlH4-crLcPIwQDFgfePZWkKhyuM2vX9WEMZMWn_wd4NlvmeSIJYdLSEq93_Ss9G6ls1C2HoG8byojpgq1HIaKQdh1_D1b4Y-a53I_7DssFkuD1zjcqVYDYyYWq-TsDtiMQGz0aGIx44vRxCoaCgYKAUISARESFQHGX2Mi-h67xFm3sEN5QPqOe5Vs5Q0174") }
+  let!(:token) { create(:gdrive_token, gdrive_config: main_config, google_user_id: main_config.org_user_id) }
   let!(:migration_config) { create(:gdrive_migration_config) }
   let!(:operation) do
     create(:gdrive_migration_operation, :webhook_registered, config: migration_config,
@@ -159,6 +159,14 @@ describe GDrive::Migration::ScanJob do
   end
 
   describe "changes scan" do
+    # To get latest page token in console:
+    # wrapper = GDrive::Wrapper.new(config: GDrive::MainConfig.first, google_user_id: "google.workspace.admin@example.com")
+    # wrapper.send(:service).get_changes_start_page_token
+    #
+    # To get latest changes in console:
+    # wrapper.send(:service).list_changes("13326", supports_all_drives: true,
+    #   include_items_from_all_drives: true, include_corpus_removals: true, include_removed: true, spaces: "drive",
+    #   fields: "changes(fileId,file(id,driveId,name,parents,owners(emailAddress))),nextPageToken")
     let!(:operation) do
       create(:gdrive_migration_operation, :webhook_registered, config: migration_config,
         src_folder_id: "1FBirfPXk-5qaMO1BkvlyhaC8JARE_FRq",

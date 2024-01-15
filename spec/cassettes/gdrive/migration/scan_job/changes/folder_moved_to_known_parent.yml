@@ -66,7 +66,7 @@ http_interactions:
                 "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.folder+shared",
                 "owners": [
                   {
-                    "emailAddress": "tomsmyth@gmail.com"
+                    "emailAddress": "example@gmail.com"
                   }
                 ],
                 "webViewLink": "https://drive.google.com/drive/folders/15wQB70b0BevG-YLdkMEuhN3tsV9hrV8y",

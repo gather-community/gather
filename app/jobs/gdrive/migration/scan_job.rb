@@ -109,6 +109,7 @@ module GDrive
       end
 
       def list_files_from_folder(folder_id)
+        Rails.logger.info("Listing files from folder", folder_id: folder_id)
         list = wrapper.list_files(
           q: "'#{scan_task.folder_id}' in parents and trashed = false",
           fields: "files(#{FILE_FIELDS}),nextPageToken",
@@ -122,6 +123,7 @@ module GDrive
       end
 
       def list_files_from_changes
+        Rails.logger.info("Listing files from changes", page_token: scan_task.page_token)
         list = wrapper.list_changes(
           scan_task.page_token,
           fields: "changes(fileId,file(#{FILE_FIELDS},driveId)),nextPageToken",
@@ -164,13 +166,13 @@ module GDrive
         scan.increment!(:scanned_file_count)
 
         if gdrive_file.mime_type == GDrive::FOLDER_MIME_TYPE
-          if (folder_map = FolderMap.find_by(src_id: gdrive_file.id))
+          processing_folder_succeeded = if (folder_map = FolderMap.find_by(src_id: gdrive_file.id))
             process_existing_folder(folder_map, gdrive_file)
           else
-            return unless process_new_folder(gdrive_file)
+            process_new_folder(gdrive_file)
           end
 
-          return if scan.changes?
+          return if scan.changes? || !processing_folder_succeeded
 
           Rails.logger.info("Scheduling scan task for subfolder", folder_id: gdrive_file.id)
           new_scan_task = scan.scan_tasks.create!(folder_id: gdrive_file.id)
@@ -189,6 +191,7 @@ module GDrive
       # Creates folder map.
       # Returns the new folder map, or nil if any API calls on source file fail.
       def process_new_folder(gdrive_file)
+        Rails.logger.info("Processing new folder", src_id: gdrive_file.id)
         begin
           # We don't need to check for the existence of an already mapped folder when we are
           # doing the initial scan since we will have just created it.
@@ -198,12 +201,12 @@ module GDrive
           Rails.logger.error("Ancestor inaccessible", file_id: gdrive_file.id, folder_id: error.folder_id)
           # We don't need to take any action here because a new folder with an inaccessible parent should
           # just be ignored as it's probably outside the migration tree.
-          return nil
+          return false
         rescue Google::Apis::ClientError => error
           Rails.logger.error("Client error ensuring tree", file_id: file_id, message: error.to_s)
           # We don't need to take any action here because a client error on a new folder means
           # we should probably just ignore it.
-          return nil
+          return false
         end
 
         dest_folder = Google::Apis::DriveV3::File.new(name: gdrive_file.name, parents: [dest_parent_id],
@@ -213,15 +216,21 @@ module GDrive
         FolderMap.create!(operation: operation, src_parent_id: gdrive_file.parents[0],
           src_id: gdrive_file.id, dest_parent_id: dest_parent_id, dest_id: dest_folder.id,
           name: gdrive_file.name)
+        true
       end
 
       def process_existing_folder(folder_map, gdrive_file)
-        return if !gdrive_file.trashed && gdrive_file.name == folder_map.name && gdrive_file.parents[0] == folder_map.src_parent_id
+        Rails.logger.info("Processing existing folder", src_id: folder_map.src_id, dest_id: folder_map.dest_id)
+
+        if !gdrive_file.trashed && gdrive_file.name == folder_map.name && gdrive_file.parents[0] == folder_map.src_parent_id
+          Rails.logger.info("No changes, returning", src_id: folder_map.src_id, dest_id: folder_map.dest_id)
+          return true
+        end
 
         if gdrive_file.trashed
           Rails.logger.info("Folder is in trash, deleting folder map", src_id: folder_map.src_id, dest_id: folder_map.dest_id)
           folder_map.destroy
-          return
+          return true
         end
 
         folder_map.name = gdrive_file.name
@@ -241,11 +250,11 @@ module GDrive
             # has been moved out of the migration tree or is otherwise inaccessible.
             # This shouldn't happen, I think, b/c we should get no file data in that case
             # and that is handled further up. But just in case, log and skip.
-            Rails.logger.error("Ancestor inaccessible, skipping", file_id: gdrive_file.id, folder_id: error.folder_id)
-            return
+            Rails.logger.error("Ancestor inaccessible, skipping", src_id: folder_map.src_id, dest_id: folder_map.dest_id, ancestor_id: error.folder_id)
+            return false
           rescue Google::Apis::ClientError => error
-            Rails.logger.error("Client error ensuring tree, skipping", file_id: gdrive_file.id, message: error.to_s)
-            return
+            Rails.logger.error("Client error ensuring tree, skipping", src_id: folder_map.src_id, dest_id: folder_map.dest_id, message: error.to_s)
+            return false
           end
 
           dest_add_parents << new_dest_parent_id
@@ -258,6 +267,7 @@ module GDrive
         begin
           # This could fail if we don't have access to the dest folder anymore, or if the
           # add or remove parents values are invalid. This could all happen if our records are out of date somehow.
+          Rails.logger.info("Updating dest folder", src_id: folder_map.src_id, dest_id: folder_map.dest_id)
           wrapper.update_file(folder_map.dest_id,
             Google::Apis::DriveV3::File.new(name: gdrive_file.name),
             add_parents: dest_add_parents,
@@ -265,11 +275,15 @@ module GDrive
             supports_all_drives: true)
           folder_map.save!
         rescue Google::Apis::ClientError => error
-          Rails.logger.error("Client error updating dest folder", folder_id: gdrive_file.id, message: error.to_s)
+          Rails.logger.error("Client error updating dest folder", src_id: folder_map.src_id, dest_id: folder_map.dest_id, message: error.to_s)
+          return false
         end
+        true
       end
 
       def process_new_file(gdrive_file)
+        Rails.logger.info("Processing new file", id: gdrive_file.id)
+
         if gdrive_file.trashed
           Rails.logger.info("File is in trash, skipping", file_id: gdrive_file.id)
           return
@@ -289,9 +303,14 @@ module GDrive
       end
 
       def process_existing_file(gdrive_file, migration_file)
+        Rails.logger.info("Processing existing file", file_id: gdrive_file.id)
+
         # If file has already been acted on, we don't care about any changes to it
         # since the new file (if applicable) is considered to be the canonical copy.
-        return if migration_file.acted_on?
+        if migration_file.acted_on?
+          Rails.logger.info("File has been acted on, skipping", file_id: gdrive_file.id, status: gdrive_file.status)
+          return
+        end
 
         # parents.nil? means the item is no longer accessible.
         if gdrive_file.trashed || gdrive_file.parents.nil?
@@ -300,6 +319,7 @@ module GDrive
           return
         end
 
+        Rails.logger.info("Updating record", file_id: gdrive_file.id)
         migration_file.name = gdrive_file.name
         migration_file.owner = gdrive_file.owners[0].email_address
         migration_file.modified_at = gdrive_file.modified_time

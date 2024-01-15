@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: https://www.googleapis.com/drive/v3/changes?fields=changes(fileId,file(id,name,parents,mimeType,webViewLink,iconLink,modifiedTime,owners(emailAddress),capabilities(canEdit),trashed,driveId)),nextPageToken&includeCorpusRemovals=true&includeItemsFromAllDrives=true&includeRemoved=true&pageSize=100&pageToken=13307&spaces=drive&supportsAllDrives=true
+    uri: https://www.googleapis.com/drive/v3/changes?fields=changes(fileId,file(id,name,parents,mimeType,webViewLink,iconLink,modifiedTime,owners(emailAddress),capabilities(canEdit),trashed,driveId)),nextPageToken&includeCorpusRemovals=true&includeItemsFromAllDrives=true&includeRemoved=true&pageSize=100&pageToken=13309&spaces=drive&supportsAllDrives=true
     body:
       encoding: UTF-8
       string: ''
@@ -14,11 +14,11 @@ http_interactions:
       Accept-Encoding:
       - gzip,deflate
       Date:
-      - Sun, 14 Jan 2024 15:14:09 GMT
+      - Sun, 14 Jan 2024 15:32:20 GMT
       X-Goog-Api-Client:
       - gl-ruby/3.2.2 gdcl/1.46.0
       Authorization:
-      - Bearer ya29.a0AfB_byB6FfN9UvJCQtuRJ21aEiBlVZSuAjYPNZVgrPLzvNH9cvb9jychfQLqE2NNP13jVcLBy79R2As8uQA6jV-CwB-pONtW3kuMSnHDnSXmSoxTu-jcZQAcTL2HfI5_RZjvIwY-X2cFhThcVvb1ous_WNLToU6udgddWxEaCgYKAUASARESFQHGX2MiFmCFf1oETp9bR-kUKHNXGw0174
+      - Bearer ya29.a0AfB_byDrPKb8iCQnlxnGvgQyt60zz2_JgGcpSnKJ41VeyUWVn4pK8iNafjEw6nxdFabYW_LLoZuVv02CZOzJslDy_hUFjGXNfeuT04lQw3Vft-4ybsUiZ2FZjdiU4rjg9O8KQjYK0fJLrpUsoHIA_qhVyFYDIdooqIb4XyMaCgYKAYgSARESFQHGX2MikHwfJ2NZUQtPJ3HcOWsIZw0174
       Content-Type:
       - application/x-www-form-urlencoded
   response:
@@ -26,16 +26,16 @@ http_interactions:
       code: 200
       message: OK
     headers:
-      Expires:
-      - Mon, 01 Jan 1990 00:00:00 GMT
-      Vary:
-      - Origin, X-Origin
-      Date:
-      - Sun, 14 Jan 2024 15:14:09 GMT
       Pragma:
       - no-cache
+      Vary:
+      - Origin, X-Origin
       Cache-Control:
       - no-cache, no-store, max-age=0, must-revalidate
+      Date:
+      - Sun, 14 Jan 2024 15:32:20 GMT
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
       Content-Type:
       - application/json; charset=UTF-8
       Content-Encoding:
@@ -61,7 +61,7 @@ http_interactions:
               "file": {
                 "mimeType": "application/vnd.google-apps.document",
                 "parents": [
-                  "1K9Sq95eB4IUQ_JHrRpNsyNg9PAjvC7Qo"
+                  "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV"
                 ],
                 "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.document",
                 "owners": [
@@ -69,18 +69,19 @@ http_interactions:
                     "emailAddress": "tomsmyth@gmail.com"
                   }
                 ],
-                "webViewLink": "https://docs.google.com/document/d/1JD-D05pWdk6keODlH3kEy8iucBCvzfM-7X5XE2ttDlA/edit?usp=drivesdk",
-                "id": "1JD-D05pWdk6keODlH3kEy8iucBCvzfM-7X5XE2ttDlA",
-                "name": "File A.2",
-                "modifiedTime": "2024-01-14T15:10:01.870Z",
+                "webViewLink": "https://docs.google.com/document/d/1IufP1TQKUf9ZlU0q-pIdY52Hg5arZc2KYGHqT-dK4nY/edit?usp=drivesdk",
+                "id": "1IufP1TQKUf9ZlU0q-pIdY52Hg5arZc2KYGHqT-dK4nY",
+                "name": "File B.1",
+                "trashed": true,
+                "modifiedTime": "2023-12-29T23:12:37.671Z",
                 "capabilities": {
                   "canEdit": true
                 }
               },
-              "fileId": "1JD-D05pWdk6keODlH3kEy8iucBCvzfM-7X5XE2ttDlA"
+              "fileId": "1IufP1TQKUf9ZlU0q-pIdY52Hg5arZc2KYGHqT-dK4nY"
             }
           ]
         }
     http_version:
-  recorded_at: Sun, 14 Jan 2024 15:14:09 GMT
+  recorded_at: Sun, 14 Jan 2024 15:32:20 GMT
 recorded_with: VCR 4.0.0

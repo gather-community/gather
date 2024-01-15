@@ -32,7 +32,7 @@ describe GDrive::Migration::ScanJob do
   # - Remove token and real email addresses using global find and replace.
 
   let!(:main_config) { create(:gdrive_main_config, org_user_id: "admin@example.org") }
-  let!(:token) { create(:gdrive_token, gdrive_config: main_config, google_user_id: main_config.org_user_id, access_token: "ya29.a0AfB_byB6FfN9UvJCQtuRJ21aEiBlVZSuAjYPNZVgrPLzvNH9cvb9jychfQLqE2NNP13jVcLBy79R2As8uQA6jV-CwB-pONtW3kuMSnHDnSXmSoxTu-jcZQAcTL2HfI5_RZjvIwY-X2cFhThcVvb1ous_WNLToU6udgddWxEaCgYKAUASARESFQHGX2MiFmCFf1oETp9bR-kUKHNXGw0174") }
+  let!(:token) { create(:gdrive_token, gdrive_config: main_config, google_user_id: main_config.org_user_id, access_token: "ya29.a0AfB_byDrPKb8iCQnlxnGvgQyt60zz2_JgGcpSnKJ41VeyUWVn4pK8iNafjEw6nxdFabYW_LLoZuVv02CZOzJslDy_hUFjGXNfeuT04lQw3Vft-4ybsUiZ2FZjdiU4rjg9O8KQjYK0fJLrpUsoHIA_qhVyFYDIdooqIb4XyMaCgYKAYgSARESFQHGX2MikHwfJ2NZUQtPJ3HcOWsIZw0174") }
   let!(:migration_config) { create(:gdrive_migration_config) }
   let!(:operation) do
     create(:gdrive_migration_operation, :webhook_registered, config: migration_config,
@@ -404,6 +404,33 @@ describe GDrive::Migration::ScanJob do
         file_c_1.reload
         expect(file_c_1.parent_id).to eq(folder_map_a.src_id)
         expect(file_c_1.name).to eq("File C.1 foo")
+      end
+    end
+
+    describe "with changeset containing a trashed file" do
+      let!(:scan_task) { scan.scan_tasks.create!(page_token: "13309") }
+      let!(:folder_map_b) do
+        create(:gdrive_migration_folder_map, operation: operation, name: "Folder B",
+          src_id: "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV", src_parent_id: operation.src_folder_id,
+          dest_id: "1v5yAODVs-lL80QtnMHlFRK9CEbFefu9o", dest_parent_id: operation.dest_folder_id)
+      end
+      # This file will be trashed.
+      let!(:file_b_1) do
+        create(:gdrive_migration_file, operation: operation, external_id: "1IufP1TQKUf9ZlU0q-pIdY52Hg5arZc2KYGHqT-dK4nY",
+          name: "File B.1", parent_id: folder_map_b.src_id)
+      end
+
+      it "removes file record, completes scan" do
+        VCR.use_cassette("gdrive/migration/scan_job/changes/file_trashed") do
+          expect { perform_job }.not_to have_enqueued_job(described_class)
+        end
+
+        expect(GDrive::Migration::Scan.count).to eq(1)
+        expect(GDrive::Migration::ScanTask.count).to eq(0)
+        scan.reload
+        expect(scan.status).to eq("complete")
+
+        expect(GDrive::Migration::File.count).to eq(0)
       end
     end
   end

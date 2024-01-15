@@ -7,7 +7,7 @@ module GDrive
       PAGE_SIZE = 100
       MIN_ERRORS_TO_CANCEL = 5
       MAX_ERROR_RATIO = 0.05
-      FILE_FIELDS = "id,name,parents,mimeType,webViewLink,iconLink,modifiedTime,owners(emailAddress),capabilities(canEdit)"
+      FILE_FIELDS = "id,name,parents,mimeType,webViewLink,iconLink,modifiedTime,owners(emailAddress),capabilities(canEdit),trashed"
 
       # If we get a not found error trying to find one of these, we should just terminate gracefully.
       DISAPPEARABLE_CLASSES = %w[GDrive::Migration::Operation GDrive::Migration::Scan GDrive::Migration::ScanTask].freeze
@@ -264,6 +264,10 @@ module GDrive
       end
 
       def process_new_file(gdrive_file)
+        if gdrive_file.trashed
+          Rails.logger.info("File is in trash, skipping", file_id: gdrive_file.id)
+          return
+        end
         Rails.logger.info("File not found, creating", file_id: gdrive_file.id)
         operation.files.create!(
           external_id: gdrive_file.id,
@@ -283,9 +287,10 @@ module GDrive
         # since the new file (if applicable) is considered to be the canonical copy.
         return if migration_file.acted_on?
 
-        # This means the item is no longer accessible.
-        if gdrive_file.parents.nil?
+        # parents.nil? means the item is no longer accessible.
+        if gdrive_file.trashed || gdrive_file.parents.nil?
           migration_file.destroy
+          return
         end
 
         migration_file.name = gdrive_file.name

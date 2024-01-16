@@ -62,7 +62,8 @@ describe GDrive::Migration::ScanJob do
         stub_const("#{described_class.name}::PAGE_SIZE", 4)
       end
 
-      it "paginates, tags un-tagged files, creates missing file records, creates folders, schedules other scans, deletes task" do
+      it "paginates, tags un-tagged files, creates missing file records, creates folders,
+            saves token, schedules other scans, deletes task" do
         VCR.use_cassette("gdrive/migration/scan_job/full/first_run") do
           scan_task = scan.scan_tasks.create!(folder_id: operation.src_folder_id)
           expect { described_class.perform_now(cluster_id: Defaults.cluster.id, scan_task_id: scan_task.id) }
@@ -88,6 +89,11 @@ describe GDrive::Migration::ScanJob do
 
           expect(GDrive::Migration::File.all.map(&:name))
             .to contain_exactly("File Root.1", "File Root.2")
+
+          operation.reload
+          expect(operation.start_page_token).to eq("12676")
+          expect(operation.webhook_channel_id).not_to be_nil
+          expect(operation.webhook_secret).not_to be_nil
 
           scan.reload
           expect(scan.scanned_file_count).to eq(4)

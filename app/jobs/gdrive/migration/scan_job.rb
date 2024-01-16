@@ -68,7 +68,7 @@ module GDrive
             # as they are just random tokens and won't change.
             webhook_channel_id: SecureRandom.uuid,
             webhook_secret: SecureRandom.hex,
-            start_page_token: start_page_token
+            start_page_token: start_page_token.start_page_token
           )
         end
       end
@@ -420,7 +420,8 @@ module GDrive
             id: operation.webhook_channel_id,
             token: operation.webhook_secret,
             address: url,
-            type: "web_hook"
+            type: "web_hook",
+            expiration: (Time.current + 7.days).to_i * 1000
           ),
           include_items_from_all_drives: false,
           include_corpus_removals: true,

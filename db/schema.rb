@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_12_27_154339) do
+ActiveRecord::Schema[7.0].define(version: 2024_01_16_131014) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -291,7 +291,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_27_154339) do
     t.index ["group_id"], name: "index_gdrive_item_groups_on_group_id"
     t.index ["item_id", "group_id"], name: "index_gdrive_item_groups_on_item_id_and_group_id", unique: true
     t.index ["item_id"], name: "index_gdrive_item_groups_on_item_id"
-    t.check_constraint "access_level::text = ANY (ARRAY['fileOrganizer'::character varying::text, 'writer'::character varying::text, 'commenter'::character varying::text, 'reader'::character varying::text])"
+    t.check_constraint "access_level::text = ANY (ARRAY['fileOrganizer'::character varying, 'writer'::character varying, 'commenter'::character varying, 'reader'::character varying]::text[])"
   end
 
   create_table "gdrive_items", force: :cascade do |t|
@@ -305,7 +305,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_27_154339) do
     t.index ["cluster_id"], name: "index_gdrive_items_on_cluster_id"
     t.index ["external_id"], name: "index_gdrive_items_on_external_id", unique: true
     t.index ["gdrive_config_id"], name: "index_gdrive_items_on_gdrive_config_id"
-    t.check_constraint "kind::text = ANY (ARRAY['drive'::character varying::text, 'folder'::character varying::text, 'file'::character varying::text])", name: "kind_enum"
+    t.check_constraint "kind::text = ANY (ARRAY['drive'::character varying, 'folder'::character varying, 'file'::character varying]::text[])", name: "kind_enum"
   end
 
   create_table "gdrive_migration_consent_requests", force: :cascade do |t|
@@ -324,8 +324,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_27_154339) do
     t.datetime "updated_at", null: false
     t.index ["cluster_id"], name: "index_gdrive_migration_consent_requests_on_cluster_id"
     t.index ["operation_id"], name: "index_gdrive_migration_consent_requests_on_operation_id"
-    t.check_constraint "ingest_status::text = ANY (ARRAY['new'::character varying::text, 'in_progress'::character varying::text, 'done'::character varying::text, 'failed'::character varying::text])", name: "ingest_status_enum"
-    t.check_constraint "status::text = ANY (ARRAY['new'::character varying::text, 'in_progress'::character varying::text, 'done'::character varying::text, 'opted_out'::character varying::text])", name: "status_enum"
+    t.check_constraint "ingest_status::text = ANY (ARRAY['new'::character varying, 'in_progress'::character varying, 'done'::character varying, 'failed'::character varying]::text[])", name: "ingest_status_enum"
+    t.check_constraint "status::text = ANY (ARRAY['new'::character varying, 'in_progress'::character varying, 'done'::character varying, 'opted_out'::character varying]::text[])", name: "status_enum"
   end
 
   create_table "gdrive_migration_files", force: :cascade do |t|
@@ -379,6 +379,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_27_154339) do
     t.string "status", default: "new", null: false
     t.datetime "updated_at", null: false
     t.string "webhook_channel_id"
+    t.datetime "webhook_expires_at"
+    t.string "webhook_resource_id"
     t.string "webhook_secret"
     t.index ["config_id"], name: "index_gdrive_migration_operations_on_config_id"
   end

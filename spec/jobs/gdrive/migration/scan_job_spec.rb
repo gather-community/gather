@@ -94,6 +94,8 @@ describe GDrive::Migration::ScanJob do
           expect(operation.start_page_token).to eq("12676")
           expect(operation.webhook_channel_id).not_to be_nil
           expect(operation.webhook_secret).not_to be_nil
+          expect(operation.webhook_resource_id).to be_nil
+          expect(operation.webhook_expires_at).to be_nil
 
           scan.reload
           expect(scan.scanned_file_count).to eq(4)
@@ -119,16 +121,26 @@ describe GDrive::Migration::ScanJob do
       subject!(:job) { described_class.new(cluster_id: Defaults.cluster.id, scan_task_id: scan_task.id) }
 
       it "marks operation complete and registers webhook" do
-        VCR.use_cassette("gdrive/migration/scan_job/full/no_more_tasks") do
-          expect { perform_job }.to have_enqueued_job(described_class)
-        end
+        time = Time.zone.parse("2024-01-10 12:00:00")
+        Timecop.freeze(time) do
+          VCR.use_cassette("gdrive/migration/scan_job/full/no_more_tasks") do
+            expect { perform_job }.to have_enqueued_job(described_class)
+          end
 
-        expect(scan.reload.status).to eq("complete")
-        expect(GDrive::Migration::Scan.count).to eq(2)
-        expect(GDrive::Migration::ScanTask.count).to eq(1)
-        scan_task = GDrive::Migration::ScanTask.first
-        expect(scan_task.page_token).to eq("12345")
-        expect(scan_task.scan.scope).to eq("changes")
+          expect(scan.reload.status).to eq("complete")
+          expect(GDrive::Migration::Scan.count).to eq(2)
+          expect(GDrive::Migration::ScanTask.count).to eq(1)
+          scan_task = GDrive::Migration::ScanTask.first
+          expect(scan_task.page_token).to eq("12345")
+          expect(scan_task.scan.scope).to eq("changes")
+
+          operation.reload
+          expect(operation.start_page_token).to eq("12345")
+          expect(operation.webhook_channel_id).not_to be_nil
+          expect(operation.webhook_secret).not_to be_nil
+          expect(operation.webhook_resource_id).to eq("030dP89w23Mzw28mQBrIu00iMXg")
+          expect(operation.webhook_expires_at).to eq(time + 7.days)
+        end
       end
     end
 

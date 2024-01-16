@@ -415,18 +415,24 @@ module GDrive
           port: webhook_url_settings&.port || Settings.url.port,
           protocol: "https"
         )
-        wrapper.watch_change(operation.start_page_token,
+        expiration = Time.current + 7.days
+        channel = wrapper.watch_change(operation.start_page_token,
           Google::Apis::DriveV3::Channel.new(
             id: operation.webhook_channel_id,
             token: operation.webhook_secret,
             address: url,
             type: "web_hook",
-            expiration: (Time.current + 7.days).to_i * 1000
+            expiration: expiration.to_i * 1000
           ),
           include_items_from_all_drives: false,
           include_corpus_removals: true,
           include_removed: true,
           spaces: "drive")
+
+        operation.update!(
+          webhook_resource_id: channel.resource_id,
+          webhook_expires_at: expiration
+        )
       end
 
       def wrapper

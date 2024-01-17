@@ -60,16 +60,7 @@ module GDrive
         # Only do this once per operation
         self.class.with_lock(operation.id) do
           return if operation.reload.start_page_token.present?
-
-          Rails.logger.info("Getting start_page_token", operation_id: operation.id)
-          start_page_token = wrapper.get_changes_start_page_token
-          operation.update!(
-            # We can setup the channel ID and the secret now too
-            # as they are just random tokens and won't change.
-            webhook_channel_id: SecureRandom.uuid,
-            webhook_secret: SecureRandom.hex,
-            start_page_token: start_page_token.start_page_token
-          )
+          WebhookRegistrar.setup(operation, wrapper)
         end
       end
 
@@ -397,7 +388,7 @@ module GDrive
               # We can register for this now since we are finished scanning.
               # We saved the start page token earlier so that we will get any changes
               # we missed during scanning.
-              register_webhook
+              WebhookRegistrar.register(operation, wrapper)
 
               # If main scan job is finishing, we should run a change scan because changes
               # may have been piling up (and we ignore them during the main scan)
@@ -407,42 +398,13 @@ module GDrive
         end
       end
 
-      def register_webhook
-        Rails.logger.info("Registering webhook", operation_id: operation.id)
-        webhook_url_settings = Settings.gdrive&.migration&.changes_webhook_url
-        url = Rails.application.routes.url_helpers.gdrive_migration_changes_webhook_url(
-          host: webhook_url_settings&.host || Settings.url.host,
-          port: webhook_url_settings&.port || Settings.url.port,
-          protocol: "https"
-        )
-        expiration = Time.current + 7.days
-        channel = wrapper.watch_change(operation.start_page_token,
-          Google::Apis::DriveV3::Channel.new(
-            id: operation.webhook_channel_id,
-            token: operation.webhook_secret,
-            address: url,
-            type: "web_hook",
-            expiration: expiration.to_i * 1000
-          ),
-          include_items_from_all_drives: false,
-          include_corpus_removals: true,
-          include_removed: true,
-          spaces: "drive")
-
-        operation.update!(
-          webhook_resource_id: channel.resource_id,
-          webhook_expires_at: expiration
-        )
-      end
-
       def wrapper
         return @wrapper if @wrapper
-        migration_config = operation.config
 
         # We build the wrapper using the main config because we are scanning the
         # folder via the Google Workspace user account. This allows us to scan all
         # the files because we have drive (not drive.file) scope on that app.
-        main_config = MainConfig.find_by(community: migration_config.community)
+        main_config = MainConfig.find_by(community: operation.community)
         @wrapper = Wrapper.new(config: main_config, google_user_id: main_config.org_user_id)
       end
     end

@@ -69,6 +69,10 @@ module GDrive
       wrap_api_method { service.watch_change(...) }
     end
 
+    def stop_channel(...)
+      wrap_api_method { service.stop_channel(...) }
+    end
+
     def list_changes(...)
       wrap_api_method { service.list_changes(...) }
     end

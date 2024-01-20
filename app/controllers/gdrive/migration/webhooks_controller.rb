@@ -5,7 +5,10 @@ module GDrive
     class WebhooksController < ApplicationController
       # These are public pages. Authentication comes from the token in the header.
       skip_before_action :authenticate_user!
+      skip_before_action :verify_authenticity_token
       skip_after_action :verify_authorized
+
+      prepend_before_action :set_current_community_from_query_string
 
       # For signed-in pages, we redirect to the appropriate community.
       # Here we should 404 if no community, except for the callback endpoint
@@ -14,7 +17,7 @@ module GDrive
       def changes
         # By the time this endpoint is being called for a given operation, that operation
         # should already have values for webhook_channel_id, webhook_secret, and start_page_token,
-        # since one of those are created when we set up the webhook channel initially.
+        # since those are created when we set up the webhook channel initially.
         operation = Operation.in_community(current_community)
           .find_by(webhook_channel_id: request.headers["x-goog-channel-id"])
 

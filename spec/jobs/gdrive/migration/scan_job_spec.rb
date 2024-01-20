@@ -31,9 +31,10 @@ describe GDrive::Migration::ScanJob do
   # Before committing:
   # - Remove token and real email addresses using global find and replace.
 
-  let!(:main_config) { create(:gdrive_main_config, org_user_id: "admin@example.org") }
+  let(:community) { Defaults.community }
+  let!(:main_config) { create(:gdrive_main_config, org_user_id: "admin@example.org", community: community) }
   let!(:token) { create(:gdrive_token, gdrive_config: main_config, google_user_id: main_config.org_user_id) }
-  let!(:migration_config) { create(:gdrive_migration_config) }
+  let!(:migration_config) { create(:gdrive_migration_config, community: community) }
   let!(:operation) do
     create(:gdrive_migration_operation, :webhook_registered, config: migration_config,
       src_folder_id: "1FBirfPXk-5qaMO1BkvlyhaC8JARE_FRq",
@@ -109,6 +110,7 @@ describe GDrive::Migration::ScanJob do
     end
 
     describe "when there are no more scan tasks left" do
+      let(:community) { create(:community, id: 123) }
       let!(:operation) do
         create(:gdrive_migration_operation, :webhook_registered, config: migration_config,
           src_folder_id: "1FBirfPXk-5qaMO1BkvlyhaC8JARE_FRq",

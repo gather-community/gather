@@ -21,7 +21,8 @@ module GDrive
         url = Rails.application.routes.url_helpers.gdrive_migration_changes_webhook_url(
           host: webhook_url_settings&.host || Settings.url.host,
           port: webhook_url_settings&.port || Settings.url.port,
-          protocol: "https"
+          protocol: "https",
+          community_id: operation.community_id
         )
         expiration = Time.current + 7.days
         channel = wrapper.watch_change(operation.start_page_token,

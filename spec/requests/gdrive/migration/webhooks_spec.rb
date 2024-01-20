@@ -3,18 +3,17 @@
 require "rails_helper"
 
 describe "gdrive auth callback" do
+  let(:community) { Defaults.community }
+  let(:config) { create(:gdrive_migration_config, community: community) }
   let!(:operation) do
     create(:gdrive_migration_operation, webhook_channel_id: "12cd", webhook_secret: "56ab", start_page_token: "34567")
   end
-
-  before do
-    use_subdomain("default")
-  end
+  let(:path) { "/gdrive/migration/changes?community_id=#{community.id}" }
 
   context "happy path" do
     it "schedules job" do
       expect do
-        post("/gdrive/migration/changes", headers: {
+        post(path, headers: {
           "x-goog-channel-id" => "12cd",
           "x-goog-channel-token" => "56ab"
         })
@@ -39,7 +38,7 @@ describe "gdrive auth callback" do
 
     it "doesn't schedule job" do
       expect do
-        post("/gdrive/migration/changes", headers: {
+        post(path, headers: {
           "x-goog-channel-id" => "12cd",
           "x-goog-channel-token" => "56ab"
         })
@@ -56,7 +55,7 @@ describe "gdrive auth callback" do
   context "with missing operation" do
     it "returns 404" do
       expect do
-        post("/gdrive/migration/changes", headers: {
+        post(path, headers: {
           "x-goog-channel-id" => "12ce",
           "x-goog-channel-token" => "56ab"
         })
@@ -73,7 +72,7 @@ describe "gdrive auth callback" do
   context "with non-matching secret/token" do
     it "returns 404" do
       expect do
-        post("/gdrive/migration/changes", headers: {
+        post(path, headers: {
           "x-goog-channel-id" => "12cd",
           "x-goog-channel-token" => "56az"
         })
@@ -96,7 +95,7 @@ describe "gdrive auth callback" do
 
     it "returns 404" do
       expect do
-        post("/gdrive/migration/changes", headers: {
+        post(path, headers: {
           "x-goog-channel-id" => "12cd",
           "x-goog-channel-token" => "56ab"
         })

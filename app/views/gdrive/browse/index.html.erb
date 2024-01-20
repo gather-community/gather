@@ -84,9 +84,6 @@
   <% end %>
 <% end %>
 
-<% if !(@authorization_error || @no_credentials) && @setup_policy.setup? %>
-  <footer id="local-footer" class="footer-links">
-    <%= link_to("Revoke Authorization", gdrive_setup_auth_revoke_path, method: :delete,
-          data: {confirm: "Are you sure you want to revoke authorization? Nobody will be able to use Google Drive features for this community until authorization is re-established."}) %>
-  </footer>
-<% end %>
+<footer id="local-footer" class="footer-links">
+  <%= @browse_decorator.footer_links %>
+</footer>

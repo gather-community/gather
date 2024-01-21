@@ -107,8 +107,9 @@ module GDrive
 
       def list_files_from_folder(folder_id)
         Rails.logger.info("Listing files from folder", folder_id: folder_id)
+        folder_id = folder_id.gsub("'") { "\\'" }
         list = wrapper.list_files(
-          q: "'#{scan_task.folder_id}' in parents and trashed = false",
+          q: "'#{folder_id}' in parents and trashed = false",
           fields: "files(#{FILE_FIELDS}),nextPageToken",
           order_by: "folder,name",
           include_items_from_all_drives: true,

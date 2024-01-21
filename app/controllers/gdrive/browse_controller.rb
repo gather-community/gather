@@ -133,6 +133,7 @@ module GDrive
     end
 
     def list_files(wrapper, parent_id)
+      parent_id = parent_id.gsub("'") { "\\'" }
       wrapper.list_files(q: "'#{parent_id}' in parents and trashed = false",
         fields: "files(id,name,mimeType,iconLink,webViewLink)",
         order_by: "folder,name",

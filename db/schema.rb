@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_01_21_123149) do
+ActiveRecord::Schema[7.0].define(version: 2024_01_21_123438) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -324,6 +324,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_21_123149) do
     t.datetime "updated_at", null: false
     t.index ["cluster_id"], name: "index_gdrive_migration_consent_requests_on_cluster_id"
     t.index ["operation_id"], name: "index_gdrive_migration_consent_requests_on_operation_id"
+    t.check_constraint "char_length(opt_out_reason) <= 32767", name: "opt_out_reason_length"
     t.check_constraint "ingest_status::text = ANY (ARRAY['new'::character varying, 'in_progress'::character varying, 'done'::character varying, 'failed'::character varying]::text[])", name: "ingest_status_enum"
     t.check_constraint "status::text = ANY (ARRAY['new'::character varying, 'in_progress'::character varying, 'done'::character varying, 'opted_out'::character varying]::text[])", name: "status_enum"
   end
@@ -348,6 +349,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_21_123149) do
     t.index ["operation_id", "external_id"], name: "index_gdrive_migration_files_on_operation_id_and_external_id", unique: true
     t.index ["operation_id", "owner", "status"], name: "index_gdrive_migration_files_on_owner"
     t.index ["operation_id"], name: "index_gdrive_migration_files_on_operation_id"
+    t.check_constraint "char_length(name) <= 32767", name: "name_length"
     t.check_constraint "error_type::text = ANY (ARRAY['forbidden'::character varying::text, 'not_found'::character varying::text, 'ancestor_inaccessible'::character varying::text, 'client_error_ensuring_tree'::character varying::text])", name: "error_type_enum"
     t.check_constraint "status::text = ANY (ARRAY['pending'::character varying::text, 'errored'::character varying::text, 'declined'::character varying::text, 'transferred'::character varying::text, 'copied'::character varying::text, 'ignored'::character varying::text])", name: "status_enum"
   end
@@ -357,7 +359,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_21_123149) do
     t.datetime "created_at", null: false
     t.string "dest_id", null: false
     t.string "dest_parent_id", null: false
-    t.string "name", null: false
+    t.text "name", null: false
     t.bigint "operation_id", null: false
     t.string "src_id", null: false
     t.string "src_parent_id", null: false
@@ -365,6 +367,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_21_123149) do
     t.index ["cluster_id"], name: "index_gdrive_migration_folder_maps_on_cluster_id"
     t.index ["operation_id", "src_id"], name: "index_gdrive_migration_folder_maps_on_operation_id_and_src_id", unique: true
     t.index ["operation_id"], name: "index_gdrive_migration_folder_maps_on_operation_id"
+    t.check_constraint "char_length(name) <= 32767", name: "name_length"
   end
 
   create_table "gdrive_migration_operations", force: :cascade do |t|
@@ -388,7 +391,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_21_123149) do
     t.integer "cluster_id", null: false
     t.datetime "created_at", null: false
     t.string "folder_id", limit: 128
-    t.text "page_token"
+    t.string "page_token"
     t.bigint "scan_id", null: false
     t.datetime "updated_at", null: false
     t.index ["scan_id"], name: "index_gdrive_migration_scan_tasks_on_scan_id"

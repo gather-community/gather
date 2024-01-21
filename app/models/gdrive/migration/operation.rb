@@ -16,7 +16,7 @@ module GDrive
         inverse_of: :operation, dependent: :destroy
 
       scope :in_community, ->(c) { joins(:config).where(gdrive_configs: {community_id: c.id}) }
-      scope :active, -> { where.not(status: "inactive") }
+      scope :active, -> { all }
 
       delegate :community, :community_id, to: :config
 

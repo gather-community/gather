@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_01_16_131014) do
+ActiveRecord::Schema[7.0].define(version: 2024_01_21_122251) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -407,6 +407,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_16_131014) do
     t.datetime "updated_at", null: false
     t.index ["cluster_id"], name: "index_gdrive_migration_scans_on_cluster_id"
     t.index ["operation_id"], name: "index_gdrive_migration_scans_on_operation_id"
+    t.check_constraint "scope::text = ANY (ARRAY['full'::character varying, 'changes'::character varying]::text[])", name: "scope_enum"
+    t.check_constraint "status::text = ANY (ARRAY['new'::character varying, 'in_progress'::character varying, 'cancelled'::character varying, 'complete'::character varying]::text[])", name: "status_enum"
   end
 
   create_table "gdrive_synced_permissions", force: :cascade do |t|
@@ -422,6 +424,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_16_131014) do
     t.index ["cluster_id"], name: "index_gdrive_synced_permissions_on_cluster_id"
     t.index ["item_id"], name: "index_gdrive_synced_permissions_on_item_id"
     t.index ["user_id"], name: "index_gdrive_synced_permissions_on_user_id"
+    t.check_constraint "access_level::text = ANY (ARRAY['reader'::character varying, 'commenter'::character varying, 'writer'::character varying, 'fileOrganizer'::character varying]::text[])", name: "access_level_enum"
   end
 
   create_table "gdrive_tokens", force: :cascade do |t|

@@ -31,6 +31,10 @@ module GDrive
           return render_not_found
         end
 
+        unless operation.active?
+          Rails.logger.info("Operation is inactive, not processing webhook", operation_id: operation_id)
+        end
+
         ScanJob.with_lock(operation.id) do
           # No need to start a new scan if there is already one that hasn't started running.
           # Background jobs only get started every few seconds so this should debounce

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_01_21_122251) do
+ActiveRecord::Schema[7.0].define(version: 2024_01_21_123149) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -376,7 +376,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_21_122251) do
     t.string "dest_folder_id", limit: 255
     t.string "src_folder_id", limit: 255
     t.string "start_page_token"
-    t.string "status", default: "new", null: false
     t.datetime "updated_at", null: false
     t.string "webhook_channel_id"
     t.datetime "webhook_expires_at"

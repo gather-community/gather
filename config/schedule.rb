@@ -18,4 +18,5 @@ end
 
 every 1.day, at: "4:30 am" do
   enqueue("CleanupJob")
+  enqueue("GDrive::Migration::WebhookRefreshJob")
 end

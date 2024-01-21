@@ -1,0 +1,125 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://oauth2.googleapis.com/token
+    body:
+      encoding: ASCII-8BIT
+      string: grant_type=authorization_code&code=4%2F0AX4XfWi1iHTsts9hiS2un1INqmi0KAIOB-iRL_OnUd7FCqyhJ7MDkPqmgjYlhAIoysAnpw&redirect_uri=http%3A%2F%2Fgatherdev.org%3A31337%2Fgdrive%2Fsetup%2Fauth%2Fcallback&client_id=236482764-xxx.apps.googleusercontent.com&client_secret=xxxxxxxx
+    headers:
+      User-Agent:
+      - Faraday v1.10.0
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Sun, 29 May 2022 00:54:10 GMT
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Pragma:
+      - no-cache
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Vary:
+      - Origin
+      - Referer
+      - X-Origin
+      Server:
+      - scaffolding on HTTPServer2
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000,h3-Q050=":443"; ma=2592000,h3-Q046=":443";
+        ma=2592000,h3-Q043=":443"; ma=2592000,quic=":443"; ma=2592000; v="46,43"
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: ASCII-8BIT
+      string: |-
+        {
+          "access_token": "xxxxxxxxRrdaM_ejqXa0Fx7v97ybEf1RBGbG4bX215yoktUIOZ01X3VSOs24d5EWxDqYTZCdXDNMmoc5m4qUAX23SoT1LXBHFe2Zw7TJC5uXTk2l4yQE1VNvbQ0LqrAu5I-JTU5Ts95qGYwcaipC5xyGlgMxxxxxxxx",
+          "expires_in": 3599,
+          "refresh_token": "1//04BhShBjZgn_pCgYIARAAGAQSNwF-L9IrbayKmHseq617gzUzp4WJCxH8RlCZFGcNNFWWFM19fkAy2WbhxFCscWwsVQg032qnAi4",
+          "scope": "https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email openid https://www.googleapis.com/auth/drive",
+          "token_type": "Bearer",
+          "id_token": "xxxxxxxxiJSUzI1NiIsImtpZCI6IjM4ZjM4ODM0NjhmYzY1OWFiYjQ0NzVmMzYzMTNkMjI1ODVjMmQ3Y2EiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiIzMDI3NzMzNDQyNDAtZWw3Zml2N3JrM3JlODd2MXNhdDl1N2NrZ2dkNmN1MXIuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiIzMDI3NzMzNDQyNDAtZWw3Zml2N3JrM3JlODd2MXNhdDl1N2NrZ2dkNmN1MXIuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMTY2MDc4MzU0Njc4ODc4NDcxNTEiLCJlbWFpbCI6InRzY29ob3RlY2hAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImF0X2hhc2giOiJ6dTg2eGd3dnYtWURmVWRBNGtYdVB3IiwibmFtZSI6IlRvdWNoc3RvbmUgQ29ob3VzaW5nIiwicGljdHVyZSI6Imh0dHBzOi8vbGgzLmdvb2dsZXVzZXJjb250ZW50LmNvbS9hLS9BT2gxNEdoMUZKQjZIM1VkajhPeEI1cUdjQXFMd1NUTnVyZUt4VGhwNlBPaENnPXM5Ni1jIiwiZ2l2ZW5fbmFtZSI6IlRvdWNoc3RvbmUiLCJmYW1pbHlfbmFtZSI6IkNvaG91c2luZyIsImxvY2FsZSI6ImVuIiwiaWF0IjoxNjUzNzg1NjUwLCJleHAiOjE2NTM3ODkyNTB9.KVYUWiNV4e6HL8b0_t6lYV53cYBkxFaSmxtgliXZirKRhQNquOjjEoV_-oCBoTBSCqgPTcBOJghYJmiXvraYrFuQsTLEsl9Rfzi802bKb4S7Wc2uLPwufo_KETmqec_CyC_Wv90a_i_gy_ZiSXRWMFArOpbU-xfKRE0JMOdujCo5ql0JXoBbfbg_i8UkQQ2LWyPsVKvLmB7LbMkUg71Xq0LOKkTmaCzLCZeXB_NhFcNVXw3MhDhvS1FPRpV27f1HERVhjjPuL4DTaRYlc4Vw-XJmUxpvyZMa9IG976j4UQpRDCXHwasZHL2pu50sigy22nY8zAm4QRSL9YDWDFRbFA"
+        }
+    http_version:
+  recorded_at: Sun, 29 May 2022 00:54:10 GMT
+- request:
+    method: get
+    uri: https://www.googleapis.com/oauth2/v2/userinfo?access_token=xxxxxxxxRrdaM_ejqXa0Fx7v97ybEf1RBGbG4bX215yoktUIOZ01X3VSOs24d5EWxDqYTZCdXDNMmoc5m4qUAX23SoT1LXBHFe2Zw7TJC5uXTk2l4yQE1VNvbQ0LqrAu5I-JTU5Ts95qGYwcaipC5xyGlgMxxxxxxxx
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - www.googleapis.com
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Pragma:
+      - no-cache
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Date:
+      - Sun, 29 May 2022 00:54:10 GMT
+      Content-Type:
+      - application/json; charset=UTF-8
+      Vary:
+      - Origin
+      - Referer
+      - X-Origin
+      Server:
+      - ESF
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000,h3-Q050=":443"; ma=2592000,h3-Q046=":443";
+        ma=2592000,h3-Q043=":443"; ma=2592000,quic=":443"; ma=2592000; v="46,43"
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: ASCII-8BIT
+      string: |
+        {
+          "id": "116607835467887847151",
+          "email": "bar@gmail.com",
+          "verified_email": true,
+          "name": "Touchstone Cohousing",
+          "given_name": "Touchstone",
+          "family_name": "Cohousing",
+          "picture": "https://lh3.googleusercontent.com/a-/AOh14Gh1FJB6H3Udj8OxB5qGcAqLwSTNureKxThp6POhCg=s96-c",
+          "locale": "en"
+        }
+    http_version:
+  recorded_at: Sun, 29 May 2022 00:54:10 GMT
+recorded_with: VCR 4.0.0

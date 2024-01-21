@@ -1,0 +1,156 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://www.googleapis.com/drive/v3/changes?fields=changes(fileId,file(id,name,parents,mimeType,webViewLink,iconLink,modifiedTime,owners(emailAddress),capabilities(canEdit),trashed,driveId)),nextPageToken,newStartPageToken&includeCorpusRemovals=true&includeItemsFromAllDrives=true&includeRemoved=true&pageSize=100&pageToken=13326&spaces=drive&supportsAllDrives=true
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      User-Agent:
+      - unknown/0.0.0 google-apis-drive_v3/0.46.0 Mac OS X/13.1 (gzip)
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip,deflate
+      Date:
+      - Mon, 15 Jan 2024 19:07:56 GMT
+      X-Goog-Api-Client:
+      - gl-ruby/3.2.2 gdcl/1.46.0
+      Authorization:
+      - Bearer ya29.a0AfB_byC_uGSkDYohhuFCoayMlH4-crLcPIwQDFgfePZWkKhyuM2vX9WEMZMWn_wd4NlvmeSIJYdLSEq93_Ss9G6ls1C2HoG8byojpgq1HIaKQdh1_D1b4Y-a53I_7DssFkuD1zjcqVYDYyYWq-TsDtiMQGz0aGIx44vRxCoaCgYKAUISARESFQHGX2Mi-h67xFm3sEN5QPqOe5Vs5Q0174
+      Content-Type:
+      - application/x-www-form-urlencoded
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Vary:
+      - Origin, X-Origin
+      Pragma:
+      - no-cache
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Date:
+      - Mon, 15 Jan 2024 19:07:56 GMT
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Encoding:
+      - gzip
+      Server:
+      - ESF
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: |
+        {
+          "changes": [
+            {
+              "file": {
+                "mimeType": "application/vnd.google-apps.folder",
+                "parents": [
+                  "1FBirfPXk-5qaMO1BkvlyhaC8JARE_FRq"
+                ],
+                "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.folder+shared",
+                "owners": [
+                  {
+                    "emailAddress": "example@gmail.com"
+                  }
+                ],
+                "webViewLink": "https://drive.google.com/drive/folders/1K9Sq95eB4IUQ_JHrRpNsyNg9PAjvC7Qo",
+                "id": "1K9Sq95eB4IUQ_JHrRpNsyNg9PAjvC7Qo",
+                "name": "Folder A",
+                "trashed": true,
+                "modifiedTime": "2024-01-11T13:05:55.817Z",
+                "capabilities": {
+                  "canEdit": true
+                }
+              },
+              "fileId": "1K9Sq95eB4IUQ_JHrRpNsyNg9PAjvC7Qo"
+            },
+            {
+              "file": {
+                "mimeType": "application/vnd.google-apps.folder",
+                "parents": [
+                  "1K9Sq95eB4IUQ_JHrRpNsyNg9PAjvC7Qo"
+                ],
+                "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.folder+shared",
+                "owners": [
+                  {
+                    "emailAddress": "example@gmail.com"
+                  }
+                ],
+                "webViewLink": "https://drive.google.com/drive/folders/15wQB70b0BevG-YLdkMEuhN3tsV9hrV8y",
+                "id": "15wQB70b0BevG-YLdkMEuhN3tsV9hrV8y",
+                "name": "Folder C",
+                "trashed": true,
+                "modifiedTime": "2024-01-11T13:06:09.023Z",
+                "capabilities": {
+                  "canEdit": true
+                }
+              },
+              "fileId": "15wQB70b0BevG-YLdkMEuhN3tsV9hrV8y"
+            },
+            {
+              "file": {
+                "mimeType": "application/vnd.google-apps.document",
+                "parents": [
+                  "1K9Sq95eB4IUQ_JHrRpNsyNg9PAjvC7Qo"
+                ],
+                "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.document",
+                "owners": [
+                  {
+                    "emailAddress": "example@gmail.com"
+                  }
+                ],
+                "webViewLink": "https://docs.google.com/document/d/1JD-D05pWdk6keODlH3kEy8iucBCvzfM-7X5XE2ttDlA/edit?usp=drivesdk",
+                "id": "1JD-D05pWdk6keODlH3kEy8iucBCvzfM-7X5XE2ttDlA",
+                "name": "File C.2",
+                "trashed": true,
+                "modifiedTime": "2024-01-14T15:10:01.870Z",
+                "capabilities": {
+                  "canEdit": true
+                }
+              },
+              "fileId": "1JD-D05pWdk6keODlH3kEy8iucBCvzfM-7X5XE2ttDlA"
+            },
+            {
+              "file": {
+                "mimeType": "application/vnd.google-apps.document",
+                "parents": [
+                  "15wQB70b0BevG-YLdkMEuhN3tsV9hrV8y"
+                ],
+                "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.document",
+                "owners": [
+                  {
+                    "emailAddress": "example@gmail.com"
+                  }
+                ],
+                "webViewLink": "https://docs.google.com/document/d/1mohxjSbIM_XvHG16aFlBT0yBFxP6sujpCNyOrxUjq1Y/edit?usp=drivesdk",
+                "id": "1mohxjSbIM_XvHG16aFlBT0yBFxP6sujpCNyOrxUjq1Y",
+                "name": "File C.1",
+                "trashed": true,
+                "modifiedTime": "2024-01-15T19:00:20.043Z",
+                "capabilities": {
+                  "canEdit": true
+                }
+              },
+              "fileId": "1mohxjSbIM_XvHG16aFlBT0yBFxP6sujpCNyOrxUjq1Y"
+            }
+          ]
+        }
+    http_version:
+  recorded_at: Mon, 15 Jan 2024 19:07:56 GMT
+recorded_with: VCR 4.0.0

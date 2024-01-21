@@ -15,7 +15,14 @@ module GDrive
       has_many :folder_maps, class_name: "GDrive::Migration::FolderMap",
         inverse_of: :operation, dependent: :destroy
 
+      scope :in_community, ->(c) { joins(:config).where(gdrive_configs: {community_id: c.id}) }
+      scope :active, -> { where.not(status: "inactive") }
+
       delegate :community, :community_id, to: :config
+
+      def webhook_registered?
+        webhook_channel_id.present?
+      end
 
       def src_folder_url
         "https://drive.google.com/drive/u/0/folders/#{src_folder_id}"

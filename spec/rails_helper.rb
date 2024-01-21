@@ -96,6 +96,7 @@ RSpec.configure do |config|
   end
 
   VCR.configure do |c|
+    c.debug_logger = File.open("log/vcr.log", "w")
     c.cassette_library_dir = "spec/cassettes"
     c.hook_into(:webmock)
     c.default_cassette_options = {match_requests_on: %i[method uri host path body]}

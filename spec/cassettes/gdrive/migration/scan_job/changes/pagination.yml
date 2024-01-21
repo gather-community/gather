@@ -1,0 +1,99 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://www.googleapis.com/drive/v3/changes?fields=changes(fileId,file(id,name,parents,mimeType,webViewLink,iconLink,modifiedTime,owners(emailAddress),capabilities(canEdit),trashed,driveId)),nextPageToken,newStartPageToken&includeCorpusRemovals=true&includeItemsFromAllDrives=true&includeRemoved=true&pageSize=2&pageToken=12683&spaces=drive&supportsAllDrives=true
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      User-Agent:
+      - unknown/0.0.0 google-apis-drive_v3/0.46.0 Mac OS X/13.1 (gzip)
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip,deflate
+      Date:
+      - Sat, 30 Dec 2023 21:11:09 GMT
+      X-Goog-Api-Client:
+      - gl-ruby/3.2.2 gdcl/1.46.0
+      Authorization:
+      - Bearer ya29.a0AfB_byBRJRSsYLU-cI8Pw6zBGiaWa80EvNT3qod5hwwfs-AwkyLvamq0LwA-SJO_IQQHOZJPpq15-VNKk5TQj8LIM0ig26Fja1FcyL_XEDEJ_K20iyEzLOs16AHDNqQhTrhOXMwZxkkuNpokRAkIr2LRJMeb5fwvGG4MeKMaCgYKAXESARESFQHGX2MiXuTVMS8n3nCznNFLOEXxkg0174
+      Content-Type:
+      - application/x-www-form-urlencoded
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Vary:
+      - Origin, X-Origin
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Date:
+      - Sat, 30 Dec 2023 21:11:09 GMT
+      Pragma:
+      - no-cache
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Encoding:
+      - gzip
+      Server:
+      - ESF
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: |
+        {
+          "nextPageToken": "12685",
+          "changes": [
+            {
+              "file": {
+                "driveId": "0AExZ3-Cu5q7uUk9PVA",
+                "mimeType": "application/vnd.google-apps.folder",
+                "parents": [
+                  "0AExZ3-Cu5q7uUk9PVA"
+                ],
+                "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.folder",
+                "webViewLink": "https://drive.google.com/drive/folders/1iAQn3IxZZp3iAhi4lItgNNDLxcxkUhNW",
+                "id": "1iAQn3IxZZp3iAhi4lItgNNDLxcxkUhNW",
+                "name": "Folder B",
+                "modifiedTime": "2023-12-30T13:20:27.758Z",
+                "capabilities": {
+                  "canEdit": true
+                }
+              }
+            },
+            {
+              "file": {
+                "driveId": "0AExZ3-Cu5q7uUk9PVA",
+                "mimeType": "application/vnd.google-apps.folder",
+                "parents": [
+                  "0AExZ3-Cu5q7uUk9PVA"
+                ],
+                "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.folder",
+                "webViewLink": "https://drive.google.com/drive/folders/1PlXD41vrchZ1EPCT7bv7HRxpET-tvOm6",
+                "id": "1PlXD41vrchZ1EPCT7bv7HRxpET-tvOm6",
+                "name": "Folder A",
+                "modifiedTime": "2023-12-30T13:20:27.060Z",
+                "capabilities": {
+                  "canEdit": true
+                }
+              }
+            }
+          ]
+        }
+    http_version:
+  recorded_at: Sat, 30 Dec 2023 21:11:09 GMT
+recorded_with: VCR 4.0.0

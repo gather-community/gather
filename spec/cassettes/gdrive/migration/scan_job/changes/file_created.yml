@@ -1,0 +1,86 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://www.googleapis.com/drive/v3/changes?fields=changes(fileId,file(id,name,parents,mimeType,webViewLink,iconLink,modifiedTime,owners(emailAddress),capabilities(canEdit),trashed,driveId)),nextPageToken,newStartPageToken&includeCorpusRemovals=true&includeItemsFromAllDrives=true&includeRemoved=true&pageSize=100&pageToken=13307&spaces=drive&supportsAllDrives=true
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      User-Agent:
+      - unknown/0.0.0 google-apis-drive_v3/0.46.0 Mac OS X/13.1 (gzip)
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip,deflate
+      Date:
+      - Sun, 14 Jan 2024 15:14:09 GMT
+      X-Goog-Api-Client:
+      - gl-ruby/3.2.2 gdcl/1.46.0
+      Authorization:
+      - Bearer ya29.a0AfB_byB6FfN9UvJCQtuRJ21aEiBlVZSuAjYPNZVgrPLzvNH9cvb9jychfQLqE2NNP13jVcLBy79R2As8uQA6jV-CwB-pONtW3kuMSnHDnSXmSoxTu-jcZQAcTL2HfI5_RZjvIwY-X2cFhThcVvb1ous_WNLToU6udgddWxEaCgYKAUASARESFQHGX2MiFmCFf1oETp9bR-kUKHNXGw0174
+      Content-Type:
+      - application/x-www-form-urlencoded
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Vary:
+      - Origin, X-Origin
+      Date:
+      - Sun, 14 Jan 2024 15:14:09 GMT
+      Pragma:
+      - no-cache
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Encoding:
+      - gzip
+      Server:
+      - ESF
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: |
+        {
+          "changes": [
+            {
+              "file": {
+                "mimeType": "application/vnd.google-apps.document",
+                "parents": [
+                  "1K9Sq95eB4IUQ_JHrRpNsyNg9PAjvC7Qo"
+                ],
+                "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.document",
+                "owners": [
+                  {
+                    "emailAddress": "example@gmail.com"
+                  }
+                ],
+                "webViewLink": "https://docs.google.com/document/d/1JD-D05pWdk6keODlH3kEy8iucBCvzfM-7X5XE2ttDlA/edit?usp=drivesdk",
+                "id": "1JD-D05pWdk6keODlH3kEy8iucBCvzfM-7X5XE2ttDlA",
+                "name": "File A.2",
+                "modifiedTime": "2024-01-14T15:10:01.870Z",
+                "capabilities": {
+                  "canEdit": true
+                }
+              },
+              "fileId": "1JD-D05pWdk6keODlH3kEy8iucBCvzfM-7X5XE2ttDlA"
+            }
+          ]
+        }
+    http_version:
+  recorded_at: Sun, 14 Jan 2024 15:14:09 GMT
+recorded_with: VCR 4.0.0

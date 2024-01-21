@@ -61,6 +61,22 @@ module GDrive
       wrap_api_method { service.delete_permission(...) }
     end
 
+    def get_changes_start_page_token(...)
+      wrap_api_method { service.get_changes_start_page_token(...) }
+    end
+
+    def watch_change(...)
+      wrap_api_method { service.watch_change(...) }
+    end
+
+    def stop_channel(...)
+      wrap_api_method { service.stop_channel(...) }
+    end
+
+    def list_changes(...)
+      wrap_api_method { service.list_changes(...) }
+    end
+
     def has_credentials?
       fetch_credentials_from_store.present?
     end

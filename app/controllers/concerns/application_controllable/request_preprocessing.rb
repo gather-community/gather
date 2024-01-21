@@ -216,6 +216,11 @@ module ApplicationControllable::RequestPreprocessing
     render_error_page(:not_found) if current_community.nil?
   end
 
+  def set_current_community_from_query_string
+    return render_not_found if params[:community_id].blank?
+    self.current_community ||= Community.find(params[:community_id])
+  end
+
   def redirect_to_same_path_in_community(community)
     host = "#{community.slug}.#{Settings.url.host}"
     url_builder = (Settings.url.protocol == "https") ? URI::HTTPS : URI::HTTP

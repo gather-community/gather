@@ -278,6 +278,7 @@ Rails.application.routes.draw do
       get "consent/:token/opt_out", to: "consent#opt_out", as: :consent_opt_out
       patch "consent/:token/confirm-opt-out", to: "consent#confirm_opt_out", as: :consent_confirm_opt_out
       get "consent/:token/opt-out-complete", to: "consent#opt_out_complete", as: :consent_opt_out_complete
+      post "changes", to: "webhooks#changes", as: :changes_webhook
     end
   end
 

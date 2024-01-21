@@ -68,7 +68,7 @@ gem "stimulus-rails", "~> 1.1"
 gem "strong_password", "~> 0.0.6"
 gem "timecop", "~> 0.8"
 gem "uglifier", ">= 1.3.0"
-gem "uri", "= 0.10.0" # Dealing with CI being finicky, possibly remove later.
+gem "uri", "0.10.0.1" # Dealing with CI being finicky, possibly remove later.
 gem "whenever", "~> 0.9"
 gem "wisper", "~> 2.0"
 gem "wisper-activerecord", "~> 1.0"

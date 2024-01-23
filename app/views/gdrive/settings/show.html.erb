@@ -1,0 +1,48 @@
+<% content_for(:title) { "Google Drive Settings" } %>
+
+<p>
+  <strong>System User:</strong> <%= @config.org_user_id %>
+</p>
+<p>
+  Add items below to sync permissions. Shared drives listed below are shown on the Gather
+  <%= link_to("Google Drive browse page", gdrive_home_path) %> for users that have permission.
+  Folders and files will not be accessible via the browse page unless their parent shared drive
+  is accessible.
+</p>
+
+<% @items_by_kind.each_pair do |kind, items| %>
+  <h3><%= t("gdrive.item_kinds.#{kind}", count: 2) %></h3>
+  <table class="full-width">
+    <% if items.any? %>
+      <tr>
+        <th>Name</th>
+        <th>Groups & Permissions</th>
+      </tr>
+      <% items.each do |item| %>
+        <tr>
+          <td><%= item.name %></td>
+          <td>
+            <ul class="permissions">
+              <% item.item_groups.each do |item_group| %>
+                <li>
+                  <%= item_group.group.name %>:
+                  <%= t("gdrive.access_levels.#{item_group.access_level}") %>
+                </li>
+              <% end %>
+            </ul>
+          </td>
+          <td>
+          </td>
+        </tr>
+      <% end %>
+    <% else %>
+      No <%= t("gdrive.item_kinds.#{kind}", count: 2).downcase %> mapped.
+    <% end %>
+  </table>
+<% end %>
+
+<footer id="local-footer" class="footer-links">
+  <%= link_to("Revoke Authorization", gdrive_setup_auth_revoke_path, method: :delete,
+      data: {confirm: "Are you sure you want to revoke authorization? Nobody will be able " \
+        "to use Google Drive features for this community until authorization is re-established."}) %>
+</footer>

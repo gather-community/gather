@@ -1,5 +1,26 @@
 en:
   gdrive:
+    item_kinds:
+      drive:
+        one: "Shared Drive"
+        other: "Shared Drives"
+      folder:
+        one: "Folder"
+        other: "Folders"
+      file:
+        one: "File"
+        other: "Files"
+    access_levels:
+      reader: "Viewer"
+      commenter: "Commenter"
+      writer: "Contributor"
+      fileOrganizer: "Content manager"
+    access_level_hints:
+      reader: "View files"
+      commenter: "View and comment on files"
+      writer: "View, add, and edit files"
+      fileOrganizer: "View, add, edit, move, delete, and share files"
+
     migration:
       errors:
         cant_edit: "No edit permission"

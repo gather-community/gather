@@ -5,7 +5,8 @@ module GDrive
     acts_as_tenant :cluster
 
     belongs_to :gdrive_config, class_name: "GDrive::Config"
-    has_many :item_groups, class_name: "GDrive::ItemGroup", inverse_of: :item, dependent: :destroy
+    has_many :item_groups, -> { includes(:group).order("groups.name") },
+      class_name: "GDrive::ItemGroup", inverse_of: :item, dependent: :destroy
     has_many :groups, through: :item_groups
 
     # We deliberately don't use dependent: :destroy here because we want to be able to search by user ID

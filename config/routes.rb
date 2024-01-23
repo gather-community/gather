@@ -256,6 +256,7 @@ Rails.application.routes.draw do
   namespace :gdrive do
     get "/", to: "browse#index", as: :home
     get "item/:item_id", to: "browse#index", as: :browse
+    get "/settings", to: "settings#show", as: :settings
 
     namespace :setup do
       get "auth/callback", to: "auth#callback", as: :auth_callback

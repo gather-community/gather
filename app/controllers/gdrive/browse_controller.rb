@@ -87,12 +87,7 @@ module GDrive
           raise error
         end
       end
-      @browse_decorator = BrowseDecorator.new(
-        item_url: @item_url,
-        authorization_error: @authorization_error,
-        no_credentials: @no_credentials,
-        setup_policy: @setup_policy
-      )
+      @browse_decorator = BrowseDecorator.new(item_url: @item_url)
     end
 
     private

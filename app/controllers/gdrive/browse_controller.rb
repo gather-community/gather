@@ -5,6 +5,8 @@ module GDrive
     before_action -> { nav_context(:wiki, :gdrive) }
 
     def index
+      @browse_decorator = BrowseDecorator.new
+
       begin
         authorize(:folder, policy_class: BrowsePolicy)
         @config = MainConfig.find_by(community: current_community)
@@ -50,7 +52,7 @@ module GDrive
           ancestors = find_ancestors(wrapper: wrapper, drive_id: params[:item_id],
             multiple_drives: multiple_drives)
           @file_list = list_files(wrapper, params[:item_id])
-          @item_url = "https://drive.google.com/drive/folders/#{params[:item_id]}"
+          @browse_decorator.item_url = "https://drive.google.com/drive/folders/#{params[:item_id]}"
 
         # Folder accessed explicitly by ID
         elsif params[:item_id]
@@ -59,19 +61,19 @@ module GDrive
             multiple_drives: multiple_drives)
           return render_not_found unless can_read_drive?(ancestors[-1].drive_id)
           @file_list = list_files(wrapper, params[:item_id])
-          @item_url = "https://drive.google.com/drive/folders/#{params[:item_id]}"
+          @browse_decorator.item_url = "https://drive.google.com/drive/folders/#{params[:item_id]}"
 
         # No ID given; list all accessible drives
         else
           # We don't need to call can_read_drive? in this branch
           # because we fetched the drive list using policy_scope.
-          DriveSyncer.new(wrapper, @drives).sync
+          ItemSyncer.new(wrapper, @drives).sync
           ancestors = []
           unless multiple_drives
             # At this point there must be exactly one shared drive.
             # If there is only one drive, we don't need to show it as ancestor.
             @file_list = list_files(wrapper, @drives[0].external_id)
-            @item_url = "https://drive.google.com/drive/folders/#{@drives[0].external_id}"
+            @browse_decorator.item_url = "https://drive.google.com/drive/folders/#{@drives[0].external_id}"
           end
         end
         @ancestors_decorator = AncestorsDecorator.new(ancestors)
@@ -87,7 +89,6 @@ module GDrive
           raise error
         end
       end
-      @browse_decorator = BrowseDecorator.new(item_url: @item_url)
     end
 
     private

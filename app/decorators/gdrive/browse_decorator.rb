@@ -4,8 +4,7 @@ module GDrive
   class BrowseDecorator < ApplicationDecorator
     attr_accessor :item_url
 
-    def initialize(item_url:)
-      self.item_url = item_url
+    def initialize
     end
 
     def footer_links

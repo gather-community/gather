@@ -94,7 +94,6 @@ module GDrive
         )
         IngestJob.perform_later(
           cluster_id: current_cluster.id,
-          community_id: current_community.id,
           consent_request_id: @consent_request.id
         )
         head :no_content

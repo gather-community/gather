@@ -10,7 +10,6 @@ module GDrive
         :ancestor_tree_duplicator
 
       def perform(cluster_id:, consent_request_id:)
-        Rails.logger.info("ConsentRequestJob starting", cluster_id: cluster_id, operation_id: operation_id)
         ActsAsTenant.with_tenant(Cluster.find(cluster_id)) do
           self.consent_request = ConsentRequest.find(consent_request_id)
           self.operation = consent_request.operation

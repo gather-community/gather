@@ -19,14 +19,15 @@ module GDrive
 
     delegate :community, to: :gdrive_config
 
-    attr_accessor :not_found
-    alias_method :not_found?, :not_found
-
     def self.sync
       all
     end
 
     def sync
+    end
+
+    def drive?
+      kind == "drive"
     end
   end
 end

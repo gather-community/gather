@@ -305,7 +305,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_23_130611) do
     t.index ["cluster_id"], name: "index_gdrive_items_on_cluster_id"
     t.index ["external_id"], name: "index_gdrive_items_on_external_id", unique: true
     t.index ["gdrive_config_id"], name: "index_gdrive_items_on_gdrive_config_id"
-    t.check_constraint "error_type::text = ANY (ARRAY['inaccessible'::character varying, 'not_owner'::character varying]::text[])", name: "error_type_enum"
+    t.check_constraint "error_type::text = ANY (ARRAY['inaccessible'::character varying, 'not_shareable'::character varying]::text[])", name: "error_type_enum"
     t.check_constraint "kind::text = ANY (ARRAY['drive'::character varying, 'folder'::character varying, 'file'::character varying]::text[])", name: "kind_enum"
   end
 

@@ -20,6 +20,9 @@ en:
       commenter: "View and comment on files"
       writer: "View, add, and edit files"
       fileOrganizer: "View, add, edit, move, delete, and share files"
+    item_error_types:
+      inaccessible: "Inaccessible"
+      not_shareable: "Not shareable"
 
     migration:
       errors:

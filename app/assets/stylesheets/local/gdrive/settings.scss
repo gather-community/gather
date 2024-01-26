@@ -3,4 +3,12 @@
     margin-bottom: 0;
     padding-inline-start: 18px;
   }
+
+  .status.good {
+    color: $brand-success;
+  }
+
+  .status.bad {
+    color: $brand-danger;
+  }
 }

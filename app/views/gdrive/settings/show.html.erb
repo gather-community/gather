@@ -16,20 +16,27 @@
     <% if items.any? %>
       <tr>
         <th>Name</th>
+        <th>Status</th>
         <th>Groups & Permissions</th>
       </tr>
       <% items.each do |item| %>
         <tr>
           <td><%= item.name %></td>
           <td>
-            <ul class="permissions">
+            <% if item.error_type %>
+              <%= icon_tag("times-circle", class: "status bad") %> &nbsp;
+              <%= t("gdrive.item_error_types.#{item.error_type}") %>
+            <% else %>
+              <%= icon_tag("check-circle", class: "status good") %>
+            <% end %>
+          </td>
+          <td>
               <% item.item_groups.each do |item_group| %>
-                <li>
-                  <%= item_group.group.name %>:
-                  <%= t("gdrive.access_levels.#{item_group.access_level}") %>
-                </li>
+                <div>
+                  <%= link_to(item_group.group.name, item_group.group) %>:
+                  <%= t("gdrive.access_levels.#{item_group.access_level}") %> (<%= t("gdrive.access_level_hints.#{item_group.access_level}") %>)
+                </div>
               <% end %>
-            </ul>
           </td>
           <td>
           </td>

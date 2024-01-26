@@ -17,6 +17,10 @@ module GDrive
       self.callback_url = callback_url
     end
 
+    def batch(...)
+      wrap_api_method { service.batch(...) }
+    end
+
     def list_files(...)
       wrap_api_method { service.list_files(...) }
     end

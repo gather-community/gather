@@ -13,11 +13,11 @@ module GDrive
 
     def sync
       drive_list = wrapper.list_drives(fields: "drives(id,name)", page_size: 100)
-      all_drives_by_id = drive_list.drives.map { |d| [d.id, d] }.to_h
+      all_drives_by_id = drive_list.drives.index_by(&:id)
       Array.wrap(drives).each do |drive|
         match = all_drives_by_id[drive.external_id]
         if match.nil?
-          drive.not_found = true
+          drive.error_type = "inaccessible"
         else
           drive.update!(name: match.name)
         end

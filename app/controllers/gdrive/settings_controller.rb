@@ -14,6 +14,10 @@ module GDrive
       @config.items.includes(:item_groups).order(:name).each do |item|
         @items_by_kind[item.kind.to_sym] << item
       end
+
+      config = MainConfig.find_by(community: current_community)
+      wrapper = Wrapper.new(config: config, google_user_id: config.org_user_id)
+      ItemSyncer.new(wrapper, @items_by_kind.values.flatten).sync
     end
   end
 end

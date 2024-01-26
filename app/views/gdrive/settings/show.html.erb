@@ -49,7 +49,9 @@
 <% end %>
 
 <footer id="local-footer" class="footer-links">
-  <%= link_to("Revoke Authorization", gdrive_setup_auth_revoke_path, method: :delete,
-      data: {confirm: "Are you sure you want to revoke authorization? Nobody will be able " \
-        "to use Google Drive features for this community until authorization is re-established."}) %>
+  <% unless @authorization_error %>
+    <%= link_to("Revoke Authorization", gdrive_setup_auth_revoke_path, method: :delete,
+        data: {confirm: "Are you sure you want to revoke authorization? Nobody will be able " \
+          "to use Google Drive features for this community until authorization is re-established."}) %>
+  <% end %>
 </footer>

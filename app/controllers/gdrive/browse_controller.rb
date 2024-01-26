@@ -39,7 +39,7 @@ module GDrive
 
         # From this point on, we only consider drives the user can actually see.
         # If they can't see any, we react differently than if there are none at all connected to the config.
-        @drives = policy_scope(@drives)
+        @drives = policy_scope(@drives).reject { |d| d.error_type.present? }
         return @no_accessible_drives = true if @drives.none?
         multiple_drives = @drives.size > 1
 
@@ -67,7 +67,7 @@ module GDrive
         else
           # We don't need to call can_read_drive? in this branch
           # because we fetched the drive list using policy_scope.
-          ItemSyncer.new(wrapper, @drives).sync
+          DriveSyncer.new(wrapper, @drives).sync
           ancestors = []
           unless multiple_drives
             # At this point there must be exactly one shared drive.
@@ -139,7 +139,7 @@ module GDrive
 
     def can_read_drive?(drive_id)
       drive = Item.find_by(external_id: drive_id, kind: "drive")
-      return false if drive.nil?
+      return false if drive.nil? || drive.error_type.present?
       ItemPolicy.new(current_user, drive).show?
     end
   end

@@ -19,6 +19,11 @@ module GDrive
 
     delegate :community, to: :gdrive_config
 
+    validates :external_id, presence: true, uniqueness: {scope: :gdrive_config_id}
+    validates :kind, presence: true
+
+    KINDS = %i[drive folder file].freeze
+
     def self.sync
       all
     end

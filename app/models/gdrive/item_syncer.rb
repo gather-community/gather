@@ -19,7 +19,8 @@ module GDrive
               process_item(item, result, error)
             end
           else
-            service.get_file(item.external_id, fields: "name,capabilities(canShare)", supports_all_drives: true) do |result, error|
+            service.get_file(item.external_id, fields: "name,mimeType,capabilities(canShare)", supports_all_drives: true) do |result, error|
+              item.kind = (result.mime_type == GDrive::FOLDER_MIME_TYPE) ? "folder" : "file"
               process_item(item, result, error)
             end
           end

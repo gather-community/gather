@@ -111,6 +111,9 @@ en:
         member_type_ids: "Member Types"
       gdrive/migration/consent_request:
         opt_out_reason: "Opt Out Reason"
+      gdrive/item:
+        external_id: "ID"
+        kind: "Type"
       groups/group:
         availability: "Availability"
         can_request_jobs: "Can request jobs?"

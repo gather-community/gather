@@ -1,0 +1,10 @@
+<% content_for(:title) { "Add Google Drive Item" } %>
+
+<%= gather_form_for(@item) do |f| %>
+<%= f.input(:kind, collection: GDrive::Item::KINDS) %>
+<%= f.input(:external_id) %>
+
+  <%= form_actions do %>
+    <%= f.button :primary %>
+  <% end %>
+<% end %>

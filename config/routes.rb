@@ -258,6 +258,8 @@ Rails.application.routes.draw do
     get "item/:item_id", to: "browse#index", as: :browse
     get "/settings", to: "settings#show", as: :settings
 
+    resources :items, only: %i[new create destroy]
+
     namespace :setup do
       get "auth/callback", to: "auth#callback", as: :auth_callback
       delete "auth/revoke", to: "auth#revoke", as: :auth_revoke

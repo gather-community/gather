@@ -9,19 +9,19 @@ module GDrive
       @config = MainConfig.find_by!(community: current_community)
       return render_not_found unless @config
 
+      wrapper = Wrapper.new(config: @config, google_user_id: @config.org_user_id)
+      if wrapper.has_credentials?
+        ItemSyncer.new(wrapper, @config.items).sync
+      else
+        set_auth_error
+      end
+
       @items_by_kind = {}
       @items_by_kind[:drive] = []
       @items_by_kind[:folder] = []
       @items_by_kind[:file] = []
       @config.items.includes(:item_groups).order(:name).each do |item|
         @items_by_kind[item.kind.to_sym] << item
-      end
-
-      wrapper = Wrapper.new(config: @config, google_user_id: @config.org_user_id)
-      if wrapper.has_credentials?
-        ItemSyncer.new(wrapper, @items_by_kind.values.flatten).sync
-      else
-        set_auth_error
       end
     rescue Google::Apis::AuthorizationError
       set_auth_error

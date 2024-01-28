@@ -10,9 +10,13 @@
   is accessible.
 </p>
 
-<% @items_by_kind.each_pair do |kind, items| %>
-  <h3><%= t("gdrive.item_kinds.#{kind}", count: 2) %></h3>
-  <table class="full-width">
+<table class="full-width">
+  <% @items_by_kind.each_pair do |kind, items| %>
+    <tr class="heading">
+      <td colspan="3">
+        <h3><%= t("gdrive.item_kinds.#{kind}", count: 2) %></h3>
+      </td>
+    </tr>
     <% if items.any? %>
       <tr>
         <th>Name</th>
@@ -45,8 +49,8 @@
     <% else %>
       No <%= t("gdrive.item_kinds.#{kind}", count: 2).downcase %> mapped.
     <% end %>
-  </table>
-<% end %>
+  <% end %>
+</table>
 
 <footer id="local-footer" class="footer-links">
   <% unless @authorization_error %>

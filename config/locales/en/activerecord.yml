@@ -114,6 +114,10 @@ en:
       gdrive/item:
         external_id: "ID"
         kind: "Type"
+      gdrive/item_group:
+        access_level: "Access Level"
+        group_id: "Group"
+        item_id: "Item"
       groups/group:
         availability: "Availability"
         can_request_jobs: "Can request jobs?"

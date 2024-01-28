@@ -10,5 +10,21 @@ module GDrive
         scope.where(group: Groups::Group.with_user(user).select(:id))
       end
     end
+
+    def new?
+      FeatureFlag.lookup(:gdrive).on?(user) && active_admin?
+    end
+
+    def create?
+      FeatureFlag.lookup(:gdrive).on?(user) && active_admin?
+    end
+
+    def destroy?
+      FeatureFlag.lookup(:gdrive).on?(user) && active_admin?
+    end
+
+    def permitted_attributes
+      %i[access_level group_id item_id]
+    end
   end
 end

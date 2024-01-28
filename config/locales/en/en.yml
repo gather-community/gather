@@ -98,6 +98,8 @@ en:
       destroy: "Are you sure you want to delete this calendar group? This action cannot be undone."
     gdrive/item:
       destroy: "Are you sure you want to remove this item? It won't be deleted from Google Drive, but it won't be linked to Gather anymore."
+    gdrive/item_group:
+      destroy: "Are you sure you want to remove this group?"
     meals/formula:
       destroy: "Are you sure you want to delete the formula '%{name}'? This action cannot be undone."
       deactivate: "Are you sure you want to deactivate the formula '%{name}'?"
@@ -166,7 +168,10 @@ en:
         destroy: "Template deleted successfully."
     gdrive/item:
       success:
-        destroy: "Item deleted successfully."
+        destroy: "Item removed successfully."
+    gdrive/item_group:
+      success:
+        destroy: "Group removed successfully."
     groups/group:
       success:
         deactivate: "Group deactivated successfully."

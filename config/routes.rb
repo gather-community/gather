@@ -258,6 +258,7 @@ Rails.application.routes.draw do
     get "item/:item_id", to: "browse#index", as: :browse
 
     resources :items, only: %i[index new create destroy]
+    resources :item_groups, path: "item-groups", only: %i[new create destroy]
 
     namespace :setup do
       get "auth/callback", to: "auth#callback", as: :auth_callback

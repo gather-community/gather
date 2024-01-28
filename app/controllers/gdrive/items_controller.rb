@@ -39,8 +39,8 @@ module GDrive
     end
 
     def create
-      @item = Item.new(params.require(:gdrive_item).permit(:external_id, :kind))
-      @item.gdrive_config_id = @config.id
+      @item = Item.new(gdrive_config: @config)
+      @item.assign_attributes(item_params)
 
       authorize(@item)
 
@@ -76,6 +76,11 @@ module GDrive
       @authorization_error = true
       flash.now[:error] = "We encountered an error connecting to Google. The information below may be out of date. " \
         "Please return to the main Google Drive page to re-establish a connection."
+    end
+
+    # Pundit built-in helper doesn't work due to namespacing
+    def item_params
+      params.require(:gdrive_item).permit(policy(@item).permitted_attributes)
     end
   end
 end

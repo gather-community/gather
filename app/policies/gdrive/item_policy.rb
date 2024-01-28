@@ -28,7 +28,7 @@ module GDrive
     end
 
     def permitted_attributes
-      %i[external_id group_id]
+      %i[external_id kind]
     end
   end
 end

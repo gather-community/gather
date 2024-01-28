@@ -136,7 +136,7 @@ describe GDrive::ItemPolicy do
     subject { described_class.new(actor, GDrive::Item.new).permitted_attributes }
 
     it do
-      expect(subject).to match_array(%i[external_id group_id])
+      expect(subject).to match_array(%i[external_id kind])
     end
   end
 end

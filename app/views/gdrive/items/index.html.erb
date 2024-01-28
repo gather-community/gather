@@ -36,12 +36,16 @@
             <% end %>
           </td>
           <td>
-              <% item.item_groups.each do |item_group| %>
-                <div>
-                  <%= link_to(item_group.group.name, item_group.group) %>:
-                  <%= t("gdrive.access_levels.#{item_group.access_level}") %> (<%= t("gdrive.access_level_hints.#{item_group.access_level}") %>)
-                </div>
-              <% end %>
+            <% item.item_groups.each do |item_group| %>
+              <div>
+                <%= link_to(item_group.group.name, item_group.group) %>:
+                <%= t("gdrive.access_levels.#{item_group.access_level}") %> (<%= t("gdrive.access_level_hints.#{item_group.access_level}") %>)&nbsp;
+                <%= link_to(icon_tag("times"), gdrive_item_group_path(item_group),
+                      method: :delete,
+                      data: {confirm: I18n.t("confirmations.gdrive/item_group.destroy")}) %>
+              </div>
+            <% end %>
+            <%= link_to(icon_tag("plus") << " Add Group", new_gdrive_item_group_path(item_id: item.id)) %>
           </td>
           <td>
             <%= link_to(icon_tag("trash"), gdrive_item_path(item),

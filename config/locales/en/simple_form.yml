@@ -76,6 +76,8 @@ en:
         own_only: "Check this box to only export events that you created for yourself. Group events and meal events won't be included."
       gdrive_item:
         external_id: "You can get this ID from the URL of the item in Google Drive. It should be a series of letters, numbers, '_', and '-'. Examples: 0AExZ3-Cu5q7uUk9PVA and 1KRjAC5Bt4WtLilnkUeTvF_okbLgONGQuDkrc."
+      gdrive_item_group:
+        access_level: "For folders and files, can't be any lower than the access level set for this group on the containing shared drive."
       groups_group:
         availability: "Whether people can join this group on their own. 'Everybody' groups automatically include all adult users."
         can_request_jobs: "Whether this group should be listed on the jobs form as a possible requester."
@@ -165,6 +167,12 @@ en:
           drive: "Shared Drive"
           folder: "Folder"
           file: "File"
+      gdrive_item_group:
+        access_level:
+          reader: "Viewer: View files"
+          commenter: "Commenter: View and comment on files"
+          writer: "Contributor: View, add, and edit files"
+          fileOrganizer: "Content manager: View, add, edit, move, delete, and share files"
       groups_group:
         availability:
           open: "Open"

@@ -18,13 +18,14 @@ describe GDrive::ItemPolicy do
     let!(:item_group1) { create(:gdrive_item_group, item: item, group: group1) }
     let!(:item_group2) { create(:gdrive_item_group, item: item, group: group2) }
     let(:record) { item }
+    let(:feature_flag_value) { true }
+
+    before do
+      expect(FeatureFlag).to receive(:lookup).at_least(:once).and_return(double(on?: feature_flag_value))
+    end
 
     permissions :show? do
       context "with feature flag on" do
-        before do
-          expect(FeatureFlag).to receive(:lookup).and_return(double(on?: true))
-        end
-
         it "permits users in group1" do
           expect(subject).to permit(in_user1, record)
         end
@@ -47,10 +48,17 @@ describe GDrive::ItemPolicy do
       end
 
       context "with feature flag off" do
+        let(:feature_flag_value) { false }
+
         it "forbids users in group" do
           expect(subject).not_to permit(in_user1, record)
         end
       end
+    end
+
+    permissions :new?, :create?, :destroy? do
+      let(:admin) { cmty1_admin }
+      it_behaves_like "permits admins from community"
     end
   end
 

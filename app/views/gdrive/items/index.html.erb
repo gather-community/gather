@@ -4,7 +4,7 @@
   <strong>System User:</strong> <%= @config.org_user_id %>
 </p>
 <p>
-  Add items below to sync permissions. Shared drives listed below are shown on the Gather
+  Add items below to connect them to Gather and sync permissions. Shared drives listed below are shown on the Gather
   <%= link_to("Google Drive browse page", gdrive_home_path) %> for users that have permission.
   Folders and files will not be accessible via the browse page unless their parent shared drive
   is accessible.
@@ -13,7 +13,7 @@
 <table class="full-width">
   <% @items_by_kind.each_pair do |kind, items| %>
     <tr class="heading">
-      <td colspan="3">
+      <td colspan="4">
         <h3><%= t("gdrive.item_kinds.#{kind}", count: 2) %></h3>
       </td>
     </tr>
@@ -22,6 +22,7 @@
         <th>Name</th>
         <th>Status</th>
         <th>Groups & Permissions</th>
+        <th></th>
       </tr>
       <% items.each do |item| %>
         <tr>
@@ -43,11 +44,18 @@
               <% end %>
           </td>
           <td>
+            <%= link_to(icon_tag("trash"), gdrive_item_path(item),
+                  method: :delete,
+                  data: {confirm: I18n.t("confirmations.gdrive/item.destroy")}) %>
           </td>
         </tr>
       <% end %>
     <% else %>
-      No <%= t("gdrive.item_kinds.#{kind}", count: 2).downcase %> mapped.
+      <tr class="heading">
+        <td colspan="4">
+          No <%= t("gdrive.item_kinds.#{kind}", count: 2).downcase %> connected to Gather.
+        </td>
+      </tr>
     <% end %>
   <% end %>
 </table>

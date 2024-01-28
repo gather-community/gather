@@ -15,6 +15,18 @@ module GDrive
       FeatureFlag.lookup(:gdrive).on?(user) && item.groups.any? { |g| g.member?(user) }
     end
 
+    def new?
+      FeatureFlag.lookup(:gdrive).on?(user) && active_admin?
+    end
+
+    def create?
+      FeatureFlag.lookup(:gdrive).on?(user) && active_admin?
+    end
+
+    def destroy?
+      FeatureFlag.lookup(:gdrive).on?(user) && active_admin?
+    end
+
     def permitted_attributes
       %i[external_id group_id]
     end

@@ -1,10 +1,16 @@
 <% content_for(:title) { "Google Drive Settings" } %>
 
+<% content_for(:action_links) do %>
+  <% if policy(sample_item).create? %>
+    <%= link_to(icon_tag("plus") << " Link Item", new_gdrive_item_path, class: "btn btn-primary") %>
+  <% end %>
+<% end %>
+
 <p>
   <strong>System User:</strong> <%= @config.org_user_id %>
 </p>
 <p>
-  Add items below to connect them to Gather and sync permissions. Shared drives listed below are shown on the Gather
+  Add items below to link them to Gather and sync permissions. Shared drives listed below are shown on the Gather
   <%= link_to("Google Drive browse page", gdrive_home_path) %> for users that have permission.
   Folders and files will not be accessible via the browse page unless their parent shared drive
   is accessible.
@@ -57,7 +63,7 @@
     <% else %>
       <tr class="heading">
         <td colspan="4">
-          No <%= t("gdrive.item_kinds.#{kind}", count: 2).downcase %> connected to Gather.
+          No <%= t("gdrive.item_kinds.#{kind}", count: 2).downcase %> linked to Gather.
         </td>
       </tr>
     <% end %>

@@ -5,14 +5,13 @@ module GDrive
     include Destructible
 
     before_action -> { nav_context(:wiki, :gdrive) }
-    before_action :load_config, only: %i[new create]
+    before_action :load_config
+
+    helper_method :sample_item
 
     def index
       authorize(current_community, :setup?, policy_class: SetupPolicy)
       skip_policy_scope
-
-      @config = MainConfig.find_by!(community: current_community)
-      return render_not_found unless @config
 
       wrapper = Wrapper.new(config: @config, google_user_id: @config.org_user_id)
       if wrapper.has_credentials?
@@ -63,6 +62,10 @@ module GDrive
     end
 
     private
+
+    def sample_item
+      @sample_item ||= Item.new(gdrive_config: @config)
+    end
 
     def load_config
       @config = MainConfig.find_by!(community: current_community)

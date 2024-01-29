@@ -16,6 +16,8 @@ module GDrive
           return
         end
 
+        @has_migration = MigrationConfig.find_by(community: current_community)&.operations&.any?
+
         wrapper = Wrapper.new(config: @config, google_user_id: @config.org_user_id,
           callback_url: gdrive_setup_auth_callback_url(host: Settings.url.host))
         unless wrapper.has_credentials?
@@ -43,7 +45,16 @@ module GDrive
         return @no_accessible_drives = true if @drives.none?
         multiple_drives = @drives.size > 1
 
-        @has_migration = MigrationConfig.find_by(community: current_community)&.operations&.any?
+        # In the below, we use ItemPolicy on the containing drive to determine whether the user can
+        # view something. If a user can a drive, then they can read any file/folder in it.
+        # It's possible that a user could read a file/folder without being able to read the drive,
+        # but in that case, they wouldn't be able to navigate to it with Gather anyway, since navigation
+        # starts from the drive level. And it would not be a recommended setup. We also warn about this
+        # on the settings page.
+        #
+        # When we later add the ability to create a file/folder, we may need to change this setup
+        # because we will need to check if the user can create an item inside the current folder, and
+        # that may be more nuanced.
 
         # Drive accessed explicitly by ID
         if params[:drive] && params[:item_id]
@@ -77,7 +88,7 @@ module GDrive
           end
         end
         @ancestors_decorator = AncestorsDecorator.new(ancestors)
-      rescue Google::Apis::AuthorizationError => error
+      rescue Google::Apis::AuthorizationError
         # The token for this config (MainConfigs should only have one) is no good anymore
         # so we destroy it so that when they go to setup they can re-connect.
         @config.tokens.destroy_all

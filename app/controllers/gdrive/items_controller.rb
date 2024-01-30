@@ -15,7 +15,7 @@ module GDrive
 
       wrapper = Wrapper.new(config: @config, google_user_id: @config.org_user_id)
       if wrapper.has_credentials?
-        ItemSyncer.new(wrapper, @config.items).sync
+        ItemSyncer.new(wrapper, @config.items).sync if @config.items.any?
       else
         set_auth_error
       end

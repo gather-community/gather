@@ -35,7 +35,8 @@
         </p>
         <%= render("auth_button") %>
       <% elsif @no_drives %>
-        Your community does not have any linked Shared Drives. Please contact Gather support for assistance.
+        Your community does not have any linked Shared Drives. Please go to the
+        <%= link_to("settings page", gdrive_items_path) %> to link a drive.
       <% end %>
     <% else %>
       Your community is not yet connected to Google Drive. Please talk to a Gather Admin.

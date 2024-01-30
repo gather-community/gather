@@ -17,7 +17,7 @@
 </p>
 
 <table class="full-width">
-  <% @items_by_kind.each_pair do |kind, items| %>
+  <% %i[drive folder file].each do |kind| items = @items_by_kind[kind] %>
     <tr class="heading">
       <td colspan="4">
         <h3><%= t("gdrive.item_kinds.#{kind}", count: 2) %></h3>

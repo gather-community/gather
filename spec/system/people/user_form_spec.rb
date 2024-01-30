@@ -319,7 +319,7 @@ describe "user form", js: true, perform_jobs: true do
 
       visit(edit_path)
       click_link("reactivate")
-      expect_alert("User activated successfully, but they will need an invitation to sign in. " \
+      expect(page).to have_warning_alert("User activated successfully, but they will need an invitation to sign in. " \
         "Click 'Invite' below to invite them.")
     end
   end

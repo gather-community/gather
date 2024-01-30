@@ -1,0 +1,50 @@
+<% content_for(:title) { "Google Drive Migration" } %>
+
+<h2><%= @owner_id %></h2>
+<h3>Files</h3>
+<table class="key-value">
+  <tr>
+    <td>Total Files</td>
+    <td><%= number_with_delimiter(@stats.by_owner[@owner_id]) %></td>
+  </tr>
+  <tr>
+    <td>Pending</td>
+    <td><%= number_with_delimiter(@stats.by_owner_and_status[[@owner_id, "pending"]]) %></td>
+  </tr>
+  <tr>
+    <td>Declined</td>
+    <td><%= number_with_delimiter(@stats.by_owner_and_status[[@owner_id, "declined"]]) %></td>
+  </tr>
+  <tr>
+    <td>Errored</td>
+    <td><%= number_with_delimiter(@stats.by_owner_and_status[[@owner_id, "errored"]]) %></td>
+  </tr>
+  <tr>
+    <td>Transferred</td>
+    <td><%= number_with_delimiter(@stats.by_owner_and_status[[@owner_id, "transferred"]]) %></td>
+  </tr>
+  <tr>
+    <td>Copied</td>
+    <td><%= number_with_delimiter(@stats.by_owner_and_status[[@owner_id, "copied"]]) %></td>
+  </tr>
+  <tr>
+    <td>Ignored</td>
+    <td><%= number_with_delimiter(@stats.by_owner_and_status[[@owner_id, "ignored"]]) %></td>
+  </tr>
+</table>
+
+<h3>Consent Requests</h3>
+<table class="full-width">
+  <tr>
+    <th>Date Sent</th>
+    <th>Status</th>
+    <th>Opt Out Reason</th>
+  </tr>
+  <% @consent_requests.each do |consent_request| %>
+    <tr>
+      <td><%= I18n.l(consent_request.created_at) %></td>
+      <td><%= I18n.t("gdrive.consent_request_statuses.#{consent_request.status}") %></td>
+      <td><%= consent_request.opt_out_reason %></td>
+    </tr>
+  <% end %>
+</table>

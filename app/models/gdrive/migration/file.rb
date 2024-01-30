@@ -26,6 +26,10 @@ module GDrive
         transferred? && copied?
       end
 
+      def declined?
+        status == "declined"
+      end
+
       def errored?
         status == "errored"
       end

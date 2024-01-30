@@ -15,6 +15,16 @@ module GDrive
           @latest_scan = @operation.scans.full.order(created_at: :desc).first
           @stats = Stats.new(operation: @operation)
         end
+
+        def show
+          authorize(current_community, :setup?, policy_class: SetupPolicy)
+          @migration_config = MigrationConfig.find_by(community: current_community)
+          @operation = @migration_config.operations.active.order(created_at: :desc).first
+          @latest_scan = @operation.scans.full.order(created_at: :desc).first
+          @stats = Stats.new(operation: @operation)
+          @owner_id = params[:id]
+          @consent_requests = @operation.consent_requests.where(google_email: @owner_id).order(:created_at).all
+        end
       end
     end
   end

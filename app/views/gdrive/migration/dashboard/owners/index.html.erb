@@ -18,8 +18,8 @@
   </tr>
   <% @stats.owners.each do |owner| %>
     <tr>
-      <td><%= link_to(owner, gdrive_migration_dashboard_files_path(owner: owner)) %></td>
-      <td><%= number_with_delimiter(@stats.by_owner[owner]) %></td>
+      <td><%= link_to(owner, gdrive_migration_dashboard_owner_path(id: owner)) %></td>
+      <td><%= link_to(number_with_delimiter(@stats.by_owner[owner]), gdrive_migration_dashboard_files_path(owner: owner)) %></td>
       <td><%= number_with_delimiter(@stats.by_owner_and_status[[owner, "pending"]]) %></td>
       <td><%= number_with_delimiter(@stats.by_owner_and_status[[owner, "declined"]]) %></td>
       <td><%= number_with_delimiter(@stats.by_owner_and_status[[owner, "errored"]]) %></td>

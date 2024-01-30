@@ -269,8 +269,11 @@ Rails.application.routes.draw do
       namespace :dashboard do
         get "/", to: redirect("/gdrive/migration/dashboard/status"), as: :home
         get "status", to: "status#show", as: :status
-        get "owners", to: "owners#index", as: :owners
-        get "files", to: "files#index", as: :files
+
+        # This is Devise.email_regexp without the anchor characters.
+        resources :owners, only: %i[index show], id: /\S+@\S+\.\S+/, format: :html
+
+        resources :files, only: %i[index]
       end
       get "consent/callback", to: "consent#callback", as: :consent_callback
       get "consent/:token", to: "consent#intro", as: :consent

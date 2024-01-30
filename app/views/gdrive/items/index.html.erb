@@ -32,7 +32,7 @@
       </tr>
       <% items.each do |item| %>
         <tr>
-          <td><%= item.name %></td>
+          <td><%= item.name.presence || "[#{item.external_id.truncate(32)}]" %></td>
           <td>
             <% if item.error_type %>
               <%= icon_tag("times-circle", class: "status bad") %> &nbsp;

@@ -68,7 +68,7 @@ module GDrive
     end
 
     def load_config
-      @config = MainConfig.find_by!(community: current_community)
+      @config = MainConfig.find_by(community: current_community)
       if !@config
         Rails.logger.error("No config found", community_id: current_community.id)
         render_not_found

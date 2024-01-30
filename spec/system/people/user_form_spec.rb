@@ -123,11 +123,11 @@ describe "user form", js: true, perform_jobs: true do
         let(:community_with_user_custom_fields) do
           create(:community, settings: {
             people: {
-              user_custom_fields_spec: "- key: foo\n"\
-                                       "  type: boolean\n"\
-                                       "- key: bar\n"\
-                                       "  type: string\n"\
-                                       "  label: Pants\n"\
+              user_custom_fields_spec: "- key: foo\n" \
+                                       "  type: boolean\n" \
+                                       "- key: bar\n" \
+                                       "  type: string\n" \
+                                       "  label: Pants\n" \
                                        "  hint: Pants information"
             }
           })
@@ -252,11 +252,11 @@ describe "user form", js: true, perform_jobs: true do
         let(:community_with_user_custom_fields) do
           create(:community, settings: {
             people: {
-              user_custom_fields_spec: "- key: foo\n"\
-                                       "  type: boolean\n"\
-                                       "- key: bar\n"\
-                                       "  type: string\n"\
-                                       "  label: Pants\n"\
+              user_custom_fields_spec: "- key: foo\n" \
+                                       "  type: boolean\n" \
+                                       "- key: bar\n" \
+                                       "  type: string\n" \
+                                       "  label: Pants\n" \
                                        "  hint: Pants information"
             }
           })
@@ -312,14 +312,14 @@ describe "user form", js: true, perform_jobs: true do
 
       visit(edit_path)
       click_link("reactivate")
-      expect_error("Error during activation: Email Address can't be blank")
+      expect(page).to have_danger_alert("Error during activation: Email Address can't be blank")
       fill_in("Email Address", with: "foobar@example.com")
       click_button("Save")
       expect_success
 
       visit(edit_path)
       click_link("reactivate")
-      expect_alert("User activated successfully, but they will need an invitation to sign in. "\
+      expect_alert("User activated successfully, but they will need an invitation to sign in. " \
         "Click 'Invite' below to invite them.")
     end
   end

@@ -1,0 +1,584 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://www.googleapis.com/batch/drive/v3
+    body:
+      encoding: UTF-8
+      string: "--47fbfff32b18857407169cd6693ae3221af58bea\r\nContent-Type: application/http\r\nContent-Id:
+        <3da332c1-5c1f-4faf-b0ce-b7078f288b6b+0>\r\nContent-Length: 410\r\nContent-Transfer-Encoding:
+        binary\r\n\r\nGET /drive/v3/drives/0ANh47wT0lLbTUk9PVA?fields=name%2Ccapabilities%28canShare%29
+        HTTP/1.1\r\nX-Goog-Api-Client: gl-ruby/3.2.2 gdcl/1.46.0\r\nauthorization:
+        Bearer ya29.a0AfB_byC0wLkre3kl_csP4ljARYrefwUhJVyB07sneGBVn54suDLn1kv_JY5TfycBavpQPu5lHPutSi0qiGGzF653b-I9Tb6g0YFXLLsKRFyw92MRTw2bt7sy4TEbP6THf7m6SdG1O068gPVaLtGe2MewwvMlGHBpPlYKxQaCgYKAboSARESFQHGX2MiosOp6nr60oZleOl-au9EZg0173\r\nHost:
+        www.googleapis.com\r\n\r\n\r\n--47fbfff32b18857407169cd6693ae3221af58bea--\r\n\r\n"
+    headers:
+      User-Agent:
+      - unknown/0.0.0 google-apis-drive_v3/0.46.0 Mac OS X/13.1 (gzip)
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip,deflate
+      Date:
+      - Tue, 30 Jan 2024 20:43:41 GMT
+      Content-Type:
+      - multipart/mixed; boundary=47fbfff32b18857407169cd6693ae3221af58bea
+      Authorization:
+      - Bearer ya29.a0AfB_byC0wLkre3kl_csP4ljARYrefwUhJVyB07sneGBVn54suDLn1kv_JY5TfycBavpQPu5lHPutSi0qiGGzF653b-I9Tb6g0YFXLLsKRFyw92MRTw2bt7sy4TEbP6THf7m6SdG1O068gPVaLtGe2MewwvMlGHBpPlYKxQaCgYKAboSARESFQHGX2MiosOp6nr60oZleOl-au9EZg0173
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - multipart/mixed; boundary=batch_eQX5lcXgxYMFol4vCedDuPyw_N78MwqK
+      Date:
+      - Tue, 30 Jan 2024 20:43:41 GMT
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Vary:
+      - Origin, X-Origin
+      Pragma:
+      - no-cache
+      Content-Encoding:
+      - gzip
+      Server:
+      - ESF
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: "\r\n--batch_eQX5lcXgxYMFol4vCedDuPyw_N78MwqK\r\nContent-Type: application/http\r\nContent-ID:
+        <response-3da332c1-5c1f-4faf-b0ce-b7078f288b6b+0>\r\n\r\nHTTP/1.1 200 OK\r\nDate:
+        Tue, 30 Jan 2024 20:43:42 GMT\r\nCache-Control: private, max-age=0\r\nExpires:
+        Tue, 30 Jan 2024 20:43:42 GMT\r\nContent-Type: application/json; charset=UTF-8\r\nContent-Length:
+        70\r\n\r\n{\n  \"name\": \"Drive 1\",\n  \"capabilities\": {\n    \"canShare\":
+        true\n  }\n}\n\r\n--batch_eQX5lcXgxYMFol4vCedDuPyw_N78MwqK--\r\n"
+    http_version:
+  recorded_at: Tue, 30 Jan 2024 20:43:42 GMT
+- request:
+    method: post
+    uri: https://www.googleapis.com/batch/drive/v3
+    body:
+      encoding: UTF-8
+      string: "--c7c02ea536f2e3b5f79f91eb884d6d259325f6b6\r\nContent-Type: application/http\r\nContent-Id:
+        <daccfbb0-a133-4ebe-9a42-da002278bc49+0>\r\nContent-Length: 410\r\nContent-Transfer-Encoding:
+        binary\r\n\r\nGET /drive/v3/drives/0ANh47wT0lLbTUk9PVA?fields=name%2Ccapabilities%28canShare%29
+        HTTP/1.1\r\nX-Goog-Api-Client: gl-ruby/3.2.2 gdcl/1.46.0\r\nauthorization:
+        Bearer ya29.a0AfB_byC0wLkre3kl_csP4ljARYrefwUhJVyB07sneGBVn54suDLn1kv_JY5TfycBavpQPu5lHPutSi0qiGGzF653b-I9Tb6g0YFXLLsKRFyw92MRTw2bt7sy4TEbP6THf7m6SdG1O068gPVaLtGe2MewwvMlGHBpPlYKxQaCgYKAboSARESFQHGX2MiosOp6nr60oZleOl-au9EZg0173\r\nHost:
+        www.googleapis.com\r\n\r\n\r\n--c7c02ea536f2e3b5f79f91eb884d6d259325f6b6--\r\n\r\n"
+    headers:
+      User-Agent:
+      - unknown/0.0.0 google-apis-drive_v3/0.46.0 Mac OS X/13.1 (gzip)
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip,deflate
+      Date:
+      - Tue, 30 Jan 2024 20:43:42 GMT
+      Content-Type:
+      - multipart/mixed; boundary=c7c02ea536f2e3b5f79f91eb884d6d259325f6b6
+      Authorization:
+      - Bearer ya29.a0AfB_byC0wLkre3kl_csP4ljARYrefwUhJVyB07sneGBVn54suDLn1kv_JY5TfycBavpQPu5lHPutSi0qiGGzF653b-I9Tb6g0YFXLLsKRFyw92MRTw2bt7sy4TEbP6THf7m6SdG1O068gPVaLtGe2MewwvMlGHBpPlYKxQaCgYKAboSARESFQHGX2MiosOp6nr60oZleOl-au9EZg0173
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - multipart/mixed; boundary=batch_PWXYZwebzLw0Jiack6oVMqPyC9z0n1Y8
+      Date:
+      - Tue, 30 Jan 2024 20:43:43 GMT
+      Pragma:
+      - no-cache
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Vary:
+      - Origin, X-Origin
+      Content-Encoding:
+      - gzip
+      Server:
+      - ESF
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: "\r\n--batch_PWXYZwebzLw0Jiack6oVMqPyC9z0n1Y8\r\nContent-Type: application/http\r\nContent-ID:
+        <response-daccfbb0-a133-4ebe-9a42-da002278bc49+0>\r\n\r\nHTTP/1.1 200 OK\r\nExpires:
+        Tue, 30 Jan 2024 20:43:43 GMT\r\nDate: Tue, 30 Jan 2024 20:43:43 GMT\r\nCache-Control:
+        private, max-age=0\r\nContent-Type: application/json; charset=UTF-8\r\nContent-Length:
+        70\r\n\r\n{\n  \"name\": \"Drive 1\",\n  \"capabilities\": {\n    \"canShare\":
+        true\n  }\n}\n\r\n--batch_PWXYZwebzLw0Jiack6oVMqPyC9z0n1Y8--\r\n"
+    http_version:
+  recorded_at: Tue, 30 Jan 2024 20:43:43 GMT
+- request:
+    method: post
+    uri: https://www.googleapis.com/batch/drive/v3
+    body:
+      encoding: UTF-8
+      string: "--c691ce5aa3002147170e35ba84d76f91247dcfd0\r\nContent-Type: application/http\r\nContent-Id:
+        <84477b5e-12af-4ac2-8661-cc5a1c0f0368+0>\r\nContent-Length: 410\r\nContent-Transfer-Encoding:
+        binary\r\n\r\nGET /drive/v3/drives/0ANh47wT0lLbTUk9PVA?fields=name%2Ccapabilities%28canShare%29
+        HTTP/1.1\r\nX-Goog-Api-Client: gl-ruby/3.2.2 gdcl/1.46.0\r\nauthorization:
+        Bearer ya29.a0AfB_byC0wLkre3kl_csP4ljARYrefwUhJVyB07sneGBVn54suDLn1kv_JY5TfycBavpQPu5lHPutSi0qiGGzF653b-I9Tb6g0YFXLLsKRFyw92MRTw2bt7sy4TEbP6THf7m6SdG1O068gPVaLtGe2MewwvMlGHBpPlYKxQaCgYKAboSARESFQHGX2MiosOp6nr60oZleOl-au9EZg0173\r\nHost:
+        www.googleapis.com\r\n\r\n\r\n--c691ce5aa3002147170e35ba84d76f91247dcfd0\r\nContent-Type:
+        application/http\r\nContent-Id: <84477b5e-12af-4ac2-8661-cc5a1c0f0368+1>\r\nContent-Length:
+        457\r\nContent-Transfer-Encoding: binary\r\n\r\nGET /drive/v3/files/15Y3FzxJHdpCv421PPHCcwu_dMFRx5Y9P?fields=name%2CmimeType%2Ccapabilities%28canShare%29&supportsAllDrives=true
+        HTTP/1.1\r\nX-Goog-Api-Client: gl-ruby/3.2.2 gdcl/1.46.0\r\nauthorization:
+        Bearer ya29.a0AfB_byC0wLkre3kl_csP4ljARYrefwUhJVyB07sneGBVn54suDLn1kv_JY5TfycBavpQPu5lHPutSi0qiGGzF653b-I9Tb6g0YFXLLsKRFyw92MRTw2bt7sy4TEbP6THf7m6SdG1O068gPVaLtGe2MewwvMlGHBpPlYKxQaCgYKAboSARESFQHGX2MiosOp6nr60oZleOl-au9EZg0173\r\nHost:
+        www.googleapis.com\r\n\r\n\r\n--c691ce5aa3002147170e35ba84d76f91247dcfd0--\r\n\r\n"
+    headers:
+      User-Agent:
+      - unknown/0.0.0 google-apis-drive_v3/0.46.0 Mac OS X/13.1 (gzip)
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip,deflate
+      Date:
+      - Tue, 30 Jan 2024 20:43:44 GMT
+      Content-Type:
+      - multipart/mixed; boundary=c691ce5aa3002147170e35ba84d76f91247dcfd0
+      Authorization:
+      - Bearer ya29.a0AfB_byC0wLkre3kl_csP4ljARYrefwUhJVyB07sneGBVn54suDLn1kv_JY5TfycBavpQPu5lHPutSi0qiGGzF653b-I9Tb6g0YFXLLsKRFyw92MRTw2bt7sy4TEbP6THf7m6SdG1O068gPVaLtGe2MewwvMlGHBpPlYKxQaCgYKAboSARESFQHGX2MiosOp6nr60oZleOl-au9EZg0173
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - multipart/mixed; boundary=batch_ZAT1PYNKQCzmDdkiW9UWSRxUL1Emxum6
+      Date:
+      - Tue, 30 Jan 2024 20:43:44 GMT
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Vary:
+      - Origin, X-Origin
+      Pragma:
+      - no-cache
+      Content-Encoding:
+      - gzip
+      Server:
+      - ESF
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: "\r\n--batch_ZAT1PYNKQCzmDdkiW9UWSRxUL1Emxum6\r\nContent-Type: application/http\r\nContent-ID:
+        <response-84477b5e-12af-4ac2-8661-cc5a1c0f0368+0>\r\n\r\nHTTP/1.1 200 OK\r\nExpires:
+        Tue, 30 Jan 2024 20:43:44 GMT\r\nDate: Tue, 30 Jan 2024 20:43:44 GMT\r\nCache-Control:
+        private, max-age=0\r\nContent-Type: application/json; charset=UTF-8\r\nContent-Length:
+        70\r\n\r\n{\n  \"name\": \"Drive 1\",\n  \"capabilities\": {\n    \"canShare\":
+        true\n  }\n}\n\r\n--batch_ZAT1PYNKQCzmDdkiW9UWSRxUL1Emxum6\r\nContent-Type:
+        application/http\r\nContent-ID: <response-84477b5e-12af-4ac2-8661-cc5a1c0f0368+1>\r\n\r\nHTTP/1.1
+        200 OK\r\nDate: Tue, 30 Jan 2024 20:43:44 GMT\r\nCache-Control: private, max-age=0\r\nExpires:
+        Tue, 30 Jan 2024 20:43:44 GMT\r\nContent-Type: application/json; charset=UTF-8\r\nContent-Length:
+        123\r\n\r\n{\n  \"name\": \"Folder 1\",\n  \"mimeType\": \"application/vnd.google-apps.folder\",\n
+        \ \"capabilities\": {\n    \"canShare\": true\n  }\n}\n\r\n--batch_ZAT1PYNKQCzmDdkiW9UWSRxUL1Emxum6--\r\n"
+    http_version:
+  recorded_at: Tue, 30 Jan 2024 20:43:44 GMT
+- request:
+    method: post
+    uri: https://www.googleapis.com/batch/drive/v3
+    body:
+      encoding: UTF-8
+      string: "--220044d70c6e03b63f344ade794c1f139146831b\r\nContent-Type: application/http\r\nContent-Id:
+        <dccd6813-e5f8-4e31-9a1e-7f548514f733+0>\r\nContent-Length: 410\r\nContent-Transfer-Encoding:
+        binary\r\n\r\nGET /drive/v3/drives/0ANh47wT0lLbTUk9PVA?fields=name%2Ccapabilities%28canShare%29
+        HTTP/1.1\r\nX-Goog-Api-Client: gl-ruby/3.2.2 gdcl/1.46.0\r\nauthorization:
+        Bearer ya29.a0AfB_byC0wLkre3kl_csP4ljARYrefwUhJVyB07sneGBVn54suDLn1kv_JY5TfycBavpQPu5lHPutSi0qiGGzF653b-I9Tb6g0YFXLLsKRFyw92MRTw2bt7sy4TEbP6THf7m6SdG1O068gPVaLtGe2MewwvMlGHBpPlYKxQaCgYKAboSARESFQHGX2MiosOp6nr60oZleOl-au9EZg0173\r\nHost:
+        www.googleapis.com\r\n\r\n\r\n--220044d70c6e03b63f344ade794c1f139146831b\r\nContent-Type:
+        application/http\r\nContent-Id: <dccd6813-e5f8-4e31-9a1e-7f548514f733+1>\r\nContent-Length:
+        457\r\nContent-Transfer-Encoding: binary\r\n\r\nGET /drive/v3/files/15Y3FzxJHdpCv421PPHCcwu_dMFRx5Y9P?fields=name%2CmimeType%2Ccapabilities%28canShare%29&supportsAllDrives=true
+        HTTP/1.1\r\nX-Goog-Api-Client: gl-ruby/3.2.2 gdcl/1.46.0\r\nauthorization:
+        Bearer ya29.a0AfB_byC0wLkre3kl_csP4ljARYrefwUhJVyB07sneGBVn54suDLn1kv_JY5TfycBavpQPu5lHPutSi0qiGGzF653b-I9Tb6g0YFXLLsKRFyw92MRTw2bt7sy4TEbP6THf7m6SdG1O068gPVaLtGe2MewwvMlGHBpPlYKxQaCgYKAboSARESFQHGX2MiosOp6nr60oZleOl-au9EZg0173\r\nHost:
+        www.googleapis.com\r\n\r\n\r\n--220044d70c6e03b63f344ade794c1f139146831b\r\nContent-Type:
+        application/http\r\nContent-Id: <dccd6813-e5f8-4e31-9a1e-7f548514f733+2>\r\nContent-Length:
+        468\r\nContent-Transfer-Encoding: binary\r\n\r\nGET /drive/v3/files/1AUjr0Tq8np0zDC0iGc38niQzVGjZKS5aqTyl5h2kMqI?fields=name%2CmimeType%2Ccapabilities%28canShare%29&supportsAllDrives=true
+        HTTP/1.1\r\nX-Goog-Api-Client: gl-ruby/3.2.2 gdcl/1.46.0\r\nauthorization:
+        Bearer ya29.a0AfB_byC0wLkre3kl_csP4ljARYrefwUhJVyB07sneGBVn54suDLn1kv_JY5TfycBavpQPu5lHPutSi0qiGGzF653b-I9Tb6g0YFXLLsKRFyw92MRTw2bt7sy4TEbP6THf7m6SdG1O068gPVaLtGe2MewwvMlGHBpPlYKxQaCgYKAboSARESFQHGX2MiosOp6nr60oZleOl-au9EZg0173\r\nHost:
+        www.googleapis.com\r\n\r\n\r\n--220044d70c6e03b63f344ade794c1f139146831b--\r\n\r\n"
+    headers:
+      User-Agent:
+      - unknown/0.0.0 google-apis-drive_v3/0.46.0 Mac OS X/13.1 (gzip)
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip,deflate
+      Date:
+      - Tue, 30 Jan 2024 20:43:45 GMT
+      Content-Type:
+      - multipart/mixed; boundary=220044d70c6e03b63f344ade794c1f139146831b
+      Authorization:
+      - Bearer ya29.a0AfB_byC0wLkre3kl_csP4ljARYrefwUhJVyB07sneGBVn54suDLn1kv_JY5TfycBavpQPu5lHPutSi0qiGGzF653b-I9Tb6g0YFXLLsKRFyw92MRTw2bt7sy4TEbP6THf7m6SdG1O068gPVaLtGe2MewwvMlGHBpPlYKxQaCgYKAboSARESFQHGX2MiosOp6nr60oZleOl-au9EZg0173
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - multipart/mixed; boundary=batch_QJ54K2RkVrWGFVbslWsv_3JbmJg2WKqy
+      Date:
+      - Tue, 30 Jan 2024 20:43:45 GMT
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Vary:
+      - Origin, X-Origin
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Content-Encoding:
+      - gzip
+      Server:
+      - ESF
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: "\r\n--batch_QJ54K2RkVrWGFVbslWsv_3JbmJg2WKqy\r\nContent-Type: application/http\r\nContent-ID:
+        <response-dccd6813-e5f8-4e31-9a1e-7f548514f733+0>\r\n\r\nHTTP/1.1 200 OK\r\nCache-Control:
+        private, max-age=0\r\nExpires: Tue, 30 Jan 2024 20:43:45 GMT\r\nDate: Tue,
+        30 Jan 2024 20:43:45 GMT\r\nContent-Type: application/json; charset=UTF-8\r\nContent-Length:
+        70\r\n\r\n{\n  \"name\": \"Drive 1\",\n  \"capabilities\": {\n    \"canShare\":
+        true\n  }\n}\n\r\n--batch_QJ54K2RkVrWGFVbslWsv_3JbmJg2WKqy\r\nContent-Type:
+        application/http\r\nContent-ID: <response-dccd6813-e5f8-4e31-9a1e-7f548514f733+1>\r\n\r\nHTTP/1.1
+        200 OK\r\nExpires: Tue, 30 Jan 2024 20:43:45 GMT\r\nCache-Control: private,
+        max-age=0\r\nDate: Tue, 30 Jan 2024 20:43:45 GMT\r\nContent-Type: application/json;
+        charset=UTF-8\r\nContent-Length: 123\r\n\r\n{\n  \"name\": \"Folder 1\",\n
+        \ \"mimeType\": \"application/vnd.google-apps.folder\",\n  \"capabilities\":
+        {\n    \"canShare\": true\n  }\n}\n\r\n--batch_QJ54K2RkVrWGFVbslWsv_3JbmJg2WKqy\r\nContent-Type:
+        application/http\r\nContent-ID: <response-dccd6813-e5f8-4e31-9a1e-7f548514f733+2>\r\n\r\nHTTP/1.1
+        200 OK\r\nExpires: Tue, 30 Jan 2024 20:43:45 GMT\r\nDate: Tue, 30 Jan 2024
+        20:43:45 GMT\r\nCache-Control: private, max-age=0\r\nContent-Type: application/json;
+        charset=UTF-8\r\nContent-Length: 123\r\n\r\n{\n  \"name\": \"File 1\",\n  \"mimeType\":
+        \"application/vnd.google-apps.document\",\n  \"capabilities\": {\n    \"canShare\":
+        true\n  }\n}\n\r\n--batch_QJ54K2RkVrWGFVbslWsv_3JbmJg2WKqy--\r\n"
+    http_version:
+  recorded_at: Tue, 30 Jan 2024 20:43:45 GMT
+- request:
+    method: post
+    uri: https://www.googleapis.com/batch/drive/v3
+    body:
+      encoding: UTF-8
+      string: "--8a07a993b64ae0c90f0884dd9cb892adf68aa52d\r\nContent-Type: application/http\r\nContent-Id:
+        <42815577-a207-44c5-9c4f-82dab3f78360+0>\r\nContent-Length: 410\r\nContent-Transfer-Encoding:
+        binary\r\n\r\nGET /drive/v3/drives/0ANh47wT0lLbTUk9PVA?fields=name%2Ccapabilities%28canShare%29
+        HTTP/1.1\r\nX-Goog-Api-Client: gl-ruby/3.2.2 gdcl/1.46.0\r\nauthorization:
+        Bearer ya29.a0AfB_byC0wLkre3kl_csP4ljARYrefwUhJVyB07sneGBVn54suDLn1kv_JY5TfycBavpQPu5lHPutSi0qiGGzF653b-I9Tb6g0YFXLLsKRFyw92MRTw2bt7sy4TEbP6THf7m6SdG1O068gPVaLtGe2MewwvMlGHBpPlYKxQaCgYKAboSARESFQHGX2MiosOp6nr60oZleOl-au9EZg0173\r\nHost:
+        www.googleapis.com\r\n\r\n\r\n--8a07a993b64ae0c90f0884dd9cb892adf68aa52d\r\nContent-Type:
+        application/http\r\nContent-Id: <42815577-a207-44c5-9c4f-82dab3f78360+1>\r\nContent-Length:
+        457\r\nContent-Transfer-Encoding: binary\r\n\r\nGET /drive/v3/files/15Y3FzxJHdpCv421PPHCcwu_dMFRx5Y9P?fields=name%2CmimeType%2Ccapabilities%28canShare%29&supportsAllDrives=true
+        HTTP/1.1\r\nX-Goog-Api-Client: gl-ruby/3.2.2 gdcl/1.46.0\r\nauthorization:
+        Bearer ya29.a0AfB_byC0wLkre3kl_csP4ljARYrefwUhJVyB07sneGBVn54suDLn1kv_JY5TfycBavpQPu5lHPutSi0qiGGzF653b-I9Tb6g0YFXLLsKRFyw92MRTw2bt7sy4TEbP6THf7m6SdG1O068gPVaLtGe2MewwvMlGHBpPlYKxQaCgYKAboSARESFQHGX2MiosOp6nr60oZleOl-au9EZg0173\r\nHost:
+        www.googleapis.com\r\n\r\n\r\n--8a07a993b64ae0c90f0884dd9cb892adf68aa52d\r\nContent-Type:
+        application/http\r\nContent-Id: <42815577-a207-44c5-9c4f-82dab3f78360+2>\r\nContent-Length:
+        468\r\nContent-Transfer-Encoding: binary\r\n\r\nGET /drive/v3/files/1AUjr0Tq8np0zDC0iGc38niQzVGjZKS5aqTyl5h2kMqI?fields=name%2CmimeType%2Ccapabilities%28canShare%29&supportsAllDrives=true
+        HTTP/1.1\r\nX-Goog-Api-Client: gl-ruby/3.2.2 gdcl/1.46.0\r\nauthorization:
+        Bearer ya29.a0AfB_byC0wLkre3kl_csP4ljARYrefwUhJVyB07sneGBVn54suDLn1kv_JY5TfycBavpQPu5lHPutSi0qiGGzF653b-I9Tb6g0YFXLLsKRFyw92MRTw2bt7sy4TEbP6THf7m6SdG1O068gPVaLtGe2MewwvMlGHBpPlYKxQaCgYKAboSARESFQHGX2MiosOp6nr60oZleOl-au9EZg0173\r\nHost:
+        www.googleapis.com\r\n\r\n\r\n--8a07a993b64ae0c90f0884dd9cb892adf68aa52d\r\nContent-Type:
+        application/http\r\nContent-Id: <42815577-a207-44c5-9c4f-82dab3f78360+3>\r\nContent-Length:
+        394\r\nContent-Transfer-Encoding: binary\r\n\r\nGET /drive/v3/drives/xyz?fields=name%2Ccapabilities%28canShare%29
+        HTTP/1.1\r\nX-Goog-Api-Client: gl-ruby/3.2.2 gdcl/1.46.0\r\nauthorization:
+        Bearer ya29.a0AfB_byC0wLkre3kl_csP4ljARYrefwUhJVyB07sneGBVn54suDLn1kv_JY5TfycBavpQPu5lHPutSi0qiGGzF653b-I9Tb6g0YFXLLsKRFyw92MRTw2bt7sy4TEbP6THf7m6SdG1O068gPVaLtGe2MewwvMlGHBpPlYKxQaCgYKAboSARESFQHGX2MiosOp6nr60oZleOl-au9EZg0173\r\nHost:
+        www.googleapis.com\r\n\r\n\r\n--8a07a993b64ae0c90f0884dd9cb892adf68aa52d--\r\n\r\n"
+    headers:
+      User-Agent:
+      - unknown/0.0.0 google-apis-drive_v3/0.46.0 Mac OS X/13.1 (gzip)
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip,deflate
+      Date:
+      - Tue, 30 Jan 2024 20:43:46 GMT
+      Content-Type:
+      - multipart/mixed; boundary=8a07a993b64ae0c90f0884dd9cb892adf68aa52d
+      Authorization:
+      - Bearer ya29.a0AfB_byC0wLkre3kl_csP4ljARYrefwUhJVyB07sneGBVn54suDLn1kv_JY5TfycBavpQPu5lHPutSi0qiGGzF653b-I9Tb6g0YFXLLsKRFyw92MRTw2bt7sy4TEbP6THf7m6SdG1O068gPVaLtGe2MewwvMlGHBpPlYKxQaCgYKAboSARESFQHGX2MiosOp6nr60oZleOl-au9EZg0173
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - multipart/mixed; boundary=batch_DsawJ01O6YQwovcXF7Q5cSUmrHWVpFFP
+      Date:
+      - Tue, 30 Jan 2024 20:43:46 GMT
+      Vary:
+      - Origin, X-Origin
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Pragma:
+      - no-cache
+      Content-Encoding:
+      - gzip
+      Server:
+      - ESF
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: "\r\n--batch_DsawJ01O6YQwovcXF7Q5cSUmrHWVpFFP\r\nContent-Type: application/http\r\nContent-ID:
+        <response-42815577-a207-44c5-9c4f-82dab3f78360+0>\r\n\r\nHTTP/1.1 200 OK\r\nExpires:
+        Tue, 30 Jan 2024 20:43:46 GMT\r\nCache-Control: private, max-age=0\r\nDate:
+        Tue, 30 Jan 2024 20:43:46 GMT\r\nContent-Type: application/json; charset=UTF-8\r\nContent-Length:
+        70\r\n\r\n{\n  \"name\": \"Drive 1\",\n  \"capabilities\": {\n    \"canShare\":
+        true\n  }\n}\n\r\n--batch_DsawJ01O6YQwovcXF7Q5cSUmrHWVpFFP\r\nContent-Type:
+        application/http\r\nContent-ID: <response-42815577-a207-44c5-9c4f-82dab3f78360+1>\r\n\r\nHTTP/1.1
+        200 OK\r\nDate: Tue, 30 Jan 2024 20:43:46 GMT\r\nExpires: Tue, 30 Jan 2024
+        20:43:46 GMT\r\nCache-Control: private, max-age=0\r\nContent-Type: application/json;
+        charset=UTF-8\r\nContent-Length: 123\r\n\r\n{\n  \"name\": \"Folder 1\",\n
+        \ \"mimeType\": \"application/vnd.google-apps.folder\",\n  \"capabilities\":
+        {\n    \"canShare\": true\n  }\n}\n\r\n--batch_DsawJ01O6YQwovcXF7Q5cSUmrHWVpFFP\r\nContent-Type:
+        application/http\r\nContent-ID: <response-42815577-a207-44c5-9c4f-82dab3f78360+2>\r\n\r\nHTTP/1.1
+        200 OK\r\nDate: Tue, 30 Jan 2024 20:43:46 GMT\r\nCache-Control: private, max-age=0\r\nExpires:
+        Tue, 30 Jan 2024 20:43:46 GMT\r\nContent-Type: application/json; charset=UTF-8\r\nContent-Length:
+        123\r\n\r\n{\n  \"name\": \"File 1\",\n  \"mimeType\": \"application/vnd.google-apps.document\",\n
+        \ \"capabilities\": {\n    \"canShare\": true\n  }\n}\n\r\n--batch_DsawJ01O6YQwovcXF7Q5cSUmrHWVpFFP\r\nContent-Type:
+        application/http\r\nContent-ID: <response-42815577-a207-44c5-9c4f-82dab3f78360+3>\r\n\r\nHTTP/1.1
+        404 Not Found\r\nCache-Control: private, max-age=0\r\nDate: Tue, 30 Jan 2024
+        20:43:46 GMT\r\nExpires: Tue, 30 Jan 2024 20:43:46 GMT\r\nContent-Type: application/json;
+        charset=UTF-8\r\nContent-Length: 297\r\n\r\n{\n  \"error\": {\n    \"code\":
+        404,\n    \"message\": \"Shared drive not found: xyz\",\n    \"errors\": [\n
+        \     {\n        \"message\": \"Shared drive not found: xyz\",\n        \"domain\":
+        \"global\",\n        \"reason\": \"notFound\",\n        \"location\": \"driveId\",\n
+        \       \"locationType\": \"parameter\"\n      }\n    ]\n  }\n}\n\r\n--batch_DsawJ01O6YQwovcXF7Q5cSUmrHWVpFFP--\r\n"
+    http_version:
+  recorded_at: Tue, 30 Jan 2024 20:43:46 GMT
+- request:
+    method: post
+    uri: https://www.googleapis.com/batch/drive/v3
+    body:
+      encoding: UTF-8
+      string: "--5e2ee8109d51f8d1b34440dd54ed2444d5526a74\r\nContent-Type: application/http\r\nContent-Id:
+        <5fc11715-3370-4e81-b180-8181af1e3ee2+0>\r\nContent-Length: 410\r\nContent-Transfer-Encoding:
+        binary\r\n\r\nGET /drive/v3/drives/0ANh47wT0lLbTUk9PVA?fields=name%2Ccapabilities%28canShare%29
+        HTTP/1.1\r\nX-Goog-Api-Client: gl-ruby/3.2.2 gdcl/1.46.0\r\nauthorization:
+        Bearer ya29.a0AfB_byC0wLkre3kl_csP4ljARYrefwUhJVyB07sneGBVn54suDLn1kv_JY5TfycBavpQPu5lHPutSi0qiGGzF653b-I9Tb6g0YFXLLsKRFyw92MRTw2bt7sy4TEbP6THf7m6SdG1O068gPVaLtGe2MewwvMlGHBpPlYKxQaCgYKAboSARESFQHGX2MiosOp6nr60oZleOl-au9EZg0173\r\nHost:
+        www.googleapis.com\r\n\r\n\r\n--5e2ee8109d51f8d1b34440dd54ed2444d5526a74\r\nContent-Type:
+        application/http\r\nContent-Id: <5fc11715-3370-4e81-b180-8181af1e3ee2+1>\r\nContent-Length:
+        457\r\nContent-Transfer-Encoding: binary\r\n\r\nGET /drive/v3/files/15Y3FzxJHdpCv421PPHCcwu_dMFRx5Y9P?fields=name%2CmimeType%2Ccapabilities%28canShare%29&supportsAllDrives=true
+        HTTP/1.1\r\nX-Goog-Api-Client: gl-ruby/3.2.2 gdcl/1.46.0\r\nauthorization:
+        Bearer ya29.a0AfB_byC0wLkre3kl_csP4ljARYrefwUhJVyB07sneGBVn54suDLn1kv_JY5TfycBavpQPu5lHPutSi0qiGGzF653b-I9Tb6g0YFXLLsKRFyw92MRTw2bt7sy4TEbP6THf7m6SdG1O068gPVaLtGe2MewwvMlGHBpPlYKxQaCgYKAboSARESFQHGX2MiosOp6nr60oZleOl-au9EZg0173\r\nHost:
+        www.googleapis.com\r\n\r\n\r\n--5e2ee8109d51f8d1b34440dd54ed2444d5526a74\r\nContent-Type:
+        application/http\r\nContent-Id: <5fc11715-3370-4e81-b180-8181af1e3ee2+2>\r\nContent-Length:
+        468\r\nContent-Transfer-Encoding: binary\r\n\r\nGET /drive/v3/files/1AUjr0Tq8np0zDC0iGc38niQzVGjZKS5aqTyl5h2kMqI?fields=name%2CmimeType%2Ccapabilities%28canShare%29&supportsAllDrives=true
+        HTTP/1.1\r\nX-Goog-Api-Client: gl-ruby/3.2.2 gdcl/1.46.0\r\nauthorization:
+        Bearer ya29.a0AfB_byC0wLkre3kl_csP4ljARYrefwUhJVyB07sneGBVn54suDLn1kv_JY5TfycBavpQPu5lHPutSi0qiGGzF653b-I9Tb6g0YFXLLsKRFyw92MRTw2bt7sy4TEbP6THf7m6SdG1O068gPVaLtGe2MewwvMlGHBpPlYKxQaCgYKAboSARESFQHGX2MiosOp6nr60oZleOl-au9EZg0173\r\nHost:
+        www.googleapis.com\r\n\r\n\r\n--5e2ee8109d51f8d1b34440dd54ed2444d5526a74\r\nContent-Type:
+        application/http\r\nContent-Id: <5fc11715-3370-4e81-b180-8181af1e3ee2+3>\r\nContent-Length:
+        394\r\nContent-Transfer-Encoding: binary\r\n\r\nGET /drive/v3/drives/xyz?fields=name%2Ccapabilities%28canShare%29
+        HTTP/1.1\r\nX-Goog-Api-Client: gl-ruby/3.2.2 gdcl/1.46.0\r\nauthorization:
+        Bearer ya29.a0AfB_byC0wLkre3kl_csP4ljARYrefwUhJVyB07sneGBVn54suDLn1kv_JY5TfycBavpQPu5lHPutSi0qiGGzF653b-I9Tb6g0YFXLLsKRFyw92MRTw2bt7sy4TEbP6THf7m6SdG1O068gPVaLtGe2MewwvMlGHBpPlYKxQaCgYKAboSARESFQHGX2MiosOp6nr60oZleOl-au9EZg0173\r\nHost:
+        www.googleapis.com\r\n\r\n\r\n--5e2ee8109d51f8d1b34440dd54ed2444d5526a74--\r\n\r\n"
+    headers:
+      User-Agent:
+      - unknown/0.0.0 google-apis-drive_v3/0.46.0 Mac OS X/13.1 (gzip)
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip,deflate
+      Date:
+      - Tue, 30 Jan 2024 20:43:46 GMT
+      Content-Type:
+      - multipart/mixed; boundary=5e2ee8109d51f8d1b34440dd54ed2444d5526a74
+      Authorization:
+      - Bearer ya29.a0AfB_byC0wLkre3kl_csP4ljARYrefwUhJVyB07sneGBVn54suDLn1kv_JY5TfycBavpQPu5lHPutSi0qiGGzF653b-I9Tb6g0YFXLLsKRFyw92MRTw2bt7sy4TEbP6THf7m6SdG1O068gPVaLtGe2MewwvMlGHBpPlYKxQaCgYKAboSARESFQHGX2MiosOp6nr60oZleOl-au9EZg0173
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - multipart/mixed; boundary=batch__CBKXnV5o4pfGonWPmPPFhAEguQJUOzG
+      Date:
+      - Tue, 30 Jan 2024 20:43:46 GMT
+      Pragma:
+      - no-cache
+      Vary:
+      - Origin, X-Origin
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Content-Encoding:
+      - gzip
+      Server:
+      - ESF
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: "\r\n--batch__CBKXnV5o4pfGonWPmPPFhAEguQJUOzG\r\nContent-Type: application/http\r\nContent-ID:
+        <response-5fc11715-3370-4e81-b180-8181af1e3ee2+0>\r\n\r\nHTTP/1.1 200 OK\r\nExpires:
+        Tue, 30 Jan 2024 20:43:47 GMT\r\nCache-Control: private, max-age=0\r\nDate:
+        Tue, 30 Jan 2024 20:43:47 GMT\r\nContent-Type: application/json; charset=UTF-8\r\nContent-Length:
+        70\r\n\r\n{\n  \"name\": \"Drive 1\",\n  \"capabilities\": {\n    \"canShare\":
+        true\n  }\n}\n\r\n--batch__CBKXnV5o4pfGonWPmPPFhAEguQJUOzG\r\nContent-Type:
+        application/http\r\nContent-ID: <response-5fc11715-3370-4e81-b180-8181af1e3ee2+1>\r\n\r\nHTTP/1.1
+        200 OK\r\nCache-Control: private, max-age=0\r\nExpires: Tue, 30 Jan 2024 20:43:47
+        GMT\r\nDate: Tue, 30 Jan 2024 20:43:47 GMT\r\nContent-Type: application/json;
+        charset=UTF-8\r\nContent-Length: 123\r\n\r\n{\n  \"name\": \"Folder 1\",\n
+        \ \"mimeType\": \"application/vnd.google-apps.folder\",\n  \"capabilities\":
+        {\n    \"canShare\": true\n  }\n}\n\r\n--batch__CBKXnV5o4pfGonWPmPPFhAEguQJUOzG\r\nContent-Type:
+        application/http\r\nContent-ID: <response-5fc11715-3370-4e81-b180-8181af1e3ee2+2>\r\n\r\nHTTP/1.1
+        200 OK\r\nExpires: Tue, 30 Jan 2024 20:43:47 GMT\r\nCache-Control: private,
+        max-age=0\r\nDate: Tue, 30 Jan 2024 20:43:47 GMT\r\nContent-Type: application/json;
+        charset=UTF-8\r\nContent-Length: 123\r\n\r\n{\n  \"name\": \"File 1\",\n  \"mimeType\":
+        \"application/vnd.google-apps.document\",\n  \"capabilities\": {\n    \"canShare\":
+        true\n  }\n}\n\r\n--batch__CBKXnV5o4pfGonWPmPPFhAEguQJUOzG\r\nContent-Type:
+        application/http\r\nContent-ID: <response-5fc11715-3370-4e81-b180-8181af1e3ee2+3>\r\n\r\nHTTP/1.1
+        404 Not Found\r\nExpires: Tue, 30 Jan 2024 20:43:47 GMT\r\nCache-Control:
+        private, max-age=0\r\nDate: Tue, 30 Jan 2024 20:43:47 GMT\r\nContent-Type:
+        application/json; charset=UTF-8\r\nContent-Length: 297\r\n\r\n{\n  \"error\":
+        {\n    \"code\": 404,\n    \"message\": \"Shared drive not found: xyz\",\n
+        \   \"errors\": [\n      {\n        \"message\": \"Shared drive not found:
+        xyz\",\n        \"domain\": \"global\",\n        \"reason\": \"notFound\",\n
+        \       \"location\": \"driveId\",\n        \"locationType\": \"parameter\"\n
+        \     }\n    ]\n  }\n}\n\r\n--batch__CBKXnV5o4pfGonWPmPPFhAEguQJUOzG--\r\n"
+    http_version:
+  recorded_at: Tue, 30 Jan 2024 20:43:47 GMT
+- request:
+    method: post
+    uri: https://www.googleapis.com/batch/drive/v3
+    body:
+      encoding: UTF-8
+      string: "--dad741cc4fe44dbcd63dde30bc06e1f794c699c8\r\nContent-Type: application/http\r\nContent-Id:
+        <5409d8b6-b0b7-48dc-b014-b5cc7aa4728e+0>\r\nContent-Length: 457\r\nContent-Transfer-Encoding:
+        binary\r\n\r\nGET /drive/v3/files/15Y3FzxJHdpCv421PPHCcwu_dMFRx5Y9P?fields=name%2CmimeType%2Ccapabilities%28canShare%29&supportsAllDrives=true
+        HTTP/1.1\r\nX-Goog-Api-Client: gl-ruby/3.2.2 gdcl/1.46.0\r\nauthorization:
+        Bearer ya29.a0AfB_byC0wLkre3kl_csP4ljARYrefwUhJVyB07sneGBVn54suDLn1kv_JY5TfycBavpQPu5lHPutSi0qiGGzF653b-I9Tb6g0YFXLLsKRFyw92MRTw2bt7sy4TEbP6THf7m6SdG1O068gPVaLtGe2MewwvMlGHBpPlYKxQaCgYKAboSARESFQHGX2MiosOp6nr60oZleOl-au9EZg0173\r\nHost:
+        www.googleapis.com\r\n\r\n\r\n--dad741cc4fe44dbcd63dde30bc06e1f794c699c8\r\nContent-Type:
+        application/http\r\nContent-Id: <5409d8b6-b0b7-48dc-b014-b5cc7aa4728e+1>\r\nContent-Length:
+        468\r\nContent-Transfer-Encoding: binary\r\n\r\nGET /drive/v3/files/1AUjr0Tq8np0zDC0iGc38niQzVGjZKS5aqTyl5h2kMqI?fields=name%2CmimeType%2Ccapabilities%28canShare%29&supportsAllDrives=true
+        HTTP/1.1\r\nX-Goog-Api-Client: gl-ruby/3.2.2 gdcl/1.46.0\r\nauthorization:
+        Bearer ya29.a0AfB_byC0wLkre3kl_csP4ljARYrefwUhJVyB07sneGBVn54suDLn1kv_JY5TfycBavpQPu5lHPutSi0qiGGzF653b-I9Tb6g0YFXLLsKRFyw92MRTw2bt7sy4TEbP6THf7m6SdG1O068gPVaLtGe2MewwvMlGHBpPlYKxQaCgYKAboSARESFQHGX2MiosOp6nr60oZleOl-au9EZg0173\r\nHost:
+        www.googleapis.com\r\n\r\n\r\n--dad741cc4fe44dbcd63dde30bc06e1f794c699c8\r\nContent-Type:
+        application/http\r\nContent-Id: <5409d8b6-b0b7-48dc-b014-b5cc7aa4728e+2>\r\nContent-Length:
+        394\r\nContent-Transfer-Encoding: binary\r\n\r\nGET /drive/v3/drives/xyz?fields=name%2Ccapabilities%28canShare%29
+        HTTP/1.1\r\nX-Goog-Api-Client: gl-ruby/3.2.2 gdcl/1.46.0\r\nauthorization:
+        Bearer ya29.a0AfB_byC0wLkre3kl_csP4ljARYrefwUhJVyB07sneGBVn54suDLn1kv_JY5TfycBavpQPu5lHPutSi0qiGGzF653b-I9Tb6g0YFXLLsKRFyw92MRTw2bt7sy4TEbP6THf7m6SdG1O068gPVaLtGe2MewwvMlGHBpPlYKxQaCgYKAboSARESFQHGX2MiosOp6nr60oZleOl-au9EZg0173\r\nHost:
+        www.googleapis.com\r\n\r\n\r\n--dad741cc4fe44dbcd63dde30bc06e1f794c699c8--\r\n\r\n"
+    headers:
+      User-Agent:
+      - unknown/0.0.0 google-apis-drive_v3/0.46.0 Mac OS X/13.1 (gzip)
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip,deflate
+      Date:
+      - Tue, 30 Jan 2024 20:43:47 GMT
+      Content-Type:
+      - multipart/mixed; boundary=dad741cc4fe44dbcd63dde30bc06e1f794c699c8
+      Authorization:
+      - Bearer ya29.a0AfB_byC0wLkre3kl_csP4ljARYrefwUhJVyB07sneGBVn54suDLn1kv_JY5TfycBavpQPu5lHPutSi0qiGGzF653b-I9Tb6g0YFXLLsKRFyw92MRTw2bt7sy4TEbP6THf7m6SdG1O068gPVaLtGe2MewwvMlGHBpPlYKxQaCgYKAboSARESFQHGX2MiosOp6nr60oZleOl-au9EZg0173
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - multipart/mixed; boundary=batch_1Fjq_S8AyHM-HW8qZM_mAQU5_N6B10fZ
+      Date:
+      - Tue, 30 Jan 2024 20:43:47 GMT
+      Pragma:
+      - no-cache
+      Vary:
+      - Origin, X-Origin
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Content-Encoding:
+      - gzip
+      Server:
+      - ESF
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: "\r\n--batch_1Fjq_S8AyHM-HW8qZM_mAQU5_N6B10fZ\r\nContent-Type: application/http\r\nContent-ID:
+        <response-5409d8b6-b0b7-48dc-b014-b5cc7aa4728e+0>\r\n\r\nHTTP/1.1 200 OK\r\nExpires:
+        Tue, 30 Jan 2024 20:43:47 GMT\r\nDate: Tue, 30 Jan 2024 20:43:47 GMT\r\nCache-Control:
+        private, max-age=0\r\nContent-Type: application/json; charset=UTF-8\r\nContent-Length:
+        123\r\n\r\n{\n  \"name\": \"Folder 1\",\n  \"mimeType\": \"application/vnd.google-apps.folder\",\n
+        \ \"capabilities\": {\n    \"canShare\": true\n  }\n}\n\r\n--batch_1Fjq_S8AyHM-HW8qZM_mAQU5_N6B10fZ\r\nContent-Type:
+        application/http\r\nContent-ID: <response-5409d8b6-b0b7-48dc-b014-b5cc7aa4728e+1>\r\n\r\nHTTP/1.1
+        200 OK\r\nDate: Tue, 30 Jan 2024 20:43:47 GMT\r\nExpires: Tue, 30 Jan 2024
+        20:43:47 GMT\r\nCache-Control: private, max-age=0\r\nContent-Type: application/json;
+        charset=UTF-8\r\nContent-Length: 123\r\n\r\n{\n  \"name\": \"File 1\",\n  \"mimeType\":
+        \"application/vnd.google-apps.document\",\n  \"capabilities\": {\n    \"canShare\":
+        true\n  }\n}\n\r\n--batch_1Fjq_S8AyHM-HW8qZM_mAQU5_N6B10fZ\r\nContent-Type:
+        application/http\r\nContent-ID: <response-5409d8b6-b0b7-48dc-b014-b5cc7aa4728e+2>\r\n\r\nHTTP/1.1
+        404 Not Found\r\nCache-Control: private, max-age=0\r\nDate: Tue, 30 Jan 2024
+        20:43:47 GMT\r\nExpires: Tue, 30 Jan 2024 20:43:47 GMT\r\nContent-Type: application/json;
+        charset=UTF-8\r\nContent-Length: 297\r\n\r\n{\n  \"error\": {\n    \"code\":
+        404,\n    \"message\": \"Shared drive not found: xyz\",\n    \"errors\": [\n
+        \     {\n        \"message\": \"Shared drive not found: xyz\",\n        \"domain\":
+        \"global\",\n        \"reason\": \"notFound\",\n        \"location\": \"driveId\",\n
+        \       \"locationType\": \"parameter\"\n      }\n    ]\n  }\n}\n\r\n--batch_1Fjq_S8AyHM-HW8qZM_mAQU5_N6B10fZ--\r\n"
+    http_version:
+  recorded_at: Tue, 30 Jan 2024 20:43:47 GMT
+recorded_with: VCR 4.0.0

@@ -15,7 +15,9 @@ module GDrive
 
       wrapper = Wrapper.new(config: @config, google_user_id: @config.org_user_id)
       if wrapper.has_credentials?
-        ItemSyncer.new(wrapper, @config.items).sync if @config.items.any?
+        # Order should be stable for testing purposes
+        items = @config.items.order(:external_id).to_a
+        ItemSyncer.new(wrapper, items).sync if items.any?
       else
         set_auth_error
       end

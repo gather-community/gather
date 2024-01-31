@@ -6,6 +6,7 @@ module GDrive
   class ItemSyncer
     attr_accessor :wrapper, :items
 
+    # items order should be stable across test runs or tests will flake!
     def initialize(wrapper, items)
       self.wrapper = wrapper
       self.items = items

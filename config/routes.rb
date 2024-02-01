@@ -271,7 +271,11 @@ Rails.application.routes.draw do
         get "status", to: "status#show", as: :status
 
         # This is Devise.email_regexp without the anchor characters.
-        resources :owners, only: %i[index show], id: /\S+@\S+\.\S+/, format: :html
+        resources :owners, only: %i[index show], id: /\S+@\S+\.\S+/, format: :html do
+          collection do
+            post :request_consent
+          end
+        end
 
         resources :files, only: %i[index]
       end

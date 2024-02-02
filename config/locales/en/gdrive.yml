@@ -28,6 +28,7 @@ en:
       in_progress: "In progress"
       done: "Done"
       opted_out: "Opted out"
+      abandoned: "Abandoned"
 
     migration:
       errors:

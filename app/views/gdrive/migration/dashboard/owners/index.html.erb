@@ -15,20 +15,32 @@
           "data-action": "batchable-table#actionClicked",
           "data-submit-url": request_consent_gdrive_migration_dashboard_owners_path) %>
   </div>
-  <table>
+  <table class="full-width">
+    <tr class="superheader">
+      <th></th>
+      <th></th>
+      <th colspan="7" class="superheader-cell">
+        <div>Files</div>
+      </th>
+      <th colspan="2" class="superheader-cell">
+        <div>Consent Request</div>
+      </th>
+    </tr>
     <tr>
       <th>
         <%= check_box_tag("b_select_all", "1", false, "data-action": "batchable-table#allSelectedClicked",
               "data-batchable-table-target": "allSelected") %>
       </th>
       <th>Owner</th>
-      <th>Total Files</th>
+      <th>Total</th>
       <th>Pending</th>
       <th>Declined</th>
       <th>Errored</th>
       <th>Transferred</th>
       <th>Copied</th>
       <th>Ignored</th>
+      <th>Date Sent</th>
+      <th>Status</th>
     </tr>
     <% @stats.owners.each do |owner| %>
       <tr>
@@ -44,6 +56,16 @@
         <td><%= number_with_delimiter(@stats.by_owner_and_status[[owner, "transferred"]]) %></td>
         <td><%= number_with_delimiter(@stats.by_owner_and_status[[owner, "copied"]]) %></td>
         <td><%= number_with_delimiter(@stats.by_owner_and_status[[owner, "ignored"]]) %></td>
+        <td>
+          <% if @stats.consent_requests_by_owner[owner] %>
+            <%= I18n.l(@stats.consent_requests_by_owner[owner].created_at, format: :day_mo_yr_no_time) %>
+          <% end %>
+        </td>
+        <td>
+          <% if @stats.consent_requests_by_owner[owner] %>
+            <%= I18n.t("gdrive.consent_request_statuses.#{@stats.consent_requests_by_owner[owner].status}") %>
+          <% end %>
+        </td>
       </tr>
     <% end %>
   </table>

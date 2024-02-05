@@ -73,7 +73,7 @@ gem "whenever", "~> 0.9"
 gem "wisper", "~> 2.0"
 gem "wisper-activerecord", "~> 1.0"
 # Using master branch b/c we want the ! variant of the lock method and disable_query_cache
-gem "with_advisory_lock", git: "https://github.com/ClosureTree/with_advisory_lock", branch: "master"
+gem "with_advisory_lock"
 
 group :development, :test do
   gem "awesome_print", "~> 1.6"

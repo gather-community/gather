@@ -16,7 +16,7 @@ module GDrive
           @stats = Stats.new(operation: @operation)
           prepare_lenses({"gdrive/migration/owner": {owners: @stats.owners}}, :"gdrive/migration/status")
 
-          @files = @operation.files.order(modified_at: :desc).page(params[:page])
+          @files = @operation.files.order(modified_at: :desc).page(params[:page]).per(3)
           @files = @files.owned_by(lenses[:owner].selection) if lenses[:owner].active?
           @files = @files.with_status(lenses[:status].selection) if lenses[:status].active?
 

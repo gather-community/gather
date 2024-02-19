@@ -38,12 +38,18 @@
   <tr>
     <th>Date Sent</th>
     <th>Status</th>
+    <th>Link</th>
     <th>Opt Out Reason</th>
   </tr>
   <% @consent_requests.each do |consent_request| %>
     <tr>
       <td><%= I18n.l(consent_request.created_at) %></td>
       <td><%= I18n.t("gdrive.consent_request_statuses.#{consent_request.status}") %></td>
+      <td>
+        <% if consent_request.pending? %>
+          <%= link_to("Link", gdrive_migration_consent_url(token: consent_request.token)) %>
+        <% end %>
+      </td>
       <td><%= consent_request.opt_out_reason %></td>
     </tr>
   <% end %>

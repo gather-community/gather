@@ -8,10 +8,6 @@ describe GDrive::ItemGroupPolicy do
     let(:item_group) { create(:gdrive_item_group) }
     let(:record) { item_group }
 
-    before do
-      expect(FeatureFlag).to receive(:lookup).at_least(:once).and_return(double(on?: true))
-    end
-
     permissions :new?, :create?, :destroy? do
       it_behaves_like "permits admins from community"
     end

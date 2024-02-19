@@ -20,10 +20,6 @@ describe GDrive::ItemPolicy do
     let(:record) { item }
     let(:feature_flag_value) { true }
 
-    before do
-      expect(FeatureFlag).to receive(:lookup).at_least(:once).and_return(double(on?: feature_flag_value))
-    end
-
     permissions :show? do
       context "with feature flag on" do
         it "permits users in group1" do

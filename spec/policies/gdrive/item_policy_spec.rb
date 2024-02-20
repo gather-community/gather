@@ -18,37 +18,26 @@ describe GDrive::ItemPolicy do
     let!(:item_group1) { create(:gdrive_item_group, item: item, group: group1) }
     let!(:item_group2) { create(:gdrive_item_group, item: item, group: group2) }
     let(:record) { item }
-    let(:feature_flag_value) { true }
 
     permissions :show? do
-      context "with feature flag on" do
-        it "permits users in group1" do
-          expect(subject).to permit(in_user1, record)
-        end
-
-        it "permits users in group2" do
-          expect(subject).to permit(in_user2, record)
-        end
-
-        it "forbids admins not in group but from item community" do
-          expect(subject).not_to permit(cmty1_admin, record)
-        end
-
-        it "forbids admins not in group and not from item community" do
-          expect(subject).not_to permit(cmty2_admin, record)
-        end
-
-        it "forbids users not in either group" do
-          expect(subject).not_to permit(out_user, record)
-        end
+      it "permits users in group1" do
+        expect(subject).to permit(in_user1, record)
       end
 
-      context "with feature flag off" do
-        let(:feature_flag_value) { false }
+      it "permits users in group2" do
+        expect(subject).to permit(in_user2, record)
+      end
 
-        it "forbids users in group" do
-          expect(subject).not_to permit(in_user1, record)
-        end
+      it "forbids admins not in group but from item community" do
+        expect(subject).not_to permit(cmty1_admin, record)
+      end
+
+      it "forbids admins not in group and not from item community" do
+        expect(subject).not_to permit(cmty2_admin, record)
+      end
+
+      it "forbids users not in either group" do
+        expect(subject).not_to permit(out_user, record)
       end
     end
 

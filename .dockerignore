@@ -1,8 +1,11 @@
 # Things we don't ever want copied into the container
-.make
-.github
-node_modules
-tmp
+/.make
+/.github
+/node_modules
+/tmp
+/deploy
+!/deploy/docker/database.yml
+/docs
 /config/database.yml
 /config/settings.local.yml
 /config/settings/*.local.yml
@@ -12,6 +15,6 @@ tmp
 /db/*.sqlite3
 /db/*.sqlite3-journal
 /log
-/Dockerfile
+Dockerfile
 README.md
 .DS_Store

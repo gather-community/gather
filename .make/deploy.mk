@@ -1,4 +1,4 @@
-gather-up:
+kube-up:
 	./deploy/scripts/deploy-local.sh
 
-.PHONY: gather-up
+.PHONY: kube-up

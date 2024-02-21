@@ -4,25 +4,45 @@ services:
   gather:
     build:
       context: ../../
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
+      target: dev-base
     restart: always
+    command: bin/dev
     env_file:
+      - .env
       - .env.local
       - .env.gather
-    depends_on:
-      postgres:
-        condition: service_healthy
     networks:
       - gather
     profiles:
       - full
+      - gather
+    ports:
+      - '3000:3000'
+  
+  delayed-job:
+    build:
+      context: ../../
+      dockerfile: Dockerfile.dev
+      target: dev-base
+    restart: always
+    command: bin/delayed_job run
+    env_file:
+      - .env
+      - .env.local
+      - .env.gather
+    networks:
+      - gather
+    profiles:
+      - full
+      - delayed
 
   postgres:
     image: postgres:16.1
     container_name: pg
     restart: always
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-dev}" ]
+      test: [ "CMD-SHELL", "pg_isready -U $${POSTGRES_USER:-dev}" ]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -38,6 +58,27 @@ services:
     profiles:
       - full
       - data
+  
+  provision:
+    build:
+      context: ../../
+      dockerfile: Dockerfile.dev
+      target: dev-base
+    command:
+      - /bin/bash
+      - -c
+      - |
+        rake db:create
+        rake db:schema:load
+        rake db:new_cluster ADMIN_FNAME="$$GATHER_ADMIN_FNAME" ADMIN_LNAME="$$GATHER_ADMIN_LNAME" ADMIN_EMAIL="$$GATHER_ADMIN_EMAIL" SUPER_ADMIN=y
+    env_file:
+      - .env
+      - .env.local
+      - .env.gather
+    networks:
+      - gather
+    profiles:
+      - provision
 
   elasticsearch:
     container_name: elasticsearch
@@ -47,6 +88,8 @@ services:
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
       - bootstrap.memory_lock=true
       - xpack.security.enabled=false
+    networks:
+      - gather
     ports:
       - "9200:9200"
       - "9300:9300"
@@ -61,6 +104,8 @@ services:
     ports:
       - '6379:6379'
     command: redis-server
+    networks:
+      - gather
     profiles:
       - full
       - data
@@ -83,6 +128,8 @@ services:
     ports:
       - "1080:1080"
       - "1025:1025"
+    networks:
+      - gather
     profiles:
       - full
       - data

@@ -99,7 +99,7 @@ module GDrive
             operation.update!(start_page_token: new_start_page_token)
           end
         end
-      rescue Google::Apis::AuthorizationError
+      rescue Google::Apis::AuthorizationError, Signet::AuthorizationError
         # If we hit an auth error, it is probably not going to resolve itself, and it
         # is not an issue with our code. So we stop the scan and notify the user.
         cancel_scan(reason: "auth_error")

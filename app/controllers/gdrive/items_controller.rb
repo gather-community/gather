@@ -29,7 +29,7 @@ module GDrive
       @config.items.includes(:item_groups).order(:name).each do |item|
         @items_by_kind[item.kind.to_sym] << item
       end
-    rescue Google::Apis::AuthorizationError
+    rescue Google::Apis::AuthorizationError, Signet::AuthorizationError
       set_auth_error
     end
 

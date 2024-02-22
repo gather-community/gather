@@ -78,9 +78,8 @@ module GDrive
     end
 
     def set_auth_error
+      @config.tokens.destroy_all
       @authorization_error = true
-      flash.now[:error] = "We encountered an error connecting to Google. The information below may be out of date. " \
-        "Please return to the main Google Drive page to re-establish a connection."
     end
 
     # Pundit built-in helper doesn't work due to namespacing

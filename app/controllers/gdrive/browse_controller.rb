@@ -88,9 +88,9 @@ module GDrive
           end
         end
         @ancestors_decorator = AncestorsDecorator.new(ancestors)
-      rescue Google::Apis::AuthorizationError
+      rescue Google::Apis::AuthorizationError, Signet::AuthorizationError
         # The token for this config (MainConfigs should only have one) is no good anymore
-        # so we destroy it so that when they go to setup they can re-connect.
+        # so we destroy it so that they can re-connect.
         @config.tokens.destroy_all
         @authorization_error = true
       rescue Google::Apis::ClientError => error

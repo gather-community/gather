@@ -17,7 +17,7 @@ describe "people settings", js: true do
     select("By Unit", from: "Default Directory Sort")
     click_button("Save")
 
-    expect(page).to have_success("Settings updated successfully.")
+    expect(page).to have_success_alert("Settings updated successfully.")
     expect(page).to have_select("Default Directory Sort", selected: "By Unit")
   end
 end

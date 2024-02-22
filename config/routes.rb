@@ -257,6 +257,9 @@ Rails.application.routes.draw do
     get "/", to: "browse#index", as: :home
     get "item/:item_id", to: "browse#index", as: :browse
 
+    resources :items, only: %i[index new create destroy]
+    resources :item_groups, path: "item-groups", only: %i[new create destroy]
+
     namespace :setup do
       get "auth/callback", to: "auth#callback", as: :auth_callback
       delete "auth/revoke", to: "auth#revoke", as: :auth_revoke
@@ -266,8 +269,15 @@ Rails.application.routes.draw do
       namespace :dashboard do
         get "/", to: redirect("/gdrive/migration/dashboard/status"), as: :home
         get "status", to: "status#show", as: :status
-        get "owners", to: "owners#index", as: :owners
-        get "files", to: "files#index", as: :files
+
+        # This is Devise.email_regexp without the anchor characters.
+        resources :owners, only: %i[index show], id: /\S+@\S+\.\S+/, format: :html do
+          collection do
+            post :request_consent
+          end
+        end
+
+        resources :files, only: %i[index]
       end
       get "consent/callback", to: "consent#callback", as: :consent_callback
       get "consent/:token", to: "consent#intro", as: :consent
@@ -278,6 +288,7 @@ Rails.application.routes.draw do
       get "consent/:token/opt_out", to: "consent#opt_out", as: :consent_opt_out
       patch "consent/:token/confirm-opt-out", to: "consent#confirm_opt_out", as: :consent_confirm_opt_out
       get "consent/:token/opt-out-complete", to: "consent#opt_out_complete", as: :consent_opt_out_complete
+      post "changes", to: "webhooks#changes", as: :changes_webhook
     end
   end
 

@@ -9,5 +9,6 @@ translations:
       "*.timepicker.*",
       "*.password.strength.*",
       "*.errors.messages.doesnt_match",
-      "*.dropzone.*"
+      "*.dropzone.*",
+      "*.batchable_tables.confirmations.*"
     ]

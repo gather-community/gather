@@ -1,0 +1,10 @@
+# Kaminari's translations for page_entries_info are not customizable enough so I made my own helper.
+en:
+  pagination:
+    page_entries_info:
+      gdrive/migration/file: "Showing files %{first}–%{last} out of %{total}"
+      meals/meal: "Showing meals %{first}–%{last} out of %{total}"
+      household: "Showing households %{first}–%{last} out of %{total}"
+      user: "Showing users %{first}–%{last} out of %{total}"
+      work/period: "Showing periods %{first}–%{last} out of %{total}"
+      work/shift: "Showing shifts %{first}–%{last} out of %{total}"

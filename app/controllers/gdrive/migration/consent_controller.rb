@@ -50,15 +50,18 @@ module GDrive
 
         operation = consent_request.operation
         config = operation.config
-        wrapper = Wrapper.new(config: config, google_user_id: consent_request.google_email, callback_url: callback_url)
+        wrapper = Wrapper.new(config: config, google_user_id: consent_request.google_email,
+          callback_url: callback_url)
         credentials = fetch_credentials_from_callback_request(wrapper, request)
         authenticated_google_id = fetch_email_of_authenticated_account(credentials)
+
         if consent_request.google_email != authenticated_google_id
           flash[:error] = "You signed into Google with #{authenticated_google_id}. " \
             "Please sign in with #{consent_request.google_email} instead."
           redirect_to(gdrive_migration_consent_auth_url(token: consent_request.token))
           return
         end
+
         wrapper.store_credentials(credentials)
         redirect_to(gdrive_migration_consent_pick_url(token: consent_request.token))
       end
@@ -91,7 +94,6 @@ module GDrive
         )
         IngestJob.perform_later(
           cluster_id: current_cluster.id,
-          community_id: current_community.id,
           consent_request_id: @consent_request.id
         )
         head :no_content

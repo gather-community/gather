@@ -10,6 +10,9 @@ application.register("gdrive--file-picker", Gdrive__FilePickerController)
 import Gdrive__RootPickerController from "./gdrive/root_picker_controller"
 application.register("gdrive--root-picker", Gdrive__RootPickerController)
 
+import BatchableTableController from "./batchable_table_controller"
+application.register("batchable-table", BatchableTableController)
+
 import PartialListController from "./partial_list_controller"
 application.register("partial-list", PartialListController)
 

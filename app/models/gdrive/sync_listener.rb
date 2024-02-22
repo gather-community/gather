@@ -70,7 +70,7 @@ module GDrive
     private
 
     def item_groups_for_user(user)
-      ItemGroup.where(group: Groups::Group.with_user(user).select(:id)).includes(:item)
+      GDrive::ItemGroup.where(group: Groups::Group.with_user(user).select(:id)).includes(:item)
     end
 
     def enqueue_item_syncs_for_group(group)
@@ -85,7 +85,7 @@ module GDrive
     def enqueue_user_sync(user, community_id: user.community_id)
       return unless MainConfig.exists?(community_id: community_id)
 
-      UserPermissionSyncJob.perform_later(cluster_id: user.cluster_id,
+      GDrive::UserPermissionSyncJob.perform_later(cluster_id: user.cluster_id,
         community_id: community_id, user_id: user.id)
     end
 
@@ -95,7 +95,7 @@ module GDrive
     def enqueue_item_sync(item_group)
       item = item_group.item
       config = item.gdrive_config
-      ItemPermissionSyncJob.perform_later(cluster_id: config.cluster_id,
+      GDrive::ItemPermissionSyncJob.perform_later(cluster_id: config.cluster_id,
         community_id: config.community_id, item_id: item.id)
     end
 

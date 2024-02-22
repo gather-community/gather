@@ -5,7 +5,6 @@ FactoryBot.define do
     community { Defaults.community }
     client_id { "236482764-xxx.apps.googleusercontent.com" }
     client_secret { "xxxxxxxx" }
-    api_key { "xxxxxxxx" }
     org_user_id { "abc123@gmail.com" }
   end
 end

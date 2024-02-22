@@ -13,7 +13,7 @@ module GDrive
 
       attr_accessor :wrapper, :operation
 
-      # Ensures that the ancestor tree we mapped for the given file also exists
+      # Ensures that the ancestor tree for the given folder also exists
       # in the new drive. Creates it if not.
       # Runs recursively. Returns the dest folder ID.
       # If a matching folder map can't be found, we trace the ancestors of
@@ -28,14 +28,18 @@ module GDrive
       #
       # If raises Google::Apis::ClientError, this is most likely because the workspace user
       # doesn't have access to src_folder or src_folder doesn't exist.
-      def ensure_tree(src_folder_id)
+      #
+      # If skip_check_for_already_mapped_folder is specified, we will assume the destination
+      # folder exists if a FolderMap exists. This is safer if we are confident that the
+      # dest folder was recently created, as when we are doing the initial scan.
+      def ensure_tree(src_folder_id, skip_check_for_already_mapped_folder: false)
         Rails.logger.info("Ensuring ancestor tree", src_folder_id: src_folder_id)
 
         return operation.dest_folder_id if src_folder_id == operation.src_folder_id
 
         # Check for an existing and valid map before we create a new one
         if (map = FolderMap.find_by(src_id: src_folder_id))
-          if folder_exists?(map.dest_id)
+          if skip_check_for_already_mapped_folder || folder_exists?(map.dest_id)
             return map.dest_id
           else
             Rails.logger.warn("Folder map dest folder missing", src_folder_id: src_folder_id, dest_folder_id: map.dest_id)
@@ -105,11 +109,13 @@ module GDrive
       private def find_folder_by_parent_id_and_name(parent_id, name)
         # This can only fail if our permissions are bad. So we let it bubble
         # up to the caller in that case.
+        parent_id = parent_id.gsub("'") { "\\'" }
+        name = name.gsub("'") { "\\'" }
         file_list = wrapper.list_files(
           q: "'#{parent_id}' in parents and " \
             "mimeType = '#{GDrive::FOLDER_MIME_TYPE}' and " \
             "trashed = false and " \
-            "name = '#{name.tr("'", "\\")}'",
+            "name = '#{name}'",
           fields: "files(id)",
           supports_all_drives: true,
           include_items_from_all_drives: true

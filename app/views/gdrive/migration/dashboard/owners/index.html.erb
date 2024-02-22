@@ -5,27 +5,70 @@
 </div>
 
 <h2>Owners</h2>
-<table>
-  <tr>
-    <th>Owner</th>
-    <th>Total Files</th>
-    <th>Pending</th>
-    <th>Declined</th>
-    <th>Errored</th>
-    <th>Transferred</th>
-    <th>Copied</th>
-    <th>Ignored</th>
-  </tr>
-  <% @stats.owners.each do |owner| %>
-    <tr>
-      <td><%= link_to(owner, gdrive_migration_dashboard_files_path(owner: owner)) %></td>
-      <td><%= number_with_delimiter(@stats.by_owner[owner]) %></td>
-      <td><%= number_with_delimiter(@stats.by_owner_and_status[[owner, "pending"]]) %></td>
-      <td><%= number_with_delimiter(@stats.by_owner_and_status[[owner, "declined"]]) %></td>
-      <td><%= number_with_delimiter(@stats.by_owner_and_status[[owner, "errored"]]) %></td>
-      <td><%= number_with_delimiter(@stats.by_owner_and_status[[owner, "transferred"]]) %></td>
-      <td><%= number_with_delimiter(@stats.by_owner_and_status[[owner, "copied"]]) %></td>
-      <td><%= number_with_delimiter(@stats.by_owner_and_status[[owner, "ignored"]]) %></td>
+
+<%= form_tag({}, method: "post", "data-controller": "batchable-table") do %>
+  <div class="batchable-table-actions">
+    <%= button_tag(I18n.t("batchable_tables.actions.gdrive__migration__owners.request_consent"),
+          class: "btn btn-default",
+          "data-scope": "gdrive__migration__owners",
+          "data-key": "request_consent",
+          "data-action": "batchable-table#actionClicked",
+          "data-submit-url": request_consent_gdrive_migration_dashboard_owners_path) %>
+  </div>
+  <table class="full-width">
+    <tr class="superheader">
+      <th></th>
+      <th></th>
+      <th colspan="7" class="superheader-cell">
+        <div>Files</div>
+      </th>
+      <th colspan="2" class="superheader-cell">
+        <div>Consent Request</div>
+      </th>
     </tr>
-  <% end %>
-</table>
+    <tr>
+      <th>
+        <%= check_box_tag("b_select_all", "1", false, "data-action": "batchable-table#allSelectedClicked",
+              "data-batchable-table-target": "allSelected") %>
+      </th>
+      <th>Owner</th>
+      <th>Total</th>
+      <th>Pending</th>
+      <th>Declined</th>
+      <th>Errored</th>
+      <th>Transferred</th>
+      <th>Copied</th>
+      <th>Ignored</th>
+      <th>Date Sent</th>
+      <th>Status</th>
+    </tr>
+    <% @stats.owners.each do |owner| %>
+      <tr>
+        <td>
+          <%= check_box_tag("b_ids[]", owner, false, "data-action": "batchable-table#itemClicked",
+                "data-batchable-table-target": "item") %>
+        </td>
+        <td><%= link_to(owner, gdrive_migration_dashboard_owner_path(id: owner)) %></td>
+        <td><%= link_to(number_with_delimiter(@stats.by_owner[owner]), gdrive_migration_dashboard_files_path(owner: owner)) %></td>
+        <td><%= number_with_delimiter(@stats.by_owner_and_status[[owner, "pending"]]) %></td>
+        <td><%= number_with_delimiter(@stats.by_owner_and_status[[owner, "declined"]]) %></td>
+        <td><%= number_with_delimiter(@stats.by_owner_and_status[[owner, "errored"]]) %></td>
+        <td><%= number_with_delimiter(@stats.by_owner_and_status[[owner, "transferred"]]) %></td>
+        <td><%= number_with_delimiter(@stats.by_owner_and_status[[owner, "copied"]]) %></td>
+        <td><%= number_with_delimiter(@stats.by_owner_and_status[[owner, "ignored"]]) %></td>
+        <td>
+          <%= I18n.l(@stats.consent_requests_by_owner[owner].created_at, format: :day_mo_yr_no_time) %>
+        </td>
+        <td>
+          <% if (consent_request = @stats.consent_requests_by_owner[owner]) %>
+            <% if consent_request.pending? %>
+              <%= link_to(I18n.t("gdrive.consent_request_statuses.#{consent_request.status}"), gdrive_migration_consent_url(token: consent_request.token)) %>
+            <% else %>
+              <%= I18n.t("gdrive.consent_request_statuses.#{consent_request.status}") %>
+            <% end %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+<% end %>

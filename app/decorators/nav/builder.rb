@@ -65,6 +65,12 @@ module Nav
         icon: "info-circle"
       )
       items << customizer.filter_item(
+        name: :files,
+        path: h.gdrive_home_path,
+        permitted: GDrive::BrowsePolicy.new(user, :folder).index?,
+        icon: "file"
+      )
+      items << customizer.filter_item(
         name: :billing,
         path: h.accounts_path,
         permitted: h.policy(sample_account).show?,
@@ -267,18 +273,11 @@ module Nav
               icon: "copy"
             }
           ]
-        when :wiki
-          sample_wiki_page = Wiki::Page.new(community: community)
+        when :files
           [
             {
-              name: :wiki,
-              parents: :wiki,
-              path: "/wiki",
-              permitted: h.policy(sample_wiki_page).show?,
-              icon: "info-circle"
-            }, {
               name: :gdrive,
-              parents: :wiki,
+              parents: :files,
               path: h.gdrive_home_path,
               permitted: GDrive::BrowsePolicy.new(user, :folder).index?,
               icon: {name: "google", style: :brands}
@@ -310,21 +309,21 @@ module Nav
             path: h.people_member_types_path,
             permitted: h.policy(sample_member_type).index?
           }]
-        elsif context[0..3] == %i[wiki gdrive migration dashboard]
+        elsif context[0..3] == %i[files gdrive migration dashboard]
           depth = 4
           [{
             name: :status,
-            parents: %i[wiki gdrive migration dashboard],
+            parents: %i[files gdrive migration dashboard],
             path: h.gdrive_migration_dashboard_status_path,
             permitted: GDrive::SetupPolicy.new(user, community).setup?
           }, {
             name: :owners,
-            parents: %i[wiki gdrive migration dashboard],
+            parents: %i[files gdrive migration dashboard],
             path: h.gdrive_migration_dashboard_owners_path,
             permitted: GDrive::SetupPolicy.new(user, community).setup?
           }, {
             name: :files,
-            parents: %i[wiki gdrive migration dashboard],
+            parents: %i[files gdrive migration dashboard],
             path: h.gdrive_migration_dashboard_files_path,
             permitted: GDrive::SetupPolicy.new(user, community).setup?
           }]

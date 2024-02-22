@@ -1,0 +1,146 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://www.googleapis.com/drive/v3/changes?fields=changes(fileId,file(id,name,parents,mimeType,webViewLink,iconLink,modifiedTime,owners(emailAddress),capabilities(canEdit),trashed,driveId)),nextPageToken,newStartPageToken&includeCorpusRemovals=true&includeItemsFromAllDrives=true&includeRemoved=true&pageSize=100&pageToken=13141&spaces=drive&supportsAllDrives=true
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      User-Agent:
+      - unknown/0.0.0 google-apis-drive_v3/0.46.0 Mac OS X/13.1 (gzip)
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip,deflate
+      Date:
+      - Wed, 10 Jan 2024 13:10:33 GMT
+      X-Goog-Api-Client:
+      - gl-ruby/3.2.2 gdcl/1.46.0
+      Authorization:
+      - Bearer ya29.a0AfB_byCDWn5mS_twLK66TSq0OsFeTM5haJ47_j5FM7_gh9MBvCxkj-pLSd5U-jpZ82yanlPKPURtqcNskPrzG2GcC0-gzxswCTpXl63glCQaRmI5KlSSFMrnNx2rvdtGnqkHh3vdrKeDvvHOU1mmYsyM93EVLQ0-2-jvtSkaCgYKAQESARESFQHGX2MiBz2XG4OxA94kaO416ZU5PQ0174
+      Content-Type:
+      - application/x-www-form-urlencoded
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Wed, 10 Jan 2024 13:10:34 GMT
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Vary:
+      - Origin, X-Origin
+      Pragma:
+      - no-cache
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Encoding:
+      - gzip
+      Server:
+      - ESF
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: |
+        {
+          "newStartPageToken": "13142",
+          "changes": [
+            {
+              "file": {
+                "mimeType": "application/vnd.google-apps.folder",
+                "parents": [
+                  "1FBirfPXk-5qaMO1BkvlyhaC8JARE_FRq"
+                ],
+                "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.folder+shared",
+                "owners": [
+                  {
+                    "emailAddress": "example@gmail.com"
+                  }
+                ],
+                "webViewLink": "https://drive.google.com/drive/folders/1XTSlSd3Bw4dkRN1OTY2lhepebfL_hZBy",
+                "id": "1XTSlSd3Bw4dkRN1OTY2lhepebfL_hZBy",
+                "name": "Folder G",
+                "modifiedTime": "2024-01-10T13:06:48.355Z",
+                "capabilities": {
+                  "canEdit": true
+                }
+              }
+            }
+          ]
+        }
+    http_version:
+  recorded_at: Wed, 10 Jan 2024 13:10:34 GMT
+- request:
+    method: post
+    uri: https://www.googleapis.com/drive/v3/files?fields=id&supportsAllDrives=true
+    body:
+      encoding: UTF-8
+      string: '{"mimeType":"application/vnd.google-apps.folder","name":"Folder G","parents":["0AExZ3-Cu5q7uUk9PVA"]}'
+    headers:
+      User-Agent:
+      - unknown/0.0.0 google-apis-drive_v3/0.46.0 Mac OS X/13.1 (gzip)
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip,deflate
+      Date:
+      - Wed, 10 Jan 2024 13:10:34 GMT
+      X-Goog-Api-Client:
+      - gl-ruby/3.2.2 gdcl/1.46.0
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer ya29.a0AfB_byCDWn5mS_twLK66TSq0OsFeTM5haJ47_j5FM7_gh9MBvCxkj-pLSd5U-jpZ82yanlPKPURtqcNskPrzG2GcC0-gzxswCTpXl63glCQaRmI5KlSSFMrnNx2rvdtGnqkHh3vdrKeDvvHOU1mmYsyM93EVLQ0-2-jvtSkaCgYKAQESARESFQHGX2MiBz2XG4OxA94kaO416ZU5PQ0174
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Pragma:
+      - no-cache
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Vary:
+      - Origin, X-Origin
+      Date:
+      - Wed, 10 Jan 2024 13:10:34 GMT
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Encoding:
+      - gzip
+      Server:
+      - ESF
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: |
+        {
+          "id": "1sjMv8mqVrv8eoFQB9UWJH7A01MQY09Jy"
+        }
+    http_version:
+  recorded_at: Wed, 10 Jan 2024 13:10:34 GMT
+recorded_with: VCR 4.0.0

@@ -2,6 +2,29 @@ table {
   tr {
     border-bottom: $light-border;
 
+    &.heading {
+      border-bottom: none;
+
+      td {
+        padding-bottom: 0;
+      }
+    }
+
+    &.superheader {
+      border-bottom: none;
+
+      th.superheader-cell {
+        text-align: center;
+        font-weight: normal;
+        padding: 0;
+
+        div {
+          margin: 2px 0 2px 2px;
+          background-color: $gray-lighter;
+        }
+      }
+    }
+
     td, th {
       vertical-align: top;
       padding-top: 5px;

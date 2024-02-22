@@ -18,3 +18,15 @@
   background-color: $link-color;
   border-color: $link-color;
 }
+
+// Custom page-entries-info stuff
+
+.pagination-wrapper {
+  display: flex;
+  align-items: center;
+
+  .page-entries-info {
+    margin-inline-start: 10px;
+    color: $text-muted;
+  }
+}

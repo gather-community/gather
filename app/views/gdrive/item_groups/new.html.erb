@@ -1,0 +1,12 @@
+<% content_for(:title) { "Add Group to Google Drive Item" } %>
+
+<%= gather_form_for(@item_group) do |f| %>
+  <%= f.hidden_field(:item_id) %>
+  <%= f.input(:item_id) { @item.name } %>
+  <%= f.input(:group_id, collection: @groups) %>
+  <%= f.input(:access_level, collection: @access_levels) %>
+
+  <%= form_actions do %>
+    <%= f.button :primary %>
+  <% end %>
+<% end %>

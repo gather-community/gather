@@ -28,7 +28,8 @@ describe "nav menu" do
             ["Meals", "http://foo.gatherdev.org:31337/meals"],
             ["Work", "http://foo.gatherdev.org:31337/work/signups"],
             ["Calendars", "http://foo.gatherdev.org:31337/calendars/events"],
-            ["Wiki", "http://foo.gatherdev.org:31337/wiki"]
+            ["Wiki", "http://foo.gatherdev.org:31337/wiki"],
+            ["Files", "http://foo.gatherdev.org:31337/gdrive"]
           ])
       end
     end
@@ -44,6 +45,7 @@ describe "nav menu" do
             ["Meals", "http://foo.gatherdev.org:31337/meals"],
             ["Work", "http://foo.gatherdev.org:31337/work/signups"],
             ["Wiki", "http://wikipedia.org"],
+            ["Files", "http://foo.gatherdev.org:31337/gdrive"],
             ["Google", "http://google.com"]
           ])
       end

@@ -1,0 +1,79 @@
+<% content_for(:title) { "Google Drive Settings" } %>
+
+<% content_for(:action_links) do %>
+  <% if policy(sample_item).create? %>
+    <%= link_to(icon_tag("plus") << " Link Item", new_gdrive_item_path, class: "btn btn-primary") %>
+  <% end %>
+<% end %>
+
+<p>
+  <strong>System User:</strong> <%= @config.org_user_id %>
+</p>
+<p>
+  Add items below to link them to Gather and sync permissions. Shared drives listed below are shown on the Gather
+  <%= link_to("Google Drive browse page", gdrive_home_path) %> for users that have permission.
+  Folders and files will not be accessible via the browse page unless their parent shared drive
+  is accessible.
+</p>
+
+<table class="full-width">
+  <% %i[drive folder file].each do |kind| items = @items_by_kind[kind] %>
+    <tr class="heading">
+      <td colspan="4">
+        <h3><%= t("gdrive.item_kinds.#{kind}", count: 2) %></h3>
+      </td>
+    </tr>
+    <% if items.any? %>
+      <tr>
+        <th>Name</th>
+        <th>Status</th>
+        <th>Groups & Permissions</th>
+        <th></th>
+      </tr>
+      <% items.each do |item| %>
+        <tr>
+          <td><%= item.name.presence || "[#{item.external_id.truncate(32)}]" %></td>
+          <td>
+            <% if item.error_type %>
+              <%= icon_tag("times-circle", class: "status bad") %> &nbsp;
+              <%= t("gdrive.item_error_types.#{item.error_type}") %>
+            <% else %>
+              <%= icon_tag("check-circle", class: "status good") %>
+            <% end %>
+          </td>
+          <td>
+            <% item.item_groups.each do |item_group| %>
+              <div>
+                <%= link_to(item_group.group.name, item_group.group) %>:
+                <%= t("gdrive.access_levels.#{item_group.access_level}") %> (<%= t("gdrive.access_level_hints.#{item_group.access_level}") %>)&nbsp;
+                <%= link_to(icon_tag("times"), gdrive_item_group_path(item_group),
+                      method: :delete,
+                      data: {confirm: I18n.t("confirmations.gdrive/item_group.destroy")}) %>
+              </div>
+            <% end %>
+            <%= link_to(icon_tag("plus") << " Add Group", new_gdrive_item_group_path(item_id: item.id)) %>
+          </td>
+          <td>
+            <%= link_to(icon_tag("trash"), gdrive_item_path(item),
+                  method: :delete,
+                  data: {confirm: I18n.t("confirmations.gdrive/item.destroy")}) %>
+          </td>
+        </tr>
+      <% end %>
+    <% else %>
+      <tr class="heading">
+        <td colspan="4">
+          No <%= t("gdrive.item_kinds.#{kind}", count: 2).downcase %> linked to Gather.
+        </td>
+      </tr>
+    <% end %>
+  <% end %>
+</table>
+
+<footer id="local-footer" class="footer-links">
+  <% unless @authorization_error %>
+    <%= link_to("Revoke Authorization", gdrive_setup_auth_revoke_path, method: :delete,
+        data: {confirm: "Are you sure you want to revoke authorization? Nobody will be able " \
+          "to use Google Drive features for this community until authorization is re-established."}) %>
+  <% end %>
+</footer>

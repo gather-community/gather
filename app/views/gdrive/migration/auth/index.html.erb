@@ -1,3 +1,4 @@
+<%# THIS FILE IS NOT IN USE RIGHT NOW BUT MAY BE USEFUL LATER WHEN WE BUILD THE MIGRATION SETUP FLOW %>
 <% content_for(:title, "Connection To Google Drive") %>
 <% if @no_credentials %>
   <p>
@@ -13,7 +14,6 @@
   <p>
     <div data-controller="gdrive--root-picker"
       data-gdrive--root-picker-client-id-value="<%= @config.client_id %>"
-      data-gdrive--root-picker-api-key-value="<%= @config.api_key %>"
       data-gdrive--root-picker-access-token-value="<%= @access_token %>"
       data-gdrive--root-picker-save-folder-url-value="<%= gdrive_migration_auth_save_folder_url(host: Settings.url.host, community_id: current_community.id) %>"
       data-gdrive--root-picker-test-mode-value="<%= Rails.env.test? %>"
@@ -36,9 +36,6 @@
     </tr>
   </table>
   <br/>
-  <%= link_to("Proceed to Select Files",
-        gdrive_migration_file_selection_url(host: Settings.url.host, community_id: current_community.id),
-        class: "btn btn-primary") %>
 <% end %>
 
 <script src="https://apis.google.com/js/api.js"></script>

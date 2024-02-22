@@ -17,7 +17,7 @@ describe "work settings", js: true do
     select("Current & Future", from: "Default Signup Date Filter")
     click_button("Save")
 
-    expect(page).to have_success("Settings updated successfully.")
+    expect(page).to have_success_alert("Settings updated successfully.")
     expect(page).to have_select("Default Signup Date Filter", selected: "Current & Future")
   end
 end

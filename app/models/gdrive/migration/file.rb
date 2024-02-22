@@ -21,8 +21,13 @@ module GDrive
         mime_type == GDrive::FOLDER_MIME_TYPE
       end
 
-      def acted_on?
-        !pending?
+      # Whether the has already been sent to the new drive.
+      def migrated?
+        transferred? && copied?
+      end
+
+      def declined?
+        status == "declined"
       end
 
       def errored?

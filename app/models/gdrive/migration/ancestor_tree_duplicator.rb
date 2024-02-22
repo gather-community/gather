@@ -109,11 +109,13 @@ module GDrive
       private def find_folder_by_parent_id_and_name(parent_id, name)
         # This can only fail if our permissions are bad. So we let it bubble
         # up to the caller in that case.
+        parent_id = parent_id.gsub("'") { "\\'" }
+        name = name.gsub("'") { "\\'" }
         file_list = wrapper.list_files(
           q: "'#{parent_id}' in parents and " \
             "mimeType = '#{GDrive::FOLDER_MIME_TYPE}' and " \
             "trashed = false and " \
-            "name = '#{name.tr("'", "\\")}'",
+            "name = '#{name}'",
           fields: "files(id)",
           supports_all_drives: true,
           include_items_from_all_drives: true

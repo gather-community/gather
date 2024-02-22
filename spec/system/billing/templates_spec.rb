@@ -57,7 +57,7 @@ describe "billing templates", js: true do
     scenario "apply" do
       visit(billing_templates_path)
       click_link("Apply Templates")
-      expect_alert("select at least one")
+      expect(page).to have_warning_alert("select at least one")
 
       find("tr", text: "Apple").find("input[type=checkbox]").check
       find("tr", text: "Banana").find("input[type=checkbox]").check
@@ -69,7 +69,7 @@ describe "billing templates", js: true do
       expect(page).not_to have_content("Cumquat")
       click_button("Cancel")
 
-      expect(page).not_to have_success
+      expect(page).not_to have_success_alert
       expect(Billing::Transaction.count).to be_zero
       find("tr", text: "Apple").find("input[type=checkbox]").check
       find("tr", text: "Banana").find("input[type=checkbox]").check

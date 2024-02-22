@@ -16,7 +16,7 @@ describe "meals settings", js: true do
     fill_in("Default Capacity", with: 51)
     click_button("Save")
 
-    expect(page).to have_success("Settings updated successfully.")
+    expect(page).to have_success_alert("Settings updated successfully.")
     expect(page).to have_field("Default Capacity", with: "51")
   end
 end

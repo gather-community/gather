@@ -13,6 +13,7 @@ module GDrive
         ActsAsTenant.with_tenant(Cluster.find(cluster_id)) do
           self.consent_request = ConsentRequest.find(consent_request_id)
           self.operation = consent_request.operation
+
           main_config = MainConfig.find_by!(community_id: operation.community_id)
           self.main_wrapper = Wrapper.new(config: main_config, google_user_id: main_config.org_user_id)
           migration_config = consent_request.config
@@ -20,7 +21,7 @@ module GDrive
           self.ancestor_tree_duplicator = AncestorTreeDuplicator.new(wrapper: main_wrapper,
             operation: operation)
 
-          Rails.logger.info("Starting ingest job",
+          Rails.logger.info("IngestJob starting",
             consent_request_id: consent_request.id,
             file_ids: consent_request.ingest_file_ids,
             operation_id: operation.id)

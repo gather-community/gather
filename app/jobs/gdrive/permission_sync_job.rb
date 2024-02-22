@@ -31,8 +31,8 @@ module GDrive
     end
 
     def access_level_cmp(level_a, level_b)
-      index_a = ItemGroup::ACCESS_LEVELS.index(level_a) || -1
-      index_b = ItemGroup::ACCESS_LEVELS.index(level_b) || -1
+      index_a = ItemGroup::ACCESS_LEVELS.index(level_a&.to_sym) || -1
+      index_b = ItemGroup::ACCESS_LEVELS.index(level_b&.to_sym) || -1
       index_a <=> index_b
     end
 

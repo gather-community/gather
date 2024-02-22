@@ -20,37 +20,30 @@ describe GDrive::ItemPolicy do
     let(:record) { item }
 
     permissions :show? do
-      context "with feature flag on" do
-        before do
-          expect(FeatureFlag).to receive(:lookup).and_return(double(on?: true))
-        end
-
-        it "permits users in group1" do
-          expect(subject).to permit(in_user1, record)
-        end
-
-        it "permits users in group2" do
-          expect(subject).to permit(in_user2, record)
-        end
-
-        it "forbids admins not in group but from item community" do
-          expect(subject).not_to permit(cmty1_admin, record)
-        end
-
-        it "forbids admins not in group and not from item community" do
-          expect(subject).not_to permit(cmty2_admin, record)
-        end
-
-        it "forbids users not in either group" do
-          expect(subject).not_to permit(out_user, record)
-        end
+      it "permits users in group1" do
+        expect(subject).to permit(in_user1, record)
       end
 
-      context "with feature flag off" do
-        it "forbids users in group" do
-          expect(subject).not_to permit(in_user1, record)
-        end
+      it "permits users in group2" do
+        expect(subject).to permit(in_user2, record)
       end
+
+      it "forbids admins not in group but from item community" do
+        expect(subject).not_to permit(cmty1_admin, record)
+      end
+
+      it "forbids admins not in group and not from item community" do
+        expect(subject).not_to permit(cmty2_admin, record)
+      end
+
+      it "forbids users not in either group" do
+        expect(subject).not_to permit(out_user, record)
+      end
+    end
+
+    permissions :new?, :create?, :destroy? do
+      let(:admin) { cmty1_admin }
+      it_behaves_like "permits admins from community"
     end
   end
 
@@ -128,7 +121,7 @@ describe GDrive::ItemPolicy do
     subject { described_class.new(actor, GDrive::Item.new).permitted_attributes }
 
     it do
-      expect(subject).to match_array(%i[external_id group_id])
+      expect(subject).to match_array(%i[external_id kind])
     end
   end
 end

@@ -107,8 +107,9 @@ module GDrive
 
       def list_files_from_folder(folder_id)
         Rails.logger.info("Listing files from folder", folder_id: folder_id)
+        folder_id = folder_id.gsub("'") { "\\'" }
         list = wrapper.list_files(
-          q: "'#{scan_task.folder_id}' in parents and trashed = false",
+          q: "'#{folder_id}' in parents and trashed = false",
           fields: "files(#{FILE_FIELDS}),nextPageToken",
           order_by: "folder,name",
           include_items_from_all_drives: true,
@@ -302,10 +303,10 @@ module GDrive
       def process_existing_file(gdrive_file, migration_file)
         Rails.logger.info("Processing existing file", file_id: gdrive_file.id)
 
-        # If file has already been acted on, we don't care about any changes to it
+        # If file has already been migrated, we don't care about any changes to it
         # since the new file (if applicable) is considered to be the canonical copy.
-        if migration_file.acted_on?
-          Rails.logger.info("File has been acted on, skipping", file_id: gdrive_file.id, status: gdrive_file.status)
+        if migration_file.migrated?
+          Rails.logger.info("File has been migrated, skipping", file_id: gdrive_file.id, status: gdrive_file.status)
           return
         end
 

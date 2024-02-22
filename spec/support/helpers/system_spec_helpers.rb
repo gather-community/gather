@@ -96,7 +96,7 @@ module SystemSpecHelpers
       # If the opposite AM/PM button to what we want is visible, we have to click it to
       # change it to what we want.
       begin
-        first(".btn-primary", text: ampm == :pm ? "AM" : "PM")&.click
+        first(".btn-primary", text: (ampm == :pm) ? "AM" : "PM")&.click
       rescue Capybara::ExpectationNotMet # rubocop:disable Lint/HandleExceptions
       end
     end
@@ -121,27 +121,27 @@ module SystemSpecHelpers
   end
 
   def expect_success(pattern = /successfully/)
-    expect(page).to have_success(pattern)
+    expect(page).to have_success_alert(pattern)
   end
 
-  def have_success(pattern = /successfully/)
+  def have_success_alert(pattern = /successfully/)
     have_css("div.alert-success", text: pattern)
   end
 
-  def have_notice(pattern)
+  def have_info_alert(pattern)
     have_css("div.alert-info", text: pattern)
+  end
+
+  def have_warning_alert(pattern)
+    have_css("div.alert-warning", text: pattern)
+  end
+
+  def have_danger_alert(pattern)
+    have_css("div.alert-danger", text: pattern)
   end
 
   def have_loading_indicator
     have_css("#glb-load-ind")
-  end
-
-  def expect_alert(pattern)
-    expect(page).to have_css("div.alert-warning", text: pattern)
-  end
-
-  def expect_error(pattern)
-    expect(page).to have_css("div.alert-danger", text: pattern)
   end
 
   def expect_validation_error(text = nil)
@@ -151,7 +151,7 @@ module SystemSpecHelpers
       expect(page).to have_css("div.alert-danger", text: /Please review/)
     end
   end
-  alias expect_validation_message expect_validation_error
+  alias_method :expect_validation_message, :expect_validation_error
 
   def expect_image_upload(state:, path: nil)
     within(".dropzone-wrapper") do

@@ -16,7 +16,7 @@ describe "meal status manipulation", js: true do
     scenario do
       visit(meal_path(meal))
       accept_confirm { click_link("Reopen") }
-      expect(page).to have_success("Meal reopened successfully")
+      expect(page).to have_success_alert("Meal reopened successfully")
     end
   end
 

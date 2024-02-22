@@ -209,7 +209,7 @@ describe "gdrive browse", js: true do
         scenario "it shows message" do
           visit(gdrive_home_path)
           expect(page).to have_content("Your community does not have any linked Shared Drives. " \
-            "Please contact Gather support")
+            "Please go to the settings page to link a drive")
         end
       end
 

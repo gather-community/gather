@@ -73,6 +73,21 @@ describe "gdrive auth callback" do
     end
   end
 
+  context "when client_error is returned from /token" do
+    let!(:config) { create(:gdrive_main_config, org_user_id: "foo@gmail.com") }
+
+    it "redirects with error" do
+      with_env("STUB_SESSION_G_XSRF_TOKEN" => "P5JPu/n1QyYvkdEr3zgyHQ==") do
+        VCR.use_cassette("gdrive/setup/callback/client_error") do
+          get("/gdrive/setup/auth/callback", params: callback_payload)
+          expect(response).to redirect_to(redirect_url)
+          expect(flash[:error]).to eq("There is a problem with your Google Drive connection." \
+            "Please contact Gather support.")
+        end
+      end
+    end
+  end
+
   context "when oauth flow is cancelled by user" do
     let(:callback_payload) do
       {

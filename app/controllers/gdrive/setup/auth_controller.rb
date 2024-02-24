@@ -30,17 +30,24 @@ module GDrive
         config = MainConfig.find_by!(community: current_community)
         wrapper = Wrapper.new(config: config, google_user_id: config.org_user_id,
           callback_url: gdrive_setup_auth_callback_url(host: Settings.url.host))
-        credentials = fetch_credentials_from_callback_request(wrapper, request)
-        authenticated_google_id = fetch_email_of_authenticated_account(credentials)
 
-        if config.org_user_id != authenticated_google_id
-          flash[:error] = "You signed into Google with #{authenticated_google_id}. " \
-            "Please sign in with #{config.org_user_id} instead."
-          redirect_to(gdrive_home_url)
-          return
+        begin
+          # If either of these calls error with AuthorizationError,
+          # it must be a problem with the client_id/secret
+          credentials = fetch_credentials_from_callback_request(wrapper, request)
+          authenticated_google_id = fetch_email_of_authenticated_account(credentials)
+
+          if config.org_user_id != authenticated_google_id
+            flash[:error] = "You signed into Google with #{authenticated_google_id}. " \
+              "Please sign in with #{config.org_user_id} instead."
+            redirect_to(gdrive_home_url)
+            return
+          end
+          wrapper.store_credentials(credentials)
+        rescue Signet::AuthorizationError
+          flash[:error] = "There is a problem with your Google Drive connection." \
+            "Please contact Gather support."
         end
-
-        wrapper.store_credentials(credentials)
         redirect_to(gdrive_home_url)
       end
 

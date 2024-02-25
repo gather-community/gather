@@ -4,7 +4,7 @@ module GDrive
   module Migration
     module Dashboard
       class FilesController < ApplicationController
-        before_action -> { nav_context(:files, :gdrive, :migration, :dashboard, :files) }
+        before_action -> { nav_context(:wiki, :gdrive, :migration, :dashboard, :files) }
 
         def index
           @main_config = MainConfig.find_by(community: current_community)
@@ -16,7 +16,7 @@ module GDrive
           @stats = Stats.new(operation: @operation)
           prepare_lenses({"gdrive/migration/owner": {owners: @stats.owners}}, :"gdrive/migration/status")
 
-          @files = @operation.files.order(modified_at: :desc).page(params[:page]).per(3)
+          @files = @operation.files.order(modified_at: :desc).page(params[:page]).per(50)
           @files = @files.owned_by(lenses[:owner].selection) if lenses[:owner].active?
           @files = @files.with_status(lenses[:status].selection) if lenses[:status].active?
 

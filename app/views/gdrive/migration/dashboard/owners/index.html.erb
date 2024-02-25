@@ -56,18 +56,21 @@
         <td><%= number_with_delimiter(@stats.by_owner_and_status[[owner, "transferred"]]) %></td>
         <td><%= number_with_delimiter(@stats.by_owner_and_status[[owner, "copied"]]) %></td>
         <td><%= number_with_delimiter(@stats.by_owner_and_status[[owner, "ignored"]]) %></td>
-        <td>
-          <%= I18n.l(@stats.consent_requests_by_owner[owner].created_at, format: :day_mo_yr_no_time) %>
-        </td>
-        <td>
-          <% if (consent_request = @stats.consent_requests_by_owner[owner]) %>
+        <% if (consent_request = @stats.consent_requests_by_owner[owner]) %>
+          <td>
+            <%= I18n.l(consent_request.created_at, format: :day_mo_yr_no_time) %>
+          </td>
+          <td>
             <% if consent_request.pending? %>
               <%= link_to(I18n.t("gdrive.consent_request_statuses.#{consent_request.status}"), gdrive_migration_consent_url(token: consent_request.token)) %>
             <% else %>
               <%= I18n.t("gdrive.consent_request_statuses.#{consent_request.status}") %>
             <% end %>
-          <% end %>
-        </td>
+          </td>
+        <% else %>
+          <td></td>
+          <td></td>
+        <% end %>
       </tr>
     <% end %>
   </table>

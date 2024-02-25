@@ -151,7 +151,10 @@ module GDrive
 
           # If drive_id is present, it means this is a changes scan and we've pulled in
           # a change to a Shared Drive item, which we don't care about.
-          next if change.file.drive_id.present?
+          if change.file.drive_id.present?
+            Rails.logger.info("Received change with drive_id, ignoring", drive_id: change.file.drive_id)
+            next
+          end
 
           gdrive_files << change.file
         end
@@ -161,6 +164,14 @@ module GDrive
       def process_file(gdrive_file)
         Rails.logger.info("Processing item", id: gdrive_file.id, name: gdrive_file.name,
           type: gdrive_file.mime_type, owner: gdrive_file.owners[0].email_address)
+
+        # Sometimes a changes batch will include the src folder, which is redundant.
+        # We should never get to this point in the full scan with the gdrive_file as the src_folder either.
+        if gdrive_file.id == operation.src_folder_id
+          Rails.logger.info("Item is operation src folder, skipping")
+          return
+        end
+
         scan.increment!(:scanned_file_count)
 
         if gdrive_file.mime_type == GDrive::FOLDER_MIME_TYPE

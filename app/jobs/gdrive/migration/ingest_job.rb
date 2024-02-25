@@ -70,6 +70,9 @@ module GDrive
             migration_file = build_new_migration_file(file_id)
           end
 
+          # If still nil, it must be an invalid file so we skip.
+          next if migration_file.nil?
+
           begin
             # This could fail if
             # 1. the folder map for migration_file.parent_id is missing or invalid AND

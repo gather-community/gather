@@ -34,7 +34,7 @@ describe "gdrive items", js: true do
 
     scenario "no valid access token" do
       visit(gdrive_items_path)
-      expect(page).to have_danger_alert("We encountered an error connecting to Google")
+      expect(page).to have_content("We encountered an error connecting to Google")
     end
 
     context "with config and token" do

@@ -21,7 +21,6 @@ module GDrive
             end
           else
             service.get_file(item.external_id, fields: "name,mimeType,capabilities(canShare)", supports_all_drives: true) do |result, error|
-              item.kind = (result.mime_type == GDrive::FOLDER_MIME_TYPE) ? "folder" : "file"
               process_item(item, result, error)
             end
           end
@@ -35,11 +34,16 @@ module GDrive
       if error
         Rails.logger.error("Error accessing item", item_id: item.id, error: error.to_s)
         item.update!(error_type: "inaccessible")
-      elsif !result.capabilities.can_share
-        item.update!(name: result.name, error_type: "not_shareable")
-      else
-        item.update!(name: result.name, error_type: nil)
+        return
       end
+
+      # Drives use a separate API endpoint so if the type were wrong it would have errored above.
+      unless item.drive?
+        item.kind = (result.mime_type == GDrive::FOLDER_MIME_TYPE) ? "folder" : "file"
+      end
+      item.name = result.name
+      item.error_type = result.capabilities.can_share ? nil : "not_shareable"
+      item.save!
     end
   end
 end

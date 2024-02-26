@@ -46,6 +46,12 @@
     No files found.
   </div>
 <% else %>
+  <% if @migration_notice_old_location %>
+    <div class="synopsis">
+       Looking for something? Files are currently being migrated to this new community-owned drive. If you can't find something, try the <%= link_to("old location", @migration_notice_old_location) %>.
+    </div>
+  <% end %>
+
   <% if @ancestors_decorator.any? %>
     <div class="breadcrumbs">
       <%= link_to(icon_tag("home"), gdrive_home_path) %><span class="divider">></span

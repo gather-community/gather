@@ -59,20 +59,24 @@ module GDrive
         # Drive accessed explicitly by ID
         if params[:drive] && params[:item_id]
           validate_gdrive_id(params[:item_id])
-          return render_not_found unless can_read_drive?(params[:item_id])
-          ancestors = find_ancestors(wrapper: wrapper, drive_id: params[:item_id],
+          drive_id = params[:item_id]
+          return render_not_found unless can_read_drive?(drive_id)
+          ancestors = find_ancestors(wrapper: wrapper, drive_id: drive_id,
             multiple_drives: multiple_drives)
-          @file_list = list_files(wrapper, params[:item_id])
-          @browse_decorator.item_url = "https://drive.google.com/drive/folders/#{params[:item_id]}"
+          @file_list = list_files(wrapper, drive_id)
+          @browse_decorator.item_url = "https://drive.google.com/drive/folders/#{drive_id}"
+          prep_migration_notice_if_applicable(drive_id)
 
         # Folder accessed explicitly by ID
         elsif params[:item_id]
           validate_gdrive_id(params[:item_id])
           ancestors = find_ancestors(wrapper: wrapper, folder_id: params[:item_id],
             multiple_drives: multiple_drives)
-          return render_not_found unless can_read_drive?(ancestors[-1].drive_id)
+          drive_id = ancestors[-1].drive_id
+          return render_not_found unless can_read_drive?(drive_id)
           @file_list = list_files(wrapper, params[:item_id])
           @browse_decorator.item_url = "https://drive.google.com/drive/folders/#{params[:item_id]}"
+          prep_migration_notice_if_applicable(drive_id)
 
         # No ID given; list all accessible drives
         else
@@ -83,8 +87,10 @@ module GDrive
           unless multiple_drives
             # At this point there must be exactly one shared drive.
             # If there is only one drive, we don't need to show it as ancestor.
-            @file_list = list_files(wrapper, @drives[0].external_id)
-            @browse_decorator.item_url = "https://drive.google.com/drive/folders/#{@drives[0].external_id}"
+            drive_id = @drives[0].external_id
+            @file_list = list_files(wrapper, drive_id)
+            @browse_decorator.item_url = "https://drive.google.com/drive/folders/#{drive_id}"
+            prep_migration_notice_if_applicable(drive_id)
           end
         end
         @ancestors_decorator = AncestorsDecorator.new(ancestors)
@@ -133,6 +139,12 @@ module GDrive
       # We add it as an ancestor if we are in multiple drive mode.
       ancestors.unshift(fetch_drive(wrapper, ancestor_id)) if multiple_drives
       ancestors
+    end
+
+    def prep_migration_notice_if_applicable(drive_id)
+      if (operation = Migration::Operation.in_community(current_community).find_by(dest_folder_id: drive_id))
+        @migration_notice_old_location = "https://drive.google.com/drive/folders/#{operation.src_folder_id}"
+      end
     end
 
     def fetch_drive(wrapper, drive_id)

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_02_26_130425) do
+ActiveRecord::Schema[7.0].define(version: 2024_03_10_141125) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -315,6 +315,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_26_130425) do
     t.integer "file_count", null: false
     t.string "google_email", limit: 255, null: false
     t.jsonb "ingest_file_ids"
+    t.integer "ingest_progress"
     t.datetime "ingest_requested_at"
     t.string "ingest_status"
     t.bigint "operation_id", null: false

@@ -131,6 +131,8 @@ module GDrive
 
           # This will also save the migration_file if it was an unpersisted one.
           migration_file.update!(status: "transferred")
+
+          consent_request.increment(:ingest_progress)
         end
       end
 

@@ -65,11 +65,7 @@ describe GDrive::Migration::IngestJob do
     allow(described_class).to receive(:random_request_id).and_return(request_id)
 
     # For the first run, set file_b_1 to be ingested, which will create folders B and A
-    consent_request.update!(
-      ingest_requested_at: Time.current,
-      ingest_file_ids: [file_b_1.external_id],
-      ingest_status: "new"
-    )
+    consent_request.setup_ingest([file_b_1.external_id])
   end
 
   describe "happy path" do
@@ -109,6 +105,7 @@ describe GDrive::Migration::IngestJob do
         consent_request.reload
 
         expect(consent_request).to be_ingest_done
+        expect(consent_request.ingest_progress).to eq(1)
         expect(consent_request).to be_in_progress
 
         # We ingested one file so there should be 3 - 1 = 2 left now
@@ -123,16 +120,13 @@ describe GDrive::Migration::IngestJob do
         # - file_root_1, which demonstrates multiple ingestions per job
         #
         # These are also the last files for the consenting user so we should mark the request done.
-        consent_request.update!(
-          ingest_requested_at: Time.current,
-          ingest_file_ids: [file_c_1.external_id, file_root_1.external_id],
-          ingest_status: "new"
-        )
+        consent_request.setup_ingest([file_c_1.external_id, file_root_1.external_id])
         described_class.perform_now(cluster_id: Defaults.cluster.id,
           consent_request_id: consent_request.id)
 
         consent_request.reload
         expect(consent_request).to be_ingest_done
+        expect(consent_request.ingest_progress).to eq(2)
         expect(consent_request).to be_done
         expect(consent_request.file_count).to eq(0)
         file_c_1.reload

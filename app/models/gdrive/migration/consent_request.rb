@@ -27,8 +27,17 @@ module GDrive
         status == "opted_out"
       end
 
+      def setup_ingest(file_ids)
+        update!(
+          ingest_requested_at: Time.current,
+          ingest_file_ids: file_ids,
+          ingest_status: "new",
+          ingest_progress: 0
+        )
+      end
+
       def clear_ingest
-        update!(ingest_requested_at: nil, ingest_file_ids: nil, ingest_status: nil)
+        update!(ingest_requested_at: nil, ingest_file_ids: nil, ingest_status: nil, ingest_progress: nil)
       end
 
       def ingest_done?

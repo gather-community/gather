@@ -294,10 +294,16 @@ module GDrive
         Rails.logger.info("Processing new file", id: gdrive_file.id)
 
         if gdrive_file.trashed
-          Rails.logger.info("File is in trash, skipping", file_id: gdrive_file.id)
+          Rails.logger.info("File is in trash, skipping", file_id: gdrive_file.id, name: gdrive_file.name)
           return
         end
-        Rails.logger.info("File not found, creating", file_id: gdrive_file.id)
+
+        if gdrive_file.parents.nil?
+          Rails.logger.info("File has no parents, skipping", file_id: gdrive_file.id, name: gdrive_file.name)
+          return
+        end
+
+        Rails.logger.info("File not found, creating", file_id: gdrive_file.id, name: gdrive_file.name)
         operation.files.create!(
           external_id: gdrive_file.id,
           name: gdrive_file.name,

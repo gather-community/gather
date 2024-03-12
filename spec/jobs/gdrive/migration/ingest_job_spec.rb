@@ -65,11 +65,7 @@ describe GDrive::Migration::IngestJob do
     allow(described_class).to receive(:random_request_id).and_return(request_id)
 
     # For the first run, set file_b_1 to be ingested, which will create folders B and A
-    consent_request.update!(
-      ingest_requested_at: Time.current,
-      ingest_file_ids: [file_b_1.external_id],
-      ingest_status: "new"
-    )
+    consent_request.setup_ingest([file_b_1.external_id])
   end
 
   describe "happy path" do
@@ -109,6 +105,7 @@ describe GDrive::Migration::IngestJob do
         consent_request.reload
 
         expect(consent_request).to be_ingest_done
+        expect(consent_request.ingest_progress).to eq(1)
         expect(consent_request).to be_in_progress
 
         # We ingested one file so there should be 3 - 1 = 2 left now
@@ -123,16 +120,13 @@ describe GDrive::Migration::IngestJob do
         # - file_root_1, which demonstrates multiple ingestions per job
         #
         # These are also the last files for the consenting user so we should mark the request done.
-        consent_request.update!(
-          ingest_requested_at: Time.current,
-          ingest_file_ids: [file_c_1.external_id, file_root_1.external_id],
-          ingest_status: "new"
-        )
+        consent_request.setup_ingest([file_c_1.external_id, file_root_1.external_id])
         described_class.perform_now(cluster_id: Defaults.cluster.id,
           consent_request_id: consent_request.id)
 
         consent_request.reload
         expect(consent_request).to be_ingest_done
+        expect(consent_request.ingest_progress).to eq(2)
         expect(consent_request).to be_done
         expect(consent_request.file_count).to eq(0)
         file_c_1.reload
@@ -229,8 +223,59 @@ describe GDrive::Migration::IngestJob do
         file_b_1.reload
         expect(file_b_1).to be_errored
         expect(file_b_1.error_type).to eq("ancestor_inaccessible")
-        expect(file_b_1.error_message).to eq("Parent of folder #{file_b_1.parent_id}, " \
-          "one of file #{file_b_1.external_id}'s ancestors, is inaccessible")
+        expect(file_b_1.error_message).to eq("Parent of folder #{file_b_1.parent_id} is inaccessible")
+        expect(consent_request.reload.ingest_progress).to eq(1)
+        expect(consent_request.error_count).to eq(1)
+      end
+    end
+  end
+
+  # Before running this spec, move source Folder B to some other folder in your My Drive
+  # and ensure the folder is still shared with the workspace user.
+  describe "with max errors" do
+    let!(:folder_map_a) do
+      create(:gdrive_migration_folder_map, operation: operation, name: "Folder A",
+        src_id: "1PJwkZgkByPMcbkfzneq65Cx1CnDNMVR_", src_parent_id: operation.src_folder_id,
+        dest_id: "1REPQUYEGym1APlylgINdZFO1Lh85eDq4", dest_parent_id: operation.dest_folder_id)
+    end
+    let!(:file_b_1) do
+      create(:gdrive_migration_file, operation: operation, external_id: "1bGXLuClPL7w0GFB_rAga0duf5tFxkTIh_vZFbrOfW5U",
+        parent_id: "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV", owner: consenter_email)
+    end
+    let!(:file_b_2) do
+      create(:gdrive_migration_file, operation: operation, external_id: "1bGXLuClPL7w0GFB_rAga0duf5tFxkTIh_vZFbrOfW5W",
+        parent_id: "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV", owner: consenter_email)
+    end
+    let(:request_id) { "bbbcc008-8209-4078-ba44-be50f6a668f1" }
+
+    before do
+      stub_const("#{described_class.name}::MAX_ERRORS", 2)
+    end
+
+    it "should set ingest failed" do
+      VCR.use_cassette("gdrive/migration/ingest_job/multiple_errors") do
+        described_class.perform_now(cluster_id: Defaults.cluster.id,
+          consent_request_id: consent_request.id)
+        file_b_1.reload
+        expect(file_b_1).to be_errored
+        expect(file_b_1.error_type).to eq("ancestor_inaccessible")
+        expect(file_b_1.error_message).to eq("Parent of folder #{file_b_1.parent_id} is inaccessible")
+
+        consent_request.setup_ingest([file_b_2.external_id])
+        described_class.perform_now(cluster_id: Defaults.cluster.id,
+          consent_request_id: consent_request.id)
+
+        file_b_2.reload
+        expect(file_b_2).to be_errored
+        expect(file_b_2.error_type).to eq("ancestor_inaccessible")
+        expect(file_b_2.error_message).to eq("Parent of folder #{file_b_2.parent_id} is inaccessible")
+
+        consent_request.reload
+        expect(consent_request.ingest_progress).to eq(2)
+        expect(consent_request.error_count).to eq(2)
+        expect(consent_request.ingest_status).to eq("failed")
+        expect(consent_request.status).to eq("ingest_failed")
+        expect(consent_request.file_count).to eq(0)
       end
     end
   end
@@ -383,6 +428,102 @@ describe GDrive::Migration::IngestJob do
         expect(consent_request).to be_ingest_done
         expect(consent_request).to be_done
         expect(consent_request.file_count).to eq(0)
+      end
+    end
+  end
+
+  describe "error when moving file to temp drive" do
+    let!(:folder_map_a) do
+      create(:gdrive_migration_folder_map, operation: operation, name: "Folder A",
+        src_id: "1PJwkZgkByPMcbkfzneq65Cx1CnDNMVR_", src_parent_id: operation.src_folder_id,
+        dest_id: "1REPQUYEGym1APlylgINdZFO1Lh85eDq4", dest_parent_id: operation.dest_folder_id)
+    end
+    let!(:folder_map_b) do
+      create(:gdrive_migration_folder_map, operation: operation, name: "Folder B",
+        src_id: "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV", src_parent_id: folder_map_a.src_id,
+        dest_id: "1fGgtI-ynyMIzi7Tp2d8bwY542jrbmAnz", dest_parent_id: folder_map_a.dest_id)
+    end
+    let!(:folder_map_c) do
+      create(:gdrive_migration_folder_map, operation: operation, name: "Folder C",
+        src_id: "1yWXMPJnSpso__yXpopV_WZ-kBj39GJi-", src_parent_id: folder_map_a.src_id,
+        dest_id: "14huMaHzvNxvfxdoQPqm3fLVOT0I1oDk-", dest_parent_id: folder_map_a.dest_id)
+    end
+    let!(:file_b_1) do
+      create(:gdrive_migration_file, operation: operation, external_id: "11jdjwgwY0duK5kMMb8b97tuvCH8TC_aDtXvAXs7N2tU",
+        parent_id: folder_map_b.src_id, owner: consenter_email)
+    end
+    let!(:file_c_1) do
+      create(:gdrive_migration_file, operation: operation, external_id: "1obo1kO6zdxnBZE9DpCfjSQk9-tVUp8u_QKR9XtzmsSI",
+        parent_id: folder_map_c.src_id, owner: consenter_email)
+    end
+    let!(:file_root_1) do
+      create(:gdrive_migration_file, operation: operation, external_id: "1TYsGVe0Vro-wCIMG_sk4aIiko5PPM8N0c8KwN1eXkMY",
+        parent_id: operation.src_folder_id, owner: consenter_email)
+    end
+    let(:request_id) { "51e86502-b047-4c06-9a7c-e9fa35137858" }
+    subject(:job) { described_class.new(cluster_id: Defaults.cluster.id, consent_request_id: consent_request.id) }
+
+    it "should fail gracefully" do
+      VCR.use_cassette("gdrive/migration/ingest_job/client_error_moving_to_temp_drive") do
+        allow_any_instance_of(GDrive::Wrapper).to receive(:update_file) do
+          raise Google::Apis::ClientError.new("foo")
+        end
+
+        perform_job
+        file_b_1.reload
+        expect(file_b_1).to be_errored
+        expect(file_b_1.error_type).to eq("client_error_moving_to_temp_drive")
+        expect(file_b_1.error_message).to eq("foo")
+      end
+    end
+  end
+
+  describe "error when moving file to destination" do
+    let!(:folder_map_a) do
+      create(:gdrive_migration_folder_map, operation: operation, name: "Folder A",
+        src_id: "1PJwkZgkByPMcbkfzneq65Cx1CnDNMVR_", src_parent_id: operation.src_folder_id,
+        dest_id: "1REPQUYEGym1APlylgINdZFO1Lh85eDq4", dest_parent_id: operation.dest_folder_id)
+    end
+    let!(:folder_map_b) do
+      create(:gdrive_migration_folder_map, operation: operation, name: "Folder B",
+        src_id: "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV", src_parent_id: folder_map_a.src_id,
+        dest_id: "1fGgtI-ynyMIzi7Tp2d8bwY542jrbmAnz", dest_parent_id: folder_map_a.dest_id)
+    end
+    let!(:folder_map_c) do
+      create(:gdrive_migration_folder_map, operation: operation, name: "Folder C",
+        src_id: "1yWXMPJnSpso__yXpopV_WZ-kBj39GJi-", src_parent_id: folder_map_a.src_id,
+        dest_id: "14huMaHzvNxvfxdoQPqm3fLVOT0I1oDk-", dest_parent_id: folder_map_a.dest_id)
+    end
+    let!(:file_b_1) do
+      create(:gdrive_migration_file, operation: operation, external_id: "11jdjwgwY0duK5kMMb8b97tuvCH8TC_aDtXvAXs7N2tU",
+        parent_id: folder_map_b.src_id, owner: consenter_email)
+    end
+    let!(:file_c_1) do
+      create(:gdrive_migration_file, operation: operation, external_id: "1obo1kO6zdxnBZE9DpCfjSQk9-tVUp8u_QKR9XtzmsSI",
+        parent_id: folder_map_c.src_id, owner: consenter_email)
+    end
+    let!(:file_root_1) do
+      create(:gdrive_migration_file, operation: operation, external_id: "1TYsGVe0Vro-wCIMG_sk4aIiko5PPM8N0c8KwN1eXkMY",
+        parent_id: operation.src_folder_id, owner: consenter_email)
+    end
+    let(:request_id) { "51e86502-b047-4c06-9a7c-e9fa35137858" }
+    subject(:job) { described_class.new(cluster_id: Defaults.cluster.id, consent_request_id: consent_request.id) }
+
+    it "should fail gracefully" do
+      VCR.use_cassette("gdrive/migration/ingest_job/client_error_moving_to_destination") do
+        call_count = 0
+        allow_any_instance_of(GDrive::Wrapper).to receive(:update_file) do
+          if call_count == 1
+            raise Google::Apis::ClientError.new("foo")
+          end
+          call_count += 1
+        end
+
+        perform_job
+        file_b_1.reload
+        expect(file_b_1).to be_errored
+        expect(file_b_1.error_type).to eq("client_error_moving_to_destination")
+        expect(file_b_1.error_message).to eq("foo")
       end
     end
   end

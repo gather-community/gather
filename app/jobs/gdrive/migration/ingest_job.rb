@@ -6,6 +6,11 @@ module GDrive
     class IngestJob < BaseJob
       retry_on Google::Apis::ServerError
 
+      class IngestFailedError < StandardError
+      end
+
+      MAX_ERRORS = 5
+
       attr_accessor :consent_request, :operation, :main_wrapper, :migration_wrapper,
         :ancestor_tree_duplicator
 
@@ -31,6 +36,12 @@ module GDrive
           files_remaining = File.pending.owned_by(consent_request.google_email).count
           status = files_remaining.zero? ? "done" : "in_progress"
           consent_request.update!(status: status, ingest_status: "done", file_count: files_remaining)
+        rescue IngestFailedError
+          # This is raised in the error handling method in order to halt the ingestion
+          # and not overwrite the status. If we get this error, we don't need to update statuses,
+          # just the file count.
+          files_remaining = File.pending.owned_by(consent_request.google_email).count
+          consent_request.update!(file_count: files_remaining)
         end
       end
 
@@ -81,25 +92,10 @@ module GDrive
             # We need to handle these possibilities and fail gracefully.
             dest_parent_id = ancestor_tree_duplicator.ensure_tree(migration_file.parent_id)
           rescue AncestorTreeDuplicator::ParentFolderInaccessible => error
-            Rails.logger.error("Ancestor inaccessible", file_id: file_id, folder_id: error.folder_id)
-
-            # No need to set an error on an unpersisted File, b/c those ones are from files the user
-            # picked but we don't have records of, so we are just trying them but they may not be valid.
-            if migration_file.persisted?
-              migration_file.set_error(type: "ancestor_inaccessible",
-                message: "Parent of folder #{error.folder_id}, one of file #{file_id}'s ancestors, is inaccessible")
-            end
-
+            handle_file_error(migration_file, error, "ancestor_inaccessible")
             next
           rescue Google::Apis::ClientError => error
-            Rails.logger.error("Client error ensuring tree", file_id: file_id, message: error.to_s)
-
-            # No need to set an error on an unpersisted File, b/c those ones are from files the user
-            # picked but we don't have records of, so we are just trying them but they may not be valid.
-            if migration_file.persisted?
-              migration_file.set_error(type: "client_error_ensuring_tree", message: error.to_s)
-            end
-
+            handle_file_error(migration_file, error, "client_error_ensuring_tree")
             next
           end
 
@@ -110,27 +106,42 @@ module GDrive
 
           # Move the file to the temp drive by removing the old parent and adding the temp drive.
           # This transfers ownership.
-          # This could only fail if:
+          # We think this could only fail if:
           # - The temp drive got deleted, very unlikely.
           # - The file got deleted or moved or permissions changed between when the user
           #   picked it and when the job runs, very unlikely.
-          # So we let it bubble up and stop the job.
-          Rails.logger.info("Moving file to temp drive.", file_id: file_id)
-          migration_wrapper.update_file(file_id, add_parents: consent_request.temp_drive_id,
-            remove_parents: migration_file.parent_id, supports_all_drives: true)
+          # Still, there may be other failure modes we haven't thought of so we don't want to fail the job.
+          # So we log and persist the error and keep going.
+          begin
+            Rails.logger.info("Moving file to temp drive.", file_id: file_id)
+            migration_wrapper.update_file(file_id, add_parents: consent_request.temp_drive_id,
+              remove_parents: migration_file.parent_id, supports_all_drives: true)
+          rescue Google::Apis::ClientError => error
+            handle_file_error(migration_file, error, "client_error_moving_to_temp_drive", report: true)
+            next
+          end
 
           # Move the file again to its proper home. The migration_wrapper can't do this because
           # the consenting user may not have permission.
-          # This could fail if:
+          # We think this could only fail if:
           # - dest_parent got deleted. This is not likely because AncestorTreeDuplicator should have caught this
           #   and recreated it and updated the folder map, unless dest_parent is the destination root,
           #   which would mean something really weird is going on and we should let the client error bubble up.
-          Rails.logger.info("Moving file to final destination.", file_id: file_id, dest_parent_id: dest_parent_id)
-          main_wrapper.update_file(file_id, add_parents: dest_parent_id,
-            remove_parents: consent_request.temp_drive_id, supports_all_drives: true)
+          # Still, there may be other failure modes we haven't thought of so we don't want to fail the job.
+          # So we log and persist the error and keep going.
+          begin
+            Rails.logger.info("Moving file to final destination.", file_id: file_id, dest_parent_id: dest_parent_id)
+            main_wrapper.update_file(file_id, add_parents: dest_parent_id,
+              remove_parents: consent_request.temp_drive_id, supports_all_drives: true)
+          rescue Google::Apis::ClientError => error
+            handle_file_error(migration_file, error, "client_error_moving_to_destination", report: true)
+            next
+          end
 
           # This will also save the migration_file if it was an unpersisted one.
           migration_file.update!(status: "transferred")
+
+          consent_request.increment(:ingest_progress)
         end
       end
 
@@ -167,6 +178,44 @@ module GDrive
       rescue Google::Apis::ClientError => error
         Rails.logger.error("Client error looking up file", file_id: file_id, message: error.to_s)
         nil
+      end
+
+      def handle_file_error(migration_file, error, error_type, report: false)
+        consent_request.increment(:ingest_progress)
+        consent_request.increment(:error_count)
+
+        Rails.logger.error("Encountered #{error_type}",
+          file_id: migration_file.external_id,
+          message: error.to_s,
+          operation_id: operation.id,
+          consent_request_id: consent_request.id)
+
+        # No need to set an error on an unpersisted File, b/c those ones are from files the user
+        # picked but we don't have records of, so we are just trying them but they may not be valid.
+        if migration_file.persisted?
+          migration_file.set_error(type: error_type, message: error.to_s)
+        end
+
+        if report
+          Gather::ErrorReporter.instance.report(error, data: {
+            type: error_type,
+            operation_id: operation.id,
+            consent_request_id: consent_request.id,
+            file_id: migration_file.external_id
+          })
+        end
+
+        if consent_request.error_count >= MAX_ERRORS
+          Rails.logger.error("GDrive max ingest errors reached", count: MAX_ERRORS,
+            consent_request_id: consent_request.id)
+          Gather::ErrorReporter.instance.report(StandardError.new("GDrive max ingest errors reached"), data: {
+            count: MAX_ERRORS,
+            operation_id: operation.id,
+            consent_request_id: consent_request.id
+          })
+          consent_request.set_ingest_failed
+          raise IngestFailedError
+        end
       end
     end
   end

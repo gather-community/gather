@@ -87,11 +87,7 @@ module GDrive
       end
 
       def ingest
-        @consent_request.update!(
-          ingest_requested_at: Time.current,
-          ingest_file_ids: params[:file_ids],
-          ingest_status: "new"
-        )
+        @consent_request.setup_ingest(params[:file_ids])
         IngestJob.perform_later(
           cluster_id: current_cluster.id,
           consent_request_id: @consent_request.id
@@ -105,11 +101,16 @@ module GDrive
         org_user_id = main_config.org_user_id
 
         if @consent_request.ingest_overdue?
-          Gather::ErrorReporter.instance.report(StandardError.new("GDrive file ingest overdue"), data: {consent_request_id: @consent_request.id})
+          Gather::ErrorReporter.instance.report(StandardError.new("GDrive file ingest overdue"),
+            data: {consent_request_id: @consent_request.id})
           @consent_request.set_ingest_failed
         end
 
-        result = {status: @consent_request.ingest_status}
+        result = {
+          status: @consent_request.ingest_status,
+          progress: @consent_request.ingest_progress,
+          total: @consent_request.ingest_file_ids.size
+        }
         if @consent_request.ingest_done? || @consent_request.ingest_failed?
           result[:instructions] = render_to_string(partial: "instructions",
             locals: {consent_request: @consent_request, community: current_community, org_user_id: org_user_id})

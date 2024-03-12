@@ -17,7 +17,11 @@
 
   <div class="foreground-loader hiding" data-gdrive--file-picker-target="loader">
     <%= image_tag("glb-load-ind.gif") %>
-    <div>Processing files</div>
+    <div>Processing file
+      <span data-gdrive--file-picker-target="progress"></span>
+      of
+      <span data-gdrive--file-picker-target="total"></span>
+    </div>
   </div>
 </div>
 

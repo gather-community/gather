@@ -4,9 +4,12 @@ module GDrive
   module Migration
     class AncestorTreeDuplicator
       class ParentFolderInaccessible < StandardError
-        include ActiveModel::Model
-
         attr_accessor :folder_id
+
+        def initialize(message, folder_id:)
+          super(message)
+          self.folder_id = folder_id
+        end
       end
 
       include ActiveModel::Model
@@ -63,7 +66,8 @@ module GDrive
         # it's unrecoverable.
         if src_folder.parents.blank?
           Rails.logger.error("Source folder parent inaccessible", src_folder_id: src_folder_id)
-          raise ParentFolderInaccessible.new(folder_id: src_folder_id)
+          message = "Parent of folder #{src_folder_id} is inaccessible"
+          raise ParentFolderInaccessible.new(message, folder_id: src_folder_id)
         else
           src_parent_id = src_folder.parents[0]
           # Recurse to get the destination for the parent.

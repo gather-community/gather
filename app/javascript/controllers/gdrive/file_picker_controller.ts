@@ -14,7 +14,7 @@ export default class extends Controller<HTMLFormElement> {
     orgUserId: String,
   };
 
-  static targets = ["instructions", "loader"];
+  static targets = ["instructions", "loader", "progress", "total"];
 
   declare clientIdValue: string;
   declare accessTokenValue: string;
@@ -29,6 +29,8 @@ export default class extends Controller<HTMLFormElement> {
 
   declare readonly instructionsTarget: HTMLElement
   declare readonly loaderTarget: HTMLElement
+  declare readonly progressTarget: HTMLElement
+  declare readonly totalTarget: HTMLElement
 
   declare pollingInterval: number;
 
@@ -54,6 +56,7 @@ export default class extends Controller<HTMLFormElement> {
     view.setSelectFolderEnabled(false);
     view.setOwnedByMe(true);
     view.setMode(google.picker.DocsViewMode.LIST);
+    // @ts-ignore: Property 'setQuery' does not exist on type 'DocsView'. (Yes it does!)
     view.setQuery(`to:${this.orgUserIdValue}`);
 
     const picker = new google.picker.PickerBuilder()
@@ -75,6 +78,7 @@ export default class extends Controller<HTMLFormElement> {
         method: "PUT",
         body: {file_ids: data.docs.map((f) => f.id)}
       });
+      this.setProgress(0, data.docs.length);
       this.startPollingForIngestStatus();
     }
   }
@@ -95,6 +99,13 @@ export default class extends Controller<HTMLFormElement> {
       this.loaderTarget.style.display = 'none';
       this.instructionsTarget.innerHTML = result.instructions;
       this.instructionsTarget.style.display = '';
+    } else {
+      this.setProgress(result.progress, result.total);
     }
+  }
+
+  setProgress(progress: number, total: number) {
+    this.progressTarget.innerHTML = progress.toString();
+    this.totalTarget.innerHTML = total.toString();
   }
 }

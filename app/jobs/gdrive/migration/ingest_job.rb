@@ -141,7 +141,7 @@ module GDrive
           # This will also save the migration_file if it was an unpersisted one.
           migration_file.update!(status: "transferred")
 
-          consent_request.increment(:ingest_progress)
+          consent_request.increment!(:ingest_progress)
         end
       end
 
@@ -181,8 +181,8 @@ module GDrive
       end
 
       def handle_file_error(migration_file, error, error_type, report: false)
-        consent_request.increment(:ingest_progress)
-        consent_request.increment(:error_count)
+        consent_request.increment!(:ingest_progress)
+        consent_request.increment!(:error_count)
 
         Rails.logger.error("Encountered #{error_type}",
           file_id: migration_file.external_id,

@@ -105,7 +105,7 @@ export default class extends Controller<HTMLFormElement> {
   }
 
   setProgress(progress: number, total: number) {
-    this.progressTarget.innerHTML = progress.toString();
+    this.progressTarget.innerHTML = (progress + 1).toString();
     this.totalTarget.innerHTML = total.toString();
   }
 }

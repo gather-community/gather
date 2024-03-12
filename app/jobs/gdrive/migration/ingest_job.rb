@@ -6,6 +6,11 @@ module GDrive
     class IngestJob < BaseJob
       retry_on Google::Apis::ServerError
 
+      class IngestFailedError < StandardError
+      end
+
+      MAX_ERRORS = 5
+
       attr_accessor :consent_request, :operation, :main_wrapper, :migration_wrapper,
         :ancestor_tree_duplicator
 
@@ -31,6 +36,12 @@ module GDrive
           files_remaining = File.pending.owned_by(consent_request.google_email).count
           status = files_remaining.zero? ? "done" : "in_progress"
           consent_request.update!(status: status, ingest_status: "done", file_count: files_remaining)
+        rescue IngestFailedError
+          # This is raised in the error handling method in order to halt the ingestion
+          # and not overwrite the status. If we get this error, we don't need to update statuses,
+          # just the file count.
+          files_remaining = File.pending.owned_by(consent_request.google_email).count
+          consent_request.update!(file_count: files_remaining)
         end
       end
 
@@ -171,8 +182,13 @@ module GDrive
 
       def handle_file_error(migration_file, error, error_type, report: false)
         consent_request.increment(:ingest_progress)
+        consent_request.increment(:error_count)
 
-        Rails.logger.error("Encountered #{error_type}", file_id: migration_file.external_id, message: error.to_s)
+        Rails.logger.error("Encountered #{error_type}",
+          file_id: migration_file.external_id,
+          message: error.to_s,
+          operation_id: operation.id,
+          consent_request_id: consent_request.id)
 
         # No need to set an error on an unpersisted File, b/c those ones are from files the user
         # picked but we don't have records of, so we are just trying them but they may not be valid.
@@ -187,6 +203,18 @@ module GDrive
             consent_request_id: consent_request.id,
             file_id: migration_file.external_id
           })
+        end
+
+        if consent_request.error_count >= MAX_ERRORS
+          Rails.logger.error("GDrive max ingest errors reached", count: MAX_ERRORS,
+            consent_request_id: consent_request.id)
+          Gather::ErrorReporter.instance.report(StandardError.new("GDrive max ingest errors reached"), data: {
+            count: MAX_ERRORS,
+            operation_id: operation.id,
+            consent_request_id: consent_request.id
+          })
+          consent_request.set_ingest_failed
+          raise IngestFailedError
         end
       end
     end

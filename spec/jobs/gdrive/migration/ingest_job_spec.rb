@@ -225,6 +225,57 @@ describe GDrive::Migration::IngestJob do
         expect(file_b_1.error_type).to eq("ancestor_inaccessible")
         expect(file_b_1.error_message).to eq("Parent of folder #{file_b_1.parent_id} is inaccessible")
         expect(consent_request.reload.ingest_progress).to eq(1)
+        expect(consent_request.error_count).to eq(1)
+      end
+    end
+  end
+
+  # Before running this spec, move source Folder B to some other folder in your My Drive
+  # and ensure the folder is still shared with the workspace user.
+  describe "with max errors" do
+    let!(:folder_map_a) do
+      create(:gdrive_migration_folder_map, operation: operation, name: "Folder A",
+        src_id: "1PJwkZgkByPMcbkfzneq65Cx1CnDNMVR_", src_parent_id: operation.src_folder_id,
+        dest_id: "1REPQUYEGym1APlylgINdZFO1Lh85eDq4", dest_parent_id: operation.dest_folder_id)
+    end
+    let!(:file_b_1) do
+      create(:gdrive_migration_file, operation: operation, external_id: "1bGXLuClPL7w0GFB_rAga0duf5tFxkTIh_vZFbrOfW5U",
+        parent_id: "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV", owner: consenter_email)
+    end
+    let!(:file_b_2) do
+      create(:gdrive_migration_file, operation: operation, external_id: "1bGXLuClPL7w0GFB_rAga0duf5tFxkTIh_vZFbrOfW5W",
+        parent_id: "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV", owner: consenter_email)
+    end
+    let(:request_id) { "bbbcc008-8209-4078-ba44-be50f6a668f1" }
+
+    before do
+      stub_const("#{described_class.name}::MAX_ERRORS", 2)
+    end
+
+    it "should set ingest failed" do
+      VCR.use_cassette("gdrive/migration/ingest_job/multiple_errors") do
+        described_class.perform_now(cluster_id: Defaults.cluster.id,
+          consent_request_id: consent_request.id)
+        file_b_1.reload
+        expect(file_b_1).to be_errored
+        expect(file_b_1.error_type).to eq("ancestor_inaccessible")
+        expect(file_b_1.error_message).to eq("Parent of folder #{file_b_1.parent_id} is inaccessible")
+
+        consent_request.setup_ingest([file_b_2.external_id])
+        described_class.perform_now(cluster_id: Defaults.cluster.id,
+          consent_request_id: consent_request.id)
+
+        file_b_2.reload
+        expect(file_b_2).to be_errored
+        expect(file_b_2.error_type).to eq("ancestor_inaccessible")
+        expect(file_b_2.error_message).to eq("Parent of folder #{file_b_2.parent_id} is inaccessible")
+
+        consent_request.reload
+        expect(consent_request.ingest_progress).to eq(2)
+        expect(consent_request.error_count).to eq(2)
+        expect(consent_request.ingest_status).to eq("failed")
+        expect(consent_request.status).to eq("ingest_failed")
+        expect(consent_request.file_count).to eq(0)
       end
     end
   end

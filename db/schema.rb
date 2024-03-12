@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_03_10_144251) do
+ActiveRecord::Schema[7.0].define(version: 2024_03_12_120059) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -312,6 +312,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_10_144251) do
   create_table "gdrive_migration_consent_requests", force: :cascade do |t|
     t.bigint "cluster_id", null: false
     t.datetime "created_at", null: false
+    t.integer "error_count", default: 0, null: false
     t.integer "file_count", null: false
     t.string "google_email", limit: 255, null: false
     t.jsonb "ingest_file_ids"
@@ -328,7 +329,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_10_144251) do
     t.index ["operation_id"], name: "index_gdrive_migration_consent_requests_on_operation_id"
     t.check_constraint "char_length(opt_out_reason) <= 32767", name: "opt_out_reason_length"
     t.check_constraint "ingest_status::text = ANY (ARRAY['new'::character varying, 'in_progress'::character varying, 'done'::character varying, 'failed'::character varying]::text[])", name: "ingest_status_enum"
-    t.check_constraint "status::text = ANY (ARRAY['new'::character varying, 'in_progress'::character varying, 'done'::character varying, 'opted_out'::character varying]::text[])", name: "status_enum"
+    t.check_constraint "status::text = ANY (ARRAY['new'::character varying, 'in_progress'::character varying, 'done'::character varying, 'opted_out'::character varying, 'ingest_failed'::character varying]::text[])", name: "status_enum"
   end
 
   create_table "gdrive_migration_files", force: :cascade do |t|

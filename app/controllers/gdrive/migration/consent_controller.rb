@@ -101,7 +101,8 @@ module GDrive
         org_user_id = main_config.org_user_id
 
         if @consent_request.ingest_overdue?
-          Gather::ErrorReporter.instance.report(StandardError.new("GDrive file ingest overdue"), data: {consent_request_id: @consent_request.id})
+          Gather::ErrorReporter.instance.report(StandardError.new("GDrive file ingest overdue"),
+            data: {consent_request_id: @consent_request.id})
           @consent_request.set_ingest_failed
         end
 

@@ -41,7 +41,7 @@ module GDrive
 
         def load_operation
           @migration_config = MigrationConfig.find_by(community: current_community)
-          @operation = @migration_config.operations.active.order(created_at: :desc).first
+          @operation = @migration_config.active_operation
         end
       end
     end

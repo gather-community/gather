@@ -10,5 +10,9 @@ module GDrive
     def drive_api_scope
       "https://www.googleapis.com/auth/drive.file"
     end
+
+    def active_operation
+      operations.active.order(created_at: :desc).first
+    end
   end
 end

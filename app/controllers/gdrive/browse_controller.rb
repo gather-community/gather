@@ -16,7 +16,7 @@ module GDrive
           return
         end
 
-        @has_migration = MigrationConfig.find_by(community: current_community)&.operations&.any?
+        @operation = MigrationConfig.find_by(community: current_community)&.active_operation
 
         wrapper = Wrapper.new(config: @config, google_user_id: @config.org_user_id,
           callback_url: gdrive_setup_auth_callback_url(host: Settings.url.host))
@@ -64,8 +64,8 @@ module GDrive
           ancestors = find_ancestors(wrapper: wrapper, drive_id: drive_id,
             multiple_drives: multiple_drives)
           @file_list = list_files(wrapper, drive_id)
-          @browse_decorator.item_url = "https://drive.google.com/drive/folders/#{drive_id}"
-          prep_migration_notice_if_applicable(drive_id)
+          @browse_decorator.item_url = item_url(drive_id)
+          @browse_decorator.old_item_url = old_item_url_if_applicable(drive_id)
 
         # Folder accessed explicitly by ID
         elsif params[:item_id]
@@ -75,8 +75,8 @@ module GDrive
           drive_id = ancestors[-1].drive_id
           return render_not_found unless can_read_drive?(drive_id)
           @file_list = list_files(wrapper, params[:item_id])
-          @browse_decorator.item_url = "https://drive.google.com/drive/folders/#{params[:item_id]}"
-          prep_migration_notice_if_applicable(drive_id)
+          @browse_decorator.item_url = item_url(params[:item_id])
+          @browse_decorator.old_item_url = old_item_url_if_applicable(params[:item_id])
 
         # No ID given; list all accessible drives
         else
@@ -89,8 +89,8 @@ module GDrive
             # If there is only one drive, we don't need to show it as ancestor.
             drive_id = @drives[0].external_id
             @file_list = list_files(wrapper, drive_id)
-            @browse_decorator.item_url = "https://drive.google.com/drive/folders/#{drive_id}"
-            prep_migration_notice_if_applicable(drive_id)
+            @browse_decorator.item_url = item_url(drive_id)
+            @browse_decorator.old_item_url = old_item_url_if_applicable(drive_id)
           end
         end
         @ancestors_decorator = AncestorsDecorator.new(ancestors)
@@ -141,10 +141,23 @@ module GDrive
       ancestors
     end
 
-    def prep_migration_notice_if_applicable(drive_id)
-      if (operation = Migration::Operation.in_community(current_community).find_by(dest_folder_id: drive_id))
-        @migration_notice_old_location = "https://drive.google.com/drive/folders/#{operation.src_folder_id}"
+    def old_item_url_if_applicable(item_id)
+      if @operation
+        # If we're at the root folder of the operation, just return the old root.
+        # There won't be a matching folder map in that case.
+        if @operation.dest_folder_id == item_id
+          item_url(@operation.src_folder_id)
+        elsif (folder_map = @operation.folder_maps.find_by(dest_id: item_id))
+          item_url(folder_map.src_id)
+        else
+          # Default to the root of the operation if we can't find a folder map.
+          item_url(@operation.src_folder_id)
+        end
       end
+    end
+
+    def item_url(item_id)
+      "https://drive.google.com/drive/folders/#{item_id}"
     end
 
     def fetch_drive(wrapper, drive_id)

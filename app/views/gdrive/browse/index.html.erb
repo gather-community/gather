@@ -5,7 +5,7 @@
       <%= link_to(icon_tag("gear") << " Settings", gdrive_items_path,
             class: "btn btn-default") %>
     <% end %>
-    <% if @config && !@no_credentials && !@authorization_error && @has_migration %>
+    <% if @config && !@no_credentials && !@authorization_error && @operation %>
       <%= link_to(icon_tag("truck") << " Migration", gdrive_migration_dashboard_home_path,
             class: "btn btn-default") %>
     <% end %>
@@ -46,9 +46,10 @@
     No files found.
   </div>
 <% else %>
-  <% if @migration_notice_old_location %>
+  <% if @browse_decorator.old_item_url %>
     <div class="synopsis">
-       Looking for something? Files are currently being migrated to this new community-owned drive. If you can't find something, try the <%= link_to("old location", @migration_notice_old_location) %>.
+       Looking for something? Files are currently being migrated to this new community-owned drive.
+       If you can't find something, try the <%= link_to("old location", @browse_decorator.old_item_url) %>.
     </div>
   <% end %>
 

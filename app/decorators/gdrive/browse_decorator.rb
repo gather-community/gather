@@ -2,7 +2,7 @@
 
 module GDrive
   class BrowseDecorator < ApplicationDecorator
-    attr_accessor :item_url
+    attr_accessor :item_url, :old_item_url
 
     def initialize
     end

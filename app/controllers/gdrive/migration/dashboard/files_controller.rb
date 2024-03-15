@@ -11,7 +11,7 @@ module GDrive
           authorize(current_community, :setup?, policy_class: SetupPolicy)
           skip_policy_scope
           @migration_config = MigrationConfig.find_by(community: current_community)
-          @operation = @migration_config.operations.active.order(created_at: :desc).first
+          @operation = @migration_config.active_operation
           @latest_scan = @operation.scans.full.order(created_at: :desc).first
           @stats = Stats.new(operation: @operation)
           prepare_lenses({"gdrive/migration/owner": {owners: @stats.owners}}, :"gdrive/migration/status")

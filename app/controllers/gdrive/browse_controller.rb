@@ -65,7 +65,7 @@ module GDrive
             multiple_drives: multiple_drives)
           @file_list = list_files(wrapper, drive_id)
           @browse_decorator.item_url = item_url(drive_id)
-          @browse_decorator.old_item_url = old_item_url_if_applicable(drive_id)
+          @browse_decorator.old_item_url = old_item_url_if_applicable(drive_id, drive_id)
 
         # Folder accessed explicitly by ID
         elsif params[:item_id]
@@ -76,7 +76,7 @@ module GDrive
           return render_not_found unless can_read_drive?(drive_id)
           @file_list = list_files(wrapper, params[:item_id])
           @browse_decorator.item_url = item_url(params[:item_id])
-          @browse_decorator.old_item_url = old_item_url_if_applicable(params[:item_id])
+          @browse_decorator.old_item_url = old_item_url_if_applicable(drive_id, params[:item_id])
 
         # No ID given; list all accessible drives
         else
@@ -90,7 +90,7 @@ module GDrive
             drive_id = @drives[0].external_id
             @file_list = list_files(wrapper, drive_id)
             @browse_decorator.item_url = item_url(drive_id)
-            @browse_decorator.old_item_url = old_item_url_if_applicable(drive_id)
+            @browse_decorator.old_item_url = old_item_url_if_applicable(drive_id, drive_id)
           end
         end
         @ancestors_decorator = AncestorsDecorator.new(ancestors)
@@ -141,8 +141,8 @@ module GDrive
       ancestors
     end
 
-    def old_item_url_if_applicable(item_id)
-      if @operation
+    def old_item_url_if_applicable(drive_id, item_id)
+      if @operation&.dest_folder_id == drive_id
         # If we're at the root folder of the operation, just return the old root.
         # There won't be a matching folder map in that case.
         if @operation.dest_folder_id == item_id

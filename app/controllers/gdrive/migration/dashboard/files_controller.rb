@@ -4,7 +4,7 @@ module GDrive
   module Migration
     module Dashboard
       class FilesController < ApplicationController
-        before_action -> { nav_context(:files, :gdrive, :migration, :dashboard, :files) }
+        before_action -> { nav_context(:wiki, :gdrive, :migration, :dashboard, :files) }
 
         def index
           @main_config = MainConfig.find_by(community: current_community)

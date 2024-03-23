@@ -4,7 +4,7 @@ module GDrive
   module Migration
     module Dashboard
       class StatusController < ApplicationController
-        before_action -> { nav_context(:files, :gdrive, :migration, :dashboard, :status) }
+        before_action -> { nav_context(:wiki, :gdrive, :migration, :dashboard, :status) }
 
         def show
           authorize(current_community, :setup?, policy_class: SetupPolicy)

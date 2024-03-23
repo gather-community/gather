@@ -2,7 +2,7 @@
 
 module GDrive
   class BrowseController < ApplicationController
-    before_action -> { nav_context(:files, :gdrive) }
+    before_action -> { nav_context(:wiki, :gdrive) }
 
     def index
       @browse_decorator = BrowseDecorator.new

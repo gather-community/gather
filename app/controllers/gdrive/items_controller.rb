@@ -4,7 +4,7 @@ module GDrive
   class ItemsController < ApplicationController
     include Destructible
 
-    before_action -> { nav_context(:files, :gdrive) }
+    before_action -> { nav_context(:wiki, :gdrive) }
     before_action :load_config
 
     helper_method :sample_item

@@ -31,8 +31,8 @@ en:
       protocols: "Protocols"
     wiki:
       _self: "Wiki"
-    files:
-      _self: "Files"
+      wiki:
+        _self: "Wiki"
       gdrive:
         _self: "Google Drive"
         migration:

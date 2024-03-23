@@ -11,7 +11,7 @@ module GDrive
     class AuthController < ApplicationController
       USERINFO_URL = "https://www.googleapis.com/oauth2/v2/userinfo?access_token="
 
-      before_action -> { nav_context(:files, :gdrive, :setup, :auth) }
+      before_action -> { nav_context(:wiki, :gdrive, :setup, :auth) }
 
       # We can't use a subdomain on this page due to Google API restrictions.
       prepend_before_action :set_current_community_from_callback_state, only: :callback

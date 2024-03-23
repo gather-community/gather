@@ -4,7 +4,7 @@ module GDrive
   class ItemGroupsController < ApplicationController
     include Destructible
 
-    before_action -> { nav_context(:files, :gdrive) }
+    before_action -> { nav_context(:wiki, :gdrive) }
 
     def new
       @item = Item.find(params[:item_id])

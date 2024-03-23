@@ -7,7 +7,7 @@ module Gather
     def report(error, env: nil, data: nil)
       if Settings.error_reporting == "sentry" && Rails.env.production?
         Sentry.with_scope do |scope|
-          scope.set_context("Gather", env: env, data: data)
+          scope.set_context("Gather", data.merge(request_env: env))
           Sentry.capture_exception(error)
         end
       elsif Settings.error_reporting == "email"

@@ -8,7 +8,7 @@ set :pty, true
 set :repo_url, "git@github.com:sassafrastech/gather.git"
 set :linked_files, fetch(:linked_files, []).push("config/database.yml")
 set :linked_dirs, fetch(:linked_dirs, []).push("log", "tmp/pids", "tmp/cache", "tmp/sockets",
-                                               "vendor/bundle", "storage")
+  "vendor/bundle", "storage")
 set :whenever_identifier, -> { "#{fetch(:application)}_#{fetch(:stage)}" }
 
 # Defining a custom delayed job restart task because we manage it with systemctl.

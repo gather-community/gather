@@ -35,6 +35,7 @@ en:
       done: "Done"
       opted_out: "Opted out"
       abandoned: "Abandoned"
+      ingest_failed: "Ingest failed"
 
     migration:
       errors:

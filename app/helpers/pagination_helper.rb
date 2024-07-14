@@ -12,6 +12,7 @@ module PaginationHelper
   end
 
   def gather_page_entries_info(collection)
+    return "" if collection[0].nil?
     content_tag(:div, class: "page-entries-info") do
       I18n.t("pagination.page_entries_info.#{collection[0].model_name.i18n_key}",
         first: number_with_delimiter(collection.offset_value + 1),

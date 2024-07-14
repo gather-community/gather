@@ -105,5 +105,17 @@ describe Calendars::Rules::MaxDaysPerYearRule do
           "per year and you have already booked 8 days"])
       end
     end
+
+    context "with event with no creator" do
+      let(:event) { Calendars::Event.new(creator: nil, starts_at: "2016-01-30 6:00pm") }
+      let(:rule) do
+        described_class.new(value: 9, calendars: nil, kinds: nil, community: Defaults.community)
+      end
+
+      it "should return true" do
+        event.ends_at = Time.zone.parse("2016-01-31 9:00pm")
+        expect(rule.check(event)).to be(true)
+      end
+    end
   end
 end

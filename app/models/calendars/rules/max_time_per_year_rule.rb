@@ -5,6 +5,9 @@ module Calendars
     # Rule for limiting time reserved per year. Abstract class.
     class MaxTimePerYearRule < Rule
       def check(event)
+        # If there is no creator, which is allowed on meal events, we can't calcuate time used.
+        return true if event.creator.nil?
+
         booked = booked_time_for_year(event, unit)
         if booked + event.send(unit) > value
           msg = I18n.t("calendars/protocol.exceeded_time",

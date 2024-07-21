@@ -30,6 +30,8 @@ module GDrive
     attr_accessor :user_id, :user, :permissions_by_item_id
 
     def handle_user_with_lock(user_id)
+      Rails.logger.info("Syncing user permissions", user_id: user_id)
+
       # Use find_by because the user may not exist anymore.
       self.user = User.find_by(id: user_id)
 
@@ -43,9 +45,13 @@ module GDrive
       # User may have been deleted between when the job was enqueued and when it was run.
       if user.present? && user.active? && user.google_email.present?
         group_ids = Groups::Group.with_user(user).active.pluck(:id)
-        ItemGroup.where(group_id: group_ids).each do |item_group|
+        ItemGroup.includes(:group).where(group_id: group_ids).each do |item_group|
+          Rails.logger.info("Processing permissions for group", group_id: item_group.group_id,
+            group_name: item_group.group.name, item_id: item_group.item_id)
           process_permissions_for_item_group(item_group)
         end
+      else
+        Rails.logger.info("User is not present, inactive, or has no google_email")
       end
 
       # We sort by persisted b/c we want to ensure we delete before we create.
@@ -59,11 +65,15 @@ module GDrive
     def process_permissions_for_item_group(item_group)
       permission = permissions_by_item_id[item_group.item_id]
       if permission.present?
+        Rails.logger.info("Existing permission", item_external_id: permission.item_external_id,
+          permission_id: permission.external_id, access_level: permission.access_level)
         permission.google_email = user.google_email
         if access_level_cmp(item_group.access_level, permission.access_level) == 1
+          Rails.logger.info("Setting higher access level", new_access_level: item_group.access_level)
           permission.access_level = item_group.access_level
         end
       else
+        Rails.logger.info("No existing permission, building")
         permissions_by_item_id[user.id] = build_synced_permission(user, item_group.item,
           item_group.access_level)
       end

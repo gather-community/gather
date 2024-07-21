@@ -37,15 +37,26 @@ module GDrive
     end
 
     def apply_permission_changes(permission)
+      Rails.logger.info("Applying permission changes",
+        access_level: permission.access_level,
+        google_email: permission.google_email,
+        external_id: permission.external_id,
+        item_external_id: permission.item_external_id,
+        item_id: permission.item_id,
+      )
       if permission.access_level.nil?
+        Rails.logger.info("Destroying")
         destroy_permission(permission)
       elsif permission.new_record?
+        Rails.logger.info("Creating")
         create_permission(permission)
       elsif permission.google_email_changed?
+        Rails.logger.info("Destroying and creating (email changed)")
         new_permission = permission.clone_without_external_id
         destroy_permission(permission)
         create_permission(new_permission)
       elsif permission.access_level_changed?
+        Rails.logger.info("Updating access level")
         update_permission_access_level(permission)
       end
     rescue Google::Apis::ClientError => error
@@ -100,8 +111,7 @@ module GDrive
     rescue Google::Apis::ClientError => error
       if error.message.match?(/notFound: Permission not found/)
         # If the permission was not found, we'll just create it.
-        Rails.logger.warn("Permission #{permission.external_id} not found for " \
-          "item #{permission.item_external_id}, creating")
+        Rails.logger.warn("Permission not found for item, creating")
         create_permission(permission)
       else
         raise
@@ -116,8 +126,12 @@ module GDrive
       if error.message.match?(/notFound: Permission not found/)
         # If the permission was not found, no problem!
         # Just go ahead and destroy the permission to match.
-        Rails.logger.warn("Permission #{permission.external_id} not found for " \
-          "item #{permission.item_external_id}, skipping delete")
+        Rails.logger.warn("Permission not found, skipping delete")
+        permission.destroy
+      elsif error.message.match?(/cannotModifyInheritedTeamDrivePermission/)
+        # It is ok to swallow these if we are destroying because it just means the supplemental
+        # permission was already destroyed, so it's kind of like the "not found" case
+        Rails.logger.warn("Swallowing cannotModifyInheritedTeamDrivePermission")
         permission.destroy
       else
         raise

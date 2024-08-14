@@ -186,9 +186,20 @@ describe HouseholdPolicy do
     # created too late and their households will show up in `permitted` but not in our expectation.
     let!(:objs_in_community) { [user, other_user, inactive_user, admin, cluster_admin].map(&:household) }
     let!(:objs_in_cluster) { [userB.household] }
+    let!(:inactive_household) { inactive_user.household }
 
     context "normal" do
-      it_behaves_like "permits all users in cluster"
+      context "for regular users" do
+        let(:actor) { user }
+        it "returns all households except inactive ones" do
+          is_expected.to match_array(objs_in_community + objs_in_cluster - [inactive_household])
+        end
+      end
+
+      context "for inactive user" do
+        let(:actor) { inactive_user }
+        it { is_expected.to be_empty }
+      end
     end
 
     describe "administerable" do

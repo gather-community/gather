@@ -5,7 +5,8 @@ class HouseholdPolicy < ApplicationPolicy
 
   class Scope < Scope
     def resolve
-      allow_all_records_in_cluster_if_user_is_active
+      result = allow_all_records_in_cluster_if_user_is_active
+      active_admin? ? result : result.active
     end
 
     def administerable

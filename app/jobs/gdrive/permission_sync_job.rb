@@ -42,8 +42,7 @@ module GDrive
         google_email: permission.google_email,
         external_id: permission.external_id,
         item_external_id: permission.item_external_id,
-        item_id: permission.item_id,
-      )
+        item_id: permission.item_id)
       if permission.access_level.nil?
         Rails.logger.info("Destroying")
         destroy_permission(permission)
@@ -66,6 +65,13 @@ module GDrive
           "Deleting local item #{item.id} and associated records")
         item.destroy
         permission.destroy if permission.persisted?
+
+      # If the user's google_email is not a good google account,
+      # we don't want to raise an error since this is based on bad user
+      # input. In the future we might want to notify the user somehow.
+      # But for now we'll just log it and move on.
+      elsif error.message.match?(/cannotShareTeamDriveWithNonGoogleAccounts|invalidSharingRequest.+there is no Google account associated/)
+        Rails.logger.warn("User #{permission.google_email} is not a valid google account")
       else
         raise
       end
@@ -86,16 +92,6 @@ module GDrive
       )
       permission.external_id = result.id
       permission.save!
-    rescue Google::Apis::ClientError => error
-      # If the user's google_email is not a good google account,
-      # we don't want to raise an error since this is based on bad user
-      # input. In the future we might want to notify the user somehow.
-      # But for now we'll just log it and move on.
-      if error.message.match?(/cannotShareTeamDriveWithNonGoogleAccounts/)
-        Rails.logger.warn("User #{permission.google_email} is not a valid google account")
-      else
-        raise
-      end
     end
 
     def update_permission_access_level(permission)

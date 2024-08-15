@@ -16,7 +16,7 @@
       <% end %>
       <% if policy(Billing::Account.new(community: current_community)).index? %>
         &nbsp;
-        <%= link_to("Accounts", accounts_url) %>
+        <%= link_to("Billing", accounts_url) %>
       <% end %>
       <% if policy(Community.new).index? %>
         &nbsp;

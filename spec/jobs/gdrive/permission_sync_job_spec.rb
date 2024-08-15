@@ -38,14 +38,30 @@ describe GDrive::PermissionSyncJob do
         end
       end
 
-      context "due to bad google_email" do
+      context "due to cannotShareTeamDriveWithNonGoogleAccounts" do
         let!(:permission) do
           build(:gdrive_synced_permission, item: item, user: user, access_level: "writer")
         end
         let!(:user) { create(:user, google_email: "notarealemail@definitelynot.com") }
 
         it "fails quietly" do
-          VCR.use_cassette("gdrive/permission_sync_job/create_failure_bad_email") do
+          VCR.use_cassette("gdrive/permission_sync_job/create_failure_cannot_share_teamdrive_no_google_account") do
+            TestPermissionSyncJob.perform_now(cluster_id: Defaults.cluster.id,
+              community_id: Defaults.community.id, permission: permission)
+            expect(item).not_to be_destroyed
+            expect(permission).not_to be_persisted
+          end
+        end
+      end
+
+      context "due to invalidSharingRequest - no google account" do
+        let!(:permission) do
+          build(:gdrive_synced_permission, item: item, user: user, access_level: "writer")
+        end
+        let!(:user) { create(:user, google_email: "notarealemail@definitelynot.com") }
+
+        it "fails quietly" do
+          VCR.use_cassette("gdrive/permission_sync_job/create_failure_invalid_sharing_no_google_account") do
             TestPermissionSyncJob.perform_now(cluster_id: Defaults.cluster.id,
               community_id: Defaults.community.id, permission: permission)
             expect(item).not_to be_destroyed

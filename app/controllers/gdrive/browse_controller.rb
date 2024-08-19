@@ -160,8 +160,15 @@ module GDrive
       "https://drive.google.com/drive/folders/#{item_id}"
     end
 
+    # Gets a Google::Apis::DriveV3::Drive object for the given shared drive ID.
+    # Updates the stored Item as it does so (using the DriveSyncer).
     def fetch_drive(wrapper, drive_id)
-      DriveSyncer.new(wrapper, Item.find_by!(external_id: drive_id)).sync
+      item = Item.find_by!(external_id: drive_id)
+      DriveSyncer.new(wrapper, item).sync
+
+      # Rather than fetch this from the API we can just build it because we have
+      # both the ID and the name, and we just sync'd the name so no need to do it again.
+      Google::Apis::DriveV3::Drive.new(id: item.external_id, name: item.name)
     end
 
     def list_files(wrapper, parent_id)

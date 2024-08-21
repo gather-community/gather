@@ -18,8 +18,14 @@ module GDrive
 
         @migration_operation = MigrationConfig.find_by(community: current_community)&.active_operation
 
+        # Note that we use the org_user here and not the current_user's Google Account by design,
+        # because we want to enable browsing (and possibly later other interactions) with Google
+        # Drive content without forcing people to have a Google Account. Read permissions are
+        # thus determined via Groups. If the user is in a Group that is connected to an Item,
+        # we show it to them.
         wrapper = Wrapper.new(config: @config, google_user_id: @config.org_user_id,
           callback_url: gdrive_setup_auth_callback_url(host: Settings.url.host))
+
         unless wrapper.has_credentials?
           setup_auth_url(wrapper: wrapper)
           # If there are any items then this community has probably connected before but maybe

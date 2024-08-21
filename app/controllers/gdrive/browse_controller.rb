@@ -16,7 +16,7 @@ module GDrive
           return
         end
 
-        @operation = MigrationConfig.find_by(community: current_community)&.active_operation
+        @migration_operation = MigrationConfig.find_by(community: current_community)&.active_operation
 
         wrapper = Wrapper.new(config: @config, google_user_id: @config.org_user_id,
           callback_url: gdrive_setup_auth_callback_url(host: Settings.url.host))
@@ -142,16 +142,16 @@ module GDrive
     end
 
     def old_item_url_if_applicable(drive_id, item_id)
-      if @operation&.dest_folder_id == drive_id
+      if @migration_operation&.dest_folder_id == drive_id
         # If we're at the root folder of the operation, just return the old root.
         # There won't be a matching folder map in that case.
-        if @operation.dest_folder_id == item_id
-          item_url(@operation.src_folder_id)
-        elsif (folder_map = @operation.folder_maps.find_by(dest_id: item_id))
+        if @migration_operation.dest_folder_id == item_id
+          item_url(@migration_operation.src_folder_id)
+        elsif (folder_map = @migration_operation.folder_maps.find_by(dest_id: item_id))
           item_url(folder_map.src_id)
         else
           # Default to the root of the operation if we can't find a folder map.
-          item_url(@operation.src_folder_id)
+          item_url(@migration_operation.src_folder_id)
         end
       end
     end

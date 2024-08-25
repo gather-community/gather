@@ -527,4 +527,38 @@ describe GDrive::Migration::IngestJob do
       end
     end
   end
+
+  describe "requested file is not owned by consenter" do
+    let!(:folder_map_a) do
+      create(:gdrive_migration_folder_map, operation: operation, name: "Folder A",
+        src_id: "1PJwkZgkByPMcbkfzneq65Cx1CnDNMVR_", src_parent_id: operation.src_folder_id,
+        dest_id: "1REPQUYEGym1APlylgINdZFO1Lh85eDq4", dest_parent_id: operation.dest_folder_id)
+    end
+    let!(:folder_map_b) do
+      create(:gdrive_migration_folder_map, operation: operation, name: "Folder B",
+        src_id: "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV", src_parent_id: folder_map_a.src_id,
+        dest_id: "1fGgtI-ynyMIzi7Tp2d8bwY542jrbmAnz", dest_parent_id: folder_map_a.dest_id)
+    end
+    let!(:folder_map_c) do
+      create(:gdrive_migration_folder_map, operation: operation, name: "Folder C",
+        src_id: "1yWXMPJnSpso__yXpopV_WZ-kBj39GJi-", src_parent_id: folder_map_a.src_id,
+        dest_id: "14huMaHzvNxvfxdoQPqm3fLVOT0I1oDk-", dest_parent_id: folder_map_a.dest_id)
+    end
+    let!(:file_b_1) do
+      create(:gdrive_migration_file, operation: operation, external_id: "11jdjwgwY0duK5kMMb8b97tuvCH8TC_aDtXvAXs7N2tU",
+        parent_id: folder_map_b.src_id, owner: "rando@example.com")
+    end
+    let(:request_id) { "51e86502-b047-4c06-9a7c-e9fa35137858" }
+    subject(:job) { described_class.new(cluster_id: Defaults.cluster.id, consent_request_id: consent_request.id) }
+
+    it "should skip the file" do
+      VCR.use_cassette("gdrive/migration/ingest_job/file_not_owned_by_consenter") do
+        perform_job
+        file_b_1.reload
+        consent_request.reload
+        expect(file_b_1).not_to be_errored
+        expect(consent_request.error_count).to eq(0)
+      end
+    end
+  end
 end

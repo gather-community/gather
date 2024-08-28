@@ -290,7 +290,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_17_013526) do
     t.index ["group_id"], name: "index_gdrive_item_groups_on_group_id"
     t.index ["item_id", "group_id"], name: "index_gdrive_item_groups_on_item_id_and_group_id", unique: true
     t.index ["item_id"], name: "index_gdrive_item_groups_on_item_id"
-    t.check_constraint "access_level::text = ANY (ARRAY['reader'::character varying, 'commenter'::character varying, 'writer'::character varying, 'fileOrganizer'::character varying, 'organizer'::character varying]::text[])", name: "access_level_enum"
+    t.check_constraint "access_level::text = ANY (ARRAY['reader'::character varying::text, 'commenter'::character varying::text, 'writer'::character varying::text, 'fileOrganizer'::character varying::text, 'organizer'::character varying::text])", name: "access_level_enum"
   end
 
   create_table "gdrive_items", force: :cascade do |t|
@@ -305,8 +305,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_17_013526) do
     t.index ["cluster_id"], name: "index_gdrive_items_on_cluster_id"
     t.index ["external_id"], name: "index_gdrive_items_on_external_id", unique: true
     t.index ["gdrive_config_id"], name: "index_gdrive_items_on_gdrive_config_id"
-    t.check_constraint "error_type::text = ANY (ARRAY['inaccessible'::character varying, 'not_shareable'::character varying]::text[])", name: "error_type_enum"
-    t.check_constraint "kind::text = ANY (ARRAY['drive'::character varying, 'folder'::character varying, 'file'::character varying]::text[])", name: "kind_enum"
+    t.check_constraint "error_type::text = ANY (ARRAY['inaccessible'::character varying::text, 'not_shareable'::character varying::text])", name: "error_type_enum"
+    t.check_constraint "kind::text = ANY (ARRAY['drive'::character varying::text, 'folder'::character varying::text, 'file'::character varying::text])", name: "kind_enum"
   end
 
   create_table "gdrive_migration_consent_requests", force: :cascade do |t|
@@ -328,8 +328,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_17_013526) do
     t.index ["cluster_id"], name: "index_gdrive_migration_consent_requests_on_cluster_id"
     t.index ["operation_id"], name: "index_gdrive_migration_consent_requests_on_operation_id"
     t.check_constraint "char_length(opt_out_reason) <= 32767", name: "opt_out_reason_length"
-    t.check_constraint "ingest_status::text = ANY (ARRAY['new'::character varying, 'in_progress'::character varying, 'done'::character varying, 'failed'::character varying]::text[])", name: "ingest_status_enum"
-    t.check_constraint "status::text = ANY (ARRAY['new'::character varying, 'in_progress'::character varying, 'done'::character varying, 'opted_out'::character varying, 'ingest_failed'::character varying]::text[])", name: "status_enum"
+    t.check_constraint "ingest_status::text = ANY (ARRAY['new'::character varying::text, 'in_progress'::character varying::text, 'done'::character varying::text, 'failed'::character varying::text])", name: "ingest_status_enum"
+    t.check_constraint "status::text = ANY (ARRAY['new'::character varying::text, 'in_progress'::character varying::text, 'done'::character varying::text, 'opted_out'::character varying::text, 'ingest_failed'::character varying::text])", name: "status_enum"
   end
 
   create_table "gdrive_migration_files", force: :cascade do |t|
@@ -415,8 +415,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_17_013526) do
     t.datetime "updated_at", null: false
     t.index ["cluster_id"], name: "index_gdrive_migration_scans_on_cluster_id"
     t.index ["operation_id"], name: "index_gdrive_migration_scans_on_operation_id"
-    t.check_constraint "scope::text = ANY (ARRAY['full'::character varying, 'changes'::character varying]::text[])", name: "scope_enum"
-    t.check_constraint "status::text = ANY (ARRAY['new'::character varying, 'in_progress'::character varying, 'cancelled'::character varying, 'complete'::character varying]::text[])", name: "status_enum"
+    t.check_constraint "scope::text = ANY (ARRAY['full'::character varying::text, 'changes'::character varying::text])", name: "scope_enum"
+    t.check_constraint "status::text = ANY (ARRAY['new'::character varying::text, 'in_progress'::character varying::text, 'cancelled'::character varying::text, 'complete'::character varying::text])", name: "status_enum"
   end
 
   create_table "gdrive_synced_permissions", force: :cascade do |t|
@@ -432,7 +432,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_17_013526) do
     t.index ["cluster_id"], name: "index_gdrive_synced_permissions_on_cluster_id"
     t.index ["item_id"], name: "index_gdrive_synced_permissions_on_item_id"
     t.index ["user_id"], name: "index_gdrive_synced_permissions_on_user_id"
-    t.check_constraint "access_level::text = ANY (ARRAY['reader'::character varying, 'commenter'::character varying, 'writer'::character varying, 'fileOrganizer'::character varying, 'organizer'::character varying]::text[])", name: "access_level_enum"
+    t.check_constraint "access_level::text = ANY (ARRAY['reader'::character varying::text, 'commenter'::character varying::text, 'writer'::character varying::text, 'fileOrganizer'::character varying::text, 'organizer'::character varying::text])", name: "access_level_enum"
   end
 
   create_table "gdrive_tokens", force: :cascade do |t|

@@ -345,6 +345,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_17_013526) do
     t.bigint "operation_id", null: false
     t.string "owner", null: false
     t.string "parent_id", null: false
+    t.string "shortcut_target_id", limit: 128
+    t.string "shortcut_target_mime_type", limit: 128
     t.string "status", null: false
     t.datetime "updated_at", null: false
     t.string "web_view_link", null: false

@@ -7,7 +7,8 @@ module GDrive
       PAGE_SIZE = 100
       MIN_ERRORS_TO_CANCEL = 5
       MAX_ERROR_RATIO = 0.05
-      FILE_FIELDS = "id,name,parents,mimeType,webViewLink,iconLink,modifiedTime,owners(emailAddress),capabilities(canEdit),trashed"
+      FILE_FIELDS = "id,name,parents,mimeType,webViewLink,iconLink,modifiedTime,owners(emailAddress)," \
+        "capabilities(canEdit),shortcutDetails(targetId,targetMimeType),trashed"
 
       # If we get a not found error trying to find one of these, we should just terminate gracefully.
       DISAPPEARABLE_CLASSES = %w[GDrive::Migration::Operation GDrive::Migration::Scan GDrive::Migration::ScanTask].freeze
@@ -310,6 +311,8 @@ module GDrive
           parent_id: gdrive_file.parents[0],
           mime_type: gdrive_file.mime_type,
           owner: gdrive_file.owners[0].email_address,
+          shortcut_target_id: gdrive_file.shortcut_details&.target_id,
+          shortcut_target_mime_type: gdrive_file.shortcut_details&.target_mime_type,
           status: "pending",
           icon_link: gdrive_file.icon_link,
           web_view_link: gdrive_file.web_view_link,
@@ -339,6 +342,8 @@ module GDrive
         migration_file.owner = gdrive_file.owners[0].email_address
         migration_file.modified_at = gdrive_file.modified_time
         migration_file.parent_id = gdrive_file.parents[0]
+        migration_file.shortcut_target_id = gdrive_file.shortcut_details&.target_id
+        migration_file.shortcut_target_mime_type = gdrive_file.shortcut_details&.target_mime_type
         migration_file.save!
       end
 

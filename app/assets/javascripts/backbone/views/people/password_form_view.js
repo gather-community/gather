@@ -3,15 +3,21 @@ Gather.Views.People.PasswordFormView = Gather.Views.FormView.extend({
   events: {
     "change #user_password": "onPasswordChanged",
     "keyup #user_password": "onPasswordChanged",
-    "change #user_password_confirmation": "onPasswordConfirmationChanged",
-    "keyup #user_password_confirmation": "onPasswordConfirmationChanged"
+    "change #user_password_confirmation": "checkMatch",
+    "keyup #user_password_confirmation": "checkMatch",
+    "click #reveal-link": "onRevealClicked",
+    "click #mask-link": "onMaskClicked",
   },
 
   onPasswordChanged() {
-    (this.debounced || (this.debounced = _.debounce(this.checkStrength, 300)))();
+    (this.debounced || (this.debounced = _.debounce(this.checkStrengthAndMatch.bind(this), 300)))();
   },
 
-  checkStrength() {
+  checkStrengthAndMatch() {
+    if (this.$("#user_password_confirmation").val()) {
+      this.checkMatch();
+    }
+
     const input = this.$("#user_password");
     $.ajax({
       url: "/people/password-change/strength",
@@ -28,7 +34,7 @@ Gather.Views.People.PasswordFormView = Gather.Views.FormView.extend({
     });
   },
 
-  onPasswordConfirmationChanged() {
+  checkMatch() {
     const input1 = this.$("#user_password");
     const input2 = this.$("#user_password_confirmation");
     const _super = Gather.Views.People.PasswordFormView.__super__;
@@ -38,5 +44,21 @@ Gather.Views.People.PasswordFormView = Gather.Views.FormView.extend({
     } else {
       _super.clearValidationMessage(input2);
     }
+  },
+
+  onRevealClicked(event) {
+    event.preventDefault();
+    this.$("#user_password").get(0).type = "text";
+    this.$("#user_password_confirmation").get(0).type = "text";
+    this.$("#reveal-link").hide();
+    this.$("#mask-link").show();
+  },
+
+  onMaskClicked(event) {
+    event.preventDefault();
+    this.$("#user_password").get(0).type = "password";
+    this.$("#user_password_confirmation").get(0).type = "password";
+    this.$("#reveal-link").show();
+    this.$("#mask-link").hide();
   }
 });

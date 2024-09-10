@@ -67,4 +67,4 @@ en:
       weak: "Too weak (Score: %{bits})"
       good: "Good (Score: %{bits})"
       excellent: "Excellent (Score: %{bits})"
-    strength_info: "We use a [smart password strength check](http://cubicspot.blogspot.com/2011/11/how-to-calculate-password-strength.html) to ensure your password is secure and can't easily be cracked. You can make your password stronger by making it longer, avoiding common words, and using a mix of lower case, upper case, numbers, and symbols."
+    strength_info: "We use a [smart password strength check](http://cubicspot.blogspot.com/2011/11/how-to-calculate-password-strength.html) to ensure your password is secure and can't easily be cracked.\n\nYou can make your password stronger by:\n\n  - making it longer\n  - avoiding words found in the dictionary\n  - using a mix of letters, numbers, and symbols"

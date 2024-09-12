@@ -84,6 +84,14 @@ module GDrive
           # If still nil, it must be an invalid file so we skip.
           next if migration_file.nil?
 
+          # Sometimes the picker gives us files that are not owned by the consenter
+          # even though we ask it not to. Skip these.
+          if migration_file.owner != consent_request.google_email
+            Rails.logger.warn("Requested to ingest file owned by other user", file_id: file_id,
+              consenter: consent_request.google_email, actual_owner: migration_file.owner)
+            next
+          end
+
           begin
             # This could fail if
             # 1. the folder map for migration_file.parent_id is missing or invalid AND

@@ -35,6 +35,7 @@ class User < ApplicationRecord
   ADMIN_ROLES = %i[super_admin cluster_admin admin].freeze
   CONTACT_TYPES = %i[email text phone].freeze
   PASSWORD_MIN_ENTROPY = 16
+  PASSWORD_STRENGTH_CHECKER_OPTIONS = {use_dictionary: true, min_entropy: PASSWORD_MIN_ENTROPY}
 
   acts_as_tenant :cluster
   rolify
@@ -155,8 +156,7 @@ class User < ApplicationRecord
   validates :last_name, presence: true
   validates :up_guardianships, presence: true, if: :child?
   validates :password, presence: true, if: :password_required?
-  validates :password, password_strength: {use_dictionary: true, min_entropy: PASSWORD_MIN_ENTROPY},
-    if: :password_required_and_not_blank?
+  validates :password, password_strength: PASSWORD_STRENGTH_CHECKER_OPTIONS, if: :password_required_and_not_blank?
 
   validates :password, confirmation: true
   validate :certify_13_or_older_if_full_access_child_or_child_becoming_adult
@@ -180,6 +180,12 @@ class User < ApplicationRecord
   before_create { self.remember_token ||= UniqueTokenGenerator.generate(self.class, :remember_token) }
   before_save { raise People::AdultWithGuardianError if adult? && guardians.present? }
   before_save :unconfirm_if_no_email
+
+  after_validation :log_errors, if: Proc.new { |m| m.errors }
+
+  def log_errors
+    Rails.logger.debug("USER-VALIDATION-ERRORS-LINE", errors: errors.full_messages.join(";"))
+  end
 
   custom_fields :custom_data, spec: lambda { |user|
     user.community && YAML.safe_load(user.community.settings.people.user_custom_fields_spec || "")

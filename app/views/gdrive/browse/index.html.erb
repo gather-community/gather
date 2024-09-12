@@ -5,7 +5,7 @@
       <%= link_to(icon_tag("gear") << " Settings", gdrive_items_path,
             class: "btn btn-default") %>
     <% end %>
-    <% if @config && !@no_credentials && !@authorization_error && @operation %>
+    <% if @config && !@no_credentials && !@authorization_error && @migration_operation %>
       <%= link_to(icon_tag("truck") << " Migration", gdrive_migration_dashboard_home_path,
             class: "btn btn-default") %>
     <% end %>

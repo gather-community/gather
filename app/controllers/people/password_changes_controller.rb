@@ -22,12 +22,20 @@ module People
     end
 
     def strength
-      bits = StrongPassword::StrengthChecker.new(use_dictionary: true).calculate_entropy(params[:password])
-      bits = [0, bits].max.round
-      category = if bits < User::PASSWORD_MIN_ENTROPY then :weak
-                 elsif bits < User::PASSWORD_MIN_ENTROPY + 6 then :good
-                 else :excellent
-                 end
+      password = params[:password]
+      checker = StrongPassword::StrengthChecker.new(**User::PASSWORD_STRENGTH_CHECKER_OPTIONS)
+      if checker.is_weak?(password)
+        category = :weak
+        bits = checker.calculate_entropy(password)
+      else
+        # Check again with a more stringent checker.
+        checker = StrongPassword::StrengthChecker.new(**User::PASSWORD_STRENGTH_CHECKER_OPTIONS.merge(min_entropy: User::PASSWORD_MIN_ENTROPY + 6))
+        category = checker.is_weak?(password) ? :good : :excellent
+        bits = checker.calculate_entropy(password)
+      end
+
+      Rails.logger.info("PASSWORD-STRENGTH-CHECK-LINE", category: category, bits: bits)
+
       render(json: {category: category, bits: bits})
     end
 

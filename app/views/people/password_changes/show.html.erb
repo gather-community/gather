@@ -1,18 +1,8 @@
 <% content_for(:title, "Change Password") %>
 
 <%= gather_form_for(current_user, top_error_notification: false,
+                                  width: :narrow,
+                                  layout: :vertical,
                                   url: people_password_change_path) do |f| %>
-  <%= safe_render_markdown(t("password.strength_info")) %>
-  <%= f.input(:password, label: "New Password") %>
-  <%= f.input(:password_confirmation, label: "Re-type New Password") %>
-
-  <%= form_actions do %>
-    <%= f.button(:primary) %>
-  <% end %>
-<% end %>
-
-<%= javascript_tag do %>
-  $(function() {
-    new Gather.Views.People.PasswordFormView({el: '.user-form'});
-  });
+  <%= render("password_fields", f: f) %>
 <% end %>

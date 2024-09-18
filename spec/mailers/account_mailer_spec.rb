@@ -30,8 +30,11 @@ describe AccountMailer do
       end
     end
 
-    context "with inactive user" do
-      before { users[0].deactivate }
+    context "with all inactive users" do
+      before do
+        users[0].deactivate
+        users[1].deactivate
+      end
 
       it "sends to same recipients anyway unlike most emails" do
         expect(mail.to).to match_array(users.map(&:email))

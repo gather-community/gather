@@ -18,7 +18,7 @@ module GDrive
           to: recipients,
           reply_to: @operation.contact_email,
           subject: "[Action Required] Help #{@community.name} reorganize its Google Drive files!",
-          include_inactive: true
+          include_inactive: :always
         )
       end
     end

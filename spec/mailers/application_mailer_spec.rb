@@ -3,11 +3,25 @@
 require "rails_helper"
 
 describe ApplicationMailer do
-  # Sample mailer for testing only.
+  # Sample mailers for testing only.
   class SampleMailer < ApplicationMailer
     def sample(recipients)
       @community = recipients.first.community
       mail(to: recipients, subject: "Test", body: "Test")
+    end
+  end
+
+  class SampleInactiveIfNoActiveMailer < ApplicationMailer
+    def sample(recipients)
+      @community = recipients.first.community
+      mail(to: recipients, subject: "Test", body: "Test", include_inactive: :if_no_active)
+    end
+  end
+
+  class SampleInactiveAlwaysMailer < ApplicationMailer
+    def sample(recipients)
+      @community = recipients.first.community
+      mail(to: recipients, subject: "Test", body: "Test", include_inactive: :always)
     end
   end
 
@@ -25,13 +39,14 @@ describe ApplicationMailer do
       end
     end
 
-    context "with unconfirmed adults" do
+    context "with unconfirmed and inactive adults" do
       let(:unconfirmed1) { create(:user, :unconfirmed) }
       let(:unconfirmed2) { create(:user, :unconfirmed) }
+      let(:inactive) { create(:user, :inactive) }
       let(:confirmed1) { create(:user) }
       let(:confirmed2) { create(:user) }
       let(:unconfirmed_child) { create(:user, :child) }
-      let(:household) { create(:household, users: [unconfirmed2, confirmed2]) }
+      let(:household) { create(:household, users: [unconfirmed2, confirmed2, inactive]) }
       let(:mail) { SampleMailer.sample([unconfirmed1, confirmed1, household, unconfirmed_child]).deliver_now }
 
       it "sets the right recipients" do
@@ -64,6 +79,38 @@ describe ApplicationMailer do
 
       it "maps to parents' emails only when mentioned directly, not via household" do
         expect(mail.to).to match_array([adult1, adult2, adult3].map(&:email))
+      end
+    end
+
+    context "with include_inactive flag" do
+      context "with all inactive users" do
+        let(:adult1) { create(:user, :inactive) }
+        let(:adult2) { create(:user, :inactive) }
+        let(:household) { create(:household, users: [adult1, adult2]) }
+        let(:mail1) { SampleInactiveIfNoActiveMailer.sample([household]).deliver_now }
+        let(:mail2) { SampleInactiveAlwaysMailer.sample([household]).deliver_now }
+
+        before { household.reload }
+
+        it "includes inactive users for both include_inactive settings" do
+          expect(mail1.to).to match_array([adult1, adult2].map(&:email))
+          expect(mail2.to).to match_array([adult1, adult2].map(&:email))
+        end
+      end
+
+      context "with at least one active household member" do
+        let(:adult1) { create(:user) }
+        let(:adult2) { create(:user, :inactive) }
+        let(:household) { create(:household, users: [adult1, adult2]) }
+        let(:mail1) { SampleInactiveIfNoActiveMailer.sample([household]).deliver_now }
+        let(:mail2) { SampleInactiveAlwaysMailer.sample([household]).deliver_now }
+
+        before { household.reload }
+
+        it "does not include inactive users for :if_no_active but does for :always" do
+          expect(mail1.to).to match_array([adult1].map(&:email))
+          expect(mail2.to).to match_array([adult1, adult2].map(&:email))
+        end
       end
     end
   end

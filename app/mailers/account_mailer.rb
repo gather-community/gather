@@ -17,7 +17,7 @@ class AccountMailer < ApplicationMailer
   private
 
   def statement_mail(params)
-    mail(params.merge(to: @household, reply_to: biller_emails, include_inactive: true))
+    mail(params.merge(to: @household, reply_to: biller_emails, include_inactive: :if_no_active))
   end
 
   def biller_emails

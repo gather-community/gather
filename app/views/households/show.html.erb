@@ -8,7 +8,7 @@
         <% if members.any? %>
           <% members.each do |user| %><%= user.photo_if_permitted(:medium) %><% end %>
         <% else %>
-          <%= image_tag("missing/users/medium.png", class: "photo") %>
+          <%= image_tag("missing/users/medium.png", class: "photo", alt: "Missing user photo") %>
         <% end %>
       </div>
       <div class="col-sm-8">

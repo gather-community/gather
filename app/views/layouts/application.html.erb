@@ -19,12 +19,12 @@
     <nav class="navbar navbar-default hidden-xs">
       <div class="nav-wrapper">
         <div class="logo nav-1 hidden-sm">
-          <%= link_to(image_tag("logo-white.png"), logo_link_url) %>
+          <%= link_to(image_tag("logo-white.png"), logo_link_url, alt: "Home") %>
         </div>
         <div class="nav-2-3-4">
           <div class="nav-2-3">
             <div class="logo nav-2 hidden visible-sm">
-              <%= link_to(image_tag("logo-white.png"), logo_link_url) %>
+              <%= link_to(image_tag("logo-white.png"), logo_link_url, alt: "Home") %>
             </div>
             <div class="nav-3 personal-nav">
               <% if user_signed_in? && current_community %>
@@ -71,7 +71,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <%= link_to(image_tag("logo-white.png"), logo_link_url, class: "logo") %>
+          <%= link_to(image_tag("logo-white.png"), logo_link_url, class: "logo", alt: "Home") %>
         </div>
 
         <% if user_signed_in? && current_community %>
@@ -153,7 +153,7 @@
   <%= render("layouts/footer") %>
 
   <div id="glb-load-ind" class="foreground-loader hiding">
-    <%= image_tag("glb-load-ind.gif") %>
+    <%= image_tag("glb-load-ind.gif", alt: "Loading indicator") %>
     <div>Loading</div>
   </div>
 

@@ -3,7 +3,7 @@
   <%= f.hidden_field :calendar_id %>
   <%= f.hidden_field :origin_page %>
   <%= f.input :calendar do %>
-    <%= image_tag(calendar.photo_variant(:thumb)) %><br/>
+    <%= image_tag(calendar.photo_variant(:thumb), alt: calendar.name) %><br/>
     <%= calendar.name %>
   <% end %>
 

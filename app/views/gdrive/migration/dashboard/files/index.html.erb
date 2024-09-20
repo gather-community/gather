@@ -18,7 +18,7 @@
   <% @files.each do |file| %>
     <tr>
       <td>
-        <%= image_tag(file.icon_link, class: "file-icon") %>
+        <%= image_tag(file.icon_link, class: "file-icon", alt: "File icon") %>
         <%= link_to(file.name, file.web_view_link, target: "_blank") %>
       </td>
       <td><%= link_to(file.owner, gdrive_migration_dashboard_owner_path(id: file.owner)) %></td>

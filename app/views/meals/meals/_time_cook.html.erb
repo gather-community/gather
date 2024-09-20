@@ -5,7 +5,7 @@
   </span>
   <% if meal.head_cook.present? %>
     <span class="chunk">
-      <%= image_tag("chef-hat.png") %>
+      <%= image_tag("chef-hat.png", alt: "Chef's hat") %>
       <%= meal.head_cook.decorate.link %>
     </span>
   <% end %>

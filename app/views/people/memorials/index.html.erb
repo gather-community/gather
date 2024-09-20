@@ -15,7 +15,7 @@
     <% memorials.each do |memorial| %>
       <% user = memorial.user.decorate %>
       <div class="memorial section">
-        <%= link_to(image_tag(user.photo_variant(:medium)), memorial) %>
+        <%= link_to(image_tag(user.photo_variant(:medium)), memorial, alt: "Photo of #{user.full_name}") %>
         <div class="name"><%= link_to(user.full_name, memorial) %></div>
         <div class="years"><%= link_to("#{memorial.birth_year}–#{memorial.death_year}", memorial) %></div>
       </div>

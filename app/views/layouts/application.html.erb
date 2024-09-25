@@ -27,6 +27,9 @@
               <%= link_to(image_tag("logo-white.png"), logo_link_url, alt: "Home") %>
             </div>
             <div class="nav-3 personal-nav">
+              <a href="#content" id="skip-link">
+                Skip to Content
+              </a>
               <% if user_signed_in? && current_community %>
                 <ul class="nav">
                   <%= render("layouts/personal_dropdown") %>
@@ -117,7 +120,7 @@
       </nav>
     <% end %>
 
-    <div id="content" class="<%= controller.controller_name.dasherize %>
+    <main id="content" class="<%= controller.controller_name.dasherize %>
       <%= controller.controller_path.gsub("/", "--").dasherize %>
       action-<%= controller.action_name.dasherize %> clearfix">
       <%= inline_svg("logo-light-bg.svg", id: "print-logo") %>
@@ -147,7 +150,7 @@
       <%= lenses.html(position: "lower") if lenses&.visible? %>
 
       <%= yield %>
-    </div>
+    </main>
   </div>
 
   <%= render("layouts/footer") %>

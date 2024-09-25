@@ -1,4 +1,4 @@
-<%= image_tag(calendar.photo_variant(:thumb)) %><br/><br/>
+<%= image_tag(calendar.photo_variant(:thumb), alt: calendar.name) %><br/><br/>
 <% if @calendars.any? %>
   <h3 class="top">Calendars</h3>
   <%= render("calendars/calendar_list", nodes: @calendars, checkboxes: false) %>

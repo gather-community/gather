@@ -19,14 +19,17 @@
     <nav class="navbar navbar-default hidden-xs">
       <div class="nav-wrapper">
         <div class="logo nav-1 hidden-sm">
-          <%= link_to(image_tag("logo-white.png"), logo_link_url) %>
+          <%= link_to(image_tag("logo-white.png"), logo_link_url, alt: "Home") %>
         </div>
         <div class="nav-2-3-4">
           <div class="nav-2-3">
             <div class="logo nav-2 hidden visible-sm">
-              <%= link_to(image_tag("logo-white.png"), logo_link_url) %>
+              <%= link_to(image_tag("logo-white.png"), logo_link_url, alt: "Home") %>
             </div>
             <div class="nav-3 personal-nav">
+              <a href="#content" id="skip-link">
+                Skip to Content
+              </a>
               <% if user_signed_in? && current_community %>
                 <ul class="nav">
                   <%= render("layouts/personal_dropdown") %>
@@ -71,7 +74,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <%= link_to(image_tag("logo-white.png"), logo_link_url, class: "logo") %>
+          <%= link_to(image_tag("logo-white.png"), logo_link_url, class: "logo", alt: "Home") %>
         </div>
 
         <% if user_signed_in? && current_community %>
@@ -117,7 +120,7 @@
       </nav>
     <% end %>
 
-    <div id="content" class="<%= controller.controller_name.dasherize %>
+    <main id="content" class="<%= controller.controller_name.dasherize %>
       <%= controller.controller_path.gsub("/", "--").dasherize %>
       action-<%= controller.action_name.dasherize %> clearfix">
       <%= inline_svg("logo-light-bg.svg", id: "print-logo") %>
@@ -147,13 +150,13 @@
       <%= lenses.html(position: "lower") if lenses&.visible? %>
 
       <%= yield %>
-    </div>
+    </main>
   </div>
 
   <%= render("layouts/footer") %>
 
   <div id="glb-load-ind" class="foreground-loader hiding">
-    <%= image_tag("glb-load-ind.gif") %>
+    <%= image_tag("glb-load-ind.gif", alt: "Loading indicator") %>
     <div>Loading</div>
   </div>
 

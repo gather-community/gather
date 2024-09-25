@@ -65,7 +65,7 @@
         <% @file_list.files.each do |file| %>
           <tr>
             <td>
-              <%= image_tag(file.icon_link, class: "file-icon") %>
+              <%= image_tag(file.icon_link, class: "file-icon", alt: "File icon") %>
               <% if file.mime_type == GDrive::FOLDER_MIME_TYPE %>
                 <%= link_to(file.name, gdrive_browse_path(item_id: file.id)) %>
               <% else %>
@@ -86,7 +86,7 @@
         <tr>
           <td>
             <%= image_tag("https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.folder+shared",
-                          class: "file-icon") %>
+                          class: "file-icon", alt: "Folder icon") %>
             <%= link_to(drive.name, gdrive_browse_path(item_id: drive.external_id, drive: 1)) %>
           </td>
         </tr>

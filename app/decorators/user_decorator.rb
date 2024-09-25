@@ -121,7 +121,7 @@ class UserDecorator < ApplicationDecorator
 
   def photo_if_permitted(format)
     image = photo_variant(format, suppress: !h.policy(object).show_photo?)
-    h.image_tag(image, class: "photo")
+    h.image_tag(image, class: "photo", alt: "Photo of #{full_name}")
   end
 
   def photo_variant(format, suppress: false)

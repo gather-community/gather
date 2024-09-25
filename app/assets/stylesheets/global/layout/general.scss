@@ -15,6 +15,14 @@
     width: 100%;
   }
 
+  #skip-link {
+    color: #fff;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
   #main-row {
     // make main row fill vertical space so we get sticky footer
     // flex: 1 was not working on IE11 as of 1/19/18

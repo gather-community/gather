@@ -4,7 +4,7 @@
 <div class="row memorial">
   <div class="col-sm-3">
     <div class="photo">
-      <%= image_tag(user.photo_variant(:medium)) %>
+      <%= image_tag(user.photo_variant(:medium), alt: "Photo of #{user.name}") %>
       <div class="years">
         <%= "#{memorial.birth_year}–#{memorial.death_year}" %>
       </div>

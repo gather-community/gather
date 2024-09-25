@@ -81,7 +81,7 @@ module ApplicationHelper
   end
 
   def inline_loading_indicator
-    image_tag("load-ind-small.gif", class: "loading-indicator", style: "display: none")
+    image_tag("load-ind-small.gif", class: "loading-indicator", style: "display: none", alt: "Loading indicator")
   end
 
   # The logo should take the user back to their home cmty root if they are in a different one.

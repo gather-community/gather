@@ -26,7 +26,7 @@
       <% @uningested_files.each do |file| %>
         <tr>
           <td>
-            <%= image_tag(file.icon_link, class: "file-icon") %>
+            <%= image_tag(file.icon_link, class: "file-icon", alt: "File icon") %>
             <%= link_to(file.name, file.web_view_link, target: "_blank") %>
           </td>
           <td><%= I18n.l(file.modified_at, format: :day_mo_yr_no_time) %></td>

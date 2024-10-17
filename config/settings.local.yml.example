@@ -46,3 +46,13 @@ email:
 elasticsearch:
   host: localhost
   port: 9200
+
+# Only required if you want to dev/test the mail test job
+mail_test:
+  destination: testlist@gather.coop
+  pop:
+    host: <HOST>
+    port: <PORT>
+    username: <USERNAME>
+    password: <PASSWORD>
+    enable_ssl: <true or false>

@@ -89,11 +89,17 @@ class SystemStatus
   def mail_up?
     latest_received_mail_sent_at = MailTestRun.first&.mail_sent_at
     if latest_received_mail_sent_at
-      Rails.logger.info("MAIL-UPTIME-LINE Last mail received #{Time.current - latest_received_mail_sent_at} ago")
+      ago = Time.current - latest_received_mail_sent_at
+      Rails.logger.info("MAIL-UPTIME-LINE Last mail received at #{latest_received_email_sent_at}, #{ago} s ago")
+
+      # If mail is sent at t, the next job picks it up at t + 5 mins and sends a new mail
+      # So if things are working normally, the max age should be 10 mins give or take
+      # So if it is more than 12 mins, we raise the alarm
+      ago < 12 * 60
     else
       Rails.logger.info("MAIL-UPTIME-LINE No mail recieved")
+      false
     end
-    true
   end
 
   private

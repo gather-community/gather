@@ -1,0 +1,2 @@
+class MailTestRun < ApplicationRecord
+end

@@ -1,0 +1,21 @@
+This is test message number <%= @counter %> for the Gather email system.
+
+We send these emails to verify that the Mailman and mail server systems are functioning properly.
+
+We use a third party email mailbox provider in order to simulate real conditions.
+
+We send the email from a backround job, and in the same job, we check to see if the email from the last time the job executed has been received.
+
+The email is sent over Gather's normal SMTP system to an email list on the staff Gather instance.
+
+The email list is configured with our test email address as the only member.
+
+If we find a received test email, we note its timestamp.
+
+The /ping page gets the timestamp of the latest received email, and if it's too far in the past, we raise an alarm.
+
+Isn't that neat?
+
+Sincerely,
+
+The Gather Team

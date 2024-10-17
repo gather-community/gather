@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_03_12_120059) do
+ActiveRecord::Schema[7.0].define(version: 2024_10_17_013526) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -534,6 +534,13 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_12_120059) do
     t.index ["deactivated_at"], name: "index_households_on_deactivated_at"
     t.index ["member_type_id"], name: "index_households_on_member_type_id"
     t.index ["name"], name: "index_households_on_name"
+  end
+
+  create_table "mail_test_runs", force: :cascade do |t|
+    t.integer "counter", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "mail_sent_at"
+    t.datetime "updated_at", null: false
   end
 
   create_table "meal_assignments", id: :serial, force: :cascade do |t|

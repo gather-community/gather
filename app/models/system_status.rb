@@ -3,7 +3,7 @@
 # Checks system status for use in the ping page.
 class SystemStatus
   BACKUP_TIMES_FILE = "/var/log/latest-backup-times"
-  SERVICES = %i[app database delayed_job redis elasticsearch backups].freeze
+  SERVICES = %i[app database delayed_job redis elasticsearch backups mail].freeze
 
   def ok?
     statuses.values.all?
@@ -84,6 +84,16 @@ class SystemStatus
       Rails.logger.debug("[system status] Backups down (latest timestamp: #{latest}, zone: #{Time.zone})")
       false
     end
+  end
+
+  def mail_up?
+    latest_received_mail_sent_at = MailTestRun.first&.mail_sent_at
+    if latest_received_mail_sent_at
+      Rails.logger.info("MAIL-UPTIME-LINE Last mail received #{Time.current - latest_received_mail_sent_at} ago")
+    else
+      Rails.logger.info("MAIL-UPTIME-LINE No mail recieved")
+    end
+    true
   end
 
   private

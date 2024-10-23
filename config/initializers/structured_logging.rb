@@ -2,4 +2,7 @@
 
 require_relative("../../lib/gather/structured_logger")
 
-Rails.logger = Gather::StructuredLogger.new(Rails.logger)
+# The production logger already supports structured logging.
+unless Rails.env.production?
+  Rails.logger = Gather::StructuredLogger.new(Rails.logger)
+end

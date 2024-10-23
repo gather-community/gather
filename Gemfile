@@ -118,3 +118,5 @@ gem "stripe", "~> 8.1"
 gem "turbo-rails", "~> 1.3"
 
 gem "money", "~> 6.16"
+
+gem "logtail-rails", "~> 0.2.8"

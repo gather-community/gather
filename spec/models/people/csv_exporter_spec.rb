@@ -3,12 +3,13 @@
 require "rails_helper"
 
 describe People::CsvExporter do
-  let(:actor) { create(:user) }
   let(:policy) { UserPolicy.new(actor, User.new(household: Household.new(community: actor.community))) }
   let(:exporter) { described_class.new(User.by_name.active.where.not(id: actor.id), policy: policy) }
 
   describe "to_csv" do
     context "with no users" do
+      let(:actor) { create(:user) }
+
       it "should return valid csv" do
         # Full headers are tested below.
         expect(exporter.to_csv).to match(/\A"ID",/)
@@ -74,10 +75,25 @@ describe People::CsvExporter do
           email: "g@h.com", mobile_phone: "+17345558788")
       end
 
-      it "should return valid csv" do
-        expect(exporter.to_csv).to eq(prepare_fixture("users.csv",
-          id: [child, adult2, adult1, adult3].map(&:id),
-          household_id: [household1, household2].map(&:id)))
+      context "as user" do
+        let(:actor) { create(:user) }
+
+        it "should return valid csv" do
+          expect(exporter.to_csv).to eq(prepare_fixture("users/as_user.csv",
+            id: [child, adult2, adult1, adult3].map(&:id),
+            household_id: [household1, household2].map(&:id)))
+        end
+      end
+
+      context "as admin" do
+        let(:actor) { create(:admin) }
+
+        it "should return valid csv" do
+          expect(exporter.to_csv).to eq(prepare_fixture("users/as_admin.csv",
+            id: [child, adult2, adult1, adult3].map(&:id),
+            household_id: [household1, household2].map(&:id),
+            google_email: [adult2, adult1, adult3].map(&:google_email)))
+        end
       end
     end
   end

@@ -272,6 +272,8 @@ en:
         birthdate: "Birthday"
         pronouns: "Pronouns"
         email: "Email"
+        google_email: "Google Email"
+        paypal_email: "Paypal Email"
         child: "Is Child"
         full_access: "Full Access"
         household_id: "Household ID"

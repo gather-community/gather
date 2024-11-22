@@ -41,7 +41,7 @@ module Utils
         datetime = datetime.in_time_zone("Eastern Time (US & Canada)")
         date = datetime.to_date + date_offset
         time = datetime.strftime("%H:%M")
-        Time.zone.parse("#{date} #{time}")
+        Time.zone.parse("#{date.to_fs} #{time}")
       end
     end
   end

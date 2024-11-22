@@ -26,8 +26,8 @@ FactoryBot.define do
             meal: ev.meals[i]
           }
           if job.full_period?
-            attribs[:starts_at] = Time.zone.parse(job.period.starts_on.to_s)
-            attribs[:ends_at] = Time.zone.parse(job.period.ends_on.to_s)
+            attribs[:starts_at] = Time.zone.parse(job.period.starts_on.to_fs)
+            attribs[:ends_at] = Time.zone.parse(job.period.ends_on.to_fs)
           else
             attribs[:starts_at] = Time.zone.parse(ev.shift_starts[i].to_s) if ev.shift_starts[i]
             attribs[:ends_at] = Time.zone.parse(ev.shift_ends[i].to_s) if ev.shift_ends[i]

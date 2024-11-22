@@ -282,6 +282,7 @@ en:
         home_phone: "Home Phone"
         work_phone: "Work Phone"
         joined_on: "Join Date"
+        deactivated_at: "Departure Date"
         preferred_contact: "Preferred Contact"
         garage_nums: "Garage Nums"
         vehicles: "Vehicles"

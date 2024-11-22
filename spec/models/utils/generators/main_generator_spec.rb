@@ -29,6 +29,7 @@ describe Utils::Generators::MainGenerator, :without_tenant, :perform_jobs do
     GDrive::Migration::ScanTask
     Groups::Mailman::List
     Groups::Mailman::User
+    MailTestRun
     Meals::Import
     Meals::Message
     People::MemberType

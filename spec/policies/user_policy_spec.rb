@@ -530,7 +530,7 @@ describe UserPolicy do
 
     context "for admin" do
       let(:actor) { admin }
-      it { is_expected.to match_array(base_attribs.concat([:google_email, :paypal_email])) }
+      it { is_expected.to match_array(base_attribs.concat([:google_email, :paypal_email, :deactivated_at])) }
     end
   end
 end

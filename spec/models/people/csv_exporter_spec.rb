@@ -3,12 +3,13 @@
 require "rails_helper"
 
 describe People::CsvExporter do
-  let(:actor) { create(:user) }
   let(:policy) { UserPolicy.new(actor, User.new(household: Household.new(community: actor.community))) }
   let(:exporter) { described_class.new(User.by_name.active.where.not(id: actor.id), policy: policy) }
 
   describe "to_csv" do
     context "with no users" do
+      let(:actor) { create(:user) }
+
       it "should return valid csv" do
         # Full headers are tested below.
         expect(exporter.to_csv).to match(/\A"ID",/)
@@ -56,16 +57,15 @@ describe People::CsvExporter do
           mobile_phone: "+17345556376", home_phone: "+17345551981")
       end
       let!(:adult2) do
-        create(:user, household: household1, first_name: "Jenn", last_name: "Blount", email: "c@d.com",
-          birthdate: "0004/03/10", pronouns: "zey/zem", joined_on: "2016/08/01",
+        create(:user, :inactive, household: household1, first_name: "Jenn", last_name: "Blount", email: "c@d.com",
+          birthdate: "0004/03/10", pronouns: "zey/zem", joined_on: "2016/08/01", deactivated_at: "2017-02-22 12:00",
           preferred_contact: "text", mobile_phone: "+17345550085", work_phone: "+17345554512")
       end
-      let!(:inactive) { create(:user, :inactive) }
       let!(:child) do
         create(:user, :child, household: household1, first_name: "Billy", last_name: "South",
           email: "e@f.com", joined_on: "2008/11/29", preferred_contact: "text",
           birthdate: nil, mobile_phone: "+17345557737",
-          guardians: [adult1, adult2, inactive])
+          guardians: [adult1, adult2])
       end
 
       let!(:household2) { create(:household, name: "Blip", member_count: 0) }
@@ -74,10 +74,26 @@ describe People::CsvExporter do
           email: "g@h.com", mobile_phone: "+17345558788")
       end
 
-      it "should return valid csv" do
-        expect(exporter.to_csv).to eq(prepare_fixture("users.csv",
-          id: [child, adult2, adult1, adult3].map(&:id),
-          household_id: [household1, household2].map(&:id)))
+      context "as user" do
+        let(:actor) { create(:user) }
+
+        it "should return valid csv" do
+          expect(exporter.to_csv).to eq(prepare_fixture("users/as_user.csv",
+            id: [child, adult2, adult1, adult3].map(&:id),
+            household_id: [household1, household2].map(&:id)))
+        end
+      end
+
+      context "as admin, with inactive users" do
+        let(:actor) { create(:admin) }
+        let(:exporter) { described_class.new(User.by_name.where.not(id: actor.id), policy: policy) }
+
+        it "should return valid csv" do
+          expect(exporter.to_csv).to eq(prepare_fixture("users/as_admin.csv",
+            id: [child, adult2, adult1, adult3].map(&:id),
+            household_id: [household1, household2].map(&:id),
+            google_email: [adult2, adult1, adult3].map(&:google_email)))
+        end
       end
     end
   end

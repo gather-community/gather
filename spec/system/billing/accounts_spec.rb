@@ -17,7 +17,7 @@ describe "accounts", js: true do
     let!(:stmt_amt) { account1.statements[0].total_due }
     let!(:late_recorded_txn) do
       create(:transaction, account: account1, incurred_on: Time.zone.today - 1.year,
-                           description: "Ye olde transaction")
+        description: "Ye olde transaction")
     end
 
     before do
@@ -69,7 +69,7 @@ describe "accounts", js: true do
       click_link(account2.household.name)
       find(:xpath, "//tr[td[contains(text(), 'New Charges')]]//a").click
       expect(page).to have_content("Late payment fee $2.51")
-      click_link("Accounts")
+      click_link("Billing")
 
       message = accept_confirm { click_link("Send Statements") }
       expect(message).to include("Are you sure? Statements will be sent out to 2 households.")

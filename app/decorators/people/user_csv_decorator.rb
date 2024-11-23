@@ -17,7 +17,7 @@ module People
     end
 
     def joined_on
-      csv_localize(object.joined_on)
+      csv_localize(object.joined_on || object.created_at.to_date)
     end
 
     def deactivated_at

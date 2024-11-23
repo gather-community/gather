@@ -20,6 +20,10 @@ module People
       csv_localize(object.joined_on)
     end
 
+    def deactivated_at
+      csv_localize(object.deactivated_at&.to_date)
+    end
+
     def child
       csv_bool(object.child?)
     end

@@ -4,9 +4,9 @@ require "rails_helper"
 
 describe "tenancy" do
   ALLOWLISTED_TABLES = %w[active_storage_attachments active_storage_blobs active_storage_variant_records
-                          ar_internal_metadata clusters delayed_jobs feature_flags feature_flag_users
-                          roles schema_migrations users_roles].freeze
-  ALLOWLISTED_CLASSES = %w[Role Cluster FeatureFlag FeatureFlagUser].freeze
+    ar_internal_metadata clusters delayed_jobs feature_flags feature_flag_users
+    roles schema_migrations users_roles mail_test_runs].freeze
+  ALLOWLISTED_CLASSES = %w[Role Cluster FeatureFlag FeatureFlagUser MailTestRun].freeze
 
   it "all tables except allowlisted ones have cluster_id" do
     ApplicationRecord.connection.tables.each do |table|

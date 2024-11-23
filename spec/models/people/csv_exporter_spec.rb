@@ -71,7 +71,7 @@ describe People::CsvExporter do
       let!(:household2) { create(:household, name: "Blip", member_count: 0) }
       let!(:adult3) do
         create(:user, household: household2, first_name: "Zorgon", last_name: "Puzt",
-          email: "g@h.com", mobile_phone: "+17345558788")
+          email: "g@h.com", mobile_phone: "+17345558788", created_at: "2017-07-11 12:00")
       end
 
       context "as user" do

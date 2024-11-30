@@ -29,7 +29,7 @@ module ApplicationHelper
 
   def flash_message(type, text)
     content_tag(:div, text, class: "alert #{bootstrap_class_for(type)} fade in") do
-      content_tag(:button, "x", class: "close", data: {dismiss: "alert"}) << text
+      content_tag(:button, "x", class: "close", "aria-label": "Close", data: {dismiss: "alert"}) << text
     end
   end
 
@@ -63,7 +63,9 @@ module ApplicationHelper
   end
 
   def print_button
-    button_tag(type: "button", class: "btn btn-default btn-print icon-only") { icon_tag("print") }
+    button_tag(type: "button", class: "btn btn-default btn-print icon-only", "aria-label": "Print") do
+      icon_tag("print")
+    end
   end
 
   def inactive_notice(object)

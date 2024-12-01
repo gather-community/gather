@@ -13,6 +13,18 @@
     background-color: $gray-lighterer;
     display: flex;
 
+    h2.person-name {
+      margin: 0;
+      font-size: $font-size-base;
+      line-height: 1.5;
+
+      a {
+        font-family: $font-family-sans-serif;
+        font-size: $font-size-base;
+        font-weight: normal;
+      }
+    }
+
     img {
       width: 125px;
       height: 125px;

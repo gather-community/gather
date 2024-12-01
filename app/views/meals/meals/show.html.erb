@@ -48,17 +48,22 @@ end %>
         </div>
       </div>
     <% end %>
-    <h2 class="top">
-      Your Order
-      <%= meal.closed? ? icon_tag("lock") : "" %>
-    </h2>
-    <%= render("meals/meals/signup_form") %>
+
+    <section>
+      <h2 class="top">
+        Your Order
+        <%= meal.closed? ? icon_tag("lock") : "" %>
+      </h2>
+      <%= render("meals/meals/signup_form") %>
+    </section>
 
     <% if current_community.settings.meals.allow_job_signup_on_meal_page && !meal.in_past? %>
-      <h2>
-        Helping Out
-      </h2>
-      <%= render("meals/meals/household_worker_form") %>
+      <section>
+        <h2>
+          Helping Out
+        </h2>
+        <%= render("meals/meals/household_worker_form") %>
+      </section>
     <% end %>
 
     <%# We want to show these below signup form on XS screens so we include them twice with different

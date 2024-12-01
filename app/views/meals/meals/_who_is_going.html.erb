@@ -1,12 +1,12 @@
-<div class="who-is-going">
+<section class="who-is-going">
   <h2>Who is Going?</h2>
-  <ul>
-    <% if @signups.empty? %>
-      Nobody, yet!
-    <% else %>
+  <% if @signups.empty? %>
+    Nobody, yet!
+  <% else %>
+    <ul>
       <% @signups.each do |s| %>
         <li><%= s.household.decorate.name_with_prefix %> (<%= s.total %>)</li>
       <% end %>
-    <% end %>
-  </ul>
-</div>
+    </ul>
+  <% end %>
+</section>

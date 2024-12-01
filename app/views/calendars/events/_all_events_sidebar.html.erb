@@ -1,6 +1,6 @@
 <% if @calendars.any? %>
-  <div class="calendar-list-wrapper">
+  <section class="calendar-list-wrapper">
     <h3 class="top">Calendars</h3>
     <%= render("calendars/calendar_list", nodes: @calendars) %>
-  </div>
+  </section>
 <% end %>

@@ -11,21 +11,23 @@
     We encountered an error connecting to Google. Please return to the main Google Drive page to re-establish a connection.
   </div>
 <% else %>
-  <p>
-    <strong>System User:</strong> <%= @config.org_user_id %>
-  </p>
-  <p>
-    Add items below to link them to Gather and sync permissions. Shared drives listed below are shown on the Gather
-    <%= link_to("Google Drive browse page", gdrive_home_path) %> for users that have permission.
-    Folders and files will not be accessible via the browse page unless their parent shared drive
-    is accessible.
-  </p>
+  <section aria-label="Introduction">
+    <p>
+      <strong>System User:</strong> <%= @config.org_user_id %>
+    </p>
+    <p>
+      Add items below to link them to Gather and sync permissions. Shared drives listed below are shown on the Gather
+      <%= link_to("Google Drive browse page", gdrive_home_path) %> for users that have permission.
+      Folders and files will not be accessible via the browse page unless their parent shared drive
+      is accessible.
+    </p>
+  </section>
 
   <table class="full-width">
     <% %i[drive folder file].each do |kind| items = @items_by_kind[kind] %>
       <tr class="heading">
         <td colspan="4">
-          <h3><%= t("gdrive.item_kinds.#{kind}", count: 2) %></h3>
+          <h2><%= t("gdrive.item_kinds.#{kind}", count: 2) %></h2>
         </td>
       </tr>
       <% if items.any? %>

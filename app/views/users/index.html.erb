@@ -63,21 +63,21 @@
   <% else %>
     <div id="directory-album" class="flowing-columns-max-3 hidden-print">
       <% users.each do |user| %>
-        <div class="user section <%= user.active? ? "" : "inactive" %>">
-          <%= link_to(user.photo_if_permitted(:thumb), user) %>
+        <section class="user section <%= user.active? ? "" : "inactive" %>">
+          <%= link_to(user.photo_if_permitted(:thumb), user, tabindex: -1) %>
           <div class="info">
             <% if user.preferred_contact.present? %>
               <%= icon_tag(user.preferred_contact_icon,
                 class: "preferred-contact", title: user.preferred_contact_tooltip) %>
             <% end %>
-            <div><%= link_to(user.name, user) %></div>
+            <h2 class="person-name"><%= link_to(user.name, user) %></h2>
             <% if user.pronouns.present? %>
               <div class="pronouns">(<%= user.pronouns %>)</div>
             <% end %>
             <div class="email"><%= user.email_link if user.email %></div>
             <div class="unit-phone"><%= user.unit_and_phone %></div>
           </div>
-        </div>
+        </section>
       <% end %>
     </div>
   <% end %>

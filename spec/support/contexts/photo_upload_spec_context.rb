@@ -23,13 +23,13 @@ shared_context "photo uploads" do
 
       # Delete existing photo without saving -- should still stay cooper.
       # Visiting new page will trigger onbeforeunload alert.
-      accept_alert { visit(edit_path) }
+      accept_confirm { page.go_back }
       expect_image_upload(state: :existing, path: /cooper/)
       delete_from_dropzone
 
       # Delete existing AND saving -- should really delete.
       # Visiting new page will trigger onbeforeunload alert.
-      accept_alert { visit(edit_path) }
+      accept_confirm { page.go_back }
       expect_image_upload(state: :existing, path: /cooper/)
       delete_from_dropzone
       click_button("Save")

@@ -74,6 +74,7 @@ describe "meal create, show, update, delete", js: true do
       # Remove head cook
       click_link("Edit")
       select_worker(:clear, role: hc_role)
+      click_button("Save") # First click clears the focus
       click_button("Save")
       expect_success
       find("a", text: "Southern Beans").click

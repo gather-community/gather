@@ -65,15 +65,25 @@ RSpec.configure do |config|
   config.include(RequestSpecHelpers, type: :request)
   config.include(GeneralHelpers)
 
-  Capybara.register_driver(:selenium_chrome_headless) do |app|
+  def register_selenium_chrome_driver(app:, headless:)
+    args = %w[disable-gpu no-sandbox disable-site-isolation-trials window-size=1280x2048]
+    args << "headless" if headless
     options = Selenium::WebDriver::Chrome::Options.new(
-      args: %w[disable-gpu no-sandbox headless disable-site-isolation-trials window-size=1280x2048],
+      args: args,
       "goog:loggingPrefs": {browser: "ALL", client: "ALL", driver: "ALL", server: "ALL"}
     )
     options.add_preference(:download, prompt_for_download: false,
       default_directory: DownloadHelpers::PATH.to_s)
     options.add_preference(:browser, set_download_behavior: {behavior: "allow"})
     Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
+  end
+
+  Capybara.register_driver(:selenium_chrome_headless) do |app|
+    register_selenium_chrome_driver(app: app, headless: true)
+  end
+
+  Capybara.register_driver(:selenium_chrome_headed) do |app|
+    register_selenium_chrome_driver(app: app, headless: false)
   end
 
   Capybara.always_include_port = true
@@ -93,6 +103,10 @@ RSpec.configure do |config|
 
   config.before(:each, type: :system, js: true) do
     driven_by :selenium_chrome_headless
+  end
+
+  config.before(:each, type: :system, js_headed: true) do
+    driven_by :selenium_chrome_headed
   end
 
   VCR.configure do |c|

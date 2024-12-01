@@ -1,3 +1,3 @@
 Number,Community ID,Community,Household ID,Household,Balance Due,Current Balance,Credit Limit,Last Statement ID,Last Statement Date,Due Last Statement,Total New Charges,Total New Credits,Creation Time
-*number2*,*community_id2*,Alpha,*household_id2*,Li,-3.56,5.34,50.00,*last_statement_id2*,2018-10-23,-3.56,8.90,0.00,2018-09-22 09:00:00 UTC
-*number1*,*community_id1*,Bravo,*household_id1*,Smith,-5.55,-5.55,,*last_statement_id1*,2018-10-23,1.23,0.00,6.78,2018-09-22 09:00:00 UTC
+*number2*,*community_id2*,Alpha,*household_id2*,Li,-3.56,5.34,50.00,*last_statement_id2*,2018-10-23,-3.56,8.90,0.00,2018-09-22T09:00:00
+*number1*,*community_id1*,Bravo,*household_id1*,Smith,-5.55,-5.55,,*last_statement_id1*,2018-10-23,1.23,0.00,6.78,2018-09-22T09:00:00

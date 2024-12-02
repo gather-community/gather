@@ -26,9 +26,9 @@ describe "protocols", js: true do
     let!(:protocols) do
       [
         create(:calendar_protocol, community: community, calendars: calendars,
-                                   pre_notice: "Foo notice"),
+          pre_notice: "Foo notice"),
         create(:calendar_protocol, community: community, kinds: ["Official"],
-                                   pre_notice: "Bar notice")
+          pre_notice: "Bar notice")
       ]
     end
 
@@ -86,7 +86,7 @@ describe "protocols", js: true do
     let!(:calendar) { create(:calendar, :inactive, community: community, name: "Log Drivings") }
     let!(:protocol) do
       create(:calendar_protocol, community: community, calendars: [calendar], name: "Stuff",
-                                 pre_notice: "Foo notice")
+        pre_notice: "Foo notice")
     end
 
     scenario "does not lose calendar" do

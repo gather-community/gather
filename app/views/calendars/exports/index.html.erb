@@ -2,11 +2,11 @@
 <% decorator = Calendars::ExportDecorator.new(current_community, current_user) %>
 
 <div class="calendars-and-url">
-  <div class="calendar-list-wrapper">
+  <section class="calendar-list-wrapper">
     <h2 class="top">Select Calendars</h2>
     <%= render("calendars/calendar_list", nodes: @calendars) %>
-  </div>
-  <div class="export-url-and-options">
+  </section>
+  <section class="export-url-and-options">
     <h2 class="top">Export Link</h2>
 
     <%= simple_form_for(:calendars_export) do |f| %>
@@ -60,7 +60,7 @@
       <li>Set subscription options if prompted. Recommended auto-refresh interval is 'every hour'.</li>
       <li>The events should now appear on your calendar.</li>
     </ol>
-  </div>
+  </section>
 </div>
 
 <div class="footnote">

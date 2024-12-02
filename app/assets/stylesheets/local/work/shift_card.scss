@@ -30,8 +30,20 @@
     text-align: right;
   }
 
-  .title-cell i {
+  .title-cell {
+    h2 {
+      font-family: $font-family-sans-serif;
+      font-size: $font-size-base;
+      margin: 0;
+
+      a {
+        color: $link-color;
+      }
+    }
+
+    i {
     color: $text-muted;
+    }
   }
 
   .title {

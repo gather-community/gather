@@ -4,13 +4,13 @@
   <%= print_button %>
 <% end %>
 
-<div class="row">
+<section class="row">
   <div class="col-sm-12">
     <%= render("menu") %>
   </div>
-</div>
+</section>
 
-<div id="signups" class="row">
+<section id="signups" class="row">
   <div class="col-sm-12">
     <%= generated_time %>
     <h2>Signups</h2>
@@ -56,9 +56,9 @@
       * Total portions calculated using portion size values in <%= link_to("meal formula", meal.formula) %>.
     </small>
   </div>
-</div>
+</section>
 
-<div id="groc-calc" class="row">
+<section id="groc-calc" class="row">
   <div class="col-sm-12">
     <h2>Grocery Calculator</h2>
     <% if @cost_calculator.type == :fixed %>
@@ -91,16 +91,16 @@
       </table>
     <% end %>
   </div>
-</div>
+</section>
 
 <% if @meal_summary.reimbursement? %>
-  <div class="row">
+  <section class="row">
     <div class="col-sm-12">
       <h2>Cook Reimbursement</h2>
       <%= @meal_summary.formatted_reimb_instructions %>
       <%= render("reimb_form") if @meal_summary.show_reimb_form? %>
     </div>
-  </div>
+  </section>
 <% end %>
 
 <%= javascript_tag do %>

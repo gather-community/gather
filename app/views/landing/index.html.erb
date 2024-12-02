@@ -6,11 +6,10 @@
 </head>
 <body class="landing">
   <%= flash_messages %>
-  <div id="main">
-    <div id="blurb">Life is better together.</div>
+  <main>
+    <h1 id="blurb">Life is better together.</h1>
     <%= image_tag("logo-white.png", id: "logo", alt: "Gather logo") %>
     <div id="sign-in-btns">
-
       <%= link_to(icon_tag("brands google") << " Sign in with Google",
             user_google_oauth2_omniauth_authorize_url(host: Settings.url.host, state: @invite_token),
             method: :post, id: "sign-in-btn", class: "btn btn-primary") %>
@@ -29,7 +28,7 @@
         <%= link_to(icon_tag("info-circle") << " Learn more about Gather", "http://info.gather.coop") %>
       </div>
     </div>
-  </div>
+  </main>
   <%= render("layouts/footer") %>
 </body>
 </html>

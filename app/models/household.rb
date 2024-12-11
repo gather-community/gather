@@ -11,7 +11,7 @@ class Household < ApplicationRecord
   belongs_to :community
   belongs_to :member_type, class_name: "People::MemberType", inverse_of: :households
   has_many :accounts, -> { joins(:community).includes(:community).alpha_order(communities: :name) },
-           inverse_of: :household, class_name: "Billing::Account"
+           inverse_of: :household, class_name: "Billing::Account", dependent: :destroy
   has_many :signups
   has_many :users, -> { by_name_adults_first }, inverse_of: :household, dependent: :destroy
   has_many :vehicles, class_name: "People::Vehicle", dependent: :destroy

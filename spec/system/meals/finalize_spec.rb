@@ -68,6 +68,11 @@ describe "finalize meal", js: true do
     expect(page).to have_content(signups[1].household_name)
     expect(page).to have_content(late_add.name)
     expect(page).not_to have_content(signups[0].household_name)
+
+    # Unfinalize
+    visit meal_path(meal)
+    accept_confirm { click_on("Unfinalize") }
+    expect(page).to have_content("Meal unfinalized successfully")
   end
 
   scenario "with editing expenses in meal" do

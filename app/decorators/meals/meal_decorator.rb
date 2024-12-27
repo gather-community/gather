@@ -112,10 +112,12 @@ module Meals
         ActionLink.new(object, :edit, icon: "pencil", path: h.edit_meal_path(object)),
         ActionLink.new(object, :summary, icon: "file-text", path: h.summary_meal_path(object)),
         ActionLink.new(object, :reopen, icon: "unlock", path: h.reopen_meal_path(object),
-                                        method: :put, confirm: true),
+          method: :put, confirm: true),
         ActionLink.new(object, :close, icon: "lock", path: h.close_meal_path(object),
-                                       method: :put, confirm: true),
+          method: :put, confirm: true),
         ActionLink.new(object, :finalize, icon: "certificate", path: h.new_meal_finalize_path(object)),
+        ActionLink.new(object, :unfinalize, icon: "box-open", path: h.unfinalize_meal_path(object),
+          method: :put, confirm: true),
         ActionLink.new(object, :cancel, icon: "ban", path: h.new_meal_message_path(object, cancel: 1)),
         ActionLink.new(object, :send_message, icon: "envelope", path: h.new_meal_message_path(object))
       )
@@ -124,7 +126,7 @@ module Meals
     def edit_action_link_set
       ActionLinkSet.new(
         ActionLink.new(object, :destroy, icon: "trash", path: h.meal_path(object), method: :delete,
-                                         confirm: {title: title_or_no_title})
+          confirm: {title: title_or_no_title})
       )
     end
 

@@ -20,6 +20,22 @@ module Meals
       copy_prices
     end
 
+    def unfinalize!
+      # This should not be possible since calls to this method should be guarded by the
+      # policy, but just in case!
+      if meal.transactions.any?(&:statement?)
+        raise "Can't unfinalize meal with transactions on statements"
+      end
+
+      meal.transactions.destroy_all
+      if cost
+        %i[meal_calc_type pantry_calc_type pantry_fee].each { |a| cost[a] = nil }
+        cost.save!
+        cost.parts.destroy_all
+      end
+      meal.close!
+    end
+
     def calculator
       @calculator ||= CostCalculator.build(meal)
     end
@@ -40,7 +56,7 @@ module Meals
 
       Billing::Transaction.create!(
         account: Billing::AccountManager.instance.account_for(household_id: signup_part.household_id,
-                                                              community_id: meal.community_id),
+          community_id: meal.community_id),
         code: "meal",
         incurred_on: meal.served_at.to_date,
         description: "#{meal.title}: #{signup_part.type_name}",
@@ -58,7 +74,7 @@ module Meals
 
       Billing::Transaction.create!(
         account: Billing::AccountManager.instance.account_for(household_id: cost.reimbursee.household_id,
-                                                              community_id: meal.community_id),
+          community_id: meal.community_id),
         code: "reimb",
         incurred_on: meal.served_at.to_date,
         description: "#{meal.title}: Grocery Reimbursement",

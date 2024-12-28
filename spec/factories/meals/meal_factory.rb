@@ -54,6 +54,8 @@ FactoryBot.define do
 
       after(:build) do |meal|
         meal.cost = build(:meal_cost, :with_parts)
+        meal.transactions << create(:meal_transaction,
+          incurred_on: meal.served_at.to_date + 2.days, statementable: meal)
       end
     end
 

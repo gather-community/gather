@@ -77,6 +77,7 @@ en:
       close: "Are you sure you want to close this meal? No further signups will be allowed."
       destroy: "Are you sure you want to delete the meal '%{title}'? This action cannot be undone."
       reopen: "Are you sure you want to reopen this meal? New signups will be allowed."
+      unfinalize: "Are you sure you want to unfinalize this meal?"
     user:
       destroy: "Are you sure you want to delete the user '%{name}'? This action cannot be undone."
       deactivate: "Are you sure you want to deactivate the user '%{name}'? This will remove them from any groups they are in."

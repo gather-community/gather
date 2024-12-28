@@ -80,6 +80,10 @@ module Meals
       meal.closed? && meal.in_past? && admin_or_biller_or_head_cook_and_can_finalize?
     end
 
+    def unfinalize?
+      meal.finalized? && admin_or_biller_or_head_cook_and_can_finalize? && meal.transactions.none?(&:statement?)
+    end
+
     def finalize_complete?
       meal.finalized? && admin_or_biller_or_head_cook_and_can_finalize?
     end

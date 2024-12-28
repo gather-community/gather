@@ -83,6 +83,7 @@ Rails.application.routes.draw do
       put :close
       put :reopen
       get :summary
+      put :unfinalize
     end
 
     resources :messages, only: %i[new create], module: :meals

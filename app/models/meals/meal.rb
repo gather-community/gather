@@ -33,7 +33,7 @@ module Meals
     has_many :reminder_deliveries, class_name: "Meals::RoleReminderDelivery", inverse_of: :meal,
       dependent: :destroy
     has_many :transactions, class_name: "Billing::Transaction", as: :statementable,
-      dependent: :restrict_with_exception, inverse_of: :statementable
+      dependent: :destroy, inverse_of: :statementable
 
     # Calendars are chosen by the user. Events are then automatically created.
     # Deterministic orderings are for specs.

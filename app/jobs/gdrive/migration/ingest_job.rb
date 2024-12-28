@@ -75,24 +75,38 @@ module GDrive
       def ingest_files
         consent_request.ingest_file_ids.each do |file_id|
           Rails.logger.info("Ingesting file", file_id: file_id)
-          migration_file = File.find_by(external_id: file_id)
+          direct_match = operation.files.find_by(external_id: file_id, status: "pending")
+          shortcuts = operation.files.where(shortcut_target_id: file_id, status: "pending").to_a
 
-          if migration_file.nil?
-            migration_file = build_new_migration_file(file_id)
-          end
+          Rails.logger.info("Found #{direct_match ? 1 : 0} direct match, #{shortcuts.size} shortcuts")
 
-          # If still nil, it must be an invalid file so we skip.
-          next if migration_file.nil?
+          all_matches = [direct_match].concat(shortcuts).compact
 
-          # Sometimes the picker gives us files that are not owned by the consenter
-          # even though we ask it not to. Skip these.
-          if migration_file.owner != consent_request.google_email
-            Rails.logger.warn("Requested to ingest file owned by other user", file_id: file_id,
-              consenter: consent_request.google_email, actual_owner: migration_file.owner)
+          if all_matches.empty?
+            Rails.logger.warn("No matches for file ID", file_id: file_id, consenter: consent_request.google_email)
             next
           end
 
-          migrate_file(file_id, migration_file)
+          owned_matches, unowned_matches = all_matches.partition { |f| f.owner == consent_request.google_email }
+
+          if owned_matches.empty?
+            Rails.logger.warn("All matches for file ID owned by someone else", file_id: file_id,
+              consenter: consent_request.google_email, matched_ids: owned_matches.map(&:external_id))
+            next
+          end
+
+          unowned_matches.each do |unowned_match|
+            Rails.logger.info("Skipping match because owned by someone else",
+              file_id: unowned_match.external_id,
+              owner: unowned_match.owner,
+              is_shortcut: unowned_match.external_id != file_id)
+          end
+
+          owned_matches.each do |migration_file|
+            Rails.logger.info("Migrating file", file_id: file_id,
+              is_shortcut: migration_file.external_id != file_id)
+            migrate_file(migration_file)
+          end
         end
       end
 
@@ -102,7 +116,8 @@ module GDrive
       # - Moves file to final location
       # - Updates file and consent request records with status
       # - Handles errors
-      def migrate_file(file_id, migration_file)
+      def migrate_file(migration_file)
+        file_id = migration_file.external_id
         begin
           # This could fail if
           # 1. the folder map for migration_file.parent_id is missing or invalid AND
@@ -126,6 +141,8 @@ module GDrive
         # Move the file to the temp drive by removing the old parent and adding the temp drive.
         # This transfers ownership.
         # We think this could only fail if:
+        # - The file is a shortcut that we haven't been granted permission for yet from the picker (this
+        #   can happen normally so we swallow this error).
         # - The temp drive got deleted, very unlikely.
         # - The file got deleted or moved or permissions changed between when the user
         #   picked it and when the job runs, very unlikely.
@@ -136,7 +153,11 @@ module GDrive
           migration_wrapper.update_file(file_id, add_parents: consent_request.temp_drive_id,
             remove_parents: migration_file.parent_id, supports_all_drives: true)
         rescue Google::Apis::ClientError => error
-          handle_file_error(migration_file, error, "client_error_moving_to_temp_drive", report: true)
+          if error.message.include?("The user has not granted the app")
+            Rails.logger.info("Got 'The user has not granted the app' error, swallowing", file_id: file_id)
+          else
+            handle_file_error(migration_file, error, "client_error_moving_to_temp_drive", report: true)
+          end
           return
         end
 

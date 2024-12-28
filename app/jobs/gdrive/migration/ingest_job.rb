@@ -102,10 +102,13 @@ module GDrive
               is_shortcut: unowned_match.external_id != file_id)
           end
 
-          owned_matches.each do |migration_file|
+          owned_matches.each_with_index do |migration_file, index|
             Rails.logger.info("Migrating file", file_id: file_id,
               is_shortcut: migration_file.external_id != file_id)
-            migrate_file(migration_file)
+
+            # We only want to increment the counter shown in the loading indicator once per
+            # picked file.
+            migrate_file(migration_file, should_increment: index == 0)
           end
         end
       end
@@ -116,7 +119,7 @@ module GDrive
       # - Moves file to final location
       # - Updates file and consent request records with status
       # - Handles errors
-      def migrate_file(migration_file)
+      def migrate_file(migration_file, should_increment:)
         file_id = migration_file.external_id
         begin
           # This could fail if
@@ -126,10 +129,10 @@ module GDrive
           # We need to handle these possibilities and fail gracefully.
           dest_parent_id = ancestor_tree_duplicator.ensure_tree(migration_file.parent_id)
         rescue AncestorTreeDuplicator::ParentFolderInaccessible => error
-          handle_file_error(migration_file, error, "ancestor_inaccessible")
+          handle_file_error(migration_file, error, "ancestor_inaccessible", should_increment: should_increment)
           return
         rescue Google::Apis::ClientError => error
-          handle_file_error(migration_file, error, "client_error_ensuring_tree")
+          handle_file_error(migration_file, error, "client_error_ensuring_tree", should_increment: should_increment)
           return
         end
 
@@ -156,7 +159,7 @@ module GDrive
           if error.message.include?("The user has not granted the app")
             Rails.logger.info("Got 'The user has not granted the app' error, swallowing", file_id: file_id)
           else
-            handle_file_error(migration_file, error, "client_error_moving_to_temp_drive", report: true)
+            handle_file_error(migration_file, error, "client_error_moving_to_temp_drive", report: true, should_increment: should_increment)
           end
           return
         end
@@ -174,14 +177,14 @@ module GDrive
           main_wrapper.update_file(file_id, add_parents: dest_parent_id,
             remove_parents: consent_request.temp_drive_id, supports_all_drives: true)
         rescue Google::Apis::ClientError => error
-          handle_file_error(migration_file, error, "client_error_moving_to_destination", report: true)
+          handle_file_error(migration_file, error, "client_error_moving_to_destination", report: true, should_increment: should_increment)
           return
         end
 
         # This will also save the migration_file if it was an unpersisted one.
         migration_file.update!(status: "transferred")
 
-        consent_request.increment!(:ingest_progress)
+        consent_request.increment!(:ingest_progress) if should_increment
       end
 
       # Builds, but does not save, a migration file record based on the given ID.
@@ -219,8 +222,8 @@ module GDrive
         nil
       end
 
-      def handle_file_error(migration_file, error, error_type, report: false)
-        consent_request.increment!(:ingest_progress)
+      def handle_file_error(migration_file, error, error_type, should_increment:, report: false)
+        consent_request.increment!(:ingest_progress) if should_increment
         consent_request.increment!(:error_count)
 
         Rails.logger.error("Encountered #{error_type}",

@@ -7,6 +7,11 @@
     <p>
       Our records indicate that you still own the files below. If you don't want to help transfer these files
       to community ownership, please let us know why you're choosing to opt out.
+    </p>
+    <p>
+      If you tried to transfer the files but something went wrong, please share what happened.
+    </p>
+    <p>
       If you didn't mean to opt out, you can <%= link_to("go back", gdrive_migration_consent_path) %>.
     </p>
     <%= gather_form_for(@consent_request, url: gdrive_migration_consent_confirm_opt_out_path, html: {class: "full-width"}) do |f| %>

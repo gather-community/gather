@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_10_17_013526) do
+ActiveRecord::Schema[7.0].define(version: 2024_12_08_190003) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -353,6 +353,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_17_013526) do
     t.index ["cluster_id"], name: "index_gdrive_migration_files_on_cluster_id"
     t.index ["operation_id", "external_id"], name: "index_gdrive_migration_files_on_operation_id_and_external_id", unique: true
     t.index ["operation_id", "owner", "status"], name: "index_gdrive_migration_files_on_owner"
+    t.index ["operation_id", "shortcut_target_id"], name: "gdrive_files_on_shortcut"
     t.index ["operation_id"], name: "index_gdrive_migration_files_on_operation_id"
     t.check_constraint "char_length(name) <= 32767", name: "name_length"
     t.check_constraint "error_type::text = ANY (ARRAY['forbidden'::character varying::text, 'not_found'::character varying::text, 'ancestor_inaccessible'::character varying::text, 'client_error_ensuring_tree'::character varying::text, 'client_error_moving_to_temp_drive'::character varying::text, 'client_error_moving_to_destination'::character varying::text])", name: "error_type_enum"

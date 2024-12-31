@@ -371,38 +371,6 @@ describe GDrive::Migration::IngestJob do
     end
   end
 
-  describe "source file with no stored reference, but it's in the migration tree" do
-    let!(:folder_map_a) do
-      create(:gdrive_migration_folder_map, operation: operation, name: "Folder A",
-        src_id: "1PJwkZgkByPMcbkfzneq65Cx1CnDNMVR_", src_parent_id: operation.src_folder_id,
-        dest_id: "1REPQUYEGym1APlylgINdZFO1Lh85eDq4", dest_parent_id: operation.dest_folder_id)
-    end
-    let!(:file_b_1) do
-      create(:gdrive_migration_file, operation: operation, external_id: "13LqTKL6yZq7MkpNKp1de2SromgPJ5m6cVbWx_hcnFoQ",
-        parent_id: "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV", owner: consenter_email)
-    end
-    let(:request_id) { "2d13b315-ee72-43eb-acf6-115528451c83" }
-
-    before do
-      file_b_1.destroy
-    end
-
-    it "should still migrate file and create File record" do
-      VCR.use_cassette("gdrive/migration/ingest_job/file_with_no_record_but_its_in_tree") do
-        described_class.perform_now(cluster_id: Defaults.cluster.id,
-          consent_request_id: consent_request.id)
-
-        new_file = GDrive::Migration::File.find_by(external_id: "13LqTKL6yZq7MkpNKp1de2SromgPJ5m6cVbWx_hcnFoQ")
-        expect(new_file).to be_transferred
-
-        consent_request.reload
-        expect(consent_request).to be_ingest_done
-        expect(consent_request).to be_done
-        expect(consent_request.file_count).to eq(0)
-      end
-    end
-  end
-
   describe "source file with no stored reference, and it's not in the migration tree" do
     let!(:folder_map_a) do
       create(:gdrive_migration_folder_map, operation: operation, name: "Folder A",

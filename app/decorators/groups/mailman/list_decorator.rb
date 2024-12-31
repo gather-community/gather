@@ -23,7 +23,7 @@ module Groups
 
       def archives_url
         return @archives_url if @archives_url
-        path = remote_id ? "/hyperkitty/lists/#{fqdn_listname}/" : "/hyperkitty/"
+        path = remote_id ? "/archives/lists/#{fqdn_listname}/" : "/archives/"
         @archives_url = "#{Settings.mailman.single_sign_on.init_url}#{CGI.escape(path)}"
       end
 

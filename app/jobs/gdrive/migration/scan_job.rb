@@ -157,6 +157,9 @@ module GDrive
             next
           end
 
+          # IMPORTANT: We don't check whether the changed file is within the source directory tree
+          # because that would be slow, and we always assume that the migration user only has access
+          # to the source migration tree anyway.
           gdrive_files << change.file
         end
         [gdrive_files, list.next_page_token, list.new_start_page_token]

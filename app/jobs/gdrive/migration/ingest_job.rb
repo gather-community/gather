@@ -75,82 +75,116 @@ module GDrive
       def ingest_files
         consent_request.ingest_file_ids.each do |file_id|
           Rails.logger.info("Ingesting file", file_id: file_id)
-          migration_file = File.find_by(external_id: file_id)
+          direct_match = operation.files.find_by(external_id: file_id, status: "pending")
+          shortcuts = operation.files.where(shortcut_target_id: file_id, status: "pending").to_a
 
-          if migration_file.nil?
-            migration_file = build_new_migration_file(file_id)
-          end
+          Rails.logger.info("Found #{direct_match ? 1 : 0} direct match, #{shortcuts.size} shortcuts")
 
-          # If still nil, it must be an invalid file so we skip.
-          next if migration_file.nil?
+          all_matches = [direct_match].concat(shortcuts).compact
 
-          # Sometimes the picker gives us files that are not owned by the consenter
-          # even though we ask it not to. Skip these.
-          if migration_file.owner != consent_request.google_email
-            Rails.logger.warn("Requested to ingest file owned by other user", file_id: file_id,
-              consenter: consent_request.google_email, actual_owner: migration_file.owner)
+          if all_matches.empty?
+            Rails.logger.warn("No matches for file ID", file_id: file_id, consenter: consent_request.google_email)
             next
           end
 
-          begin
-            # This could fail if
-            # 1. the folder map for migration_file.parent_id is missing or invalid AND
-            #   1a. the workspace user doesn't have access to src_folder
-            #   1b. the workspace user has access to src_folder but not its parents
-            # We need to handle these possibilities and fail gracefully.
-            dest_parent_id = ancestor_tree_duplicator.ensure_tree(migration_file.parent_id)
-          rescue AncestorTreeDuplicator::ParentFolderInaccessible => error
-            handle_file_error(migration_file, error, "ancestor_inaccessible")
-            next
-          rescue Google::Apis::ClientError => error
-            handle_file_error(migration_file, error, "client_error_ensuring_tree")
+          owned_matches, unowned_matches = all_matches.partition { |f| f.owner == consent_request.google_email }
+
+          if owned_matches.empty?
+            Rails.logger.warn("All matches for file ID owned by someone else", file_id: file_id,
+              consenter: consent_request.google_email, matched_ids: owned_matches.map(&:external_id))
             next
           end
 
-          if dest_parent_id.nil?
-            Rails.logger.error("dest_parent_id was nil, aborting", file_id: file_id)
-            raise "dest_parent_id should never be nil"
+          unowned_matches.each do |unowned_match|
+            Rails.logger.info("Skipping match because owned by someone else",
+              file_id: unowned_match.external_id,
+              owner: unowned_match.owner,
+              is_shortcut: unowned_match.external_id != file_id)
           end
 
-          # Move the file to the temp drive by removing the old parent and adding the temp drive.
-          # This transfers ownership.
-          # We think this could only fail if:
-          # - The temp drive got deleted, very unlikely.
-          # - The file got deleted or moved or permissions changed between when the user
-          #   picked it and when the job runs, very unlikely.
-          # Still, there may be other failure modes we haven't thought of so we don't want to fail the job.
-          # So we log and persist the error and keep going.
-          begin
-            Rails.logger.info("Moving file to temp drive.", file_id: file_id)
-            migration_wrapper.update_file(file_id, add_parents: consent_request.temp_drive_id,
-              remove_parents: migration_file.parent_id, supports_all_drives: true)
-          rescue Google::Apis::ClientError => error
-            handle_file_error(migration_file, error, "client_error_moving_to_temp_drive", report: true)
-            next
+          owned_matches.each_with_index do |migration_file, index|
+            Rails.logger.info("Migrating file", file_id: file_id,
+              is_shortcut: migration_file.external_id != file_id)
+
+            # We only want to increment the counter shown in the loading indicator once per
+            # picked file.
+            migrate_file(migration_file, should_increment: index == 0)
           end
-
-          # Move the file again to its proper home. The migration_wrapper can't do this because
-          # the consenting user may not have permission.
-          # We think this could only fail if:
-          # - dest_parent got deleted. This is not likely because AncestorTreeDuplicator should have caught this
-          #   and recreated it and updated the folder map, unless dest_parent is the destination root,
-          #   which would mean something really weird is going on and we should let the client error bubble up.
-          # Still, there may be other failure modes we haven't thought of so we don't want to fail the job.
-          # So we log and persist the error and keep going.
-          begin
-            Rails.logger.info("Moving file to final destination.", file_id: file_id, dest_parent_id: dest_parent_id)
-            main_wrapper.update_file(file_id, add_parents: dest_parent_id,
-              remove_parents: consent_request.temp_drive_id, supports_all_drives: true)
-          rescue Google::Apis::ClientError => error
-            handle_file_error(migration_file, error, "client_error_moving_to_destination", report: true)
-            next
-          end
-
-          # This will also save the migration_file if it was an unpersisted one.
-          migration_file.update!(status: "transferred")
-
-          consent_request.increment!(:ingest_progress)
         end
+      end
+
+      # This method:
+      # - Ensures the destination folder exists
+      # - Moves file to temp drive
+      # - Moves file to final location
+      # - Updates file and consent request records with status
+      # - Handles errors
+      def migrate_file(migration_file, should_increment:)
+        file_id = migration_file.external_id
+        begin
+          # This could fail if
+          # 1. the folder map for migration_file.parent_id is missing or invalid AND
+          #   1a. the workspace user doesn't have access to src_folder
+          #   1b. the workspace user has access to src_folder but not its parents
+          # We need to handle these possibilities and fail gracefully.
+          dest_parent_id = ancestor_tree_duplicator.ensure_tree(migration_file.parent_id)
+        rescue AncestorTreeDuplicator::ParentFolderInaccessible => error
+          handle_file_error(migration_file, error, "ancestor_inaccessible", should_increment: should_increment)
+          return
+        rescue Google::Apis::ClientError => error
+          handle_file_error(migration_file, error, "client_error_ensuring_tree", should_increment: should_increment)
+          return
+        end
+
+        if dest_parent_id.nil?
+          Rails.logger.error("dest_parent_id was nil, aborting", file_id: file_id)
+          raise "dest_parent_id should never be nil"
+        end
+
+        # Move the file to the temp drive by removing the old parent and adding the temp drive.
+        # This transfers ownership.
+        # We think this could only fail if:
+        # - The file is a shortcut that we haven't been granted permission for yet from the picker (this
+        #   can happen normally so we swallow this error).
+        # - The temp drive got deleted, very unlikely.
+        # - The file got deleted or moved or permissions changed between when the user
+        #   picked it and when the job runs, very unlikely.
+        # Still, there may be other failure modes we haven't thought of so we don't want to fail the job.
+        # So we log and persist the error and keep going.
+        begin
+          Rails.logger.info("Moving file to temp drive.", file_id: file_id)
+          migration_wrapper.update_file(file_id, add_parents: consent_request.temp_drive_id,
+            remove_parents: migration_file.parent_id, supports_all_drives: true)
+        rescue Google::Apis::ClientError => error
+          if error.message.include?("The user has not granted the app")
+            Rails.logger.info("Got 'The user has not granted the app' error, swallowing", file_id: file_id)
+          else
+            handle_file_error(migration_file, error, "client_error_moving_to_temp_drive", report: true, should_increment: should_increment)
+          end
+          return
+        end
+
+        # Move the file again to its proper home. The migration_wrapper can't do this because
+        # the consenting user may not have permission.
+        # We think this could only fail if:
+        # - dest_parent got deleted. This is not likely because AncestorTreeDuplicator should have caught this
+        #   and recreated it and updated the folder map, unless dest_parent is the destination root,
+        #   which would mean something really weird is going on and we should let the client error bubble up.
+        # Still, there may be other failure modes we haven't thought of so we don't want to fail the job.
+        # So we log and persist the error and keep going.
+        begin
+          Rails.logger.info("Moving file to final destination.", file_id: file_id, dest_parent_id: dest_parent_id)
+          main_wrapper.update_file(file_id, add_parents: dest_parent_id,
+            remove_parents: consent_request.temp_drive_id, supports_all_drives: true)
+        rescue Google::Apis::ClientError => error
+          handle_file_error(migration_file, error, "client_error_moving_to_destination", report: true, should_increment: should_increment)
+          return
+        end
+
+        # This will also save the migration_file if it was an unpersisted one.
+        migration_file.update!(status: "transferred")
+
+        consent_request.increment!(:ingest_progress) if should_increment
       end
 
       # Builds, but does not save, a migration file record based on the given ID.
@@ -188,8 +222,8 @@ module GDrive
         nil
       end
 
-      def handle_file_error(migration_file, error, error_type, report: false)
-        consent_request.increment!(:ingest_progress)
+      def handle_file_error(migration_file, error, error_type, should_increment:, report: false)
+        consent_request.increment!(:ingest_progress) if should_increment
         consent_request.increment!(:error_count)
 
         Rails.logger.error("Encountered #{error_type}",

@@ -94,8 +94,8 @@ class SystemStatus
 
       # If mail is sent at t, the next job picks it up at t + 5 mins and sends a new mail
       # So if things are working normally, the max age should be 10 mins give or take
-      # So if it is more than 12 mins, we raise the alarm
-      ago < 12 * 60
+      # So if it is more than 20 mins, we raise the alarm
+      ago < 20 * 60
     else
       Rails.logger.info("MAIL-UPTIME-LINE No mail recieved")
       false

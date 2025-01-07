@@ -206,10 +206,12 @@ module GDrive
       def process_new_folder(gdrive_file)
         Rails.logger.info("Processing new folder", src_id: gdrive_file.id)
         begin
-          # We don't need to check for the existence of an already mapped folder when we are
+          # The AncestorTreeDuplicator makes use of existing FolderMap records as part of its algorithm
+          # but it treats them skeptically by default, making sure that the destination folder still actually
+          # exists before proceeding. But we don't need to check this when we are
           # doing the initial scan since we will have just created it.
-          dest_parent_id = ancestor_tree_duplicator.ensure_tree(gdrive_file.parents[0],
-            skip_check_for_already_mapped_folder: scan.full?)
+          dest_parent_id = ancestor_tree_duplicator.ensure_tree(gdrive_file,
+            skip_check_for_already_mapped_folders: scan.full?)
         rescue AncestorTreeDuplicator::ParentFolderInaccessible => error
           Rails.logger.error("Ancestor inaccessible", file_id: gdrive_file.id, folder_id: error.folder_id)
           # We don't need to take any action here because a new folder with an inaccessible parent should
@@ -221,14 +223,6 @@ module GDrive
           # we should probably just ignore it.
           return false
         end
-
-        dest_folder = Google::Apis::DriveV3::File.new(name: gdrive_file.name, parents: [dest_parent_id],
-          mime_type: GDrive::FOLDER_MIME_TYPE)
-        dest_folder = wrapper.create_file(dest_folder, fields: "id", supports_all_drives: true)
-
-        FolderMap.create!(operation: operation, src_parent_id: gdrive_file.parents[0],
-          src_id: gdrive_file.id, dest_parent_id: dest_parent_id, dest_id: dest_folder.id,
-          name: gdrive_file.name)
         true
       end
 

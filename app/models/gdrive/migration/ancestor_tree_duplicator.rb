@@ -32,17 +32,25 @@ module GDrive
       # If raises Google::Apis::ClientError, this is most likely because the workspace user
       # doesn't have access to src_folder or src_folder doesn't exist.
       #
-      # If skip_check_for_already_mapped_folder is specified, we will assume the destination
+      # If skip_check_for_already_mapped_folders is specified, we will assume the destination
       # folder exists if a FolderMap exists. This is safer if we are confident that the
       # dest folder was recently created, as when we are doing the initial scan.
-      def ensure_tree(src_folder_id, skip_check_for_already_mapped_folder: false)
-        Rails.logger.info("Ensuring ancestor tree", src_folder_id: src_folder_id)
+      def ensure_tree(src_folder_or_id, skip_check_for_already_mapped_folders: false)
+        if src_folder_or_id.is_a?(String)
+          src_folder_id = src_folder_or_id
+          src_folder = nil
+        else
+          src_folder_id = src_folder_or_id.id
+          src_folder = src_folder_or_id
+        end
+
+        Rails.logger.info("Ensuring folder tree", src_folder_id: src_folder_id)
 
         return operation.dest_folder_id if src_folder_id == operation.src_folder_id
 
         # Check for an existing and valid map before we create a new one
         if (map = FolderMap.find_by(src_id: src_folder_id))
-          if skip_check_for_already_mapped_folder || folder_exists?(map.dest_id)
+          if skip_check_for_already_mapped_folders || folder_exists?(map.dest_id)
             return map.dest_id
           else
             Rails.logger.warn("Folder map dest folder missing", src_folder_id: src_folder_id, dest_folder_id: map.dest_id)
@@ -57,9 +65,10 @@ module GDrive
 
         # The first thing we need is the src_folder's parent so that we know what folder on the destination
         # to find/create the destination folder in.
+        # To get this, we need to load the src folder from the API, unless it was given to us in the method call.
         # This request could fail if the workspace user doesn't have access to src_folder or src_folder
         # doesn't exist. The error will bubble up to the caller in that case.
-        src_folder = wrapper.get_file(src_folder_id, fields: "id,name,parents", supports_all_drives: true)
+        src_folder ||= wrapper.get_file(src_folder_id, fields: "id,name,parents", supports_all_drives: true)
 
         # This can happen if we don't have access to the target folder's parent, or, rarely,
         # if it has no parents, like if somehow src_folder_id is the person's My Drive. Either way

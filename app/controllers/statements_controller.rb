@@ -37,7 +37,7 @@ class StatementsController < ApplicationController
   def more
     @account = Billing::Account.find(params[:account_id])
     authorize(@account, :show?)
-    @statements = @account.statements.page(params[:page]).per(StatementsController::PER_PAGE)
+    @statements = @account.statements.order(created_at: :desc).page(params[:page]).per(StatementsController::PER_PAGE)
     render(partial: "statements/statement_rows")
   end
 

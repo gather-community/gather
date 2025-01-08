@@ -78,7 +78,9 @@ module Groups
 
       # Assumes remote_id is set on list_mship
       def delete_membership(list_mship)
-        request("members/#{list_mship.remote_id}", :delete)
+        # There seems to be a bug in the Mailman API where we get a 400 "Could not parse an empty JSON body"
+        # if we send the request with a null body. Even though this works for deleteing a list.
+        request("members/#{list_mship.remote_id}", :delete, include_empty_json_object: true)
       end
 
       def memberships(source)
@@ -198,13 +200,19 @@ module Groups
         end
       end
 
-      def request(endpoint, method = :get, **data)
+      def request(endpoint, method = :get, include_empty_json_object: false, **data)
         return stubbed_response if Rails.env.test? && ENV["STUB_MAILMAN"]
         url = URI.parse("#{base_url}/#{endpoint}")
         req = "Net::HTTP::#{method.to_s.capitalize}".constantize.new(url)
         req["Content-Type"] = "application/json"
         req.basic_auth(*credentials)
-        req.body = data.to_json if data.present?
+        req.body = if data.present?
+          data.to_json
+        elsif include_empty_json_object
+          "{}"
+        else
+          nil
+        end
         res = Net::HTTP.start(url.hostname, url.port, use_ssl: url.scheme == "https") do |http|
           http.request(req)
         end

@@ -14,7 +14,7 @@ describe "accounts", js: true do
     let!(:account2) { create(:account, :with_statement, :with_transactions) }
     let!(:account3) { create(:account, :no_activity) }
     let!(:txn_description) { account1.transactions[0].description }
-    let!(:stmt_amt) { account1.statements[0].total_due }
+    let!(:stmt_amt) { account1.statements.order(created_at: :desc)[0].total_due }
     let!(:late_recorded_txn) do
       create(:transaction, account: account1, incurred_on: Time.zone.today - 1.year,
         description: "Ye olde transaction")

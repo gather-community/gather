@@ -144,16 +144,19 @@ module GDrive
           # If no file is present at all, it means we no longer have access to this file
           # and we should delete any reference we have to it.
           if change.file.nil?
-            Rails.logger.info("Received change with no file info, deleting references",
+            Rails.logger.info("Received change with no file info, deleting references if present",
               file_id: change.file_id)
             delete_references_to(change.file_id)
             next
           end
 
           # If drive_id is present, it means this is a changes scan and we've pulled in
-          # a change to a Shared Drive item, which we don't care about.
+          # a change to a Shared Drive item. This could happen if someone migrated a file manually.
+          # In any case, we don't care about these files anymore so delete any references if present.
           if change.file.drive_id.present?
-            Rails.logger.info("Received change with drive_id, ignoring", drive_id: change.file.drive_id)
+            Rails.logger.info("Received change with drive_id, deleting references if present",
+              file_id: change.file_id, drive_id: change.file.drive_id)
+            delete_references_to(change.file_id)
             next
           end
 

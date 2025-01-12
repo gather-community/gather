@@ -26,10 +26,9 @@ module GDrive
           self.ancestor_tree_duplicator = AncestorTreeDuplicator.new(wrapper: main_wrapper,
             operation: operation)
 
-          Rails.logger.info("IngestJob starting",
+          operation.log(:info, "IngestJob starting",
             consent_request_id: consent_request.id,
-            file_ids: consent_request.ingest_file_ids,
-            operation_id: operation.id)
+            file_ids: consent_request.ingest_file_ids)
 
           ensure_temp_drive
           ingest_files
@@ -56,7 +55,7 @@ module GDrive
         return if consent_request.temp_drive_id.present?
 
         temp_drive = Google::Apis::DriveV3::Drive.new(name: "Migration Temp Drive #{consent_request.id}")
-        Rails.logger.info("Creating temp drive", name: temp_drive.name)
+        operation.log(:info, "Creating temp drive", name: temp_drive.name)
 
         # This could only fail if our permissons are bad, which means the whole operation is broken.
         # So we let it bubble up and stop the job.
@@ -64,7 +63,7 @@ module GDrive
 
         # This could only fail if our permissons are bad, which means the whole operation is broken.
         # So we let it bubble up and stop the job.
-        Rails.logger.info("Adding temp drive write permission", consenter: consent_request.google_email)
+        operation.log(:info, "Adding temp drive write permission", consenter: consent_request.google_email)
         permission = Google::Apis::DriveV3::Permission.new(type: "user", email_address: consent_request.google_email,
           role: "writer")
         main_wrapper.create_permission(temp_drive.id, permission, supports_all_drives: true, send_notification_email: false)
@@ -74,36 +73,36 @@ module GDrive
 
       def ingest_files
         consent_request.ingest_file_ids.each do |file_id|
-          Rails.logger.info("Ingesting file", file_id: file_id)
+          operation.log(:info, "Ingesting file", file_id: file_id)
           direct_match = operation.files.find_by(external_id: file_id, status: "pending")
           shortcuts = operation.files.where(shortcut_target_id: file_id, status: "pending").to_a
 
-          Rails.logger.info("Found #{direct_match ? 1 : 0} direct match, #{shortcuts.size} shortcuts")
+          operation.log(:info, "Found #{direct_match ? 1 : 0} direct match, #{shortcuts.size} shortcuts")
 
           all_matches = [direct_match].concat(shortcuts).compact
 
           if all_matches.empty?
-            Rails.logger.warn("No matches for file ID", file_id: file_id, consenter: consent_request.google_email)
+            operation.log(:warn, "No matches for file ID", file_id: file_id, consenter: consent_request.google_email)
             next
           end
 
           owned_matches, unowned_matches = all_matches.partition { |f| f.owner == consent_request.google_email }
 
           if owned_matches.empty?
-            Rails.logger.warn("All matches for file ID owned by someone else", file_id: file_id,
+            operation.log(:warn, "All matches for file ID owned by someone else", file_id: file_id,
               consenter: consent_request.google_email, matched_ids: owned_matches.map(&:external_id))
             next
           end
 
           unowned_matches.each do |unowned_match|
-            Rails.logger.info("Skipping match because owned by someone else",
+            operation.log(:info, "Skipping match because owned by someone else",
               file_id: unowned_match.external_id,
               owner: unowned_match.owner,
               is_shortcut: unowned_match.external_id != file_id)
           end
 
           owned_matches.each_with_index do |migration_file, index|
-            Rails.logger.info("Migrating file", file_id: file_id,
+            operation.log(:info, "Migrating file", file_id: file_id,
               is_shortcut: migration_file.external_id != file_id)
 
             # We only want to increment the counter shown in the loading indicator once per
@@ -137,7 +136,7 @@ module GDrive
         end
 
         if dest_parent_id.nil?
-          Rails.logger.error("dest_parent_id was nil, aborting", file_id: file_id)
+          operation.log(:error, "dest_parent_id was nil, aborting", file_id: file_id)
           raise "dest_parent_id should never be nil"
         end
 
@@ -152,12 +151,12 @@ module GDrive
         # Still, there may be other failure modes we haven't thought of so we don't want to fail the job.
         # So we log and persist the error and keep going.
         begin
-          Rails.logger.info("Moving file to temp drive.", file_id: file_id)
+          operation.log(:info, "Moving file to temp drive.", file_id: file_id)
           migration_wrapper.update_file(file_id, add_parents: consent_request.temp_drive_id,
             remove_parents: migration_file.parent_id, supports_all_drives: true)
         rescue Google::Apis::ClientError => error
           if error.message.include?("The user has not granted the app")
-            Rails.logger.info("Got 'The user has not granted the app' error, swallowing", file_id: file_id)
+            operation.log(:info, "Got 'The user has not granted the app' error, swallowing", file_id: file_id)
           else
             handle_file_error(migration_file, error, "client_error_moving_to_temp_drive", report: true, should_increment: should_increment)
           end
@@ -173,7 +172,7 @@ module GDrive
         # Still, there may be other failure modes we haven't thought of so we don't want to fail the job.
         # So we log and persist the error and keep going.
         begin
-          Rails.logger.info("Moving file to final destination.", file_id: file_id, dest_parent_id: dest_parent_id)
+          operation.log(:info, "Moving file to final destination.", file_id: file_id, dest_parent_id: dest_parent_id)
           main_wrapper.update_file(file_id, add_parents: dest_parent_id,
             remove_parents: consent_request.temp_drive_id, supports_all_drives: true)
         rescue Google::Apis::ClientError => error
@@ -191,18 +190,18 @@ module GDrive
       # We then proceed through ingestion with this unpersisted object, only saving it if
       # ingestion is successful. Returns nil if getting the file fails or if it's a folder.
       def build_new_migration_file(file_id)
-        Rails.logger.info("No matching File record for file. Attempting to create.", file_id: file_id)
+        operation.log(:info, "No matching File record for file. Attempting to create.", file_id: file_id)
 
         gdrive_file = main_wrapper.get_file(file_id,
           fields: "name,parents,mimeType,webViewLink,iconLink,modifiedTime,owners(emailAddress),capabilities(canEdit)")
 
         if gdrive_file.parents.blank?
-          Rails.logger.error("File has no accessible parents", file_id: file_id)
+          operation.log(:error, "File has no accessible parents", file_id: file_id)
           return nil
         elsif gdrive_file.mime_type == GDrive::FOLDER_MIME_TYPE
           # This shouldn't normally happen since we don't allow picking folders in the picker
           # but just in case.
-          Rails.logger.error("File is a folder, skipping", file_id: file_id)
+          operation.log(:error, "File is a folder, skipping", file_id: file_id)
           return nil
         end
 
@@ -218,7 +217,7 @@ module GDrive
           modified_at: gdrive_file.modified_time
         )
       rescue Google::Apis::ClientError => error
-        Rails.logger.error("Client error looking up file", file_id: file_id, message: error.to_s)
+        operation.log(:error, "Client error looking up file", file_id: file_id, message: error.to_s)
         nil
       end
 
@@ -226,10 +225,9 @@ module GDrive
         consent_request.increment!(:ingest_progress) if should_increment
         consent_request.increment!(:error_count)
 
-        Rails.logger.error("Encountered #{error_type}",
+        operation.log(:error, "Encountered #{error_type}",
           file_id: migration_file.external_id,
           message: error.to_s,
-          operation_id: operation.id,
           consent_request_id: consent_request.id)
 
         # No need to set an error on an unpersisted File, b/c those ones are from files the user
@@ -248,7 +246,7 @@ module GDrive
         end
 
         if consent_request.error_count >= MAX_ERRORS
-          Rails.logger.error("GDrive max ingest errors reached", count: MAX_ERRORS,
+          operation.log(:error, "GDrive max ingest errors reached", count: MAX_ERRORS,
             consent_request_id: consent_request.id)
           Gather::ErrorReporter.instance.report(StandardError.new("GDrive max ingest errors reached"), data: {
             count: MAX_ERRORS,

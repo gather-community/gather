@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_12_08_190003) do
+ActiveRecord::Schema[7.0].define(version: 2025_01_12_160611) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -374,6 +374,18 @@ ActiveRecord::Schema[7.0].define(version: 2024_12_08_190003) do
     t.index ["operation_id", "src_id"], name: "index_gdrive_migration_folder_maps_on_operation_id_and_src_id", unique: true
     t.index ["operation_id"], name: "index_gdrive_migration_folder_maps_on_operation_id"
     t.check_constraint "char_length(name) <= 32767", name: "name_length"
+  end
+
+  create_table "gdrive_migration_logs", force: :cascade do |t|
+    t.bigint "cluster_id", null: false
+    t.datetime "created_at", null: false
+    t.jsonb "data"
+    t.string "level", null: false
+    t.text "message", null: false
+    t.bigint "operation_id", null: false
+    t.index ["cluster_id"], name: "index_gdrive_migration_logs_on_cluster_id"
+    t.index ["created_at"], name: "index_gdrive_migration_logs_on_created_at"
+    t.index ["operation_id"], name: "index_gdrive_migration_logs_on_operation_id"
   end
 
   create_table "gdrive_migration_operations", force: :cascade do |t|
@@ -1227,6 +1239,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_12_08_190003) do
   add_foreign_key "gdrive_migration_files", "gdrive_migration_operations", column: "operation_id"
   add_foreign_key "gdrive_migration_folder_maps", "clusters"
   add_foreign_key "gdrive_migration_folder_maps", "gdrive_migration_operations", column: "operation_id"
+  add_foreign_key "gdrive_migration_logs", "clusters"
+  add_foreign_key "gdrive_migration_logs", "gdrive_migration_operations", column: "operation_id"
   add_foreign_key "gdrive_migration_operations", "gdrive_configs", column: "config_id"
   add_foreign_key "gdrive_migration_scan_tasks", "gdrive_migration_scans", column: "scan_id"
   add_foreign_key "gdrive_migration_scans", "clusters"

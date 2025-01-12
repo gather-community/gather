@@ -5,8 +5,9 @@ module GDrive
     # Creates and emails out consent requests.
     class ConsentRequestJob < ApplicationJob
       def perform(cluster_id:, operation_id:, google_emails:)
-        Rails.logger.info("ConsentRequestJob starting", cluster_id: cluster_id, operation_id: operation_id)
         ActsAsTenant.with_tenant(Cluster.find(cluster_id)) do
+          operation = Operation.find(operation_id)
+          operation.log(:info, "ConsentRequestJob starting", cluster_id: cluster_id)
           google_emails.each do |google_email|
             file_count = File.owned_by(google_email).count
             consent_request = ConsentRequest.create!(

@@ -279,6 +279,7 @@ Rails.application.routes.draw do
         end
 
         resources :files, only: %i[index]
+        resources :logs, only: %i[index]
       end
       get "consent/callback", to: "consent#callback", as: :consent_callback
       get "consent/:token", to: "consent#intro", as: :consent

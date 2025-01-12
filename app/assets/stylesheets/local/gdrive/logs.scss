@@ -1,0 +1,15 @@
+.gdrive--migration--dashboard--logs {
+  .level {
+    .fa-circle-info { color: lightgray; }
+    .fa-triangle-exclamation { color: orange; }
+    .fa-circle-xmark { color: red; }
+  }
+  .time {
+    white-space: nowrap;
+    vertical-align: top;
+  }
+  .message {
+    font-family: $font-family-monospace;
+    font-size: 90%;
+  }
+}

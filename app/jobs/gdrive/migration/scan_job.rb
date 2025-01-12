@@ -36,7 +36,7 @@ module GDrive
           self.scan_task = ScanTask.find(scan_task_id)
           self.scan = scan_task.scan
           self.operation = scan.operation
-          Rails.logger.info("ScanJob starting", operation_id: operation.id, scan_task_id: scan_task_id)
+          operation.log(:info, "ScanJob starting", scan_task_id: scan_task_id)
           return if scan.cancelled?
 
           self.ancestor_tree_duplicator = AncestorTreeDuplicator.new(wrapper: wrapper, operation: operation)
@@ -51,8 +51,13 @@ module GDrive
       rescue ActiveRecord::RecordNotFound => error
         class_name = error.message.match(/Couldn't find (.+) with/).captures[0]
         raise unless DISAPPEARABLE_CLASSES.include?(class_name)
-        Rails.logger.error(error.message)
-        Rails.logger.info("Exiting gracefully")
+        if operation
+          operation.log(:error, error.message)
+          operation.log(:info, "Exiting gracefully")
+        else
+          Rails.logger.error(error.message)
+          Rails.logger.info("Exiting gracefully")
+        end
       end
 
       private
@@ -81,7 +86,7 @@ module GDrive
         # has hit too many errors and cancelled the scan.
         files.each do |gdrive_file|
           if scan.cancelled?
-            Rails.logger.info("Scan has been cancelled, exiting loop")
+            operation.log(:info, "Scan has been cancelled, exiting loop")
             break
           end
           process_file(gdrive_file)
@@ -95,7 +100,7 @@ module GDrive
           if next_page_token
             scan_next_page(next_page_token)
           elsif new_start_page_token
-            Rails.logger.info("Reached end of changes, updating start page token",
+            operation.log(:info, "Reached end of changes, updating start page token",
               new_start_page_token: new_start_page_token)
             operation.update!(start_page_token: new_start_page_token)
           end
@@ -107,7 +112,7 @@ module GDrive
       end
 
       def list_files_from_folder(folder_id)
-        Rails.logger.info("Listing files from folder", folder_id: folder_id)
+        operation.log(:info, "Listing files from folder", folder_id: folder_id)
         folder_id = folder_id.gsub("'") { "\\'" }
         list = wrapper.list_files(
           q: "'#{folder_id}' in parents and trashed = false",
@@ -122,7 +127,7 @@ module GDrive
       end
 
       def list_files_from_changes
-        Rails.logger.info("Listing files from changes", page_token: scan_task.page_token)
+        operation.log(:info, "Listing files from changes", page_token: scan_task.page_token)
         list = wrapper.list_changes(
           scan_task.page_token,
           fields: "changes(fileId,file(#{FILE_FIELDS},driveId)),nextPageToken,newStartPageToken",
@@ -144,7 +149,7 @@ module GDrive
           # If no file is present at all, it means we no longer have access to this file
           # and we should delete any reference we have to it.
           if change.file.nil?
-            Rails.logger.info("Received change with no file info, deleting references if present",
+            operation.log(:info, "Received change with no file info, deleting references if present",
               file_id: change.file_id)
             delete_references_to(change.file_id)
             next
@@ -154,7 +159,7 @@ module GDrive
           # a change to a Shared Drive item. This could happen if someone migrated a file manually.
           # In any case, we don't care about these files anymore so delete any references if present.
           if change.file.drive_id.present?
-            Rails.logger.info("Received change with drive_id, deleting references if present",
+            operation.log(:info, "Received change with drive_id, deleting references if present",
               file_id: change.file_id, drive_id: change.file.drive_id)
             delete_references_to(change.file_id)
             next
@@ -169,13 +174,13 @@ module GDrive
       end
 
       def process_file(gdrive_file)
-        Rails.logger.info("Processing item", id: gdrive_file.id, name: gdrive_file.name,
+        operation.log(:info, "Processing item", id: gdrive_file.id, name: gdrive_file.name,
           type: gdrive_file.mime_type, owner: gdrive_file.owners[0].email_address)
 
         # Sometimes a changes batch will include the src folder, which is redundant.
         # We should never get to this point in the full scan with the gdrive_file as the src_folder either.
         if gdrive_file.id == operation.src_folder_id
-          Rails.logger.info("Item is operation src folder, skipping")
+          operation.log(:info, "Item is operation src folder, skipping")
           return
         end
 
@@ -190,7 +195,7 @@ module GDrive
 
           return if scan.changes? || !processing_folder_succeeded
 
-          Rails.logger.info("Scheduling scan task for subfolder", folder_id: gdrive_file.id)
+          operation.log(:info, "Scheduling scan task for subfolder", folder_id: gdrive_file.id)
           new_scan_task = scan.scan_tasks.create!(folder_id: gdrive_file.id)
           ScanJob.perform_later(cluster_id: cluster_id, scan_task_id: new_scan_task.id)
         else
@@ -207,7 +212,7 @@ module GDrive
       # Creates folder map.
       # Returns the new folder map, or nil if any API calls on source file fail.
       def process_new_folder(gdrive_file)
-        Rails.logger.info("Processing new folder", src_id: gdrive_file.id)
+        operation.log(:info, "Processing new folder", src_id: gdrive_file.id)
         begin
           # The AncestorTreeDuplicator makes use of existing FolderMap records as part of its algorithm
           # but it treats them skeptically by default, making sure that the destination folder still actually
@@ -216,12 +221,12 @@ module GDrive
           dest_parent_id = ancestor_tree_duplicator.ensure_tree(gdrive_file,
             skip_check_for_already_mapped_folders: scan.full?)
         rescue AncestorTreeDuplicator::ParentFolderInaccessible => error
-          Rails.logger.error("Ancestor inaccessible", file_id: gdrive_file.id, folder_id: error.folder_id)
+          operation.log(:error, "Ancestor inaccessible", file_id: gdrive_file.id, folder_id: error.folder_id)
           # We don't need to take any action here because a new folder with an inaccessible parent should
           # just be ignored as it's probably outside the migration tree.
           return false
         rescue Google::Apis::ClientError => error
-          Rails.logger.error("Client error ensuring tree", file_id: file_id, message: error.to_s)
+          operation.log(:error, "Client error ensuring tree", file_id: file_id, message: error.to_s)
           # We don't need to take any action here because a client error on a new folder means
           # we should probably just ignore it.
           return false
@@ -230,15 +235,15 @@ module GDrive
       end
 
       def process_existing_folder(folder_map, gdrive_file)
-        Rails.logger.info("Processing existing folder", src_id: folder_map.src_id, dest_id: folder_map.dest_id)
+        operation.log(:info, "Processing existing folder", src_id: folder_map.src_id, dest_id: folder_map.dest_id)
 
         if !gdrive_file.trashed && gdrive_file.name == folder_map.name && gdrive_file.parents[0] == folder_map.src_parent_id
-          Rails.logger.info("No changes, returning", src_id: folder_map.src_id, dest_id: folder_map.dest_id)
+          operation.log(:info, "No changes, returning", src_id: folder_map.src_id, dest_id: folder_map.dest_id)
           return true
         end
 
         if gdrive_file.trashed
-          Rails.logger.info("Folder is in trash, deleting folder map", src_id: folder_map.src_id, dest_id: folder_map.dest_id)
+          operation.log(:info, "Folder is in trash, deleting folder map", src_id: folder_map.src_id, dest_id: folder_map.dest_id)
           folder_map.destroy
           return true
         end
@@ -260,10 +265,10 @@ module GDrive
             # has been moved out of the migration tree or is otherwise inaccessible.
             # This shouldn't happen, I think, b/c we should get no file data in that case
             # and that is handled further up. But just in case, log and skip.
-            Rails.logger.error("Ancestor inaccessible, skipping", src_id: folder_map.src_id, dest_id: folder_map.dest_id, ancestor_id: error.folder_id)
+            operation.log(:error, "Ancestor inaccessible, skipping", src_id: folder_map.src_id, dest_id: folder_map.dest_id, ancestor_id: error.folder_id)
             return false
           rescue Google::Apis::ClientError => error
-            Rails.logger.error("Client error ensuring tree, skipping", src_id: folder_map.src_id, dest_id: folder_map.dest_id, message: error.to_s)
+            operation.log(:error, "Client error ensuring tree, skipping", src_id: folder_map.src_id, dest_id: folder_map.dest_id, message: error.to_s)
             return false
           end
 
@@ -277,7 +282,7 @@ module GDrive
         begin
           # This could fail if we don't have access to the dest folder anymore, or if the
           # add or remove parents values are invalid. This could all happen if our records are out of date somehow.
-          Rails.logger.info("Updating dest folder", src_id: folder_map.src_id, dest_id: folder_map.dest_id)
+          operation.log(:info, "Updating dest folder", src_id: folder_map.src_id, dest_id: folder_map.dest_id)
           wrapper.update_file(folder_map.dest_id,
             Google::Apis::DriveV3::File.new(name: gdrive_file.name),
             add_parents: dest_add_parents,
@@ -285,26 +290,26 @@ module GDrive
             supports_all_drives: true)
           folder_map.save!
         rescue Google::Apis::ClientError => error
-          Rails.logger.error("Client error updating dest folder", src_id: folder_map.src_id, dest_id: folder_map.dest_id, message: error.to_s)
+          operation.log(:error, "Client error updating dest folder", src_id: folder_map.src_id, dest_id: folder_map.dest_id, message: error.to_s)
           return false
         end
         true
       end
 
       def process_new_file(gdrive_file)
-        Rails.logger.info("Processing new file", id: gdrive_file.id)
+        operation.log(:info, "Processing new file", id: gdrive_file.id)
 
         if gdrive_file.trashed
-          Rails.logger.info("File is in trash, skipping", file_id: gdrive_file.id, name: gdrive_file.name)
+          operation.log(:info, "File is in trash, skipping", file_id: gdrive_file.id, name: gdrive_file.name)
           return
         end
 
         if gdrive_file.parents.nil?
-          Rails.logger.info("File has no parents, skipping", file_id: gdrive_file.id, name: gdrive_file.name)
+          operation.log(:info, "File has no parents, skipping", file_id: gdrive_file.id, name: gdrive_file.name)
           return
         end
 
-        Rails.logger.info("File not found, creating", file_id: gdrive_file.id, name: gdrive_file.name)
+        operation.log(:info, "File not found, creating", file_id: gdrive_file.id, name: gdrive_file.name)
         operation.files.create!(
           external_id: gdrive_file.id,
           name: gdrive_file.name,
@@ -321,23 +326,23 @@ module GDrive
       end
 
       def process_existing_file(gdrive_file, migration_file)
-        Rails.logger.info("Processing existing file", file_id: gdrive_file.id)
+        operation.log(:info, "Processing existing file", file_id: gdrive_file.id)
 
         # If file has already been migrated, we don't care about any changes to it
         # since the new file (if applicable) is considered to be the canonical copy.
         if migration_file.migrated?
-          Rails.logger.info("File has been migrated, skipping", file_id: gdrive_file.id, status: gdrive_file.status)
+          operation.log(:info, "File has been migrated, skipping", file_id: gdrive_file.id, status: gdrive_file.status)
           return
         end
 
         # parents.nil? means the item is no longer accessible.
         if gdrive_file.trashed || gdrive_file.parents.nil?
-          Rails.logger.info("File is in trash, deleting record", file_id: gdrive_file.id)
+          operation.log(:info, "File is in trash, deleting record", file_id: gdrive_file.id)
           migration_file.destroy
           return
         end
 
-        Rails.logger.info("Updating record", file_id: gdrive_file.id)
+        operation.log(:info, "Updating record", file_id: gdrive_file.id)
         migration_file.name = gdrive_file.name
         migration_file.owner = gdrive_file.owners[0].email_address
         migration_file.modified_at = gdrive_file.modified_time
@@ -353,7 +358,7 @@ module GDrive
       end
 
       def add_file_error(migration_file, type, message)
-        Rails.logger.error("File error", id: migration_file.id, type: type, message: message)
+        operation.log(:error, "File error", id: migration_file.id, type: type, message: message)
         migration_file.update!(status: "errored", error_type: type, error_message: message)
         scan.increment!(:error_count)
         if scan.error_count >= MIN_ERRORS_TO_CANCEL &&
@@ -363,7 +368,7 @@ module GDrive
       end
 
       def scan_next_page(next_page_token)
-        Rails.logger.info("Creating scan task for next page")
+        operation.log(:info, "Creating scan task for next page")
         new_task = scan.scan_tasks.create!(
           # This may be nil if we are doing a changes scan.
           folder_id: scan_task.folder_id,
@@ -385,7 +390,7 @@ module GDrive
 
       def cancel_scan(reason:)
         self.class.with_lock(operation.id) do
-          Rails.logger.info("Cancelling scan", reason: reason)
+          operation.log(:info, "Cancelling scan", reason: reason)
           scan.update!(status: "cancelled", cancel_reason: reason)
         end
       end
@@ -404,7 +409,7 @@ module GDrive
           # We need to check again if cancelled in case another job has cancelled
           # the operation.
           if ScanTask.where(scan: scan).none? && !scan.reload.cancelled?
-            Rails.logger.info("No more scan task exists for this scan, marking complete")
+            operation.log(:info, "No more scan task exists for this scan, marking complete")
             scan.update!(status: "complete")
 
             if scan.full?

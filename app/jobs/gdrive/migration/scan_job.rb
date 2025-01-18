@@ -353,8 +353,14 @@ module GDrive
       end
 
       def delete_references_to(id)
-        operation.folder_maps.where(src_id: id).destroy_all
-        operation.files.where(external_id: id).destroy_all
+        deleted = operation.folder_maps.where(src_id: id).destroy_all
+        if deleted.any?
+          operation.log(:info, "Deleted #{deleted.size} folder maps")
+        end
+        deleted = operation.files.where(external_id: id).destroy_all
+        if deleted.any?
+          operation.log(:info, "Deleted #{deleted.size} files")
+        end
       end
 
       def add_file_error(migration_file, type, message)

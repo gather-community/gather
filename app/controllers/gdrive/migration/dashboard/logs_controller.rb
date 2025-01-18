@@ -11,6 +11,7 @@ module GDrive
           authorize(current_community, :setup?, policy_class: SetupPolicy)
           skip_policy_scope
           load_operation
+          @latest_scan = @operation.scans.full.order(created_at: :desc).first
           @logs = @operation.logs.order(created_at: :desc).page(params[:page]).per(50)
         end
 

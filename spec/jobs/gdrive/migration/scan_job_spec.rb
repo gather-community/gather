@@ -31,7 +31,6 @@ describe GDrive::Migration::ScanJob do
   # Before committing:
   # - Remove token and real email addresses using global find and replace.
 
-
   # Prep function:
   # - Delete everything in source folder and dest folder
   # - Create file tree above
@@ -42,7 +41,8 @@ describe GDrive::Migration::ScanJob do
   let!(:migration_config) { create(:gdrive_migration_config, community: community) }
   let!(:operation) do
     create(:gdrive_migration_operation, :webhook_registered, config: migration_config,
-      src_folder_id: src_folder_id, dest_folder_id: dest_folder_id)
+      src_folder_id: "1FBirfPXk-5qaMO1BkvlyhaC8JARE_FRq",
+      dest_folder_id: "0AExZ3-Cu5q7uUk9PVA")
   end
 
   describe "full scan" do

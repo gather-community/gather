@@ -328,6 +328,11 @@ module Nav
             parents: %i[wiki gdrive migration dashboard],
             path: h.gdrive_migration_dashboard_files_path,
             permitted: GDrive::SetupPolicy.new(user, community).setup?
+          }, {
+            name: :logs,
+            parents: %i[wiki gdrive migration dashboard],
+            path: h.gdrive_migration_dashboard_logs_path,
+            permitted: GDrive::SetupPolicy.new(user, community).setup?
           }]
         end
       @sub_sub_items = filter_and_set_active_items(items, active: context[depth])

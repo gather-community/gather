@@ -4,7 +4,7 @@ module GDrive
   module Migration
     class WebhookRegistrar
       def self.setup(operation, wrapper)
-        Rails.logger.info("Getting start_page_token", operation_id: operation.id)
+        operation.log(:info, "Getting start_page_token")
         start_page_token = wrapper.get_changes_start_page_token
         operation.update!(
           # We can setup the channel ID and the secret now too
@@ -16,7 +16,7 @@ module GDrive
       end
 
       def self.register(operation, wrapper)
-        Rails.logger.info("Registering webhook", operation_id: operation.id)
+        operation.log(:info, "Registering webhook")
         webhook_url_settings = Settings.gdrive&.migration&.changes_webhook_url
         url = Rails.application.routes.url_helpers.gdrive_migration_changes_webhook_url(
           host: webhook_url_settings&.host || Settings.url.host,
@@ -50,7 +50,7 @@ module GDrive
           resource_id: operation.webhook_resource_id
         ))
       rescue Google::Apis::ClientError => error
-        Rails.logger.error("Client error stopping channel, swallowing", message: error.to_s)
+        operation.log(:error, "Client error stopping channel, swallowing", message: error.to_s)
       end
     end
   end

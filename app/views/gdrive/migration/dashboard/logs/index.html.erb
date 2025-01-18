@@ -1,0 +1,39 @@
+<% content_for(:title) { "Google Drive Migration" } %>
+
+<div class="synopsis gdrive-migration-synopsis">
+  <%= render("gdrive/migration/dashboard/synopsis") %>
+</div>
+
+<h2>Logs</h2>
+
+<% if @logs.empty? %>
+  <div class="center-notice">
+    No logs yet.
+  </div>
+<% else %>
+  <table class="full-width">
+    <tr>
+      <th></th>
+      <th>Time</th>
+      <th>Message</th>
+    </tr>
+    <% @logs.each do |log| %>
+      <tr>
+        <td class="level">
+          <% case log.level %>
+          <% when "info" %>
+            <%= icon_tag("circle-info") %>
+          <% when "warn" %>
+            <%= icon_tag("triangle-exclamation") %>
+          <% when "error" %>
+            <%= icon_tag("circle-xmark") %>
+          <% end %>
+        </td>
+        <td class="time"><%= l(log.created_at, format: :stamp) %></td>
+        <td class="message"><%= [log.message, log.data&.to_json].compact.join(" ") %> </td>
+      </tr>
+    <% end %>
+  </table>
+<% end %>
+
+<%= gather_paginate(@logs) %>

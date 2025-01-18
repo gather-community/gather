@@ -27,12 +27,12 @@ module GDrive
         end
 
         if operation.webhook_secret != request.headers["x-goog-channel-token"]
-          Rails.logger.error("x-goog-channel-token does not match the webhook secret", operation_id: operation.id)
+          operation.log(:error, "x-goog-channel-token does not match the webhook secret")
           return render_not_found
         end
 
         unless operation.active?
-          Rails.logger.info("Operation is inactive, not processing webhook", operation_id: operation_id)
+          operation.log(:info, "Operation is inactive, not processing webhook")
         end
 
         ScanJob.with_lock(operation.id) do

@@ -18,6 +18,7 @@ en:
       wday_no_year_no_time: "%a %b %d"
       day_mo_yr_no_time: "%b %d %Y"
       time_only: "%l:%M%P"
+      stamp: "%Y-%m-%d %H:%M:%S"
   datepicker:
     dformat: '%b %d %Y'
     pformat: 'MMM D YYYY'

@@ -22,7 +22,7 @@ For both production and development environments:
 1. Yarn (`npm install -g yarn`)
 1. PostgreSQL 9.2+ (database)
 1. Redis 4.0+ (cache, key-value store)
-1. Elasticsearch 6.2+ (search engine)
+1. Elasticsearch 6.2+ (search engine) (Can be installed via homebrew on Mac OS X)
 1. libvips v8.8+ (image manipulation; PNG, JPG, and GIF support needed)
 1. Mailcatcher for testing email (run `gem install mailcatcher` to install).
     1. Note, this gem is deliberately not in the Gemfile because it is a standalone development tool.
@@ -82,9 +82,13 @@ Follow these steps to setup a development environment for Gather.
 1. Trust the development certificate
     1. On MacOS you can do `sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain config/ssl/gatherdev.org.crt`.
     2. On other platforms you will need to figure this out. Search for "trust local ssl certificate".
+1. Install javascript packages
+    1. Run `yarn install`
 1. Start the server
     1. Run `bin/dev`.
     1. Leave this console open.
+1. In order to use the rails console, you will need to set a tenant:
+    1. At the console run `CH.tenant(1)` or whatever Community id you would like.
 1. Start DelayedJob
     1. Open a new console.
     1. Go to the project directory.
@@ -94,6 +98,9 @@ Follow these steps to setup a development environment for Gather.
 1. Start using the system
     1. In a browser, go to `https://gatherdev.org:3000` to start Gather.
     1. Click "Sign in with Google" to use Gather as the user you just created.
+    1. You can also choose to sign in using a username and password.
+       1. In the rails console, set the user's password (password and password_confirmation columns) and save the user.
+       1. You will need to create a link to sign in for the first time via an invitation. You can run `People::SignInInvitationJob.perform_now(1, 154)`. Where the first parameter is the community id, and the second parameter is the user id. Note, you must have mailcatcher gem installed (see above.) Copy the generated url in the console into the browser and sign in.
     1. Enjoy!
 
 Later, to re-start your development environment, the following should be sufficient:

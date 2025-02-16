@@ -3,16 +3,16 @@
 <div data-controller="gdrive--file-picker"
   data-gdrive--file-picker-client-id-value="<%= @migration_config.client_id %>"
   data-gdrive--file-picker-access-token-value="<%= @access_token %>"
-  data-gdrive--file-picker-ingest-url-value="<%= gdrive_migration_consent_ingest_url %>"
-  data-gdrive--file-picker-ingest-status-url-value="<%= gdrive_migration_consent_ingest_status_url %>"
-  data-gdrive--file-picker-ingest-initial-status-value="<%= @consent_request.ingest_status %>"
+  data-gdrive--file-picker-ingest-url-value="<%= gdrive_migration_request_ingest_url %>"
+  data-gdrive--file-picker-ingest-status-url-value="<%= gdrive_migration_request_ingest_status_url %>"
+  data-gdrive--file-picker-ingest-initial-status-value="<%= @request.ingest_status %>"
   data-gdrive--file-picker-test-mode-value="<%= Rails.env.test? %>"
   data-gdrive--file-picker-community-name-value="<%= current_community.name %>"
   data-gdrive--file-picker-org-user-id-value="<%= @org_user_id %>"
   >
 
   <div data-gdrive--file-picker-target="instructions">
-    <%= render("instructions", consent_request: @consent_request, community: @community, org_user_id: @org_user_id) %>
+    <%= render("instructions", request: @request, community: @community, org_user_id: @org_user_id) %>
   </div>
 
   <div class="foreground-loader hiding" data-gdrive--file-picker-target="loader">

@@ -274,22 +274,23 @@ Rails.application.routes.draw do
         # This is Devise.email_regexp without the anchor characters.
         resources :owners, only: %i[index show], id: /\S+@\S+\.\S+/, format: :html do
           collection do
-            post :request_consent
+            post :send_requests
           end
         end
 
         resources :files, only: %i[index]
         resources :logs, only: %i[index]
       end
-      get "consent/callback", to: "consent#callback", as: :consent_callback
-      get "consent/:token", to: "consent#intro", as: :consent
-      get "consent/:token/auth", to: "consent#auth", as: :consent_auth
-      get "consent/:token/pick", to: "consent#pick", as: :consent_pick
-      put "consent/:token/ingest", to: "consent#ingest", as: :consent_ingest
-      get "consent/:token/ingest-status", to: "consent#ingest_status", as: :consent_ingest_status
-      get "consent/:token/opt_out", to: "consent#opt_out", as: :consent_opt_out
-      patch "consent/:token/confirm-opt-out", to: "consent#confirm_opt_out", as: :consent_confirm_opt_out
-      get "consent/:token/opt-out-complete", to: "consent#opt_out_complete", as: :consent_opt_out_complete
+      get "request/callback", to: "request#callback", as: :request_callback
+      get "request/:token", to: "request#intro", as: :request
+      get "request/:token/auth", to: "request#auth", as: :request_auth
+      get "request/:token/pick", to: "request#pick", as: :request_pick
+      put "request/:token/ingest", to: "request#ingest", as: :request_ingest
+      get "request/:token/ingest-status", to: "request#ingest_status", as: :request_ingest_status
+      get "request/:token/opt_out", to: "request#opt_out", as: :request_opt_out
+      patch "request/:token/confirm-opt-out", to: "request#confirm_opt_out", as: :request_confirm_opt_out
+      get "request/:token/opt-out-complete", to: "request#opt_out_complete", as: :request_opt_out_complete
+
       post "changes", to: "webhooks#changes", as: :changes_webhook
     end
   end

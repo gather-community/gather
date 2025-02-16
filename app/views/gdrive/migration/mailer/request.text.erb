@@ -6,13 +6,13 @@ Currently, the community's files are owned by whoever created them. This can lea
 
 To prevent this, the community is moving all its files into a shared drive owned by the community.
 
-<% if @consent_request.file_count >= 2 %>
-Your Google Account <%= @consent_request.google_email %> owns about <%= @consent_request.file_count %> files in the old Google Drive folder for <%= @community.name %>. We need your permission to move them into the new drive.
+<% if @request.file_count >= 2 %>
+Your Google Account <%= @request.google_email %> owns about <%= @request.file_count %> files in the old Google Drive folder for <%= @community.name %>. We need your permission to move them into the new drive.
 <% else %>
-Your Google Account <%= @consent_request.google_email %> owns at least one file in the old Google Drive folder for <%= @community.name %>. We need your permission to move it into the new drive.
+Your Google Account <%= @request.google_email %> owns at least one file in the old Google Drive folder for <%= @community.name %>. We need your permission to move it into the new drive.
 <% end %>
 
-Please go here to help out: <%= gdrive_migration_consent_url(token: @consent_request.token) %>
+Please go here to help out: <%= gdrive_migration_request_url(token: @request.token) %>
 
 You will still retain access to the files if you are a member of the community. If you have questions or concerns, you can reach out to <%= @operation.contact_name %> at <%= @operation.contact_email %>, who is coordinating the reorganization process. If you'd rather not help with this effort, you can also opt out at the URL above.
 

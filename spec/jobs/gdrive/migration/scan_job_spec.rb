@@ -9,7 +9,7 @@ describe GDrive::Migration::ScanJob do
   #
   # Setup:
   # - Create a destination Shared Drive for the migration inside your Google Workspace account.
-  # - Under the consenter email, create a source folder/file structure in Drive as follows:
+  # - Under the requestee email, create a source folder/file structure in Drive as follows:
   #   - Gather Migration Test Source Folder
   #     - Folder A
   #       - Folder C

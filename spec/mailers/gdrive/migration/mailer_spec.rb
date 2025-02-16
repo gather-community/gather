@@ -5,10 +5,10 @@ require "rails_helper"
 describe GDrive::Migration::Mailer do
   # We should still send to user's main email even if they're inactive.
   let!(:operation) { create(:gdrive_migration_operation, contact_email: "john@example.com") }
-  let(:consent_request) do
-    create(:gdrive_migration_consent_request, operation: operation, google_email: "blorb@gmail.com")
+  let(:request) do
+    create(:gdrive_migration_request, operation: operation, google_email: "blorb@gmail.com")
   end
-  let(:mail) { described_class.consent_request(consent_request).deliver_now }
+  let(:mail) { described_class.request(request).deliver_now }
 
   describe "when google_email matches a user record" do
     let!(:user) { create(:user, :inactive, first_name: "Bing", last_name: "Borb", email: "blorb@example.com", google_email: "blorb@gmail.com") }

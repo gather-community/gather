@@ -2,48 +2,48 @@
 
 <div class="row">
   <div class="col-sm-6">
-    <% if consent_request.ingest_failed? %>
+    <% if request.ingest_failed? %>
       <p>Something went wrong. A Gather staff member has been notified. We apologize for the inconvenience.</p>
     <% else %>
-      <% if consent_request.ingest_status.nil? %>
-        <% if consent_request.file_count == 0 %>
+      <% if request.ingest_status.nil? %>
+        <% if request.file_count == 0 %>
           <p>
             Oops, it looks like you don't currently own any files in the old
             <%= community.name %> folder. Thanks for stopping by!
           </p>
         <% else %>
           <p>
-            <% if consent_request.file_count == 1 %>
+            <% if request.file_count == 1 %>
               You own 1 file in the old <%= community.name %> folder.
             <% else %>
-              You own <%= number_with_delimiter(consent_request.file_count) %> files in the old
+              You own <%= number_with_delimiter(request.file_count) %> files in the old
               <%= community.name %> folder.
             <% end %>
             Please use the picker to select the ones you're willing to move.
             Gather will handle the move once you select the files.
           </p>
         <% end %>
-      <% elsif consent_request.ingest_status == "done" %>
+      <% elsif request.ingest_status == "done" %>
         <p>
-          <% if consent_request.ingest_file_ids.size == 1 %>
+          <% if request.ingest_file_ids.size == 1 %>
             You successfully moved 1 file!
           <% else %>
-            You successfully moved <%= number_with_delimiter(consent_request.ingest_file_ids.size) %> files!
+            You successfully moved <%= number_with_delimiter(request.ingest_file_ids.size) %> files!
           <% end %>
         </p>
-        <% if consent_request.file_count > 0 %>
+        <% if request.file_count > 0 %>
           <p>
-            <% if consent_request.file_count == 1 %>
+            <% if request.file_count == 1 %>
               You still own <strong>1 file</strong> in the old
               <%= community.name %> folder.
               Please use the picker to select it. Gather will handle the move once you select the file.
             <% else %>
-              You still own <strong><%= number_with_delimiter(consent_request.file_count) %> files</strong> in the old
+              You still own <strong><%= number_with_delimiter(request.file_count) %> files</strong> in the old
               <%= community.name %> folder.
               Please use the picker to select the ones you're willing to move.
             <% end %>
           </p>
-          <% if consent_request.ingest_file_ids.size == 1 && consent_request.file_count > 1 %>
+          <% if request.ingest_file_ids.size == 1 && request.file_count > 1 %>
             <p>
               <strong>Note:</strong> You can hold the <strong>"SHIFT" key</strong> while selecting files to select more than one.
             </p>
@@ -55,18 +55,18 @@
         <% end %>
       <% end %>
 
-      <% if consent_request.file_count > 0 %>
+      <% if request.file_count > 0 %>
         <p>
           <%= button_tag("Select Files", class: "btn btn-primary", data: {action: "click->gdrive--file-picker#showPicker"}) %>
         </p>
         <p class="weak">
-          If you'd rather not move files or something went wrong, you can <%= link_to("opt out", gdrive_migration_consent_opt_out_url) %>.
+          If you'd rather not move files or something went wrong, you can <%= link_to("opt out", gdrive_migration_request_opt_out_url) %>.
         </p>
       <% end %>
     <% end %>
   </div>
   <div class="col-sm-6">
-    <% if consent_request.file_count > 0 %>
+    <% if request.file_count > 0 %>
       <div class="callout">
         <h3>Why do I have to select files?</h3>
         <p>

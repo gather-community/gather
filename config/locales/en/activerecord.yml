@@ -109,7 +109,7 @@ en:
         description: "Description"
         value: "Amount"
         member_type_ids: "Member Types"
-      gdrive/migration/consent_request:
+      gdrive/migration/request:
         opt_out_reason: "Opt Out Reason"
       gdrive/item:
         external_id: "ID"

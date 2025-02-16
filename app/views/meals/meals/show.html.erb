@@ -6,6 +6,10 @@
     (meal.finalized? ? icon_tag("certificate") : "")
 end %>
 
+<% content_for(:mobile_back_link) do %>
+  <%= render partial: "shared/mobile_back_link", locals: {label: "Meals", path: meals_path } %>
+<% end %>
+
 <% content_for(:action_links, meal.action_links) %>
 
 <div class="row">

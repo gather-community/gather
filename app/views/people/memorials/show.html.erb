@@ -1,6 +1,10 @@
 <% content_for(:title, user.full_name) %>
 <% content_for(:action_links, memorial.action_links) %>
 
+<% content_for(:mobile_back_link) do %>
+  <%= render partial: "shared/mobile_back_link", locals: {label: "Memorials", path: people_memorials_path } %>
+<% end %>
+
 <div class="row memorial">
   <div class="col-sm-3">
     <div class="photo">

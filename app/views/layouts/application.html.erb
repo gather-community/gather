@@ -127,18 +127,10 @@
 
       <%= flash_messages %><%# These are from the controller via the `flash` array %>
       <%= yield(:flashes) %><%# These are from the view via `content_for` %>
-
-      <% if show_back_link(controller) %>
-        <div class="visible-xs mobile-back">
-          <h5>
-            <% index_link = index_path(controller.controller_name) %>
-            <%= link_to(index_link[:url]) do %>
-              <i class="fa fas fa-angle-left"></i>
-              Back to <%= index_link[:label] %>
-            <% end %>
-          </h5>
-        </div>
-      <% end %>
+      
+      <div class="visible-xs mobile-back">
+        <%= yield(:mobile_back_link) %>
+      </div>
 
       <div class="title-and-buttons">
         <% title_icons = yield(:title_icons) %>

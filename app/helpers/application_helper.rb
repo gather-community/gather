@@ -95,33 +95,4 @@ module ApplicationHelper
   def safe_str
     "".html_safe
   end
-
-  def show_back_link(controller)
-    controller.action_name == "show" && controller.controller_name != "password_changes"
-  end
-
-  def index_path(controller_name)
-    case controller_name
-    when "groups"
-      { label: "Groups", url: groups_groups_path }
-    when "users"
-      { label: "Directory", url: users_path }
-    when "memorials"
-      { label: "Memorials", url: people_memorials_path }
-    when "pages"
-      { label: "Wiki Home", url: wiki_pages_path }
-    when "formulas"
-      { label: "Formulas", url: meals_formulas_path }
-    when "events"
-      { label: "Calendars", url: calendars_events_path }
-    when "shifts"
-      { label: "Signups", url: work_shifts_path }
-    when "periods"
-      { label: "Periods", url: work_periods_path }
-    when "jobs"
-      { label: "Jobs", url: work_jobs_path }
-    else
-      { label: controller_name.capitalize, url: send("#{controller_name}_path") }
-    end
-  end
 end

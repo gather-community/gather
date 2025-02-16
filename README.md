@@ -87,8 +87,6 @@ Follow these steps to setup a development environment for Gather.
 1. Start the server
     1. Run `bin/dev`.
     1. Leave this console open.
-1. In order to use the rails console, you will need to set a tenant:
-    1. At the console run `CH.tenant(1)` or whatever Community id you would like.
 1. Start DelayedJob
     1. Open a new console.
     1. Go to the project directory.
@@ -97,10 +95,7 @@ Follow these steps to setup a development environment for Gather.
        contains only information about the initialization and resulting state of jobs.
 1. Start using the system
     1. In a browser, go to `https://gatherdev.org:3000` to start Gather.
-    1. Click "Sign in with Google" to use Gather as the user you just created.
-    1. You can also choose to sign in using a username and password.
-       1. In the rails console, set the user's password (password and password_confirmation columns) and save the user.
-       1. You will need to create a link to sign in for the first time via an invitation. You can run `People::SignInInvitationJob.perform_now(1, 154)`. Where the first parameter is the community id, and the second parameter is the user id. Note, you must have mailcatcher gem installed (see above.) Copy the generated url in the console into the browser and sign in.
+    1. Sign in with the username and password created in rake new_cluster task (the username and password will be shown in the output.)
     1. Enjoy!
 
 Later, to re-start your development environment, the following should be sufficient:
@@ -108,6 +103,9 @@ Later, to re-start your development environment, the following should be suffici
     bundle install
     bundle exec rake db:migrate
     brew services start redis
+
+To run the rails console you will need to set a tenant:
+    1. At the console run `CH.tenant(1)` or whatever Community id you would like.
 
 And if working with Mailman, in a separate terminal:
 

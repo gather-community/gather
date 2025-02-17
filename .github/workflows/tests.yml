@@ -99,7 +99,7 @@ jobs:
       - name: RSpec Tests
         run: bundle exec rspec --format RSpec::Github::Formatter --format documentation
       - name: Archive test artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: success() || failure()
         with:
           name: screnshots

@@ -311,6 +311,19 @@ module Nav
             path: h.people_member_types_path,
             permitted: h.policy(sample_member_type).index?
           }]
+        elsif context[0..1] == %i[meals settings]
+          depth = 2
+          [{
+            name: :general,
+            parents: %i[meals settings],
+            path: h.edit_meals_settings_path,
+            permitted: SettingsPolicy.new(user, community).edit?
+          }, {
+            name: :restrictions,
+            parents: %i[meals settings],
+            path: h.edit_meals_restrictions_path,
+            permitted: h.policy(sample_member_type).index?
+          }]
         elsif context[0..3] == %i[wiki gdrive migration dashboard]
           depth = 4
           [{

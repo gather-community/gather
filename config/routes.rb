@@ -44,6 +44,7 @@ Rails.application.routes.draw do
 
   namespace :meals do
     resource :settings, only: %i[edit update]
+    resource :restrictions, only: %i[edit update]
     resources :signups, only: %i[create update]
     resources :assignments, only: %i[update destroy]
     resources :formulas do

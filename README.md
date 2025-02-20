@@ -22,7 +22,7 @@ For both production and development environments:
 1. Yarn (`npm install -g yarn`)
 1. PostgreSQL 9.2+ (database)
 1. Redis 4.0+ (cache, key-value store)
-1. Elasticsearch 6.2+ (search engine)
+1. Elasticsearch 6.2+ (search engine) (Can be installed via homebrew on Mac OS X)
 1. libvips v8.8+ (image manipulation; PNG, JPG, and GIF support needed)
 1. Mailcatcher for testing email (run `gem install mailcatcher` to install).
     1. Note, this gem is deliberately not in the Gemfile because it is a standalone development tool.
@@ -82,6 +82,8 @@ Follow these steps to setup a development environment for Gather.
 1. Trust the development certificate
     1. On MacOS you can do `sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain config/ssl/gatherdev.org.crt`.
     2. On other platforms you will need to figure this out. Search for "trust local ssl certificate".
+1. Install javascript packages
+    1. Run `yarn install`
 1. Start the server
     1. Run `bin/dev`.
     1. Leave this console open.
@@ -93,7 +95,7 @@ Follow these steps to setup a development environment for Gather.
        contains only information about the initialization and resulting state of jobs.
 1. Start using the system
     1. In a browser, go to `https://gatherdev.org:3000` to start Gather.
-    1. Click "Sign in with Google" to use Gather as the user you just created.
+    1. Sign in with the username and password created in rake new_cluster task (the username and password will be shown in the output.)
     1. Enjoy!
 
 Later, to re-start your development environment, the following should be sufficient:
@@ -101,6 +103,9 @@ Later, to re-start your development environment, the following should be suffici
     bundle install
     bundle exec rake db:migrate
     brew services start redis
+
+To run the rails console you will need to set a tenant:
+    1. At the console run `CH.tenant(1)` or whatever Community id you would like.
 
 And if working with Mailman, in a separate terminal:
 

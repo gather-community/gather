@@ -1,6 +1,10 @@
 <% content_for(:title, "Event: #{event.name}") %>
 <% content_for(:action_links, event.action_links) %>
 
+<% content_for(:mobile_back_link) do %>
+  <%= render partial: "shared/mobile_back_link", locals: {label: "Calendars", path: calendars_events_path } %>
+<% end %>
+
 <table class="key-value key-value-wide">
   <tr>
     <td>Calendar</td>

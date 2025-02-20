@@ -10,7 +10,7 @@ module People
         self.resource = resource_class.confirm_by_token(params[:confirmation_token])
         yield(resource) if block_given?
 
-        if resource.errors.empty?
+        if resource.errors.empty? || resource.errors.all? { |e| e.type == :already_confirmed }
           handle_success
         elsif resource.errors.details[:email]&.first&.[](:error) == :confirmation_period_expired
           handle_expiry
@@ -38,11 +38,11 @@ module People
       def handle_expiry
         respond_with_navigational(resource.errors, status: :unprocessable_entity) do
           if signed_in?(resource_name)
-            flash[:alert] = "The confirmation period has expired. "\
+            flash[:alert] = "The confirmation period has expired. " \
               "Please use the 'Resend confirmation instructions' link below to try again."
             redirect_to(user_path(resource))
           else
-            flash[:alert] = "The confirmation period has expired. "\
+            flash[:alert] = "The confirmation period has expired. " \
               "Please sign in using your old email address and try again."
             redirect_to(root_path)
           end

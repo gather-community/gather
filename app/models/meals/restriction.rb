@@ -1,6 +1,9 @@
 module Meals
   class Restriction < ApplicationRecord
-    belongs_to :community
+    include Deactivatable
+    acts_as_tenant :cluster
+
+    belongs_to :community, inverse_of :restriction
 
     validates :contains, :absence, presence: true
 

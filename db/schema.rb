@@ -688,12 +688,14 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_11_200735) do
   end
 
   create_table "meal_restrictions", force: :cascade do |t|
-    t.string "absence", null: false
+    t.string "absence", limit: 64, null: false
+    t.bigint "cluster_id", null: false
     t.bigint "community_id", null: false
-    t.string "contains", null: false
+    t.string "contains", limit: 64, null: false
     t.datetime "created_at", null: false
-    t.boolean "enabled", default: true, null: false
+    t.datetime "deactivated_at"
     t.datetime "updated_at", null: false
+    t.index ["cluster_id"], name: "index_meal_restrictions_on_cluster_id"
     t.index ["community_id"], name: "index_meal_restrictions_on_community_id"
   end
 
@@ -1297,6 +1299,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_11_200735) do
   add_foreign_key "meal_resourcings", "calendar_nodes", column: "calendar_id"
   add_foreign_key "meal_resourcings", "clusters"
   add_foreign_key "meal_resourcings", "meals"
+  add_foreign_key "meal_restrictions", "clusters"
   add_foreign_key "meal_restrictions", "communities"
   add_foreign_key "meal_roles", "clusters"
   add_foreign_key "meal_roles", "communities"

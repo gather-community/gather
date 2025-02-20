@@ -23,7 +23,12 @@ en:
       formulas: "Formulas"
       roles: "Roles"
       types: "Types"
-      settings: "Settings"
+      settings: 
+        _self: "Settings"
+        general: "General"
+        restrictions: "Dietary Restrictions"
+        reminders: "Reminders"
+
     calendars:
       _self: "Calendars"
       events: "Events"

@@ -2,7 +2,7 @@
 
 module Meals
   class SettingsController < ::SettingsController
-    before_action -> { nav_context(:meals, :settings) }
+    before_action -> { nav_context(:meals, :settings, :general) }
 
     protected
 

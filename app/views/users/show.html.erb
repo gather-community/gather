@@ -1,6 +1,10 @@
 <% content_for(:title, user.name) %>
 <% content_for(:action_links, user.action_links) %>
 
+<% content_for(:mobile_back_link) do %>
+  <%= render partial: "shared/mobile_back_link", locals: {label: "Directory", path: users_path } %>
+<% end %>
+
 <% if user.pronouns.present? %>
   <% content_for(:title_footnote, "(#{user.pronouns})") %>
 <% end %>

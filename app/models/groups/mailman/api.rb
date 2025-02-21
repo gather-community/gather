@@ -72,8 +72,7 @@ module Groups
           role: list_mship.role, pre_verified: "true", pre_confirmed: "true",
           pre_approved: "true")
       rescue ApiRequestError => e
-        # If we get 'is already' error, that's fine, swallow it.
-        (e.response.is_a?(Net::HTTPBadRequest) && e.response.body =~ /is already/) ? nil : (raise e)
+        raise e unless /Member already subscribed|is already/.match?(e.response.body)
       end
 
       # Assumes remote_id is set on list_mship
@@ -196,7 +195,7 @@ module Groups
             delivery_mode: mship["delivery_mode"], role: mship["role"],
             pre_verified: "true", pre_confirmed: "true", pre_approved: "true")
         rescue ApiRequestError => e
-          raise e unless /Member already subscribed/.match?(e.response.body)
+          raise e unless /Member already subscribed|is already/.match?(e.response.body)
         end
       end
 
@@ -210,8 +209,6 @@ module Groups
           data.to_json
         elsif include_empty_json_object
           "{}"
-        else
-          nil
         end
         res = Net::HTTP.start(url.hostname, url.port, use_ssl: url.scheme == "https") do |http|
           http.request(req)

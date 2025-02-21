@@ -127,6 +127,10 @@
 
       <%= flash_messages %><%# These are from the controller via the `flash` array %>
       <%= yield(:flashes) %><%# These are from the view via `content_for` %>
+      
+      <div class="visible-xs mobile-back">
+        <%= yield(:mobile_back_link) %>
+      </div>
 
       <div class="title-and-buttons">
         <% title_icons = yield(:title_icons) %>

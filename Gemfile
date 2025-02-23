@@ -16,10 +16,10 @@ gem "chroma", "~> 0.2"
 gem "cocoon", "~> 1.2"
 gem "config", "~> 4.0"
 gem "country_select", "~> 4.0",
-  require: "country_select_without_sort_alphabetical" # Alpha sort is memory intensive?
+    require: "country_select_without_sort_alphabetical" # Alpha sort is memory intensive?
 gem "daemons", "~> 1.2"
 gem "datetimepicker-rails", git: "https://github.com/zpaulovics/datetimepicker-rails",
-  branch: "master", submodules: true
+                            branch: "master", submodules: true
 gem "delayed_job_active_record", "~> 4.1"
 gem "devise", "~> 4.7"
 gem "diffy", "~> 3.4"
@@ -58,9 +58,9 @@ gem "redcarpet", "~> 3.5"
 gem "redis", "~> 4.1"
 gem "rein", "~> 5.0" # This can be removed when we go to Rails 6.1.
 gem "rolify", "~> 6.0"
-gem "sentry-ruby", "~> 5.4"
-gem "sentry-rails", "~> 5.4"
 gem "sassc-rails", "~> 2.1"
+gem "sentry-rails", "~> 5.4"
+gem "sentry-ruby", "~> 5.4"
 gem "serviceworker-rails", "~> 0.5"
 gem "simple_form", "~> 5.0"
 gem "sprockets-rails", "~> 3.4"
@@ -78,11 +78,11 @@ gem "with_advisory_lock", git: "https://github.com/ClosureTree/with_advisory_loc
 group :development, :test do
   gem "awesome_print", "~> 1.6"
   gem "byebug", "~> 11.0"
+  gem "capistrano3-delayed-job", "~> 1.0"
   gem "capistrano-bundler", "~> 1.0"
   gem "capistrano-passenger", "~> 0.2"
   gem "capistrano-rails", "~> 1.1"
   gem "capistrano-rbenv", "~> 2.1"
-  gem "capistrano3-delayed-job", "~> 1.0"
   gem "capybara", "~> 3.29"
   gem "database_cleaner", "~> 1.7"
   gem "fix-db-schema-conflicts", "~> 3.0"
@@ -95,7 +95,6 @@ group :development, :test do
   gem "rubocop-rails", "2.9"
   gem "selenium-webdriver", "~> 4.0"
   gem "spring", "~> 3.0"
-  gem "standard", "~> 1.24"
   gem "thin", "~> 1.7"
   gem "vcr", "~> 4.0"
   gem "webmock", "~> 3.1"

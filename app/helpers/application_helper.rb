@@ -40,7 +40,7 @@ module ApplicationHelper
             when :brands then "fab"
             else "fas"
             end
-    tag.i("", options.merge(class: "fa #{style} #{name} #{options.delete(:class)}"))
+    tag.i("", **options, class: "fa #{style} #{name} #{options.delete(:class)}")
   end
 
   # Sets twitter-bootstrap theme as default for pagination.

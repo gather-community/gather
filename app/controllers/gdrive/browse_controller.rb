@@ -11,7 +11,7 @@ module GDrive
         authorize(:folder, policy_class: BrowsePolicy)
         @config = MainConfig.find_by(community: current_community)
         @setup_policy = SetupPolicy.new(current_user, current_community)
-        if !@config
+        unless @config
           skip_policy_scope
           return
         end
@@ -24,7 +24,7 @@ module GDrive
         # thus determined via Groups. If the user is in a Group that is connected to an Item,
         # we show it to them.
         wrapper = Wrapper.new(config: @config, google_user_id: @config.org_user_id,
-          callback_url: gdrive_setup_auth_callback_url(host: Settings.url.host))
+                              callback_url: gdrive_setup_auth_callback_url(host: Settings.url.host))
 
         unless wrapper.has_credentials?
           setup_auth_url(wrapper: wrapper)
@@ -49,6 +49,7 @@ module GDrive
         # If they can't see any, we react differently than if there are none at all connected to the config.
         @drives = policy_scope(@drives).reject { |d| d.error_type.present? }
         return @no_accessible_drives = true if @drives.none?
+
         multiple_drives = @drives.size > 1
 
         # In the below, we use ItemPolicy on the containing drive to determine whether the user can
@@ -67,8 +68,9 @@ module GDrive
           validate_gdrive_id(params[:item_id])
           drive_id = params[:item_id]
           return render_not_found unless can_read_drive?(drive_id)
+
           ancestors = find_ancestors(wrapper: wrapper, drive_id: drive_id,
-            multiple_drives: multiple_drives)
+                                     multiple_drives: multiple_drives)
           @file_list = list_files(wrapper, drive_id)
           @browse_decorator.item_url = item_url(drive_id)
           @browse_decorator.old_item_url = old_item_url_if_applicable(drive_id, drive_id)
@@ -77,9 +79,10 @@ module GDrive
         elsif params[:item_id]
           validate_gdrive_id(params[:item_id])
           ancestors = find_ancestors(wrapper: wrapper, folder_id: params[:item_id],
-            multiple_drives: multiple_drives)
+                                     multiple_drives: multiple_drives)
           drive_id = ancestors[-1].drive_id
           return render_not_found unless can_read_drive?(drive_id)
+
           @file_list = list_files(wrapper, params[:item_id])
           @browse_decorator.item_url = item_url(params[:item_id])
           @browse_decorator.old_item_url = old_item_url_if_applicable(drive_id, params[:item_id])
@@ -105,11 +108,11 @@ module GDrive
         # so we destroy it so that they can re-connect.
         @config.tokens.destroy_all
         @authorization_error = true
-      rescue Google::Apis::ClientError => error
-        if error.message.include?("File not found")
+      rescue Google::Apis::ClientError => e
+        if e.message.include?("File not found")
           render_not_found
         else
-          raise error
+          raise e
         end
       end
     end
@@ -123,7 +126,7 @@ module GDrive
     def setup_auth_url(wrapper:)
       state = {community_id: current_community.id}
       @auth_url = wrapper.get_authorization_url(request: request, state: state,
-        redirect_to: gdrive_home_url)
+                                                redirect_to: gdrive_home_url)
     end
 
     def find_ancestors(wrapper:, multiple_drives:, folder_id: nil, drive_id: nil)
@@ -132,7 +135,7 @@ module GDrive
         ancestor_id = folder_id
         loop do
           folder = wrapper.get_file(ancestor_id, fields: "id,name,parents,driveId",
-            supports_all_drives: true)
+                                                 supports_all_drives: true)
           ancestors.unshift(folder)
           # If parent ID is the drive ID, we can stop searching.
           ancestor_id = folder.parents[0]
@@ -180,15 +183,16 @@ module GDrive
     def list_files(wrapper, parent_id)
       parent_id = parent_id.gsub("'") { "\\'" }
       wrapper.list_files(q: "'#{parent_id}' in parents and trashed = false",
-        fields: "files(id,name,mimeType,iconLink,webViewLink)",
-        order_by: "folder,name",
-        supports_all_drives: true,
-        include_items_from_all_drives: true)
+                         fields: "files(id,name,mimeType,iconLink,webViewLink)",
+                         order_by: "folder,name",
+                         supports_all_drives: true,
+                         include_items_from_all_drives: true)
     end
 
     def can_read_drive?(drive_id)
       drive = Item.find_by(external_id: drive_id, kind: "drive")
       return false if drive.nil? || drive.error_type.present?
+
       ItemPolicy.new(current_user, drive).show?
     end
   end

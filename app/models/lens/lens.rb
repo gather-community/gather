@@ -11,7 +11,7 @@ module Lens
     def self.class_var_get_or_set(name, value, default: nil)
       name = "@@#{name}"
       if value.nil?
-        class_variable_defined?(name) && class_variable_get(name) || default
+        (class_variable_defined?(name) && class_variable_get(name)) || default
       else
         class_variable_set(name, value)
       end

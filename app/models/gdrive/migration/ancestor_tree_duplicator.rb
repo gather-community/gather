@@ -53,7 +53,8 @@ module GDrive
           if skip_check_for_already_mapped_folders || folder_exists?(map.dest_id)
             return map.dest_id
           else
-            operation.log(:warn, "Folder map dest folder missing", src_folder_id: src_folder_id, dest_folder_id: map.dest_id)
+            operation.log(:warn, "Folder map dest folder missing", src_folder_id: src_folder_id,
+                                                                   dest_folder_id: map.dest_id)
             map.destroy
           end
         else
@@ -85,18 +86,19 @@ module GDrive
           # Try to find a matching folder. If we fail, create one.
           unless (dest_folder = find_folder_by_parent_id_and_name(dest_parent_id, src_folder.name))
             operation.log(:warn, "Dest folder not found, creating", src_folder_id: src_folder_id,
-              dest_parent_id: dest_parent_id, name: src_folder.name)
+                                                                    dest_parent_id: dest_parent_id, name: src_folder.name)
             dest_folder = Google::Apis::DriveV3::File.new(name: src_folder.name, parents: [dest_parent_id],
-              mime_type: GDrive::FOLDER_MIME_TYPE)
+                                                          mime_type: GDrive::FOLDER_MIME_TYPE)
             # This should not fail b/c we just confirmed that the parent exists, and we are working inside
             # the shared drive.
             dest_folder = wrapper.create_file(dest_folder, fields: "id", supports_all_drives: true)
           end
 
-          operation.log(:info, "Creating folder map", src_folder_id: src_folder_id, dest_folder_id: dest_folder.id)
+          operation.log(:info, "Creating folder map", src_folder_id: src_folder_id,
+                                                      dest_folder_id: dest_folder.id)
           FolderMap.create!(operation: operation, name: src_folder.name,
-            src_parent_id: src_parent_id, src_id: src_folder_id,
-            dest_parent_id: dest_parent_id, dest_id: dest_folder.id)
+                            src_parent_id: src_parent_id, src_id: src_folder_id,
+                            dest_parent_id: dest_parent_id, dest_id: dest_folder.id)
           dest_folder.id
         end
       end
@@ -112,6 +114,7 @@ module GDrive
         begin
           match = wrapper.get_file(id, fields: "id,mimeType", supports_all_drives: true)
           return false if !match || match.mime_type != GDrive::FOLDER_MIME_TYPE
+
           @folder_ids_that_exist[match.id]
           true
         rescue Google::Apis::ClientError
@@ -126,9 +129,9 @@ module GDrive
         name = name.gsub("'") { "\\'" }
         file_list = wrapper.list_files(
           q: "'#{parent_id}' in parents and " \
-            "mimeType = '#{GDrive::FOLDER_MIME_TYPE}' and " \
-            "trashed = false and " \
-            "name = '#{name}'",
+             "mimeType = '#{GDrive::FOLDER_MIME_TYPE}' and " \
+             "trashed = false and " \
+             "name = '#{name}'",
           fields: "files(id)",
           supports_all_drives: true,
           include_items_from_all_drives: true

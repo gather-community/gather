@@ -16,11 +16,13 @@ module Billing
     # Returns an AR relation for accounts that would receive late fees.
     def late_accounts
       return Billing::Account.none unless policy?
+
       Billing::Account.where(community: community).where("balance_due > ?", threshold)
     end
 
     def apply!
       return unless policy?
+
       late_accounts.each do |account|
         account.transactions.create!(
           incurred_on: Time.zone.today,
@@ -45,9 +47,11 @@ module Billing
       case policy.fee_type
       when "fixed"
         raise "Late fee policy must have amount if fee_type is 'fixed'" unless policy.amount
+
         policy.amount
       when "percent"
         raise "Late fee policy must have amount if fee_type is 'percent'" unless policy.amount
+
         (balance_due * policy.amount / 100).round(2)
       else
         raise "Invalid fee_type '#{policy['fee_type']}'"

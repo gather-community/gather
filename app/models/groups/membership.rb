@@ -47,6 +47,7 @@ module Groups
 
     def from_affiliated_community
       return if group.communities.empty?
+
       errors.add(:user_id, :unaffiliated) unless group.communities.include?(user&.community)
     end
   end

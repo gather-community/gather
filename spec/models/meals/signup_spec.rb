@@ -79,8 +79,8 @@ describe Meals::Signup do
         context "with too many" do
           let(:new_count) { 4 }
           it do
-            is_expected.to have_errors(base: "Based on the number of spots remaining, "\
-              "you can sign up a maximum of 3 people.")
+            is_expected.to have_errors(base: "Based on the number of spots remaining, " \
+                                             "you can sign up a maximum of 3 people.")
           end
         end
       end
@@ -100,8 +100,8 @@ describe Meals::Signup do
         context "with too many" do
           let(:new_count) { 4 }
           it do
-            is_expected.to have_errors(base: "Based on the number of spots remaining, "\
-              "you can sign up a maximum of 3 people.")
+            is_expected.to have_errors(base: "Based on the number of spots remaining, " \
+                                             "you can sign up a maximum of 3 people.")
           end
         end
 
@@ -127,8 +127,8 @@ describe Meals::Signup do
           context "if increasing diner count" do
             let(:new_count) { 4 }
             it "should be invalid and report the previous signup count as the max" do
-              is_expected.to have_errors(base: "Based on the number of spots remaining, "\
-                "you can sign up a maximum of 3 people.")
+              is_expected.to have_errors(base: "Based on the number of spots remaining, " \
+                                               "you can sign up a maximum of 3 people.")
             end
           end
         end

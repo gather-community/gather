@@ -4,7 +4,7 @@ module Lens
   # Models a set of parameters and parameter values that scope an index view.
   class Set
     attr_accessor :storage, :lenses, :route_params, :context, :visible
-    alias_method :visible?, :visible
+    alias visible? visible
 
     delegate :html, to: :bar
 
@@ -20,8 +20,8 @@ module Lens
       self.visible = true
 
       self.storage = Storage.new(session: context.session, community_id: context.current_community.id,
-        controller_path: context.controller_path, action_name: context.action_name,
-        persist: context.own_cluster?, reset: route_params[:clearlenses].present?)
+                                 controller_path: context.controller_path, action_name: context.action_name,
+                                 persist: context.own_cluster?, reset: route_params[:clearlenses].present?)
       build_lenses(lens_names)
     end
 

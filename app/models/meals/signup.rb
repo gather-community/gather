@@ -83,8 +83,10 @@ module Meals
     def dont_exceed_spots
       total_change = total - total_was
       return unless !meal.finalized? && meal.capacity.present? && total_change.positive?
+
       other_signups_total = (meal.signups - [self]).sum(&:total)
       return if other_signups_total + total <= meal.capacity
+
       max_spots_can_take = [meal.capacity - other_signups_total, total_was].max
       errors.add(:base, :exceeded_spots, count: max_spots_can_take)
     end
@@ -96,6 +98,7 @@ module Meals
     def no_dupe_types
       type_ids = non_zero_non_destroyed_parts.map(&:type_id)
       return if type_ids.uniq.size == type_ids.size
+
       errors.add(:base, "Please sign up each type only once")
     end
 

@@ -14,7 +14,7 @@ describe Calendars::EventPolicy do
     let(:group) { nil }
     let(:event) do
       create(:event, creator: creator, calendar: calendar, created_at: created_at,
-        group: group, starts_at: starts_at, ends_at: ends_at)
+                     group: group, starts_at: starts_at, ends_at: ends_at)
     end
     let(:record) { event }
 
@@ -58,7 +58,7 @@ describe Calendars::EventPolicy do
       end
 
       permissions :show?, :new?, :create?, :edit?, :update?, :privileged_change?,
-        :choose_creator?, :destroy? do
+                  :choose_creator?, :destroy? do
         it_behaves_like "forbids all"
       end
     end
@@ -156,7 +156,10 @@ describe Calendars::EventPolicy do
 
     context "meal event" do
       let(:meal) { create(:meal, calendars: [calendar]) }
-      let(:event) { create(:event, creator: nil, calendar: calendar, meal: meal, starts_at: meal.served_at, ends_at: meal.served_at + 1.hour, kind: "_meal") }
+      let(:event) do
+        create(:event, creator: nil, calendar: calendar, meal: meal, starts_at: meal.served_at,
+                       ends_at: meal.served_at + 1.hour, kind: "_meal")
+      end
 
       permissions :index?, :show? do
         it_behaves_like "permits active users only"

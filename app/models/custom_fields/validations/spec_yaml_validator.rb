@@ -6,11 +6,12 @@ module CustomFields
     class SpecYamlValidator < ActiveModel::EachValidator
       def initialize(options)
         options.reverse_merge!(message: :invalid)
-        super(options)
+        super
       end
 
       def validate_each(record, attribute, value)
         return nil if value.blank?
+
         value = value.strip if value.is_a?(String)
         begin
           value = YAML.safe_load(value)
@@ -20,8 +21,8 @@ module CustomFields
         begin
           CustomFields::Spec.new(value)
         rescue NameError, ArgumentError, NoMethodError
-          record.errors.add(attribute, "This specification is invalid. "\
-            "Please contact Gather support for assistance.")
+          record.errors.add(attribute, "This specification is invalid. " \
+                                       "Please contact Gather support for assistance.")
         end
       end
     end

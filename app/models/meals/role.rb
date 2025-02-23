@@ -12,7 +12,7 @@ module Meals
     acts_as_tenant :cluster
 
     belongs_to :community
-    has_many :assignments, class_name: "Meals::Assignment", foreign_key: :role_id, inverse_of: :role
+    has_many :assignments, class_name: "Meals::Assignment", inverse_of: :role
     has_many :reminders, -> { canonical_order }, class_name: "Meals::RoleReminder", dependent: :destroy,
                                                  foreign_key: :role_id, inverse_of: :role
     has_many :formula_roles, inverse_of: :role
@@ -53,11 +53,7 @@ module Meals
 
     def normalize
       if date_time?
-        if shift_end.present? && shift_start.present?
-          self.work_hours = (shift_end - shift_start).to_f / 60
-        else
-          self.work_hours = nil
-        end
+        self.work_hours = ((shift_end - shift_start).to_f / 60 if shift_end.present? && shift_start.present?)
       else
         self.shift_start = nil
         self.shift_end = nil
@@ -70,6 +66,7 @@ module Meals
     # but if these are set, hours is not visible.
     def shift_time_positive
       return unless shift_start.present? && shift_end.present? && !(shift_end - shift_start).positive?
+
       errors.add(:shift_end, :not_after_start)
     end
   end

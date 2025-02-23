@@ -5,6 +5,7 @@ module ApplicationControllable::Users
 
   included do
     attr_reader :impersonated_user
+
     helper_method :current_user, :real_current_user, :impersonated_user
   end
 

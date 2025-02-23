@@ -11,7 +11,7 @@ module Meals
     end
 
     def html
-      h.content_tag(:section, id: section) { header << summary << fields }
+      h.tag.section(id: section) { header << summary << fields }
     end
 
     private
@@ -20,19 +20,20 @@ module Meals
     alias expanded? expanded
 
     def header
-      h.content_tag(:h2, t("meals.form.sections.label.#{section}"), class: ("top" if section == :general))
+      h.tag.h2(t("meals.form.sections.label.#{section}"), class: ("top" if section == :general))
     end
 
     def summary
       return nil unless collapse?
+
       text = send("#{section}_summary")
       link = h.link_to(t("meals.form.sections.edit.#{section}"), "#", "data-toggle": section)
-      h.content_tag(:p, text << nbsp(2) << link, class: "summary", "data-toggle-on": section)
+      h.tag.p(text << nbsp(2) << link, class: "summary", "data-toggle-on": section)
     end
 
     def fields
       attribs = {class: "fields", "data-toggle-off": collapse? ? section : nil}
-      h.content_tag(:div, block_content, attribs)
+      h.tag.div(block_content, attribs)
     end
 
     def collapse?
@@ -75,6 +76,7 @@ module Meals
       cost = meal.cost
       base_key = "meals.form.summaries.expenses"
       return safe_str << t("#{base_key}.none") if cost.blank?
+
       chunks = []
       chunks << t("#{base_key}.ingredients", cost: cost.ingredient_cost_formatted)
       chunks << t("#{base_key}.pantry", cost: cost.pantry_cost_formatted) if cost.pantry_cost.present?

@@ -7,15 +7,15 @@ describe Meals::Finalizer do
   let(:reimbursee) { create(:user) }
   let(:meal) do
     create(:meal, :with_menu,
-      formula: formula,
-      cost_attributes: {ingredient_cost: 20.23, pantry_cost: 5.11,
-                        payment_method: "credit", reimbursee_id: reimbursee.id})
+           formula: formula,
+           cost_attributes: {ingredient_cost: 20.23, pantry_cost: 5.11,
+                             payment_method: "credit", reimbursee_id: reimbursee.id})
   end
   let(:households) { create_list(:household, 2) }
   let(:finalizer) { Meals::Finalizer.new(meal) }
   let!(:signups) do
     [create(:meal_signup, meal: meal, household: households[0], diner_counts: [2, 0, 0]),
-      create(:meal_signup, meal: meal, household: households[1], diner_counts: [0, 1, 1])]
+     create(:meal_signup, meal: meal, household: households[1], diner_counts: [0, 1, 1])]
   end
   let(:txns_by_household) { Billing::Transaction.all.to_a.index_by(&:household_id) }
   let(:cost) { Meals::Cost.first }

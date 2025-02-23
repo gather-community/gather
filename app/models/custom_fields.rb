@@ -27,6 +27,7 @@ module CustomFields
       define_method("#{attrib_name}_custom_fields_spec") do
         ivar_value = instance_variable_get("@#{attrib_name}_custom_fields_spec")
         return ivar_value unless ivar_value.nil?
+
         computed_spec = Spec.new(spec.call(self))
         instance_variable_set("@#{attrib_name}_custom_fields_spec", computed_spec)
       end

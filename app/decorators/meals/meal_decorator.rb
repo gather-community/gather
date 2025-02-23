@@ -12,8 +12,8 @@ module Meals
       h.link_to(title_or_no_title, h.meal_url(object, *url_args))
     end
 
-    def form_section(section, **options, &block)
-      Meals::FormSection.new(self, section, **options, &block).html
+    def form_section(section, **, &)
+      Meals::FormSection.new(self, section, **, &).html
     end
 
     def current_signup
@@ -41,7 +41,7 @@ module Meals
     end
 
     def nonempty_menu_items
-      Meals::Meal::MENU_ITEMS.map { |i| [i, self[i]] }.to_h.reject { |_, t| t.blank? }
+      Meals::Meal::MENU_ITEMS.index_with { |i| self[i] }.reject { |_, t| t.blank? }
     end
 
     # Returns a non-persisted SignupPolicy with this meal. Used for policy checks.
@@ -51,6 +51,7 @@ module Meals
 
     def location_name
       return @location_name if defined?(@location_name)
+
       @location_name = calendars.first&.decorate&.name_with_prefix
     end
 
@@ -85,7 +86,7 @@ module Meals
 
     # We should disable the "own" community checkbox for most users.
     def disable_community_checkbox?(community)
-      disable = (object.community == community && community_invited?(community))
+      disable = object.community == community && community_invited?(community)
       disable ? "disabled" : nil
     end
 
@@ -100,7 +101,7 @@ module Meals
     def worker_links_for_role(role)
       assignments = assignments_by_role[role] || []
       links = assignments.map { |a| a.user.decorate.link(highlight: h.lenses[:user].value) }
-      links.present? ? h.safe_join(links, ", ") : h.content_tag(:span, "[None]", class: "weak")
+      links.present? ? h.safe_join(links, ", ") : h.tag.span("[None]", class: "weak")
     end
 
     def takeout_allowed?
@@ -112,12 +113,12 @@ module Meals
         ActionLink.new(object, :edit, icon: "pencil", path: h.edit_meal_path(object)),
         ActionLink.new(object, :summary, icon: "file-text", path: h.summary_meal_path(object)),
         ActionLink.new(object, :reopen, icon: "unlock", path: h.reopen_meal_path(object),
-          method: :put, confirm: true),
+                                        method: :put, confirm: true),
         ActionLink.new(object, :close, icon: "lock", path: h.close_meal_path(object),
-          method: :put, confirm: true),
+                                       method: :put, confirm: true),
         ActionLink.new(object, :finalize, icon: "certificate", path: h.new_meal_finalize_path(object)),
         ActionLink.new(object, :unfinalize, icon: "box-open", path: h.unfinalize_meal_path(object),
-          method: :put, confirm: true),
+                                            method: :put, confirm: true),
         ActionLink.new(object, :cancel, icon: "ban", path: h.new_meal_message_path(object, cancel: 1)),
         ActionLink.new(object, :send_message, icon: "envelope", path: h.new_meal_message_path(object))
       )
@@ -126,7 +127,7 @@ module Meals
     def edit_action_link_set
       ActionLinkSet.new(
         ActionLink.new(object, :destroy, icon: "trash", path: h.meal_path(object), method: :delete,
-          confirm: {title: title_or_no_title})
+                                         confirm: {title: title_or_no_title})
       )
     end
 

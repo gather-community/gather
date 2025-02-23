@@ -41,12 +41,10 @@ class ApplicationRecord < ActiveRecord::Base
   # If ActiveRecord::SerializationFailure results, tries it repeatedly until it succeeds or
   # the maximum number of tries is reached, in which case it re-raises the
   # ActiveRecord::SerializationFailure error.
-  def repeatable_read_transaction_with_retries(max_tries: 10)
+  def repeatable_read_transaction_with_retries(max_tries: 10, &block)
     tries = 0
     loop do
-      transaction(isolation: :repeatable_read) do
-        yield
-      end
+      transaction(isolation: :repeatable_read, &block)
       break
     rescue ActiveRecord::SerializationFailure => e
       tries += 1

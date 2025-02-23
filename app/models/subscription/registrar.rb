@@ -64,6 +64,7 @@ module Subscription
     def find_or_create_customer
       matches = Stripe::Customer.search(query: "email:'#{intent.contact_email}'").data
       raise "Mutliple customers found for #{intent.contact_email}" if matches.size > 1
+
       matches[0] || create_customer
     end
 
@@ -72,7 +73,7 @@ module Subscription
         email: intent.contact_email,
         name: intent.community_name,
         description: intent.community_name,
-        address: ADDRESS_FIELDS.map { |f| [f, intent["address_#{f}"]] }.to_h
+        address: ADDRESS_FIELDS.index_with { |f| intent["address_#{f}"] }
       )
     end
 

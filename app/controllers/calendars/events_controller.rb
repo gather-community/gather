@@ -69,6 +69,7 @@ module Calendars
       @event = Event.find(params[:id])
       authorize(@event)
       return handle_xhr_update if request.xhr?
+
       if @event.update(event_params)
         flash[:success] = "Event updated successfully."
         redirect_to_event_in_context(@event)
@@ -117,8 +118,8 @@ module Calendars
         flash.now[:notice] = "Only #{@calendar.community_name} residents may reserve this calendar."
       end
       @rule_set_serializer = build_attribute_serializer(@rule_set, creator_community: Community.first,
-        serializer: RuleSetSerializer)
-      @other_communities = Community.where("id != ?", @calendar.community_id)
+                                                                   serializer: RuleSetSerializer)
+      @other_communities = Community.where.not(id: @calendar.community_id)
 
       @new_event_path = new_calendar_event_path(@calendar)
       @permalink = calendar_events_path(@calendar)

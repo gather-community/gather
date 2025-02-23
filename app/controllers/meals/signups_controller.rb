@@ -42,6 +42,7 @@ module Meals
     def catch_non_open_meal
       # If meal is open and not full, the authz error must be for some other reason.
       return false if @signup.meal.open? && !@signup.meal.full?
+
       flash[:error] = "Your signup could not be recorded because the meal is full or no longer open."
       render(json: {redirect: meal_path(@signup.meal)})
       true

@@ -1,4 +1,4 @@
- # frozen_string_literal: true
+# frozen_string_literal: true
 
 module CustomFields
   class EntryDecorator < ApplicationDecorator
@@ -6,6 +6,7 @@ module CustomFields
 
     def formatted_value
       return nil if value.nil?
+
       case type
       when :boolean then I18n.t("custom_fields.boolean.#{value}")
       when :markdown then h.safe_render_markdown(value)
@@ -17,6 +18,7 @@ module CustomFields
 
     def sanitized_hint
       return nil if hint.nil?
+
       # Hints can contain user-generated HTML.
       Rails::Html::SafeListSanitizer.new.sanitize(hint).html_safe # rubocop:disable Rails/OutputSafety
     end

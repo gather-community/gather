@@ -7,7 +7,7 @@ module Calendars
     def defined_rules
       rules = Rules::Rule::NAMES
         .reject { |n| self[n].nil? }
-        .map { |n| safe_str << "#{t_rule_name(n)}: " << h.content_tag(:strong, rule_value(n)) }
+        .map { |n| safe_str << "#{t_rule_name(n)}: " << h.tag.strong(rule_value(n)) }
       h.safe_join(rules, h.tag(:br))
     end
 

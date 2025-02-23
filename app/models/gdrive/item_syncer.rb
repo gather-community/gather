@@ -20,7 +20,8 @@ module GDrive
               process_item(item, result, error)
             end
           else
-            service.get_file(item.external_id, fields: "name,mimeType,capabilities(canShare)", supports_all_drives: true) do |result, error|
+            service.get_file(item.external_id, fields: "name,mimeType,capabilities(canShare)",
+                                               supports_all_drives: true) do |result, error|
               process_item(item, result, error)
             end
           end
@@ -39,7 +40,7 @@ module GDrive
 
       # Drives use a separate API endpoint so if the type were wrong it would have errored above.
       unless item.drive?
-        item.kind = (result.mime_type == GDrive::FOLDER_MIME_TYPE) ? "folder" : "file"
+        item.kind = result.mime_type == GDrive::FOLDER_MIME_TYPE ? "folder" : "file"
       end
       item.name = result.name
       item.error_type = result.capabilities.can_share ? nil : "not_shareable"

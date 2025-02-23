@@ -10,11 +10,11 @@ describe "gdrive auth callback" do
   let(:callback_payload) do
     {
       "state" => "{\"community_id\":#{Defaults.community.id}," \
-        "\"session_id\":\"P5JPu/n1QyYvkdEr3zgyHQ==\"," \
-        "\"current_uri\":\"#{redirect_url}\"}",
+                 '"session_id":"P5JPu/n1QyYvkdEr3zgyHQ==",' \
+                 "\"current_uri\":\"#{redirect_url}\"}",
       "code" => "4/0AX4XfWi1iHTsts9hiS2un1INqmi0KAIOB-iRL_OnUd7FCqyhJ7MDkPqmgjYlhAIoysAnpw",
       "scope" => "email profile https://www.googleapis.com/auth/drive openid " \
-        "https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email",
+                 "https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email",
       "authuser" => "1",
       "prompt" => "consent"
     }
@@ -67,7 +67,7 @@ describe "gdrive auth callback" do
           get("/gdrive/setup/auth/callback", params: callback_payload)
           expect(response).to redirect_to(redirect_url)
           expect(flash[:error]).to eq("You signed into Google with bar@gmail.com. " \
-            "Please sign in with foo@gmail.com instead.")
+                                      "Please sign in with foo@gmail.com instead.")
         end
       end
     end
@@ -82,7 +82,7 @@ describe "gdrive auth callback" do
           get("/gdrive/setup/auth/callback", params: callback_payload)
           expect(response).to redirect_to(redirect_url)
           expect(flash[:error]).to eq("There is a problem with your Google Drive connection. " \
-            "Please contact Gather support.")
+                                      "Please contact Gather support.")
         end
       end
     end
@@ -93,7 +93,7 @@ describe "gdrive auth callback" do
       {
         "error" => "access_denied",
         "state" => "{\"community_id\":#{Defaults.community.id},\"session_id\":\"S03BSk1qW/wSZ6yyP9rXyA==\"," \
-          "\"current_uri\":\"#{redirect_url}\"}"
+                   "\"current_uri\":\"#{redirect_url}\"}"
       }
     end
 

@@ -22,6 +22,7 @@ class WorkMailer < ApplicationMailer
     @period = share.period
     @community = @period.community
     raise "quota required" if @period.quota_none?
+
     @synopsis = Work::SynopsisDecorator.new(Work::Synopsis.new(period: @period, user: @user))
     mail(to: @user)
   end

@@ -12,7 +12,7 @@ module Meals
     DEFAULT_TIME = 18.hours + 15.minutes
     DEFAULT_CAPACITY = 64
     ALLERGENS = %w[gluten shellfish soy corn dairy eggs peanuts almonds
-      tree_nuts pineapple bananas tofu eggplant].freeze
+                   tree_nuts pineapple bananas tofu eggplant].freeze
     DEFAULT_ASSIGN_COUNTS = {asst_cook: 2, table_setter: 1, cleaner: 3}.freeze
     MENU_ITEMS = %w[entrees side kids dessert notes].freeze
 
@@ -24,26 +24,26 @@ module Meals
     belongs_to :creator, class_name: "User"
     belongs_to :formula, class_name: "Meals::Formula", inverse_of: :meals
     has_many :assignments, -> { by_role }, class_name: "Meals::Assignment",
-      dependent: :destroy, inverse_of: :meal
+                                           dependent: :destroy, inverse_of: :meal
     has_many :invitations, class_name: "Meals::Invitation", dependent: :destroy
     has_many :communities, through: :invitations
     has_many :signups, class_name: "Meals::Signup", dependent: :destroy, inverse_of: :meal
     has_many :work_shifts, class_name: "Work::Shift", dependent: :destroy, inverse_of: :meal
     has_one :cost, class_name: "Meals::Cost", dependent: :destroy, inverse_of: :meal
     has_many :reminder_deliveries, class_name: "Meals::RoleReminderDelivery", inverse_of: :meal,
-      dependent: :destroy
+                                   dependent: :destroy
     has_many :transactions, class_name: "Billing::Transaction", as: :statementable,
-      dependent: :restrict_with_exception, inverse_of: :statementable
+                            dependent: :restrict_with_exception, inverse_of: :statementable
 
     # Calendars are chosen by the user. Events are then automatically created.
     # Deterministic orderings are for specs.
     has_many :resourcings, dependent: :destroy
     has_many :calendars, -> { order(:id) }, class_name: "Calendars::Calendar", through: :resourcings
     has_many :events, -> { order(:id) }, class_name: "Calendars::Event", autosave: true,
-      dependent: :destroy, inverse_of: :meal
+                                         dependent: :destroy, inverse_of: :meal
 
     scope :hosted_by, ->(community) { where(community: community) }
-    scope :inviting, ->(community) {
+    scope :inviting, lambda { |community|
       where("EXISTS (SELECT id FROM meal_invitations
         WHERE meal_invitations.meal_id = meals.id AND meal_invitations.community_id = ?)", community)
     }
@@ -71,7 +71,7 @@ module Meals
       a["id"].blank? && a["parts_attributes"].values.all? { |v| v["count"] == "0" }
     }
     accepts_nested_attributes_for :cost,
-      reject_if: ->(a) { a.all? { |k, v| k == "reimbursee_id" || v.blank? } }
+                                  reject_if: ->(a) { a.all? { |k, v| k == "reimbursee_id" || v.blank? } }
     accepts_nested_attributes_for :assignments, reject_if: ->(h) { h["user_id"].blank? }, allow_destroy: true
 
     delegate :cluster, to: :community
@@ -178,6 +178,7 @@ module Meals
       @signup_totals = formula.parts.map { |p| [p.type, 0] }.to_h.tap do |totals|
         signups.each do |signup|
           next if signup.marked_for_destruction?
+
           formula.parts.each do |part|
             totals[part.type] += signup.parts_by_type[part.type]&.count || 0
           end
@@ -195,7 +196,7 @@ module Meals
       self.class.joins(:community)
         .where("served_at > ? OR served_at = ? AND
           (communities.name > ? OR communities.name = ? AND meals.id > ?)",
-          served_at, served_at, community_name, community_name, id)
+               served_at, served_at, community_name, community_name, id)
     end
 
     # Returns a relation for all meals before the current one.
@@ -204,7 +205,7 @@ module Meals
       self.class.joins(:community)
         .where("served_at < ? OR served_at = ? AND
           (communities.name < ? OR communities.name = ? AND meals.id < ?)",
-          served_at, served_at, community_name, community_name, id)
+               served_at, served_at, community_name, community_name, id)
     end
 
     def allergen?(allergen)
@@ -215,18 +216,21 @@ module Meals
 
     def enough_capacity_for_current_signups
       return unless persisted? && !finalized? && capacity && capacity < signup_count
+
       errors.add(:capacity, "must be at least #{signup_count} due to current signups")
     end
 
     def title_and_entree_if_other_menu_items
       %w[title entrees].each do |attrib|
         next unless self[attrib].blank? && menu_posted?
+
         errors.add(attrib, "can't be blank if other menu items entered")
       end
     end
 
     def at_least_one_community
       return unless invitations.reject(&:blank?).empty?
+
       errors.add(:invitations, "you must invite at least one community")
     end
 
@@ -234,11 +238,13 @@ module Meals
       return unless open?
       return if auto_close_time.blank? || served_at.blank?
       return if auto_close_time > Time.current && auto_close_time < served_at
+
       errors.add(:auto_close_time, "must be between now and the meal time")
     end
 
     def allergens_specified_appropriately
       return unless menu_posted?
+
       if !allergens? && !no_allergens?
         errors.add(:allergens, "at least one box must be checked if menu entered")
       elsif allergens? && no_allergens?

@@ -13,8 +13,7 @@ module Calendars
   class Protocol < ApplicationRecord
     acts_as_tenant :cluster
 
-    has_many :protocolings, class_name: "Calendars::Protocoling", inverse_of: :protocol,
-                            foreign_key: "protocol_id", dependent: :destroy
+    has_many :protocolings, class_name: "Calendars::Protocoling", inverse_of: :protocol, dependent: :destroy
     has_many :calendars, -> { by_name }, class_name: "Calendars::Calendar", through: :protocolings
     belongs_to :community
 
@@ -35,8 +34,8 @@ module Calendars
     # If kind is given, matches protocols with given kind or with nil kind.
     # If kind is nil, matches protocols with nil kind only.
     def self.matching(calendar, kind = nil)
-      calendar_id_expr = "(SELECT calendar_id FROM calendar_protocolings "\
-        "WHERE protocol_id = calendar_protocols.id)"
+      calendar_id_expr = "(SELECT calendar_id FROM calendar_protocolings " \
+                         "WHERE protocol_id = calendar_protocols.id)"
       result = where(community_id: calendar.community_id)
         .where(":id IN #{calendar_id_expr} OR NOT EXISTS #{calendar_id_expr}", id: calendar.id)
         .order(:created_at) # Need a definite ordering for specs
@@ -54,7 +53,7 @@ module Calendars
     def normalize
       # Can only be true if set to true and no kinds. nil otherwise. Should never be false.
       self.kinds = kinds.reject(&:blank?).presence unless kinds.nil?
-      self.requires_kind = !kinds&.any? && requires_kind? || nil
+      self.requires_kind = (!kinds&.any? && requires_kind?) || nil
     end
   end
 end

@@ -15,7 +15,7 @@ module Meals
     end
 
     def permitted_attributes
-      [:id, :household_id, :meal_id, :takeout, :comments, parts_attributes: %i[id type_id count _destroy]]
+      [:id, :household_id, :meal_id, :takeout, :comments, {parts_attributes: %i[id type_id count _destroy]}]
     end
 
     private

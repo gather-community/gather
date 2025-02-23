@@ -53,7 +53,7 @@ describe "mailing lists", js: true do
     context "with few add'l members/senders" do
       let!(:list) do
         create(:group_mailman_list, group: group, domain: domain, name: "knitting",
-          additional_members: ["a@a.com", "b@b.com"], additional_senders: ["c@c.com", "d@d.com"])
+                                    additional_members: ["a@a.com", "b@b.com"], additional_senders: ["c@c.com", "d@d.com"])
       end
 
       scenario "shows all add'l members/senders" do
@@ -68,7 +68,7 @@ describe "mailing lists", js: true do
       let(:addl_senders) { 15.times.map { |i| "#{i}@a.com" } }
       let!(:list) do
         create(:group_mailman_list, group: group, domain: domain, name: "knitting",
-          additional_members: ["a@a.com", "b@b.com"], additional_senders: addl_senders)
+                                    additional_members: ["a@a.com", "b@b.com"], additional_senders: addl_senders)
       end
 
       scenario "shows subset of senders" do

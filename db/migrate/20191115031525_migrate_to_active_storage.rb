@@ -6,16 +6,14 @@ class MigrateToActiveStorage < ActiveRecord::Migration[6.0]
   require "open-uri"
 
   def up
-    get_blob_id = "LASTVAL()"
-
-    active_storage_blob_statement = ActiveRecord::Base.connection.raw_connection
+    ActiveRecord::Base.connection.raw_connection
       .prepare("active_storage_blob_statement", <<-SQL)
       INSERT INTO active_storage_blobs (
         "key", filename, content_type, metadata, byte_size, checksum, created_at
       ) VALUES ($1, $2, $3, '{}', $4, $5, $6) RETURNING id
     SQL
 
-    active_storage_attachment_statement = ActiveRecord::Base.connection.raw_connection
+    ActiveRecord::Base.connection.raw_connection
       .prepare("active_storage_attachment_statement", <<-SQL)
       INSERT INTO active_storage_attachments (
         name, record_type, record_id, blob_id, created_at
@@ -28,17 +26,16 @@ class MigrateToActiveStorage < ActiveRecord::Migration[6.0]
     ActsAsTenant.without_tenant do
       transaction do
         models.each do |model|
-
           attachments = model.column_names.map do |c|
             Regexp.last_match(1) if c =~ /(.+)_file_name$/
           end.compact
 
           if attachments.blank?
-            raise "No attachments found on model #{model}. "\
-              "Make sure Paperclip still exists in code when this migration is run."
+            raise "No attachments found on model #{model}. " \
+                  "Make sure Paperclip still exists in code when this migration is run."
           elsif !model.first.send(attachments[0]).respond_to?(:path)
-            raise "Model #{model} does not support Paperclip methods. "\
-              "Make sure Paperclip still exists in code when this migration is run."
+            raise "Model #{model} does not support Paperclip methods. " \
+                  "Make sure Paperclip still exists in code when this migration is run."
           end
 
           model.find_each.each do |instance|

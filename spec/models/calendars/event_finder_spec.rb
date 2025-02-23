@@ -18,7 +18,8 @@ describe Calendars::EventFinder do
     create(:event, calendar: cal1, starts_at: t0 + 2.hours, ends_at: t0 + 3.hours, creator: user)
   end
   let!(:event1_3) do
-    create(:event, calendar: cal1, starts_at: t0 + 3.hours, ends_at: t0 + 4.hours, creator: user, group: group)
+    create(:event, calendar: cal1, starts_at: t0 + 3.hours, ends_at: t0 + 4.hours, creator: user,
+                   group: group)
   end
   let!(:event1_4) { create(:event, calendar: cal1, starts_at: t0 + 4.hours, ends_at: t0 + 5.hours) }
   let!(:event1_5) { create(:event, calendar: cal1, starts_at: t0 + 5.hours, ends_at: t0 + 6.hours) }

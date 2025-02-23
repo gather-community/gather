@@ -32,6 +32,7 @@ module Meals
     def validate_meal
       meal.events.each do |event|
         next if event.valid?
+
         errors = event.errors.map do |error|
           if error.attribute == :base
             error.message
@@ -40,8 +41,8 @@ module Meals
           end
         end.join(", ")
         meal.errors.add(:base,
-          "The following error(s) occurred in making a #{event.calendar_name} event " \
-          "for this meal: #{errors}.")
+                        "The following error(s) occurred in making a #{event.calendar_name} event " \
+                        "for this meal: #{errors}.")
       end
 
       # Since we are copying these errors to the meal base, we don't need them in the
@@ -52,6 +53,7 @@ module Meals
     # Validates that changes to the event are valid with respect to the meal.
     def validate_event(event)
       return if meal.served_at.nil?
+
       if event.starts_at&.>(meal.served_at)
         event.errors.add(:starts_at, :after_meal_time, time: meal_time)
       elsif event.ends_at&.<(meal.served_at)
@@ -64,6 +66,7 @@ module Meals
     def sync_resourcings(event)
       resourcing = meal.resourcings.detect { |r| r.calendar == event.calendar }
       raise ArgumentError, "Meal is not associated with calendar" if resourcing.nil?
+
       resourcing.update(
         prep_time: (meal.served_at - event.starts_at) / 1.minute,
         total_time: (event.ends_at - event.starts_at) / 1.minute
@@ -91,7 +94,7 @@ module Meals
     def event_name
       prefix = "Meal:"
       title = truncate(meal.decorate.title_or_no_title,
-        length: Calendars::Event::NAME_MAX_LENGTH - prefix.size - 1, escape: false)
+                       length: Calendars::Event::NAME_MAX_LENGTH - prefix.size - 1, escape: false)
       "#{prefix} #{title}"
     end
 

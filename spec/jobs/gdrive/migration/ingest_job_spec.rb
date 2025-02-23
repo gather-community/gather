@@ -48,17 +48,21 @@ describe GDrive::Migration::IngestJob do
 
   let(:consenter_email) { "example@gmail.com" }
   let!(:main_config) { create(:gdrive_main_config) }
-  let!(:main_token) { create(:gdrive_token, gdrive_config: main_config, google_user_id: main_config.org_user_id) }
+  let!(:main_token) do
+    create(:gdrive_token, gdrive_config: main_config, google_user_id: main_config.org_user_id)
+  end
   let!(:migration_config) { create(:gdrive_migration_config) }
-  let!(:migration_token) { create(:gdrive_token, gdrive_config: migration_config, google_user_id: consenter_email) }
+  let!(:migration_token) do
+    create(:gdrive_token, gdrive_config: migration_config, google_user_id: consenter_email)
+  end
   let!(:operation) do
     create(:gdrive_migration_operation, config: migration_config, dest_folder_id: "0AExZ3-Cu5q7uUk9PVA",
-      src_folder_id: "1FBirfPXk-5qaMO1BkvlyhaC8JARE_FRq")
+                                        src_folder_id: "1FBirfPXk-5qaMO1BkvlyhaC8JARE_FRq")
   end
   let!(:consent_request) do
     # We need a known ID value or it may not match what's in the cassette.
-    create(:gdrive_migration_consent_request, id: 537716653, operation: operation,
-      google_email: consenter_email, file_count: 3)
+    create(:gdrive_migration_consent_request, id: 537_716_653, operation: operation,
+                                              google_email: consenter_email, file_count: 3)
   end
 
   before do
@@ -71,37 +75,37 @@ describe GDrive::Migration::IngestJob do
   describe "happy path" do
     let!(:folder_map_a) do
       create(:gdrive_migration_folder_map, operation: operation, name: "Folder A",
-        src_id: "1PJwkZgkByPMcbkfzneq65Cx1CnDNMVR_", src_parent_id: operation.src_folder_id,
-        dest_id: "1REPQUYEGym1APlylgINdZFO1Lh85eDq4", dest_parent_id: operation.dest_folder_id)
+                                           src_id: "1PJwkZgkByPMcbkfzneq65Cx1CnDNMVR_", src_parent_id: operation.src_folder_id,
+                                           dest_id: "1REPQUYEGym1APlylgINdZFO1Lh85eDq4", dest_parent_id: operation.dest_folder_id)
     end
     let!(:folder_map_b) do
       create(:gdrive_migration_folder_map, operation: operation, name: "Folder B",
-        src_id: "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV", src_parent_id: folder_map_a.src_id,
-        dest_id: "1fGgtI-ynyMIzi7Tp2d8bwY542jrbmAnz", dest_parent_id: folder_map_a.dest_id)
+                                           src_id: "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV", src_parent_id: folder_map_a.src_id,
+                                           dest_id: "1fGgtI-ynyMIzi7Tp2d8bwY542jrbmAnz", dest_parent_id: folder_map_a.dest_id)
     end
     let!(:folder_map_c) do
       create(:gdrive_migration_folder_map, operation: operation, name: "Folder C",
-        src_id: "1yWXMPJnSpso__yXpopV_WZ-kBj39GJi-", src_parent_id: folder_map_a.src_id,
-        dest_id: "14huMaHzvNxvfxdoQPqm3fLVOT0I1oDk-", dest_parent_id: folder_map_a.dest_id)
+                                           src_id: "1yWXMPJnSpso__yXpopV_WZ-kBj39GJi-", src_parent_id: folder_map_a.src_id,
+                                           dest_id: "14huMaHzvNxvfxdoQPqm3fLVOT0I1oDk-", dest_parent_id: folder_map_a.dest_id)
     end
     let!(:file_b_1) do
       create(:gdrive_migration_file, operation: operation, external_id: "11jdjwgwY0duK5kMMb8b97tuvCH8TC_aDtXvAXs7N2tU",
-        parent_id: folder_map_b.src_id, owner: consenter_email)
+                                     parent_id: folder_map_b.src_id, owner: consenter_email)
     end
     let!(:file_c_1) do
       create(:gdrive_migration_file, operation: operation, external_id: "1obo1kO6zdxnBZE9DpCfjSQk9-tVUp8u_QKR9XtzmsSI",
-        parent_id: folder_map_c.src_id, owner: consenter_email)
+                                     parent_id: folder_map_c.src_id, owner: consenter_email)
     end
     let!(:file_root_1) do
       create(:gdrive_migration_file, operation: operation, external_id: "1TYsGVe0Vro-wCIMG_sk4aIiko5PPM8N0c8KwN1eXkMY",
-        parent_id: operation.src_folder_id, owner: consenter_email)
+                                     parent_id: operation.src_folder_id, owner: consenter_email)
     end
     let(:request_id) { "51e86502-b047-4c06-9a7c-e9fa35137858" }
 
     it "creates temp drive, creates and reuses parent folders, double-moves files, updates statuses" do
       VCR.use_cassette("gdrive/migration/ingest_job/happy_path") do
         described_class.perform_now(cluster_id: Defaults.cluster.id,
-          consent_request_id: consent_request.id)
+                                    consent_request_id: consent_request.id)
         consent_request.reload
 
         expect(consent_request).to be_ingest_done
@@ -122,7 +126,7 @@ describe GDrive::Migration::IngestJob do
         # These are also the last files for the consenting user so we should mark the request done.
         consent_request.setup_ingest([file_c_1.external_id, file_root_1.external_id])
         described_class.perform_now(cluster_id: Defaults.cluster.id,
-          consent_request_id: consent_request.id)
+                                    consent_request_id: consent_request.id)
 
         consent_request.reload
         expect(consent_request).to be_ingest_done
@@ -140,17 +144,17 @@ describe GDrive::Migration::IngestJob do
   describe "source folder with no folder map but dest folder does exist" do
     let!(:folder_map_a) do
       create(:gdrive_migration_folder_map, operation: operation, name: "Folder A",
-        src_id: "1PJwkZgkByPMcbkfzneq65Cx1CnDNMVR_", src_parent_id: operation.src_folder_id,
-        dest_id: "1REPQUYEGym1APlylgINdZFO1Lh85eDq4", dest_parent_id: operation.dest_folder_id)
+                                           src_id: "1PJwkZgkByPMcbkfzneq65Cx1CnDNMVR_", src_parent_id: operation.src_folder_id,
+                                           dest_id: "1REPQUYEGym1APlylgINdZFO1Lh85eDq4", dest_parent_id: operation.dest_folder_id)
     end
     let!(:folder_map_b) do
       create(:gdrive_migration_folder_map, operation: operation, name: "Folder B",
-        src_id: "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV", src_parent_id: folder_map_a.src_id,
-        dest_id: "1wX5bKq7TPUHS2tX0UM9SJkAEhGsJy-H3", dest_parent_id: folder_map_a.dest_id)
+                                           src_id: "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV", src_parent_id: folder_map_a.src_id,
+                                           dest_id: "1wX5bKq7TPUHS2tX0UM9SJkAEhGsJy-H3", dest_parent_id: folder_map_a.dest_id)
     end
     let!(:file_b_1) do
       create(:gdrive_migration_file, operation: operation, external_id: "1CLjCdL5-73nj5aybzafYyucgGpI9kFfaKR5TB8QLtOs",
-        parent_id: folder_map_b.src_id, owner: consenter_email)
+                                     parent_id: folder_map_b.src_id, owner: consenter_email)
     end
     let(:request_id) { "3829126f-6917-44ea-af36-9b26e3e2c164" }
 
@@ -161,7 +165,7 @@ describe GDrive::Migration::IngestJob do
     it "should find and use the dest folder" do
       VCR.use_cassette("gdrive/migration/ingest_job/no_folder_map_but_folder_exists") do
         described_class.perform_now(cluster_id: Defaults.cluster.id,
-          consent_request_id: consent_request.id)
+                                    consent_request_id: consent_request.id)
         file_b_1.reload
         expect(file_b_1).to be_transferred
         GDrive::Migration::FolderMap.find_by!(name: "Folder B", src_id: file_b_1.parent_id)
@@ -173,17 +177,17 @@ describe GDrive::Migration::IngestJob do
   describe "source folder with no folder map and dest folder doesn't exist" do
     let!(:folder_map_a) do
       create(:gdrive_migration_folder_map, operation: operation, name: "Folder A",
-        src_id: "1PJwkZgkByPMcbkfzneq65Cx1CnDNMVR_", src_parent_id: operation.src_folder_id,
-        dest_id: "1REPQUYEGym1APlylgINdZFO1Lh85eDq4", dest_parent_id: operation.dest_folder_id)
+                                           src_id: "1PJwkZgkByPMcbkfzneq65Cx1CnDNMVR_", src_parent_id: operation.src_folder_id,
+                                           dest_id: "1REPQUYEGym1APlylgINdZFO1Lh85eDq4", dest_parent_id: operation.dest_folder_id)
     end
     let!(:folder_map_b) do
       create(:gdrive_migration_folder_map, operation: operation, name: "Folder B",
-        src_id: "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV", src_parent_id: folder_map_a.src_id,
-        dest_id: "1fGgtI-ynyMIzi7Tp2d8bwY542jrbmAnz", dest_parent_id: folder_map_a.dest_id)
+                                           src_id: "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV", src_parent_id: folder_map_a.src_id,
+                                           dest_id: "1fGgtI-ynyMIzi7Tp2d8bwY542jrbmAnz", dest_parent_id: folder_map_a.dest_id)
     end
     let!(:file_b_1) do
       create(:gdrive_migration_file, operation: operation, external_id: "1hfyPrCWbphUSqoYvPE1DxLkJmV77AzpO6A0f_IyiLzs",
-        parent_id: folder_map_b.src_id, owner: consenter_email)
+                                     parent_id: folder_map_b.src_id, owner: consenter_email)
     end
     let(:request_id) { "639a0455-60a6-4634-8dfc-9f016d6bd450" }
 
@@ -194,7 +198,7 @@ describe GDrive::Migration::IngestJob do
     it "should create the dest folder" do
       VCR.use_cassette("gdrive/migration/ingest_job/no_folder_map_and_no_folder") do
         described_class.perform_now(cluster_id: Defaults.cluster.id,
-          consent_request_id: consent_request.id)
+                                    consent_request_id: consent_request.id)
         file_b_1.reload
         expect(file_b_1).to be_transferred
         GDrive::Migration::FolderMap.find_by!(name: "Folder B", src_id: file_b_1.parent_id)
@@ -207,19 +211,19 @@ describe GDrive::Migration::IngestJob do
   describe "source folder with no folder map and not in the migration tree" do
     let!(:folder_map_a) do
       create(:gdrive_migration_folder_map, operation: operation, name: "Folder A",
-        src_id: "1PJwkZgkByPMcbkfzneq65Cx1CnDNMVR_", src_parent_id: operation.src_folder_id,
-        dest_id: "1REPQUYEGym1APlylgINdZFO1Lh85eDq4", dest_parent_id: operation.dest_folder_id)
+                                           src_id: "1PJwkZgkByPMcbkfzneq65Cx1CnDNMVR_", src_parent_id: operation.src_folder_id,
+                                           dest_id: "1REPQUYEGym1APlylgINdZFO1Lh85eDq4", dest_parent_id: operation.dest_folder_id)
     end
     let!(:file_b_1) do
       create(:gdrive_migration_file, operation: operation, external_id: "1bGXLuClPL7w0GFB_rAga0duf5tFxkTIh_vZFbrOfW5U",
-        parent_id: "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV", owner: consenter_email)
+                                     parent_id: "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV", owner: consenter_email)
     end
     let(:request_id) { "bbbcc008-8209-4078-ba44-be50f6a668f1" }
 
     it "should fail gracefully and store error message" do
       VCR.use_cassette("gdrive/migration/ingest_job/no_folder_map_and_outside_tree") do
         described_class.perform_now(cluster_id: Defaults.cluster.id,
-          consent_request_id: consent_request.id)
+                                    consent_request_id: consent_request.id)
         file_b_1.reload
         expect(file_b_1).to be_errored
         expect(file_b_1.error_type).to eq("ancestor_inaccessible")
@@ -235,16 +239,16 @@ describe GDrive::Migration::IngestJob do
   describe "with max errors" do
     let!(:folder_map_a) do
       create(:gdrive_migration_folder_map, operation: operation, name: "Folder A",
-        src_id: "1PJwkZgkByPMcbkfzneq65Cx1CnDNMVR_", src_parent_id: operation.src_folder_id,
-        dest_id: "1REPQUYEGym1APlylgINdZFO1Lh85eDq4", dest_parent_id: operation.dest_folder_id)
+                                           src_id: "1PJwkZgkByPMcbkfzneq65Cx1CnDNMVR_", src_parent_id: operation.src_folder_id,
+                                           dest_id: "1REPQUYEGym1APlylgINdZFO1Lh85eDq4", dest_parent_id: operation.dest_folder_id)
     end
     let!(:file_b_1) do
       create(:gdrive_migration_file, operation: operation, external_id: "1bGXLuClPL7w0GFB_rAga0duf5tFxkTIh_vZFbrOfW5U",
-        parent_id: "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV", owner: consenter_email)
+                                     parent_id: "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV", owner: consenter_email)
     end
     let!(:file_b_2) do
       create(:gdrive_migration_file, operation: operation, external_id: "1bGXLuClPL7w0GFB_rAga0duf5tFxkTIh_vZFbrOfW5W",
-        parent_id: "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV", owner: consenter_email)
+                                     parent_id: "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV", owner: consenter_email)
     end
     let(:request_id) { "bbbcc008-8209-4078-ba44-be50f6a668f1" }
 
@@ -255,7 +259,7 @@ describe GDrive::Migration::IngestJob do
     it "should set ingest failed" do
       VCR.use_cassette("gdrive/migration/ingest_job/multiple_errors") do
         described_class.perform_now(cluster_id: Defaults.cluster.id,
-          consent_request_id: consent_request.id)
+                                    consent_request_id: consent_request.id)
         file_b_1.reload
         expect(file_b_1).to be_errored
         expect(file_b_1.error_type).to eq("ancestor_inaccessible")
@@ -263,7 +267,7 @@ describe GDrive::Migration::IngestJob do
 
         consent_request.setup_ingest([file_b_2.external_id])
         described_class.perform_now(cluster_id: Defaults.cluster.id,
-          consent_request_id: consent_request.id)
+                                    consent_request_id: consent_request.id)
 
         file_b_2.reload
         expect(file_b_2).to be_errored
@@ -283,17 +287,17 @@ describe GDrive::Migration::IngestJob do
   describe "folder map with a bad dest_id but folder exists" do
     let!(:folder_map_a) do
       create(:gdrive_migration_folder_map, operation: operation, name: "Folder A",
-        src_id: "1PJwkZgkByPMcbkfzneq65Cx1CnDNMVR_", src_parent_id: operation.src_folder_id,
-        dest_id: "1REPQUYEGym1APlylgINdZFO1Lh85eDq4", dest_parent_id: operation.dest_folder_id)
+                                           src_id: "1PJwkZgkByPMcbkfzneq65Cx1CnDNMVR_", src_parent_id: operation.src_folder_id,
+                                           dest_id: "1REPQUYEGym1APlylgINdZFO1Lh85eDq4", dest_parent_id: operation.dest_folder_id)
     end
     let!(:folder_map_b) do
       create(:gdrive_migration_folder_map, operation: operation, name: "Folder B",
-        src_id: "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV", src_parent_id: folder_map_a.src_id,
-        dest_id: "1CUk2Z1Qg52TcjWYFvUuqngL3brXa0Xv2", dest_parent_id: folder_map_a.dest_id)
+                                           src_id: "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV", src_parent_id: folder_map_a.src_id,
+                                           dest_id: "1CUk2Z1Qg52TcjWYFvUuqngL3brXa0Xv2", dest_parent_id: folder_map_a.dest_id)
     end
     let!(:file_b_1) do
       create(:gdrive_migration_file, operation: operation, external_id: "1cB-qwVowTr6cFIEHa-E3M-fpk6JMMmpUW1JIITP6TUE",
-        parent_id: folder_map_b.src_id, owner: consenter_email)
+                                     parent_id: folder_map_b.src_id, owner: consenter_email)
     end
     let(:request_id) { "ce0fd796-b4ed-4b6c-be57-20ef4de74bc7" }
 
@@ -304,7 +308,7 @@ describe GDrive::Migration::IngestJob do
     it "should find and use the dest folder" do
       VCR.use_cassette("gdrive/migration/ingest_job/bad_dest_id_but_folder_exists") do
         described_class.perform_now(cluster_id: Defaults.cluster.id,
-          consent_request_id: consent_request.id)
+                                    consent_request_id: consent_request.id)
         file_b_1.reload
         expect(file_b_1).to be_transferred
         expect { folder_map_b.reload }.to raise_error(ActiveRecord::RecordNotFound)
@@ -317,17 +321,17 @@ describe GDrive::Migration::IngestJob do
   describe "folder map with a bad dest_id and dest folder doesn't exist" do
     let!(:folder_map_a) do
       create(:gdrive_migration_folder_map, operation: operation, name: "Folder A",
-        src_id: "1PJwkZgkByPMcbkfzneq65Cx1CnDNMVR_", src_parent_id: operation.src_folder_id,
-        dest_id: "1REPQUYEGym1APlylgINdZFO1Lh85eDq4", dest_parent_id: operation.dest_folder_id)
+                                           src_id: "1PJwkZgkByPMcbkfzneq65Cx1CnDNMVR_", src_parent_id: operation.src_folder_id,
+                                           dest_id: "1REPQUYEGym1APlylgINdZFO1Lh85eDq4", dest_parent_id: operation.dest_folder_id)
     end
     let!(:folder_map_b) do
       create(:gdrive_migration_folder_map, operation: operation, name: "Folder B",
-        src_id: "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV", src_parent_id: folder_map_a.src_id,
-        dest_id: "1CUk2Z1Qg52TcjWYFvUuqngL3brXa0Xv2", dest_parent_id: folder_map_a.dest_id)
+                                           src_id: "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV", src_parent_id: folder_map_a.src_id,
+                                           dest_id: "1CUk2Z1Qg52TcjWYFvUuqngL3brXa0Xv2", dest_parent_id: folder_map_a.dest_id)
     end
     let!(:file_b_1) do
       create(:gdrive_migration_file, operation: operation, external_id: "1uPHTd2fm_Er5D34yREXW5fgTSEOdcyPoZ6zcJ2c0Svo",
-        parent_id: folder_map_b.src_id, owner: consenter_email)
+                                     parent_id: folder_map_b.src_id, owner: consenter_email)
     end
     let(:request_id) { "877d7570-877f-478c-b3ac-eda91b71e3f6" }
 
@@ -338,7 +342,7 @@ describe GDrive::Migration::IngestJob do
     it "should create the dest folder" do
       VCR.use_cassette("gdrive/migration/ingest_job/bad_dest_id_and_no_folder") do
         described_class.perform_now(cluster_id: Defaults.cluster.id,
-          consent_request_id: consent_request.id)
+                                    consent_request_id: consent_request.id)
         file_b_1.reload
         expect(file_b_1).to be_transferred
         expect { folder_map_b.reload }.to raise_error(ActiveRecord::RecordNotFound)
@@ -350,19 +354,19 @@ describe GDrive::Migration::IngestJob do
   describe "source file with a stored reference to a parent folder that no longer exists" do
     let!(:folder_map_a) do
       create(:gdrive_migration_folder_map, operation: operation, name: "Folder A",
-        src_id: "1PJwkZgkByPMcbkfzneq65Cx1CnDNMVR_", src_parent_id: operation.src_folder_id,
-        dest_id: "1REPQUYEGym1APlylgINdZFO1Lh85eDq4", dest_parent_id: operation.dest_folder_id)
+                                           src_id: "1PJwkZgkByPMcbkfzneq65Cx1CnDNMVR_", src_parent_id: operation.src_folder_id,
+                                           dest_id: "1REPQUYEGym1APlylgINdZFO1Lh85eDq4", dest_parent_id: operation.dest_folder_id)
     end
     let!(:file_b_1) do
       create(:gdrive_migration_file, operation: operation, external_id: "1CLjCdL5-73nj5aybzafYyucgGpI9kFfaKR5TB8QLtOs",
-        parent_id: "xyz", owner: consenter_email)
+                                     parent_id: "xyz", owner: consenter_email)
     end
     let(:request_id) { "9c75f009-5253-4516-b8f7-6139e73c8c9d" }
 
     it "should fail gracefully" do
       VCR.use_cassette("gdrive/migration/ingest_job/file_with_missing_parent") do
         described_class.perform_now(cluster_id: Defaults.cluster.id,
-          consent_request_id: consent_request.id)
+                                    consent_request_id: consent_request.id)
         file_b_1.reload
         expect(file_b_1).to be_errored
         expect(file_b_1.error_type).to eq("client_error_ensuring_tree")
@@ -374,12 +378,12 @@ describe GDrive::Migration::IngestJob do
   describe "source file with no stored reference, and it's not in the migration tree" do
     let!(:folder_map_a) do
       create(:gdrive_migration_folder_map, operation: operation, name: "Folder A",
-        src_id: "1PJwkZgkByPMcbkfzneq65Cx1CnDNMVR_", src_parent_id: operation.src_folder_id,
-        dest_id: "1REPQUYEGym1APlylgINdZFO1Lh85eDq4", dest_parent_id: operation.dest_folder_id)
+                                           src_id: "1PJwkZgkByPMcbkfzneq65Cx1CnDNMVR_", src_parent_id: operation.src_folder_id,
+                                           dest_id: "1REPQUYEGym1APlylgINdZFO1Lh85eDq4", dest_parent_id: operation.dest_folder_id)
     end
     let!(:file_b_1) do
       create(:gdrive_migration_file, operation: operation, external_id: "1ocLaGwSn97tTpZa1o_UbfJJXM1rFqhcA8CQyCIWMRKs",
-        parent_id: "13dcZ65dZ5H-npYmvrlLBGsSyC0EzpEsm", owner: consenter_email)
+                                     parent_id: "13dcZ65dZ5H-npYmvrlLBGsSyC0EzpEsm", owner: consenter_email)
     end
     let(:request_id) { "25a4f5bc-38cc-40bc-867f-f3333d66be72" }
 
@@ -390,7 +394,7 @@ describe GDrive::Migration::IngestJob do
     it "should still migrate file and create File record" do
       VCR.use_cassette("gdrive/migration/ingest_job/file_with_no_record_and_not_in_tree") do
         described_class.perform_now(cluster_id: Defaults.cluster.id,
-          consent_request_id: consent_request.id)
+                                    consent_request_id: consent_request.id)
 
         consent_request.reload
         expect(consent_request).to be_ingest_done
@@ -403,33 +407,35 @@ describe GDrive::Migration::IngestJob do
   describe "error when moving file to temp drive" do
     let!(:folder_map_a) do
       create(:gdrive_migration_folder_map, operation: operation, name: "Folder A",
-        src_id: "1PJwkZgkByPMcbkfzneq65Cx1CnDNMVR_", src_parent_id: operation.src_folder_id,
-        dest_id: "1REPQUYEGym1APlylgINdZFO1Lh85eDq4", dest_parent_id: operation.dest_folder_id)
+                                           src_id: "1PJwkZgkByPMcbkfzneq65Cx1CnDNMVR_", src_parent_id: operation.src_folder_id,
+                                           dest_id: "1REPQUYEGym1APlylgINdZFO1Lh85eDq4", dest_parent_id: operation.dest_folder_id)
     end
     let!(:folder_map_b) do
       create(:gdrive_migration_folder_map, operation: operation, name: "Folder B",
-        src_id: "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV", src_parent_id: folder_map_a.src_id,
-        dest_id: "1fGgtI-ynyMIzi7Tp2d8bwY542jrbmAnz", dest_parent_id: folder_map_a.dest_id)
+                                           src_id: "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV", src_parent_id: folder_map_a.src_id,
+                                           dest_id: "1fGgtI-ynyMIzi7Tp2d8bwY542jrbmAnz", dest_parent_id: folder_map_a.dest_id)
     end
     let!(:folder_map_c) do
       create(:gdrive_migration_folder_map, operation: operation, name: "Folder C",
-        src_id: "1yWXMPJnSpso__yXpopV_WZ-kBj39GJi-", src_parent_id: folder_map_a.src_id,
-        dest_id: "14huMaHzvNxvfxdoQPqm3fLVOT0I1oDk-", dest_parent_id: folder_map_a.dest_id)
+                                           src_id: "1yWXMPJnSpso__yXpopV_WZ-kBj39GJi-", src_parent_id: folder_map_a.src_id,
+                                           dest_id: "14huMaHzvNxvfxdoQPqm3fLVOT0I1oDk-", dest_parent_id: folder_map_a.dest_id)
     end
     let!(:file_b_1) do
       create(:gdrive_migration_file, operation: operation, external_id: "11jdjwgwY0duK5kMMb8b97tuvCH8TC_aDtXvAXs7N2tU",
-        parent_id: folder_map_b.src_id, owner: consenter_email)
+                                     parent_id: folder_map_b.src_id, owner: consenter_email)
     end
     let!(:file_c_1) do
       create(:gdrive_migration_file, operation: operation, external_id: "1obo1kO6zdxnBZE9DpCfjSQk9-tVUp8u_QKR9XtzmsSI",
-        parent_id: folder_map_c.src_id, owner: consenter_email)
+                                     parent_id: folder_map_c.src_id, owner: consenter_email)
     end
     let!(:file_root_1) do
       create(:gdrive_migration_file, operation: operation, external_id: "1TYsGVe0Vro-wCIMG_sk4aIiko5PPM8N0c8KwN1eXkMY",
-        parent_id: operation.src_folder_id, owner: consenter_email)
+                                     parent_id: operation.src_folder_id, owner: consenter_email)
     end
     let(:request_id) { "51e86502-b047-4c06-9a7c-e9fa35137858" }
-    subject(:job) { described_class.new(cluster_id: Defaults.cluster.id, consent_request_id: consent_request.id) }
+    subject(:job) do
+      described_class.new(cluster_id: Defaults.cluster.id, consent_request_id: consent_request.id)
+    end
 
     it "should fail gracefully" do
       VCR.use_cassette("gdrive/migration/ingest_job/client_error_moving_to_temp_drive") do
@@ -449,41 +455,42 @@ describe GDrive::Migration::IngestJob do
   describe "error when moving file to destination" do
     let!(:folder_map_a) do
       create(:gdrive_migration_folder_map, operation: operation, name: "Folder A",
-        src_id: "1PJwkZgkByPMcbkfzneq65Cx1CnDNMVR_", src_parent_id: operation.src_folder_id,
-        dest_id: "1REPQUYEGym1APlylgINdZFO1Lh85eDq4", dest_parent_id: operation.dest_folder_id)
+                                           src_id: "1PJwkZgkByPMcbkfzneq65Cx1CnDNMVR_", src_parent_id: operation.src_folder_id,
+                                           dest_id: "1REPQUYEGym1APlylgINdZFO1Lh85eDq4", dest_parent_id: operation.dest_folder_id)
     end
     let!(:folder_map_b) do
       create(:gdrive_migration_folder_map, operation: operation, name: "Folder B",
-        src_id: "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV", src_parent_id: folder_map_a.src_id,
-        dest_id: "1fGgtI-ynyMIzi7Tp2d8bwY542jrbmAnz", dest_parent_id: folder_map_a.dest_id)
+                                           src_id: "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV", src_parent_id: folder_map_a.src_id,
+                                           dest_id: "1fGgtI-ynyMIzi7Tp2d8bwY542jrbmAnz", dest_parent_id: folder_map_a.dest_id)
     end
     let!(:folder_map_c) do
       create(:gdrive_migration_folder_map, operation: operation, name: "Folder C",
-        src_id: "1yWXMPJnSpso__yXpopV_WZ-kBj39GJi-", src_parent_id: folder_map_a.src_id,
-        dest_id: "14huMaHzvNxvfxdoQPqm3fLVOT0I1oDk-", dest_parent_id: folder_map_a.dest_id)
+                                           src_id: "1yWXMPJnSpso__yXpopV_WZ-kBj39GJi-", src_parent_id: folder_map_a.src_id,
+                                           dest_id: "14huMaHzvNxvfxdoQPqm3fLVOT0I1oDk-", dest_parent_id: folder_map_a.dest_id)
     end
     let!(:file_b_1) do
       create(:gdrive_migration_file, operation: operation, external_id: "11jdjwgwY0duK5kMMb8b97tuvCH8TC_aDtXvAXs7N2tU",
-        parent_id: folder_map_b.src_id, owner: consenter_email)
+                                     parent_id: folder_map_b.src_id, owner: consenter_email)
     end
     let!(:file_c_1) do
       create(:gdrive_migration_file, operation: operation, external_id: "1obo1kO6zdxnBZE9DpCfjSQk9-tVUp8u_QKR9XtzmsSI",
-        parent_id: folder_map_c.src_id, owner: consenter_email)
+                                     parent_id: folder_map_c.src_id, owner: consenter_email)
     end
     let!(:file_root_1) do
       create(:gdrive_migration_file, operation: operation, external_id: "1TYsGVe0Vro-wCIMG_sk4aIiko5PPM8N0c8KwN1eXkMY",
-        parent_id: operation.src_folder_id, owner: consenter_email)
+                                     parent_id: operation.src_folder_id, owner: consenter_email)
     end
     let(:request_id) { "51e86502-b047-4c06-9a7c-e9fa35137858" }
-    subject(:job) { described_class.new(cluster_id: Defaults.cluster.id, consent_request_id: consent_request.id) }
+    subject(:job) do
+      described_class.new(cluster_id: Defaults.cluster.id, consent_request_id: consent_request.id)
+    end
 
     it "should fail gracefully" do
       VCR.use_cassette("gdrive/migration/ingest_job/client_error_moving_to_destination") do
         call_count = 0
         allow_any_instance_of(GDrive::Wrapper).to receive(:update_file) do
-          if call_count == 1
-            raise Google::Apis::ClientError.new("foo")
-          end
+          raise Google::Apis::ClientError.new("foo") if call_count == 1
+
           call_count += 1
         end
 
@@ -499,25 +506,27 @@ describe GDrive::Migration::IngestJob do
   describe "requested file is not owned by consenter" do
     let!(:folder_map_a) do
       create(:gdrive_migration_folder_map, operation: operation, name: "Folder A",
-        src_id: "1PJwkZgkByPMcbkfzneq65Cx1CnDNMVR_", src_parent_id: operation.src_folder_id,
-        dest_id: "1REPQUYEGym1APlylgINdZFO1Lh85eDq4", dest_parent_id: operation.dest_folder_id)
+                                           src_id: "1PJwkZgkByPMcbkfzneq65Cx1CnDNMVR_", src_parent_id: operation.src_folder_id,
+                                           dest_id: "1REPQUYEGym1APlylgINdZFO1Lh85eDq4", dest_parent_id: operation.dest_folder_id)
     end
     let!(:folder_map_b) do
       create(:gdrive_migration_folder_map, operation: operation, name: "Folder B",
-        src_id: "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV", src_parent_id: folder_map_a.src_id,
-        dest_id: "1fGgtI-ynyMIzi7Tp2d8bwY542jrbmAnz", dest_parent_id: folder_map_a.dest_id)
+                                           src_id: "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV", src_parent_id: folder_map_a.src_id,
+                                           dest_id: "1fGgtI-ynyMIzi7Tp2d8bwY542jrbmAnz", dest_parent_id: folder_map_a.dest_id)
     end
     let!(:folder_map_c) do
       create(:gdrive_migration_folder_map, operation: operation, name: "Folder C",
-        src_id: "1yWXMPJnSpso__yXpopV_WZ-kBj39GJi-", src_parent_id: folder_map_a.src_id,
-        dest_id: "14huMaHzvNxvfxdoQPqm3fLVOT0I1oDk-", dest_parent_id: folder_map_a.dest_id)
+                                           src_id: "1yWXMPJnSpso__yXpopV_WZ-kBj39GJi-", src_parent_id: folder_map_a.src_id,
+                                           dest_id: "14huMaHzvNxvfxdoQPqm3fLVOT0I1oDk-", dest_parent_id: folder_map_a.dest_id)
     end
     let!(:file_b_1) do
       create(:gdrive_migration_file, operation: operation, external_id: "11jdjwgwY0duK5kMMb8b97tuvCH8TC_aDtXvAXs7N2tU",
-        parent_id: folder_map_b.src_id, owner: "rando@example.com")
+                                     parent_id: folder_map_b.src_id, owner: "rando@example.com")
     end
     let(:request_id) { "51e86502-b047-4c06-9a7c-e9fa35137858" }
-    subject(:job) { described_class.new(cluster_id: Defaults.cluster.id, consent_request_id: consent_request.id) }
+    subject(:job) do
+      described_class.new(cluster_id: Defaults.cluster.id, consent_request_id: consent_request.id)
+    end
 
     it "should skip the file" do
       VCR.use_cassette("gdrive/migration/ingest_job/file_not_owned_by_consenter") do

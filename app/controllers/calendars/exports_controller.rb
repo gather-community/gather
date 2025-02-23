@@ -66,6 +66,7 @@ module Calendars
 
     def calendars
       return @calendars if @calendars
+
       calendar_scope = Calendar.in_community(current_community)
       @calendars = if params[:calendars] == "all"
                      calendar_scope.to_a

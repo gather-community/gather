@@ -16,10 +16,9 @@ class DiscourseSingleSignOn
   BOOLS = %i[admin avatar_force_update locale_force_update moderator
              require_activation suppress_welcome_message].freeze
 
-  attr_accessor(*ACCESSORS)
-  attr_accessor :secret, :return_url
+  attr_accessor(*ACCESSORS, :secret, :return_url)
 
-  def initialize(payload: nil, signature: nil, secret:, return_url: nil)
+  def initialize(secret:, payload: nil, signature: nil, return_url: nil)
     if payload.blank? ^ signature.blank?
       raise ParseError, "Payload and signature both required if either given"
     end
@@ -35,7 +34,8 @@ class DiscourseSingleSignOn
   end
 
   def to_url
-    raise ParseError, "Return URL not given" unless return_url.present?
+    raise ParseError, "Return URL not given" if return_url.blank?
+
     "#{return_url}#{return_url.include?('?') ? '&' : '?'}#{return_payload}"
   end
 
@@ -54,6 +54,7 @@ class DiscourseSingleSignOn
 
   def check_signature(payload, signature)
     return if sign(payload) == signature
+
     if payload =~ %r{[^a-zA-Z0-9=\r\n/+]}m
       diags = "\n\npayload: #{payload}"
       raise ParseError, "Invalid chars in SSO field.#{diags}"
@@ -66,6 +67,7 @@ class DiscourseSingleSignOn
   def assign_fields(decoded_hash)
     ACCESSORS.each do |k|
       next if public_send(k)
+
       val = decoded_hash[k.to_s]
       val = val.to_i if FIXNUMS.include?(k)
       val = %w[true false].include?(val) ? val == "true" : nil if BOOLS.include?(k)
@@ -95,6 +97,7 @@ class DiscourseSingleSignOn
 
     ACCESSORS.each do |k|
       next if (val = public_send(k)).nil?
+
       payload[k] = val
     end
 

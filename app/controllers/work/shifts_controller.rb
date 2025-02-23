@@ -121,6 +121,7 @@ module Work
       @period = lenses[:period].selection
       @choosee = lenses[:choosee].selection || current_user
       return if @choosee == current_user
+
       flash.now[:notice] = t("work.choosing_as", name: choosee.full_name)
     end
 
@@ -190,6 +191,7 @@ module Work
 
     def apply_search_lens
       return if lenses[:search].blank?
+
       search = Work::Shift.search(
         query: {
           multi_match: {
@@ -211,6 +213,7 @@ module Work
 
     def apply_date_range_lens
       return if lenses[:dates].selection == :all
+
       if lenses[:dates].selection == :curftr
         @shifts = @shifts.current_future
       elsif lenses[:dates].selection == :past
@@ -225,6 +228,7 @@ module Work
 
     def synopsis
       raise "period must be set to build synopsis" unless @period
+
       # Draper inferral is not working here for some reason.
       @synopsis ||= SynopsisDecorator.new(Synopsis.new(period: @period, user: @choosee))
     end

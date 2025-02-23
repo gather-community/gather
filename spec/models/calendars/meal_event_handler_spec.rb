@@ -7,7 +7,7 @@ describe Meals::EventHandler do
   let(:calendars) { create_list(:calendar, 2) }
   let(:meal) do
     build(:meal, :with_menu, community: community, title: "A very very very long title",
-      calendars: calendars, served_at: "2017-01-01 12:00")
+                             calendars: calendars, served_at: "2017-01-01 12:00")
   end
   let(:handler) { described_class.new(meal) }
   let(:handler2) { described_class.new(meal) }
@@ -68,7 +68,7 @@ describe Meals::EventHandler do
           # Create event that will conflict when meal calendar changes
           meal_time = meal.served_at
           create(:event, calendar: calendar2,
-            starts_at: meal_time, ends_at: meal_time + 30.minutes)
+                         starts_at: meal_time, ends_at: meal_time + 30.minutes)
 
           meal.calendars = [calendar2]
           handler.build_events
@@ -112,7 +112,7 @@ describe Meals::EventHandler do
           before do
             new_meal_time = meal.served_at + 1.day
             create(:event, calendar: calendars[1],
-              starts_at: new_meal_time, ends_at: new_meal_time + 30.minutes)
+                           starts_at: new_meal_time, ends_at: new_meal_time + 30.minutes)
             meal.served_at = new_meal_time
             handler.build_events
           end
@@ -146,7 +146,7 @@ describe Meals::EventHandler do
   describe "validate_meal" do
     let!(:conflicting_event) do
       create(:event, calendar: calendars[0],
-        starts_at: "2017-01-01 11:00", ends_at: "2017-01-01 12:00")
+                     starts_at: "2017-01-01 11:00", ends_at: "2017-01-01 12:00")
     end
 
     before do
@@ -246,6 +246,6 @@ describe Meals::EventHandler do
   def expect_overlap_error(calendar)
     expect(meal).not_to be_valid
     expect(meal.errors[:base]).to eq(["The following error(s) occurred in making a #{calendar.name} " \
-      "event for this meal: This event overlaps an existing one."])
+                                      "event for this meal: This event overlaps an existing one."])
   end
 end

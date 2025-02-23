@@ -11,6 +11,7 @@ class ReminderMaintainer
     deliveries_by_event.each { |_, ds| ds.each(&:calculate_and_save) }
     remindable_events(reminder).find_each do |event|
       next if deliveries_by_event[event]
+
       deliveries.build(event_key => event, type: delivery_type).calculate_and_save
     end
   end

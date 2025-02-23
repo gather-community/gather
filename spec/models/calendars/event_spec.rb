@@ -76,7 +76,8 @@ describe Calendars::Event do
       context "when meal event" do
         it "should not error if creator not present" do
           meal = create(:meal)
-          event = build(:event, meal: meal, creator: nil, kind: "_meal", starts_at: meal.served_at, ends_at: meal.served_at + 1.hour)
+          event = build(:event, meal: meal, creator: nil, kind: "_meal", starts_at: meal.served_at,
+                                ends_at: meal.served_at + 1.hour)
           expect(event).to be_valid
         end
 
@@ -177,7 +178,7 @@ describe Calendars::Event do
       let(:privileged_changer) { false }
       let(:event) do
         create(:event, created_at: created_at, starts_at: starts_at, ends_at: ends_at,
-          privileged_changer: privileged_changer)
+                       privileged_changer: privileged_changer)
       end
       subject(:changed_event) do
         event.tap { |r| r.starts_at += 10.minutes } # Attempt to change the start time.

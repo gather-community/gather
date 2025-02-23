@@ -20,6 +20,7 @@ module Calendars
 
       def base_meals_scope(range, actor:)
         return Meals::Meal.none if actor.nil?
+
         super.attended_by(actor.household)
       end
     end

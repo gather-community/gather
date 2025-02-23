@@ -43,16 +43,12 @@ module GeneralHelpers
     use_subdomain(user.community.slug)
   end
 
-  def with_tenant(tenant)
-    ActsAsTenant.with_tenant(tenant) do
-      yield
-    end
+  def with_tenant(tenant, &)
+    ActsAsTenant.with_tenant(tenant, &)
   end
 
-  def with_default_tenant
-    ActsAsTenant.with_tenant(Defaults.cluster) do
-      yield
-    end
+  def with_default_tenant(&)
+    ActsAsTenant.with_tenant(Defaults.cluster, &)
   end
 
   def with_locale(locale)

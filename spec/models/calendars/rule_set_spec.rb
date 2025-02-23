@@ -59,7 +59,7 @@ describe Calendars::Rules::RuleSet do
     context "with multiple rules" do
       let!(:p1) do
         create(:calendar_protocol, calendars: [calendar], rule_name => "11:00am",
-                                      created_at: Time.current - 10)
+                                   created_at: Time.current - 10)
       end
       let!(:p2) do
         create(:calendar_protocol, calendars: [calendar], rule_name => "10:00am")
@@ -88,7 +88,7 @@ describe Calendars::Rules::RuleSet do
     context "with multiple rules" do
       let!(:p1) do
         create(:calendar_protocol, calendars: [calendar], pre_notice: "Foo",
-                                      created_at: Time.current - 10)
+                                   created_at: Time.current - 10)
       end
       let!(:p2) do
         create(:calendar_protocol, calendars: [calendar], pre_notice: "Bar")
@@ -107,7 +107,7 @@ describe Calendars::Rules::RuleSet do
     context "with multiple rules" do
       let!(:p1) do
         create(:calendar_protocol, calendars: [calendar], requires_kind: nil,
-                                      created_at: Time.current - 10)
+                                   created_at: Time.current - 10)
       end
       let!(:p2) do
         create(:calendar_protocol, calendars: [calendar], requires_kind: true)

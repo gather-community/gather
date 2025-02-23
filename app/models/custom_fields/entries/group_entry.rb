@@ -13,13 +13,14 @@ module CustomFields
       validate :validate_children
 
       def initialize(field:, hash:, parent: nil)
-        super(field: field, hash: hash, parent: parent)
+        super
         self.entries = field.fields.map { |f| build_child_entry(f) }
 
         field.fields.each do |f|
           if respond_to?(f.key) || respond_to?("#{f.key}?") || respond_to?("#{f.key}=")
             raise ArgumentError, "`#{f.key}` is a reserved attribute name"
           end
+
           define_singleton_method(f.key) { self[f.key] }
           define_singleton_method("#{f.key}?") { self[f.key] } if f.type == :boolean
           define_singleton_method("#{f.key}=") { |value| self[f.key] = value }
@@ -75,7 +76,7 @@ module CustomFields
       end
 
       def entries_by_key
-        @entries_by_key ||= entries.map { |e| [e.key, e] }.to_h
+        @entries_by_key ||= entries.index_by { |e| e.key }
       end
 
       private

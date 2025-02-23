@@ -12,7 +12,8 @@ describe CustomFields::Spec do
   describe "keys" do
     let(:spec) do
       described_class.new([
-        {"key" => "fruit", "type" => "enum", "options" => %w[apple banana peach], "required" => true},
+        {"key" => "fruit", "type" => "enum", "options" => %w[apple banana peach],
+         "required" => true},
         {"key" => "info", "type" => "group", "fields" => [
           {"key" => "complete", "type" => "boolean", "default" => true},
           {"key" => "comment", "type" => "string", "default" => "foo"},

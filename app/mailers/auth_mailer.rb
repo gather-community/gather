@@ -16,22 +16,26 @@ class AuthMailer < Devise::Mailer
 
   def reset_password_instructions(user, token, opts = {})
     return if user.fake?
+
     super(user.decorate, token, opts)
   end
 
   def cant_reset_password(user)
     return if user.fake?
+
     @user = user.decorate
     mail(to: @user)
   end
 
   def confirmation_instructions(user, token, opts = {})
     return if user.fake?
+
     super(user.decorate, token, opts)
   end
 
   def sign_in_invitation(user, token)
     return if user.fake? || user.email.blank?
+
     @user = user.decorate
     @token = token
     @expiry_days = (Devise.reset_password_within / 1.day).to_i

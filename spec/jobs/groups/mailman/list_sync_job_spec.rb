@@ -66,8 +66,8 @@ describe Groups::Mailman::ListSyncJob do
         expect(api).to receive(:create_list, &with_obj_attribs(fqdn_listname: "foo@tscoho.org")).ordered
           .and_return("foo.tscoho.org")
         expect(api).to receive(:configure_list,
-          &with_obj_attribs(fqdn_listname: "foo@tscoho.org",
-            config: list.default_config)).ordered
+                               &with_obj_attribs(fqdn_listname: "foo@tscoho.org",
+                                                 config: list.default_config)).ordered
         expect { perform_job }.to have_enqueued_job(Groups::Mailman::MembershipSyncJob)
           .with("Groups::Mailman::List", list.id)
         expect(list.reload.remote_id).to eq("foo.tscoho.org")
@@ -86,8 +86,8 @@ describe Groups::Mailman::ListSyncJob do
         expect(expected_config).to be_instance_of(Hash)
         expect(expected_config.size).to eq(Groups::Mailman::List::ENFORCED_SETTINGS.size)
         expect(api).to receive(:configure_list,
-          &with_obj_attribs(fqdn_listname: "foo@tscoho.org",
-            config: expected_config)).ordered
+                               &with_obj_attribs(fqdn_listname: "foo@tscoho.org",
+                                                 config: expected_config)).ordered
         expect { perform_job }.to have_enqueued_job(Groups::Mailman::MembershipSyncJob)
           .with("Groups::Mailman::List", list.id)
         expect(list.reload.remote_id).to eq("foo.tscoho.org")

@@ -20,12 +20,12 @@ class MailTestJob < ApplicationJob
     pop.mails.each do |popmail|
       mail = Mail.read_from_string(popmail.pop)
       Rails.logger.info("Processing mail: #{mail.subject}")
-      if mail.subject.include?(TestMailer::SUBJECT)
-        # mail.date is a DateTime object in UTC
-        sent_at = mail.date.to_time
-        Rails.logger.info("Test mail found with date #{sent_at.to_fs}, recording")
-        run.mail_sent_at = sent_at
-      end
+      next unless mail.subject.include?(TestMailer::SUBJECT)
+
+      # mail.date is a DateTime object in UTC
+      sent_at = mail.date.to_time
+      Rails.logger.info("Test mail found with date #{sent_at.to_fs}, recording")
+      run.mail_sent_at = sent_at
     end
     pop.delete_all
     pop.finish

@@ -92,7 +92,7 @@ module Utils
         Meals::Meal.where.not(status: "finalized").find_each do |meal|
           meal.update!(status: "finalized")
           meal.build_cost(
-            ingredient_cost: rand(10_000) / 100.0 + 32,
+            ingredient_cost: (rand(10_000) / 100.0) + 32,
             pantry_cost: rand(1000) / 100.0,
             payment_method: Meals::Cost::PAYMENT_METHODS.sample,
             reimbursee: meal.head_cook

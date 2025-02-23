@@ -5,4 +5,4 @@ module SMTPFix
   end
 end
 
-Net::SMTP.prepend SMTPFix
+Net::SMTP.prepend(SMTPFix)

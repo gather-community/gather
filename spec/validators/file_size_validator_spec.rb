@@ -12,7 +12,7 @@ describe FileSizeValidator do
 
   context "with too big file" do
     let(:path) { fixture_file_path("9mb.jpg") }
-    it { is_expected.to have_errors(photo: "File is too big \\(maximum 8 MiB\\)") }
+    it { is_expected.to have_errors(photo: 'File is too big \\(maximum 8 MiB\\)') }
   end
 
   context "with no attachment" do

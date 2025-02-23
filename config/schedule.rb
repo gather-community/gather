@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 set(:output, "#{path}/log/cron_log.log")
-env(:PATH, ENV["PATH"])
-env(:GEM_HOME, ENV["GEM_HOME"])
+env(:PATH, ENV.fetch("PATH", nil))
+env(:GEM_HOME, ENV.fetch("GEM_HOME", nil))
 
 job_type(:enqueue, "cd :path && RAILS_ENV=:environment bundle exec rake jobs:enqueue[:task] :output")
 

@@ -29,7 +29,7 @@ describe "gdrive browse", js: true do
       scenario "it shows message" do
         visit(gdrive_home_path)
         expect(page).to have_content("Your community is not yet connected to Google Drive. " \
-          "Please talk to a Gather Admin.")
+                                     "Please talk to a Gather Admin.")
       end
     end
 
@@ -39,7 +39,7 @@ describe "gdrive browse", js: true do
       scenario "it shows message" do
         visit(gdrive_home_path)
         expect(page).to have_content("Your community is not yet connected to Google Drive. " \
-          "Please talk to a Gather Admin.")
+                                     "Please talk to a Gather Admin.")
       end
     end
 
@@ -50,7 +50,7 @@ describe "gdrive browse", js: true do
       scenario "it shows message" do
         visit(gdrive_home_path)
         expect(page).to have_content("Your community is not yet connected to Google Drive. " \
-          "Please talk to a Gather Admin.")
+                                     "Please talk to a Gather Admin.")
       end
     end
 
@@ -88,16 +88,16 @@ describe "gdrive browse", js: true do
           VCR.use_cassette("gdrive/browse/authorization_error") do
             visit(gdrive_home_path)
             expect(page).to have_content("There was an error connecting to Google Drive. " \
-              "Please notify a Gather Admin.")
+                                         "Please notify a Gather Admin.")
 
             visit(root_path)
             expect(page).not_to have_content("There was an error connecting to Google Drive. " \
-              "Please notify a Gather Admin.")
+                                             "Please notify a Gather Admin.")
 
             # Second visit to the page should show same error but via a different code path.
             visit(gdrive_home_path)
             expect(page).to(have_content("There was an error connecting to Google Drive. " \
-              "Please notify a Gather Admin."))
+                                         "Please notify a Gather Admin."))
           end
         end
 
@@ -153,12 +153,12 @@ describe "gdrive browse", js: true do
 
         let!(:folder) do
           create(:gdrive_item, gdrive_config: config, external_id: "1R-5rrk68UIdYcidp61CZ54fnLMSiakEi",
-            kind: "folder", name: "")
+                               kind: "folder", name: "")
         end
         let!(:item_group4) { create(:gdrive_item_group, item: folder, group: group1) }
         let!(:file) do
           create(:gdrive_item, gdrive_config: config, external_id: "1s5sjHHrXaVxw5OqlmtZKR2b_GR5qMr8KASfsG9w3dz4",
-            kind: "file")
+                               kind: "file")
         end
         let!(:item_group5) { create(:gdrive_item_group, item: file, group: group1) }
 
@@ -187,7 +187,7 @@ describe "gdrive browse", js: true do
       scenario "it shows message" do
         visit(gdrive_home_path)
         expect(page).to have_content("Your community is not yet connected to Google Drive. " \
-          "Please contact Gather support to get started")
+                                     "Please contact Gather support to get started")
       end
     end
 
@@ -197,7 +197,7 @@ describe "gdrive browse", js: true do
       scenario "it shows message" do
         visit(gdrive_home_path)
         expect(page).to have_content("Your community is not yet connected to Google Drive.\n" \
-          "Please authenticate with Google")
+                                     "Please authenticate with Google")
       end
     end
 
@@ -209,7 +209,7 @@ describe "gdrive browse", js: true do
         scenario "it shows message" do
           visit(gdrive_home_path)
           expect(page).to have_content("Your community does not have any linked Shared Drives. " \
-            "Please go to the settings page to link a drive")
+                                       "Please go to the settings page to link a drive")
         end
       end
 
@@ -224,7 +224,7 @@ describe "gdrive browse", js: true do
           VCR.use_cassette("gdrive/browse/admin_authorization_error") do
             visit(gdrive_home_path)
             expect(page).to(have_content("There was an error connecting to Google Drive.\n" \
-              "Please authenticate with Google"))
+                                         "Please authenticate with Google"))
           end
         end
       end

@@ -19,6 +19,7 @@ module Meals
 
     def takeout_cell
       return "" unless takeout?
+
       safe_str << "✔" << nbsp << "Takeout"
     end
 

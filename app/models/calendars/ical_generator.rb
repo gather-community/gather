@@ -63,7 +63,7 @@ module Calendars
     def date_or_time_value(event, attrib)
       if event.all_day?
         # iCal format wants the day after the last day of the event as the end date for all day events.
-        Icalendar::Values::Date.new(event[attrib] + ((attrib == :ends_at) ? 1 : 0).days)
+        Icalendar::Values::Date.new(event[attrib] + (attrib == :ends_at ? 1 : 0).days)
       else
         Icalendar::Values::DateTime.new(event[attrib], tzid: tzid)
       end

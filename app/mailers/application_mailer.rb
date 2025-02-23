@@ -27,6 +27,7 @@ class ApplicationMailer < ActionMailer::Base
     params[:to] = resolve_recipients(params[:to], include_inactive: include_inactive)
     return if params[:to].empty?
     raise "@community must be set or community method overridden to send mail" unless community
+
     with_community_subdomain(community) do
       super
     end
@@ -51,18 +52,20 @@ class ApplicationMailer < ActionMailer::Base
     end.flatten.uniq.compact
 
     users_or_strings = if include_inactive == :always
-      users_or_strings
-    elsif include_inactive == :if_no_active
-      # If all results are inactive users, send to all. Else just send to active users and raw email addresses.
-      inactive_users, active_users_or_strings = users_or_strings.partition { |us| us.is_a?(User) && us.inactive? }
-      emails = if active_users_or_strings.empty?
-        inactive_users
-      else
-        active_users_or_strings
-      end
-    else
-      users_or_strings.reject { |us| us.is_a?(User) && us.inactive? }
-    end
+                         users_or_strings
+                       elsif include_inactive == :if_no_active
+                         # If all results are inactive users, send to all. Else just send to active users and raw email addresses.
+                         inactive_users, active_users_or_strings = users_or_strings.partition do |us|
+                           us.is_a?(User) && us.inactive?
+                         end
+                         if active_users_or_strings.empty?
+                           inactive_users
+                         else
+                           active_users_or_strings
+                         end
+                       else
+                         users_or_strings.reject { |us| us.is_a?(User) && us.inactive? }
+                       end
 
     users_or_strings.map { |us| us.is_a?(User) ? us.email : us }
   end
@@ -73,10 +76,10 @@ class ApplicationMailer < ActionMailer::Base
     # of children in a household live in that household. So sending an email addressed to household X
     # to guardians Y and Z of child C, even though Z doesn't live in household X, could be awkward.
     users = if user.child? && user.email.blank? && !via_household
-      user.guardians
-    else
-      [user]
-    end
+              user.guardians
+            else
+              [user]
+            end
 
     # Don't send to fake users or unconfirmed full_access users.
     # It's ok to send emails to unconfirmed non-full_access users

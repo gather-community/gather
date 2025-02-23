@@ -93,7 +93,7 @@ module Groups
         # Groups that can administer this group must have at least the same communities if not more.
         ability_groups = Group.active.in_communities(group.communities)
         %i[administer moderate].flat_map do |ability|
-          role = (ability == :administer) ? "owner" : "moderator"
+          role = ability == :administer ? "owner" : "moderator"
           ability_groups.where("can_#{ability}_email_lists": true).flat_map do |ability_group|
             ability_group.members.map do |member|
               mm_user = find_or_initialize_mm_user_for(member)
@@ -106,6 +106,7 @@ module Groups
       def normal_memberships
         group.computed_memberships(user_eager_load: :group_mailman_user).flat_map do |mship|
           next if mship.opt_out?
+
           mm_user = find_or_initialize_mm_user_for(mship.user)
           list_memberships_for_group_membership_and_mm_user(mship, mm_user)
         end.compact
@@ -115,6 +116,7 @@ module Groups
       def find_or_initialize_mm_user_for(user)
         @mm_users_by_user ||= {}
         return @mm_users_by_user[user] if @mm_users_by_user.key?(user)
+
         @mm_users_by_user[user] = Mailman::User.find_or_initialize_by(user: user)
       end
     end

@@ -25,8 +25,8 @@ shared_context "calendar exports" do
       if value.nil?
         expect(block).not_to match(/^#{key.to_s.dasherize.upcase}:/)
       else
-        key = key.is_a?(Symbol) ? key.to_s.dasherize.upcase : key
-        value = value.is_a?(Regexp) ? value : Regexp.quote(value)
+        key = key.to_s.dasherize.upcase if key.is_a?(Symbol)
+        value = Regexp.quote(value) unless value.is_a?(Regexp)
         expect(block).to match(/^#{key}:#{value}/)
       end
     end

@@ -6,7 +6,8 @@ describe "gdrive auth callback" do
   let(:community) { Defaults.community }
   let(:config) { create(:gdrive_migration_config, community: community) }
   let!(:operation) do
-    create(:gdrive_migration_operation, webhook_channel_id: "12cd", webhook_secret: "56ab", start_page_token: "34567")
+    create(:gdrive_migration_operation, webhook_channel_id: "12cd", webhook_secret: "56ab",
+                                        start_page_token: "34567")
   end
   let(:path) { "/gdrive/migration/changes?community_id=#{community.id}" }
 
@@ -18,7 +19,8 @@ describe "gdrive auth callback" do
           "x-goog-channel-token" => "56ab"
         })
         expect(response.status).to eq(204)
-      end.to have_enqueued_job(GDrive::Migration::ScanJob).with(cluster_id: Defaults.cluster.id, scan_task_id: anything)
+      end.to have_enqueued_job(GDrive::Migration::ScanJob).with(cluster_id: Defaults.cluster.id,
+                                                                scan_task_id: anything)
 
       ActsAsTenant.with_tenant(Defaults.cluster) do
         expect(GDrive::Migration::Scan.count).to eq(1)

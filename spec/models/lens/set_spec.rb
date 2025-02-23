@@ -15,11 +15,11 @@ describe Lens::Set do
     let(:ver) { Lens::Storage::LENS_VERSION }
     let(:context) do
       double(own_cluster?: own_cluster,
-        current_community: community,
-        controller_path: "x",
-        action_name: "y",
-        request: double(path: "z"),
-        session: session)
+             current_community: community,
+             controller_path: "x",
+             action_name: "y",
+             request: double(path: "z"),
+             session: session)
     end
     let(:own_cluster) { true }
     let(:route_params) { ActionController::Parameters.new(basic: "foo") }
@@ -55,7 +55,7 @@ describe Lens::Set do
           session: session, community_id: 3, controller_path: "a/b", action_name: "c", persist: true
         )
         expect(Lens::Storage).to receive(:new) do |params|
-          expect(params[:reset]).to be true
+          expect(params[:reset]).to be(true)
         end.and_return(storage)
         set
       end

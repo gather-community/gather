@@ -49,7 +49,7 @@ class UserLens < Lens::Lens
   # Returns the tag that says 'All Users'. Remote select2s only need one actual option tag.
   def selected_option_tag
     if user.present?
-      h.content_tag(:option, user.name, value: user.id, selected: "selected")
+      h.tag.option(user.name, value: user.id, selected: "selected")
     else
       ""
     end

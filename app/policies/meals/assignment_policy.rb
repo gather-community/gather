@@ -6,7 +6,7 @@ module Meals
 
     def destroy?
       assigned_user = assignment.user
-      active_admin_or?(:meals_coordinator) || active? && user.household_id == assigned_user.household_id
+      active_admin_or?(:meals_coordinator) || (active? && user.household_id == assigned_user.household_id)
     end
   end
 end

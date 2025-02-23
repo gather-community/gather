@@ -49,6 +49,7 @@ module ApplicationControllable::RequestPreprocessing
   def authorize_with_explict_policy_object(query, policy_object:)
     skip_authorization # We are doing this manually so need to skip the check.
     return if policy_object.send(query)
+
     raise Pundit::NotAuthorizedError, query: query, record: policy_object.record, policy: policy_object
   end
 
@@ -56,7 +57,8 @@ module ApplicationControllable::RequestPreprocessing
   # Not run on every request.
   def ensure_apex_domain
     return if subdomain.blank?
-    url_builder = (Settings.url.protocol == "https") ? URI::HTTPS : URI::HTTP
+
+    url_builder = Settings.url.protocol == "https" ? URI::HTTPS : URI::HTTP
     url_params = Settings.url.to_h
     url_params[:path], url_params[:query] = request.fullpath.split("?")
     redirect_to(url_builder.build(url_params).to_s, allow_other_host: true)
@@ -120,6 +122,7 @@ module ApplicationControllable::RequestPreprocessing
 
   def require_current_community
     return if !authenticated_page? || devise_controller?
+
     render_error_page(:not_found) if current_community.nil?
   end
 
@@ -144,6 +147,7 @@ module ApplicationControllable::RequestPreprocessing
     current_user&.community
 
     return if current_community.blank?
+
     set_current_tenant(current_community.cluster)
 
     # Scoping is turned off temporarily in a rack middleware to prevent NoTenantSet errors in preprocessing.
@@ -180,6 +184,7 @@ module ApplicationControllable::RequestPreprocessing
   # Skip this before_action to not respect impersonation for a given controller action.
   def handle_impersonation
     return unless session[:impersonating_id]
+
     user = ActsAsTenant.without_tenant do
       # If user found, need to load subdomain inside without_tenant block or it will fail later.
       User.find_by(id: session[:impersonating_id]).tap { |u| u&.subdomain }
@@ -218,12 +223,13 @@ module ApplicationControllable::RequestPreprocessing
 
   def set_current_community_from_query_string
     return render_not_found if params[:community_id].blank?
+
     self.current_community ||= Community.find(params[:community_id])
   end
 
   def redirect_to_same_path_in_community(community)
     host = "#{community.slug}.#{Settings.url.host}"
-    url_builder = (Settings.url.protocol == "https") ? URI::HTTPS : URI::HTTP
+    url_builder = Settings.url.protocol == "https" ? URI::HTTPS : URI::HTTP
     url_params = Settings.url.to_h.merge(host: host)
     url_params[:path], url_params[:query] = request.fullpath.split("?")
     redirect_to(url_builder.build(url_params).to_s, allow_other_host: true)

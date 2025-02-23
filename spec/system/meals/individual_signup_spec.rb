@@ -88,8 +88,8 @@ describe "meal signups", js: true do
       click_button("Sign Up")
       all("select[id$=_count]")[0].select("2")
       click_button("Save")
-      expect(page).to have_alert("Your signup could not be recorded because "\
-        "the meal is full or no longer open.")
+      expect(page).to have_alert("Your signup could not be recorded because " \
+                                 "the meal is full or no longer open.")
       expect(page).to have_content("You have not signed up for this meal and it is now closed.")
     end
   end
@@ -103,8 +103,8 @@ describe "meal signups", js: true do
       all("select[id$=_count]")[0].select("0")
       all("select[id$=_count]")[1].select("0")
       click_button("Save")
-      expect(page).to have_alert("Your signup could not be recorded because "\
-        "the meal is full or no longer open.")
+      expect(page).to have_alert("Your signup could not be recorded because " \
+                                 "the meal is full or no longer open.")
       expect(page).to have_content("4 Fmla A Type 1")
     end
   end
@@ -116,8 +116,8 @@ describe "meal signups", js: true do
       click_button("Sign Up")
       all("select[id$=_count]")[0].select("2")
       click_button("Save")
-      expect(page).to have_alert("Your signup could not be recorded because "\
-        "the meal is full or no longer open.")
+      expect(page).to have_alert("Your signup could not be recorded because " \
+                                 "the meal is full or no longer open.")
       expect(page).to have_content("You have not signed up for this meal and it is now full.")
     end
   end

@@ -22,7 +22,7 @@ module Utils
       def generate_households_and_users
         self.users = []
         adults = []
-        garages = ((1..20).to_a + [nil] * 4).shuffle
+        garages = ((1..20).to_a + ([nil] * 4)).shuffle
 
         last_names = unique_set(60) { Faker::Name.last_name }
 
@@ -42,27 +42,28 @@ module Utils
           adults = Dir[dir].map do |path|
             age = File.basename(path, ".jpg").to_i
             next if age < 16
+
             bday = Faker::Date.birthday(min_age: age, max_age: age + 1)
             first_name = Faker::Name.unisex_name
 
             email = "#{first_name}#{rand(10_000_000..99_999_999)}@example.com"
 
             user = build(:user,
-                  :with_random_password,
-                  fake: true,
-                  household: household,
-                  first_name: first_name,
-                  last_name: bool_prob(70) ? last_name : last_names.pop,
-                  birthdate: bday,
-                  email: email,
-                  google_email: email,
-                  mobile_phone: Faker::PhoneNumber.simple,
-                  home_phone: bool_prob(50) ? Faker::PhoneNumber.simple : nil,
-                  work_phone: bool_prob(15) ? Faker::PhoneNumber.simple : nil,
-                  joined_on: joined,
-                  preferred_contact: %w[phone email text].sample,
-                  created_at: community.created_at,
-                  updated_at: community.updated_at)
+                         :with_random_password,
+                         fake: true,
+                         household: household,
+                         first_name: first_name,
+                         last_name: bool_prob(70) ? last_name : last_names.pop,
+                         birthdate: bday,
+                         email: email,
+                         google_email: email,
+                         mobile_phone: Faker::PhoneNumber.simple,
+                         home_phone: bool_prob(50) ? Faker::PhoneNumber.simple : nil,
+                         work_phone: bool_prob(15) ? Faker::PhoneNumber.simple : nil,
+                         joined_on: joined,
+                         preferred_contact: %w[phone email text].sample,
+                         created_at: community.created_at,
+                         updated_at: community.updated_at)
             user.photo.attach(io: File.open(path), filename: File.basename(path)) if photos
             user
           end.compact
@@ -72,20 +73,21 @@ module Utils
           kids = Dir[dir].map do |path|
             age = File.basename(path, ".jpg").to_i
             next if age >= 16
+
             bday = Faker::Date.birthday(min_age: age, max_age: age + 1)
             kid = build(:user, :child, :with_random_password,
-              fake: true,
-              household: household,
-              first_name: Faker::Name.unisex_name,
-              last_name: bool_prob(90) ? last_name : last_names.pop,
-              email: nil,
-              google_email: nil,
-              mobile_phone: nil,
-              guardians: adults,
-              birthdate: bday,
-              joined_on: [bday, joined].max,
-              created_at: community.created_at,
-              updated_at: community.updated_at)
+                        fake: true,
+                        household: household,
+                        first_name: Faker::Name.unisex_name,
+                        last_name: bool_prob(90) ? last_name : last_names.pop,
+                        email: nil,
+                        google_email: nil,
+                        mobile_phone: nil,
+                        guardians: adults,
+                        birthdate: bday,
+                        joined_on: [bday, joined].max,
+                        created_at: community.created_at,
+                        updated_at: community.updated_at)
             kid.photo.attach(io: File.open(path), filename: File.basename(path)) if photos
             kid
           end.compact
@@ -109,8 +111,8 @@ module Utils
       end
 
       def generate_memorial
-        message = "was such a kind person and a passionate member of our community. "\
-          "They will be dearly missed."
+        message = "was such a kind person and a passionate member of our community. " \
+                  "They will be dearly missed."
         memorial = create(:memorial, death_year: Time.current.year, user: User.adults.inactive.first)
         memorial.messages.create!(author: User.adults.sample, body: "#{memorial.user.first_name} #{message}")
       end

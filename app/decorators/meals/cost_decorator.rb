@@ -21,7 +21,7 @@ module Meals
     def payment_method_formatted_with_details(override = payment_method)
       parts = [t("simple_form.options.meals_meal.cost.payment_method.#{override}")]
       if override == "paypal" && paypal_email.present?
-        parts << h.content_tag(:span, paypal_email, id: "reimbursee-paypal-email")
+        parts << h.tag.span(paypal_email, id: "reimbursee-paypal-email")
       end
       h.safe_join(parts, " - ")
     end

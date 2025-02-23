@@ -11,7 +11,7 @@ module Calendars
         booked = booked_time_for_year(event, unit)
         if booked + event.send(unit) > value
           msg = I18n.t("calendars/protocol.exceeded_time",
-            kind_calendar: kind_calendar_str, max: interval(value), booked: interval(booked)).gsub("  ", " ")
+                       kind_calendar: kind_calendar_str, max: interval(value), booked: interval(booked)).gsub("  ", " ")
           [:base, msg]
         else
           true

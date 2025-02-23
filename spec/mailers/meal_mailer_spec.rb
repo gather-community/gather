@@ -69,8 +69,8 @@ describe MealMailer do
         let(:reminder) { double(note?: true, note: "Hi there! And stuff.") }
 
         it "renders the subject" do
-          expect(mail.subject).to eq("Job Reminder: Assistant Cook on Sun Jan 01 10:30am at #{ca} CH "\
-            "(Hi there! And stuff.)")
+          expect(mail.subject).to eq("Job Reminder: Assistant Cook on Sun Jan 01 10:30am at #{ca} CH " \
+                                     "(Hi there! And stuff.)")
         end
 
         it "renders the correct times and URL in the body" do

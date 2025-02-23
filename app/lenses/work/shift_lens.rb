@@ -10,6 +10,7 @@ module Work
 
     def requester_id
       return unless value =~ /\A#{REQUESTER_PREFIX}(.+)\z/
+
       Regexp.last_match(1)
     end
 

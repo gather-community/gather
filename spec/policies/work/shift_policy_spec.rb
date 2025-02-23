@@ -47,7 +47,7 @@ describe Work::ShiftPolicy do
 
       context "with synopsis for round limit checking" do
         let(:synopsis) do
-          double(for_user: [{got: picked}], staggering: {prev_limit: limit}, "staggering?": true)
+          double(for_user: [{got: picked}], staggering: {prev_limit: limit}, staggering?: true)
         end
         subject(:permitted) { described_class.new(user, shift, synopsis: synopsis).signup? }
 

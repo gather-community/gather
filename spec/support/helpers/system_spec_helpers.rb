@@ -6,8 +6,8 @@ module SystemSpecHelpers
   end
 
   # Temporarily undoes any within scopes.
-  def with_top_level_scope
-    within(Capybara::Node::Document.new(page, page.driver)) { yield }
+  def with_top_level_scope(&)
+    within(Capybara::Node::Document.new(page, page.driver), &)
   end
 
   # Fills in the given value into the given select (a Node::Element or CSS selector),
@@ -35,6 +35,7 @@ module SystemSpecHelpers
     if from.is_a?(Capybara::Node::Element)
       select_el = from
       raise "Element must have a unique ID attribute so jQuery can grab it" if select_el[:id].blank?
+
       css = "##{select_el[:id]}"
     else
       css = from
@@ -96,8 +97,8 @@ module SystemSpecHelpers
       # If the opposite AM/PM button to what we want is visible, we have to click it to
       # change it to what we want.
       begin
-        first(".btn-primary", text: (ampm == :pm) ? "AM" : "PM")&.click
-      rescue Capybara::ExpectationNotMet # rubocop:disable Lint/HandleExceptions
+        first(".btn-primary", text: ampm == :pm ? "AM" : "PM")&.click
+      rescue Capybara::ExpectationNotMet
       end
     end
     find(next_click).click # Get out of the picker.
@@ -151,7 +152,7 @@ module SystemSpecHelpers
       expect(page).to have_css("div.alert-danger", text: /Please review/)
     end
   end
-  alias_method :expect_validation_message, :expect_validation_error
+  alias expect_validation_message expect_validation_error
 
   def expect_image_upload(state:, path: nil)
     within(".dropzone-wrapper") do

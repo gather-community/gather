@@ -41,8 +41,8 @@ describe GDrive::Migration::ScanJob do
   let!(:migration_config) { create(:gdrive_migration_config, community: community) }
   let!(:operation) do
     create(:gdrive_migration_operation, :webhook_registered, config: migration_config,
-      src_folder_id: "1FBirfPXk-5qaMO1BkvlyhaC8JARE_FRq",
-      dest_folder_id: "0AExZ3-Cu5q7uUk9PVA")
+                                                             src_folder_id: "1FBirfPXk-5qaMO1BkvlyhaC8JARE_FRq",
+                                                             dest_folder_id: "0AExZ3-Cu5q7uUk9PVA")
   end
 
   describe "full scan" do
@@ -117,10 +117,10 @@ describe GDrive::Migration::ScanJob do
       let(:community) { create(:community, id: 123) }
       let!(:operation) do
         create(:gdrive_migration_operation, :webhook_registered, config: migration_config,
-          src_folder_id: "1FBirfPXk-5qaMO1BkvlyhaC8JARE_FRq",
-          dest_folder_id: "0AExZ3-Cu5q7uUk9PVA",
-          webhook_channel_id: "b0801a4c-4437-4284-b723-035c7c7f87f8",
-          start_page_token: "12345")
+                                                                 src_folder_id: "1FBirfPXk-5qaMO1BkvlyhaC8JARE_FRq",
+                                                                 dest_folder_id: "0AExZ3-Cu5q7uUk9PVA",
+                                                                 webhook_channel_id: "b0801a4c-4437-4284-b723-035c7c7f87f8",
+                                                                 start_page_token: "12345")
       end
       let(:folder_b_id) { "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV" }
       let!(:scan_task) { scan.scan_tasks.create!(folder_id: folder_b_id) }
@@ -193,10 +193,10 @@ describe GDrive::Migration::ScanJob do
     #   fields: "changes(fileId,file(id,driveId,name,parents,owners(emailAddress))),nextPageToken")
     let!(:operation) do
       create(:gdrive_migration_operation, :webhook_registered, config: migration_config,
-        src_folder_id: "1FBirfPXk-5qaMO1BkvlyhaC8JARE_FRq",
-        dest_folder_id: "0AExZ3-Cu5q7uUk9PVA",
-        webhook_channel_id: "0009c409-6bf4-473b-ba04-6b0557219502",
-        start_page_token: "12683")
+                                                               src_folder_id: "1FBirfPXk-5qaMO1BkvlyhaC8JARE_FRq",
+                                                               dest_folder_id: "0AExZ3-Cu5q7uUk9PVA",
+                                                               webhook_channel_id: "0009c409-6bf4-473b-ba04-6b0557219502",
+                                                               start_page_token: "12683")
     end
     let!(:scan) { create(:gdrive_migration_scan, operation: operation, scope: "changes") }
     subject!(:job) { described_class.new(cluster_id: Defaults.cluster.id, scan_task_id: scan_task.id) }
@@ -255,8 +255,8 @@ describe GDrive::Migration::ScanJob do
       let!(:scan_task) { scan.scan_tasks.create!(page_token: "12738") }
       let!(:folder_map_a) do
         create(:gdrive_migration_folder_map, operation: operation, name: "Folder A",
-          src_id: "1PJwkZgkByPMcbkfzneq65Cx1CnDNMVR_", src_parent_id: operation.src_folder_id,
-          dest_id: "1fN1rrzq4J28Nv5a0qB2ihbG6bhGs9MjQ", dest_parent_id: operation.dest_folder_id)
+                                             src_id: "1PJwkZgkByPMcbkfzneq65Cx1CnDNMVR_", src_parent_id: operation.src_folder_id,
+                                             dest_id: "1fN1rrzq4J28Nv5a0qB2ihbG6bhGs9MjQ", dest_parent_id: operation.dest_folder_id)
       end
 
       it "updates folder map and copy on dest drive, completes scan" do
@@ -278,20 +278,20 @@ describe GDrive::Migration::ScanJob do
       let!(:scan_task) { scan.scan_tasks.create!(page_token: "13296") }
       let!(:folder_map_a) do
         create(:gdrive_migration_folder_map, operation: operation, name: "Folder A",
-          src_id: "1K9Sq95eB4IUQ_JHrRpNsyNg9PAjvC7Qo", src_parent_id: operation.src_folder_id,
-          dest_id: "1J1k3DcfL1kQFmzrnlyiRQvgNs2WNjL-w", dest_parent_id: operation.dest_folder_id)
+                                             src_id: "1K9Sq95eB4IUQ_JHrRpNsyNg9PAjvC7Qo", src_parent_id: operation.src_folder_id,
+                                             dest_id: "1J1k3DcfL1kQFmzrnlyiRQvgNs2WNjL-w", dest_parent_id: operation.dest_folder_id)
       end
       let!(:folder_map_b) do
         create(:gdrive_migration_folder_map, operation: operation, name: "Folder B",
-          src_id: "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV", src_parent_id: operation.src_folder_id,
-          dest_id: "1v5yAODVs-lL80QtnMHlFRK9CEbFefu9o", dest_parent_id: operation.dest_folder_id)
+                                             src_id: "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV", src_parent_id: operation.src_folder_id,
+                                             dest_id: "1v5yAODVs-lL80QtnMHlFRK9CEbFefu9o", dest_parent_id: operation.dest_folder_id)
       end
 
       # This folder will be moved from A to B
       let!(:folder_map_c) do
         create(:gdrive_migration_folder_map, operation: operation, name: "Folder C",
-          src_id: "15wQB70b0BevG-YLdkMEuhN3tsV9hrV8y", src_parent_id: folder_map_a.src_id,
-          dest_id: "1hEcRA06GLBUvvan0unzXJ31Utw6Bk9YN", dest_parent_id: folder_map_a.dest_id)
+                                             src_id: "15wQB70b0BevG-YLdkMEuhN3tsV9hrV8y", src_parent_id: folder_map_a.src_id,
+                                             dest_id: "1hEcRA06GLBUvvan0unzXJ31Utw6Bk9YN", dest_parent_id: folder_map_a.dest_id)
       end
 
       it "updates folder map and copy on dest drive, completes scan" do
@@ -314,15 +314,15 @@ describe GDrive::Migration::ScanJob do
       let!(:scan_task) { scan.scan_tasks.create!(page_token: "13292") }
       let!(:folder_map_a) do
         create(:gdrive_migration_folder_map, operation: operation, name: "Folder A",
-          src_id: "1K9Sq95eB4IUQ_JHrRpNsyNg9PAjvC7Qo", src_parent_id: operation.src_folder_id,
-          dest_id: "1J1k3DcfL1kQFmzrnlyiRQvgNs2WNjL-w", dest_parent_id: operation.dest_folder_id)
+                                             src_id: "1K9Sq95eB4IUQ_JHrRpNsyNg9PAjvC7Qo", src_parent_id: operation.src_folder_id,
+                                             dest_id: "1J1k3DcfL1kQFmzrnlyiRQvgNs2WNjL-w", dest_parent_id: operation.dest_folder_id)
       end
 
       # This folder will be moved from A to B
       let!(:folder_map_c) do
         create(:gdrive_migration_folder_map, operation: operation, name: "Folder C",
-          src_id: "15wQB70b0BevG-YLdkMEuhN3tsV9hrV8y", src_parent_id: folder_map_a.src_id,
-          dest_id: "1hEcRA06GLBUvvan0unzXJ31Utw6Bk9YN", dest_parent_id: folder_map_a.dest_id)
+                                             src_id: "15wQB70b0BevG-YLdkMEuhN3tsV9hrV8y", src_parent_id: folder_map_a.src_id,
+                                             dest_id: "1hEcRA06GLBUvvan0unzXJ31Utw6Bk9YN", dest_parent_id: folder_map_a.dest_id)
       end
 
       it "updates folder map c, creates folder map b, moves copy on dest drive, completes scan" do
@@ -351,22 +351,22 @@ describe GDrive::Migration::ScanJob do
       # This folder will be moved outside the tree
       let!(:folder_map_a) do
         create(:gdrive_migration_folder_map, operation: operation, name: "Folder A",
-          src_id: "1K9Sq95eB4IUQ_JHrRpNsyNg9PAjvC7Qo", src_parent_id: operation.src_folder_id,
-          dest_id: "1J1k3DcfL1kQFmzrnlyiRQvgNs2WNjL-w", dest_parent_id: operation.dest_folder_id)
+                                             src_id: "1K9Sq95eB4IUQ_JHrRpNsyNg9PAjvC7Qo", src_parent_id: operation.src_folder_id,
+                                             dest_id: "1J1k3DcfL1kQFmzrnlyiRQvgNs2WNjL-w", dest_parent_id: operation.dest_folder_id)
       end
       let!(:folder_map_b) do
         create(:gdrive_migration_folder_map, operation: operation, name: "Folder B",
-          src_id: "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV", src_parent_id: operation.src_folder_id,
-          dest_id: "1v5yAODVs-lL80QtnMHlFRK9CEbFefu9o", dest_parent_id: operation.dest_folder_id)
+                                             src_id: "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV", src_parent_id: operation.src_folder_id,
+                                             dest_id: "1v5yAODVs-lL80QtnMHlFRK9CEbFefu9o", dest_parent_id: operation.dest_folder_id)
       end
       let!(:folder_map_c) do
         create(:gdrive_migration_folder_map, operation: operation, name: "Folder C",
-          src_id: "15wQB70b0BevG-YLdkMEuhN3tsV9hrV8y", src_parent_id: folder_map_a.src_id,
-          dest_id: "1hEcRA06GLBUvvan0unzXJ31Utw6Bk9YN", dest_parent_id: folder_map_a.dest_id)
+                                             src_id: "15wQB70b0BevG-YLdkMEuhN3tsV9hrV8y", src_parent_id: folder_map_a.src_id,
+                                             dest_id: "1hEcRA06GLBUvvan0unzXJ31Utw6Bk9YN", dest_parent_id: folder_map_a.dest_id)
       end
       let!(:file_c_1) do
         create(:gdrive_migration_file, operation: operation, external_id: "1mohxjSbIM_XvHG16aFlBT0yBFxP6sujpCNyOrxUjq1Y",
-          parent_id: folder_map_c.src_id)
+                                       parent_id: folder_map_c.src_id)
       end
 
       it "deletes folder map a and c, deletes file c.1, completes scan" do
@@ -392,22 +392,22 @@ describe GDrive::Migration::ScanJob do
       # This folder will be deleted
       let!(:folder_map_a) do
         create(:gdrive_migration_folder_map, operation: operation, name: "Folder A",
-          src_id: "1K9Sq95eB4IUQ_JHrRpNsyNg9PAjvC7Qo", src_parent_id: operation.src_folder_id,
-          dest_id: "1J1k3DcfL1kQFmzrnlyiRQvgNs2WNjL-w", dest_parent_id: operation.dest_folder_id)
+                                             src_id: "1K9Sq95eB4IUQ_JHrRpNsyNg9PAjvC7Qo", src_parent_id: operation.src_folder_id,
+                                             dest_id: "1J1k3DcfL1kQFmzrnlyiRQvgNs2WNjL-w", dest_parent_id: operation.dest_folder_id)
       end
       let!(:folder_map_b) do
         create(:gdrive_migration_folder_map, operation: operation, name: "Folder B",
-          src_id: "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV", src_parent_id: operation.src_folder_id,
-          dest_id: "1v5yAODVs-lL80QtnMHlFRK9CEbFefu9o", dest_parent_id: operation.dest_folder_id)
+                                             src_id: "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV", src_parent_id: operation.src_folder_id,
+                                             dest_id: "1v5yAODVs-lL80QtnMHlFRK9CEbFefu9o", dest_parent_id: operation.dest_folder_id)
       end
       let!(:folder_map_c) do
         create(:gdrive_migration_folder_map, operation: operation, name: "Folder C",
-          src_id: "15wQB70b0BevG-YLdkMEuhN3tsV9hrV8y", src_parent_id: folder_map_a.src_id,
-          dest_id: "1hEcRA06GLBUvvan0unzXJ31Utw6Bk9YN", dest_parent_id: folder_map_a.dest_id)
+                                             src_id: "15wQB70b0BevG-YLdkMEuhN3tsV9hrV8y", src_parent_id: folder_map_a.src_id,
+                                             dest_id: "1hEcRA06GLBUvvan0unzXJ31Utw6Bk9YN", dest_parent_id: folder_map_a.dest_id)
       end
       let!(:file_c_1) do
         create(:gdrive_migration_file, operation: operation, external_id: "1mohxjSbIM_XvHG16aFlBT0yBFxP6sujpCNyOrxUjq1Y",
-          parent_id: folder_map_c.src_id)
+                                       parent_id: folder_map_c.src_id)
       end
 
       it "deletes folder map a and c, deletes file c.1, completes scan" do
@@ -432,8 +432,8 @@ describe GDrive::Migration::ScanJob do
       let!(:scan_task) { scan.scan_tasks.create!(page_token: "13307") }
       let!(:folder_map_a) do
         create(:gdrive_migration_folder_map, operation: operation, name: "Folder A",
-          src_id: "1K9Sq95eB4IUQ_JHrRpNsyNg9PAjvC7Qo", src_parent_id: operation.src_folder_id,
-          dest_id: "1J1k3DcfL1kQFmzrnlyiRQvgNs2WNjL-w", dest_parent_id: operation.dest_folder_id)
+                                             src_id: "1K9Sq95eB4IUQ_JHrRpNsyNg9PAjvC7Qo", src_parent_id: operation.src_folder_id,
+                                             dest_id: "1J1k3DcfL1kQFmzrnlyiRQvgNs2WNjL-w", dest_parent_id: operation.dest_folder_id)
       end
 
       it "creates file record, completes scan" do
@@ -457,18 +457,18 @@ describe GDrive::Migration::ScanJob do
       let!(:scan_task) { scan.scan_tasks.create!(page_token: "13304") }
       let!(:folder_map_a) do
         create(:gdrive_migration_folder_map, operation: operation, name: "Folder A",
-          src_id: "1K9Sq95eB4IUQ_JHrRpNsyNg9PAjvC7Qo", src_parent_id: operation.src_folder_id,
-          dest_id: "1J1k3DcfL1kQFmzrnlyiRQvgNs2WNjL-w", dest_parent_id: operation.dest_folder_id)
+                                             src_id: "1K9Sq95eB4IUQ_JHrRpNsyNg9PAjvC7Qo", src_parent_id: operation.src_folder_id,
+                                             dest_id: "1J1k3DcfL1kQFmzrnlyiRQvgNs2WNjL-w", dest_parent_id: operation.dest_folder_id)
       end
       let!(:folder_map_c) do
         create(:gdrive_migration_folder_map, operation: operation, name: "Folder C",
-          src_id: "15wQB70b0BevG-YLdkMEuhN3tsV9hrV8y", src_parent_id: folder_map_a.src_id,
-          dest_id: "1hEcRA06GLBUvvan0unzXJ31Utw6Bk9YN", dest_parent_id: folder_map_a.dest_id)
+                                             src_id: "15wQB70b0BevG-YLdkMEuhN3tsV9hrV8y", src_parent_id: folder_map_a.src_id,
+                                             dest_id: "1hEcRA06GLBUvvan0unzXJ31Utw6Bk9YN", dest_parent_id: folder_map_a.dest_id)
       end
       # This file will be renamed and moved to Folder A.
       let!(:file_c_1) do
         create(:gdrive_migration_file, operation: operation, external_id: "1mohxjSbIM_XvHG16aFlBT0yBFxP6sujpCNyOrxUjq1Y",
-          name: "File C.1", parent_id: folder_map_c.src_id)
+                                       name: "File C.1", parent_id: folder_map_c.src_id)
       end
 
       it "updates file record, completes scan" do
@@ -491,13 +491,13 @@ describe GDrive::Migration::ScanJob do
       let!(:scan_task) { scan.scan_tasks.create!(page_token: "13309") }
       let!(:folder_map_b) do
         create(:gdrive_migration_folder_map, operation: operation, name: "Folder B",
-          src_id: "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV", src_parent_id: operation.src_folder_id,
-          dest_id: "1v5yAODVs-lL80QtnMHlFRK9CEbFefu9o", dest_parent_id: operation.dest_folder_id)
+                                             src_id: "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV", src_parent_id: operation.src_folder_id,
+                                             dest_id: "1v5yAODVs-lL80QtnMHlFRK9CEbFefu9o", dest_parent_id: operation.dest_folder_id)
       end
       # This file will be trashed.
       let!(:file_b_1) do
         create(:gdrive_migration_file, operation: operation, external_id: "1IufP1TQKUf9ZlU0q-pIdY52Hg5arZc2KYGHqT-dK4nY",
-          name: "File B.1", parent_id: folder_map_b.src_id)
+                                       name: "File B.1", parent_id: folder_map_b.src_id)
       end
 
       it "removes file record, completes scan" do

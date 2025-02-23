@@ -17,6 +17,7 @@ describe Work::RoundCalculator do
     let!(:assigns) do
       shares.each_with_index.map do |share, i|
         next if pre_assign_totals[i].zero?
+
         job = create(:work_job, period: period, hours: pre_assign_totals[i])
         create(:work_assignment, shift: job.shifts.first, user: share.user, preassigned: true)
       end

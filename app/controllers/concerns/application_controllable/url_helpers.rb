@@ -34,6 +34,7 @@ module ApplicationControllable
       respond_to do |format|
         code = Rack::Utils::SYMBOL_TO_STATUS_CODE[status]&.to_s
         raise "Invalid status #{status}" unless code
+
         format.html { render(file: Rails.root.join("public", "#{code}.html"), layout: false, status: status) }
         format.any { head(status) }
       end
@@ -51,12 +52,12 @@ module ApplicationControllable
       redirect_to(url_in_home_community(home_path))
     end
 
-    def home_path(*args)
-      current_user&.inactive? ? inactive_path(*args) : root_path(*args)
+    def home_path(*)
+      current_user&.inactive? ? inactive_path(*) : root_path(*)
     end
 
-    def home_url(*args)
-      current_user&.inactive? ? inactive_url(*args) : root_url(*args)
+    def home_url(*)
+      current_user&.inactive? ? inactive_url(*) : root_url(*)
     end
 
     def sign_in_url

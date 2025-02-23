@@ -13,6 +13,7 @@ module People
 
     def guardian_names
       return nil if guardians.none?
+
       guardians.active.decorate.map(&:full_name).sort.join(", ")
     end
 
@@ -33,20 +34,22 @@ module People
     end
 
     def vehicles
-      (adult? && household.vehicles.any?) ? household.vehicles.map(&:to_s).sort.join("; ") : nil
+      adult? && household.vehicles.any? ? household.vehicles.map(&:to_s).sort.join("; ") : nil
     end
 
     def emergency_contacts
       return nil if household.emergency_contacts.none?
+
       chunks = household.emergency_contacts.map do |contact|
         ["#{contact.name} (#{contact.relationship})", contact.location, contact.phone(:main).formatted,
-          contact.phone(:alt).formatted, contact.email].compact.join(", ")
+         contact.phone(:alt).formatted, contact.email].compact.join(", ")
       end
       chunks.sort.join("; ")
     end
 
     def pets
       return nil if household.pets.none?
+
       chunks = household.pets.map do |pet|
         "#{pet.name} (#{pet.color} #{pet.species})"
       end

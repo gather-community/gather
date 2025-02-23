@@ -35,8 +35,8 @@ describe Groups::Mailman::UserSyncJob do
         context "with valid mailman ID" do
           it "syncs user info and enqueues membership sync" do
             expect(api).to receive(:update_user,
-              &with_obj_attribs(remote_id: "abcd", display_name: "John Bing",
-                email: user.email))
+                                   &with_obj_attribs(remote_id: "abcd", display_name: "John Bing",
+                                                     email: user.email))
             expect { perform_job }.to have_enqueued_job(Groups::Mailman::MembershipSyncJob)
               .with("Groups::Mailman::User", mailman_user.id)
           end
@@ -90,8 +90,8 @@ describe Groups::Mailman::UserSyncJob do
           context "normal case" do
             it "saves and updates user and enqueues job" do
               expect(api).to receive(:update_user,
-                &with_obj_attribs(remote_id: "abcd", display_name: "John Bing",
-                  email: user.email))
+                                     &with_obj_attribs(remote_id: "abcd", display_name: "John Bing",
+                                                       email: user.email))
               expect { perform_job }
                 .to have_enqueued_job(Groups::Mailman::MembershipSyncJob)
               expect(mailman_user).to be_persisted
@@ -107,7 +107,7 @@ describe Groups::Mailman::UserSyncJob do
 
           it "creates mm user and enqueues membership sync" do
             expect(api).to receive(:create_user,
-              &with_obj_attribs(display_name: "John Bing", email: user.email))
+                                   &with_obj_attribs(display_name: "John Bing", email: user.email))
               .and_return("abcd")
             expect { perform_job }
               .to have_enqueued_job(Groups::Mailman::MembershipSyncJob)
@@ -150,7 +150,7 @@ describe Groups::Mailman::UserSyncJob do
     let(:cluster_id) { ActsAsTenant.current_tenant.id }
     subject!(:job) do
       described_class.new(mm_user_attribs: {remote_id: "ab12cd", cluster_id: cluster_id},
-        destroyed: true)
+                          destroyed: true)
     end
 
     it "calls delete_user" do

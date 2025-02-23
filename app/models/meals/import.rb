@@ -45,7 +45,7 @@ module Meals
     end
 
     def sorted_errors_by_row
-      errors_by_row.keys.sort_by(&:to_i).map { |k| [k, errors_by_row[k]] }.to_h
+      errors_by_row.keys.sort_by(&:to_i).index_with { |k| errors_by_row[k] }
     end
 
     private
@@ -68,6 +68,7 @@ module Meals
 
     def error_free?
       return @error_free if defined?(@error_free)
+
       @error_free = errors_by_row.values.all?(&:empty?)
     end
 
@@ -76,23 +77,27 @@ module Meals
         self.row_pointer += 1
         self.row_action = :create
         next if row.empty?
+
         (parse_headers(row) ? next : break) if row_pointer == 1
         self.new_meal = Meal.new(source_form: "import")
         header_map.each do |col_index, attrib|
           parse_attrib(attrib, row[col_index])
         end
         next if current_row_errors?
+
         create_update_or_destroy
       end
     end
 
     def create_update_or_destroy
-      self.target_meal = (row_action == :create) ? new_meal : find_matching_meal
+      self.target_meal = row_action == :create ? new_meal : find_matching_meal
       return unless target_meal
+
       target_meal.community = community # May be redundant, needed for permission check
       self.row_policy = Meals::MealPolicy.new(user, target_meal)
       return add_error("Action not permitted (#{row_action})") unless row_policy.send("#{row_action}?")
       return destroy_target_meal if row_action == :destroy
+
       assign_defaults_to_new_meal
       copy_attribs_to_target_meal if row_action == :update
       unless target_meal.save
@@ -123,8 +128,8 @@ module Meals
 
     def destroy_target_meal
       target_meal.destroy
-    rescue => error
-      add_error("Error deleting meal #{target_meal.id}: '#{error}'")
+    rescue StandardError => e
+      add_error("Error deleting meal #{target_meal.id}: '#{e}'")
     end
 
     def find_matching_meal
@@ -135,8 +140,9 @@ module Meals
         candidates = scope.where(served_at: new_meal.served_at)
         meal = candidates.detect { |m| m.calendars.to_set == new_meal.calendars.to_set }
         return meal if meal.present?
-        add_error("Could not find meal served at #{I18n.l(new_meal.served_at).gsub("  ", " ")} at " \
-          "locations: #{new_meal.calendars.map(&:name).join(", ")}")
+
+        add_error("Could not find meal served at #{I18n.l(new_meal.served_at).gsub('  ', ' ')} at " \
+                  "locations: #{new_meal.calendars.map(&:name).join(', ')}")
       end
     end
 
@@ -156,19 +162,20 @@ module Meals
           bad_headers << cell
         end
       end
-      add_error("Invalid column headers: #{bad_headers.join(", ")}") if bad_headers.any?
+      add_error("Invalid column headers: #{bad_headers.join(', ')}") if bad_headers.any?
     end
 
     def check_for_missing_headers
       missing = REQUIRED_HEADERS - header_map.values
       return true if missing.none?
+
       names = missing.map { |h| translate_header(h) }.join(", ")
       add_error("Missing columns: #{names}")
     end
 
     # Looking up a header symbol based on the provided human-readable string.
     def untranslate_header(str)
-      @untranslate_dict ||= BASIC_HEADERS.map { |h| [translate_header(h).downcase, h] }.to_h
+      @untranslate_dict ||= BASIC_HEADERS.index_by { |h| translate_header(h).downcase }
       @untranslate_dict[str.downcase]
     end
 
@@ -178,7 +185,7 @@ module Meals
 
     def role_from_header(cell)
       scope = Meals::RolePolicy::Scope.new(user, Meals::Role).resolve.in_community(community).active
-      if (match_data = cell.match(/\A#{I18n.t("csv.headers.meals/meal.role")}(\d+)\z/))
+      if (match_data = cell.match(/\A#{I18n.t('csv.headers.meals/meal.role')}(\d+)\z/))
         scope.find_by(id: match_data[1])
       else
         scope.find_by(title: cell)
@@ -199,11 +206,13 @@ module Meals
     def parse_action(str)
       return :create if str.blank?
       return add_error("Invalid action: #{str}") unless %w[create update destroy].include?(str.downcase)
+
       self.row_action = str.downcase.to_sym
     end
 
     def parse_served_at(str)
       return add_error("Date/time is required") if str.blank?
+
       new_meal.served_at = Time.zone.parse(str)
       raise ArgumentError if new_meal.served_at.nil?
     rescue ArgumentError, TypeError
@@ -212,6 +221,7 @@ module Meals
 
     def parse_calendars(str)
       return add_error("Calendar(s) are required") if str.blank?
+
       new_meal.calendars = str.split(/\s*;\s*/).map do |substr|
         find_calendar(substr)
       end.compact
@@ -219,11 +229,13 @@ module Meals
 
     def parse_formula(str)
       return if str.blank?
+
       new_meal.formula = find_formula(str)
     end
 
     def parse_communities(str)
       return if str.blank?
+
       new_meal.communities = str.split(/\s*;\s*/).map do |substr|
         find_community(substr)
       end.compact
@@ -231,8 +243,10 @@ module Meals
 
     def parse_role(role, str)
       return if str.blank?
+
       str.split(/\s*;\s*/).each do |substr|
         next unless (user = find_user(substr))
+
         new_meal.assignments.build(role: role, user: user)
       end
     end

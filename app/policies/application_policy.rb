@@ -5,7 +5,7 @@ class ApplicationPolicy
   class CommunityNotSetError < StandardError; end
   class ClusterNotSetError < StandardError; end
 
-  # Note: It is not a Policy scope's job to:
+  # NOTE: It is not a Policy scope's job to:
   # - Restrict the results to the current community (controller should do that where appropriate)
   #   (Note this is not the same as restricting results to the user's community in cases
   #   where the user can only see their own community's records.)
@@ -31,7 +31,7 @@ class ApplicationPolicy
     end
 
     def active_cluster_admin?
-      active? && user.global_role?(:cluster_admin) || active_super_admin?
+      (active? && user.global_role?(:cluster_admin)) || active_super_admin?
     end
 
     def active_admin?
@@ -139,20 +139,20 @@ class ApplicationPolicy
   delegate :active?, to: :user
 
   def active_in_community?
-    active? && record_tied_to_user_community? || active_admin?
+    (active? && record_tied_to_user_community?) || active_admin?
   end
 
   def active_in_cluster?
-    active? && record_tied_to_user_cluster? || active_admin?
+    (active? && record_tied_to_user_cluster?) || active_admin?
   end
 
   def active_admin?
-    active? && user.global_role?(:admin) && record_tied_to_user_community? ||
+    (active? && user.global_role?(:admin) && record_tied_to_user_community?) ||
       active_cluster_admin? || active_super_admin?
   end
 
   def active_cluster_admin?
-    active? && user.global_role?(:cluster_admin) && record_tied_to_user_cluster? || active_super_admin?
+    (active? && user.global_role?(:cluster_admin) && record_tied_to_user_cluster?) || active_super_admin?
   end
 
   def active_super_admin?
@@ -182,6 +182,7 @@ class ApplicationPolicy
   def record_communities
     if not_specific_record?
       return nil if allow_class_based_auth?
+
       raise CommunityNotSetError, "community/communities must be set via dummy record for this check"
     else
       if record.respond_to?(:community)
@@ -196,9 +197,11 @@ class ApplicationPolicy
   def record_cluster
     if not_specific_record?
       return nil if allow_class_based_auth?
+
       raise ClusterNotSetError, "cluster must be set via dummy record for this check"
     else
       return record.cluster if record.cluster.present?
+
       raise CommunityNotSetError, "cluster must be set on record for this check"
     end
   end

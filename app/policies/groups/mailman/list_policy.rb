@@ -3,7 +3,7 @@
 module Groups
   module Mailman
     class ListPolicy < ApplicationPolicy
-      alias_method :list, :record
+      alias list record
 
       def new?
         active? && list.group && group_policy.appropriate_admin?

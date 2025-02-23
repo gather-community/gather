@@ -29,7 +29,7 @@ module GDrive
 
         config = MainConfig.find_by!(community: current_community)
         wrapper = Wrapper.new(config: config, google_user_id: config.org_user_id,
-          callback_url: gdrive_setup_auth_callback_url(host: Settings.url.host))
+                              callback_url: gdrive_setup_auth_callback_url(host: Settings.url.host))
 
         begin
           # If either of these calls error with AuthorizationError,
@@ -39,15 +39,15 @@ module GDrive
 
           if config.org_user_id != authenticated_google_id
             flash[:error] = "You signed into Google with #{authenticated_google_id}. " \
-              "Please sign in with #{config.org_user_id} instead."
+                            "Please sign in with #{config.org_user_id} instead."
             redirect_to(gdrive_home_url)
             return
           end
           wrapper.store_credentials(credentials)
-        rescue Signet::AuthorizationError => error
-          Rails.logger.error("AuthorizationError in gdrive auth callback", message: error.to_s)
+        rescue Signet::AuthorizationError => e
+          Rails.logger.error("AuthorizationError in gdrive auth callback", message: e.to_s)
           flash[:error] = "There is a problem with your Google Drive connection. " \
-            "Please contact Gather support."
+                          "Please contact Gather support."
         end
         redirect_to(gdrive_home_url)
       end
@@ -65,7 +65,7 @@ module GDrive
       private
 
       def stub_g_xsrf_token_in_session
-        request.session["g-xsrf-token"] = ENV["STUB_SESSION_G_XSRF_TOKEN"]
+        request.session["g-xsrf-token"] = ENV.fetch("STUB_SESSION_G_XSRF_TOKEN", nil)
       end
 
       def set_current_community_from_callback_state
@@ -89,7 +89,7 @@ module GDrive
       def fetch_email_of_authenticated_account(credentials)
         uri = URI("#{USERINFO_URL}#{credentials.access_token}")
         res = Net::HTTP.get_response(uri)
-        authenticated_google_id = JSON.parse(res.body)["email"]
+        JSON.parse(res.body)["email"]
       end
     end
   end

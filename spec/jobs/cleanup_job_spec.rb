@@ -9,12 +9,12 @@ describe CleanupJob do
     let!(:user) { Timecop.freeze(-1.day) { create(:user, :with_photo) } }
     let!(:new_blob) do
       ActiveStorage::Blob.create_and_upload!(io: File.open(fixture_file_path("chomsky.jpg")),
-                                               filename: "chomsky.jpg")
+                                             filename: "chomsky.jpg")
     end
     let!(:old_blob) do
       Timecop.freeze(-1.day) do
         ActiveStorage::Blob.create_and_upload!(io: File.open(fixture_file_path("cooper.jpg")),
-                                                 filename: "cooper.jpg")
+                                               filename: "cooper.jpg")
       end
     end
 

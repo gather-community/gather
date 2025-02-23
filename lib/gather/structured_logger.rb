@@ -10,24 +10,24 @@ module Gather
       self.level = base_logger.level
     end
 
-    def debug(message_or_progname = nil, data = nil, &block)
+    def debug(message_or_progname = nil, data = nil, &)
       message_or_progname = "#{message_or_progname} #{data.to_json}" unless data.nil?
-      base_logger.debug(message_or_progname, &block)
+      base_logger.debug(message_or_progname, &)
     end
 
-    def info(message_or_progname = nil, data = nil, &block)
+    def info(message_or_progname = nil, data = nil, &)
       message_or_progname = "#{message_or_progname} #{data.to_json}" unless data.nil?
-      base_logger.info(message_or_progname, &block)
+      base_logger.info(message_or_progname, &)
     end
 
-    def warn(message_or_progname = nil, data = nil, &block)
+    def warn(message_or_progname = nil, data = nil, &)
       message_or_progname = "#{message_or_progname} #{data.to_json}" unless data.nil?
-      base_logger.warn(message_or_progname, &block)
+      base_logger.warn(message_or_progname, &)
     end
 
-    def error(message_or_progname = nil, data = nil, &block)
+    def error(message_or_progname = nil, data = nil, &)
       message_or_progname = "#{message_or_progname} #{data.to_json}" unless data.nil?
-      base_logger.error(message_or_progname, &block)
+      base_logger.error(message_or_progname, &)
     end
   end
 end

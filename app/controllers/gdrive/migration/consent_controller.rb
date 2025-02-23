@@ -16,7 +16,7 @@ module GDrive
       # We can't use a subdomain on these pages due to Google API restrictions.
       prepend_before_action :set_current_community_from_callback_state, only: :callback
 
-      before_action :load_and_check_consent_request, except: [:callback, :ingest_status, :opt_out_complete]
+      before_action :load_and_check_consent_request, except: %i[callback ingest_status opt_out_complete]
 
       def intro
         @operation = @consent_request.operation
@@ -29,7 +29,8 @@ module GDrive
         @config = @operation.config
         @community = current_community
 
-        wrapper = Wrapper.new(config: @config, google_user_id: @consent_request.google_email, callback_url: callback_url)
+        wrapper = Wrapper.new(config: @config, google_user_id: @consent_request.google_email,
+                              callback_url: callback_url)
 
         if wrapper.has_credentials?
           redirect_to(gdrive_migration_consent_pick_url)
@@ -51,13 +52,13 @@ module GDrive
         operation = consent_request.operation
         config = operation.config
         wrapper = Wrapper.new(config: config, google_user_id: consent_request.google_email,
-          callback_url: callback_url)
+                              callback_url: callback_url)
         credentials = fetch_credentials_from_callback_request(wrapper, request)
         authenticated_google_id = fetch_email_of_authenticated_account(credentials)
 
         if consent_request.google_email != authenticated_google_id
           flash[:error] = "You signed into Google with #{authenticated_google_id}. " \
-            "Please sign in with #{consent_request.google_email} instead."
+                          "Please sign in with #{consent_request.google_email} instead."
           redirect_to(gdrive_migration_consent_auth_url(token: consent_request.token))
           return
         end
@@ -72,17 +73,18 @@ module GDrive
         main_config = MainConfig.find_by!(community: current_community)
         @org_user_id = main_config.org_user_id
         @community = current_community
-        wrapper = Wrapper.new(config: @migration_config, google_user_id: @consent_request.google_email, callback_url: callback_url)
+        wrapper = Wrapper.new(config: @migration_config, google_user_id: @consent_request.google_email,
+                              callback_url: callback_url)
 
-        if !wrapper.has_credentials?
-          redirect_to(gdrive_migration_consent_auth_url)
-        else
+        if wrapper.has_credentials?
           # Fetch a fresh access token for the picker.
           credentials = wrapper.fetch_credentials_from_store
           credentials.fetch_access_token!
           @access_token = credentials.access_token
 
           @consent_request.update!(status: "in_progress")
+        else
+          redirect_to(gdrive_migration_consent_auth_url)
         end
       end
 
@@ -92,7 +94,7 @@ module GDrive
           cluster_id: current_cluster.id,
           consent_request_id: @consent_request.id
         )
-        head :no_content
+        head(:no_content)
       end
 
       def ingest_status
@@ -102,7 +104,7 @@ module GDrive
 
         if @consent_request.ingest_overdue?
           Gather::ErrorReporter.instance.report(StandardError.new("GDrive file ingest overdue"),
-            data: {consent_request_id: @consent_request.id})
+                                                data: {consent_request_id: @consent_request.id})
           @consent_request.set_ingest_failed
         end
 
@@ -113,21 +115,25 @@ module GDrive
         }
         if @consent_request.ingest_done? || @consent_request.ingest_failed?
           result[:instructions] = render_to_string(partial: "instructions",
-            locals: {consent_request: @consent_request, community: current_community, org_user_id: org_user_id})
+                                                   locals: {consent_request: @consent_request, community: current_community,
+                                                            org_user_id: org_user_id})
         end
 
         render(json: result)
       end
 
       def opt_out
-        @uningested_files = @consent_request.operation.files.where(owner: @consent_request.google_email, status: "pending")
+        @uningested_files = @consent_request.operation.files.where(owner: @consent_request.google_email,
+                                                                   status: "pending")
           .order(:name).page(params[:page])
       end
 
       def confirm_opt_out
-        @consent_request.update!(status: "opted_out", opt_out_reason: params[:gdrive_migration_consent_request][:opt_out_reason])
-        @consent_request.operation.files.where(owner: @consent_request.google_email, status: "pending").update_all(status: "declined")
-        redirect_to gdrive_migration_consent_opt_out_complete_path
+        @consent_request.update!(status: "opted_out",
+                                 opt_out_reason: params[:gdrive_migration_consent_request][:opt_out_reason])
+        @consent_request.operation.files.where(owner: @consent_request.google_email,
+                                               status: "pending").update_all(status: "declined")
+        redirect_to(gdrive_migration_consent_opt_out_complete_path)
       end
 
       def opt_out_complete

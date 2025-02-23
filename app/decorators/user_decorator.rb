@@ -10,15 +10,15 @@ class UserDecorator < ApplicationDecorator
   def link(highlight: nil, show_cmty_if_foreign: false, show_inactive: false)
     name = full_name(show_inactive: show_inactive)
     if show_cmty_if_foreign && community != h.current_community
-      suffix = (show_cmty_if_foreign == :abbrv) ? community_abbrv : community_name
+      suffix = show_cmty_if_foreign == :abbrv ? community_abbrv : community_name
       name = "#{name} (#{suffix})"
     end
-    name = h.content_tag(:mark, name) if id == highlight.to_i
+    name = h.tag.mark(name) if id == highlight.to_i
     h.link_to(name, h.user_url(object), class: "user-link")
   end
 
   def full_name(show_inactive: false)
-    suffix = (active? || !show_inactive) ? "" : " (Inactive)"
+    suffix = active? || !show_inactive ? "" : " (Inactive)"
     "#{first_name} #{last_name}#{suffix}"
   end
 
@@ -27,11 +27,12 @@ class UserDecorator < ApplicationDecorator
   end
 
   def first_name_with_inactive
-    "#{first_name}#{active? ? "" : " (Inactive)"}"
+    "#{first_name}#{active? ? '' : ' (Inactive)'}"
   end
 
   def birthday_formatted
     return nil unless object.birthday?
+
     l(birthday.date, format: birthday.format)
   end
 
@@ -52,11 +53,12 @@ class UserDecorator < ApplicationDecorator
   end
 
   def phone_tags
-    phones.map { |p| h.content_tag(:div, p.formatted(kind_abbrv: true), class: "phone") }.reduce(:<<)
+    phones.map { |p| h.tag.div(p.formatted(kind_abbrv: true), class: "phone") }.reduce(:<<)
   end
 
   def preferred_contact
     return nil if object.preferred_contact.nil?
+
     I18n.t("simple_form.options.user.preferred_contact.#{object.preferred_contact}")
   end
 
@@ -85,7 +87,7 @@ class UserDecorator < ApplicationDecorator
   end
 
   def long_email_class
-    (email.size > 25) ? "long-email" : ""
+    email.size > 25 ? "long-email" : ""
   end
 
   def household_hint
@@ -99,9 +101,9 @@ class UserDecorator < ApplicationDecorator
 
     if user.child?
       chunks << "Due to a system limitation, all Gather users must belong to a single household, " \
-        "but children may have parents or guardians from multiple households. " \
-        "All system functions involving children treat all parents/guardians and " \
-        "all households associated with the child equally."
+                "but children may have parents or guardians from multiple households. " \
+                "All system functions involving children treat all parents/guardians and " \
+                "all households associated with the child equally."
     end
 
     h.safe_join(chunks, " ")
@@ -126,6 +128,7 @@ class UserDecorator < ApplicationDecorator
 
   def photo_variant(format, suppress: false)
     return "missing/users/#{format}.png" if suppress || !photo.attached? || !photo.variable?
+
     case format
     when :thumb then photo.variant(resize_to_fill: [150, 150])
     when :medium then photo.variant(resize_to_fill: [300, 300])
@@ -138,22 +141,22 @@ class UserDecorator < ApplicationDecorator
       ActionLink.new(object, :update_info, icon: "pencil", path: h.edit_user_path(object)),
       ActionLink.new(object, :update_photo, icon: "camera", path: h.edit_user_path(object)),
       ActionLink.new(object, :impersonate, icon: "user-circle", path: h.impersonate_user_path(object),
-        method: :post),
+                                           method: :post),
       ActionLink.new(object, :invite,
-        icon: "life-ring",
-        method: :post,
-        path: h.people_sign_in_invitations_path(object, "to_invite[]": id),
-        confirm: {name: name},
-        permitted: People::SignInInvitationsPolicy.new(h.current_user, object).create?)
+                     icon: "life-ring",
+                     method: :post,
+                     path: h.people_sign_in_invitations_path(object, "to_invite[]": id),
+                     confirm: {name: name},
+                     permitted: People::SignInInvitationsPolicy.new(h.current_user, object).create?)
     )
   end
 
   def edit_action_link_set
     ActionLinkSet.new(
       ActionLink.new(object, :deactivate, icon: "times-circle", path: h.deactivate_user_path(object),
-        method: :put, confirm: {name: name}),
+                                          method: :put, confirm: {name: name}),
       ActionLink.new(object, :destroy, icon: "trash", path: h.user_path(object), method: :delete,
-        confirm: {name: name})
+                                       confirm: {name: name})
     )
   end
 end

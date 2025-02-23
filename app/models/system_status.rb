@@ -10,7 +10,7 @@ class SystemStatus
   end
 
   def statuses
-    @statuses ||= SERVICES.map { |s| [s, send("#{s}_up?")] }.to_h
+    @statuses ||= SERVICES.index_with { |s| send("#{s}_up?") }
   end
 
   def app_up?
@@ -19,6 +19,7 @@ class SystemStatus
 
   def database_up?
     return @database_up if defined?(@database_up)
+
     @database_up =
       begin
         Cluster.count && true
@@ -31,6 +32,7 @@ class SystemStatus
   def delayed_job_up?
     return true if Rails.env.test? # DJ doesn't run in test env.
     return @delayed_job_up if defined?(@delayed_job_up)
+
     @delayed_job_up =
       begin
         pid = delayed_job_pid
@@ -43,6 +45,7 @@ class SystemStatus
 
   def elasticsearch_up?
     return @elasticsearch_up if defined?(@elasticsearch_up)
+
     @elasticsearch_up =
       begin
         Work::Shift.search("foo").results.size && true
@@ -55,6 +58,7 @@ class SystemStatus
   def redis_up?
     return true if Rails.env.test? # Redis doesn't run in test env.
     return @redis_up if defined?(@redis_up)
+
     @redis_up =
       begin
         Rails.cache.redis.get("__foo__") # Force connection to be established

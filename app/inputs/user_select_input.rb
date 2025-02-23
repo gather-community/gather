@@ -14,7 +14,7 @@ class UserSelectInput < SimpleForm::Inputs::CollectionSelectInput
     else
       setup_select2
     end
-    super(wrapper_options)
+    super
   end
 
   private

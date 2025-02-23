@@ -8,7 +8,7 @@ module Meals
     # We have to limit this because otherwise we end up having to compute/load too many objects.
     MAX_FUTURE_DISTANCE = 30.days
 
-    belongs_to :role, class_name: "Meals::Role", inverse_of: :reminders, foreign_key: :role_id
+    belongs_to :role, class_name: "Meals::Role", inverse_of: :reminders
 
     protected
 

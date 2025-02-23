@@ -87,6 +87,7 @@ module Groups
     # See Groups::Mailman::TemplatesController for more.
     def community_for_route
       return nil unless params[:action] == "show"
+
       current_user.community
     end
 

@@ -123,9 +123,9 @@ class UserPolicy < ApplicationPolicy
     household_permitted.delete(:community_id)
 
     permitted = %i[email first_name last_name mobile_phone home_phone work_phone
-      child full_access certify_13_or_older paypal_email pronouns
-      photo_new_signed_id photo_destroy birthday_str child joined_on job_choosing_proxy_id
-      school allergies doctor medical preferred_contact household_by_id]
+                   child full_access certify_13_or_older paypal_email pronouns
+                   photo_new_signed_id photo_destroy birthday_str child joined_on job_choosing_proxy_id
+                   school allergies doctor medical preferred_contact household_by_id]
     permitted << {privacy_settings: [:hide_photo_from_cluster]}
     permitted << {up_guardianships_attributes: %i[id guardian_id _destroy]}
     permitted << user.custom_data.permitted
@@ -151,8 +151,8 @@ class UserPolicy < ApplicationPolicy
 
   def exportable_attributes
     all = %i[id first_name last_name unit_num unit_suffix birthdate pronouns email google_email paypal_email
-      child full_access household_id household_name guardian_names mobile_phone home_phone work_phone
-      joined_on deactivated_at preferred_contact garage_nums vehicles keyholders emergency_contacts pets]
+             child full_access household_id household_name guardian_names mobile_phone home_phone work_phone
+             joined_on deactivated_at preferred_contact garage_nums vehicles keyholders emergency_contacts pets]
     active_admin? ? all : all - %i[google_email paypal_email deactivated_at]
   end
 

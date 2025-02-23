@@ -13,6 +13,7 @@ module Work
       # We randomize the users because staggering calculations depend on share ID for randomness.
       users.shuffle.each do |user|
         next if existing_shares_by_user_id.key?(user.id)
+
         period.shares.build(user: user, portion: initial_portion_for(user))
       end
     end
@@ -32,6 +33,7 @@ module Work
       # For existing periods with quota_type not none, only new users will usually not have shares.
       # We don't want to assume they should get a portion.
       return unless @period.new_record? || @period.quota_none?
+
       user.full_access? ? 1 : 0
     end
 

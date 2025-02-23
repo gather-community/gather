@@ -43,12 +43,12 @@ describe "event form", js: true do
       end
       let!(:protocol2) do
         create(:calendar_protocol, community: community, calendars: [calendar], max_days_per_year: 1,
-          kinds: ["Personal"])
+                                   kinds: ["Personal"])
       end
       let!(:existing_event) do
         Timecop.freeze("2022-01-01 12:00") do
           create(:event, creator: user, calendar: calendar, kind: "Personal", guidelines_ok: "1",
-            starts_at: "2022-01-01 13:00", ends_at: "2022-01-01 14:00")
+                         starts_at: "2022-01-01 13:00", ends_at: "2022-01-01 14:00")
         end
       end
 

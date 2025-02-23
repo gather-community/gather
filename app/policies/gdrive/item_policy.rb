@@ -2,7 +2,7 @@
 
 module GDrive
   class ItemPolicy < ApplicationPolicy
-    alias_method :item, :record
+    alias item record
 
     class Scope < Scope
       def resolve

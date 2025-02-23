@@ -7,7 +7,7 @@ describe Calendars::Protocol do
     let(:protocol) { build(:calendar_protocol, submitted) }
 
     # Get the normalized values for the submitted keys.
-    subject { submitted.keys.map { |k| [k, protocol.send(k)] }.to_h }
+    subject { submitted.keys.index_with { |k| protocol.send(k) }.to_h }
 
     before do
       protocol.validate

@@ -24,7 +24,7 @@ describe Calendars::System::BirthdaysCalendar do
   end
   let!(:other_cmty) do
     create(:user, first_name: "Zo", last_name: "Kiz", birthday_str: "1980-02-20",
-      community: create(:community))
+                  community: create(:community))
   end
   let(:full_range) { Date.new(2021, 1, 1)..Date.new(2021, 12, 31) }
 

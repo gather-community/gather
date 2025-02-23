@@ -7,6 +7,7 @@ describe SemicolonDisallowable do
     include ActiveModel::Model
     include SemicolonDisallowable
     attr_accessor :foo, :bar, :baz
+
     disallow_semicolons :foo, :bar
   end
 

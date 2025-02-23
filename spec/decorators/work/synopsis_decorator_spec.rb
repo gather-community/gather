@@ -6,8 +6,8 @@ describe Work::SynopsisDecorator do
   let(:synopsis) do
     described_class.new(
       double({
-        "done?": attribs[:done],
-        "empty?": false,
+        done?: attribs[:done],
+        empty?: false,
         for_user: nil,
         for_household: nil,
         staggering: nil
@@ -51,8 +51,8 @@ describe Work::SynopsisDecorator do
            done: false}
         end
         it do
-          is_expected.to eq("You have signed up for <b>0/28.5</b> regular hours "\
-            "and <b>0/6</b> Foo Bar hours.")
+          is_expected.to eq("You have signed up for <b>0/28.5</b> regular hours " \
+                            "and <b>0/6</b> Foo Bar hours.")
         end
       end
 
@@ -63,8 +63,8 @@ describe Work::SynopsisDecorator do
            done: false}
         end
         it do
-          is_expected.to eq("You have signed up for <i>28.5/28.5</i> regular hours "\
-            "and <b>2/6</b> Foo Bar hours.")
+          is_expected.to eq("You have signed up for <i>28.5/28.5</i> regular hours " \
+                            "and <b>2/6</b> Foo Bar hours.")
         end
       end
 
@@ -75,8 +75,8 @@ describe Work::SynopsisDecorator do
            done: true}
         end
         it do
-          is_expected.to eq("You have signed up for <i>28.5/28.5</i> regular hours "\
-            "and <i>6/6</i> Foo Bar hours. <i>You&#39;re all set!</i>")
+          is_expected.to eq("You have signed up for <i>28.5/28.5</i> regular hours " \
+                            "and <i>6/6</i> Foo Bar hours. <i>You&#39;re all set!</i>")
         end
       end
     end
@@ -94,8 +94,8 @@ describe Work::SynopsisDecorator do
           ], done: false}
         end
         it do
-          is_expected.to eq("You have signed up for <b>0/28.5</b> regular hours, "\
-            "<b>3/6</b> Foo Bar hours, and <i>8/8</i> Ba. Qux hours.")
+          is_expected.to eq("You have signed up for <b>0/28.5</b> regular hours, " \
+                            "<b>3/6</b> Foo Bar hours, and <i>8/8</i> Ba. Qux hours.")
         end
       end
     end
@@ -113,9 +113,9 @@ describe Work::SynopsisDecorator do
          done: false}
       end
       it do
-        is_expected.to eq("You have signed up for <b>0/28.5</b> regular hours "\
-          "and <b>0/6</b> Foo Bar hours. Your household has <b>0/57</b> regular hours "\
-          "and <b>0/12</b> Foo Bar hours.")
+        is_expected.to eq("You have signed up for <b>0/28.5</b> regular hours " \
+                          "and <b>0/6</b> Foo Bar hours. Your household has <b>0/57</b> regular hours " \
+                          "and <b>0/12</b> Foo Bar hours.")
       end
     end
 
@@ -128,9 +128,9 @@ describe Work::SynopsisDecorator do
          done: false}
       end
       it do
-        is_expected.to eq("You have signed up for <b>4.5/28.5</b> regular hours "\
-          "and <i>6/6</i> Foo Bar hours. Your household has <b>4.5/57</b> regular hours "\
-          "and <b>6/12</b> Foo Bar hours.")
+        is_expected.to eq("You have signed up for <b>4.5/28.5</b> regular hours " \
+                          "and <i>6/6</i> Foo Bar hours. Your household has <b>4.5/57</b> regular hours " \
+                          "and <b>6/12</b> Foo Bar hours.")
       end
     end
 
@@ -143,9 +143,9 @@ describe Work::SynopsisDecorator do
          done: true}
       end
       it do
-        is_expected.to eq("You have signed up for <i>25/28.5</i> regular hours "\
-          "and <i>6/6</i> Foo Bar hours. Your household has <i>58/57</i> regular hours "\
-          "and <i>12/12</i> Foo Bar hours. <i>You&#39;re all set!</i>")
+        is_expected.to eq("You have signed up for <i>25/28.5</i> regular hours " \
+                          "and <i>6/6</i> Foo Bar hours. Your household has <i>58/57</i> regular hours " \
+                          "and <i>12/12</i> Foo Bar hours. <i>You&#39;re all set!</i>")
       end
     end
   end
@@ -166,16 +166,16 @@ describe Work::SynopsisDecorator do
 
       context "on choosing day" do
         it "gives time only " do
-          is_expected.to eq("You have signed up for <b>0/28.5</b> hours. "\
-            "You can start choosing jobs at 7:30pm.")
+          is_expected.to eq("You have signed up for <b>0/28.5</b> hours. " \
+                            "You can start choosing jobs at 7:30pm.")
         end
       end
 
       context "on other day" do
         let(:now) { next_starts_at - 2.days }
         it "gives date and time" do
-          is_expected.to eq("You have signed up for <b>0/28.5</b> hours. "\
-            "You can start choosing jobs on Wed Aug 15 7:30pm.")
+          is_expected.to eq("You have signed up for <b>0/28.5</b> hours. " \
+                            "You can start choosing jobs on Wed Aug 15 7:30pm.")
         end
       end
 
@@ -192,16 +192,16 @@ describe Work::SynopsisDecorator do
     context "with next_limit and prev_limit" do
       let(:staggering) { {prev_limit: 15, next_limit: 20, next_starts_at: next_starts_at} }
       it do
-        is_expected.to eq("You have signed up for <b>0/28.5</b> hours. "\
-          "Your round limit is 15 hours and will rise to 20 at 7:30pm.")
+        is_expected.to eq("You have signed up for <b>0/28.5</b> hours. " \
+                          "Your round limit is 15 hours and will rise to 20 at 7:30pm.")
       end
     end
 
     context "with prev_limit only" do
       let(:staggering) { {prev_limit: 15, next_limit: nil, next_starts_at: next_starts_at} }
       it do
-        is_expected.to eq("You have signed up for <b>0/28.5</b> hours. "\
-          "Your round limit is 15 hours until 7:30pm.")
+        is_expected.to eq("You have signed up for <b>0/28.5</b> hours. " \
+                          "Your round limit is 15 hours until 7:30pm.")
       end
     end
 

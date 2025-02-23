@@ -11,6 +11,7 @@ module CustomFields
     # Converts to Field objects.
     def initialize(spec_data)
       return if spec_data.nil?
+
       self.root = Fields::GroupField.new(key: :__root__, fields: spec_data)
 
       # Create a dummy instance to ensure that no reserved name collisions are encountered.

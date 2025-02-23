@@ -14,6 +14,7 @@ module Billing
     # are less likely to be needed. They will get created automatically by account_for if they are needed.
     def create_household_successful(household)
       return if household.skip_listener_action == :account_create
+
       account_for(household_id: household.id, community_id: household.community_id)
     end
   end

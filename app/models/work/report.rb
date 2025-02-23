@@ -25,6 +25,7 @@ module Work
           hash[user_id][:fixed_slot] = assigns.select(&:fixed_slot?).sum(&:shift_hours)
           assigns.each do |assign|
             next unless assign.full_community?
+
             hash[user_id][assign.job] ||= 0
             hash[user_id][assign.job] += assign.shift_hours
           end
@@ -48,7 +49,9 @@ module Work
         if period.quota_none?
           assignments.map(&:user).uniq.sort_by { |u| u.name.downcase }
         else
-          shares.by_user_name.reject { |s| s.zero? && (by_user.dig(s.user_id, :total) || 0).zero? }.map(&:user)
+          shares.by_user_name.reject do |s|
+            s.zero? && (by_user.dig(s.user_id, :total) || 0).zero?
+          end.map(&:user)
         end
     end
 

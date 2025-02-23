@@ -28,10 +28,18 @@ describe GDrive::UserPermissionSyncJob do
   let!(:group4) { create(:group, joiners: [user]) }
   let!(:group5) { create(:group, availability: "everybody", opt_outs: [user]) }
   let!(:group6) { create(:group, :inactive, joiners: [user]) }
-  let!(:item1) { create(:gdrive_item, gdrive_config: config, external_id: "1pAl7FvP0ud4KarSE1ags5nG2zta-61Zp6_q91Wh4y1A") }
-  let!(:item2) { create(:gdrive_item, gdrive_config: config, external_id: "1zLxt9wYrj1VEOiSnncd0nQfMQCm4hkRqU7WyidaRwB0") }
-  let!(:item3) { create(:gdrive_item, gdrive_config: config, external_id: "10pCGogEYyi7EY1wQIHUDFtNfsbNJkpUl") }
-  let!(:item4) { create(:gdrive_item, gdrive_config: config, external_id: "1s5sjHHrXaVxw5OqlmtZKR2b_GR5qMr8KASfsG9w3dz4") }
+  let!(:item1) do
+    create(:gdrive_item, gdrive_config: config, external_id: "1pAl7FvP0ud4KarSE1ags5nG2zta-61Zp6_q91Wh4y1A")
+  end
+  let!(:item2) do
+    create(:gdrive_item, gdrive_config: config, external_id: "1zLxt9wYrj1VEOiSnncd0nQfMQCm4hkRqU7WyidaRwB0")
+  end
+  let!(:item3) do
+    create(:gdrive_item, gdrive_config: config, external_id: "10pCGogEYyi7EY1wQIHUDFtNfsbNJkpUl")
+  end
+  let!(:item4) do
+    create(:gdrive_item, gdrive_config: config, external_id: "1s5sjHHrXaVxw5OqlmtZKR2b_GR5qMr8KASfsG9w3dz4")
+  end
   let!(:item5) { create(:gdrive_item, gdrive_config: config) }
   let!(:item6) { create(:gdrive_item, gdrive_config: config) }
 
@@ -45,7 +53,9 @@ describe GDrive::UserPermissionSyncJob do
   # This ItemGroup has existing SyncedPermission, but user's google_email has changed
   # so this should be updated.
   let!(:item_grp3) { create(:gdrive_item_group, item: item3, group: group3, access_level: "reader") }
-  let!(:synced_permission2) { create_synced_permission(item3, "13716252126343845941", "reader", "jpxxxnd@gmail.com") }
+  let!(:synced_permission2) do
+    create_synced_permission(item3, "13716252126343845941", "reader", "jpxxxnd@gmail.com")
+  end
 
   # There is a SyncedPermission for this ItemGroup, but it is currently reader role,
   # so user's access should be upgraded to writer.
@@ -67,7 +77,7 @@ describe GDrive::UserPermissionSyncJob do
 
   subject(:job) do
     described_class.new(cluster_id: Defaults.cluster.id, community_id: Defaults.community.id,
-      user_id: user.id)
+                        user_id: user.id)
   end
 
   context "with valid user" do
@@ -128,6 +138,6 @@ describe GDrive::UserPermissionSyncJob do
 
   def create_synced_permission(item, external_id, level, google_email = "toxxxth@gmail.com")
     create(:gdrive_synced_permission, user: user, external_id: external_id, item: item,
-      google_email: google_email, access_level: level)
+                                      google_email: google_email, access_level: level)
   end
 end

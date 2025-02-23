@@ -23,9 +23,7 @@ module Meals
     def unfinalize!
       # This should not be possible since calls to this method should be guarded by the
       # policy, but just in case!
-      if meal.transactions.any?(&:statement?)
-        raise "Can't unfinalize meal with transactions on statements"
-      end
+      raise "Can't unfinalize meal with transactions on statements" if meal.transactions.any?(&:statement?)
 
       meal.transactions.destroy_all
       if cost
@@ -45,18 +43,20 @@ module Meals
     def create_diner_transactions
       signups.each do |signup|
         next if signup.marked_for_destruction?
+
         signup.parts.each { |p| create_diner_transaction(signup_part: p) }
       end
     end
 
     def create_diner_transaction(signup_part:)
       return if signup_part.count.zero?
+
       price = calculator.price_for(signup_part.type)
       return if price < 0.01
 
       Billing::Transaction.create!(
         account: Billing::AccountManager.instance.account_for(household_id: signup_part.household_id,
-          community_id: meal.community_id),
+                                                              community_id: meal.community_id),
         code: "meal",
         incurred_on: meal.served_at.to_date,
         description: "#{meal.title}: #{signup_part.type_name}",
@@ -74,7 +74,7 @@ module Meals
 
       Billing::Transaction.create!(
         account: Billing::AccountManager.instance.account_for(household_id: cost.reimbursee.household_id,
-          community_id: meal.community_id),
+                                                              community_id: meal.community_id),
         code: "reimb",
         incurred_on: meal.served_at.to_date,
         description: "#{meal.title}: Grocery Reimbursement",

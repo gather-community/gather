@@ -72,25 +72,28 @@ module Work
 
     def compute_share_round(share)
       return if share.rounds_completed.positive? && share.current_min_need.zero?
+
       share.rounds_completed += 1
       share.current_min_need = [share.current_min_need - share.hours_per_round, 0].max
       return unless share == target_share
-      time = auto_open_time + (round_num - 1) * round_duration.minutes
-      limit = (quota * share.portion - share.current_min_need).ceil
+
+      time = auto_open_time + ((round_num - 1) * round_duration.minutes)
+      limit = ((quota * share.portion) - share.current_min_need).ceil
       limit = nil if limit >= quota * share.portion
       rounds << {starts_at: time, limit: limit}
     end
 
     def compute_shares_with_no_initial_need
       return if shares_with_initial_need.include?(target_share)
-      time = auto_open_time + (round_num - 1) * round_duration.minutes
+
+      time = auto_open_time + ((round_num - 1) * round_duration.minutes)
       rounds << {starts_at: time, limit: nil}
     end
 
     def prepare_shares
       shares.each do |share|
         share.rounds_completed = 0
-        share.current_min_need = [share.portion * quota - preassigned_total_for(share), 0].max
+        share.current_min_need = [(share.portion * quota) - preassigned_total_for(share), 0].max
         share.num_rounds = if quota.zero? || share.current_min_need.zero?
                              1
                            elsif preassigned_total_for(share).zero?
@@ -144,6 +147,7 @@ module Work
     def setup_debug(debug)
       self.debug = debug
       return unless debug?
+
       self.target_share = cohorts.last[0]
     end
 

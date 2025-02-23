@@ -8,7 +8,7 @@ class DatePickerInput < SimpleForm::Inputs::StringInput
     set_html_options
     set_value_html_option
 
-    template.content_tag(:div, class: "input-group date datetimepicker") do
+    template.tag.div(class: "input-group date datetimepicker") do
       input = super(wrapper_options) # leave StringInput do the real rendering
       input + input_button
     end
@@ -21,9 +21,10 @@ class DatePickerInput < SimpleForm::Inputs::StringInput
   private
 
   def input_button
-    template.content_tag(:span, class: "input-group-btn") do
-      template.content_tag(:button, class: "btn btn-default", type: "button", "aria-label": "Open date picker") do
-        template.content_tag(:span, "", class: "fa fa-calendar")
+    template.tag.span(class: "input-group-btn") do
+      template.tag.button(class: "btn btn-default", type: "button",
+                          "aria-label": "Open date picker") do
+        template.tag.span("", class: "fa fa-calendar")
       end
     end
   end
@@ -45,6 +46,7 @@ class DatePickerInput < SimpleForm::Inputs::StringInput
 
   def set_value_html_option
     return if value.blank?
+
     input_html_options[:value] ||= I18n.l(value, format: display_pattern)
   end
 

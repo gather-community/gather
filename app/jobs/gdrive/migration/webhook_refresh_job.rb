@@ -6,7 +6,8 @@ module GDrive
     class WebhookRefreshJob < BaseJob
       def perform
         ActsAsTenant.without_tenant do
-          GDrive::Migration::Operation.active.where("webhook_expires_at < ?", Time.current + 2.days).find_each do |operation|
+          GDrive::Migration::Operation.active.where("webhook_expires_at < ?",
+                                                    Time.current + 2.days).find_each do |operation|
             ActsAsTenant.with_tenant(operation.cluster) do
               refresh_webhook(operation)
             end

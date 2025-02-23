@@ -30,8 +30,8 @@ class ApplicationDecorator < Draper::Decorator
     h.tag(:br)
   end
 
-  def action_links(action = :show, **options)
-    send("#{action}_action_link_set").render(**options)
+  def action_links(action = :show, **)
+    send("#{action}_action_link_set").render(**)
   end
 
   def to_int_if_no_fractional_part(num)

@@ -151,13 +151,13 @@ describe "signups", js: true do
       scenario do
         visit(page_path)
         time = I18n.l(open_time, format: :wday_no_year)
-        expect(page).to have_content("You have signed up for 0/32 hours. "\
-          "You can start choosing jobs on #{time}")
+        expect(page).to have_content("You have signed up for 0/32 hours. " \
+                                     "You can start choosing jobs on #{time}")
         Timecop.freeze(open_time + 2.minutes) do
           visit(page_path)
           time = I18n.l(open_time + 5.minutes, format: :time_only)
-          expect(page).to have_content("You have signed up for 0/32 hours. "\
-            "Your round limit is 11 hours and will rise to 22 at #{time}")
+          expect(page).to have_content("You have signed up for 0/32 hours. " \
+                                       "Your round limit is 11 hours and will rise to 22 at #{time}")
         end
         expect(periods[0].reload.phase).to eq("open")
       end

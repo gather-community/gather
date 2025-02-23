@@ -18,17 +18,17 @@ class StatementsController < ApplicationController
     authorize(sample_statement)
     Billing::StatementJob.perform_later(current_community.id)
 
-    flash[:success] = "Statement generation started. Please try refreshing "\
-      "the page in a moment to see updated account statuses."
+    flash[:success] = "Statement generation started. Please try refreshing " \
+                      "the page in a moment to see updated account statuses."
 
     with_no_users = Billing::Account.in_community(current_community)
       .includes(:household).with_activity_but_no_users
 
     if with_no_users.any?
       who = with_no_users.map { |a| a.decorate.household_name }.join(", ")
-      flash[:alert] = "The following households have no associated users and thus "\
-        "statements were not generated for them: #{who}. "\
-        "Try sending statements again once the households have associated users."
+      flash[:alert] = "The following households have no associated users and thus " \
+                      "statements were not generated for them: #{who}. " \
+                      "Try sending statements again once the households have associated users."
     end
 
     redirect_to(accounts_path)

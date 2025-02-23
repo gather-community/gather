@@ -89,7 +89,7 @@ describe GDrive::ItemPermissionSyncJob do
 
   subject(:job) do
     described_class.new(cluster_id: Defaults.cluster.id, community_id: Defaults.community.id,
-      item_id: item.id)
+                        item_id: item.id)
   end
 
   context "with valid item" do
@@ -129,6 +129,6 @@ describe GDrive::ItemPermissionSyncJob do
 
   def create_synced_permission(user, external_id, level, google_email = user.google_email)
     create(:gdrive_synced_permission, user: user, item: item, google_email: google_email,
-      access_level: level, external_id: external_id)
+                                      access_level: level, external_id: external_id)
   end
 end

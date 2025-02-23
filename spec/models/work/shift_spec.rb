@@ -11,7 +11,7 @@ describe Work::Shift do
     let(:shift) { build(:work_shift, submitted.merge(job: job)) }
 
     # Get the normalized values for the submitted keys.
-    subject { submitted.keys.map { |k| [k, shift.send(k)] }.to_h }
+    subject { submitted.keys.index_with { |k| shift.send(k) }.to_h }
 
     describe "slots" do
       context "full community job" do

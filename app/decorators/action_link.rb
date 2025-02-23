@@ -2,7 +2,7 @@
 
 class ActionLink < ApplicationDecorator
   attr_accessor :object, :action, :icon, :method, :path, :confirm, :confirm_args,
-    :btn_class, :permitted, :label_symbol
+                :btn_class, :permitted, :label_symbol
 
   def initialize(object, action, icon:, path:, btn_class: :default, label_symbol: action,
     method: :get, permitted: nil, confirm: false)
@@ -20,8 +20,9 @@ class ActionLink < ApplicationDecorator
 
   def render
     return @rendered if defined?(@rendered)
+
     @rendered =
-      if permitted || permitted.nil? && h.policy(object).send("#{action}?")
+      if permitted || (permitted.nil? && h.policy(object).send("#{action}?"))
         params = {title: label, method: method, class: "btn btn-#{btn_class}"}
         params[:data] = {confirm: confirm_msg} if confirm_msg
         h.link_to(icon_tag << label_tag, path, params)
@@ -35,7 +36,7 @@ class ActionLink < ApplicationDecorator
   end
 
   def label_tag
-    h.content_tag(:span, label, class: "action-label")
+    h.tag.span(label, class: "action-label")
   end
 
   def label
@@ -49,6 +50,7 @@ class ActionLink < ApplicationDecorator
   def confirm_msg
     return @confirm_msg if defined?(@confirm_msg)
     return @confirm_msg = nil unless confirm
+
     @confirm_msg = I18n.t("confirmations.#{object.model_name.i18n_key}.#{action}", **confirm_args)
   end
 end

@@ -2,13 +2,13 @@
 
 Rails.application.routes.draw do
   devise_for :users, path: "people/users",
-    path_names: {sign_in: "sign-in", sign_out: "sign-out"},
-    controllers: {
-      sessions: "people/users/sessions",
-      omniauth_callbacks: "people/users/omniauth_callbacks",
-      passwords: "people/users/passwords",
-      confirmations: "people/users/confirmations"
-    }
+                     path_names: {sign_in: "sign-in", sign_out: "sign-out"},
+                     controllers: {
+                       sessions: "people/users/sessions",
+                       omniauth_callbacks: "people/users/omniauth_callbacks",
+                       passwords: "people/users/passwords",
+                       confirmations: "people/users/confirmations"
+                     }
   get "people/users/signed-out", to: "landing#signed_out", as: :user_signed_out
 
   resources :communities, only: :index
@@ -95,7 +95,7 @@ Rails.application.routes.draw do
   end
 
   resources :meals, controller: "meals/meals_household_worker_change", path: "meals/worker-form",
-    as: "meal_worker_form", only: :update
+                    as: "meal_worker_form", only: :update
 
   # These routes are provided because Rails guesses meals_meal_path and meals_meals_path even
   # though we prefer meals_path (above) in code we write. Both this route and
@@ -123,7 +123,7 @@ Rails.application.routes.draw do
   namespace :groups do
     namespace :mailman do
       get "templates/:template_name/:list_id/:locale",
-        to: "templates#show", constraints: {list_id: /.*/}, defaults: {format: "text"}
+          to: "templates#show", constraints: {list_id: /.*/}, defaults: {format: "text"}
 
       resources :lists, only: [] do
         member do
@@ -145,12 +145,12 @@ Rails.application.routes.draw do
     # Gen 1 legacy calendar export routes. They are highly constrained.
     # These come first so they don't get gobbled up by more generic calendar routes below.
     get ":type/:token",
-      to: "legacy_exports#personalized",
-      as: nil,
-      constraints: calendar_token_constraints.merge(
-        # These are the original calendar export types. Only these need to work for legacy URLs.
-        type: /meals|community-meals|all-meals|shifts|reservations|your-reservations/
-      )
+        to: "legacy_exports#personalized",
+        as: nil,
+        constraints: calendar_token_constraints.merge(
+          # These are the original calendar export types. Only these need to work for legacy URLs.
+          type: /meals|community-meals|all-meals|shifts|reservations|your-reservations/
+        )
 
     # Gen 2 legacy calendar export routes. These are resource-style because they assumed one calendar
     # per export.
@@ -163,21 +163,21 @@ Rails.application.routes.draw do
     # The calendar's type gets captured as the :id param, so this is equivalent to
     # /calendars/exports/:type/:token
     get "exports/:type/:token",
-      to: "legacy_exports#personalized",
-      as: :personalized_exports,
-      constraints: calendar_token_constraints.merge(
-        type: /meals|your-meals|community-meals|all-meals|your-jobs|community-events|your-events/
-      )
+        to: "legacy_exports#personalized",
+        as: :personalized_exports,
+        constraints: calendar_token_constraints.merge(
+          type: /meals|your-meals|community-meals|all-meals|your-jobs|community-events|your-events/
+        )
 
     # This is the community show action, allowing paths to include the community's calendar token.
     # The community part is indicated by a leading +, e.g.
     # e.g. /calendars/exports/meals/+X7sbPv7YCUhxMs4Pyx9D.
     get "exports/:type/+:token",
-      to: "legacy_exports#nonpersonalized",
-      as: :nonpersonalized_exports,
-      constraints: calendar_token_constraints.merge(
-        type: /community-meals|all-meals|community-events/
-      )
+        to: "legacy_exports#nonpersonalized",
+        as: :nonpersonalized_exports,
+        constraints: calendar_token_constraints.merge(
+          type: /community-meals|all-meals|community-events/
+        )
 
     # Gen 3 (current) calendar export routes
     get "exports", to: "exports#index", constraints: {format: :html}

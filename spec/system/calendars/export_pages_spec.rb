@@ -30,27 +30,27 @@ describe "calendar export pages", js: true do
         expect(page).to have_field("Calendar 2", checked: false)
         expect(page).to have_field("Calendar 3", checked: true)
         expect(page).to have_field("export-url", with: "webcal://default.gatherdev.org:31337" \
-          "/calendars/export.ics?calendars=#{calendar1.id}+#{calendar3.id}&token=#{user_token}")
+                                                       "/calendars/export.ics?calendars=#{calendar1.id}+#{calendar3.id}&token=#{user_token}")
 
         # Single calendar
         uncheck("Calendar 1")
         expect(page).to have_field("export-url", with: "webcal://default.gatherdev.org:31337" \
-          "/calendars/export.ics?calendars=#{calendar3.id}&token=#{user_token}")
+                                                       "/calendars/export.ics?calendars=#{calendar3.id}&token=#{user_token}")
 
         # All calendars
         check("Calendar 1")
         check("Calendar 2")
         expect(page).to have_field("export-url", with: "webcal://default.gatherdev.org:31337" \
-          "/calendars/export.ics?calendars=all&token=#{user_token}")
+                                                       "/calendars/export.ics?calendars=all&token=#{user_token}")
 
         check("Include only your events")
         expect(page).to have_field("export-url", with: "webcal://default.gatherdev.org:31337" \
-          "/calendars/export.ics?calendars=all&token=#{user_token}&own_only=1")
+                                                       "/calendars/export.ics?calendars=all&token=#{user_token}&own_only=1")
 
         check("Don't personalize events")
         expect(page).not_to have_content("Include only events you created")
         expect(page).to have_field("export-url", with: "webcal://default.gatherdev.org:31337" \
-          "/calendars/community-export.ics?calendars=all&token=#{cmty_token}")
+                                                       "/calendars/community-export.ics?calendars=all&token=#{cmty_token}")
       end
     end
 
@@ -65,7 +65,7 @@ describe "calendar export pages", js: true do
         expect(page).to have_field("Calendar 1", checked: true)
         expect(page).to have_field("Calendar 2", checked: false)
         expect(page).to have_field("export-url", with: "webcal://default.gatherdev.org:31337" \
-          "/calendars/export.ics?calendars=#{calendar1.id}&token=#{user_token}")
+                                                       "/calendars/export.ics?calendars=#{calendar1.id}&token=#{user_token}")
       end
     end
   end
@@ -73,7 +73,7 @@ describe "calendar export pages", js: true do
   scenario "reset_token" do
     visit("/calendars/exports")
     expect(page).to have_field("export-url", with: "webcal://default.gatherdev.org:31337" \
-      "/calendars/export.ics?calendars=all&token=#{user_token}")
+                                                   "/calendars/export.ics?calendars=all&token=#{user_token}")
     expect(find("#export-url").value.match(/token=(.+)$/)[1]).to eq(user_token)
 
     click_link("click here to reset your secret token")

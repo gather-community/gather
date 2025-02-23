@@ -24,8 +24,8 @@ module Work
         old_period = Period.find(params[:clone_from])
         cloner = PeriodCloner.new(old_period: old_period, new_period: @period)
         cloner.copy_attributes_and_shares
-        flash.now[:notice] = "Some data have been copied from the period '#{old_period.name}'. "\
-          "Please review and adjust below. Jobs will be copied when you save the period."
+        flash.now[:notice] = "Some data have been copied from the period '#{old_period.name}'. " \
+                             "Please review and adjust below. Jobs will be copied when you save the period."
       end
       authorize(@period)
       @periods = Period.in_community(current_community).newest_first

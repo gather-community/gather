@@ -50,7 +50,8 @@ describe "mailman integration" do
           user2.deactivate
         end
         step("create_admin_group") do
-          admin_group = create(:group, name: "Admins Only", joiners: [user3], can_administer_email_lists: true)
+          admin_group = create(:group, name: "Admins Only", joiners: [user3],
+                                       can_administer_email_lists: true)
         end
         step("add_moderate_permission") do
           admin_group.update!(can_moderate_email_lists: true)
@@ -98,9 +99,9 @@ describe "mailman integration" do
     end
   end
 
-  def step(name)
+  def step(name, &block)
     Groups::Mailman::SyncListener.instance.reset_duplicate_tracking!
     [user1, user2, user3, user4].each { |o| o.reload unless o.destroyed? }
-    VCR.use_cassette("groups/mailman/integration/#{context_name}/#{name}") { yield }
+    VCR.use_cassette("groups/mailman/integration/#{context_name}/#{name}", &block)
   end
 end

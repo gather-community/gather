@@ -4,6 +4,7 @@ module Work
   # Calculates how many hours each person (or share) are implied by the current set of jobs for a period.
   class QuotaCalculator
     attr_accessor :period, :report, :hours_to_distribute, :portions_equalized, :quota
+
     delegate :shares, :total_portions, :fixed_slot_non_preassigned_hours, :by_user, to: :report
 
     def initialize(period)
@@ -24,9 +25,11 @@ module Work
     # which is OK.
     def calculate
       return 0 if period.quota_none? || total_portions.zero?
+
       setup_vars
       sorted_levels.each_with_index do |level, i|
         break if i == sorted_levels.size - 1 || hours_to_distribute <= 0
+
         equalize_to_level(level, i)
       end
       distribute_leftover_hours if hours_to_distribute.positive?
@@ -62,10 +65,12 @@ module Work
 
     def portions_by_level
       return @portions_by_level if @portions_by_level
+
       @portions_by_level = Hash.new(0)
       grouped_shares.each do |shares|
         portions = shares.sum(&:portion)
         next if portions.zero?
+
         preassigned = shares.sum { |s| by_user[s.user_id].try(:[], :preassigned) || 0 }
         level = preassigned / portions
         @portions_by_level[level] += portions

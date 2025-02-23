@@ -62,10 +62,10 @@ module Subscription
 
     def load_auth_and_populate_subscription(or_initialize: false)
       subscription = if or_initialize
-                        Subscription.find_or_initialize_by(community: current_community)
-                      else
-                        Subscription.find_by!(community: current_community)
-                      end
+                       Subscription.find_or_initialize_by(community: current_community)
+                     else
+                       Subscription.find_by!(community: current_community)
+                     end
       authorize(subscription)
       Sentry.configure_scope do |scope|
         scope.set_context("subscription", stripe_subscription_id: subscription.stripe_id)

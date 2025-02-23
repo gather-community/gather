@@ -9,6 +9,7 @@ module Calendars
 
       def check(event)
         return true if event.meal?
+
         case value
         when "forbidden", "read_only"
           event.creator_community == community ||

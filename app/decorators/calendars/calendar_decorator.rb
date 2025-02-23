@@ -27,12 +27,13 @@ module Calendars
 
     def swatch(color: self.color, content: "", fg_color: nil)
       fg_color_style = fg_color ? "; color: #{fg_color}" : ""
-      h.content_tag(:div, content, class: "swatch", style: "background-color: #{color}#{fg_color_style}",
-                                   data: {color: color})
+      h.tag.div(content, class: "swatch", style: "background-color: #{color}#{fg_color_style}",
+                         data: {color: color})
     end
 
     def photo_variant(format)
       return "missing/calendars/calendars/#{format}.png" unless photo.attached? && photo.variable?
+
       case format
       when :thumb then photo.variant(resize_to_fill: [220, 165])
       else raise "Unknown photo format #{format}"

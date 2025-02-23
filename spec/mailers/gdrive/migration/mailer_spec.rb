@@ -11,7 +11,10 @@ describe GDrive::Migration::Mailer do
   let(:mail) { described_class.consent_request(consent_request).deliver_now }
 
   describe "when google_email matches a user record" do
-    let!(:user) { create(:user, :inactive, first_name: "Bing", last_name: "Borb", email: "blorb@example.com", google_email: "blorb@gmail.com") }
+    let!(:user) do
+      create(:user, :inactive, first_name: "Bing", last_name: "Borb", email: "blorb@example.com",
+                               google_email: "blorb@gmail.com")
+    end
 
     it "builds mail properly" do
       expect(mail.to).to match_array(["blorb@example.com", "blorb@gmail.com"])
@@ -22,7 +25,9 @@ describe GDrive::Migration::Mailer do
   end
 
   describe "when google_email doesn't match a user record" do
-    let!(:user) { create(:user, :inactive, first_name: "Bing", last_name: "Borb", google_email: "zorb@example.com") }
+    let!(:user) do
+      create(:user, :inactive, first_name: "Bing", last_name: "Borb", google_email: "zorb@example.com")
+    end
 
     it "builds mail properly" do
       expect(mail.to).to match_array(["blorb@gmail.com"])

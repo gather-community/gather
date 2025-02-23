@@ -211,10 +211,10 @@ describe HouseholdPolicy do
   describe "permitted attributes" do
     let(:basic_attribs) do
       [:name, :garage_nums, :keyholders,
-        {vehicles_attributes: %i[id make model color plate _destroy]},
-        {emergency_contacts_attributes: %i[id name relationship main_phone alt_phone
-          email location country_code _destroy]},
-        {pets_attributes: %i[id name species color vet caregivers health_issues _destroy]}]
+       {vehicles_attributes: %i[id make model color plate _destroy]},
+       {emergency_contacts_attributes: %i[id name relationship main_phone alt_phone
+                                          email location country_code _destroy]},
+       {pets_attributes: %i[id name species color vet caregivers health_issues _destroy]}]
     end
     let(:admin_attribs) { basic_attribs.concat(%i[unit_num_and_suffix old_id old_name member_type_id]) }
     let(:cluster_admin_attribs) { admin_attribs << :community_id }

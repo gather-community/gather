@@ -20,9 +20,9 @@ describe "single sign on" do
     # By the time we are testing the redirect, we can assume the secret on the foreign
     # host was correct.
     secret_for_redirect = secret_on_foreign_host
-    payload = "ZW1haWw9dG9tJTQwZXhhbXBsZS5jb20mZXh0ZXJuYWxfaWQ9MTIzNCZuYW1lPVRvbStTbXl0aCZub25jZT14eXomc"\
-      "mV0dXJuX3Nzb191cmw9aHR0cHMlM0ElMkYlMkZleGFtcGxlLmNvbSUyRnNzbyUyRmxvZ2luJnVzZXJuYW1lPVRvbS"\
-      "tTbXl0aCZjdXN0b20uZmlyc3RfbmFtZT1Ub20mY3VzdG9tLmxhc3RfbmFtZT1TbXl0aA=="
+    payload = "ZW1haWw9dG9tJTQwZXhhbXBsZS5jb20mZXh0ZXJuYWxfaWQ9MTIzNCZuYW1lPVRvbStTbXl0aCZub25jZT14eXomc" \
+              "mV0dXJuX3Nzb191cmw9aHR0cHMlM0ElMkYlMkZleGFtcGxlLmNvbSUyRnNzbyUyRmxvZ2luJnVzZXJuYW1lPVRvbS" \
+              "tTbXl0aCZjdXN0b20uZmlyc3RfbmFtZT1Ub20mY3VzdG9tLmxhc3RfbmFtZT1TbXl0aA=="
     sig = OpenSSL::HMAC.hexdigest("sha256", secret_for_redirect, payload)
     "https://example.com/sso/login?sso=#{CGI.escape(payload)}&sig=#{sig}"
   end

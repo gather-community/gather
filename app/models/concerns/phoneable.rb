@@ -10,8 +10,8 @@ module Phoneable
 
       phone_types.each do |p|
         # country_code should be present on model and is auto-detected by Phony
-        validates_plausible_phone "#{p}_phone"
-        phony_normalize "#{p}_phone", normalize_when_valid: true
+        validates_plausible_phone("#{p}_phone")
+        phony_normalize("#{p}_phone", normalize_when_valid: true)
       end
     end
   end

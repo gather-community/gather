@@ -40,9 +40,15 @@ describe CustomReminderJob do
     let(:periodB) { create(:work_period, community: cmtyB) }
 
     context "with multiple matching reminders in different clusters" do
-      let(:work_jobA) { create(:work_job, period: periodA, shift_starts: ["2018-01-01 11:30"], shift_slots: 3) }
-      let(:work_jobB1) { create(:work_job, period: periodB, shift_starts: ["2018-01-02 12:00"], shift_slots: 1) }
-      let(:work_jobB2) { create(:work_job, period: periodB, shift_starts: ["2018-01-03 12:00"], shift_slots: 1) }
+      let(:work_jobA) do
+        create(:work_job, period: periodA, shift_starts: ["2018-01-01 11:30"], shift_slots: 3)
+      end
+      let(:work_jobB1) do
+        create(:work_job, period: periodB, shift_starts: ["2018-01-02 12:00"], shift_slots: 1)
+      end
+      let(:work_jobB2) do
+        create(:work_job, period: periodB, shift_starts: ["2018-01-03 12:00"], shift_slots: 1)
+      end
       let!(:assignA1) { work_jobA.shifts[0].assignments.create!(user: userA1) }
       let!(:assignA2) { work_jobA.shifts[0].assignments.create!(user: userA2) }
       let!(:assignB1) { work_jobB1.shifts[0].assignments.create!(user: userB1) }

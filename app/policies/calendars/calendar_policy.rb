@@ -2,7 +2,7 @@
 
 module Calendars
   class CalendarPolicy < NodePolicy
-    alias_method :calendar, :record
+    alias calendar record
 
     class Scope < NodePolicy::Scope
       # Returns an Array of calendars within the given scope that
@@ -45,7 +45,7 @@ module Calendars
 
     def permitted_attributes
       base = %i[default_calendar_view abbrv name color
-        photo_new_signed_id photo_destroy group_id selected_by_default]
+                photo_new_signed_id photo_destroy group_id selected_by_default]
       base.concat(%i[meal_hostable guidelines allow_overlap]) unless calendar.system?
       base
     end

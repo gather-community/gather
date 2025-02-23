@@ -73,6 +73,7 @@ class HouseholdPolicy < ApplicationPolicy
   # If it is not, sets the param to nil.
   def ensure_allowed_community_id(params)
     return if allowed_community_changes.map(&:id).include?(params[:community_id].to_i)
+
     # Important to delete instead of set to nil, as setting to nil
     # will set the household to nil and the form won't save.
     params.delete(:community_id)

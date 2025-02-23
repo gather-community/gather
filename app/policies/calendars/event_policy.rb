@@ -2,7 +2,7 @@
 
 module Calendars
   class EventPolicy < ApplicationPolicy
-    alias_method :event, :record
+    alias event record
 
     delegate :rule_set, :meal?, to: :event
 
@@ -61,7 +61,7 @@ module Calendars
 
     def destroy?
       specific_record? && !read_only_by_protocol? && !meal? && !calendar.system? &&
-        (admin_or_coord? || active_creator_or_group_member? && (future? || recently_created?))
+        (admin_or_coord? || (active_creator_or_group_member? && (future? || recently_created?)))
     end
 
     def permitted_attributes(group_id:)

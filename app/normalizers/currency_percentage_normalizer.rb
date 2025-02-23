@@ -7,6 +7,7 @@ module CurrencyPercentageNormalizer
     separator = I18n.t("number.format.separator")
     value = value&.to_s&.gsub(/[^#{separator}0-9]/, "")
     return nil if value.blank?
+
     value.to_f / (options[:pct] ? 100 : 1)
   end
 end

@@ -28,6 +28,7 @@ module Work
 
     def update_meals_meal_successful(meal)
       return unless (meal.previous_changes.keys & %w[served_at formula_id]).any?
+
       periods = meal_periods(meal)
       if meal.served_at_previously_changed?
         old_date = meal.served_at_previous_change[0].to_date
@@ -68,6 +69,7 @@ module Work
       Meals::Meal.where(served_at: meal_time_range(period)).oldest_first.each do |meal|
         meal.roles.each do |role|
           next unless period_sync_role?(period, meal, role)
+
           job = find_or_create_job(period, role)
           job_ids << job.id
           shift = find_or_create_shift(job, role, meal)
@@ -86,7 +88,7 @@ module Work
     end
 
     def period_sync_role?(period, meal, role)
-      period.meal_job_sync_settings.where(role_id: role.id, formula_id: meal.formula_id).exists?
+      period.meal_job_sync_settings.exists?(role_id: role.id, formula_id: meal.formula_id)
     end
 
     def find_or_create_job(period, role)

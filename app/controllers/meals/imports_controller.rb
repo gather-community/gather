@@ -10,6 +10,7 @@ module Meals
       @import = Import.find(params[:id])
       prep_form_vars
       return unless request.xhr?
+
       if @import.complete?
         render(partial: "results")
       else

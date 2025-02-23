@@ -16,11 +16,11 @@ describe "meal messages", :perform_jobs do
   shared_examples_for "sends message" do |recipient_type, email_count|
     scenario do
       email_sent = email_sent_by do
-        visit meal_path(meal)
-        click_link "Message"
-        select recipient_type, from: "Recipients"
-        fill_in "Message", with: "Foo bar"
-        click_button "Send Message"
+        visit(meal_path(meal))
+        click_link("Message")
+        select(recipient_type, from: "Recipients")
+        fill_in("Message", with: "Foo bar")
+        click_button("Send Message")
         expect(page).to have_content("Message sent successfully")
       end
       expect(email_sent.size).to eq(email_count)

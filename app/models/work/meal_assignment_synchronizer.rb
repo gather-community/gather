@@ -7,6 +7,7 @@ module Work
 
     def destroy_work_job_successful(job)
       return unless job.meal_role?
+
       # Save the IDs of destroyed jobs in a hash so that we can skip
       # sync for these. If a whole job gets destroyed, we don't want to treat it as if
       # those people un-signed-up from the jobs as that would be surprising to the user.
@@ -15,6 +16,7 @@ module Work
 
     def destroy_work_shift_successful(shift)
       return unless shift.meal?
+
       # Similar reasoning to the above. The only time a meal shift can get destroyed
       # is if the meal is destroyed.
       destroyed_shifts[shift.id] = true
@@ -24,18 +26,21 @@ module Work
     # Copies assignments from meal if they exist.
     def create_work_shift_successful(shift)
       return unless meal_shift?(shift)
+
       sync_meal_to_shift(shift.meal, shift)
     end
 
     def create_work_assignment_successful(work_asst)
       return if work_asst.syncing?
       return unless meal_shift?(work_asst.shift)
+
       sync_shift_to_meal(work_asst.shift, work_asst.meal)
     end
 
     def update_work_assignment_successful(work_asst)
       return if work_asst.syncing?
       return unless meal_shift?(work_asst.shift)
+
       sync_shift_to_meal(work_asst.shift, work_asst.meal)
     end
 
@@ -43,16 +48,18 @@ module Work
       return if work_asst.syncing?
       return unless meal_shift?(work_asst.shift)
       return if destroyed_jobs[work_asst.job_id] || destroyed_shifts[work_asst.shift_id]
+
       sync_shift_to_meal(work_asst.shift, work_asst.meal)
     end
 
     def create_meals_assignment_successful(meal_asst)
       return if meal_asst.syncing?
       return unless (shift = shift_for_meal_assignment(meal_asst))
+
       sync_meal_to_shift(meal_asst.meal, shift)
     end
-    alias_method :update_meals_assignment_successful, :create_meals_assignment_successful
-    alias_method :destroy_meals_assignment_successful, :create_meals_assignment_successful
+    alias update_meals_assignment_successful create_meals_assignment_successful
+    alias destroy_meals_assignment_successful create_meals_assignment_successful
 
     private
 
@@ -90,7 +97,7 @@ module Work
 
     def shift_for_meal_assignment(meal_asst)
       Work::Shift.joins(:job).find_by(meal_id: meal_asst.meal_id,
-        work_jobs: {meal_role_id: meal_asst.role_id})
+                                      work_jobs: {meal_role_id: meal_asst.role_id})
     end
 
     def destroy_assignment(assignment)

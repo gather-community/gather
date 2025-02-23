@@ -8,7 +8,7 @@ describe Calendars::IcalGenerator do
   subject(:ical) do
     Timecop.freeze("2021-01-01 12:00") do
       described_class.new(calendar_name: calendar_name, events: events,
-        url_options: {host: "foo.com", protocol: "https", port: 443}).generate
+                          url_options: {host: "foo.com", protocol: "https", port: 443}).generate
     end
   end
 
@@ -19,10 +19,10 @@ describe Calendars::IcalGenerator do
   context "with simple event" do
     let(:events) do
       [create(:event, name: "Some Event",
-        starts_at: "2021-01-01 12:00",
-        ends_at: "2022-01-01 13:00",
-        note: "This is a description",
-        location: "A nice place")]
+                      starts_at: "2021-01-01 12:00",
+                      ends_at: "2022-01-01 13:00",
+                      note: "This is a description",
+                      location: "A nice place")]
     end
 
     it "encodes event attributes appropriately" do
@@ -60,9 +60,9 @@ describe Calendars::IcalGenerator do
   context "with all day event" do
     let(:events) do
       [create(:event, name: "Some Event",
-        all_day: true,
-        starts_at: "2021-01-02T00:00:00",
-        ends_at: "2021-01-02T23:59:59")]
+                      all_day: true,
+                      starts_at: "2021-01-02T00:00:00",
+                      ends_at: "2021-01-02T23:59:59")]
     end
 
     it "encodes event attributes appropriately" do
@@ -95,9 +95,9 @@ describe Calendars::IcalGenerator do
       # Per the RFC, the string should actually include the literal string \n for line breaks, which is why
       # we are checking for `\\n`.
       expect(ical).to include_line(
-        "DESCRIPTION:fishy fishy fishy fishy fishy fishy fishy fishy fishy fishy fis\r\n" \
-        " hy fishy fishy fishy fishy fishy fishy fishy fishy fishy fishy fishy fishy\r\n" \
-        "  fishy \\nstuff\\nother stuff\\nhttps://foo.com/calendars/events/#{events[0].id}"
+        "DESCRIPTION:fishy fishy fishy fishy fishy fishy fishy fishy fishy fishy fis\r\n " \
+        "hy fishy fishy fishy fishy fishy fishy fishy fishy fishy fishy fishy fishy\r\n  " \
+        "fishy \\nstuff\\nother stuff\\nhttps://foo.com/calendars/events/#{events[0].id}"
       )
     end
   end
@@ -136,29 +136,29 @@ describe Calendars::IcalGenerator do
     let(:events) do
       [
         create(:event, name: "Some Event",
-          creator: user,
-          starts_at: "2021-01-01 12:00",
-          ends_at: "2022-01-01 13:00",
-          note: "This is a description",
-          location: "A nice place"),
+                       creator: user,
+                       starts_at: "2021-01-01 12:00",
+                       ends_at: "2022-01-01 13:00",
+                       note: "This is a description",
+                       location: "A nice place"),
         create(:event, name: "Some Event",
-          creator: user,
-          starts_at: "2021-01-01 12:00",
-          ends_at: "2022-01-01 13:00",
-          note: "Other description",
-          location: "Other place"),
+                       creator: user,
+                       starts_at: "2021-01-01 12:00",
+                       ends_at: "2022-01-01 13:00",
+                       note: "Other description",
+                       location: "Other place"),
         create(:event, name: "Other Event",
-          creator: user,
-          starts_at: "2021-01-01 12:00",
-          ends_at: "2022-01-01 13:00")
+                       creator: user,
+                       starts_at: "2021-01-01 12:00",
+                       ends_at: "2022-01-01 13:00")
       ]
     end
 
     it "groups first two events" do
-      expect(ical.scan(/BEGIN:VEVENT/).size).to eq(2)
+      expect(ical.scan("BEGIN:VEVENT").size).to eq(2)
       expect(ical).to include_line("LOCATION:A nice place + Other place")
-      expect(ical).to include_line("DESCRIPTION:This is a description\\nOther description\\n" \
-        "https://foo.com/calen\r\n dars/events/#{events[0].id}")
+      expect(ical).to include_line('DESCRIPTION:This is a description\\nOther description\\n' \
+                                   "https://foo.com/calen\r\n dars/events/#{events[0].id}")
     end
   end
 

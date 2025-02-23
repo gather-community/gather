@@ -63,22 +63,23 @@ describe Utils::Generators::MainGenerator, :without_tenant, :perform_jobs do
       dataless = []
       ApplicationRecord.descendants.each do |model|
         next if model.test_mock? || NO_SAMPLE_DATA_CLASSES.include?(model.name)
+
         dataless << model.name if model.none?
       end
-      expect(dataless).to be_empty, "#{dataless.join(", ")} don't have any sample data"
+      expect(dataless).to be_empty, "#{dataless.join(', ')} don't have any sample data"
 
       # Destroy and check
       Utils::SampleDataRemover.new(cluster).remove
       cluster.communities[0].destroy
       ApplicationRecord.descendants.each do |model|
         next if model.test_mock? || !model.scoped_by_tenant?
+
         expect(model.count).to eq(0), "Expected to find no #{model.name.pluralize}"
       end
     end
   end
 
   it "should generate and destroy photos" do
-    cluster = nil
     main = described_class.new(cmty_name: "Foo Community", slug: "foo", sample_data: true, photos: true)
     cluster = main.generate
 

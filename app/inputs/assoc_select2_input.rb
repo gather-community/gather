@@ -7,6 +7,6 @@ class AssocSelect2Input < SimpleForm::Inputs::CollectionSelectInput
 
   def input(wrapper_options)
     setup_select2
-    super(wrapper_options)
+    super
   end
 end

@@ -13,6 +13,7 @@ module CustomFields
 
     def initialize(spec:, host:, instance_data:, model_i18n_key:, attrib_name:)
       raise ArgumentError, "instance_data is required" if instance_data.nil?
+
       self.spec = spec
       self.host = host
       return if undefined?
@@ -32,6 +33,7 @@ module CustomFields
         if respond_to?(f.key) || respond_to?("#{f.key}?") || respond_to?("#{f.key}=")
           raise ArgumentError, "`#{f.key}` is a reserved attribute name"
         end
+
         define_singleton_method(f.key) { root[f.key] }
         define_singleton_method("#{f.key}?") { root[f.key] } if f.type == :boolean
         define_singleton_method("#{f.key}=") { |value| root[f.key] = value }
@@ -76,12 +78,14 @@ module CustomFields
 
     def valid?
       return true if undefined?
+
       root.valid?
     end
 
     # Returns a list of permitted keys in the form expected by strong params.
     def permitted
       return nil if undefined?
+
       {attrib_name => spec.permitted}
     end
   end

@@ -8,7 +8,7 @@ class CreateGDriveUnownedFiles < ActiveRecord::Migration[7.0]
       t.jsonb :data, null: false
 
       t.timestamps
-      t.index [:gdrive_config_id, :external_id], unique: true
+      t.index %i[gdrive_config_id external_id], unique: true
     end
   end
 end

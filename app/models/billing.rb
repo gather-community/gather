@@ -1,5 +1,5 @@
 module Billing
   def self.table_name_prefix
-    'billing_'
+    "billing_"
   end
 end

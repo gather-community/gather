@@ -72,6 +72,7 @@ module Wiki
 
     def create_new_version
       return unless saved_change_to_title? || saved_change_to_content? || comment.present?
+
       n = last_version_number
       v = versions.build
       v.attributes = attributes.slice(*(v.attribute_names - ["id"]))

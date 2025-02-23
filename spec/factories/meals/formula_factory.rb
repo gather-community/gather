@@ -36,7 +36,7 @@ FactoryBot.define do
       roles do
         [
           head_cook_role,
-          create(:meal_role, title: "Assistant Cook", community: community),
+          create(:meal_role, title: "Assistant Cook", community: community)
         ]
       end
     end

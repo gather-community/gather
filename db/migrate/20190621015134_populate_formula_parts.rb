@@ -20,10 +20,11 @@ class PopulateFormulaParts < ActiveRecord::Migration[5.1]
     Cluster.all.each do |cluster|
       ActsAsTenant.with_tenant(cluster) do
         Community.all.each do |community|
-          type_map = TYPES.map { |t| [t, meal_type_for_type(t, community)] }.to_h
+          type_map = TYPES.index_with { |t| meal_type_for_type(t, community) }
           community.meal_formulas.each do |formula|
             TYPES.each_with_index do |type_name, rank|
               next if (share = formula[type_name]).blank?
+
               share_formatted = formula.fixed_meal? ? share : share * 100
               Meals::FormulaPart.create!(formula: formula, type: type_map[type_name],
                                          share_formatted: share_formatted,

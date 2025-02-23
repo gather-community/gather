@@ -10,9 +10,10 @@ module Wiki
     # Sets data_fetch_error on first run if there is a problem fetching data
     def formatted_content
       return @formatted_content if defined?(@formatted_content)
+
       classes = ["wiki-content"]
       classes << "preview" if h.params[:preview]
-      @formatted_content = h.content_tag(:div, class: classes.join(" ")) do
+      @formatted_content = h.tag.div(class: classes.join(" ")) do
         # iframe tags are useful for embedding and should be generally safe especially in closed communities.
         h.safe_render_markdown(process_data(linkify(content)), extra_allowed_tags: %w[iframe])
       end
@@ -29,7 +30,7 @@ module Wiki
     end
 
     def revision_info
-      h.content_tag(:span, class: "wiki-page-revision-info") do
+      h.tag.span(class: "wiki-page-revision-info") do
         if updater
           h.t("wiki.revision_info", time: h.l(updated_at), user: updater.decorate.name_with_inactive)
         else
@@ -98,7 +99,7 @@ module Wiki
 
     def link_regex
       /\[\[                 # The opening [[
-        (?:([^\[\]\|]+)\|)? # An optional first segment with pipe, not capturing pipe
+        (?:([^\[\]|]+)\|)? # An optional first segment with pipe, not capturing pipe
         ([^\[\]]+)          # Another segment
         \]\]                # Closing ]]
         /x

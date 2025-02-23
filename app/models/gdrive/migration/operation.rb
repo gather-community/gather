@@ -7,15 +7,15 @@ module GDrive
 
       belongs_to :config, class_name: "GDrive::MigrationConfig", inverse_of: :operations
       has_many :scans, class_name: "GDrive::Migration::Scan",
-        inverse_of: :operation, dependent: :destroy
+                       inverse_of: :operation, dependent: :destroy
       has_many :files, class_name: "GDrive::Migration::File",
-        inverse_of: :operation, dependent: :destroy
+                       inverse_of: :operation, dependent: :destroy
       has_many :consent_requests, class_name: "GDrive::Migration::ConsentRequest",
-        inverse_of: :operation, dependent: :destroy
+                                  inverse_of: :operation, dependent: :destroy
       has_many :folder_maps, class_name: "GDrive::Migration::FolderMap",
-        inverse_of: :operation, dependent: :destroy
+                             inverse_of: :operation, dependent: :destroy
       has_many :logs, class_name: "GDrive::Migration::Log",
-        inverse_of: :operation, dependent: :destroy
+                      inverse_of: :operation, dependent: :destroy
 
       scope :in_community, ->(c) { joins(:config).where(gdrive_configs: {community_id: c.id}) }
       scope :active, -> { all }

@@ -18,7 +18,7 @@ FactoryBot.define do
 
     after(:build) do |job, ev|
       if job.shifts.empty?
-        (ev.shift_hours || [ev.hours_per_shift || ev.hours] * ev.shift_count).each_with_index do |hours, i|
+        (ev.shift_hours || ([ev.hours_per_shift || ev.hours] * ev.shift_count)).each_with_index do |hours, i|
           attribs = {
             job: job,
             hours: hours,

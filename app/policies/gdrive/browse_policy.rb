@@ -2,7 +2,7 @@
 
 module GDrive
   class BrowsePolicy < ApplicationPolicy
-    alias_method :item, :record
+    alias item record
 
     def index?
       true

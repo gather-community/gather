@@ -43,10 +43,10 @@ class ApplicationJob < ActiveJob::Base
   def with_object_in_cluster_context(klass: nil, class_name: nil, id: nil, attribs: nil)
     klass ||= class_name.constantize
     object = if id
-      load_object_without_tenant(klass, id)
-    else
-      build_object_without_tenant(klass, attribs)
-    end
+               load_object_without_tenant(klass, id)
+             else
+               build_object_without_tenant(klass, attribs)
+             end
     with_cluster(object.cluster) { yield(object) }
   end
 
@@ -58,18 +58,18 @@ class ApplicationJob < ActiveJob::Base
     ActsAsTenant.with_tenant(Cluster.find(attribs[:cluster_id])) { klass.new(attribs) }
   end
 
-  def each_community
+  def each_community(&block)
     Cluster.all.each do |cluster|
       with_cluster(cluster) do
-        cluster.communities.each { |cmty| yield(cmty) }
+        cluster.communities.each(&block)
       end
     end
   end
 
   # Sets tenant and timezone for the given cluster.
-  def with_cluster(cluster)
+  def with_cluster(cluster, &block)
     ActsAsTenant.with_tenant(cluster) do
-      with_cluster_timezone(cluster) { yield }
+      with_cluster_timezone(cluster, &block)
     end
   end
 

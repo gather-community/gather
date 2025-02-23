@@ -12,6 +12,7 @@ module Work
     # Rounds to the next .5 and displays fractional part only if nonzero
     def round_next_half(num)
       return nil if num.blank?
+
       to_int_if_no_fractional_part((num * 2).ceil.to_f / 2)
     end
   end

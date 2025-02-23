@@ -71,8 +71,8 @@ describe WorkMailer do
 
         it do
           expect(mail.subject).to eq("Job Choosing is Coming Up!")
-          expect(mail.body.encoded).to include("You have 5 pre-assigned hours and your quota is 15.5, "\
-            "so you need to choose 10.5 regular hours.")
+          expect(mail.body.encoded).to include("You have 5 pre-assigned hours and your quota is 15.5, " \
+                                               "so you need to choose 10.5 regular hours.")
           expect(mail.body.encoded).to include("You are also expected to choose 4 Junk hours.")
           expect(mail.body.encoded).to include("You can begin choosing at 7:00pm.\r\n\r\nGo to")
           expect(mail.body.encoded).to have_correct_shifts_url(Defaults.community)
@@ -81,13 +81,14 @@ describe WorkMailer do
 
       context "multiple rounds" do
         let(:rounds) do
-          [{starts_at: period.auto_open_time, limit: 10}, {starts_at: period.auto_open_time + 300, limit: 20}]
+          [{starts_at: period.auto_open_time, limit: 10},
+           {starts_at: period.auto_open_time + 300, limit: 20}]
         end
 
         it do
-          expect(mail.body.encoded).to include("Your round schedule is as follows:\r\n"\
-            "* At 7:00pm you can choose up to 10 hours.\r\n"\
-            "* At 7:05pm you can choose up to 20 hours.")
+          expect(mail.body.encoded).to include("Your round schedule is as follows:\r\n" \
+                                               "* At 7:00pm you can choose up to 10 hours.\r\n" \
+                                               "* At 7:05pm you can choose up to 20 hours.")
         end
       end
     end

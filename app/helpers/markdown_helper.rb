@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module MarkdownHelper
-  def safe_render_markdown(str, **options)
-    Utils::Markdowner.instance.render(str, **options)
+  def safe_render_markdown(str, **)
+    Utils::Markdowner.instance.render(str, **)
   end
 end

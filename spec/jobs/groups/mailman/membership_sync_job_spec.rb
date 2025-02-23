@@ -54,16 +54,16 @@ describe Groups::Mailman::MembershipSyncJob do
     it "calls correct api methods" do
       expect(api).to receive(:correct_email?, &with_obj_attribs(email: "a@a.com")).once.and_return(true)
       expect(api).to receive(:create_membership, &with_obj_attribs(user_remote_id: "111",
-        list_id: "list1.blah", role: "member"))
+                                                                   list_id: "list1.blah", role: "member"))
 
       expect(api).to receive(:create_membership, &with_obj_attribs(user_remote_id: "111",
-        list_id: "list2.blah", role: "owner"))
+                                                                   list_id: "list2.blah", role: "owner"))
 
       expect(api).to receive(:delete_membership, &with_obj_attribs(user_remote_id: "111",
-        list_id: "list2.blah", role: "moderator"))
+                                                                   list_id: "list2.blah", role: "moderator"))
 
       expect(api).to receive(:delete_membership, &with_obj_attribs(user_remote_id: "111",
-        list_id: "list4.blah", role: "member"))
+                                                                   list_id: "list4.blah", role: "member"))
       perform_job
     end
   end
@@ -125,17 +125,17 @@ describe Groups::Mailman::MembershipSyncJob do
         # This will stay and go in additional_senders since it doesn't match an email in our database
         # and has moderation action accept.
         build_mship(remote_id: "f55", mailman_user: mm_user10, list_id: "list3.blah",
-          role: "nonmember", moderation_action: "accept"),
+                    role: "nonmember", moderation_action: "accept"),
 
         # This will stay and go in additional_senders since it doesn't match an email in our database
         # and has moderation action defer.
         build_mship(remote_id: "f66", mailman_user: mm_user11, list_id: "list3.blah",
-          role: "nonmember", moderation_action: "defer"),
+                    role: "nonmember", moderation_action: "defer"),
 
         # This will be ignored since it doesn't match an email in our database
         # and has moderation action reject.
         build_mship(remote_id: "f77", mailman_user: mm_user12, list_id: "list3.blah",
-          role: "nonmember", moderation_action: "reject")
+                    role: "nonmember", moderation_action: "reject")
       ]
     end
     subject(:job) { described_class.new("Groups::Mailman::List", mm_list.id) }
@@ -148,19 +148,19 @@ describe Groups::Mailman::MembershipSyncJob do
     it "calls correct api methods" do
       expect(api).to receive(:correct_email?, &with_obj_attribs(email: "y@y.com")).and_return(true)
       expect(api).to receive(:create_membership, &with_obj_attribs(user_remote_id: "000",
-        list_id: "list3.blah", role: "member"))
+                                                                   list_id: "list3.blah", role: "member"))
 
       expect(api).to receive(:user_id_for_email, &with_obj_attribs(email: "a@a.com")).and_return("222")
       expect(api).to receive(:correct_email?, &with_obj_attribs(email: "a@a.com")).and_return(false)
       expect(api).to receive(:update_user, &with_obj_attribs(email: "a@a.com"))
       expect(api).to receive(:create_membership, &with_obj_attribs(user_remote_id: "222",
-        list_id: "list3.blah", role: "member"))
+                                                                   list_id: "list3.blah", role: "member"))
 
       expect(api).to receive(:user_id_for_email, &with_obj_attribs(email: "b@b.com")).and_return(nil)
       expect(api).to receive(:create_user).with(mm_user5).and_return("333")
       expect(api).to receive(:correct_email?, &with_obj_attribs(email: "b@b.com")).and_return(true)
       expect(api).to receive(:create_membership, &with_obj_attribs(user_remote_id: "333",
-        list_id: "list3.blah", role: "member"))
+                                                                   list_id: "list3.blah", role: "member"))
 
       expect(api).to receive(:delete_membership, &with_obj_attribs(remote_id: "f33"))
       expect(api).to receive(:delete_membership, &with_obj_attribs(remote_id: "f44"))

@@ -8,12 +8,12 @@ class Foo
 
   attr_accessor :id, :name
 
-  def ==(o)
-    o.is_a?(Foo) && o.id == id
+  def ==(other)
+    other.is_a?(Foo) && other.id == id
   end
 
-  def eql?(o)
-    o == self
+  def eql?(other)
+    other == self
   end
 
   delegate :hash, to: :id

@@ -16,7 +16,7 @@ module GDrive
         path = h.gdrive_browse_path(anc.id, drive: is_drive ? 1 : nil)
         h.link_to(anc.name, path)
       end
-      safe_join(anchors, h.content_tag(:span, " > ", class: "divider"))
+      safe_join(anchors, h.tag.span(" > ", class: "divider"))
     end
   end
 end

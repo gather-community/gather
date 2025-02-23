@@ -18,7 +18,7 @@ module Subscription
     end
 
     def total_per_invoice
-      quantity * price_per_user_cents * months_per_period * (1 - (discount_percent || 0) / 100)
+      quantity * price_per_user_cents * months_per_period * (1 - ((discount_percent || 0) / 100))
     end
 
     def future?

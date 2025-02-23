@@ -9,7 +9,7 @@ module GDrive
       attr_reader :total, :by_status, :by_owner, :by_owner_and_status, :owners, :consent_requests_by_owner
 
       def initialize(...)
-        super(...)
+        super
 
         base_query = GDrive::Migration::File.where(operation: operation)
         @total = base_query.count

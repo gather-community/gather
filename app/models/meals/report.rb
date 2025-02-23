@@ -4,6 +4,7 @@ module Meals
   # Calculates a bunch of statistics about the meals system.
   class Report # rubocop:disable Metrics/ClassLength
     attr_accessor :type_map, :community, :range
+
     SUNDAY = Date.parse("Sunday")
 
     def initialize(community, range: nil)
@@ -37,7 +38,7 @@ module Meals
           month, max = months.minmax
           while month <= max
             result[month] = by_month[month] || {}
-            month = month >> 1
+            month >>= 1
           end
         end
       end
@@ -117,10 +118,10 @@ module Meals
       prev_month_range = Time.zone.today.prev_month.beginning_of_month..
         Time.zone.today.prev_month.end_of_month
       range_end = if Meal.hosted_by(community).where(served_at: prev_month_range).finalizable.any?
-        Time.zone.today.prev_month.prev_month.end_of_month
-      else
-        Time.zone.today.prev_month.end_of_month
-      end
+                    Time.zone.today.prev_month.prev_month.end_of_month
+                  else
+                    Time.zone.today.prev_month.end_of_month
+                  end
       range_end.prev_year.next_month.beginning_of_month..range_end
     end
 
@@ -187,6 +188,7 @@ module Meals
     # rubocop:disable Metrics/MethodLength
     def type_or_category_query(col_name:)
       return [] if empty?
+
       where_expr, vars = meal_cmty_where_expr
       ttl_meals = by_month[:all]["ttl_meals"]
       avg_servings = by_month[:all]["avg_servings"]
@@ -240,7 +242,7 @@ module Meals
     def community_avg_exprs
       communities.map do |c|
         "AVG(ttl_from_#{c.id})::real AS avg_from_#{c.id}, " \
-        "(AVG(ttl_from_#{c.id}) * 100 / AVG(signup_ttls.ttl_servings))::real AS avg_from_#{c.id}_pct"
+          "(AVG(ttl_from_#{c.id}) * 100 / AVG(signup_ttls.ttl_servings))::real AS avg_from_#{c.id}_pct"
       end.join(",\n")
     end
 

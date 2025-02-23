@@ -137,7 +137,7 @@ VSCode is recommended with the following extensions:
 - RuboCop
 - ESLint
 
-All should be configured to format on save.
+All should be configured to format on save. There are some VSCode settings in the `.vscode` folder in the project.
 
 ### Troubleshooting
 

@@ -67,12 +67,17 @@ module Groups
       end
 
       # Assumes list_mship has an associated user remote_id.
-      def create_membership(list_mship)
-        request("members", :post, list_id: list_mship.list_id, subscriber: list_mship.subscriber,
-          role: list_mship.role, pre_verified: "true", pre_confirmed: "true",
-          pre_approved: "true")
+      def create_membership(list_mship, pre_approved: true)
+        data = {list_id: list_mship.list_id, subscriber: list_mship.subscriber,
+                role: list_mship.role, pre_verified: "true", pre_confirmed: "true"}
+        data[:pre_approved] = "true" if pre_approved
+        request("members", :post, **data)
       rescue ApiRequestError => e
-        raise e unless /Member already subscribed|is already/.match?(e.response.body)
+        if /Member already subscribed|is already/.match?(e.response.body)
+          Rails.logger.info("Member already subscribed")
+        elsif /Subscription request already pending/.match?(e.response.body)
+          accept_existing_subscription_request(list_mship, e)
+        end
       end
 
       # Assumes remote_id is set on list_mship
@@ -197,6 +202,25 @@ module Groups
         rescue ApiRequestError => e
           raise e unless /Member already subscribed|is already/.match?(e.response.body)
         end
+      end
+
+      def accept_existing_subscription_request(list_mship, error_409)
+        response = request("lists/#{list_mship.list_id}/requests", include_empty_json_object: true)
+        sub_requests = response["entries"].select { |e| e["email"] == list_mship.email }
+
+        if sub_requests.size > 1
+          Rails.logger.warn("There are more than 1 pending subscription request for #{list_mship.email}. " \
+            "This should not happen.", json: response["entries"])
+        elsif sub_requests.size == 0
+          raise ApiRequestError.new(
+            request: error_409.request,
+            response: error_409.response,
+            message: "Mailman membership sync: No matching subscription requests despite 409 conflict"
+          )
+        end
+
+        token = sub_requests[0]["token"]
+        request("lists/#{list_mship.list_id}/requests/#{token}", :post, action: "accept")
       end
 
       def request(endpoint, method = :get, include_empty_json_object: false, **data)

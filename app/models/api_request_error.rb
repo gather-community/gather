@@ -4,8 +4,8 @@
 class ApiRequestError < StandardError
   attr_accessor :request, :response, :storytime
 
-  def initialize(request:, response:)
-    super("API request failed: #{request.method.upcase} #{request.path}")
+  def initialize(request:, response:, message: nil)
+    super(message || "API request failed: #{request.method.upcase} #{request.path}")
     self.request = request
     self.response = response
     self.storytime = {

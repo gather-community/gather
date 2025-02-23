@@ -131,13 +131,11 @@ We use:
 
 - rubocop (Ruby)
 - eslint (JS/TS)
-- scss_lint (SCSS)
 
 VSCode is recommended with the following extensions:
 
 - RuboCop
 - ESLint
-- scss-lint
 
 All should be configured to format on save.
 

@@ -1,4 +1,4 @@
-export const jsonFetch = async (resource: string, options: {[key: string]: unknown}): Promise<{[key: string]: any} | null> => {
+export const jsonFetch = async(resource: string, options: {[key: string]: unknown}): Promise<{[key: string]: any} | null> => {
   options.headers = options.headers || {};
   options.headers["Content-Type"] = "application/json";
 

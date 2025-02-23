@@ -1,4 +1,4 @@
-import { Controller } from "@hotwired/stimulus";
+import {Controller} from "@hotwired/stimulus";
 
 export default class extends Controller<HTMLFormElement> {
   static values = {
@@ -8,7 +8,7 @@ export default class extends Controller<HTMLFormElement> {
     returnUrl: String,
     acssDebitMode: Boolean,
   };
-  static targets = ['submitButton', 'form'];
+  static targets = ["submitButton", "form"];
 
   declare publishableKeyValue: string;
   declare clientSecretValue: string;
@@ -20,7 +20,7 @@ export default class extends Controller<HTMLFormElement> {
 
   connect(): void {
     this.stripe = Stripe(this.publishableKeyValue);
-    console.log(this.acssDebitModeValue)
+    console.log(this.acssDebitModeValue);
     if (this.acssDebitModeValue) {
       this.showSubmitButton();
     } else {
@@ -29,20 +29,22 @@ export default class extends Controller<HTMLFormElement> {
   }
 
   initPaymentElement(): void {
-    const options = { clientSecret: this.clientSecretValue };
+    const options = {clientSecret: this.clientSecretValue};
     this.elements = this.stripe.elements(options);
-    const paymentElement = this.elements.create('payment', {
-      fields: { billingDetails: { email: 'never' } },
-      // This is mainly to show us_bank_account first
-      // Also card is likely to be more useful for communities than wallets, so we put that first.
-      paymentMethodOrder: ['us_bank_account', 'card']
+    const paymentElement = this.elements.create("payment", {
+      fields: {billingDetails: {email: "never"}},
+      /*
+       * This is mainly to show us_bank_account first
+       * Also card is likely to be more useful for communities than wallets, so we put that first.
+       */
+      paymentMethodOrder: ["us_bank_account", "card"]
     });
-    paymentElement.on('ready', this.showSubmitButton.bind(this));
-    paymentElement.mount('#payment-element');
+    paymentElement.on("ready", this.showSubmitButton.bind(this));
+    paymentElement.mount("#payment-element");
   }
 
   showSubmitButton(): void {
-    this.submitButtonTarget.classList.remove('hiding');
+    this.submitButtonTarget.classList.remove("hiding");
   }
 
   async handleSubmit(event: Event): Promise<T> {
@@ -55,17 +57,17 @@ export default class extends Controller<HTMLFormElement> {
   }
 
   async handleAcssDebitSubmit(): Promise<T> {
-    const accountHolder = this.formTarget['payment[accountholder_name]'].value.trim();
+    const accountHolder = this.formTarget["payment[accountholder_name]"].value.trim();
 
-    if (accountHolder === '') {
-      alert('Please specify the accountholder name.');
+    if (accountHolder === "") {
+      alert("Please specify the accountholder name.");
       return;
     }
 
-    document.getElementById('glb-load-ind').classList.remove('hiding');
+    document.getElementById("glb-load-ind").classList.remove("hiding");
     const confirmFunction = this.clientSecretValue.startsWith("pi_") ?
       this.stripe.confirmAcssDebitPayment : this.stripe.confirmAcssDebitSetup;
-    const { paymentIntent, error } = await confirmFunction(
+    const {paymentIntent, error} = await confirmFunction(
       this.clientSecretValue,
       {
         payment_method: {
@@ -77,7 +79,7 @@ export default class extends Controller<HTMLFormElement> {
       }
     );
     if (error) {
-      document.getElementById('glb-load-ind').classList.add('hiding');
+      document.getElementById("glb-load-ind").classList.add("hiding");
       console.log(error.message);
     } else {
       window.location.href = this.returnUrlValue;
@@ -97,6 +99,6 @@ export default class extends Controller<HTMLFormElement> {
           }
         }
       }
-  });
+    });
   }
 }

@@ -27,10 +27,10 @@ export default class extends Controller<HTMLFormElement> {
   declare orgUserIdValue: string;
   declare gapiLoaded: boolean;
 
-  declare readonly instructionsTarget: HTMLElement
-  declare readonly loaderTarget: HTMLElement
-  declare readonly progressTarget: HTMLElement
-  declare readonly totalTarget: HTMLElement
+  declare readonly instructionsTarget: HTMLElement;
+  declare readonly loaderTarget: HTMLElement;
+  declare readonly progressTarget: HTMLElement;
+  declare readonly totalTarget: HTMLElement;
 
   declare pollingInterval: number;
 
@@ -39,9 +39,11 @@ export default class extends Controller<HTMLFormElement> {
       this.gapiLoaded = true;
     });
 
-    // If ingest is in progress, we want to behave as if the
-    // user had clicked the ingest button.
-    if (this.ingestInitialStatusValue === 'new' || this.ingestInitialStatusValue === 'in_progress') {
+    /*
+     * If ingest is in progress, we want to behave as if the
+     * user had clicked the ingest button.
+     */
+    if (this.ingestInitialStatusValue === "new" || this.ingestInitialStatusValue === "in_progress") {
       this.startPollingForIngestStatus();
     }
   }
@@ -65,7 +67,7 @@ export default class extends Controller<HTMLFormElement> {
       .setAppId(this.appId)
       .setOAuthToken(this.accessTokenValue)
       .addView(view)
-      .setTitle(`Please select all files. Hold the SHIFT key while clicking to select multiple files.`)
+      .setTitle("Please select all files. Hold the SHIFT key while clicking to select multiple files.")
       .setMaxItems(100)
       .setCallback(this.callback.bind(this))
       .build();
@@ -84,8 +86,8 @@ export default class extends Controller<HTMLFormElement> {
   }
 
   startPollingForIngestStatus(): void {
-    this.instructionsTarget.style.display = 'none';
-    this.loaderTarget.style.display = 'block';
+    this.instructionsTarget.style.display = "none";
+    this.loaderTarget.style.display = "block";
     this.pollingInterval = setInterval(this.pollForIngestStatus.bind(this), 2000);
   }
 
@@ -94,11 +96,11 @@ export default class extends Controller<HTMLFormElement> {
       method: "GET"
     });
 
-    if (result.status === 'done' || result.status === 'failed') {
+    if (result.status === "done" || result.status === "failed") {
       clearInterval(this.pollingInterval);
-      this.loaderTarget.style.display = 'none';
+      this.loaderTarget.style.display = "none";
       this.instructionsTarget.innerHTML = result.instructions;
-      this.instructionsTarget.style.display = '';
+      this.instructionsTarget.style.display = "";
     } else {
       this.setProgress(result.progress, result.total);
     }

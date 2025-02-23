@@ -1,20 +1,22 @@
-import { Controller } from "@hotwired/stimulus";
+import {Controller} from "@hotwired/stimulus";
 
-// We should move to i18n-js v4 later, which would let us get rid of this
-// gross global declaration. But to do that, we'd have to figure out how
-// to use npm packages in the legacy Backbone JS stuff since that uses
-// i18n-js too.
+/*
+ * We should move to i18n-js v4 later, which would let us get rid of this
+ * gross global declaration. But to do that, we'd have to figure out how
+ * to use npm packages in the legacy Backbone JS stuff since that uses
+ * i18n-js too.
+ */
 declare global {
   var I18n: {t(key:string, params:{}): string};
 }
 
 export default class extends Controller<HTMLFormElement> {
-  static targets = ['allSelected', 'item'];
+  static targets = ["allSelected", "item"];
 
   declare allSelectedTarget: HTMLFormElement;
   declare itemTargets: Array<HTMLFormElement>;
 
-  actionClicked (event: Event): void {
+  actionClicked(event: Event): void {
     if (event.currentTarget instanceof HTMLElement) {
       const scope = event.currentTarget.dataset.scope;
       const key = event.currentTarget.dataset.key;
@@ -24,7 +26,7 @@ export default class extends Controller<HTMLFormElement> {
 
       if (selectedIds.length == 0) {
         event.preventDefault();
-        return
+        return;
       }
 
       const confirmation = I18n.t(`batchable_tables.confirmations.${scope}.${key}`, {count: selectedIds.length});
@@ -36,11 +38,11 @@ export default class extends Controller<HTMLFormElement> {
     }
   }
 
-  allSelectedClicked (event: Event): void {
+  allSelectedClicked(event: Event): void {
     this.selectAllItems(this.allSelectedTarget.checked);
   }
 
-  itemClicked (event: Event): void {
+  itemClicked(event: Event): void {
     this.allSelectedTarget.checked = this.allAreSelected();
   }
 

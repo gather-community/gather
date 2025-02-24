@@ -19,6 +19,31 @@ module GDrive
   # on the Google side for each item, and then re-sync all the permissions.
   # This would take a bit of time, but it would be a one-time thing. I am not
   # going to build out the re-sync code for now since it might not even
+# == Schema Information
+#
+# Table name: gdrive_synced_permissions
+#
+#  id                                                                                                                                                             :bigint           not null, primary key
+#  access_level                                                                                                                                                   :string(32)       not null
+#  google_email                                                                                                                                                   :string(256)      not null
+#  created_at                                                                                                                                                     :datetime         not null
+#  updated_at                                                                                                                                                     :datetime         not null
+#  cluster_id                                                                                                                                                     :bigint           not null
+#  external_id                                                                                                                                                    :string           not null
+#  item_external_id                                                                                                                                               :string(128)      not null
+#  item_id(Deliberately not a foreign key because we want to retain ID information even after item record destroyed so we can search by ID in PermissionSyncJob.) :integer          not null
+#  user_id(Deliberately not a foreign key because we want to retain ID information even after user record destroyed so we can search by ID in PermissionSyncJob.) :integer          not null
+#
+# Indexes
+#
+#  index_gdrive_synced_permissions_on_cluster_id  (cluster_id)
+#  index_gdrive_synced_permissions_on_item_id     (item_id)
+#  index_gdrive_synced_permissions_on_user_id     (user_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (cluster_id => clusters.id)
+#
   # become an issue.
   class SyncedPermission < ApplicationRecord
     acts_as_tenant :cluster

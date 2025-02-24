@@ -1,5 +1,33 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: work_shifts
+#
+#  id                :bigint           not null, primary key
+#  assignments_count :integer          default(0), not null
+#  ends_at           :datetime
+#  slots             :integer          not null
+#  starts_at         :datetime
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#  cluster_id        :bigint           not null
+#  job_id            :integer          not null
+#  meal_id           :integer
+#
+# Indexes
+#
+#  index_work_shifts_on_cluster_id                        (cluster_id)
+#  index_work_shifts_on_job_id                            (job_id)
+#  index_work_shifts_on_job_id_and_starts_at_and_ends_at  (job_id,starts_at,ends_at) UNIQUE
+#  index_work_shifts_on_meal_id                           (meal_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (cluster_id => clusters.id)
+#  fk_rails_...  (job_id => work_jobs.id)
+#  fk_rails_...  (meal_id => meals.id)
+#
 module Work
   class SlotsExceededError < StandardError; end
   class RoundLimitExceededError < StandardError; end

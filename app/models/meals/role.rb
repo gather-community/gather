@@ -1,6 +1,37 @@
 # frozen_string_literal: true
 
 module Meals
+# == Schema Information
+#
+# Table name: meal_roles
+#
+#  id                     :bigint           not null, primary key
+#  count_per_meal         :integer          default(1), not null
+#  deactivated_at         :datetime
+#  description            :text             not null
+#  double_signups_allowed :boolean          default(FALSE)
+#  shift_end              :integer
+#  shift_start            :integer
+#  special                :string(32)
+#  time_type              :string(32)       default("date_time"), not null
+#  title                  :string(128)      not null
+#  work_hours             :decimal(6, 2)
+#  work_job_title         :string(128)
+#  created_at             :datetime         not null
+#  updated_at             :datetime         not null
+#  cluster_id             :integer          not null
+#  community_id           :integer          not null
+#
+# Indexes
+#
+#  index_meal_roles_on_cluster_id                             (cluster_id)
+#  index_meal_roles_on_cluster_id_and_community_id_and_title  (cluster_id,community_id,title) WHERE (deactivated_at IS NULL)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (cluster_id => clusters.id)
+#  fk_rails_...  (community_id => communities.id)
+#
   # Meal roles are types of jobs for meals like head cook, assistant cook, etc.
   class Role < ApplicationRecord
     include Wisper.model

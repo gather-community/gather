@@ -1,6 +1,31 @@
 # frozen_string_literal: true
 
 module Work
+# == Schema Information
+#
+# Table name: work_assignments
+#
+#  id          :bigint           not null, primary key
+#  preassigned :boolean          default(FALSE), not null
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  cluster_id  :integer          not null
+#  shift_id    :integer          not null
+#  user_id     :integer          not null
+#
+# Indexes
+#
+#  index_work_assignments_on_cluster_id                           (cluster_id)
+#  index_work_assignments_on_cluster_id_and_shift_id_and_user_id  (cluster_id,shift_id,user_id)
+#  index_work_assignments_on_shift_id                             (shift_id)
+#  index_work_assignments_on_user_id                              (user_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (cluster_id => clusters.id)
+#  fk_rails_...  (shift_id => work_shifts.id)
+#  fk_rails_...  (user_id => users.id)
+#
   # Models a single signup for a single shift.
   class Assignment < ApplicationRecord
     include Wisper.model

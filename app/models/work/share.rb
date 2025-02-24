@@ -1,6 +1,31 @@
 # frozen_string_literal: true
 
 module Work
+# == Schema Information
+#
+# Table name: work_shares
+#
+#  id         :bigint           not null, primary key
+#  portion    :decimal(4, 3)    default(1.0), not null
+#  priority   :boolean          default(FALSE), not null
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  cluster_id :integer          not null
+#  period_id  :integer          not null
+#  user_id    :integer          not null
+#
+# Indexes
+#
+#  index_work_shares_on_period_id              (period_id)
+#  index_work_shares_on_period_id_and_user_id  (period_id,user_id) UNIQUE
+#  index_work_shares_on_user_id                (user_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (cluster_id => clusters.id)
+#  fk_rails_...  (period_id => work_periods.id)
+#  fk_rails_...  (user_id => users.id)
+#
   # A share describes what portion of the full workload a particular user is responsible for.
   class Share < ApplicationRecord
     acts_as_tenant :cluster

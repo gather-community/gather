@@ -1,5 +1,38 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: accounts
+#
+#  id                 :integer          not null, primary key
+#  balance_due        :decimal(10, 2)   default(0.0), not null
+#  credit_limit       :decimal(10, 2)
+#  current_balance    :decimal(10, 2)   default(0.0), not null
+#  due_last_statement :decimal(10, 2)
+#  last_statement_on  :date
+#  total_new_charges  :decimal(10, 2)   default(0.0), not null
+#  total_new_credits  :decimal(10, 2)   default(0.0), not null
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
+#  cluster_id         :integer          not null
+#  community_id       :integer          not null
+#  household_id       :integer          not null
+#  last_statement_id  :integer
+#
+# Indexes
+#
+#  index_accounts_on_cluster_id                     (cluster_id)
+#  index_accounts_on_community_id                   (community_id)
+#  index_accounts_on_community_id_and_household_id  (community_id,household_id) UNIQUE
+#  index_accounts_on_household_id                   (household_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (cluster_id => clusters.id)
+#  fk_rails_...  (community_id => communities.id)
+#  fk_rails_...  (household_id => households.id)
+#  fk_rails_...  (last_statement_id => statements.id)
+#
 module Billing
   class Account < ApplicationRecord
     RECENT_STATEMENT_WINDOW = 24.hours

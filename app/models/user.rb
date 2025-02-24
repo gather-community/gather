@@ -22,6 +22,75 @@
 #    email must be added, still unconfirmed, sent sign in invite, etc.
 # 7. Directory-only child created with email, not confirmed, can't sign in, later converted to full access,
 #    sent sign in invite, signs in, is confirmed
+# == Schema Information
+#
+# Table name: users
+#
+#  id                     :integer          not null, primary key
+#  allergies              :string
+#  birthdate              :date
+#  calendar_token         :string
+#  child                  :boolean          default(FALSE), not null
+#  confirmation_sent_at   :datetime
+#  confirmation_token     :string
+#  confirmed_at           :datetime
+#  current_sign_in_at     :datetime
+#  current_sign_in_ip     :inet
+#  custom_data            :jsonb            not null
+#  deactivated_at         :datetime
+#  doctor                 :string
+#  email                  :string(255)
+#  encrypted_password     :string           default(""), not null
+#  fake                   :boolean          default(FALSE), not null
+#  first_name             :string           not null
+#  full_access            :boolean          default(TRUE), not null
+#  google_email           :string(255)
+#  home_phone             :string
+#  joined_on              :date
+#  last_name              :string           not null
+#  last_sign_in_at        :datetime
+#  last_sign_in_ip        :inet
+#  medical                :text
+#  mobile_phone           :string
+#  paypal_email           :string(255)
+#  preferred_contact      :string
+#  privacy_settings       :jsonb            not null
+#  pronouns               :string(24)
+#  provider               :string
+#  remember_created_at    :datetime
+#  remember_token         :string
+#  reset_password_sent_at :datetime
+#  reset_password_token   :string
+#  school                 :string
+#  settings               :jsonb            not null
+#  sign_in_count          :integer          default(0), not null
+#  uid                    :string
+#  unconfirmed_email      :string(255)
+#  work_phone             :string
+#  created_at             :datetime         not null
+#  updated_at             :datetime         not null
+#  alternate_id           :string
+#  cluster_id             :integer          not null
+#  household_id           :integer          not null
+#  job_choosing_proxy_id  :integer
+#
+# Indexes
+#
+#  index_users_on_alternate_id          (alternate_id)
+#  index_users_on_cluster_id            (cluster_id)
+#  index_users_on_confirmation_token    (confirmation_token) UNIQUE
+#  index_users_on_deactivated_at        (deactivated_at)
+#  index_users_on_email                 (email) UNIQUE
+#  index_users_on_google_email          (google_email) UNIQUE
+#  index_users_on_household_id          (household_id)
+#  index_users_on_reset_password_token  (reset_password_token) UNIQUE
+#
+# Foreign Keys
+#
+#  fk_rails_...  (cluster_id => clusters.id)
+#  fk_rails_...  (household_id => households.id)
+#  fk_rails_...  (job_choosing_proxy_id => users.id)
+#
 class User < ApplicationRecord
   include Wisper.model
   include AttachmentFormable

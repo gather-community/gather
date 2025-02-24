@@ -1,6 +1,43 @@
 # frozen_string_literal: true
 
 module Work
+# == Schema Information
+#
+# Table name: work_periods
+#
+#  id                    :bigint           not null, primary key
+#  auto_open_time        :datetime
+#  ends_on               :date             not null
+#  max_rounds_per_worker :integer
+#  meal_job_sync         :boolean          default(FALSE), not null
+#  name                  :string           not null
+#  phase                 :string           default("draft"), not null
+#  pick_type             :string           default("free_for_all"), not null
+#  quota                 :decimal(10, 2)   default(0.0), not null
+#  quota_type            :string           default("none"), not null
+#  round_duration        :integer
+#  starts_on             :date             not null
+#  workers_per_round     :integer
+#  created_at            :datetime         not null
+#  updated_at            :datetime         not null
+#  cluster_id            :integer          not null
+#  community_id          :integer          not null
+#  meal_job_requester_id :bigint
+#
+# Indexes
+#
+#  index_work_periods_on_cluster_id             (cluster_id)
+#  index_work_periods_on_community_id           (community_id)
+#  index_work_periods_on_community_id_and_name  (community_id,name) UNIQUE
+#  index_work_periods_on_meal_job_requester_id  (meal_job_requester_id)
+#  index_work_periods_on_starts_on_and_ends_on  (starts_on,ends_on)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (cluster_id => clusters.id)
+#  fk_rails_...  (community_id => communities.id)
+#  fk_rails_...  (meal_job_requester_id => groups.id)
+#
   # A subdivision of the community's work program based on a period of time.
   class Period < ApplicationRecord
     include Wisper.model

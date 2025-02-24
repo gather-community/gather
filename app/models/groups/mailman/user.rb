@@ -1,5 +1,27 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: group_mailman_users
+#
+#  id         :bigint           not null, primary key
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  cluster_id :bigint           not null
+#  remote_id  :string           not null
+#  user_id    :bigint           not null
+#
+# Indexes
+#
+#  index_group_mailman_users_on_cluster_id  (cluster_id)
+#  index_group_mailman_users_on_remote_id   (remote_id) UNIQUE
+#  index_group_mailman_users_on_user_id     (user_id) UNIQUE
+#
+# Foreign Keys
+#
+#  fk_rails_...  (cluster_id => clusters.id)
+#  fk_rails_...  (user_id => users.id)
+#
 module Groups
   module Mailman
     # Wrapper class that links a mailman user to a Gather user

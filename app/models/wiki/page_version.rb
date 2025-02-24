@@ -1,5 +1,32 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: wiki_page_versions
+#
+#  id         :integer          not null, primary key
+#  comment    :string
+#  content    :text
+#  number     :integer          not null
+#  title      :string           not null
+#  updated_at :datetime         not null
+#  cluster_id :integer          not null
+#  page_id    :integer          not null
+#  updater_id :integer
+#
+# Indexes
+#
+#  index_wiki_page_versions_on_cluster_id          (cluster_id)
+#  index_wiki_page_versions_on_page_id             (page_id)
+#  index_wiki_page_versions_on_page_id_and_number  (page_id,number) UNIQUE
+#  index_wiki_page_versions_on_updater_id          (updater_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (cluster_id => clusters.id)
+#  fk_rails_...  (page_id => wiki_pages.id)
+#  fk_rails_...  (updater_id => users.id)
+#
 module Wiki
   class PageVersion < ApplicationRecord
     acts_as_tenant :cluster

@@ -1,6 +1,33 @@
 # frozen_string_literal: true
 
 module Meals
+# == Schema Information
+#
+# Table name: meal_assignments
+#
+#  id                       :integer          not null, primary key
+#  cook_menu_reminder_count :integer          default(0), not null
+#  created_at               :datetime         not null
+#  updated_at               :datetime         not null
+#  cluster_id               :integer          not null
+#  meal_id                  :integer          not null
+#  role_id                  :bigint           not null
+#  user_id                  :integer          not null
+#
+# Indexes
+#
+#  index_meal_assignments_on_cluster_id  (cluster_id)
+#  index_meal_assignments_on_meal_id     (meal_id)
+#  index_meal_assignments_on_role_id     (role_id)
+#  index_meal_assignments_on_user_id     (user_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (cluster_id => clusters.id)
+#  fk_rails_...  (meal_id => meals.id)
+#  fk_rails_...  (role_id => meal_roles.id)
+#  fk_rails_...  (user_id => users.id)
+#
   # Models an assignment of a worker to a meal for a meal role.
   class Assignment < ApplicationRecord
     include Wisper.model

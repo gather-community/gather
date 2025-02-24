@@ -1,6 +1,34 @@
 # frozen_string_literal: true
 
 module Meals
+# == Schema Information
+#
+# Table name: meal_signups
+#
+#  id           :integer          not null, primary key
+#  comments     :text
+#  notified     :boolean          default(FALSE), not null
+#  takeout      :boolean          default(FALSE), not null
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  cluster_id   :integer          not null
+#  household_id :integer          not null
+#  meal_id      :integer          not null
+#
+# Indexes
+#
+#  index_meal_signups_on_cluster_id                (cluster_id)
+#  index_meal_signups_on_household_id              (household_id)
+#  index_meal_signups_on_household_id_and_meal_id  (household_id,meal_id) UNIQUE
+#  index_meal_signups_on_meal_id                   (meal_id)
+#  index_meal_signups_on_notified                  (notified)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (cluster_id => clusters.id)
+#  fk_rails_...  (household_id => households.id)
+#  fk_rails_...  (meal_id => meals.id)
+#
   # Models information about one household's attendance at a meal.
   class Signup < ApplicationRecord
     MAX_COMMENT_LENGTH = 500

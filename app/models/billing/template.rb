@@ -1,6 +1,29 @@
 # frozen_string_literal: true
 
 module Billing
+# == Schema Information
+#
+# Table name: billing_templates
+#
+#  id           :bigint           not null, primary key
+#  code         :string(16)       not null
+#  description  :string(255)      not null
+#  value        :decimal(10, 2)   not null
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  cluster_id   :bigint           not null
+#  community_id :bigint           not null
+#
+# Indexes
+#
+#  index_billing_templates_on_cluster_id    (cluster_id)
+#  index_billing_templates_on_community_id  (community_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (cluster_id => clusters.id)
+#  fk_rails_...  (community_id => communities.id)
+#
   # Represents a template of a transaction from which transactions can be created.
   class Template < ApplicationRecord
     include Transactable

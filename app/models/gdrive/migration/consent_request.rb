@@ -1,5 +1,36 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: gdrive_migration_consent_requests
+#
+#  id                  :bigint           not null, primary key
+#  error_count         :integer          default(0), not null
+#  file_count          :integer          not null
+#  google_email        :string(255)      not null
+#  ingest_file_ids     :jsonb
+#  ingest_progress     :integer
+#  ingest_requested_at :datetime
+#  ingest_status       :string
+#  opt_out_reason      :text
+#  status              :string(16)       default("new"), not null
+#  token               :string           not null
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  cluster_id          :bigint           not null
+#  operation_id        :bigint           not null
+#  temp_drive_id       :string
+#
+# Indexes
+#
+#  index_gdrive_migration_consent_requests_on_cluster_id    (cluster_id)
+#  index_gdrive_migration_consent_requests_on_operation_id  (operation_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (cluster_id => clusters.id)
+#  fk_rails_...  (operation_id => gdrive_migration_operations.id)
+#
 module GDrive
   module Migration
     class ConsentRequest < ApplicationRecord

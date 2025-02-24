@@ -1,6 +1,33 @@
 # frozen_string_literal: true
 
 module Meals
+# == Schema Information
+#
+# Table name: meal_formula_parts
+#
+#  id           :bigint           not null, primary key
+#  portion_size :decimal(10, 2)   not null
+#  rank         :integer          not null
+#  share        :decimal(10, 4)   not null
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  cluster_id   :bigint           not null
+#  formula_id   :bigint           not null
+#  type_id      :bigint           not null
+#
+# Indexes
+#
+#  index_meal_formula_parts_on_cluster_id              (cluster_id)
+#  index_meal_formula_parts_on_formula_id              (formula_id)
+#  index_meal_formula_parts_on_formula_id_and_type_id  (formula_id,type_id) UNIQUE
+#  index_meal_formula_parts_on_type_id                 (type_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (cluster_id => clusters.id)
+#  fk_rails_...  (formula_id => meal_formulas.id)
+#  fk_rails_...  (type_id => meal_types.id)
+#
   # Joins formula to meal part
   class FormulaPart < ApplicationRecord
     acts_as_tenant :cluster

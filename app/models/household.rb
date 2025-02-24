@@ -1,6 +1,39 @@
 # frozen_string_literal: true
 
 # A single cohesive household group, not necessarily one-to-one with a unit.
+# == Schema Information
+#
+# Table name: households
+#
+#  id             :integer          not null, primary key
+#  deactivated_at :datetime
+#  garage_nums    :string
+#  keyholders     :string
+#  name           :string(50)       not null
+#  unit_num       :integer
+#  unit_suffix    :string
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
+#  alternate_id   :string
+#  cluster_id     :integer          not null
+#  community_id   :integer          not null
+#  member_type_id :bigint
+#
+# Indexes
+#
+#  index_households_on_cluster_id             (cluster_id)
+#  index_households_on_community_id           (community_id)
+#  index_households_on_community_id_and_name  (community_id,name) UNIQUE
+#  index_households_on_deactivated_at         (deactivated_at)
+#  index_households_on_member_type_id         (member_type_id)
+#  index_households_on_name                   (name)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (cluster_id => clusters.id)
+#  fk_rails_...  (community_id => communities.id)
+#  fk_rails_...  (member_type_id => people_member_types.id)
+#
 class Household < ApplicationRecord
   include Wisper.model
   include Deactivatable

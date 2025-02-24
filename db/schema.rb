@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_01_12_160611) do
+ActiveRecord::Schema[7.0].define(version: 2025_02_18_191831) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -690,6 +690,18 @@ ActiveRecord::Schema[7.0].define(version: 2025_01_12_160611) do
     t.index ["meal_id", "calendar_id"], name: "index_meal_resourcings_on_meal_id_and_calendar_id", unique: true
   end
 
+  create_table "meal_restrictions", force: :cascade do |t|
+    t.string "absence", limit: 64, null: false
+    t.bigint "cluster_id", null: false
+    t.bigint "community_id", null: false
+    t.string "contains", limit: 64, null: false
+    t.datetime "created_at", null: false
+    t.datetime "deactivated_at"
+    t.datetime "updated_at", null: false
+    t.index ["cluster_id"], name: "index_meal_restrictions_on_cluster_id"
+    t.index ["community_id"], name: "index_meal_restrictions_on_community_id"
+  end
+
   create_table "meal_roles", force: :cascade do |t|
     t.integer "cluster_id", null: false
     t.integer "community_id", null: false
@@ -1290,6 +1302,8 @@ ActiveRecord::Schema[7.0].define(version: 2025_01_12_160611) do
   add_foreign_key "meal_resourcings", "calendar_nodes", column: "calendar_id"
   add_foreign_key "meal_resourcings", "clusters"
   add_foreign_key "meal_resourcings", "meals"
+  add_foreign_key "meal_restrictions", "clusters"
+  add_foreign_key "meal_restrictions", "communities"
   add_foreign_key "meal_roles", "clusters"
   add_foreign_key "meal_roles", "communities"
   add_foreign_key "meal_signup_parts", "clusters"

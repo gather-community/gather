@@ -3,7 +3,7 @@
 # Root mailer for all mailers.
 class ApplicationMailer < ActionMailer::Base
   include SubdomainSettable
-  default from: Settings.email.from, reply_to: Settings.email.no_reply
+  default from: Settings.email.from, reply_to: Settings.email.from
 
   protected
 

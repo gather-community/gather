@@ -12,7 +12,7 @@
 # should be taken all the same.
 class AuthMailer < Devise::Mailer
   # Need to set `from` here separately because we're not inheriting from ApplicationMailer
-  default template_path: "auth_mailer", from: Settings.email.from, reply_to: Settings.email.no_reply
+  default template_path: "auth_mailer", from: Settings.email.from
 
   def reset_password_instructions(user, token, opts = {})
     return if user.fake?

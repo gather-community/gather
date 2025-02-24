@@ -33,7 +33,7 @@ module Meals
 
     def fields
       attribs = {class: "fields", "data-toggle-off": collapse? ? section : nil}
-      h.tag.div(block_content, attribs)
+      h.tag.div(block_content, **attribs)
     end
 
     def collapse?

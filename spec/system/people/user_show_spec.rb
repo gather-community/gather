@@ -59,7 +59,7 @@ describe "user show" do
                                    "- key: charlie\n  " \
                                    "type: url\n" \
                                    "- key: delta\n  " \
-                                   "type: text\n    " \
+                                   "type: text\n  " \
                                    "label: Some Long Text"
         }
       })

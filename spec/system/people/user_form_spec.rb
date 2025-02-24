@@ -127,7 +127,7 @@ describe "user form", js: true, perform_jobs: true do
                                        "type: boolean\n" \
                                        "- key: bar\n  " \
                                        "type: string\n  " \
-                                       "label: Pants\n    " \
+                                       "label: Pants\n  " \
                                        "hint: Pants information"
             }
           })
@@ -256,7 +256,7 @@ describe "user form", js: true, perform_jobs: true do
                                        "type: boolean\n" \
                                        "- key: bar\n  " \
                                        "type: string\n  " \
-                                       "label: Pants\n    " \
+                                       "label: Pants\n  " \
                                        "hint: Pants information"
             }
           })

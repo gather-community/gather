@@ -45,7 +45,8 @@ module Work
     def chunk_for_item(item)
       got = round_next_half(item[:got])
       ttl = round_next_half(item[:ttl])
-      fraction = h.tag(item[:ok] ? :i : :b, "#{got}/#{ttl}")
+      fraction_str = "#{got}/#{ttl}"
+      fraction = item[:ok] ? h.tag(:i, fraction_str) : h.tag(:b, fraction_str)
       h.t("work.synopsis.chunk.#{item_count}_html",
           title: h.sanitize(item[:bucket].title), fraction: fraction)
     end

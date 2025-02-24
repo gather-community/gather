@@ -3,7 +3,7 @@ module Meals
     include Deactivatable
     acts_as_tenant :cluster
 
-    belongs_to :community, inverse_of :meals
+    belongs_to :community, inverse_of: :meals
 
     validates :contains, :absence, presence: true
 

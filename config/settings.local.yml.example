@@ -14,11 +14,9 @@ oauth:
 secret_key_base: <secret key>
 
 email:
-  # Used in the email `From` header. Should be a real address.
-  from: Gather <support@example.coop>
-  # Used in the Reply-To header for emails that don't specify one explicitly.
-  # Should contain 'noreply' or similar. Should be a real address.
-  no_reply: No-Reply <noreply@example.com>
+  # Used in the email `From` header. Should probably include 'noreply'
+  # to indicate not a monitored email box.
+  from: Gather <noreply@example.coop>
   # For error messages and other system messages.
   webmaster: someone@example.com
 

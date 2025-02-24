@@ -18,6 +18,7 @@ module Groups
           api.create_domain(list.domain)
           create_or_update_list(list)
           raise ArgumentError, "list remote_id is missing for #{list.fqdn_listname}" if list.remote_id.nil?
+
           api.configure_list(list)
           MembershipSyncJob.perform_later("Groups::Mailman::List", list.id)
         end

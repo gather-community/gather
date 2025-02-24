@@ -75,8 +75,8 @@ class TransactionsController < ApplicationController
       flash[:success] = "Transaction added successfully."
       redirect_to(accounts_path)
     elsif params[:confirmed] == "0"
-      flash.now[:notice] = "The transaction was not added. You can edit it below and try again, "\
-         "or click 'Cancel' below to return to the accounts page."
+      flash.now[:notice] = "The transaction was not added. You can edit it below and try again, " \
+                           "or click 'Cancel' below to return to the accounts page."
       render(:new)
     else
       render(:confirm)

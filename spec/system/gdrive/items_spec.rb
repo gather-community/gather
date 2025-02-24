@@ -48,7 +48,10 @@ describe "gdrive items", js: true do
       let(:folder_id) { "15Y3FzxJHdpCv421PPHCcwu_dMFRx5Y9P" }
       let(:file_id) { "1AUjr0Tq8np0zDC0iGc38niQzVGjZKS5aqTyl5h2kMqI" }
       let!(:group) { create(:group, name: "Stuff") }
-      let!(:token) { create(:gdrive_token, gdrive_config: config, google_user_id: config.org_user_id, access_token: "ya29.a0AfB_byC0wLkre3kl_csP4ljARYrefwUhJVyB07sneGBVn54suDLn1kv_JY5TfycBavpQPu5lHPutSi0qiGGzF653b-I9Tb6g0YFXLLsKRFyw92MRTw2bt7sy4TEbP6THf7m6SdG1O068gPVaLtGe2MewwvMlGHBpPlYKxQaCgYKAboSARESFQHGX2MiosOp6nr60oZleOl-au9EZg0173") }
+      let!(:token) do
+        create(:gdrive_token, gdrive_config: config, google_user_id: config.org_user_id,
+                              access_token: "ya29.a0AfB_byC0wLkre3kl_csP4ljARYrefwUhJVyB07sneGBVn54suDLn1kv_JY5TfycBavpQPu5lHPutSi0qiGGzF653b-I9Tb6g0YFXLLsKRFyw92MRTw2bt7sy4TEbP6THf7m6SdG1O068gPVaLtGe2MewwvMlGHBpPlYKxQaCgYKAboSARESFQHGX2MiosOp6nr60oZleOl-au9EZg0173")
+      end
 
       scenario "happy path" do
         # Can't match on body because the boundary changes to something random every time

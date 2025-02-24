@@ -12,10 +12,10 @@ shared_context "reminders" do
   end
 
   def create_work_job_reminder(job, time_or_magnitude, unit_sign = nil, **attribs)
-    create_reminder(:work_job_reminder, time_or_magnitude, unit_sign, **attribs.merge(job: job))
+    create_reminder(:work_job_reminder, time_or_magnitude, unit_sign, **attribs, job: job)
   end
 
   def create_meal_role_reminder(role, time_or_magnitude, unit_sign = nil, **attribs)
-    create_reminder(:meal_role_reminder, time_or_magnitude, unit_sign, **attribs.merge(role: role))
+    create_reminder(:meal_role_reminder, time_or_magnitude, unit_sign, **attribs, role: role)
   end
 end

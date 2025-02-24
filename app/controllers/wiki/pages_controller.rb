@@ -17,6 +17,7 @@ module Wiki
       @page = Page.find_by(community: current_community, slug: params[:slug])
       if @page.nil?
         raise ActiveRecord::RecordNotFound unless params[:slug] == Page.reserved_slug(:home)
+
         # Create home and sample pages on first visit to home page.
         @page = Page.create_special_page(:home, community: current_community)
         Page.create_special_page(:sample, community: current_community)
@@ -131,6 +132,7 @@ module Wiki
       # Force the decorator to render to trigger any data fetch errors.
       page.formatted_content
       return unless page.data_fetch_error?
+
       flash.now[:error] = I18n.t("activerecord.errors.models.wiki/page.data_fetch.main",
                                  error: page.data_fetch_error)
       params.delete(:preview)

@@ -12,7 +12,7 @@ module GDrive
       MAX_ERRORS = 5
 
       attr_accessor :consent_request, :operation, :main_wrapper, :migration_wrapper,
-        :ancestor_tree_duplicator
+                    :ancestor_tree_duplicator
 
       def perform(cluster_id:, consent_request_id:)
         ActsAsTenant.with_tenant(Cluster.find(cluster_id)) do
@@ -22,13 +22,14 @@ module GDrive
           main_config = MainConfig.find_by!(community_id: operation.community_id)
           self.main_wrapper = Wrapper.new(config: main_config, google_user_id: main_config.org_user_id)
           migration_config = consent_request.config
-          self.migration_wrapper = Wrapper.new(config: migration_config, google_user_id: @consent_request.google_email)
+          self.migration_wrapper = Wrapper.new(config: migration_config,
+                                               google_user_id: @consent_request.google_email)
           self.ancestor_tree_duplicator = AncestorTreeDuplicator.new(wrapper: main_wrapper,
-            operation: operation)
+                                                                     operation: operation)
 
           operation.log(:info, "IngestJob starting",
-            consent_request_id: consent_request.id,
-            file_ids: consent_request.ingest_file_ids)
+                        consent_request_id: consent_request.id,
+                        file_ids: consent_request.ingest_file_ids)
 
           ensure_temp_drive
           ingest_files
@@ -65,8 +66,9 @@ module GDrive
         # So we let it bubble up and stop the job.
         operation.log(:info, "Adding temp drive write permission", consenter: consent_request.google_email)
         permission = Google::Apis::DriveV3::Permission.new(type: "user", email_address: consent_request.google_email,
-          role: "writer")
-        main_wrapper.create_permission(temp_drive.id, permission, supports_all_drives: true, send_notification_email: false)
+                                                           role: "writer")
+        main_wrapper.create_permission(temp_drive.id, permission, supports_all_drives: true,
+                                                                  send_notification_email: false)
 
         consent_request.update!(temp_drive_id: temp_drive.id)
       end
@@ -82,28 +84,31 @@ module GDrive
           all_matches = [direct_match].concat(shortcuts).compact
 
           if all_matches.empty?
-            operation.log(:warn, "No matches for file ID", file_id: file_id, consenter: consent_request.google_email)
+            operation.log(:warn, "No matches for file ID", file_id: file_id,
+                                                           consenter: consent_request.google_email)
             next
           end
 
-          owned_matches, unowned_matches = all_matches.partition { |f| f.owner == consent_request.google_email }
+          owned_matches, unowned_matches = all_matches.partition do |f|
+            f.owner == consent_request.google_email
+          end
 
           if owned_matches.empty?
             operation.log(:warn, "All matches for file ID owned by someone else", file_id: file_id,
-              consenter: consent_request.google_email, matched_ids: owned_matches.map(&:external_id))
+                                                                                  consenter: consent_request.google_email, matched_ids: owned_matches.map(&:external_id))
             next
           end
 
           unowned_matches.each do |unowned_match|
             operation.log(:info, "Skipping match because owned by someone else",
-              file_id: unowned_match.external_id,
-              owner: unowned_match.owner,
-              is_shortcut: unowned_match.external_id != file_id)
+                          file_id: unowned_match.external_id,
+                          owner: unowned_match.owner,
+                          is_shortcut: unowned_match.external_id != file_id)
           end
 
           owned_matches.each_with_index do |migration_file, index|
             operation.log(:info, "Migrating file", file_id: file_id,
-              is_shortcut: migration_file.external_id != file_id)
+                                                   is_shortcut: migration_file.external_id != file_id)
 
             # We only want to increment the counter shown in the loading indicator once per
             # picked file.
@@ -127,11 +132,13 @@ module GDrive
           #   1b. the workspace user has access to src_folder but not its parents
           # We need to handle these possibilities and fail gracefully.
           dest_parent_id = ancestor_tree_duplicator.ensure_tree(migration_file.parent_id)
-        rescue AncestorTreeDuplicator::ParentFolderInaccessible => error
-          handle_file_error(migration_file, error, "ancestor_inaccessible", should_increment: should_increment)
+        rescue AncestorTreeDuplicator::ParentFolderInaccessible => e
+          handle_file_error(migration_file, e, "ancestor_inaccessible",
+                            should_increment: should_increment)
           return
-        rescue Google::Apis::ClientError => error
-          handle_file_error(migration_file, error, "client_error_ensuring_tree", should_increment: should_increment)
+        rescue Google::Apis::ClientError => e
+          handle_file_error(migration_file, e, "client_error_ensuring_tree",
+                            should_increment: should_increment)
           return
         end
 
@@ -153,12 +160,13 @@ module GDrive
         begin
           operation.log(:info, "Moving file to temp drive.", file_id: file_id)
           migration_wrapper.update_file(file_id, add_parents: consent_request.temp_drive_id,
-            remove_parents: migration_file.parent_id, supports_all_drives: true)
-        rescue Google::Apis::ClientError => error
-          if error.message.include?("The user has not granted the app")
+                                                 remove_parents: migration_file.parent_id, supports_all_drives: true)
+        rescue Google::Apis::ClientError => e
+          if e.message.include?("The user has not granted the app")
             operation.log(:info, "Got 'The user has not granted the app' error, swallowing", file_id: file_id)
           else
-            handle_file_error(migration_file, error, "client_error_moving_to_temp_drive", report: true, should_increment: should_increment)
+            handle_file_error(migration_file, e, "client_error_moving_to_temp_drive", report: true,
+                                                                                      should_increment: should_increment)
           end
           return
         end
@@ -172,11 +180,13 @@ module GDrive
         # Still, there may be other failure modes we haven't thought of so we don't want to fail the job.
         # So we log and persist the error and keep going.
         begin
-          operation.log(:info, "Moving file to final destination.", file_id: file_id, dest_parent_id: dest_parent_id)
+          operation.log(:info, "Moving file to final destination.", file_id: file_id,
+                                                                    dest_parent_id: dest_parent_id)
           main_wrapper.update_file(file_id, add_parents: dest_parent_id,
-            remove_parents: consent_request.temp_drive_id, supports_all_drives: true)
-        rescue Google::Apis::ClientError => error
-          handle_file_error(migration_file, error, "client_error_moving_to_destination", report: true, should_increment: should_increment)
+                                            remove_parents: consent_request.temp_drive_id, supports_all_drives: true)
+        rescue Google::Apis::ClientError => e
+          handle_file_error(migration_file, e, "client_error_moving_to_destination", report: true,
+                                                                                     should_increment: should_increment)
           return
         end
 
@@ -193,7 +203,7 @@ module GDrive
         operation.log(:info, "No matching File record for file. Attempting to create.", file_id: file_id)
 
         gdrive_file = main_wrapper.get_file(file_id,
-          fields: "name,parents,mimeType,webViewLink,iconLink,modifiedTime,owners(emailAddress),capabilities(canEdit)")
+                                            fields: "name,parents,mimeType,webViewLink,iconLink,modifiedTime,owners(emailAddress),capabilities(canEdit)")
 
         if gdrive_file.parents.blank?
           operation.log(:error, "File has no accessible parents", file_id: file_id)
@@ -216,8 +226,8 @@ module GDrive
           web_view_link: gdrive_file.web_view_link,
           modified_at: gdrive_file.modified_time
         )
-      rescue Google::Apis::ClientError => error
-        operation.log(:error, "Client error looking up file", file_id: file_id, message: error.to_s)
+      rescue Google::Apis::ClientError => e
+        operation.log(:error, "Client error looking up file", file_id: file_id, message: e.to_s)
         nil
       end
 
@@ -226,15 +236,13 @@ module GDrive
         consent_request.increment!(:error_count)
 
         operation.log(:error, "Encountered #{error_type}",
-          file_id: migration_file.external_id,
-          message: error.to_s,
-          consent_request_id: consent_request.id)
+                      file_id: migration_file.external_id,
+                      message: error.to_s,
+                      consent_request_id: consent_request.id)
 
         # No need to set an error on an unpersisted File, b/c those ones are from files the user
         # picked but we don't have records of, so we are just trying them but they may not be valid.
-        if migration_file.persisted?
-          migration_file.set_error(type: error_type, message: error.to_s)
-        end
+        migration_file.set_error(type: error_type, message: error.to_s) if migration_file.persisted?
 
         if report
           Gather::ErrorReporter.instance.report(error, data: {
@@ -247,7 +255,7 @@ module GDrive
 
         if consent_request.error_count >= MAX_ERRORS
           operation.log(:error, "GDrive max ingest errors reached", count: MAX_ERRORS,
-            consent_request_id: consent_request.id)
+                                                                    consent_request_id: consent_request.id)
           Gather::ErrorReporter.instance.report(StandardError.new("GDrive max ingest errors reached"), data: {
             count: MAX_ERRORS,
             operation_id: operation.id,

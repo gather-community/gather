@@ -17,6 +17,7 @@ module ApplicationControllable::Loaders
   # and that the UserPolicy says we can show.
   def load_showable_users_and_children_in(household, show_inactive_if_allowed: false)
     return [] if household.no_users?
+
     users = UserPolicy::Scope.new(current_user, User).resolve
     # If the current user is allowed to see inactive users but we don't want them to, respect that.
     # If they're not allowed to see inactive users, this won't have any effect.

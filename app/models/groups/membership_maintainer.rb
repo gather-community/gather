@@ -7,6 +7,7 @@ module Groups
 
     def update_user_successful(user)
       return unless user.saved_change_to_deactivated_at? && user.inactive?
+
       user.group_memberships.destroy_all
     end
 
@@ -21,6 +22,7 @@ module Groups
 
     def update_household_successful(household)
       return unless household.saved_change_to_community_id?
+
       Membership
         .where(user: household.users.pluck(:id))
         .where("NOT EXISTS(SELECT id FROM group_affiliations

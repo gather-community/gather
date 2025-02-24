@@ -9,11 +9,11 @@ module Work
       options[:clearable] = false
       options[:global] = true # Global so that it doesn't cause a clear link to show (sort of a hack).
       options[:floating] = true
-      super(options: options, **params)
+      super
     end
 
     def render
-      h.content_tag(:form, select_tag, class: "form-inline floating-lens hidden-print")
+      h.tag.form(select_tag, class: "form-inline floating-lens hidden-print")
     end
 
     private

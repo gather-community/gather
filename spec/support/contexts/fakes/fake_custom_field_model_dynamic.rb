@@ -10,6 +10,7 @@ class FakeCustomFieldModelDynamic
 
   def build_spec
     return nil if fruits.nil?
+
     [
       {key: "fruit", type: "enum", options: fruits, required: true}
     ]

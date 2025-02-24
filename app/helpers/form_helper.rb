@@ -21,7 +21,7 @@ module FormHelper
     width = options.delete(:width) || :normal
     layout = options.delete(:layout) || :narrow_label
     name = options.delete(:name) ||
-      obj.is_a?(Symbol) && obj.to_s ||
+      (obj.is_a?(Symbol) && obj.to_s) ||
       obj.model_name.name.underscore.dasherize.gsub("/", "--")
 
     options[:html] ||= {}
@@ -36,7 +36,7 @@ module FormHelper
     options[:html][:class] = classes.join(" ")
 
     # We need to wrap form in a row because it has a col-sm-x class.
-    content_tag(:div, class: "row") do
+    tag.div(class: "row") do
       simple_form_for(objs, options) do |form|
         top_errors = []
         unless obj.is_a?(Symbol)
@@ -53,16 +53,16 @@ module FormHelper
     end
   end
 
-  def form_actions(align: :right, classes: "")
-    content_tag(:div, class: "row") do
-      content_tag(:div, class: "form-actions col-sm-12 buttons-#{align} #{classes}") do
-        content = capture { yield }
+  def form_actions(align: :right, classes: "", &block)
+    tag.div(class: "row") do
+      tag.div(class: "form-actions col-sm-12 buttons-#{align} #{classes}") do
+        content = capture(&block)
         if content.match?(/class="secondary-links"/)
           content
         else
           # If no secondary-links are defined we add a blank div so that flexbox justify works properly.
-          content_tag(:div, "", class: "secondary-links") <<
-            content_tag(:div, content, class: "buttons")
+          tag.div("", class: "secondary-links") <<
+            tag.div(content, class: "buttons")
         end
       end
     end
@@ -107,7 +107,7 @@ module FormHelper
     end
 
     f.input(assoc, options.slice(:required, :label)) do
-      content_tag(:div, class: "nested-field-set") do
+      tag.div(class: "nested-field-set") do
         fields_for_args = [assoc, options[:objects]].compact
         (options[:top_hint] ? render(options[:top_hint]) : safe_str) <<
           f.simple_fields_for(*fields_for_args, wrapper: :nested_fields) do |f2|
@@ -116,7 +116,7 @@ module FormHelper
           if options[:multiple]
             link_text = I18n.t("cocoon.add_links.#{f.object.class.model_name.i18n_key}.#{assoc}",
                                default: I18n.t("cocoon.add_links.#{assoc}"))
-            content_tag(:span, class: "add-link-wrapper") do
+            tag.span(class: "add-link-wrapper") do
               link_to_add_association_with_icon(link_text, f, assoc,
                                                 partial: wrapper_partial,
                                                 wrap_object: wrap_object_proc,
@@ -130,7 +130,7 @@ module FormHelper
     end
   end
 
-  def link_to_add_association_with_icon(label, *args)
-    link_to_add_association(icon_tag("plus") << " " << label, *args)
+  def link_to_add_association_with_icon(label, *)
+    link_to_add_association(icon_tag("plus") << " " << label, *)
   end
 end

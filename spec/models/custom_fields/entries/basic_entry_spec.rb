@@ -155,7 +155,8 @@ describe CustomFields::Entries::BasicEntry do
         before do
           I18n.backend.send(:init_translations)
           I18n.backend.store_translations(:en,
-                                          custom_fields: {options: {model_x: {attrib_y: {foo: {a: "Alpha", b: "Bravo"}}}}})
+                                          custom_fields: {options: {model_x: {attrib_y: {foo: {a: "Alpha",
+                                                                                               b: "Bravo"}}}}})
         end
 
         after do

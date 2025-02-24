@@ -18,6 +18,7 @@ class AddRoleIdToAssignments < ActiveRecord::Migration[5.1]
         role = Meals::Role.find_by(community_id: community_id,
                                    title: KEYS_TO_TITLES[assignment.role.to_sym])
         raise "Couldn't find role for cmty #{community_id}, role key #{assignment.role}" unless role
+
         assignment.update_column(:role_id, role.id)
       end
     end

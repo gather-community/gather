@@ -9,9 +9,7 @@ module GDrive
 
     def footer_links
       links = []
-      if item_url
-        links << h.link_to("View in Google Drive", item_url)
-      end
+      links << h.link_to("View in Google Drive", item_url) if item_url
       safe_join(links, nbsp(3))
     end
   end

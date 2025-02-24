@@ -26,17 +26,17 @@ module GDrive
         )
         expiration = Time.current + 7.days
         channel = wrapper.watch_change(operation.start_page_token,
-          Google::Apis::DriveV3::Channel.new(
-            id: operation.webhook_channel_id,
-            token: operation.webhook_secret,
-            address: url,
-            type: "web_hook",
-            expiration: expiration.to_i * 1000
-          ),
-          include_items_from_all_drives: false,
-          include_corpus_removals: true,
-          include_removed: true,
-          spaces: "drive")
+                                       Google::Apis::DriveV3::Channel.new(
+                                         id: operation.webhook_channel_id,
+                                         token: operation.webhook_secret,
+                                         address: url,
+                                         type: "web_hook",
+                                         expiration: expiration.to_i * 1000
+                                       ),
+                                       include_items_from_all_drives: false,
+                                       include_corpus_removals: true,
+                                       include_removed: true,
+                                       spaces: "drive")
 
         operation.update!(
           webhook_resource_id: channel.resource_id,
@@ -49,8 +49,8 @@ module GDrive
           id: operation.webhook_channel_id,
           resource_id: operation.webhook_resource_id
         ))
-      rescue Google::Apis::ClientError => error
-        operation.log(:error, "Client error stopping channel, swallowing", message: error.to_s)
+      rescue Google::Apis::ClientError => e
+        operation.log(:error, "Client error stopping channel, swallowing", message: e.to_s)
       end
     end
   end

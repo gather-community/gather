@@ -6,7 +6,7 @@ class CommunityLens < Lens::SelectLens
   i18n_key "community_lens"
 
   def initialize(**args)
-    super(**args)
+    super
     options[:subdomain] = true unless options.key?(:subdomain)
     self.communities = context.current_cluster.communities.by_name
   end

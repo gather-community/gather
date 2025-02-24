@@ -38,11 +38,11 @@ module GDrive
 
     def apply_permission_changes(permission)
       Rails.logger.info("Applying permission changes",
-        access_level: permission.access_level,
-        google_email: permission.google_email,
-        external_id: permission.external_id,
-        item_external_id: permission.item_external_id,
-        item_id: permission.item_id)
+                        access_level: permission.access_level,
+                        google_email: permission.google_email,
+                        external_id: permission.external_id,
+                        item_external_id: permission.item_external_id,
+                        item_id: permission.item_id)
       if permission.access_level.nil?
         Rails.logger.info("Destroying")
         destroy_permission(permission)
@@ -58,11 +58,11 @@ module GDrive
         Rails.logger.info("Updating access level")
         update_permission_access_level(permission)
       end
-    rescue Google::Apis::ClientError => error
-      if error.message.match?(/notFound: File not found/)
+    rescue Google::Apis::ClientError => e
+      if e.message.match?(/notFound: File not found/)
         item = permission.item
         Rails.logger.warn("Item #{item.external_id} was not found. " \
-          "Deleting local item #{item.id} and associated records")
+                          "Deleting local item #{item.id} and associated records")
         item.destroy
         permission.destroy if permission.persisted?
 
@@ -70,7 +70,7 @@ module GDrive
       # we don't want to raise an error since this is based on bad user
       # input. In the future we might want to notify the user somehow.
       # But for now we'll just log it and move on.
-      elsif error.message.match?(/cannotShareTeamDriveWithNonGoogleAccounts|invalidSharingRequest.+there is no Google account associated/)
+      elsif e.message.match?(/cannotShareTeamDriveWithNonGoogleAccounts|invalidSharingRequest.+there is no Google account associated/)
         Rails.logger.warn("User #{permission.google_email} is not a valid google account")
       else
         raise
@@ -104,8 +104,8 @@ module GDrive
         supports_all_drives: true
       )
       permission.save!
-    rescue Google::Apis::ClientError => error
-      if error.message.match?(/notFound: Permission not found/)
+    rescue Google::Apis::ClientError => e
+      if e.message.match?(/notFound: Permission not found/)
         # If the permission was not found, we'll just create it.
         Rails.logger.warn("Permission not found for item, creating")
         create_permission(permission)
@@ -116,15 +116,15 @@ module GDrive
 
     def destroy_permission(permission)
       wrapper.delete_permission(permission.item_external_id, permission.external_id,
-        supports_all_drives: true)
+                                supports_all_drives: true)
       permission.destroy
-    rescue Google::Apis::ClientError => error
-      if error.message.match?(/notFound: Permission not found/)
+    rescue Google::Apis::ClientError => e
+      if e.message.match?(/notFound: Permission not found/)
         # If the permission was not found, no problem!
         # Just go ahead and destroy the permission to match.
         Rails.logger.warn("Permission not found, skipping delete")
         permission.destroy
-      elsif error.message.match?(/cannotModifyInheritedTeamDrivePermission/)
+      elsif e.message.match?(/cannotModifyInheritedTeamDrivePermission/)
         # It is ok to swallow these if we are destroying because it just means the supplemental
         # permission was already destroyed, so it's kind of like the "not found" case
         Rails.logger.warn("Swallowing cannotModifyInheritedTeamDrivePermission")

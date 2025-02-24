@@ -68,7 +68,7 @@ module Work
     # Make it so assignments with no user ID are destroyed.
     def assignments_attributes=(attribs)
       attribs.each_value { |a| a[:_destroy] = 1 if a[:user_id].blank? }
-      super(attribs)
+      super
     end
 
     def min_time
@@ -118,6 +118,7 @@ module Work
       repeatable_read_transaction_with_retries do
         raise Work::SlotsExceededError if current_assignments_count >= slots
         raise Work::AlreadySignedUpError if !job.double_signups_allowed? && user_signed_up?(user)
+
         assignments.create!(user_id: user.id)
       end
     end
@@ -125,6 +126,7 @@ module Work
     def unsignup_user(user)
       assignment = assignment_for_user(user)
       raise Work::NotSignedUpError unless assignment
+
       assignments.destroy(assignment)
     end
 
@@ -166,13 +168,16 @@ module Work
 
     def start_before_end
       return unless starts_at.present? && ends_at.present? && ends_at <= starts_at
+
       errors.add(:ends_at, :not_after_start)
     end
 
     def elapsed_hours_must_equal_job_hours
       return unless job_date_time? && job_hours.present? && elapsed_time.present?
+
       if slot_type == "full_multiple"
         return unless elapsed_time.positive? && job_hours.hours % elapsed_time > 0.01
+
         errors.add(:starts_at, :elapsed_doesnt_evenly_divide_job, hours: job_hours)
       elsif (elapsed_time - job_hours.hours).abs > 0.01
         errors.add(:starts_at, :elapsed_doesnt_equal_job, hours: job_hours)
@@ -181,8 +186,10 @@ module Work
 
     def no_double_assignments
       return if double_signups_allowed?
+
       user_ids = assignments.reject(&:marked_for_destruction?).map(&:user_id)
       return if user_ids.size == user_ids.uniq.size
+
       errors.add(:assignments, :no_double_assignments)
     end
 

@@ -10,7 +10,7 @@ module CustomFields
       def normalize(value)
         if value.is_a?(Integer)
           value
-        elsif value.nil? || value.is_a?(String) && value.strip == ""
+        elsif value.nil? || (value.is_a?(String) && value.strip == "")
           nil
         else
           value.to_i

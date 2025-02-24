@@ -52,15 +52,15 @@ describe "user show" do
     let(:community_with_user_custom_fields) do
       create(:community, settings: {
         people: {
-          user_custom_fields_spec: "- key: alpha\n"\
-                                   "  type: boolean\n"\
-                                   "- key: bravo\n"\
-                                   "  type: markdown\n"\
-                                   "- key: charlie\n"\
-                                   "  type: url\n"\
-                                   "- key: delta\n"\
-                                   "  type: text\n"\
-                                   "  label: Some Long Text"
+          user_custom_fields_spec: "- key: alpha\n  " \
+                                   "type: boolean\n" \
+                                   "- key: bravo\n  " \
+                                   "type: markdown\n" \
+                                   "- key: charlie\n  " \
+                                   "type: url\n" \
+                                   "- key: delta\n  " \
+                                   "type: text\n  " \
+                                   "label: Some Long Text"
         }
       })
     end

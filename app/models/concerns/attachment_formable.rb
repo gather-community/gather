@@ -17,8 +17,8 @@ module AttachmentFormable
       attribs.each do |attrib|
         attachment_attribs << attrib
 
-        attr_accessor :"#{attrib}_destroy"
-        attr_reader :"#{attrib}_new_signed_id"
+        attr_accessor(:"#{attrib}_destroy")
+        attr_reader(:"#{attrib}_new_signed_id")
 
         define_method(:"#{attrib}_new_signed_id=") do |signed_id|
           instance_variable_set("@#{attrib}_new_signed_id", signed_id)
@@ -36,6 +36,7 @@ module AttachmentFormable
 
   def destroy_attachments_if_requested
     return if self.class.attachment_attribs.blank?
+
     self.class.attachment_attribs.each do |attrib|
       attachment = send(attrib)
       attachment.purge if send("#{attrib}_destroy?") && attachment.attached?

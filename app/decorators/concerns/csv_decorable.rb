@@ -7,11 +7,12 @@ module CsvDecorable
 
   def csv_localize(date_or_time)
     return nil if date_or_time.nil?
+
     date_or_time.to_fs
   end
 
   def csv_bool(val)
-    I18n.t("common.#{val ? "true" : "false"}")
+    I18n.t("common.#{val ? 'true' : 'false'}")
   end
 
   # We don't include the currency symbol b/c that can interfere with reading in a spreadsheet.

@@ -16,8 +16,7 @@ module Calendars
     has_many :shared_guidelines, through: :guideline_inclusions
     has_many :events, inverse_of: :calendar, class_name: "Calendars::Event",
                       dependent: :destroy
-    has_many :protocolings, class_name: "Calendars::Protocoling", inverse_of: :calendar,
-                            foreign_key: "calendar_id", dependent: :destroy
+    has_many :protocolings, class_name: "Calendars::Protocoling", inverse_of: :calendar, dependent: :destroy
     has_many :protocols, through: :protocolings
 
     has_one_attached :photo
@@ -39,7 +38,7 @@ module Calendars
 
     # Selects the least-used colors in the color set, for the given community
     def self.least_used_colors(community)
-      counts = COLORS.map { |c| [c, 0] }.to_h
+      counts = COLORS.index_with { |_c| 0 }
       in_community(community).each { |c| counts[c.color] += 1 if counts[c.color] }
       min_count = counts.values.min
       counts.map { |color, count| count == min_count ? color : nil }.compact

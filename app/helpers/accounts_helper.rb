@@ -7,13 +7,15 @@ module AccountsHelper
 
   def currency_with_cr(amount)
     return "" if amount.blank?
+
     number_to_currency(amount.abs) << (amount < 0 ? " CR" : "")
   end
 
   def currency_with_cr_span(amount)
     return "" if amount.blank?
+
     number_to_currency(amount.abs) <<
-      content_tag(:span, amount < 0 ? "CR" : "", class: "cr")
+      tag.span(amount < 0 ? "CR" : "", class: "cr")
   end
 
   def link_to_currency_if_nonzero(amt, target)
@@ -25,7 +27,7 @@ module AccountsHelper
   end
 
   def late_fee_confirm
-    +"Are you sure? Fees will be charged to #{@late_fee_count} households. " <<
+    "Are you sure? Fees will be charged to #{@late_fee_count} households. " <<
       if @late_fee_days_ago.nil?
         ""
       else
@@ -42,7 +44,7 @@ module AccountsHelper
   end
 
   def statement_confirm_msg
-    msg = +"Are you sure? Statements will be sent out to #{@statement_accounts} households."
+    msg = "Are you sure? Statements will be sent out to #{@statement_accounts} households."
     msg << "\n\n" << t(".no_users", count: @no_user_accounts) if @no_user_accounts > 0
     msg << "\n\n" << t(".recent_statements", count: @recent_stmt_accounts) if @recent_stmt_accounts > 0
     msg

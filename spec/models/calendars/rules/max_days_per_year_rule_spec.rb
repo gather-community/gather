@@ -15,27 +15,27 @@ describe Calendars::Rules::MaxDaysPerYearRule do
     let!(:event1) do
       # 8 hours
       create(:event, creator: user1, calendar: calendar1, kind: "Special",
-        starts_at: "2016-01-01 12:00", ends_at: "2016-01-01 20:00")
+                     starts_at: "2016-01-01 12:00", ends_at: "2016-01-01 20:00")
     end
     let!(:event2) do
       # 26 hours (2 days)
       create(:event, creator: user2, calendar: calendar2, kind: "Personal",
-        starts_at: "2016-01-03 12:00", ends_at: "2016-01-04 14:00")
+                     starts_at: "2016-01-03 12:00", ends_at: "2016-01-04 14:00")
     end
     let!(:event3) do
       # 3.5 hours
       create(:event, creator: user2, calendar: calendar1,
-        starts_at: "2016-01-08 9:00", ends_at: "2016-01-08 12:30")
+                     starts_at: "2016-01-08 9:00", ends_at: "2016-01-08 12:30")
     end
     let!(:event4) do
       # 70 hours (3 days)
       create(:event, creator: user2, calendar: calendar1, kind: "Official",
-        starts_at: "2016-01-11 13:00", ends_at: "2016-01-14 11:00")
+                     starts_at: "2016-01-11 13:00", ends_at: "2016-01-14 11:00")
     end
     let!(:event5) do
       # 3 hours
       create(:event, creator: user1, calendar: calendar3,
-        starts_at: "2016-01-11 13:00", ends_at: "2016-01-11 16:00")
+                     starts_at: "2016-01-11 13:00", ends_at: "2016-01-11 16:00")
     end
 
     let(:event) { Calendars::Event.new(creator: user1, starts_at: "2016-01-30 6:00pm") }
@@ -43,7 +43,7 @@ describe Calendars::Rules::MaxDaysPerYearRule do
     context "rule with kinds and calendars" do
       let(:rule) do
         described_class.new(value: 4, calendars: [calendar1, calendar2], kinds: %w[Personal Special],
-          community: Defaults.community)
+                            community: Defaults.community)
       end
 
       it "should work for event 1 hour long" do
@@ -54,7 +54,7 @@ describe Calendars::Rules::MaxDaysPerYearRule do
       it "should fail for event 2 days long" do
         event.ends_at = Time.zone.parse("2016-01-31 9:00pm")
         expect(rule.check(event)).to eq([:base, "You can book at most 4 days of Personal/Special " \
-          "Foo Room/Bar Room events per year and you have already booked 3 days"])
+                                                "Foo Room/Bar Room events per year and you have already booked 3 days"])
       end
     end
 
@@ -74,7 +74,7 @@ describe Calendars::Rules::MaxDaysPerYearRule do
         it "should fail for event 3 days long" do
           event.ends_at = Time.zone.parse("2016-02-01 7:30pm")
           expect(rule.check(event)).to eq([:base, "You can book at most 9 days " \
-            "of Foo Room/Bar Room events per year and you have already booked 7 days"])
+                                                  "of Foo Room/Bar Room events per year and you have already booked 7 days"])
         end
       end
 
@@ -84,7 +84,7 @@ describe Calendars::Rules::MaxDaysPerYearRule do
         it "should fail for even very short event" do
           event.ends_at = Time.zone.parse("2016-01-30 6:30pm")
           expect(rule.check(event)).to eq([:base, "You can book at most 7 days " \
-            "of Foo Room/Bar Room events per year and you have already booked 7 days"])
+                                                  "of Foo Room/Bar Room events per year and you have already booked 7 days"])
         end
       end
     end
@@ -102,7 +102,7 @@ describe Calendars::Rules::MaxDaysPerYearRule do
       it "should fail for event 2 days long" do
         event.ends_at = Time.zone.parse("2016-01-31 9:00pm")
         expect(rule.check(event)).to eq([:base, "You can book at most 9 days of events " \
-          "per year and you have already booked 8 days"])
+                                                "per year and you have already booked 8 days"])
       end
     end
 

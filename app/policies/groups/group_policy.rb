@@ -2,7 +2,7 @@
 
 module Groups
   class GroupPolicy < ApplicationPolicy
-    alias_method :group, :record
+    alias group record
 
     class Scope < Scope
       def resolve
@@ -80,8 +80,8 @@ module Groups
 
     def appropriate_admin?
       user.global_role?(:super_admin) ||
-        user.global_role?(:cluster_admin) && group.cluster == user.cluster ||
-        user.global_role?(:admin) && record_tied_to_user_community?
+        (user.global_role?(:cluster_admin) && group.cluster == user.cluster) ||
+        (user.global_role?(:admin) && record_tied_to_user_community?)
     end
 
     private

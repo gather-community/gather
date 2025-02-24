@@ -7,7 +7,8 @@ namespace :db do
     if ENV["CLUSTER_NAME"].blank?
       raise %(Please specify cluster name, e.g. rake fake:clear_data CLUSTER_NAME="Funton Cohousing")
     end
-    cluster = Cluster.find_by!(name: ENV["CLUSTER_NAME"])
+
+    cluster = Cluster.find_by!(name: ENV.fetch("CLUSTER_NAME", nil))
     ActsAsTenant.current_tenant = cluster
     Utils::SampleDataRemover.new(cluster).remove
   end

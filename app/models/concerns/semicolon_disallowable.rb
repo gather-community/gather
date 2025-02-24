@@ -7,7 +7,7 @@ module SemicolonDisallowable
   included do
     def self.disallow_semicolons(*attribs)
       attribs.each do |attrib|
-        validates attrib, format: {with: /\A[^;]*\z/, message: :no_semicolons}
+        validates(attrib, format: {with: /\A[^;]*\z/, message: :no_semicolons})
       end
     end
   end

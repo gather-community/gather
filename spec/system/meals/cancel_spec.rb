@@ -15,10 +15,10 @@ describe "meal messages", :perform_jobs do
 
   scenario "cancel meal" do
     email_sent = email_sent_by do
-      visit meal_path(meal)
-      click_link "Cancel"
-      fill_in "Message", with: "Foo bar"
-      click_button "Send Message and Cancel Meal"
+      visit(meal_path(meal))
+      click_link("Cancel")
+      fill_in("Message", with: "Foo bar")
+      click_button("Send Message and Cancel Meal")
       expect(page).to have_content("Message sent successfully")
       expect(page).to have_content("This meal has been cancelled")
     end
@@ -27,9 +27,9 @@ describe "meal messages", :perform_jobs do
 
   scenario "abort cancellation" do
     email_sent = email_sent_by do
-      visit meal_path(meal)
-      click_link "Cancel"
-      click_button "Don't Cancel Meal"
+      visit(meal_path(meal))
+      click_link("Cancel")
+      click_button("Don't Cancel Meal")
       expect(page).to have_title(meal.title)
       expect(page).not_to have_content("This meal has been cancelled")
     end

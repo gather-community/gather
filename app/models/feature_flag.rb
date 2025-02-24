@@ -14,6 +14,7 @@ class FeatureFlag < ApplicationRecord
       status
     else
       raise ArgumentError, "user required" if user.nil?
+
       feature_flag_users.exists?(user: user)
     end
   end

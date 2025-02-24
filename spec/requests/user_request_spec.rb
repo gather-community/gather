@@ -35,7 +35,7 @@ describe "user request" do
     context "creating with outside household" do
       it "should error" do
         expect do
-          post users_path, params: {user: basic_params.merge(household_id: outside_household.id)}
+          post(users_path, params: {user: basic_params.merge(household_id: outside_household.id)})
         end.to raise_error(Pundit::NotAuthorizedError)
       end
     end
@@ -70,7 +70,8 @@ describe "user request" do
       context "trying to change household" do
         it "should error" do
           expect do
-            patch user_path(user), params: {user: {household_by_id: "true", household_id: new_household.id}}
+            patch(user_path(user),
+                  params: {user: {household_by_id: "true", household_id: new_household.id}})
           end.to raise_error(Pundit::NotAuthorizedError)
         end
       end
@@ -79,7 +80,8 @@ describe "user request" do
     context "trying to change to unauthorized household" do
       it "should error" do
         expect do
-          patch user_path(user), params: {user: {household_by_id: "true", household_id: outside_household.id}}
+          patch(user_path(user),
+                params: {user: {household_by_id: "true", household_id: outside_household.id}})
         end.to raise_error(Pundit::NotAuthorizedError)
       end
     end

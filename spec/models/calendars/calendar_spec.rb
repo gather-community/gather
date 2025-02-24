@@ -57,7 +57,6 @@ describe Calendars::Calendar do
     end
   end
 
-
   describe "#all_guidelines" do
     let(:calendar) { create(:calendar, :with_shared_guidelines) }
     let(:gl1) { calendar.guidelines }

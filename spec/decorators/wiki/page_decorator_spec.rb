@@ -41,16 +41,16 @@ describe Wiki::PageDecorator do
       context "with page creation permission" do
         let(:can_create_page) { true }
         it do
-          is_expected.to eq(+%(A link to <a class=\"not-found\" ) <<
-            %(href=\"/wiki/new?title=Non-existent+Page\">Non-existent Page</a>))
+          is_expected.to eq(+%(A link to <a class="not-found" ) <<
+            %(href="/wiki/new?title=Non-existent+Page">Non-existent Page</a>))
         end
       end
 
       context "without page creation permission" do
         let(:can_create_page) { false }
         it do
-          is_expected.to eq(+%(A link to <a class=\"not-found\" ) <<
-            %(href=\"/wiki/notfound\">Non-existent Page</a>))
+          is_expected.to eq(+%(A link to <a class="not-found" ) <<
+            %(href="/wiki/notfound">Non-existent Page</a>))
         end
       end
     end

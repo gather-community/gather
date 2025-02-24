@@ -29,7 +29,8 @@ module People
         bits = checker.calculate_entropy(password)
       else
         # Check again with a more stringent checker.
-        checker = StrongPassword::StrengthChecker.new(**User::PASSWORD_STRENGTH_CHECKER_OPTIONS.merge(min_entropy: User::PASSWORD_MIN_ENTROPY + 6))
+        checker = StrongPassword::StrengthChecker.new(**User::PASSWORD_STRENGTH_CHECKER_OPTIONS,
+min_entropy: User::PASSWORD_MIN_ENTROPY + 6)
         category = checker.is_weak?(password) ? :good : :excellent
         bits = checker.calculate_entropy(password)
       end

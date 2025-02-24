@@ -10,7 +10,7 @@ module Meals
 
     def subhead(current_cmty_only: true)
       cmty_str = h.multi_community? && current_cmty_only ? ", #{community.name} meals only" : ""
-      h.content_tag(:small, range_formatted << cmty_str)
+      h.tag.small(range_formatted << cmty_str)
     end
   end
 end

@@ -1,10 +1,4 @@
-require:
-  - rubocop-rails
-  - standard
-
-inherit_gem:
-  standard:
-    - config/ruby-3.0.yml
+require: rubocop-rails
 
 AllCops:
   TargetRailsVersion: 6.0
@@ -18,6 +12,36 @@ AllCops:
     - "vendor/**/*"
     - "**/*.erb"
 
+Layout/ParameterAlignment:
+  EnforcedStyle: with_fixed_indentation
+
+Layout/CaseIndentation:
+  EnforcedStyle: end
+
+Layout/EmptyLineAfterGuardClause:
+  Enabled: false
+
+Layout/FirstArgumentIndentation:
+  EnforcedStyle: consistent
+
+Layout/FirstArrayElementIndentation:
+  EnforcedStyle: consistent
+
+Layout/FirstHashElementIndentation:
+  EnforcedStyle: consistent
+
+Layout/LineLength:
+  Enabled: true
+  Max: 110
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+
+Layout/MultilineOperationIndentation:
+  EnforcedStyle: indented
+
+Layout/SpaceInsideHashLiteralBraces:
+  EnforcedStyle: no_space
 
 Lint/UnusedMethodArgument:
   AllowUnusedKeywordArguments: true
@@ -39,15 +63,15 @@ Metrics/BlockLength:
     - config/routes.rb
     - config/initializers/simple_form_bootstrap.rb
 
-Layout/LineLength:
-  Enabled: true
-  Max: 110
-
 Metrics/MethodLength:
   Enabled: true
   Max: 15
   Exclude:
     - db/migrate/*.rb
+
+# Was causing errors, not very important
+Rails/BulkChangeTable:
+  Enabled: false
 
 # We rely on foreign key constraints to raise errors in some cases, instead
 # of using restrict_with_exception.
@@ -78,6 +102,24 @@ Style/EmptyMethod:
 # Sometimes using a series of if/unless blocks in parallel structure is good for readability.
 Style/GuardClause:
   Enabled: false
+
+Style/MethodCallWithArgsParentheses:
+  Enabled: true
+  AllowedMethods:
+    - "[]"
+    - to
+    - not_to
+    - require
+    - raise
+  Exclude:
+    - config/initializers/simple_form_bootstrap.rb
+    - config/deploy.rb
+    - config/deploy/**/*.rb
+    - db/migrate/*.rb
+    - Gemfile*
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
 
 Bundler:
   Enabled: true

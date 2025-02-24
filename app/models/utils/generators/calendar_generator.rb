@@ -90,13 +90,13 @@ module Utils
       end
 
       def calendars_with_shared_guidelines_id(id)
-        calendar_data.select { |r| r[:shared_guideline_ids].include?(id) }.map { |r| r[:obj] }
+        calendar_data.select { |r| r[:shared_guideline_ids].include?(id) }.pluck(:obj)
       end
 
       def calendars_with_protocol_id(id)
         @protocoling_data = load_yaml("calendars/protocolings.yml")
         calendar_ids = @protocoling_data.select { |p| p["protocol_id"] == id }.map { |p| p["calendar_id"] }
-        calendar_data.select { |r| calendar_ids.include?(r["id"]) }.map { |r| r[:obj] }
+        calendar_data.select { |r| calendar_ids.include?(r["id"]) }.pluck(:obj)
       end
 
       def next_color

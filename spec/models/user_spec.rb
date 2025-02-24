@@ -20,17 +20,17 @@ describe User do
     let!(:users) do
       [
         create(:user, first_name: "Gordon", last_name: "Druck",
-          household: create(:household, member_count: 0, unit_num_and_suffix: "99B")),
+                      household: create(:household, member_count: 0, unit_num_and_suffix: "99B")),
         create(:user, first_name: "Soox", last_name: "Druck",
-          household: create(:household, member_count: 0, unit_num_and_suffix: "99")),
+                      household: create(:household, member_count: 0, unit_num_and_suffix: "99")),
         create(:user, first_name: "Ralla", last_name: "Bington",
-          household: create(:household, member_count: 0, unit_num_and_suffix: "99X")),
+                      household: create(:household, member_count: 0, unit_num_and_suffix: "99X")),
         create(:user, first_name: "Pooda", last_name: "Bington",
-          household: create(:household, member_count: 0, unit_num_and_suffix: "99X")),
+                      household: create(:household, member_count: 0, unit_num_and_suffix: "99X")),
         create(:user, first_name: "Lordum", last_name: "Zobstra",
-          household: create(:household, member_count: 0, unit_num_and_suffix: "")),
+                      household: create(:household, member_count: 0, unit_num_and_suffix: "")),
         create(:user, first_name: "Nuru", last_name: "Rog",
-          household: create(:household, member_count: 0, unit_num_and_suffix: "X"))
+                      household: create(:household, member_count: 0, unit_num_and_suffix: "X"))
       ]
     end
 
@@ -70,7 +70,7 @@ describe User do
     let(:user2) { create(:user) }
 
     # Get the normalized values for the submitted keys.
-    subject { submitted.keys.map { |k| [k, user.send(k)] }.to_h }
+    subject { submitted.keys.index_with { |k| user.send(k) }.to_h }
 
     before do
       user.validate
@@ -100,8 +100,8 @@ describe User do
 
         it do
           is_expected.to eq(google_email: "a@b.com", job_choosing_proxy_id: user2.id,
-            child: true, reset_password_token: "xyz", full_access: true,
-            role_admin: true, role_biller: true, confirmed_at: now)
+                            child: true, reset_password_token: "xyz", full_access: true,
+                            role_admin: true, role_biller: true, confirmed_at: now)
         end
       end
 
@@ -113,8 +113,8 @@ describe User do
 
         it do
           is_expected.to eq(google_email: nil, job_choosing_proxy_id: nil, child: true,
-            reset_password_token: nil, full_access: false,
-            role_admin: false, role_biller: false, confirmed_at: nil)
+                            reset_password_token: nil, full_access: false,
+                            role_admin: false, role_biller: false, confirmed_at: nil)
         end
       end
     end
@@ -268,7 +268,7 @@ describe User do
         it do
           expect(user).not_to be_valid
           expect(user.errors[:password].join).to eq("Your password was too weak. " \
-            "Try making it longer or adding special characters.")
+                                                    "Try making it longer or adding special characters.")
         end
       end
 

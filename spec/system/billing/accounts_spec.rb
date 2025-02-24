@@ -17,7 +17,7 @@ describe "accounts", js: true do
     let!(:stmt_amt) { account1.statements.order(created_at: :desc)[0].total_due }
     let!(:late_recorded_txn) do
       create(:transaction, account: account1, incurred_on: Time.zone.today - 1.year,
-        description: "Ye olde transaction")
+                           description: "Ye olde transaction")
     end
 
     before do

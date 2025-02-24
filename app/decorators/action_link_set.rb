@@ -16,7 +16,7 @@ class ActionLinkSet < ApplicationDecorator
     # Group buttons nicely to avoid orphans. Assumes we won't have more than 6 buttons.
     slice_size = tags.size <= 4 ? 4 : 3
     tag_groups = tags.each_slice(slice_size).to_a
-    tag_html = tag_groups.map { |g| h.content_tag(:div, g.reduce(:<<), class: "action-link-group") }
+    tag_html = tag_groups.map { |g| h.tag.div(g.reduce(:<<), class: "action-link-group") }
     tag_html.reduce(:<<)
   end
 end

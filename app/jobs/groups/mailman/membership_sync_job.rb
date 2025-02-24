@@ -67,6 +67,7 @@ module Groups
       def email_exists_locally?(email)
         # If we're syncing a user we know they exist locally.
         return true if source.is_a?(Groups::Mailman::User)
+
         local_email_hash.key?(email)
       end
 
@@ -109,6 +110,7 @@ module Groups
         if source == mm_user
           # Don't call API over and over if source is user
           return @correct_email if defined?(@correct_email)
+
           @correct_email = api.correct_email?(mm_user)
         else
           api.correct_email?(mm_user)

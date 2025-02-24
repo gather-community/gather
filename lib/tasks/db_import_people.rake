@@ -17,8 +17,8 @@ namespace :db do
     CSV.foreach("tmp/go-people/member_directory.csv", headers: true, header_converters: :symbol) do |row|
       photo = begin
         File.open("tmp/go-people/#{row[:photo_path]}", "r")
-              rescue StandardError
-                nil
+      rescue StandardError
+        nil
       end
 
       first_name = row[:first_name]
@@ -27,7 +27,8 @@ namespace :db do
 
       if row[:adult_child] == "adult"
         # Find matching user, complain if none
-        u = User.joins(:household).where(households: {community_id: 2}, first_name: first_name, last_name: last_name).first
+        u = User.joins(:household).where(households: {community_id: 2}, first_name: first_name,
+                                         last_name: last_name).first
         print_error("Can't find adult #{first_name} #{last_name}") && next unless u
 
         old_unit = u.household.unit_num.to_s.sub(/^5/, "").to_i
@@ -60,6 +61,7 @@ namespace :db do
           fn, ln = parent_name.split(" ")
           parent = User.find_by(first_name: fn, last_name: ln)
           print_error("Couldn't find parent '#{parent_name}'") && next unless parent
+
           parent
         end.compact
 

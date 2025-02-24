@@ -28,7 +28,7 @@ class CustomReminderJob < ReminderJob
   # get to the related community object.
   def eager_loads
     [:reminder,
-     shift: {assignments: :user, job: {period: :community}},
-     meal: [:community, assignments: %i[user role]]]
+     {shift: {assignments: :user, job: {period: :community}},
+      meal: [:community, {assignments: %i[user role]}]}]
   end
 end

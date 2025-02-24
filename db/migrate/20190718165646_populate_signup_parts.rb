@@ -8,10 +8,11 @@ class PopulateSignupParts < ActiveRecord::Migration[5.1]
     Cluster.all.each do |cluster|
       ActsAsTenant.with_tenant(cluster) do
         Community.all.each do |community|
-          type_map = TYPES.map { |t| [t, meal_type_for_type(t, community)] }.to_h
+          type_map = TYPES.index_with { |t| meal_type_for_type(t, community) }
           Meals::Signup.where(meal_id: community.meals.pluck(:id)).find_each do |signup|
             TYPES.each do |type_name|
               next if (count = signup.send(type_name)).zero?
+
               Meals::SignupPart.create!(signup: signup, type: type_map[type_name], count: count)
             end
           end

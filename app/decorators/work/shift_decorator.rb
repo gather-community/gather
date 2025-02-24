@@ -55,7 +55,7 @@ module Work
     def assginees_with_empty_slots(style:)
       blobs = (worker_names << empty_total_slots).compact
       blobs = [t("work.no_signups")] if blobs.empty?
-      blobs.map! { |b| h.content_tag(:li, b) } if style == :li
+      blobs.map! { |b| h.tag.li(b) } if style == :li
       separator = style == :comma_sep ? ", " : ""
       blobs.reduce(&sep(separator))
     end
@@ -71,6 +71,7 @@ module Work
 
     def empty_total_slots
       return nil if empty_slots.zero? || full_community?
+
       t("work/shift.slots_open", count: empty_slots)
     end
 

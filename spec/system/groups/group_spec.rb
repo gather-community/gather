@@ -24,11 +24,11 @@ describe "groups", js: true do
       expect(page).to have_title("Groups")
       expect(page).to have_css("table.index tr", count: 5) # Header plus four rows
       expect(page.all("td.name a").map(&:text)).to eq(["All Hands", "Knitting Club",
-        "Meals Committee", "Fun Team (Inactive)"])
+                                                       "Meals Committee", "Fun Team (Inactive)"])
 
       select_lens_and_wait(:sort, "By Type")
       expect(page.all("td.name a").map(&:text)).to eq(["Knitting Club", "Meals Committee", "All Hands",
-        "Fun Team (Inactive)"])
+                                                       "Fun Team (Inactive)"])
 
       select2_lens_and_wait(:user, manager1.decorate.full_name, url_value: manager1.id)
       expect(page.all("td.name a").map(&:text)).to eq(["Knitting Club", "All Hands"])

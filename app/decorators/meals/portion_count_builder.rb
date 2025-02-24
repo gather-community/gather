@@ -8,8 +8,8 @@ module Meals
       nil_category_formula_parts = formula_parts_by_category.delete(nil)
       chunks = formula_parts_by_category.map { |c, fp| chunk(c, fp) }
       chunks << chunk(nil, nil_category_formula_parts, only: chunks.empty?) if nil_category_formula_parts
-      ttl_signups = h.content_tag(:strong, "#{signup_count} diners")
-      h.content_tag(:div, class: "portion-counts") do
+      ttl_signups = h.tag.strong("#{signup_count} diners")
+      h.tag.div(class: "portion-counts") do
         if chunks.size == 1
           safe_str << "This meal has " << ttl_signups << " and will require approximately " <<
             chunks[0] << ".*"
@@ -24,7 +24,7 @@ module Meals
 
     def chunk(category, formula_parts, only: false)
       formula_parts_by_type = formula_parts.index_by(&:type)
-      h.content_tag(:strong) do
+      h.tag.strong do
         total = signups.sum do |signup|
           signup.parts.sum do |signup_part|
             matching_formula_part = formula_parts_by_type[signup_part.type]

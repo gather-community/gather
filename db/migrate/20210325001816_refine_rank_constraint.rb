@@ -8,7 +8,7 @@ class RefineRankConstraint < ActiveRecord::Migration[6.0]
         execute("UPDATE calendar_nodes SET rank = NULL WHERE deactivated_at IS NOT NULL")
       end
     end
-    add_check_constraint :calendar_nodes, "(deactivated_at IS NOT NULL AND rank IS NULL) "\
-      "OR (rank IS NOT NULL AND deactivated_at IS NULL)", name: "rank_or_deactivated_at_null"
+    add_check_constraint :calendar_nodes, "(deactivated_at IS NOT NULL AND rank IS NULL) " \
+                                          "OR (rank IS NOT NULL AND deactivated_at IS NULL)", name: "rank_or_deactivated_at_null"
   end
 end

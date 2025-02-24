@@ -45,7 +45,7 @@ describe Groups::Mailman::Api do
       context "with existing user" do
         let(:mm_user) do
           build(:group_mailman_user,
-            user: User.new(email: "jen@example.com", first_name: "Jen", last_name: "Lo"))
+                user: User.new(email: "jen@example.com", first_name: "Jen", last_name: "Lo"))
         end
 
         it "returns true" do
@@ -71,7 +71,7 @@ describe Groups::Mailman::Api do
     describe "#user_id_for_email" do
       let(:mm_user) do
         build(:group_mailman_user,
-          user: User.new(email: "jen@example.com", first_name: "Jen", last_name: "Lo"))
+              user: User.new(email: "jen@example.com", first_name: "Jen", last_name: "Lo"))
       end
 
       context "with existing user" do
@@ -96,7 +96,7 @@ describe Groups::Mailman::Api do
     describe "#create_user" do
       let(:mm_user) do
         build(:group_mailman_user,
-          user: User.new(email: "jen@example.com", first_name: "Jen", last_name: "Lo"))
+              user: User.new(email: "jen@example.com", first_name: "Jen", last_name: "Lo"))
       end
 
       context "happy path" do
@@ -124,7 +124,7 @@ describe Groups::Mailman::Api do
     describe "#update_user" do
       let(:mm_user) do
         build(:group_mailman_user,
-          user: User.new(email: "jen@example.com", first_name: "Jen", last_name: "Lo"))
+              user: User.new(email: "jen@example.com", first_name: "Jen", last_name: "Lo"))
       end
 
       context "when email matches" do
@@ -164,7 +164,7 @@ describe Groups::Mailman::Api do
       context "when email address exists in mailman but doesn't belong to user" do
         let(:mm_user2) do
           build(:group_mailman_user,
-            user: User.new(email: "len@example.com", first_name: "Len", last_name: "Jo"))
+                user: User.new(email: "len@example.com", first_name: "Len", last_name: "Jo"))
         end
 
         it "claims the address" do
@@ -185,7 +185,7 @@ describe Groups::Mailman::Api do
         let(:list2) { build(:group_mailman_list, name: "zing", domain: domain) }
         let(:mm_user2) do
           build(:group_mailman_user,
-            user: User.new(email: "len@example.com", first_name: "Len", last_name: "Jo"))
+                user: User.new(email: "len@example.com", first_name: "Len", last_name: "Jo"))
         end
 
         # Start out with user1 as member in ping
@@ -193,19 +193,19 @@ describe Groups::Mailman::Api do
         # user2 is also member of zing by address only
         let(:mship) do
           Groups::Mailman::ListMembership.new(list_id: "ping.tscoho.org", mailman_user: mm_user,
-            role: "member")
+                                              role: "member")
         end
         let(:mship2) do
           Groups::Mailman::ListMembership.new(list_id: "ping.tscoho.org", mailman_user: mm_user2,
-            role: "member")
+                                              role: "member")
         end
         let(:mship3) do
           Groups::Mailman::ListMembership.new(list_id: "ping.tscoho.org", mailman_user: mm_user2,
-            role: "owner")
+                                              role: "owner")
         end
         let(:mship4) do
           Groups::Mailman::ListMembership.new(list_id: "zing.tscoho.org", mailman_user: mm_user2,
-            role: "member", by_address: true)
+                                              role: "member", by_address: true)
         end
 
         it "merges the two users, including memberships by ID and by address, and ignores duplicate mships" do
@@ -234,7 +234,7 @@ describe Groups::Mailman::Api do
       context "with matching user" do
         let(:mm_user) do
           build(:group_mailman_user,
-            user: User.new(email: "jen@example.com", first_name: "Jen", last_name: "Lo"))
+                user: User.new(email: "jen@example.com", first_name: "Jen", last_name: "Lo"))
         end
 
         it "deletes user" do
@@ -263,7 +263,7 @@ describe Groups::Mailman::Api do
     let(:list) { build(:group_mailman_list, name: "ping", domain: domain) }
     let(:mm_user) do
       build(:group_mailman_user,
-        user: User.new(email: "jen@example.com", first_name: "Jen", last_name: "Lo"))
+            user: User.new(email: "jen@example.com", first_name: "Jen", last_name: "Lo"))
     end
 
     describe "#populate_membership" do
@@ -307,7 +307,7 @@ describe Groups::Mailman::Api do
       context "with member role" do
         let(:mship) do
           Groups::Mailman::ListMembership.new(list_id: "ping.tscoho.org",
-            mailman_user: mm_user, role: "member")
+                                              mailman_user: mm_user, role: "member")
         end
         let(:populated_mship) do
           Groups::Mailman::ListMembership.new(list_id: "ping.tscoho.org", mailman_user: mm_user)
@@ -332,7 +332,7 @@ describe Groups::Mailman::Api do
       context "with owner role" do
         let(:mship) do
           Groups::Mailman::ListMembership.new(list_id: "ping.tscoho.org",
-            mailman_user: mm_user, role: "owner")
+                                              mailman_user: mm_user, role: "owner")
         end
         let(:populated_mship) do
           Groups::Mailman::ListMembership.new(list_id: "ping.tscoho.org", mailman_user: mm_user)
@@ -356,11 +356,11 @@ describe Groups::Mailman::Api do
       context "when subscription request already exists" do
         let(:list) do
           build(:group_mailman_list, name: "ping", domain: domain,
-            config: {display_name: "Stuff", advertised: false, subscription_policy: "moderate"})
+                                     config: {display_name: "Stuff", advertised: false, subscription_policy: "moderate"})
         end
         let(:mship) do
           Groups::Mailman::ListMembership.new(list_id: "ping.tscoho.org",
-            mailman_user: mm_user, role: "member")
+                                              mailman_user: mm_user, role: "member")
         end
         let(:populated_mship) do
           Groups::Mailman::ListMembership.new(list_id: "ping.tscoho.org", mailman_user: mm_user)
@@ -415,11 +415,11 @@ describe Groups::Mailman::Api do
           let(:list2) { build(:group_mailman_list, name: "zing", domain: domain) }
           let(:mship) do
             Groups::Mailman::ListMembership.new(list_id: "ping.tscoho.org",
-              mailman_user: mm_user, role: "member")
+                                                mailman_user: mm_user, role: "member")
           end
           let(:mship2) do
             Groups::Mailman::ListMembership.new(list_id: "zing.tscoho.org",
-              mailman_user: mm_user, role: "owner")
+                                                mailman_user: mm_user, role: "owner")
           end
 
           it "gets memberships" do
@@ -454,15 +454,15 @@ describe Groups::Mailman::Api do
         context "with matching" do
           let(:mship) do
             Groups::Mailman::ListMembership.new(list_id: "ping.tscoho.org",
-              mailman_user: mm_user, role: "member")
+                                                mailman_user: mm_user, role: "member")
           end
           let(:mship2) do
             Groups::Mailman::ListMembership.new(list_id: "ping.tscoho.org",
-              mailman_user: mm_user2, role: "owner")
+                                                mailman_user: mm_user2, role: "owner")
           end
           let(:mm_user2) do
             build(:group_mailman_user,
-              user: User.new(email: "len@example.com", first_name: "Len", last_name: "Jo"))
+                  user: User.new(email: "len@example.com", first_name: "Len", last_name: "Jo"))
           end
 
           it "gets memberships" do
@@ -519,7 +519,7 @@ describe Groups::Mailman::Api do
       context "happy path" do
         let(:list) do
           create(:group_mailman_list, name: "ping", domain: domain, remote_id: nil,
-            config: {display_name: "Stuff", advertised: false})
+                                      config: {display_name: "Stuff", advertised: false})
         end
 
         it "saves configuration" do
@@ -544,7 +544,7 @@ describe Groups::Mailman::Api do
       context "with no matching list" do
         let(:list) do
           create(:group_mailman_list, name: "baz", domain: domain, remote_id: nil,
-            config: {display_name: "Stuff"})
+                                      config: {display_name: "Stuff"})
         end
 
         it "raises error" do

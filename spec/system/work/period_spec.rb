@@ -6,24 +6,24 @@ describe "periods", js: true do
   let(:actor) { create(:work_coordinator) }
   let!(:period1) do
     create(:work_period,
-      name: "Foo",
-      starts_on: "2017-01-01",
-      ends_on: "2017-04-30",
-      phase: "archived")
+           name: "Foo",
+           starts_on: "2017-01-01",
+           ends_on: "2017-04-30",
+           phase: "archived")
   end
   let!(:period2) do
     create(:work_period,
-      name: "Bar",
-      starts_on: "2017-05-01",
-      ends_on: "2017-08-31",
-      phase: "active")
+           name: "Bar",
+           starts_on: "2017-05-01",
+           ends_on: "2017-08-31",
+           phase: "active")
   end
   let!(:period3) do
     create(:work_period,
-      name: "Baz",
-      starts_on: "2017-09-01",
-      ends_on: "2017-12-31",
-      phase: "draft")
+           name: "Baz",
+           starts_on: "2017-09-01",
+           ends_on: "2017-12-31",
+           phase: "draft")
   end
   let!(:user1) { create(:user, first_name: "Jane", last_name: "Picard") }
   let!(:user2) { create(:user, first_name: "Churl", last_name: "Rox") }
@@ -128,13 +128,13 @@ describe "periods", js: true do
     let!(:users) { create_list(:user, 5) }
     let!(:period4) do
       create(:work_period, :with_shares, name: "Charlie", quota_type: "by_person", pick_type: "staggered",
-        starts_on: "2020-02-01", ends_on: "2020-04-30",
-        round_duration: 5, auto_open_time: "2020-01-15 12:00",
-        max_rounds_per_worker: 3, workers_per_round: 10)
+                                         starts_on: "2020-02-01", ends_on: "2020-04-30",
+                                         round_duration: 5, auto_open_time: "2020-01-15 12:00",
+                                         max_rounds_per_worker: 3, workers_per_round: 10)
     end
     let!(:job) do
       create(:work_job, period: period4, title: "Frungler", time_type: "date_only", hours: 2,
-        shift_starts: ["2020-02-03"], shift_ends: ["2020-02-03"])
+                        shift_starts: ["2020-02-03"], shift_ends: ["2020-02-03"])
     end
 
     scenario "clone" do

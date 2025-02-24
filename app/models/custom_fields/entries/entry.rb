@@ -23,9 +23,7 @@ module CustomFields
         hash[key] = nil if !hash.key?(key) && key != :__root__
       end
 
-      def blank?
-        value.blank?
-      end
+      delegate :blank?, to: :value
 
       def value
         raise NotImplementedError
@@ -45,13 +43,13 @@ module CustomFields
 
       def translate(type)
         key = i18n_key(type.to_s.pluralize)
-        result = I18n.translate!(key)
+        I18n.translate!(key)
       rescue I18n::MissingTranslationData
         nil
       end
 
       def label
-        explicit_or_translated_param_value(:label) || key != :__root__ && key.capitalize || nil
+        explicit_or_translated_param_value(:label) || (key != :__root__ && key.capitalize) || nil
       end
 
       def hint

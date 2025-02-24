@@ -14,14 +14,14 @@ module ApplicationControllable::Setters
   def render_not_found
     respond_to do |format|
       format.html { render(file: Rails.root.join("public", "404.html"), layout: false, status: :not_found) }
-      format.any { head :not_found }
+      format.any { head(:not_found) }
     end
   end
 
   def render_forbidden
     respond_to do |format|
       format.html { render(file: Rails.root.join("public", "403.html"), layout: false, status: :forbidden) }
-      format.any { head :forbidden }
+      format.any { head(:forbidden) }
     end
   end
 end

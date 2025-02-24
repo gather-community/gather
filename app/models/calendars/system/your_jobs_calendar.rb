@@ -41,8 +41,8 @@ module Calendars
           .oldest_first
           .worked_by(actor)
           .flat_map do |meal|
-            meal.assignments.select { |a| a.user_id == actor.id && !a.linked_to_work_assignment? }
-          end
+          meal.assignments.select { |a| a.user_id == actor.id && !a.linked_to_work_assignment? }
+        end
           .compact
       end
 

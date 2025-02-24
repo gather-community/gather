@@ -65,9 +65,9 @@ class ReminderDelivery < ApplicationRecord
       if abs_time?
         abs_time
       elsif rel_days?
-        starts_at.midnight + rel_sign * rel_magnitude.to_i.days + Settings.reminders.time_of_day.hours
+        starts_at.midnight + (rel_sign * rel_magnitude.to_i.days) + Settings.reminders.time_of_day.hours
       else
-        starts_at + rel_sign * rel_magnitude.hours
+        starts_at + (rel_sign * rel_magnitude.hours)
       end
   end
 end

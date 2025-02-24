@@ -13,6 +13,7 @@ module Lens
     def self.possible_options(possible_options = nil)
       possible_options&.each do |option|
         next unless option.is_a?(Symbol)
+
         define_method(:"#{option}?") do
           selection == option
         end
@@ -34,6 +35,7 @@ module Lens
     # True if selection is not base_option.
     def clearable_and_active?
       return false if empty?
+
       clearable? && active?
     end
 
@@ -43,11 +45,13 @@ module Lens
 
     def render
       return nil if empty?
+
       select_tag
     end
 
     def selection
       return nil if empty?
+
       @selection ||= possible_options.detect { |o| value_matches_option?(o) }
     end
 
@@ -80,9 +84,9 @@ module Lens
 
     def select_tag
       h.select_tag(select_input_name, option_tags,
-        class: css_classes,
-        onchange: onchange,
-        "data-param-name": param_name)
+                   class: css_classes,
+                   onchange: onchange,
+                   "data-param-name": param_name)
     end
 
     # Depends on enabled_options, which depends on possible_options. So if the lens doesn't
@@ -140,7 +144,7 @@ module Lens
     end
 
     def value_matches_option?(option)
-      option == base_option && value.nil? || value == value_for_option(option)
+      (option == base_option && value.nil?) || value == value_for_option(option)
     end
 
     # Returns nil if select is empty.

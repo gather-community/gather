@@ -83,6 +83,7 @@ class UsersController < ApplicationController
   def create
     @user = User.new
     return unless bootstrap_household
+
     prepare_custom_data_infrastructure
     @user.assign_attributes(permitted_attributes(@user))
     authorize(@user)
@@ -112,6 +113,7 @@ class UsersController < ApplicationController
   def update
     @user = User.find(params[:id])
     return unless bootstrap_household
+
     authorize(@user)
     skip_email_confirmation_if_unconfirmed!
     prepare_custom_data_infrastructure
@@ -183,6 +185,7 @@ class UsersController < ApplicationController
   # Overrides default behavior in Deactivatable concern.
   def after_activate(user)
     return super if user.confirmed?
+
     flash[:alert] = I18n.t("deactivatable.#{user.model_name.i18n_key}.success.activate_unconfirmed")
   end
 
@@ -307,6 +310,7 @@ class UsersController < ApplicationController
     # email of a new user and then goes back and corrects it.
     # See the User class for more documentation on email confirmation.
     return if @user.confirmed?
+
     @user.skip_confirmation_notification!
     @user.skip_reconfirmation!
   end

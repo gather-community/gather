@@ -26,6 +26,7 @@ module Meals
     # Returns a price for the given signup type, rounded to the nearest cent.
     def price_for(type)
       return prices[type] if prices.key?(type)
+
       base_price = base_price_for(type)
       prices[type] = base_price ? (base_price + pantry_fee_for(base_price)).round(2) : nil
     end
@@ -44,6 +45,7 @@ module Meals
 
     def pantry_fee_for(base_price)
       return 0 if base_price < 0.01
+
       if formula.fixed_pantry?
         formula.pantry_fee
       else

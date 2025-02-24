@@ -40,7 +40,7 @@ module Utils
 
       def parse
         # scan the string for markdown-style links like [link-name](target)
-        settings_topmenu = markdown.scan(%r{\[([\w\- ]+)\]\s*\(([\w/\.:%&\?=\-_\',\+@]*)\)})
+        settings_topmenu = markdown.scan(%r{\[([\w\- ]+)\]\s*\(([\w/.:%&?=\-_',+@]*)\)})
         settings_topmenu.to_h
       end
     end

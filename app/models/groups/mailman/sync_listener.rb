@@ -16,22 +16,25 @@ module Groups
       def create_user_successful(user)
         return if no_need_to_create_or_update?(user)
         return unless ::Groups::Mailman::User.new(user: user).syncable_with_memberships?
+
         UserSyncJob.perform_later(user_id: user.id)
       end
 
       def update_user_successful(user)
         return if no_need_to_create_or_update?(user)
+
         attribs = %w[email first_name last_name deactivated_at full_access]
-        if attribs_changed?(user, %w[deactivated_at full_access])
-          # If user is no longer syncable, sign them out. Then they won't be able to sign in again.
-          if (mm_user = user.group_mailman_user).present? && !mm_user.syncable?
-            SingleSignOnJob.perform_later(user_id: user.id, action: :sign_out)
-          end
+        # If user is no longer syncable, sign them out. Then they won't be able to sign in again.
+        if attribs_changed?(user,
+                            %w[deactivated_at
+                               full_access]) && ((mm_user = user.group_mailman_user).present? && !mm_user.syncable?)
+          SingleSignOnJob.perform_later(user_id: user.id, action: :sign_out)
         end
         if attribs_changed?(user, %w[email first_name last_name]) && user.email.present?
           SingleSignOnJob.perform_later(user_id: user.id, action: :update)
         end
         return unless attribs_changed?(user, attribs) || user_community_changed?(user)
+
         UserSyncJob.perform_later(user_id: user.id)
       end
 
@@ -46,17 +49,20 @@ module Groups
         )
 
         return if user.group_mailman_user.nil?
+
         SingleSignOnJob.perform_later(user_id: user.id, cluster_id: user.cluster_id,
-          action: :sign_out, destroyed: true)
+                                      action: :sign_out, destroyed: true)
       end
 
       def user_signed_out(user)
         return if no_need_to_create_or_update?(user)
+
         SingleSignOnJob.perform_later(user_id: user.id, action: :sign_out)
       end
 
       def update_household_successful(household)
         return unless household.saved_change_to_community_id?
+
         household.users.each { |u| UserSyncJob.perform_later(user_id: u.id) }
       end
 
@@ -71,6 +77,7 @@ module Groups
 
         return unless attribs_changed?(group, %w[availability deactivated_at])
         return if group.mailman_list.nil?
+
         ListSyncJob.perform_later(list_id: group.mailman_list.id)
       end
 
@@ -87,6 +94,7 @@ module Groups
         # So these are the only fields we care about, and if they change, we only need
         # to sync members, not the whole list.
         return unless attribs_changed?(list, %w[managers_can_moderate managers_can_administer])
+
         MembershipSyncJob.perform_later("Groups::Mailman::List", list.id)
       end
 
@@ -113,16 +121,19 @@ module Groups
 
       def sync_memberships_for_groups_in_same_communities_if_admin_or_mod_perms(group)
         return unless group.can_moderate_email_lists? || group.can_administer_email_lists?
+
         sync_list_memberships_for_groups_in_same_communities(group)
       end
 
       def sync_memberships_for_group_list(group)
         return if method_already_ran_this_transaction?(__method__)
+
         list = group&.mailman_list
 
         # If list doesn't have remote ID, it means ListSyncJob hasn't run yet.
         # We want to run that first. And it will enqueue the MembershipSyncJob.
         return if list.nil? || !list.reload.remote_id?
+
         MembershipSyncJob.perform_later("Groups::Mailman::List", list.id)
       end
 
@@ -152,6 +163,7 @@ module Groups
 
       def user_community_changed?(user)
         return false unless user.saved_change_to_household_id?
+
         old_community_id = Household.find_by(id: user.saved_changes["household_id"][0])&.community_id
         user.community_id != old_community_id
       end
@@ -159,6 +171,7 @@ module Groups
       def method_already_ran_this_transaction?(method_name)
         self.last_method_txn_ids ||= {}
         return true if last_method_txn_ids[method_name] == ApplicationRecord.txn_id
+
         last_method_txn_ids[method_name] = ApplicationRecord.txn_id
         false
       end

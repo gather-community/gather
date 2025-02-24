@@ -127,7 +127,17 @@ CACHE=1 rails server
 
 ## Linters
 
-Linters are strongly recommended for checking your code. The CI system will run linters as well and pull requests won't be approved until all issues are resolved or cancelled by the reviewer. We recommend eslint, rubocop, and scss_lint.
+We use:
+
+- rubocop (Ruby)
+- eslint (JS/TS)
+
+VSCode is recommended with the following extensions:
+
+- RuboCop
+- ESLint
+
+All should be configured to format on save. There are some VSCode settings in the `.vscode` folder in the project.
 
 ### Troubleshooting
 

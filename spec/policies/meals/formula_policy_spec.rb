@@ -120,7 +120,7 @@ describe Meals::FormulaPolicy do
         expect(subject).to contain_exactly(:meal_calc_type, :pantry_calc_type,
                                            :pantry_fee_formatted, *base_attribs,
                                            parts_attributes: [:id, :type_id, :share_formatted, :portion_size,
-                                                              :_destroy, type_attributes: %i[name]])
+                                                              :_destroy, {type_attributes: %i[name]}])
       end
     end
 

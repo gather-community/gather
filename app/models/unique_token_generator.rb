@@ -4,8 +4,8 @@
 class UniqueTokenGenerator
   include Singleton
 
-  def self.generate(klass, attrib, **kwargs)
-    instance.generate(klass, attrib, **kwargs)
+  def self.generate(klass, attrib, **)
+    instance.generate(klass, attrib, **)
   end
 
   def generate(klass, attrib, type: :devise)

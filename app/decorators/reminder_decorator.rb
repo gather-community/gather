@@ -5,6 +5,7 @@ class ReminderDecorator < ApplicationDecorator
 
   def rel_magnitude_to_i_or_f
     return nil if rel_magnitude.blank?
+
     to_int_if_no_fractional_part(rel_magnitude)
   end
 
@@ -23,6 +24,6 @@ class ReminderDecorator < ApplicationDecorator
   end
 
   def note_tag
-    note.present? ? h.content_tag(:strong, note) : nil
+    note.present? ? h.tag.strong(note) : nil
   end
 end

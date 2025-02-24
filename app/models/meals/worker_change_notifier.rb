@@ -13,10 +13,12 @@ module Meals
 
     def check_and_send!
       return if policy.change_workers_without_notification?
+
       current = assignment_wrappers
       added = (current - orig).map(&:assignment)
       removed = (orig - current).map(&:assignment)
       return unless added.any? || removed.any?
+
       MealMailer.worker_change_notice(initiator, meal, added, removed).deliver_now
     end
 
@@ -38,6 +40,7 @@ module Meals
   # Wrapper to make comparison easier.
   class AssignmentWrapper
     attr_accessor :assignment
+
     delegate :role_id, :user, to: :assignment
 
     def initialize(assignment)

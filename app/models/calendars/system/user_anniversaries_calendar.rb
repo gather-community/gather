@@ -26,7 +26,11 @@ module Calendars
             candidate_day_end = Time.zone.local(year, month, day, 11, 59)
 
             # We match if the range overlaps _any part of_ the candidate day
-            range.first <= candidate_day_end && range.last >= candidate_day_start ? event_for(Date.new(year, month, day), user) : nil
+            next unless range.first <= candidate_day_end && range.last >= candidate_day_start
+
+            event_for(
+              Date.new(year, month, day), user
+            )
           end
         end
         events.compact.sort_by(&:starts_at)
@@ -36,7 +40,7 @@ module Calendars
 
       def event_for(date, user)
         age = date.year - user[attrib].year
-        title = +"#{emoji} #{user.name}"
+        title = "#{emoji} #{user.name}"
         title << " (#{age})" if age <= 18
         events.build(
           name: title,

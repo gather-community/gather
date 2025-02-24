@@ -258,13 +258,13 @@ describe "custom field validation" do
     let(:instance_data) { {alpha: "xxxxxx"} }
 
     it "should look up message in expected place" do
-      stub_translation(:"custom_fields.errors.mod.att.alpha.foo", "Teh error msg", expect_defaults: %i[
-        activemodel.errors.messages.foo
-        activerecord.errors.messages.foo
-        errors.messages.foo
-      ])
+      expected_error_msg = "Translation missing. Options considered were:\n" \
+                           "- en.custom_fields.errors.mod.att.alpha.foo\n" \
+                           "- en.activemodel.errors.messages.foo\n" \
+                           "- en.activerecord.errors.messages.foo\n" \
+                           "- en.errors.messages.foo"
       expect(instance).not_to be_valid
-      expect(instance.errors[:alpha]).to eq(["Teh error msg"])
+      expect(instance.errors[:alpha]).to eq([expected_error_msg])
     end
   end
 end

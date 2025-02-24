@@ -72,6 +72,7 @@ module Groups
 
       def ensure_no_duplicate_user(remote_id)
         return unless Groups::Mailman::User.find_by(remote_id: remote_id)
+
         raise SyncError, "duplicate mailman user found for mailman ID #{remote_id}"
       end
 

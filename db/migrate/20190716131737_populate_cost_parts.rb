@@ -8,11 +8,13 @@ class PopulateCostParts < ActiveRecord::Migration[5.1]
     Cluster.all.each do |cluster|
       ActsAsTenant.with_tenant(cluster) do
         Community.all.each do |community|
-          type_map = TYPES.map { |t| [t, meal_type_for_type(t, community)] }.to_h
+          type_map = TYPES.index_with { |t| meal_type_for_type(t, community) }
           community.meals.each do |meal|
             next if meal.cost.nil?
+
             TYPES.each do |type_name|
               next if (value = meal.cost.send(type_name)).blank?
+
               Meals::CostPart.create!(cost: meal.cost, type: type_map[type_name], value: value)
             end
           end

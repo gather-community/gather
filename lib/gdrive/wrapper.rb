@@ -12,6 +12,7 @@ module GDrive
     def initialize(config:, google_user_id:, callback_url: nil)
       raise ArgumentError, "config cannot be nil" if config.nil?
       raise ArgumentError, "google_user_id cannot be nil" if google_user_id.nil?
+
       self.config = config
       self.google_user_id = google_user_id
       self.callback_url = callback_url
@@ -101,7 +102,7 @@ module GDrive
 
     def get_credentials_from_code(code:, scope:, base_url:)
       authorizer.get_credentials_from_code(user_id: google_user_id, code: code,
-        scope: scope, base_url: base_url)
+                                           scope: scope, base_url: base_url)
     end
 
     def store_credentials(credentials)
@@ -110,27 +111,28 @@ module GDrive
 
     def get_authorization_url(request:, state:, redirect_to: nil)
       authorizer.get_authorization_url(login_hint: google_user_id, request: request,
-        state: state, redirect_to: redirect_to)
+                                       state: state, redirect_to: redirect_to)
     end
 
     private
 
     def wrap_api_method(&block)
       block.call
-    rescue Google::Apis::ClientError => error
+    rescue Google::Apis::ClientError => e
       # Split rate limit errors into their own class
       new_error =
-        if error.message.match?(/rate limit exceeded|too many requests/)
-          RateLimitError.new(error.message)
+        if e.message.match?(/rate limit exceeded|too many requests/)
+          RateLimitError.new(e.message)
         else
-          error
+          e
         end
-      new_error.set_backtrace(error.backtrace)
+      new_error.set_backtrace(e.backtrace)
       raise new_error
     end
 
     def service
       return @service if @service
+
       @service = Google::Apis::DriveV3::DriveService.new
       @service.authorization = fetch_credentials_from_store
       @service
@@ -138,6 +140,7 @@ module GDrive
 
     def authorizer
       return @authorizer if @authorizer
+
       client_id = Google::Auth::ClientId.new(config.client_id, config.client_secret)
       scope = [
         config.drive_api_scope,

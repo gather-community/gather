@@ -18,6 +18,7 @@ module Work
       @portions_for = {}
       @shares_for = {}
       return if !(period.open? || period.ready?) || period.quota_none? || portions_for(:user).zero?
+
       self.for_user = obligations_for(:user)
       period.quota_by_person? ? handle_by_person_quota : handle_by_household_quota
       handle_staggering
@@ -47,8 +48,9 @@ module Work
 
     def handle_staggering
       return unless period.staggered?
+
       calc = round_calculator
-      self.staggering = %i[prev_limit next_limit next_starts_at].map { |a| [a, calc.send(a)] }.to_h
+      self.staggering = %i[prev_limit next_limit next_starts_at].index_with { |a| calc.send(a) }
     end
 
     def round_calculator

@@ -36,7 +36,7 @@ ActiveRecord::Migration.maintain_test_schema!
 
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
-  config.fixture_path = "#{::Rails.root}/spec/fixtures"
+  config.fixture_path = "#{Rails.root}/spec/fixtures"
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
@@ -73,7 +73,7 @@ RSpec.configure do |config|
       "goog:loggingPrefs": {browser: "ALL", client: "ALL", driver: "ALL", server: "ALL"}
     )
     options.add_preference(:download, prompt_for_download: false,
-      default_directory: DownloadHelpers::PATH.to_s)
+                                      default_directory: DownloadHelpers::PATH.to_s)
     options.add_preference(:browser, set_download_behavior: {behavior: "allow"})
     Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
   end

@@ -10,6 +10,7 @@ module Work
 
     def create_or_update_work_job_successful(job)
       return if paused?
+
       reindex(job.shifts.includes(assignments: :user))
     end
     alias create_work_job_successful create_or_update_work_job_successful
@@ -18,6 +19,7 @@ module Work
     def update_groups_group_successful(group)
       return if paused?
       return unless group.saved_change_to_name?
+
       jobs = Job.where(requester: group).includes(:requester, shifts: {assignments: :user}).by_title
       jobs.each { |j| reindex(j.shifts) }
     end
@@ -25,6 +27,7 @@ module Work
     def update_user_successful(user)
       return if paused?
       return unless user.saved_change_to_first_name? || user.saved_change_to_last_name?
+
       assignments = Assignment.where(user: user).includes(shift: {job: :requester, assignments: :user})
       assignments.each { |a| reindex(a.shift) }
     end

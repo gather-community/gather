@@ -10,8 +10,10 @@ module CustomFields
 
       def normalize(value)
         return nil if value.nil?
+
         value = value.strip
         return nil if value.blank?
+
         YAML.safe_load(value).to_yaml.gsub(/(\A---|\.\.\.\s*\z)/m, "").strip
       rescue Psych::SyntaxError
         value

@@ -27,6 +27,7 @@ module People
       end
       if show_country
         raise ArgumentError("Phone number country requested but nil") if country_code.nil?
+
         country = ISO3166::Country[country_code]
         country_name = country.translations[I18n.locale.to_s] || country.name
         result = "#{result} (#{country_name})"

@@ -20,7 +20,7 @@ module People
     delegate :name, to: :household, prefix: true
 
     def to_s
-      str = +"#{color} #{make} #{model}"
+      str = "#{color} #{make} #{model}"
       str << " (#{plate})" if plate.present?
       str
     end

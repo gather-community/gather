@@ -12,7 +12,7 @@ module GDrive
       delegate :config, to: :operation
 
       def pending?
-        status == "new" || status == "in_progress"
+        %w[new in_progress].include?(status)
       end
 
       def in_progress?
@@ -45,7 +45,7 @@ module GDrive
       end
 
       def ingest_pending?
-        ingest_status == "new" || ingest_status == "in_progress"
+        %w[new in_progress].include?(ingest_status)
       end
 
       def ingest_failed?

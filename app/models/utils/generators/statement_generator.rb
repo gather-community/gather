@@ -24,6 +24,7 @@ module Utils
         # All but 4 accounts get paid up.
         Billing::Account.all.shuffle[0..-4].each do |acct|
           next if acct.balance_due <= 0
+
           Timecop.freeze(rand(20).days) do
             acct.transactions.create!(
               value: acct.balance_due,

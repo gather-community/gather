@@ -53,7 +53,7 @@ module Meals
       if update_calcs?
         attrs.push(:meal_calc_type, :pantry_calc_type, :pantry_fee_formatted)
         attrs.push(parts_attributes: [:id, :type_id, :share_formatted, :portion_size,
-                                      :_destroy, type_attributes: %i[name]])
+                                      :_destroy, {type_attributes: %i[name]}])
       end
       attrs
     end

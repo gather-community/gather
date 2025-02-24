@@ -6,8 +6,13 @@ describe GDrive::Migration::WebhookRefreshJob do
   include_context "jobs"
 
   let(:community) { create(:community, id: 123) }
-  let!(:main_config) { create(:gdrive_main_config, community: community, org_user_id: "workspace.admin@touchstonecohousing.org") }
-  let!(:token) { create(:gdrive_token, gdrive_config: main_config, google_user_id: main_config.org_user_id, access_token: "ya29.a0AfB_byDbkQ6Z6aG9nLFlIEgbC6uJwS5pjnPzIYreh7AtdgnrAJxVvmNI0-6cYRuK0AbEgnQziTry6J-S0RyorHo4-7b3b9x8Rn7pl5wI7TyAP7nvD4RAqpOnrn7HAf7X9NDw7QEDfmXzPquVWbuaOMzOEfDh-_DBpOGkOfkaCgYKAUYSARESFQHGX2Mii53-4bcjZLOXXxESdQZIsw0174") }
+  let!(:main_config) do
+    create(:gdrive_main_config, community: community, org_user_id: "workspace.admin@touchstonecohousing.org")
+  end
+  let!(:token) do
+    create(:gdrive_token, gdrive_config: main_config, google_user_id: main_config.org_user_id,
+                          access_token: "ya29.a0AfB_byDbkQ6Z6aG9nLFlIEgbC6uJwS5pjnPzIYreh7AtdgnrAJxVvmNI0-6cYRuK0AbEgnQziTry6J-S0RyorHo4-7b3b9x8Rn7pl5wI7TyAP7nvD4RAqpOnrn7HAf7X9NDw7QEDfmXzPquVWbuaOMzOEfDh-_DBpOGkOfkaCgYKAUYSARESFQHGX2Mii53-4bcjZLOXXxESdQZIsw0174")
+  end
   let!(:migration_config) { create(:gdrive_migration_config, community: community) }
   subject(:job) { described_class.new }
 
@@ -21,9 +26,9 @@ describe GDrive::Migration::WebhookRefreshJob do
     let(:expiration) { Time.current + 3.days }
     let!(:operation) do
       create(:gdrive_migration_operation, :webhook_registered, config: migration_config,
-        webhook_channel_id: "2b8d212d-b0f7-47ae-b5ec-e971d8f86c19",
-        webhook_expires_at: expiration,
-        start_page_token: "13296")
+                                                               webhook_channel_id: "2b8d212d-b0f7-47ae-b5ec-e971d8f86c19",
+                                                               webhook_expires_at: expiration,
+                                                               start_page_token: "13296")
     end
 
     it "does not refresh" do
@@ -38,9 +43,9 @@ describe GDrive::Migration::WebhookRefreshJob do
     let(:expiration) { Time.current - 1.day }
     let!(:operation) do
       create(:gdrive_migration_operation, :webhook_registered, config: migration_config,
-        webhook_channel_id: "0a6ba57a-e058-4a06-a21f-ae1e57f0262b",
-        webhook_expires_at: expiration,
-        start_page_token: "13296")
+                                                               webhook_channel_id: "0a6ba57a-e058-4a06-a21f-ae1e57f0262b",
+                                                               webhook_expires_at: expiration,
+                                                               start_page_token: "13296")
     end
 
     it "refreshes and ignores failure on stop call" do
@@ -58,9 +63,9 @@ describe GDrive::Migration::WebhookRefreshJob do
     let(:expiration) { Time.current + 1.day }
     let!(:operation) do
       create(:gdrive_migration_operation, :webhook_registered, config: migration_config,
-        webhook_channel_id: "2b8d212d-b0f7-47ae-b5ec-e971d8f86c19",
-        webhook_resource_id: "030dP89w23Mzw28mQBrIu00iMXg",
-        webhook_expires_at: expiration)
+                                                               webhook_channel_id: "2b8d212d-b0f7-47ae-b5ec-e971d8f86c19",
+                                                               webhook_resource_id: "030dP89w23Mzw28mQBrIu00iMXg",
+                                                               webhook_expires_at: expiration)
     end
 
     it "refreshes" do

@@ -25,7 +25,8 @@ describe Work::ShiftIndexUpdater do
     it "updates shifts on assignment change" do
       expect(updater).to receive(:reindex)
       assign_attrs = {0 => {user_id: create(:user).id}}
-      job.update!(shifts_attributes: {0 => {id: job.shifts.first.id, assignments_attributes: assign_attrs}})
+      job.update!(shifts_attributes: {0 => {id: job.shifts.first.id,
+                                            assignments_attributes: assign_attrs}})
     end
   end
 

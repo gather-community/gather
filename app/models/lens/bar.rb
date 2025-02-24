@@ -11,13 +11,14 @@ module Lens
     end
 
     def html(options = {})
-      h.content_tag(:form, inner, class: "form-inline lens-bar hidden-print #{options[:position]}")
+      h.tag.form(inner, class: "form-inline lens-bar hidden-print #{options[:position]}")
     end
 
     private
 
     def inner
       return @inner if @inner
+
       html = set.lenses.reject(&:floating?).map(&:render)
       html << link_to_clear
       @inner = html.compact.reduce(&h.sep(" "))
@@ -29,7 +30,7 @@ module Lens
 
     def link_to_clear
       if set.can_clear_lenses?
-        h.link_to(h.icon_tag("times-circle") << " " << h.content_tag(:span, "Clear Filter"),
+        h.link_to(h.icon_tag("times-circle") << " " << h.tag.span("Clear Filter"),
                   set.path_to_clear, class: "clear")
       else
         ""

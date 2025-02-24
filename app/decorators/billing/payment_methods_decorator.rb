@@ -14,6 +14,7 @@ module Billing
 
     def payment_badge(type)
       return unless send("pay_with_#{type}?")
+
       image = h.image_tag("payment-badges/#{type.to_s.tr('_', '-')}.png",
                           class: "payment-badge", alt: t("accounts.payment_badge_alt.#{type}"))
       payment_link(type, image)
@@ -67,9 +68,10 @@ module Billing
 
     def link_attribs(type)
       return unless type == :paypal
+
       if pay_with_paypal_me? && paypal_friend?
-        {data: {confirm: "Please **do not** select 'Paying for goods or a service?' if prompted "\
-          "to avoid being charged a fee."}}
+        {data: {confirm: "Please **do not** select 'Paying for goods or a service?' if prompted " \
+                         "to avoid being charged a fee."}}
       else
         {}
       end

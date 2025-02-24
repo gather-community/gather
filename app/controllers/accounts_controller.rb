@@ -96,6 +96,7 @@ class AccountsController < ApplicationController
 
   def prepare_lens_and_get_community
     return current_user.community unless @accounts.many?
+
     prepare_lenses(community: {clearable: false, subdomain: false})
     lenses[:community].selection
   end
@@ -115,9 +116,9 @@ class AccountsController < ApplicationController
 
   def build_account_totals
     totals = {due_last_statement: 0, total_new_credits: 0, balance_due: 0,
-            total_new_charges: 0, current_balance: 0}
+              total_new_charges: 0, current_balance: 0}
     @accounts.each do |account|
-      totals.keys.each { |k| totals[k] += (account.send(k) || 0) }
+      totals.keys.each { |k| totals[k] += account.send(k) || 0 }
     end
     totals
   end

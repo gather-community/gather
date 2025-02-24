@@ -8,7 +8,7 @@ module CustomFields
       end
 
       def normalize(value)
-        if value == true || value == false
+        if [true, false].include?(value)
           value
         elsif %w[1 true].include?(value.to_s)
           true

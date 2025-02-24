@@ -13,15 +13,16 @@ class HouseholdDecorator < ApplicationDecorator
   end
 
   def selected_option_tag
-    h.content_tag(:option, name_with_prefix, value: id, selected: "selected")
+    h.tag.option(name_with_prefix, value: id, selected: "selected")
   end
 
   def emergency_contacts_html
     return "[None]" if emergency_contacts.empty?
+
     emergency_contacts.map do |contact|
       foreign = contact.country_code != h.current_community.country_code
       phone_format = foreign ? :international : :national
-      h.content_tag(:div, class: "emergency-contact") do
+      h.tag.div(class: "emergency-contact") do
         lines = [contact.name_relationship, contact.location]
         lines.concat(contact.phones.map { |p| h.phone_link(p, show_country: foreign, format: phone_format) })
         lines << h.link_to(contact.email, "mailto:#{contact.email}") if contact.email.present?
@@ -32,16 +33,15 @@ class HouseholdDecorator < ApplicationDecorator
 
   def pets_html
     return "[None]" if pets.empty?
+
     pets.map do |pet|
-      h.content_tag(:div, class: "pet") do
+      h.tag.div(class: "pet") do
         lines = []
         lines << "#{pet.name} (#{pet.color} #{pet.species})"
-        lines << (h.content_tag(:span, "Vet", class: "inner-label") << pet.vet) if pet.vet.present?
-        if pet.caregivers.present?
-          lines << (h.content_tag(:span, "Caregivers", class: "inner-label") << pet.caregivers)
-        end
+        lines << (h.tag.span("Vet", class: "inner-label") << pet.vet) if pet.vet.present?
+        lines << (h.tag.span("Caregivers", class: "inner-label") << pet.caregivers) if pet.caregivers.present?
         if pet.health_issues.present?
-          lines << (h.content_tag(:span, "Health Issues", class: "inner-label") <<
+          lines << (h.tag.span("Health Issues", class: "inner-label") <<
             h.simple_format(pet.health_issues))
         end
         h.safe_join(lines, h.tag(:br))

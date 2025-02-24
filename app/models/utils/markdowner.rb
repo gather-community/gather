@@ -8,6 +8,7 @@ module Utils
 
     def render(str, extra_allowed_tags: [])
       return "" if str.blank?
+
       table_tags = %w[table thead tbody tfoot tr th td]
       tags = Rails::Html::SafeListSanitizer.allowed_tags + extra_allowed_tags + table_tags
       attributes = Rails::Html::SafeListSanitizer.allowed_attributes + %w[target]

@@ -22,6 +22,7 @@ module Meals
       current_meals(meals).find_each do |meal|
         reminders_for_roles.each do |reminder|
           next if pairs[[meal.id, reminder.id]]
+
           RoleReminderDelivery.new(meal: meal, reminder: reminder).calculate_and_save
         end
       end

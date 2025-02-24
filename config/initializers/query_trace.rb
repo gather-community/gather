@@ -6,8 +6,9 @@ if Rails.env.development? || ENV["QUERY_TRACE"]
   class QueryTrace < ActiveSupport::LogSubscriber
     attr_accessor :trace_queries
 
-    def sql(_event) #:nodoc:
+    def sql(_event) # :nodoc:
       return unless QueryTrace.enabled? && logger.debug?
+
       stack = Rails.backtrace_cleaner.clean(caller)
       first_line = stack.shift
       return unless first_line
@@ -66,7 +67,7 @@ if Rails.env.development? || ENV["QUERY_TRACE"]
 
     protected
 
-    def prefix #:nodoc:
+    def prefix # :nodoc:
       "Called from: "
     end
   end

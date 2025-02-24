@@ -12,9 +12,7 @@ module Work
 
     acts_as_tenant :cluster
 
-    attr_accessor :job_copy_source_id
-    attr_accessor :previous_meal_job_sync_setting_ids
-    attr_accessor :copy_preassignments
+    attr_accessor :job_copy_source_id, :previous_meal_job_sync_setting_ids, :copy_preassignments
     alias copy_preassignments? copy_preassignments
 
     belongs_to :community, inverse_of: :work_periods
@@ -111,6 +109,7 @@ module Work
       self.phase = "open" if should_auto_open?
       self.pick_type = "free_for_all" if quota_none?
       return if staggered?
+
       self.round_duration = nil
       self.max_rounds_per_worker = nil
       self.workers_per_round = nil

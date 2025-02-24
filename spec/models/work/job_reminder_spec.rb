@@ -10,7 +10,7 @@ describe Work::JobReminder do
 
   describe "normalization" do
     let(:reminder) { build(:work_job_reminder, submitted) }
-    subject(:normalized) { submitted.keys.map { |k| [k, reminder.send(k)] }.to_h }
+    subject(:normalized) { submitted.keys.index_with { |k| reminder.send(k) }.to_h }
 
     before { reminder.validate } # Trigger the callback.
 

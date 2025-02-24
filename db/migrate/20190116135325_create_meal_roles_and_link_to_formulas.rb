@@ -14,6 +14,7 @@ class CreateMealRolesAndLinkToFormulas < ActiveRecord::Migration[5.1]
       roles = [create_role(community, :head_cook)]
       extra_roles(community).each do |role_key|
         next unless TITLES[role_key] # Skip invalid roles
+
         roles << create_role(community, role_key)
       end
 
@@ -66,13 +67,11 @@ class CreateMealRolesAndLinkToFormulas < ActiveRecord::Migration[5.1]
     execute("SELECT #{path} FROM communities WHERE id = #{community.id}").to_a[0].values[0]
   end
 
-  def each_community
+  def each_community(&block)
     ActsAsTenant.without_tenant do
       Cluster.all.each do |cluster|
         ActsAsTenant.with_tenant(cluster) do
-          cluster.communities.each do |community|
-            yield(community)
-          end
+          cluster.communities.each(&block)
         end
       end
     end

@@ -16,13 +16,13 @@ module Groups
     has_many :affiliations, class_name: "Groups::Affiliation", dependent: :destroy, inverse_of: :group
     has_many :communities, through: :affiliations
     has_many :memberships, -> { by_kind_and_user_name }, class_name: "Groups::Membership",
-      dependent: :destroy, inverse_of: :group
+                                                         dependent: :destroy, inverse_of: :group
     has_many :work_jobs, class_name: "Work::Job", foreign_key: :requester_id, dependent: :nullify,
-      inverse_of: :requester
+                         inverse_of: :requester
     has_many :work_periods_as_meal_job_requester, class_name: "Work::Period",
-      foreign_key: :meal_job_requester_id,
-      dependent: :nullify,
-      inverse_of: :meal_job_requester
+                                                  foreign_key: :meal_job_requester_id,
+                                                  dependent: :nullify,
+                                                  inverse_of: :meal_job_requester
     has_many :events, class_name: "Calendars::Event", dependent: :nullify, inverse_of: :group
     has_many :gdrive_item_groups, class_name: "GDrive::ItemGroup", dependent: :destroy, inverse_of: :group
     has_one :mailman_list, class_name: "Groups::Mailman::List", dependent: :destroy, inverse_of: :group
@@ -59,7 +59,7 @@ module Groups
     scope :with_user, lambda { |user|
       subq = "(SELECT id FROM group_memberships WHERE group_id = groups.id AND user_id = ? AND kind IN (?))"
       memb_clause = "(availability != 'everybody' AND EXISTS #{subq}) OR " \
-        "(availability = 'everybody' AND NOT EXISTS #{subq})"
+                    "(availability = 'everybody' AND NOT EXISTS #{subq})"
       affil_clause = "? IN (SELECT community_id FROM group_affiliations WHERE group_id = groups.id)"
       where(memb_clause, user, %w[joiner manager], user, %w[opt_out])
         .where(affil_clause, user.community_id)
@@ -71,7 +71,7 @@ module Groups
         translated = I18n.t("simple_form.options.groups_group.kind.#{kind}")
         "WHEN '#{kind}' THEN '#{translated}'"
       end
-      order(Arel.sql("LOWER(CASE kind #{whens.join(" ")} END)"))
+      order(Arel.sql("LOWER(CASE kind #{whens.join(' ')} END)"))
     }
 
     normalize_attributes :kind, :availability, :name
@@ -137,6 +137,7 @@ module Groups
         mships_by_user = matching_mships.index_by(&:user)
         all_users.each do |user|
           next if mships_by_user.key?(user)
+
           matching_mships << Membership.new(group: self, user: user, kind: "joiner")
         end
       end
@@ -188,22 +189,23 @@ module Groups
 
     def name_unique_in_all_communities
       return if name.blank?
+
       scope = self.class.where(name: name)
       scope = scope.where.not(id: id) if persisted?
       return if (communities & scope.to_a.flat_map(&:communities)).none?
+
       errors.add(:name, :taken)
     end
 
     def at_least_one_affiliation
       return if affiliations.reject(&:marked_for_destruction?).any?
+
       errors.add(:base, :at_least_one_affiliation)
     end
 
     def clear_mailman_list_if_empty_name
       # If list doesn't pre-exist and no name is given, we're assuming they didn't fill in the form.
-      if mailman_list&.new_record? && mailman_list.name.blank?
-        self.mailman_list = nil
-      end
+      self.mailman_list = nil if mailman_list&.new_record? && mailman_list.name.blank?
     end
   end
 end

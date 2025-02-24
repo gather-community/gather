@@ -31,7 +31,7 @@ module Calendars
       children_by_group_id = second_level.group_by(&:group_id)
       first_level = base_scope.first_level
       first_level = decorator.decorate_collection(first_level) if decorator.present?
-      first_level.map { |n| [n, children_by_group_id[n.id] || {}] }.to_h
+      first_level.index_with { |n| children_by_group_id[n.id] || {} }
     end
   end
 end

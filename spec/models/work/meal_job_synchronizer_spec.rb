@@ -128,8 +128,14 @@ describe Work::MealJobSynchronizer do
       settings = period.meal_job_sync_settings
       period.update!(meal_job_sync_settings_attributes: {
         "0" => {id: settings.detect { |s| s.role_id == role1.id }.id}, # No change
-        "1" => {id: settings.detect { |s| s.role_id == role2.id }.id, _destroy: "1"}, # Should kill shifts
-        "2" => {id: settings.detect { |s| s.role_id == role3.id }.id, _destroy: "1"}, # Should kill job
+        "1" => {id: # Should kill shifts
+settings.detect do |s|
+  s.role_id == role2.id
+end.id, _destroy: "1"},
+        "2" => {id: # Should kill job
+settings.detect do |s|
+  s.role_id == role3.id
+end.id, _destroy: "1"},
         "3" => {formula_id: formula2.id, role_id: role1.id}, # Should add shifts
         "4" => {formula_id: formula1.id, role_id: role4.id} # Should add job
       })

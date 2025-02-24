@@ -122,16 +122,19 @@ module Work
 
     def no_duplicate_start_end_times
       return unless non_destroyed_shifts.map { |s| [s.starts_at, s.ends_at] }.uniq.size < shift_count
+
       errors.add(:shifts, :duplicate_start_end_times)
     end
 
     def shifts_same_length_for_date_time_full_multiple
       return unless date_time? && full_community_multiple_slot? && !all_shifts_have_same_elapsed_time?
+
       errors.add(:shifts, :different_length_shifts)
     end
 
     def hours_per_shift_evenly_divides_hours
       return unless hours.present? && hours_per_shift.present? && hours % hours_per_shift != 0
+
       errors.add(:hours_per_shift, :uneven_divisor, hours: hours)
     end
 

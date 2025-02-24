@@ -39,11 +39,11 @@ module People
         respond_with_navigational(resource.errors, status: :unprocessable_entity) do
           if signed_in?(resource_name)
             flash[:alert] = "The confirmation period has expired. " \
-              "Please use the 'Resend confirmation instructions' link below to try again."
+                            "Please use the 'Resend confirmation instructions' link below to try again."
             redirect_to(user_path(resource))
           else
             flash[:alert] = "The confirmation period has expired. " \
-              "Please sign in using your old email address and try again."
+                            "Please sign in using your old email address and try again."
             redirect_to(root_path)
           end
         end

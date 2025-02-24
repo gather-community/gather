@@ -311,18 +311,18 @@ describe GDrive::SyncListener do
 
   def expect_enqueues_job_with_users(*users, communities: [Defaults.community], &block)
     expect_enqueues_job_with_objects(users, job_class: GDrive::UserPermissionSyncJob,
-      id_key: :user_id, communities: communities, &block)
+                                            id_key: :user_id, communities: communities, &block)
   end
 
   def expect_enqueues_job_with_items(*items, &block)
     expect_enqueues_job_with_objects(items, job_class: GDrive::ItemPermissionSyncJob,
-      id_key: :item_id, communities: [items[0].community], &block)
+                                            id_key: :item_id, communities: [items[0].community], &block)
   end
 
   def expect_enqueues_job_with_objects(objects, job_class:, id_key:, communities:, &block)
     calls = []
-    expect(&block).to have_enqueued_job(job_class).exactly(objects.size * communities.size).times
-      .with { |**args| calls << args }
+    expect(&block).to(have_enqueued_job(job_class).exactly(objects.size * communities.size).times
+                                                  .with { |**args| calls << args })
     expected_params = objects.flat_map do |obj|
       communities.map do |community|
         expected_id = obj.persisted? ? obj.id : anything

@@ -14,7 +14,7 @@ class UploadsController < ApplicationController
   def create
     authorize(Upload.new)
     blob = ActiveStorage::Blob.create_and_upload!(io: params[:file].open,
-                                                    filename: params[:file].original_filename)
+                                                  filename: params[:file].original_filename)
 
     # Run validations to ensure that the attachment is valid.
     object = build_object_with_blob_attached(params[:class_name], params[:attrib], blob)
@@ -40,6 +40,7 @@ class UploadsController < ApplicationController
 
   def ensure_permitted_class
     return if Array.wrap(PERMITTED_ATTRIBS[params[:class_name]]).include?(params[:attrib])
+
     render(json: {error: ["Unpermitted attribute"]}, status: :forbidden)
   end
 end

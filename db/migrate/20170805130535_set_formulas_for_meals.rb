@@ -8,6 +8,7 @@ class SetFormulasForMeals < ActiveRecord::Migration[4.2]
           .where(community_id: meal.community_id)
           .order(effective_on: :desc).first.id
         raise "formula not found for meal #{meal.id}" unless formula_id
+
         meal.update_attribute(:formula_id, formula_id)
       end
     end

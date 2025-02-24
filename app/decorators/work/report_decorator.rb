@@ -33,6 +33,7 @@ module Work
     def regular_pct_for(entity)
       denom = entity.users.sum { |u| shares_by_user[u.id].try(:adjusted_quota) || 0 }
       return "" if denom.zero?
+
       num = entity.users.sum { |u| by_user.dig(u.id, :fixed_slot) || 0 } * 100
       h.number_to_percentage(num / denom, precision: 0)
     end
@@ -45,6 +46,7 @@ module Work
     def fc_job_pct_for(fcjob, entity)
       denom = fcjob.hours * entity.users.sum { |u| shares_by_user[u.id].try(:portion) || 0 }
       return "" if denom.zero?
+
       num = entity.users.sum { |u| by_user.dig(u.id, fcjob) || 0 } * 100
       h.number_to_percentage(num / denom, precision: 0)
     end

@@ -20,18 +20,20 @@ class DateRangeBuilder
     year = max_range[1].year
     loop do
       break unless add_range(year, Date.new(year, 1, 1), Date.new(year, 12, 31))
+
       year -= 1
     end
   end
 
   def add_quarters(count)
     year = max_range[1].year
-    quarter = (max_range[1].beginning_of_quarter.month - 1) / 3 + 1
+    quarter = ((max_range[1].beginning_of_quarter.month - 1) / 3) + 1
     count.times do
       (quarter = 4) && (year -= 1) if quarter.zero?
-      first = Date.new(year, (quarter - 1) * 3 + 1, 1)
+      first = Date.new(year, ((quarter - 1) * 3) + 1, 1)
       last = first.end_of_quarter
       break unless add_range("#{year} Q#{quarter}", first, last)
+
       quarter -= 1
     end
   end
@@ -45,6 +47,7 @@ class DateRangeBuilder
       last = first.end_of_month
       month_name = I18n.l(first, format: "%B")
       break unless add_range("#{month_name} #{year}", first, last)
+
       month -= 1
     end
   end
@@ -61,6 +64,7 @@ class DateRangeBuilder
 
   def add_range(label, first, last)
     return false if last < max_range[0] || max_range[1] < first
+
     first = [first, max_range[0]].max if trim_ranges
     last = [last, max_range[1]].min if trim_ranges
     val = [first, last].map { |d| d.strftime("%Y%m%d") }.join("-")

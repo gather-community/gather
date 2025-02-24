@@ -25,6 +25,7 @@ module Calendars
     def system_events
       # If own_only is true, we exclude all system events because all such events are created by the system.
       return [] if own_only
+
       system_calendars.map { |c| c.events_between(range, actor: user) }.flatten
     end
 

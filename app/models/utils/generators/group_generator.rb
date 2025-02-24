@@ -31,7 +31,7 @@ module Utils
       end
 
       def generate_and_populate_everybody_group
-        generate_everybody_group unless Groups::Group.where(availability: "everybody").exists?
+        generate_everybody_group unless Groups::Group.exists?(availability: "everybody")
         group = Groups::Group.find_by(availability: "everybody")
         group.memberships.create!(user: users[user_index], kind: "manager")
         group.memberships.create!(user: users[user_index + 1], kind: "opt_out")

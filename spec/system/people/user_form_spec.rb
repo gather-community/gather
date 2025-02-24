@@ -123,12 +123,12 @@ describe "user form", js: true, perform_jobs: true do
         let(:community_with_user_custom_fields) do
           create(:community, settings: {
             people: {
-              user_custom_fields_spec: "- key: foo\n" \
-                                       "  type: boolean\n" \
-                                       "- key: bar\n" \
-                                       "  type: string\n" \
-                                       "  label: Pants\n" \
-                                       "  hint: Pants information"
+              user_custom_fields_spec: "- key: foo\n  " \
+                                       "type: boolean\n" \
+                                       "- key: bar\n  " \
+                                       "type: string\n  " \
+                                       "label: Pants\n  " \
+                                       "hint: Pants information"
             }
           })
         end
@@ -252,12 +252,12 @@ describe "user form", js: true, perform_jobs: true do
         let(:community_with_user_custom_fields) do
           create(:community, settings: {
             people: {
-              user_custom_fields_spec: "- key: foo\n" \
-                                       "  type: boolean\n" \
-                                       "- key: bar\n" \
-                                       "  type: string\n" \
-                                       "  label: Pants\n" \
-                                       "  hint: Pants information"
+              user_custom_fields_spec: "- key: foo\n  " \
+                                       "type: boolean\n" \
+                                       "- key: bar\n  " \
+                                       "type: string\n  " \
+                                       "label: Pants\n  " \
+                                       "hint: Pants information"
             }
           })
         end
@@ -320,7 +320,7 @@ describe "user form", js: true, perform_jobs: true do
       visit(edit_path)
       click_link("reactivate")
       expect(page).to have_warning_alert("User activated successfully, but they will need an invitation to sign in. " \
-        "Click 'Invite' below to invite them.")
+                                         "Click 'Invite' below to invite them.")
     end
   end
 

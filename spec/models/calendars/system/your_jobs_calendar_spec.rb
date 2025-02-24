@@ -114,7 +114,7 @@ describe Calendars::System::YourJobsCalendar do
     }, {
       name: "Single-day",
       location: nil,
-      note: "A very silly job\.",
+      note: "A very silly job.",
       uid: "Work_Assignment_#{job2.shifts[0].assignments[0].id}",
       linkable: job2.shifts[0],
       all_day: true,
@@ -175,6 +175,6 @@ describe Calendars::System::YourJobsCalendar do
 
   it "returns empty if no actor is given" do
     events = calendar.events_between(full_range, actor: nil)
-    expect_events(events, *[])
+    expect_events(events)
   end
 end

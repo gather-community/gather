@@ -9,8 +9,10 @@ module Work
     def to_s
       return @to_s if defined?(@to_s)
       return (@to_s = nil) if empty?
+
       sentences = %i[for_user for_household].map do |who|
         next unless send(who)
+
         chunks = send(who).map { |i| chunk_for_item(i) }
         safe_str << h.t("work.synopsis.#{who}") << " " << join_chunks(chunks)
       end
@@ -37,13 +39,14 @@ module Work
     private
 
     def youre_all_set
-      h.content_tag(:i, h.t("work.synopsis.done"))
+      h.tag.i(h.t("work.synopsis.done"))
     end
 
     def chunk_for_item(item)
       got = round_next_half(item[:got])
       ttl = round_next_half(item[:ttl])
-      fraction = h.content_tag(item[:ok] ? :i : :b, "#{got}/#{ttl}")
+      fraction_str = "#{got}/#{ttl}"
+      fraction = item[:ok] ? h.tag(:i, fraction_str) : h.tag(:b, fraction_str)
       h.t("work.synopsis.chunk.#{item_count}_html",
           title: h.sanitize(item[:bucket].title), fraction: fraction)
     end
@@ -60,6 +63,7 @@ module Work
 
     def staggering_plan
       return unless staggering.present? && staggering[:prev_limit].present?
+
       if staggering[:prev_limit].zero?
         h.t("work.synopsis.start_choosing", at_or_on_time: next_round_time)
       elsif staggering[:next_limit].nil?
@@ -73,6 +77,7 @@ module Work
 
     def next_round_time(preposition: nil)
       return if staggering[:next_starts_at].nil?
+
       preposition ||= staggering[:next_starts_at].today? ? "at" : "on"
       format = preposition == "on" ? :wday_no_year : :time_only
       time = h.l(staggering[:next_starts_at], format: format)

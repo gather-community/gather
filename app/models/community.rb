@@ -20,15 +20,16 @@ class Community < ApplicationRecord
   has_many :meal_types, class_name: "Meals::Type", inverse_of: :community, dependent: :destroy
   has_many :member_types, class_name: "People::MemberType", inverse_of: :community, dependent: :destroy
   has_many :calendar_protocols, class_name: "Calendars::Protocol",
-    inverse_of: :community, dependent: :destroy
+                                inverse_of: :community, dependent: :destroy
   has_many :calendar_shared_guidelines, class_name: "Calendars::SharedGuidelines",
-    inverse_of: :community, dependent: :destroy
+                                        inverse_of: :community, dependent: :destroy
   has_many :calendars, class_name: "Calendars::Calendar", inverse_of: :community, dependent: :destroy
   has_many :calendar_groups, class_name: "Calendars::Group", inverse_of: :community, dependent: :destroy
   has_many :households, inverse_of: :community, dependent: :destroy
   has_many :wiki_pages, class_name: "Wiki::Page", inverse_of: :community, dependent: :destroy
   has_one :subscription, inverse_of: :community, class_name: "Subscription::Subscription", dependent: :destroy
-  has_one :subscription_intent, inverse_of: :community, class_name: "Subscription::Intent", dependent: :destroy
+  has_one :subscription_intent, inverse_of: :community, class_name: "Subscription::Intent",
+                                dependent: :destroy
   has_many :work_periods, class_name: "Work::Period", inverse_of: :community, dependent: :destroy
 
   scope :by_name, -> { order(:name) }
@@ -49,7 +50,8 @@ class Community < ApplicationRecord
        default: "directory", required: true},
       {key: :main_nav_customizations, type: :text},
       {key: :people, type: :group, fields: [
-        {key: :default_directory_sort, type: :enum, options: %w[name unit], default: "name", required: true},
+        {key: :default_directory_sort, type: :enum, options: %w[name unit], default: "name",
+         required: true},
         {key: :plain_user_selects, type: :boolean, default: false},
         {key: :user_custom_fields_spec, type: :spec}
       ]},

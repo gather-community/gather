@@ -25,13 +25,14 @@ module Work
       @reminders = job.meal_role? ? job.meal_role.reminders : job.reminders
       authorize(@job)
       if policy(sample_job).edit? && job.meal_role?
-        flash.now[:notice] = "This is job was synchronized from the meals system and can't be edited "\
-          "directly. It will be automatically updated to reflect newly added or changed meals."
+        flash.now[:notice] = "This is job was synchronized from the meals system and can't be edited " \
+                             "directly. It will be automatically updated to reflect newly added or changed meals."
       end
     end
 
     def new
       return render_not_found if params[:period].blank?
+
       @job = Job.new(period_id: params[:period])
       @job.shifts.build
       @job.reminders.build(rel_magnitude: 1, rel_unit_sign: "days_before")

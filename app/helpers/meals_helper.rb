@@ -2,8 +2,8 @@
 
 module MealsHelper
   # Use this helper if the current_community *is or may be* different from the target meal's community.
-  def meal_url(meal, *args)
-    url_in_community(meal.community, meal_path(meal, *args))
+  def meal_url(meal, *)
+    url_in_community(meal.community, meal_path(meal, *))
   end
 
   def signup_link(meal)

@@ -2,7 +2,7 @@
 
 module Meals
   class MealPolicy < ApplicationPolicy
-    alias_method :meal, :record
+    alias meal record
 
     class Scope < Scope
       ASSIGNED = "EXISTS (SELECT id FROM meal_assignments
@@ -21,7 +21,7 @@ module Meals
           scope
         elsif user.active?
           scope.where("#{ASSIGNED} OR #{INVITED} OR #{SIGNED_UP}",
-            user.id, user.community_id, user.household_id)
+                      user.id, user.community_id, user.household_id)
         else
           scope.where(SIGNED_UP, user.household_id)
         end
@@ -97,7 +97,7 @@ module Meals
     end
 
     def change_invites?
-      active_admin_or?(:meals_coordinator) || meal.community.settings.meals.cooks_can_change_invites? && head_cook?
+      active_admin_or?(:meals_coordinator) || (meal.community.settings.meals.cooks_can_change_invites? && head_cook?)
     end
 
     def change_formula?
@@ -154,7 +154,7 @@ module Meals
     end
 
     def active_and_associated_or_signed_up?
-      active? && associated? || signed_up? || active_admin?
+      (active? && associated?) || signed_up? || active_admin?
     end
 
     def not_finalized_and_admin_coord_head_cook_or_biller?
@@ -162,7 +162,7 @@ module Meals
     end
 
     def admin_or_biller_or_head_cook_and_can_finalize?
-      active_admin_or?(:biller) || meal.community.settings.meals.cooks_can_finalize? && head_cook?
+      active_admin_or?(:biller) || (meal.community.settings.meals.cooks_can_finalize? && head_cook?)
     end
 
     def associated?
@@ -206,7 +206,7 @@ module Meals
     end
 
     def signup_attribs
-      [signups_attributes: [:id, :household_id, parts_attributes: %i[id type_id count _destroy]]]
+      [signups_attributes: [:id, :household_id, {parts_attributes: %i[id type_id count _destroy]}]]
     end
 
     def expense_attribs

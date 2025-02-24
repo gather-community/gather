@@ -31,18 +31,14 @@ module GDrive
           return render_not_found
         end
 
-        unless operation.active?
-          operation.log(:info, "Operation is inactive, not processing webhook")
-        end
+        operation.log(:info, "Operation is inactive, not processing webhook") unless operation.active?
 
         ScanJob.with_lock(operation.id) do
           # No need to start a new scan if there is already one that hasn't started running.
           # Background jobs only get started every few seconds so this should debounce
           # things if a lot of webhook pings are coming in.
           # We do this in a critical section so that we don't have any race conditions.
-          if !operation.scans.changes.any?(&:new?)
-            ScanJob.enqueue_change_scan_job(operation)
-          end
+          ScanJob.enqueue_change_scan_job(operation) unless operation.scans.changes.any?(&:new?)
         end
       end
 

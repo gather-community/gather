@@ -21,7 +21,7 @@ describe "member types", js: true do
 
     expect_success
     click_on("Squengler")
-    
+
     fill_in("Name", with: "Pongler")
     click_on("Save")
 

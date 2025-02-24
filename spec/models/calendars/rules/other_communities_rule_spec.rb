@@ -22,7 +22,7 @@ describe Calendars::Rules::OtherCommunitiesRule do
         event.creator = outsider
         event.sponsor = insider
         expect(rule.check(event)).to eq([:base,
-          "Residents from other communities may not make events"])
+                                         "Residents from other communities may not make events"])
       end
     end
 
@@ -54,13 +54,13 @@ describe Calendars::Rules::OtherCommunitiesRule do
         event.creator = outsider
         event.sponsor = outsider2
         expect(rule.check(event)).to eq([:sponsor_id,
-          "You must have a sponsor from #{calendar.community.name}"])
+                                         "You must have a sponsor from #{calendar.community.name}"])
       end
 
       it "should fail if outsider has no sponsor" do
         event.creator = outsider
         expect(rule.check(event)).to eq([:sponsor_id,
-          "You must have a sponsor from #{calendar.community.name}"])
+                                         "You must have a sponsor from #{calendar.community.name}"])
       end
     end
 

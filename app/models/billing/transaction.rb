@@ -14,12 +14,12 @@ module Billing
     belongs_to :statementable, polymorphic: true
 
     scope :in_community, ->(c) { joins(:account).merge(Billing::Account.in_community(c)) }
-    scope :for_household, ->(h) { joins(account: :household).where("households.id = ?", h.id) }
+    scope :for_household, ->(h) { joins(account: :household).where("households.id" => h.id) }
     scope :for_community_or_household,
-      ->(c, h) { joins(:account).merge(Billing::Account.for_community_or_household(c, h)) }
+          ->(c, h) { joins(:account).merge(Billing::Account.for_community_or_household(c, h)) }
     scope :incurred_between, ->(a, b) { where("incurred_on >= ? AND incurred_on <= ?", a, b) }
     scope :recorded_between,
-      ->(a, b) { where("transactions.created_at >= ? AND transactions.created_at <= ?", a, b) }
+          ->(a, b) { where("transactions.created_at >= ? AND transactions.created_at <= ?", a, b) }
     scope :no_statement, -> { where(statement_id: nil) }
     scope :newest_first, -> { order(incurred_on: :desc, created_at: :desc) }
     scope :oldest_first, -> { order(:incurred_on, :created_at) }
@@ -48,6 +48,7 @@ module Billing
       txns = txns.where(account: account) unless account.nil?
       txns = txns.in_community(community) unless community.nil?
       return nil if txns.none?
+
       [
         [txns.minimum(:created_at).to_date, txns.minimum(:incurred_on)].min,
         [txns.maximum(:created_at).to_date, txns.maximum(:incurred_on)].max
@@ -60,7 +61,7 @@ module Billing
     end
 
     def meal_id
-      (statementable_type == "Meals::Meal") ? statementable_id : nil
+      statementable_type == "Meals::Meal" ? statementable_id : nil
     end
 
     def statement?

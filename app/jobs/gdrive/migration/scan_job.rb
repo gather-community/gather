@@ -8,10 +8,11 @@ module GDrive
       MIN_ERRORS_TO_CANCEL = 5
       MAX_ERROR_RATIO = 0.05
       FILE_FIELDS = "id,name,parents,mimeType,webViewLink,iconLink,modifiedTime,owners(emailAddress)," \
-        "capabilities(canEdit),shortcutDetails(targetId,targetMimeType),trashed"
+                    "capabilities(canEdit),shortcutDetails(targetId,targetMimeType),trashed"
 
       # If we get a not found error trying to find one of these, we should just terminate gracefully.
-      DISAPPEARABLE_CLASSES = %w[GDrive::Migration::Operation GDrive::Migration::Scan GDrive::Migration::ScanTask].freeze
+      DISAPPEARABLE_CLASSES = %w[GDrive::Migration::Operation GDrive::Migration::Scan
+                                 GDrive::Migration::ScanTask].freeze
 
       attr_accessor :cluster_id, :scan_task, :scan, :operation, :ancestor_tree_duplicator
 
@@ -48,14 +49,15 @@ module GDrive
           do_scan_task
           check_for_completeness
         end
-      rescue ActiveRecord::RecordNotFound => error
-        class_name = error.message.match(/Couldn't find (.+) with/).captures[0]
+      rescue ActiveRecord::RecordNotFound => e
+        class_name = e.message.match(/Couldn't find (.+) with/).captures[0]
         raise unless DISAPPEARABLE_CLASSES.include?(class_name)
+
         if operation
-          operation.log(:error, error.message)
+          operation.log(:error, e.message)
           operation.log(:info, "Exiting gracefully")
         else
-          Rails.logger.error(error.message)
+          Rails.logger.error(e.message)
           Rails.logger.info("Exiting gracefully")
         end
       end
@@ -66,16 +68,17 @@ module GDrive
         # Only do this once per operation
         self.class.with_lock(operation.id) do
           return if operation.reload.start_page_token.present?
+
           WebhookRegistrar.setup(operation, wrapper)
         end
       end
 
       def do_scan_task
         files, next_page_token, new_start_page_token = if scan.full?
-          list_files_from_folder(scan_task.folder_id)
-        else
-          list_files_from_changes
-        end
+                                                         list_files_from_folder(scan_task.folder_id)
+                                                       else
+                                                         list_files_from_changes
+                                                       end
 
         # Update scan status now and then each time we go through loop.
         # We do it here just in case we are skipping all the files we fetched on the
@@ -101,7 +104,7 @@ module GDrive
             scan_next_page(next_page_token)
           elsif new_start_page_token
             operation.log(:info, "Reached end of changes, updating start page token",
-              new_start_page_token: new_start_page_token)
+                          new_start_page_token: new_start_page_token)
             operation.update!(start_page_token: new_start_page_token)
           end
         end
@@ -150,7 +153,7 @@ module GDrive
           # and we should delete any reference we have to it.
           if change.file.nil?
             operation.log(:info, "Received change with no file info, deleting references if present",
-              file_id: change.file_id)
+                          file_id: change.file_id)
             delete_references_to(change.file_id)
             next
           end
@@ -160,7 +163,7 @@ module GDrive
           # In any case, we don't care about these files anymore so delete any references if present.
           if change.file.drive_id.present?
             operation.log(:info, "Received change with drive_id, deleting references if present",
-              file_id: change.file_id, drive_id: change.file.drive_id)
+                          file_id: change.file_id, drive_id: change.file.drive_id)
             delete_references_to(change.file_id)
             next
           end
@@ -175,7 +178,7 @@ module GDrive
 
       def process_file(gdrive_file)
         operation.log(:info, "Processing item", id: gdrive_file.id, name: gdrive_file.name,
-          type: gdrive_file.mime_type, owner: gdrive_file.owners[0].email_address)
+                                                type: gdrive_file.mime_type, owner: gdrive_file.owners[0].email_address)
 
         # Sometimes a changes batch will include the src folder, which is redundant.
         # We should never get to this point in the full scan with the gdrive_file as the src_folder either.
@@ -188,10 +191,10 @@ module GDrive
 
         if gdrive_file.mime_type == GDrive::FOLDER_MIME_TYPE
           processing_folder_succeeded = if (folder_map = FolderMap.find_by(src_id: gdrive_file.id))
-            process_existing_folder(folder_map, gdrive_file)
-          else
-            process_new_folder(gdrive_file)
-          end
+                                          process_existing_folder(folder_map, gdrive_file)
+                                        else
+                                          process_new_folder(gdrive_file)
+                                        end
 
           return if scan.changes? || !processing_folder_succeeded
 
@@ -218,15 +221,15 @@ module GDrive
           # but it treats them skeptically by default, making sure that the destination folder still actually
           # exists before proceeding. But we don't need to check this when we are
           # doing the initial scan since we will have just created it.
-          dest_parent_id = ancestor_tree_duplicator.ensure_tree(gdrive_file,
-            skip_check_for_already_mapped_folders: scan.full?)
-        rescue AncestorTreeDuplicator::ParentFolderInaccessible => error
-          operation.log(:error, "Ancestor inaccessible", file_id: gdrive_file.id, folder_id: error.folder_id)
+          ancestor_tree_duplicator.ensure_tree(gdrive_file,
+                                               skip_check_for_already_mapped_folders: scan.full?)
+        rescue AncestorTreeDuplicator::ParentFolderInaccessible => e
+          operation.log(:error, "Ancestor inaccessible", file_id: gdrive_file.id, folder_id: e.folder_id)
           # We don't need to take any action here because a new folder with an inaccessible parent should
           # just be ignored as it's probably outside the migration tree.
           return false
-        rescue Google::Apis::ClientError => error
-          operation.log(:error, "Client error ensuring tree", file_id: file_id, message: error.to_s)
+        rescue Google::Apis::ClientError => e
+          operation.log(:error, "Client error ensuring tree", file_id: file_id, message: e.to_s)
           # We don't need to take any action here because a client error on a new folder means
           # we should probably just ignore it.
           return false
@@ -235,15 +238,18 @@ module GDrive
       end
 
       def process_existing_folder(folder_map, gdrive_file)
-        operation.log(:info, "Processing existing folder", src_id: folder_map.src_id, dest_id: folder_map.dest_id)
+        operation.log(:info, "Processing existing folder", src_id: folder_map.src_id,
+                                                           dest_id: folder_map.dest_id)
 
         if !gdrive_file.trashed && gdrive_file.name == folder_map.name && gdrive_file.parents[0] == folder_map.src_parent_id
-          operation.log(:info, "No changes, returning", src_id: folder_map.src_id, dest_id: folder_map.dest_id)
+          operation.log(:info, "No changes, returning", src_id: folder_map.src_id,
+                                                        dest_id: folder_map.dest_id)
           return true
         end
 
         if gdrive_file.trashed
-          operation.log(:info, "Folder is in trash, deleting folder map", src_id: folder_map.src_id, dest_id: folder_map.dest_id)
+          operation.log(:info, "Folder is in trash, deleting folder map", src_id: folder_map.src_id,
+                                                                          dest_id: folder_map.dest_id)
           folder_map.destroy
           return true
         end
@@ -260,15 +266,17 @@ module GDrive
 
           begin
             new_dest_parent_id = ancestor_tree_duplicator.ensure_tree(new_src_parent_id)
-          rescue AncestorTreeDuplicator::ParentFolderInaccessible => error
+          rescue AncestorTreeDuplicator::ParentFolderInaccessible => e
             # If getting the new dest folder ID fails, it likely means the the src folder
             # has been moved out of the migration tree or is otherwise inaccessible.
             # This shouldn't happen, I think, b/c we should get no file data in that case
             # and that is handled further up. But just in case, log and skip.
-            operation.log(:error, "Ancestor inaccessible, skipping", src_id: folder_map.src_id, dest_id: folder_map.dest_id, ancestor_id: error.folder_id)
+            operation.log(:error, "Ancestor inaccessible, skipping", src_id: folder_map.src_id,
+                                                                     dest_id: folder_map.dest_id, ancestor_id: e.folder_id)
             return false
-          rescue Google::Apis::ClientError => error
-            operation.log(:error, "Client error ensuring tree, skipping", src_id: folder_map.src_id, dest_id: folder_map.dest_id, message: error.to_s)
+          rescue Google::Apis::ClientError => e
+            operation.log(:error, "Client error ensuring tree, skipping", src_id: folder_map.src_id,
+                                                                          dest_id: folder_map.dest_id, message: e.to_s)
             return false
           end
 
@@ -284,13 +292,14 @@ module GDrive
           # add or remove parents values are invalid. This could all happen if our records are out of date somehow.
           operation.log(:info, "Updating dest folder", src_id: folder_map.src_id, dest_id: folder_map.dest_id)
           wrapper.update_file(folder_map.dest_id,
-            Google::Apis::DriveV3::File.new(name: gdrive_file.name),
-            add_parents: dest_add_parents,
-            remove_parents: dest_remove_parents,
-            supports_all_drives: true)
+                              Google::Apis::DriveV3::File.new(name: gdrive_file.name),
+                              add_parents: dest_add_parents,
+                              remove_parents: dest_remove_parents,
+                              supports_all_drives: true)
           folder_map.save!
-        rescue Google::Apis::ClientError => error
-          operation.log(:error, "Client error updating dest folder", src_id: folder_map.src_id, dest_id: folder_map.dest_id, message: error.to_s)
+        rescue Google::Apis::ClientError => e
+          operation.log(:error, "Client error updating dest folder", src_id: folder_map.src_id,
+                                                                     dest_id: folder_map.dest_id, message: e.to_s)
           return false
         end
         true
@@ -305,7 +314,8 @@ module GDrive
         end
 
         if gdrive_file.parents.nil?
-          operation.log(:info, "File has no parents, skipping", file_id: gdrive_file.id, name: gdrive_file.name)
+          operation.log(:info, "File has no parents, skipping", file_id: gdrive_file.id,
+                                                                name: gdrive_file.name)
           return
         end
 
@@ -331,7 +341,8 @@ module GDrive
         # If file has already been migrated, we don't care about any changes to it
         # since the new file (if applicable) is considered to be the canonical copy.
         if migration_file.migrated?
-          operation.log(:info, "File has been migrated, skipping", file_id: gdrive_file.id, status: gdrive_file.status)
+          operation.log(:info, "File has been migrated, skipping", file_id: gdrive_file.id,
+                                                                   status: gdrive_file.status)
           return
         end
 
@@ -354,13 +365,9 @@ module GDrive
 
       def delete_references_to(id)
         deleted = operation.folder_maps.where(src_id: id).destroy_all
-        if deleted.any?
-          operation.log(:info, "Deleted #{deleted.size} folder maps")
-        end
+        operation.log(:info, "Deleted #{deleted.size} folder maps") if deleted.any?
         deleted = operation.files.where(external_id: id).destroy_all
-        if deleted.any?
-          operation.log(:info, "Deleted #{deleted.size} files")
-        end
+        operation.log(:info, "Deleted #{deleted.size} files") if deleted.any?
       end
 
       def add_file_error(migration_file, type, message)
@@ -388,9 +395,7 @@ module GDrive
         # separate job that updates status to cancelled after we check
         # but before we set to "in_progress". We would then wipe out the cancellation.
         self.class.with_lock(operation.id) do
-          unless scan.reload.cancelled?
-            scan.update!(status: "in_progress")
-          end
+          scan.update!(status: "in_progress") unless scan.reload.cancelled?
         end
       end
 

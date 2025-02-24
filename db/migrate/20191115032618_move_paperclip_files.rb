@@ -10,7 +10,8 @@ class MovePaperclipFiles < ActiveRecord::Migration[6.0]
         dest_dir = File.join(
           "storage",
           attachment.blob.key.first(2),
-          attachment.blob.key.first(4).last(2))
+          attachment.blob.key.first(4).last(2)
+        )
         dest = File.join(dest_dir, attachment.blob.key)
 
         FileUtils.mkdir_p(dest_dir)

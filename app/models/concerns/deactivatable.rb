@@ -15,6 +15,7 @@ module Deactivatable
 
     def self.after_deactivate_callbacks
       return [] unless class_variable_defined?("@@after_deactivate_callbacks")
+
       class_variable_get("@@after_deactivate_callbacks")
     end
   end

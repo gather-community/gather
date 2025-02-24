@@ -8,6 +8,7 @@ module Groups
       include ActiveModel::Model
 
       attr_accessor :remote_id, :mailman_user, :list_id, :role, :moderation_action, :display_name, :by_address
+
       delegate :email, to: :mailman_user
       delegate :syncable?, :remote_id, :remote_id?, to: :mailman_user, prefix: "user"
 

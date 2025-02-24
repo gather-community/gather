@@ -6,7 +6,7 @@ module Work
     include ActiveModel::Model
 
     JOB_ATTRIBS_TO_COPY = %i[description double_signups_allowed hours hours_per_shift
-      requester_id slot_type time_type title].freeze
+                             requester_id slot_type time_type title].freeze
     REMINDER_ATTRIBS_TO_COPY = %i[abs_rel note rel_magnitude rel_unit_sign].freeze
 
     attr_accessor :old_period, :new_period
@@ -15,14 +15,15 @@ module Work
     def copy_attributes_and_shares
       new_period.job_copy_source_id = old_period.id
       %i[meal_job_requester_id pick_type quota_type round_duration
-        max_rounds_per_worker workers_per_round].each do |attrib|
+         max_rounds_per_worker workers_per_round].each do |attrib|
         new_period[attrib] = old_period[attrib]
       end
 
       old_period.shares.includes(:user).find_each do |share|
         next if share.user.inactive?
+
         new_period.shares.build(period: new_period, user_id: share.user_id, portion: share.portion,
-          priority: share.priority)
+                                priority: share.priority)
       end
     end
 
@@ -41,6 +42,7 @@ module Work
     def copy_job(old_job)
       # Meal jobs should be imported separately from the meals module.
       return if old_job.meal_role?
+
       new_job = new_period.jobs.build
       JOB_ATTRIBS_TO_COPY.each { |a| new_job[a] = old_job[a] }
       copy_reminders(old_job, new_job)
@@ -80,8 +82,10 @@ module Work
 
     def copy_assignments(old_shift:, new_shift:)
       return unless new_period.copy_preassignments?
+
       old_shift.assignments.preassigned.each do |old_assignment|
         next if old_assignment.user.inactive?
+
         new_shift.assignments.build(preassigned: true, user_id: old_assignment.user_id)
       end
     end
@@ -107,6 +111,7 @@ module Work
       return false unless shift.date_only?
       return unless old_period_has_month_boundaries?
       return unless new_period_has_month_boundary_start?
+
       shift_month_start = shift.starts_at.to_date == shift.starts_at.to_date.beginning_of_month
       shift_month_end = shift.ends_at.to_date == shift.ends_at.to_date.end_of_month
       shift_month_start && shift_month_end
@@ -114,6 +119,7 @@ module Work
 
     def old_period_has_month_boundaries?
       return @old_period_has_month_boundaries if defined?(@old_period_has_month_boundaries)
+
       period_month_start = old_period.starts_on == old_period.starts_on.beginning_of_month
       period_month_end = old_period.ends_on == old_period.ends_on.end_of_month
       @old_period_has_month_boundaries = period_month_start && period_month_end
@@ -121,6 +127,7 @@ module Work
 
     def new_period_has_month_boundary_start?
       return @new_period_has_month_boundary_start if defined?(@new_period_has_month_boundary_start)
+
       period_month_start = new_period.starts_on == new_period.starts_on.beginning_of_month
       @new_period_has_month_boundary_start = period_month_start
     end

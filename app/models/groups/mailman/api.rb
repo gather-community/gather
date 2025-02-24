@@ -62,6 +62,7 @@ module Groups
       def populate_membership(list_mship)
         found = request("members/find", :post, subscriber: list_mship.email, list_id: list_mship.list_id)
         raise ArgumentError, "Membership not found for #{list_mship.email}" if found["total_size"].zero?
+
         list_mship.remote_id = found["entries"][0]["member_id"]
         list_mship.role = found["entries"][0]["role"]
       end
@@ -92,11 +93,11 @@ module Groups
         (request("members/find", :post, **criterion)["entries"] || []).map do |entry|
           mm_user = source.respond_to?(:email) ? source : Mailman::User.new(email: entry["email"])
           ListMembership.new(mailman_user: mm_user,
-            list_id: entry["list_id"],
-            role: entry["role"],
-            moderation_action: entry["moderation_action"],
-            display_name: entry["display_name"],
-            remote_id: entry["member_id"])
+                             list_id: entry["list_id"],
+                             role: entry["role"],
+                             moderation_action: entry["moderation_action"],
+                             display_name: entry["display_name"],
+                             remote_id: entry["member_id"])
         end
       end
 
@@ -109,6 +110,7 @@ module Groups
 
       def configure_list(list)
         raise ArgumentError, "No config given for list ##{list.id}" if list.config.blank?
+
         config = list.config.dup
         config.each { |k, v| config[k] = v.to_s if [true, false].include?(v) }
         request("lists/#{list.fqdn_listname}/config", :patch, **config)
@@ -197,8 +199,8 @@ module Groups
 
         other_mships.each do |mship|
           request("members", :post, list_id: mship["list_id"], subscriber: mm_user.remote_id,
-            delivery_mode: mship["delivery_mode"], role: mship["role"],
-            pre_verified: "true", pre_confirmed: "true", pre_approved: "true")
+                                    delivery_mode: mship["delivery_mode"], role: mship["role"],
+                                    pre_verified: "true", pre_confirmed: "true", pre_approved: "true")
         rescue ApiRequestError => e
           raise e unless /Member already subscribed|is already/.match?(e.response.body)
         end
@@ -210,7 +212,7 @@ module Groups
 
         if sub_requests.size > 1
           Rails.logger.warn("There are more than 1 pending subscription request for #{list_mship.email}. " \
-            "This should not happen.", json: response["entries"])
+                            "This should not happen.", json: response["entries"])
         elsif sub_requests.size == 0
           raise ApiRequestError.new(
             request: error_409.request,
@@ -225,24 +227,26 @@ module Groups
 
       def request(endpoint, method = :get, include_empty_json_object: false, **data)
         return stubbed_response if Rails.env.test? && ENV["STUB_MAILMAN"]
+
         url = URI.parse("#{base_url}/#{endpoint}")
         req = "Net::HTTP::#{method.to_s.capitalize}".constantize.new(url)
         req["Content-Type"] = "application/json"
         req.basic_auth(*credentials)
         req.body = if data.present?
-          data.to_json
-        elsif include_empty_json_object
-          "{}"
-        end
+                     data.to_json
+                   elsif include_empty_json_object
+                     "{}"
+                   end
         res = Net::HTTP.start(url.hostname, url.port, use_ssl: url.scheme == "https") do |http|
           http.request(req)
         end
         raise ApiRequestError.new(request: req, response: res) unless res.is_a?(Net::HTTPSuccess)
+
         ApiJsonResponse.new(res)
       end
 
       def stubbed_response
-        response = OpenStruct.new(body: ENV["STUB_MAILMAN"])
+        response = OpenStruct.new(body: ENV.fetch("STUB_MAILMAN", nil))
         ApiJsonResponse.new(response)
       end
 

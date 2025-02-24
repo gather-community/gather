@@ -45,4 +45,4 @@ RSpec::Matchers.define(:have_errors) do |errors|
   end
 end
 
-RSpec::Matchers.define_negated_matcher :have_not_enqueued_job, :have_enqueued_job
+RSpec::Matchers.define_negated_matcher(:have_not_enqueued_job, :have_enqueued_job)

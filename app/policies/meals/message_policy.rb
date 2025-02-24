@@ -9,6 +9,7 @@ module Meals
     def create?
       raise ArgumentError, "Meal must be set on Message to check permissions" if record.meal.nil?
       return @create if defined?(@create)
+
       @create = MealPolicy.new(user, record.meal).send_message?
     end
 

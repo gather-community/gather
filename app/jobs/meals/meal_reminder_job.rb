@@ -10,6 +10,7 @@ module Meals
         meal_ids = Meal.hosted_by(community).served_within_days_from_now(lead_days).not_cancelled.pluck(:id)
 
         next unless meal_ids.any?
+
         # Find all households for target meals that have not yet been notified.
         signups = Signup.where(meal_id: meal_ids).where(notified: false).includes(household: :users)
 

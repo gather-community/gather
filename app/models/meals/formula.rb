@@ -25,8 +25,8 @@ module Meals
     scope :in_community, ->(c) { where(community_id: c.id) }
     scope :newest_first, -> { order(created_at: :desc) }
     scope :with_meal_counts, lambda {
-                               select("meal_formulas.*, (SELECT COUNT(id) FROM meals "\
-                                 "WHERE formula_id = meal_formulas.id) AS meal_count")
+                               select("meal_formulas.*, (SELECT COUNT(id) FROM meals " \
+                                      "WHERE formula_id = meal_formulas.id) AS meal_count")
                              }
     scope :by_name, -> { alpha_order(:name) }
 
@@ -93,6 +93,7 @@ module Meals
     def must_have_head_cook_role
       head_cook_role = Meals::Role.in_community(community).head_cook.first
       return if head_cook_role.nil? || role_ids.include?(head_cook_role.id)
+
       errors.add(:role_ids, :must_have_head_cook, title: head_cook_role.title)
     end
 

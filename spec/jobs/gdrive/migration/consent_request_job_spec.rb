@@ -11,7 +11,7 @@ describe GDrive::Migration::ConsentRequestJob do
   let!(:file3) { create(:gdrive_migration_file, operation: operation, owner: "b@gmail.com") }
   subject(:job) do
     described_class.new(cluster_id: Defaults.cluster.id, operation_id: operation.id,
-      google_emails: ["a@gmail.com", "b@gmail.com"])
+                        google_emails: ["a@gmail.com", "b@gmail.com"])
   end
 
   it "works" do

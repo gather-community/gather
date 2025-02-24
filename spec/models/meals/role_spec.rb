@@ -7,7 +7,7 @@ describe Meals::Role do
     let(:role) { build(:meal_role, submitted) }
 
     # Get the normalized values for the submitted keys.
-    subject { submitted.keys.map { |k| [k, role.send(k)] }.to_h }
+    subject { submitted.keys.index_with { |k| role.send(k) }.to_h }
 
     before do
       role.validate

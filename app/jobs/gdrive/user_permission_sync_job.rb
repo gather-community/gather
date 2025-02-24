@@ -47,7 +47,7 @@ module GDrive
         group_ids = Groups::Group.with_user(user).active.pluck(:id)
         ItemGroup.includes(:group).where(group_id: group_ids).each do |item_group|
           Rails.logger.info("Processing permissions for group", group_id: item_group.group_id,
-            group_name: item_group.group.name, item_id: item_group.item_id)
+                                                                group_name: item_group.group.name, item_id: item_group.item_id)
           process_permissions_for_item_group(item_group)
         end
       else
@@ -66,7 +66,7 @@ module GDrive
       permission = permissions_by_item_id[item_group.item_id]
       if permission.present?
         Rails.logger.info("Existing permission", item_external_id: permission.item_external_id,
-          permission_id: permission.external_id, access_level: permission.access_level)
+                                                 permission_id: permission.external_id, access_level: permission.access_level)
         permission.google_email = user.google_email
         if access_level_cmp(item_group.access_level, permission.access_level) == 1
           Rails.logger.info("Setting higher access level", new_access_level: item_group.access_level)
@@ -75,7 +75,7 @@ module GDrive
       else
         Rails.logger.info("No existing permission, building")
         permissions_by_item_id[user.id] = build_synced_permission(user, item_group.item,
-          item_group.access_level)
+                                                                  item_group.access_level)
       end
     end
   end

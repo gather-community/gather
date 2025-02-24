@@ -13,6 +13,7 @@ module ApplicationHelper
   # are not assuming nil checking.
   def l(date_or_time, **args)
     return nil if date_or_time.nil?
+
     I18n.l(date_or_time, **args).gsub("  ", " ").strip
   end
 
@@ -28,24 +29,24 @@ module ApplicationHelper
   end
 
   def flash_message(type, text)
-    content_tag(:div, text, class: "alert #{bootstrap_class_for(type)} fade in") do
-      content_tag(:button, "x", class: "close", "aria-label": "Close", data: {dismiss: "alert"}) << text
+    tag.div(text, class: "alert #{bootstrap_class_for(type)} fade in") do
+      tag.button("x", class: "close", "aria-label": "Close", data: {dismiss: "alert"}) << text
     end
   end
 
   def icon_tag(name, options = {})
     name = "fa-#{name}" unless /\Afa-/.match?(name)
     style = case options.delete(:style)
-    when :brands then "fab"
-    else "fas"
-    end
-    content_tag(:i, "", options.merge(class: "fa #{style} #{name} #{options.delete(:class)}"))
+            when :brands then "fab"
+            else "fas"
+            end
+    tag.i("", **options, class: "fa #{style} #{name} #{options.delete(:class)}")
   end
 
   # Sets twitter-bootstrap theme as default for pagination.
   def paginate(objects, **options)
     options.reverse_merge!(theme: "twitter-bootstrap-3")
-    super(objects, **options)
+    super
   end
 
   def sep(separator)
@@ -59,7 +60,7 @@ module ApplicationHelper
   end
 
   def generated_time
-    content_tag(:div, "Generated: #{l(Time.current)}", id: "gen-time")
+    tag.div("Generated: #{l(Time.current)}", id: "gen-time")
   end
 
   def print_button
@@ -83,12 +84,14 @@ module ApplicationHelper
   end
 
   def inline_loading_indicator
-    image_tag("load-ind-small.gif", class: "loading-indicator", style: "display: none", alt: "Loading indicator")
+    image_tag("load-ind-small.gif", class: "loading-indicator", style: "display: none",
+                                    alt: "Loading indicator")
   end
 
   # The logo should take the user back to their home cmty root if they are in a different one.
   def logo_link_url
     return home_path if !current_community || !current_user || current_community == current_user.community
+
     home_url(host: "#{current_user.subdomain}.#{Settings.url.host}")
   end
 

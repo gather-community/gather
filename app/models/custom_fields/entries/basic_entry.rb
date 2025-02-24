@@ -20,7 +20,7 @@ module CustomFields
           end
 
           if options[:message].is_a?(Symbol)
-            options[:message] = I18n.translate(:"#{i18n_key(:errors)}.#{options[:message]}", default: [
+            options[:message] = I18n.t(:"#{i18n_key(:errors)}.#{options[:message]}", default: [
               :"activemodel.errors.messages.#{options[:message]}",
               :"activerecord.errors.messages.#{options[:message]}",
               :"errors.messages.#{options[:message]}"
@@ -82,6 +82,7 @@ module CustomFields
 
       def sanitize_and_mark_safe(content)
         return nil if content.nil?
+
         Rails::Html::SafeListSanitizer.new.sanitize(content).html_safe # rubocop:disable Rails/OutputSafety
       end
 

@@ -18,7 +18,7 @@ class Household < ApplicationRecord
   has_many :emergency_contacts, class_name: "People::EmergencyContact", dependent: :destroy
   has_many :pets, class_name: "People::Pet", dependent: :destroy
 
-  scope :active, -> { where("deactivated_at IS NULL") }
+  scope :active, -> { where(deactivated_at: nil) }
   scope :by_name, -> { alpha_order(households: :name) }
   scope :by_unit, -> { order(:unit_num, :unit_suffix) }
   scope :ordered_by, ->(col) { col == "unit" ? by_unit : by_name }
@@ -38,8 +38,12 @@ class Household < ApplicationRecord
 
   accepts_nested_attributes_for :vehicles, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :emergency_contacts,
-    allow_destroy: true,
-    reject_if: ->(attrs) { attrs.all? { |k, v| k == "_destroy" || k == "country_code" || v.blank? } }
+                                allow_destroy: true,
+                                reject_if: lambda { |attrs|
+                                  attrs.all? do |k, v|
+                                    k == "_destroy" || k == "country_code" || v.blank?
+                                  end
+                                }
   accepts_nested_attributes_for :pets, reject_if: :all_blank, allow_destroy: true
 
   normalize_attributes :name, :old_id, :old_name, :garage_nums

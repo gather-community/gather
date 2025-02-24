@@ -6,6 +6,7 @@ module Lensable
 
   included do
     attr_reader :lenses
+
     helper_method :lenses
   end
 

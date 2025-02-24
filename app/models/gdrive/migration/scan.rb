@@ -1,5 +1,30 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: gdrive_migration_scans
+#
+#  id                 :bigint           not null, primary key
+#  cancel_reason      :string(128)
+#  error_count        :integer          default(0), not null
+#  scanned_file_count :integer          default(0), not null
+#  scope              :string(16)       default("full"), not null
+#  status             :string(32)       default("new"), not null
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
+#  cluster_id         :bigint           not null
+#  operation_id       :bigint           not null
+#
+# Indexes
+#
+#  index_gdrive_migration_scans_on_cluster_id    (cluster_id)
+#  index_gdrive_migration_scans_on_operation_id  (operation_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (cluster_id => clusters.id)
+#  fk_rails_...  (operation_id => gdrive_migration_operations.id)
+#
 module GDrive
   module Migration
     # Models a single scan attempt, whether it be a user-initiated full scan

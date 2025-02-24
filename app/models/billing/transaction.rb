@@ -1,6 +1,40 @@
 # frozen_string_literal: true
 
 module Billing
+# == Schema Information
+#
+# Table name: transactions
+#
+#  id                 :integer          not null, primary key
+#  code               :string(16)       not null
+#  description        :string(255)      not null
+#  incurred_on        :date             not null
+#  quantity           :integer
+#  statementable_type :string(32)
+#  unit_price         :decimal(10, 2)
+#  value              :decimal(10, 2)   not null
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
+#  account_id         :integer          not null
+#  cluster_id         :integer          not null
+#  statement_id       :integer
+#  statementable_id   :integer
+#
+# Indexes
+#
+#  index_transactions_on_account_id                               (account_id)
+#  index_transactions_on_cluster_id                               (cluster_id)
+#  index_transactions_on_code                                     (code)
+#  index_transactions_on_incurred_on                              (incurred_on)
+#  index_transactions_on_statement_id                             (statement_id)
+#  index_transactions_on_statementable_id_and_statementable_type  (statementable_id,statementable_type)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (account_id => accounts.id)
+#  fk_rails_...  (cluster_id => clusters.id)
+#  fk_rails_...  (statement_id => statements.id)
+#
   # Models a transaction in a billing account.
   class Transaction < ApplicationRecord
     include Transactable

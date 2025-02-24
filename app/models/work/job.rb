@@ -1,5 +1,39 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: work_jobs
+#
+#  id                     :bigint           not null, primary key
+#  description            :text             not null
+#  double_signups_allowed :boolean          default(FALSE)
+#  hours                  :decimal(6, 2)    not null
+#  hours_per_shift        :decimal(6, 2)
+#  slot_type              :string(32)       default("fixed"), not null
+#  time_type              :string(32)       default("date_time"), not null
+#  title                  :string(128)      not null
+#  created_at             :datetime         not null
+#  updated_at             :datetime         not null
+#  cluster_id             :integer          not null
+#  meal_role_id           :bigint
+#  period_id              :integer          not null
+#  requester_id           :integer
+#
+# Indexes
+#
+#  index_work_jobs_on_cluster_id           (cluster_id)
+#  index_work_jobs_on_meal_role_id         (meal_role_id)
+#  index_work_jobs_on_period_id            (period_id)
+#  index_work_jobs_on_period_id_and_title  (period_id,title) UNIQUE
+#  index_work_jobs_on_requester_id         (requester_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (cluster_id => clusters.id)
+#  fk_rails_...  (meal_role_id => meal_roles.id)
+#  fk_rails_...  (period_id => work_periods.id)
+#  fk_rails_...  (requester_id => groups.id)
+#
 module Work
   class Job < ApplicationRecord
     include Wisper.model

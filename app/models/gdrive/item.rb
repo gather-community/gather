@@ -1,5 +1,30 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: gdrive_items
+#
+#  id               :bigint           not null, primary key
+#  error_type       :string
+#  kind             :string           not null
+#  name             :string           not null
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
+#  cluster_id       :bigint           not null
+#  external_id      :string(255)      not null
+#  gdrive_config_id :bigint           not null
+#
+# Indexes
+#
+#  index_gdrive_items_on_cluster_id        (cluster_id)
+#  index_gdrive_items_on_external_id       (external_id) UNIQUE
+#  index_gdrive_items_on_gdrive_config_id  (gdrive_config_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (cluster_id => clusters.id)
+#  fk_rails_...  (gdrive_config_id => gdrive_configs.id)
+#
 module GDrive
   class Item < ApplicationRecord
     acts_as_tenant :cluster

@@ -1,6 +1,20 @@
 # frozen_string_literal: true
 
 # A group of related communities.
+# == Schema Information
+#
+# Table name: clusters
+#
+#  id         :integer          not null, primary key
+#  name       :string(20)       not null
+#  sso_secret :string           not null
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+# Indexes
+#
+#  index_clusters_on_name  (name)
+#
 class Cluster < ApplicationRecord
   has_many :communities, inverse_of: :cluster, dependent: :destroy
 

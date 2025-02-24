@@ -1,6 +1,45 @@
 # frozen_string_literal: true
 
 module Meals
+# == Schema Information
+#
+# Table name: meals
+#
+#  id              :integer          not null, primary key
+#  allergens       :jsonb            not null
+#  auto_close_time :datetime
+#  capacity        :integer          not null
+#  dessert         :text
+#  entrees         :text
+#  kids            :text
+#  menu_posted_at  :datetime
+#  no_allergens    :boolean          default(FALSE), not null
+#  notes           :text
+#  served_at       :datetime         not null
+#  side            :text
+#  status          :string           default("open"), not null
+#  title           :string
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  cluster_id      :integer          not null
+#  community_id    :integer          not null
+#  creator_id      :integer          not null
+#  formula_id      :integer          not null
+#
+# Indexes
+#
+#  index_meals_on_cluster_id  (cluster_id)
+#  index_meals_on_creator_id  (creator_id)
+#  index_meals_on_formula_id  (formula_id)
+#  index_meals_on_served_at   (served_at)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (cluster_id => clusters.id)
+#  fk_rails_...  (community_id => communities.id)
+#  fk_rails_...  (creator_id => users.id)
+#  fk_rails_...  (formula_id => meal_formulas.id)
+#
   # Models a common meal.
   class Meal < ApplicationRecord
     self.table_name = "meals" # Override suffix

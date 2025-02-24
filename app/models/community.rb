@@ -1,6 +1,31 @@
 # frozen_string_literal: true
 
 # This is what it's all about!
+# == Schema Information
+#
+# Table name: communities
+#
+#  id             :integer          not null, primary key
+#  abbrv          :string(2)
+#  calendar_token :string           not null
+#  country_code   :string(2)        default("US"), not null
+#  name           :string(20)       not null
+#  settings       :jsonb
+#  slug           :string           not null
+#  sso_secret     :string           not null
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
+#  cluster_id     :integer          not null
+#
+# Indexes
+#
+#  index_communities_on_cluster_id  (cluster_id)
+#  index_communities_on_name        (name) UNIQUE
+#
+# Foreign Keys
+#
+#  fk_rails_...  (cluster_id => clusters.id)
+#
 class Community < ApplicationRecord
   include CustomFields
   include SemicolonDisallowable

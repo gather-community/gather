@@ -1,6 +1,27 @@
 # frozen_string_literal: true
 
 module Subscription
+# == Schema Information
+#
+# Table name: subscriptions
+#
+#  id           :bigint           not null, primary key
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  cluster_id   :bigint           not null
+#  community_id :bigint           not null
+#  stripe_id    :string           not null
+#
+# Indexes
+#
+#  index_subscriptions_on_cluster_id    (cluster_id)
+#  index_subscriptions_on_community_id  (community_id) UNIQUE
+#
+# Foreign Keys
+#
+#  fk_rails_...  (cluster_id => clusters.id)
+#  fk_rails_...  (community_id => communities.id)
+#
   # Models a subscription of Gather product itself.
   class Subscription < ApplicationRecord
     # Override suffix

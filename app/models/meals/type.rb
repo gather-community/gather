@@ -1,6 +1,29 @@
 # frozen_string_literal: true
 
 module Meals
+# == Schema Information
+#
+# Table name: meal_types
+#
+#  id             :bigint           not null, primary key
+#  category       :string(32)
+#  deactivated_at :datetime
+#  name           :string(32)       not null
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
+#  cluster_id     :bigint           not null
+#  community_id   :bigint           not null
+#
+# Indexes
+#
+#  index_meal_types_on_cluster_id    (cluster_id)
+#  index_meal_types_on_community_id  (community_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (cluster_id => clusters.id)
+#  fk_rails_...  (community_id => communities.id)
+#
   # Models a type of meal like Adult Veg or Pepperoni slice
   class Type < ApplicationRecord
     include Deactivatable

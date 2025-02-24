@@ -2,6 +2,33 @@
 
 module Work
   # Represents the user's desire to sync meal jobs for a given meal role in a given formula for a
+# == Schema Information
+#
+# Table name: work_meal_job_sync_settings
+#
+#  id         :bigint           not null, primary key
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  cluster_id :bigint
+#  formula_id :bigint           not null
+#  period_id  :bigint           not null
+#  role_id    :bigint           not null
+#
+# Indexes
+#
+#  index_work_meal_job_sync_settings_on_cluster_id  (cluster_id)
+#  index_work_meal_job_sync_settings_on_formula_id  (formula_id)
+#  index_work_meal_job_sync_settings_on_period_id   (period_id)
+#  index_work_meal_job_sync_settings_on_role_id     (role_id)
+#  work_meal_job_sync_settings_uniq                 (formula_id,role_id,period_id) UNIQUE
+#
+# Foreign Keys
+#
+#  fk_rails_...  (cluster_id => clusters.id)
+#  fk_rails_...  (formula_id => meal_formulas.id)
+#  fk_rails_...  (period_id => work_periods.id)
+#  fk_rails_...  (role_id => meal_roles.id)
+#
   # given period.
   class MealJobSyncSetting < ApplicationRecord
     acts_as_tenant :cluster

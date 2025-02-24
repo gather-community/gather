@@ -1,6 +1,35 @@
 # frozen_string_literal: true
 
 module Meals
+# == Schema Information
+#
+# Table name: meal_formulas
+#
+#  id                   :integer          not null, primary key
+#  deactivated_at       :datetime
+#  is_default           :boolean          default(FALSE), not null
+#  meal_calc_type       :string           not null
+#  name                 :string           not null
+#  pantry_calc_type     :string           not null
+#  pantry_fee           :decimal(10, 4)   not null
+#  pantry_reimbursement :boolean          default(FALSE)
+#  takeout              :boolean          default(TRUE), not null
+#  created_at           :datetime         not null
+#  updated_at           :datetime         not null
+#  cluster_id           :integer          not null
+#  community_id         :integer          not null
+#
+# Indexes
+#
+#  index_meal_formulas_on_cluster_id      (cluster_id)
+#  index_meal_formulas_on_community_id    (community_id)
+#  index_meal_formulas_on_deactivated_at  (deactivated_at)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (cluster_id => clusters.id)
+#  fk_rails_...  (community_id => communities.id)
+#
   # Describes a meal system.
   class Formula < ApplicationRecord
     include Wisper.model

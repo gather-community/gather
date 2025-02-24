@@ -1,5 +1,29 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: people_vehicles
+#
+#  id           :integer          not null, primary key
+#  color        :string
+#  make         :string
+#  model        :string
+#  plate        :string(10)
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  cluster_id   :integer          not null
+#  household_id :integer          not null
+#
+# Indexes
+#
+#  index_people_vehicles_on_cluster_id    (cluster_id)
+#  index_people_vehicles_on_household_id  (household_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (cluster_id => clusters.id)
+#  fk_rails_...  (household_id => households.id)
+#
 module People
   class Vehicle < ApplicationRecord
     acts_as_tenant :cluster

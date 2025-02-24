@@ -1,5 +1,30 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: meal_imports
+#
+#  id            :bigint           not null, primary key
+#  errors_by_row :jsonb
+#  status        :string           default("queued"), not null
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  cluster_id    :bigint           not null
+#  community_id  :bigint           not null
+#  user_id       :bigint           not null
+#
+# Indexes
+#
+#  index_meal_imports_on_cluster_id    (cluster_id)
+#  index_meal_imports_on_community_id  (community_id)
+#  index_meal_imports_on_user_id       (user_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (cluster_id => clusters.id)
+#  fk_rails_...  (community_id => communities.id)
+#  fk_rails_...  (user_id => users.id)
+#
 require "csv"
 
 module Meals

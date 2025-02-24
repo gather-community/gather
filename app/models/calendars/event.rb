@@ -1,5 +1,44 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: calendar_events
+#
+#  id          :integer          not null, primary key
+#  all_day     :boolean          default(FALSE), not null
+#  ends_at     :datetime         not null
+#  kind        :string
+#  name        :string(24)       not null
+#  note        :text
+#  starts_at   :datetime         not null
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  calendar_id :integer          not null
+#  cluster_id  :integer          not null
+#  creator_id  :integer
+#  group_id    :bigint
+#  meal_id     :integer
+#  sponsor_id  :integer
+#
+# Indexes
+#
+#  index_calendar_events_on_calendar_id  (calendar_id)
+#  index_calendar_events_on_cluster_id   (cluster_id)
+#  index_calendar_events_on_creator_id   (creator_id)
+#  index_calendar_events_on_group_id     (group_id)
+#  index_calendar_events_on_meal_id      (meal_id)
+#  index_calendar_events_on_sponsor_id   (sponsor_id)
+#  index_calendar_events_on_starts_at    (starts_at)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (calendar_id => calendar_nodes.id)
+#  fk_rails_...  (cluster_id => clusters.id)
+#  fk_rails_...  (creator_id => users.id)
+#  fk_rails_...  (group_id => groups.id)
+#  fk_rails_...  (meal_id => meals.id)
+#  fk_rails_...  (sponsor_id => users.id)
+#
 module Calendars
   class Event < ApplicationRecord
     NAME_MAX_LENGTH = 24

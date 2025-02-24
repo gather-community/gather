@@ -1,5 +1,33 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: gdrive_migration_operations
+#
+#  id                  :bigint           not null, primary key
+#  active              :boolean          default(TRUE), not null
+#  contact_email       :string           not null
+#  contact_name        :string           not null
+#  start_page_token    :string
+#  webhook_expires_at  :datetime
+#  webhook_secret      :string
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  cluster_id          :integer          not null
+#  config_id           :bigint           not null
+#  dest_folder_id      :string(255)
+#  src_folder_id       :string(255)
+#  webhook_channel_id  :string
+#  webhook_resource_id :string
+#
+# Indexes
+#
+#  index_gdrive_migration_operations_on_config_id  (config_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (config_id => gdrive_configs.id)
+#
 module GDrive
   module Migration
     class Operation < ApplicationRecord

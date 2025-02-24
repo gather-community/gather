@@ -9,6 +9,37 @@ module Calendars
   # Another sets max_minutes_per_year for a subset of calendars.
   # etc.
   #
+# == Schema Information
+#
+# Table name: calendar_protocols
+#
+#  id                   :integer          not null, primary key
+#  fixed_end_time       :time
+#  fixed_start_time     :time
+#  kinds                :jsonb
+#  max_days_per_year    :integer
+#  max_lead_days        :integer
+#  max_length_minutes   :integer
+#  max_minutes_per_year :integer
+#  name                 :string           not null
+#  other_communities    :string
+#  pre_notice           :text
+#  requires_kind        :boolean
+#  created_at           :datetime         not null
+#  updated_at           :datetime         not null
+#  cluster_id           :integer          not null
+#  community_id         :integer          not null
+#
+# Indexes
+#
+#  index_calendar_protocols_on_cluster_id    (cluster_id)
+#  index_calendar_protocols_on_community_id  (community_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (cluster_id => clusters.id)
+#  fk_rails_...  (community_id => communities.id)
+#
   # See Calendars::Rule::NAMES for list of rule attributes
   class Protocol < ApplicationRecord
     acts_as_tenant :cluster

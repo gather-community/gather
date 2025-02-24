@@ -1,5 +1,32 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: statements
+#
+#  id            :integer          not null, primary key
+#  due_on        :date
+#  prev_balance  :decimal(10, 2)   not null
+#  prev_stmt_on  :date
+#  reminder_sent :boolean          default(FALSE), not null
+#  total_due     :decimal(10, 2)   not null
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  account_id    :integer          not null
+#  cluster_id    :integer          not null
+#
+# Indexes
+#
+#  index_statements_on_account_id  (account_id)
+#  index_statements_on_cluster_id  (cluster_id)
+#  index_statements_on_created_at  (created_at)
+#  index_statements_on_due_on      (due_on)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (account_id => accounts.id)
+#  fk_rails_...  (cluster_id => clusters.id)
+#
 module Billing
   class Statement < ApplicationRecord
     include TimeCalculable

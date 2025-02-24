@@ -1,5 +1,39 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: wiki_pages
+#
+#  id           :integer          not null, primary key
+#  content      :text
+#  data_source  :text
+#  editable_by  :string           default("everyone"), not null
+#  role         :string
+#  slug         :string           not null
+#  title        :string           not null
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  cluster_id   :integer          not null
+#  community_id :integer          not null
+#  creator_id   :integer
+#  updater_id   :integer
+#
+# Indexes
+#
+#  index_wiki_pages_on_cluster_id              (cluster_id)
+#  index_wiki_pages_on_community_id            (community_id)
+#  index_wiki_pages_on_community_id_and_slug   (community_id,slug) UNIQUE
+#  index_wiki_pages_on_community_id_and_title  (community_id,title) UNIQUE
+#  index_wiki_pages_on_creator_id              (creator_id)
+#  index_wiki_pages_on_updater_id              (updater_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (cluster_id => clusters.id)
+#  fk_rails_...  (community_id => communities.id)
+#  fk_rails_...  (creator_id => users.id)
+#  fk_rails_...  (updater_id => users.id)
+#
 require "open-uri"
 
 module Wiki

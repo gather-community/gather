@@ -1,6 +1,31 @@
 # frozen_string_literal: true
 
 module Groups
+# == Schema Information
+#
+# Table name: groups
+#
+#  id                         :bigint           not null, primary key
+#  availability               :string(10)       default("closed"), not null
+#  can_administer_email_lists :boolean          default(FALSE), not null
+#  can_moderate_email_lists   :boolean          default(FALSE), not null
+#  can_request_jobs           :boolean          default(FALSE), not null
+#  deactivated_at             :datetime
+#  description                :string(255)
+#  kind                       :string(32)       default("committee"), not null
+#  name                       :string(64)       not null
+#  created_at                 :datetime         not null
+#  updated_at                 :datetime         not null
+#  cluster_id                 :integer          not null
+#
+# Indexes
+#
+#  index_groups_on_cluster_id  (cluster_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (cluster_id => clusters.id)
+#
   # A group of users.
   class Group < ApplicationRecord
     include Wisper.model

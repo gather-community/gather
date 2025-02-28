@@ -38,6 +38,8 @@ class Community < ApplicationRecord
   scope :by_one_cmty_first, ->(c) { order(arel_table[:id].not_eq(c.id)) }
   scope :by_name_with_first, ->(c) { by_one_cmty_first(c).by_name }
 
+  accepts_nested_attributes_for :restrictions
+
   disallow_semicolons :name
 
   delegate :name, to: :cluster, prefix: true

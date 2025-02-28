@@ -1,9 +1,10 @@
 <% content_for(:title, "Meals Settings: Dietary Restrictions") %>
 
+
 <%= gather_form_for(@community, url: meals_restrictions_path) do |f| %>
-  <%= f.fields_for(:settings) do |ff| %>
-    <%= render("custom_fields/group_entry_edit", group_entry: @settings, f: ff, hide_title: true) %>
-  <% end %>
+
+  <%= nested_field_set(f, :restrictions, inner_partial: "meals/restrictions/restriction_fields", required: true, single_row: true) %>
+
   <%= form_actions do %>
     <%= f.button :primary %>
   <% end %>
@@ -14,3 +15,4 @@
       new Gather.Views.DirtyChecker({el: '.community-form'});
     });
   <% end %>
+  

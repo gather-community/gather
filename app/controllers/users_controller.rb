@@ -52,7 +52,7 @@ class UsersController < ApplicationController
 
       format.csv do
         load_users
-        @users = @users.active # No inactve users in CSV
+        @users = @users.active if lenses[:view].active_only?
         @users = @users.includes(household: :vehicles)
         filename = csv_filename(:community, "directory", :date)
         csv = People::CsvExporter.new(@users, policy: policy(sample_user)).to_csv

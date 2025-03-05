@@ -95,7 +95,7 @@
         <div class="visible-print"><%= generated_time %></div>
       </div>
       <div class="footer-links footer-2nd-col col-sm-6 hidden-print">
-        <%= link_to(icon_tag("download") << " Download as CSV", users_path(format: :csv)) %>
+        <%= link_to(icon_tag("download") << " Download as CSV", users_path(format: :csv, view: lenses[:view].value)) %>
       </div>
     </div>
   </footer>

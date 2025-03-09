@@ -36,14 +36,10 @@ module GDrive
           self.scan_task = ScanTask.find(scan_task_id)
           self.scan = scan_task.scan
           self.operation = scan.operation
-          operation.log(:info, "ScanJob starting", scan_task_id: scan_task_id)
+          operation.log(:info, "ScanJob starting", scan_task_id: scan_task_id, scope: scan.scope)
           return if scan.cancelled?
 
           self.ancestor_tree_duplicator = AncestorTreeDuplicator.new(wrapper: wrapper, operation: operation)
-
-          # We save the start page token now so that we can look back through any changes that we miss
-          # during the scan operation.
-          save_start_page_token if scan.full?
 
           do_scan_task
           check_for_completeness
@@ -60,56 +56,23 @@ module GDrive
         end
       end
 
-      private
+      protected
 
-      def save_start_page_token
-        # Only do this once per operation
-        self.class.with_lock(operation.id) do
-          return if operation.reload.start_page_token.present?
-          WebhookRegistrar.setup(operation, wrapper)
-        end
+      def before_scan_start
+      end
+
+      def after_scan_complete
+      end
+
+      def skip_check_for_already_mapped_folders?
+        false
       end
 
       def do_scan_task
-        files, next_page_token, new_start_page_token = if scan.full?
-          list_files_from_folder(scan_task.folder_id)
-        else
-          list_files_from_changes
-        end
-
-        # Update scan status now and then each time we go through loop.
-        # We do it here just in case we are skipping all the files we fetched on the
-        # first page.
-        ensure_scan_status_in_progress_unless_cancelled
-
-        # Process files one by one, but check after each one if another task thread
-        # has hit too many errors and cancelled the scan.
-        files.each do |gdrive_file|
-          if scan.cancelled?
-            operation.log(:info, "Scan has been cancelled, exiting loop")
-            break
-          end
-          process_file(gdrive_file)
-          ensure_scan_status_in_progress_unless_cancelled
-        end
-
-        # We don't need a critical section/advisory lock here because in the worst case, if there is a
-        # race condition we might schedule an extra job, but when it actually runs it will notice
-        # the cancelled state before it gets very far.
-        unless scan.reload.cancelled?
-          if next_page_token
-            scan_next_page(next_page_token)
-          elsif new_start_page_token
-            operation.log(:info, "Reached end of changes, updating start page token",
-              new_start_page_token: new_start_page_token)
-            operation.update!(start_page_token: new_start_page_token)
-          end
-        end
-      rescue Google::Apis::AuthorizationError, Signet::AuthorizationError
-        # If we hit an auth error, it is probably not going to resolve itself, and it
-        # is not an issue with our code. So we stop the scan and notify the user.
-        cancel_scan(reason: "auth_error")
+        raise NotImplementedError
       end
+
+      private
 
       def list_files_from_folder(folder_id)
         operation.log(:info, "Listing files from folder", folder_id: folder_id)
@@ -123,54 +86,7 @@ module GDrive
           page_token: scan_task.page_token,
           page_size: PAGE_SIZE
         )
-        [list.files, list.next_page_token, nil]
-      end
-
-      def list_files_from_changes
-        operation.log(:info, "Listing files from changes", page_token: scan_task.page_token)
-        list = wrapper.list_changes(
-          scan_task.page_token,
-          fields: "changes(fileId,file(#{FILE_FIELDS},driveId)),nextPageToken,newStartPageToken",
-          # Even though on change scans we only care about files from My Drive,
-          # we need to include items from all drives because that is how we find out whether
-          # something is in a shared drive or not. For some reason, the API still returns changes
-          # from shared drives regardless of these booleans—it just doesn't tell us what
-          # drive they're from /shrug.
-          include_items_from_all_drives: true,
-          supports_all_drives: true,
-          page_size: PAGE_SIZE,
-          include_corpus_removals: true,
-          include_removed: true,
-          spaces: "drive"
-        )
-
-        gdrive_files = []
-        list.changes.each do |change|
-          # If no file is present at all, it means we no longer have access to this file
-          # and we should delete any reference we have to it.
-          if change.file.nil?
-            operation.log(:info, "Received change with no file info, deleting references if present",
-              file_id: change.file_id)
-            delete_references_to(change.file_id)
-            next
-          end
-
-          # If drive_id is present, it means this is a changes scan and we've pulled in
-          # a change to a Shared Drive item. This could happen if someone migrated a file manually.
-          # In any case, we don't care about these files anymore so delete any references if present.
-          if change.file.drive_id.present?
-            operation.log(:info, "Received change with drive_id, deleting references if present",
-              file_id: change.file_id, drive_id: change.file.drive_id)
-            delete_references_to(change.file_id)
-            next
-          end
-
-          # IMPORTANT: We don't check whether the changed file is within the source directory tree
-          # because that would be slow, and we always assume that the migration user only has access
-          # to the source migration tree anyway.
-          gdrive_files << change.file
-        end
-        [gdrive_files, list.next_page_token, list.new_start_page_token]
+        [list.files, list.next_page_token]
       end
 
       def process_file(gdrive_file)
@@ -219,7 +135,7 @@ module GDrive
           # exists before proceeding. But we don't need to check this when we are
           # doing the initial scan since we will have just created it.
           dest_parent_id = ancestor_tree_duplicator.ensure_tree(gdrive_file,
-            skip_check_for_already_mapped_folders: scan.full?)
+            skip_check_for_already_mapped_folders: skip_check_for_already_mapped_folders?)
         rescue AncestorTreeDuplicator::ParentFolderInaccessible => error
           operation.log(:error, "Ancestor inaccessible", file_id: gdrive_file.id, folder_id: error.folder_id)
           # We don't need to take any action here because a new folder with an inaccessible parent should
@@ -418,16 +334,7 @@ module GDrive
             operation.log(:info, "No more scan task exists for this scan, marking complete")
             scan.update!(status: "complete")
 
-            if scan.full?
-              # We can register for this now since we are finished scanning.
-              # We saved the start page token earlier so that we will get any changes
-              # we missed during scanning.
-              WebhookRegistrar.register(operation, wrapper)
-
-              # If main scan job is finishing, we should run a change scan because changes
-              # may have been piling up (and we ignore them during the main scan)
-              self.class.enqueue_change_scan_job(operation)
-            end
+            after_scan_complete
           end
         end
       end

@@ -18,7 +18,7 @@ describe "gdrive auth callback" do
           "x-goog-channel-token" => "56ab"
         })
         expect(response.status).to eq(204)
-      end.to have_enqueued_job(GDrive::Migration::ScanJob).with(cluster_id: Defaults.cluster.id, scan_task_id: anything)
+      end.to have_enqueued_job(GDrive::Migration::ChangesScanJob).with(cluster_id: Defaults.cluster.id, scan_task_id: anything)
 
       ActsAsTenant.with_tenant(Defaults.cluster) do
         expect(GDrive::Migration::Scan.count).to eq(1)
@@ -43,7 +43,7 @@ describe "gdrive auth callback" do
           "x-goog-channel-token" => "56ab"
         })
         expect(response.status).to eq(204)
-      end.not_to have_enqueued_job(GDrive::Migration::ScanJob)
+      end.not_to have_enqueued_job(GDrive::Migration::ChangesScanJob)
 
       ActsAsTenant.with_tenant(Defaults.cluster) do
         expect(GDrive::Migration::Scan.count).to eq(1)
@@ -60,7 +60,7 @@ describe "gdrive auth callback" do
           "x-goog-channel-token" => "56ab"
         })
         expect(response.status).to eq(404)
-      end.not_to have_enqueued_job(GDrive::Migration::ScanJob)
+      end.not_to have_enqueued_job(GDrive::Migration::ChangesScanJob)
 
       ActsAsTenant.with_tenant(Defaults.cluster) do
         expect(GDrive::Migration::Scan.count).to eq(0)
@@ -77,7 +77,7 @@ describe "gdrive auth callback" do
           "x-goog-channel-token" => "56az"
         })
         expect(response.status).to eq(404)
-      end.not_to have_enqueued_job(GDrive::Migration::ScanJob)
+      end.not_to have_enqueued_job(GDrive::Migration::ChangesScanJob)
 
       ActsAsTenant.with_tenant(Defaults.cluster) do
         expect(GDrive::Migration::Scan.count).to eq(0)
@@ -100,7 +100,7 @@ describe "gdrive auth callback" do
           "x-goog-channel-token" => "56ab"
         })
         expect(response.status).to eq(404)
-      end.not_to have_enqueued_job(GDrive::Migration::ScanJob)
+      end.not_to have_enqueued_job(GDrive::Migration::ChangesScanJob)
 
       ActsAsTenant.with_tenant(Defaults.cluster) do
         expect(GDrive::Migration::Scan.count).to eq(0)
@@ -121,7 +121,7 @@ describe "gdrive auth callback" do
           "x-goog-channel-token" => "56ab"
         })
         expect(response.status).to eq(404)
-      end.not_to have_enqueued_job(GDrive::Migration::ScanJob)
+      end.not_to have_enqueued_job(GDrive::Migration::ChangesScanJob)
 
       ActsAsTenant.with_tenant(Defaults.cluster) do
         expect(GDrive::Migration::Scan.count).to eq(0)

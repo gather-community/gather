@@ -2,7 +2,7 @@
 
 # Sends test emails that are then checked for by the system.
 class TestMailer < ActionMailer::Base
-  default from: Settings.email.from, reply_to: Settings.email.no_reply
+  default from: Settings.email.from
 
   SUBJECT = "Gather Mail Reliability Test"
 

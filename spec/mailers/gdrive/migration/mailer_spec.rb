@@ -8,7 +8,7 @@ describe GDrive::Migration::Mailer do
   let(:request) do
     create(:gdrive_migration_request, operation: operation, google_email: "blorb@gmail.com")
   end
-  let(:mail) { described_class.request(request).deliver_now }
+  let(:mail) { described_class.migration_request(request).deliver_now }
 
   describe "when google_email matches a user record" do
     let!(:user) { create(:user, :inactive, first_name: "Bing", last_name: "Borb", email: "blorb@example.com", google_email: "blorb@gmail.com") }

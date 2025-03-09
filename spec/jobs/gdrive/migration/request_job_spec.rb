@@ -16,7 +16,7 @@ describe GDrive::Migration::RequestJob do
 
   it "works" do
     request_ids = []
-    expect(GDrive::Migration::Mailer).to receive(:request).twice do |request|
+    expect(GDrive::Migration::Mailer).to receive(:migration_request).twice do |request|
       request_ids << request.id
       double(deliver_now: nil)
     end

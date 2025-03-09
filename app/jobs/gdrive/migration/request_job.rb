@@ -15,7 +15,7 @@ module GDrive
               google_email: google_email,
               operation_id: operation_id
             )
-            Mailer.request(request).deliver_now
+            Mailer.migration_request(request).deliver_now
           end
         end
       end

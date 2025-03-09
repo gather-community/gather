@@ -5,14 +5,14 @@ module GDrive
     class Mailer < ApplicationMailer
       attr_reader :community
 
-      def request(request)
-        @request = request
-        @operation = @request.operation
+      def migration_request(migration_request)
+        @migration_request = migration_request
+        @operation = @migration_request.operation
         @community = @operation.community
-        user = User.find_by(google_email: request.google_email)
-        @name = user ? "#{user.first_name} #{user.last_name}" : request.google_email
+        user = User.find_by(google_email: migration_request.google_email)
+        @name = user ? "#{user.first_name} #{user.last_name}" : migration_request.google_email
 
-        recipients = [user, request.google_email].compact
+        recipients = [user, migration_request.google_email].compact
 
         mail(
           to: recipients,

@@ -41,7 +41,7 @@ module GDrive
           # things if a lot of webhook pings are coming in.
           # We do this in a critical section so that we don't have any race conditions.
           if !operation.scans.changes.any?(&:new?)
-            ScanJob.enqueue_change_scan_job(operation)
+            ChangesScanJob.enqueue(operation)
           end
         end
       end

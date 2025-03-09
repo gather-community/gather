@@ -3,12 +3,17 @@
 module GDrive
   module Migration
     # Scans items returned from changes API
-    class ChangesScanJob < ScanJob
+    class ChangesScanJob < SourceScanJob
+      def self.enqueue(operation)
+        scan = operation.scans.create!(scope: "changes")
+        scan_task = scan.scan_tasks.create!(page_token: operation.start_page_token)
+        ChangesScanJob.perform_later(cluster_id: operation.cluster_id, scan_task_id: scan_task.id)
+      end
 
       protected
 
       def do_scan_task
-        files, next_page_token, new_start_page_token = list_files_from_changes
+        files, next_page_token = list_files
 
         # Update scan status now and then each time we go through loop.
         # We do it here just in case we are skipping all the files we fetched on the
@@ -32,10 +37,6 @@ module GDrive
         unless scan.reload.cancelled?
           if next_page_token
             scan_next_page(next_page_token)
-          elsif new_start_page_token
-            operation.log(:info, "Reached end of changes, updating start page token",
-              new_start_page_token: new_start_page_token)
-            operation.update!(start_page_token: new_start_page_token)
           end
         end
       rescue Google::Apis::AuthorizationError, Signet::AuthorizationError
@@ -44,7 +45,9 @@ module GDrive
         cancel_scan(reason: "auth_error")
       end
 
-      def list_files_from_changes
+      # We override the list_files function to get changes from the changes API instead of
+      # from the folder_id, which is not set fo this kind of job.
+      def list_files
         operation.log(:info, "Listing files from changes", page_token: scan_task.page_token)
         list = wrapper.list_changes(
           scan_task.page_token,
@@ -88,7 +91,29 @@ module GDrive
           # to the source migration tree anyway.
           gdrive_files << change.file
         end
-        [gdrive_files, list.next_page_token, list.new_start_page_token]
+
+        # If next_page_token is present then we are going to keep scanning so
+        # no need to save new_start_page_token yet.
+        if !list.next_page_token && list.new_start_page_token
+          operation.log(:info, "Reached end of changes, updating start page token",
+            new_start_page_token: list.new_start_page_token)
+          operation.update!(start_page_token: list.new_start_page_token)
+        end
+
+        [gdrive_files, list.next_page_token]
+      end
+
+      private
+
+      def delete_references_to(id)
+        deleted = operation.folder_maps.where(src_id: id).destroy_all
+        if deleted.any?
+          operation.log(:info, "Deleted #{deleted.size} folder maps")
+        end
+        deleted = operation.files.where(external_id: id).destroy_all
+        if deleted.any?
+          operation.log(:info, "Deleted #{deleted.size} files")
+        end
       end
     end
   end

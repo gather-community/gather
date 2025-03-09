@@ -27,7 +27,7 @@ module GDrive
       def self.enqueue_change_scan_job(operation)
         scan = operation.scans.create!(scope: "changes")
         scan_task = scan.scan_tasks.create!(page_token: operation.start_page_token)
-        ScanJob.perform_later(cluster_id: operation.cluster_id, scan_task_id: scan_task.id)
+        ChangesScanJob.perform_later(cluster_id: operation.cluster_id, scan_task_id: scan_task.id)
       end
 
       def perform(cluster_id:, scan_task_id:)
@@ -197,7 +197,7 @@ module GDrive
 
           operation.log(:info, "Scheduling scan task for subfolder", folder_id: gdrive_file.id)
           new_scan_task = scan.scan_tasks.create!(folder_id: gdrive_file.id)
-          ScanJob.perform_later(cluster_id: cluster_id, scan_task_id: new_scan_task.id)
+          self.class.perform_later(cluster_id: cluster_id, scan_task_id: new_scan_task.id)
         else
           migration_file = operation.files.find_by(external_id: gdrive_file.id)
           if migration_file.nil?
@@ -380,7 +380,7 @@ module GDrive
           folder_id: scan_task.folder_id,
           page_token: next_page_token
         )
-        ScanJob.perform_later(cluster_id: cluster_id, scan_task_id: new_task.id)
+        self.class.perform_later(cluster_id: cluster_id, scan_task_id: new_task.id)
       end
 
       def ensure_scan_status_in_progress_unless_cancelled

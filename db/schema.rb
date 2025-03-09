@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_01_12_160611) do
+ActiveRecord::Schema[7.0].define(version: 2025_02_16_180314) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -309,29 +309,6 @@ ActiveRecord::Schema[7.0].define(version: 2025_01_12_160611) do
     t.check_constraint "kind::text = ANY (ARRAY['drive'::character varying::text, 'folder'::character varying::text, 'file'::character varying::text])", name: "kind_enum"
   end
 
-  create_table "gdrive_migration_consent_requests", force: :cascade do |t|
-    t.bigint "cluster_id", null: false
-    t.datetime "created_at", null: false
-    t.integer "error_count", default: 0, null: false
-    t.integer "file_count", null: false
-    t.string "google_email", limit: 255, null: false
-    t.jsonb "ingest_file_ids"
-    t.integer "ingest_progress"
-    t.datetime "ingest_requested_at"
-    t.string "ingest_status"
-    t.bigint "operation_id", null: false
-    t.text "opt_out_reason"
-    t.string "status", limit: 16, default: "new", null: false
-    t.string "temp_drive_id"
-    t.string "token", null: false
-    t.datetime "updated_at", null: false
-    t.index ["cluster_id"], name: "index_gdrive_migration_consent_requests_on_cluster_id"
-    t.index ["operation_id"], name: "index_gdrive_migration_consent_requests_on_operation_id"
-    t.check_constraint "char_length(opt_out_reason) <= 32767", name: "opt_out_reason_length"
-    t.check_constraint "ingest_status::text = ANY (ARRAY['new'::character varying::text, 'in_progress'::character varying::text, 'done'::character varying::text, 'failed'::character varying::text])", name: "ingest_status_enum"
-    t.check_constraint "status::text = ANY (ARRAY['new'::character varying::text, 'in_progress'::character varying::text, 'done'::character varying::text, 'opted_out'::character varying::text, 'ingest_failed'::character varying::text])", name: "status_enum"
-  end
-
   create_table "gdrive_migration_files", force: :cascade do |t|
     t.bigint "cluster_id", null: false
     t.datetime "created_at", null: false
@@ -404,6 +381,29 @@ ActiveRecord::Schema[7.0].define(version: 2025_01_12_160611) do
     t.string "webhook_resource_id"
     t.string "webhook_secret"
     t.index ["config_id"], name: "index_gdrive_migration_operations_on_config_id"
+  end
+
+  create_table "gdrive_migration_requests", force: :cascade do |t|
+    t.bigint "cluster_id", null: false
+    t.datetime "created_at", null: false
+    t.integer "error_count", default: 0, null: false
+    t.integer "file_count", null: false
+    t.string "google_email", limit: 255, null: false
+    t.jsonb "ingest_file_ids"
+    t.integer "ingest_progress"
+    t.datetime "ingest_requested_at"
+    t.string "ingest_status"
+    t.bigint "operation_id", null: false
+    t.text "opt_out_reason"
+    t.string "status", limit: 16, default: "new", null: false
+    t.string "temp_drive_id"
+    t.string "token", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cluster_id"], name: "index_gdrive_migration_requests_on_cluster_id"
+    t.index ["operation_id"], name: "index_gdrive_migration_requests_on_operation_id"
+    t.check_constraint "char_length(opt_out_reason) <= 32767", name: "opt_out_reason_length"
+    t.check_constraint "ingest_status::text = ANY (ARRAY['new'::character varying::text, 'in_progress'::character varying::text, 'done'::character varying::text, 'failed'::character varying::text])", name: "ingest_status_enum"
+    t.check_constraint "status::text = ANY (ARRAY['new'::character varying::text, 'in_progress'::character varying::text, 'done'::character varying::text, 'opted_out'::character varying::text, 'ingest_failed'::character varying::text])", name: "status_enum"
   end
 
   create_table "gdrive_migration_scan_tasks", force: :cascade do |t|
@@ -1233,8 +1233,6 @@ ActiveRecord::Schema[7.0].define(version: 2025_01_12_160611) do
   add_foreign_key "gdrive_item_groups", "groups"
   add_foreign_key "gdrive_items", "clusters"
   add_foreign_key "gdrive_items", "gdrive_configs"
-  add_foreign_key "gdrive_migration_consent_requests", "clusters"
-  add_foreign_key "gdrive_migration_consent_requests", "gdrive_migration_operations", column: "operation_id"
   add_foreign_key "gdrive_migration_files", "clusters"
   add_foreign_key "gdrive_migration_files", "gdrive_migration_operations", column: "operation_id"
   add_foreign_key "gdrive_migration_folder_maps", "clusters"
@@ -1242,6 +1240,8 @@ ActiveRecord::Schema[7.0].define(version: 2025_01_12_160611) do
   add_foreign_key "gdrive_migration_logs", "clusters"
   add_foreign_key "gdrive_migration_logs", "gdrive_migration_operations", column: "operation_id"
   add_foreign_key "gdrive_migration_operations", "gdrive_configs", column: "config_id"
+  add_foreign_key "gdrive_migration_requests", "clusters"
+  add_foreign_key "gdrive_migration_requests", "gdrive_migration_operations", column: "operation_id"
   add_foreign_key "gdrive_migration_scan_tasks", "gdrive_migration_scans", column: "scan_id"
   add_foreign_key "gdrive_migration_scans", "clusters"
   add_foreign_key "gdrive_migration_scans", "gdrive_migration_operations", column: "operation_id"

@@ -91,6 +91,7 @@ module FormHelper
     wrap_object_proc = options.delete(:wrap_object) # Used for messing with template object.
     options[:inner_partial] ||= "#{f.object.class.model_name.collection}/#{assoc.to_s.singularize}_fields"
     options[:multiple] = true unless options.key?(:multiple)
+    options[:enable] = false unless options.key?(:enable)
 
     wrapper_classes = %w[nested-fields subfields]
     wrapper_classes << "no-inner-labels" if options[:inner_labels] == false

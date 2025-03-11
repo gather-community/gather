@@ -3,12 +3,18 @@
   <div class="fields-col">
     <%= render(options[:inner_partial], f: f, options: options) %>
   </div>
-  <% if options[:multiple] %>
+  <% if options[:multiple] && !options[:enable] %>
     <% unless options[:no_remove_link] %>
       <div class="remove-link-col">
         <%= link_to_remove_association(icon_tag("trash"), f) %>
       </div>
     <% end %>
+  <% elsif options[:enable] %>
+    <div class="disabled">
+          <label>Disabled?</label>
+      <%= check_box_tag("community_restrictions_attributes_#{f.index}_deactivated_at", 
+         f.object.deactivated_at, f.object.disabled?, name: "community[restrictions_attributes][#{f.index}][deactivated_at]") %>
+    </div>
   <% else %>
     <%# We need a way to set the destroy flag if the object is cleared %>
     <% if options[:allow_clear] %>

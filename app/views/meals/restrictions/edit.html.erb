@@ -6,7 +6,8 @@
 </p>
 <%= gather_form_for(@community, url: meals_restrictions_path) do |f| %>
   <%= hidden_field_tag "id", "#{@community.id}" %>
-  <%= nested_field_set(f, :restrictions, inner_partial: "meals/restrictions/restriction_fields", 
+  <%= nested_field_set(f, :restrictions, 
+                          inner_partial: "meals/restrictions/restriction_fields", 
                           required: true, single_row: true, enable: true) %>
 
   <%= form_actions do %>

@@ -2,7 +2,9 @@
 
 module Meals
   class SettingsController < ::SettingsController
-    before_action -> { nav_context(:meals, :settings, :general) }
+    before_action -> { 
+      nav_context(:meals, :settings, :general) if FeatureFlag.find_by(name: "restrictions").status? 
+    }
 
     protected
 

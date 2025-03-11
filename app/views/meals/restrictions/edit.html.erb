@@ -1,9 +1,13 @@
 <% content_for(:title, "Meals Settings: Dietary Restrictions") %>
-
-
+<p>
+  Please enter the dietary restriction by how it is described when a meal 
+  contains it, and when there is an abscence of it, as both forms are used. 
+  We have given common restrictions.
+</p>
 <%= gather_form_for(@community, url: meals_restrictions_path) do |f| %>
-
-  <%= nested_field_set(f, :restrictions, inner_partial: "meals/restrictions/restriction_fields", required: true, single_row: true) %>
+  <%= hidden_field_tag "id", "#{@community.id}" %>
+  <%= nested_field_set(f, :restrictions, inner_partial: "meals/restrictions/restriction_fields", 
+                          required: true, single_row: true, enable: true) %>
 
   <%= form_actions do %>
     <%= f.button :primary %>
@@ -13,6 +17,7 @@
   <%= javascript_tag do %>
     $(function() {
       new Gather.Views.DirtyChecker({el: '.community-form'});
+      new Gather.Views.Meals.RestrictionView({el: '.community-form'})
     });
   <% end %>
-  
+

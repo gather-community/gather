@@ -237,6 +237,7 @@ en:
       shifts: "Add Shift"
       assignments: "Add Worker"
       reminders: "Add Reminder"
+      restrictions: "Add restriction"
       signups: "Add Household"
       groups/group:
         memberships: "Add Member"

@@ -1,5 +1,5 @@
 <div class="field-row">
-  <% disabled = f.object.disabled? %>
-  <%= f.input :contains, disabled: disabled %>
-  <%= f.input :absence, disabled: disabled %>
+  <% deactivated = f.object.deactivated? %>
+  <%= f.input :contains, disabled: deactivated %>
+  <%= f.input :absence, disabled: deactivated %>
 </div>

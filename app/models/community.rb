@@ -16,7 +16,6 @@ class Community < ApplicationRecord
   has_many :group_affiliations, class_name: "Groups::Affiliation", inverse_of: :community, dependent: :destroy
   has_many :meals, class_name: "Meals::Meal", inverse_of: :community, dependent: :destroy
   has_many :meal_formulas, class_name: "Meals::Formula", inverse_of: :community, dependent: :destroy
-  has_many :meal_restrictions, class_name: "Meals::Restriction", inverse_of: :community, dependent: :destroy
   has_many :meal_roles, class_name: "Meals::Role", inverse_of: :community, dependent: :destroy
   has_many :meal_types, class_name: "Meals::Type", inverse_of: :community, dependent: :destroy
   has_many :member_types, class_name: "People::MemberType", inverse_of: :community, dependent: :destroy

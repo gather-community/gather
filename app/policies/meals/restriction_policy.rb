@@ -50,7 +50,6 @@ module Meals
 
     def permitted_attributes
       attrs = %i[contains abscence deactivated_at] << {role_ids: []}
-      puts "ATTRS ~~~~~ #{attrs}"
     end
   end
 end

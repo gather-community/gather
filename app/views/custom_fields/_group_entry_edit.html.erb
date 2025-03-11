@@ -1,3 +1,4 @@
+<% flag = FeatureFlag.find_by(name: "restrictions").status? %>
 <div class="custom-fields">
   <% if (title = group_entry.label) && !local_assigns[:hide_title] %>
     <div class="group-title"><%= title %></div>
@@ -11,7 +12,9 @@
         <% if entry.group? %>
           <%= render("custom_fields/group_entry_edit", group_entry: entry, f: ff) %>
         <% else %>
-          <%= ff.input entry.key, entry.input_params %>
+          <% unless flag && entry.key == :allergens %>
+            <%= ff.input entry.key, entry.input_params %>
+          <% end %>
         <% end %>
       <% end %>
     <% end %>

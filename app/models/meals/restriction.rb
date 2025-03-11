@@ -2,7 +2,7 @@ module Meals
   class Restriction < ApplicationRecord
     include Deactivatable
 
-    attribute :disabled, :boolean
+    attribute :deactivated, :boolean
 
     acts_as_tenant :cluster
 
@@ -10,7 +10,7 @@ module Meals
 
     validates :contains, :absence, presence: true
 
-    def disabled? 
+    def deactivated? 
       deactivated_at.present? && deactivated_at != 0
     end
 

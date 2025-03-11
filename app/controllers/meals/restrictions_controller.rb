@@ -27,7 +27,7 @@ module Meals
       c = params[:community].permit(policy(@community).permitted_attributes)
       # Because we are not storing deactivated at as a boolean, we need to help rails a bit
       c[:restrictions_attributes].each do |k,v|
-        if !v.key?(:deactivated_at) && Meals::Restriction.find_by(id: v[:id])&.disabled?
+        if !v.key?(:deactivated_at) && Meals::Restriction.find_by(id: v[:id])&.deactivated?
           v[:deactivated_at] = "0"
         end
       end

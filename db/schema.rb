@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_02_16_180314) do
+ActiveRecord::Schema[7.0].define(version: 2025_03_14_124826) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -388,6 +388,8 @@ ActiveRecord::Schema[7.0].define(version: 2025_02_16_180314) do
     t.datetime "created_at", null: false
     t.integer "error_count", default: 0, null: false
     t.integer "file_count", null: false
+    t.string "file_drop_drive_id", limit: 128, null: false
+    t.string "file_drop_drive_name", limit: 128, null: false
     t.string "google_email", limit: 255, null: false
     t.jsonb "ingest_file_ids"
     t.integer "ingest_progress"

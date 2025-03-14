@@ -2,7 +2,6 @@
 <p>
   Please enter the dietary restriction by how it is described when a meal 
   contains it, and when there is an abscence of it, as both forms are used. 
-  We have given common restrictions.
 </p>
 <%= gather_form_for(@community, url: meals_restrictions_path) do |f| %>
   <%= hidden_field_tag "id", "#{@community.id}" %>

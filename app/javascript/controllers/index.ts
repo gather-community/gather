@@ -14,4 +14,4 @@ import PartialListController from "./partial_list_controller"
 application.register("partial-list", PartialListController)
 
 import PaymentController from "./payment_controller"
-application.register("payment", PaymentController
+application.register("payment", PaymentController)

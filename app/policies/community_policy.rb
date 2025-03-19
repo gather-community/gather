@@ -14,6 +14,6 @@ class CommunityPolicy < ApplicationPolicy
   end
 
   def permitted_attributes
-    [restrictions_attributes: [:id, :contains, :absence, :deactivated_at]]
+    [restrictions_attributes: [:id, :contains, :absence, :deactivated_at, :deactivated]]
   end
 end

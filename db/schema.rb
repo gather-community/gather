@@ -693,6 +693,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_11_200735) do
     t.bigint "community_id", null: false
     t.string "contains", limit: 64, null: false
     t.datetime "created_at", null: false
+    t.boolean "deactivated", null: false
     t.datetime "deactivated_at"
     t.datetime "updated_at", null: false
     t.index ["cluster_id"], name: "index_meal_restrictions_on_cluster_id"

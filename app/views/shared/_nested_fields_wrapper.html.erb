@@ -12,8 +12,7 @@
   <% elsif options[:enable] %>
     <div class="disabled">
           <label>Deactivated?</label>
-      <%= check_box_tag("community_restrictions_attributes_#{f.index}_deactivated_at", 
-         f.object.deactivated_at, f.object.deactivated?, name: "community[restrictions_attributes][#{f.index}][deactivated_at]") %>
+          <%= f.input :deactivated, label: false, input_html: {checked: f.object.deactivated?} %>
     </div>
   <% else %>
     <%# We need a way to set the destroy flag if the object is cleared %>

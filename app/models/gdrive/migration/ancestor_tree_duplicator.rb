@@ -35,6 +35,14 @@ module GDrive
       # If skip_check_for_already_mapped_folders is specified, we will assume the destination
       # folder exists if a FolderMap exists. This is safer if we are confident that the
       # dest folder was recently created, as when we are doing the initial scan.
+      #
+      # Note that this method may be called in cases where the source folder does not exist anymore.
+      # This can happen if, for example, the user somehow drags the source folder into the file drop
+      # drive. In this case:
+      # - if a matching folder map is found and the mapped destination folder exists,
+      #   the method should run cleanly and early return
+      # - if a matching folder map is not found or destination folder does not exist,
+      #   an error will be thrown
       def ensure_tree(src_folder_or_id, skip_check_for_already_mapped_folders: false)
         if src_folder_or_id.is_a?(String)
           src_folder_id = src_folder_or_id

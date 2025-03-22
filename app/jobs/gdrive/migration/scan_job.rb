@@ -98,6 +98,7 @@ module GDrive
         cancel_scan(reason: "auth_error")
       end
 
+      # Default implementation, lists files from folder
       def list_files
         folder_id = scan_task.folder_id
         operation.log(:info, "Listing files from folder", folder_id: folder_id)

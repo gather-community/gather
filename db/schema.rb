@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_03_14_124826) do
+ActiveRecord::Schema[7.0].define(version: 2025_03_15_024451) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -430,7 +430,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_03_14_124826) do
     t.datetime "updated_at", null: false
     t.index ["cluster_id"], name: "index_gdrive_migration_scans_on_cluster_id"
     t.index ["operation_id"], name: "index_gdrive_migration_scans_on_operation_id"
-    t.check_constraint "scope::text = ANY (ARRAY['full'::character varying::text, 'changes'::character varying::text])", name: "scope_enum"
+    t.check_constraint "scope::text = ANY (ARRAY['full'::character varying, 'changes'::character varying, 'file_drop'::character varying]::text[])", name: "scope_enum"
     t.check_constraint "status::text = ANY (ARRAY['new'::character varying::text, 'in_progress'::character varying::text, 'cancelled'::character varying::text, 'complete'::character varying::text])", name: "status_enum"
   end
 

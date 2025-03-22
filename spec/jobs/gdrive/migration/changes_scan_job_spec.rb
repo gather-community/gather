@@ -5,9 +5,23 @@ require "rails_helper"
 describe GDrive::Migration::ChangesScanJob do
   include_context "jobs"
 
+  # To dev on these specs:
+  #
+  # Setup:
+  # - Create a destination Shared Drive for the migration inside your Google Workspace account.
+  # - Under the requestee email, create a source folder/file structure in regular Google Drive as follows:
+  #   - Gather Migration Test Source Folder
+  # - Share the source folder with your org_user_id.
+  # - Update any literal IDs in relevant tests fixtures. The names should make it obvious what ID to get.
+  # - Get a fresh main access_token from the DB after viewing the main GDrive page and add it below.
+  #
+  # For each real run:
+  # - Ensure the destination Shared Drive is empty.
+  # - Delete any casettes under spec/cassettes/gdrive/migration/scan_job that you want to adjust.
+
   let(:community) { Defaults.community }
-  let!(:main_config) { create(:gdrive_main_config, org_user_id: "admin@example.org", community: community) }
-  let!(:token) { create(:gdrive_token, gdrive_config: main_config, google_user_id: main_config.org_user_id) }
+  let!(:main_config) { create(:gdrive_main_config, community: community) }
+  let!(:token) { create(:gdrive_token, gdrive_config: main_config, google_user_id: main_config.org_user_id, access_token: "ya29.a0AeXRPp6h54IVI-JqfIPzHxB7cL-BWsf9bWw3pbP406QUT56AYC3L3RWcENZw-ZJiMjKCGVmbWBXaHpyVfELsBz8_ByqltkIjLG0F2y4RcvX45ICZGxsebjVvfcPSHf8UPb1Zvgld4LRqtzJTBcmFl9MFYoe7dvpA_y42T9wyw78aCgYKAckSARESFQHGX2Mi6UT7JXhV77V2xM21uePB-w0178") }
   let!(:migration_config) { create(:gdrive_migration_config, community: community) }
   let!(:operation) do
     create(:gdrive_migration_operation, :webhook_registered, config: migration_config,
@@ -64,24 +78,33 @@ describe GDrive::Migration::ChangesScanJob do
     end
   end
 
-  # describe "with changeset containing one new folder" do
-  #   let!(:scan_task) { scan.scan_tasks.create!(page_token: "13141") }
+  describe "with changeset containing one new folder" do
+    # Get the latest start_page_token, then create a new folder in the source drive.
+    # Copy the folder's ID below.
+    # Copy the start page token below, then add one and copy it further down.
+    let!(:operation) do
+      create(:gdrive_migration_operation, :webhook_registered, config: migration_config,
+        src_folder_id: "1F_bPvGfgHj8TEmlTFsZxU69sLB1keEfZ",
+        dest_folder_id: "0AIQ_OKz_uphLUk9PVA")
+    end
+    let!(:scan_task) { scan.scan_tasks.create!(page_token: "41659") }
+    let(:new_folder_id) { "1_p9qu3RGOsMi2FJY4Gm_SSXxdvPN78so" }
 
-  #   it "creates folder map and a copy on dest drive, completes scan, stores new start_page_token" do
-  #     VCR.use_cassette("gdrive/migration/scan_job/changes/folder_created") do
-  #       expect { perform_job }.not_to have_enqueued_job(described_class)
-  #     end
+    it "creates folder map and a copy on dest drive, completes scan, stores new start_page_token" do
+      VCR.use_cassette("gdrive/migration/scan_job/changes/folder_created") do
+        expect { perform_job }.not_to have_enqueued_job(described_class)
+      end
 
-  #     expect(GDrive::Migration::Scan.count).to eq(1)
-  #     expect(GDrive::Migration::ScanTask.count).to eq(0)
-  #     scan.reload
-  #     expect(scan.status).to eq("complete")
-  #     expect(GDrive::Migration::FolderMap.find_by(src_id: "1XTSlSd3Bw4dkRN1OTY2lhepebfL_hZBy")).not_to be_nil
+      expect(GDrive::Migration::Scan.count).to eq(1)
+      expect(GDrive::Migration::ScanTask.count).to eq(0)
+      scan.reload
+      expect(scan.status).to eq("complete")
+      expect(GDrive::Migration::FolderMap.find_by(src_id: new_folder_id)).not_to be_nil
 
-  #     operation.reload
-  #     expect(operation.start_page_token).to eq("13142")
-  #   end
-  # end
+      operation.reload
+      expect(operation.start_page_token).to eq("41660")
+    end
+  end
 
   describe "with changeset containing a change to a mapped folder" do
     let!(:scan_task) { scan.scan_tasks.create!(page_token: "12738") }

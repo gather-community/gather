@@ -5,13 +5,13 @@ module GDrive
     # For scanning new arrivals to the file drop drive during the migration process.
     class FileDropScanJob < ScanJob
       def process_file(gdrive_file)
-        operation.log(:info, "Processing item", id: gdrive_file.id, name: gdrive_file.name,
+        scan.log(:info, "Processing item", id: gdrive_file.id, name: gdrive_file.name,
           type: gdrive_file.mime_type)
 
         scan.increment!(:scanned_file_count)
 
         if gdrive_file.mime_type == GDrive::FOLDER_MIME_TYPE
-          operation.log(:info, "Scheduling scan task for subfolder", folder_id: gdrive_file.id)
+          scan.log(:info, "Scheduling scan task for subfolder", folder_id: gdrive_file.id)
           new_scan_task = scan.scan_tasks.create!(folder_id: gdrive_file.id)
           self.class.perform_later(cluster_id: cluster_id, scan_task_id: new_scan_task.id)
         else
@@ -25,27 +25,27 @@ module GDrive
       end
 
       def process_new_file(gdrive_file)
-        operation.log(:info, "Unrecognized file, leaving file in drop drive",
+        scan.log(:info, "Unrecognized file, leaving file in drop drive",
           file_id: gdrive_file.id, name: gdrive_file.name)
       end
 
       def process_existing_file(gdrive_file, migration_file)
-        operation.log(:info, "Processing recognized file", file_id: gdrive_file.id, name: gdrive_file.name)
+        scan.log(:info, "Processing recognized file", file_id: gdrive_file.id, name: gdrive_file.name)
 
         begin
           dest_folder_id = ancestor_tree_duplicator.ensure_tree(migration_file.parent_id)
         rescue AncestorTreeDuplicator::ParentFolderInaccessible => error
-          operation.log(:error, "Ancestor inaccessible, leaving file in drop drive",
+          scan.log(:error, "Ancestor inaccessible, leaving file in drop drive",
             file_id: gdrive_file.id, name: gdrive_file.name, folder_id: error.folder_id)
           return
         rescue Google::Apis::ClientError => error
-          operation.log(:error, "Client error ensuring tree, leaving file in drop drive",
+          scan.log(:error, "Client error ensuring tree, leaving file in drop drive",
             file_id: gdrive_file.id, name: gdrive_file.name, message: error.to_s)
           return
         end
 
         begin
-          operation.log(:info, "Moving file to final destination.", file_id: gdrive_file.id,
+          scan.log(:info, "Moving file to final destination.", file_id: gdrive_file.id,
             dest_folder_id: dest_folder_id)
 
           # This should rarely fail because we have just checked the existence of the destination folder
@@ -56,7 +56,7 @@ module GDrive
             remove_parents: gdrive_file.parents[0],
             supports_all_drives: true)
         rescue Google::Apis::ClientError => error
-          operation.log(:error, "Client error moving file, leaving file in drop drive",
+          scan.log(:error, "Client error moving file, leaving file in drop drive",
             file_id: gdrive_file.id, name: gdrive_file.name, message: error.to_s)
         end
         migration_file.update!(status: "transferred")

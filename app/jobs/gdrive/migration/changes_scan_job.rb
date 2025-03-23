@@ -24,7 +24,7 @@ module GDrive
         # has hit too many errors and cancelled the scan.
         files.each do |gdrive_file|
           if scan.cancelled?
-            operation.log(:info, "Scan has been cancelled, exiting loop")
+            scan.log(:info, "Scan has been cancelled, exiting loop")
             break
           end
           process_file(gdrive_file)
@@ -48,7 +48,7 @@ module GDrive
       # We override the list_files function to get changes from the changes API instead of
       # from the folder_id, which is not set fo this kind of job.
       def list_files
-        operation.log(:info, "Listing files from changes", page_token: scan_task.page_token)
+        scan.log(:info, "Listing files from changes", page_token: scan_task.page_token)
         list = wrapper.list_changes(
           scan_task.page_token,
           fields: "changes(fileId,file(#{FILE_FIELDS},driveId)),nextPageToken,newStartPageToken",
@@ -70,7 +70,7 @@ module GDrive
           # If no file is present at all, it means we no longer have access to this file
           # and we should delete any reference we have to it.
           if change.file.nil?
-            operation.log(:info, "Received change with no file info, deleting references if present",
+            scan.log(:info, "Received change with no file info, deleting references if present",
               file_id: change.file_id)
             update_references_to_missing_file(change.file_id)
             next
@@ -80,7 +80,7 @@ module GDrive
           # a change to a Shared Drive item. This could happen if someone migrated a file manually.
           # In any case, we don't care about these files anymore so delete any references if present.
           if change.file.drive_id.present?
-            operation.log(:info, "Received change with drive_id, deleting references if present",
+            scan.log(:info, "Received change with drive_id, deleting references if present",
               file_id: change.file_id, drive_id: change.file.drive_id)
             update_references_to_missing_file(change.file_id)
             next
@@ -95,7 +95,7 @@ module GDrive
         # If next_page_token is present then we are going to keep scanning so
         # no need to save new_start_page_token yet.
         if !list.next_page_token && list.new_start_page_token
-          operation.log(:info, "Reached end of changes, updating start page token",
+          scan.log(:info, "Reached end of changes, updating start page token",
             new_start_page_token: list.new_start_page_token)
           operation.update!(start_page_token: list.new_start_page_token)
         end
@@ -108,13 +108,13 @@ module GDrive
       def update_references_to_missing_file(id)
         deleted = operation.folder_maps.where(src_id: id).destroy_all
         if deleted.any?
-          operation.log(:info, "Deleted #{deleted.size} folder maps")
+          scan.log(:info, "Deleted #{deleted.size} folder maps")
         end
         missing_files = operation.files.where(external_id: id)
         missing_files.update_all(status: "disappeared")
         updated_count = missing_files.count
         if updated_count > 0
-          operation.log(:info, "Updated status of #{updated_count} files to disappeared")
+          scan.log(:info, "Updated status of #{updated_count} files to disappeared")
         end
       end
     end

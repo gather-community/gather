@@ -30,7 +30,7 @@ module GDrive
           self.scan_task = ScanTask.find(scan_task_id)
           self.scan = scan_task.scan
           self.operation = scan.operation
-          operation.log(:info, "ScanJob starting", scan_task_id: scan_task_id, scope: scan.scope)
+          scan.log(:info, "ScanJob starting", scan_task_id: scan_task_id, scope: scan.scope)
           return if scan.cancelled?
 
           self.ancestor_tree_duplicator = AncestorTreeDuplicator.new(wrapper: wrapper, operation: operation)
@@ -45,8 +45,8 @@ module GDrive
         class_name = error.message.match(/Couldn't find (.+) with/).captures[0]
         raise unless DISAPPEARABLE_CLASSES.include?(class_name)
         if operation
-          operation.log(:error, error.message)
-          operation.log(:info, "Exiting gracefully")
+          scan.log(:error, error.message)
+          scan.log(:info, "Exiting gracefully")
         else
           Rails.logger.error(error.message)
           Rails.logger.info("Exiting gracefully")
@@ -77,7 +77,7 @@ module GDrive
         # has hit too many errors and cancelled the scan.
         files.each do |gdrive_file|
           if scan.cancelled?
-            operation.log(:info, "Scan has been cancelled, exiting loop")
+            scan.log(:info, "Scan has been cancelled, exiting loop")
             break
           end
           process_file(gdrive_file)
@@ -101,7 +101,7 @@ module GDrive
       # Default implementation, lists files from folder
       def list_files
         folder_id = scan_task.folder_id
-        operation.log(:info, "Listing files from folder", folder_id: folder_id)
+        scan.log(:info, "Listing files from folder", folder_id: folder_id)
         folder_id = folder_id.gsub("'") { "\\'" }
         list = wrapper.list_files(
           q: "'#{folder_id}' in parents and trashed = false",
@@ -116,7 +116,7 @@ module GDrive
       end
 
       def scan_next_page(next_page_token)
-        operation.log(:info, "Creating scan task for next page")
+        scan.log(:info, "Creating scan task for next page")
         new_task = scan.scan_tasks.create!(
           # This may be nil if we are doing a changes scan.
           folder_id: scan_task.folder_id,
@@ -138,7 +138,7 @@ module GDrive
 
       def cancel_scan(reason:)
         self.class.with_lock(operation.id) do
-          operation.log(:info, "Cancelling scan", reason: reason)
+          scan.log(:info, "Cancelling scan", reason: reason)
           scan.update!(status: "cancelled", cancel_reason: reason)
         end
       end
@@ -157,7 +157,7 @@ module GDrive
           # We need to check again if cancelled in case another job has cancelled
           # the operation.
           if ScanTask.where(scan: scan).none? && !scan.reload.cancelled?
-            operation.log(:info, "No more scan task exists for this scan, marking complete")
+            scan.log(:info, "No more scan task exists for this scan, marking complete")
             scan.update!(status: "complete")
 
             # Call a hook for subclasses

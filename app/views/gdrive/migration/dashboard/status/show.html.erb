@@ -16,4 +16,5 @@
   <tr><td>Files Transferred</td><td><%= number_with_delimiter(@stats.by_status["transferred"]) %></td></tr>
   <tr><td>Files Copied</td><td><%= number_with_delimiter(@stats.by_status["copied"]) %></td></tr>
   <tr><td>Files Ignored</td><td><%= number_with_delimiter(@stats.by_status["ignored"]) %></td></tr>
+  <tr><td>Files Disappeared</td><td><%= number_with_delimiter(@stats.by_status["disappeared"]) %></td></tr>
 </table>

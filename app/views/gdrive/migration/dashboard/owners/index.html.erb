@@ -39,6 +39,7 @@
       <th>Transferred</th>
       <th>Copied</th>
       <th>Ignored</th>
+      <th>Disappeared</th>
       <th>Date Sent</th>
       <th>Status</th>
     </tr>
@@ -56,6 +57,7 @@
         <td><%= number_with_delimiter(@stats.by_owner_and_status[[owner, "transferred"]]) %></td>
         <td><%= number_with_delimiter(@stats.by_owner_and_status[[owner, "copied"]]) %></td>
         <td><%= number_with_delimiter(@stats.by_owner_and_status[[owner, "ignored"]]) %></td>
+        <td><%= number_with_delimiter(@stats.by_owner_and_status[[owner, "disappeared"]]) %></td>
         <% if (request = @stats.requests_by_owner[owner]) %>
           <td>
             <%= I18n.l(request.created_at, format: :day_mo_yr_no_time) %>

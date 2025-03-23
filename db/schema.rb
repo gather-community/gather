@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_03_15_024451) do
+ActiveRecord::Schema[7.0].define(version: 2025_03_23_183307) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -334,7 +334,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_03_15_024451) do
     t.index ["operation_id"], name: "index_gdrive_migration_files_on_operation_id"
     t.check_constraint "char_length(name) <= 32767", name: "name_length"
     t.check_constraint "error_type::text = ANY (ARRAY['forbidden'::character varying::text, 'not_found'::character varying::text, 'ancestor_inaccessible'::character varying::text, 'client_error_ensuring_tree'::character varying::text, 'client_error_moving_to_temp_drive'::character varying::text, 'client_error_moving_to_destination'::character varying::text])", name: "error_type_enum"
-    t.check_constraint "status::text = ANY (ARRAY['pending'::character varying::text, 'errored'::character varying::text, 'declined'::character varying::text, 'transferred'::character varying::text, 'copied'::character varying::text, 'ignored'::character varying::text])", name: "status_enum"
+    t.check_constraint "status::text = ANY (ARRAY['pending'::character varying::text, 'errored'::character varying::text, 'declined'::character varying::text, 'transferred'::character varying::text, 'copied'::character varying::text, 'ignored'::character varying::text, 'disappeared'::character varying::text])", name: "status_enum"
   end
 
   create_table "gdrive_migration_folder_maps", force: :cascade do |t|

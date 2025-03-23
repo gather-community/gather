@@ -72,7 +72,7 @@ module GDrive
           if change.file.nil?
             operation.log(:info, "Received change with no file info, deleting references if present",
               file_id: change.file_id)
-            delete_references_to(change.file_id)
+            update_references_to_missing_file(change.file_id)
             next
           end
 
@@ -82,7 +82,7 @@ module GDrive
           if change.file.drive_id.present?
             operation.log(:info, "Received change with drive_id, deleting references if present",
               file_id: change.file_id, drive_id: change.file.drive_id)
-            delete_references_to(change.file_id)
+            update_references_to_missing_file(change.file_id)
             next
           end
 
@@ -105,14 +105,16 @@ module GDrive
 
       private
 
-      def delete_references_to(id)
+      def update_references_to_missing_file(id)
         deleted = operation.folder_maps.where(src_id: id).destroy_all
         if deleted.any?
           operation.log(:info, "Deleted #{deleted.size} folder maps")
         end
-        deleted = operation.files.where(external_id: id).destroy_all
-        if deleted.any?
-          operation.log(:info, "Deleted #{deleted.size} files")
+        missing_files = operation.files.where(external_id: id)
+        missing_files.update_all(status: "disappeared")
+        updated_count = missing_files.count
+        if updated_count > 0
+          operation.log(:info, "Updated status of #{updated_count} files to disappeared")
         end
       end
     end

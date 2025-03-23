@@ -74,8 +74,8 @@ describe GDrive::Migration::FileDropScanJob do
         expect { described_class.perform_now(cluster_id: Defaults.cluster.id, scan_task_id: scan_task.id) }
           .not_to have_enqueued_job
       end
-      expect { file_a_1.reload }.to raise_error(ActiveRecord::RecordNotFound)
-      expect { file_b_1.reload }.to raise_error(ActiveRecord::RecordNotFound)
+      expect(file_a_1.reload).to be_transferred
+      expect(file_b_1.reload).to be_transferred
       expect(scan.reload).to be_complete
     end
   end
@@ -93,7 +93,7 @@ describe GDrive::Migration::FileDropScanJob do
       VCR.use_cassette("gdrive/migration/scan_job/file_drop/file_in_folder") do
         expect { described_class.perform_now(cluster_id: Defaults.cluster.id, scan_task_id: scan_task.id) }
           .to have_enqueued_job(described_class)
-        expect { file_a_1.reload }.not_to raise_error
+        expect(file_a_1.reload).to be_pending
         expect(scan.reload).not_to be_complete
 
         expect(GDrive::Migration::ScanTask.count).to eq(1)
@@ -101,7 +101,7 @@ describe GDrive::Migration::FileDropScanJob do
         expect { described_class.perform_now(cluster_id: Defaults.cluster.id, scan_task_id: new_scan_task.id) }
           .not_to have_enqueued_job
 
-        expect { file_a_1.reload }.to raise_error(ActiveRecord::RecordNotFound)
+        expect(file_a_1.reload).to be_transferred
         expect(scan.reload).to be_complete
       end
     end
@@ -125,7 +125,7 @@ describe GDrive::Migration::FileDropScanJob do
         expect { described_class.perform_now(cluster_id: Defaults.cluster.id, scan_task_id: scan_task.id) }
           .not_to have_enqueued_job
       end
-      expect { file_a_1.reload }.to raise_error(ActiveRecord::RecordNotFound)
+      expect(file_a_1.reload).to be_transferred
       expect(scan.reload).to be_complete
     end
   end

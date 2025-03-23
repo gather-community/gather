@@ -59,7 +59,7 @@ module GDrive
           operation.log(:error, "Client error moving file, leaving file in drop drive",
             file_id: gdrive_file.id, name: gdrive_file.name, message: error.to_s)
         end
-        migration_file.destroy
+        migration_file.update!(status: "transferred")
       end
     end
   end

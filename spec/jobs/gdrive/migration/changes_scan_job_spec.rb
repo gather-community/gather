@@ -224,7 +224,7 @@ describe GDrive::Migration::ChangesScanJob do
         parent_id: folder_map_c.src_id)
     end
 
-    it "deletes folder map a and c, deletes file c.1, completes scan" do
+    it "deletes folder map a and c, updates file c.1 status, completes scan" do
       VCR.use_cassette("gdrive/migration/scan_job/changes/folder_moved_to_outside_parent") do
         expect { perform_job }.not_to have_enqueued_job(described_class)
       end
@@ -238,7 +238,8 @@ describe GDrive::Migration::ChangesScanJob do
       folder_map_b = GDrive::Migration::FolderMap.first
       expect(folder_map_b.name).to eq("Folder B")
 
-      expect(GDrive::Migration::File.count).to eq(0)
+      expect(GDrive::Migration::File.count).to eq(1)
+      expect(file_c_1.reload).to be_disappeared
     end
   end
 
@@ -265,7 +266,7 @@ describe GDrive::Migration::ChangesScanJob do
         parent_id: folder_map_c.src_id)
     end
 
-    it "deletes folder map a and c, deletes file c.1, completes scan" do
+    it "deletes folder map a and c, updates file c.1, completes scan" do
       VCR.use_cassette("gdrive/migration/scan_job/changes/folder_trashed") do
         expect { perform_job }.not_to have_enqueued_job(described_class)
       end
@@ -279,7 +280,8 @@ describe GDrive::Migration::ChangesScanJob do
       folder_map_b = GDrive::Migration::FolderMap.first
       expect(folder_map_b.name).to eq("Folder B")
 
-      expect(GDrive::Migration::File.count).to eq(0)
+      expect(GDrive::Migration::File.count).to eq(1)
+      expect(file_c_1.reload).to be_disappeared
     end
   end
 
@@ -349,7 +351,7 @@ describe GDrive::Migration::ChangesScanJob do
         src_id: "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV", src_parent_id: operation.src_folder_id,
         dest_id: "1v5yAODVs-lL80QtnMHlFRK9CEbFefu9o", dest_parent_id: operation.dest_folder_id)
     end
-    # This file will be trashed.
+    # This file will come back from the API as trashed.
     let!(:file_b_1) do
       create(:gdrive_migration_file, operation: operation, external_id: "1IufP1TQKUf9ZlU0q-pIdY52Hg5arZc2KYGHqT-dK4nY",
         name: "File B.1", parent_id: folder_map_b.src_id)
@@ -365,7 +367,8 @@ describe GDrive::Migration::ChangesScanJob do
       scan.reload
       expect(scan.status).to eq("complete")
 
-      expect(GDrive::Migration::File.count).to eq(0)
+      expect(GDrive::Migration::File.count).to eq(1)
+      expect(file_b_1.reload).to be_disappeared
     end
   end
 end

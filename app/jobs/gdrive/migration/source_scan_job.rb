@@ -169,7 +169,7 @@ module GDrive
         # parents.nil? means the item is no longer accessible.
         if gdrive_file.trashed || gdrive_file.parents.nil?
           operation.log(:info, "File is in trash, deleting record", file_id: gdrive_file.id)
-          migration_file.destroy
+          migration_file.update!(status: "disappeared")
           return
         end
 

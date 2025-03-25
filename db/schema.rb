@@ -388,8 +388,8 @@ ActiveRecord::Schema[7.0].define(version: 2025_03_23_183307) do
     t.datetime "created_at", null: false
     t.integer "error_count", default: 0, null: false
     t.integer "file_count", null: false
-    t.string "file_drop_drive_id", limit: 128, null: false
-    t.string "file_drop_drive_name", limit: 128, null: false
+    t.string "file_drop_drive_id", limit: 128
+    t.string "file_drop_drive_name", limit: 128
     t.string "google_email", limit: 255, null: false
     t.jsonb "ingest_file_ids"
     t.integer "ingest_progress"

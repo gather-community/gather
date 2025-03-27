@@ -5,7 +5,6 @@ class CreateMealRestrictions < ActiveRecord::Migration[7.0]
       t.string :absence, null: false, limit: 64
       t.references :cluster, foreign_key: true, index: true, null: false
       t.datetime :deactivated_at
-      t.boolean :deactivated, null: false
 
       t.references :community, null: false, index: true, foreign_key: true
 

@@ -16,6 +16,7 @@ module GDrive
 
       def log(level, message, data = nil)
         data ||= {}
+        data.merge!(log_data) if log_data.present?
         data["scan_scope"] = scope
         data["scan_id"] = id
         operation.log(level, message, data)

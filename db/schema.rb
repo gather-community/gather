@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_03_23_183307) do
+ActiveRecord::Schema[7.0].define(version: 2025_03_29_172119) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -423,6 +423,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_03_23_183307) do
     t.bigint "cluster_id", null: false
     t.datetime "created_at", null: false
     t.integer "error_count", default: 0, null: false
+    t.jsonb "log_data"
     t.bigint "operation_id", null: false
     t.integer "scanned_file_count", default: 0, null: false
     t.string "scope", limit: 16, default: "full", null: false

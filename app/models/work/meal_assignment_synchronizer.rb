@@ -85,7 +85,7 @@ module Work
     end
 
     def meal_shift?(shift)
-      shift.meal? && shift.meal_role_id.present?
+      shift.present? && shift.meal? && shift.meal_role_id.present?
     end
 
     def shift_for_meal_assignment(meal_asst)

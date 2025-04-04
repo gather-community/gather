@@ -1,0 +1,110 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://www.googleapis.com/drive/v3/changes?fields=changes(fileId,file(id,name,parents,mimeType,webViewLink,iconLink,modifiedTime,owners(emailAddress),capabilities(canEdit),shortcutDetails(targetId,targetMimeType),trashed,driveId)),nextPageToken,newStartPageToken&includeCorpusRemovals=true&includeItemsFromAllDrives=true&includeRemoved=true&pageSize=100&pageToken=13309&spaces=drive&supportsAllDrives=true
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      User-Agent:
+      - unknown/0.0.0 google-apis-drive_v3/0.46.0 Mac OS X/13.1 (gzip)
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip,deflate
+      Date:
+      - Sun, 14 Jan 2024 15:32:20 GMT
+      X-Goog-Api-Client:
+      - gl-ruby/3.2.2 gdcl/1.46.0
+      Authorization:
+      - Bearer ya29.a0AfB_byDrPKb8iCQnlxnGvgQyt60zz2_JgGcpSnKJ41VeyUWVn4pK8iNafjEw6nxdFabYW_LLoZuVv02CZOzJslDy_hUFjGXNfeuT04lQw3Vft-4ybsUiZ2FZjdiU4rjg9O8KQjYK0fJLrpUsoHIA_qhVyFYDIdooqIb4XyMaCgYKAYgSARESFQHGX2MikHwfJ2NZUQtPJ3HcOWsIZw0174
+      Content-Type:
+      - application/x-www-form-urlencoded
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Pragma:
+      - no-cache
+      Vary:
+      - Origin, X-Origin
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Date:
+      - Sun, 14 Jan 2024 15:32:20 GMT
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Encoding:
+      - gzip
+      Server:
+      - ESF
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: |
+        {
+          "changes": [
+            {
+              "file": {
+                "driveId": "0AExZ3-Cu5q7uUk9PVX",
+                "mimeType": "application/vnd.google-apps.document",
+                "parents": [
+                  "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV"
+                ],
+                "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.document",
+                "owners": [
+                  {
+                    "emailAddress": "example@gmail.com"
+                  }
+                ],
+                "webViewLink": "https://docs.google.com/document/d/1IufP1TQKUf9ZlU0q-pIdY52Hg5arZc2KYGHqT-dK4nY/edit?usp=drivesdk",
+                "id": "1IufP1TQKUf9ZlU0q-pIdY52Hg5arZc2KYGHqT-dK4nY",
+                "name": "File B.1",
+                "modifiedTime": "2023-12-29T23:12:37.671Z",
+                "capabilities": {
+                  "canEdit": true
+                }
+              },
+              "fileId": "1IufP1TQKUf9ZlU0q-pIdY52Hg5arZc2KYGHqT-dK4nY"
+            },
+            {
+              "file": {
+                "driveId": "0AExZ3-Cu5q7uUk9PVX",
+                "mimeType": "application/vnd.google-apps.document",
+                "parents": [
+                  "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV"
+                ],
+                "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.document",
+                "owners": [
+                  {
+                    "emailAddress": "example@gmail.com"
+                  }
+                ],
+                "webViewLink": "https://docs.google.com/document/d/QIufP1TQKUf9ZlU0q-pIdY52Hg5arZc2KYGHqT-dK4nY/edit?usp=drivesdk",
+                "id": "QIufP1TQKUf9ZlU0q-pIdY52Hg5arZc2KYGHqT-dK4nY",
+                "name": "File B.1",
+                "modifiedTime": "2023-12-29T23:12:37.671Z",
+                "capabilities": {
+                  "canEdit": true
+                }
+              },
+              "fileId": "QIufP1TQKUf9ZlU0q-pIdY52Hg5arZc2KYGHqT-dK4nY"
+            }
+          ]
+        }
+    http_version:
+  recorded_at: Sun, 14 Jan 2024 15:32:20 GMT
+recorded_with: VCR 4.0.0

@@ -66,6 +66,7 @@ module GDrive
         )
 
         gdrive_files = []
+        requests_to_scan = {}
         list.changes.each do |change|
           # If no file is present at all, it means we no longer have access to this file
           # and we should delete any reference we have to it.
@@ -77,11 +78,30 @@ module GDrive
           end
 
           # If drive_id is present, it means this is a changes scan and we've pulled in
-          # a change to a Shared Drive item. This could happen if someone migrated a file manually.
-          # In any case, we don't care about these files anymore so delete any references if present.
+          # a change to a Shared Drive item.
+          #
+          # This is expected to happen when folks drag files into a file drop drive.
+          # In this case we should run the FileDropScanJob.
+          #
+          # It also could simply be from folks modifying files in the
+          # main community drive, to which the main config user obviously has access. If the
+          # drive is not a file drop drive, we simply ignore the change.
+          #
+          # In all cases, we mark the file as disappeared. If the file ends up being migrated
+          # by the scan job, we'll mark it as migrated shortly.
           if change.file.drive_id.present?
-            scan.log(:info, "Received change with drive_id, deleting references if present",
-              file_id: change.file_id, drive_id: change.file.drive_id)
+            if (request = operation.requests.find_by(file_drop_drive_id: change.file.drive_id))
+              scan.log(:info, "Received change in file drop drive, enqueueing scan job "\
+                "and updating references if present",
+                file_id: change.file_id, drive_id: change.file.drive_id,
+                request_id: request.id, request_owner: request.google_email)
+              if !requests_to_scan[request.id]
+                requests_to_scan[request.id] = request
+              end
+            else
+              scan.log(:info, "Received change with drive_id, updating references if present",
+                file_id: change.file_id, drive_id: change.file.drive_id)
+            end
             update_references_to_missing_file(change.file_id)
             next
           end
@@ -90,6 +110,15 @@ module GDrive
           # because that would be slow, and we always assume that the migration user only has access
           # to the source migration tree anyway.
           gdrive_files << change.file
+        end
+
+        requests_to_scan.each_value do |request|
+          scan = operation.scans.create!(scope: "file_drop", log_data: {
+            request_id: request.id,
+            request_owner: request.google_email
+          })
+          scan_task = scan.scan_tasks.create!(folder_id: request.file_drop_drive_id)
+          FileDropScanJob.perform_later(cluster_id: operation.cluster_id, scan_task_id: scan_task.id)
         end
 
         # If next_page_token is present then we are going to keep scanning so

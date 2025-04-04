@@ -371,4 +371,31 @@ describe GDrive::Migration::ChangesScanJob do
       expect(file_b_1.reload).to be_disappeared
     end
   end
+
+  describe "with changeset containing multiple files in a file drop drive" do
+    let!(:scan_task) { scan.scan_tasks.create!(page_token: "13309") }
+    let!(:request) do
+      create(:gdrive_migration_request, google_email: "foo@gmail.com",
+        operation: operation, file_drop_drive_id: "0AExZ3-Cu5q7uUk9PVX")
+    end
+
+    it "enqueues scan job once with appropriate data" do
+      VCR.use_cassette("gdrive/migration/scan_job/changes/file_in_drop_drive") do
+        expect { perform_job }.to have_enqueued_job(GDrive::Migration::FileDropScanJob)
+      end
+
+      # Previous changes scan plus file drop scan
+      expect(GDrive::Migration::Scan.count).to eq(2)
+      expect(GDrive::Migration::ScanTask.count).to eq(1)
+      scan.reload
+      expect(scan.status).to eq("complete")
+
+      scan2 = (GDrive::Migration::Scan.all - [scan]).first
+      scan2_task = scan2.scan_tasks.first
+
+      expect(scan2.status).to eq("new")
+      expect(scan2.scope).to eq("file_drop")
+      expect(scan2.log_data).to eq({"request_id" =>  request.id, "request_owner" => "foo@gmail.com"})
+    end
+  end
 end

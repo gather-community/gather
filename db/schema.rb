@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_02_16_180314) do
+ActiveRecord::Schema[7.0].define(version: 2025_03_29_185602) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -334,7 +334,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_02_16_180314) do
     t.index ["operation_id"], name: "index_gdrive_migration_files_on_operation_id"
     t.check_constraint "char_length(name) <= 32767", name: "name_length"
     t.check_constraint "error_type::text = ANY (ARRAY['forbidden'::character varying::text, 'not_found'::character varying::text, 'ancestor_inaccessible'::character varying::text, 'client_error_ensuring_tree'::character varying::text, 'client_error_moving_to_temp_drive'::character varying::text, 'client_error_moving_to_destination'::character varying::text])", name: "error_type_enum"
-    t.check_constraint "status::text = ANY (ARRAY['pending'::character varying::text, 'errored'::character varying::text, 'declined'::character varying::text, 'transferred'::character varying::text, 'copied'::character varying::text, 'ignored'::character varying::text])", name: "status_enum"
+    t.check_constraint "status::text = ANY (ARRAY['pending'::character varying::text, 'errored'::character varying::text, 'declined'::character varying::text, 'transferred'::character varying::text, 'copied'::character varying::text, 'ignored'::character varying::text, 'disappeared'::character varying::text])", name: "status_enum"
   end
 
   create_table "gdrive_migration_folder_maps", force: :cascade do |t|
@@ -388,21 +388,18 @@ ActiveRecord::Schema[7.0].define(version: 2025_02_16_180314) do
     t.datetime "created_at", null: false
     t.integer "error_count", default: 0, null: false
     t.integer "file_count", null: false
+    t.string "file_drop_drive_id", limit: 128
+    t.string "file_drop_drive_name", limit: 128
     t.string "google_email", limit: 255, null: false
-    t.jsonb "ingest_file_ids"
-    t.integer "ingest_progress"
-    t.datetime "ingest_requested_at"
-    t.string "ingest_status"
     t.bigint "operation_id", null: false
     t.text "opt_out_reason"
     t.string "status", limit: 16, default: "new", null: false
-    t.string "temp_drive_id"
     t.string "token", null: false
     t.datetime "updated_at", null: false
     t.index ["cluster_id"], name: "index_gdrive_migration_requests_on_cluster_id"
+    t.index ["file_drop_drive_id"], name: "index_gdrive_migration_requests_on_file_drop_drive_id", unique: true
     t.index ["operation_id"], name: "index_gdrive_migration_requests_on_operation_id"
     t.check_constraint "char_length(opt_out_reason) <= 32767", name: "opt_out_reason_length"
-    t.check_constraint "ingest_status::text = ANY (ARRAY['new'::character varying::text, 'in_progress'::character varying::text, 'done'::character varying::text, 'failed'::character varying::text])", name: "ingest_status_enum"
     t.check_constraint "status::text = ANY (ARRAY['new'::character varying::text, 'in_progress'::character varying::text, 'done'::character varying::text, 'opted_out'::character varying::text, 'ingest_failed'::character varying::text])", name: "status_enum"
   end
 
@@ -421,6 +418,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_02_16_180314) do
     t.bigint "cluster_id", null: false
     t.datetime "created_at", null: false
     t.integer "error_count", default: 0, null: false
+    t.jsonb "log_data"
     t.bigint "operation_id", null: false
     t.integer "scanned_file_count", default: 0, null: false
     t.string "scope", limit: 16, default: "full", null: false
@@ -428,7 +426,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_02_16_180314) do
     t.datetime "updated_at", null: false
     t.index ["cluster_id"], name: "index_gdrive_migration_scans_on_cluster_id"
     t.index ["operation_id"], name: "index_gdrive_migration_scans_on_operation_id"
-    t.check_constraint "scope::text = ANY (ARRAY['full'::character varying::text, 'changes'::character varying::text])", name: "scope_enum"
+    t.check_constraint "scope::text = ANY (ARRAY['full'::character varying, 'changes'::character varying, 'file_drop'::character varying]::text[])", name: "scope_enum"
     t.check_constraint "status::text = ANY (ARRAY['new'::character varying::text, 'in_progress'::character varying::text, 'cancelled'::character varying::text, 'complete'::character varying::text])", name: "status_enum"
   end
 

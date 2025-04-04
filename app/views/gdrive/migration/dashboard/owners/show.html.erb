@@ -31,6 +31,10 @@
     <td>Ignored</td>
     <td><%= number_with_delimiter(@stats.by_owner_and_status[[@owner_id, "ignored"]]) %></td>
   </tr>
+  <tr>
+    <td>Disappeared</td>
+    <td><%= number_with_delimiter(@stats.by_owner_and_status[[@owner_id, "disappeared"]]) %></td>
+  </tr>
 </table>
 
 <h3>Requests</h3>

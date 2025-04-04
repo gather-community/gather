@@ -261,6 +261,7 @@ en:
           transferred: "Transferred"
           copied: "Copied"
           ignored: "Ignored"
+          disappeared: "Disappeared"
       wiki_page:
         editable_by:
           everyone: "Everyone"

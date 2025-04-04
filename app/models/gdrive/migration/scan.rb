@@ -14,6 +14,14 @@ module GDrive
       scope :changes, -> { where(scope: "changes") }
       scope :pending, -> { where(status: %w[new in_progress]) }
 
+      def log(level, message, data = nil)
+        data ||= {}
+        data.merge!(log_data) if log_data.present?
+        data["scan_scope"] = scope
+        data["scan_id"] = id
+        operation.log(level, message, data)
+      end
+
       def new?
         status == "new"
       end

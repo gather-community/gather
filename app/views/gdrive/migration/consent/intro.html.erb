@@ -11,8 +11,8 @@
     community.
   </p>
   <p class="cta">
-    <% if @consent_request.file_count >= 2 %>
-      You own about <%= @consent_request.file_count %> files in the
+    <% if @request.file_count >= 2 %>
+      You own about <%= @request.file_count %> files in the
       <%= link_to("old Google Drive folder", @operation.src_folder_url) %>
       for <%= @community.name %>. We need your permission to move them into the new drive.
     <% else %>
@@ -29,8 +29,8 @@
     who is coordinating the reorganization process.
   </p>
   <p>
-    If you'd rather not help with this effort, you can <%= link_to("opt out", gdrive_migration_consent_opt_out_path) %>.
+    If you'd rather not help with this effort, you can <%= link_to("opt out", gdrive_migration_request_opt_out_path) %>.
   </p>
 
-  <%= link_to("Yes, I am ready to help!", gdrive_migration_consent_auth_url, class: "btn btn-primary") %>
+  <%= link_to("Yes, I am ready to help!", gdrive_migration_request_auth_url, class: "btn btn-primary") %>
 </div>

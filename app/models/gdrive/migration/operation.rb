@@ -10,7 +10,7 @@ module GDrive
         inverse_of: :operation, dependent: :destroy
       has_many :files, class_name: "GDrive::Migration::File",
         inverse_of: :operation, dependent: :destroy
-      has_many :consent_requests, class_name: "GDrive::Migration::ConsentRequest",
+      has_many :requests, class_name: "GDrive::Migration::Request",
         inverse_of: :operation, dependent: :destroy
       has_many :folder_maps, class_name: "GDrive::Migration::FolderMap",
         inverse_of: :operation, dependent: :destroy

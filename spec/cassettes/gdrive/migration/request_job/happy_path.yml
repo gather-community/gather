@@ -1,0 +1,253 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://www.googleapis.com/drive/v3/drives?requestId=01234567
+    body:
+      encoding: UTF-8
+      string: '{"name":"Gather File Drop 01234567"}'
+    headers:
+      User-Agent:
+      - unknown/0.0.0 google-apis-drive_v3/0.46.0 Mac OS X/14.6.1 (gzip)
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip,deflate
+      Date:
+      - Tue, 25 Mar 2025 12:52:10 GMT
+      X-Goog-Api-Client:
+      - gl-ruby/3.2.2 gdcl/1.46.0
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer ya29.a0AeXRPp4aH2VpuozhQivLX5-PPaWW7PjN3xNMqR33NK3y-Xl-XEVZ235wFIqbH4Qqrk3uVWEOOTIBWjssw_NY77LlbBYEzZyGLW5gAHZd-w90_sdJ49i7whuP0N1MGHNUgrspbLiBVjgFq8ftHclc8T0i2ZStGO7jDKRytnRrdugaCgYKAfsSARESFQHGX2MiET46Y49afvFZMQQAC-fVfg0178
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Vary:
+      - Origin, X-Origin
+      Pragma:
+      - no-cache
+      Date:
+      - Tue, 25 Mar 2025 12:52:12 GMT
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Encoding:
+      - gzip
+      Server:
+      - ESF
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: |
+        {
+          "kind": "drive#drive",
+          "id": "0AH1t4Om92eQGUk9PVA",
+          "name": "Gather File Drop 01234567"
+        }
+    http_version:
+  recorded_at: Tue, 25 Mar 2025 12:52:12 GMT
+- request:
+    method: post
+    uri: https://www.googleapis.com/drive/v3/files/0AH1t4Om92eQGUk9PVA/permissions?sendNotificationEmail=true&supportsAllDrives=true
+    body:
+      encoding: UTF-8
+      string: '{"emailAddress":"a@gmail.com","role":"writer","type":"user"}'
+    headers:
+      User-Agent:
+      - unknown/0.0.0 google-apis-drive_v3/0.46.0 Mac OS X/14.6.1 (gzip)
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip,deflate
+      Date:
+      - Tue, 25 Mar 2025 12:52:12 GMT
+      X-Goog-Api-Client:
+      - gl-ruby/3.2.2 gdcl/1.46.0
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer ya29.a0AeXRPp4aH2VpuozhQivLX5-PPaWW7PjN3xNMqR33NK3y-Xl-XEVZ235wFIqbH4Qqrk3uVWEOOTIBWjssw_NY77LlbBYEzZyGLW5gAHZd-w90_sdJ49i7whuP0N1MGHNUgrspbLiBVjgFq8ftHclc8T0i2ZStGO7jDKRytnRrdugaCgYKAfsSARESFQHGX2MiET46Y49afvFZMQQAC-fVfg0178
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Vary:
+      - Origin, X-Origin
+      Date:
+      - Tue, 25 Mar 2025 12:52:14 GMT
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Encoding:
+      - gzip
+      Server:
+      - ESF
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: |
+        {
+          "kind": "drive#permission",
+          "id": "12363746022515177322",
+          "type": "user",
+          "role": "writer"
+        }
+    http_version:
+  recorded_at: Tue, 25 Mar 2025 12:52:14 GMT
+- request:
+    method: post
+    uri: https://www.googleapis.com/drive/v3/drives?requestId=890abcde
+    body:
+      encoding: UTF-8
+      string: '{"name":"Gather File Drop 890abcde"}'
+    headers:
+      User-Agent:
+      - unknown/0.0.0 google-apis-drive_v3/0.46.0 Mac OS X/14.6.1 (gzip)
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip,deflate
+      Date:
+      - Tue, 25 Mar 2025 12:52:14 GMT
+      X-Goog-Api-Client:
+      - gl-ruby/3.2.2 gdcl/1.46.0
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer ya29.a0AeXRPp4aH2VpuozhQivLX5-PPaWW7PjN3xNMqR33NK3y-Xl-XEVZ235wFIqbH4Qqrk3uVWEOOTIBWjssw_NY77LlbBYEzZyGLW5gAHZd-w90_sdJ49i7whuP0N1MGHNUgrspbLiBVjgFq8ftHclc8T0i2ZStGO7jDKRytnRrdugaCgYKAfsSARESFQHGX2MiET46Y49afvFZMQQAC-fVfg0178
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Pragma:
+      - no-cache
+      Date:
+      - Tue, 25 Mar 2025 12:52:16 GMT
+      Vary:
+      - Origin, X-Origin
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Encoding:
+      - gzip
+      Server:
+      - ESF
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: |
+        {
+          "kind": "drive#drive",
+          "id": "0ALuBmEiJY2YlUk9PVA",
+          "name": "Gather File Drop 890abcde"
+        }
+    http_version:
+  recorded_at: Tue, 25 Mar 2025 12:52:16 GMT
+- request:
+    method: post
+    uri: https://www.googleapis.com/drive/v3/files/0ALuBmEiJY2YlUk9PVA/permissions?sendNotificationEmail=true&supportsAllDrives=true
+    body:
+      encoding: UTF-8
+      string: '{"emailAddress":"b@gmail.com","role":"writer","type":"user"}'
+    headers:
+      User-Agent:
+      - unknown/0.0.0 google-apis-drive_v3/0.46.0 Mac OS X/14.6.1 (gzip)
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip,deflate
+      Date:
+      - Tue, 25 Mar 2025 12:52:16 GMT
+      X-Goog-Api-Client:
+      - gl-ruby/3.2.2 gdcl/1.46.0
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer ya29.a0AeXRPp4aH2VpuozhQivLX5-PPaWW7PjN3xNMqR33NK3y-Xl-XEVZ235wFIqbH4Qqrk3uVWEOOTIBWjssw_NY77LlbBYEzZyGLW5gAHZd-w90_sdJ49i7whuP0N1MGHNUgrspbLiBVjgFq8ftHclc8T0i2ZStGO7jDKRytnRrdugaCgYKAfsSARESFQHGX2MiET46Y49afvFZMQQAC-fVfg0178
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Pragma:
+      - no-cache
+      Vary:
+      - Origin, X-Origin
+      Date:
+      - Tue, 25 Mar 2025 12:52:19 GMT
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Encoding:
+      - gzip
+      Server:
+      - ESF
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: |
+        {
+          "kind": "drive#permission",
+          "id": "02022397847969109002",
+          "type": "user",
+          "role": "writer"
+        }
+    http_version:
+  recorded_at: Tue, 25 Mar 2025 12:52:19 GMT
+recorded_with: VCR 4.0.0

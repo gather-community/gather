@@ -8,12 +8,12 @@
 
 <%= form_tag({}, method: "post", "data-controller": "batchable-table") do %>
   <div class="batchable-table-actions">
-    <%= button_tag(I18n.t("batchable_tables.actions.gdrive__migration__owners.request_consent"),
+    <%= button_tag(I18n.t("batchable_tables.actions.gdrive__migration__owners.send_request"),
           class: "btn btn-default",
           "data-scope": "gdrive__migration__owners",
-          "data-key": "request_consent",
+          "data-key": "send_request",
           "data-action": "batchable-table#actionClicked",
-          "data-submit-url": request_consent_gdrive_migration_dashboard_owners_path) %>
+          "data-submit-url": send_requests_gdrive_migration_dashboard_owners_path) %>
   </div>
   <table class="full-width">
     <tr class="superheader">
@@ -23,7 +23,7 @@
         <div>Files</div>
       </th>
       <th colspan="2" class="superheader-cell">
-        <div>Consent Request</div>
+        <div>Request</div>
       </th>
     </tr>
     <tr>
@@ -39,6 +39,7 @@
       <th>Transferred</th>
       <th>Copied</th>
       <th>Ignored</th>
+      <th>Disappeared</th>
       <th>Date Sent</th>
       <th>Status</th>
     </tr>
@@ -56,15 +57,16 @@
         <td><%= number_with_delimiter(@stats.by_owner_and_status[[owner, "transferred"]]) %></td>
         <td><%= number_with_delimiter(@stats.by_owner_and_status[[owner, "copied"]]) %></td>
         <td><%= number_with_delimiter(@stats.by_owner_and_status[[owner, "ignored"]]) %></td>
-        <% if (consent_request = @stats.consent_requests_by_owner[owner]) %>
+        <td><%= number_with_delimiter(@stats.by_owner_and_status[[owner, "disappeared"]]) %></td>
+        <% if (request = @stats.requests_by_owner[owner]) %>
           <td>
-            <%= I18n.l(consent_request.created_at, format: :day_mo_yr_no_time) %>
+            <%= I18n.l(request.created_at, format: :day_mo_yr_no_time) %>
           </td>
           <td>
-            <% if consent_request.pending? %>
-              <%= link_to(I18n.t("gdrive.consent_request_statuses.#{consent_request.status}"), gdrive_migration_consent_url(token: consent_request.token)) %>
+            <% if request.pending? %>
+              <%= link_to(I18n.t("gdrive.request_statuses.#{request.status}"), gdrive_migration_request_url(token: request.token)) %>
             <% else %>
-              <%= I18n.t("gdrive.consent_request_statuses.#{consent_request.status}") %>
+              <%= I18n.t("gdrive.request_statuses.#{request.status}") %>
             <% end %>
           </td>
         <% else %>

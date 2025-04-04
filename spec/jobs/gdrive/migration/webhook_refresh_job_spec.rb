@@ -6,7 +6,7 @@ describe GDrive::Migration::WebhookRefreshJob do
   include_context "jobs"
 
   let(:community) { create(:community, id: 123) }
-  let!(:main_config) { create(:gdrive_main_config, community: community, org_user_id: "workspace.admin@touchstonecohousing.org") }
+  let!(:main_config) { create(:gdrive_main_config, community: community, org_user_id: "admin@example.com") }
   let!(:token) { create(:gdrive_token, gdrive_config: main_config, google_user_id: main_config.org_user_id, access_token: "ya29.a0AfB_byDbkQ6Z6aG9nLFlIEgbC6uJwS5pjnPzIYreh7AtdgnrAJxVvmNI0-6cYRuK0AbEgnQziTry6J-S0RyorHo4-7b3b9x8Rn7pl5wI7TyAP7nvD4RAqpOnrn7HAf7X9NDw7QEDfmXzPquVWbuaOMzOEfDh-_DBpOGkOfkaCgYKAUYSARESFQHGX2Mii53-4bcjZLOXXxESdQZIsw0174") }
   let!(:migration_config) { create(:gdrive_migration_config, community: community) }
   subject(:job) { described_class.new }

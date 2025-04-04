@@ -16,6 +16,7 @@ module GDrive
       scope :transferred, -> { where(status: "transferred") }
       scope :copied, -> { where(status: "copied") }
       scope :ignored, -> { where(status: "ignored") }
+      scope :disappeared, -> { where(status: "disappeared") }
 
       def folder?
         mime_type == GDrive::FOLDER_MIME_TYPE
@@ -40,6 +41,10 @@ module GDrive
 
       def transferred?
         status == "transferred"
+      end
+
+      def disappeared?
+        status == "disappeared"
       end
 
       def set_error(type:, message: nil)

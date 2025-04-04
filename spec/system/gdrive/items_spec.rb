@@ -30,7 +30,7 @@ describe "gdrive items", js: true do
   end
 
   context "with config" do
-    let!(:config) { create(:gdrive_main_config, org_user_id: "workspace.admin@touchstonecohousing.org") }
+    let!(:config) { create(:gdrive_main_config, org_user_id: "admin@example.com") }
 
     scenario "no valid access token" do
       visit(gdrive_items_path)

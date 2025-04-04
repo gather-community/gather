@@ -31,9 +31,13 @@
     <td>Ignored</td>
     <td><%= number_with_delimiter(@stats.by_owner_and_status[[@owner_id, "ignored"]]) %></td>
   </tr>
+  <tr>
+    <td>Disappeared</td>
+    <td><%= number_with_delimiter(@stats.by_owner_and_status[[@owner_id, "disappeared"]]) %></td>
+  </tr>
 </table>
 
-<h3>Consent Requests</h3>
+<h3>Requests</h3>
 <table class="full-width">
   <tr>
     <th>Date Sent</th>
@@ -41,16 +45,16 @@
     <th>Link</th>
     <th>Opt Out Reason</th>
   </tr>
-  <% @consent_requests.each do |consent_request| %>
+  <% @requests.each do |request| %>
     <tr>
-      <td><%= I18n.l(consent_request.created_at) %></td>
-      <td><%= I18n.t("gdrive.consent_request_statuses.#{consent_request.status}") %></td>
+      <td><%= I18n.l(request.created_at) %></td>
+      <td><%= I18n.t("gdrive.request_statuses.#{request.status}") %></td>
       <td>
-        <% if consent_request.pending? %>
-          <%= link_to("Link", gdrive_migration_consent_url(token: consent_request.token)) %>
+        <% if request.pending? %>
+          <%= link_to("Link", gdrive_migration_request_url(token: request.token)) %>
         <% end %>
       </td>
-      <td><%= consent_request.opt_out_reason %></td>
+      <td><%= request.opt_out_reason %></td>
     </tr>
   <% end %>
 </table>

@@ -21,19 +21,19 @@ module GDrive
           @latest_scan = @operation.scans.full.order(created_at: :desc).first
           @stats = Stats.new(operation: @operation)
           @owner_id = params[:id]
-          @consent_requests = @operation.consent_requests.where(google_email: @owner_id).order(:created_at).all
+          @requests = @operation.requests.where(google_email: @owner_id).order(:created_at).all
         end
 
-        def request_consent
+        def send_requests
           authorize(current_community, :setup?, policy_class: SetupPolicy)
           load_operation
           google_emails = params[:b_ids]
-          ConsentRequestJob.perform_later(
+          RequestJob.perform_later(
             cluster_id: current_community.cluster_id,
             operation_id: @operation.id,
             google_emails: google_emails
           )
-          flash[:success] = "Consent requests will be sent momentarily."
+          flash[:success] = "Requests will be sent momentarily."
           redirect_to(gdrive_migration_dashboard_owners_path)
         end
 

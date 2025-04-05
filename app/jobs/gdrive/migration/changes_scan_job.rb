@@ -139,7 +139,7 @@ module GDrive
         if deleted.any?
           scan.log(:info, "Deleted #{deleted.size} folder maps")
         end
-        missing_files = operation.files.where(external_id: id)
+        missing_files = operation.files.with_non_final_status.where(external_id: id)
         missing_files.update_all(status: "disappeared")
         updated_count = missing_files.count
         if updated_count > 0

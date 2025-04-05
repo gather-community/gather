@@ -20,11 +20,14 @@ describe Billing::StatementReminderJob do
     let!(:s4) { create(:statement, due_on: "2017-01-04", total_due: -1) }
     let!(:s5) { create(:statement, due_on: "2017-01-04", total_due: 0) }
 
+    # Should not send if no due date.
+    let!(:s6) { create(:statement, due_on: nil) }
+
     # Should not send if account has a later statement that is not remindable.
     Timecop.freeze(-1.day) do
-      let!(:s6) { create(:statement, due_on: "2017-01-04") }
+      let!(:s7) { create(:statement, due_on: "2017-01-04") }
     end
-    let!(:s7) { create(:statement, account: s6.account, due_on: "2017-01-08") }
+    let!(:s8) { create(:statement, account: s7.account, due_on: "2017-01-08") }
 
     it "should send two reminders the first time, then none the second time" do
       expect(AccountMailer).to receive(:statement_reminder).exactly(2).times.and_return(mlrdbl)

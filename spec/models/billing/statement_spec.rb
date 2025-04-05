@@ -54,10 +54,10 @@ describe Billing::Statement do
     let!(:s1) { create(:statement, due_on: Time.zone.today + 29.days) }
     let!(:s2) { create(:statement, due_on: Time.zone.today + 31.days) }
     let!(:s3) { create(:statement, due_on: Time.zone.today + 33.days) }
-    let!(:s4) { create(:statement, due_on: nil) } # 30 days by default
+    let!(:s4) { create(:statement, due_on: nil) } # nil due date should not be included
 
     it "should return the correct statements" do
-      expect(described_class.due_within_days_from_now(31).to_a).to contain_exactly(s1, s2, s4)
+      expect(described_class.due_within_days_from_now(31).to_a).to contain_exactly(s1, s2)
     end
   end
 end

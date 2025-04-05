@@ -24,10 +24,13 @@
       <td><%= link_to(file.owner, gdrive_migration_dashboard_owner_path(id: file.owner)) %></td>
       <td><%= I18n.l(file.modified_at, format: :day_mo_yr_no_time) %></td>
       <td>
+        <% status_str = I18n.t("simple_form.options.gdrive_migration.status.#{file.status}") %>
         <% if file.declined? %>
-          <%= link_to("Declined", gdrive_migration_dashboard_owner_path(file.owner)) %>
+          <%= link_to(status_str, gdrive_migration_dashboard_owner_path(file.owner)) %>
+        <% elsif file.transferred? && file.migrated_parent_id? %>
+          <%= link_to(status_str, "https://drive.google.com/drive/folders/#{file.migrated_parent_id}")
         <% else %>
-          <%= I18n.t("simple_form.options.gdrive_migration.status.#{file.status}") %>
+          <%= status_str %>
         <% end %>
       </td>
       <% if @any_errors %>

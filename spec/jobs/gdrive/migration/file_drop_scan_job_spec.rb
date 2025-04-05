@@ -75,7 +75,9 @@ describe GDrive::Migration::FileDropScanJob do
           .not_to have_enqueued_job
       end
       expect(file_a_1.reload).to be_transferred
+      expect(file_a_1.migrated_parent_id).to eq("1OtYkzME_7bUoTjRxyfTurDrAwtsKidM0")
       expect(file_b_1.reload).to be_transferred
+      expect(file_b_1.migrated_parent_id).to eq("1YmEQzrLhUOHGkzVkr3ztBfzvYlQ-OPAM")
       expect(scan.reload).to be_complete
     end
   end

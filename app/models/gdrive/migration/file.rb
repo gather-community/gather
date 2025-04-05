@@ -6,6 +6,8 @@ module GDrive
     class File < ApplicationRecord
       acts_as_tenant :cluster
 
+      FINAL_STATUSES = %w[transferred copied ignored].freeze
+
       belongs_to :operation, class_name: "GDrive::Migration::Operation", inverse_of: :files
 
       scope :owned_by, ->(o) { where(owner: o) }
@@ -17,6 +19,8 @@ module GDrive
       scope :copied, -> { where(status: "copied") }
       scope :ignored, -> { where(status: "ignored") }
       scope :disappeared, -> { where(status: "disappeared") }
+      scope :with_final_status, -> { where(status: FINAL_STATUSES) }
+      scope :with_non_final_status, -> { where.not(status: FINAL_STATUSES) }
 
       def folder?
         mime_type == GDrive::FOLDER_MIME_TYPE

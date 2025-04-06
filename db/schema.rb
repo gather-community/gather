@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_03_29_185602) do
+ActiveRecord::Schema[7.0].define(version: 2025_04_05_211108) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -316,6 +316,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_03_29_185602) do
     t.string "error_type"
     t.string "external_id", null: false
     t.string "icon_link", null: false
+    t.string "migrated_parent_id"
     t.string "mime_type", limit: 255, null: false
     t.datetime "modified_at", null: false
     t.text "name", null: false

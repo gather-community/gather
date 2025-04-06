@@ -55,7 +55,7 @@ module GDrive
             add_parents: dest_folder_id,
             remove_parents: gdrive_file.parents[0],
             supports_all_drives: true)
-          migration_file.update!(status: "transferred")
+          migration_file.update!(status: "transferred", migrated_parent_id: dest_folder_id)
         rescue Google::Apis::ClientError => error
           scan.log(:error, "Client error moving file, leaving file in drop drive",
             file_id: gdrive_file.id, name: gdrive_file.name, message: error.to_s)

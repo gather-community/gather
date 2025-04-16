@@ -30,7 +30,7 @@ module GDrive
           self.scan_task = ScanTask.find(scan_task_id)
           self.scan = scan_task.scan
           self.operation = scan.operation
-          scan.log(:info, "ScanJob starting", scan_task_id: scan_task_id, scope: scan.scope)
+          scan.log(:info, "ScanJob starting", scan_task_id: scan_task_id)
           return if scan.cancelled?
 
           self.ancestor_tree_duplicator = AncestorTreeDuplicator.new(wrapper: wrapper, operation: operation)

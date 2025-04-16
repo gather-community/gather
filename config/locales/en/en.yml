@@ -367,7 +367,8 @@ en:
     user:
       update_info: "Edit Profile"
       update_photo: "Edit Photo"
-      invite_sign_in: "Invite"
+      invite: "Invite"
+      impersonate: "Impersonate"
     wiki/page:
       history: "History"
     work/job:

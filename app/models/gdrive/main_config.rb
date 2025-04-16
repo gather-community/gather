@@ -8,6 +8,8 @@ module GDrive
       inverse_of: :gdrive_config,
       dependent: :destroy
 
+    validates :org_user_id, format: Devise.email_regexp
+
     # The main config requires the full drive scope, which is not a problem
     # because its connected app is marked "internal".
     def drive_api_scope

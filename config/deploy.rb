@@ -16,7 +16,7 @@ set :whenever_identifier, -> { "#{fetch(:application)}_#{fetch(:stage)}" }
 # to the sudoers file.
 namespace :delayed_job do
   task :restart do
-    on roles(:app) do
+    on roles(:bg) do
       execute :sudo, "/bin/systemctl restart delayed-job.service"
     end
   end

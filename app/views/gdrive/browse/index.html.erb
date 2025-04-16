@@ -19,7 +19,7 @@
   <div class="center-notice">
     <% if @setup_policy.setup? %>
       <p>
-        Your community needs to be re-connected to Google Drive.
+        Your community needs to be reconnected to Google Drive.
       </p>
       <p>
         Please authenticate with Google as <strong><%= @config.org_user_id %></strong>.
@@ -27,7 +27,7 @@
       <br/>
       <%= render("auth_button") %>
     <% else %>
-      Your community needs to be re-connected to Google Drive. Please notify a Gather Admin.
+      Your community needs to be reconnected to Google Drive. Please notify a Gather Admin.
     <% end %>
   </div>
 <% elsif @config.nil? || @auth_required || @no_drives %>

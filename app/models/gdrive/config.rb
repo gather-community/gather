@@ -21,7 +21,6 @@ module GDrive
       inverse_of: :gdrive_config,
       dependent: :destroy
 
-    validates :org_user_id, format: Devise.email_regexp
     validates :client_id, format: /\.apps\.googleusercontent\.com\z/
     validates :client_secret_to_write, length: {is: 35}, if: :new_record?
 

@@ -53,7 +53,7 @@ describe "gdrive items", js: true do
 
         scenario do
           visit(gdrive_config_path)
-          expect(page).to have_content("Your community needs to be re-connected to Google Drive.")
+          expect(page).to have_content("Your community needs to be reconnected to Google Drive.")
         end
       end
     end

@@ -97,7 +97,7 @@ module GDrive
         @ancestors_decorator = AncestorsDecorator.new(ancestors)
       rescue Google::Apis::AuthorizationError, Signet::AuthorizationError => error
         # The token for this config (MainConfigs should only have one) is no good anymore
-        # so we destroy it so that they can re-connect.
+        # so we destroy it so that they can reconnect.
         Rails.logger.error("There was an authorization error connecting to Google Drive", error: error.to_s)
         @config.tokens.destroy_all
         @auth_required = true

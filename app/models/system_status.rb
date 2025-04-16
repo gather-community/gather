@@ -3,7 +3,7 @@
 # Checks system status for use in the ping page.
 class SystemStatus
   BACKUP_TIMES_FILE = "/var/log/latest-backup-times"
-  SERVICES = %i[app database delayed_job redis elasticsearch backups mail].freeze
+  SERVICES = %i[app database redis elasticsearch backups mail].freeze
 
   def ok?
     statuses.values.all?
@@ -24,19 +24,6 @@ class SystemStatus
         Cluster.count && true
       rescue ActiveRecord::StatementInvalid
         Rails.logger.debug("[system status] Database down")
-        false
-      end
-  end
-
-  def delayed_job_up?
-    return true if Rails.env.test? # DJ doesn't run in test env.
-    return @delayed_job_up if defined?(@delayed_job_up)
-    @delayed_job_up =
-      begin
-        pid = delayed_job_pid
-        pid.present? && Process.kill(0, pid) && true
-      rescue Errno::ESRCH
-        Rails.logger.debug("[system status] Delayed Job down (process not running)")
         false
       end
   end
@@ -100,13 +87,5 @@ class SystemStatus
       Rails.logger.info("MAIL-UPTIME-LINE No mail recieved")
       false
     end
-  end
-
-  private
-
-  def delayed_job_pid
-    File.read(Rails.root.join("tmp", "pids", "delayed_job.pid")).to_i
-  rescue Errno::ENOENT
-    nil
   end
 end

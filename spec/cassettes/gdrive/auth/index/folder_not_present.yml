@@ -5,7 +5,7 @@ http_interactions:
     uri: https://oauth2.googleapis.com/token
     body:
       encoding: ASCII-8BIT
-      string: grant_type=refresh_token&refresh_token=xxxx4HCOkvr0wgmNCgYIARAAGAQSNwF-L9IrEdybQAql6Z9OiwLdUuPLUR-dl8H5DhX8SoL_IkITiJ3m64HbqOMVOIFnK52YQ8Jxxxx&client_id=302773344240-el7fiv7rk3re87v1sat9u7ckggd6cu1r.apps.googleusercontent.com&client_secret=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+      string: grant_type=refresh_token&refresh_token=xxxx4HCOkvr0wgmNCgYIARAAGAQSNwF-L9IrEdybQAql6Z9OiwLdUuPLUR-dl8H5DhX8SoL_IkITiJ3m64HbqOMVOIFnK52YQ8Jxxxx&client_id=302773344240-el7fiv7rk3re87v1sat9u7ckggd6cu1r.apps.googleusercontent.com&client_secret=53VUKh3CKKWOgKY1yn4BaPfaDYpFXMweksU
     headers:
       User-Agent:
       - Faraday v1.10.0

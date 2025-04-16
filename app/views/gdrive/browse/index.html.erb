@@ -1,41 +1,54 @@
 <% content_for(:title) { "Google Drive" } %>
 <% content_for(:action_links) do %>
   <% if @setup_policy.setup? %>
-    <% if @config && !@no_credentials && !@authorization_error %>
-      <%= link_to(icon_tag("gear") << " Settings", gdrive_items_path,
-            class: "btn btn-default") %>
-    <% end %>
-    <% if @config && !@no_credentials && !@authorization_error && @migration_operation %>
+    <%= link_to(icon_tag("gear") << " Settings", gdrive_config_path,
+          class: "btn btn-default") %>
+    <% if @config && !@auth_required && @migration_operation %>
       <%= link_to(icon_tag("truck") << " Migration", gdrive_migration_dashboard_home_path,
             class: "btn btn-default") %>
     <% end %>
   <% end %>
 <% end %>
 
-<% if @authorization_error %>
+<%
+  # If there are any items then this community has probably connected before but maybe
+  # their refresh token expired, so we don't want to say they're not yet connected or they
+  # might freak out.
+%>
+<% if @auth_required && @config && @config.items.any? %>
   <div class="center-notice">
     <% if @setup_policy.setup? %>
       <p>
-        There was an error connecting to Google Drive.
+        Your community needs to be reconnected to Google Drive.
       </p>
+      <p>
+        Please authenticate with Google as <strong><%= @config.org_user_id %></strong>.
+      </p>
+      <br/>
       <%= render("auth_button") %>
     <% else %>
-      There was an error connecting to Google Drive. Please notify a Gather Admin.
+      Your community needs to be reconnected to Google Drive. Please notify a Gather Admin.
     <% end %>
   </div>
-<% elsif @config.nil? || @no_credentials || @no_drives %>
+<% elsif @config.nil? || @auth_required || @no_drives %>
   <div class="center-notice">
     <% if @setup_policy.setup? %>
       <% if @config.nil? %>
-        Your community is not yet connected to Google Drive. Please contact Gather support to get started.
-      <% elsif @no_credentials %>
+        Your community is not yet connected to Google Drive.
+        Please go to the
+        <%= link_to("settings page", gdrive_config_path) %> to get started.
+      <% elsif @auth_required %>
         <p>
           Your community is not yet connected to Google Drive.
         </p>
+        <p>
+          Please authenticate with Google as <strong><%= @config.org_user_id %></strong>.
+        </p>
+        <br/>
         <%= render("auth_button") %>
       <% elsif @no_drives %>
         Your community does not have any linked Shared Drives. Please go to the
-        <%= link_to("settings page", gdrive_items_path) %> to link a drive.
+        <%= link_to("settings page", gdrive_config_path) %> to link a drive.
       <% end %>
     <% else %>
       Your community is not yet connected to Google Drive. Please talk to a Gather Admin.
@@ -48,8 +61,8 @@
 <% else %>
   <% if @browse_decorator.old_item_url %>
     <div class="synopsis">
-       Looking for something? Files are currently being migrated to this new community-owned drive.
-       If you can't find something, try the <%= link_to("old location", @browse_decorator.old_item_url) %>.
+      Looking for something? Files are currently being migrated to this new community-owned drive.
+      If you can't find something, try the <%= link_to("old location", @browse_decorator.old_item_url) %>.
     </div>
   <% end %>
 

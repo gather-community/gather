@@ -67,6 +67,7 @@ describe "sign in invitations", js: true, perform_jobs: true do
           expect(invitee).not_to be_confirmed
           full_sign_in_as(actor)
           visit(user_path(invitee))
+          expect(page).to have_css("a.btn", text: "Invite")
           accept_confirm { click_on("Invite") }
           expect_success(/Invitation sent./)
           full_sign_out

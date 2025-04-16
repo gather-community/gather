@@ -2,6 +2,8 @@
 
 module GDrive
   class BrowseController < ApplicationController
+    include AuthUrlable
+
     before_action -> { nav_context(:wiki, :gdrive) }
 
     def index
@@ -28,14 +30,7 @@ module GDrive
 
         unless wrapper.has_credentials?
           setup_auth_url(wrapper: wrapper)
-          # If there are any items then this community has probably connected before but maybe
-          # their refresh token expired, so we don't want to say they're not yet connected or they
-          # might freak out.
-          if @config.items.any?
-            @authorization_error = true
-          else
-            @no_credentials = true
-          end
+          @auth_required = true
         end
 
         # If there are no drives at all connected to the config, then we set a special flag and return.
@@ -100,11 +95,12 @@ module GDrive
           end
         end
         @ancestors_decorator = AncestorsDecorator.new(ancestors)
-      rescue Google::Apis::AuthorizationError, Signet::AuthorizationError
+      rescue Google::Apis::AuthorizationError, Signet::AuthorizationError => error
         # The token for this config (MainConfigs should only have one) is no good anymore
-        # so we destroy it so that they can re-connect.
+        # so we destroy it so that they can reconnect.
+        Rails.logger.error("There was an authorization error connecting to Google Drive", error: error.to_s)
         @config.tokens.destroy_all
-        @authorization_error = true
+        @auth_required = true
       rescue Google::Apis::ClientError => error
         if error.message.include?("File not found")
           render_not_found
@@ -118,12 +114,6 @@ module GDrive
 
     def validate_gdrive_id(gdrive_id)
       raise ArgumentError, "Invalid ID #{gdrive_id}" unless /\A[A-Za-z0-9_-]*\z/.match?(gdrive_id)
-    end
-
-    def setup_auth_url(wrapper:)
-      state = {community_id: current_community.id}
-      @auth_url = wrapper.get_authorization_url(request: request, state: state,
-        redirect_to: gdrive_home_url)
     end
 
     def find_ancestors(wrapper:, multiple_drives:, folder_id: nil, drive_id: nil)

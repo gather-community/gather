@@ -87,16 +87,16 @@ describe "gdrive browse", js: true do
         scenario "authorization error perhaps from expired refresh token" do
           VCR.use_cassette("gdrive/browse/authorization_error") do
             visit(gdrive_home_path)
-            expect(page).to have_content("There was an error connecting to Google Drive. " \
+            expect(page).to have_content("Your community needs to be reconnected to Google Drive. " \
               "Please notify a Gather Admin.")
 
             visit(root_path)
-            expect(page).not_to have_content("There was an error connecting to Google Drive. " \
+            expect(page).not_to have_content("Your community needs to be reconnected to Google Drive. " \
               "Please notify a Gather Admin.")
 
             # Second visit to the page should show same error but via a different code path.
             visit(gdrive_home_path)
-            expect(page).to(have_content("There was an error connecting to Google Drive. " \
+            expect(page).to(have_content("Your community needs to be reconnected to Google Drive. " \
               "Please notify a Gather Admin."))
           end
         end
@@ -187,7 +187,7 @@ describe "gdrive browse", js: true do
       scenario "it shows message" do
         visit(gdrive_home_path)
         expect(page).to have_content("Your community is not yet connected to Google Drive. " \
-          "Please contact Gather support to get started")
+          "Please go to the settings page to get started")
       end
     end
 
@@ -223,7 +223,7 @@ describe "gdrive browse", js: true do
         scenario "authorization error perhaps from expired refresh token" do
           VCR.use_cassette("gdrive/browse/admin_authorization_error") do
             visit(gdrive_home_path)
-            expect(page).to(have_content("There was an error connecting to Google Drive.\n" \
+            expect(page).to(have_content("Your community needs to be reconnected to Google Drive.\n" \
               "Please authenticate with Google"))
           end
         end

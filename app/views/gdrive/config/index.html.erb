@@ -1,15 +1,32 @@
 <% content_for(:title) { "Google Drive Settings" } %>
 
 <% content_for(:action_links) do %>
-  <% if !@authorization_error && policy(sample_item).create? %>
+  <% if !@auth_required && policy(sample_item).create? %>
     <%= link_to(icon_tag("plus") << " Link Item", new_gdrive_item_path, class: "btn btn-primary") %>
   <% end %>
 <% end %>
 
-<% if @authorization_error %>
-  <div class="center-notice">
-    We encountered an error connecting to Google. Please return to the main Google Drive page to re-establish a connection.
-  </div>
+<% if @auth_required %>
+  <% if @config.new_record? %>
+    <h2>Google Workspace Credentials</h2>
+    <p>Your community is not yet connected to Google Drive. Add your Google Workspace credentials to connect.</p>
+    <%= render("config_form") %>
+  <% else %>
+    <h2>Authentication</h2>
+    <p>
+      <% if @config.items.any? %>
+        Your community needs to be reconnected to Google Drive.
+      <% else %>
+        Your community is not yet connected to Google Drive.
+      <% end %>
+      Please authenticate with Google as <strong><%= @config.org_user_id %></strong>.
+    </p>
+    <%= render("gdrive/browse/auth_button") %>
+
+    <h2>Google Workspace Credentials</h2>
+    <p>If you need to update your Google Workspace credentials, you can do so here.</p>
+    <%= render("config_form") %>
+  <% end %>
 <% else %>
   <section aria-label="Introduction">
     <p>
@@ -78,10 +95,10 @@
   </table>
 
   <footer id="local-footer" class="footer-links">
-    <% unless @authorization_error %>
-      <%= link_to("Revoke Authorization", gdrive_setup_auth_revoke_path, method: :delete,
+    <% unless @auth_required %>
+      If you need to disconnect from Google or update your Google Workspace credentials you can <%= link_to("revoke authorization", gdrive_setup_auth_revoke_path, method: :delete,
           data: {confirm: "Are you sure you want to revoke authorization? Nobody will be able " \
-            "to use Google Drive features for this community until authorization is re-established."}) %>
+            "to use Google Drive features for this community until authorization is re-established."}) %>.
     <% end %>
   </footer>
 <% end %>

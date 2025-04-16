@@ -109,6 +109,10 @@ en:
         description: "Description"
         value: "Amount"
         member_type_ids: "Member Types"
+      gdrive/main_config:
+        org_user_id: "Google Workspace User ID"
+        client_id: "App Client ID"
+        client_secret_to_write: "App Client Secret"
       gdrive/migration/request:
         opt_out_reason: "Opt Out Reason"
       gdrive/item:
@@ -248,6 +252,14 @@ en:
         too_big: "File is too big (maximum %{max} MiB)"
         attached: "File is missing"
       models:
+        gdrive/main_config:
+          attributes:
+            org_user_id:
+              invalid: "Must be an email address"
+            client_id:
+              invalid: "Must end in .apps.googleusercontent.com"
+            client_secret_to_write:
+              wrong_length: "Must be exactly %{count} characters"
         groups/group:
           attributes:
             base:

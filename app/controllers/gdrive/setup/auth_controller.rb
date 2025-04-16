@@ -44,6 +44,7 @@ module GDrive
             return
           end
           wrapper.store_credentials(credentials)
+          flash[:success] = "Authenticated successfully with Google."
         rescue Signet::AuthorizationError => error
           Rails.logger.error("AuthorizationError in gdrive auth callback", message: error.to_s)
           flash[:error] = "There is a problem with your Google Drive connection. " \

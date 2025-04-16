@@ -28,14 +28,14 @@ module GDrive
 
       if @item_group.save
         flash[:success] = "Group added successfully."
-        redirect_to(gdrive_items_path)
+        redirect_to(gdrive_config_path)
       else
         render(:new)
       end
     end
 
     def destroy
-      simple_action(:destroy, redirect: gdrive_items_path)
+      simple_action(:destroy, redirect: gdrive_config_path)
     end
 
     protected

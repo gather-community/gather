@@ -74,6 +74,10 @@ en:
       calendars_export:
         dont_personalize: "By default, calendar exports are tailored to you and your household so you shouldn't share your export links. If you need a non-personalized link to use in a public place, check this box."
         own_only: "Check this box to only export events that you created for yourself. Group events and meal events won't be included."
+      gdrive_main_config:
+        org_user_id: "This is the user ID for your community's Google Workspace user. It should have Manager access to your communtiy Shared Drive."
+        client_id: "Ends in .apps.googleusercontent.com"
+        client_secret: "Leave blank to leave secret unchanged."
       gdrive_item:
         external_id: "You can get this ID from the URL of the item in Google Drive. It should be a series of letters, numbers, '_', and '-'. Examples: 0AExZ3-Cu5q7uUk9PVA and 1KRjAC5Bt4WtLilnkUeTvF_okbLgONGQuDkrc."
       gdrive_item_group:

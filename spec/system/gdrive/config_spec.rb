@@ -19,22 +19,43 @@ describe "gdrive items", js: true do
   let(:actor) { create(:admin) }
 
   before do
-    create(:feature_flag, name: "gdrive", status: true)
     use_user_subdomain(actor)
     login_as(actor, scope: :user)
   end
 
-  scenario "no config" do
-    visit(gdrive_items_path)
-    expect(page).to be_not_found
+  scenario "with no config" do
+    visit(gdrive_config_path)
+    fill_in("Google Workspace User ID", with: "admin@example.com")
+    fill_in("App Client ID", with: "1234567-abcdefg.apps.googleusercontent.com")
+    click_on("Save")
+
+    expect(page).to have_content("Must be exactly 35 characters")
+    fill_in("App Client Secret", with: "53VUKh3CKKWOgKY1yn4BaPfaDYpFXMweg5er")
+    click_on("Save")
+
+    expect_success("Config updated successfully.")
+    expect(page).to have_content("Authenticate With Google")
   end
 
   context "with config" do
     let!(:config) { create(:gdrive_main_config, org_user_id: "admin@example.com") }
 
-    scenario "no valid access token" do
-      visit(gdrive_items_path)
-      expect(page).to have_content("We encountered an error connecting to Google")
+    context "no valid access token" do
+      context "with no mapped drives" do
+        scenario do
+          visit(gdrive_config_path)
+          expect(page).to have_content("Your community is not yet connected to Google Drive.")
+        end
+      end
+
+      context "with mapped drives" do
+        let!(:item) { create(:gdrive_item, gdrive_config: config) }
+
+        scenario do
+          visit(gdrive_config_path)
+          expect(page).to have_content("Your community needs to be re-connected to Google Drive.")
+        end
+      end
     end
 
     context "with config and token" do
@@ -54,7 +75,7 @@ describe "gdrive items", js: true do
         # Can't match on body because the boundary changes to something random every time
         # and I'm not sure how to set it to something known.
         VCR.use_cassette("gdrive/items/happy_path", match_requests_on: %i[method uri host path]) do
-          visit(gdrive_items_path)
+          visit(gdrive_config_path)
           expect(page).to have_content("No shared drives linked to Gather")
 
           click_on("Link Item")

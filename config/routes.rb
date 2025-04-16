@@ -258,7 +258,11 @@ Rails.application.routes.draw do
     get "/", to: "browse#index", as: :home
     get "item/:item_id", to: "browse#index", as: :browse
 
-    resources :items, only: %i[index new create destroy]
+    get "/config", to: "config#index", as: :config
+    post "/config", to: "config#update"
+    patch "/config", to: "config#update"
+
+    resources :items, only: %i[new create destroy]
     resources :item_groups, path: "item-groups", only: %i[new create destroy]
 
     namespace :setup do

@@ -287,11 +287,7 @@ Rails.application.routes.draw do
       end
       get "request/callback", to: "request#callback", as: :request_callback
       get "request/:token", to: "request#intro", as: :request
-      get "request/:token/auth", to: "request#auth", as: :request_auth
-      get "request/:token/pick", to: "request#pick", as: :request_pick
-      put "request/:token/ingest", to: "request#ingest", as: :request_ingest
-      get "request/:token/ingest-status", to: "request#ingest_status", as: :request_ingest_status
-      get "request/:token/opt_out", to: "request#opt_out", as: :request_opt_out
+      get "request/:token/opt-out", to: "request#opt_out", as: :request_opt_out
       patch "request/:token/confirm-opt-out", to: "request#confirm_opt_out", as: :request_confirm_opt_out
       get "request/:token/opt-out-complete", to: "request#opt_out_complete", as: :request_opt_out_complete
 

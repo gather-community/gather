@@ -20,6 +20,11 @@ module GDrive
 
         @migration_operation = MigrationConfig.find_by(community: current_community)&.active_operation
 
+        if @migration_operation.created_at < 31.days.ago
+          flash.now[:alert] = "Your migration was created more than 30 days ago. "\
+            "Please consider concluding and deleting your migration."
+        end
+
         # Note that we use the org_user here and not the current_user's Google Account by design,
         # because we want to enable browsing (and possibly later other interactions) with Google
         # Drive content without forcing people to have a Google Account. Read permissions are

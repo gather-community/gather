@@ -20,7 +20,7 @@ module GDrive
 
       # This is a separate class method so we can stub it in tests.
       def self.random_drive_id
-        SecureRandom.hex(8)
+        SecureRandom.hex(6)
       end
 
       def create_and_send_request(google_email)

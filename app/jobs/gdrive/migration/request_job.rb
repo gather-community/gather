@@ -24,15 +24,20 @@ module GDrive
       end
 
       def create_and_send_request(google_email)
-        file_count = File.owned_by(google_email).count
-        request = Request.create!(
-          file_count: file_count,
-          google_email: google_email,
-          operation_id: operation.id
-        )
-        operation.log(:info, "Created migration request", google_email: google_email, request_id: request.id)
-        create_file_drop_drive(request)
-        Mailer.migration_request(request).deliver_now
+        if Request.where(google_email: google_email, operation_id: operation.id).exists?
+          operation.log(:info, "Request already exists, not creating or sending email",
+            google_email: google_email)
+        else
+          file_count = File.owned_by(google_email).count
+          request = Request.create!(
+            file_count: file_count,
+            google_email: google_email,
+            operation_id: operation.id
+          )
+          operation.log(:info, "Created migration request", google_email: google_email, request_id: request.id)
+          create_file_drop_drive(request)
+          Mailer.migration_request(request).deliver_now
+        end
       end
 
       def create_file_drop_drive(request)

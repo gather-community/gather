@@ -43,4 +43,15 @@ describe GDrive::Migration::RequestJob do
       expect(request2.file_drop_drive_name).to eq("Gather File Drop 890abcde")
     end
   end
+
+  context "when requests already exist" do
+    let!(:request1) { create(:gdrive_migration_request, operation: operation, google_email: "a@gmail.com") }
+    let!(:request2) { create(:gdrive_migration_request, operation: operation, google_email: "b@gmail.com") }
+
+    it "doesn't send any new ones" do
+      expect(GDrive::Migration::Request.count).to eq(2)
+      perform_job
+      expect(GDrive::Migration::Request.count).to eq(2)
+    end
+  end
 end

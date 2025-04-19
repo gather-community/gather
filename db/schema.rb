@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_04_05_211108) do
+ActiveRecord::Schema[7.0].define(version: 2025_04_19_140042) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -399,6 +399,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_04_05_211108) do
     t.datetime "updated_at", null: false
     t.index ["cluster_id"], name: "index_gdrive_migration_requests_on_cluster_id"
     t.index ["file_drop_drive_id"], name: "index_gdrive_migration_requests_on_file_drop_drive_id", unique: true
+    t.index ["operation_id", "google_email"], name: "index_migration_requests_on_operation_id_and_google_email", unique: true
     t.index ["operation_id"], name: "index_gdrive_migration_requests_on_operation_id"
     t.check_constraint "char_length(opt_out_reason) <= 32767", name: "opt_out_reason_length"
     t.check_constraint "status::text = ANY (ARRAY['new'::character varying::text, 'in_progress'::character varying::text, 'done'::character varying::text, 'opted_out'::character varying::text, 'ingest_failed'::character varying::text])", name: "status_enum"

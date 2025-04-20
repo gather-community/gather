@@ -15,8 +15,6 @@ describe Utils::Generators::MainGenerator, :without_tenant, :perform_jobs do
     FeatureFlag
     FeatureFlagUser
     GDrive::Config
-    GDrive::MainConfig
-    GDrive::MigrationConfig
     GDrive::Item
     GDrive::ItemGroup
     GDrive::SyncedPermission

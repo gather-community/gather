@@ -27,7 +27,7 @@ module GDrive
           return
         end
 
-        config = MainConfig.find_by!(community: current_community)
+        config = Config.find_by!(community: current_community)
         wrapper = Wrapper.new(config: config, google_user_id: config.org_user_id,
           callback_url: gdrive_setup_auth_callback_url(host: Settings.url.host))
 
@@ -56,7 +56,7 @@ module GDrive
 
       def revoke
         authorize(current_community, :setup?, policy_class: SetupPolicy)
-        config = MainConfig.find_by(community: current_community)
+        config = Config.find_by(community: current_community)
         if config
           wrapper = Wrapper.new(config: config, google_user_id: config.org_user_id)
           wrapper.revoke_authorization

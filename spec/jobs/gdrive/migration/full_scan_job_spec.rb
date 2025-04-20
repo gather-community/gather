@@ -28,11 +28,10 @@ describe GDrive::Migration::FullScanJob do
   # - Delete any casettes under spec/cassettes/gdrive/migration/scan_job that you want to adjust.
 
   let(:community) { Defaults.community }
-  let!(:main_config) { create(:gdrive_main_config, community: community) }
-  let!(:token) { create(:gdrive_token, gdrive_config: main_config, google_user_id: main_config.org_user_id, access_token: "ya29.a0AeXRPp6h54IVI-JqfIPzHxB7cL-BWsf9bWw3pbP406QUT56AYC3L3RWcENZw-ZJiMjKCGVmbWBXaHpyVfELsBz8_ByqltkIjLG0F2y4RcvX45ICZGxsebjVvfcPSHf8UPb1Zvgld4LRqtzJTBcmFl9MFYoe7dvpA_y42T9wyw78aCgYKAckSARESFQHGX2Mi6UT7JXhV77V2xM21uePB-w0178") }
-  let!(:migration_config) { create(:gdrive_migration_config, community: community) }
+  let!(:config) { create(:gdrive_config, community: community) }
+  let!(:token) { create(:gdrive_token, gdrive_config: config, google_user_id: config.org_user_id, access_token: "ya29.a0AeXRPp6h54IVI-JqfIPzHxB7cL-BWsf9bWw3pbP406QUT56AYC3L3RWcENZw-ZJiMjKCGVmbWBXaHpyVfELsBz8_ByqltkIjLG0F2y4RcvX45ICZGxsebjVvfcPSHf8UPb1Zvgld4LRqtzJTBcmFl9MFYoe7dvpA_y42T9wyw78aCgYKAckSARESFQHGX2Mi6UT7JXhV77V2xM21uePB-w0178") }
   let!(:operation) do
-    create(:gdrive_migration_operation, :webhook_registered, config: migration_config,
+    create(:gdrive_migration_operation, :webhook_registered, community: community,
       src_folder_id: "1F_bPvGfgHj8TEmlTFsZxU69sLB1keEfZ",
       dest_folder_id: "0AIQ_OKz_uphLUk9PVA")
   end
@@ -40,7 +39,7 @@ describe GDrive::Migration::FullScanJob do
 
   describe "first run" do
     let!(:operation) do
-      create(:gdrive_migration_operation, :webhook_not_registered, config: migration_config,
+      create(:gdrive_migration_operation, :webhook_not_registered, community: community,
         src_folder_id: "1F_bPvGfgHj8TEmlTFsZxU69sLB1keEfZ",
         dest_folder_id: "0AIQ_OKz_uphLUk9PVA")
     end
@@ -106,7 +105,7 @@ describe GDrive::Migration::FullScanJob do
   describe "when there are no more scan tasks left" do
     let(:community) { create(:community, id: 123) }
     let!(:operation) do
-      create(:gdrive_migration_operation, :webhook_registered, config: migration_config,
+      create(:gdrive_migration_operation, :webhook_registered, community: community,
         src_folder_id: "1FBirfPXk-5qaMO1BkvlyhaC8JARE_FRq",
         dest_folder_id: "0AExZ3-Cu5q7uUk9PVA",
         webhook_channel_id: "b0801a4c-4437-4284-b723-035c7c7f87f8",

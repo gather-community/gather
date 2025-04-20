@@ -34,7 +34,7 @@ describe "gdrive browse", js: true do
     end
 
     context "when wrapper not authenticated" do
-      let!(:config) { create(:gdrive_main_config) }
+      let!(:config) { create(:gdrive_config) }
 
       scenario "it shows message" do
         visit(gdrive_home_path)
@@ -44,7 +44,7 @@ describe "gdrive browse", js: true do
     end
 
     context "when no shared drives present" do
-      let!(:config) { create(:gdrive_main_config, org_user_id: "a@example.com") }
+      let!(:config) { create(:gdrive_config, org_user_id: "a@example.com") }
       let!(:token) { create(:gdrive_token, gdrive_config: config, google_user_id: "a@example.com") }
 
       scenario "it shows message" do
@@ -55,7 +55,7 @@ describe "gdrive browse", js: true do
     end
 
     context "when authenticated and shared drive present" do
-      let!(:config) { create(:gdrive_main_config, org_user_id: "a@example.com") }
+      let!(:config) { create(:gdrive_config, org_user_id: "a@example.com") }
       let!(:group1) { create(:group, joiners: group1_joiners) }
       let!(:group2) { create(:group, joiners: group2_joiners) }
       let!(:drive1) do
@@ -192,7 +192,7 @@ describe "gdrive browse", js: true do
     end
 
     context "when wrapper not authenticated" do
-      let!(:config) { create(:gdrive_main_config) }
+      let!(:config) { create(:gdrive_config) }
 
       scenario "it shows message" do
         visit(gdrive_home_path)
@@ -202,7 +202,7 @@ describe "gdrive browse", js: true do
     end
 
     context "when config present" do
-      let!(:config) { create(:gdrive_main_config, org_user_id: "a@example.com") }
+      let!(:config) { create(:gdrive_config, org_user_id: "a@example.com") }
       let!(:token) { create(:gdrive_token, gdrive_config: config, google_user_id: "a@example.com") }
 
       context "when no shared drives present" do

@@ -4,9 +4,9 @@ require "rails_helper"
 
 describe "gdrive auth callback" do
   let(:community) { Defaults.community }
-  let(:config) { create(:gdrive_migration_config, community: community) }
   let!(:operation) do
-    create(:gdrive_migration_operation, webhook_channel_id: "12cd", webhook_secret: "56ab", start_page_token: "34567")
+    create(:gdrive_migration_operation, community: community, webhook_channel_id: "12cd",
+      webhook_secret: "56ab", start_page_token: "34567")
   end
   let(:path) { "/gdrive/migration/changes?community_id=#{community.id}" }
 

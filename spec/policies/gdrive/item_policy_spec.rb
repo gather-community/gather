@@ -13,7 +13,7 @@ describe GDrive::ItemPolicy do
     let(:cmty2_admin) { create(:admin, community: communities[1]) }
     let(:group1) { create(:group, communities: communities, joiners: [in_user1]) }
     let(:group2) { create(:group, communities: communities, joiners: [in_user2]) }
-    let(:config) { create(:gdrive_main_config, community: communities[0]) }
+    let(:config) { create(:gdrive_config, community: communities[0]) }
     let(:item) { create(:gdrive_item, gdrive_config: config) }
     let!(:item_group1) { create(:gdrive_item_group, item: item, group: group1) }
     let!(:item_group2) { create(:gdrive_item_group, item: item, group: group2) }
@@ -51,8 +51,8 @@ describe GDrive::ItemPolicy do
     include_context "policy scopes"
     let(:klass) { GDrive::Item }
     let!(:communities) { [create(:community), create(:community)] }
-    let!(:config1) { create(:gdrive_main_config, community: communities[0]) }
-    let!(:config2) { create(:gdrive_main_config, community: communities[1]) }
+    let!(:config1) { create(:gdrive_config, community: communities[0]) }
+    let!(:config2) { create(:gdrive_config, community: communities[1]) }
 
     # actor is in this group and it's with communities[0]
     let!(:group1) { create(:group, communities: [communities[0]], joiners: [actor]) }

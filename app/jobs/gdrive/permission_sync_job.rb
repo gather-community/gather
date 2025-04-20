@@ -16,7 +16,7 @@ module GDrive
     end
 
     def init_api_wrapper
-      config = MainConfig.find_by!(community_id: community.id)
+      config = Config.find_by!(community_id: community.id)
       self.wrapper = Wrapper.new(config: config, google_user_id: config.org_user_id)
     end
 

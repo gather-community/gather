@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module GDrive
-  class MainConfigPolicy < ApplicationPolicy
+  class ConfigPolicy < ApplicationPolicy
     alias_method :config, :record
 
     def show?

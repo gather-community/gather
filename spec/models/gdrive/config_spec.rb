@@ -2,9 +2,9 @@
 
 require "rails_helper"
 
-describe GDrive::MainConfig do
+describe GDrive::Config do
   it "has valid factory" do
-    create(:gdrive_main_config, org_user_id: "a@example.com")
+    create(:gdrive_config, org_user_id: "a@example.com")
   end
 
   # Our approach to destruction is to:
@@ -19,7 +19,7 @@ describe GDrive::MainConfig do
   #   normally forbid it, but the deletion script can be ordered in such a way as to avoid problems by
   #   deleting dependent objects first, and then users and households.
   describe "destruction" do
-    let!(:config) { create(:gdrive_main_config) }
+    let!(:config) { create(:gdrive_config) }
 
     context "with token" do
       let!(:token) { create(:gdrive_token, gdrive_config: config) }

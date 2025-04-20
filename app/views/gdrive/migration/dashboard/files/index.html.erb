@@ -28,7 +28,7 @@
         <% if file.declined? %>
           <%= link_to(status_str, gdrive_migration_dashboard_owner_path(file.owner)) %>
         <% elsif file.transferred? && file.migrated_parent_id? %>
-          <%= link_to(status_str, "https://drive.google.com/drive/folders/#{file.migrated_parent_id}")
+          <%= link_to(status_str, "https://drive.google.com/drive/folders/#{file.migrated_parent_id}") %>
         <% else %>
           <%= status_str %>
         <% end %>

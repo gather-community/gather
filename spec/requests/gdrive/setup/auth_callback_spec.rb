@@ -26,7 +26,7 @@ describe "gdrive auth callback" do
   end
 
   context "when authenticated google ID matches stored config" do
-    let!(:config) { create(:gdrive_main_config, org_user_id: "bar@gmail.com") }
+    let!(:config) { create(:gdrive_config, org_user_id: "bar@gmail.com") }
 
     it "stores token and redirects" do
       # This token must match the `session_id` in the copied payload below.
@@ -59,7 +59,7 @@ describe "gdrive auth callback" do
   end
 
   context "when authenticated google ID does not match stored config" do
-    let!(:config) { create(:gdrive_main_config, org_user_id: "foo@gmail.com") }
+    let!(:config) { create(:gdrive_config, org_user_id: "foo@gmail.com") }
 
     it "redirects with error" do
       with_env("STUB_SESSION_G_XSRF_TOKEN" => "P5JPu/n1QyYvkdEr3zgyHQ==") do
@@ -74,7 +74,7 @@ describe "gdrive auth callback" do
   end
 
   context "when client_error is returned from /token" do
-    let!(:config) { create(:gdrive_main_config, org_user_id: "foo@gmail.com") }
+    let!(:config) { create(:gdrive_config, org_user_id: "foo@gmail.com") }
 
     it "redirects with error" do
       with_env("STUB_SESSION_G_XSRF_TOKEN" => "P5JPu/n1QyYvkdEr3zgyHQ==") do

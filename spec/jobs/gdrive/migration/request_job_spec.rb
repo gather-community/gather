@@ -6,10 +6,9 @@ describe GDrive::Migration::RequestJob do
   include_context "jobs"
 
   let(:community) { Defaults.community }
-  let!(:main_config) { create(:gdrive_main_config, community: community) }
-  let!(:token) { create(:gdrive_token, gdrive_config: main_config, google_user_id: main_config.org_user_id, access_token: "ya29.a0AeXRPp4aH2VpuozhQivLX5-PPaWW7PjN3xNMqR33NK3y-Xl-XEVZ235wFIqbH4Qqrk3uVWEOOTIBWjssw_NY77LlbBYEzZyGLW5gAHZd-w90_sdJ49i7whuP0N1MGHNUgrspbLiBVjgFq8ftHclc8T0i2ZStGO7jDKRytnRrdugaCgYKAfsSARESFQHGX2MiET46Y49afvFZMQQAC-fVfg0178") }
-  let!(:migration_config) { create(:gdrive_migration_config, community: community) }
-  let!(:operation) { create(:gdrive_migration_operation, config: migration_config) }
+  let!(:config) { create(:gdrive_config, community: community) }
+  let!(:token) { create(:gdrive_token, gdrive_config: config, google_user_id: config.org_user_id, access_token: "ya29.a0AeXRPp4aH2VpuozhQivLX5-PPaWW7PjN3xNMqR33NK3y-Xl-XEVZ235wFIqbH4Qqrk3uVWEOOTIBWjssw_NY77LlbBYEzZyGLW5gAHZd-w90_sdJ49i7whuP0N1MGHNUgrspbLiBVjgFq8ftHclc8T0i2ZStGO7jDKRytnRrdugaCgYKAfsSARESFQHGX2MiET46Y49afvFZMQQAC-fVfg0178") }
+  let!(:operation) { create(:gdrive_migration_operation, community: community) }
   let!(:file1) { create(:gdrive_migration_file, operation: operation, owner: "a@gmail.com") }
   let!(:file2) { create(:gdrive_migration_file, operation: operation, owner: "a@gmail.com") }
   let!(:file3) { create(:gdrive_migration_file, operation: operation, owner: "b@gmail.com") }

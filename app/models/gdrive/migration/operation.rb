@@ -5,7 +5,7 @@ module GDrive
     class Operation < ApplicationRecord
       acts_as_tenant :cluster
 
-      belongs_to :config, class_name: "GDrive::MigrationConfig", inverse_of: :operations
+      belongs_to :community, inverse_of: :gdrive_migration_operation
       has_many :scans, class_name: "GDrive::Migration::Scan",
         inverse_of: :operation, dependent: :destroy
       has_many :files, class_name: "GDrive::Migration::File",
@@ -17,10 +17,8 @@ module GDrive
       has_many :logs, class_name: "GDrive::Migration::Log",
         inverse_of: :operation, dependent: :destroy
 
-      scope :in_community, ->(c) { joins(:config).where(gdrive_configs: {community_id: c.id}) }
+      scope :in_community, ->(c) { where(community_id: c.id) }
       scope :active, -> { all }
-
-      delegate :community, :community_id, to: :config
 
       def webhook_registered?
         webhook_channel_id.present?

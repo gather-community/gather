@@ -11,16 +11,16 @@ module GDrive
 
       begin
         authorize(:folder, policy_class: BrowsePolicy)
-        @config = MainConfig.find_by(community: current_community)
+        @config = Config.find_by(community: current_community)
         @setup_policy = SetupPolicy.new(current_user, current_community)
         if !@config
           skip_policy_scope
           return
         end
 
-        @migration_operation = MigrationConfig.find_by(community: current_community)&.active_operation
+        @migration_operation = Migration::Operation.find_by(community: current_community)
 
-        if @migration_operation.created_at < 31.days.ago
+        if @migration_operation && @migration_operation.created_at < 31.days.ago
           flash.now[:alert] = "Your migration was created more than 30 days ago. "\
             "Please consider concluding and deleting your migration."
         end
@@ -101,7 +101,7 @@ module GDrive
         end
         @ancestors_decorator = AncestorsDecorator.new(ancestors)
       rescue Google::Apis::AuthorizationError, Signet::AuthorizationError => error
-        # The token for this config (MainConfigs should only have one) is no good anymore
+        # The token for this config (each Config should only have one) is no good anymore
         # so we destroy it so that they can reconnect.
         Rails.logger.error("There was an authorization error connecting to Google Drive", error: error.to_s)
         @config.tokens.destroy_all

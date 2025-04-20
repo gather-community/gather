@@ -9,7 +9,7 @@
 <% elsif @latest_scan.cancelled? %>
   <% case @latest_scan.cancel_reason %>
   <% when "auth_error" %>
-    File scan cancelled due to authorization error. Please ensure <%= @main_config.org_user_id %> has <strong>edit</strong> access to your
+    File scan cancelled due to authorization error. Please ensure <%= @config.org_user_id %> has <strong>edit</strong> access to your
     <%= link_to("source folder", "https://drive.google.com/drive/u/0/folders/#{@operation.src_folder_id}") %>.
     Try clicking "Revoke Authorization" and signing in again on the
     <%= link_to("main Google Drive page", gdrive_home_path) %>.

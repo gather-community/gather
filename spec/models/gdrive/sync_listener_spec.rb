@@ -4,7 +4,7 @@ require "rails_helper"
 
 describe GDrive::SyncListener do
   context "with gdrive config" do
-    let!(:config) { create(:gdrive_main_config) }
+    let!(:config) { create(:gdrive_config) }
     let!(:community) { Defaults.community }
 
     describe "create user" do
@@ -103,7 +103,7 @@ describe GDrive::SyncListener do
 
       context "when changing to household in different community" do
         let!(:community2) { create(:community) }
-        let!(:config2) { create(:gdrive_main_config, community: community2) }
+        let!(:config2) { create(:gdrive_config, community: community2) }
         let!(:household) { create(:household, community: community2) }
 
         it "enqueues sync job" do
@@ -149,7 +149,7 @@ describe GDrive::SyncListener do
     describe "update household" do
       let!(:household) { create(:household, member_count: 2) }
       let!(:community2) { create(:community) }
-      let!(:config2) { create(:gdrive_main_config, community: community2) }
+      let!(:config2) { create(:gdrive_config, community: community2) }
 
       context "with community change" do
         it "enqueues job for each user" do

@@ -109,7 +109,7 @@ en:
         description: "Description"
         value: "Amount"
         member_type_ids: "Member Types"
-      gdrive/main_config:
+      gdrive/config:
         org_user_id: "Google Workspace User ID"
         client_id: "App Client ID"
         client_secret_to_write: "App Client Secret"
@@ -252,7 +252,7 @@ en:
         too_big: "File is too big (maximum %{max} MiB)"
         attached: "File is missing"
       models:
-        gdrive/main_config:
+        gdrive/config:
           attributes:
             org_user_id:
               invalid: "Must be an email address"

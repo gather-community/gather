@@ -7,7 +7,7 @@ module GDrive
         before_action -> { nav_context(:wiki, :gdrive, :migration, :dashboard, :owners) }
 
         def index
-          @main_config = MainConfig.find_by(community: current_community)
+          @config = Config.find_by(community: current_community)
           authorize(current_community, :setup?, policy_class: SetupPolicy)
           skip_policy_scope
           load_operation
@@ -41,8 +41,7 @@ module GDrive
         private
 
         def load_operation
-          @migration_config = MigrationConfig.find_by(community: current_community)
-          @operation = @migration_config.active_operation
+          @operation = Operation.find_by(community: current_community)
         end
       end
     end

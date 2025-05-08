@@ -9,7 +9,7 @@ module GDrive
     def new
       @item = Item.find(params[:item_id])
       @item_group = ItemGroup.new(item: @item)
-      @access_levels = ItemGroup.access_levels_for_kind(@item.kind)
+      @access_levels = ItemGroup::ACCESS_LEVELS
 
       # We don't exclude hidden groups because they are useful here and only
       # admins can see this page.

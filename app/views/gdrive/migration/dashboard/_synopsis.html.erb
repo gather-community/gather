@@ -1,7 +1,7 @@
 <% if @latest_scan.nil? %>
   File scan has not begun. Please contact Gather Support.
 <% elsif @latest_scan.new? %>
-  File scan has not begun. Please wait.
+  File scan has not begun. Please wait a moment, then refresh the page.
 <% elsif @latest_scan.in_progress? %>
   File scan in progress. <%= number_with_delimiter(@latest_scan.scanned_file_count) %> files scanned so far.
 <% elsif @latest_scan.complete? %>

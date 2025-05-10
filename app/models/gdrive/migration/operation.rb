@@ -20,6 +20,13 @@ module GDrive
       scope :in_community, ->(c) { where(community_id: c.id) }
       scope :active, -> { all }
 
+      validates :contact_name, presence: true
+      validates :contact_email, presence: true, format: Devise.email_regexp
+      validates :src_folder_id, presence: true, length: {minimum: 30, maximum: 60},
+        format:  /\A[a-z0-9_\-]+\z/i
+      validates :dest_folder_id, presence: true, length: {minimum: 19, maximum: 60},
+        format:  /\A[a-z0-9_\-]+\z/i
+
       def webhook_registered?
         webhook_channel_id.present?
       end

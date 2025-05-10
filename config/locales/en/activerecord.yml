@@ -113,6 +113,11 @@ en:
         org_user_id: "Google Workspace User ID"
         client_id: "App Client ID"
         client_secret_to_write: "App Client Secret"
+      gdrive/migration/operation:
+        contact_email: "Contact Email"
+        contact_name: "Contact Name"
+        src_folder_id: "Source ID"
+        dest_folder_id: "Destination ID"
       gdrive/migration/request:
         opt_out_reason: "Opt Out Reason"
       gdrive/item:
@@ -260,6 +265,14 @@ en:
               invalid: "Must end in .apps.googleusercontent.com"
             client_secret_to_write:
               wrong_length: "Must be exactly %{count} characters"
+        gdrive/migration/operation:
+          attributes:
+            contact_email:
+              invalid: "Must be an email address"
+            dest_folder_id:
+              invalid: "Must contain only letters, numbers, _, or -"
+            src_folder_id:
+              invalid: "Must contain only letters, numbers, _, or -"
         groups/group:
           attributes:
             base:

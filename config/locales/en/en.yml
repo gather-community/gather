@@ -101,6 +101,8 @@ en:
       destroy: "Are you sure you want to remove this item? It won't be deleted from Google Drive, but it won't be linked to Gather anymore."
     gdrive/item_group:
       destroy: "Are you sure you want to remove this group?"
+    gdrive/migration/operation:
+      destroy: "Are you sure you want to delete this migration? All migration information will be deleted. No actual Google Drive files will be affected in any way."
     meals/formula:
       destroy: "Are you sure you want to delete the formula '%{name}'? This action cannot be undone."
       deactivate: "Are you sure you want to deactivate the formula '%{name}'?"
@@ -173,6 +175,9 @@ en:
     gdrive/item_group:
       success:
         destroy: "Group removed successfully."
+    gdrive/migration/operation:
+      success:
+        destroy: "Operation deleted successfully."
     groups/group:
       success:
         deactivate: "Group deactivated successfully."
@@ -358,6 +363,7 @@ en:
       opt_out: "Opt-Out"
       rejoin: "Re-Join"
       reopen: "Reopen"
+      rescan: "Rescan"
       summary: "Summary"
       finalize: "Finalize"
       cancel: "Cancel"

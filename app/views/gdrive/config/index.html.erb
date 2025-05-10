@@ -1,8 +1,19 @@
 <% content_for(:title) { "Google Drive Settings" } %>
 
 <% content_for(:action_links) do %>
-  <% if !@auth_required && policy(sample_item).create? %>
-    <%= link_to(icon_tag("plus") << " Link Item", new_gdrive_item_path, class: "btn btn-primary") %>
+  <% if !@auth_required %>
+    <% if @migration_operation %>
+      <% if policy(@migration_operation).show? %>
+        <%= link_to(icon_tag("truck") << " Migration", gdrive_migration_dashboard_home_path, class: "btn btn-default") %>
+      <% end %>
+    <% else %>
+      <% if policy(sample_operation).new? %>
+        <%= link_to(icon_tag("truck") << " Migrate Files", new_gdrive_migration_operation_path, class: "btn btn-default") %>
+      <% end %>
+    <% end %>
+    <% if policy(sample_item).create? %>
+      <%= link_to(icon_tag("plus") << " Link Item", new_gdrive_item_path, class: "btn btn-primary") %>
+    <% end %>
   <% end %>
 <% end %>
 

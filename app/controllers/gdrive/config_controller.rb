@@ -5,13 +5,14 @@ module GDrive
     include AuthUrlable
 
     before_action -> { nav_context(:wiki, :gdrive) }
-    helper_method :sample_item
+    helper_method :sample_item, :sample_operation
 
     def index
       authorize(current_community, :setup?, policy_class: SetupPolicy)
       skip_policy_scope
 
       @config = Config.find_by(community: current_community) || Config.new
+      @migration_operation = Migration::Operation.find_by(community: current_community)
 
       if @config.persisted?
         # We need the callback_url here b/c we may need to generate the auth_url in the else branch below
@@ -60,6 +61,10 @@ module GDrive
     def sample_item
       return nil if @config.nil?
       @sample_item ||= Item.new(gdrive_config: @config)
+    end
+
+    def sample_operation
+      @sample_operation ||= Migration::Operation.new(community: current_community)
     end
 
     def set_auth_required

@@ -271,6 +271,12 @@ Rails.application.routes.draw do
     end
 
     namespace :migration do
+      resources :operations, only: %i[new edit create update destroy] do
+        member do
+          post "rescan"
+        end
+      end
+
       namespace :dashboard do
         get "/", to: redirect("/gdrive/migration/dashboard/status"), as: :home
         get "status", to: "status#show", as: :status

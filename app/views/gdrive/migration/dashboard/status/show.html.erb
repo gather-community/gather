@@ -1,4 +1,5 @@
 <% content_for(:title) { "Google Drive Migration" } %>
+<%= content_for(:action_links, operation.action_links) %>
 
 <div class="synopsis gdrive-migration-synopsis">
   <%= render("gdrive/migration/dashboard/synopsis") %>

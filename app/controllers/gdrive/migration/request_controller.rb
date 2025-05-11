@@ -24,7 +24,7 @@ module GDrive
       end
 
       def opt_out
-        @uningested_files = @request.operation.files.where(owner: @request.google_email, status: "pending")
+        @untransferred_files = @request.operation.files.where(owner: @request.google_email, status: "pending")
           .order(:name).page(params[:page])
       end
 
@@ -41,7 +41,7 @@ module GDrive
 
       def load_and_check_request
         @request = Request.find_by!(token: params[:token])
-        render_not_found unless @request.pending?
+        render_not_found unless @request.active?
       end
 
       def ensure_community

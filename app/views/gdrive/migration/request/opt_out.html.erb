@@ -1,7 +1,7 @@
 <% content_for(:title, "#{current_community.name} File Reorganization") %>
 <div class="simple">
   <h2>File Selection Opt Out</h2>
-  <% if !@request.in_progress? || @uningested_files.none? %>
+  <% if !@request.active? || @untransferred_files.none? %>
     <p>We're sorry, something went wrong.</p>
   <% else %>
     <p>
@@ -28,7 +28,7 @@
         <th>Name</th>
         <th>Modified</th>
       </tr>
-      <% @uningested_files.each do |file| %>
+      <% @untransferred_files.each do |file| %>
         <tr>
           <td>
             <%= image_tag(file.icon_link, class: "file-icon", alt: "File icon") %>
@@ -39,6 +39,6 @@
       <% end %>
     </table>
 
-    <%= gather_paginate(@uningested_files) %>
+    <%= gather_paginate(@untransferred_files) %>
   <% end %>
 </div>

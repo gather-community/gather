@@ -31,11 +31,8 @@ en:
       not_shareable: "Not shareable"
     request_statuses:
       new: "New"
-      in_progress: "In progress"
-      done: "Done"
+      opened: "Opened"
       opted_out: "Opted out"
-      abandoned: "Abandoned"
-      ingest_failed: "Ingest failed"
 
     migration:
       errors:

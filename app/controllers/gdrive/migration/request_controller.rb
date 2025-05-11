@@ -17,8 +17,10 @@ module GDrive
 
       def intro
         @operation = @request.operation
-        @config = @operation.config
-        @community = current_community
+        @community = @operation.community
+        if !params[:ignore_mobile] && Browser.new(request.user_agent).device.mobile?
+          render("mobile_warning")
+        end
       end
 
       def opt_out

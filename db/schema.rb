@@ -724,13 +724,17 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_11_200735) do
     t.bigint "cluster_id", null: false
     t.integer "count", null: false
     t.datetime "created_at", precision: nil, null: false
+    t.boolean "save_plate", default: false
+    t.boolean "set_place", default: true
     t.bigint "signup_id", null: false
     t.bigint "type_id", null: false
     t.datetime "updated_at", precision: nil, null: false
+    t.bigint "user_id"
     t.index ["cluster_id"], name: "index_meal_signup_parts_on_cluster_id"
     t.index ["signup_id"], name: "index_meal_signup_parts_on_signup_id"
     t.index ["type_id", "signup_id"], name: "index_meal_signup_parts_on_type_id_and_signup_id", unique: true
     t.index ["type_id"], name: "index_meal_signup_parts_on_type_id"
+    t.index ["user_id"], name: "index_meal_signup_parts_on_user_id"
   end
 
   create_table "meal_signups", id: :serial, force: :cascade do |t|
@@ -1307,6 +1311,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_11_200735) do
   add_foreign_key "meal_signup_parts", "clusters"
   add_foreign_key "meal_signup_parts", "meal_signups", column: "signup_id"
   add_foreign_key "meal_signup_parts", "meal_types", column: "type_id"
+  add_foreign_key "meal_signup_parts", "users"
   add_foreign_key "meal_signups", "clusters"
   add_foreign_key "meal_signups", "households"
   add_foreign_key "meal_signups", "meals"

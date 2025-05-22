@@ -1,5 +1,4 @@
-<div class="field-row">
-  <% deactivated = f.object.deactivated? %>
-  <%= f.input :contains, disabled: deactivated %>
-  <%= f.input :absence, disabled: deactivated %>
-</div>
+<% deactivated = f.object.deactivated? %>
+<td><%= f.input :contains, disabled: deactivated, label: false %></td>
+<td><%= f.input :absence, disabled: deactivated, label: false %></td>
+

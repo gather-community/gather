@@ -9,15 +9,15 @@ module Utils
 
       def generate_seed_data
         r = [
-          ["gluten", "no gluten"],
-          ["meat", "no meat"],
-          ["tree nuts", "no treenuts"],
-          ["dairy", "no dairy"],
-          ["shellfish", "no shellfish"],
-          ["not vegan", "vegan"],
-          ["spicy", "not spicy"],
-          ["kid friendly", "not kid friendly"],
-          ["peanuts", "no peanuts"]
+          ["Gluten", "No Gluten"],
+          ["Meat", "No Meat"],
+          ["Tree Nuts", "No Treenuts"],
+          ["Dairy", "No Dairy"],
+          ["Shellfish", "No Shellfish"],
+          ["Not Vegan", "Vegan"],
+          ["Spicy", "Not Spicy"],
+          ["Kid Friendly", "Not Kid Friendly"],
+          ["Peanuts", "No Peanuts"]
         ]
         r.each do |row|
           create(:restriction, community: self.community, contains: row[0], absence: row[1])

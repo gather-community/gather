@@ -10,10 +10,10 @@
       </div>
     <% end %>
   <% elsif options[:enable] %>
-    <div class="disabled">
+    <td class="disabled">
           <label>Deactivated?</label>
           <%= f.input :deactivated, label: false, input_html: {checked: f.object.deactivated?} %>
-    </div>
+    </td>
   <% else %>
     <%# We need a way to set the destroy flag if the object is cleared %>
     <% if options[:allow_clear] %>

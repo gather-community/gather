@@ -108,7 +108,7 @@ module FormHelper
     options[:inner_partial] ||= "#{f.object.class.model_name.collection}/#{assoc.to_s.singularize}_fields"
     options[:multiple] = true unless options.key?(:multiple)
     options[:enable] = false unless options.key?(:enable)
-    options[:table] = true unless options.key?(:table)
+    options[:table] = false unless options.key?(:table)
     wrapper_partial = options[:table] ? "shared/nested_fields_table" : "shared/nested_fields_wrapper"
 
 
@@ -129,7 +129,7 @@ module FormHelper
   end
 
   def div_field_set(args)
-    fields_for_args = [args[:assoc], options[:objects]].compact
+    fields_for_args = [args[:assoc], args[:objects]].compact
     f = args[:f]
 
     f.input(args[:assoc], args[:options].slice(:required, :label)) do

@@ -1,0 +1,29 @@
+<% content_for(:title, "#{@community.name} File Reorganization") %>
+
+<div class="simple">
+  <h2>Step 1: Your File Drop Drive</h2>
+  <p>Click below to open your Gather File Drop Drive. This will open a new browser tab.</p>
+  <p>
+    <%= link_to("Open File Drop Drive", migration_request.file_drop_drive_url,
+      class: "btn btn-primary", target: "blank") %>
+  </p>
+  <p>
+    You should see something like this:
+  </p>
+  <p>
+    <%= image_tag("gdrive/migration/request/step1-1.png", class: "screenshot") %>
+  </p>
+  <p>
+    Instead of "abc123", you should see a code unique to you.
+  </p>
+  <p class="wizard-buttons">
+    <%= link_to("< Previous", gdrive_migration_request_path, class: "btn btn-default") %>
+    <%= link_to("Next >", gdrive_migration_request_step2_path, class: "btn btn-primary") %>
+  </p>
+  <h2 class="troubleshooting">Troubleshooting</h2>
+  <h3>I get a 404 error</h3>
+  <p>
+    If you see a 404 "not found" error, make sure you are signed into Google with the account
+    <b><%= migration_request.google_email %></b>.
+  </p>
+</div>

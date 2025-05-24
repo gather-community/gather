@@ -15,33 +15,32 @@ module GDrive
 
       before_action :load_and_check_request, except: [:opt_out_complete]
 
+      decorates_assigned :migration_request
+
       def intro
-        @operation = @request.operation
-        @community = @operation.community
         if !params[:ignore_mobile] && Browser.new(request.user_agent).device.mobile?
           render("mobile_warning")
         end
       end
 
       def opt_out
-        @untransferred_files = @request.operation.files.where(owner: @request.google_email, status: "pending")
+        @untransferred_files = @migration_request.operation.files.where(owner: @migration_request.google_email, status: "pending")
           .order(:name).page(params[:page])
       end
 
       def confirm_opt_out
-        @request.update!(status: "opted_out", opt_out_reason: params[:gdrive_migration_request][:opt_out_reason])
-        @request.operation.files.where(owner: @request.google_email, status: "pending").update_all(status: "declined")
+        @migration_request.update!(status: "opted_out", opt_out_reason: params[:gdrive_migration_request][:opt_out_reason])
+        @migration_request.operation.files.where(owner: @migration_request.google_email, status: "pending").update_all(status: "declined")
         redirect_to gdrive_migration_request_opt_out_complete_path
-      end
-
-      def opt_out_complete
       end
 
       private
 
       def load_and_check_request
-        @request = Request.find_by!(token: params[:token])
-        render_not_found unless @request.active?
+        @migration_request = Request.find_by!(token: params[:token])
+        render_not_found unless @migration_request.active?
+        @operation = @migration_request.operation
+        @community = @operation.community
       end
 
       def ensure_community

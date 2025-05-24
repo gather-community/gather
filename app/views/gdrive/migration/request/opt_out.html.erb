@@ -1,7 +1,7 @@
 <% content_for(:title, "#{current_community.name} File Reorganization") %>
 <div class="simple">
   <h2>File Selection Opt Out</h2>
-  <% if !@request.active? || @untransferred_files.none? %>
+  <% if !migration_request.active? || @untransferred_files.none? %>
     <p>We're sorry, something went wrong.</p>
   <% else %>
     <p>
@@ -14,7 +14,7 @@
     <p>
       If you didn't mean to opt out, you can <%= link_to("go back", gdrive_migration_request_path) %>.
     </p>
-    <%= gather_form_for(@request, url: gdrive_migration_request_confirm_opt_out_path, html: {class: "full-width"}) do |f| %>
+    <%= gather_form_for(migration_request, url: gdrive_migration_request_confirm_opt_out_path, html: {class: "full-width"}) do |f| %>
       <%= f.input(:opt_out_reason) %>
       <%= form_actions do %>
         <%= link_to("Go Back", gdrive_migration_request_path) %>

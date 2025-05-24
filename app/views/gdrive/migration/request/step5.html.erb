@@ -1,0 +1,26 @@
+<% content_for(:title, "#{@community.name} File Reorganization") %>
+
+<div class="simple">
+  <h2>Step 5: Ensure All Files Moved</h2>
+  <p>You should now see an empty list of files, something like this:</p>
+  <p>
+    <%= image_tag("gdrive/migration/request/step5-1.png", class: "screenshot") %>
+  </p>
+  <p>
+    If so, you are done!
+  </p>
+  <p class="wizard-buttons">
+    <%= link_to("< Previous", gdrive_migration_request_step4_path, class: "btn btn-default") %>
+    <%= link_to("Finish", gdrive_migration_request_finish_path, class: "btn btn-primary") %>
+  </p>
+  <h2 class="troubleshooting">Troubleshooting</h2>
+  <h3>The list of files is not empty</h3>
+  <p>
+    No problem! Head back to <%= link_to("Step 3", gdrive_migration_request_step3_path) %>.
+  </p>
+  <h3>There are some files I don't want to transfer</h3>
+  <p>
+    Please use the <%= link_to("opt-out form", gdrive_migration_request_opt_out_path) %>
+    to notify the coordinator.
+  </p>
+</div>

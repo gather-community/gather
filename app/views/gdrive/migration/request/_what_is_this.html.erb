@@ -11,8 +11,8 @@
   community.
 </p>
 <p class="cta">
-  <% if @request.file_count >= 2 %>
-    You own about <%= @request.file_count %> files in the
+  <% if migration_request.file_count >= 2 %>
+    You own about <%= migration_request.file_count %> files in the
     <%= link_to("old Google Drive folder", @operation.src_folder_url) %>
     for <%= @community.name %>. We need your permission to move them into the new drive.
   <% else %>

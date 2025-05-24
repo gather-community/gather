@@ -8,6 +8,7 @@ module Calendars
 
     acts_as_tenant :cluster
 
+    has_many :eventlets, class_name: "Calendars::Eventlet"
     belongs_to :community
 
     validates :name, presence: true, uniqueness: {scope: :community_id}

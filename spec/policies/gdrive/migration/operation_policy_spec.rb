@@ -5,8 +5,8 @@ require "rails_helper"
 describe GDrive::Migration::OperationPolicy do
   describe "permissions" do
     include_context "policy permissions"
-    let(:config) { create(:gdrive_main_config, community: community) }
-    let(:record) { config }
+    let(:operation) { create(:gdrive_migration_operation, community: community) }
+    let(:record) { operation }
 
     permissions :show?, :new?, :create?, :edit?, :rescan?, :update?, :destroy? do
       it_behaves_like "permits admins from community"
@@ -17,7 +17,7 @@ describe GDrive::Migration::OperationPolicy do
     include_context "policy permissions"
     let(:actor) { admin }
 
-    subject { described_class.new(actor, GDrive::MainConfig.new).permitted_attributes(action) }
+    subject { described_class.new(actor, GDrive::Migration::Operation.new).permitted_attributes(action) }
 
     context "create" do
       let(:action) { :create }

@@ -3,7 +3,7 @@
 module GDrive
   module Migration
     class OperationPolicy < ApplicationPolicy
-      alias_method :config, :record
+      alias_method :operation, :record
 
       def show?
         active_admin?

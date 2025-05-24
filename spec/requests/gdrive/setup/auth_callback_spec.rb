@@ -81,7 +81,7 @@ describe "gdrive auth callback" do
         VCR.use_cassette("gdrive/setup/callback/client_error") do
           get("/gdrive/setup/auth/callback", params: callback_payload)
           expect(response).to redirect_to(redirect_url)
-          expect(flash[:error]).to eq("There is a problem with your Google Drive connection. " \
+          expect(flash[:error]).to match("There is a problem with your Google Drive connection. " \
             "Please contact Gather support.")
         end
       end

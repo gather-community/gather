@@ -200,6 +200,20 @@ ActiveRecord::Schema[7.0].define(version: 2025_07_26_183249) do
     t.index ["community_id"], name: "index_calendar_shared_guidelines_on_community_id"
   end
 
+  create_table "calendars_eventlets", force: :cascade do |t|
+    t.boolean "all_day", default: false, null: false
+    t.bigint "calendar_id", null: false
+    t.bigint "cluster_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "ends_at", null: false
+    t.bigint "event_id", null: false
+    t.datetime "starts_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["calendar_id"], name: "index_calendars_eventlets_on_calendar_id"
+    t.index ["cluster_id"], name: "index_calendars_eventlets_on_cluster_id"
+    t.index ["event_id"], name: "index_calendars_eventlets_on_event_id"
+  end
+
   create_table "clusters", id: :serial, force: :cascade do |t|
     t.datetime "created_at", precision: nil, null: false
     t.string "name", limit: 20, null: false
@@ -1244,6 +1258,9 @@ ActiveRecord::Schema[7.0].define(version: 2025_07_26_183249) do
   add_foreign_key "calendar_protocols", "communities"
   add_foreign_key "calendar_shared_guidelines", "clusters"
   add_foreign_key "calendar_shared_guidelines", "communities"
+  add_foreign_key "calendars_eventlets", "calendar_events", column: "event_id"
+  add_foreign_key "calendars_eventlets", "calendar_nodes", column: "calendar_id"
+  add_foreign_key "calendars_eventlets", "clusters"
   add_foreign_key "communities", "clusters"
   add_foreign_key "domain_ownerships", "clusters"
   add_foreign_key "domain_ownerships", "communities"

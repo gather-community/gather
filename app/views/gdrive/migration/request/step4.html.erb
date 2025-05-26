@@ -1,8 +1,15 @@
 <% content_for(:title, "#{@community.name} File Reorganization") %>
 
 <div class="simple">
-  <h2>Step 4: Drag Files</h2>
-  <p>Drag the selected files to the your Gather File Drop Drive.</p>
+  <h2>Step 4: Select File Drop Drive</h2>
+  <p>
+    <ol>
+      <li>Click 'All locations'</li>
+      <li>Click 'Shared drives'</li>
+      <li>Next to <strong><%= migration_request.file_drop_drive_name %></strong>, click 'Move'</li>
+      <li>Click the 'Move' button</li>
+    </ol>
+  </p>
   <p>
     <%= image_tag("gdrive/migration/request/step4-1.gif", class: "screenshot") %>
   </p>
@@ -11,14 +18,21 @@
     <%= link_to("Next >", gdrive_migration_request_step5_path, class: "btn btn-primary") %>
   </p>
   <h2 class="troubleshooting">Troubleshooting</h2>
-  <h3>I'm not sure what 'drag' means</h3>
+  <h3>I don't see 'Shared drives' under the 'All locations' list</h3>
   <p>
-    Click on the selected files and hold down your mouse button. Then move the mouse
-    as shown in the video above.
+    Make sure you are signed into Google with the account <b><%= migration_request.google_email %></b>.
+    If you still don't see 'Shared drives', try opening
+    <%= link_to("this link", migration_request.file_drop_drive_url, target: "_blank") %>
+    in a new tab, and then try this step again.
+  </p>
+  <p>
+    If you are still having trouble, contact
+    <%= link_to(@operation.contact_name, "mailto:#{@operation.contact_email}") %>
+    for help.
   </p>
   <h3>I accidentally un-selected some of the files</h3>
   <p>
-    No problem! Go back to <%= link_to("Step 3", gdrive_migration_request_step3_path) %>.
+    No problem! Go back to <%= link_to("Step 2", gdrive_migration_request_step2_path) %>.
   </p>
   <h3>I don't want to change ownership</h3>
   <p>

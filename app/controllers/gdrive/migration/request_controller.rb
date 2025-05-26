@@ -18,7 +18,9 @@ module GDrive
       decorates_assigned :migration_request
 
       def intro
-        if !params[:ignore_mobile] && Browser.new(request.user_agent).device.mobile?
+        if migration_request.opted_out?
+          render("opted_out")
+        elsif !params[:ignore_mobile] && Browser.new(request.user_agent).device.mobile?
           render("mobile_warning")
         end
       end
@@ -34,11 +36,22 @@ module GDrive
         redirect_to gdrive_migration_request_opt_out_complete_path
       end
 
+      def confirm_opt_out
+        @migration_request.update!(status: "opted_out", opt_out_reason: params[:gdrive_migration_request][:opt_out_reason])
+        @migration_request.operation.files.where(owner: @migration_request.google_email, status: "pending").update_all(status: "declined")
+        redirect_to gdrive_migration_request_path
+      end
+
+      def un_opt_out
+        @migration_request.update!(status: "opened", opt_out_reason: nil)
+        @migration_request.operation.files.where(owner: @migration_request.google_email, status: "declined").update_all(status: "pending")
+        redirect_to gdrive_migration_request_path
+      end
+
       private
 
       def load_and_check_request
         @migration_request = Request.find_by!(token: params[:token])
-        render_not_found unless @migration_request.active?
         @operation = @migration_request.operation
         @community = @operation.community
       end

@@ -301,7 +301,7 @@ Rails.application.routes.draw do
       get "request/:token/finish", to: "request#finish", as: :request_finish
       get "request/:token/opt-out", to: "request#opt_out", as: :request_opt_out
       patch "request/:token/confirm-opt-out", to: "request#confirm_opt_out", as: :request_confirm_opt_out
-      get "request/:token/opt-out-complete", to: "request#opt_out_complete", as: :request_opt_out_complete
+      patch "request/:token/un-opt-out", to: "request#un_opt_out", as: :request_un_opt_out
 
       post "changes", to: "webhooks#changes", as: :changes_webhook
     end

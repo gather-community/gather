@@ -1,15 +1,21 @@
 <% content_for(:title, "#{current_community.name} File Reorganization") %>
 <div class="simple">
   <h2>File Selection Opt Out</h2>
-  <% if !migration_request.active? || @untransferred_files.none? %>
-    <p>We're sorry, something went wrong.</p>
+  <% if !migration_request.active? %>
+    <p>It looks like your migration request is not active, so you can't opt out.</p>
   <% else %>
+    <% if @untransferred_files.none? %>
+      <p>
+        Please let us know why you're choosing to opt out.
+      </p>
+    <% else %>
+      <p>
+        Our records indicate that you still own the files below. If you don't want to help transfer these files
+        to community ownership, please let us know why you're choosing to opt out.
+      </p>
+     <% end %>
     <p>
-      Our records indicate that you still own the files below. If you don't want to help transfer these files
-      to community ownership, please let us know why you're choosing to opt out.
-    </p>
-    <p>
-      If you tried to transfer the files but something went wrong, please share what happened.
+      If you tried to transfer files but something went wrong, please share what happened.
     </p>
     <p>
       If you didn't mean to opt out, you can <%= link_to("go back", gdrive_migration_request_path) %>.
@@ -22,23 +28,24 @@
       <% end %>
     <% end %>
 
-    <h3>Files Not Transferred</h3>
-    <table class="full-width">
-      <tr>
-        <th>Name</th>
-        <th>Modified</th>
-      </tr>
-      <% @untransferred_files.each do |file| %>
+    <% if @untransferred_files.any? %>
+      <h3>Files Not Transferred</h3>
+      <table class="full-width">
         <tr>
-          <td>
-            <%= image_tag(file.icon_link, class: "file-icon", alt: "File icon") %>
-            <%= link_to(file.name, file.web_view_link, target: "_blank") %>
-          </td>
-          <td><%= I18n.l(file.modified_at, format: :day_mo_yr_no_time) %></td>
+          <th>Name</th>
+          <th>Modified</th>
         </tr>
-      <% end %>
-    </table>
-
-    <%= gather_paginate(@untransferred_files) %>
+        <% @untransferred_files.each do |file| %>
+          <tr>
+            <td>
+              <%= image_tag(file.icon_link, class: "file-icon", alt: "File icon") %>
+              <%= link_to(file.name, file.web_view_link, target: "_blank") %>
+            </td>
+            <td><%= I18n.l(file.modified_at, format: :day_mo_yr_no_time) %></td>
+          </tr>
+        <% end %>
+      </table>
+      <%= gather_paginate(@untransferred_files) %>
+    <% end %>
   <% end %>
 </div>

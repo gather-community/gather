@@ -15,12 +15,12 @@ describe GDrive::UserPermissionSyncJob do
   # Here is how I got the list of existing permissions with their IDs so
   # that I could fill them in below.
   #
-  # config = GDrive::MainConfig.find_by(community_id: community_id)
+  # config = GDrive::Config.find_by(community_id: community_id)
   # wrapper = GDrive::Wrapper.new(config: config, google_user_id: "drxxxin@example.net")
   # wrapper.list_permissions("<ITEM_ID>", fields: "permissions(id,emailAddress,role)",
   #   supports_all_drives: true)
 
-  let!(:config) { create(:gdrive_main_config, org_user_id: "drxxxin@example.net") }
+  let!(:config) { create(:gdrive_config, org_user_id: "drxxxin@example.net") }
   let!(:token) { create(:gdrive_token, gdrive_config: config, google_user_id: "drxxxin@example.net") }
   let!(:group1) { create(:group, joiners: [user]) }
   let!(:group2) { create(:group, joiners: [user]) }

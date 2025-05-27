@@ -3,7 +3,7 @@
 require "rails_helper"
 
 describe GDrive::Wrapper do
-  let!(:config) { create(:gdrive_main_config, org_user_id: "drive.admin@gocoho.net") }
+  let!(:config) { create(:gdrive_config, org_user_id: "drive.admin@gocoho.net") }
   let!(:wrapper) { GDrive::Wrapper.new(config: config, google_user_id: config.org_user_id) }
 
   describe "error handling" do

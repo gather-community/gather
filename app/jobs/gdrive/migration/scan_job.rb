@@ -172,8 +172,8 @@ module GDrive
         # We build the wrapper using the main config because we are scanning the
         # folder via the Google Workspace user account. This allows us to scan all
         # the files because we have drive (not drive.file) scope on that app.
-        main_config = MainConfig.find_by(community: operation.community)
-        @wrapper = Wrapper.new(config: main_config, google_user_id: main_config.org_user_id)
+        config = Config.find_by(community: operation.community)
+        @wrapper = Wrapper.new(config: config, google_user_id: config.org_user_id)
       end
     end
   end

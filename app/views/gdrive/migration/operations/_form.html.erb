@@ -1,0 +1,10 @@
+<%= gather_form_for(@operation) do |f| %>
+  <%= f.input :src_folder_id, disabled: controller.action_name == "edit"  %>
+  <%= f.input :dest_folder_id, disabled: controller.action_name == "edit" %>
+  <%= f.input :contact_name %>
+  <%= f.input :contact_email %>
+
+  <%= form_actions do %>
+    <%= f.button :primary %>
+  <% end %>
+<% end %>

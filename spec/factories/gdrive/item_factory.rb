@@ -6,7 +6,7 @@ FactoryBot.define do
       group { nil }
     end
 
-    association :gdrive_config, factory: :gdrive_main_config
+    association :gdrive_config, factory: :gdrive_config
     kind { "drive" }
     sequence(:external_id) { |i| "xxx#{i}" }
     sequence(:name) { |i| "#{kind.capitalize} #{i}" }

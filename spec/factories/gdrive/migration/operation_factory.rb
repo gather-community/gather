@@ -2,9 +2,9 @@
 
 FactoryBot.define do
   factory :gdrive_migration_operation, class: "GDrive::Migration::Operation" do
-    association :config, factory: :gdrive_migration_config
-    src_folder_id { "abc123" }
-    dest_folder_id { "123abc" }
+    community { Defaults.community }
+    src_folder_id { "abc123abc123abc123abc123abc123abc123" }
+    dest_folder_id { "123abcabc123abc123a" }
     contact_name { "John Johns" }
     contact_email { "foo@example.com" }
 

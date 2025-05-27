@@ -1,0 +1,30 @@
+<% content_for(:title, "#{@community.name} File Reorganization") %>
+
+<div class="simple">
+  <p>
+    Thanks for your interest in helping <%= @community.name %> reorganize its Google Drive files!
+  <p>
+  <h2>Mobile Device?</h2>
+  <p>
+    It looks like you're using a mobile device.
+  </p>
+  <p>
+    This process works much better on a laptop or desktop with a full keyboard and pointing device.
+  </p>
+  <p>
+    <%= link_to("You are welcome to proceed", gdrive_migration_request_path(ignore_mobile: true)) %>,
+    but if you have a lot of files in the old
+    Google Drive folder, the process may be tedious.
+  </p>
+  <p>
+    If you want to switch to a laptop/desktop, you can use the same
+    <%= link_to("link", gdrive_migration_request_path) %>
+    in your email that brought you here.
+  </p>
+  <p>
+    Either way, thanks again!
+  </p>
+
+  <h2>What Is This?</h2>
+  <%= render("what_is_this") %>
+</div>

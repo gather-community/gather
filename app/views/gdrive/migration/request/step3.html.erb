@@ -1,0 +1,20 @@
+<% content_for(:title, "#{@community.name} File Reorganization") %>
+
+<div class="simple">
+  <h2>Step 3: Organize > Move</h2>
+  <p>
+    Click the following in sequence:
+    <ol>
+      <li>'3 dots' icon</li>
+      <li>Organize</li>
+      <li>Move</li>
+    </ol>
+  </p>
+  <p>
+    <%= image_tag("gdrive/migration/request/step3-1.gif", class: "screenshot") %>
+  </p>
+  <p class="wizard-buttons">
+    <%= link_to("< Previous", gdrive_migration_request_step2_path, class: "btn btn-default") %>
+    <%= link_to("Next >", gdrive_migration_request_step4_path, class: "btn btn-primary") %>
+  </p>
+</div>

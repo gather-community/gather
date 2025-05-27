@@ -20,17 +20,16 @@ describe GDrive::Migration::ChangesScanJob do
   # - Delete any casettes under spec/cassettes/gdrive/migration/scan_job that you want to adjust.
 
   let(:community) { Defaults.community }
-  let!(:main_config) { create(:gdrive_main_config, community: community) }
-  let!(:token) { create(:gdrive_token, gdrive_config: main_config, google_user_id: main_config.org_user_id, access_token: "ya29.a0AeXRPp6h54IVI-JqfIPzHxB7cL-BWsf9bWw3pbP406QUT56AYC3L3RWcENZw-ZJiMjKCGVmbWBXaHpyVfELsBz8_ByqltkIjLG0F2y4RcvX45ICZGxsebjVvfcPSHf8UPb1Zvgld4LRqtzJTBcmFl9MFYoe7dvpA_y42T9wyw78aCgYKAckSARESFQHGX2Mi6UT7JXhV77V2xM21uePB-w0178") }
-  let!(:migration_config) { create(:gdrive_migration_config, community: community) }
+  let!(:config) { create(:gdrive_config, community: community) }
+  let!(:token) { create(:gdrive_token, gdrive_config: config, google_user_id: config.org_user_id, access_token: "ya29.a0AeXRPp6h54IVI-JqfIPzHxB7cL-BWsf9bWw3pbP406QUT56AYC3L3RWcENZw-ZJiMjKCGVmbWBXaHpyVfELsBz8_ByqltkIjLG0F2y4RcvX45ICZGxsebjVvfcPSHf8UPb1Zvgld4LRqtzJTBcmFl9MFYoe7dvpA_y42T9wyw78aCgYKAckSARESFQHGX2Mi6UT7JXhV77V2xM21uePB-w0178") }
   let!(:operation) do
-    create(:gdrive_migration_operation, :webhook_registered, config: migration_config,
+    create(:gdrive_migration_operation, :webhook_registered, community: community,
       src_folder_id: "1FBirfPXk-5qaMO1BkvlyhaC8JARE_FRq",
       dest_folder_id: "0AExZ3-Cu5q7uUk9PVA")
   end
 
   # To get latest page token in console:
-  # wrapper = GDrive::Wrapper.new(config: GDrive::MainConfig.first, google_user_id: "google.workspace.admin@example.com")
+  # wrapper = GDrive::Wrapper.new(config: GDrive::Config.first, google_user_id: "google.workspace.admin@example.com")
   # wrapper.send(:service).get_changes_start_page_token
   #
   # To get latest changes in console:
@@ -38,7 +37,7 @@ describe GDrive::Migration::ChangesScanJob do
   #   include_items_from_all_drives: true, include_corpus_removals: true, include_removed: true, spaces: "drive",
   #   fields: "changes(fileId,file(id,driveId,name,parents,owners(emailAddress))),nextPageToken")
   let!(:operation) do
-    create(:gdrive_migration_operation, :webhook_registered, config: migration_config,
+    create(:gdrive_migration_operation, :webhook_registered, community: community,
       src_folder_id: "1FBirfPXk-5qaMO1BkvlyhaC8JARE_FRq",
       dest_folder_id: "0AExZ3-Cu5q7uUk9PVA",
       webhook_channel_id: "0009c409-6bf4-473b-ba04-6b0557219502",
@@ -83,7 +82,7 @@ describe GDrive::Migration::ChangesScanJob do
     # Copy the folder's ID below.
     # Copy the start page token below, then add one and copy it further down.
     let!(:operation) do
-      create(:gdrive_migration_operation, :webhook_registered, config: migration_config,
+      create(:gdrive_migration_operation, :webhook_registered, community: community,
         src_folder_id: "1F_bPvGfgHj8TEmlTFsZxU69sLB1keEfZ",
         dest_folder_id: "0AIQ_OKz_uphLUk9PVA")
     end

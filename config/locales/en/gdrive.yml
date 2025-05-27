@@ -15,17 +15,11 @@ en:
       commenter: "Commenter"
       writer: "Contributor"
       fileOrganizer: "Content manager"
-      # This is the same as fileOrganizer because fileOrganizer for drives == organizer for folders/files
-      # and we don't allow organizer for drives currently.
-      organizer: "Content manager"
     access_level_hints:
       reader: "View files"
       commenter: "View and comment on files"
       writer: "View, add, and edit files"
-      # This is the same as fileOrganizer because fileOrganizer for drives == organizer for folders/files
-      # and we don't allow organizer for drives currently.
       fileOrganizer: "View, add, edit, move, delete, and share files"
-      organizer: "View, add, edit, move, delete, and share files"
     item_error_types:
       inaccessible: "Inaccessible"
       not_shareable: "Not shareable"

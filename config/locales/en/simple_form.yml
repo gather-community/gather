@@ -182,9 +182,6 @@ en:
           commenter: "Commenter: View and comment on files"
           writer: "Contributor: View, add, and edit files"
           fileOrganizer: "Content manager: View, add, edit, move, delete, and share files"
-          # This is the same as fileOrganizer because fileOrganizer for drives == organizer for folders/files
-          # and we don't allow organizer for drives currently.
-          organizer: "Content manager: View, add, edit, move, delete, and share files"
       groups_group:
         availability:
           open: "Open"

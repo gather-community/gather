@@ -8,7 +8,7 @@ describe GDrive::Migration::FileDropScanJob do
   # To dev on these specs:
   #
   # Setup:
-  # - Enter the org_user_id for your Google Workspace account below in main_config.
+  # - Enter the org_user_id for your Google Workspace account below in config.
   # - Create a source folder in a regular Google Drive folder that your org_user_id has access to.
   #   - Paste the ID of that folder as the operation src_folder_id below.
   #   - Create a "Folder A" subfolder that your org_user_id has access to.
@@ -22,7 +22,7 @@ describe GDrive::Migration::FileDropScanJob do
   # - Create a separate Shared Drive to serve as the file drop, leaving it empty.
   #   - Paste the ID of the file drop drive below
   # - Update src and dest folder IDs in the operation below.
-  # - Get a fresh MainConfig access_token from the DB after viewing the main GDrive page and add it below.
+  # - Get a fresh Config access_token from the DB after viewing the main GDrive page and add it below.
   #
   # For each real run:
   # - Ensure the folders in the destination Shared Drive are empty
@@ -36,11 +36,10 @@ describe GDrive::Migration::FileDropScanJob do
   # - Create file tree above
 
   let(:community) { Defaults.community }
-  let!(:main_config) { create(:gdrive_main_config, org_user_id: "admin@example.com", community: community) }
-  let!(:token) { create(:gdrive_token, gdrive_config: main_config, google_user_id: main_config.org_user_id, access_token: "ya29.a0AeXRPp6h54IVI-JqfIPzHxB7cL-BWsf9bWw3pbP406QUT56AYC3L3RWcENZw-ZJiMjKCGVmbWBXaHpyVfELsBz8_ByqltkIjLG0F2y4RcvX45ICZGxsebjVvfcPSHf8UPb1Zvgld4LRqtzJTBcmFl9MFYoe7dvpA_y42T9wyw78aCgYKAckSARESFQHGX2Mi6UT7JXhV77V2xM21uePB-w0178") }
-  let!(:migration_config) { create(:gdrive_migration_config, community: community) }
+  let!(:config) { create(:gdrive_config, org_user_id: "admin@example.com", community: community) }
+  let!(:token) { create(:gdrive_token, gdrive_config: config, google_user_id: config.org_user_id, access_token: "ya29.a0AeXRPp6h54IVI-JqfIPzHxB7cL-BWsf9bWw3pbP406QUT56AYC3L3RWcENZw-ZJiMjKCGVmbWBXaHpyVfELsBz8_ByqltkIjLG0F2y4RcvX45ICZGxsebjVvfcPSHf8UPb1Zvgld4LRqtzJTBcmFl9MFYoe7dvpA_y42T9wyw78aCgYKAckSARESFQHGX2Mi6UT7JXhV77V2xM21uePB-w0178") }
   let!(:operation) do
-    create(:gdrive_migration_operation, :webhook_registered, config: migration_config,
+    create(:gdrive_migration_operation, :webhook_registered, community: community,
       src_folder_id: "1nOK7ou2O9NqiNyJR2bACsitjphr0e6pV",
       dest_folder_id: "0AIQ_OKz_uphLUk9PVA")
   end

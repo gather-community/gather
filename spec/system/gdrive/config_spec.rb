@@ -38,7 +38,7 @@ describe "gdrive items", js: true do
   end
 
   context "with config" do
-    let!(:config) { create(:gdrive_main_config, org_user_id: "admin@example.com") }
+    let!(:config) { create(:gdrive_config, org_user_id: "admin@example.com") }
 
     context "no valid access token" do
       context "with no mapped drives" do

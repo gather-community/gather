@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_05_08_125815) do
+ActiveRecord::Schema[7.0].define(version: 2025_05_11_200735) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -271,12 +271,9 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_08_125815) do
     t.bigint "community_id", null: false
     t.datetime "created_at", null: false
     t.string "org_user_id", limit: 255
-    t.string "type", null: false
     t.datetime "updated_at", null: false
     t.index ["cluster_id"], name: "index_gdrive_configs_on_cluster_id"
-    t.index ["community_id", "type"], name: "index_gdrive_configs_on_community_id_and_type", unique: true
     t.index ["org_user_id"], name: "index_gdrive_configs_on_org_user_id"
-    t.check_constraint "(type::text = 'GDrive::MainConfig'::text) = (org_user_id IS NOT NULL)", name: "org_user_id_non_null_if_main"
   end
 
   create_table "gdrive_item_groups", force: :cascade do |t|
@@ -369,7 +366,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_08_125815) do
   create_table "gdrive_migration_operations", force: :cascade do |t|
     t.boolean "active", default: true, null: false
     t.integer "cluster_id", null: false
-    t.bigint "config_id", null: false
+    t.bigint "community_id", null: false
     t.string "contact_email", null: false
     t.string "contact_name", null: false
     t.datetime "created_at", null: false
@@ -381,7 +378,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_08_125815) do
     t.datetime "webhook_expires_at"
     t.string "webhook_resource_id"
     t.string "webhook_secret"
-    t.index ["config_id"], name: "index_gdrive_migration_operations_on_config_id"
+    t.index ["community_id"], name: "index_gdrive_migration_operations_on_community_id", unique: true
   end
 
   create_table "gdrive_migration_requests", force: :cascade do |t|
@@ -399,9 +396,10 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_08_125815) do
     t.datetime "updated_at", null: false
     t.index ["cluster_id"], name: "index_gdrive_migration_requests_on_cluster_id"
     t.index ["file_drop_drive_id"], name: "index_gdrive_migration_requests_on_file_drop_drive_id", unique: true
+    t.index ["operation_id", "google_email"], name: "index_migration_requests_on_operation_id_and_google_email", unique: true
     t.index ["operation_id"], name: "index_gdrive_migration_requests_on_operation_id"
     t.check_constraint "char_length(opt_out_reason) <= 32767", name: "opt_out_reason_length"
-    t.check_constraint "status::text = ANY (ARRAY['new'::character varying::text, 'in_progress'::character varying::text, 'done'::character varying::text, 'opted_out'::character varying::text, 'ingest_failed'::character varying::text])", name: "status_enum"
+    t.check_constraint "status::text = ANY (ARRAY['new'::character varying, 'opened'::character varying, 'opted_out'::character varying]::text[])", name: "status_enum"
   end
 
   create_table "gdrive_migration_scan_tasks", force: :cascade do |t|
@@ -1238,7 +1236,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_08_125815) do
   add_foreign_key "gdrive_migration_folder_maps", "gdrive_migration_operations", column: "operation_id"
   add_foreign_key "gdrive_migration_logs", "clusters"
   add_foreign_key "gdrive_migration_logs", "gdrive_migration_operations", column: "operation_id"
-  add_foreign_key "gdrive_migration_operations", "gdrive_configs", column: "config_id"
+  add_foreign_key "gdrive_migration_operations", "communities"
   add_foreign_key "gdrive_migration_requests", "clusters"
   add_foreign_key "gdrive_migration_requests", "gdrive_migration_operations", column: "operation_id"
   add_foreign_key "gdrive_migration_scan_tasks", "gdrive_migration_scans", column: "scan_id"

@@ -6,7 +6,7 @@ FactoryBot.define do
     google_email { "foo@gmail.com" }
     file_count { 42 }
     status { "new" }
-    file_drop_drive_id { "abc123" }
-    file_drop_drive_name { "Gather File Drop 1234" }
+    file_drop_drive_id { SecureRandom.hex(32) }
+    file_drop_drive_name { "Gather File Drop #{SecureRandom.hex(6)}" }
   end
 end

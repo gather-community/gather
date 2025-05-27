@@ -20,19 +20,24 @@ module GDrive
 
       # This is a separate class method so we can stub it in tests.
       def self.random_drive_id
-        SecureRandom.hex(8)
+        SecureRandom.hex(6)
       end
 
       def create_and_send_request(google_email)
-        file_count = File.owned_by(google_email).count
-        request = Request.create!(
-          file_count: file_count,
-          google_email: google_email,
-          operation_id: operation.id
-        )
-        operation.log(:info, "Created migration request", google_email: google_email, request_id: request.id)
-        create_file_drop_drive(request)
-        Mailer.migration_request(request).deliver_now
+        if Request.where(google_email: google_email, operation_id: operation.id).exists?
+          operation.log(:info, "Request already exists, not creating or sending email",
+            google_email: google_email)
+        else
+          file_count = File.owned_by(google_email).count
+          request = Request.create!(
+            file_count: file_count,
+            google_email: google_email,
+            operation_id: operation.id
+          )
+          operation.log(:info, "Created migration request", google_email: google_email, request_id: request.id)
+          create_file_drop_drive(request)
+          Mailer.migration_request(request).deliver_now
+        end
       end
 
       def create_file_drop_drive(request)
@@ -60,8 +65,8 @@ module GDrive
 
         # We build the wrapper using the main config because we are creating
         # file drop drives in the community Workspace account.
-        main_config = MainConfig.find_by(community: operation.community)
-        @wrapper = Wrapper.new(config: main_config, google_user_id: main_config.org_user_id)
+        config = Config.find_by(community: operation.community)
+        @wrapper = Wrapper.new(config: config, google_user_id: config.org_user_id)
       end
     end
   end

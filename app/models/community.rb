@@ -30,6 +30,7 @@ class Community < ApplicationRecord
   has_one :subscription, inverse_of: :community, class_name: "Subscription::Subscription", dependent: :destroy
   has_one :subscription_intent, inverse_of: :community, class_name: "Subscription::Intent", dependent: :destroy
   has_many :work_periods, class_name: "Work::Period", inverse_of: :community, dependent: :destroy
+  has_one :gdrive_migration_operation, class_name: "GDrive::Migration::Operation", inverse_of: :community, dependent: :destroy
 
   scope :by_name, -> { order(:name) }
   scope :by_one_cmty_first, ->(c) { order(arel_table[:id].not_eq(c.id)) }

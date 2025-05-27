@@ -5,13 +5,14 @@ module GDrive
     include AuthUrlable
 
     before_action -> { nav_context(:wiki, :gdrive) }
-    helper_method :sample_item
+    helper_method :sample_item, :sample_operation
 
     def index
       authorize(current_community, :setup?, policy_class: SetupPolicy)
       skip_policy_scope
 
-      @config = MainConfig.find_by(community: current_community) || MainConfig.new
+      @config = Config.find_by(community: current_community) || Config.new
+      @migration_operation = Migration::Operation.find_by(community: current_community)
 
       if @config.persisted?
         # We need the callback_url here b/c we may need to generate the auth_url in the else branch below
@@ -44,7 +45,7 @@ module GDrive
 
     def update
       authorize(current_community, :setup?, policy_class: SetupPolicy)
-      @config = MainConfig.find_by(community: current_community) || MainConfig.new(community: current_community)
+      @config = Config.find_by(community: current_community) || Config.new(community: current_community)
       @config.assign_attributes(config_params)
       if @config.save
         flash[:success] = "Config updated successfully."
@@ -62,6 +63,10 @@ module GDrive
       @sample_item ||= Item.new(gdrive_config: @config)
     end
 
+    def sample_operation
+      @sample_operation ||= Migration::Operation.new(community: current_community)
+    end
+
     def set_auth_required
       @config.tokens.destroy_all if @config.persisted?
       @auth_required = true
@@ -69,7 +74,7 @@ module GDrive
 
     # Pundit built-in helper doesn't work due to namespacing
     def config_params
-      params.require(:gdrive_main_config).permit(policy(@config).permitted_attributes)
+      params.require(:gdrive_config).permit(policy(@config).permitted_attributes)
     end
   end
 end

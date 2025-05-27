@@ -27,7 +27,7 @@ module GDrive
           return
         end
 
-        config = MainConfig.find_by!(community: current_community)
+        config = Config.find_by!(community: current_community)
         wrapper = Wrapper.new(config: config, google_user_id: config.org_user_id,
           callback_url: gdrive_setup_auth_callback_url(host: Settings.url.host))
 
@@ -46,17 +46,17 @@ module GDrive
           wrapper.store_credentials(credentials)
           flash[:success] = "Authenticated successfully with Google."
         rescue Signet::AuthorizationError => error
-          p error
-          Rails.logger.error("AuthorizationError in gdrive auth callback", message: error.to_s)
+          error_code = SecureRandom.base58(8)
+          Rails.logger.error("AuthorizationError in gdrive auth callback", message: error.to_s, community_id: current_community.id, error_code: error_code)
           flash[:error] = "There is a problem with your Google Drive connection. " \
-            "Please contact Gather support."
+            "Please contact Gather support. (#{error_code})"
         end
         redirect_to(gdrive_home_url)
       end
 
       def revoke
         authorize(current_community, :setup?, policy_class: SetupPolicy)
-        config = MainConfig.find_by(community: current_community)
+        config = Config.find_by(community: current_community)
         if config
           wrapper = Wrapper.new(config: config, google_user_id: config.org_user_id)
           wrapper.revoke_authorization

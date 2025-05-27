@@ -74,14 +74,19 @@ en:
       calendars_export:
         dont_personalize: "By default, calendar exports are tailored to you and your household so you shouldn't share your export links. If you need a non-personalized link to use in a public place, check this box."
         own_only: "Check this box to only export events that you created for yourself. Group events and meal events won't be included."
-      gdrive_main_config:
+      gdrive_config:
         org_user_id: "This is the user ID for your community's Google Workspace user. It should have Manager access to your communtiy Shared Drive."
         client_id: "Ends in .apps.googleusercontent.com"
         client_secret: "Leave blank to leave secret unchanged."
       gdrive_item:
-        external_id: "You can get this ID from the URL of the item in Google Drive. It should be a series of letters, numbers, '_', and '-'. Examples: 0AExZ3-Cu5q7uUk9PVA and 1KRjAC5Bt4WtLilnkUeTvF_okbLgONGQuDkrc."
+        external_id: "You can get this ID from the URL of the item in Google Drive. It should be a series of letters, numbers, '_', and '-'. Examples: 0AExZ3_Cu5q7uUk9PVA and 1KRjAC5Bt4WtLilnkUeTvF_okbLgONGQuDkrc."
       gdrive_item_group:
         access_level: "For folders and files, can't be any lower than the access level set for this group on the containing shared drive."
+      gdrive_migration_operation:
+        contact_email: "Email address for the contact person."
+        contact_name: "A person in the community who is in charge of the migration and can answer questions about it."
+        src_folder_id: "The ID of the source folder for the migration. You can get this ID from the URL of the item in Google Drive. It should be a series of letters, numbers, '_', and '-'. Example: 1KRjAC5Bt4WtLilnkUeTvF_okbLgONGQuDkrc."
+        dest_folder_id: "The ID of the destination shared drive OR folder for the migration. You can get this ID from the URL of the item in Google Drive. It should be a series of letters, numbers, '_', and '-'. Examples: 0AExZ3_Cu5q7uUk9PVA and 1KRjAC5Bt4WtLilnkUeTvF_okbLgONGQuDkrc."
       groups_group:
         availability: "Whether people can join this group on their own. 'Everybody' groups automatically include all adult users."
         can_request_jobs: "Whether this group should be listed on the jobs form as a possible requester."

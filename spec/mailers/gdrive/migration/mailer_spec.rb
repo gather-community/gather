@@ -4,7 +4,9 @@ require "rails_helper"
 
 describe GDrive::Migration::Mailer do
   # We should still send to user's main email even if they're inactive.
-  let!(:operation) { create(:gdrive_migration_operation, contact_email: "john@example.com") }
+  let!(:operation) do
+    create(:gdrive_migration_operation, contact_email: "john@example.com")
+  end
   let(:request) do
     create(:gdrive_migration_request, operation: operation, google_email: "blorb@gmail.com")
   end

@@ -16,7 +16,6 @@ module GDrive
       end
 
       def self.register(operation, wrapper)
-        operation.log(:info, "Registering webhook")
         webhook_url_settings = Settings.gdrive&.migration&.changes_webhook_url
         url = Rails.application.routes.url_helpers.gdrive_migration_changes_webhook_url(
           host: webhook_url_settings&.host || Settings.url.host,
@@ -37,7 +36,8 @@ module GDrive
           include_corpus_removals: true,
           include_removed: true,
           spaces: "drive")
-
+        operation.log(:info, "Registered webhook channel", resource_id: channel.resource_id,
+          start_page_token: operation.start_page_token)
         operation.update!(
           webhook_resource_id: channel.resource_id,
           webhook_expires_at: expiration
@@ -49,6 +49,7 @@ module GDrive
           id: operation.webhook_channel_id,
           resource_id: operation.webhook_resource_id
         ))
+        operation.log(:info, "Successfully stopped webhook channel")
       rescue Google::Apis::ClientError => error
         operation.log(:error, "Client error stopping channel, swallowing", message: error.to_s)
       end

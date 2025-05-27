@@ -50,7 +50,7 @@
       <td><%= I18n.l(request.created_at) %></td>
       <td><%= I18n.t("gdrive.request_statuses.#{request.status}") %></td>
       <td>
-        <% if request.pending? %>
+        <% if request.active? %>
           <%= link_to("Link", gdrive_migration_request_url(token: request.token)) %>
         <% end %>
       </td>

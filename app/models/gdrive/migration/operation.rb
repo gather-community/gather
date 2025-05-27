@@ -5,7 +5,7 @@ module GDrive
     class Operation < ApplicationRecord
       acts_as_tenant :cluster
 
-      belongs_to :config, class_name: "GDrive::MigrationConfig", inverse_of: :operations
+      belongs_to :community, inverse_of: :gdrive_migration_operation
       has_many :scans, class_name: "GDrive::Migration::Scan",
         inverse_of: :operation, dependent: :destroy
       has_many :files, class_name: "GDrive::Migration::File",
@@ -17,10 +17,15 @@ module GDrive
       has_many :logs, class_name: "GDrive::Migration::Log",
         inverse_of: :operation, dependent: :destroy
 
-      scope :in_community, ->(c) { joins(:config).where(gdrive_configs: {community_id: c.id}) }
+      scope :in_community, ->(c) { where(community_id: c.id) }
       scope :active, -> { all }
 
-      delegate :community, :community_id, to: :config
+      validates :contact_name, presence: true
+      validates :contact_email, presence: true, format: Devise.email_regexp
+      validates :src_folder_id, presence: true, length: {minimum: 30, maximum: 60},
+        format:  /\A[a-z0-9_\-]+\z/i
+      validates :dest_folder_id, presence: true, length: {minimum: 19, maximum: 60},
+        format:  /\A[a-z0-9_\-]+\z/i
 
       def webhook_registered?
         webhook_channel_id.present?

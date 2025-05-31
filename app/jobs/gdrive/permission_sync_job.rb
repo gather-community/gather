@@ -80,6 +80,7 @@ module GDrive
     private
 
     def create_permission(permission)
+      log("Creating permission", permission)
       result = wrapper.create_permission(
         permission.item_external_id,
         Google::Apis::DriveV3::Permission.new(
@@ -92,9 +93,18 @@ module GDrive
       )
       permission.external_id = result.id
       permission.save!
+    rescue Google::Apis::ClientError => error
+      if error.message.match?(/teamDriveDomainUsersOnlyRestriction/)
+        # It is ok to swallow these because they mean that the owner of the shared drive
+        # has set the permissions too restrictively so that isn't our fault
+        log("Swallowing teamDriveDomainUsersOnlyRestriction", permission)
+      else
+        raise
+      end
     end
 
     def update_permission_access_level(permission)
+      log("Updating permission", permission)
       wrapper.update_permission(
         permission.item_external_id,
         permission.external_id,
@@ -107,14 +117,21 @@ module GDrive
     rescue Google::Apis::ClientError => error
       if error.message.match?(/notFound: Permission not found/)
         # If the permission was not found, we'll just create it.
-        Rails.logger.warn("Permission not found for item, creating")
+        log("Permission not found for item, creating", permission)
         create_permission(permission)
+      elsif error.message.match?(/cannotModifyInheritedPermission/)
+        # The full error message here was: "Cannot modify a permission on an item to be
+        # less than the inherited access from a direct or indirect parent"
+        # So it seems ok to swallow this.
+        log("Swallowing cannotModifyInheritedPermission because inherited one is higher level", permission)
+        permission.destroy
       else
         raise
       end
     end
 
     def destroy_permission(permission)
+      log("Destroying permission", permission)
       wrapper.delete_permission(permission.item_external_id, permission.external_id,
         supports_all_drives: true)
       permission.destroy
@@ -122,16 +139,37 @@ module GDrive
       if error.message.match?(/notFound: Permission not found/)
         # If the permission was not found, no problem!
         # Just go ahead and destroy the permission to match.
-        Rails.logger.warn("Permission not found, skipping delete")
+        log("Permission not found, skipping delete", permission)
+        permission.destroy
+      elsif error.message.match?(/cannotDeletePermission/)
+        # It appears these may be due to the permission being inherited.
+        # The full error was "The authenticated user does not have the required
+        # access to delete the permission." But it seems unlikely that this is really an "access"
+        # issue because the Gather user is generally a super admin, and I was still able to list
+        # the permissions when debugging in the Ruby console. So going to log these and swallow them
+        # for now.
+        log("Swallowing cannotDeletePermission", permission)
         permission.destroy
       elsif error.message.match?(/cannotModifyInheritedTeamDrivePermission/)
         # It is ok to swallow these if we are destroying because it just means the supplemental
         # permission was already destroyed, so it's kind of like the "not found" case
-        Rails.logger.warn("Swallowing cannotModifyInheritedTeamDrivePermission")
+        log("Swallowing cannotModifyInheritedTeamDrivePermission", permission)
         permission.destroy
       else
         raise
       end
+    end
+
+    def log(message, permission)
+      Rails.logger.info("[GDrive::PermissionSyncJob] #{message}",
+        cluster_id: permission.cluster_id,
+        access_level: permission.access_level,
+        external_id: permission.external_id,
+        google_email: permission.google_email,
+        item_external_id: permission.item_external_id,
+        item_id: permission.item_id,
+        user_id: permission.user_id,
+      )
     end
   end
 end

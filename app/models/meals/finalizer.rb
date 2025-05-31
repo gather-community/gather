@@ -59,7 +59,7 @@ module Meals
           community_id: meal.community_id),
         code: "meal",
         incurred_on: meal.served_at.to_date,
-        description: "#{meal.title}: #{signup_part.type_name}",
+        description: "#{meal.title}: #{signup_part.type_name}".truncate(Billing::Transaction::DESCRIPTION_MAX_LENGTH),
         quantity: signup_part.count,
         unit_price: price,
         statementable: meal

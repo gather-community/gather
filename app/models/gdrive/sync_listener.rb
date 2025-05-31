@@ -63,7 +63,7 @@ module GDrive
 
     def groups_affiliation_committed(affiliation)
       group = affiliation.group
-      return unless group.everybody?
+      return unless group.present? && group.everybody?
       enqueue_item_syncs_for_group(group)
     end
 
@@ -74,6 +74,7 @@ module GDrive
     end
 
     def enqueue_item_syncs_for_group(group)
+      return unless group.present?
       group.gdrive_item_groups.includes(item: :gdrive_config).each do |item_group|
         enqueue_item_sync(item_group)
       end

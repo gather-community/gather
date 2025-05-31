@@ -24,10 +24,13 @@ module Utils
         end
         ActionMailer::Base.perform_deliveries = true
         cluster
-      rescue StandardError
+      rescue StandardError => ex
         # Can't create the cluster inside the transaction (see above). So we need to clean up in here instead
         # in case of error.
-        cluster.destroy
+        ActsAsTenant.with_tenant(cluster) do
+          cluster.destroy
+        end
+        raise ex
       end
 
       private

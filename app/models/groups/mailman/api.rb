@@ -195,12 +195,14 @@ module Groups
         request("users/#{mm_user.remote_id}/addresses", :post, email: email)
         verify_address_and_set_preferred(mm_user.email)
 
-        other_mships.each do |mship|
-          request("members", :post, list_id: mship["list_id"], subscriber: mm_user.remote_id,
-            delivery_mode: mship["delivery_mode"], role: mship["role"],
-            pre_verified: "true", pre_confirmed: "true", pre_approved: "true")
-        rescue ApiRequestError => e
-          raise e unless /Member already subscribed|is already/.match?(e.response.body)
+        if other_mships
+          other_mships.each do |mship|
+            request("members", :post, list_id: mship["list_id"], subscriber: mm_user.remote_id,
+              delivery_mode: mship["delivery_mode"], role: mship["role"],
+              pre_verified: "true", pre_confirmed: "true", pre_approved: "true")
+          rescue ApiRequestError => e
+            raise e unless /Member already subscribed|is already/.match?(e.response.body)
+          end
         end
       end
 

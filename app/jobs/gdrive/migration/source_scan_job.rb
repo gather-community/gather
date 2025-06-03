@@ -68,6 +68,12 @@ module GDrive
       def process_existing_folder(folder_map, gdrive_file)
         scan.log(:info, "Processing existing folder", src_id: folder_map.src_id, dest_id: folder_map.dest_id)
 
+        if gdrive_file.parents.nil?
+          scan.log(:info, "Folder has no parents, deleting folder map", src_id: folder_map.src_id, dest_id: folder_map.dest_id)
+          folder_map.destroy
+          return true
+        end
+
         if !gdrive_file.trashed && gdrive_file.name == folder_map.name && gdrive_file.parents[0] == folder_map.src_parent_id
           scan.log(:info, "No changes, returning", src_id: folder_map.src_id, dest_id: folder_map.dest_id)
           return true

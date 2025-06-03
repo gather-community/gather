@@ -5,6 +5,8 @@ module Billing
   class Transaction < ApplicationRecord
     include Transactable
 
+    DESCRIPTION_MAX_LENGTH = 255
+
     acts_as_tenant :cluster
 
     self.table_name = "transactions"

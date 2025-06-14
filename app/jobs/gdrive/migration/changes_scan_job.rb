@@ -46,7 +46,7 @@ module GDrive
       end
 
       def scan_next_page(next_page_token)
-        scan.log(:info, "Updating start_page_token with next_page_token")
+        scan.log(:info, "Updating start_page_token with next_page_token", new_start_page_token: next_page_token)
         operation.update!(start_page_token: next_page_token)
 
         scan.log(:info, "Creating scan task for next page")

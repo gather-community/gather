@@ -12,9 +12,7 @@
         <% if entry.group? %>
           <%= render("custom_fields/group_entry_edit", group_entry: entry, f: ff) %>
         <% else %>
-          <% unless flag && entry.key == :allergens %>
-            <%= ff.input entry.key, entry.input_params %>
-          <% end %>
+          <%= ff.input entry.key, entry.input_params %>
         <% end %>
       <% end %>
     <% end %>

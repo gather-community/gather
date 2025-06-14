@@ -13,7 +13,7 @@ module GDrive
       def before_scan_start
         # We save the start page token now so that we can look back through any changes that we miss
         # during the scan operation.
-        self.class.with_lock(operation.id) do
+        with_lock(**SCAN_STATUS_LOCK) do
           return if operation.reload.start_page_token.present?
           WebhookRegistrar.setup(operation, wrapper)
         end

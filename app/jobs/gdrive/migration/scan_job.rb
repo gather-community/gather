@@ -10,19 +10,13 @@ module GDrive
       FILE_FIELDS = "id,name,parents,mimeType,webViewLink,iconLink,modifiedTime,owners(emailAddress)," \
         "capabilities(canEdit),shortcutDetails(targetId,targetMimeType),trashed"
 
+      # A briefly held lock just for critical sections when we are checking scan status
+      SCAN_STATUS_LOCK = {name: :"scan-status", timeout: 5}
+
       # If we get a not found error trying to find one of these, we should just terminate gracefully.
       DISAPPEARABLE_CLASSES = %w[GDrive::Migration::Operation GDrive::Migration::Scan GDrive::Migration::ScanTask].freeze
 
       attr_accessor :cluster_id, :scan_task, :scan, :operation, :ancestor_tree_duplicator
-
-      def self.with_lock(operation_id, &block)
-        # We use the operation and not the scan as the context since there could be a race condition
-        # between several scans running at the same time for the same operation.
-        lock_name = "gdrive-migration-scan-operation-#{operation_id}"
-        Operation.with_advisory_lock!(lock_name, timeout_seconds: 120, disable_query_cache: true) do
-          block.call
-        end
-      end
 
       def perform(cluster_id:, scan_task_id:)
         self.cluster_id = cluster_id
@@ -63,6 +57,13 @@ module GDrive
 
       def skip_check_for_already_mapped_folders?
         false
+      end
+
+      def with_lock(lock_info, &block)
+        full_lock_name = "gdrive-migration-scan-#{lock_info[:name]}-operation-#{operation.id}"
+        Operation.with_advisory_lock!(full_lock_name, timeout_seconds: lock_info[:timeout], disable_query_cache: true) do
+          block.call
+        end
       end
 
       def do_scan_task
@@ -129,7 +130,7 @@ module GDrive
         # We need a critical section here because otherwise we could have a
         # separate job that updates status to cancelled after we check
         # but before we set to "in_progress". We would then wipe out the cancellation.
-        self.class.with_lock(operation.id) do
+        with_lock(**SCAN_STATUS_LOCK) do
           unless scan.reload.cancelled?
             scan.update!(status: "in_progress")
           end
@@ -137,7 +138,7 @@ module GDrive
       end
 
       def cancel_scan(reason:)
-        self.class.with_lock(operation.id) do
+        with_lock(**SCAN_STATUS_LOCK) do
           scan.log(:info, "Cancelling scan", reason: reason)
           scan.update!(status: "cancelled", cancel_reason: reason)
         end
@@ -152,7 +153,7 @@ module GDrive
         # is another ScanJob running at the same time, it must have already
         # deleted its ScanTask, so there is not a chance of us thinking we are
         # not the last one when in fact we are.
-        self.class.with_lock(operation.id) do
+        with_lock(**SCAN_STATUS_LOCK) do
           scan_task.destroy
           # We need to check again if cancelled in case another job has cancelled
           # the operation.

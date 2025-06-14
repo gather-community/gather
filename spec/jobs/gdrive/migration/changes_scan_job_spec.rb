@@ -22,11 +22,6 @@ describe GDrive::Migration::ChangesScanJob do
   let(:community) { Defaults.community }
   let!(:config) { create(:gdrive_config, community: community) }
   let!(:token) { create(:gdrive_token, gdrive_config: config, google_user_id: config.org_user_id, access_token: "ya29.a0AeXRPp6h54IVI-JqfIPzHxB7cL-BWsf9bWw3pbP406QUT56AYC3L3RWcENZw-ZJiMjKCGVmbWBXaHpyVfELsBz8_ByqltkIjLG0F2y4RcvX45ICZGxsebjVvfcPSHf8UPb1Zvgld4LRqtzJTBcmFl9MFYoe7dvpA_y42T9wyw78aCgYKAckSARESFQHGX2Mi6UT7JXhV77V2xM21uePB-w0178") }
-  let!(:operation) do
-    create(:gdrive_migration_operation, :webhook_registered, community: community,
-      src_folder_id: "1FBirfPXk-5qaMO1BkvlyhaC8JARE_FRq",
-      dest_folder_id: "0AExZ3-Cu5q7uUk9PVA")
-  end
 
   # To get latest page token in console:
   # wrapper = GDrive::Wrapper.new(config: GDrive::Config.first, google_user_id: "google.workspace.admin@example.com")
@@ -36,18 +31,43 @@ describe GDrive::Migration::ChangesScanJob do
   # wrapper.send(:service).list_changes("13326", supports_all_drives: true,
   #   include_items_from_all_drives: true, include_corpus_removals: true, include_removed: true, spaces: "drive",
   #   fields: "changes(fileId,file(id,driveId,name,parents,owners(emailAddress))),nextPageToken")
-  let!(:operation) do
-    create(:gdrive_migration_operation, :webhook_registered, community: community,
-      src_folder_id: "1FBirfPXk-5qaMO1BkvlyhaC8JARE_FRq",
-      dest_folder_id: "0AExZ3-Cu5q7uUk9PVA",
-      webhook_channel_id: "0009c409-6bf4-473b-ba04-6b0557219502",
-      start_page_token: "12683")
-  end
   let!(:scan) { create(:gdrive_migration_scan, operation: operation, scope: "changes") }
+  let!(:scan_task) { scan.scan_tasks.create! }
   subject!(:job) { described_class.new(cluster_id: Defaults.cluster.id, scan_task_id: scan_task.id) }
 
+  describe "when lock not available" do
+    let!(:operation) do
+      create(:gdrive_migration_operation, :webhook_registered, community: community,
+        src_folder_id: "1FBirfPXk-5qaMO1BkvlyhaC8JARE_FRq",
+        dest_folder_id: "0AExZ3-Cu5q7uUk9PVA",
+        webhook_channel_id: "0009c409-6bf4-473b-ba04-6b0557219502",
+        start_page_token: "12683")
+    end
+
+    it "it reenqueues same task" do
+      # Mock the first lock call and do nothing
+      lock_name = "gdrive-migration-scan-scan-status-operation-#{operation.id}"
+      allow(GDrive::Migration::Operation).to receive(:with_advisory_lock!)
+        .with(lock_name, disable_query_cache: true, timeout_seconds: 5).and_call_original
+
+      # Mock the second lock call and raise the error
+      lock_name = "gdrive-migration-scan-changes-scan-operation-#{operation.id}"
+      exception = WithAdvisoryLock::FailedToAcquireLock.new(lock_name)
+      allow(GDrive::Migration::Operation).to receive(:with_advisory_lock!)
+        .with(lock_name, disable_query_cache: true, timeout_seconds: 0).and_raise(exception)
+
+      expect { perform_job }.to have_enqueued_job(described_class).exactly(1).times
+    end
+  end
+
   describe "with changeset containing 3 folders and page size of 2" do
-    let!(:scan_task) { scan.scan_tasks.create!(page_token: "12683") }
+    let!(:operation) do
+      create(:gdrive_migration_operation, :webhook_registered, community: community,
+        src_folder_id: "1FBirfPXk-5qaMO1BkvlyhaC8JARE_FRq",
+        dest_folder_id: "0AExZ3-Cu5q7uUk9PVA",
+        webhook_channel_id: "0009c409-6bf4-473b-ba04-6b0557219502",
+        start_page_token: "12683")
+    end
 
     before do
       stub_const("GDrive::Migration::ScanJob::PAGE_SIZE", 2)
@@ -63,7 +83,7 @@ describe GDrive::Migration::ChangesScanJob do
       scan_tasks = GDrive::Migration::ScanTask.all
       expect(scan_tasks.size).to eq(1)
       expect(scan_tasks[0].folder_id).to be_nil
-      expect(scan_tasks[0].page_token).not_to be_nil
+      expect(scan_tasks[0].page_token).to be_nil
       enqueued_task_ids = ActiveJob::Base.queue_adapter.enqueued_jobs[-scan_tasks.size..].map do |j|
         j["arguments"][0]["scan_task_id"]
       end
@@ -73,7 +93,7 @@ describe GDrive::Migration::ChangesScanJob do
       expect(scan.status).to eq("in_progress")
 
       operation.reload
-      expect(operation.start_page_token).to eq("12683")
+      expect(operation.start_page_token).to eq("12685")
     end
   end
 
@@ -84,9 +104,8 @@ describe GDrive::Migration::ChangesScanJob do
     let!(:operation) do
       create(:gdrive_migration_operation, :webhook_registered, community: community,
         src_folder_id: "1F_bPvGfgHj8TEmlTFsZxU69sLB1keEfZ",
-        dest_folder_id: "0AIQ_OKz_uphLUk9PVA")
+        dest_folder_id: "0AIQ_OKz_uphLUk9PVA", start_page_token: "41659")
     end
-    let!(:scan_task) { scan.scan_tasks.create!(page_token: "41659") }
     let(:new_folder_id) { "1_p9qu3RGOsMi2FJY4Gm_SSXxdvPN78so" }
 
     it "creates folder map and a copy on dest drive, completes scan, stores new start_page_token" do
@@ -106,7 +125,13 @@ describe GDrive::Migration::ChangesScanJob do
   end
 
   describe "with changeset containing a change to a mapped folder" do
-    let!(:scan_task) { scan.scan_tasks.create!(page_token: "12738") }
+    let!(:operation) do
+      create(:gdrive_migration_operation, :webhook_registered, community: community,
+        src_folder_id: "1FBirfPXk-5qaMO1BkvlyhaC8JARE_FRq",
+        dest_folder_id: "0AExZ3-Cu5q7uUk9PVA",
+        webhook_channel_id: "0009c409-6bf4-473b-ba04-6b0557219502",
+        start_page_token: "12738")
+    end
     let!(:folder_map_a) do
       create(:gdrive_migration_folder_map, operation: operation, name: "Folder A",
         src_id: "1PJwkZgkByPMcbkfzneq65Cx1CnDNMVR_", src_parent_id: operation.src_folder_id,
@@ -129,7 +154,13 @@ describe GDrive::Migration::ChangesScanJob do
   end
 
   describe "with changeset containing a move of a mapped folder to a new parent that is also mapped" do
-    let!(:scan_task) { scan.scan_tasks.create!(page_token: "13296") }
+    let!(:operation) do
+      create(:gdrive_migration_operation, :webhook_registered, community: community,
+        src_folder_id: "1FBirfPXk-5qaMO1BkvlyhaC8JARE_FRq",
+        dest_folder_id: "0AExZ3-Cu5q7uUk9PVA",
+        webhook_channel_id: "0009c409-6bf4-473b-ba04-6b0557219502",
+        start_page_token: "13296")
+    end
     let!(:folder_map_a) do
       create(:gdrive_migration_folder_map, operation: operation, name: "Folder A",
         src_id: "1K9Sq95eB4IUQ_JHrRpNsyNg9PAjvC7Qo", src_parent_id: operation.src_folder_id,
@@ -165,7 +196,13 @@ describe GDrive::Migration::ChangesScanJob do
   end
 
   describe "with changeset containing a move of a mapped folder to a new parent that is not mapped" do
-    let!(:scan_task) { scan.scan_tasks.create!(page_token: "13292") }
+    let!(:operation) do
+      create(:gdrive_migration_operation, :webhook_registered, community: community,
+        src_folder_id: "1FBirfPXk-5qaMO1BkvlyhaC8JARE_FRq",
+        dest_folder_id: "0AExZ3-Cu5q7uUk9PVA",
+        webhook_channel_id: "0009c409-6bf4-473b-ba04-6b0557219502",
+        start_page_token: "13292")
+    end
     let!(:folder_map_a) do
       create(:gdrive_migration_folder_map, operation: operation, name: "Folder A",
         src_id: "1K9Sq95eB4IUQ_JHrRpNsyNg9PAjvC7Qo", src_parent_id: operation.src_folder_id,
@@ -201,7 +238,13 @@ describe GDrive::Migration::ChangesScanJob do
   end
 
   describe "with changeset containing a move of a mapped folder to a new parent that is outside tree" do
-    let!(:scan_task) { scan.scan_tasks.create!(page_token: "13283") }
+    let!(:operation) do
+      create(:gdrive_migration_operation, :webhook_registered, community: community,
+        src_folder_id: "1FBirfPXk-5qaMO1BkvlyhaC8JARE_FRq",
+        dest_folder_id: "0AExZ3-Cu5q7uUk9PVA",
+        webhook_channel_id: "0009c409-6bf4-473b-ba04-6b0557219502",
+        start_page_token: "13283")
+    end
     # This folder will be moved outside the tree
     let!(:folder_map_a) do
       create(:gdrive_migration_folder_map, operation: operation, name: "Folder A",
@@ -243,7 +286,13 @@ describe GDrive::Migration::ChangesScanJob do
   end
 
   describe "with changeset containing a deletion of a folder" do
-    let!(:scan_task) { scan.scan_tasks.create!(page_token: "13326") }
+    let!(:operation) do
+      create(:gdrive_migration_operation, :webhook_registered, community: community,
+        src_folder_id: "1FBirfPXk-5qaMO1BkvlyhaC8JARE_FRq",
+        dest_folder_id: "0AExZ3-Cu5q7uUk9PVA",
+        webhook_channel_id: "0009c409-6bf4-473b-ba04-6b0557219502",
+        start_page_token: "13326")
+    end
     # This folder will be deleted
     let!(:folder_map_a) do
       create(:gdrive_migration_folder_map, operation: operation, name: "Folder A",
@@ -285,7 +334,13 @@ describe GDrive::Migration::ChangesScanJob do
   end
 
   describe "with changeset containing a new file" do
-    let!(:scan_task) { scan.scan_tasks.create!(page_token: "13307") }
+    let!(:operation) do
+      create(:gdrive_migration_operation, :webhook_registered, community: community,
+        src_folder_id: "1FBirfPXk-5qaMO1BkvlyhaC8JARE_FRq",
+        dest_folder_id: "0AExZ3-Cu5q7uUk9PVA",
+        webhook_channel_id: "0009c409-6bf4-473b-ba04-6b0557219502",
+        start_page_token: "13307")
+    end
     let!(:folder_map_a) do
       create(:gdrive_migration_folder_map, operation: operation, name: "Folder A",
         src_id: "1K9Sq95eB4IUQ_JHrRpNsyNg9PAjvC7Qo", src_parent_id: operation.src_folder_id,
@@ -310,7 +365,13 @@ describe GDrive::Migration::ChangesScanJob do
   end
 
   describe "with changeset containing a renamed and moved file" do
-    let!(:scan_task) { scan.scan_tasks.create!(page_token: "13304") }
+    let!(:operation) do
+      create(:gdrive_migration_operation, :webhook_registered, community: community,
+        src_folder_id: "1FBirfPXk-5qaMO1BkvlyhaC8JARE_FRq",
+        dest_folder_id: "0AExZ3-Cu5q7uUk9PVA",
+        webhook_channel_id: "0009c409-6bf4-473b-ba04-6b0557219502",
+        start_page_token: "13304")
+    end
     let!(:folder_map_a) do
       create(:gdrive_migration_folder_map, operation: operation, name: "Folder A",
         src_id: "1K9Sq95eB4IUQ_JHrRpNsyNg9PAjvC7Qo", src_parent_id: operation.src_folder_id,
@@ -344,7 +405,13 @@ describe GDrive::Migration::ChangesScanJob do
   end
 
   describe "with changeset containing a trashed file" do
-    let!(:scan_task) { scan.scan_tasks.create!(page_token: "13309") }
+    let!(:operation) do
+      create(:gdrive_migration_operation, :webhook_registered, community: community,
+        src_folder_id: "1FBirfPXk-5qaMO1BkvlyhaC8JARE_FRq",
+        dest_folder_id: "0AExZ3-Cu5q7uUk9PVA",
+        webhook_channel_id: "0009c409-6bf4-473b-ba04-6b0557219502",
+        start_page_token: "13309")
+    end
     let!(:folder_map_b) do
       create(:gdrive_migration_folder_map, operation: operation, name: "Folder B",
         src_id: "1nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV", src_parent_id: operation.src_folder_id,
@@ -372,7 +439,13 @@ describe GDrive::Migration::ChangesScanJob do
   end
 
   describe "with changeset containing multiple files in a file drop drive" do
-    let!(:scan_task) { scan.scan_tasks.create!(page_token: "13309") }
+    let!(:operation) do
+      create(:gdrive_migration_operation, :webhook_registered, community: community,
+        src_folder_id: "1FBirfPXk-5qaMO1BkvlyhaC8JARE_FRq",
+        dest_folder_id: "0AExZ3-Cu5q7uUk9PVA",
+        webhook_channel_id: "0009c409-6bf4-473b-ba04-6b0557219502",
+        start_page_token: "13309")
+    end
     let!(:request) do
       create(:gdrive_migration_request, google_email: "foo@gmail.com",
         operation: operation, file_drop_drive_id: "0AExZ3-Cu5q7uUk9PVX")

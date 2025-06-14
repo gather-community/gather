@@ -126,7 +126,7 @@ describe GDrive::Migration::FullScanJob do
         expect(GDrive::Migration::Scan.count).to eq(2)
         expect(GDrive::Migration::ScanTask.count).to eq(1)
         scan_task = GDrive::Migration::ScanTask.first
-        expect(scan_task.page_token).to eq("12345")
+        expect(scan_task.page_token).to be_nil
         expect(scan_task.scan.scope).to eq("changes")
 
         operation.reload

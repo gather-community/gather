@@ -6,51 +6,63 @@ module GDrive
     class ChangesScanJob < SourceScanJob
       def self.enqueue(operation)
         scan = operation.scans.create!(scope: "changes")
-        scan_task = scan.scan_tasks.create!(page_token: operation.start_page_token)
+        scan_task = scan.scan_tasks.create!
+        scan.log(:info, "Enqueueing changes scan")
         ChangesScanJob.perform_later(cluster_id: operation.cluster_id, scan_task_id: scan_task.id)
       end
 
       protected
 
       def do_scan_task
-        files, next_page_token = list_files
+        # We run the core of this scan inside a critical section to avoid having multiple
+        # of them running at once, as that would lead to unpredictable behavior, since there
+        # is only one changes feed.
+        # Timeout of zero means we try once to get lock and if we fail, return false.
+        lock_acquired = with_lock(name: "changes-scan", timeout: 0) do
+          files, next_page_token = list_files
 
-        # Update scan status now and then each time we go through loop.
-        # We do it here just in case we are skipping all the files we fetched on the
-        # first page.
-        ensure_scan_status_in_progress_unless_cancelled
-
-        # Process files one by one, but check after each one if another task thread
-        # has hit too many errors and cancelled the scan.
-        files.each do |gdrive_file|
-          if scan.cancelled?
-            scan.log(:info, "Scan has been cancelled, exiting loop")
-            break
-          end
-          process_file(gdrive_file)
           ensure_scan_status_in_progress_unless_cancelled
-        end
 
-        # We don't need a critical section/advisory lock here because in the worst case, if there is a
-        # race condition we might schedule an extra job, but when it actually runs it will notice
-        # the cancelled state before it gets very far.
-        unless scan.reload.cancelled?
-          if next_page_token
-            scan_next_page(next_page_token)
+          files.each do |gdrive_file|
+            process_file(gdrive_file)
           end
+
+          unless scan.reload.cancelled?
+            if next_page_token
+              scan_next_page(next_page_token)
+            end
+          end
+        rescue Google::Apis::AuthorizationError, Signet::AuthorizationError
+          # If we hit an auth error, it is probably not going to resolve itself, and it
+          # is not an issue with our code. So we stop the scan and notify the user.
+          cancel_scan(reason: "auth_error")
         end
-      rescue Google::Apis::AuthorizationError, Signet::AuthorizationError
-        # If we hit an auth error, it is probably not going to resolve itself, and it
-        # is not an issue with our code. So we stop the scan and notify the user.
-        cancel_scan(reason: "auth_error")
+      rescue WithAdvisoryLock::FailedToAcquireLock
+        # If we didn't get the lock, re-enqueue the job. We don't discard it because
+        # there may be new files waiting to get read and the currently running job may have
+        # pulled its file list before they were available, so we do need to run another scan.
+        scan.log(:warn, "Failed to acquire lock for changes scan, re-enqueueing")
+        ChangesScanJob.perform_later(cluster_id: operation.cluster_id, scan_task_id: scan_task.id)
+      end
+
+      def scan_next_page(next_page_token)
+        scan.log(:info, "Updating start_page_token with next_page_token")
+        operation.update!(start_page_token: next_page_token)
+
+        scan.log(:info, "Creating scan task for next page")
+        new_task = scan.scan_tasks.create!
+        self.class.perform_later(cluster_id: cluster_id, scan_task_id: new_task.id)
       end
 
       # We override the list_files function to get changes from the changes API instead of
       # from the folder_id, which is not set fo this kind of job.
       def list_files
-        scan.log(:info, "Listing files from changes", page_token: scan_task.page_token)
+        # We use operation.start_page_token instead of scan_task.page_token so that there is no risk
+        # of conflict if a new task gets added while one is running. There is only one changes
+        # feed so we just keep track of the token in one place.
+        scan.log(:info, "Listing files from changes", start_page_token: operation.start_page_token)
         list = wrapper.list_changes(
-          scan_task.page_token,
+          operation.start_page_token,
           fields: "changes(fileId,file(#{FILE_FIELDS},driveId)),nextPageToken,newStartPageToken",
           # Even though on change scans we only care about files from My Drive,
           # we need to include items from all drives because that is how we find out whether

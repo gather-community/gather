@@ -1,11 +1,26 @@
-.restrictions {
+.meals--restrictions.action-edit {
+  table.nested-field-set {
+    width: 100%;
+
+    th:nth-child(1), th:nth-child(2) {
+      width: 50%
+    }
+  }
+
+  form.gather-form.narrow-label-layout .community_restrictions > .control-wrapper {
+    width: 100%;
+  }
+
   .community_restrictions_contains {
     padding-right: 10px;
   }
 
-  input[type="checkbox"] {
-    margin-left: 20px;
-    margin-top: 8px;
+  form.gather-form.narrow-label-layout .form-group.boolean.community_restrictions_deactivated > .control-wrapper {
+    margin-left: 0;
+
+    label {
+      padding-left: 10px;
+    }
   }
 
   tr {
@@ -15,7 +30,4 @@
   input[type=checkbox] {
     margin-left: 0px;
   }
-
-
-
 }

@@ -77,6 +77,7 @@ module FormHelper
   # - objects - The objects array passed to simple_form_for. Optional, just as with simple_fields_for.
   # - required - Whether the field should be marked required. Passed to f.input.
   # - label - The outer field label. Passed to f.input.
+  # - table - Whether to render the set as a table or using divs.
   # - multiple - Whether multiple items can be added. Defaults to true.
   # - inner_partial - The path to the partial rendered for each item. Guessed if not provided.
   # - inner_labels - Whether to display labels on fields inside each item. Defaults to true.
@@ -99,7 +100,11 @@ module FormHelper
     args[:wrapper_partial] = wrapper_partial
     args[:wrap_object_proc] = wrap_object_proc
     args[:table] = options[:table] ? true : false
- 
+
+    if args[:table]
+      args[:headers] = options[:headers]
+    end
+
     options[:table] ? table_field_set(args) : div_field_set(args)
   end
 
@@ -110,7 +115,6 @@ module FormHelper
     options[:enable] = false unless options.key?(:enable)
     options[:table] = false unless options.key?(:table)
     wrapper_partial = options[:table] ? "shared/nested_fields_table" : "shared/nested_fields_wrapper"
-
 
     wrapper_classes = %w[nested-fields subfields]
     wrapper_classes << "no-inner-labels" if options[:inner_labels] == false
@@ -151,23 +155,28 @@ module FormHelper
     f.input(args[:assoc], args[:options].slice(:required, :label)) do
       content_tag(:table, class: "nested-field-set") do
         # headers
-        content_tag(:tr) do 
-            content_tag(:th, "Contains") << 
-            content_tag(:th, "Absence") << 
-            content_tag(:th, "Deactivated?")
-        end <<
-
-        (args[:options][:top_hint] ? render(args[:options][:top_hint]) : safe_str) <<
-        f.simple_fields_for(*fields_for_args, wrapper: :nested_fields) do |f2|
+        content_tag(:thead) do
           content_tag(:tr) do
+            safe_join(args[:headers].map { |h| content_tag(:th, h) })
+          end
+        end <<
+        content_tag(:tbody, id: "nested-field-table-rows") do
+          (args[:options][:top_hint] ? render(args[:options][:top_hint]) : safe_str) <<
+          f.simple_fields_for(*fields_for_args, wrapper: :nested_fields) do |f2|
             render(args[:wrapper_partial], f: f2, options: args[:options], classes: args[:wrapper_classes])
-          end 
-        end  << 
-        content_tag(:tr, class: "add-link") do
-          multiple_link(args) if args[:options][:multiple]
+          end
+        end <<
+        content_tag(:tfoot) do
+          content_tag(:tr, class: "add-link") do
+            if args[:options][:multiple]
+              args[:"data-association-insertion-node"] = "#nested-field-table-rows"
+              args[:"data-association-insertion-method"] = "append"
+              multiple_link(args)
+            end
+          end
         end
       end
-    end 
+    end
   end
 
   def multiple_link(args)
@@ -178,11 +187,13 @@ module FormHelper
       link_to_add_association_with_icon(link_text, f, args[:assoc],
                                         partial: args[:wrapper_partial],
                                         wrap_object: args[:wrap_object_proc],
+                                        "data-association-insertion-node": args[:"data-association-insertion-node"],
+                                        "data-association-insertion-method": args[:"data-association-insertion-method"],
                                         render_options: {
                                           wrapper: :nested_fields, # Simple form wrapper
                                           locals: {options: args[:options], classes: args[:wrapper_classes]}
                                         })
-    end 
+    end
   end
 
   def link_to_add_association_with_icon(label, *args)

@@ -29,11 +29,27 @@ module GDrive
 
           self.ancestor_tree_duplicator = AncestorTreeDuplicator.new(wrapper: wrapper, operation: operation)
 
-          # Call a hook for subclasses
-          before_scan_start
-
-          do_scan_task
-          check_for_completeness
+          # We run the scan inside a critical section to avoid having multiple
+          # of them running at once (for a given folder, or globally for the operation if folder is nil),
+          # as that would lead to unpredictable behavior.
+          # Timeout of zero means we try once to get lock and if we fail, return false.
+          job_type = self.class.name.split("::").last.underscore.dasherize.sub(/-job$/, "")
+          lock_name = [job_type, scan_task.folder_id].compact.join("-")
+          scan.log(:info, "Attempting to acquire lock", lock_name: lock_name)
+          with_lock(name: lock_name, timeout: 0) do
+            # Call a hook for subclasses
+            before_scan_start
+            do_scan_task
+            check_for_completeness
+          ensure
+            scan.log(:info, "Released lock", lock_name: lock_name)
+          end
+        rescue WithAdvisoryLock::FailedToAcquireLock
+          # If we didn't get the lock, re-enqueue the job. We don't discard it because
+          # there may be new files waiting to get read and the currently running job may have
+          # pulled its file list before they were available, so we do need to run another scan.
+          scan.log(:warn, "Failed to acquire lock, re-enqueueing")
+          self.class.perform_later(cluster_id: operation.cluster_id, scan_task_id: scan_task.id)
         end
       rescue ActiveRecord::RecordNotFound => error
         class_name = error.message.match(/Couldn't find (.+) with/).captures[0]

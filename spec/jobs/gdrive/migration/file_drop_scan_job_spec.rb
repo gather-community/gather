@@ -56,6 +56,27 @@ describe GDrive::Migration::FileDropScanJob do
   end
   let(:file_drop_drive_id) { "0AMPAMmEXmRdFUk9PVA" }
 
+  describe "when lock not available" do
+    it "it reenqueues same task" do
+      scan_task = scan.scan_tasks.create!(folder_id: file_drop_drive_id)
+
+      # Mock the first lock call and do nothing
+      lock_name = "gdrive-migration-scan-scan-status-operation-#{operation.id}"
+      allow(GDrive::Migration::Operation).to receive(:with_advisory_lock!)
+        .with(lock_name, disable_query_cache: true, timeout_seconds: 5).and_call_original
+
+      # Mock the second lock call and raise the error
+      lock_name = "gdrive-migration-scan-file-drop-scan-#{file_drop_drive_id}-operation-#{operation.id}"
+      exception = WithAdvisoryLock::FailedToAcquireLock.new(lock_name)
+      allow(GDrive::Migration::Operation).to receive(:with_advisory_lock!)
+        .with(lock_name, disable_query_cache: true, timeout_seconds: 0).and_raise(exception)
+
+      expect {
+        described_class.perform_now(cluster_id: Defaults.cluster.id, scan_task_id: scan_task.id)
+      }.to have_enqueued_job(described_class).exactly(1).times
+    end
+  end
+
   describe "with multiple files in the drop drive" do
     # Create two files in the file drop drive and paste their IDs below
     let!(:file_a_1) do

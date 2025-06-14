@@ -14,39 +14,27 @@ module GDrive
       protected
 
       def do_scan_task
-        # We run the core of this scan inside a critical section to avoid having multiple
-        # of them running at once, as that would lead to unpredictable behavior, since there
-        # is only one changes feed.
-        # Timeout of zero means we try once to get lock and if we fail, return false.
-        lock_acquired = with_lock(name: "changes-scan", timeout: 0) do
-          files, next_page_token = list_files
+        files, next_page_token = list_files
 
-          ensure_scan_status_in_progress_unless_cancelled
+        ensure_scan_status_in_progress_unless_cancelled
 
-          files.each do |gdrive_file|
-            process_file(gdrive_file)
-          end
-
-          unless scan.reload.cancelled?
-            if next_page_token
-              scan_next_page(next_page_token)
-            end
-          end
-        rescue Google::Apis::AuthorizationError, Signet::AuthorizationError
-          # If we hit an auth error, it is probably not going to resolve itself, and it
-          # is not an issue with our code. So we stop the scan and notify the user.
-          cancel_scan(reason: "auth_error")
+        files.each do |gdrive_file|
+          process_file(gdrive_file)
         end
-      rescue WithAdvisoryLock::FailedToAcquireLock
-        # If we didn't get the lock, re-enqueue the job. We don't discard it because
-        # there may be new files waiting to get read and the currently running job may have
-        # pulled its file list before they were available, so we do need to run another scan.
-        scan.log(:warn, "Failed to acquire lock for changes scan, re-enqueueing")
-        ChangesScanJob.perform_later(cluster_id: operation.cluster_id, scan_task_id: scan_task.id)
+
+        unless scan.reload.cancelled?
+          if next_page_token
+            scan_next_page(next_page_token)
+          end
+        end
+      rescue Google::Apis::AuthorizationError, Signet::AuthorizationError
+        # If we hit an auth error, it is probably not going to resolve itself, and it
+        # is not an issue with our code. So we stop the scan and notify the user.
+        cancel_scan(reason: "auth_error")
       end
 
       def scan_next_page(next_page_token)
-        scan.log(:info, "Updating start_page_token with next_page_token")
+        scan.log(:info, "Updating start_page_token with next_page_token", new_start_page_token: next_page_token)
         operation.update!(start_page_token: next_page_token)
 
         scan.log(:info, "Creating scan task for next page")

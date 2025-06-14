@@ -5,9 +5,9 @@ module GDrive
     # Scans items returned from changes API
     class ChangesScanJob < SourceScanJob
       def self.enqueue(operation)
-        scan.log(:info, "Enqueueing changes scan")
         scan = operation.scans.create!(scope: "changes")
         scan_task = scan.scan_tasks.create!
+        scan.log(:info, "Enqueueing changes scan")
         ChangesScanJob.perform_later(cluster_id: operation.cluster_id, scan_task_id: scan_task.id)
       end
 

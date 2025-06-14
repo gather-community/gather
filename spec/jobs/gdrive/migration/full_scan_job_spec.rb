@@ -37,6 +37,27 @@ describe GDrive::Migration::FullScanJob do
   end
   let!(:scan) { create(:gdrive_migration_scan, operation: operation, scope: "full") }
 
+  describe "when lock not available" do
+    it "it reenqueues same task" do
+      scan_task = scan.scan_tasks.create!(folder_id: operation.src_folder_id)
+
+      # Mock the first lock call and do nothing
+      lock_name = "gdrive-migration-scan-scan-status-operation-#{operation.id}"
+      allow(GDrive::Migration::Operation).to receive(:with_advisory_lock!)
+        .with(lock_name, disable_query_cache: true, timeout_seconds: 5).and_call_original
+
+      # Mock the second lock call and raise the error
+      lock_name = "gdrive-migration-scan-full-scan-#{operation.src_folder_id}-operation-#{operation.id}"
+      exception = WithAdvisoryLock::FailedToAcquireLock.new(lock_name)
+      allow(GDrive::Migration::Operation).to receive(:with_advisory_lock!)
+        .with(lock_name, disable_query_cache: true, timeout_seconds: 0).and_raise(exception)
+
+      expect {
+        described_class.perform_now(cluster_id: Defaults.cluster.id, scan_task_id: scan_task.id)
+      }.to have_enqueued_job(described_class).exactly(1).times
+    end
+  end
+
   describe "first run" do
     let!(:operation) do
       create(:gdrive_migration_operation, :webhook_not_registered, community: community,

@@ -37,24 +37,35 @@
   </tr>
 </table>
 
-<h3>Requests</h3>
-<table class="full-width">
+<h3>Request</h3>
+<table class="key-value">
   <tr>
-    <th>Date Sent</th>
-    <th>Status</th>
-    <th>Link</th>
-    <th>Opt Out Reason</th>
+    <td class="key">Date Sent</td>
+    <td class="value"><%= I18n.l(migration_request.created_at) %></td>
   </tr>
-  <% @requests.each do |request| %>
+  <tr>
+    <td class="key">Status</td>
+    <td class="value"><%= I18n.t("gdrive.request_statuses.#{migration_request.status}") %></td>
+  </tr>
+  <% if migration_request.active? %>
     <tr>
-      <td><%= I18n.l(request.created_at) %></td>
-      <td><%= I18n.t("gdrive.request_statuses.#{request.status}") %></td>
-      <td>
-        <% if request.active? %>
-          <%= link_to("Link", gdrive_migration_request_url(token: request.token)) %>
+      <td class="key">Request Intro Page</td>
+      <td class="value">
+        <%= link_to("Link", gdrive_migration_request_url(token: migration_request.token)) %>
+        <% if migration_request.new? %>
+          <br/>Note that clicking this link will change the request to "opened" status.
         <% end %>
       </td>
-      <td><%= request.opt_out_reason %></td>
     </tr>
   <% end %>
+  <tr>
+    <td class="key">File Drop Drive</td>
+    <td class="value">
+      <%= link_to(migration_request.file_drop_drive_name, migration_request.file_drop_drive_url) %>
+    </td>
+  </tr>
+  <tr>
+    <td class="key">Opt Out Reason</td>
+    <td class="value"><%= migration_request.opt_out_reason %></td>
+  </tr>
 </table>

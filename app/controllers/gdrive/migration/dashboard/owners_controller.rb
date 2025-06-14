@@ -6,6 +6,8 @@ module GDrive
       class OwnersController < ApplicationController
         before_action -> { nav_context(:wiki, :gdrive, :migration, :dashboard, :owners) }
 
+        decorates_assigned :migration_request
+
         def index
           @config = Config.find_by(community: current_community)
           authorize(current_community, :setup?, policy_class: SetupPolicy)
@@ -21,7 +23,7 @@ module GDrive
           @latest_scan = @operation.scans.full.order(created_at: :desc).first
           @stats = Stats.new(operation: @operation)
           @owner_id = params[:id]
-          @requests = @operation.requests.where(google_email: @owner_id).order(:created_at).all
+          @migration_request = @operation.requests.where(google_email: @owner_id).order(:created_at).first
         end
 
         def send_requests

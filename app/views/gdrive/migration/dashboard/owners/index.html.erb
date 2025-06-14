@@ -63,11 +63,7 @@
             <%= I18n.l(request.created_at, format: :day_mo_yr_no_time) %>
           </td>
           <td>
-            <% if request.active? %>
-              <%= link_to(I18n.t("gdrive.request_statuses.#{request.status}"), gdrive_migration_request_url(token: request.token)) %>
-            <% else %>
-              <%= I18n.t("gdrive.request_statuses.#{request.status}") %>
-            <% end %>
+            <%= I18n.t("gdrive.request_statuses.#{request.status}") %>
           </td>
         <% else %>
           <td></td>

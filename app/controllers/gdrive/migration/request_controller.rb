@@ -52,6 +52,7 @@ module GDrive
 
       def load_and_check_request
         @migration_request = Request.find_by!(token: params[:token])
+        @migration_request.update!(status: "opened") if @migration_request.new?
         @operation = @migration_request.operation
         @community = @operation.community
       end

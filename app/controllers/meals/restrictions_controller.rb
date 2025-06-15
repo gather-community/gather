@@ -7,6 +7,9 @@ module Meals
     def edit
       @community = current_community
       authorize(@community)
+      if @community.restrictions.none?
+        @community.restrictions.build
+      end
     end
 
     def update
@@ -25,6 +28,6 @@ module Meals
     def community_params
       params[:community].permit(policy(@community).permitted_attributes)
     end
-     
+
   end
 end

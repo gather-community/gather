@@ -13,12 +13,36 @@ describe "restrictions settings", js: true do
   scenario "happy path" do
     visit(edit_meals_restrictions_path)
 
-    click_link("Add restriction")
-    fill_in("Contains", with: "gluten")
-    fill_in("Absence", with: "no gluten")
+    click_button("Save")
+
+    expect(page).to have_content("Please review the problems below:")
+
+    within(all("#nested-field-table-rows tr")[0]) do
+      find("input[aria-label=Restriction]").set("gluten")
+      find("input[aria-label=Opposite]").set("no gluten")
+    end
+
     click_button("Save")
 
     expect(page).to have_success_alert("Updated successfully")
-    expect(page).to have_field("Contains", with: "gluten")
+
+    within(all("#nested-field-table-rows tr")[0]) do
+      expect(page).to have_field("community_restrictions_attributes_0_contains", with: "gluten")
+      expect(page).to have_field("community_restrictions_attributes_0_absence", with: "no gluten")
+    end
+
+    click_on("Add Restriction")
+
+    within(all("#nested-field-table-rows tr")[1]) do
+      find("input[aria-label=Restriction]").set("spicy")
+      find("input[aria-label=Opposite]").set("not spicy")
+    end
+
+    click_button("Save")
+
+    within(all("#nested-field-table-rows tr")[1]) do
+      expect(page).to have_field("community_restrictions_attributes_1_contains", with: "spicy")
+      expect(page).to have_field("community_restrictions_attributes_1_absence", with: "not spicy")
+    end
   end
 end

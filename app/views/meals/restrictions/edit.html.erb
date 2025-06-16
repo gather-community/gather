@@ -4,7 +4,7 @@
     <%= nested_field_set(f, :restrictions,
                             inner_partial: "meals/restrictions/restriction_fields",
                             headers: %w[Restriction Opposite Deactivated?],
-                            required: true, table: true, single_row: true, enable: true, label: false) %>
+                            required: true, table: true, single_row: true, label: false) %>
   <%= form_actions do %>
     <%= f.button :primary %>
   <% end %>

@@ -34,7 +34,6 @@ module FormHelper
     classes << "#{name}-form" # Object class name
 
     options[:html][:class] = classes.join(" ")
-    options[:label] = false
 
     # We need to wrap form in a row because it has a col-sm-x class.
     content_tag(:div, class: "row") do
@@ -112,7 +111,6 @@ module FormHelper
     wrap_object_proc = options.delete(:wrap_object) # Used for messing with template object.
     options[:inner_partial] ||= "#{f.object.class.model_name.collection}/#{assoc.to_s.singularize}_fields"
     options[:multiple] = true unless options.key?(:multiple)
-    options[:enable] = false unless options.key?(:enable)
     options[:table] = false unless options.key?(:table)
     wrapper_partial = options[:table] ? "shared/nested_fields_table" : "shared/nested_fields_wrapper"
 

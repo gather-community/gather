@@ -141,7 +141,7 @@ module FormHelper
           f.simple_fields_for(*fields_for_args, wrapper: :nested_fields) do |f2|
             render(args[:wrapper_partial], f: f2, options: args[:options], classes: args[:wrapper_classes])
           end <<
-          (args[:options][:multiple] ? multiple_link(args) : safe_str)
+          (args[:options][:multiple] ? link_to_add(:span, args) : safe_str)
       end
     end
   end
@@ -167,9 +167,9 @@ module FormHelper
         content_tag(:tfoot) do
           content_tag(:tr, class: "add-link") do
             if args[:options][:multiple]
-              args[:"data-association-insertion-node"] = "#nested-field-table-rows"
-              args[:"data-association-insertion-method"] = "append"
-              multiple_link(args)
+              args[:insertion_node] = "#nested-field-table-rows"
+              args[:insertion_method] = "append"
+              link_to_add(:td, args)
             end
           end
         end
@@ -177,20 +177,25 @@ module FormHelper
     end
   end
 
-  def multiple_link(args)
+  def link_to_add(wrapper_tag, args)
     f = args[:f]
     link_text = I18n.t("cocoon.add_links.#{f.object.class.model_name.i18n_key}.#{args[:assoc]}",
                         default: I18n.t("cocoon.add_links.#{args[:assoc]}"))
-    content_tag(:td, class: "add-link-wrapper") do
-      link_to_add_association_with_icon(link_text, f, args[:assoc],
-                                        partial: args[:wrapper_partial],
-                                        wrap_object: args[:wrap_object_proc],
-                                        "data-association-insertion-node": args[:"data-association-insertion-node"],
-                                        "data-association-insertion-method": args[:"data-association-insertion-method"],
-                                        render_options: {
-                                          wrapper: :nested_fields, # Simple form wrapper
-                                          locals: {options: args[:options], classes: args[:wrapper_classes]}
-                                        })
+    content_tag(wrapper_tag, class: "add-link-wrapper") do
+      options = {}
+      options[:partial] = args[:wrapper_partial]
+      options[:wrap_object] = args[:wrap_object_proc]
+      if args[:insertion_node]
+        options[:"data-association-insertion-node"] = args[:insertion_node]
+      end
+      if args[:insertion_method]
+        options[:"data-association-insertion-method"] = args[:insertion_method]
+      end
+      options[:render_options] = {
+        wrapper: :nested_fields, # Simple form wrapper
+        locals: {options: args[:options], classes: args[:wrapper_classes]}
+      }
+      link_to_add_association_with_icon(link_text, f, args[:assoc], **options)
     end
   end
 

@@ -186,7 +186,9 @@ describe "meal create, show, update, delete", js: true do
   end
 
   def select_worker(user, role:)
+    p worker_div_selector(role: role)
     select = all("#{worker_div_selector(role: role)} select")[0]
+    p select
     select2(user, from: select)
   end
 

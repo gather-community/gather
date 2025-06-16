@@ -66,12 +66,13 @@ RSpec.configure do |config|
   config.include(GeneralHelpers)
 
   def register_selenium_chrome_driver(app:, headless:)
-    args = %w[disable-gpu no-sandbox disable-site-isolation-trials window-size=1280x2048]
+    args = %w[disable-gpu no-sandbox disable-site-isolation-trials]
     args << "headless" if headless
     options = Selenium::WebDriver::Chrome::Options.new(
       args: args,
       "goog:loggingPrefs": {browser: "ALL", client: "ALL", driver: "ALL", server: "ALL"}
     )
+    options.add_argument("--window-size=1280,2048")
     options.add_preference(:download, prompt_for_download: false,
       default_directory: DownloadHelpers::PATH.to_s)
     options.add_preference(:browser, set_download_behavior: {behavior: "allow"})

@@ -141,7 +141,7 @@ module FormHelper
           f.simple_fields_for(*fields_for_args, wrapper: :nested_fields) do |f2|
             render(args[:wrapper_partial], f: f2, options: args[:options], classes: args[:wrapper_classes])
           end <<
-          multiple_link(args) if args[:options][:multiple]
+          (args[:options][:multiple] ? multiple_link(args) : safe_str)
       end
     end
   end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# This file is copied to spec/ when you run 'rails generate rspec:install'
+# This file is copied to spec/ when you run "rails generate rspec:install"
 ENV["RAILS_ENV"] ||= "test"
 require File.expand_path("../config/environment", __dir__)
 # Prevent database truncation if the environment is production
@@ -35,10 +35,10 @@ Dir[Rails.root.join("spec/support/**/*.rb")].sort.each { |f| require f }
 ActiveRecord::Migration.maintain_test_schema!
 
 RSpec.configure do |config|
-  # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
+  # Remove this line if you"re not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
 
-  # If you're not using ActiveRecord, or you'd prefer not to run each of your
+  # If you"re not using ActiveRecord, or you"d prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
   # instead of true.
   config.use_transactional_fixtures = true
@@ -79,6 +79,10 @@ RSpec.configure do |config|
     Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
   end
 
+  Capybara.register_driver(:default) do |app|
+    Capybara::RackTest::Driver.new(app, headers: {"HTTP_USER_AGENT" => "Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/109.0"})
+  end
+
   Capybara.register_driver(:selenium_chrome_headless) do |app|
     register_selenium_chrome_driver(app: app, headless: true)
   end
@@ -99,7 +103,7 @@ RSpec.configure do |config|
   end
 
   config.before(:each, type: :system) do
-    driven_by :rack_test
+    driven_by :default
   end
 
   config.before(:each, type: :system, js: true) do

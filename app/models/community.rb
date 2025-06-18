@@ -31,10 +31,13 @@ class Community < ApplicationRecord
   has_one :subscription_intent, inverse_of: :community, class_name: "Subscription::Intent", dependent: :destroy
   has_many :work_periods, class_name: "Work::Period", inverse_of: :community, dependent: :destroy
   has_one :gdrive_migration_operation, class_name: "GDrive::Migration::Operation", inverse_of: :community, dependent: :destroy
+  has_many :restrictions, class_name: "Meals::Restriction", inverse_of: :community, dependent: :destroy
 
   scope :by_name, -> { order(:name) }
   scope :by_one_cmty_first, ->(c) { order(arel_table[:id].not_eq(c.id)) }
   scope :by_name_with_first, ->(c) { by_one_cmty_first(c).by_name }
+
+  accepts_nested_attributes_for :restrictions
 
   disallow_semicolons :name
 
@@ -67,7 +70,9 @@ class Community < ApplicationRecord
           {key: :diner, type: :integer, required: true, default: 0},
           {key: :early_menu, type: :integer, required: true, default: 10},
           {key: :late_menu, type: :integer, required: true, default: 5}
-        ]}
+        ]}]},
+      {key: :restrictions, type: :group, fields: [
+          {key: :restriction, type: :integer}
       ]},
       {key: :calendars, type: :group, fields: [
         {key: :kinds, type: :string},

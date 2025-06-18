@@ -42,6 +42,7 @@ module People
       end
 
       def failure
+        p request.user_agent
         unless browser.bot?
           Rails.logger.info("OAuth failed: #{failure_message}")
           Gather::ErrorReporter.instance.report(StandardError.new("OAuth failure"), env: request.env, data: {failure_message: failure_message})

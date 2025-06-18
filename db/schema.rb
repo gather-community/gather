@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_05_11_200735) do
+ActiveRecord::Schema[7.0].define(version: 2025_05_24_222129) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -687,6 +687,18 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_11_200735) do
     t.index ["meal_id", "calendar_id"], name: "index_meal_resourcings_on_meal_id_and_calendar_id", unique: true
   end
 
+  create_table "meal_restrictions", force: :cascade do |t|
+    t.string "absence", null: false
+    t.bigint "cluster_id", null: false
+    t.bigint "community_id", null: false
+    t.string "contains", null: false
+    t.datetime "created_at", null: false
+    t.boolean "deactivated", default: false, null: false
+    t.datetime "updated_at", null: false
+    t.index ["cluster_id"], name: "index_meal_restrictions_on_cluster_id"
+    t.index ["community_id"], name: "index_meal_restrictions_on_community_id"
+  end
+
   create_table "meal_roles", force: :cascade do |t|
     t.integer "cluster_id", null: false
     t.integer "community_id", null: false
@@ -717,7 +729,6 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_11_200735) do
     t.index ["cluster_id"], name: "index_meal_signup_parts_on_cluster_id"
     t.index ["signup_id"], name: "index_meal_signup_parts_on_signup_id"
     t.index ["type_id", "signup_id"], name: "index_meal_signup_parts_on_type_id_and_signup_id", unique: true
-    t.index ["type_id"], name: "index_meal_signup_parts_on_type_id"
   end
 
   create_table "meal_signups", id: :serial, force: :cascade do |t|
@@ -1287,6 +1298,8 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_11_200735) do
   add_foreign_key "meal_resourcings", "calendar_nodes", column: "calendar_id"
   add_foreign_key "meal_resourcings", "clusters"
   add_foreign_key "meal_resourcings", "meals"
+  add_foreign_key "meal_restrictions", "clusters"
+  add_foreign_key "meal_restrictions", "communities"
   add_foreign_key "meal_roles", "clusters"
   add_foreign_key "meal_roles", "communities"
   add_foreign_key "meal_signup_parts", "clusters"

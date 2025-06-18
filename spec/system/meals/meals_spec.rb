@@ -75,7 +75,6 @@ describe "meal create, show, update, delete", js: true do
       click_link("Edit")
       select_worker(:clear, role: hc_role)
       click_button("Save") # First click clears the focus
-      click_button("Save")
       expect_success
       find("a", text: "Southern Beans").click
       expect(page).not_to have_content("Head Cook")
@@ -186,7 +185,9 @@ describe "meal create, show, update, delete", js: true do
   end
 
   def select_worker(user, role:)
+    p worker_div_selector(role: role)
     select = all("#{worker_div_selector(role: role)} select")[0]
+    p select
     select2(user, from: select)
   end
 

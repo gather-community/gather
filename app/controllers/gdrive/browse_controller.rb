@@ -20,7 +20,7 @@ module GDrive
 
         @migration_operation = Migration::Operation.find_by(community: current_community)
 
-        if @migration_operation && @migration_operation.created_at < 31.days.ago
+        if @setup_policy.setup? && @migration_operation && @migration_operation.created_at < 31.days.ago
           flash.now[:alert] = "Your migration was created more than 30 days ago. "\
             "Please consider concluding and deleting your migration."
         end

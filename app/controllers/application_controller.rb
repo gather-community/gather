@@ -17,8 +17,7 @@ class ApplicationController < ActionController::Base
 
   attr_accessor :current_community
 
-  helper_method :current_community, :current_cluster, :multi_community?, :own_cluster?,
-    :app_version, :nav_builder
+  helper_method :current_community, :current_cluster, :multi_community?, :own_cluster?, :nav_builder
 
   def current_cluster
     current_tenant
@@ -36,10 +35,6 @@ class ApplicationController < ActionController::Base
 
   def nav_context(*levels)
     nav_builder.context = levels
-  end
-
-  def app_version
-    @app_version ||= File.read(Rails.root.join("VERSION"))
   end
 
   # Builds a serializer for the given object using the Attributes adapter.

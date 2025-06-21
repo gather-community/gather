@@ -1,5 +1,30 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: subscription_intents
+#
+#  id                   :bigint           not null, primary key
+#  address_city         :string           not null
+#  address_country      :string           not null
+#  address_line1        :string           not null
+#  address_line2        :string
+#  address_postal_code  :string
+#  address_state        :string
+#  cluster_id           :bigint           not null
+#  community_id         :bigint           not null
+#  contact_email        :string           not null
+#  created_at           :datetime         not null
+#  currency             :string           not null
+#  discount_percent     :decimal(6, 2)
+#  months_per_period    :integer          not null
+#  payment_method_types :jsonb            not null
+#  price_per_user_cents :integer          not null
+#  quantity             :integer          not null
+#  start_date           :date
+#  tier                 :string           not null
+#  updated_at           :datetime         not null
+#
 module Subscription
   # Models a subscription of Gather product itself.
   class Intent < ApplicationRecord

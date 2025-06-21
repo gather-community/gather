@@ -1,5 +1,19 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: meal_formula_parts
+#
+#  id           :bigint           not null, primary key
+#  cluster_id   :bigint           not null
+#  created_at   :datetime         not null
+#  formula_id   :bigint           not null
+#  portion_size :decimal(10, 2)   not null
+#  rank         :integer          not null
+#  share        :decimal(10, 4)   not null
+#  type_id      :bigint           not null
+#  updated_at   :datetime         not null
+#
 module Meals
   # Joins formula to meal part
   class FormulaPart < ApplicationRecord

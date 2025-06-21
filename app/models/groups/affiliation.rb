@@ -1,5 +1,14 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: group_affiliations
+#
+#  id           :bigint           not null, primary key
+#  cluster_id   :bigint           not null
+#  community_id :bigint           not null
+#  group_id     :bigint           not null
+#
 module Groups
   # An affiliation of a group to a community. A join model.
   class Affiliation < ApplicationRecord

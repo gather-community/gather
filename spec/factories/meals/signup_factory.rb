@@ -1,5 +1,19 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: meal_signups
+#
+#  id           :integer          not null, primary key
+#  cluster_id   :integer          not null
+#  comments     :text
+#  created_at   :datetime         not null
+#  household_id :integer          not null
+#  meal_id      :integer          not null
+#  notified     :boolean          default(FALSE), not null
+#  takeout      :boolean          default(FALSE), not null
+#  updated_at   :datetime         not null
+#
 FactoryBot.define do
   factory :meal_signup, class: "Meals::Signup" do
     transient do

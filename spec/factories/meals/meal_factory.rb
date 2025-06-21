@@ -1,5 +1,30 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: meals
+#
+#  id              :integer          not null, primary key
+#  allergens       :jsonb            not null
+#  auto_close_time :datetime
+#  capacity        :integer          not null
+#  cluster_id      :integer          not null
+#  community_id    :integer          not null
+#  created_at      :datetime         not null
+#  creator_id      :integer          not null
+#  dessert         :text
+#  entrees         :text
+#  formula_id      :integer          not null
+#  kids            :text
+#  menu_posted_at  :datetime
+#  no_allergens    :boolean          default(FALSE), not null
+#  notes           :text
+#  served_at       :datetime         not null
+#  side            :text
+#  status          :string           default("open"), not null
+#  title           :string
+#  updated_at      :datetime         not null
+#
 FactoryBot.define do
   factory :meal, class: "Meals::Meal" do
     transient do

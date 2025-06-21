@@ -1,5 +1,24 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: accounts
+#
+#  id                 :integer          not null, primary key
+#  balance_due        :decimal(10, 2)   default(0.0), not null
+#  cluster_id         :integer          not null
+#  community_id       :integer          not null
+#  created_at         :datetime         not null
+#  credit_limit       :decimal(10, 2)
+#  current_balance    :decimal(10, 2)   default(0.0), not null
+#  due_last_statement :decimal(10, 2)
+#  household_id       :integer          not null
+#  last_statement_id  :integer
+#  last_statement_on  :date
+#  total_new_charges  :decimal(10, 2)   default(0.0), not null
+#  total_new_credits  :decimal(10, 2)   default(0.0), not null
+#  updated_at         :datetime         not null
+#
 require "rails_helper"
 
 describe Billing::Account do

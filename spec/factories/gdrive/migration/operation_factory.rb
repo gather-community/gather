@@ -1,5 +1,25 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: gdrive_migration_operations
+#
+#  id                  :bigint           not null, primary key
+#  active              :boolean          default(TRUE), not null
+#  cluster_id          :integer          not null
+#  contact_email       :string           not null
+#  contact_name        :string           not null
+#  created_at          :datetime         not null
+#  dest_folder_id      :string(255)
+#  src_folder_id       :string(255)
+#  start_page_token    :string
+#  updated_at          :datetime         not null
+#  webhook_channel_id  :string
+#  webhook_expires_at  :datetime
+#  webhook_resource_id :string
+#  webhook_secret      :string
+#  community_id        :bigint           not null
+#
 FactoryBot.define do
   factory :gdrive_migration_operation, class: "GDrive::Migration::Operation" do
     community { Defaults.community }

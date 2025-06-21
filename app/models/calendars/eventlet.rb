@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Calendars
+module Calendars
   class Eventlet < ApplicationRecord
     acts_as_tenant :cluster
 

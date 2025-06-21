@@ -19,6 +19,7 @@ module Calendars
     alias_method :privileged_changer?, :privileged_changer
 
     has_many :eventlets, inverse_of: :event, dependent: :destroy
+    has_many :picks, class_name: "Calendars::Pick", inverse_of: :event, dependent: :destroy
     belongs_to :creator, class_name: "User"
     belongs_to :sponsor, class_name: "User"
     belongs_to :calendar, inverse_of: :events

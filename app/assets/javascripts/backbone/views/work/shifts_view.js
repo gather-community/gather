@@ -26,7 +26,7 @@ Gather.Views.Work.ShiftsView = Backbone.View.extend({
       cache: false,
       success: response => {
         this.$(".shifts-main").replaceWith(response.shifts);
-        this.$(".pagination").replaceWith(response.pagination);
+        this.$(".pagination-wrapper").replaceWith(response.pagination);
       }
     });
   },

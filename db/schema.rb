@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_06_21_181423) do
+ActiveRecord::Schema[7.0].define(version: 2025_06_25_112539) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -85,6 +85,20 @@ ActiveRecord::Schema[7.0].define(version: 2025_06_21_181423) do
     t.index ["community_id"], name: "index_billing_templates_on_community_id"
   end
 
+  create_table "calendar_eventlets", force: :cascade do |t|
+    t.boolean "all_day", default: false, null: false
+    t.bigint "calendar_id", null: false
+    t.bigint "cluster_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "ends_at", null: false
+    t.bigint "event_id", null: false
+    t.datetime "starts_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["calendar_id"], name: "index_calendar_eventlets_on_calendar_id"
+    t.index ["cluster_id"], name: "index_calendar_eventlets_on_cluster_id"
+    t.index ["event_id"], name: "index_calendar_eventlets_on_event_id"
+  end
+
   create_table "calendar_events", id: :serial, force: :cascade do |t|
     t.boolean "all_day", default: false, null: false
     t.integer "calendar_id", null: false
@@ -145,6 +159,17 @@ ActiveRecord::Schema[7.0].define(version: 2025_06_21_181423) do
     t.check_constraint "type::text <> 'Calendars::Group'::text OR type::text = 'Calendars::Group'::text AND group_id IS NULL", name: "group_id_null"
   end
 
+  create_table "calendar_picks", force: :cascade do |t|
+    t.bigint "calendar_id", null: false
+    t.bigint "cluster_id", null: false
+    t.datetime "created_at", null: false
+    t.bigint "event_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["calendar_id"], name: "index_calendar_picks_on_calendar_id"
+    t.index ["cluster_id"], name: "index_calendar_picks_on_cluster_id"
+    t.index ["event_id"], name: "index_calendar_picks_on_event_id"
+  end
+
   create_table "calendar_protocolings", id: :serial, force: :cascade do |t|
     t.integer "calendar_id", null: false
     t.integer "cluster_id", null: false
@@ -184,31 +209,6 @@ ActiveRecord::Schema[7.0].define(version: 2025_06_21_181423) do
     t.datetime "updated_at", precision: nil, null: false
     t.index ["cluster_id"], name: "index_calendar_shared_guidelines_on_cluster_id"
     t.index ["community_id"], name: "index_calendar_shared_guidelines_on_community_id"
-  end
-
-  create_table "calendars_eventlets", force: :cascade do |t|
-    t.boolean "all_day", default: false, null: false
-    t.bigint "calendar_id", null: false
-    t.bigint "cluster_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "ends_at", null: false
-    t.bigint "event_id", null: false
-    t.datetime "starts_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["calendar_id"], name: "index_calendars_eventlets_on_calendar_id"
-    t.index ["cluster_id"], name: "index_calendars_eventlets_on_cluster_id"
-    t.index ["event_id"], name: "index_calendars_eventlets_on_event_id"
-  end
-
-  create_table "calendars_picks", force: :cascade do |t|
-    t.bigint "calendar_id", null: false
-    t.bigint "cluster_id", null: false
-    t.datetime "created_at", null: false
-    t.bigint "event_id", null: false
-    t.datetime "updated_at", null: false
-    t.index ["calendar_id"], name: "index_calendars_picks_on_calendar_id"
-    t.index ["cluster_id"], name: "index_calendars_picks_on_cluster_id"
-    t.index ["event_id"], name: "index_calendars_picks_on_event_id"
   end
 
   create_table "clusters", id: :serial, force: :cascade do |t|
@@ -1233,6 +1233,9 @@ ActiveRecord::Schema[7.0].define(version: 2025_06_21_181423) do
   add_foreign_key "billing_template_member_types", "people_member_types", column: "member_type_id"
   add_foreign_key "billing_templates", "clusters"
   add_foreign_key "billing_templates", "communities"
+  add_foreign_key "calendar_eventlets", "calendar_events", column: "event_id"
+  add_foreign_key "calendar_eventlets", "calendar_nodes", column: "calendar_id"
+  add_foreign_key "calendar_eventlets", "clusters"
   add_foreign_key "calendar_events", "calendar_nodes", column: "calendar_id"
   add_foreign_key "calendar_events", "clusters"
   add_foreign_key "calendar_events", "groups"
@@ -1245,6 +1248,9 @@ ActiveRecord::Schema[7.0].define(version: 2025_06_21_181423) do
   add_foreign_key "calendar_nodes", "calendar_nodes", column: "group_id"
   add_foreign_key "calendar_nodes", "clusters"
   add_foreign_key "calendar_nodes", "communities"
+  add_foreign_key "calendar_picks", "calendar_events", column: "event_id"
+  add_foreign_key "calendar_picks", "calendar_nodes", column: "calendar_id"
+  add_foreign_key "calendar_picks", "clusters"
   add_foreign_key "calendar_protocolings", "calendar_nodes", column: "calendar_id"
   add_foreign_key "calendar_protocolings", "calendar_protocols", column: "protocol_id"
   add_foreign_key "calendar_protocolings", "clusters"
@@ -1252,12 +1258,6 @@ ActiveRecord::Schema[7.0].define(version: 2025_06_21_181423) do
   add_foreign_key "calendar_protocols", "communities"
   add_foreign_key "calendar_shared_guidelines", "clusters"
   add_foreign_key "calendar_shared_guidelines", "communities"
-  add_foreign_key "calendars_eventlets", "calendar_events", column: "event_id"
-  add_foreign_key "calendars_eventlets", "calendar_nodes", column: "calendar_id"
-  add_foreign_key "calendars_eventlets", "clusters"
-  add_foreign_key "calendars_picks", "calendar_events", column: "event_id"
-  add_foreign_key "calendars_picks", "calendar_nodes", column: "calendar_id"
-  add_foreign_key "calendars_picks", "clusters"
   add_foreign_key "communities", "clusters"
   add_foreign_key "domain_ownerships", "clusters"
   add_foreign_key "domain_ownerships", "communities"

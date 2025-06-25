@@ -19,7 +19,6 @@ module Calendars
     has_many :protocolings, class_name: "Calendars::Protocoling", inverse_of: :calendar,
                             foreign_key: "calendar_id", dependent: :destroy
     has_many :protocols, through: :protocolings
-    has_many :picks, class_name: "Calendars::Pick", inverse_of: :calendar, dependent: :destroy
 
     has_one_attached :photo
     accepts_attachment_via_form :photo

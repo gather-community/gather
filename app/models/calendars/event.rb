@@ -18,7 +18,7 @@ module Calendars
     attr_writer :uid
     alias_method :privileged_changer?, :privileged_changer
 
-    has_many :eventlets, inverse_of: :event, dependent: :destroy
+    has_many :eventlets, inverse_of: :event, dependent: :destroy, autosave: true
     belongs_to :creator, class_name: "User"
     belongs_to :sponsor, class_name: "User"
     belongs_to :calendar, inverse_of: :events
@@ -51,6 +51,9 @@ module Calendars
     validate :no_overlap
     validate :apply_rules
     validate lambda { |r| meal&.event_handler&.validate_event(r) }
+
+    # Temporary method to dual write Eventlet model
+    before_validation :sync_eventlet
 
     before_validation :normalize
 
@@ -144,6 +147,17 @@ module Calendars
     end
 
     private
+
+    def sync_eventlet
+      # Ensure only one
+      (eventlets[1..-1] || []).each(&:destroy)
+      eventlet = eventlets[0] || eventlets.build
+
+      eventlet.event_id = id
+      eventlet.calendar_id = calendar_id
+      eventlet.starts_at = starts_at
+      eventlet.ends_at = ends_at
+    end
 
     def normalize
       self.all_day = false if rule_set.timed_events_only?

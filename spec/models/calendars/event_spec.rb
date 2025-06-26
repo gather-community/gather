@@ -12,6 +12,32 @@ describe Calendars::Event do
     create(:event, group: create(:group))
   end
 
+  describe "eventlet sync" do
+    it "syncs eventlet on create and update" do
+      event = create(:event, starts_at: "2016-04-07 12:00", ends_at: "2016-04-07 13:00")
+
+      expect(event.eventlets.size).to eq(1)
+
+      eventlet = event.eventlets.first
+      expect(eventlet.event_id).to eq(event.id)
+      expect(eventlet.calendar_id).to eq(event.calendar_id)
+      expect(eventlet.cluster_id).to eq(event.cluster_id)
+      expect(eventlet.starts_at).to eq("2016-04-07 12:00")
+      expect(eventlet.ends_at).to eq("2016-04-07 13:00")
+
+      event.update!(starts_at: "2016-04-07 13:00", ends_at: "2016-04-07 14:00")
+      expect(eventlet.starts_at).to eq("2016-04-07 13:00")
+      expect(eventlet.ends_at).to eq("2016-04-07 14:00")
+
+      expect(event.eventlets.size).to eq(1)
+
+      # Ensure that references still intact
+      eventlet = event.eventlets.first.reload
+      expect(eventlet.starts_at).to eq("2016-04-07 13:00")
+      expect(eventlet.ends_at).to eq("2016-04-07 14:00")
+    end
+  end
+
   describe "normalization" do
     let(:event) { build(:event, submitted) }
 

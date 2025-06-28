@@ -7,6 +7,9 @@ module Calendars
     belongs_to :event, class_name: "Calendars::Event", inverse_of: :eventlets
     belongs_to :calendar, class_name: "Calendars::Calendar", inverse_of: :eventlets
 
+    delegate :community_id, :color, to: :calendar
+    delegate :name, to: :calendar, prefix: true
+
     scope :between, ->(range) { where("starts_at < ? AND ends_at > ?", range.last, range.first) }
   end
 end

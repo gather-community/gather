@@ -32,12 +32,13 @@ module Calendars
     # and sponsor_community for other uses.
     delegate :community, to: :calendar, allow_nil: true
 
+    delegate :community_id, :color, to: :calendar
+    delegate :name, to: :calendar, prefix: true
+
     delegate :household, to: :creator
     delegate :users, to: :household, prefix: true
     delegate :name, :community, to: :creator, prefix: true
     delegate :community, to: :sponsor, prefix: true, allow_nil: true
-    delegate :community_id, :color, to: :calendar
-    delegate :name, to: :calendar, prefix: true
     delegate :access_level, :fixed_start_time?, :fixed_end_time?, :requires_kind?, to: :rule_set
 
     validates :name, presence: true, length: {maximum: NAME_MAX_LENGTH}

@@ -26,8 +26,6 @@ module Calendars
     belongs_to :group, class_name: "Groups::Group", inverse_of: :events
 
     scope :between, ->(range) { where("starts_at < ? AND ends_at > ?", range.last, range.first) }
-    scope :with_max_age, ->(age) { where("starts_at >= ?", Time.current - age) }
-    scope :oldest_first, -> { order(:starts_at, :ends_at) }
     scope :related_to, ->(user) { where(creator: user).or(where(sponsor: user)) }
 
     # Satisfies ducktype expected by policies. Prefer more explicit variants creator_community

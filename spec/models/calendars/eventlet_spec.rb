@@ -7,8 +7,12 @@ describe Calendars::Eventlet do
   let(:calendar) { create(:calendar, allow_overlap: allow_overlap) }
   let(:calendar2) { create(:calendar) }
 
-  it "has a valid factory" do
-    create(:eventlet)
+  it "has a valid factory with event and not duplicate eventlets" do
+    eventlet = create(:eventlet)
+    expect(Calendars::Eventlet.count).to eq(1)
+    expect(Calendars::Event.count).to eq(1)
+    expect(eventlet.event).not_to be_nil
+    expect(eventlet.event.reload).not_to be_nil
   end
 
   describe "normalization" do

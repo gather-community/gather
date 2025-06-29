@@ -10,7 +10,11 @@ module Calendars
     belongs_to :event, class_name: "Calendars::Event", inverse_of: :eventlets
     belongs_to :calendar, class_name: "Calendars::Calendar", inverse_of: :eventlets
 
-    delegate :kind, to: :event
+    delegate :kind, :meal?, :creator, :group, to: :event
+
+    # Satisfies ducktype expected by policies. Prefer more explicit variants creator_community
+    # and sponsor_community on Event for other uses.
+    delegate :community, to: :calendar, allow_nil: true
 
     delegate :community_id, :color, to: :calendar
     delegate :name, to: :calendar, prefix: true
@@ -66,15 +70,6 @@ module Calendars
       calendar.allow_overlap?
     end
 
-    private
-
-    def normalize
-      self.all_day = false if rule_set.timed_events_only?
-      return unless all_day?
-      self.starts_at = starts_at.midnight
-      self.ends_at = ends_at.midnight + 1.day - 1.second
-    end
-
     # RuleSet needs to know `kind` to give a definitive answer on event permissions.
     # At event grid or event form load time, kind isn't known,
     # so some rules can't be applied until event submission.
@@ -84,6 +79,15 @@ module Calendars
     def rule_set
       # Don't memoize this, it causes all kinds of bugs. Worth the performance hit.
       Rules::RuleSet.build_for(calendar: calendar, kind: kind)
+    end
+
+    private
+
+    def normalize
+      self.all_day = false if rule_set.timed_events_only?
+      return unless all_day?
+      self.starts_at = starts_at.midnight
+      self.ends_at = ends_at.midnight + 1.day - 1.second
     end
   end
 end

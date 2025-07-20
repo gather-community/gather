@@ -59,6 +59,7 @@ shared_context "policy permissions" do
     end
   end
   let(:admin_cmtyB) { create(:admin, community: communityB, first_name: "admin_cmtyB") }
+  let(:admin_cmtyC) { create(:admin, community: communityC, first_name: "admin_cmtyC") }
   let(:inactive_admin) { create(:admin, :inactive, first_name: "inactive_admin") }
   let(:biller) { create(:biller, first_name: "biller") }
   let(:biller_cmtyB) { create(:biller, community: communityB, first_name: "biller_cmtyB") }
@@ -141,6 +142,22 @@ shared_context "policy permissions" do
 
     it "forbids admins from outside community" do
       expect(subject).not_to permit(admin_cmtyB, record)
+    end
+  end
+
+  shared_examples_for "permits admins from any community" do
+    context do
+      let(:actor) { admin }
+      it_behaves_like "errors on permission check without community"
+    end
+    it_behaves_like "permits cluster and super admins"
+
+    it "permits admins from community" do
+      expect(subject).to permit(admin, record)
+    end
+
+    it "permits admins from outside community" do
+      expect(subject).to permit(admin_cmtyB, record)
     end
   end
 
@@ -253,7 +270,13 @@ shared_context "policy permissions" do
   # we should get an error!
   shared_examples_for "errors on permission check without community" do
     context "with nil community" do
-      before { expect(record).to receive(:community).at_least(1).and_return(nil) }
+      before do
+        if record.respond_to?(:community)
+          expect(record).to receive(:community).at_least(1).and_return(nil)
+        else
+          expect(record).to receive(:communities).at_least(1).and_return([])
+        end
+      end
 
       it "errors when checking role permission" do |example|
         example.metadata[:permissions].each do |perm|

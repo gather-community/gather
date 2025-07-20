@@ -13,6 +13,8 @@ Rails.application.routes.draw do
 
   resources :communities, only: :index
 
+  resources :domains, only: %i[index show new create destroy]
+
   namespace :people do
     resources :sign_in_invitations, path: "sign-in-invitations", only: %i[new create]
     resources :birthdays, only: :index

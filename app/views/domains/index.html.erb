@@ -1,0 +1,39 @@
+<% content_for(:title, "Domains") %>
+<% content_for(:action_links) do %>
+  <% if policy(sample_domain).create? %>
+    <%= link_to(icon_tag("plus") << " Add Domain", new_domain_path, class: "btn btn-primary") %>
+  <% end %>
+<% end %>
+
+
+<p>
+  These are the domains on which you can create email lists. For instructions on adding a domain,
+  click <%= link_to "Add Domain", new_domain_path %>.
+</p>
+
+<% if @domains.empty? %>
+  <div class="center-notice">
+    No domains found.
+  </div>
+<% else %>
+  <table class="index part-width">
+    <thead>
+      <tr>
+        <th><%= Domain.human_attribute_name(:name) %></th>
+        <% if multi_community? %>
+          <th><%= Domain.human_attribute_name(:communities) %></th>
+        <% end %>
+      </tr>
+    </thead>
+    <tbody>
+      <% @domains.each do |domain| %>
+        <tr>
+          <td class="name"><%= link_to(domain.name, domain_path(domain)) %></td>
+          <% if multi_community? %>
+            <td class="communities"><%= domain.communities.map(&:name).join(", ") %></td>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

@@ -67,6 +67,8 @@ en:
   confirmations:
     billing/template:
       destroy: "Are you sure you want to delete the template '%{description}' for %{member_types}? This action cannot be undone."
+    domain:
+      destroy: "Are you sure you want to delete the domain '%{name}'? This action cannot be undone."
     groups/group:
       destroy: "Are you sure you want to delete the group '%{name}'? This action cannot be undone."
       deactivate: "Are you sure you want to deactivate the group '%{name}'?"
@@ -169,6 +171,9 @@ en:
     billing/template:
       success:
         destroy: "Template deleted successfully."
+    domain:
+      success:
+        destroy: "Domain deleted successfully."
     gdrive/item:
       success:
         destroy: "Item removed successfully."

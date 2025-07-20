@@ -1,0 +1,44 @@
+<% content_for(:title, "Add Domain") %>
+<div class="row">
+  <div class="col-sm-9">
+    <p>
+      To add a domain to Gather:
+    </p>
+    <ol>
+      <li>
+        Consider whether there are mailboxes, forwarding addresses, or mailing lists defined for this domain.
+        <ul>
+          <li>
+            <strong>Mailboxes:</strong> If there are mailboxes defined for this domain, they will stop working if you
+            direct the domain to Gather. To avoid this, you can use a subdomain, e.g. lists.yourdomain.com instead
+            of yourdomain.com.
+          </li>
+          <li>
+            <strong>Forwarding addresses:</strong> If there are forwarding addresses defined for this domain, you can migrate them
+            to Gather. Please contact <%= mail_to("support@gather.coop") %>.
+          </li>
+          <li>
+            <strong>Mailing lists:</strong> If there are mailing lists defined for this domain, you can migrate them to Gather.
+            Please contact <%= mail_to("support@gather.coop") %>.
+          </li>
+        </ul>
+      </li>
+      <li>
+        Create the domain below by entering the full domain name, e.g. "yourdomain.com" and clicking "Save".
+      </li>
+      <li>
+        If you are migrating forwarding addresses or mailing lists, ensure these are set up on Gather and ready
+        to receive email when you update the domain to point to Gather.
+      </li>
+      <li>
+        Finally, update the domain to point to Gather. Set the following three DNS records:
+        <p><pre>
+    MX 10 mail.gather.coop
+    MX 20 mail2.gather.coop
+    TXT "v=spf1 mx a:spf.mayfirst.org a:spf.gather.coop -all"</pre></p>
+      </li>
+    </ol>
+  </div>
+</div>
+<br/>
+<%= render("form") %>

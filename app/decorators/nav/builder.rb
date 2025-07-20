@@ -175,6 +175,7 @@ module Nav
         when :groups
           sample_user = User.new(household: sample_household)
           sample_group = Groups::Group.new(communities: [community])
+          sample_domain = Domain.new(communities: [community])
           [
             {
               name: :groups,
@@ -188,6 +189,12 @@ module Nav
               path: h.roles_path,
               permitted: h.policy(sample_user).index?,
               icon: "user-circle"
+            }, {
+              name: :domains,
+              parents: :groups,
+              path: h.domains_path,
+              permitted: h.policy(sample_domain).index?,
+              icon: "cloud"
             }
           ]
         when :calendars

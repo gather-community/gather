@@ -257,6 +257,10 @@ en:
         too_big: "File is too big (maximum %{max} MiB)"
         attached: "File is missing"
       models:
+        domain:
+          attributes:
+            base:
+              at_least_one_ownership: "Please select at least one community"
         gdrive/config:
           attributes:
             org_user_id:

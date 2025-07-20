@@ -65,7 +65,7 @@ RSpec.configure do |config|
   config.include(RequestSpecHelpers, type: :request)
   config.include(GeneralHelpers)
 
-  def register_selenium_chrome_driver(app:, headless:)
+  def register_selenium_chrome_driver(app:, headless:, user_agent: nil)
     args = %w[disable-gpu no-sandbox disable-site-isolation-trials]
     args << "headless" if headless
     options = Selenium::WebDriver::Chrome::Options.new(
@@ -73,6 +73,7 @@ RSpec.configure do |config|
       "goog:loggingPrefs": {browser: "ALL", client: "ALL", driver: "ALL", server: "ALL"}
     )
     options.add_argument("--window-size=1280,2048")
+    options.add_argument("--user-agent=\"#{user_agent}\"") if user_agent
     options.add_preference(:download, prompt_for_download: false,
       default_directory: DownloadHelpers::PATH.to_s)
     options.add_preference(:browser, set_download_behavior: {behavior: "allow"})
@@ -85,6 +86,10 @@ RSpec.configure do |config|
 
   Capybara.register_driver(:selenium_chrome_headless) do |app|
     register_selenium_chrome_driver(app: app, headless: true)
+  end
+
+  Capybara.register_driver(:selenium_chrome_headless_mobile) do |app|
+    register_selenium_chrome_driver(app: app, headless: true, user_agent: "Mozilla/5.0 (iPhone; CPU iPhone OS 17_7_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/137.0.7151.34 Mobile/15E148 Safari/604.1")
   end
 
   Capybara.register_driver(:selenium_chrome_headed) do |app|
@@ -104,6 +109,10 @@ RSpec.configure do |config|
 
   config.before(:each, type: :system) do
     driven_by :default
+  end
+
+  config.before(:each, type: :system, mobile: true) do
+    driven_by :selenium_chrome_headless_mobile
   end
 
   config.before(:each, type: :system, js: true) do

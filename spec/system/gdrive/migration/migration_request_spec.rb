@@ -15,12 +15,12 @@ describe "gdrive migration request" do
     use_subdomain(migration_request.operation.community.slug)
   end
 
-  scenario "happy path" do
-    page.driver.header('User-Agent', 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_7_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/137.0.7151.34 Mobile/15E148 Safari/604.1')
+  scenario "mobile", mobile: true do
     visit(gdrive_migration_request_path(token: migration_request.token))
     expect(page).to have_content("It looks like you're using a mobile device.")
+  end
 
-    page.driver.header('User-Agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36')
+  scenario "happy path", js: true do
     visit(gdrive_migration_request_path(token: migration_request.token))
     expect(page).to have_content("Introduction")
     click_on("Yes, I am ready to help!")

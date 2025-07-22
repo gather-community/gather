@@ -3,6 +3,7 @@
 # A group of related communities.
 class Cluster < ApplicationRecord
   has_many :communities, inverse_of: :cluster, dependent: :destroy
+  has_many :groups, class_name: "Groups::Group", dependent: :destroy
 
   before_create :generate_sso_secret
 

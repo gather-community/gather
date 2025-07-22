@@ -77,6 +77,7 @@ gem "with_advisory_lock", git: "https://github.com/ClosureTree/with_advisory_loc
 
 group :development, :test do
   gem "awesome_print", "~> 1.6"
+  gem "bcrypt_pbkdf", ">= 1.0", "< 2.0" # For Capistrano
   gem "byebug", "~> 11.0"
   gem "capistrano-bundler", "~> 1.0"
   gem "capistrano-passenger", "~> 0.2"
@@ -85,14 +86,15 @@ group :development, :test do
   gem "capistrano3-delayed-job", "~> 1.0"
   gem "capybara", "~> 3.29"
   gem "database_cleaner", "~> 1.7"
+  gem "ed25519", ">= 1.2", "< 2.0" # For Capistrano
   gem "fix-db-schema-conflicts", "~> 3.0"
   gem "launchy", "~> 2.4" # For opening screenshots
-  gem "pry", "~> 0.14"
   gem "pry-nav", "~> 1.0"
   gem "pry-rails", "~> 0.3"
+  gem "pry", "~> 0.14"
   gem "rspec-rails", "~> 4.0"
-  gem "rubocop", "~> 1.0"
   gem "rubocop-rails", "2.9"
+  gem "rubocop", "~> 1.0"
   gem "selenium-webdriver", "~> 4.0"
   gem "spring", "~> 3.0"
   gem "standard", "~> 1.24"

@@ -34,6 +34,8 @@ en:
         name: "e.g. Game night"
       billing_transaction:
         description: "e.g. Check #12345"
+      gdrive_config:
+        org_user_id: "e.g. yourname@yourdomain.com"
       user:
         birthday_str: "e.g. Feb 29 1981 (year optional)"
       people_memorial:
@@ -77,7 +79,7 @@ en:
       gdrive_config:
         org_user_id: "This is the user ID for your community's Google Workspace user. It should have Manager access to your communtiy Shared Drive."
         client_id: "Ends in .apps.googleusercontent.com"
-        client_secret: "Leave blank to leave secret unchanged."
+        client_secret_to_write: "Leave blank to leave secret unchanged."
       gdrive_item:
         external_id: "You can get this ID from the URL of the item in Google Drive. It should be a series of letters, numbers, '_', and '-'. Examples: 0AExZ3_Cu5q7uUk9PVA and 1KRjAC5Bt4WtLilnkUeTvF_okbLgONGQuDkrc."
       gdrive_item_group:

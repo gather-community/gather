@@ -7,7 +7,7 @@
     "@stripe/stripe-js": "^5.2.0"
   },
   "scripts": {
-    "build": "esbuild app/javascript/*.* --bundle --sourcemap --outdir=app/assets/builds --public-path=assets --watch --external:@stripe/stripe-js",
+    "build": "esbuild app/javascript/*.* --bundle --sourcemap --outdir=app/assets/builds --public-path=assets --external:@stripe/stripe-js",
     "check-types": "tsc --noEmit --watch --preserveWatchOutput"
   },
   "devDependencies": {

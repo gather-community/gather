@@ -20,7 +20,10 @@
 <% if @auth_required %>
   <% if @config.new_record? %>
     <h2>Google Workspace Credentials</h2>
-    <p>Your community is not yet connected to Google Drive. Add your Google Workspace credentials to connect.</p>
+    <p>
+      Your community is not yet connected to Google Drive. Add your Google Workspace credentials to connect.
+      See the <%= link_to("config guide", gdrive_guide_path) %> for how to get started.
+    </p>
     <%= render("config_form") %>
   <% else %>
     <h2>Authentication</h2>

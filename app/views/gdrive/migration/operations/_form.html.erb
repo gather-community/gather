@@ -1,4 +1,11 @@
 <%= gather_form_for(@operation) do |f| %>
+  <% if controller.action_name == "new" %>
+    <p>
+      Enter the information below to set up your migration.
+      A file scan will be initiated and
+      you will be redirected to the migration dashboard.
+    </p>
+  <% end %>
   <%= f.input :src_folder_id, disabled: controller.action_name == "edit"  %>
   <%= f.input :dest_folder_id, disabled: controller.action_name == "edit" %>
   <%= f.input :contact_name %>

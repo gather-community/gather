@@ -260,6 +260,7 @@ Rails.application.routes.draw do
     get "item/:item_id", to: "browse#index", as: :browse
 
     get "/config", to: "config#index", as: :config
+    get "/config/guide", to: "config#guide", as: :guide
     post "/config", to: "config#update"
     patch "/config", to: "config#update"
 

@@ -43,6 +43,10 @@ module GDrive
       set_auth_required
     end
 
+    def guide
+      authorize(current_community, :setup?, policy_class: SetupPolicy)
+    end
+
     def update
       authorize(current_community, :setup?, policy_class: SetupPolicy)
       @config = Config.find_by(community: current_community) || Config.new(community: current_community)

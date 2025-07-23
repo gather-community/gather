@@ -32,6 +32,8 @@ en:
         calendar_ids: "Select calendars or leave blank to apply to all ..."
       calendars_event:
         name: "e.g. Game night"
+      domain:
+        name: "e.g. yourdomain.com"
       billing_transaction:
         description: "e.g. Check #12345"
       gdrive_config:
@@ -76,6 +78,8 @@ en:
       calendars_export:
         dont_personalize: "By default, calendar exports are tailored to you and your household so you shouldn't share your export links. If you need a non-personalized link to use in a public place, check this box."
         own_only: "Check this box to only export events that you created for yourself. Group events and meal events won't be included."
+      domain:
+        communities: "What communities this domain is available/visible to."
       gdrive_config:
         org_user_id: "This is the user ID for your community's Google Workspace user. It should have Manager access to your communtiy Shared Drive."
         client_id: "Ends in .apps.googleusercontent.com"

@@ -151,6 +151,18 @@ class ApplicationPolicy
       active_cluster_admin? || active_super_admin?
   end
 
+  # For single-community setups, this is the same as active_admin?
+  def active_admin_for_at_least_one_record_community?
+    active? && user.global_role?(:admin) && record_tied_to_at_least_one_user_community? ||
+      active_cluster_admin? || active_super_admin?
+  end
+
+  # For single-community setups, this is the same as active_admin?
+  def active_admin_for_all_record_communities?
+    active? && user.global_role?(:admin) && record_tied_to_all_user_communities? ||
+      active_cluster_admin? || active_super_admin?
+  end
+
   def active_cluster_admin?
     active? && user.global_role?(:cluster_admin) && record_tied_to_user_cluster? || active_super_admin?
   end
@@ -169,6 +181,16 @@ class ApplicationPolicy
 
   def record_tied_to_user_community?
     record_communities.nil? || record_communities.include?(user.community)
+  end
+
+  # For single community setups, this is the same as record_tied_to_user_community?
+  def record_tied_to_at_least_one_user_community?
+    record_communities.nil? || record_communities.include?(user.community)
+  end
+
+  # For single community setups, this is the same as record_tied_to_user_community?
+  def record_tied_to_all_user_communities?
+    record_communities.nil? || (user.global_role?(:cluster_admin) || record_communities == [user.community])
   end
 
   def record_tied_to_user_cluster?

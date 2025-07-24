@@ -4,7 +4,7 @@ require "rails_helper"
 
 describe "finalize meal", js: true do
   let!(:actor) { create(:admin) }
-  let!(:meal) { create(:meal, :with_menu, served_at: Time.current - 3.days) }
+  let!(:meal) { create(:meal, :with_menu, title: "Super yumz", served_at: Time.current - 3.days) }
   let!(:user) { create(:user, first_name: "Bo", last_name: "Liz") }
   let!(:signups) { create_list(:meal_signup, 3, meal: meal, diner_counts: [1]) }
   let!(:late_add) { create(:household) }
@@ -88,6 +88,7 @@ describe "finalize meal", js: true do
     click_button("Save")
 
     visit(meals_meal_path(meal))
+    expect(page).to have_content("Super yumz")
     click_link("Finalize")
 
     # Add a new household

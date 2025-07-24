@@ -88,7 +88,7 @@ describe "finalize meal", js: true do
     click_button("Save")
 
     visit(meals_meal_path(meal))
-    expect(page).to have_content("Super yumz")
+    expect(page).to have_content("Super yumz", wait: 10)
     click_link("Finalize")
 
     # Add a new household

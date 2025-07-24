@@ -143,7 +143,7 @@ describe "google oauth" do
     end
   end
 
-  context "without oauth stubbed" do
+  context "without oauth stubbed", desktop: true do
     context "with invalid query params on callback" do
       it "should show error" do
         expect(Gather::ErrorReporter.instance).to receive(:report) do |error|

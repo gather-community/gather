@@ -88,6 +88,10 @@ RSpec.configure do |config|
     register_selenium_chrome_driver(app: app, headless: true)
   end
 
+  Capybara.register_driver(:selenium_chrome_headless_desktop) do |app|
+    register_selenium_chrome_driver(app: app, headless: true, user_agent: "Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/109.0")
+  end
+
   Capybara.register_driver(:selenium_chrome_headless_mobile) do |app|
     register_selenium_chrome_driver(app: app, headless: true, user_agent: "Mozilla/5.0 (iPhone; CPU iPhone OS 17_7_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/137.0.7151.34 Mobile/15E148 Safari/604.1")
   end
@@ -109,6 +113,10 @@ RSpec.configure do |config|
 
   config.before(:each, type: :system) do
     driven_by :rack_test
+  end
+
+  config.before(:each, type: :system, desktop: true) do
+    driven_by :selenium_chrome_headless_desktop
   end
 
   config.before(:each, type: :system, mobile: true) do

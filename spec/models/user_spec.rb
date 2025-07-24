@@ -630,12 +630,18 @@ describe User do
 
     context "with memorial" do
       let!(:memorial) { create(:memorial, user: user) }
-      it { expect { user.destroy }.to raise_error(ActiveRecord::InvalidForeignKey) }
+      it "deletes cleanly" do
+        user.destroy
+        expect { memorial.reload }.to raise_error(ActiveRecord::RecordNotFound)
+      end
     end
 
     context "with memorial message" do
       let!(:memorial_message) { create(:memorial_message, author: user) }
-      it { expect { user.destroy }.to raise_error(ActiveRecord::InvalidForeignKey) }
+      it "deletes cleanly" do
+        user.destroy
+        expect { memorial_message.reload }.to raise_error(ActiveRecord::RecordNotFound)
+      end
     end
   end
 end

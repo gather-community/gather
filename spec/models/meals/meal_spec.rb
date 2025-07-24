@@ -153,8 +153,10 @@ describe Meals::Meal do
         Meals::Finalizer.new(meal).finalize!
       end
 
-      it "raises error" do
-        expect { meal.destroy }.to raise_error(ActiveRecord::DeleteRestrictionError)
+      it "deletes cleanly" do
+        transaction = meal.transactions.first
+        meal.destroy
+        expect { transaction.reload }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
   end

@@ -136,12 +136,20 @@ describe Household do
 
     context "with account" do
       let!(:account) { create(:account, household: household) }
-      it { expect { household.destroy }.to raise_error(ActiveRecord::InvalidForeignKey) }
+
+      it "destroys cleanly" do
+        household.destroy
+        expect { account.reload }.to raise_error(ActiveRecord::RecordNotFound)
+      end
     end
 
     context "with meal signup" do
       let!(:signup) { create(:meal_signup, household: household, diner_counts: [2, 1]) }
-      it { expect { household.destroy }.to raise_error(ActiveRecord::InvalidForeignKey) }
+
+      it "destroys cleanly" do
+        household.destroy
+        expect { signup.reload }.to raise_error(ActiveRecord::RecordNotFound)
+      end
     end
   end
 end

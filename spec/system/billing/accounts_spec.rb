@@ -83,9 +83,10 @@ describe "accounts", js: true do
       Timecop.freeze("2017-04-15 12:00pm") do
         visit(accounts_path)
         click_link("Download Accounts as CSV")
-        wait_for_download
-        expect(download_content).to match(/Number,Household ID/)
-        expect(download_filename).to eq("#{account1.community.slug}-accounts-2017-04-15.csv")
+        downloads = wait_for_downloads
+        expect(downloads.size).to eq(1)
+        expect(File.read(downloads.first)).to match(/Number,Household ID/)
+        expect(File.basename(downloads.first)).to eq("#{account1.community.slug}-accounts-2017-04-15.csv")
       end
     end
 
@@ -94,9 +95,10 @@ describe "accounts", js: true do
       click_link("Download Transactions as CSV")
       year = account1.transactions[0].incurred_on.year
       select(year, from: "dates")
-      wait_for_download
-      expect(download_content).to match(/"ID",Date/)
-      expect(download_filename)
+      downloads = wait_for_downloads
+      expect(downloads.size).to eq(1)
+      expect(File.read(downloads.first)).to match(/"ID",Date/)
+      expect(File.basename(downloads.first))
         .to eq("#{account1.community.slug}-transactions-incd-#{year}0101-#{year}1231.csv")
     end
 
@@ -105,10 +107,12 @@ describe "accounts", js: true do
       click_link("Download Transactions as CSV")
       year = account1.transactions[0].incurred_on.year
       select(year, from: "dates")
-      wait_for_download
-      expect(download_content).to match(/"ID",Date/)
-      expect(download_content).not_to match(/Ye olde transaction/)
-      expect(download_filename).to eq("account-#{account1.id}-transactions-incd-#{year}0101-#{year}1231.csv")
+      downloads = wait_for_downloads
+      expect(downloads.size).to eq(1)
+      expect(File.read(downloads.first)).to match(/"ID",Date/)
+      expect(File.read(downloads.first)).not_to match(/Ye olde transaction/)
+      expect(File.basename(downloads.first))
+        .to eq("account-#{account1.id}-transactions-incd-#{year}0101-#{year}1231.csv")
     end
 
     scenario "download account transaction csv by date recorded" do
@@ -117,9 +121,11 @@ describe "accounts", js: true do
       year = Time.zone.today.year
       select("Recorded within ...", from: "col")
       select(year, from: "dates")
-      wait_for_download
-      expect(download_content).to match(/Ye olde transaction/)
-      expect(download_filename).to eq("account-#{account1.id}-transactions-recd-#{year}0101-#{year}1231.csv")
+      downloads = wait_for_downloads
+      expect(downloads.size).to eq(1)
+      expect(File.read(downloads.first)).to match(/Ye olde transaction/)
+      expect(File.basename(downloads.first))
+        .to eq("account-#{account1.id}-transactions-recd-#{year}0101-#{year}1231.csv")
     end
   end
 

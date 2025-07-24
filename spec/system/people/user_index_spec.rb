@@ -26,9 +26,10 @@ describe "user index", js: true do
       Timecop.freeze("2017-04-15 12:00pm") do
         visit(users_path)
         click_link("Download as CSV")
-        wait_for_download
-        expect(download_content).to match(/"ID",First Name,Last Name/)
-        expect(download_filename).to eq("#{user.community.slug}-directory-2017-04-15.csv")
+        downloads = wait_for_downloads
+        expect(downloads.size).to eq(1)
+        expect(File.read(downloads.first)).to match(/"ID",First Name,Last Name/)
+        expect(File.basename(downloads.first)).to eq("#{user.community.slug}-directory-2017-04-15.csv")
       end
     end
 

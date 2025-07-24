@@ -9,9 +9,11 @@ module DownloadHelpers
 
   def wait_for_downloads
     Timeout.timeout(TIMEOUT) do
-      sleep(0.1)
-      downloads = list_downloads
-      return downloads if downloads.none? { |d| d.end_with?(".crdownload") } && downloads.any?
+      loop do
+        sleep(0.1)
+        downloads = list_downloads
+        return downloads if downloads.none? { |d| d.end_with?(".crdownload") } && downloads.any?
+      end
     end
   end
 

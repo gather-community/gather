@@ -91,7 +91,7 @@ jobs:
         with:
           stack-version: 7.6.0
       - name: Install Chromedriver
-        uses: nanasess/setup-chromedriver@master
+        uses: nanasess/setup-chromedriver@v2
       - name: Configure Chromedriver
         run: |
           export DISPLAY=:99

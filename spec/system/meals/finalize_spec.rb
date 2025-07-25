@@ -87,8 +87,8 @@ describe "finalize meal", js: true do
     choose("PayPal")
     click_button("Save")
 
-    visit(meals_meal_path(meal))
-    expect(page).to have_content("Super yumz", wait: 10)
+    select_lens(:time, "Past")
+    click_link("Super yumz")
     click_link("Finalize")
 
     # Add a new household

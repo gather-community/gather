@@ -3,7 +3,7 @@
 class DomainsController < ApplicationController
   include Destructible
 
-  before_action -> { nav_context(:groups) }
+  before_action -> { nav_context(:groups, :domains) }
   helper_method :sample_domain
   decorates_assigned :domain
 

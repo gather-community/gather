@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_05_24_222129) do
+ActiveRecord::Schema[7.0].define(version: 2025_07_26_183249) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -83,6 +83,20 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_24_222129) do
     t.decimal "value", precision: 10, scale: 2, null: false
     t.index ["cluster_id"], name: "index_billing_templates_on_cluster_id"
     t.index ["community_id"], name: "index_billing_templates_on_community_id"
+  end
+
+  create_table "calendar_eventlets", force: :cascade do |t|
+    t.boolean "all_day", default: false, null: false
+    t.bigint "calendar_id", null: false
+    t.bigint "cluster_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "ends_at", null: false
+    t.bigint "event_id", null: false
+    t.datetime "starts_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["calendar_id"], name: "index_calendar_eventlets_on_calendar_id"
+    t.index ["cluster_id"], name: "index_calendar_eventlets_on_cluster_id"
+    t.index ["event_id"], name: "index_calendar_eventlets_on_event_id"
   end
 
   create_table "calendar_events", id: :serial, force: :cascade do |t|
@@ -1208,6 +1222,9 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_24_222129) do
   add_foreign_key "billing_template_member_types", "people_member_types", column: "member_type_id"
   add_foreign_key "billing_templates", "clusters"
   add_foreign_key "billing_templates", "communities"
+  add_foreign_key "calendar_eventlets", "calendar_events", column: "event_id"
+  add_foreign_key "calendar_eventlets", "calendar_nodes", column: "calendar_id"
+  add_foreign_key "calendar_eventlets", "clusters"
   add_foreign_key "calendar_events", "calendar_nodes", column: "calendar_id"
   add_foreign_key "calendar_events", "clusters"
   add_foreign_key "calendar_events", "groups"

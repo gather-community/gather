@@ -6,11 +6,14 @@ describe Utils::Generators::GroupGenerator do
   let!(:users) { create_list(:user, 12) }
   let(:generator) { described_class.new(community: Defaults.community) }
 
-  it "generates everybody group" do
+  it "generates everybody group and gather.coop domain" do
     generator.generate_seed_data
     expect(Groups::Group.count).to eq(1)
     expect(Groups::Group.first.availability).to eq("everybody")
     expect(Groups::Group.first.memberships).to be_empty
+    expect(Domain.count).to eq(1)
+    expect(Domain.first.name).to eq("#{Defaults.community.slug}.gather.coop")
+    expect(Domain.first.communities).to eq([Defaults.community])
   end
 
   it "generates samples" do

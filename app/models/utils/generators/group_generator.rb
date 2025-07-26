@@ -14,6 +14,7 @@ module Utils
 
       def generate_seed_data
         generate_everybody_group
+        generate_gather_coop_domain
       end
 
       def generate_samples
@@ -28,6 +29,10 @@ module Utils
         create(:group, communities: [community], availability: "everybody",
                        name: "Full Community", kind: "group",
                        description: "General group containing all full users in the community.")
+      end
+
+      def generate_gather_coop_domain
+        create(:domain, name: "#{community.slug}.gather.coop", communities: [community])
       end
 
       def generate_and_populate_everybody_group

@@ -2,12 +2,11 @@
 
 # A domain owned by one or more communities.
 class Domain < ApplicationRecord
-  # TEST THIS
   DOMAIN_REGEX = /\A([A-Z0-9]([A-Z0-9-]{0,61}[A-Z0-9])?)([.][A-Z0-9]([A-Z0-9-]{0,61}[A-Z0-9])?)*([.][A-Z0-9]([A-Z0-9-]{0,61}[A-Z0-9]))\z/i
 
   acts_as_tenant :cluster
 
-  has_many :ownerships, class_name: "DomainOwnership", dependent: :destroy
+  has_many :ownerships, class_name: "DomainOwnership", dependent: :destroy, inverse_of: :domain
   has_many :communities, through: :ownerships
   has_many :group_mailman_lists, class_name: "Groups::Mailman::List", dependent: :destroy
 

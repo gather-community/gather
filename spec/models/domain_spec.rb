@@ -91,6 +91,57 @@ describe Domain do
         expect(domain_with_multiple_ownerships).to be_valid
       end
     end
+
+    describe "*.gather.coop domain must match community slug" do
+      context "multiple communities" do
+        let!(:community) { create(:community, slug: "community1") }
+        let!(:community2) { create(:community, slug: "community2") }
+
+        context "when domain matches at least one community slug" do
+          let(:domain) { build(:domain, name: "community1.gather.coop", communities: [community, community2]) }
+
+          it "is valid" do
+            expect(domain).to be_valid
+          end
+        end
+
+        context "when domain does not match any community slug" do
+          let(:domain) { build(:domain, name: "community3.gather.coop", communities: [community, community2]) }
+
+          it "is invalid" do
+            expect(domain).not_to be_valid
+            expect(domain.errors[:name]).to include("gather.coop domains must match at least one community associated with the domain")
+          end
+        end
+      end
+
+      context "single community" do
+        let!(:community) { create(:community, slug: "community1") }
+        let(:domain) { build(:domain, name: "community1.gather.coop", communities: [community]) }
+
+        it "is valid" do
+          expect(domain).to be_valid
+        end
+
+        context "when domain does not match community slug" do
+          let(:domain) { build(:domain, name: "community2.gather.coop", communities: [community]) }
+
+          it "is invalid" do
+            expect(domain).not_to be_valid
+            expect(domain.errors[:name]).to include("gather.coop domains must match the community associated with the domain")
+          end
+        end
+      end
+
+      context "complex prefix" do
+        let!(:community) { create(:community, slug: "community1") }
+        let(:domain) { build(:domain, name: "community1.foo.gather.coop", communities: [community]) }
+
+        it "is invalid" do
+          expect(domain).not_to be_valid
+        end
+      end
+    end
   end
 
   describe "scopes" do

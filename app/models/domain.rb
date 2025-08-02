@@ -2,12 +2,11 @@
 
 # A domain owned by one or more communities.
 class Domain < ApplicationRecord
-  # TEST THIS
   DOMAIN_REGEX = /\A([A-Z0-9]([A-Z0-9-]{0,61}[A-Z0-9])?)([.][A-Z0-9]([A-Z0-9-]{0,61}[A-Z0-9])?)*([.][A-Z0-9]([A-Z0-9-]{0,61}[A-Z0-9]))\z/i
 
   acts_as_tenant :cluster
 
-  has_many :ownerships, class_name: "DomainOwnership", dependent: :destroy
+  has_many :ownerships, class_name: "DomainOwnership", dependent: :destroy, inverse_of: :domain
   has_many :communities, through: :ownerships
   has_many :group_mailman_lists, class_name: "Groups::Mailman::List", dependent: :destroy
 
@@ -23,6 +22,7 @@ class Domain < ApplicationRecord
   validates :name, presence: true, format: {with: DOMAIN_REGEX}
   validate :name_unique_in_system
   validate :at_least_one_ownership
+  validate :gather_coop_domain_must_match_community_slug
 
   private
 
@@ -37,5 +37,18 @@ class Domain < ApplicationRecord
   def at_least_one_ownership
     return if ownerships.reject(&:marked_for_destruction?).any?
     errors.add(:base, :at_least_one_ownership)
+  end
+
+  def gather_coop_domain_must_match_community_slug
+    return if name.blank?
+    suffix = ".gather.coop"
+    return unless name.end_with?(suffix)
+    prefix = name.delete_suffix(suffix)
+    return if communities.any? { |c| c.slug == prefix }
+    if communities.one?
+      errors.add(:name, "gather.coop domains must match the community associated with the domain")
+    else
+      errors.add(:name, "gather.coop domains must match at least one community associated with the domain")
+    end
   end
 end

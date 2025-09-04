@@ -1,5 +1,17 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: meal_signup_parts
+#
+#  id         :bigint           not null, primary key
+#  cluster_id :bigint           not null
+#  count      :integer          not null
+#  created_at :datetime         not null
+#  signup_id  :bigint           not null
+#  type_id    :bigint           not null
+#  updated_at :datetime         not null
+#
 module Meals
   # Joins a meal signup object to its constituent meal types.
   class SignupPart < ApplicationRecord

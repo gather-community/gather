@@ -1,5 +1,19 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: reminder_deliveries
+#
+#  id          :bigint           not null, primary key
+#  cluster_id  :integer          not null
+#  created_at  :datetime         not null
+#  deliver_at  :datetime         not null
+#  meal_id     :bigint
+#  reminder_id :integer          not null
+#  shift_id    :bigint
+#  type        :string           not null
+#  updated_at  :datetime         not null
+#
 require "rails_helper"
 
 # This spec covers base class behaviors like the deliver_at computation.

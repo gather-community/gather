@@ -1,5 +1,21 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: gdrive_migration_scans
+#
+#  id                 :bigint           not null, primary key
+#  cancel_reason      :string(128)
+#  cluster_id         :bigint           not null
+#  created_at         :datetime         not null
+#  error_count        :integer          default(0), not null
+#  log_data           :jsonb
+#  operation_id       :bigint           not null
+#  scanned_file_count :integer          default(0), not null
+#  scope              :string(16)       default("full"), not null
+#  status             :string(32)       default("new"), not null
+#  updated_at         :datetime         not null
+#
 module GDrive
   module Migration
     # Models a single scan attempt, whether it be a user-initiated full scan

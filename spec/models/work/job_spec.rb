@@ -1,5 +1,24 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: work_jobs
+#
+#  id                     :bigint           not null, primary key
+#  cluster_id             :integer          not null
+#  created_at             :datetime         not null
+#  description            :text             not null
+#  double_signups_allowed :boolean          default(FALSE)
+#  hours                  :decimal(6, 2)    not null
+#  hours_per_shift        :decimal(6, 2)
+#  meal_role_id           :bigint
+#  period_id              :integer          not null
+#  requester_id           :integer
+#  slot_type              :string(32)       default("fixed"), not null
+#  time_type              :string(32)       default("date_time"), not null
+#  title                  :string(128)      not null
+#  updated_at             :datetime         not null
+#
 require "rails_helper"
 
 describe Work::Job do

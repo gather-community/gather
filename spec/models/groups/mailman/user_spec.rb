@@ -1,5 +1,16 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: group_mailman_users
+#
+#  id         :bigint           not null, primary key
+#  cluster_id :bigint           not null
+#  created_at :datetime         not null
+#  remote_id  :string           not null
+#  updated_at :datetime         not null
+#  user_id    :bigint           not null
+#
 require "rails_helper"
 
 describe Groups::Mailman::User do

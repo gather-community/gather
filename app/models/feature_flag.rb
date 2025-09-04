@@ -1,5 +1,16 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: feature_flags
+#
+#  id         :bigint           not null, primary key
+#  created_at :datetime         not null
+#  interface  :string           default("basic"), not null
+#  name       :string           not null
+#  status     :boolean
+#  updated_at :datetime         not null
+#
 # A flag that indicates whether a feature is enabled.
 class FeatureFlag < ApplicationRecord
   has_many :feature_flag_users, dependent: :destroy, inverse_of: :feature_flag

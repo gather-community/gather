@@ -1,5 +1,17 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: meal_cost_parts
+#
+#  id         :bigint           not null, primary key
+#  cluster_id :bigint           not null
+#  cost_id    :bigint           not null
+#  created_at :datetime         not null
+#  type_id    :bigint           not null
+#  updated_at :datetime         not null
+#  value      :decimal(10, 2)
+#
 module Meals
   # Joins a meal cost object to its constituent meal types.
   class CostPart < ApplicationRecord

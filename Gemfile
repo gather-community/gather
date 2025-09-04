@@ -76,6 +76,7 @@ gem "wisper-activerecord", "~> 1.0"
 gem "with_advisory_lock", git: "https://github.com/ClosureTree/with_advisory_lock", branch: "master"
 
 group :development, :test do
+  gem "annotate", "~> 3.2.0"
   gem "awesome_print", "~> 1.6"
   gem "bcrypt_pbkdf", ">= 1.0", "< 2.0" # For Capistrano
   gem "byebug", "~> 11.0"

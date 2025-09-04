@@ -1,5 +1,15 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: domains
+#
+#  id         :bigint           not null, primary key
+#  cluster_id :bigint           not null
+#  created_at :datetime         not null
+#  name       :string           not null
+#  updated_at :datetime         not null
+#
 require "rails_helper"
 
 describe Domain do

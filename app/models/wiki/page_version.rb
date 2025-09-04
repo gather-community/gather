@@ -1,5 +1,19 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: wiki_page_versions
+#
+#  id         :integer          not null, primary key
+#  cluster_id :integer          not null
+#  comment    :string
+#  content    :text
+#  number     :integer          not null
+#  page_id    :integer          not null
+#  title      :string           not null
+#  updated_at :datetime         not null
+#  updater_id :integer
+#
 module Wiki
   class PageVersion < ApplicationRecord
     acts_as_tenant :cluster

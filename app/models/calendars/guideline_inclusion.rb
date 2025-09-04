@@ -1,5 +1,14 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: calendar_guideline_inclusions
+#
+#  id                   :integer          not null, primary key
+#  calendar_id          :integer          not null
+#  cluster_id           :integer          not null
+#  shared_guidelines_id :integer          not null
+#
 # Join class for Calendar and SharedGuidelines
 module Calendars
   class GuidelineInclusion < ApplicationRecord

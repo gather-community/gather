@@ -18,6 +18,7 @@ module Calendars
     attr_writer :uid
     alias_method :privileged_changer?, :privileged_changer
 
+    has_many :eventlets, inverse_of: :event, dependent: :destroy, autosave: true
     belongs_to :creator, class_name: "User"
     belongs_to :sponsor, class_name: "User"
     belongs_to :calendar, inverse_of: :events
@@ -25,21 +26,20 @@ module Calendars
     belongs_to :group, class_name: "Groups::Group", inverse_of: :events
 
     scope :between, ->(range) { where("starts_at < ? AND ends_at > ?", range.last, range.first) }
-    scope :with_max_age, ->(age) { where("starts_at >= ?", Time.current - age) }
-    scope :oldest_first, -> { order(:starts_at, :ends_at) }
     scope :related_to, ->(user) { where(creator: user).or(where(sponsor: user)) }
 
     # Satisfies ducktype expected by policies. Prefer more explicit variants creator_community
     # and sponsor_community for other uses.
     delegate :community, to: :calendar, allow_nil: true
 
+    delegate :community_id, :color, to: :calendar
+    delegate :name, to: :calendar, prefix: true
+    delegate :access_level, :fixed_start_time?, :fixed_end_time?, :requires_kind?, to: :rule_set
+
     delegate :household, to: :creator
     delegate :users, to: :household, prefix: true
     delegate :name, :community, to: :creator, prefix: true
     delegate :community, to: :sponsor, prefix: true, allow_nil: true
-    delegate :community_id, :color, to: :calendar
-    delegate :name, to: :calendar, prefix: true
-    delegate :access_level, :fixed_start_time?, :fixed_end_time?, :requires_kind?, to: :rule_set
 
     validates :name, presence: true, length: {maximum: NAME_MAX_LENGTH}
     validates :calendar_id, :starts_at, :ends_at, presence: true
@@ -50,6 +50,9 @@ module Calendars
     validate :no_overlap
     validate :apply_rules
     validate lambda { |r| meal&.event_handler&.validate_event(r) }
+
+    # Temporary method to dual write Eventlet model
+    before_validation :sync_eventlet
 
     before_validation :normalize
 
@@ -143,6 +146,17 @@ module Calendars
     end
 
     private
+
+    def sync_eventlet
+      # Ensure only one
+      (eventlets[1..-1] || []).each(&:destroy)
+      eventlet = eventlets[0] || eventlets.build
+
+      eventlet.event_id = id
+      eventlet.calendar_id = calendar_id
+      eventlet.starts_at = starts_at
+      eventlet.ends_at = ends_at
+    end
 
     def normalize
       self.all_day = false if rule_set.timed_events_only?

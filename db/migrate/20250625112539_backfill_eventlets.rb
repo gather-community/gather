@@ -7,5 +7,6 @@ class BackfillEventlets < ActiveRecord::Migration[7.0]
   end
 
   def down
+    execute("DELETE FROM calendar_eventlets")
   end
 end

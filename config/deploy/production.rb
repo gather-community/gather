@@ -6,7 +6,7 @@ role :web, %w[deploy@10.136.121.112 deploy@10.136.121.115]
 role :bg, %w[deploy@10.136.121.113]
 
 # This is not the db server. It's just the server we use to run the migrations.
-role :db, %w[deploy@10.136.121.104]
+role :db, %w[deploy@10.136.121.113]
 
 set :branch, "develop"
 set :rails_env, "production"

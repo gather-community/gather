@@ -10,6 +10,7 @@ set :linked_files, fetch(:linked_files, []).push("config/database.yml")
 set :linked_dirs, fetch(:linked_dirs, []).push("log", "tmp/pids", "tmp/cache", "tmp/sockets",
   "vendor/bundle", "storage")
 set :whenever_identifier, -> { "#{fetch(:application)}_#{fetch(:stage)}" }
+set :whenever_roles, -> { :bg }
 
 # Defining a custom delayed job restart task because we manage it with systemctl.
 # This is allowed because we added `deploy ALL=(ALL) NOPASSWD: /bin/systemctl restart delayed-job.service`

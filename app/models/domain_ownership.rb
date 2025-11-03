@@ -11,7 +11,6 @@
 #  domain_id    :bigint           not null
 #  updated_at   :datetime         not null
 #
-# Connects a communitiy to a domain.
 class DomainOwnership < ApplicationRecord
   acts_as_tenant :cluster
 

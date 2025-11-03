@@ -52,7 +52,6 @@
 #  updated_at             :datetime         not null
 #  work_phone             :string
 #
-# Users are the key to the whole thing!
 
 # Email confirmation info:
 # Rules:

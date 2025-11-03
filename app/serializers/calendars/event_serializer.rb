@@ -20,7 +20,6 @@
 #  starts_at   :datetime         not null
 #  updated_at  :datetime         not null
 #
-# For calendars.
 module Calendars
   class EventSerializer < ApplicationSerializer
     include Rails.application.routes.url_helpers

@@ -9,6 +9,8 @@
 #  cluster_id           :integer          not null
 #  shared_guidelines_id :integer          not null
 #
+
+# Join class for Calendar and SharedGuidelines
 module Calendars
   class GuidelineInclusion < ApplicationRecord
     acts_as_tenant :cluster

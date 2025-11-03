@@ -10,7 +10,8 @@
 #  name       :string           not null
 #  status     :boolean
 #  updated_at :datetime         not null
-#
+
+# A flag that indicates whether a feature is enabled.
 class FeatureFlag < ApplicationRecord
   has_many :feature_flag_users, dependent: :destroy, inverse_of: :feature_flag
   has_many :users, through: :feature_flag_users

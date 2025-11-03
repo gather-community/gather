@@ -16,7 +16,8 @@
 #  role_id       :bigint
 #  type          :string           not null
 #  updated_at    :datetime         not null
-#
+
+# Models a reminder. Abstract class.
 class Reminder < ApplicationRecord
   include Wisper.model
 

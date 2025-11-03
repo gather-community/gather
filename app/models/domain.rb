@@ -10,6 +10,8 @@
 #  name       :string           not null
 #  updated_at :datetime         not null
 #
+
+# A domain owned by one or more communities.
 class Domain < ApplicationRecord
   DOMAIN_REGEX = /\A([A-Z0-9]([A-Z0-9-]{0,61}[A-Z0-9])?)([.][A-Z0-9]([A-Z0-9-]{0,61}[A-Z0-9])?)*([.][A-Z0-9]([A-Z0-9-]{0,61}[A-Z0-9]))\z/i
 

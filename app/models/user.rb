@@ -73,6 +73,8 @@
 #    email must be added, still unconfirmed, sent sign in invite, etc.
 # 7. Directory-only child created with email, not confirmed, can't sign in, later converted to full access,
 #    sent sign in invite, signs in, is confirmed
+
+# Users are the key to the whole thing!
 class User < ApplicationRecord
   include Wisper.model
   include AttachmentFormable

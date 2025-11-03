@@ -16,6 +16,7 @@
 #  sso_secret     :string           not null
 #  updated_at     :datetime         not null
 #
+# This is what it's all about!
 class Community < ApplicationRecord
   include CustomFields
   include SemicolonDisallowable

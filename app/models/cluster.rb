@@ -10,6 +10,7 @@
 #  sso_secret :string           not null
 #  updated_at :datetime         not null
 #
+# A group of related communities.
 class Cluster < ApplicationRecord
   has_many :communities, inverse_of: :cluster, dependent: :destroy
 

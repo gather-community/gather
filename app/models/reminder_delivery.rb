@@ -14,6 +14,8 @@
 #  type        :string           not null
 #  updated_at  :datetime         not null
 #
+
+# Tracks the delivery of a given reminder for a given Shift, in order to prevent duplicate deliveries.
 class ReminderDelivery < ApplicationRecord
   TOO_OLD = 1.hour
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_11_03_224150) do
+ActiveRecord::Schema[7.0].define(version: 2025_11_05_022737) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -711,6 +711,13 @@ ActiveRecord::Schema[7.0].define(version: 2025_11_03_224150) do
     t.datetime "updated_at", null: false
     t.index ["cluster_id"], name: "index_meal_restrictions_on_cluster_id"
     t.index ["community_id"], name: "index_meal_restrictions_on_community_id"
+  end
+
+  create_table "meal_restrictions_signup_parts", id: false, force: :cascade do |t|
+    t.bigint "meal_restriction_id", null: false
+    t.bigint "meal_signup_part_id", null: false
+    t.index ["meal_restriction_id", "meal_signup_part_id"], name: "restriction_signup_part_index"
+    t.index ["meal_signup_part_id", "meal_restriction_id"], name: "signup_part_restriction_index"
   end
 
   create_table "meal_roles", force: :cascade do |t|

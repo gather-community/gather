@@ -29,7 +29,7 @@ FactoryBot.define do
       (evaluator.diner_counts || []).each_with_index do |count, index|
         break if index >= signup.types.size
         next if count.zero?
-        signup.parts.build(count: count, type: signup.types[index])
+        signup.parts.build(count: count, type: signup.types[index], user_id: signup.household.users.first.id)
       end
     end
   end

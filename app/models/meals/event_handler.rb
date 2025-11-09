@@ -91,7 +91,7 @@ module Meals
     def event_name
       prefix = "Meal:"
       title = truncate(meal.decorate.title_or_no_title,
-        length: Calendars::Event::NAME_MAX_LENGTH - prefix.size - 1, escape: false)
+        length: Calendars::EventForm::NAME_MAX_LENGTH - prefix.size - 1, escape: false)
       "#{prefix} #{title}"
     end
 

@@ -110,4 +110,67 @@ describe Calendars::System::BirthdaysCalendar do
     ]
     expect_events(events, *attribs)
   end
+
+  describe "eventlets" do
+    it "returns correct event attribs" do
+      attribs = [{
+        event: {
+          name: "🎂 Jo Fiz",
+          creator_id: nil,
+          note: nil,
+        },
+        starts_at: Time.zone.parse("2021-01-28 00:00"),
+        ends_at: Time.zone.parse("2021-01-28 23:59:59"),
+        all_day: true,
+        linkable: user1,
+        uid: "birthdays_#{user1.id}"
+      }, {
+        event: {
+          name: "🎂 Ko Xiz (13)",
+          creator_id: nil,
+          note: nil,
+        },
+        starts_at: Time.zone.parse("2021-02-19 00:00"),
+        ends_at: Time.zone.parse("2021-02-19 23:59:59"),
+        all_day: true,
+        linkable: user3,
+        uid: "birthdays_#{user3.id}"
+      }, {
+        event: {
+          name: "🎂 Bo Biz", # Don't include age if age > 18
+          creator_id: nil,
+          note: nil,
+        },
+        starts_at: Time.zone.parse("2021-02-28 00:00"), # Observe Feb 29 on Feb 28 in non-leap year
+        ends_at: Time.zone.parse("2021-02-28 23:59:59"),
+        all_day: true,
+        linkable: user2,
+        uid: "birthdays_#{user2.id}"
+      }]
+      eventlets = calendar.eventlets_between(full_range, actor: actor)
+      expect_eventlets(eventlets, *attribs)
+    end
+
+    it "returns correct eventlets inside tighter range" do
+      eventlets = calendar.eventlets_between(Date.new(2021, 2, 1)..Date.new(2021, 2, 20), actor: actor)
+      expect_eventlets(eventlets, {event: {name: "🎂 Ko Xiz (13)"}})
+    end
+
+    it "returns correct eventlets inside longer range" do
+      eventlets = calendar.eventlets_between(Date.new(2020, 2, 1)..Date.new(2023, 2, 20), actor: actor)
+      attribs = [
+        {event: {name: "🎂 Ko Xiz (12)"}, starts_at: Time.zone.parse("19 Feb 2020 00:00:00")},
+        {event: {name: "🎂 Bo Biz"}, starts_at: Time.zone.parse("29 Feb 2020 00:00:00")},
+        {event: {name: "🎂 Jo Fiz"}, starts_at: Time.zone.parse("28 Jan 2021 00:00:00")},
+        {event: {name: "🎂 Ko Xiz (13)"}, starts_at: Time.zone.parse("19 Feb 2021 00:00:00")},
+        {event: {name: "🎂 Bo Biz"}, starts_at: Time.zone.parse("28 Feb 2021 00:00:00")},
+        {event: {name: "🎂 Jo Fiz"}, starts_at: Time.zone.parse("28 Jan 2022 00:00:00")},
+        {event: {name: "🎂 Ko Xiz (14)"}, starts_at: Time.zone.parse("19 Feb 2022 00:00:00")},
+        {event: {name: "🎂 Bo Biz"}, starts_at: Time.zone.parse("28 Feb 2022 00:00:00")},
+        {event: {name: "🎂 Jo Fiz"}, starts_at: Time.zone.parse("28 Jan 2023 00:00:00")},
+        {event: {name: "🎂 Ko Xiz (15)"}, starts_at: Time.zone.parse("19 Feb 2023 00:00:00")}
+      ]
+      expect_eventlets(eventlets, *attribs)
+    end
+  end
 end

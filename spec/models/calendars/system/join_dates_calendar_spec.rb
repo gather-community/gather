@@ -54,4 +54,23 @@ describe Calendars::System::JoinDatesCalendar do
     events = calendar.events_between(full_range, actor: actor)
     expect_events(events, *attribs)
   end
+
+  describe "eventlets" do
+    it "returns correct event attribs" do
+      attribs = [{
+        event: {
+          name: "➕ Jo Fiz (8)",
+          creator_id: nil,
+          note: nil,
+        },
+        starts_at: Time.zone.parse("2021-01-28 00:00"),
+        ends_at: Time.zone.parse("2021-01-28 23:59:59"),
+        all_day: true,
+        linkable: user1,
+        uid: "join_dates_#{user1.id}"
+      }]
+      eventlets = calendar.eventlets_between(full_range, actor: actor)
+      expect_eventlets(eventlets, *attribs)
+    end
+  end
 end

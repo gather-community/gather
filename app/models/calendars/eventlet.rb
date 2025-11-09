@@ -19,7 +19,19 @@ module Calendars
     acts_as_tenant :cluster
 
     attr_accessor :guidelines_ok
+
+    # For system calendar event exports. See the reader method below.
+    attr_writer :uid
+
+    # For system calendars event exports. See the reader method below.
     attr_writer :location
+
+    # Used by system calendars. Holds either a URL or
+    # an object that this event should link to.
+    # objects are preferred so that the system calendar classes don't have to be responsible
+    # for generating URLs/paths.
+    attr_accessor :linkable
+
 
     belongs_to :event, class_name: "Calendars::Event", inverse_of: :eventlets
     belongs_to :calendar, class_name: "Calendars::Calendar", inverse_of: :eventlets

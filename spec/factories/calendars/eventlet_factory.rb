@@ -16,14 +16,25 @@
 #
 FactoryBot.define do
   factory :eventlet, class: "Calendars::Eventlet" do
-    association(:event, strategy: :build)
-    calendar
-    sequence(:starts_at) { |n| Time.current.tomorrow.midnight + n.hours }
-    sequence(:ends_at) { starts_at + 55.minutes }
-
-    after(:build) do |eventlet|
-      eventlet.event.eventlets << eventlet
-      eventlet.event.calendar = eventlet.calendar
+    transient do
+      creator { nil }
+      group { nil }
     end
+
+    event do |evaluator|
+      overrides = {
+        calendar: calendar,
+        starts_at: starts_at,
+        ends_at: ends_at
+      }
+      overrides[:creator] = evaluator.creator if evaluator.creator.present?
+      overrides[:group] = evaluator.group if evaluator.group.present?
+      overrides[:dont_sync_eventlet] = true
+      association :event, overrides
+    end
+
+    calendar
+    starts_at { Time.current.tomorrow.midnight }
+    ends_at { starts_at + 55.minutes }
   end
 end

@@ -26,6 +26,14 @@ module Calendars
 
     attr_writer :location
 
+    # Temporary accessor used only by the Eventlet factory. Without this, we were creating duplicate
+    # Eventlets because the factory would build the parent Event, which would build its own Eventlet,
+    # and then the factory would then build its own Eventlet.
+    #
+    # Once we are done splitting Eventlet out from Event, we can remove both this attribute and the
+    # sync_eventlet method.
+    attr_accessor :dont_sync_eventlet
+
     # linkable is used by system calendars and holds either a URL or
     # an object that this event should link to.
     # objects are preferred so that the system calendar classes don't have to be responsible
@@ -127,6 +135,8 @@ module Calendars
     private
 
     def sync_eventlet
+      return if dont_sync_eventlet
+
       # Ensure only one
       (eventlets[1..-1] || []).each(&:destroy)
       eventlet = eventlets[0] || eventlets.build

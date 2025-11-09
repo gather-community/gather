@@ -32,7 +32,6 @@ module Calendars
     # for generating URLs/paths.
     attr_accessor :linkable
 
-
     belongs_to :event, class_name: "Calendars::Event", inverse_of: :eventlets
     belongs_to :calendar, class_name: "Calendars::Calendar", inverse_of: :eventlets
 
@@ -46,7 +45,8 @@ module Calendars
     delegate :name, to: :calendar, prefix: true
     delegate :access_level, :fixed_start_time?, :fixed_end_time?, :requires_kind?, to: :rule_set
 
-    scope :between, ->(range) { where("starts_at < ? AND ends_at > ?", range.last, range.first) }
+    # Specifying the table name here is temporarily required for some queries because calendar_events also has these columns.
+    scope :between, ->(range) { where("calendar_eventlets.starts_at < ? AND calendar_eventlets.ends_at > ?", range.last, range.first) }
 
     before_validation :normalize
 

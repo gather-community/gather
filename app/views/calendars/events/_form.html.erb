@@ -1,4 +1,4 @@
-<%= gather_form_for(event) do |f| %>
+<%= gather_form_for(@form, url: @form.url) do |f| %>
 
   <%= f.hidden_field :calendar_id %>
   <%= f.hidden_field :origin_page %>
@@ -16,11 +16,11 @@
   <% end %>
 
   <% unless @rule_set.timed_events_only? %>
-    <%= f.input :all_day %>
+    <%= f.input :all_day, as: :boolean %>
   <% end %>
 
   <% unless event.meal? %>
-    <%= f.input :name, maxlength: Calendars::Event::NAME_MAX_LENGTH %>
+    <%= f.input :name, maxlength: Calendars::EventForm::NAME_MAX_LENGTH %>
   <% end %>
 
   <% if policy(event).choose_creator? %>

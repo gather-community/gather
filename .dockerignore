@@ -1,0 +1,90 @@
+# Git
+.git
+.gitignore
+
+# Documentation
+README.md
+README.rdoc
+docs/
+credits.md
+
+# Development files
+.env
+.env.local
+.env.development
+.env.test
+
+# Logs
+log/*
+!log/.keep
+
+# Runtime data
+tmp/*
+!tmp/.keep
+
+# Coverage directory used by tools like istanbul
+coverage/
+
+# nyc test coverage
+.nyc_output
+
+# Dependency directories
+node_modules/
+
+# Optional npm cache directory
+.npm
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# dotenv environment variables file
+.env
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Test files
+spec/
+test/
+
+# Development database
+db/*.sqlite3
+db/*.sqlite3-journal
+
+# Docker files
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# Build artifacts
+app/assets/builds/*
+!app/assets/builds/.keep
+
+# Capistrano
+config/deploy.rb
+Capfile
+
+# SSL certificates (development)
+config/ssl/
+
+# Local settings
+config/settings.local.yml

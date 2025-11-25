@@ -6,7 +6,11 @@ ARG USERNAME=gatherdev
 ENV BINDING="0.0.0.0"
 
 RUN apt-get update \
+<<<<<<< HEAD
   && DEBIAN_FRONTEND=noninteractive TZ=US/Eastern apt-get -y install \
+=======
+  && apt-get -y install \
+>>>>>>> f1000605 (Initial devcontainer)
   build-essential \
   ca-certificates \
   curl \
@@ -16,7 +20,10 @@ RUN apt-get update \
   iftop \
   iproute2 \
   libcurl4-openssl-dev \
+<<<<<<< HEAD
   libnss3-tools \
+=======
+>>>>>>> f1000605 (Initial devcontainer)
   libreadline-dev \
   libsqlite3-dev \
   libssl-dev \
@@ -31,20 +38,29 @@ RUN apt-get update \
   sed \
   unzip \
   nano \
+<<<<<<< HEAD
   redis-tools \
   software-properties-common \
   sudo \
   tzdata \
+=======
+  software-properties-common \
+  sudo \
+>>>>>>> f1000605 (Initial devcontainer)
   vim \
   wget \
   zlib1g-dev
 
+<<<<<<< HEAD
 # Create user
+=======
+>>>>>>> f1000605 (Initial devcontainer)
 RUN groupadd --gid 1000 $USERNAME \
   && useradd --uid 1000 --gid 1000 -m -s /bin/bash $USERNAME \
   && echo "$USERNAME ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/$USERNAME \
   && chmod 0440 /etc/sudoers.d/$USERNAME
 
+<<<<<<< HEAD
 # Switch to user for mise installation
 USER $USERNAME
 WORKDIR /home/$USERNAME
@@ -67,3 +83,7 @@ ENV PATH="/home/$USERNAME/.local/bin:/home/$USERNAME/.local/share/mise/shims:$PA
 # Copy starship config
 RUN mkdir -p /home/$USERNAME/.config
 COPY --chown=$USERNAME:$USERNAME .devcontainer/starship.toml /home/$USERNAME/.config/starship.toml
+=======
+USER $USERNAME
+WORKDIR /home/$USERNAME
+>>>>>>> f1000605 (Initial devcontainer)

@@ -2,6 +2,7 @@
 
 require "json"
 require "fileutils"
+require "rbconfig"
 
 class Setup < Thor
   include Thor::Actions
@@ -26,6 +27,8 @@ class Setup < Thor
     loop do
       show_status
       case main_menu
+      when :google_oauth
+        configure_google_oauth
       when :generate
         generate_config
       when :provision
@@ -156,6 +159,21 @@ class Setup < Thor
       say "  #{file}  #{status}"
     end
     say
+
+    say "Google OAuth", :bold
+    say
+    if oauth_configured?
+      say "  credentials  #{status_icon(true)}  configured"
+    else
+      say "  credentials  #{status_icon(false)}  not configured"
+    end
+    say
+  end
+
+  def oauth_configured?
+    @google_client_id && @google_client_secret &&
+      !@google_client_id.empty? && !@google_client_secret.empty? &&
+      @google_client_id != "REPLACE_ME" && @google_client_secret != "REPLACE_ME"
   end
 
   def status_icon(ok)
@@ -176,13 +194,15 @@ class Setup < Thor
   # Menus
   # ---------------------------------------------------------------------------
   def main_menu
-    options = ["Generate config files"]
+    options = ["Configure Google OAuth via gcloud"]
+    options << "Generate config files"
     options << "Provision database" if @config_status["docker-compose.yml"]
     options << "Exit"
 
     choice = select_prompt("Select an action:", options)
 
     case choice
+    when "Configure Google OAuth via gcloud" then :google_oauth
     when "Generate config files" then :generate
     when "Provision database" then :provision
     when "Exit" then :exit
@@ -202,6 +222,222 @@ class Setup < Thor
       return options[index] if index >= 0 && index < options.size
 
       say "Invalid choice, try again", :red
+    end
+  end
+
+  # ---------------------------------------------------------------------------
+  # Google OAuth configuration via gcloud
+  # ---------------------------------------------------------------------------
+  def configure_google_oauth
+    clear_screen
+    say_header(step: "Google OAuth via gcloud")
+    say
+
+    # Check if gcloud is installed
+    unless command_exists?("gcloud")
+      say "gcloud CLI is not installed.", :red
+      say
+      say "Install it with: mise install gcloud"
+      say
+      ask "Press Enter to continue..."
+      return
+    end
+
+    # Check if already authenticated
+    say "Checking gcloud authentication...", :green
+    auth_account = `gcloud auth list --filter=status:ACTIVE --format="value(account)" 2>/dev/null`.strip
+
+    if auth_account.empty?
+      say "Not logged in to gcloud. Starting authentication...", :yellow
+      say
+      unless system("gcloud auth login")
+        say "Authentication failed", :red
+        ask "Press Enter to continue..."
+        return
+      end
+      auth_account = `gcloud auth list --filter=status:ACTIVE --format="value(account)" 2>/dev/null`.strip
+    else
+      say "Logged in as: #{auth_account}", :green
+    end
+    say
+
+    # Select or create project
+    project_id = select_or_create_gcloud_project
+    return unless project_id
+
+    # Set active project
+    say "==> Setting active project to #{project_id}...", :green
+    unless system("gcloud config set project #{project_id}")
+      say "Failed to set project", :red
+      ask "Press Enter to continue..."
+      return
+    end
+
+    # Enable required APIs
+    say "==> Enabling required APIs...", :green
+    apis = %w[
+      iamcredentials.googleapis.com
+      oauth2.googleapis.com
+    ]
+    apis.each do |api|
+      say "    Enabling #{api}..."
+      system("gcloud services enable #{api} --quiet 2>/dev/null")
+    end
+    say
+
+    # Create OAuth credentials
+    create_oauth_credentials(project_id)
+  end
+
+  def select_or_create_gcloud_project
+    clear_screen
+    say_header(step: "Google Cloud Project")
+    say
+
+    choice = select_prompt("Project:", ["Select an existing project", "Create a new project"])
+
+    if choice == "Select an existing project"
+      select_existing_project
+    else
+      create_new_project
+    end
+  end
+
+  def select_existing_project
+    say
+    say "Fetching projects...", :green
+    projects_json = `gcloud projects list --format="json" 2>/dev/null`
+
+    begin
+      projects = JSON.parse(projects_json)
+    rescue JSON::ParserError
+      say "Failed to list projects", :red
+      ask "Press Enter to continue..."
+      return nil
+    end
+
+    if projects.empty?
+      say "No projects found. Please create one.", :yellow
+      ask "Press Enter to continue..."
+      return nil
+    end
+
+    say
+    say "Available projects:"
+    projects.each_with_index do |p, i|
+      say "  #{i + 1}. #{p['projectId']} (#{p['name']})"
+    end
+    say
+
+    loop do
+      input = ask("Select project (1-#{projects.size}):")
+      index = input.to_i - 1
+      if index >= 0 && index < projects.size
+        return projects[index]["projectId"]
+      end
+      say "Invalid choice, try again", :red
+    end
+  end
+
+  def create_new_project
+    say
+
+    loop do
+      project_name = ask("Project name (e.g., gather-dev):")
+      if project_name.empty?
+        say "Project name cannot be empty", :red
+        next
+      end
+
+      # Sanitize project ID (lowercase, alphanumeric and hyphens)
+      project_id = project_name.downcase.gsub(/[^a-z0-9-]/, "-").gsub(/-+/, "-").gsub(/^-|-$/, "")
+
+      # Project IDs must be 6-30 characters
+      if project_id.length < 6
+        project_id = "#{project_id}-project"
+      end
+      project_id = project_id[0, 30]
+
+      say "Creating project '#{project_id}'...", :green
+
+      result = system("gcloud projects create #{project_id} --name=\"#{project_name}\" 2>&1")
+
+      if result
+        say "Project created successfully!", :green
+        return project_id
+      else
+        say "Failed to create project. The name might be taken.", :red
+        unless yes?("Try a different name?")
+          return nil
+        end
+      end
+    end
+  end
+
+  def create_oauth_credentials(project_id)
+    clear_screen
+    say_header(step: "OAuth Credentials")
+    say
+
+    # Check if OAuth consent screen is configured
+    say "Checking OAuth consent screen...", :green
+    say
+
+    # The gcloud CLI doesn't directly support creating OAuth client IDs for web apps
+    # We need to guide the user through the console or use the REST API
+    say "To complete OAuth setup, you need to:", :yellow
+    say
+    say "  1. Configure the OAuth consent screen"
+    say "  2. Create OAuth 2.0 credentials"
+    say
+    say "Required configuration:"
+    say "  Application type:           Web application"
+    say "  Authorized JS origins:      https://gatherdev.org:3000"
+    say "  Authorized redirect URIs:   https://gatherdev.org:3000/people/users/auth/google_oauth2/callback"
+    say
+
+    credentials_url = "https://console.cloud.google.com/apis/credentials?project=#{project_id}"
+
+    if yes?("Open Google Cloud Console in browser?")
+      say
+      say "Opening browser...", :green
+      open_browser(credentials_url)
+      say
+      say "After creating credentials in the console, enter them below:"
+    else
+      say
+      say "Visit: #{credentials_url}"
+      say
+      say "After creating credentials, enter them below:"
+    end
+
+    say
+
+    @google_client_id = ask("Client ID:")
+    @google_client_secret = ask("Client Secret:", echo: false)
+    say
+
+    if @google_client_id.empty? || @google_client_secret.empty?
+      say "Credentials not provided - you can add them during config generation", :yellow
+    else
+      say "OAuth credentials saved!", :green
+      say "They will be included when you generate config files."
+    end
+
+    say
+    ask "Press Enter to continue..."
+  end
+
+  def open_browser(url)
+    case RbConfig::CONFIG["host_os"]
+    when /darwin/
+      system("open", url)
+    when /linux/
+      system("xdg-open", url)
+    when /mswin|mingw/
+      system("start", url)
+    else
+      say "Please open this URL manually: #{url}", :yellow
     end
   end
 
@@ -331,11 +567,24 @@ class Setup < Thor
     say_header(step: "Google OAuth")
     say
 
+    if oauth_configured?
+      say "OAuth credentials already configured.", :green
+      say
+      say "  Client ID: #{@google_client_id[0, 20]}..."
+      say
+      unless yes?("Keep existing credentials?")
+        @google_client_id = nil
+        @google_client_secret = nil
+        collect_oauth_config
+      end
+      return
+    end
+
     say "Create an OAuth client at: https://console.cloud.google.com/apis/credentials"
     say
     say "Configure with:"
     say "  Authorized JS origins:    https://gatherdev.org:3000"
-    say "  Authorized redirect URIs: https://gatherdev.org:3000/users/auth/google_oauth2/callback"
+    say "  Authorized redirect URIs: https://gatherdev.org:3000/people/users/auth/google_oauth2/callback"
     say
 
     @google_client_id = ask("Client ID:")

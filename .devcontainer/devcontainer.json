@@ -180,6 +180,5 @@
 
   // Use 'postCreateCommand' to run commands after the container is created.
   "initializeCommand": "bash ${localWorkspaceFolder}/.devcontainer/setup.sh",
-  "postCreateCommand": "echo 'eval \"$(mise activate zsh)\"' >> ~/.zshrc && mise trust &&  mise i"
->>>>>>> f1000605 (Initial devcontainer)
+  "postCreateCommand": "echo 'eval \"$(mise activate zsh)\"' >> ~/.zshrc && mise trust && mise i && sudo cp ${containerWorkspaceFolder}/config/ssl/gatherdev.org.crt /usr/local/share/ca-certificates/ && sudo update-ca-certificates"
 }

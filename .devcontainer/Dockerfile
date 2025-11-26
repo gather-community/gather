@@ -6,11 +6,7 @@ ARG USERNAME=gatherdev
 ENV BINDING="0.0.0.0"
 
 RUN apt-get update \
-<<<<<<< HEAD
   && DEBIAN_FRONTEND=noninteractive TZ=US/Eastern apt-get -y install \
-=======
-  && apt-get -y install \
->>>>>>> f1000605 (Initial devcontainer)
   build-essential \
   ca-certificates \
   curl \
@@ -46,7 +42,7 @@ RUN apt-get update \
 =======
   software-properties-common \
   sudo \
->>>>>>> f1000605 (Initial devcontainer)
+  tzdata \
   vim \
   wget \
   zlib1g-dev

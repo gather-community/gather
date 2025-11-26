@@ -16,26 +16,142 @@
 		"--group-add=docker",
 		"--privileged"
 	],
-
-  "workspaceMount": "source=${localWorkspaceFolder},target=${localWorkspaceFolder},type=bind",
+	"workspaceMount": "source=${localWorkspaceFolder},target=${localWorkspaceFolder},type=bind",
 	"workspaceFolder": "${localWorkspaceFolder}",
-
-  // Features to add to the dev container. More info: https://containers.dev/features.
-  "features": {
-    "ghcr.io/devcontainers/features/github-cli:1": {},
-    "ghcr.io/rails/devcontainer/features/activestorage": {},
-    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {"moby":false},
-    "ghcr.io/rails/devcontainer/features/postgres-client": {},
-    "ghcr.io/devcontainers-extra/features/mise:1": {},
-    "ghcr.io/devcontainers/features/common-utils": {
-        "installZsh": true,
-        "installOhMyZsh": true,
-        "installOhMyZshConfig": true,
-        "configureZshAsDefaultShell": true
-    }
-  },
-
-  // Use 'postCreateCommand' to run commands after the container is created.
-  "initializeCommand": "bash ${localWorkspaceFolder}/.devcontainer/setup.sh",
-  "postCreateCommand": "echo 'eval \"$(mise activate zsh)\"' >> ~/.zshrc && mise trust && mise i"
+	// Features to add to the dev container. More info: https://containers.dev/features.
+	"features": {
+		"ghcr.io/devcontainers/features/github-cli:1": {},
+		"ghcr.io/rails/devcontainer/features/activestorage": {},
+		"ghcr.io/devcontainers/features/docker-outside-of-docker:1": {
+			"moby": false
+		},
+		"ghcr.io/rails/devcontainer/features/postgres-client": {},
+		"ghcr.io/devcontainers-extra/features/mise:1": {},
+		"ghcr.io/devcontainers/features/common-utils": {}
+	},
+	// VS Code extensions for Ruby on Rails + TypeScript development
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"hverlin.mise-vscode",
+				// Ruby / Rails
+				"Shopify.ruby-lsp",
+				"Shopify.ruby-extensions-pack",
+				"KoichiSasada.vscode-rdbg",
+				// ERB templates
+				"aliariff.vscode-erb-beautify",
+				// RuboCop / Standard
+				"rubocop.vscode-rubocop",
+				// TypeScript / JavaScript
+				"dbaeumer.vscode-eslint",
+				"esbenp.prettier-vscode",
+				// Stimulus (Hotwire)
+				"marcoroth.stimulus-lsp",
+				// General web development
+				"bradlc.vscode-tailwindcss",
+				"formulahendry.auto-rename-tag",
+				"formulahendry.auto-close-tag",
+				// Git
+				"waderyan.gitblame",
+				"mhutchie.git-graph",
+				// Database
+				"ckolkman.vscode-postgres",
+				// Docker
+				"ms-azuretools.vscode-docker",
+				// Misc utilities
+				"EditorConfig.EditorConfig",
+				"mikestead.dotenv",
+				"redhat.vscode-yaml",
+				"streetsidesoftware.code-spell-checker",
+				// Shell scripting
+				"foxundermoon.shell-format",
+				"timonwong.shellcheck"
+			],
+			"settings": {
+				"editor.tabSize": 2,
+				"editor.rulers": [
+					80,
+					120
+				],
+				"search.exclude": {
+					"**/node_modules": true
+				},
+				"cSpell.enabledFileTypes": {
+					"*": true
+				},
+				"cSpell.ignorePaths": [
+					"Gemfile",
+					"node_modules",
+					"storage",
+					"tmp"
+				],
+				"cSpell.customDictionaries": {
+					"custom-dictionary-workspace": {
+						"name": "custom-dictionary-workspace",
+						"path": "${workspaceFolder}/.cspell/custom-dictionary-workspace.txt",
+						"addWords": true,
+						"scope": "workspace"
+					}
+				},
+				"editor.formatOnSave": true,
+				"editor.defaultFormatter": "esbenp.prettier-vscode",
+				"[ruby]": {
+					"editor.defaultFormatter": "Shopify.ruby-lsp",
+					"editor.formatOnSave": true
+				},
+				"[erb]": {
+					"editor.defaultFormatter": "aliariff.vscode-erb-beautify"
+				},
+				"eslint.validate": [
+					"javascript",
+					"typescript"
+				],
+				"files.associations": {
+					"*.html.erb": "erb"
+				},
+				"files.exclude": {
+					"**/.git": true,
+					"**/.svn": true,
+					"**/.hg": true,
+					"**/.DS_Store": true,
+					"**/Thumbs.db": true,
+					"**/node_modules": true
+				},
+				"[shellscript]": {
+					"editor.defaultFormatter": "foxundermoon.shell-format"
+				},
+				"[dotenv]": {
+					"editor.defaultFormatter": "foxundermoon.shell-format"
+				},
+				"[ignore]": {
+					"editor.defaultFormatter": "foxundermoon.shell-format"
+				},
+				"[properties]": {
+					"editor.defaultFormatter": "foxundermoon.shell-format"
+				},
+				"[jsonc]": {
+					"editor.defaultFormatter": "vscode.json-language-features"
+				},
+				"[typescript]": {
+					"editor.defaultFormatter": "esbenp.prettier-vscode",
+					"editor.formatOnSave": true,
+					"editor.codeActionsOnSave": {
+						"source.fixAll.eslint": "explicit"
+					}
+				},
+				"[javascript]": {
+					"editor.defaultFormatter": "esbenp.prettier-vscode",
+					"editor.formatOnSave": true,
+					"editor.codeActionsOnSave": {
+						"source.fixAll.eslint": "explicit"
+					}
+				},
+				"prettier.tabWidth": 2
+			}
+		}
+	},
+	// Use 'postCreateCommand' to run commands after the container is created.
+	"initializeCommand": "bash ${localWorkspaceFolder}/.devcontainer/setup.sh",
+	"postCreateCommand": "echo 'eval \"$(mise activate zsh)\"' >> ~/.zshrc && mise trust -- --non-interactive && mise install --yes",
+	"postAttachCommand": "mise reshim"
 }

@@ -87,6 +87,7 @@ group :development, :test do
   gem "capistrano3-delayed-job", "~> 1.0"
   gem "capybara", "~> 3.29"
   gem "database_cleaner", "~> 1.7"
+  gem "debug", require: false
   gem "ed25519", ">= 1.2", "< 2.0" # For Capistrano
   gem "fix-db-schema-conflicts", "~> 3.0"
   gem "launchy", "~> 2.4" # For opening screenshots

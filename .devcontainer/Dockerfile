@@ -35,12 +35,20 @@ RUN apt-get update \
   tzdata \
   vim \
   wget \
+  zsh \
   zlib1g-dev
 
 RUN groupadd --gid 1000 $USERNAME \
   && useradd --uid 1000 --gid 1000 -m -s /bin/bash $USERNAME \
   && echo "$USERNAME ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/$USERNAME \
   && chmod 0440 /etc/sudoers.d/$USERNAME
+
+# Install Oh My Zsh (unattended)
+RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+
+# Set Zsh as the default shell for the root user
+# If you are using a different user, adjust the command accordingly
+RUN usermod -s $(which zsh) $USERNAME
 
 USER $USERNAME
 WORKDIR /home/$USERNAME

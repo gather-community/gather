@@ -73,6 +73,11 @@ install_cert_system() {
     return 1
   fi
 
+  if cert_installed_system; then
+    msg_info "Certificate already in system trust store, skipping"
+    return 0
+  fi
+
   msg_info "Installing certificate to system trust store..."
 
   case "$os" in
@@ -179,6 +184,11 @@ install_cert_chrome() {
   if [[ ! -f "$CERT_FILE" ]]; then
     msg_error "Certificate file not found: $CERT_FILE"
     return 1
+  fi
+
+  if cert_installed_chrome; then
+    msg_info "Certificate already in Chrome/Chromium, skipping"
+    return 0
   fi
 
   case "$os" in
@@ -300,6 +310,11 @@ install_cert_firefox() {
   if [[ ! -f "$CERT_FILE" ]]; then
     msg_error "Certificate file not found: $CERT_FILE"
     return 1
+  fi
+
+  if cert_installed_firefox; then
+    msg_info "Certificate already in Firefox, skipping"
+    return 0
   fi
 
   if ! command_exists certutil; then

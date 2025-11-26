@@ -20,7 +20,6 @@
 		"--group-add=docker",
 		"--privileged"
 	],
-<<<<<<< HEAD
 	"workspaceMount": "source=${localWorkspaceFolder},target=${localWorkspaceFolder},type=bind",
 	"workspaceFolder": "${localWorkspaceFolder}",
 	// Features to add to the dev container. More info: https://containers.dev/features.
@@ -31,8 +30,8 @@
 			"moby": false
 		},
 		"ghcr.io/rails/devcontainer/features/postgres-client": {},
-		"ghcr.io/devcontainers/features/common-utils": {},
-		"ghcr.io/devcontainer-community/devcontainer-features/starship.rs:1": {}
+		"ghcr.io/devcontainers-extra/features/mise:1": {},
+		"ghcr.io/devcontainers/features/common-utils": {}
 	},
 	// VS Code extensions for Ruby on Rails + TypeScript development
 	"customizations": {
@@ -156,29 +155,7 @@
 		}
 	},
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"initializeCommand": "bash ${localWorkspaceFolder}/.devcontainer/setup.sh && exit 0",
-	"postCreateCommand": "bundle install && yarn install & exit 0"
-=======
-
-  "workspaceMount": "source=${localWorkspaceFolder},target=${localWorkspaceFolder},type=bind",
-	"workspaceFolder": "${localWorkspaceFolder}",
-
-  // Features to add to the dev container. More info: https://containers.dev/features.
-  "features": {
-    "ghcr.io/devcontainers/features/github-cli:1": {},
-    "ghcr.io/rails/devcontainer/features/activestorage": {},
-    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {"moby":false},
-    "ghcr.io/rails/devcontainer/features/postgres-client": {},
-    "ghcr.io/devcontainers-extra/features/mise:1": {},
-    "ghcr.io/devcontainers/features/common-utils": {
-        "installZsh": true,
-        "installOhMyZsh": true,
-        "installOhMyZshConfig": true,
-        "configureZshAsDefaultShell": true
-    }
-  },
-
-  // Use 'postCreateCommand' to run commands after the container is created.
-  "initializeCommand": "bash ${localWorkspaceFolder}/.devcontainer/setup.sh",
-  "postCreateCommand": "echo 'eval \"$(mise activate zsh)\"' >> ~/.zshrc && mise trust && mise i"
+	"initializeCommand": "bash ${localWorkspaceFolder}/.devcontainer/setup.sh",
+	"postCreateCommand": "echo 'eval \"$(mise activate zsh)\"' >> ~/.zshrc && mise trust -- --non-interactive && mise install --yes",
+	"postAttachCommand": "mise reshim"
 }

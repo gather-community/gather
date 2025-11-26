@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 #!/usr/bin/env bash
 set -euo pipefail
 
@@ -49,83 +48,8 @@ command_exists() {
   command -v "$1" &>/dev/null
 }
 
-# -----------------------------------------------------------------------------
-# Certificate detection
-# -----------------------------------------------------------------------------
-cert_installed_system() {
-  local os="$(detect_os)"
-
-  case "$os" in
-    macos)
-      security find-certificate -c "$CERT_NAME" /Library/Keychains/System.keychain &>/dev/null
-      ;;
-    linux)
-      local distro="$(detect_linux_distro)"
-      case "$distro" in
-        arch)
-          [[ -f "/etc/ca-certificates/trust-source/anchors/${CERT_NAME}.crt" ]]
-          ;;
-        debian)
-          [[ -f "/usr/local/share/ca-certificates/${CERT_NAME}.crt" ]]
-          ;;
-        fedora)
-          [[ -f "/etc/pki/ca-trust/source/anchors/${CERT_NAME}.crt" ]]
-          ;;
-        *)
-          return 1
-          ;;
-      esac
-      ;;
-    *)
-      return 1
-      ;;
-  esac
-}
-
-cert_installed_chrome() {
-  local os="$(detect_os)"
-
-  case "$os" in
-    macos)
-      cert_installed_system
-      ;;
-    linux)
-      if [[ -d "$HOME/.pki/nssdb" ]] && command_exists certutil; then
-        certutil -d sql:"$HOME/.pki/nssdb" -L -n "$CERT_NAME" &>/dev/null
-      else
-        return 1
-      fi
-      ;;
-    *)
-      return 1
-      ;;
-  esac
-}
-
-cert_installed_firefox() {
-  if ! command_exists certutil; then
-    return 1
-  fi
-
-  local profiles
-  profiles="$(find_firefox_profiles)"
-  [[ -z "$profiles" ]] && return 1
-
-  while IFS= read -r profile; do
-    if certutil -d sql:"$profile" -L -n "$CERT_NAME" &>/dev/null; then
-      return 0
-    fi
-  done <<< "$profiles"
-  return 1
-}
-
 install_cert_system() {
   local os="$(detect_os)"
-
-  if cert_installed_system; then
-    echo "Certificate already in system trust store, skipping"
-    return 0
-  fi
 
   echo "Installing certificate to system trust store..."
 
@@ -166,11 +90,6 @@ install_cert_system() {
 
 install_cert_chrome() {
   local os="$(detect_os)"
-
-  if cert_installed_chrome; then
-    echo "Certificate already in Chrome/Chromium, skipping"
-    return 0
-  fi
 
   case "$os" in
     macos)
@@ -217,11 +136,6 @@ find_firefox_profiles() {
 }
 
 install_cert_firefox() {
-  if cert_installed_firefox; then
-    echo "Certificate already in Firefox, skipping"
-    return 0
-  fi
-
   if ! command_exists certutil; then
     echo "Warning: certutil not found, skipping Firefox cert install"
     return 1
@@ -276,11 +190,3 @@ setup_certificates() {
 setup_certificates
 
 echo "==> Devcontainer setup complete"
-=======
-#!/bin/sh
-
-# The devcontainer should use the same network as the application so we can reach services by name,
-# This should match the network in the compose file and runArgs in devcontainer.json
-
-docker network create gather-network --label "com.docker.compose.network=gather" --label "com.docker.compose.project=gather" 2>/dev/null || true
->>>>>>> f1000605 (Initial devcontainer)

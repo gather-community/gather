@@ -1,5 +1,10 @@
 [tools]
 gcloud = "latest"
+gum = "latest"
 node = { version = "18.12.1", postinstall = "corepack enable" }
 ruby = "3.2.2"
->>>>>>> f1000605 (Initial devcontainer)
+yq = "latest"
+
+[tasks.setup]
+description = "Interactive setup for Gather development environment"
+run = "bin/setup"

@@ -1,0 +1,17 @@
+oauth:
+  google:
+    client_id: {{ (ds "config").oauth.google.client_id }}
+    client_secret: {{ (ds "config").oauth.google.client_secret }}
+
+secret_key_base: {{ (ds "config").secrets.key_base }}
+
+email:
+  from: Gather <noreply@example.coop>
+  webmaster: developer@example.com
+
+elasticsearch:
+  host: {{ (ds "config").elasticsearch.host }}
+  port: {{ (ds "config").elasticsearch.port }}
+
+redis:
+  url: redis://{{ (ds "config").redis.host }}:{{ (ds "config").redis.port }}/0

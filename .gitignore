@@ -34,6 +34,7 @@
 !/app/assets/builds/.keep
 
 /node_modules
-
-# Agent config
 .claude
+
+# We generate this, so don't commit it.
+docker-compose.yml

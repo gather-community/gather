@@ -1,0 +1,77 @@
+services:
+{{- if eq (ds "config").postgres.source "docker" }}
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: {{ (ds "config").postgres.user }}
+      POSTGRES_PASSWORD: {{ (ds "config").postgres.password }}
+      POSTGRES_DB: gather_development
+    ports:
+      - "{{ (ds "config").postgres.port }}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - gather
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U {{ (ds "config").postgres.user }}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+{{ end }}
+{{- if eq (ds "config").redis.source "docker" }}
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "{{ (ds "config").redis.port }}:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - gather
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+{{ end }}
+{{- if eq (ds "config").elasticsearch.source "docker" }}
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.8.23
+    environment:
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms200m -Xmx200m"
+      - xpack.security.enabled=false
+    ports:
+      - "{{ (ds "config").elasticsearch.port }}:9200"
+      - "9300:9300"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    networks:
+      - gather
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s http://localhost:9200/_cluster/health | grep -vq '\"status\":\"red\"'"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+{{ end }}
+  mailcatcher:
+    image: schickling/mailcatcher
+    ports:
+      - "1025:1025"
+      - "1080:1080"
+    networks:
+      - gather
+
+volumes:
+{{- if eq (ds "config").postgres.source "docker" }}
+  postgres_data:
+{{- end }}
+{{- if eq (ds "config").redis.source "docker" }}
+  redis_data:
+{{- end }}
+{{- if eq (ds "config").elasticsearch.source "docker" }}
+  elasticsearch_data:
+{{- end }}
+
+networks:
+  gather:
+    external: true

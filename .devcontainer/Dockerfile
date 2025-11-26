@@ -6,7 +6,7 @@ ARG USERNAME=gatherdev
 ENV BINDING="0.0.0.0"
 
 RUN apt-get update \
-  && apt-get -y install \
+  && DEBIAN_FRONTEND=noninteractive TZ=US/Eastern apt-get -y install \
   build-essential \
   ca-certificates \
   curl \
@@ -32,6 +32,7 @@ RUN apt-get update \
   nano \
   software-properties-common \
   sudo \
+  tzdata \
   vim \
   wget \
   zlib1g-dev

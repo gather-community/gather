@@ -755,7 +755,6 @@ ActiveRecord::Schema[7.0].define(version: 2025_11_05_022737) do
     t.index ["signup_id"], name: "index_meal_signup_parts_on_signup_id"
     t.index ["type_id", "signup_id"], name: "index_meal_signup_parts_on_type_id_and_signup_id", unique: true
     t.index ["type_id"], name: "index_meal_signup_parts_on_type_id"
-    t.check_constraint "(user_id IS NULL) <> (guest_id IS NULL)", name: "affirm_user_with_signup"
   end
 
   create_table "meal_signups", id: :serial, force: :cascade do |t|

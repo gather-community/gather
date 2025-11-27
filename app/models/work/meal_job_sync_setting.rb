@@ -1,5 +1,17 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: work_meal_job_sync_settings
+#
+#  id         :bigint           not null, primary key
+#  cluster_id :bigint
+#  created_at :datetime         not null
+#  formula_id :bigint           not null
+#  period_id  :bigint           not null
+#  role_id    :bigint           not null
+#  updated_at :datetime         not null
+#
 module Work
   # Represents the user's desire to sync meal jobs for a given meal role in a given formula for a
   # given period.

@@ -1,5 +1,23 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: meal_formulas
+#
+#  id                   :integer          not null, primary key
+#  cluster_id           :integer          not null
+#  community_id         :integer          not null
+#  created_at           :datetime         not null
+#  deactivated_at       :datetime
+#  is_default           :boolean          default(FALSE), not null
+#  meal_calc_type       :string           not null
+#  name                 :string           not null
+#  pantry_calc_type     :string           not null
+#  pantry_fee           :decimal(10, 4)   not null
+#  pantry_reimbursement :boolean          default(FALSE)
+#  takeout              :boolean          default(TRUE), not null
+#  updated_at           :datetime         not null
+#
 module Meals
   # Describes a meal system.
   class Formula < ApplicationRecord

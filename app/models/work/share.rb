@@ -1,5 +1,18 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: work_shares
+#
+#  id         :bigint           not null, primary key
+#  cluster_id :integer          not null
+#  created_at :datetime         not null
+#  period_id  :integer          not null
+#  portion    :decimal(4, 3)    default(1.0), not null
+#  priority   :boolean          default(FALSE), not null
+#  updated_at :datetime         not null
+#  user_id    :integer          not null
+#
 module Work
   # A share describes what portion of the full workload a particular user is responsible for.
   class Share < ApplicationRecord

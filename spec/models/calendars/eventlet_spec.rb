@@ -1,5 +1,19 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: calendar_eventlets
+#
+#  id          :bigint           not null, primary key
+#  cluster_id  :bigint           not null
+#  event_id    :bigint           not null
+#  calendar_id :bigint           not null
+#  all_day     :boolean          default(FALSE), not null
+#  starts_at   :datetime         not null
+#  ends_at     :datetime         not null
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#
 require "rails_helper"
 
 describe Calendars::Eventlet do

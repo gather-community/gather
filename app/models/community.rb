@@ -1,5 +1,21 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: communities
+#
+#  id             :integer          not null, primary key
+#  abbrv          :string(2)
+#  calendar_token :string           not null
+#  cluster_id     :integer          not null
+#  country_code   :string(2)        default("US"), not null
+#  created_at     :datetime         not null
+#  name           :string(20)       not null
+#  settings       :jsonb
+#  slug           :string           not null
+#  sso_secret     :string           not null
+#  updated_at     :datetime         not null
+#
 # This is what it's all about!
 class Community < ApplicationRecord
   include CustomFields

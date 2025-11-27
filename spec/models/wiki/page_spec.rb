@@ -1,5 +1,23 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: wiki_pages
+#
+#  id           :integer          not null, primary key
+#  cluster_id   :integer          not null
+#  community_id :integer          not null
+#  content      :text
+#  created_at   :datetime         not null
+#  creator_id   :integer
+#  data_source  :text
+#  editable_by  :string           default("everyone"), not null
+#  role         :string
+#  slug         :string           not null
+#  title        :string           not null
+#  updated_at   :datetime         not null
+#  updater_id   :integer
+#
 require "rails_helper"
 
 describe Wiki::Page do

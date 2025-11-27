@@ -1,5 +1,20 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: work_shifts
+#
+#  id                :bigint           not null, primary key
+#  assignments_count :integer          default(0), not null
+#  cluster_id        :bigint           not null
+#  created_at        :datetime         not null
+#  ends_at           :datetime
+#  job_id            :integer          not null
+#  meal_id           :integer
+#  slots             :integer          not null
+#  starts_at         :datetime
+#  updated_at        :datetime         not null
+#
 require "rails_helper"
 
 describe Work::Shift do

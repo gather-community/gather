@@ -84,8 +84,7 @@ module Meals
     end
 
     def meal_dirty?
-      @meal_dirty ||= meal.new_record? || meal.will_save_change_to_served_at? ||
-        meal.will_save_change_to_title?
+      meal.new_record? || meal.will_save_change_to_served_at? || meal.will_save_change_to_title?
     end
 
     def event_name

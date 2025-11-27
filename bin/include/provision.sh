@@ -8,6 +8,9 @@ provision_database() {
   header "Provisioning Database"
   echo
 
+  # Ensure docker network exists
+  docker network create gather-network 2>/dev/null || true
+
   # Start docker compose services
   msg_success "==> Starting Docker services..."
   if ! docker compose up -d; then

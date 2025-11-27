@@ -1,6 +1,7 @@
 {
 	"name": "Gather",
 	"build": {
+		"context": "..",
 		"dockerfile": "Dockerfile",
 		"args": {
 			"USERNAME": "${localEnv:USER}"
@@ -26,8 +27,8 @@
 			"moby": false
 		},
 		"ghcr.io/rails/devcontainer/features/postgres-client": {},
-		"ghcr.io/devcontainers-extra/features/mise:1": {},
-		"ghcr.io/devcontainers/features/common-utils": {}
+		"ghcr.io/devcontainers/features/common-utils": {},
+		"ghcr.io/devcontainer-community/devcontainer-features/starship.rs:1": {}
 	},
 	// VS Code extensions for Ruby on Rails + TypeScript development
 	"customizations": {
@@ -151,7 +152,6 @@
 		}
 	},
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"initializeCommand": "bash ${localWorkspaceFolder}/.devcontainer/setup.sh",
-	"postCreateCommand": "echo 'eval \"$(mise activate zsh)\"' >> ~/.zshrc && mise trust -- --non-interactive && mise install --yes",
-	"postAttachCommand": "mise reshim"
+	"initializeCommand": "bash ${localWorkspaceFolder}/.devcontainer/setup.sh && exit 0",
+	"postCreateCommand": "grep -q 'mise activate' ~/.zshrc || echo 'eval \"$(mise activate zsh)\"' >> ~/.zshrc && mise trust --yes && bundle install && yarn install & exit 0"
 }

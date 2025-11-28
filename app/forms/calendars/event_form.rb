@@ -10,11 +10,7 @@ module Calendars
     include Rails.application.routes.url_helpers
     extend AttributeNormalizer::ClassMethods
 
-    # These accessors are private because we don't want callers to set them willy nilly. The values
-    # should only be set in the constructor.
-
     # These are persisted attributes that are persisted to the database.
-    # attr_accessor :starts_at, :ends_at, :note, :name, :kind, :sponsor_id, :all_day, :creator_id, :group_id
     delegate :starts_at, :ends_at, :note, :name, :kind, :sponsor_id, :all_day, :creator_id, :group_id, to: :event
 
     # These are ephemeral attributes that are not persisted to the database.
@@ -47,25 +43,28 @@ module Calendars
       Calendars::Event.model_name
     end
 
-    # If not passing an id, current_user and params.calendar_id are required,
+    # If not passing an id or event object, current_user and params.calendar_id are required,
     # and a new event will be initialized with default parameters.
     #
     # params is not required when instantiating for the purpose of #new and #edit.
+    # params is also not required if passing an already-constructed event object.
     # params is a hash of parameters that will be used to initialize the event.
     # params can be a regular Hash or an ActionController::Parameters object.
     #
     # This method will filter permitted attributes based on the policy for the event.
-    def initialize(action:, current_user: nil, id: nil, params: nil)
+    def initialize(action: nil, current_user: nil, event: nil, id: nil, params: nil)
       @current_user = current_user
       @action = action
 
       # If we need to build an event object, we set the calendar on it so we can pass it to the policy object.
-      if id.nil?
+      if id.nil? && event.nil?
         calendar_id = params.delete(:calendar_id)
         raise "current_user and params[:calendar_id] are required when not passing an event" if current_user.nil? || calendar_id.nil?
 
         @event = Event.new(creator: current_user)
         @event.calendar = Calendar.find(calendar_id)
+      elsif event.present?
+        @event = event
       else
         @event = Event.find(id)
       end

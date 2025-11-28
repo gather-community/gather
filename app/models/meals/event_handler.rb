@@ -27,16 +27,17 @@ module Meals
       meal.events.destroy(*(meal.events - current_events))
     end
 
-    # Validates the event and copies errors to meal.
+    # Validates meal events and copies errors to meal.
     # Assumes build_events has been run already.
     def validate_meal
       meal.events.each do |event|
-        next if event.valid?
-        errors = event.errors.map do |error|
+        event_form = Calendars::EventForm.new(event: event)
+        next if event_form.valid?
+        errors = event_form.errors.map do |error|
           if error.attribute == :base
             error.message
           else
-            "#{Calendars::Event.human_attribute_name(error.attribute)}: #{error.message}"
+            "#{Calendars::EventForm.human_attribute_name(error.attribute)}: #{error.message}"
           end
         end.join(", ")
         meal.errors.add(:base,
@@ -79,7 +80,6 @@ module Meals
         kind: "_meal",
         starts_at: starts_at,
         ends_at: starts_at + resourcing.total_time.minutes,
-        guidelines_ok: "1"
       }
     end
 

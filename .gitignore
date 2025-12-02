@@ -38,3 +38,5 @@
 
 # We generate this, so don't commit it.
 docker-compose.yml
+# But we want to keep the template.
+!config/templates/docker-compose.yml

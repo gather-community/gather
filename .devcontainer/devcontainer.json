@@ -153,5 +153,5 @@
 	},
 	// Use 'postCreateCommand' to run commands after the container is created.
 	"initializeCommand": "bash ${localWorkspaceFolder}/.devcontainer/setup.sh && exit 0",
-	"postCreateCommand": "grep -q 'mise activate' ~/.zshrc || echo 'eval \"$(mise activate zsh)\"' >> ~/.zshrc && mise trust --yes && bundle install && yarn install & exit 0"
+	"postCreateCommand": "bundle install && yarn install & exit 0"
 }

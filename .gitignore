@@ -19,7 +19,9 @@
 /public/javascripts/i18n.js
 
 /config/database.yml
+/config/database.yml.bak
 /config/settings.local.yml
+/config/settings.local.yml.bak
 /config/settings/*.local.yml
 /config/environments/*.local.yml
 /public/system
@@ -35,8 +37,3 @@
 
 # Agent config
 .claude
-
-# We generate this, so don't commit it.
-docker-compose.yml
-# But we want to keep the template.
-!config/templates/docker-compose.yml

@@ -1,226 +1,86 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# -----------------------------------------------------------------------------
-# Configuration
-# -----------------------------------------------------------------------------
+abort() {
+  echo
+  echo "Aborting Gather setup..."
+  exit 1
+}
+
+trap abort INT
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
-INCLUDE_DIR="$SCRIPT_DIR/include"
 
-# State variables
-export PG_SOURCE="" PG_HOST="" PG_PORT="" PG_USER="" PG_PASSWORD=""
-export REDIS_SOURCE="" REDIS_HOST="" REDIS_PORT=""
-export ES_SOURCE="" ES_HOST="" ES_PORT=""
-export GOOGLE_CLIENT_ID="" GOOGLE_CLIENT_SECRET=""
-export ADMIN_FNAME="" ADMIN_LNAME="" ADMIN_EMAIL=""
-export SECRET_KEY=""
+# Source utilities and stage modules
+source "$SCRIPT_DIR/include/utils.sh"
+source "$SCRIPT_DIR/include/deps.sh"
+source "$SCRIPT_DIR/include/conf.sh"
+source "$SCRIPT_DIR/include/data.sh"
+source "$SCRIPT_DIR/include/ssl.sh"
 
-# -----------------------------------------------------------------------------
-# Source includes
-# -----------------------------------------------------------------------------
-# shellcheck source=include/util.sh
-source "$INCLUDE_DIR/util.sh"
-# shellcheck source=include/config.sh
-source "$INCLUDE_DIR/config.sh"
-# shellcheck source=include/deps.sh
-source "$INCLUDE_DIR/deps.sh"
-# shellcheck source=include/gcloud.sh
-source "$INCLUDE_DIR/gcloud.sh"
-# shellcheck source=include/services.sh
-source "$INCLUDE_DIR/services.sh"
-# shellcheck source=include/generate.sh
-source "$INCLUDE_DIR/generate.sh"
-# shellcheck source=include/provision.sh
-source "$INCLUDE_DIR/provision.sh"
-# shellcheck source=include/certs.sh
-source "$INCLUDE_DIR/certs.sh"
+cd "$ROOT_DIR"
 
-# -----------------------------------------------------------------------------
-# Menu helpers
-# -----------------------------------------------------------------------------
-# Color codes for gum (using ANSI 256 colors)
-COLOR_SERVICE="220"    # Yellow for service options
-COLOR_ACTION="120"     # Light green for provision
-COLOR_EXIT="196"       # Red for exit
+STAGES=(deps conf data ssl)
 
-service_status_label() {
-  local name="$1"
-  local configured="$2"
-  local status_text="$3"
-
-  local icon styled_name
-  styled_name="$(gum style --foreground "$COLOR_SERVICE" "$name")"
-
-  # Name is colored yellow, status icon keeps green/red, details stay default
-  if [[ "$configured" == "true" ]]; then
-    icon="$(gum style --foreground 2 '✓')"
-    printf "%-28s %s  %s" "$styled_name" "$icon" "$status_text"
-  else
-    icon="$(gum style --foreground 1 '✗')"
-    printf "%-28s %s  not configured" "$styled_name" "$icon"
-  fi
-}
-
-all_services_configured() {
-  pg_configured && redis_configured && es_configured && oauth_configured && secret_key_configured
-}
-
-# -----------------------------------------------------------------------------
-# Main menu
-# -----------------------------------------------------------------------------
-build_menu_header() {
-  local header_text
-  header_text="$(gum style --border double --padding "0 2" "Gather Development Setup")"
-
-  local deps_header
-  deps_header="$(gum style --bold "Dependencies")"
-
-  local ruby_line libvips_line gems_line
-  ruby_line="$(printf "  %-12s %s  %s" "ruby" "$(status_icon "${DEPS[ruby]}")" "${DEPS[ruby_version]}")"
-  libvips_line="$(printf "  %-12s %s  %s" "libvips" "$(status_icon "${DEPS[libvips]}")" "${DEPS[libvips_version]}")"
-  gems_line="$(printf "  %-12s %s" "gems" "$(status_icon "${DEPS[gems]}")")"
-
-  printf "%s\n\n%s\n\n%s\n%s\n%s\n\nConfigure services:" \
-    "$header_text" "$deps_header" "$ruby_line" "$libvips_line" "$gems_line"
-}
-
-show_main_menu() {
-  clear_screen
-
-  # Build menu options with status
-  local options=()
-
-  # PostgreSQL
-  if pg_configured; then
-    options+=("$(service_status_label "PostgreSQL" "true" "$(pg_status_text)")")
-  else
-    options+=("$(service_status_label "PostgreSQL" "false" "")")
-  fi
-
-  # Redis
-  if redis_configured; then
-    options+=("$(service_status_label "Redis" "true" "$(redis_status_text)")")
-  else
-    options+=("$(service_status_label "Redis" "false" "")")
-  fi
-
-  # Elasticsearch
-  if es_configured; then
-    options+=("$(service_status_label "Elasticsearch" "true" "$(es_status_text)")")
-  else
-    options+=("$(service_status_label "Elasticsearch" "false" "")")
-  fi
-
-  # Google OAuth
-  if oauth_configured; then
-    options+=("$(service_status_label "Google OAuth" "true" "$(oauth_status_text)")")
-  else
-    options+=("$(service_status_label "Google OAuth" "false" "")")
-  fi
-
-  # Secret Key
-  if secret_key_configured; then
-    options+=("$(service_status_label "Secret Key" "true" "configured")")
-  else
-    options+=("$(service_status_label "Secret Key" "false" "")")
-  fi
-
-  # SSL Certificates
-  if cert_file_exists; then
-    if cert_any_installed; then
-      options+=("$(service_status_label "SSL Certificates" "true" "$(cert_status_text)")")
-    else
-      options+=("$(service_status_label "SSL Certificates" "false" "")")
-    fi
-  else
-    options+=("$(service_status_label "SSL Certificates" "false" "")")
-  fi
-
-  # Add action options
-  if all_services_configured; then
-    options+=("$(gum style --foreground "$COLOR_ACTION" "Provision database")")
-  fi
-
-  options+=("$(gum style --foreground "$COLOR_EXIT" "Exit")")
-
-  gum choose --header "$(build_menu_header)" \
-    --cursor-prefix "› " \
-    --cursor.foreground="15" \
-    --cursor.bold \
-    "${options[@]}"
-}
-
-oauth_submenu() {
-  clear_screen
-  header "Google OAuth"
+usage() {
+  echo "Usage: bin/setup [stage]"
   echo
+  echo "Stages:"
+  echo "  deps    Check development dependencies"
+  echo "  conf    Generate configuration files"
+  echo "  data    Setup data services and provision database"
+  echo "  ssl     Configure SSL certificates"
+  echo
+  echo "If no stage is provided, all stages run in order."
+}
 
-  local choice
-  choice="$(gum choose --header "How would you like to configure OAuth?" \
-    "Enter credentials manually" \
-    "Configure via gcloud CLI" \
-    "Back to main menu")"
-
-  case "$choice" in
-    "Enter credentials manually")
-      collect_oauth_config
-      ;;
-    "Configure via gcloud CLI")
-      configure_google_oauth
-      ;;
-    "Back to main menu")
-      return
-      ;;
+stage_name() {
+  case "$1" in
+    deps) echo "Dependencies" ;;
+    conf) echo "Configuration" ;;
+    data) echo "Data services" ;;
+    ssl)  echo "SSL certificates" ;;
   esac
 }
 
-# -----------------------------------------------------------------------------
-# Main
-# -----------------------------------------------------------------------------
-main() {
-  trap cleanup INT TERM
-
-  cd "$ROOT_DIR"
-
-  check_dependencies
-  load_all_config
-
-  while true; do
-    local choice
-    choice="$(show_main_menu)"
-
-    case "$choice" in
-      *"PostgreSQL"*)
-        collect_postgres_config
-        ;;
-      *"Redis"*)
-        collect_redis_config
-        ;;
-      *"Elasticsearch"*)
-        collect_elasticsearch_config
-        ;;
-      *"Google OAuth"*)
-        oauth_submenu
-        ;;
-      *"Secret Key"*)
-        configure_secret_key
-        press_enter
-        ;;
-      *"SSL Certificates"*)
-        manage_certificates
-        ;;
-      *"Provision database"*)
-        provision_database
-        ;;
-      *"Exit"*)
-        break
-        ;;
-    esac
-
-    # Reload config after changes
-    load_all_config
-  done
+run_stage() {
+  local stage="$1"
+  local show_complete="${2:-true}"
+  case "$stage" in
+    deps) run_deps ;;
+    conf) run_conf ;;
+    data) run_data ;;
+    ssl)  run_ssl ;;
+    *)
+      msg_error "Unknown stage: $stage"
+      echo
+      usage
+      return 1
+      ;;
+  esac
+  if [[ "$show_complete" == "true" ]]; then
+    echo
+    msg_success "$(stage_name "$stage") complete."
+  fi
 }
 
-main
+run_all() {
+  for stage in "${STAGES[@]}"; do
+    run_stage "$stage" false || return 1
+    echo
+  done
+  msg_success "Gather setup complete."
+}
+
+main() {
+  if [[ $# -eq 0 ]]; then
+    run_all
+  elif [[ "$1" == "-h" || "$1" == "--help" ]]; then
+    usage
+  else
+    run_stage "$1"
+  fi
+}
+
+main "$@"

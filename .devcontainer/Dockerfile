@@ -16,6 +16,7 @@ RUN apt-get update \
   iftop \
   iproute2 \
   libcurl4-openssl-dev \
+  libnss3-tools \
   libreadline-dev \
   libsqlite3-dev \
   libssl-dev \
@@ -30,6 +31,7 @@ RUN apt-get update \
   sed \
   unzip \
   nano \
+  redis-tools \
   software-properties-common \
   sudo \
   tzdata \
@@ -47,7 +49,12 @@ RUN groupadd --gid 1000 $USERNAME \
 USER $USERNAME
 WORKDIR /home/$USERNAME
 
+# Install starship
+RUN curl -sS https://starship.rs/install.sh | sh -s -- -y
+RUN echo 'eval "$(starship init bash)"' >> /home/$USERNAME/.bashrc
+
 RUN curl https://mise.run | sh
+RUN echo 'eval "$(mise activate bash)"' >> ~/.bashrc
 
 # Copy mise.toml and install tools
 COPY --chown=$USERNAME:$USERNAME mise.toml /tmp/mise.toml
@@ -56,10 +63,6 @@ RUN /home/$USERNAME/.local/bin/mise trust --yes /tmp/mise.toml \
 
 # Set PATH for mise
 ENV PATH="/home/$USERNAME/.local/bin:/home/$USERNAME/.local/share/mise/shims:$PATH"
-
-# Install starship
-RUN curl -sS https://starship.rs/install.sh | sh -s -- -y
-RUN echo 'eval "$(starship init bash)"' >> /home/$USERNAME/.bashrc
 
 # Copy starship config
 RUN mkdir -p /home/$USERNAME/.config

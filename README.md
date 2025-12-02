@@ -3,149 +3,224 @@
 The App for Community - https://info.gather.coop
 
 ## Platform
-Gather is a Ruby on Rails application with some client-side JavaScript for dynamic view elements. HTML is generally rendered server-side. [SCSS](http://sass-lang.com/) is used for styling. No special IDE is required for Ruby on Rails development.
 
-Ruby on Rails applications are best developed and run on Linux, Unix, or Mac OS. Development is also possible, though not recommended, on Windows. See the [Rails download page](http://rubyonrails.org/download/) for more information.
+Gather is a Ruby on Rails application with some client-side JavaScript for dynamic view elements. HTML is rendered server-side. [SCSS](http://sass-lang.com/) is used for styling.
+
+Development is supported on Linux and macOS. Windows is not supported.
+
+## Quick Start
+
+### Using Dev Container (Recommended)
+
+The easiest way to get started is with VS Code and Dev Containers:
+
+1. Install [Docker](https://www.docker.com/) and [VS Code](https://code.visualstudio.com/)
+2. Install the [Dev Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
+3. Clone and open the project:
+   ```bash
+   git clone https://github.com/gather-community/gather.git
+   code gather
+   ```
+4. When prompted, click "Reopen in Container" (or run `Dev Containers: Reopen in Container` from the command palette)
+5. Once the container is built, run:
+   ```bash
+   mise setup
+   ```
+
+### Manual Setup
+
+If not using Dev Containers:
+
+```bash
+git clone https://github.com/gather-community/gather.git
+cd gather
+git checkout develop
+mise setup
+```
+
+The setup script will guide you through:
+
+- Checking dependencies
+- Generating configuration files
+- Starting data services (PostgreSQL, Redis, Elasticsearch)
+- Provisioning the database with an admin user
+- Installing SSL certificates
+
+Once complete, start the application:
+
+```bash
+bin/dev           # Start Rails server with foreman
+bin/delayed_job run  # Start background job processor (separate terminal)
+```
+
+Then visit https://gatherdev.org:3000 and sign in with the credentials shown during setup.
 
 ## System Dependencies
-To install the software below we recommend the following package managers:
 
-- Mac OS X: [Homebrew](http://brew.sh/)
-- Linux/Unix: bundled package manager (e.g. apt-get, yum)
+We recommend using [mise](https://mise.jdx.dev/) for managing tool versions and running configuration tasks. The project includes a `mise.toml` that installs Ruby, Node.js, and other required tools automatically.
 
-For both production and development environments:
+### Required Tools
 
-1. Ruby (see [.ruby-version file](.ruby-version) for exact version, [rbenv](https://github.com/sstephenson/rbenv) is recommended for Ruby version management)
-1. [Bundler](http://bundler.io/)
-    1. Once Ruby is installed, run `gem install bundler` to install.
-1. Node.js (see [.nvmrc file](.nvmrc) for exact version, nvm is recommended for Node version management)
-1. Yarn (`npm install -g yarn`)
-1. PostgreSQL 9.2+ (database)
-1. Redis 4.0+ (cache, key-value store)
-1. Elasticsearch 6.2+ (search engine) (Can be installed via homebrew on Mac OS X)
-1. libvips v8.8+ (image manipulation; PNG, JPG, and GIF support needed)
-1. Mailcatcher for testing email (run `gem install mailcatcher` to install).
-    1. Note, this gem is deliberately not in the Gemfile because it is a standalone development tool.
-1. A Gather OAuth client via the [Google API Console](https://support.google.com/cloud/answer/6158849?hl=en).
-1. Mailman 3 (see instructions below).
+| Tool                       | Purpose             |
+| -------------------------- | ------------------- |
+| Ruby (see `.ruby-version`) | Application runtime |
+| Node.js (see `.nvmrc`)     | JavaScript tooling  |
+| libvips 8.8+               | Image processing    |
 
-## Development Environment Setup
+### Optional Tools
 
-Follow these steps to setup a development environment for Gather.
+| Tool        | Purpose                                                           |
+| ----------- | ----------------------------------------------------------------- |
+| Docker      | Only required if using the repo's `compose.yml` for data services |
+| Mailcatcher | Email testing (`gem install mailcatcher`)                         |
+| Mailman 3   | Mailing list integration (see below)                              |
 
-1. Install all above dependencies
-    1. **Note:** For Elasticsearch, we recommend setting the maximum heap size to 200m unless you have lots of memory on your development machine. To do so, edit the `jvm.options` file. [See here for instructions](https://stackoverflow.com/a/40333263/2066866).
-    1. For Mailman 3:
-      1. Mailman is only required if you're working on the Mailman API integration. If so...
-        mkdir ../mailman && cd ../mailman
-        python3 -m venv venv
-        source venv/bin/activate
-        pip3 install mailman
-        mailman start
-        curl -v http://restadmin:restpass@localhost:8001/3.1/lists
-        pip3 install postorius hyperkitty whoosh
-        git clone https://github.com/gather-community/mailman-suite.git
-        cd mailman-suite/mailman-suite_project/
-        git clone https://github.com/gather-community/discoursessoclient.git
-        python3 manage.py migrate
-        python3 manage.py collectstatic
-        python3 manage.py runserver
-        curl -v http://localhost:8000 # To test. Run in a new tab.
-1. Retrieve project files using Git
-        git clone https://github.com/gather-community/gather.git
-        cd gather
+## Setup Stages
 
-    If developing, it's best to work off the development branch:
+Run individual setup stages with:
 
-        git checkout develop
+```bash
+mise deps    # Check dependencies
+mise conf    # Generate configuration
+mise data    # Setup data services and database
+mise ssl     # Configure SSL certificates
+```
 
-    The remaining steps should all be done from the project directory.
-1. Install gems
-    1. Run `bundle install` to install the required gems.
-1. Set local config
-    1. Copy `config/settings.local.yml.example` to `config/settings.local.yml`.
-    1. Edit `config/settings.local.yml` to fit your environment. Be sure to read all the comments within that file for guidance.
-1. Create development and test databases and schemas
-    1. Copy `config/database.yml.example` to `config/database.yml`.
-    1. Run `rake db:create` to create `gather_development` and `gather_test` databases.
-    1. Run `rake db:schema:load` to create the schema in both databases.
-1. Create some fake data and a user so you can sign in
-    1. Run:
-            rake db:new_cluster ADMIN_FNAME="Your" ADMIN_LNAME="Name" ADMIN_EMAIL="you@example.com" SUPER_ADMIN=y
-        to add one cluster, one community, and a full complement of fake data. This command will also add a user with superadmin privileges with the Gmail address you entered in `settings.local.yml`.
-1. Run the tests
-    1. Run `bundle exec rspec`.
-    1. All tests should pass.
-1. Ensure Redis is running.
-    1. If you installed via Homebrew, try `brew services start redis`.
-    1. If you are on Linux try `sudo systemctl start redis` or `sudo service redis start`.
-1. Trust the development certificate
-    1. On MacOS you can do `sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain config/ssl/gatherdev.org.crt`.
-    2. On other platforms you will need to figure this out. Search for "trust local ssl certificate".
-1. Install javascript packages
-    1. Run `yarn install`
-1. Start the server
-    1. Run `bin/dev`.
-    1. Leave this console open.
-1. Start DelayedJob
-    1. Open a new console.
-    1. Go to the project directory.
-    1. Run `bin/delayed_job run`.
-    1. The logs for jobs will mostly go to log/development.log. The log/delayed_job.log file is sparse and
-       contains only information about the initialization and resulting state of jobs.
-1. Start using the system
-    1. In a browser, go to `https://gatherdev.org:3000` to start Gather.
-    1. Sign in with the username and password created in rake new_cluster task (the username and password will be shown in the output.)
-    1. Enjoy!
+The `mise data` stage will create an admin user for development. If you need to reset the admin password later, run `mise data` again and select "Reset super admin password".
 
-Later, to re-start your development environment, the following should be sufficient:
+## Running the Application
 
-    bundle install
-    bundle exec rake db:migrate
-    brew services start redis
+1. **Start data services** (PostgreSQL, Redis, Elasticsearch):
 
-To run the rails console you will need to set a tenant:
-    1. At the console run `CH.tenant(1)` or whatever Community id you would like.
+   ```bash
+   docker compose up -d
+   ```
 
-And if working with Mailman, in a separate terminal:
+   If you're using your own data services, ensure they're running and configured in `config/database.yml` and `config/settings.local.yml`. The `mise data` task will attempt to start Docker Compose services if it can't connect to the configured hosts.
 
-    cd ../mailman
-    source venv/bin/activate
-    mailman start
-    cd mailman-suite/mailman-suite_project/
-    python3 manage.py runserver
+2. **Run tests** to verify everything is working:
+
+   ```bash
+   bundle exec rspec
+   ```
+
+3. **Start the application**:
+   ```bash
+   bin/dev           # Start Rails server with foreman
+   bin/delayed_job run  # Start background job processor (separate terminal)
+   ```
+   Job logs go to `log/development.log`. The `log/delayed_job.log` file contains only initialization and job state information.
+
+## Rails Console
+
+When using the Rails console, set a tenant first:
+
+```ruby
+CH.tenant(1)  # Use Community ID 1
+```
 
 ## Caching
 
-Caching is off by default in development mode since it can lead to confusing issues where changes to views don't show up.
+Caching is off by default in development. Enable temporarily with:
 
-If you are testing some caching behavior you can enable it temporarily by doing:
-
-```
+```bash
 CACHE=1 rails server
 ```
 
 ## Linters
 
-Linters are strongly recommended for checking your code. The CI system will run linters as well and pull requests won't be approved until all issues are resolved or cancelled by the reviewer. We recommend eslint, rubocop, and scss_lint.
+We use eslint, rubocop, and scss_lint. The CI system enforces these—PRs won't be approved until issues are resolved.
 
-### Troubleshooting
+## Troubleshooting
 
-If the Elasticsearch index is returning 403 errors, try the following to reset the index (assumes development environment is where the problem is ocurring):
+### Elasticsearch 403 Errors
 
-```
+Reset the index:
+
+```ruby
 rails console -e development
 Work::Shift.__elasticsearch__.create_index!(force: true)
 ```
 
-After re-creating the search index in development mode, if you want to be able to search existing data, you'll need to re-populate the index:
+To re-populate after resetting:
 
-    ActsAsTenant.current_tenant = Cluster.find(...)
-    Work::Shift.find_each { |s| s.__elasticsearch__.index_document }
+```ruby
+ActsAsTenant.current_tenant = Cluster.find(...)
+Work::Shift.find_each { |s| s.__elasticsearch__.index_document }
+```
 
-### Tools
-Most code editors have plugins for linting. They will identify and let you click directly into problematic lines. You are encouraged to try one out!
+## Mailman 3 Setup
+
+Only required if working on mailing list integration:
+
+```bash
+mkdir ../mailman && cd ../mailman
+python3 -m venv venv
+source venv/bin/activate
+pip3 install mailman postorius hyperkitty whoosh
+mailman start
+git clone https://github.com/gather-community/mailman-suite.git
+cd mailman-suite/mailman-suite_project/
+git clone https://github.com/gather-community/discoursessoclient.git
+python3 manage.py migrate
+python3 manage.py collectstatic
+python3 manage.py runserver
+```
+
+## VS Code
+
+When using Dev Containers, extensions and settings are installed and configured automatically.
+
+If working locally without a Dev Container, install these recommended extensions:
+
+**Ruby/Rails:**
+
+- `Shopify.ruby-lsp` - Ruby language server
+- `Shopify.ruby-extensions-pack` - Ruby extensions pack
+- `KoichiSasada.vscode-rdbg` - Ruby debugger
+- `rubocop.vscode-rubocop` - RuboCop linting
+- `aliariff.vscode-erb-beautify` - ERB formatting
+
+**JavaScript/TypeScript:**
+
+- `dbaeumer.vscode-eslint` - ESLint
+- `esbenp.prettier-vscode` - Prettier formatting
+- `marcoroth.stimulus-lsp` - Stimulus (Hotwire) support
+- `bradlc.vscode-tailwindcss` - Tailwind CSS
+
+**Utilities:**
+
+- `hverlin.mise-vscode` - mise integration
+- `ckolkman.vscode-postgres` - PostgreSQL client
+- `ms-azuretools.vscode-docker` - Docker support
+- `foxundermoon.shell-format` - Shell script formatting
+- `timonwong.shellcheck` - Shell script linting
+- `EditorConfig.EditorConfig` - EditorConfig support
+
+**Recommended settings** (`.vscode/settings.json`):
+
+```json
+{
+  "editor.tabSize": 2,
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[ruby]": {
+    "editor.defaultFormatter": "Shopify.ruby-lsp"
+  },
+  "[erb]": {
+    "editor.defaultFormatter": "aliariff.vscode-erb-beautify"
+  },
+  "[shellscript]": {
+    "editor.defaultFormatter": "foxundermoon.shell-format"
+  },
+  "files.associations": {
+    "*.html.erb": "erb"
+  }
+}
+```
 
 ## Acknowledgements
+
 This project is happily tested with BrowserStack!
+
 [![Tested with BrowserStack](https://www.browserstack.com/images/layout/browserstack-logo-600x315.png)](https://www.browserstack.com)

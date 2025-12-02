@@ -6,6 +6,7 @@ run_deps() {
   echo
 
   local all_ok=true
+  local fixes=()
 
   # Mise
   local mise_ok
@@ -14,6 +15,7 @@ run_deps() {
   else
     mise_ok="false"
     all_ok=false
+    fixes+=("mise doctor")
   fi
   printf "  %-12s %s\n" "mise doctor" "$(status_icon "$mise_ok")"
 
@@ -26,6 +28,7 @@ run_deps() {
     ruby_ok="false"
     ruby_version="not found"
     all_ok=false
+    fixes+=("mise install ruby")
   fi
   printf "  %-12s %s  %s\n" "ruby" "$(status_icon "$ruby_ok")" "$ruby_version"
 
@@ -43,11 +46,13 @@ run_deps() {
       libvips_ok="false"
       libvips_version="$version (too old)"
       all_ok=false
+      fixes+=("Install libvips 8.8+")
     fi
   else
     libvips_ok="false"
     libvips_version="not found"
     all_ok=false
+    fixes+=("Install libvips 8.8+")
   fi
   printf "  %-12s %s  %s\n" "libvips" "$(status_icon "$libvips_ok")" "$libvips_version"
 
@@ -58,8 +63,20 @@ run_deps() {
   else
     gems_ok="false"
     all_ok=false
+    fixes+=("bundle install")
   fi
   printf "  %-12s %s\n" "gems" "$(status_icon "$gems_ok")"
+
+  # Yarn packages
+  local yarn_ok
+  if command_exists yarn && yarn check --verify-tree &>/dev/null; then
+    yarn_ok="true"
+  else
+    yarn_ok="false"
+    all_ok=false
+    fixes+=("yarn install")
+  fi
+  printf "  %-12s %s\n" "yarn" "$(status_icon "$yarn_ok")"
 
   echo
 
@@ -67,7 +84,10 @@ run_deps() {
     msg_success "All dependencies satisfied."
     return 0
   else
-    msg_error "Some dependencies are missing."
+    msg_error "Some dependencies are missing. To fix:"
+    for fix in "${fixes[@]}"; do
+      echo "  $fix"
+    done
     return 1
   fi
 }

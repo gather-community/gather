@@ -1,103 +1,73 @@
 # shellcheck shell=bash
-# Dependency checking and status display
+# Check development dependencies
 
-declare -A DEPS
+run_deps() {
+  echo "Checking dependencies..."
+  echo
 
-check_dependencies() {
-  # Ruby
-  if command_exists ruby; then
-    DEPS[ruby]="true"
-    DEPS[ruby_version]="$(ruby -v | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')"
+  local all_ok=true
+
+  # Mise
+  local mise_ok
+  if mise doctor &>/dev/null; then
+    mise_ok="true"
   else
-    DEPS[ruby]="false"
-    DEPS[ruby_version]="not found"
+    mise_ok="false"
+    all_ok=false
   fi
+  printf "  %-12s %s\n" "mise doctor" "$(status_icon "$mise_ok")"
+
+  # Ruby
+  local ruby_ok ruby_version
+  if command_exists ruby; then
+    ruby_ok="true"
+    ruby_version="$(ruby -v | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')"
+  else
+    ruby_ok="false"
+    ruby_version="not found"
+    all_ok=false
+  fi
+  printf "  %-12s %s  %s\n" "ruby" "$(status_icon "$ruby_ok")" "$ruby_version"
 
   # libvips
+  local libvips_ok libvips_version version major minor
   if command_exists vips; then
-    local version
     version="$(vips --version | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')"
-    local major minor
     major="${version%%.*}"
     minor="${version#*.}"
     minor="${minor%%.*}"
     if [[ "$major" -gt 8 ]] || { [[ "$major" -eq 8 ]] && [[ "$minor" -ge 8 ]]; }; then
-      DEPS[libvips]="true"
-      DEPS[libvips_version]="$version"
+      libvips_ok="true"
+      libvips_version="$version"
     else
-      DEPS[libvips]="false"
-      DEPS[libvips_version]="$version (too old)"
+      libvips_ok="false"
+      libvips_version="$version (too old)"
+      all_ok=false
     fi
   else
-    DEPS[libvips]="false"
-    DEPS[libvips_version]="not found"
+    libvips_ok="false"
+    libvips_version="not found"
+    all_ok=false
   fi
+  printf "  %-12s %s  %s\n" "libvips" "$(status_icon "$libvips_ok")" "$libvips_version"
 
   # Gems
+  local gems_ok
   if bundle check &>/dev/null; then
-    DEPS[gems]="true"
+    gems_ok="true"
   else
-    DEPS[gems]="false"
+    gems_ok="false"
+    all_ok=false
   fi
-}
+  printf "  %-12s %s\n" "gems" "$(status_icon "$gems_ok")"
 
-all_deps_ok() {
-  [[ "${DEPS[libvips]}" == "true" ]]
-}
-
-admin_config_present() {
-  [[ -n "$ADMIN_FNAME" && -n "$ADMIN_LNAME" && -n "$ADMIN_EMAIL" ]]
-}
-
-show_status() {
-  clear_screen
-  header
   echo
 
-  gum style --bold "Dependencies"
-  echo
-  printf "  %-12s %s  %s\n" "ruby" "$(status_icon "${DEPS[ruby]}")" "${DEPS[ruby_version]}"
-  printf "  %-12s %s  %s\n" "libvips" "$(status_icon "${DEPS[libvips]}")" "${DEPS[libvips_version]}"
-  printf "  %-12s %s\n" "gems" "$(status_icon "${DEPS[gems]}")"
-  echo
-
-  gum style --bold "Services"
-  echo
-
-  # PostgreSQL
-  if pg_configured; then
-    printf "  %-14s %s  %s\n" "PostgreSQL" "$(status_icon true)" "$(pg_status_text)"
+  if [[ "$all_ok" == "true" ]]; then
+    msg_success "All dependencies satisfied."
+    return 0
   else
-    printf "  %-14s %s  %s\n" "PostgreSQL" "$(status_icon false)" "$(gum style --foreground 7 "not configured")"
+    msg_error "Some dependencies are missing."
+    return 1
   fi
-
-  # Redis
-  if redis_configured; then
-    printf "  %-14s %s  %s\n" "Redis" "$(status_icon true)" "$(redis_status_text)"
-  else
-    printf "  %-14s %s  %s\n" "Redis" "$(status_icon false)" "$(gum style --foreground 7 "not configured")"
-  fi
-
-  # Elasticsearch
-  if es_configured; then
-    printf "  %-14s %s  %s\n" "Elasticsearch" "$(status_icon true)" "$(es_status_text)"
-  else
-    printf "  %-14s %s  %s\n" "Elasticsearch" "$(status_icon false)" "$(gum style --foreground 7 "not configured")"
-  fi
-
-  # Google OAuth
-  if oauth_configured; then
-    printf "  %-14s %s  %s\n" "Google OAuth" "$(status_icon true)" "$(oauth_status_text)"
-  else
-    printf "  %-14s %s  %s\n" "Google OAuth" "$(status_icon false)" "$(gum style --foreground 7 "not configured")"
-  fi
-
-  # Secret Key
-  if secret_key_configured; then
-    printf "  %-14s %s  %s\n" "Secret Key" "$(status_icon true)" "configured"
-  else
-    printf "  %-14s %s  %s\n" "Secret Key" "$(status_icon false)" "$(gum style --foreground 7 "not configured")"
-  fi
-
-  echo
 }

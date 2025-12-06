@@ -17,8 +17,10 @@
 FactoryBot.define do
   factory :eventlet, class: "Calendars::Eventlet" do
     transient do
+      name { nil }
       creator { nil }
       group { nil }
+      note { nil }
     end
 
     event do |evaluator|
@@ -27,8 +29,10 @@ FactoryBot.define do
         starts_at: starts_at,
         ends_at: ends_at
       }
+      overrides[:name] = evaluator.name if evaluator.name.present?
       overrides[:creator] = evaluator.creator if evaluator.creator.present?
       overrides[:group] = evaluator.group if evaluator.group.present?
+      overrides[:note] = evaluator.note if evaluator.note.present?
       overrides[:dont_sync_eventlet] = true
       association :event, overrides
     end

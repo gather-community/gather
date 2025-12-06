@@ -18,11 +18,11 @@ module Calendars
       end
     end
 
-    def send_calendar_data(calendar_name, events)
+    def send_calendar_data(calendar_name, eventlets)
       host = "#{current_community.subdomain}.#{Settings.url.host}"
       url_options = Settings.url.to_h.slice(:port, :protocol).merge(host: host)
-      generator = IcalGenerator.new(calendar_name: calendar_name, events: events,
-                                    url_options: url_options)
+      generator = IcalGenerator.new(calendar_name: calendar_name, eventlets: eventlets,
+                                     url_options: url_options)
       send_data(generator.generate, filename: "#{export_file_basename}.ics", type: "text/calendar")
     end
   end

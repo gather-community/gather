@@ -35,7 +35,7 @@ module Calendars
     belongs_to :event, class_name: "Calendars::Event", inverse_of: :eventlets
     belongs_to :calendar, class_name: "Calendars::Calendar", inverse_of: :eventlets
 
-    delegate :kind, :meal?, :creator, :group, to: :event
+    delegate :name, :kind, :meal?, :meal_id, :creator, :creator_id, :group, :note, to: :event
 
     # Satisfies ducktype expected by policies. Prefer more explicit variants creator_community
     # and sponsor_community on Event for other uses.

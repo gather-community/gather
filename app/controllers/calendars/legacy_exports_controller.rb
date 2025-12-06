@@ -109,7 +109,7 @@ module Calendars
     def generate_ical_data_and_send(calendar_name, calendars, self_created_events_only)
       finder = EventFinder.new(calendars: calendars.compact, range: event_date_range,
                                user: current_user, own_only: self_created_events_only)
-      send_calendar_data(calendar_name, finder.events)
+      send_calendar_data(calendar_name, finder.eventlets)
     end
   end
 end

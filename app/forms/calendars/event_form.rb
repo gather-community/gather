@@ -189,7 +189,7 @@ module Calendars
 
     def apply_rules
       return if errors.any?
-      rule_set.errors(self).each { |e| errors.add(*e) }
+      rule_set.errors(event).each { |e| errors.add(*e) }
     end
 
     def restrict_changes_in_past

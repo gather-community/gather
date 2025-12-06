@@ -31,7 +31,7 @@ module Meals
     # Assumes build_events has been run already.
     def validate_meal
       meal.events.each do |event|
-        event_form = Calendars::EventForm.new(event: event)
+        event_form = Calendars::EventForm.new(event: event, params: {guidelines_ok: "1"})
         next if event_form.valid?
         errors = event_form.errors.map do |error|
           if error.attribute == :base

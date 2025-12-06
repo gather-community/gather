@@ -73,13 +73,15 @@ module Calendars
       set_default_starts_and_ends_at(params) if @action == :new
 
       if params.present?
-        permitted_attributes = event_policy.permitted_attributes(group_id: params[:group_id])
-        unless params.is_a?(ActionController::Parameters)
-          params = ActionController::Parameters.new(params)
-        end
         self.origin_page = params.delete(:origin_page)
         self.guidelines_ok = params.delete(:guidelines_ok)
-        @event.assign_attributes(params.permit(permitted_attributes))
+        if @current_user
+          permitted_attributes = event_policy.permitted_attributes(group_id: params[:group_id])
+          unless params.is_a?(ActionController::Parameters)
+            params = ActionController::Parameters.new(params)
+          end
+          @event.assign_attributes(params.permit(permitted_attributes))
+        end
       end
     end
 

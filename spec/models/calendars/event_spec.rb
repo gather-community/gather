@@ -44,14 +44,13 @@ describe Calendars::Event do
 
     before do
       meal.build_events
-      meal.save!
     end
 
     it "should call validate_event and then sync_resourcings" do
       event.starts_at += 1.minute
       expect(meal.event_handler).to receive(:validate_event).with(event)
       expect(meal.event_handler).to receive(:sync_resourcings).with(event)
-      event.save!
+      meal.save!
     end
   end
 

@@ -33,7 +33,7 @@ module Calendars
     validate :restrict_changes_in_past
     validate :no_overlap
     validate :apply_rules
-    validate lambda { |r| meal&.event_handler&.validate_event(r) }
+    validate lambda { |r| meal&.event_handler&.validate_event(r.event) }
 
     class << self
       delegate :reflect_on_association, to: Event

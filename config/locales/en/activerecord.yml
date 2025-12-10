@@ -1,4 +1,18 @@
 en:
+  activemodel:
+    attributes:
+      calendars/event:
+        calendar: "Calendar"
+        pre_notice: "Notice"
+        name: "Event Name"
+        starts_at: "Start Time"
+        ends_at: "End Time"
+        creator: "Creator"
+        group: "Group"
+        all_day: "All-day event?"
+        kind: "Type"
+        note: "Note"
+        guidelines: "Guidelines"
   activerecord:
     models:
       meals/meal: "Meal"
@@ -161,18 +175,6 @@ en:
         calendar_ids: "Calendars"
       calendars/group:
         name: "Group Name"
-      calendars/event:
-        calendar: "Calendar"
-        pre_notice: "Notice"
-        name: "Event Name"
-        starts_at: "Start Time"
-        ends_at: "End Time"
-        creator: "Creator"
-        group: "Group"
-        all_day: "All-day event?"
-        kind: "Type"
-        note: "Note"
-        guidelines: "Guidelines"
       calendars/calendar:
         name: "Name"
         guidelines: "Guidelines"

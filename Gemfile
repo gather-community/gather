@@ -18,7 +18,7 @@ gem "config", "~> 4.0"
 gem "country_select", "~> 4.0",
   require: "country_select_without_sort_alphabetical" # Alpha sort is memory intensive?
 gem "daemons", "~> 1.2"
-gem "datetimepicker-rails", git: "https://github.com/zpaulovics/datetimepicker-rails",
+gem "datetimepicker-rails", git: "https://github.com/gather-community/datetimepicker-rails",
   branch: "master", submodules: true
 gem "delayed_job_active_record", "~> 4.1"
 gem "devise", "~> 4.7"

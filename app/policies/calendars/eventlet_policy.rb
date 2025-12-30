@@ -30,7 +30,8 @@ module Calendars
 
     # All mutations should happen via the Event controller and policy
     def create?
-      false
+      specific_record? && calendar.active? && !calendar.system? &&
+        active? && !read_only_by_protocol? && !meal?
     end
 
     def update?

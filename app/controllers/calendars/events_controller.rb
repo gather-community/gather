@@ -159,17 +159,17 @@ module Calendars
     private
 
     def prep_single_calendar_index
-      # We use an unsaved sample event to authorize against.
+      # We use an unsaved sample eventlet to authorize against.
       # We set kind to nil because we can't know the kind in advance. This object is also used
       # to fetch a RuleSet for use in showing other_communities warnings and fixed start/end times.
       # As such, only warnings and fixed time rules that don't specify a particular kind will be observed.
       # Kind-specific rules will be enforced through validation.
-      sample_event = Event.new(calendar: @calendar, creator: current_user, kind: nil)
-      authorize(sample_event)
+      sample_eventlet = Eventlet.new(calendar: @calendar, event: Event.new(creator: current_user, kind: nil))
+      authorize(sample_eventlet)
       prepare_lenses(*BASE_LENSES)
-      @can_create_event = policy(sample_event).create?
+      @can_create_event = policy(sample_eventlet).create?
 
-      @rule_set = sample_event.rule_set
+      @rule_set = sample_eventlet.rule_set
       if @rule_set.access_level(current_user.community) == "read_only"
         flash.now[:notice] = "Only #{@calendar.community_name} residents may reserve this calendar."
       end

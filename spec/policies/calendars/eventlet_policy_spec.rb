@@ -41,7 +41,7 @@ describe Calendars::EventletPolicy do
       context "inactive calendar" do
         let(:calendar) { create(:calendar, :inactive) }
 
-        permissions :index? do
+        permissions :index?, :new?, :create? do
           it_behaves_like "forbids all"
         end
       end
@@ -58,11 +58,11 @@ describe Calendars::EventletPolicy do
       context "with forbidden access_level" do
         let(:access_level) { "forbidden" }
 
-        permissions :index?, :show? do
+        permissions :index?, :show?, :new?, :create? do
           it_behaves_like "permits cluster admins only"
         end
 
-        permissions :new?, :create?, :edit?, :update?, :destroy? do
+        permissions :edit?, :update?, :destroy? do
           it_behaves_like "forbids all"
         end
       end
@@ -74,7 +74,11 @@ describe Calendars::EventletPolicy do
           it_behaves_like "permits active users only"
         end
 
-        permissions :new?, :create?, :edit?, :update?, :destroy? do
+        permissions :new?, :create? do
+          it_behaves_like "permits cluster admins only"
+        end
+
+        permissions :edit?, :update?, :destroy? do
           it_behaves_like "forbids all"
         end
       end
@@ -83,7 +87,7 @@ describe Calendars::EventletPolicy do
       context "with sponsor access_level" do
         let(:access_level) { "sponsor" }
 
-        permissions :index?, :show? do
+        permissions :index?, :show?, :new?, :create? do
           it_behaves_like "permits active users only"
         end
 

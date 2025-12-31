@@ -39,8 +39,7 @@ module Calendars
     end
 
     def create?
-      specific_record? && calendar.active? && !calendar.system? &&
-        active? && !read_only_by_protocol? && !meal?
+      specific_record? && active? && !meal?
     end
 
     def update?

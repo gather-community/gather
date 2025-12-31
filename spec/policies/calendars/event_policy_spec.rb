@@ -84,13 +84,6 @@ describe Calendars::EventPolicy do
         end
       end
 
-      context "inactive calendar" do
-        let(:calendar) { create(:calendar, :inactive) }
-
-        permissions :new?, :create? do
-          it_behaves_like "forbids all"
-        end
-      end
 
       permissions :destroy? do
         context "future event" do
@@ -123,7 +116,7 @@ describe Calendars::EventPolicy do
       context "with forbidden access_level" do
         let(:access_level) { "forbidden" }
 
-        permissions :show?, :new?, :create?, :edit?, :update?, :destroy? do
+        permissions :show?, :edit?, :update?, :destroy? do
           it_behaves_like "permits cluster admins only"
         end
       end
@@ -135,7 +128,7 @@ describe Calendars::EventPolicy do
           it_behaves_like "permits active users only"
         end
 
-        permissions :new?, :create?, :edit?, :update?, :destroy? do
+        permissions :edit?, :update?, :destroy? do
           it_behaves_like "permits cluster admins only"
         end
       end
@@ -144,7 +137,7 @@ describe Calendars::EventPolicy do
       context "with sponsor access_level" do
         let(:access_level) { "sponsor" }
 
-        permissions :show?, :new?, :create? do
+        permissions :show? do
           it_behaves_like "permits active users only"
         end
 
@@ -188,7 +181,7 @@ describe Calendars::EventPolicy do
         it_behaves_like "permits active users only"
       end
 
-      permissions :new?, :create?, :edit?, :update?, :destroy? do
+      permissions :edit?, :update?, :destroy? do
         it "forbids all" do
           expect(subject).not_to permit(creator, event)
           expect(subject).not_to permit(user, event)

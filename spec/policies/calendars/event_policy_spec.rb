@@ -87,7 +87,7 @@ describe Calendars::EventPolicy do
       context "inactive calendar" do
         let(:calendar) { create(:calendar, :inactive) }
 
-        permissions :index?, :new?, :create? do
+        permissions :new?, :create? do
           it_behaves_like "forbids all"
         end
       end
@@ -123,7 +123,7 @@ describe Calendars::EventPolicy do
       context "with forbidden access_level" do
         let(:access_level) { "forbidden" }
 
-        permissions :index?, :show?, :new?, :create?, :edit?, :update?, :destroy? do
+        permissions :show?, :new?, :create?, :edit?, :update?, :destroy? do
           it_behaves_like "permits cluster admins only"
         end
       end
@@ -131,7 +131,7 @@ describe Calendars::EventPolicy do
       context "with read_only access_level" do
         let(:access_level) { "read_only" }
 
-        permissions :index?, :show? do
+        permissions :show? do
           it_behaves_like "permits active users only"
         end
 
@@ -144,7 +144,7 @@ describe Calendars::EventPolicy do
       context "with sponsor access_level" do
         let(:access_level) { "sponsor" }
 
-        permissions :index?, :show?, :new?, :create? do
+        permissions :show?, :new?, :create? do
           it_behaves_like "permits active users only"
         end
 
@@ -184,7 +184,7 @@ describe Calendars::EventPolicy do
       let(:calendar) { create(:your_meals_calendar) }
       let(:event) { build(:event, creator: creator, calendar: calendar) }
 
-      permissions :index?, :show? do
+      permissions :show? do
         it_behaves_like "permits active users only"
       end
 

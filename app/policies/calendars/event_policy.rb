@@ -29,10 +29,9 @@ module Calendars
     end
 
     def index?
-      # If record is a Class (not a specific event), can't check if calendar is active
-      (not_specific_record? || calendar.active?) &&
-        # If record is a Class (not a specific event), can't check protocol
-        active? && (not_specific_record? || !forbidden_by_protocol?)
+      # Any user can view an event list since event lists can't be calendar-specific because
+      # events can span multiple calendars. Events/eventlets the user can't see will be scoped out.
+      active?
     end
 
     def show?

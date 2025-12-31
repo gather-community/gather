@@ -35,11 +35,13 @@ module Calendars
     end
 
     def update?
-      false
+      specific_record? && !calendar.system? && !read_only_by_protocol? &&
+        (admin_or_coord? || active_creator_or_group_member? || (meal? && active_with_community_role?(:meals_coordinator)))
     end
 
     def destroy?
-      false
+      specific_record? && !read_only_by_protocol? && !meal? && !calendar.system? &&
+        (admin_or_coord? || active_creator_or_group_member? && (future? || recently_created?))
     end
 
     private
@@ -48,6 +50,10 @@ module Calendars
 
     def admin_or_coord?
       active_admin_or?(:calendar_coordinator)
+    end
+
+    def active_creator_or_group_member?
+      active? && (eventlet.creator == user || eventlet.group&.member?(user))
     end
 
     def forbidden_by_protocol?

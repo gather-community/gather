@@ -21,6 +21,26 @@ describe Calendars::EventletPolicy do
     end
     let(:record) { eventlet }
 
+    shared_examples_for "permits admins or calendar coord or creator or group member but not regular users" do
+      it_behaves_like "permits admins or special role but not regular users", :calendar_coordinator
+
+      context "without group" do
+        it "permits creator" do
+          expect(subject).to permit(creator, event)
+        end
+      end
+
+      context "with group" do
+        let(:joiner) { create(:user) }
+        let(:group) { create(:group, joiners: [joiner]) }
+
+        it "permits creator and group member" do
+          expect(subject).to permit(creator, event)
+          expect(subject).to permit(joiner, event)
+        end
+      end
+    end
+
     context "with class instead of object" do
       let(:record) { Calendars::Eventlet }
 
@@ -58,12 +78,8 @@ describe Calendars::EventletPolicy do
       context "with forbidden access_level" do
         let(:access_level) { "forbidden" }
 
-        permissions :index?, :show?, :new?, :create? do
+        permissions :index?, :show?, :new?, :create?, :edit?, :update?, :destroy? do
           it_behaves_like "permits cluster admins only"
-        end
-
-        permissions :edit?, :update?, :destroy? do
-          it_behaves_like "forbids all"
         end
       end
 
@@ -74,12 +90,8 @@ describe Calendars::EventletPolicy do
           it_behaves_like "permits active users only"
         end
 
-        permissions :new?, :create? do
+        permissions :new?, :create?, :edit?, :update?, :destroy? do
           it_behaves_like "permits cluster admins only"
-        end
-
-        permissions :edit?, :update?, :destroy? do
-          it_behaves_like "forbids all"
         end
       end
 
@@ -92,7 +104,7 @@ describe Calendars::EventletPolicy do
         end
 
         permissions :edit?, :update?, :destroy? do
-          it_behaves_like "forbids all"
+          it_behaves_like "permits admins or calendar coord or creator or group member but not regular users"
         end
       end
     end

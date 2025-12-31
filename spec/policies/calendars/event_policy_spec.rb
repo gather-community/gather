@@ -18,9 +18,7 @@ describe Calendars::EventPolicy do
     end
     let(:record) { event }
 
-    shared_examples_for "permits admins or calendar coord or creator or group member but not regular users" do
-      it_behaves_like "permits admins or special role but not regular users", :calendar_coordinator
-
+    shared_examples_for "permits creator or group member but not regular users" do
       context "without group" do
         it "permits creator" do
           expect(subject).to permit(creator, event)
@@ -36,6 +34,15 @@ describe Calendars::EventPolicy do
           expect(subject).to permit(joiner, event)
         end
       end
+
+      it "forbids regular users" do
+        expect(subject).not_to permit(user, event)
+      end
+    end
+
+    shared_examples_for "permits admins or calendar coord or creator or group member but not regular users" do
+      it_behaves_like "permits admins or special role but not regular users", :calendar_coordinator
+      it_behaves_like "permits creator or group member but not regular users"
     end
 
     shared_examples_for "permits admins or calendar coord but not creator" do
@@ -64,8 +71,21 @@ describe Calendars::EventPolicy do
     end
 
     context "regular (non-meal) event" do
-      permissions :index?, :show?, :new?, :create? do
+      permissions :index?, :new?, :create? do
         it_behaves_like "permits active users only"
+      end
+
+      permissions :show? do
+        it_behaves_like "permits active users only"
+
+        context "all eventlets are forbidden" do
+          let!(:calendar) { create(:calendar, community: communityB) }
+          let!(:protocol) { create(:calendar_protocol, calendars: [calendar], other_communities: "forbidden") }
+
+          it "forbids" do
+            expect(subject).not_to permit(user, event)
+          end
+        end
       end
 
       permissions :edit?, :update? do
@@ -105,13 +125,9 @@ describe Calendars::EventPolicy do
       end
     end
 
-    # These specs assumes that the user is from a different community since it wouldn't make
-    # sense for a rule set to forbid access from the calendar's own community.
-    # With forbidden access level, the only outside users that can do the things are cluster admins.
-    context "event with calendar with access_level rule for outside communities" do
-      before do
-        allow(event).to receive(:rule_set).and_return(double(access_level: access_level))
-      end
+    context "event with calendar in different community and access_level rule for outside communities" do
+      let(:calendar) { create(:calendar, community: communityB) }
+      let!(:protocol) { create(:calendar_protocol, calendars: [calendar], other_communities: access_level) }
 
       context "with forbidden access_level" do
         let(:access_level) { "forbidden" }
@@ -142,7 +158,8 @@ describe Calendars::EventPolicy do
         end
 
         permissions :edit?, :update?, :destroy? do
-          it_behaves_like "permits admins or calendar coord or creator or group member but not regular users"
+          it_behaves_like "permits cluster and super admins"
+          it_behaves_like "permits creator or group member but not regular users"
         end
       end
     end
@@ -169,23 +186,6 @@ describe Calendars::EventPolicy do
           expect(subject).to permit(meals_coordinator, event)
           expect(subject).to permit(calendar_coordinator, event)
           expect(subject).not_to permit(user, event)
-        end
-      end
-    end
-
-    context "system calendar event" do
-      let(:calendar) { create(:your_meals_calendar) }
-      let(:event) { build(:event, creator: creator, calendar: calendar) }
-
-      permissions :show? do
-        it_behaves_like "permits active users only"
-      end
-
-      permissions :edit?, :update?, :destroy? do
-        it "forbids all" do
-          expect(subject).not_to permit(creator, event)
-          expect(subject).not_to permit(user, event)
-          expect(subject).not_to permit(admin, event)
         end
       end
     end

@@ -5,7 +5,7 @@ The App for Community - https://info.gather.coop
 ## Platform
 Gather is a Ruby on Rails application with some client-side JavaScript for dynamic view elements. HTML is generally rendered server-side. [SCSS](http://sass-lang.com/) is used for styling. No special IDE is required for Ruby on Rails development.
 
-Ruby on Rails applications are best developed and run on Linux, Unix, or Mac OS. Development is also possible, though not recommended, on Windows. See the [Rails download page](http://rubyonrails.org/download/) for more information.
+Ruby on Rails applications are best developed and run on Linux, Unix, or Mac OS. Development is also possible, though not recommended, on Windows. See the [Rails website](http://rubyonrails.org/) for more information.
 
 ## System Dependencies
 To install the software below we recommend the following package managers:

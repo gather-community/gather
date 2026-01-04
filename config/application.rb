@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require "logger"
 require_relative("boot")
 require "rails/all"
 require_relative("../lib/disable_tenant_scoping")

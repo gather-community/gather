@@ -1,0 +1,32 @@
+[tools]
+gcloud = "latest"
+gum = "latest"
+node = { version = "18.12.1", postinstall = "corepack enable" }
+ruby = "3.2.2"
+shfmt = "latest"
+yq = "latest"
+
+[tasks.setup]
+description = "Run full development environment setup"
+run = "bin/setup"
+raw = true
+
+[tasks.deps]
+description = "Check development dependencies"
+run = "bin/setup deps"
+raw = true
+
+[tasks.conf]
+description = "Generate configuration files"
+run = "bin/setup conf"
+raw = true
+
+[tasks.data]
+description = "Setup data services and provision database"
+run = "bin/setup data"
+raw = true
+
+[tasks.ssl]
+description = "Configure SSL certificates"
+run = "bin/setup ssl"
+raw = true

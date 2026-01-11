@@ -38,4 +38,15 @@ describe Calendars::System::OtherCommunitiesMealsCalendar do
     events = calendar.events_between((Time.current - 2.days)..(Time.current + 5.days), actor: actor)
     expect_events(events, *attribs)
   end
+
+  describe "eventlets" do
+    it "includes only meals from other cmtys" do
+      attribs = [
+        {event: {name: "Other Cmty Meal ✓"}, uid: "Meal_#{meal3.id}"},
+        {event: {name: "Other Cmty Meal 2"}, uid: "Meal_#{meal4.id}"}
+      ]
+      eventlets = calendar.eventlets_between((Time.current - 2.days)..(Time.current + 5.days), actor: actor)
+      expect_eventlets(eventlets, *attribs)
+    end
+  end
 end

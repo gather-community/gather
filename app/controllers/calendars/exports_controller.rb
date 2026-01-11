@@ -22,7 +22,7 @@ module Calendars
       authorize(current_community, :personalized?, policy_class: ExportPolicy)
       finder = EventFinder.new(calendars: calendars, range: event_date_range,
                                user: current_user, own_only: params[:own_only] == "1")
-      send_calendar_data(calendar_name, finder.events)
+      send_calendar_data(calendar_name, finder.eventlets)
     end
 
     # Nonpersonalized exports are those where the current user is not known and the token
@@ -33,7 +33,7 @@ module Calendars
       authorize_with_explict_policy_object(:community?, policy_object: policy)
       finder = EventFinder.new(calendars: calendars, range: event_date_range,
                                user: nil, own_only: false)
-      send_calendar_data(calendar_name, finder.events)
+      send_calendar_data(calendar_name, finder.eventlets)
     end
 
     def reset_token

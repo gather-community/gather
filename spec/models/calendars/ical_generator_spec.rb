@@ -4,10 +4,10 @@ require "rails_helper"
 
 describe Calendars::IcalGenerator do
   let(:calendar_name) { "Some Calendar" }
-  let(:events) { [] }
+  let(:eventlets) { [] }
   subject(:ical) do
     Timecop.freeze("2021-01-01 12:00") do
-      described_class.new(calendar_name: calendar_name, events: events,
+      described_class.new(calendar_name: calendar_name, eventlets: eventlets,
         url_options: {host: "foo.com", protocol: "https", port: 443}).generate
     end
   end
@@ -17,8 +17,8 @@ describe Calendars::IcalGenerator do
   end
 
   context "with simple event" do
-    let(:events) do
-      [create(:event, name: "Some Event",
+    let(:eventlets) do
+      [create(:eventlet, name: "Some Event",
         starts_at: "2021-01-01 12:00",
         ends_at: "2022-01-01 13:00",
         note: "This is a description",
@@ -44,10 +44,10 @@ describe Calendars::IcalGenerator do
         END:VTIMEZONE
         BEGIN:VEVENT
         DTSTAMP:20210101T120000Z
-        UID:91a772a5ae4a_#{events[0].id}
+        UID:91a772a5ae4a_#{eventlets[0].id}
         DTSTART;TZID=Etc/UTC:20210101T120000
         DTEND;TZID=Etc/UTC:20220101T130000
-        DESCRIPTION:This is a description\\nhttps://foo.com/calendars/events/#{events[0].id}
+        DESCRIPTION:This is a description\\nhttps://foo.com/calendars/events/#{eventlets[0].id}
         LOCATION:A nice place
         SUMMARY:Some Event
         END:VEVENT
@@ -58,8 +58,8 @@ describe Calendars::IcalGenerator do
   end
 
   context "with all day event" do
-    let(:events) do
-      [create(:event, name: "Some Event",
+    let(:eventlets) do
+      [create(:eventlet, name: "Some Event",
         all_day: true,
         starts_at: "2021-01-02T00:00:00",
         ends_at: "2021-01-02T23:59:59")]
@@ -72,7 +72,7 @@ describe Calendars::IcalGenerator do
   end
 
   context "with unpersisted event" do
-    let(:events) { [build(:event, uid: "stuff_1234", linkable: create(:user))] }
+    let(:eventlets) { [build(:eventlet, uid: "stuff_1234", linkable: create(:user))] }
 
     it "uses uid" do
       expect(ical).to include_line("UID:91a772a5ae4a_stuff_1234")
@@ -80,7 +80,7 @@ describe Calendars::IcalGenerator do
   end
 
   context "with unpersisted event with no uid" do
-    let(:events) { [build(:event, uid: nil)] }
+    let(:eventlets) { [build(:eventlet, uid: nil)] }
 
     it "raises error" do
       expect { ical }.to raise_error(ArgumentError, "all events must specify uid")
@@ -89,7 +89,7 @@ describe Calendars::IcalGenerator do
 
   context "with multiline description" do
     let(:description) { ("fishy " * 24) << "\nstuff\nother stuff" }
-    let(:events) { [create(:event, note: description)] }
+    let(:eventlets) { [create(:eventlet, note: description)] }
 
     it "splits line properly" do
       # Per the RFC, the string should actually include the literal string \n for line breaks, which is why
@@ -97,14 +97,14 @@ describe Calendars::IcalGenerator do
       expect(ical).to include_line(
         "DESCRIPTION:fishy fishy fishy fishy fishy fishy fishy fishy fishy fishy fis\r\n" \
         " hy fishy fishy fishy fishy fishy fishy fishy fishy fishy fishy fishy fishy\r\n" \
-        "  fishy \\nstuff\\nother stuff\\nhttps://foo.com/calendars/events/#{events[0].id}"
+        "  fishy \\nstuff\\nother stuff\\nhttps://foo.com/calendars/events/#{eventlets[0].id}"
       )
     end
   end
 
   context "with linkable object" do
     let(:user) { create(:user) }
-    let(:events) { [create(:event, note: "Stuff", linkable: user)] }
+    let(:eventlets) { [create(:eventlet, note: "Stuff", linkable: user)] }
 
     it "includes an appropriate url" do
       expect(ical).to include_line(
@@ -114,51 +114,51 @@ describe Calendars::IcalGenerator do
   end
 
   context "with persisted event but no linkable object" do
-    let(:events) { [create(:event, note: "Stuff")] }
+    let(:eventlets) { [create(:eventlet, note: "Stuff")] }
 
     it "includes an appropriate url" do
       expect(ical).to include_line(
-        "DESCRIPTION:Stuff\\nhttps://foo.com/calendars/events/#{events[0].id}"
+        "DESCRIPTION:Stuff\\nhttps://foo.com/calendars/events/#{eventlets[0].id}"
       )
     end
   end
 
   context "with unpersisted event and no linkable object" do
-    let(:events) { [build(:event)] }
+    let(:eventlets) { [build(:eventlet)] }
 
     it "includes an appropriate url" do
       expect { ical }.to raise_error(ArgumentError)
     end
   end
 
-  context "with groupable events" do
+  context "with groupable eventlets" do
     let(:user) { create(:user) }
-    let(:events) do
+    let(:eventlets) do
       [
-        create(:event, name: "Some Event",
+        create(:eventlet, name: "Some Event",
           creator: user,
           starts_at: "2021-01-01 12:00",
           ends_at: "2022-01-01 13:00",
           note: "This is a description",
           location: "A nice place"),
-        create(:event, name: "Some Event",
+        create(:eventlet, name: "Some Event",
           creator: user,
           starts_at: "2021-01-01 12:00",
           ends_at: "2022-01-01 13:00",
           note: "Other description",
           location: "Other place"),
-        create(:event, name: "Other Event",
+        create(:eventlet, name: "Other Event",
           creator: user,
           starts_at: "2021-01-01 12:00",
           ends_at: "2022-01-01 13:00")
       ]
     end
 
-    it "groups first two events" do
+    it "groups first two eventlets" do
       expect(ical.scan(/BEGIN:VEVENT/).size).to eq(2)
       expect(ical).to include_line("LOCATION:A nice place + Other place")
       expect(ical).to include_line("DESCRIPTION:This is a description\\nOther description\\n" \
-        "https://foo.com/calen\r\n dars/events/#{events[0].id}")
+        "https://foo.com/calen\r\n dars/events/#{eventlets[0].id}")
     end
   end
 

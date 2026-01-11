@@ -32,5 +32,13 @@ module Calendars
     def system?
       true
     end
+
+    def events_between(range, actor:)
+      raise NotImplementedError
+    end
+
+    def eventlets_between(range, actor:)
+      raise NotImplementedError
+    end
   end
 end

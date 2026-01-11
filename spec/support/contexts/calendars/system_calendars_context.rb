@@ -18,4 +18,28 @@ shared_context "system calendars" do
       end
     end
   end
+
+  def expect_eventlets(eventlets, *attribs)
+    expect(eventlets.size).to eq(attribs.size)
+    eventlets.each_with_index do |eventlet, i|
+      expect_eventlet(eventlet, attribs[i])
+    end
+  end
+
+  def expect_eventlet(eventlet, attribs)
+    attribs = {calendar_id: calendar.id}.merge(attribs)
+    attribs[:event] = {kind: nil, sponsor_id: nil}.merge(attribs[:event] || {})
+    attribs.each do |k, v|
+      p k
+      if k == :event
+        v.each do |ek, ev|
+          expect(eventlet.event.send(ek)).to eq(ev)
+        end
+      elsif v.is_a?(Time)
+        expect(eventlet.send(k)).to eq_time(v)
+      else
+        expect(eventlet.send(k)).to eq(v)
+      end
+    end
+  end
 end

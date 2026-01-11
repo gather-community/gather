@@ -53,6 +53,34 @@ module Calendars
         end
       end
 
+      # actor may be nil in the case of a non-personalized calendar export
+      def eventlets_between(range, actor:)
+        scope = base_meals_scope(range, actor: actor)
+        meals = scope.order(:served_at).decorate
+        signups_by_meal_id = build_signups_by_meal_id(meals: meals, actor: actor)
+
+        meals.map do |meal|
+          title = +meal.title_or_no_title
+          title << " ✓" if signups_by_meal_id.key?(meal.id)
+          signup = signups_by_meal_id[meal.id]
+
+          # We don't save the events since that's not how system calendars work.
+          Eventlet.new(
+            calendar: self,
+            starts_at: meal.served_at,
+            ends_at: meal.served_at + MEAL_DURATION,
+            uid: "#{slug}_#{meal.id}",
+            location: meal.location_name,
+            linkable: meal,
+            event: Event.new(
+              name: title,
+              meal_id: meal.id,
+              note: note_for_meal(meal: meal, signup: signup)
+            )
+          )
+        end
+      end
+
       def all_day_allowed?
         false
       end

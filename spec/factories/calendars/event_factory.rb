@@ -29,4 +29,8 @@ FactoryBot.define do
     sequence(:ends_at) { starts_at + 55.minutes }
     kind { nil }
   end
+
+  # For use in eventlet factory
+  factory :empty_event, class: "Calendars::Event" do
+  end
 end

@@ -35,7 +35,21 @@ module Calendars
 
     def new
       if params[:calendar_id]
-        render_form
+        @form = EventForm.new(
+          action: :new,
+          current_user: current_user,
+          params: {
+            creator_id: current_user.id,
+            calendar_id: params[:calendar_id],
+            starts_at: params[:start],
+            ends_at: params[:end],
+            origin_page: params[:origin_page]
+          }
+        )
+        @event = @form.event
+        authorize(@event)
+
+        prep_form_vars
       elsif writeable_calendars.any?
         render_choose_calendar_page
       else
@@ -44,21 +58,40 @@ module Calendars
     end
 
     def edit
-      @event = Event.find(params[:id])
-      @event.origin_page = params[:origin_page]
+      @form = EventForm.new(
+        action: :edit,
+        current_user: current_user,
+        id: params[:id],
+        params: {
+          origin_page: params[:origin_page],
+          guidelines_ok: "1"
+        }
+      )
+      @event = @form.event
       authorize(@event)
-      @event.guidelines_ok = "1"
+
       prep_form_vars
     end
 
     def create
-      @event = Event.new(creator: current_user)
-      assign_calendar
-      @event.assign_attributes(event_params)
+      # If the calendar_id is blank, we can't even do proper authorization, so we short circuit.
+      if params[:calendars_event][:calendar_id].blank?
+        skip_authorization
+        render_error_page(:unprocessable_entity)
+        return
+      end
+
+      @form = EventForm.new(
+        action: :create,
+        current_user: current_user,
+        params: params.require(:calendars_event)
+      )
+      @event = @form.event
+
       authorize(@event)
-      if @event.save
+      if @form.save
         flash[:success] = "Event created successfully."
-        redirect_to_event_in_context(@event)
+        redirect_to_event_in_context(@form)
       else
         prep_form_vars
         render(:new)
@@ -66,25 +99,49 @@ module Calendars
     end
 
     def update
-      @event = Event.find(params[:id])
+      event_params = params.require(:calendars_event)
+
+      @form = EventForm.new(
+        action: :update,
+        current_user: current_user,
+        id: params[:id],
+        params: event_params
+      )
+      @event = @form.event
+
       authorize(@event)
-      return handle_xhr_update if request.xhr?
-      if @event.update(event_params)
-        flash[:success] = "Event updated successfully."
-        redirect_to_event_in_context(@event)
+
+      if @form.save
+        if request.xhr?
+          head(:ok)
+        else
+          flash[:success] = "Event updated successfully."
+          redirect_to_event_in_context(@form)
+        end
       else
-        prep_form_vars
-        render(:edit)
+        if request.xhr?
+          render(partial: "update_error_messages", status: :unprocessable_entity)
+        else
+          prep_form_vars
+          render(:edit)
+        end
       end
     end
 
     def destroy
-      @event = Event.find(params[:id])
-      @event.origin_page = params[:origin_page]
+      @form = EventForm.new(
+        action: :destroy,
+        current_user: current_user,
+        id: params[:id],
+        params: {
+          origin_page: params[:origin_page]
+        }
+      )
+      @event = @form.event
       authorize(@event)
       @event.destroy
       flash[:success] = "Event deleted successfully."
-      redirect_to_event_in_context(@event)
+      redirect_to_event_in_context(@form)
     end
 
     protected
@@ -157,21 +214,8 @@ module Calendars
       render(json: events, adapter: :attributes, origin_page: params[:origin_page])
     end
 
-    def render_form
-      @calendar = Calendar.find(params[:calendar_id])
-      @event = Event.new_with_defaults(
-        calendar: @calendar,
-        creator: current_user,
-        starts_at: params[:start],
-        ends_at: params[:end],
-        origin_page: params[:origin_page]
-      )
-      authorize(@event)
-      prep_form_vars
-    end
-
     def prep_form_vars
-      @calendar ||= @event.calendar
+      @calendar = @event.calendar
       @rule_set = @event.rule_set
       @kinds = @calendar.kinds # May be nil
       @groups = Calendars::EventPolicy::GroupScope.new(current_user, Groups::Group)
@@ -200,35 +244,12 @@ module Calendars
       @calendars = []
     end
 
-    def handle_xhr_update
-      if @event.update(event_params.merge(guidelines_ok: "1"))
-        head(:ok)
-      else
-        render(partial: "update_error_messages", status: :unprocessable_entity)
-      end
-    end
-
-    # We need to set the calendar separately from the other parameters because
-    # the calendar is what determines the community, and that determines what attributes
-    # are permitted to be set. So we don't allow calendar_id itself through permitted_attributes.
-    def assign_calendar
-      @event.calendar = Calendar.find(params[:calendars_event][:calendar_id])
-    end
-
-    # Pundit built-in helper doesn't work due to namespacing
-    def event_params
-      permitted_attributes = policy(@event).permitted_attributes(group_id: params[:calendars_event][:group_id])
-      permitted = params.require(:calendars_event).permit(permitted_attributes)
-      permitted[:privileged_changer] = true if policy(@event).privileged_change?
-      permitted
-    end
-
-    def redirect_to_event_in_context(event)
-      params = {date: event.starts_at&.to_fs(:no_time)}
-      if event.origin_page == "combined"
+    def redirect_to_event_in_context(event_form)
+      params = {date: event_form.starts_at&.to_fs(:no_time)}
+      if event_form.origin_page == "combined"
         redirect_to(calendars_events_path(params))
       else
-        redirect_to(calendar_events_path(event.calendar, params))
+        redirect_to(calendar_events_path(event_form.calendar, params))
       end
     end
   end

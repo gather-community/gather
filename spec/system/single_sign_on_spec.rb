@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe "single sign on" do
+describe "single sign on", js: true do
   # We create an admin so they can impersonate. Otherwise behavior should be the same.
   let!(:actor) { create(:admin, id: 1234, first_name: "Tom", last_name: "Smyth", email: "tom@example.com") }
   let(:subdomain) { nil }
@@ -125,7 +125,7 @@ describe "single sign on" do
     context "with errant data" do
       scenario "returns error" do
         visit("/sso?sso=&sig=")
-        expect(page.body).to eq("Return URL not given")
+        expect(page.body).to match("Return URL not given")
       end
     end
 

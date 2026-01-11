@@ -22,7 +22,6 @@ module Utils
             ends_at: translate_time(row["ends_at"]),
             creator: adults.sample,
             calendar: calendar_map[row["calendar_id"]],
-            guidelines_ok: "1",
             name: Faker::Hipster.words(number: 2).join(" ").capitalize[0..23],
             created_at: community.created_at,
             updated_at: community.updated_at

@@ -27,16 +27,17 @@ module Meals
       meal.events.destroy(*(meal.events - current_events))
     end
 
-    # Validates the event and copies errors to meal.
+    # Validates meal events and copies errors to meal.
     # Assumes build_events has been run already.
     def validate_meal
       meal.events.each do |event|
-        next if event.valid?
-        errors = event.errors.map do |error|
+        event_form = Calendars::EventForm.new(event: event, params: {guidelines_ok: "1"})
+        next if event_form.valid?
+        errors = event_form.errors.map do |error|
           if error.attribute == :base
             error.message
           else
-            "#{Calendars::Event.human_attribute_name(error.attribute)}: #{error.message}"
+            "#{Calendars::EventForm.human_attribute_name(error.attribute)}: #{error.message}"
           end
         end.join(", ")
         meal.errors.add(:base,
@@ -79,19 +80,17 @@ module Meals
         kind: "_meal",
         starts_at: starts_at,
         ends_at: starts_at + resourcing.total_time.minutes,
-        guidelines_ok: "1"
       }
     end
 
     def meal_dirty?
-      @meal_dirty ||= meal.new_record? || meal.will_save_change_to_served_at? ||
-        meal.will_save_change_to_title?
+      meal.new_record? || meal.will_save_change_to_served_at? || meal.will_save_change_to_title?
     end
 
     def event_name
       prefix = "Meal:"
       title = truncate(meal.decorate.title_or_no_title,
-        length: Calendars::Event::NAME_MAX_LENGTH - prefix.size - 1, escape: false)
+        length: Calendars::EventForm::NAME_MAX_LENGTH - prefix.size - 1, escape: false)
       "#{prefix} #{title}"
     end
 

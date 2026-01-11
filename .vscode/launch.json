@@ -1,0 +1,27 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"type": "node-terminal",
+			"name": "RUN Gather",
+			"request": "launch",
+			"command": "bin/dev"
+		},
+		{
+			"type": "node-terminal",
+			"name": "RUN Delayed Job",
+			"request": "launch",
+			"command": "bin/delayed_job run"
+		}
+	],
+	"compounds": [
+		{
+			"name": "RUN All",
+			"configurations": [
+				"RUN Gather",
+				"RUN Delayed Job"
+			],
+			"stopAll": true
+		}
+	]
+}

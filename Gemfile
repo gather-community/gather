@@ -18,8 +18,7 @@ gem "config", "~> 4.0"
 gem "country_select", "~> 4.0",
   require: "country_select_without_sort_alphabetical" # Alpha sort is memory intensive?
 gem "daemons", "~> 1.2"
-gem "datetimepicker-rails", git: "https://github.com/gather-community/datetimepicker-rails",
-  branch: "master", submodules: true
+gem "datetimepicker-rails", git: "https://gitlab.com/zpaulovics/datetimepicker-rails"
 gem "delayed_job_active_record", "~> 4.1"
 gem "devise", "~> 4.7"
 gem "diffy", "~> 3.4"
@@ -87,6 +86,7 @@ group :development, :test do
   gem "capistrano3-delayed-job", "~> 1.0"
   gem "capybara", "~> 3.29"
   gem "database_cleaner", "~> 1.7"
+  gem "debug", require: false
   gem "ed25519", ">= 1.2", "< 2.0" # For Capistrano
   gem "fix-db-schema-conflicts", "~> 3.0"
   gem "launchy", "~> 2.4" # For opening screenshots

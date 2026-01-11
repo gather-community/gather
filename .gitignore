@@ -19,7 +19,9 @@
 /public/javascripts/i18n.js
 
 /config/database.yml
+/config/database.yml.bak
 /config/settings.local.yml
+/config/settings.local.yml.bak
 /config/settings/*.local.yml
 /config/environments/*.local.yml
 /public/system
@@ -32,3 +34,6 @@
 !/app/assets/builds/.keep
 
 /node_modules
+
+# Agent config
+.claude

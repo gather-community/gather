@@ -42,11 +42,27 @@ describe "subdomain handling" do
       expect(page).to be_not_found
     end
 
-    scenario "visiting apex domain root and signing in should take you to community root" do
-      visit("/")
-      expect_sign_in_with_google_link_and_click
-      expect(page).to have_content(user.name)
-      expect(current_url).to have_subdomain_and_path("foo", "/users")
+    context "with /users as default landing page" do
+      scenario "visiting apex domain root and signing in should take you to /users" do
+        visit("/")
+        expect_sign_in_with_google_link_and_click
+        expect(page).to have_content(user.name)
+        expect(current_url).to have_subdomain_and_path("foo", "/users")
+      end
+    end
+
+    context "with /wiki as default landing page" do
+      before do
+        home_cmty.settings.default_landing_page = "wiki"
+        home_cmty.save!
+      end
+
+      scenario "visiting apex domain root and signing in should take you to /wiki/home" do
+        visit("/")
+        expect_sign_in_with_google_link_and_click
+        expect(page).to have_content(user.name)
+        expect(current_url).to have_subdomain_and_path("foo", "/wiki/home")
+      end
     end
   end
 
@@ -60,10 +76,25 @@ describe "subdomain handling" do
         use_subdomain("foo")
       end
 
-      scenario "visiting root should work" do
-        visit("/")
-        expect(current_url).to have_subdomain_and_path("foo", "/users")
-        expect(page).to be_signed_in_root
+      context "with /users as default landing page" do
+        scenario "visiting root should work" do
+          visit("/")
+          expect(current_url).to have_subdomain_and_path("foo", "/users")
+          expect(page).to be_signed_in_root
+        end
+      end
+
+      context "with /wiki as default landing page" do
+        before do
+          home_cmty.settings.default_landing_page = "wiki"
+          home_cmty.save!
+        end
+
+        scenario "visiting root should work" do
+          visit("/")
+          expect(current_url).to have_subdomain_and_path("foo", "/wiki/home")
+          expect(page).to have_title("Wiki")
+        end
       end
 
       scenario "visiting path should work" do
@@ -86,10 +117,25 @@ describe "subdomain handling" do
           use_subdomain("bar")
         end
 
-        scenario "visiting root should work" do
-          visit("/")
-          expect(current_url).to have_subdomain_and_path("bar", "/users")
-          expect(page).to have_title("Directory")
+        context "with /users as default landing page" do
+          scenario "visiting root should work" do
+            visit("/")
+            expect(current_url).to have_subdomain_and_path("bar", "/users")
+            expect(page).to have_title("Directory")
+          end
+        end
+
+        context "with /meals as default landing page for other community" do
+          before do
+            neighbor_cmty.settings.default_landing_page = "meals"
+            neighbor_cmty.save!
+          end
+
+          scenario "visiting root should work" do
+            visit("/")
+            expect(current_url).to have_subdomain_and_path("bar", "/meals")
+            expect(page).to have_title("Meals")
+          end
         end
 
         scenario "visiting path should work" do
@@ -117,9 +163,23 @@ describe "subdomain handling" do
     end
 
     context "with apex domain" do
-      scenario "visiting root should redirect to home community root" do
-        visit("/")
-        expect(current_url).to have_subdomain_and_path("foo", "/users")
+      context "with /users as default landing page" do
+        scenario "visiting root should redirect to home community root" do
+          visit("/")
+          expect(current_url).to have_subdomain_and_path("foo", "/users")
+        end
+      end
+
+      context "with /wiki as default landing page" do
+        before do
+          home_cmty.settings.default_landing_page = "wiki"
+          home_cmty.save!
+        end
+
+        scenario "visiting root should redirect to home community root" do
+          visit("/")
+          expect(current_url).to have_subdomain_and_path("foo", "/wiki/home")
+        end
       end
 
       scenario "visiting URL with query string should also redirect" do

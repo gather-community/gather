@@ -108,12 +108,41 @@ module ApplicationControllable::RequestPreprocessing
 
   def set_current_community
     if subdomain.present?
+      # This is the happy path where we have a subdomain and can set the community from it.
       set_current_community_from_subdomain(subdomain)
     elsif (community_from_controller = community_for_route)
-      if redirect_if_subdomain_missing?
-        redirect_to_same_path_in_community(community_from_controller)
-      else
-        self.current_community = community_from_controller
+      # If we don't have a subdomain, things get tricky.
+      #
+      # The community_for_route method is overridden in the controllers that have opinions about
+      # what the community should be for a given route that doesn't have a subdomain. Most controllers
+      # don't override it.
+      #
+      # We don't want to always use the community from the current user because in multi-community clusters,
+      # the route may point to a resource in another community in the cluster.
+      #
+      # But also, this lookup happens before the tenant is set, so we need to be careful not to leak information.
+      # If we redirect to a community that the user doesn't have access to, then the `check_community_permissions`
+      # filter will return 403, but by then we would have already leaked information about what community
+      # the resource is associated with. So we need to check access permissions for the returned community
+      # and ignore it if it's not accessible. So for example, if the route is
+      # https://gather.coop/groups/123, but Group 123 is in a community that the user doesn't have access to,
+      # then we should just not set the current_community. Then the `require_current_community`
+      # filter will render a 404.
+      #
+      # In general, if we can glean the community from the route, but the route has no subdomain,
+      # we should redirect to the community's subdomain. Therefore, the redirect_if_subdomain_missing? method
+      # returns true by default, but controllers can override it if they want to prevent redirection,
+      # for example for ICS/calendar systems that may not support redirects.
+      #
+      # Some implementations of `community_for_route` just return current_user.community. We may be tempted to
+      # have that as a default, but we don't want to encourage folks to use routes without subdomains. So
+      # we only do that on an as-needed basis.
+      if CommunityPolicy.new(current_user, community_from_controller).show?
+        if redirect_if_subdomain_missing?
+          redirect_to_same_path_in_community(community_from_controller)
+        else
+          self.current_community = community_from_controller
+        end
       end
     end
   end

@@ -74,7 +74,7 @@ module GDrive
         end
       else
         Rails.logger.info("No existing permission, building")
-        permissions_by_item_id[user.id] = build_synced_permission(user, item_group.item,
+        permissions_by_item_id[item_group.item_id] = build_synced_permission(user, item_group.item,
           item_group.access_level)
       end
     end

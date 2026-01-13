@@ -127,6 +127,10 @@ module Calendars
       to: :event
     )
 
+    # This policy is needed for two things:
+    # 1. To determine which attributes are permitted (only needed when params are submitted)
+    # 2. For certain validation rules that need to check the policy. As of this writing,
+    #    this was only to check the privileged_change? permission for editing an event in the past.
     def event_policy
       @event_policy ||= EventPolicy.new(@current_user, @event)
     end
@@ -193,7 +197,9 @@ module Calendars
     end
 
     def restrict_changes_in_past
-      return unless persisted? && !recently_created? && !event_policy.privileged_change?
+      # We don't want to restrict changes in the past for meal events because they are created and updated
+      # by the meal event handler.
+      return if !persisted? || recently_created? || event.meal? || event_policy.privileged_change?
       if will_save_change_to_starts_at? && starts_at_was&.past?
         errors.add(:starts_at, "can't be changed after event begins")
       end

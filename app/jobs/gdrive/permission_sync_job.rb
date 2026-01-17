@@ -60,10 +60,12 @@ module GDrive
       end
     rescue Google::Apis::ClientError => error
       if error.message.match?(/notFound: File not found/)
+        # This may be nil if the item was destroyed between when the job was enqueued and when it was run.
         item = permission.item
-        Rails.logger.warn("Item #{item.external_id} was not found. " \
-          "Deleting local item #{item.id} and associated records")
-        item.destroy
+        external_id = item&.external_id || "[unknown]"
+        Rails.logger.warn("Item #{external_id} was not found. " \
+          "Deleting local item #{permission.item_id} and associated records")
+        item&.destroy
         permission.destroy if permission.persisted?
 
       # If the user's google_email is not a good google account,

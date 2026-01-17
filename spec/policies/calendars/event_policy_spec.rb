@@ -63,11 +63,6 @@ describe Calendars::EventPolicy do
       permissions :index? do
         it_behaves_like "permits active users only"
       end
-
-      permissions :show?, :new?, :create?, :edit?, :update?, :privileged_change?,
-        :choose_creator?, :destroy? do
-        it_behaves_like "forbids all"
-      end
     end
 
     context "regular (non-meal) event" do

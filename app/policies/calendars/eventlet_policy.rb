@@ -25,22 +25,22 @@ module Calendars
     end
 
     def show?
-      specific_record? && active? && !forbidden_by_protocol?
+      active? && !forbidden_by_protocol?
     end
 
     # All mutations should happen via the Event controller and policy
     def create?
-      specific_record? && calendar.active? && !calendar.system? &&
+      calendar.active? && !calendar.system? &&
         active? && !read_only_by_protocol? && !meal?
     end
 
     def update?
-      specific_record? && !calendar.system? && !read_only_by_protocol? &&
+      !calendar.system? && !read_only_by_protocol? &&
         (admin_or_coord? || active_creator_or_group_member? || (meal? && active_with_community_role?(:meals_coordinator)))
     end
 
     def destroy?
-      specific_record? && !read_only_by_protocol? && !meal? && !calendar.system? &&
+      !read_only_by_protocol? && !meal? && !calendar.system? &&
         (admin_or_coord? || active_creator_or_group_member? && (future? || recently_created?))
     end
 

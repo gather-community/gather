@@ -35,15 +35,15 @@ module Calendars
     end
 
     def show?
-      specific_record? && active? && eventlets.any? { |e| EventletPolicy.new(user, e).show? }
+      active? && eventlets.any? { |e| EventletPolicy.new(user, e).show? }
     end
 
     def create?
-      specific_record? && active? && !meal?
+      active? && !meal?
     end
 
     def update?
-      specific_record? && !calendar.system? && !read_only_or_forbidden_by_protocol? &&
+      !calendar.system? && !read_only_or_forbidden_by_protocol? &&
         (admin_or_coord? || active_creator_or_group_member? || (meal? && active_with_community_role?(:meals_coordinator)))
     end
 
@@ -58,7 +58,7 @@ module Calendars
     end
 
     def destroy?
-      specific_record? && !read_only_or_forbidden_by_protocol? && !meal? && !calendar.system? &&
+      !read_only_or_forbidden_by_protocol? && !meal? && !calendar.system? &&
         (admin_or_coord? || active_creator_or_group_member? && (future? || recently_created?))
     end
 

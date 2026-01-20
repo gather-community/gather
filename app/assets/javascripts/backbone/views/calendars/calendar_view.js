@@ -3,11 +3,10 @@
  * Most other heavy lifting should be done by other classes like CalendarLinkManager.
  */
 Gather.Views.Calendars.CalendarView = Backbone.View.extend({
-
   URL_PARAMS_TO_VIEW_TYPES: {
-    "day": "agendaDay",
-    "week": "agendaWeek",
-    "month": "month"
+    day: "agendaDay",
+    week: "agendaWeek",
+    month: "month",
   },
 
   initialize(options) {
@@ -21,18 +20,39 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
     this.calendarId = options.calendarId;
     this.timedEventsOnly = options.timedEventsOnly;
     this.allDayText = options.allDayText;
+    this._fcHeaderLastFocusKey = null;
     this.showAppropriateEarlyLink();
     this.initCalendar();
   },
 
-  events: {
-    "click .modal .btn-primary": "create",
-    "click .early": "showHideEarly"
+  events() {
+    const headerControlSelector =
+      "#calendar .fc-toolbar button, " +
+      "#calendar .fc-header button, " +
+      "#calendar .fc-toolbar a, " +
+      "#calendar .fc-header a";
+
+    return {
+      "click .modal .btn-primary": "create",
+      "click .early": "showHideEarly",
+
+      /*
+       * Capture header interactions before FullCalendar handles them, so we can restore focus
+       * after the header re-renders (navigation/view changes).
+       */
+      [`focusin ${headerControlSelector}`]: "captureHeaderControlActivation",
+      [`mousedown ${headerControlSelector}`]: "captureHeaderControlActivation",
+      [`keydown ${headerControlSelector}`]:
+        "captureHeaderControlActivationOnKeydown",
+    };
   },
 
   initCalendar() {
     this.calendar.fullCalendar({
-      defaultView: this.URL_PARAMS_TO_VIEW_TYPES[this.viewParams.viewType || this.defaultViewType],
+      defaultView:
+        this.URL_PARAMS_TO_VIEW_TYPES[
+          this.viewParams.viewType || this.defaultViewType
+        ],
       defaultDate: this.viewParams.date,
       height: "auto",
       minTime: this.minTime(),
@@ -46,13 +66,13 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
       header: {
         left: "title",
         center: "agendaDay,agendaWeek,month",
-        right: "today prev,next"
+        right: "today prev,next",
       },
       select: this.onSelect.bind(this),
       loading: this.onLoading.bind(this),
       eventDrop: this.onEventChange.bind(this),
       eventResize: this.onEventChange.bind(this),
-      eventAfterAllRender: this.onViewRender.bind(this)
+      eventAfterAllRender: this.onViewRender.bind(this),
     });
   },
 
@@ -77,14 +97,16 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
 
   eventOverlap(stillEvent, movingEvent) {
     // Disallow overlap only if events on same calendar and the calendar forbids overlap
-    return (stillEvent.calendarId !== movingEvent.calendarId) || stillEvent.calendarAllowsOverlap;
+    return (
+      stillEvent.calendarId !== movingEvent.calendarId ||
+      stillEvent.calendarAllowsOverlap
+    );
   },
 
   onSelect(start, end, _, view) {
     let changed, endTime, startTime;
     const modal = this.$("#create-confirm-modal");
     const body = modal.find(".modal-body");
-    const changedInterval = false;
 
     /*
      * If we get an all day selection (hasTime false), and the calendar supports all day events,
@@ -105,7 +127,7 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
      * Redraw selection if fixed times applied. But doing this in month mode causes an infinite loop
      * and doesn't provide any useful feedback to the user.
      */
-    if (changed && (view.name !== "month")) {
+    if (changed && view.name !== "month") {
       this.calendar.fullCalendar("select", start, end);
       return;
     }
@@ -113,7 +135,7 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
     // Save for create method to use.
     this.selection = {
       start: start.format(Gather.TIME_FORMATS.machineDatetime),
-      end: end.format(Gather.TIME_FORMATS.machineDatetime)
+      end: end.format(Gather.TIME_FORMATS.machineDatetime),
     };
 
     // Build confirmation string
@@ -125,7 +147,9 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
       if (start.hasTime()) {
         startTime = start.format(Gather.TIME_FORMATS.regTime);
         endTime = end.format(Gather.TIME_FORMATS.regTime);
-        body.html(`Create event on <b>${date}</b> from <b>${startTime}</b> to <b>${endTime}</b>?`);
+        body.html(
+          `Create event on <b>${date}</b> from <b>${startTime}</b> to <b>${endTime}</b>?`
+        );
       } else {
         body.html(`Create event on <b>${date}</b>?`);
       }
@@ -144,8 +168,48 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
   },
 
   onViewRender() {
+    this.applyFullCalendarHeaderA11y();
     this.$el.trigger("viewRender"); // Notify other views
     this.saveViewParams();
+  },
+
+  captureHeaderControlActivation(e) {
+    const helper = Gather.Utils && Gather.Utils.FullCalendarHeaderA11y;
+    if (!helper || !helper.focusKeyFromElement) {
+      return;
+    }
+
+    const key = helper.focusKeyFromElement(e.currentTarget);
+    if (key) {
+      this._fcHeaderLastFocusKey = key;
+    }
+  },
+
+  captureHeaderControlActivationOnKeydown(e) {
+    const keyCode = e.which || e.keyCode;
+    const isActivationKey = keyCode === 13 || keyCode === 32; // Enter or Space
+    if (!isActivationKey) {
+      return;
+    }
+    this.captureHeaderControlActivation(e);
+  },
+
+  applyFullCalendarHeaderA11y() {
+    const helper = Gather.Utils && Gather.Utils.FullCalendarHeaderA11y;
+    if (!helper || !helper.enhance) {
+      return;
+    }
+
+    const focusKeyToRestore = this._fcHeaderLastFocusKey;
+    helper.enhance(this.calendar, {
+      toolbarLabel: "Calendar controls",
+      focusKeyToRestore,
+    });
+
+    // Always clear after attempting restore to avoid stealing focus on later renders.
+    if (focusKeyToRestore) {
+      this._fcHeaderLastFocusKey = null;
+    }
   },
 
   onLoading(isLoading) {
@@ -163,13 +227,16 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
           _method: "PATCH",
           calendars_event: {
             starts_at: event.start.format(),
-            ends_at: event.end.format()
-          }
+            ends_at: event.end.format(),
+          },
         },
         error(xhr) {
           revertFunc();
-          Gather.errorModal.modal("show").find(".modal-body").html(xhr.responseText);
-        }
+          Gather.errorModal
+            .modal("show")
+            .find(".modal-body")
+            .html(xhr.responseText);
+        },
       });
     }
   },
@@ -194,31 +261,43 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
   },
 
   viewType() {
-    return this.calendar.fullCalendar("getView").name.replace("agenda", "").toLowerCase();
+    return this.calendar
+      .fullCalendar("getView")
+      .name.replace("agenda", "")
+      .toLowerCase();
   },
 
   date() {
-    return this.calendar.fullCalendar("getView").intervalStart.format(Gather.TIME_FORMATS.compactDate);
+    return this.calendar
+      .fullCalendar("getView")
+      .intervalStart.format(Gather.TIME_FORMATS.compactDate);
   },
 
   hasEventInInterval(start, end) {
-    const matches = this.calendar.fullCalendar("clientEvents", event => event.start.isBefore(end) && event.end.isAfter(start));
+    const matches = this.calendar.fullCalendar(
+      "clientEvents",
+      (event) => event.start.isBefore(end) && event.end.isAfter(start)
+    );
     return matches.length > 0;
   },
 
   applyFixedTimes(start, end) {
-    const fixedStart = this.ruleSet.fixedStartTime && $.fullCalendar.moment(this.ruleSet.fixedStartTime);
-    const fixedEnd = this.ruleSet.fixedEndTime && $.fullCalendar.moment(this.ruleSet.fixedEndTime);
+    const fixedStart =
+      this.ruleSet.fixedStartTime &&
+      $.fullCalendar.moment(this.ruleSet.fixedStartTime);
+    const fixedEnd =
+      this.ruleSet.fixedEndTime &&
+      $.fullCalendar.moment(this.ruleSet.fixedEndTime);
     let changed = false;
 
-    if (fixedStart && (fixedStart.format("HHmm") !== start.format("HHmm"))) {
+    if (fixedStart && fixedStart.format("HHmm") !== start.format("HHmm")) {
       start = this.nearestFixedTime(start, fixedStart);
       const length = end.diff(start);
       end = $.fullCalendar.moment(start).add(length);
       changed = true;
     }
 
-    if (fixedEnd && (fixedEnd.format("HHmm") !== end.format("HHmm"))) {
+    if (fixedEnd && fixedEnd.format("HHmm") !== end.format("HHmm")) {
       end = this.nearestFixedTime(end, fixedEnd);
       changed = true;
     }
@@ -259,13 +338,19 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
   },
 
   showAppropriateEarlyLink() {
-    this.$("#hide-early").css({display: this.viewParams.earlyMorning ? "inline" : "none"});
-    this.$("#show-early").css({display: this.viewParams.earlyMorning ? "none" : "inline"});
+    this.$("#hide-early").css({
+      display: this.viewParams.earlyMorning ? "inline" : "none",
+    });
+    this.$("#show-early").css({
+      display: this.viewParams.earlyMorning ? "none" : "inline",
+    });
   },
 
   expireCurrentDateSettingAfterOneHour(settings) {
     if (settings.savedAt) {
-      const settingsAge = moment.duration(moment().diff(moment(settings.savedAt))).asSeconds();
+      const settingsAge = moment
+        .duration(moment().diff(moment(settings.savedAt)))
+        .asSeconds();
       if (settingsAge > 3600) {
         delete settings.date;
       }
@@ -280,8 +365,8 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
         update_lenses: 1,
         view: this.viewType(),
         date: this.date(),
-        early: this.viewParams.earlyMorning
-      }
+        early: this.viewParams.earlyMorning,
+      },
     });
-  }
+  },
 });

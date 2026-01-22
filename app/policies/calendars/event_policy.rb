@@ -35,10 +35,12 @@ module Calendars
     end
 
     def show?
+      # An event is visible if any of its eventlets are visible.
       active? && eventlets.any? { |e| EventletPolicy.new(user, e).show? }
     end
 
     def create?
+      # Any active user can create an event. Only writeable calendars will be allowed.
       active? && !meal?
     end
 

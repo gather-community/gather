@@ -31,16 +31,16 @@ module Calendars
     # All mutations should happen via the Event controller and policy
     def create?
       calendar.active? && !calendar.system? &&
-        active? && !read_only_by_protocol? && !meal?
+        active? && !read_only_or_forbidden_by_protocol? && !meal?
     end
 
     def update?
-      !calendar.system? && !read_only_by_protocol? &&
+      !calendar.system? && !read_only_or_forbidden_by_protocol? &&
         (admin_or_coord? || active_creator_or_group_member? || (meal? && active_with_community_role?(:meals_coordinator)))
     end
 
     def destroy?
-      !read_only_by_protocol? && !meal? && !calendar.system? &&
+      !read_only_or_forbidden_by_protocol? && !meal? && !calendar.system? &&
         (admin_or_coord? || active_creator_or_group_member? && (future? || recently_created?))
     end
 
@@ -60,7 +60,7 @@ module Calendars
       !active_cluster_admin? && rule_set.access_level(user.community) == "forbidden"
     end
 
-    def read_only_by_protocol?
+    def read_only_or_forbidden_by_protocol?
       !active_cluster_admin? && %w[forbidden read_only].include?(rule_set.access_level(user.community))
     end
   end

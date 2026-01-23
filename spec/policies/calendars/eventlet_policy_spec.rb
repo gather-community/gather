@@ -114,11 +114,20 @@ describe Calendars::EventletPolicy do
         it_behaves_like "permits active users only"
       end
 
-      permissions :new?, :create?, :edit?, :update?, :destroy? do
+      permissions :new?, :create?, :destroy? do
         it "forbids all" do
-          expect(subject).not_to permit(creator, eventlet)
-          expect(subject).not_to permit(user, eventlet)
-          expect(subject).not_to permit(admin, eventlet)
+          expect(subject).not_to permit(creator, event)
+          expect(subject).not_to permit(user, event)
+          expect(subject).not_to permit(admin, event)
+        end
+      end
+
+      permissions :edit?, :update? do
+        it "permits access to admins, meals/cal coordinators, and forbids others" do
+          expect(subject).to permit(admin, event)
+          expect(subject).to permit(meals_coordinator, event)
+          expect(subject).to permit(calendar_coordinator, event)
+          expect(subject).not_to permit(user, event)
         end
       end
     end

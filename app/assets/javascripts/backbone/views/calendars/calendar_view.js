@@ -169,6 +169,7 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
 
   onViewRender() {
     this.applyFullCalendarHeaderA11y();
+    this.applyFullCalendarGridA11y();
     this.$el.trigger("viewRender"); // Notify other views
     this.saveViewParams();
   },
@@ -209,6 +210,40 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
     // Always clear after attempting restore to avoid stealing focus on later renders.
     if (focusKeyToRestore) {
       this._fcHeaderLastFocusKey = null;
+    }
+  },
+
+  applyFullCalendarGridA11y() {
+    const view = this.calendar.fullCalendar("getView");
+    if (!view) {
+      return;
+    }
+
+    if (view.name === "month") {
+      const $grid = this.calendar.find(".fc-month-view").first();
+      if (!$grid.length) {
+        return;
+      }
+      $grid.attr("role", "grid");
+      $grid.find(".fc-row").attr("role", "row");
+      $grid.find(".fc-day").attr("role", "gridcell");
+      return;
+    }
+
+    if (view.name === "agendaDay" || view.name === "agendaWeek") {
+      const $allDayGrid = this.calendar.find(".fc-agenda-view .fc-day-grid").first();
+      if ($allDayGrid.length) {
+        $allDayGrid.attr("role", "grid");
+        $allDayGrid.find(".fc-row").attr("role", "row");
+        $allDayGrid.find(".fc-day").attr("role", "gridcell");
+      }
+
+      const $timeGrid = this.calendar.find(".fc-time-grid").first();
+      if ($timeGrid.length) {
+        $timeGrid.attr("role", "grid");
+        $timeGrid.find(".fc-slats tr").attr("role", "row");
+        $timeGrid.find(".fc-slats td").attr("role", "gridcell");
+      }
     }
   },
 

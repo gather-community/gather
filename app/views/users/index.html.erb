@@ -61,7 +61,7 @@
       </table>
     </div>
   <% else %>
-    <div id="directory-album" class="flowing-columns-max-3 hidden-print">
+    <div id="directory-album" class="flowing-rows hidden-print">
       <% users.each do |user| %>
         <section class="user section <%= user.active? ? "" : "inactive" %>">
           <%= link_to(user.photo_if_permitted(:thumb), user, tabindex: -1) %>

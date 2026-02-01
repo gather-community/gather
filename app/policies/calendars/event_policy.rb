@@ -45,6 +45,10 @@ module Calendars
     end
 
     def update?
+      # Any new eventlets should check Eventlet#create? on submission;
+      # any eventlet deletions should check Eventlet#destroy? on submission.
+      # So all we need to do here is check that all existing eventlets are editable.
+      #
       # We check for the presence of some eventlets, even though this shouldn't be possible,
       # to guard against weird privilege escalation bugs.
       eventlets.any? && eventlets.all? { |e| EventletPolicy.new(user, e).update? }

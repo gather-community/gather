@@ -41,6 +41,14 @@ describe Calendars::EventletPolicy do
       end
     end
 
+    shared_examples_for "permits admins or calendar coord but not creator" do
+      it_behaves_like "permits admins or special role but not regular users", :calendar_coordinator
+
+      it "forbids creator" do
+        expect(subject).not_to permit(creator, event)
+      end
+    end
+
     context "with class instead of object" do
       let(:record) { Calendars::Eventlet }
 
@@ -56,6 +64,25 @@ describe Calendars::EventletPolicy do
 
       permissions :edit?, :update? do
         it_behaves_like "permits admins or calendar coord or creator or group member but not regular users"
+      end
+
+      permissions :destroy? do
+        context "future event" do
+          let(:starts_at) { 1.day.from_now }
+          it_behaves_like "permits admins or calendar coord or creator or group member but not regular users"
+        end
+
+        context "just-created event" do
+          let(:starts_at) { 1.day.ago }
+          let(:created_at) { 50.minutes.ago }
+          it_behaves_like "permits admins or calendar coord or creator or group member but not regular users"
+        end
+
+        context "not-just-created event" do
+          let(:starts_at) { 1.day.ago }
+          let(:created_at) { 1.week.ago }
+          it_behaves_like "permits admins or calendar coord but not creator"
+        end
       end
 
       context "inactive calendar" do

@@ -105,21 +105,22 @@ describe Calendars::EventPolicy do
 
 
       permissions :destroy? do
-        context "future event" do
-          let(:starts_at) { 1.day.from_now }
-          it_behaves_like "permits admins or calendar coord or creator or group member but not regular users"
+        context "when there are no eventlets" do
+          before { event.eventlets.destroy_all }
+
+          it { is_expected.not_to permit(admin, event) }
         end
 
-        context "just-created event" do
-          let(:starts_at) { 1.day.ago }
-          let(:created_at) { 50.minutes.ago }
-          it_behaves_like "permits admins or calendar coord or creator or group member but not regular users"
+        context "when all eventlets are destroyable" do
+          it { is_expected.to permit(admin, event) }
         end
 
-        context "not-just-created event" do
-          let(:starts_at) { 1.day.ago }
-          let(:created_at) { 1.week.ago }
-          it_behaves_like "permits admins or calendar coord but not creator"
+        context "when some eventlets are not destroyable" do
+          let!(:calendar) { create(:calendar, community: communityB) }
+          let!(:protocol) { create(:calendar_protocol, calendars: [calendar], other_communities: "forbidden") }
+          let!(:eventlet) { create(:eventlet, event: event, calendar: calendar) }
+
+          it { is_expected.not_to permit(admin, event) }
         end
       end
     end

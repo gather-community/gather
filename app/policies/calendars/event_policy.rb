@@ -45,6 +45,8 @@ module Calendars
     end
 
     def update?
+      # We check for the presence of some eventlets, even though this shouldn't be possible,
+      # to guard against weird privilege escalation bugs.
       eventlets.any? && eventlets.all? { |e| EventletPolicy.new(user, e).update? }
     end
 
@@ -59,8 +61,9 @@ module Calendars
     end
 
     def destroy?
-      !read_only_or_forbidden_by_protocol? && !meal? && !calendar.system? &&
-        (admin_or_coord? || active_creator_or_group_member? && (future? || recently_created?))
+      # We check for the presence of some eventlets, even though this shouldn't be possible,
+      # to guard against weird privilege escalation bugs.
+      eventlets.any? && eventlets.all? { |e| EventletPolicy.new(user, e).destroy? }
     end
 
     def permitted_attributes(group_id:)

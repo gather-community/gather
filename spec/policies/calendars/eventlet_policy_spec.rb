@@ -54,6 +54,10 @@ describe Calendars::EventletPolicy do
         it_behaves_like "permits active users only"
       end
 
+      permissions :edit?, :update? do
+        it_behaves_like "permits admins or calendar coord or creator or group member but not regular users"
+      end
+
       context "inactive calendar" do
         let(:calendar) { create(:calendar, :inactive) }
 

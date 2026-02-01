@@ -40,7 +40,7 @@ module Calendars
     end
 
     def destroy?
-      !read_only_or_forbidden_by_protocol? && !meal? && !calendar.system? &&
+      !calendar.system? && !read_only_or_forbidden_by_protocol? && !meal? &&
         (admin_or_coord? || active_creator_or_group_member? && (future? || recently_created?))
     end
 

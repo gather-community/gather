@@ -84,18 +84,22 @@ describe Calendars::EventPolicy do
       end
 
       permissions :edit?, :update? do
-        it_behaves_like "permits admins or calendar coord or creator or group member but not regular users"
+        context "when there are no eventlets" do
+          before { event.eventlets.destroy_all }
 
-        context "just-created event with end time in past" do
-          let(:starts_at) { 3.hours.ago }
-          let(:created_at) { 50.minutes.ago }
-          it_behaves_like "permits admins or calendar coord or creator or group member but not regular users"
+          it { is_expected.not_to permit(admin, event) }
         end
 
-        context "not-just-created event with end time in past" do
-          let(:created_at) { 90.minutes.ago }
-          let(:starts_at) { 3.hours.ago }
-          it_behaves_like "permits admins or calendar coord or creator or group member but not regular users"
+        context "when all eventlets are editable" do
+          it { is_expected.to permit(admin, event) }
+        end
+
+        context "when some eventlets are not editable" do
+          let!(:calendar) { create(:calendar, community: communityB) }
+          let!(:protocol) { create(:calendar_protocol, calendars: [calendar], other_communities: "forbidden") }
+          let!(:eventlet) { create(:eventlet, event: event, calendar: calendar) }
+
+          it { is_expected.not_to permit(admin, event) }
         end
       end
 

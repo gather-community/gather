@@ -45,8 +45,7 @@ module Calendars
     end
 
     def update?
-      !calendar.system? && !read_only_or_forbidden_by_protocol? &&
-        (admin_or_coord? || active_creator_or_group_member? || (meal? && active_with_community_role?(:meals_coordinator)))
+      eventlets.any? && eventlets.all? { |e| EventletPolicy.new(user, e).update? }
     end
 
     # Allowed to make certain changes that would otherwise be invalid.

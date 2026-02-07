@@ -4,7 +4,7 @@ module Calendars
   class EventPolicy < ApplicationPolicy
     alias_method :event, :record
 
-    delegate :rule_set, :meal?, to: :event
+    delegate :meal?, to: :event
 
     class Scope < Scope
       def resolve
@@ -95,14 +95,6 @@ module Calendars
 
     def active_creator_or_group_member?
       active? && (event.creator == user || event.group&.member?(user))
-    end
-
-    def forbidden_by_protocol?
-      !active_cluster_admin? && rule_set.access_level(user.community) == "forbidden"
-    end
-
-    def read_only_or_forbidden_by_protocol?
-      !active_cluster_admin? && %w[forbidden read_only].include?(rule_set.access_level(user.community))
     end
   end
 end

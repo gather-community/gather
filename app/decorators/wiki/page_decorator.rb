@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 module Wiki
+  class InvalidProtocolError < StandardError; end
+  class HttpRequestError < StandardError; end
+
   # Decorates wiki pages. Lots of key stuff happens here!
   class PageDecorator < ApplicationDecorator
     delegate_all
@@ -109,23 +112,44 @@ module Wiki
     def process_data(str)
       if data_source.present?
         begin
-          Mustache.render(str, JSON.parse(URI.open(data_source, &:read)))
-        rescue SocketError
-          self.data_fetch_error = I18n.t("activerecord.errors.models.wiki/page.data_fetch.socket_error")
-          ""
-        rescue OpenURI::HTTPError
-          self.data_fetch_error = $ERROR_INFO.to_s
-          ""
+          Mustache.render(str, JSON.parse(fetch_http_data(data_source)))
         rescue JSON::ParserError
           self.data_fetch_error = I18n.t("activerecord.errors.models.wiki/page.data_fetch.invalid_json")
           ""
         rescue Mustache::Parser::SyntaxError
           self.data_fetch_error = format_mustache_error($ERROR_INFO)
           ""
+        rescue InvalidProtocolError
+          self.data_fetch_error = I18n.t("activerecord.errors.models.wiki/page.data_fetch.invalid_protocol")
+          ""
+        rescue HttpRequestError, SocketError, Timeout::Error,
+               Net::OpenTimeout, Net::ReadTimeout, URI::InvalidURIError,
+               Errno::ECONNREFUSED, Errno::ECONNRESET, Errno::ETIMEDOUT,
+               OpenSSL::SSL::SSLError => e
+          Rails.logger.error("Error fetching data from data source",
+                             error: e.message, error_type: e.class.name, data_source: data_source,
+                             backtrace: e.backtrace.join("\n"))
+          self.data_fetch_error = I18n.t("activerecord.errors.models.wiki/page.data_fetch.connection_error")
+          ""
         end
       else
         str
       end
+    end
+
+    def fetch_http_data(url)
+      uri = URI.parse(url)
+      raise InvalidProtocolError unless %w[http https].include?(uri.scheme&.downcase)
+
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = uri.scheme == "https"
+      http.open_timeout = 10
+      http.read_timeout = 10
+
+      response = http.request(Net::HTTP::Get.new(uri.request_uri))
+      raise HttpRequestError unless response.is_a?(Net::HTTPSuccess)
+
+      response.body
     end
 
     def format_mustache_error(error)

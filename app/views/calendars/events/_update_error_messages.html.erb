@@ -1,7 +1,7 @@
 <p>The following error(s) occurred in trying to save your changes:</p>
 <ul>
-  <% @event.errors.each do |attrib, error| %>
-    <% attrib = "Event" if attrib == :base %>
-    <li><%= "#{Calendars::EventForm.human_attribute_name(attrib)}: #{error}" %></li>
+  <% errors.sort_by { |e| e.attribute == :base ? 0 : 1 }.each do |error| %>
+    <% attrib = error.attribute == :base ? nil : Calendars::EventForm.human_attribute_name(error.attribute) %>
+    <li><%= [attrib, error.message].compact.join(": ") %></li>
   <% end %>
 </ul>

@@ -120,7 +120,7 @@ module Calendars
         end
       else
         if request.xhr?
-          render(partial: "update_error_messages", status: :unprocessable_entity)
+          render(partial: "update_error_messages", locals: {errors: @form.errors}, status: :unprocessable_entity)
         else
           prep_form_vars
           render(:edit)

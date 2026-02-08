@@ -51,7 +51,7 @@ module Calendars
 
     def delete_action_link
       ActionLink.new(object, :destroy, icon: "trash", method: :delete, confirm: {name: name},
-        path: h.calendars_event_path(object))
+        path: h.calendars_event_path(object, url_params))
     end
 
     def url_params

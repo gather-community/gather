@@ -124,7 +124,7 @@ describe GDrive::Migration::FullScanJob do
   end
 
   describe "when there are no more scan tasks left" do
-    let(:community) { create(:community, id: 123) }
+    let(:community) { create(:community, id: 999_999_999) }
     let!(:operation) do
       create(:gdrive_migration_operation, :webhook_registered, community: community,
         src_folder_id: "1FBirfPXk-5qaMO1BkvlyhaC8JARE_FRq",

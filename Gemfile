@@ -49,7 +49,7 @@ gem "omniauth-rails_csrf_protection", "~> 0.1" # Related to CVE 2015 9284
 gem "pg", "~> 1.6"
 gem "phony_rails", "~> 0.12"
 gem "psych", "< 4"
-gem "puma", "~> 5.6"
+gem "puma", "~> 7.2"
 gem "pundit", "~> 2.0"
 gem "rails", "~> 7.0.0"
 gem "rails-backbone", "~> 1.2"

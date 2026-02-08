@@ -122,4 +122,4 @@ gem "turbo-rails", "~> 1.3"
 
 gem "money", "~> 6.16"
 
-gem "logtail-rails", "~> 0.2.8"
+gem "logtail-rails", "~> 0.2.12"

@@ -59,7 +59,9 @@ module Calendars
         if params[:calendar_id]
           {params[:calendar_id] => true}
         else
-          setting = current_user.settings["calendar_selection"]
+          # Include the old, non-scoped key for backwards compatibility during deploy.
+          setting = current_user.settings["calendar_selection_#{current_community.id}"] ||
+                    current_user.settings["calendar_selection"]
           InitialSelection.new(stored: setting, calendar_scope: calendar_scope).selection
         end
     end

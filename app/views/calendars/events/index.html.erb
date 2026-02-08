@@ -74,7 +74,8 @@
     });
     var listView = new Gather.Views.Calendars.CalendarListView({
       el: '.calendar-list-wrapper',
-      selection: <%= json(@calendar_selection) %>
+      selection: <%= json(@calendar_selection) %>,
+      communityId: <%= json(current_community&.id) %>
     });
     var linkManager = new Gather.Views.Calendars.CalendarLinkManager({
       el: '#calendar-and-sidebar'

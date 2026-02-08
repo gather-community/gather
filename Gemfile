@@ -78,7 +78,7 @@ group :development, :test do
   gem "annotate", "~> 3.2.0"
   gem "awesome_print", "~> 1.6"
   gem "bcrypt_pbkdf", ">= 1.0", "< 2.0" # For Capistrano
-  gem "byebug", "~> 11.0"
+  gem "byebug", "~> 13.0"
   gem "capistrano-bundler", "~> 1.0"
   gem "capistrano-passenger", "~> 0.2"
   gem "capistrano-rails", "~> 1.1"

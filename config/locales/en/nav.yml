@@ -15,6 +15,7 @@ en:
       _self: "Groups"
       groups: "Groups"
       roles: "Roles"
+      domains: "Domains"
     meals:
       _self: "Meals"
       meals: "Meals"
@@ -23,7 +24,12 @@ en:
       formulas: "Formulas"
       roles: "Roles"
       types: "Types"
-      settings: "Settings"
+      settings:
+        _self: "Settings"
+        general: "General"
+        restrictions: "Dietary Restrictions"
+        reminders: "Reminders"
+
     calendars:
       _self: "Calendars"
       events: "Events"
@@ -40,6 +46,7 @@ en:
             status: "Status"
             owners: "Owners"
             files: "Files"
+            logs: "Logs"
     work:
       _self: "Work"
       signups: "Signups"

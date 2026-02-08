@@ -11,6 +11,5 @@ oauth:
 secret_key_base: 64a09c05e3fcbc96c7d4fc35d83b1c6edb272e1ab7232c8f6332d560652409d49216c7a7025ca6e696111d394c731c3a0da144c984280da873c86fff75f47222
 
 email:
-  from: Gather <gather@gatherdev.org>
-  no_reply: No-Reply <noreply@gatherdev.org>
+  from: Gather <noreply@gatherdev.org>
   webmaster: someone@example.com

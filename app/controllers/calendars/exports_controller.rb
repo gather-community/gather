@@ -22,7 +22,7 @@ module Calendars
       authorize(current_community, :personalized?, policy_class: ExportPolicy)
       finder = EventFinder.new(calendars: calendars, range: event_date_range,
                                user: current_user, own_only: params[:own_only] == "1")
-      send_calendar_data(calendar_name, finder.events)
+      send_calendar_data(calendar_name, finder.eventlets)
     end
 
     # Nonpersonalized exports are those where the current user is not known and the token
@@ -33,7 +33,7 @@ module Calendars
       authorize_with_explict_policy_object(:community?, policy_object: policy)
       finder = EventFinder.new(calendars: calendars, range: event_date_range,
                                user: nil, own_only: false)
-      send_calendar_data(calendar_name, finder.events)
+      send_calendar_data(calendar_name, finder.eventlets)
     end
 
     def reset_token
@@ -59,7 +59,9 @@ module Calendars
         if params[:calendar_id]
           {params[:calendar_id] => true}
         else
-          setting = current_user.settings["calendar_selection"]
+          # Include the old, non-scoped key for backwards compatibility during deploy.
+          setting = current_user.settings["calendar_selection_#{current_community.id}"] ||
+                    current_user.settings["calendar_selection"]
           InitialSelection.new(stored: setting, calendar_scope: calendar_scope).selection
         end
     end

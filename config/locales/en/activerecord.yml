@@ -1,4 +1,18 @@
 en:
+  activemodel:
+    attributes:
+      calendars/event:
+        calendar: "Calendar"
+        pre_notice: "Notice"
+        name: "Event Name"
+        starts_at: "Start Time"
+        ends_at: "End Time"
+        creator: "Creator"
+        group: "Group"
+        all_day: "All-day event?"
+        kind: "Type"
+        note: "Note"
+        guidelines: "Guidelines"
   activerecord:
     models:
       meals/meal: "Meal"
@@ -109,7 +123,16 @@ en:
         description: "Description"
         value: "Amount"
         member_type_ids: "Member Types"
-      gdrive/migration/consent_request:
+      gdrive/config:
+        org_user_id: "Google Workspace User ID"
+        client_id: "App Client ID"
+        client_secret_to_write: "App Client Secret"
+      gdrive/migration/operation:
+        contact_email: "Contact Email"
+        contact_name: "Contact Name"
+        src_folder_id: "Source ID"
+        dest_folder_id: "Destination ID"
+      gdrive/migration/request:
         opt_out_reason: "Opt Out Reason"
       gdrive/item:
         external_id: "ID"
@@ -152,18 +175,6 @@ en:
         calendar_ids: "Calendars"
       calendars/group:
         name: "Group Name"
-      calendars/event:
-        calendar: "Calendar"
-        pre_notice: "Notice"
-        name: "Event Name"
-        starts_at: "Start Time"
-        ends_at: "End Time"
-        creator: "Creator"
-        group: "Group"
-        all_day: "All-day event?"
-        kind: "Type"
-        note: "Note"
-        guidelines: "Guidelines"
       calendars/calendar:
         name: "Name"
         guidelines: "Guidelines"
@@ -248,6 +259,26 @@ en:
         too_big: "File is too big (maximum %{max} MiB)"
         attached: "File is missing"
       models:
+        domain:
+          attributes:
+            base:
+              at_least_one_ownership: "Please select at least one community"
+        gdrive/config:
+          attributes:
+            org_user_id:
+              invalid: "Must be an email address"
+            client_id:
+              invalid: "Must end in .apps.googleusercontent.com"
+            client_secret_to_write:
+              wrong_length: "Must be exactly %{count} characters"
+        gdrive/migration/operation:
+          attributes:
+            contact_email:
+              invalid: "Must be an email address"
+            dest_folder_id:
+              invalid: "Must contain only letters, numbers, _, or -"
+            src_folder_id:
+              invalid: "Must contain only letters, numbers, _, or -"
         groups/group:
           attributes:
             base:
@@ -306,7 +337,8 @@ en:
           sample_not_editable: "The sample page is not editable so that it remains intact as a reference for other users. If you would like to experiment, try creating a new page using the 'New Wiki Page' link below."
           data_fetch:
             main: "There was a problem fetching data for this page (%{error})"
-            socket_error: "Couldn't connect to server"
+            connection_error: "Could not connect to data source"
+            invalid_protocol: "Data source URL must use HTTP or HTTPS"
             invalid_json: "Invalid JSON"
             template_error: "Template Error: %{details}"
           attributes:

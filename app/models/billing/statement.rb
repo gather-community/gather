@@ -1,12 +1,23 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: statements
+#
+#  id            :integer          not null, primary key
+#  account_id    :integer          not null
+#  cluster_id    :integer          not null
+#  created_at    :datetime         not null
+#  due_on        :date
+#  prev_balance  :decimal(10, 2)   not null
+#  prev_stmt_on  :date
+#  reminder_sent :boolean          default(FALSE), not null
+#  total_due     :decimal(10, 2)   not null
+#  updated_at    :datetime         not null
+#
 module Billing
   class Statement < ApplicationRecord
     include TimeCalculable
-    # Used to compute an assumed due date when community has no due date policy.
-    # Used when e.g. determining when to send payment reminders.
-    DEFAULT_TERMS = 30.days
-    DUE_DATE_EXPR = "COALESCE(due_on, statements.created_at + INTERVAL '1' DAY * #{DEFAULT_TERMS / 1.day})"
 
     acts_as_tenant :cluster
 
@@ -29,7 +40,7 @@ module Billing
     paginates_per 10
 
     def self.due_within_days_from_now(days)
-      within_days_from_now(DUE_DATE_EXPR, days)
+      within_days_from_now(:due_on, days)
     end
 
     after_create do

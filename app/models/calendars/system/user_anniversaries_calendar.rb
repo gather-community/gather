@@ -1,5 +1,27 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: calendar_nodes
+#
+#  id                    :integer          not null, primary key
+#  abbrv                 :string(6)
+#  allow_overlap         :boolean          default(TRUE), not null
+#  cluster_id            :integer          not null
+#  color                 :string(7)
+#  community_id          :integer          not null
+#  created_at            :datetime         not null
+#  deactivated_at        :datetime
+#  default_calendar_view :string           default("week"), not null
+#  group_id              :bigint
+#  guidelines            :text
+#  meal_hostable         :boolean          default(FALSE), not null
+#  name                  :string(24)       not null
+#  rank                  :integer
+#  selected_by_default   :boolean          default(FALSE), not null
+#  type                  :string           not null
+#  updated_at            :datetime         not null
+#
 module Calendars
   module System
     # Returns people's birthdays
@@ -32,6 +54,30 @@ module Calendars
         events.compact.sort_by(&:starts_at)
       end
 
+      def eventlets_between(range, actor:)
+        lower = range.first
+        upper = range.last
+        users = User.in_community(community).active.where.not(attrib => nil)
+
+        # Try the anniversaries for each year
+        eventlets = (lower.year..upper.year).flat_map do |year|
+          users.map do |user|
+            month = user[attrib].month
+            day = user[attrib].day
+
+            # If the anniversary is on feb 29 and it's not a leap year, use feb 28
+            day = 28 if !Date.leap?(year) && month == 2 && day == 29
+
+            candidate_day_start = Time.zone.local(year, month, day, 0, 0)
+            candidate_day_end = Time.zone.local(year, month, day, 11, 59)
+
+            # We match if the range overlaps _any part of_ the candidate day
+            range.first <= candidate_day_end && range.last >= candidate_day_start ? eventlet_for(Date.new(year, month, day), user) : nil
+          end
+        end
+        eventlets.compact.sort_by(&:starts_at)
+      end
+
       private
 
       def event_for(date, user)
@@ -45,6 +91,23 @@ module Calendars
           linkable: user,
           uid: "#{slug}_#{user.id}",
           all_day: true
+        )
+      end
+
+      def eventlet_for(date, user)
+        age = date.year - user[attrib].year
+        title = +"#{emoji} #{user.name}"
+        title << " (#{age})" if age <= 18
+        Eventlet.new(
+          calendar: self,
+          starts_at: date.in_time_zone,
+          ends_at: date.in_time_zone + 1.day - 1.second,
+          linkable: user,
+          uid: "#{slug}_#{user.id}",
+          all_day: true,
+          event: Event.new(
+            name: title
+          )
         )
       end
     end

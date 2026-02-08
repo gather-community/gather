@@ -22,7 +22,7 @@ class DatePickerInput < SimpleForm::Inputs::StringInput
 
   def input_button
     template.content_tag(:span, class: "input-group-btn") do
-      template.content_tag(:button, class: "btn btn-default", type: "button") do
+      template.content_tag(:button, class: "btn btn-default", type: "button", "aria-label": "Open date picker") do
         template.content_tag(:span, "", class: "fa fa-calendar")
       end
     end

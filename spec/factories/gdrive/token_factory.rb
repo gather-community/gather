@@ -1,5 +1,17 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: gdrive_tokens
+#
+#  id               :bigint           not null, primary key
+#  cluster_id       :bigint           not null
+#  created_at       :datetime         not null
+#  data             :text             not null
+#  gdrive_config_id :bigint           not null
+#  google_user_id   :string           not null
+#  updated_at       :datetime         not null
+#
 FactoryBot.define do
   factory :gdrive_token, class: "GDrive::Token" do
     # When testing using VCR, we should override access_token as needed in the factory call, temporarily,
@@ -8,18 +20,18 @@ FactoryBot.define do
     # Once we have captured the request, remove the overridden values from the factory
     # call and update the cassette to match.
     transient do
-      access_token { gdrive_config.migration? ? "ya29.yyy" : "ya29.xxx" }
+      access_token { "ya29.xxx" }
     end
-    association :gdrive_config, factory: :gdrive_main_config
+    association :gdrive_config, factory: :gdrive_config
     google_user_id { "a@example.com" }
     data do
       {
-        "client_id" => gdrive_config.migration? ? "236482765-xxx.apps.googleusercontent.com" : "236482764-xxx.apps.googleusercontent.com",
+        "client_id" => "236482764-xxx.apps.googleusercontent.com",
         "access_token" => access_token,
         "refresh_token" => "xxx",
         "scope" => [
           "email",
-          gdrive_config.migration? ? "https://www.googleapis.com/auth/drive.file" : "https://www.googleapis.com/auth/drive",
+          "https://www.googleapis.com/auth/drive",
           "https://www.googleapis.com/auth/userinfo.email",
           "openid"
         ],

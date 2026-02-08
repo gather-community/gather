@@ -2,6 +2,10 @@
 <% content_for(:title_no_html, shift.job_title) %>
 <% content_for(:action_links, shift.action_links) %>
 
+<% content_for(:mobile_back_link) do %>
+  <%= render partial: "shared/mobile_back_link", locals: {label: "Signups", path: work_shifts_path } %>
+<% end %>
+
 <h2><%= shift.times %></h2>
 
 <dl class="shift-info icon-list bigger">

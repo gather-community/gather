@@ -1,0 +1,20 @@
+<%= gather_form_for(@domain, url: @domain.new_record? ? domains_path : domain_path(@domain)) do |f| %>
+  <%= f.input(:name, maxlength: Domain.columns_hash["name"].limit) %>
+  <% if @community_options %>
+    <%= f.input(:communities, required: true) do %>
+      <% @community_options.each do |community| %>
+        <div class="checkbox">
+          <label>
+            <%= check_box_tag("domain[community_ids][]", community.id,
+                  @domain.communities.include?(community)) %>
+            <%= community.name %>
+          </label>
+        </div>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <%= form_actions do %>
+    <%= f.button :primary %>
+  <% end %>
+<% end %>

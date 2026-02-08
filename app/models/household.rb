@@ -1,5 +1,24 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: households
+#
+#  id             :integer          not null, primary key
+#  alternate_id   :string
+#  cluster_id     :integer          not null
+#  community_id   :integer          not null
+#  created_at     :datetime         not null
+#  deactivated_at :datetime
+#  garage_nums    :string
+#  keyholders     :string
+#  member_type_id :bigint
+#  name           :string(50)       not null
+#  unit_num       :integer
+#  unit_suffix    :string
+#  updated_at     :datetime         not null
+#
+
 # A single cohesive household group, not necessarily one-to-one with a unit.
 class Household < ApplicationRecord
   include Wisper.model
@@ -11,8 +30,8 @@ class Household < ApplicationRecord
   belongs_to :community
   belongs_to :member_type, class_name: "People::MemberType", inverse_of: :households
   has_many :accounts, -> { joins(:community).includes(:community).alpha_order(communities: :name) },
-           inverse_of: :household, class_name: "Billing::Account"
-  has_many :signups
+           inverse_of: :household, class_name: "Billing::Account", dependent: :destroy
+  has_many :signups, class_name: "Meals::Signup", dependent: :destroy
   has_many :users, -> { by_name_adults_first }, inverse_of: :household, dependent: :destroy
   has_many :vehicles, class_name: "People::Vehicle", dependent: :destroy
   has_many :emergency_contacts, class_name: "People::EmergencyContact", dependent: :destroy

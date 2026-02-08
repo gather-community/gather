@@ -13,6 +13,7 @@ every 5.minutes do
     Meals::CookMenuReminderJob
     Meals::CloseMealsJob
     CustomReminderJob
+    MailTestJob
   ].join(","))
 end
 

@@ -1,5 +1,27 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: calendar_nodes
+#
+#  id                    :integer          not null, primary key
+#  abbrv                 :string(6)
+#  allow_overlap         :boolean          default(TRUE), not null
+#  cluster_id            :integer          not null
+#  color                 :string(7)
+#  community_id          :integer          not null
+#  created_at            :datetime         not null
+#  deactivated_at        :datetime
+#  default_calendar_view :string           default("week"), not null
+#  group_id              :bigint
+#  guidelines            :text
+#  meal_hostable         :boolean          default(FALSE), not null
+#  name                  :string(24)       not null
+#  rank                  :integer
+#  selected_by_default   :boolean          default(FALSE), not null
+#  type                  :string           not null
+#  updated_at            :datetime         not null
+#
 module Calendars
   module System
     # Returns people's work shifts.
@@ -19,6 +41,23 @@ module Calendars
           end
         end
         events.sort_by(&:starts_at)
+      end
+
+      def eventlets_between(range, actor:)
+        # actor can always be nil, but for this calendar, that doesn't make sense so we just return empty.
+        return [] if actor.nil?
+
+        assignments = (work_assignments(range, actor) + meal_assignments(range, actor))
+        eventlets = assignments.flat_map do |assignment|
+          if assignment.date_time? || assignment.elapsed_time <= 1.day
+            eventlet_for(assignment)
+          else
+            # For multi-day date_only shifts, we include two all-day eventlets,
+            # one for the start of the interval and one for the end.
+            [multi_day_start_eventlet_for(assignment), multi_day_end_eventlet_for(assignment)]
+          end
+        end
+        eventlets.sort_by(&:starts_at)
       end
 
       private
@@ -81,6 +120,42 @@ module Calendars
           starts_at: assignment.date_time? ? assignment.starts_at : assignment.starts_at.midnight,
           ends_at: assignment.date_time? ? assignment.ends_at : assignment.ends_at.midnight + 1.day - 1.second
         }
+      end
+
+      def eventlet_for(assignment)
+        # These prefixes match legacy export uid prefixes
+        uid_prefix = assignment.is_a?(Work::Assignment) ? "Work_Assignment" : "Meals_Assignment"
+        Eventlet.new(
+          calendar: self,
+          event: Event.new(
+            name: [assignment.job_title, meal_for(assignment)&.title_or_no_title].compact.join(": "),
+            note: assignment.job_description,
+          ),
+          location: meal_for(assignment)&.location_name,
+          linkable: assignment.linkable,
+          uid: "#{uid_prefix}_#{assignment.id}",
+          all_day: !assignment.date_time?,
+          starts_at: assignment.date_time? ? assignment.starts_at : assignment.starts_at.midnight,
+          ends_at: assignment.date_time? ? assignment.ends_at : assignment.ends_at.midnight + 1.day - 1.second
+        )
+      end
+
+      # Assumes assignment is date_only type.
+      def multi_day_start_eventlet_for(assignment)
+        eventlet = eventlet_for(assignment)
+        eventlet.event.name = "#{eventlet.event.name} (Start)"
+        eventlet.uid = "#{eventlet.uid}_Start"
+        eventlet.ends_at = eventlet.starts_at + 1.day - 1.second
+        eventlet
+      end
+
+      # Assumes assignment is date_only type.
+      def multi_day_end_eventlet_for(assignment)
+        eventlet = eventlet_for(assignment)
+        eventlet.event.name = "#{eventlet.event.name} (End)"
+        eventlet.uid = "#{eventlet.uid}_End"
+        eventlet.starts_at = eventlet.ends_at - 1.day + 1.second
+        eventlet
       end
 
       def meal_for(assignment)

@@ -3,6 +3,7 @@ en:
   pagination:
     page_entries_info:
       gdrive/migration/file: "Showing files %{first}–%{last} out of %{total}"
+      gdrive/migration/log: "Showing logs %{first}–%{last} out of %{total}"
       meals/meal: "Showing meals %{first}–%{last} out of %{total}"
       household: "Showing households %{first}–%{last} out of %{total}"
       user: "Showing users %{first}–%{last} out of %{total}"

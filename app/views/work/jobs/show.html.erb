@@ -2,6 +2,10 @@
 <% content_for(:title_no_html, job.title) %>
 <% content_for(:action_links, job.action_links) %>
 
+<% content_for(:mobile_back_link) do %>
+  <%= render partial: "shared/mobile_back_link", locals: {label: "Jobs", path: work_jobs_path } %>
+<% end %>
+
 <table class="key-value">
   <tr>
     <td><%= Work::Job.human_attribute_name(:title) %></td>

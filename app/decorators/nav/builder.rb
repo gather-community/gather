@@ -175,6 +175,7 @@ module Nav
         when :groups
           sample_user = User.new(household: sample_household)
           sample_group = Groups::Group.new(communities: [community])
+          sample_domain = Domain.new(communities: [community])
           [
             {
               name: :groups,
@@ -188,6 +189,12 @@ module Nav
               path: h.roles_path,
               permitted: h.policy(sample_user).index?,
               icon: "user-circle"
+            }, {
+              name: :domains,
+              parents: :groups,
+              path: h.domains_path,
+              permitted: h.policy(sample_domain).index?,
+              icon: "cloud"
             }
           ]
         when :calendars
@@ -311,6 +318,19 @@ module Nav
             path: h.people_member_types_path,
             permitted: h.policy(sample_member_type).index?
           }]
+        elsif context[0..1] == %i[meals settings]
+          depth = 2
+          [{
+            name: :general,
+            parents: %i[meals settings],
+            path: h.edit_meals_settings_path,
+            permitted: SettingsPolicy.new(user, community).edit?
+          }, {
+            name: :restrictions,
+            parents: %i[meals settings],
+            path: h.edit_meals_restrictions_path,
+            permitted: h.policy(sample_member_type).index?
+          }]
         elsif context[0..3] == %i[wiki gdrive migration dashboard]
           depth = 4
           [{
@@ -327,6 +347,11 @@ module Nav
             name: :files,
             parents: %i[wiki gdrive migration dashboard],
             path: h.gdrive_migration_dashboard_files_path,
+            permitted: GDrive::SetupPolicy.new(user, community).setup?
+          }, {
+            name: :logs,
+            parents: %i[wiki gdrive migration dashboard],
+            path: h.gdrive_migration_dashboard_logs_path,
             permitted: GDrive::SetupPolicy.new(user, community).setup?
           }]
         end

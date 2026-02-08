@@ -39,20 +39,19 @@ module Calendars
       ActionLinkSet.new(
         ActionLink.new(object, :edit, icon: "pencil",
           path: h.edit_calendars_event_path(object, url_params)),
-        cancel_action_link
+        delete_action_link
       )
     end
 
     def edit_action_link_set
-      ActionLinkSet.new(cancel_action_link)
+      ActionLinkSet.new(delete_action_link)
     end
 
     private
 
-    def cancel_action_link
-      ActionLink.new(object, :destroy, icon: "times",
-        path: h.calendars_event_path(object, url_params), confirm: true,
-        method: :delete, label_symbol: :cancel, btn_class: "danger")
+    def delete_action_link
+      ActionLink.new(object, :destroy, icon: "trash", method: :delete, confirm: {name: name},
+        path: h.calendars_event_path(object, url_params))
     end
 
     def url_params

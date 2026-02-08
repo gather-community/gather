@@ -1,9 +1,30 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: transactions
+#
+#  id                 :integer          not null, primary key
+#  account_id         :integer          not null
+#  cluster_id         :integer          not null
+#  code               :string(16)       not null
+#  created_at         :datetime         not null
+#  description        :string(255)      not null
+#  incurred_on        :date             not null
+#  quantity           :integer
+#  statement_id       :integer
+#  statementable_id   :integer
+#  statementable_type :string(32)
+#  unit_price         :decimal(10, 2)
+#  updated_at         :datetime         not null
+#  value              :decimal(10, 2)   not null
+#
 module Billing
   # Models a transaction in a billing account.
   class Transaction < ApplicationRecord
     include Transactable
+
+    DESCRIPTION_MAX_LENGTH = 255
 
     acts_as_tenant :cluster
 
@@ -16,10 +37,10 @@ module Billing
     scope :in_community, ->(c) { joins(:account).merge(Billing::Account.in_community(c)) }
     scope :for_household, ->(h) { joins(account: :household).where("households.id = ?", h.id) }
     scope :for_community_or_household,
-          ->(c, h) { joins(:account).merge(Billing::Account.for_community_or_household(c, h)) }
+      ->(c, h) { joins(:account).merge(Billing::Account.for_community_or_household(c, h)) }
     scope :incurred_between, ->(a, b) { where("incurred_on >= ? AND incurred_on <= ?", a, b) }
     scope :recorded_between,
-          ->(a, b) { where("transactions.created_at >= ? AND transactions.created_at <= ?", a, b) }
+      ->(a, b) { where("transactions.created_at >= ? AND transactions.created_at <= ?", a, b) }
     scope :no_statement, -> { where(statement_id: nil) }
     scope :newest_first, -> { order(incurred_on: :desc, created_at: :desc) }
     scope :oldest_first, -> { order(:incurred_on, :created_at) }
@@ -60,7 +81,11 @@ module Billing
     end
 
     def meal_id
-      statementable_type == "Meals::Meal" ? statementable_id : nil
+      (statementable_type == "Meals::Meal") ? statementable_id : nil
+    end
+
+    def statement?
+      !statement_id.nil?
     end
 
     private

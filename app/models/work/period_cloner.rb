@@ -6,7 +6,7 @@ module Work
     include ActiveModel::Model
 
     JOB_ATTRIBS_TO_COPY = %i[description double_signups_allowed hours hours_per_shift
-                             requester_id slot_type time_type title].freeze
+      requester_id slot_type time_type title].freeze
     REMINDER_ATTRIBS_TO_COPY = %i[abs_rel note rel_magnitude rel_unit_sign].freeze
 
     attr_accessor :old_period, :new_period
@@ -15,14 +15,14 @@ module Work
     def copy_attributes_and_shares
       new_period.job_copy_source_id = old_period.id
       %i[meal_job_requester_id pick_type quota_type round_duration
-         max_rounds_per_worker workers_per_round].each do |attrib|
+        max_rounds_per_worker workers_per_round].each do |attrib|
         new_period[attrib] = old_period[attrib]
       end
 
       old_period.shares.includes(:user).find_each do |share|
         next if share.user.inactive?
         new_period.shares.build(period: new_period, user_id: share.user_id, portion: share.portion,
-                                priority: share.priority)
+          priority: share.priority)
       end
     end
 
@@ -88,8 +88,8 @@ module Work
 
     def new_shift_bounds(old_shift)
       if old_shift.full_period?
-        starts_at = Time.zone.parse(new_period.starts_on.to_s)
-        ends_at = Time.zone.parse(new_period.ends_on.to_s) + 1.day - 1.minute
+        starts_at = Time.zone.parse(new_period.starts_on.to_fs)
+        ends_at = Time.zone.parse(new_period.ends_on.to_fs) + 1.day - 1.minute
       elsif periods_and_shift_have_month_boundaries?(old_shift)
         period_month_diff = ((new_period.starts_on - old_period.starts_on) / 30).round
         starts_at = old_shift.starts_at + period_month_diff.months

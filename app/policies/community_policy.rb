@@ -12,4 +12,8 @@ class CommunityPolicy < ApplicationPolicy
   def update?
     active_admin?
   end
+
+  def permitted_attributes
+    [restrictions_attributes: [:id, :contains, :absence, :deactivated_at, :deactivated]]
+  end
 end

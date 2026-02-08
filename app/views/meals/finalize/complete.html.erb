@@ -3,7 +3,7 @@
 <div class="center-notice">
   <p>Meal finalized successfully!</p>
   <% case cost.payment_method %>
-  <% when "paypal" %>
+  <% when "check" %>
     Please send a check to <%= cost.reimbursee.name %> for <%= cost.ingredient_cost_formatted %> now.
   <% when "credit" %>
     <%= cost.reimbursee.name %>'s Gather account has been credited <%= cost.ingredient_cost_formatted %>.

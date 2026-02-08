@@ -1,10 +1,15 @@
 <% content_for(:title) { "Google Drive Migration" } %>
+<%= content_for(:action_links, operation.action_links) %>
 
 <div class="synopsis gdrive-migration-synopsis">
   <%= render("gdrive/migration/dashboard/synopsis") %>
 </div>
 
 <table>
+  <tr><td>System User</td><td><%= @config.org_user_id %></td></tr>
+  <tr><td>Contact</td><td><%= @operation.contact_name %> &lt;<%= @operation.contact_email %>&gt;</td></tr>
+  <tr><td>Source Folder</td><td><%= link_to(@operation.src_folder_id, "https://drive.google.com/drive/u/0/folders/#{@operation.src_folder_id}") %></td></tr>
+  <tr><td>Destination Folder</td><td><%= link_to(@operation.dest_folder_id, "https://drive.google.com/drive/u/0/folders/#{@operation.dest_folder_id}") %></td></tr>
   <tr><td>Total Files</td><td><%= number_with_delimiter(@stats.total) %></td></tr>
   <tr><td>Files Pending</td><td><%= number_with_delimiter(@stats.by_status["pending"]) %></td></tr>
   <tr><td>Files Declined</td><td><%= number_with_delimiter(@stats.by_status["declined"]) %></td></tr>
@@ -12,4 +17,5 @@
   <tr><td>Files Transferred</td><td><%= number_with_delimiter(@stats.by_status["transferred"]) %></td></tr>
   <tr><td>Files Copied</td><td><%= number_with_delimiter(@stats.by_status["copied"]) %></td></tr>
   <tr><td>Files Ignored</td><td><%= number_with_delimiter(@stats.by_status["ignored"]) %></td></tr>
+  <tr><td>Files Disappeared</td><td><%= number_with_delimiter(@stats.by_status["disappeared"]) %></td></tr>
 </table>

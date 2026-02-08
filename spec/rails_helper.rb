@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# This file is copied to spec/ when you run 'rails generate rspec:install'
+# This file is copied to spec/ when you run "rails generate rspec:install"
 ENV["RAILS_ENV"] ||= "test"
 require File.expand_path("../config/environment", __dir__)
 # Prevent database truncation if the environment is production
@@ -35,10 +35,10 @@ Dir[Rails.root.join("spec/support/**/*.rb")].sort.each { |f| require f }
 ActiveRecord::Migration.maintain_test_schema!
 
 RSpec.configure do |config|
-  # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
+  # Remove this line if you"re not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
 
-  # If you're not using ActiveRecord, or you'd prefer not to run each of your
+  # If you"re not using ActiveRecord, or you"d prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
   # instead of true.
   config.use_transactional_fixtures = true
@@ -65,15 +65,39 @@ RSpec.configure do |config|
   config.include(RequestSpecHelpers, type: :request)
   config.include(GeneralHelpers)
 
-  Capybara.register_driver(:selenium_chrome_headless) do |app|
+  def register_selenium_chrome_driver(app:, headless:, user_agent: nil)
+    args = %w[disable-gpu no-sandbox disable-site-isolation-trials]
+    args << "headless" if headless
     options = Selenium::WebDriver::Chrome::Options.new(
-      args: %w[disable-gpu no-sandbox headless disable-site-isolation-trials window-size=1280x2048],
+      args: args,
       "goog:loggingPrefs": {browser: "ALL", client: "ALL", driver: "ALL", server: "ALL"}
     )
+    options.add_argument("--window-size=1280,2048")
+    options.add_argument("--user-agent=\"#{user_agent}\"") if user_agent
     options.add_preference(:download, prompt_for_download: false,
       default_directory: DownloadHelpers::PATH.to_s)
     options.add_preference(:browser, set_download_behavior: {behavior: "allow"})
     Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
+  end
+
+  Capybara.register_driver(:default) do |app|
+    Capybara::RackTest::Driver.new(app, headers: {"HTTP_USER_AGENT" => "Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/109.0"})
+  end
+
+  Capybara.register_driver(:selenium_chrome_headless) do |app|
+    register_selenium_chrome_driver(app: app, headless: true)
+  end
+
+  Capybara.register_driver(:selenium_chrome_headless_desktop) do |app|
+    register_selenium_chrome_driver(app: app, headless: true, user_agent: "Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/109.0")
+  end
+
+  Capybara.register_driver(:selenium_chrome_headless_mobile) do |app|
+    register_selenium_chrome_driver(app: app, headless: true, user_agent: "Mozilla/5.0 (iPhone; CPU iPhone OS 17_7_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/137.0.7151.34 Mobile/15E148 Safari/604.1")
+  end
+
+  Capybara.register_driver(:selenium_chrome_headed) do |app|
+    register_selenium_chrome_driver(app: app, headless: false)
   end
 
   Capybara.always_include_port = true
@@ -91,8 +115,20 @@ RSpec.configure do |config|
     driven_by :rack_test
   end
 
+  config.before(:each, type: :system, desktop: true) do
+    driven_by :selenium_chrome_headless_desktop
+  end
+
+  config.before(:each, type: :system, mobile: true) do
+    driven_by :selenium_chrome_headless_mobile
+  end
+
   config.before(:each, type: :system, js: true) do
     driven_by :selenium_chrome_headless
+  end
+
+  config.before(:each, type: :system, js_headed: true) do
+    driven_by :selenium_chrome_headed
   end
 
   VCR.configure do |c|

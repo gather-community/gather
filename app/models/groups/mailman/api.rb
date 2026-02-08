@@ -67,18 +67,24 @@ module Groups
       end
 
       # Assumes list_mship has an associated user remote_id.
-      def create_membership(list_mship)
-        request("members", :post, list_id: list_mship.list_id, subscriber: list_mship.subscriber,
-          role: list_mship.role, pre_verified: "true", pre_confirmed: "true",
-          pre_approved: "true")
+      def create_membership(list_mship, pre_approved: true)
+        data = {list_id: list_mship.list_id, subscriber: list_mship.subscriber,
+                role: list_mship.role, pre_verified: "true", pre_confirmed: "true"}
+        data[:pre_approved] = "true" if pre_approved
+        request("members", :post, **data)
       rescue ApiRequestError => e
-        # If we get 'is already' error, that's fine, swallow it.
-        (e.response.is_a?(Net::HTTPBadRequest) && e.response.body =~ /is already/) ? nil : (raise e)
+        if /Member already subscribed|is already/.match?(e.response.body)
+          Rails.logger.info("Member already subscribed")
+        elsif /Subscription request already pending/.match?(e.response.body)
+          accept_existing_subscription_request(list_mship, e)
+        end
       end
 
       # Assumes remote_id is set on list_mship
       def delete_membership(list_mship)
-        request("members/#{list_mship.remote_id}", :delete)
+        # There seems to be a bug in the Mailman API where we get a 400 "Could not parse an empty JSON body"
+        # if we send the request with a null body. Even though this works for deleteing a list.
+        request("members/#{list_mship.remote_id}", :delete, include_empty_json_object: true)
       end
 
       def memberships(source)
@@ -189,22 +195,47 @@ module Groups
         request("users/#{mm_user.remote_id}/addresses", :post, email: email)
         verify_address_and_set_preferred(mm_user.email)
 
-        other_mships.each do |mship|
-          request("members", :post, list_id: mship["list_id"], subscriber: mm_user.remote_id,
-            delivery_mode: mship["delivery_mode"], role: mship["role"],
-            pre_verified: "true", pre_confirmed: "true", pre_approved: "true")
-        rescue ApiRequestError => e
-          raise e unless /Member already subscribed/.match?(e.response.body)
+        if other_mships
+          other_mships.each do |mship|
+            request("members", :post, list_id: mship["list_id"], subscriber: mm_user.remote_id,
+              delivery_mode: mship["delivery_mode"], role: mship["role"],
+              pre_verified: "true", pre_confirmed: "true", pre_approved: "true")
+          rescue ApiRequestError => e
+            raise e unless /Member already subscribed|is already/.match?(e.response.body)
+          end
         end
       end
 
-      def request(endpoint, method = :get, **data)
+      def accept_existing_subscription_request(list_mship, error_409)
+        response = request("lists/#{list_mship.list_id}/requests", include_empty_json_object: true)
+        sub_requests = response["entries"].select { |e| e["email"] == list_mship.email }
+
+        if sub_requests.size > 1
+          Rails.logger.warn("There are more than 1 pending subscription request for #{list_mship.email}. " \
+            "This should not happen.", json: response["entries"])
+        elsif sub_requests.size == 0
+          raise ApiRequestError.new(
+            request: error_409.request,
+            response: error_409.response,
+            message: "Mailman membership sync: No matching subscription requests despite 409 conflict"
+          )
+        end
+
+        token = sub_requests[0]["token"]
+        request("lists/#{list_mship.list_id}/requests/#{token}", :post, action: "accept")
+      end
+
+      def request(endpoint, method = :get, include_empty_json_object: false, **data)
         return stubbed_response if Rails.env.test? && ENV["STUB_MAILMAN"]
         url = URI.parse("#{base_url}/#{endpoint}")
         req = "Net::HTTP::#{method.to_s.capitalize}".constantize.new(url)
         req["Content-Type"] = "application/json"
         req.basic_auth(*credentials)
-        req.body = data.to_json if data.present?
+        req.body = if data.present?
+          data.to_json
+        elsif include_empty_json_object
+          "{}"
+        end
         res = Net::HTTP.start(url.hostname, url.port, use_ssl: url.scheme == "https") do |http|
           http.request(req)
         end

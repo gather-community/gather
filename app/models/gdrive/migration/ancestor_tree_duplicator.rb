@@ -32,24 +32,40 @@ module GDrive
       # If raises Google::Apis::ClientError, this is most likely because the workspace user
       # doesn't have access to src_folder or src_folder doesn't exist.
       #
-      # If skip_check_for_already_mapped_folder is specified, we will assume the destination
+      # If skip_check_for_already_mapped_folders is specified, we will assume the destination
       # folder exists if a FolderMap exists. This is safer if we are confident that the
       # dest folder was recently created, as when we are doing the initial scan.
-      def ensure_tree(src_folder_id, skip_check_for_already_mapped_folder: false)
-        Rails.logger.info("Ensuring ancestor tree", src_folder_id: src_folder_id)
+      #
+      # Note that this method may be called in cases where the source folder does not exist anymore.
+      # This can happen if, for example, the user somehow drags the source folder into the file drop
+      # drive. In this case:
+      # - if a matching folder map is found and the mapped destination folder exists,
+      #   the method should run cleanly and early return
+      # - if a matching folder map is not found or destination folder does not exist,
+      #   an error will be thrown
+      def ensure_tree(src_folder_or_id, skip_check_for_already_mapped_folders: false)
+        if src_folder_or_id.is_a?(String)
+          src_folder_id = src_folder_or_id
+          src_folder = nil
+        else
+          src_folder_id = src_folder_or_id.id
+          src_folder = src_folder_or_id
+        end
+
+        operation.log(:info, "Ensuring folder tree", src_folder_id: src_folder_id)
 
         return operation.dest_folder_id if src_folder_id == operation.src_folder_id
 
         # Check for an existing and valid map before we create a new one
         if (map = FolderMap.find_by(src_id: src_folder_id))
-          if skip_check_for_already_mapped_folder || folder_exists?(map.dest_id)
+          if skip_check_for_already_mapped_folders || folder_exists?(map.dest_id)
             return map.dest_id
           else
-            Rails.logger.warn("Folder map dest folder missing", src_folder_id: src_folder_id, dest_folder_id: map.dest_id)
+            operation.log(:warn, "Folder map dest folder missing", src_folder_id: src_folder_id, dest_folder_id: map.dest_id)
             map.destroy
           end
         else
-          Rails.logger.warn("Folder map not found", src_folder_id: src_folder_id)
+          operation.log(:warn, "Folder map not found", src_folder_id: src_folder_id)
         end
 
         # If we get to this point, we either had no map at all or an invalid map, so we need to
@@ -57,15 +73,16 @@ module GDrive
 
         # The first thing we need is the src_folder's parent so that we know what folder on the destination
         # to find/create the destination folder in.
+        # To get this, we need to load the src folder from the API, unless it was given to us in the method call.
         # This request could fail if the workspace user doesn't have access to src_folder or src_folder
         # doesn't exist. The error will bubble up to the caller in that case.
-        src_folder = wrapper.get_file(src_folder_id, fields: "id,name,parents", supports_all_drives: true)
+        src_folder ||= wrapper.get_file(src_folder_id, fields: "id,name,parents", supports_all_drives: true)
 
         # This can happen if we don't have access to the target folder's parent, or, rarely,
         # if it has no parents, like if somehow src_folder_id is the person's My Drive. Either way
         # it's unrecoverable.
         if src_folder.parents.blank?
-          Rails.logger.error("Source folder parent inaccessible", src_folder_id: src_folder_id)
+          operation.log(:error, "Source folder parent inaccessible", src_folder_id: src_folder_id)
           message = "Parent of folder #{src_folder_id} is inaccessible"
           raise ParentFolderInaccessible.new(message, folder_id: src_folder_id)
         else
@@ -75,7 +92,7 @@ module GDrive
 
           # Try to find a matching folder. If we fail, create one.
           unless (dest_folder = find_folder_by_parent_id_and_name(dest_parent_id, src_folder.name))
-            Rails.logger.warn("Dest folder not found, creating", src_folder_id: src_folder_id,
+            operation.log(:warn, "Dest folder not found, creating", src_folder_id: src_folder_id,
               dest_parent_id: dest_parent_id, name: src_folder.name)
             dest_folder = Google::Apis::DriveV3::File.new(name: src_folder.name, parents: [dest_parent_id],
               mime_type: GDrive::FOLDER_MIME_TYPE)
@@ -84,7 +101,7 @@ module GDrive
             dest_folder = wrapper.create_file(dest_folder, fields: "id", supports_all_drives: true)
           end
 
-          Rails.logger.info("Creating folder map", src_folder_id: src_folder_id, dest_folder_id: dest_folder.id)
+          operation.log(:info, "Creating folder map", src_folder_id: src_folder_id, dest_folder_id: dest_folder.id)
           FolderMap.create!(operation: operation, name: src_folder.name,
             src_parent_id: src_parent_id, src_id: src_folder_id,
             dest_parent_id: dest_parent_id, dest_id: dest_folder.id)

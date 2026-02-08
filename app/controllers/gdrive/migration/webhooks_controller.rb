@@ -27,23 +27,15 @@ module GDrive
         end
 
         if operation.webhook_secret != request.headers["x-goog-channel-token"]
-          Rails.logger.error("x-goog-channel-token does not match the webhook secret", operation_id: operation.id)
+          operation.log(:error, "x-goog-channel-token does not match the webhook secret")
           return render_not_found
         end
 
         unless operation.active?
-          Rails.logger.info("Operation is inactive, not processing webhook", operation_id: operation_id)
+          operation.log(:info, "Operation is inactive, not processing webhook")
         end
 
-        ScanJob.with_lock(operation.id) do
-          # No need to start a new scan if there is already one that hasn't started running.
-          # Background jobs only get started every few seconds so this should debounce
-          # things if a lot of webhook pings are coming in.
-          # We do this in a critical section so that we don't have any race conditions.
-          if !operation.scans.changes.any?(&:new?)
-            ScanJob.enqueue_change_scan_job(operation)
-          end
-        end
+        ChangesScanJob.enqueue(operation)
       end
 
       private

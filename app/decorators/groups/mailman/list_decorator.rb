@@ -17,14 +17,14 @@ module Groups
 
       def panel_url
         return @panel_url if @panel_url
-        path = remote_id ? "/postorius/lists/#{remote_id}/" : "/postorius/lists/"
-        @panel_url = "#{Settings.mailman.single_sign_on.init_url}#{CGI.escape(path)}"
+        path = remote_id ? "/mailman3/lists/#{remote_id}/" : "/mailman3/lists/"
+        @panel_url = "#{Settings.mailman.single_sign_on.init_url}?next=#{CGI.escape(path)}"
       end
 
       def archives_url
         return @archives_url if @archives_url
-        path = remote_id ? "/hyperkitty/lists/#{fqdn_listname}/" : "/hyperkitty/"
-        @archives_url = "#{Settings.mailman.single_sign_on.init_url}#{CGI.escape(path)}"
+        path = remote_id ? "/archives/list/#{fqdn_listname}/" : "/archives/"
+        @archives_url = "#{Settings.mailman.single_sign_on.init_url}?next=#{CGI.escape(path)}"
       end
 
       private

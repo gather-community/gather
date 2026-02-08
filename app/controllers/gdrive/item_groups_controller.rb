@@ -9,7 +9,7 @@ module GDrive
     def new
       @item = Item.find(params[:item_id])
       @item_group = ItemGroup.new(item: @item)
-      @access_levels = ItemGroup.access_levels_for_kind(@item.kind)
+      @access_levels = ItemGroup::ACCESS_LEVELS
 
       # We don't exclude hidden groups because they are useful here and only
       # admins can see this page.
@@ -28,14 +28,14 @@ module GDrive
 
       if @item_group.save
         flash[:success] = "Group added successfully."
-        redirect_to(gdrive_items_path)
+        redirect_to(gdrive_config_path)
       else
         render(:new)
       end
     end
 
     def destroy
-      simple_action(:destroy, redirect: gdrive_items_path)
+      simple_action(:destroy, redirect: gdrive_config_path)
     end
 
     protected

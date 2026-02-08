@@ -1,0 +1,27 @@
+<% content_for(:title, domain.name) %>
+<% content_for(:action_links, domain.action_links(:show)) %>
+
+<table class="key-value key-value-narrow">
+  <tr>
+    <td>Domain</td>
+    <td><%= domain.name %></td>
+  </tr>
+  <% if multi_community? %>
+    <tr>
+      <td>Communities</td>
+      <td><%= domain.communities.map(&:name).join(", ") %></td>
+    </tr>
+  <% end %>
+  <tr>
+    <td>Mailman Lists</td>
+    <td>
+      <% if domain.group_mailman_lists.any? %>
+        <% domain.group_mailman_lists.each do |list| %>
+          <%= link_to(list.name, groups_group_path(list.group)) %><br/>
+        <% end %>
+      <% else %>
+        None
+      <% end %>
+    </td>
+  </tr>
+</table>

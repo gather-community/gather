@@ -1,5 +1,21 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: communities
+#
+#  id             :integer          not null, primary key
+#  abbrv          :string(2)
+#  calendar_token :string           not null
+#  cluster_id     :integer          not null
+#  country_code   :string(2)        default("US"), not null
+#  created_at     :datetime         not null
+#  name           :string(20)       not null
+#  settings       :jsonb
+#  slug           :string           not null
+#  sso_secret     :string           not null
+#  updated_at     :datetime         not null
+#
 # This is what it's all about!
 class Community < ApplicationRecord
   include CustomFields
@@ -14,6 +30,7 @@ class Community < ApplicationRecord
   belongs_to :cluster, inverse_of: :communities
   has_many :billing_templates, class_name: "Billing::Template", inverse_of: :community, dependent: :destroy
   has_many :group_affiliations, class_name: "Groups::Affiliation", inverse_of: :community, dependent: :destroy
+  has_many :domain_ownerships, class_name: "DomainOwnership", inverse_of: :community, dependent: :destroy
   has_many :meals, class_name: "Meals::Meal", inverse_of: :community, dependent: :destroy
   has_many :meal_formulas, class_name: "Meals::Formula", inverse_of: :community, dependent: :destroy
   has_many :meal_roles, class_name: "Meals::Role", inverse_of: :community, dependent: :destroy
@@ -30,10 +47,14 @@ class Community < ApplicationRecord
   has_one :subscription, inverse_of: :community, class_name: "Subscription::Subscription", dependent: :destroy
   has_one :subscription_intent, inverse_of: :community, class_name: "Subscription::Intent", dependent: :destroy
   has_many :work_periods, class_name: "Work::Period", inverse_of: :community, dependent: :destroy
+  has_one :gdrive_migration_operation, class_name: "GDrive::Migration::Operation", inverse_of: :community, dependent: :destroy
+  has_many :restrictions, class_name: "Meals::Restriction", inverse_of: :community, dependent: :destroy
 
   scope :by_name, -> { order(:name) }
   scope :by_one_cmty_first, ->(c) { order(arel_table[:id].not_eq(c.id)) }
   scope :by_name_with_first, ->(c) { by_one_cmty_first(c).by_name }
+
+  accepts_nested_attributes_for :restrictions
 
   disallow_semicolons :name
 
@@ -66,7 +87,9 @@ class Community < ApplicationRecord
           {key: :diner, type: :integer, required: true, default: 0},
           {key: :early_menu, type: :integer, required: true, default: 10},
           {key: :late_menu, type: :integer, required: true, default: 5}
-        ]}
+        ]}]},
+      {key: :restrictions, type: :group, fields: [
+          {key: :restriction, type: :integer}
       ]},
       {key: :calendars, type: :group, fields: [
         {key: :kinds, type: :string},

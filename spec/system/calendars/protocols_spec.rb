@@ -26,9 +26,9 @@ describe "protocols", js: true do
     let!(:protocols) do
       [
         create(:calendar_protocol, community: community, calendars: calendars,
-                                   pre_notice: "Foo notice"),
+          pre_notice: "Foo notice"),
         create(:calendar_protocol, community: community, kinds: ["Official"],
-                                   pre_notice: "Bar notice")
+          pre_notice: "Bar notice")
       ]
     end
 
@@ -54,8 +54,10 @@ describe "protocols", js: true do
       select2(calendars[0].name, from: cal_select, multiple: true)
       select2("Official", from: "#calendars_protocol_kinds", multiple: true)
       expect(page).not_to have_content("Type Required")
-      pick_time(".calendars_protocol_fixed_start_time", hour: 2, min: 30, ampm: :pm)
-      pick_time(".calendars_protocol_fixed_end_time", hour: 1, min: 30, ampm: :pm)
+      pick_time(".calendars_protocol_fixed_start_time", hour: 2, min: 30, ampm: :pm,
+        next_click: "div.title-and-buttons")
+      pick_time(".calendars_protocol_fixed_end_time", hour: 1, min: 30, ampm: :pm,
+        next_click: "div.title-and-buttons")
       fill_in("Max. Advance Time", with: "30")
       click_button("Save")
 
@@ -86,7 +88,7 @@ describe "protocols", js: true do
     let!(:calendar) { create(:calendar, :inactive, community: community, name: "Log Drivings") }
     let!(:protocol) do
       create(:calendar_protocol, community: community, calendars: [calendar], name: "Stuff",
-                                 pre_notice: "Foo notice")
+        pre_notice: "Foo notice")
     end
 
     scenario "does not lose calendar" do

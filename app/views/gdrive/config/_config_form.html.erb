@@ -1,0 +1,9 @@
+<%= gather_form_for(@config, url: gdrive_config_path) do |f| %>
+  <%= f.input(:org_user_id) %>
+  <%= f.input(:client_id) %>
+  <%= f.input(:client_secret_to_write, as: :password) %>
+
+  <%= form_actions do %>
+    <%= f.button :primary %>
+  <% end %>
+<% end %>

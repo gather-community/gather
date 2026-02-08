@@ -152,8 +152,8 @@ class UserPolicy < ApplicationPolicy
   def exportable_attributes
     all = %i[id first_name last_name unit_num unit_suffix birthdate pronouns email google_email paypal_email
       child full_access household_id household_name guardian_names mobile_phone home_phone work_phone
-      joined_on preferred_contact garage_nums vehicles keyholders emergency_contacts pets]
-    active_admin? ? all : all - %i[google_email paypal_email]
+      joined_on deactivated_at preferred_contact garage_nums vehicles keyholders emergency_contacts pets]
+    active_admin? ? all : all - %i[google_email paypal_email deactivated_at]
   end
 
   private

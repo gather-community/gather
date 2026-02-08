@@ -1,8 +1,8 @@
-<div class="shift-card section <%= "mine" if shift.user_signed_up?(@choosee) %>" data-id="<%= shift.id %>">
+<section class="shift-card section <%= "mine" if shift.user_signed_up?(@choosee) %>" data-id="<%= shift.id %>">
   <table>
     <tr>
       <td class="title-cell">
-        <%= shift.link_with_icons %>
+        <h2><%= shift.link_with_icons %></h2>
       </td>
       <td>
         <div class="hours" title="<%= I18n.t("work.num_hours", num: shift.hours_formatted) %>">
@@ -58,4 +58,4 @@
       </tr>
     <% end %>
   </table>
-</div>
+</section>

@@ -52,7 +52,7 @@ class UsersController < ApplicationController
 
       format.csv do
         load_users
-        @users = @users.active # No inactve users in CSV
+        @users = @users.active if lenses[:view].active_only?
         @users = @users.includes(household: :vehicles)
         filename = csv_filename(:community, "directory", :date)
         csv = People::CsvExporter.new(@users, policy: policy(sample_user)).to_csv
@@ -127,8 +127,17 @@ class UsersController < ApplicationController
   def update_setting
     @user = current_user
     authorize(@user)
-    new_settings = params.require(:settings)
-      .permit(:calendar_popover_dismissed, calendar_selection: params[:settings][:calendar_selection]&.keys)
+    permit_args = [:calendar_popover_dismissed]
+    params[:settings].keys.each do |key|
+      # Include the old key for backwards compatibility during deploy.
+      if key.to_s.start_with?("calendar_selection")
+        value = params[:settings][key]
+        if value.is_a?(ActionController::Parameters)
+          permit_args << {key => value.keys}
+        end
+      end
+    end
+    new_settings = params.require(:settings).permit(*permit_args)
     @user.settings = (@user.settings || {}).merge(new_settings)
     @user.save!
   end

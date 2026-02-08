@@ -1,6 +1,10 @@
 <% content_for(:title, "Household: #{household.name}") %>
 <% content_for(:action_links, household.action_links) %>
 
+<% content_for(:mobile_back_link) do %>
+  <%= render partial: "shared/mobile_back_link", locals: {label: "Households", path: households_path } %>
+<% end %>
+
 <div class="row">
   <div class="col-sm-12">
     <div class="row">
@@ -8,7 +12,7 @@
         <% if members.any? %>
           <% members.each do |user| %><%= user.photo_if_permitted(:medium) %><% end %>
         <% else %>
-          <%= image_tag("missing/users/medium.png", class: "photo") %>
+          <%= image_tag("missing/users/medium.png", class: "photo", alt: "Missing user photo") %>
         <% end %>
       </div>
       <div class="col-sm-8">

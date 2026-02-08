@@ -1,5 +1,27 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: calendar_nodes
+#
+#  id                    :integer          not null, primary key
+#  abbrv                 :string(6)
+#  allow_overlap         :boolean          default(TRUE), not null
+#  cluster_id            :integer          not null
+#  color                 :string(7)
+#  community_id          :integer          not null
+#  created_at            :datetime         not null
+#  deactivated_at        :datetime
+#  default_calendar_view :string           default("week"), not null
+#  group_id              :bigint
+#  guidelines            :text
+#  meal_hostable         :boolean          default(FALSE), not null
+#  name                  :string(24)       not null
+#  rank                  :integer
+#  selected_by_default   :boolean          default(FALSE), not null
+#  type                  :string           not null
+#  updated_at            :datetime         not null
+#
 module Calendars
   module System
     # Superclass for system-populated meals calendars
@@ -27,6 +49,34 @@ module Calendars
             linkable: meal,
             uid: "#{slug}_#{meal.id}",
             note: note_for_meal(meal: meal, signup: signup)
+          )
+        end
+      end
+
+      # actor may be nil in the case of a non-personalized calendar export
+      def eventlets_between(range, actor:)
+        scope = base_meals_scope(range, actor: actor)
+        meals = scope.order(:served_at).decorate
+        signups_by_meal_id = build_signups_by_meal_id(meals: meals, actor: actor)
+
+        meals.map do |meal|
+          title = +meal.title_or_no_title
+          title << " ✓" if signups_by_meal_id.key?(meal.id)
+          signup = signups_by_meal_id[meal.id]
+
+          # We don't save the events since that's not how system calendars work.
+          Eventlet.new(
+            calendar: self,
+            starts_at: meal.served_at,
+            ends_at: meal.served_at + MEAL_DURATION,
+            uid: "#{slug}_#{meal.id}",
+            location: meal.location_name,
+            linkable: meal,
+            event: Event.new(
+              name: title,
+              meal_id: meal.id,
+              note: note_for_meal(meal: meal, signup: signup)
+            )
           )
         end
       end

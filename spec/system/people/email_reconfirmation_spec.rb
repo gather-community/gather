@@ -62,7 +62,10 @@ describe "email reconfirmation", js: true do
         fill_in("Password", with: FactoryBot::DEFAULT_PASSWORD)
         click_on("Sign In")
         click_on_personal_nav("Profile")
-        email = email_sent_by { click_on("Resend confirmation instructions") }.first
+        email = email_sent_by do
+          click_on("Resend confirmation instructions")
+          expect(page).to have_content("Instructions sent")
+        end.first
         match_and_visit_url(email.body.encoded, %r{https?://.+/?confirmation_token=.+$})
         expect(page).to have_alert("Your email address has been successfully confirmed.")
         expect(page).to have_title(actor.name)

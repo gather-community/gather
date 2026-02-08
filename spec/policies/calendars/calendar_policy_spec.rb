@@ -50,16 +50,30 @@ describe Calendars::CalendarPolicy do
     end
 
     describe "#resolve_for_create" do
-      let!(:calendar1) { create(:calendar, name: "Cal1") }
-      let!(:calendar2) { create(:calendar, name: "Cal2") }
-      let!(:calendar3) { create(:calendar, name: "Cal3") }
+      let!(:calendar1) { create(:calendar) }
+      let!(:group1) { create(:calendar_group) }
+      let!(:calendar2) { create(:calendar, community: communityB) }
+      let!(:calendar3) { create(:calendar, community: communityB) }
+      let!(:calendar4) { create(:calendar, community: communityB) }
+      let!(:calendar5) { create(:calendar, :inactive) }
+      let!(:protocol1) { create(:calendar_protocol, calendars: [calendar3], other_communities: "forbidden") }
+      let!(:protocol2) { create(:calendar_protocol, calendars: [calendar4], other_communities: "read_only") }
+
       let(:actor) { user }
       subject(:result) { described_class::Scope.new(actor, klass.by_name).resolve_for_create }
 
-      it "returns calendars for which EventPolicy returns true" do
-        expect(Calendars::EventPolicy).to receive(:new)
-          .and_return(double(create?: true), double(create?: true), double(create?: false))
-        expect(result).to eq([calendar1, calendar2])
+      context "for regular users" do
+        let(:actor) { user }
+        it "returns writeable calendars for regular users" do
+          expect(result).to eq([calendar1, calendar2])
+        end
+      end
+
+      context "for admins" do
+        let(:actor) { cluster_admin }
+        it "returns writeable calendars for cluster-admins" do
+          expect(result).to eq([calendar1, calendar2, calendar3, calendar4])
+        end
       end
     end
   end

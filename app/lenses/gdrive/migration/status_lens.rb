@@ -10,7 +10,7 @@ module GDrive
       protected
 
       def possible_options
-        %i[any pending errored declined transferred copied ignored]
+        %i[any pending errored declined transferred copied ignored disappeared]
       end
     end
   end

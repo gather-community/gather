@@ -3,7 +3,7 @@
 # Checks system status for use in the ping page.
 class SystemStatus
   BACKUP_TIMES_FILE = "/var/log/latest-backup-times"
-  SERVICES = %i[app database delayed_job redis elasticsearch backups].freeze
+  SERVICES = %i[app database redis elasticsearch backups mail].freeze
 
   def ok?
     statuses.values.all?
@@ -24,19 +24,6 @@ class SystemStatus
         Cluster.count && true
       rescue ActiveRecord::StatementInvalid
         Rails.logger.debug("[system status] Database down")
-        false
-      end
-  end
-
-  def delayed_job_up?
-    return true if Rails.env.test? # DJ doesn't run in test env.
-    return @delayed_job_up if defined?(@delayed_job_up)
-    @delayed_job_up =
-      begin
-        pid = delayed_job_pid
-        pid.present? && Process.kill(0, pid) && true
-      rescue Errno::ESRCH
-        Rails.logger.debug("[system status] Delayed Job down (process not running)")
         false
       end
   end
@@ -86,11 +73,19 @@ class SystemStatus
     end
   end
 
-  private
+  def mail_up?
+    latest_received_mail_sent_at = MailTestRun.first&.mail_sent_at
+    if latest_received_mail_sent_at
+      ago = Time.current - latest_received_mail_sent_at
+      Rails.logger.info("MAIL-UPTIME-LINE Last mail received at #{latest_received_mail_sent_at.to_fs}, #{ago} s ago")
 
-  def delayed_job_pid
-    File.read(Rails.root.join("tmp", "pids", "delayed_job.pid")).to_i
-  rescue Errno::ENOENT
-    nil
+      # If mail is sent at t, the next job picks it up at t + 5 mins and sends a new mail
+      # So if things are working normally, the max age should be 10 mins give or take
+      # So if it is more than 20 mins, we raise the alarm
+      ago < 20 * 60
+    else
+      Rails.logger.info("MAIL-UPTIME-LINE No mail recieved")
+      false
+    end
   end
 end

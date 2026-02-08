@@ -4,7 +4,7 @@ module Calendars
   class EventPolicy < ApplicationPolicy
     alias_method :event, :record
 
-    delegate :rule_set, :meal?, to: :event
+    delegate :meal?, to: :event
 
     class Scope < Scope
       def resolve
@@ -29,24 +29,29 @@ module Calendars
     end
 
     def index?
-      # If record is a Class (not a specific event), can't check if calendar is active
-      (not_specific_record? || calendar.active?) &&
-        # If record is a Class (not a specific event), can't check protocol
-        active? && (not_specific_record? || !forbidden_by_protocol?)
+      # Any user can view an event list since event lists can't be calendar-specific because
+      # events can span multiple calendars. Events/eventlets the user can't see will be scoped out.
+      active?
     end
 
     def show?
-      specific_record? && active? && !forbidden_by_protocol?
+      # An event is visible if any of its eventlets are visible.
+      active? && eventlets.any? { |e| EventletPolicy.new(user, e).show? }
     end
 
     def create?
-      specific_record? && calendar.active? && !calendar.system? &&
-        active? && !read_only_by_protocol? && !meal?
+      # Any active user can create an event. Only writeable calendars will be allowed.
+      active? && !meal?
     end
 
     def update?
-      specific_record? && !calendar.system? && !read_only_by_protocol? &&
-        (admin_or_coord? || active_creator_or_group_member? || (meal? && active_with_community_role?(:meals_coordinator)))
+      # Any new eventlets should check Eventlet#create? on submission;
+      # any eventlet deletions should check Eventlet#destroy? on submission.
+      # So all we need to do here is check that all existing eventlets are editable.
+      #
+      # We check for the presence of some eventlets, even though this shouldn't be possible,
+      # to guard against weird privilege escalation bugs.
+      eventlets.any? && eventlets.all? { |e| EventletPolicy.new(user, e).update? }
     end
 
     # Allowed to make certain changes that would otherwise be invalid.
@@ -60,8 +65,9 @@ module Calendars
     end
 
     def destroy?
-      specific_record? && !read_only_by_protocol? && !meal? && !calendar.system? &&
-        (admin_or_coord? || active_creator_or_group_member? && (future? || recently_created?))
+      # We check for the presence of some eventlets, even though this shouldn't be possible,
+      # to guard against weird privilege escalation bugs.
+      eventlets.any? && eventlets.all? { |e| EventletPolicy.new(user, e).destroy? }
     end
 
     def permitted_attributes(group_id:)
@@ -81,7 +87,7 @@ module Calendars
 
     private
 
-    delegate :calendar, :future?, :recently_created?, to: :event
+    delegate :calendar, :future?, :recently_created?, :eventlets, to: :event
 
     def admin_or_coord?
       active_admin_or?(:calendar_coordinator)
@@ -89,14 +95,6 @@ module Calendars
 
     def active_creator_or_group_member?
       active? && (event.creator == user || event.group&.member?(user))
-    end
-
-    def forbidden_by_protocol?
-      !active_cluster_admin? && rule_set.access_level(user.community) == "forbidden"
-    end
-
-    def read_only_by_protocol?
-      !active_cluster_admin? && %w[forbidden read_only].include?(rule_set.access_level(user.community))
     end
   end
 end

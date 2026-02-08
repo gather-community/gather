@@ -10,14 +10,20 @@ module Calendars
 
     UID_SIGNATURE = "91a772a5ae4a"
 
-    # If all of these are the same for any N calendar events, we should group them together in the export.
-    GROUP_ATTRIBS = %w[starts_at ends_at creator_id meal_id name].freeze
-
     attr_accessor :calendar_name, :grouped_events, :cal, :url_options, :groups
 
-    def initialize(calendar_name:, events:, url_options:)
+
+    def initialize(calendar_name:, eventlets:, url_options:)
       self.calendar_name = calendar_name
-      self.grouped_events = events.group_by { |e| e.attributes.slice(*GROUP_ATTRIBS) }.values
+      self.grouped_events = eventlets.group_by do |eventlet|
+        [
+          eventlet.starts_at,
+          eventlet.ends_at,
+          eventlet.creator_id,
+          eventlet.meal_id,
+          eventlet.name
+        ]
+      end.values
       self.url_options = url_options
     end
 

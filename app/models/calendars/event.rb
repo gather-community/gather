@@ -1,13 +1,38 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: calendar_events
+#
+#  id          :integer          not null, primary key
+#  all_day     :boolean          default(FALSE), not null
+#  calendar_id :integer          not null
+#  cluster_id  :integer          not null
+#  created_at  :datetime         not null
+#  creator_id  :integer
+#  ends_at     :datetime         not null
+#  group_id    :bigint
+#  kind        :string
+#  meal_id     :integer
+#  name        :string(24)       not null
+#  note        :text
+#  sponsor_id  :integer
+#  starts_at   :datetime         not null
+#  updated_at  :datetime         not null
+#
 module Calendars
   class Event < ApplicationRecord
-    NAME_MAX_LENGTH = 24
-
     acts_as_tenant :cluster
 
-    attr_accessor :guidelines_ok, :privileged_changer, :origin_page
     attr_writer :location
+
+    # Temporary accessor used only by the Eventlet factory. Without this, we were creating duplicate
+    # Eventlets because the factory would build the parent Event, which would build its own Eventlet,
+    # and then the factory would then build its own Eventlet.
+    #
+    # Once we are done splitting Eventlet out from Event, we can remove both this attribute and the
+    # sync_eventlet method.
+    attr_accessor :dont_sync_eventlet
 
     # linkable is used by system calendars and holds either a URL or
     # an object that this event should link to.
@@ -16,8 +41,8 @@ module Calendars
     attr_accessor :linkable
 
     attr_writer :uid
-    alias_method :privileged_changer?, :privileged_changer
 
+    has_many :eventlets, inverse_of: :event, dependent: :destroy, autosave: true
     belongs_to :creator, class_name: "User"
     belongs_to :sponsor, class_name: "User"
     belongs_to :calendar, inverse_of: :events
@@ -25,56 +50,25 @@ module Calendars
     belongs_to :group, class_name: "Groups::Group", inverse_of: :events
 
     scope :between, ->(range) { where("starts_at < ? AND ends_at > ?", range.last, range.first) }
-    scope :with_max_age, ->(age) { where("starts_at >= ?", Time.current - age) }
-    scope :oldest_first, -> { order(:starts_at, :ends_at) }
     scope :related_to, ->(user) { where(creator: user).or(where(sponsor: user)) }
 
     # Satisfies ducktype expected by policies. Prefer more explicit variants creator_community
     # and sponsor_community for other uses.
     delegate :community, to: :calendar, allow_nil: true
 
-    delegate :household, to: :creator
-    delegate :users, to: :household, prefix: true
-    delegate :name, :community, to: :creator, prefix: true
-    delegate :community, to: :sponsor, prefix: true, allow_nil: true
     delegate :community_id, :color, to: :calendar
     delegate :name, to: :calendar, prefix: true
     delegate :access_level, :fixed_start_time?, :fixed_end_time?, :requires_kind?, to: :rule_set
 
-    validates :name, presence: true, length: {maximum: NAME_MAX_LENGTH}
-    validates :calendar_id, :starts_at, :ends_at, presence: true
-    validates :creator_id, presence: true, unless: ->(e) { e.meal? }
-    validate :guidelines_accepted
-    validate :start_before_end
-    validate :restrict_changes_in_past
-    validate :no_overlap
-    validate :apply_rules
-    validate lambda { |r| meal&.event_handler&.validate_event(r) }
+    delegate :household, to: :creator
+    delegate :users, to: :household, prefix: true
+    delegate :name, :community, to: :creator, prefix: true
+    delegate :community, to: :sponsor, prefix: true, allow_nil: true
 
-    before_validation :normalize
+    # Temporary method to dual write Eventlet model
+    before_save :sync_eventlet
 
     before_save lambda { |r| meal&.event_handler&.sync_resourcings(r) }
-
-    normalize_attributes :kind, :note
-
-    def self.new_with_defaults(attribs)
-      event = new(attribs)
-
-      event.starts_at ||= Time.current.midnight + 1.week + 17.hours
-      event.ends_at ||= Time.current.midnight + 1.week + 18.hours
-
-      # Set fixed start/end time
-      rule_set = event.rule_set
-      if fst = rule_set.fixed_start_time
-        event.starts_at = event.starts_at.change(hour: fst.hour, min: fst.min)
-      end
-      if fet = rule_set.fixed_end_time
-        event.ends_at = event.ends_at.change(hour: fet.hour, min: fet.min)
-      end
-      event.ends_at += 1.day if event.starts_at >= event.ends_at
-
-      event
-    end
 
     def uid
       # System calendars that make unpersisted events should set
@@ -125,10 +119,6 @@ module Calendars
       Time.current - created_at < 1.hour
     end
 
-    def guidelines_ok?
-      guidelines_ok == "1"
-    end
-
     def single_day?
       ends_at.to_date == starts_at.to_date
     end
@@ -144,44 +134,17 @@ module Calendars
 
     private
 
-    def normalize
-      self.all_day = false if rule_set.timed_events_only?
-      return unless all_day?
-      self.starts_at = starts_at.midnight
-      self.ends_at = ends_at.midnight + 1.day - 1.second
-    end
+    def sync_eventlet
+      return if dont_sync_eventlet
 
-    def guidelines_accepted
-      return unless new_record? && calendar.guidelines? && !guidelines_ok?
-      errors.add(:guidelines, "You must agree to the guidelines")
-    end
+      # Ensure only one
+      (eventlets[1..-1] || []).each(&:destroy)
+      eventlet = eventlets[0] || eventlets.build
 
-    def start_before_end
-      return unless starts_at.present? && ends_at.present? && starts_at >= ends_at
-      errors.add(:ends_at, "must be after start time")
-    end
-
-    def no_overlap
-      return if calendar_allows_overlap? || starts_at.blank? || ends_at.blank?
-      query = self.class.between(starts_at..ends_at)
-      query = query.where(calendar_id: calendar_id)
-      query = query.where("id != #{id}") if persisted?
-      errors.add(:base, "This event overlaps an existing one") if query.any?
-    end
-
-    def apply_rules
-      return if errors.any?
-      rule_set.errors(self).each { |e| errors.add(*e) }
-    end
-
-    def restrict_changes_in_past
-      return unless persisted? && !recently_created? && !privileged_changer?
-      if will_save_change_to_starts_at? && starts_at_was&.past?
-        errors.add(:starts_at, "can't be changed after event begins")
-      end
-      if will_save_change_to_ends_at? && ends_at&.past? # rubocop:disable Style/GuardClause # || structure
-        errors.add(:ends_at, "can't be changed to a time in the past")
-      end
+      eventlet.event_id = id
+      eventlet.calendar_id = calendar_id
+      eventlet.starts_at = starts_at
+      eventlet.ends_at = ends_at
     end
   end
 end

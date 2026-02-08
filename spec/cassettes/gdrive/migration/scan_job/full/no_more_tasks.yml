@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: https://www.googleapis.com/drive/v3/files?fields=files(id,name,parents,mimeType,webViewLink,iconLink,modifiedTime,owners(emailAddress),capabilities(canEdit),trashed),nextPageToken&includeItemsFromAllDrives=true&orderBy=folder,name&pageSize=100&q=%271nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV%27%20in%20parents%20and%20trashed%20=%20false&supportsAllDrives=true
+    uri: https://www.googleapis.com/drive/v3/files?fields=files(id,name,parents,mimeType,webViewLink,iconLink,modifiedTime,owners(emailAddress),capabilities(canEdit),shortcutDetails(targetId,targetMimeType),trashed),nextPageToken&includeItemsFromAllDrives=true&orderBy=folder,name&pageSize=100&q=%271nqlV0TWp5e78WCVmSuLdtQ2KYV2S8hsV%27%20in%20parents%20and%20trashed%20=%20false&supportsAllDrives=true
     body:
       encoding: UTF-8
       string: ''
@@ -85,7 +85,7 @@ http_interactions:
     uri: https://www.googleapis.com/drive/v3/changes/watch?includeCorpusRemovals=true&includeItemsFromAllDrives=false&includeRemoved=true&pageToken=12345&spaces=drive
     body:
       encoding: UTF-8
-      string: '{"address":"https://gatherdev.org:31337/gdrive/migration/changes?community_id=123","expiration":"1705492800000","id":"b0801a4c-4437-4284-b723-035c7c7f87f8","token":"7ca1eda696d682802edf3d3056ca03fd","type":"web_hook"}'
+      string: '{"address":"https://gatherdev.org:31337/gdrive/migration/changes?community_id=999999999","expiration":"1705492800000","id":"b0801a4c-4437-4284-b723-035c7c7f87f8","token":"7ca1eda696d682802edf3d3056ca03fd","type":"web_hook"}'
     headers:
       User-Agent:
       - unknown/0.0.0 google-apis-drive_v3/0.46.0 Mac OS X/13.1 (gzip)

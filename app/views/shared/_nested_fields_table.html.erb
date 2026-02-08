@@ -1,0 +1,7 @@
+<tr>
+  <%= f.hidden_field :id %>
+  <%= render(options[:inner_partial], f: f, options: options) %>
+  <td class="disabled">
+    <%= f.input :deactivated, label: false, input_html: {checked: f.object.deactivated?} %>
+  </td>
+</tr>

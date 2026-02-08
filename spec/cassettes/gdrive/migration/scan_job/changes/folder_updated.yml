@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: https://www.googleapis.com/drive/v3/changes?fields=changes(fileId,file(id,name,parents,mimeType,webViewLink,iconLink,modifiedTime,owners(emailAddress),capabilities(canEdit),trashed,driveId)),nextPageToken,newStartPageToken&includeCorpusRemovals=true&includeItemsFromAllDrives=true&includeRemoved=true&pageSize=100&pageToken=12738&spaces=drive&supportsAllDrives=true
+    uri: https://www.googleapis.com/drive/v3/changes?fields=changes(fileId,file(id,name,parents,mimeType,webViewLink,iconLink,modifiedTime,owners(emailAddress),capabilities(canEdit),shortcutDetails(targetId,targetMimeType),trashed,driveId)),nextPageToken,newStartPageToken&includeCorpusRemovals=true&includeItemsFromAllDrives=true&includeRemoved=true&pageSize=100&pageToken=12738&spaces=drive&supportsAllDrives=true
     body:
       encoding: UTF-8
       string: ''

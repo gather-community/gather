@@ -63,7 +63,7 @@ module GDrive
 
     def groups_affiliation_committed(affiliation)
       group = affiliation.group
-      return unless group.everybody?
+      return unless group.present? && group.everybody?
       enqueue_item_syncs_for_group(group)
     end
 
@@ -74,6 +74,7 @@ module GDrive
     end
 
     def enqueue_item_syncs_for_group(group)
+      return unless group.present?
       group.gdrive_item_groups.includes(item: :gdrive_config).each do |item_group|
         enqueue_item_sync(item_group)
       end
@@ -83,7 +84,7 @@ module GDrive
     # changes on two different GDrive configurations. So we allow
     # the caller to specify the community_id to use.
     def enqueue_user_sync(user, community_id: user.community_id)
-      return unless MainConfig.exists?(community_id: community_id)
+      return unless Config.exists?(community_id: community_id)
 
       GDrive::UserPermissionSyncJob.perform_later(cluster_id: user.cluster_id,
         community_id: community_id, user_id: user.id)

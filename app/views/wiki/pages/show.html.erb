@@ -1,5 +1,10 @@
 <% content_for(:title, page.title) %>
 <% content_for(:action_links, page.action_links) %>
+
+<% content_for(:mobile_back_link) do %>
+  <%= render partial: "shared/mobile_back_link", locals: {label: "Wiki Home", path: wiki_pages_path } %>
+<% end %>
+
 <%= page.formatted_content %>
 <footer id="local-footer" class="footer-links">
   <%= page.footer_content %>

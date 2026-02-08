@@ -22,7 +22,6 @@ module Utils
             ends_at: translate_time(row["ends_at"]),
             creator: adults.sample,
             calendar: calendar_map[row["calendar_id"]],
-            guidelines_ok: "1",
             name: Faker::Hipster.words(number: 2).join(" ").capitalize[0..23],
             created_at: community.created_at,
             updated_at: community.updated_at
@@ -41,7 +40,7 @@ module Utils
         datetime = datetime.in_time_zone("Eastern Time (US & Canada)")
         date = datetime.to_date + date_offset
         time = datetime.strftime("%H:%M")
-        Time.zone.parse("#{date} #{time}")
+        Time.zone.parse("#{date.to_fs} #{time}")
       end
     end
   end

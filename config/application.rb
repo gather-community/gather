@@ -104,8 +104,6 @@ module Gather
 
     config.cache_store = :redis_cache_store, {url: Settings.redis.url}
 
-    config.hosts << /([a-z0-9-]+\.)?#{Settings.url.host}/
-
     # Currently, fr is only available for testing purposes.
     I18n.available_locales = %i[en fr]
   end

@@ -58,14 +58,14 @@ http_interactions:
         "moderation_action": "accept", "display_name": "Hotel Smith", "user": "http://localhost:8001/3.1/users/5d6fe56d947346579afd79d2d589ed7b",
         "http_etag": "\"0a82b768a3f5e718e1262661319e47ccb6de1e87\""}], "http_etag":
         "\"e6e70490e10f84e471dbe6305739f5edb2da6ff0\""}'
-    http_version: 
+    http_version:
   recorded_at: Wed, 19 May 2021 01:33:49 GMT
 - request:
     method: delete
     uri: http://localhost:8001/3.1/members/3532e14c149648d5967137261bd804a8
     body:
       encoding: US-ASCII
-      string: ''
+      string: '{}'
     headers:
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
@@ -93,14 +93,14 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
+    http_version:
   recorded_at: Wed, 19 May 2021 01:33:49 GMT
 - request:
     method: delete
     uri: http://localhost:8001/3.1/members/f70af6dfe8904c788188f893cfcf002f
     body:
       encoding: US-ASCII
-      string: ''
+      string: '{}'
     headers:
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
@@ -128,14 +128,14 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
+    http_version:
   recorded_at: Wed, 19 May 2021 01:33:49 GMT
 - request:
     method: delete
     uri: http://localhost:8001/3.1/members/8ee1899a3d7f40fc999a53325e42d264
     body:
       encoding: US-ASCII
-      string: ''
+      string: '{}'
     headers:
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
@@ -163,14 +163,14 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
+    http_version:
   recorded_at: Wed, 19 May 2021 01:33:49 GMT
 - request:
     method: delete
     uri: http://localhost:8001/3.1/members/b58b7ea1299546209ba030b779157524
     body:
       encoding: US-ASCII
-      string: ''
+      string: '{}'
     headers:
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
@@ -198,6 +198,6 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
+    http_version:
   recorded_at: Wed, 19 May 2021 01:33:49 GMT
 recorded_with: VCR 4.0.0

@@ -286,7 +286,7 @@ module SystemSpecHelpers
   end
 
   def be_signed_out_root
-    have_css("div#blurb", text: "Life is better together.")
+    have_css("#blurb", text: "Life is better together.")
   end
 
   def be_signed_in_root

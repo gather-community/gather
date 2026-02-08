@@ -123,7 +123,7 @@ class AccountsController < ApplicationController
   end
 
   def prep_account_vars
-    @statements = @account.statements.page(params[:page] || 1).per(StatementsController::PER_PAGE)
+    @statements = @account.statements.order(created_at: :desc).page(params[:page] || 1).per(StatementsController::PER_PAGE)
     @last_statement = @account.last_statement
     @has_activity = @account.transactions.any?
   end

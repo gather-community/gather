@@ -97,6 +97,46 @@ describe "user request" do
     end
   end
 
+  describe "update_setting" do
+    let(:actor) { user }
+
+    context "with calendar_selection for a community" do
+      let(:community) { user.community }
+
+      it "saves to community-scoped key" do
+        patch update_setting_users_path,
+          params: {settings: {"calendar_selection_#{community.id}" => {"1" => true, "2" => false}}},
+          as: :json
+
+        expect(response).to have_http_status(:success)
+        expect(user.reload.settings["calendar_selection_#{community.id}"]).to eq("1" => true, "2" => false)
+      end
+
+      it "preserves settings for other communities when updating one" do
+        user.update!(settings: user.settings.merge("calendar_selection_999" => {"3" => true}))
+
+        patch update_setting_users_path,
+          params: {settings: {"calendar_selection_#{community.id}" => {"1" => true}}},
+          as: :json
+
+        expect(response).to have_http_status(:success)
+        expect(user.reload.settings["calendar_selection_#{community.id}"]).to eq("1" => true)
+        expect(user.settings["calendar_selection_999"]).to eq("3" => true)
+      end
+    end
+
+    context "with calendar_popover_dismissed" do
+      it "saves the setting" do
+        patch update_setting_users_path,
+          params: {settings: {calendar_popover_dismissed: true}},
+          as: :json
+
+        expect(response).to have_http_status(:success)
+        expect(user.reload.settings["calendar_popover_dismissed"]).to be_in([true, "true"])
+      end
+    end
+  end
+
   def expect_successful_create_or_update
     expect(response).to be_redirect
     expect(flash[:success]).to be_present

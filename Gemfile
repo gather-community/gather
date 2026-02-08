@@ -11,15 +11,14 @@ gem "babosa", "~> 1.0"
 gem "bootsnap", "~> 1.4"
 gem "bootstrap-kaminari-views", "~> 0.0"
 gem "bootstrap-sass", "~> 3.4"
-gem "browser", "~> 2.5"
+gem "browser", "~> 6"
 gem "chroma", "~> 0.2"
 gem "cocoon", "~> 1.2"
 gem "config", "~> 4.0"
 gem "country_select", "~> 4.0",
   require: "country_select_without_sort_alphabetical" # Alpha sort is memory intensive?
 gem "daemons", "~> 1.2"
-gem "datetimepicker-rails", git: "https://github.com/zpaulovics/datetimepicker-rails",
-  branch: "master", submodules: true
+gem "datetimepicker-rails", git: "https://gitlab.com/zpaulovics/datetimepicker-rails"
 gem "delayed_job_active_record", "~> 4.1"
 gem "devise", "~> 4.7"
 gem "diffy", "~> 3.4"
@@ -76,7 +75,9 @@ gem "wisper-activerecord", "~> 1.0"
 gem "with_advisory_lock", git: "https://github.com/ClosureTree/with_advisory_lock", branch: "master"
 
 group :development, :test do
+  gem "annotate", "~> 3.2.0"
   gem "awesome_print", "~> 1.6"
+  gem "bcrypt_pbkdf", ">= 1.0", "< 2.0" # For Capistrano
   gem "byebug", "~> 11.0"
   gem "capistrano-bundler", "~> 1.0"
   gem "capistrano-passenger", "~> 0.2"
@@ -85,14 +86,16 @@ group :development, :test do
   gem "capistrano3-delayed-job", "~> 1.0"
   gem "capybara", "~> 3.29"
   gem "database_cleaner", "~> 1.7"
+  gem "debug", require: false
+  gem "ed25519", ">= 1.2", "< 2.0" # For Capistrano
   gem "fix-db-schema-conflicts", "~> 3.0"
   gem "launchy", "~> 2.4" # For opening screenshots
-  gem "pry", "~> 0.14"
   gem "pry-nav", "~> 1.0"
   gem "pry-rails", "~> 0.3"
+  gem "pry", "~> 0.14"
   gem "rspec-rails", "~> 4.0"
-  gem "rubocop", "~> 1.0"
   gem "rubocop-rails", "2.9"
+  gem "rubocop", "~> 1.0"
   gem "selenium-webdriver", "~> 4.0"
   gem "spring", "~> 3.0"
   gem "standard", "~> 1.24"
@@ -118,3 +121,5 @@ gem "stripe", "~> 8.1"
 gem "turbo-rails", "~> 1.3"
 
 gem "money", "~> 6.16"
+
+gem "logtail-rails", "~> 0.2.8"

@@ -17,7 +17,6 @@ describe "gdrive browse", js: true do
   include_context "gdrive"
 
   before do
-    create(:feature_flag, name: "gdrive", status: true)
     use_user_subdomain(actor)
     login_as(actor, scope: :user)
   end
@@ -34,7 +33,7 @@ describe "gdrive browse", js: true do
     end
 
     context "when wrapper not authenticated" do
-      let!(:config) { create(:gdrive_main_config) }
+      let!(:config) { create(:gdrive_config) }
 
       scenario "it shows message" do
         visit(gdrive_home_path)
@@ -44,7 +43,7 @@ describe "gdrive browse", js: true do
     end
 
     context "when no shared drives present" do
-      let!(:config) { create(:gdrive_main_config, org_user_id: "a@example.com") }
+      let!(:config) { create(:gdrive_config, org_user_id: "a@example.com") }
       let!(:token) { create(:gdrive_token, gdrive_config: config, google_user_id: "a@example.com") }
 
       scenario "it shows message" do
@@ -55,7 +54,7 @@ describe "gdrive browse", js: true do
     end
 
     context "when authenticated and shared drive present" do
-      let!(:config) { create(:gdrive_main_config, org_user_id: "a@example.com") }
+      let!(:config) { create(:gdrive_config, org_user_id: "a@example.com") }
       let!(:group1) { create(:group, joiners: group1_joiners) }
       let!(:group2) { create(:group, joiners: group2_joiners) }
       let!(:drive1) do
@@ -87,16 +86,16 @@ describe "gdrive browse", js: true do
         scenario "authorization error perhaps from expired refresh token" do
           VCR.use_cassette("gdrive/browse/authorization_error") do
             visit(gdrive_home_path)
-            expect(page).to have_content("There was an error connecting to Google Drive. " \
+            expect(page).to have_content("Your community needs to be reconnected to Google Drive. " \
               "Please notify a Gather Admin.")
 
             visit(root_path)
-            expect(page).not_to have_content("There was an error connecting to Google Drive. " \
+            expect(page).not_to have_content("Your community needs to be reconnected to Google Drive. " \
               "Please notify a Gather Admin.")
 
             # Second visit to the page should show same error but via a different code path.
             visit(gdrive_home_path)
-            expect(page).to(have_content("There was an error connecting to Google Drive. " \
+            expect(page).to(have_content("Your community needs to be reconnected to Google Drive. " \
               "Please notify a Gather Admin."))
           end
         end
@@ -187,12 +186,12 @@ describe "gdrive browse", js: true do
       scenario "it shows message" do
         visit(gdrive_home_path)
         expect(page).to have_content("Your community is not yet connected to Google Drive. " \
-          "Please contact Gather support to get started")
+          "Please go to the settings page to get started")
       end
     end
 
     context "when wrapper not authenticated" do
-      let!(:config) { create(:gdrive_main_config) }
+      let!(:config) { create(:gdrive_config) }
 
       scenario "it shows message" do
         visit(gdrive_home_path)
@@ -202,7 +201,7 @@ describe "gdrive browse", js: true do
     end
 
     context "when config present" do
-      let!(:config) { create(:gdrive_main_config, org_user_id: "a@example.com") }
+      let!(:config) { create(:gdrive_config, org_user_id: "a@example.com") }
       let!(:token) { create(:gdrive_token, gdrive_config: config, google_user_id: "a@example.com") }
 
       context "when no shared drives present" do
@@ -223,7 +222,7 @@ describe "gdrive browse", js: true do
         scenario "authorization error perhaps from expired refresh token" do
           VCR.use_cassette("gdrive/browse/admin_authorization_error") do
             visit(gdrive_home_path)
-            expect(page).to(have_content("There was an error connecting to Google Drive.\n" \
+            expect(page).to(have_content("Your community needs to be reconnected to Google Drive.\n" \
               "Please authenticate with Google"))
           end
         end

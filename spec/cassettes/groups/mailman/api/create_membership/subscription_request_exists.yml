@@ -1,0 +1,517 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: http://localhost:8001/3.1/domains
+    body:
+      encoding: UTF-8
+      string: '{"mail_host":"tscoho.org"}'
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Server:
+      - gunicorn
+      Date:
+      - Sun, 23 Feb 2025 14:16:55 GMT
+      Connection:
+      - close
+      Location:
+      - http://localhost:8001/3.1/domains/tscoho.org
+      Content-Length:
+      - '0'
+      Content-Type:
+      - application/json
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version:
+  recorded_at: Sun, 23 Feb 2025 14:16:55 GMT
+- request:
+    method: post
+    uri: http://localhost:8001/3.1/lists
+    body:
+      encoding: UTF-8
+      string: '{"fqdn_listname":"ping@tscoho.org"}'
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Server:
+      - gunicorn
+      Date:
+      - Sun, 23 Feb 2025 14:16:55 GMT
+      Connection:
+      - close
+      Location:
+      - http://localhost:8001/3.1/lists/ping.tscoho.org
+      Content-Length:
+      - '0'
+      Content-Type:
+      - application/json
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version:
+  recorded_at: Sun, 23 Feb 2025 14:16:55 GMT
+- request:
+    method: patch
+    uri: http://localhost:8001/3.1/lists/ping@tscoho.org/config
+    body:
+      encoding: UTF-8
+      string: '{"display_name":"Stuff","advertised":"false","subscription_policy":"moderate"}'
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 204
+      message: No Content
+    headers:
+      Server:
+      - gunicorn
+      Date:
+      - Sun, 23 Feb 2025 14:16:55 GMT
+      Connection:
+      - close
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version:
+  recorded_at: Sun, 23 Feb 2025 14:16:55 GMT
+- request:
+    method: post
+    uri: http://localhost:8001/3.1/users
+    body:
+      encoding: UTF-8
+      string: '{"email":"jen@example.com"}'
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Server:
+      - gunicorn
+      Date:
+      - Sun, 23 Feb 2025 14:16:56 GMT
+      Connection:
+      - close
+      Location:
+      - http://localhost:8001/3.1/users/0b6de07d0b4b49889152a87a59e3fee4
+      Content-Length:
+      - '0'
+      Content-Type:
+      - application/json
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version:
+  recorded_at: Sun, 23 Feb 2025 14:16:56 GMT
+- request:
+    method: patch
+    uri: http://localhost:8001/3.1/users/jen@example.com
+    body:
+      encoding: UTF-8
+      string: '{"display_name":"Jen Lo"}'
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 204
+      message: No Content
+    headers:
+      Server:
+      - gunicorn
+      Date:
+      - Sun, 23 Feb 2025 14:16:56 GMT
+      Connection:
+      - close
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version:
+  recorded_at: Sun, 23 Feb 2025 14:16:56 GMT
+- request:
+    method: post
+    uri: http://localhost:8001/3.1/addresses/jen@example.com/verify
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 204
+      message: No Content
+    headers:
+      Server:
+      - gunicorn
+      Date:
+      - Sun, 23 Feb 2025 14:16:56 GMT
+      Connection:
+      - close
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version:
+  recorded_at: Sun, 23 Feb 2025 14:16:56 GMT
+- request:
+    method: post
+    uri: http://localhost:8001/3.1/users/jen@example.com/preferred_address
+    body:
+      encoding: UTF-8
+      string: '{"email":"jen@example.com"}'
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Server:
+      - gunicorn
+      Date:
+      - Sun, 23 Feb 2025 14:16:56 GMT
+      Connection:
+      - close
+      Location:
+      - http://localhost:8001/3.1/addresses/jen@example.com
+      Content-Length:
+      - '0'
+      Content-Type:
+      - application/json
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version:
+  recorded_at: Sun, 23 Feb 2025 14:16:56 GMT
+- request:
+    method: get
+    uri: http://localhost:8001/3.1/users/jen@example.com
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - gunicorn
+      Date:
+      - Sun, 23 Feb 2025 14:16:56 GMT
+      Connection:
+      - close
+      Content-Length:
+      - '421'
+      Content-Type:
+      - application/json
+    body:
+      encoding: UTF-8
+      string: '{"created_on": "2025-02-23T14:16:55.721146", "is_server_owner": false,
+        "self_link": "http://localhost:8001/3.1/users/0b6de07d0b4b49889152a87a59e3fee4",
+        "user_id": "0b6de07d0b4b49889152a87a59e3fee4", "password": "$6$rounds=656000$MF1DIE7.W7sXp2eQ$9BQR02Ycrht2trVn.WBY81B6nBogPCvThMHOwe2JFQZHJZArrOVKZO.NzLk/AlSGfKj.vAN5DoltVxUgfYAxT1",
+        "display_name": "Jen Lo", "http_etag": "\"36f5f92bbdc3e6a8ebef3e92664bdf798a048d73\""}'
+    http_version:
+  recorded_at: Sun, 23 Feb 2025 14:16:56 GMT
+- request:
+    method: post
+    uri: http://localhost:8001/3.1/members
+    body:
+      encoding: UTF-8
+      string: '{"list_id":"ping.tscoho.org","subscriber":"0b6de07d0b4b49889152a87a59e3fee4","role":"member","pre_verified":"true","pre_confirmed":"true"}'
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 202
+      message: Accepted
+    headers:
+      Server:
+      - gunicorn
+      Date:
+      - Sun, 23 Feb 2025 14:16:56 GMT
+      Connection:
+      - close
+      Content-Length:
+      - '142'
+      Content-Type:
+      - application/json
+    body:
+      encoding: UTF-8
+      string: '{"token": "6555a2072d26a1b2cc0c9619359e7ae43c65b434", "token_owner":
+        "moderator", "http_etag": "\"3ae13210100bb32593ddd37e7644053ff2ea39a3\""}'
+    http_version:
+  recorded_at: Sun, 23 Feb 2025 14:16:56 GMT
+- request:
+    method: post
+    uri: http://localhost:8001/3.1/members
+    body:
+      encoding: UTF-8
+      string: '{"list_id":"ping.tscoho.org","subscriber":"0b6de07d0b4b49889152a87a59e3fee4","role":"member","pre_verified":"true","pre_confirmed":"true","pre_approved":"true"}'
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 409
+      message: Conflict
+    headers:
+      Server:
+      - gunicorn
+      Date:
+      - Sun, 23 Feb 2025 14:16:56 GMT
+      Connection:
+      - close
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Length:
+      - '80'
+    body:
+      encoding: UTF-8
+      string: '{"title": "409 Conflict", "description": "Subscription request already
+        pending"}'
+    http_version:
+  recorded_at: Sun, 23 Feb 2025 14:16:56 GMT
+- request:
+    method: get
+    uri: http://localhost:8001/3.1/lists/ping.tscoho.org/requests
+    body:
+      encoding: UTF-8
+      string: "{}"
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - gunicorn
+      Date:
+      - Sun, 23 Feb 2025 14:16:56 GMT
+      Connection:
+      - close
+      Content-Length:
+      - '380'
+      Content-Type:
+      - application/json
+    body:
+      encoding: UTF-8
+      string: '{"start": 0, "total_size": 1, "entries": [{"token": "6555a2072d26a1b2cc0c9619359e7ae43c65b434",
+        "type": "subscription", "list_id": "ping.tscoho.org", "email": "jen@example.com",
+        "display_name": "", "when": "2025-02-23T14:16:56", "token_owner": "moderator",
+        "http_etag": "\"a18f0919ccfd9846b85d6108c431ba8b3f426521\""}], "http_etag":
+        "\"45abae8ee1540b0504080019a48425ac0f693343\""}'
+    http_version:
+  recorded_at: Sun, 23 Feb 2025 14:16:56 GMT
+- request:
+    method: post
+    uri: http://localhost:8001/3.1/lists/ping.tscoho.org/requests/6555a2072d26a1b2cc0c9619359e7ae43c65b434
+    body:
+      encoding: UTF-8
+      string: '{"action":"accept"}'
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 204
+      message: No Content
+    headers:
+      Server:
+      - gunicorn
+      Date:
+      - Sun, 23 Feb 2025 14:16:56 GMT
+      Connection:
+      - close
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version:
+  recorded_at: Sun, 23 Feb 2025 14:16:56 GMT
+- request:
+    method: post
+    uri: http://localhost:8001/3.1/members/find
+    body:
+      encoding: UTF-8
+      string: '{"subscriber":"jen@example.com","list_id":"ping.tscoho.org"}'
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8001
+      Content-Type:
+      - application/json
+      Authorization:
+      - Basic cmVzdGFkbWluOnJlc3RwYXNz
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - gunicorn
+      Date:
+      - Sun, 23 Feb 2025 14:16:56 GMT
+      Connection:
+      - close
+      Content-Length:
+      - '691'
+      Content-Type:
+      - application/json
+    body:
+      encoding: UTF-8
+      string: '{"start": 0, "total_size": 1, "entries": [{"address": "http://localhost:8001/3.1/addresses/jen@example.com",
+        "bounce_score": 0, "last_warning_sent": "0001-01-01T00:00:00", "total_warnings_sent":
+        0, "delivery_mode": "regular", "email": "jen@example.com", "list_id": "ping.tscoho.org",
+        "subscription_mode": "as_user", "role": "member", "user": "http://localhost:8001/3.1/users/0b6de07d0b4b49889152a87a59e3fee4",
+        "display_name": "Jen Lo", "self_link": "http://localhost:8001/3.1/members/d8a840cd2c804015b352578edb4f2903",
+        "member_id": "d8a840cd2c804015b352578edb4f2903", "http_etag": "\"a0c4fccc373cada5297c0fce2d77867c6d069cdc\""}],
+        "http_etag": "\"35ee6b37d687f8a153b066b2506c02d7d1964bac\""}'
+    http_version:
+  recorded_at: Sun, 23 Feb 2025 14:16:56 GMT
+recorded_with: VCR 4.0.0

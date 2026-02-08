@@ -67,6 +67,8 @@ en:
   confirmations:
     billing/template:
       destroy: "Are you sure you want to delete the template '%{description}' for %{member_types}? This action cannot be undone."
+    domain:
+      destroy: "Are you sure you want to delete the domain '%{name}'? This action cannot be undone."
     groups/group:
       destroy: "Are you sure you want to delete the group '%{name}'? This action cannot be undone."
       deactivate: "Are you sure you want to deactivate the group '%{name}'?"
@@ -77,6 +79,7 @@ en:
       close: "Are you sure you want to close this meal? No further signups will be allowed."
       destroy: "Are you sure you want to delete the meal '%{title}'? This action cannot be undone."
       reopen: "Are you sure you want to reopen this meal? New signups will be allowed."
+      unfinalize: "Are you sure you want to unfinalize this meal?"
     user:
       destroy: "Are you sure you want to delete the user '%{name}'? This action cannot be undone."
       deactivate: "Are you sure you want to deactivate the user '%{name}'? This will remove them from any groups they are in."
@@ -93,13 +96,15 @@ en:
       destroy: "Are you sure you want to delete the calendar '%{name}'? This action cannot be undone."
       deactivate: "Are you sure you want to deactivate the calendar '%{name}'?"
     calendars/event:
-      destroy: "Are you sure you want to cancel this event? This action cannot be undone."
+      destroy: "Are you sure you want to delete the event '%{name}'? This action cannot be undone."
     calendars/group:
       destroy: "Are you sure you want to delete this calendar group? This action cannot be undone."
     gdrive/item:
       destroy: "Are you sure you want to remove this item? It won't be deleted from Google Drive, but it won't be linked to Gather anymore."
     gdrive/item_group:
       destroy: "Are you sure you want to remove this group?"
+    gdrive/migration/operation:
+      destroy: "Are you sure you want to delete this migration? All migration information will be deleted. No actual Google Drive files will be affected in any way."
     meals/formula:
       destroy: "Are you sure you want to delete the formula '%{name}'? This action cannot be undone."
       deactivate: "Are you sure you want to deactivate the formula '%{name}'?"
@@ -166,12 +171,18 @@ en:
     billing/template:
       success:
         destroy: "Template deleted successfully."
+    domain:
+      success:
+        destroy: "Domain deleted successfully."
     gdrive/item:
       success:
         destroy: "Item removed successfully."
     gdrive/item_group:
       success:
         destroy: "Group removed successfully."
+    gdrive/migration/operation:
+      success:
+        destroy: "Operation deleted successfully."
     groups/group:
       success:
         deactivate: "Group deactivated successfully."
@@ -231,6 +242,7 @@ en:
       shifts: "Add Shift"
       assignments: "Add Worker"
       reminders: "Add Reminder"
+      restrictions: "Add Restriction"
       signups: "Add Household"
       groups/group:
         memberships: "Add Member"
@@ -272,6 +284,8 @@ en:
         birthdate: "Birthday"
         pronouns: "Pronouns"
         email: "Email"
+        google_email: "Google Email"
+        paypal_email: "Paypal Email"
         child: "Is Child"
         full_access: "Full Access"
         household_id: "Household ID"
@@ -280,6 +294,7 @@ en:
         home_phone: "Home Phone"
         work_phone: "Work Phone"
         joined_on: "Join Date"
+        deactivated_at: "Departure Date"
         preferred_contact: "Preferred Contact"
         garage_nums: "Garage Nums"
         vehicles: "Vehicles"
@@ -354,6 +369,7 @@ en:
       opt_out: "Opt-Out"
       rejoin: "Re-Join"
       reopen: "Reopen"
+      rescan: "Rescan"
       summary: "Summary"
       finalize: "Finalize"
       cancel: "Cancel"
@@ -363,7 +379,8 @@ en:
     user:
       update_info: "Edit Profile"
       update_photo: "Edit Photo"
-      invite_sign_in: "Invite"
+      invite: "Invite"
+      impersonate: "Impersonate"
     wiki/page:
       history: "History"
     work/job:

@@ -124,6 +124,14 @@ module Meals
       end
     end
 
+    def unfinalize
+      @meal = Meal.find(params[:id])
+      authorize(@meal)
+      Finalizer.new(@meal).unfinalize!
+      flash[:success] = "Meal unfinalized successfully."
+      redirect_to(meal_path(@meal))
+    end
+
     def summary
       @meal = Meal.find(params[:id]).decorate
       @meal_summary = Summary.new(@meal)

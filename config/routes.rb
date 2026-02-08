@@ -13,6 +13,8 @@ Rails.application.routes.draw do
 
   resources :communities, only: :index
 
+  resources :domains, only: %i[index show new create destroy]
+
   namespace :people do
     resources :sign_in_invitations, path: "sign-in-invitations", only: %i[new create]
     resources :birthdays, only: :index
@@ -44,6 +46,7 @@ Rails.application.routes.draw do
 
   namespace :meals do
     resource :settings, only: %i[edit update]
+    resource :restrictions, only: %i[edit update]
     resources :signups, only: %i[create update]
     resources :assignments, only: %i[update destroy]
     resources :formulas do
@@ -83,6 +86,7 @@ Rails.application.routes.draw do
       put :close
       put :reopen
       get :summary
+      put :unfinalize
     end
 
     resources :messages, only: %i[new create], module: :meals
@@ -257,7 +261,12 @@ Rails.application.routes.draw do
     get "/", to: "browse#index", as: :home
     get "item/:item_id", to: "browse#index", as: :browse
 
-    resources :items, only: %i[index new create destroy]
+    get "/config", to: "config#index", as: :config
+    get "/config/guide", to: "config#guide", as: :guide
+    post "/config", to: "config#update"
+    patch "/config", to: "config#update"
+
+    resources :items, only: %i[new create destroy]
     resources :item_groups, path: "item-groups", only: %i[new create destroy]
 
     namespace :setup do
@@ -266,6 +275,12 @@ Rails.application.routes.draw do
     end
 
     namespace :migration do
+      resources :operations, only: %i[new edit create update destroy] do
+        member do
+          post "rescan"
+        end
+      end
+
       namespace :dashboard do
         get "/", to: redirect("/gdrive/migration/dashboard/status"), as: :home
         get "status", to: "status#show", as: :status
@@ -273,21 +288,25 @@ Rails.application.routes.draw do
         # This is Devise.email_regexp without the anchor characters.
         resources :owners, only: %i[index show], id: /\S+@\S+\.\S+/, format: :html do
           collection do
-            post :request_consent
+            post :send_requests
           end
         end
 
         resources :files, only: %i[index]
+        resources :logs, only: %i[index]
       end
-      get "consent/callback", to: "consent#callback", as: :consent_callback
-      get "consent/:token", to: "consent#intro", as: :consent
-      get "consent/:token/auth", to: "consent#auth", as: :consent_auth
-      get "consent/:token/pick", to: "consent#pick", as: :consent_pick
-      put "consent/:token/ingest", to: "consent#ingest", as: :consent_ingest
-      get "consent/:token/ingest-status", to: "consent#ingest_status", as: :consent_ingest_status
-      get "consent/:token/opt_out", to: "consent#opt_out", as: :consent_opt_out
-      patch "consent/:token/confirm-opt-out", to: "consent#confirm_opt_out", as: :consent_confirm_opt_out
-      get "consent/:token/opt-out-complete", to: "consent#opt_out_complete", as: :consent_opt_out_complete
+      get "request/callback", to: "request#callback", as: :request_callback
+      get "request/:token", to: "request#intro", as: :request
+      get "request/:token/step1", to: "request#step1", as: :request_step1
+      get "request/:token/step2", to: "request#step2", as: :request_step2
+      get "request/:token/step3", to: "request#step3", as: :request_step3
+      get "request/:token/step4", to: "request#step4", as: :request_step4
+      get "request/:token/step5", to: "request#step5", as: :request_step5
+      get "request/:token/finish", to: "request#finish", as: :request_finish
+      get "request/:token/opt-out", to: "request#opt_out", as: :request_opt_out
+      patch "request/:token/confirm-opt-out", to: "request#confirm_opt_out", as: :request_confirm_opt_out
+      patch "request/:token/un-opt-out", to: "request#un_opt_out", as: :request_un_opt_out
+
       post "changes", to: "webhooks#changes", as: :changes_webhook
     end
   end

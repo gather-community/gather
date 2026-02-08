@@ -18,8 +18,8 @@ module GDrive
 
       def refresh_webhook(operation)
         # We build the wrapper using the main config because the webhook uses the main config user.
-        main_config = MainConfig.find_by(community: operation.community)
-        wrapper = Wrapper.new(config: main_config, google_user_id: main_config.org_user_id)
+        config = Config.find_by(community: operation.community)
+        wrapper = Wrapper.new(config: config, google_user_id: config.org_user_id)
 
         WebhookRegistrar.stop(operation, wrapper)
         WebhookRegistrar.register(operation, wrapper)

@@ -11,7 +11,8 @@ describe "changing password when already signed in", js: true do
 
   scenario "validation errors and happy path" do
     full_sign_in_as(actor)
-    visit(people_password_change_path)
+    find(".dropdown-toggle").click
+    click_on("Change Password")
 
     click_on("Set Password")
     expect_validation_message(/can't be blank/)

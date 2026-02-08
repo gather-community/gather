@@ -15,7 +15,7 @@ describe "gdrive auth index", js: true do
   end
 
   # context "when saved credentials and folder are present" do
-  #   let!(:gdrive_config) { create(:gdrive_main_config, folder_id: "0B24us5XZC4JyX21yUUw3aHBEYlU") }
+  #   let!(:gdrive_config) { create(:gdrive_config, folder_id: "0B24us5XZC4JyX21yUUw3aHBEYlU") }
 
   #   context "when fetching folder succeeds" do
   #     scenario "it shows connected status and folder name, option to reset" do
@@ -41,7 +41,7 @@ describe "gdrive auth index", js: true do
   #   end
 
   #   context "when fetching folder fails with 404" do
-  #     let!(:gdrive_config) { create(:gdrive_main_config, folder_id: "0B24us5XZC4JyX21yUUw3aHBEYl") }
+  #     let!(:gdrive_config) { create(:gdrive_config, folder_id: "0B24us5XZC4JyX21yUUw3aHBEYl") }
 
   #     scenario "it shows error information, option to reset" do
   #       # We don't want to just let them pick a new folder as that would blow up sync.
@@ -84,7 +84,7 @@ describe "gdrive auth index", js: true do
   # end
 
   # context "when saved credentials are present but no folder" do
-  #   let!(:gdrive_config) { create(:gdrive_main_config, folder_id: nil) }
+  #   let!(:gdrive_config) { create(:gdrive_config, folder_id: nil) }
 
   #   it "shows need to pick folder link, option to reset" do
   #     VCR.use_cassette("gdrive/auth/index/folder_not_present") do

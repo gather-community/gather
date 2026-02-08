@@ -62,12 +62,41 @@ describe Wiki::PageDecorator do
     let(:attribs) { {content: content, data_source: data_source} }
     let(:page) { create(:wiki_page, attribs) }
 
+    def stub_http_success(body)
+      response = double(body: body)
+      allow(response).to receive(:is_a?).with(Net::HTTPSuccess).and_return(true)
+      http = double
+      allow(http).to receive(:use_ssl=)
+      allow(http).to receive(:open_timeout=)
+      allow(http).to receive(:read_timeout=)
+      allow(http).to receive(:request).and_return(response)
+      allow(Net::HTTP).to receive(:new).and_return(http)
+    end
+
+    def stub_http_error(exception)
+      http = double
+      allow(http).to receive(:use_ssl=)
+      allow(http).to receive(:open_timeout=)
+      allow(http).to receive(:read_timeout=)
+      allow(http).to receive(:request).and_raise(exception)
+      allow(Net::HTTP).to receive(:new).and_return(http)
+    end
+
+    def stub_http_error_response(code)
+      response = double(body: "Error", code: code.to_s)
+      allow(response).to receive(:is_a?).with(Net::HTTPSuccess).and_return(false)
+      http = double
+      allow(http).to receive(:use_ssl=)
+      allow(http).to receive(:open_timeout=)
+      allow(http).to receive(:read_timeout=)
+      allow(http).to receive(:request).and_return(response)
+      allow(Net::HTTP).to receive(:new).and_return(http)
+    end
+
     context "with no errors" do
       before do
         if attribs[:data_source].present?
-          allow(URI).to receive(:open).and_return(
-            '{"name":"Rolph","pants":[{"type":"jeans"},{"type":"cords"}]}'
-          )
+          stub_http_success('{"name":"Rolph","pants":[{"type":"jeans"},{"type":"cords"}]}')
         end
       end
 
@@ -101,32 +130,35 @@ describe Wiki::PageDecorator do
     end
 
     context "error handling" do
-      context "with socket error" do
-        before do
-          expect(URI).to receive(:open).and_raise(SocketError)
-        end
+      context "with invalid protocol" do
+        let(:data_source) { "ftp://example.com/data.json" }
 
         it do
           expect_empty_formatted_content
-          expect(decorator.data_fetch_error).to eq("Couldn't connect to server")
+          expect(decorator.data_fetch_error).to eq("Data source URL must use HTTP or HTTPS")
+        end
+      end
+
+      context "with socket error" do
+        before { stub_http_error(SocketError) }
+
+        it do
+          expect_empty_formatted_content
+          expect(decorator.data_fetch_error).to eq("Could not connect to data source")
         end
       end
 
       context "with http error" do
-        before do
-          expect(URI).to receive(:open).and_raise(OpenURI::HTTPError.new("404 Not Found", nil))
-        end
+        before { stub_http_error_response(404) }
 
         it do
           expect_empty_formatted_content
-          expect(decorator.data_fetch_error).to eq("404 Not Found")
+          expect(decorator.data_fetch_error).to eq("Could not connect to data source")
         end
       end
 
       context "with json error" do
-        before do
-          expect(URI).to receive(:open).and_return("badjson")
-        end
+        before { stub_http_success("badjson") }
 
         it do
           expect_empty_formatted_content
@@ -136,9 +168,8 @@ describe Wiki::PageDecorator do
 
       context "with template syntax error" do
         before do
-          # Have to do it this way to sidestep validation errors.
           page.update_column(:content, "{{1&na.me}}")
-          expect(URI).to receive(:open).and_return("{}")
+          stub_http_success("{}")
         end
 
         it do

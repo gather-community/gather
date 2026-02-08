@@ -53,7 +53,7 @@ en:
       duplicates: "There are duplicate signups. Please correct by adding numbers for each diner type."
       cancelled: "The meal was not finalized. You can edit it below and try again, or click 'Cancel' below to return to the meals page."
       success: "Meal finalized successfully"
-      review_and_confirm_html: "<strong>Note:</strong> This meal has not been finalized yet. Please review and confirm your entries below. This information cannot be changed once confirmed, so be careful."
+      review_and_confirm_html: "<strong>Note:</strong> This meal has not been finalized yet. Please review and confirm your entries below. This information cannot be changed once billing statements are sent out, so be careful."
   meals/assignments:
     change_warning: "Note: If you change meal workers, an email notification will be sent to the meals committee/manager and all current and newly assigned workers.'"
   meals/formulas:

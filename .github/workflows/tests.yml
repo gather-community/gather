@@ -91,7 +91,7 @@ jobs:
         with:
           stack-version: 7.6.0
       - name: Install Chromedriver
-        uses: nanasess/setup-chromedriver@master
+        uses: nanasess/setup-chromedriver@v2
       - name: Configure Chromedriver
         run: |
           export DISPLAY=:99
@@ -99,7 +99,7 @@ jobs:
       - name: RSpec Tests
         run: bundle exec rspec --format RSpec::Github::Formatter --format documentation
       - name: Archive test artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: success() || failure()
         with:
           name: screnshots

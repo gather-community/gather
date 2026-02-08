@@ -1,5 +1,28 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: work_periods
+#
+#  id                    :bigint           not null, primary key
+#  auto_open_time        :datetime
+#  cluster_id            :integer          not null
+#  community_id          :integer          not null
+#  created_at            :datetime         not null
+#  ends_on               :date             not null
+#  max_rounds_per_worker :integer
+#  meal_job_requester_id :bigint
+#  meal_job_sync         :boolean          default(FALSE), not null
+#  name                  :string           not null
+#  phase                 :string           default("draft"), not null
+#  pick_type             :string           default("free_for_all"), not null
+#  quota                 :decimal(10, 2)   default(0.0), not null
+#  quota_type            :string           default("none"), not null
+#  round_duration        :integer
+#  starts_on             :date             not null
+#  updated_at            :datetime         not null
+#  workers_per_round     :integer
+#
 module Work
   # A subdivision of the community's work program based on a period of time.
   class Period < ApplicationRecord

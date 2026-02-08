@@ -1,0 +1,151 @@
+<% content_for(:title) { "Google Drive Config Guide" } %>
+
+<p>
+  This guide will walk you through the process of obtaining the credentials needed to connect your community's Google Workspace to Gather.
+</p>
+
+<h2>Prerequisites</h2>
+<ul>
+  <li>
+    The community must have signed up for <strong>Google Workspace</strong>.
+    <ul>
+      <li>The Business Starter plan is sufficient.</li>
+      <li>Only one user account is needed.</li>
+      <li>Choose a community name for the account (e.g. workspace.admin@yourdomain.com) instead of a personal name (e.g. johndoe@yourdomain.com).</li>
+    </ul>
+  </li>
+  <li>
+    Whoever is following these instructions must be logged in to Google as a user in the community's Google Workspace with <strong>Super Admin</strong> privileges.
+    If you only have one account, that account will have Super Admin privileges.
+  </li>
+</ul>
+
+<h2>Main Config</h2>
+
+<h3>Creating a Project</h3>
+<ol>
+  <li>
+    Go to
+    <a href="https://console.cloud.google.com" target="_blank" rel="noopener">https://console.cloud.google.com</a>
+  </li>
+  <li>
+    Ensure you are logged in to Google as the user with Super Admin privileges.
+  </li>
+  <li>
+    Accept the terms and conditions. Wait a few minutes for your organization resource to be provisioned.
+  </li>
+  <li>
+    Go to
+    <a href="https://console.cloud.google.com/projectcreate" target="_blank" rel="noopener">https://console.cloud.google.com/projectcreate</a>
+    to create a project.
+  </li>
+  <li>
+    Name it <strong>Gather Main</strong>.
+  </li>
+  <li>
+    Select the organization for your domain.
+  </li>
+  <li>
+    Use the default value for location.
+  </li>
+</ol>
+
+<h3>Enabled APIs</h3>
+<ol>
+  <li>
+    With the new project selected, go to
+    <a href="https://console.cloud.google.com/" target="_blank" rel="noopener">https://console.cloud.google.com/</a>
+    &rarr; Hamburger menu &rarr; APIs &amp; Services &rarr; Enabled APIs &amp; Services
+  </li>
+  <li>
+    Click <strong>Enable APIs and Services</strong>.
+  </li>
+  <li>
+    Enable the <strong>Google Drive API</strong>.
+  </li>
+</ol>
+
+<h3>OAuth Client ID</h3>
+<ol>
+  <li>
+    With the new project selected, go to
+    <a href="https://console.cloud.google.com/" target="_blank" rel="noopener">https://console.cloud.google.com/</a>
+    &rarr; Hamburger menu &rarr; APIs &amp; Services &rarr; Enabled APIs &amp; Services &rarr; Credentials.
+  </li>
+  <li>
+    Click <strong>Create Credentials</strong> &rarr; <strong>OAuth Client ID</strong>
+  </li>
+  <li>
+    Select <strong>Web Application</strong>.
+  </li>
+  <li>
+    Name: <strong>Drive OAuth Client ID</strong>.
+  </li>
+  <li>
+    Under <strong>Authorized JavaScript origins</strong> add
+    <a href="https://gather.coop" target="_blank" rel="noopener">https://gather.coop</a>.
+  </li>
+  <li>
+    Under <strong>Authorized redirect URIs</strong> add
+    <a href="https://gather.coop/gdrive/setup/auth/callback" target="_blank" rel="noopener">https://gather.coop/gdrive/setup/auth/callback</a>.
+  </li>
+  <li>
+    Copy the Client ID and secret somewhere safe and save for later.
+    <ol>
+      <li>
+        Client ID should look like
+        <code>302773344240-7g2n5abcdef8es2cvpc0roj7t.apps.googleusercontent.com</code>
+      </li>
+      <li>
+        Client secret should look like
+        <code>AIza73uyhc63ehd763ehesysqyhw-hei2asda_2rs</code>
+      </li>
+    </ol>
+  </li>
+</ol>
+
+<h3>OAuth Consent Screen</h3>
+<ol>
+  <li>
+    With the new project selected, go to
+    <a href="https://console.cloud.google.com/" target="_blank" rel="noopener">https://console.cloud.google.com/</a>
+    &rarr; Hamburger menu &rarr; APIs &amp; Services &rarr; OAuth Consent Screen.
+  </li>
+  <li>
+    Pick <strong>Internal</strong>.
+  </li>
+  <li>
+    App Name: <strong>Gather</strong>.
+  </li>
+  <li>
+    User support email: the email address of the user with Super Admin privileges.
+  </li>
+  <li>
+    No logo.
+  </li>
+  <li>
+    App home page:
+    <a href="https://gather.coop" target="_blank" rel="noopener">https://gather.coop</a>
+  </li>
+  <li>
+    Privacy policy:
+    <a href="https://gather.coop/privacy-policy" target="_blank" rel="noopener">https://gather.coop/privacy-policy</a>
+  </li>
+  <li>
+    Authorized domains:
+    <ol>
+      <li>gather.coop</li>
+    </ol>
+  </li>
+  <li>
+    Developer contact email:
+    <a href="mailto:support@gather.coop">support@gather.coop</a>
+  </li>
+  <li>
+    Scopes
+    <ol>
+      <li>auth/userinfo.email</li>
+      <li>auth/drive</li>
+    </ol>
+  </li>
+</ol>

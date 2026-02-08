@@ -1,3 +1,3 @@
 "ID",Date Incurred,Date Recorded,Household,Household ID,Code,Type,Description,Quantity,Unit Price,Amount,Account ID,Statement ID,Meal ID
-*id2*,2018-09-01,2018-09-10 12:00:00 UTC,Smith,*household_id1*,meal,charge,Tasty burgers - Adult,3,1.50,4.50,*account_id1*,*statement_id1*,*meal_id1*
-*id1*,2018-09-05,2018-09-10 12:00:00 UTC,Smith,*household_id1*,othcrd,credit,Mistake correction,,,-1.23,*account_id1*,*statement_id1*,
+*id2*,2018-09-01,2018-09-10T12:00:00,Smith,*household_id1*,meal,charge,Tasty burgers - Adult,3,1.50,4.50,*account_id1*,*statement_id1*,*meal_id1*
+*id1*,2018-09-05,2018-09-10T12:00:00,Smith,*household_id1*,othcrd,credit,Mistake correction,,,-1.23,*account_id1*,*statement_id1*,

@@ -15,19 +15,21 @@ describe GDrive::UserPermissionSyncJob do
   # Here is how I got the list of existing permissions with their IDs so
   # that I could fill them in below.
   #
-  # config = GDrive::MainConfig.find_by(community_id: community_id)
+  # config = GDrive::Config.find_by(community_id: community_id)
   # wrapper = GDrive::Wrapper.new(config: config, google_user_id: "drxxxin@example.net")
   # wrapper.list_permissions("<ITEM_ID>", fields: "permissions(id,emailAddress,role)",
   #   supports_all_drives: true)
 
-  let!(:config) { create(:gdrive_main_config, org_user_id: "drxxxin@example.net") }
+  let!(:config) { create(:gdrive_config, org_user_id: "drxxxin@example.net") }
   let!(:token) { create(:gdrive_token, gdrive_config: config, google_user_id: "drxxxin@example.net") }
+  let!(:group0) { create(:group, joiners: [user]) }
   let!(:group1) { create(:group, joiners: [user]) }
   let!(:group2) { create(:group, joiners: [user]) }
   let!(:group3) { create(:group, joiners: [user]) }
   let!(:group4) { create(:group, joiners: [user]) }
   let!(:group5) { create(:group, availability: "everybody", opt_outs: [user]) }
   let!(:group6) { create(:group, :inactive, joiners: [user]) }
+  let!(:item0) { create(:gdrive_item, gdrive_config: config, external_id: "0hd6aQjz3f_N3yX-8sMh9_U69Y6k5lU5qMl8Ql6Ml8Q") }
   let!(:item1) { create(:gdrive_item, gdrive_config: config, external_id: "1pAl7FvP0ud4KarSE1ags5nG2zta-61Zp6_q91Wh4y1A") }
   let!(:item2) { create(:gdrive_item, gdrive_config: config, external_id: "1zLxt9wYrj1VEOiSnncd0nQfMQCm4hkRqU7WyidaRwB0") }
   let!(:item3) { create(:gdrive_item, gdrive_config: config, external_id: "10pCGogEYyi7EY1wQIHUDFtNfsbNJkpUl") }
@@ -36,6 +38,10 @@ describe GDrive::UserPermissionSyncJob do
   let!(:item6) { create(:gdrive_item, gdrive_config: config) }
 
   # There is no SyncedPermission for this ItemGroup, and user is in the group, so this permission
+  # should be created.
+  let!(:item_grp0) { create(:gdrive_item_group, item: item0, group: group0, access_level: "commenter") }
+
+  # There is no SyncedPermission for this ItemGroup either, and user is in the group, so this permission
   # should be created.
   let!(:item_grp1) { create(:gdrive_item_group, item: item1, group: group1, access_level: "commenter") }
 
@@ -81,6 +87,7 @@ describe GDrive::UserPermissionSyncJob do
       synced_permissions = GDrive::SyncedPermission.all
       sp_attribs = synced_permissions.map { |sp| sp.attributes.symbolize_keys.slice(*attribs_to_check) }
       expect(sp_attribs).to contain_exactly(
+        {item_id: item0.id, item_external_id: item0.external_id, access_level: "commenter"},
         {item_id: item1.id, item_external_id: item1.external_id, access_level: "commenter"},
         {item_id: item3.id, item_external_id: item3.external_id, access_level: "reader"},
         {item_id: item4.id, item_external_id: item4.external_id, access_level: "writer"}

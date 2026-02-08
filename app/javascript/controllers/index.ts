@@ -4,9 +4,6 @@
 
 import { application } from "./application"
 
-import Gdrive__FilePickerController from "./gdrive/file_picker_controller"
-application.register("gdrive--file-picker", Gdrive__FilePickerController)
-
 import Gdrive__RootPickerController from "./gdrive/root_picker_controller"
 application.register("gdrive--root-picker", Gdrive__RootPickerController)
 

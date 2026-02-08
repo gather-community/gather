@@ -9,7 +9,7 @@ body.landing {
     text-align: center;
   }
 
-  #main {
+  main {
     background-image: url(image-path("intro-bg.jpg"));
     background-repeat: no-repeat;
     background-size: cover;
@@ -25,6 +25,7 @@ body.landing {
       color: white;
       font-size: 24px;
       font-weight: 200;
+      margin: 0;
     }
 
     #logo {

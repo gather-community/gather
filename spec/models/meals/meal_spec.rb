@@ -1,5 +1,30 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: meals
+#
+#  id              :integer          not null, primary key
+#  allergens       :jsonb            not null
+#  auto_close_time :datetime
+#  capacity        :integer          not null
+#  cluster_id      :integer          not null
+#  community_id    :integer          not null
+#  created_at      :datetime         not null
+#  creator_id      :integer          not null
+#  dessert         :text
+#  entrees         :text
+#  formula_id      :integer          not null
+#  kids            :text
+#  menu_posted_at  :datetime
+#  no_allergens    :boolean          default(FALSE), not null
+#  notes           :text
+#  served_at       :datetime         not null
+#  side            :text
+#  status          :string           default("open"), not null
+#  title           :string
+#  updated_at      :datetime         not null
+#
 require "rails_helper"
 
 describe Meals::Meal do
@@ -153,8 +178,10 @@ describe Meals::Meal do
         Meals::Finalizer.new(meal).finalize!
       end
 
-      it "raises error" do
-        expect { meal.destroy }.to raise_error(ActiveRecord::DeleteRestrictionError)
+      it "deletes cleanly" do
+        transaction = meal.transactions.first
+        meal.destroy
+        expect { transaction.reload }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
   end

@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative("../../lib/gather/structured_logger")
+
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -76,15 +78,7 @@ Rails.application.configure do
   # Don't log any deprecations.
   config.active_support.report_deprecations = false
 
-  # Use a different logger for distributed setups.
-  # require 'syslog/logger'
-  # config.logger = ActiveSupport::TaggedLogging.new(Syslog::Logger.new 'app-name')
-
-  if ENV["RAILS_LOG_TO_STDOUT"].present?
-    logger = ActiveSupport::Logger.new(STDOUT)
-    logger.formatter = config.log_formatter
-    config.logger = ActiveSupport::TaggedLogging.new(logger)
-  end
+  config.logger = Logtail::Logger.create_default_logger("3mgVU1SKiL2gb3ETgQooWPTE")
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false

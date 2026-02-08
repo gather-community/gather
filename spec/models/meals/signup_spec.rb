@@ -1,11 +1,29 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: meal_signups
+#
+#  id           :integer          not null, primary key
+#  cluster_id   :integer          not null
+#  comments     :text
+#  created_at   :datetime         not null
+#  household_id :integer          not null
+#  meal_id      :integer          not null
+#  notified     :boolean          default(FALSE), not null
+#  takeout      :boolean          default(FALSE), not null
+#  updated_at   :datetime         not null
+#
 require "rails_helper"
 
 describe Meals::Signup do
   describe "#total and #total_was" do
+    let(:user1) { create(:user) }
+    let(:user2) { create(:user) }
+    let(:user3) { create(:user) }
+
     context "with no signups" do
-      subject(:signup) { build(:meal_signup, parts_attributes: {"0": {count: 0}}) }
+      subject(:signup) { build(:meal_signup, parts_attributes: {"0": {count: 0, user_id: user1}} )}
       it do
         expect(signup.total).to eq(0)
         expect(signup.total_was).to eq(0)
@@ -13,7 +31,8 @@ describe Meals::Signup do
     end
 
     context "with new record" do
-      subject(:signup) { build(:meal_signup, parts_attributes: {"0": {count: 1}, "1": {count: 2}}) }
+      subject(:signup) { build(:meal_signup, 
+        parts_attributes: {"0": {count: 1, user_id: user1}, "1": {count: 2, user_id: user2}}) }
       it do
         expect(signup.total).to eq(3)
         expect(signup.total_was).to eq(0)
@@ -23,11 +42,12 @@ describe Meals::Signup do
     context "with existing record" do
       subject!(:signup) { create(:meal_signup, diner_counts: [1, 2]) }
 
+
       before do
         # Add, edit, and delete
         signup.assign_attributes(parts_attributes: {
-          "0": {id: signup.parts[0].id, count: 4},
-          "1": {id: signup.parts[1].id, _destroy: "1"},
+          "0": {id: signup.parts[0].id, count: 4, user_id: user1},
+          "1": {id: signup.parts[1].id, _destroy: "1", user_id: user2},
           "2": {count: 8}
         })
       end
@@ -170,11 +190,15 @@ describe Meals::Signup do
       context "partial zero" do
         # Deliberately including same type_id twice.
         # Second should get ignored and not trigger unique validation.
+        let(:user1) { create(:user) }
+        let(:user2) { create(:user) }
+        let(:user3) { create(:user) }
+        
         let(:parts_attributes) do
           [
-            {type_id: formula.types[0].id, count: 2},
-            {type_id: formula.types[1].id, count: 0},
-            {type_id: formula.types[0].id, count: 0}
+            {type_id: formula.types[0].id, count: 2, user_id: user1.id},
+            {type_id: formula.types[1].id, count: 0, user_id: user2.id},
+            {type_id: formula.types[0].id, count: 0, user_id: user3.id}
           ]
         end
 
@@ -185,14 +209,19 @@ describe Meals::Signup do
     end
 
     context "on update" do
+      let!(:user1) { create(:user) }
+      let!(:user2) { create(:user) }
       let(:parts_attributes) do
-        [{type_id: formula.types[0].id, count: 2}, {type_id: formula.types[1].id, count: 3}]
+        [{type_id: formula.types[0].id, count: 2, user_id: user1.id}, 
+          {type_id: formula.types[1].id, count: 3, user_id: user2.id}]
       end
 
       context "partial zero" do
+        let!(:user1) { create(:user) }
+        let!(:user2) { create(:user) }
         it "destroys zero part" do
           signup.reload.update!(parts_attributes:
-            [{id: signup.parts[0].id, count: 0}, {id: signup.parts[1].id, count: 4}])
+            [{id: signup.parts[0].id, count: 0, user_id: user1.id}, {id: signup.parts[1].id, count: 4, user_id: user2.id}])
           expect(Meals::Signup.find(signup.id).parts.map(&:count)).to eq([4])
         end
       end

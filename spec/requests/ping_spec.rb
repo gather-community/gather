@@ -4,6 +4,7 @@ require "rails_helper"
 
 describe "user request" do
   let(:user) { create(:user) }
+  let!(:mail_test_run) { create(:mail_test_run, mail_sent_at: Time.current - 1.minute) }
 
   shared_examples_for "works" do
     it do

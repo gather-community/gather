@@ -96,7 +96,7 @@ module Groups
       @group.build_mailman_list if @group.mailman_list.nil?
       @mailman_list = @group.mailman_list
 
-      if policy(@group).permitted_attributes.include?(community_ids: [])
+      if policy(@group).permitted_attributes.include?(community_ids: []) && multi_community?
         @community_options = Community.by_name_with_first(current_community)
       end
 

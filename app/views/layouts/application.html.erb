@@ -19,14 +19,17 @@
     <nav class="navbar navbar-default hidden-xs">
       <div class="nav-wrapper">
         <div class="logo nav-1 hidden-sm">
-          <%= link_to(image_tag("logo-white.png"), logo_link_url) %>
+          <%= link_to(image_tag("logo-white.png"), logo_link_url, alt: "Home") %>
         </div>
         <div class="nav-2-3-4">
           <div class="nav-2-3">
             <div class="logo nav-2 hidden visible-sm">
-              <%= link_to(image_tag("logo-white.png"), logo_link_url) %>
+              <%= link_to(image_tag("logo-white.png"), logo_link_url, alt: "Home") %>
             </div>
             <div class="nav-3 personal-nav">
+              <a href="#content" id="skip-link">
+                Skip to Content
+              </a>
               <% if user_signed_in? && current_community %>
                 <ul class="nav">
                   <%= render("layouts/personal_dropdown") %>
@@ -65,13 +68,13 @@
       <div class="container-fluid" class="nav-wrapper">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-            data-target="#mobile-nav" aria-expanded="false">
+            data-target="#mobile-nav" aria-expanded="false" aria-label="Show menu">
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <%= link_to(image_tag("logo-white.png"), logo_link_url, class: "logo") %>
+          <%= link_to(image_tag("logo-white.png"), logo_link_url, class: "logo", alt: "Home") %>
         </div>
 
         <% if user_signed_in? && current_community %>
@@ -81,7 +84,7 @@
                 <% if (sub_items = nav_builder.sub_items(item[:name])).size > 1 %>
                   <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                      aria-haspopup="true" aria-expanded="false">
+                      aria-haspopup="true" aria-expanded="false" aria-label="Show menu">
                       <%= icon_tag(item[:icon]) %>
                       <%= t("nav_links.main.#{item[:name]}") %>
                       <span class="caret"></span>
@@ -117,13 +120,17 @@
       </nav>
     <% end %>
 
-    <div id="content" class="<%= controller.controller_name.dasherize %>
+    <main id="content" class="<%= controller.controller_name.dasherize %>
       <%= controller.controller_path.gsub("/", "--").dasherize %>
       action-<%= controller.action_name.dasherize %> clearfix">
       <%= inline_svg("logo-light-bg.svg", id: "print-logo") %>
 
       <%= flash_messages %><%# These are from the controller via the `flash` array %>
       <%= yield(:flashes) %><%# These are from the view via `content_for` %>
+      
+      <div class="visible-xs mobile-back">
+        <%= yield(:mobile_back_link) %>
+      </div>
 
       <div class="title-and-buttons">
         <% title_icons = yield(:title_icons) %>
@@ -147,13 +154,13 @@
       <%= lenses.html(position: "lower") if lenses&.visible? %>
 
       <%= yield %>
-    </div>
+    </main>
   </div>
 
   <%= render("layouts/footer") %>
 
   <div id="glb-load-ind" class="foreground-loader hiding">
-    <%= image_tag("glb-load-ind.gif") %>
+    <%= image_tag("glb-load-ind.gif", alt: "Loading indicator") %>
     <div>Loading</div>
   </div>
 

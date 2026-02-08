@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_03_12_120059) do
+ActiveRecord::Schema[7.0].define(version: 2026_02_08_133512) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -83,6 +83,20 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_12_120059) do
     t.decimal "value", precision: 10, scale: 2, null: false
     t.index ["cluster_id"], name: "index_billing_templates_on_cluster_id"
     t.index ["community_id"], name: "index_billing_templates_on_community_id"
+  end
+
+  create_table "calendar_eventlets", force: :cascade do |t|
+    t.boolean "all_day", default: false, null: false
+    t.bigint "calendar_id", null: false
+    t.bigint "cluster_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "ends_at", null: false
+    t.bigint "event_id", null: false
+    t.datetime "starts_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["calendar_id"], name: "index_calendar_eventlets_on_calendar_id"
+    t.index ["cluster_id"], name: "index_calendar_eventlets_on_cluster_id"
+    t.index ["event_id"], name: "index_calendar_eventlets_on_event_id"
   end
 
   create_table "calendar_events", id: :serial, force: :cascade do |t|
@@ -271,12 +285,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_12_120059) do
     t.bigint "community_id", null: false
     t.datetime "created_at", null: false
     t.string "org_user_id", limit: 255
-    t.string "type", null: false
     t.datetime "updated_at", null: false
     t.index ["cluster_id"], name: "index_gdrive_configs_on_cluster_id"
-    t.index ["community_id", "type"], name: "index_gdrive_configs_on_community_id_and_type", unique: true
     t.index ["org_user_id"], name: "index_gdrive_configs_on_org_user_id"
-    t.check_constraint "(type::text = 'GDrive::MainConfig'::text) = (org_user_id IS NOT NULL)", name: "org_user_id_non_null_if_main"
   end
 
   create_table "gdrive_item_groups", force: :cascade do |t|
@@ -290,7 +301,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_12_120059) do
     t.index ["group_id"], name: "index_gdrive_item_groups_on_group_id"
     t.index ["item_id", "group_id"], name: "index_gdrive_item_groups_on_item_id_and_group_id", unique: true
     t.index ["item_id"], name: "index_gdrive_item_groups_on_item_id"
-    t.check_constraint "access_level::text = ANY (ARRAY['reader'::character varying, 'commenter'::character varying, 'writer'::character varying, 'fileOrganizer'::character varying, 'organizer'::character varying]::text[])", name: "access_level_enum"
+    t.check_constraint "access_level::text = ANY (ARRAY['reader'::character varying, 'commenter'::character varying, 'writer'::character varying, 'fileOrganizer'::character varying]::text[])", name: "access_level_enum"
   end
 
   create_table "gdrive_items", force: :cascade do |t|
@@ -305,31 +316,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_12_120059) do
     t.index ["cluster_id"], name: "index_gdrive_items_on_cluster_id"
     t.index ["external_id"], name: "index_gdrive_items_on_external_id", unique: true
     t.index ["gdrive_config_id"], name: "index_gdrive_items_on_gdrive_config_id"
-    t.check_constraint "error_type::text = ANY (ARRAY['inaccessible'::character varying, 'not_shareable'::character varying]::text[])", name: "error_type_enum"
-    t.check_constraint "kind::text = ANY (ARRAY['drive'::character varying, 'folder'::character varying, 'file'::character varying]::text[])", name: "kind_enum"
-  end
-
-  create_table "gdrive_migration_consent_requests", force: :cascade do |t|
-    t.bigint "cluster_id", null: false
-    t.datetime "created_at", null: false
-    t.integer "error_count", default: 0, null: false
-    t.integer "file_count", null: false
-    t.string "google_email", limit: 255, null: false
-    t.jsonb "ingest_file_ids"
-    t.integer "ingest_progress"
-    t.datetime "ingest_requested_at"
-    t.string "ingest_status"
-    t.bigint "operation_id", null: false
-    t.text "opt_out_reason"
-    t.string "status", limit: 16, default: "new", null: false
-    t.string "temp_drive_id"
-    t.string "token", null: false
-    t.datetime "updated_at", null: false
-    t.index ["cluster_id"], name: "index_gdrive_migration_consent_requests_on_cluster_id"
-    t.index ["operation_id"], name: "index_gdrive_migration_consent_requests_on_operation_id"
-    t.check_constraint "char_length(opt_out_reason) <= 32767", name: "opt_out_reason_length"
-    t.check_constraint "ingest_status::text = ANY (ARRAY['new'::character varying, 'in_progress'::character varying, 'done'::character varying, 'failed'::character varying]::text[])", name: "ingest_status_enum"
-    t.check_constraint "status::text = ANY (ARRAY['new'::character varying, 'in_progress'::character varying, 'done'::character varying, 'opted_out'::character varying, 'ingest_failed'::character varying]::text[])", name: "status_enum"
+    t.check_constraint "error_type::text = ANY (ARRAY['inaccessible'::character varying::text, 'not_shareable'::character varying::text])", name: "error_type_enum"
+    t.check_constraint "kind::text = ANY (ARRAY['drive'::character varying::text, 'folder'::character varying::text, 'file'::character varying::text])", name: "kind_enum"
   end
 
   create_table "gdrive_migration_files", force: :cascade do |t|
@@ -339,22 +327,26 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_12_120059) do
     t.string "error_type"
     t.string "external_id", null: false
     t.string "icon_link", null: false
+    t.string "migrated_parent_id"
     t.string "mime_type", limit: 255, null: false
     t.datetime "modified_at", null: false
     t.text "name", null: false
     t.bigint "operation_id", null: false
     t.string "owner", null: false
     t.string "parent_id", null: false
+    t.string "shortcut_target_id", limit: 128
+    t.string "shortcut_target_mime_type", limit: 128
     t.string "status", null: false
     t.datetime "updated_at", null: false
     t.string "web_view_link", null: false
     t.index ["cluster_id"], name: "index_gdrive_migration_files_on_cluster_id"
     t.index ["operation_id", "external_id"], name: "index_gdrive_migration_files_on_operation_id_and_external_id", unique: true
     t.index ["operation_id", "owner", "status"], name: "index_gdrive_migration_files_on_owner"
+    t.index ["operation_id", "shortcut_target_id"], name: "gdrive_files_on_shortcut"
     t.index ["operation_id"], name: "index_gdrive_migration_files_on_operation_id"
     t.check_constraint "char_length(name) <= 32767", name: "name_length"
     t.check_constraint "error_type::text = ANY (ARRAY['forbidden'::character varying::text, 'not_found'::character varying::text, 'ancestor_inaccessible'::character varying::text, 'client_error_ensuring_tree'::character varying::text, 'client_error_moving_to_temp_drive'::character varying::text, 'client_error_moving_to_destination'::character varying::text])", name: "error_type_enum"
-    t.check_constraint "status::text = ANY (ARRAY['pending'::character varying::text, 'errored'::character varying::text, 'declined'::character varying::text, 'transferred'::character varying::text, 'copied'::character varying::text, 'ignored'::character varying::text])", name: "status_enum"
+    t.check_constraint "status::text = ANY (ARRAY['pending'::character varying::text, 'errored'::character varying::text, 'declined'::character varying::text, 'transferred'::character varying::text, 'copied'::character varying::text, 'ignored'::character varying::text, 'disappeared'::character varying::text])", name: "status_enum"
   end
 
   create_table "gdrive_migration_folder_maps", force: :cascade do |t|
@@ -373,10 +365,22 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_12_120059) do
     t.check_constraint "char_length(name) <= 32767", name: "name_length"
   end
 
+  create_table "gdrive_migration_logs", force: :cascade do |t|
+    t.bigint "cluster_id", null: false
+    t.datetime "created_at", null: false
+    t.jsonb "data"
+    t.string "level", null: false
+    t.text "message", null: false
+    t.bigint "operation_id", null: false
+    t.index ["cluster_id"], name: "index_gdrive_migration_logs_on_cluster_id"
+    t.index ["created_at"], name: "index_gdrive_migration_logs_on_created_at"
+    t.index ["operation_id"], name: "index_gdrive_migration_logs_on_operation_id"
+  end
+
   create_table "gdrive_migration_operations", force: :cascade do |t|
     t.boolean "active", default: true, null: false
     t.integer "cluster_id", null: false
-    t.bigint "config_id", null: false
+    t.bigint "community_id", null: false
     t.string "contact_email", null: false
     t.string "contact_name", null: false
     t.datetime "created_at", null: false
@@ -388,7 +392,28 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_12_120059) do
     t.datetime "webhook_expires_at"
     t.string "webhook_resource_id"
     t.string "webhook_secret"
-    t.index ["config_id"], name: "index_gdrive_migration_operations_on_config_id"
+    t.index ["community_id"], name: "index_gdrive_migration_operations_on_community_id", unique: true
+  end
+
+  create_table "gdrive_migration_requests", force: :cascade do |t|
+    t.bigint "cluster_id", null: false
+    t.datetime "created_at", null: false
+    t.integer "error_count", default: 0, null: false
+    t.integer "file_count", null: false
+    t.string "file_drop_drive_id", limit: 128
+    t.string "file_drop_drive_name", limit: 128
+    t.string "google_email", limit: 255, null: false
+    t.bigint "operation_id", null: false
+    t.text "opt_out_reason"
+    t.string "status", limit: 16, default: "new", null: false
+    t.string "token", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cluster_id"], name: "index_gdrive_migration_requests_on_cluster_id"
+    t.index ["file_drop_drive_id"], name: "index_gdrive_migration_requests_on_file_drop_drive_id", unique: true
+    t.index ["operation_id", "google_email"], name: "index_migration_requests_on_operation_id_and_google_email", unique: true
+    t.index ["operation_id"], name: "index_gdrive_migration_requests_on_operation_id"
+    t.check_constraint "char_length(opt_out_reason) <= 32767", name: "opt_out_reason_length"
+    t.check_constraint "status::text = ANY (ARRAY['new'::character varying, 'opened'::character varying, 'opted_out'::character varying]::text[])", name: "status_enum"
   end
 
   create_table "gdrive_migration_scan_tasks", force: :cascade do |t|
@@ -406,6 +431,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_12_120059) do
     t.bigint "cluster_id", null: false
     t.datetime "created_at", null: false
     t.integer "error_count", default: 0, null: false
+    t.jsonb "log_data"
     t.bigint "operation_id", null: false
     t.integer "scanned_file_count", default: 0, null: false
     t.string "scope", limit: 16, default: "full", null: false
@@ -413,8 +439,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_12_120059) do
     t.datetime "updated_at", null: false
     t.index ["cluster_id"], name: "index_gdrive_migration_scans_on_cluster_id"
     t.index ["operation_id"], name: "index_gdrive_migration_scans_on_operation_id"
-    t.check_constraint "scope::text = ANY (ARRAY['full'::character varying, 'changes'::character varying]::text[])", name: "scope_enum"
-    t.check_constraint "status::text = ANY (ARRAY['new'::character varying, 'in_progress'::character varying, 'cancelled'::character varying, 'complete'::character varying]::text[])", name: "status_enum"
+    t.check_constraint "scope::text = ANY (ARRAY['full'::character varying, 'changes'::character varying, 'file_drop'::character varying]::text[])", name: "scope_enum"
+    t.check_constraint "status::text = ANY (ARRAY['new'::character varying::text, 'in_progress'::character varying::text, 'cancelled'::character varying::text, 'complete'::character varying::text])", name: "status_enum"
   end
 
   create_table "gdrive_synced_permissions", force: :cascade do |t|
@@ -430,7 +456,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_12_120059) do
     t.index ["cluster_id"], name: "index_gdrive_synced_permissions_on_cluster_id"
     t.index ["item_id"], name: "index_gdrive_synced_permissions_on_item_id"
     t.index ["user_id"], name: "index_gdrive_synced_permissions_on_user_id"
-    t.check_constraint "access_level::text = ANY (ARRAY['reader'::character varying, 'commenter'::character varying, 'writer'::character varying, 'fileOrganizer'::character varying, 'organizer'::character varying]::text[])", name: "access_level_enum"
+    t.check_constraint "access_level::text = ANY (ARRAY['reader'::character varying, 'commenter'::character varying, 'writer'::character varying, 'fileOrganizer'::character varying]::text[])", name: "access_level_enum"
   end
 
   create_table "gdrive_tokens", force: :cascade do |t|
@@ -534,6 +560,13 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_12_120059) do
     t.index ["deactivated_at"], name: "index_households_on_deactivated_at"
     t.index ["member_type_id"], name: "index_households_on_member_type_id"
     t.index ["name"], name: "index_households_on_name"
+  end
+
+  create_table "mail_test_runs", force: :cascade do |t|
+    t.integer "counter", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "mail_sent_at"
+    t.datetime "updated_at", null: false
   end
 
   create_table "meal_assignments", id: :serial, force: :cascade do |t|
@@ -668,6 +701,25 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_12_120059) do
     t.index ["meal_id", "calendar_id"], name: "index_meal_resourcings_on_meal_id_and_calendar_id", unique: true
   end
 
+  create_table "meal_restrictions", force: :cascade do |t|
+    t.string "absence", null: false
+    t.bigint "cluster_id", null: false
+    t.bigint "community_id", null: false
+    t.string "contains", null: false
+    t.datetime "created_at", null: false
+    t.boolean "deactivated", default: false, null: false
+    t.datetime "updated_at", null: false
+    t.index ["cluster_id"], name: "index_meal_restrictions_on_cluster_id"
+    t.index ["community_id"], name: "index_meal_restrictions_on_community_id"
+  end
+
+  create_table "meal_restrictions_signup_parts", id: false, force: :cascade do |t|
+    t.bigint "meal_restriction_id", null: false
+    t.bigint "meal_signup_part_id", null: false
+    t.index ["meal_restriction_id", "meal_signup_part_id"], name: "restriction_signup_part_index"
+    t.index ["meal_signup_part_id", "meal_restriction_id"], name: "signup_part_restriction_index"
+  end
+
   create_table "meal_roles", force: :cascade do |t|
     t.integer "cluster_id", null: false
     t.integer "community_id", null: false
@@ -692,13 +744,16 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_12_120059) do
     t.bigint "cluster_id", null: false
     t.integer "count", null: false
     t.datetime "created_at", precision: nil, null: false
+    t.integer "guest_id"
+    t.boolean "save_plate"
+    t.boolean "set_place"
     t.bigint "signup_id", null: false
     t.bigint "type_id", null: false
     t.datetime "updated_at", precision: nil, null: false
+    t.integer "user_id"
     t.index ["cluster_id"], name: "index_meal_signup_parts_on_cluster_id"
     t.index ["signup_id"], name: "index_meal_signup_parts_on_signup_id"
     t.index ["type_id", "signup_id"], name: "index_meal_signup_parts_on_type_id_and_signup_id", unique: true
-    t.index ["type_id"], name: "index_meal_signup_parts_on_type_id"
   end
 
   create_table "meal_signups", id: :serial, force: :cascade do |t|
@@ -1178,6 +1233,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_12_120059) do
   add_foreign_key "billing_template_member_types", "people_member_types", column: "member_type_id"
   add_foreign_key "billing_templates", "clusters"
   add_foreign_key "billing_templates", "communities"
+  add_foreign_key "calendar_eventlets", "calendar_events", column: "event_id"
+  add_foreign_key "calendar_eventlets", "calendar_nodes", column: "calendar_id"
+  add_foreign_key "calendar_eventlets", "clusters"
   add_foreign_key "calendar_events", "calendar_nodes", column: "calendar_id"
   add_foreign_key "calendar_events", "clusters"
   add_foreign_key "calendar_events", "groups"
@@ -1211,13 +1269,15 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_12_120059) do
   add_foreign_key "gdrive_item_groups", "groups"
   add_foreign_key "gdrive_items", "clusters"
   add_foreign_key "gdrive_items", "gdrive_configs"
-  add_foreign_key "gdrive_migration_consent_requests", "clusters"
-  add_foreign_key "gdrive_migration_consent_requests", "gdrive_migration_operations", column: "operation_id"
   add_foreign_key "gdrive_migration_files", "clusters"
   add_foreign_key "gdrive_migration_files", "gdrive_migration_operations", column: "operation_id"
   add_foreign_key "gdrive_migration_folder_maps", "clusters"
   add_foreign_key "gdrive_migration_folder_maps", "gdrive_migration_operations", column: "operation_id"
-  add_foreign_key "gdrive_migration_operations", "gdrive_configs", column: "config_id"
+  add_foreign_key "gdrive_migration_logs", "clusters"
+  add_foreign_key "gdrive_migration_logs", "gdrive_migration_operations", column: "operation_id"
+  add_foreign_key "gdrive_migration_operations", "communities"
+  add_foreign_key "gdrive_migration_requests", "clusters"
+  add_foreign_key "gdrive_migration_requests", "gdrive_migration_operations", column: "operation_id"
   add_foreign_key "gdrive_migration_scan_tasks", "gdrive_migration_scans", column: "scan_id"
   add_foreign_key "gdrive_migration_scans", "clusters"
   add_foreign_key "gdrive_migration_scans", "gdrive_migration_operations", column: "operation_id"
@@ -1266,6 +1326,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_12_120059) do
   add_foreign_key "meal_resourcings", "calendar_nodes", column: "calendar_id"
   add_foreign_key "meal_resourcings", "clusters"
   add_foreign_key "meal_resourcings", "meals"
+  add_foreign_key "meal_restrictions", "clusters"
+  add_foreign_key "meal_restrictions", "communities"
   add_foreign_key "meal_roles", "clusters"
   add_foreign_key "meal_roles", "communities"
   add_foreign_key "meal_signup_parts", "clusters"

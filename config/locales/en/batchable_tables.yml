@@ -2,9 +2,9 @@ en:
   batchable_tables:
     actions:
       gdrive__migration__owners:
-        request_consent: "Request Consent"
+        send_request: "Send Request"
     confirmations:
       gdrive__migration__owners:
-        request_consent:
-          one: "Are you sure you want to send a consent email to %{count} person?"
-          other: "Are you sure you want to send consent emails to %{count} people?"
+        send_request:
+          one: "Are you sure you want to send a request email to %{count} person?"
+          other: "Are you sure you want to send request emails to %{count} people?"

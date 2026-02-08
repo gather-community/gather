@@ -7,11 +7,10 @@ module GDrive
         before_action -> { nav_context(:wiki, :gdrive, :migration, :dashboard, :files) }
 
         def index
-          @main_config = MainConfig.find_by(community: current_community)
+          @config = Config.find_by(community: current_community)
           authorize(current_community, :setup?, policy_class: SetupPolicy)
           skip_policy_scope
-          @migration_config = MigrationConfig.find_by(community: current_community)
-          @operation = @migration_config.active_operation
+          @operation = Operation.find_by(community: current_community)
           @latest_scan = @operation.scans.full.order(created_at: :desc).first
           @stats = Stats.new(operation: @operation)
           prepare_lenses({"gdrive/migration/owner": {owners: @stats.owners}}, :"gdrive/migration/status")

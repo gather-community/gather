@@ -4,7 +4,7 @@ require "rails_helper"
 
 describe GDrive::TokenStore do
   let(:community) { Defaults.community }
-  let(:config) { create(:gdrive_main_config, community: community) }
+  let(:config) { create(:gdrive_config, community: community) }
   let(:token_store) { described_class.new(config: config) }
 
   describe "#store" do

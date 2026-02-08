@@ -38,10 +38,13 @@
     .menu-label {
       letter-spacing: 2px;
       background-color: #fff;
-      margin: -32px auto 0 auto;
+      margin: -28px auto 10px auto;
       width: 90px;
       text-transform: uppercase;
       color: $text-muted;
+      font-family: $font-family-sans-serif;
+      font-weight: normal;
+      font-size: $font-size-base;
     }
 
     .smaller {

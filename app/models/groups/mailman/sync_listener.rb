@@ -112,13 +112,15 @@ module Groups
       private
 
       def sync_memberships_for_groups_in_same_communities_if_admin_or_mod_perms(group)
+        return unless group.present?
         return unless group.can_moderate_email_lists? || group.can_administer_email_lists?
         sync_list_memberships_for_groups_in_same_communities(group)
       end
 
       def sync_memberships_for_group_list(group)
+        return unless group.present?
         return if method_already_ran_this_transaction?(__method__)
-        list = group&.mailman_list
+        list = group.mailman_list
 
         # If list doesn't have remote ID, it means ListSyncJob hasn't run yet.
         # We want to run that first. And it will enqueue the MembershipSyncJob.

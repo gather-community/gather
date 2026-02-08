@@ -1,0 +1,5 @@
+<% deactivated = f.object.deactivated? %>
+<td><%= f.input :contains, disabled: deactivated, label: false,
+          placeholder: "e.g. Gluten", input_html: {"aria-label": "Restriction"} %></td>
+<td><%= f.input :absence, disabled: deactivated, label: false,
+          placeholder: "e.g. Gluten-free", input_html: {"aria-label": "Opposite"} %></td>

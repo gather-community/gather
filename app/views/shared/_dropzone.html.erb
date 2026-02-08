@@ -21,7 +21,7 @@
 
     <%# Existing image on object (may or may not be persisted as an attachment-could be just a blob.) %>
     <% if attachment.attached? %>
-      <%= image_tag(obj.send("#{attrib}_variant", format), class: "existing") %>
+      <%= image_tag(obj.send("#{attrib}_variant", format), class: "existing", alt: "Image attachment") %>
     <% end %>
 
     <%# Drop area with the dashed border. %>

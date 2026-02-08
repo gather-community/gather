@@ -58,4 +58,10 @@
       <td><%= event.rendered_note %></td>
     </tr>
   <% end %>
+  <% if event.eventlets.count > 1 %>
+    <tr>
+      <td>Visible Eventlet Count</td>
+      <td><%= event.eventlets.select { |e| Calendars::EventletPolicy.new(current_user, e).show? }.count %></td>
+    </tr>
+  <% end %>
 </table>

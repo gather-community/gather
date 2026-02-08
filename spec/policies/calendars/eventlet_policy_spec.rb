@@ -21,15 +21,39 @@ describe Calendars::EventletPolicy do
     end
     let(:record) { eventlet }
 
+    shared_examples_for "permits admins or calendar coord or creator or group member but not regular users" do
+      it_behaves_like "permits admins or special role but not regular users", :calendar_coordinator
+
+      context "without group" do
+        it "permits creator" do
+          expect(subject).to permit(creator, event)
+        end
+      end
+
+      context "with group" do
+        let(:joiner) { create(:user) }
+        let(:group) { create(:group, joiners: [joiner]) }
+
+        it "permits creator and group member" do
+          expect(subject).to permit(creator, event)
+          expect(subject).to permit(joiner, event)
+        end
+      end
+    end
+
+    shared_examples_for "permits admins or calendar coord but not creator" do
+      it_behaves_like "permits admins or special role but not regular users", :calendar_coordinator
+
+      it "forbids creator" do
+        expect(subject).not_to permit(creator, event)
+      end
+    end
+
     context "with class instead of object" do
       let(:record) { Calendars::Eventlet }
 
       permissions :index? do
         it_behaves_like "permits active users only"
-      end
-
-      permissions :show? do
-        it_behaves_like "forbids all"
       end
     end
 
@@ -38,10 +62,33 @@ describe Calendars::EventletPolicy do
         it_behaves_like "permits active users only"
       end
 
+      permissions :edit?, :update? do
+        it_behaves_like "permits admins or calendar coord or creator or group member but not regular users"
+      end
+
+      permissions :destroy? do
+        context "future event" do
+          let(:starts_at) { 1.day.from_now }
+          it_behaves_like "permits admins or calendar coord or creator or group member but not regular users"
+        end
+
+        context "just-created event" do
+          let(:starts_at) { 1.day.ago }
+          let(:created_at) { 50.minutes.ago }
+          it_behaves_like "permits admins or calendar coord or creator or group member but not regular users"
+        end
+
+        context "not-just-created event" do
+          let(:starts_at) { 1.day.ago }
+          let(:created_at) { 1.week.ago }
+          it_behaves_like "permits admins or calendar coord but not creator"
+        end
+      end
+
       context "inactive calendar" do
         let(:calendar) { create(:calendar, :inactive) }
 
-        permissions :index? do
+        permissions :index?, :new?, :create? do
           it_behaves_like "forbids all"
         end
       end
@@ -58,12 +105,8 @@ describe Calendars::EventletPolicy do
       context "with forbidden access_level" do
         let(:access_level) { "forbidden" }
 
-        permissions :index?, :show? do
+        permissions :index?, :show?, :new?, :create?, :edit?, :update?, :destroy? do
           it_behaves_like "permits cluster admins only"
-        end
-
-        permissions :new?, :create?, :edit?, :update?, :destroy? do
-          it_behaves_like "forbids all"
         end
       end
 
@@ -75,7 +118,7 @@ describe Calendars::EventletPolicy do
         end
 
         permissions :new?, :create?, :edit?, :update?, :destroy? do
-          it_behaves_like "forbids all"
+          it_behaves_like "permits cluster admins only"
         end
       end
 
@@ -83,12 +126,12 @@ describe Calendars::EventletPolicy do
       context "with sponsor access_level" do
         let(:access_level) { "sponsor" }
 
-        permissions :index?, :show? do
+        permissions :index?, :show?, :new?, :create? do
           it_behaves_like "permits active users only"
         end
 
         permissions :edit?, :update?, :destroy? do
-          it_behaves_like "forbids all"
+          it_behaves_like "permits admins or calendar coord or creator or group member but not regular users"
         end
       end
     end
@@ -102,11 +145,20 @@ describe Calendars::EventletPolicy do
         it_behaves_like "permits active users only"
       end
 
-      permissions :new?, :create?, :edit?, :update?, :destroy? do
+      permissions :new?, :create?, :destroy? do
         it "forbids all" do
-          expect(subject).not_to permit(creator, eventlet)
-          expect(subject).not_to permit(user, eventlet)
-          expect(subject).not_to permit(admin, eventlet)
+          expect(subject).not_to permit(creator, event)
+          expect(subject).not_to permit(user, event)
+          expect(subject).not_to permit(admin, event)
+        end
+      end
+
+      permissions :edit?, :update? do
+        it "permits access to admins, meals/cal coordinators, and forbids others" do
+          expect(subject).to permit(admin, event)
+          expect(subject).to permit(meals_coordinator, event)
+          expect(subject).to permit(calendar_coordinator, event)
+          expect(subject).not_to permit(user, event)
         end
       end
     end

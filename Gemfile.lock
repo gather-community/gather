@@ -467,7 +467,7 @@ GEM
     parallel (1.22.1)
     parser (3.2.1.1)
       ast (~> 2.4.1)
-    pg (1.4.4)
+    pg (1.6.3)
     phony (2.20.1)
     phony_rails (0.15.0)
       activesupport (>= 3.0)
@@ -758,7 +758,7 @@ DEPENDENCIES
   net-http
   omniauth-google-oauth2 (~> 0.6)
   omniauth-rails_csrf_protection (~> 0.1)
-  pg (~> 1.1)
+  pg (~> 1.6)
   phony_rails (~> 0.12)
   pry (~> 0.14)
   pry-nav (~> 1.0)

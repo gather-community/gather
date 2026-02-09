@@ -31,10 +31,11 @@ module Gather
       Rails.root.join("app", "decorators", "concerns"),
       Rails.root.join("app", "mailers", "concerns"),
       Rails.root.join("app", "search_configs"),
-      Rails.root.join("lib")
     ]
     config.autoload_paths += extra_paths
     config.eager_load_paths += extra_paths
+
+    config.autoload_lib(ignore: %w(assets tasks))
 
     config.add_autoload_paths_to_load_path = false
 

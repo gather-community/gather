@@ -8,7 +8,7 @@ gem "acts_as_tenant", "~> 0.4"
 gem "attribute_normalizer", "~> 1.2"
 gem "aws-sdk-s3", "~> 1.97", require: false
 gem "babosa", "~> 1.0"
-gem "bootsnap", "~> 1.4"
+gem "bootsnap", "~> 1.22"
 gem "bootstrap-kaminari-views", "~> 0.0"
 gem "bootstrap-sass", "~> 3.4"
 gem "browser", "~> 6"

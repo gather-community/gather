@@ -6,7 +6,7 @@ gem "active_model_serializers", "~> 0.10.16"
 gem "acts_as_list", "~> 0.9"
 gem "acts_as_tenant", "~> 0.4"
 gem "attribute_normalizer", "~> 1.2"
-gem "aws-sdk-s3", "~> 1.97", require: false
+gem "aws-sdk-s3", "~> 1.213", require: false
 gem "babosa", "~> 1.0"
 gem "bootsnap", "~> 1.22"
 gem "bootstrap-kaminari-views", "~> 0.0"

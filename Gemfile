@@ -85,7 +85,7 @@ group :development, :test do
   gem "capistrano-rbenv", "~> 2.1"
   gem "capistrano3-delayed-job", "~> 1.0"
   gem "capybara", "~> 3.40"
-  gem "database_cleaner", "~> 1.7"
+  gem "database_cleaner", "~> 2.0"
   gem "debug", require: false
   gem "ed25519", ">= 1.2", "< 2.0" # For Capistrano
   gem "fix-db-schema-conflicts", "~> 3.0"

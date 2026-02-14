@@ -220,7 +220,12 @@ GEM
       rexml
     crass (1.0.6)
     daemons (1.4.1)
-    database_cleaner (1.99.0)
+    database_cleaner (2.1.0)
+      database_cleaner-active_record (>= 2, < 3)
+    database_cleaner-active_record (2.2.2)
+      activerecord (>= 5.a)
+      database_cleaner-core (~> 2.0)
+    database_cleaner-core (2.0.1)
     date (3.5.1)
     debug (1.11.0)
       irb (~> 1.10)
@@ -760,7 +765,7 @@ DEPENDENCIES
   config (~> 4.0)
   country_select (~> 4.0)
   daemons (~> 1.2)
-  database_cleaner (~> 1.7)
+  database_cleaner (~> 2.0)
   datetimepicker-rails!
   debug
   delayed_job_active_record (~> 4.1)

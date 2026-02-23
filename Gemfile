@@ -93,7 +93,7 @@ group :development, :test do
   gem "pry-nav", "~> 1.0"
   gem "pry-rails", "~> 0.3"
   gem "pry", "~> 0.14"
-  gem "rspec-rails", "~> 4.0"
+  gem "rspec-rails", "~> 6.0"
   gem "rubocop-rails", "2.9"
   gem "rubocop", "~> 1.0"
   gem "selenium-webdriver", "~> 4.0"

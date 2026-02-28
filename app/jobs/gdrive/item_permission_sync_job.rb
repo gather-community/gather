@@ -4,7 +4,13 @@ module GDrive
   # Syncs permissions for a given Item from Gather to Google Drive.
   # Keeps track of permissions in the GDrive::SyncedPermission model.
   class ItemPermissionSyncJob < PermissionSyncJob
-    def perform(cluster_id:, community_id:, item_id:)
+    def perform(cluster_id:, community_id:, item_id:, refresh_synced_permissions: false)
+      if refresh_synced_permissions
+        Rails.logger.info("Refreshing synced permissions before item sync", item_id: item_id)
+        RefreshSyncedPermissionsJob.perform_now(cluster_id: cluster_id, community_id: community_id,
+          item_id: item_id)
+      end
+
       with_cluster_and_api_wrapper(cluster_id: cluster_id, community_id: community_id) do
         self.item_id = item_id
 

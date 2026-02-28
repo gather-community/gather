@@ -38,9 +38,9 @@ module GDrive
       # Make a hash by item_id of all existing SyncedPermissions
       self.permissions_by_item_id = GDrive::SyncedPermission.where(user_id: user_id).index_by(&:item_id)
 
-      # Clear the access level. If it's still nil at the end of this method, we should delete
-      # the permission.
-      permissions_by_item_id.values.each { |p| p.access_level = nil }
+      # Reset access_level to inherited_access_level (which may be nil). If it remains nil after
+      # processing all ItemGroups, the permission should be deleted.
+      permissions_by_item_id.values.each { |p| p.access_level = p.inherited_access_level }
 
       # User may have been deleted between when the job was enqueued and when it was run.
       if user.present? && user.active? && user.google_email.present?

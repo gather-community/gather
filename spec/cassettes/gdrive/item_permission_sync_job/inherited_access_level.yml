@@ -1,0 +1,129 @@
+---
+http_interactions:
+- request:
+    method: patch
+    uri: https://www.googleapis.com/drive/v3/files/0AGH_tsBj1z-INHERITED0001/permissions/10000000000000000001?supportsAllDrives=true
+    body:
+      encoding: UTF-8
+      string: '{"role":"reader"}'
+    headers:
+      User-Agent:
+      - unknown/0.0.0 google-apis-drive_v3/0.32.0 Mac OS X/13.1 (gzip)
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip,deflate
+      Date:
+      - Sun, 16 Apr 2023 02:49:06 GMT
+      X-Goog-Api-Client:
+      - gl-ruby/2.7.5 gdcl/1.32.0
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer ya29.xxx
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Date:
+      - Sun, 16 Apr 2023 02:49:07 GMT
+      Vary:
+      - Origin, X-Origin
+      Pragma:
+      - no-cache
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Encoding:
+      - gzip
+      Server:
+      - ESF
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: |
+        {
+          "kind": "drive#permission",
+          "id": "10000000000000000001",
+          "type": "user",
+          "role": "reader"
+        }
+    http_version:
+  recorded_at: Sun, 16 Apr 2023 02:49:07 GMT
+- request:
+    method: patch
+    uri: https://www.googleapis.com/drive/v3/files/0AGH_tsBj1z-INHERITED0001/permissions/10000000000000000003?supportsAllDrives=true
+    body:
+      encoding: UTF-8
+      string: '{"role":"writer"}'
+    headers:
+      User-Agent:
+      - unknown/0.0.0 google-apis-drive_v3/0.32.0 Mac OS X/13.1 (gzip)
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip,deflate
+      Date:
+      - Sun, 16 Apr 2023 02:49:07 GMT
+      X-Goog-Api-Client:
+      - gl-ruby/2.7.5 gdcl/1.32.0
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer ya29.xxx
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Date:
+      - Sun, 16 Apr 2023 02:49:08 GMT
+      Vary:
+      - Origin, X-Origin
+      Pragma:
+      - no-cache
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Encoding:
+      - gzip
+      Server:
+      - ESF
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: |
+        {
+          "kind": "drive#permission",
+          "id": "10000000000000000003",
+          "type": "user",
+          "role": "writer"
+        }
+    http_version:
+  recorded_at: Sun, 16 Apr 2023 02:49:08 GMT
+recorded_with: VCR 4.0.0

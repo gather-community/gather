@@ -112,6 +112,71 @@ describe GDrive::ItemPermissionSyncJob do
     end
   end
 
+  # These three scenarios use a separate item so only the three permissions below are in scope
+  # for the job, keeping the test isolated from the main happy_path setup.
+  context "with inherited_access_level" do
+    let!(:inherited_item) do
+      create(:gdrive_item, gdrive_config: config, external_id: "0AGH_tsBj1z-INHERITED0001")
+    end
+
+    # Scenario 1: inherited_access_level non-nil, no applicable ItemGroup (direct level nil).
+    # access_level resets to inherited "reader" from "writer" in DB. No group grants access,
+    # so it stays at "reader" and is downgraded via PATCH.
+    let!(:user_a) { create(:user, google_email: "aaa_inherited@example.com") }
+    let!(:perm_a) do
+      create(:gdrive_synced_permission, user: user_a, item: inherited_item,
+        access_level: "writer", inherited_access_level: "reader", external_id: "10000000000000000001")
+    end
+
+    # Scenario 2: inherited_access_level non-nil, direct level equals inherited.
+    # access_level resets to "reader" (inherited). Group also grants "reader", so no upgrade.
+    # DB already has "reader", so no API call.
+    let!(:user_b) { create(:user, google_email: "bbb_inherited@example.com") }
+    let!(:group_for_b) { create(:group, joiners: [user_b]) }
+    let!(:item_grp_for_b) do
+      create(:gdrive_item_group, item: inherited_item, group: group_for_b, access_level: "reader")
+    end
+    let!(:perm_b) do
+      create(:gdrive_synced_permission, user: user_b, item: inherited_item,
+        access_level: "reader", inherited_access_level: "reader", external_id: "10000000000000000002")
+    end
+
+    # Scenario 3: inherited_access_level non-nil, direct level higher than inherited.
+    # access_level resets to "reader" (inherited), then group grants "writer" (higher), so it
+    # upgrades to "writer" via PATCH.
+    let!(:user_c) { create(:user, google_email: "ccc_inherited@example.com") }
+    let!(:group_for_c) { create(:group, joiners: [user_c]) }
+    let!(:item_grp_for_c) do
+      create(:gdrive_item_group, item: inherited_item, group: group_for_c, access_level: "writer")
+    end
+    let!(:perm_c) do
+      create(:gdrive_synced_permission, user: user_c, item: inherited_item,
+        access_level: "reader", inherited_access_level: "reader", external_id: "10000000000000000003")
+    end
+
+    subject(:job) do
+      described_class.new(cluster_id: Defaults.cluster.id, community_id: Defaults.community.id,
+        item_id: inherited_item.id)
+    end
+
+    it "uses inherited_access_level as a floor when no direct access is higher" do
+      VCR.use_cassette("gdrive/item_permission_sync_job/inherited_access_level") do
+        perform_job
+      end
+      attribs_to_check = %i[user_id google_email access_level]
+      synced_permissions = GDrive::SyncedPermission.where(item_id: inherited_item.id)
+      sp_attribs = synced_permissions.map { |sp| sp.attributes.symbolize_keys.slice(*attribs_to_check) }
+      expect(sp_attribs).to contain_exactly(
+        # No direct access; falls back to inherited "reader", downgraded from "writer" in DB
+        {user_id: user_a.id, google_email: "aaa_inherited@example.com", access_level: "reader"},
+        # Direct level equals inherited; stays at "reader"
+        {user_id: user_b.id, google_email: "bbb_inherited@example.com", access_level: "reader"},
+        # Direct level "writer" exceeds inherited "reader"; upgrades to "writer"
+        {user_id: user_c.id, google_email: "ccc_inherited@example.com", access_level: "writer"}
+      )
+    end
+  end
+
   context "with deleted item" do
     it "removes all permissions" do
       item.destroy
@@ -127,8 +192,8 @@ describe GDrive::ItemPermissionSyncJob do
     end
   end
 
-  def create_synced_permission(user, external_id, level, google_email = user.google_email)
+  def create_synced_permission(user, external_id, level, google_email = user.google_email, **kwargs)
     create(:gdrive_synced_permission, user: user, item: item, google_email: google_email,
-      access_level: level, external_id: external_id)
+      access_level: level, external_id: external_id, **kwargs)
   end
 end

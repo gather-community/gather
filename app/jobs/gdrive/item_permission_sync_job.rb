@@ -36,9 +36,9 @@ module GDrive
       # Make a hash by user_id of all existing SyncedPermissions
       self.permissions_by_user_id = GDrive::SyncedPermission.where(item_id: item_id).index_by(&:user_id)
 
-      # Clear the access level. If it's still nil at the end of this method, we should delete
-      # the permission.
-      permissions_by_user_id.values.each { |p| p.access_level = nil }
+      # Reset access_level to inherited_access_level (which may be nil). If it remains nil after
+      # processing all ItemGroups, the permission should be deleted.
+      permissions_by_user_id.values.each { |p| p.access_level = p.inherited_access_level }
 
       # If the item has been destroyed, there can't be any ItemGroups for it
       # since they are linked by a foreign key. So this loop will be a no-op.

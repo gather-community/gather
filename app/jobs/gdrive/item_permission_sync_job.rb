@@ -63,11 +63,16 @@ module GDrive
 
         permission = permissions_by_user_id[user.id]
         if permission.present?
+          Rails.logger.info("Existing permission", user_id: user.id, item_external_id: item_group.item.external_id,
+            permission_id: permission.external_id, access_level: permission.access_level)
           permission.google_email = user.google_email
           if access_level_cmp(item_group.access_level, permission.access_level) == 1
+            Rails.logger.info("Setting higher access level", new_access_level: item_group.access_level)
             permission.access_level = item_group.access_level
           end
         else
+          # No existing permission was found so make a new one. It will get saved when permissions are applied.
+          Rails.logger.info("No existing permission, building")
           permissions_by_user_id[user.id] = build_synced_permission(user, item, item_group.access_level)
         end
       end

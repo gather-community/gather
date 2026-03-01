@@ -34,6 +34,11 @@
     table {
       margin-bottom: 20px;
     }
+
+    code {
+      color: $gray-dark;
+      background-color: $pre-bg;
+    }
   }
 
   .wiki-page-revision-info {
@@ -43,10 +48,19 @@
   }
 
   .wiki--page-form {
-    #wiki_page_content {
+    .EasyMDEContainer .CodeMirror .CodeMirror-lines {
       font-family: $font-family-monospace;
       font-size: 12px;
-      height: 500px;
+    }
+
+    .EasyMDEContainer .editor-statusbar {
+      padding: 1px 10px 1px 0;
+      text-align: left;
+
+      span {
+        margin-left: 0;
+        margin-right: 1em;
+      }
     }
   }
 }

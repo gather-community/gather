@@ -4,7 +4,8 @@
 
 <%= gather_form_for(page, width: :full, layout: :narrower_label) do |f| %>
   <%= f.input :title %>
-  <%= f.input :content %>
+  <%= f.input :content, input_html: { data: { controller: "wiki--markdown-editor", page_id: page.id,
+                                                                                        help_url: "/wiki/sample" } } %>
   <%= f.input :comment %>
   <% if policy(page).attribute_permitted?(:editable_by) %>
     <%= f.input :editable_by, collection: Wiki::Page::EDITABLE_BY_OPTIONS, include_blank: false %>

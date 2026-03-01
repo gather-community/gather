@@ -4,7 +4,13 @@ module GDrive
   # Syncs permissions for a given User from Gather to Google Drive.
   # Keeps track of permissions in the GDrive::SyncedPermission model.
   class UserPermissionSyncJob < PermissionSyncJob
-    def perform(cluster_id:, community_id:, user_id:)
+    def perform(cluster_id:, community_id:, user_id:, refresh_synced_permissions: false)
+      if refresh_synced_permissions
+        Rails.logger.info("Refreshing synced permissions before user sync",
+          user_id: user_id, community_id: community_id)
+        RefreshSyncedPermissionsJob.perform_now(cluster_id: cluster_id, community_id: community_id)
+      end
+
       with_cluster_and_api_wrapper(cluster_id: cluster_id, community_id: community_id) do
         self.user_id = user_id
 
@@ -38,9 +44,9 @@ module GDrive
       # Make a hash by item_id of all existing SyncedPermissions
       self.permissions_by_item_id = GDrive::SyncedPermission.where(user_id: user_id).index_by(&:item_id)
 
-      # Clear the access level. If it's still nil at the end of this method, we should delete
-      # the permission.
-      permissions_by_item_id.values.each { |p| p.access_level = nil }
+      # Reset access_level to inherited_access_level (which may be nil). If it remains nil after
+      # processing all ItemGroups, the permission should be deleted.
+      permissions_by_item_id.values.each { |p| p.access_level = p.inherited_access_level }
 
       # User may have been deleted between when the job was enqueued and when it was run.
       if user.present? && user.active? && user.google_email.present?
@@ -65,7 +71,7 @@ module GDrive
     def process_permissions_for_item_group(item_group)
       permission = permissions_by_item_id[item_group.item_id]
       if permission.present?
-        Rails.logger.info("Existing permission", item_external_id: permission.item_external_id,
+        Rails.logger.info("Existing permission", user_id: user.id, item_external_id: permission.item_external_id,
           permission_id: permission.external_id, access_level: permission.access_level)
         permission.google_email = user.google_email
         if access_level_cmp(item_group.access_level, permission.access_level) == 1
@@ -73,6 +79,7 @@ module GDrive
           permission.access_level = item_group.access_level
         end
       else
+        # No existing permission was found so make a new one. It will get saved when permissions are applied.
         Rails.logger.info("No existing permission, building")
         permissions_by_item_id[item_group.item_id] = build_synced_permission(user, item_group.item,
           item_group.access_level)

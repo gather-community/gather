@@ -97,6 +97,80 @@ describe GDrive::UserPermissionSyncJob do
     end
   end
 
+  # These three scenarios use a dedicated user so only that user's permissions are in scope
+  # for the job, keeping the test isolated from the main happy_path setup.
+  context "with inherited_access_level" do
+    let!(:user) { create(:user, google_email: "main_user@example.com") }
+    let!(:user_with_inherited) { create(:user, google_email: "inherited_user@example.com") }
+
+    # Opt user_with_inherited out of the everybody group to keep the test focused on the
+    # three items created below.
+    let!(:group5) { create(:group, availability: "everybody", opt_outs: [user, user_with_inherited]) }
+
+    # Scenario 1: inherited_access_level non-nil, no applicable ItemGroup (direct level nil).
+    # access_level resets to inherited "reader" from "writer" in DB. No group grants access,
+    # so it stays at "reader" and is downgraded via PATCH.
+    let!(:item_a) do
+      create(:gdrive_item, gdrive_config: config, external_id: "AAAAinheritedItemA0001")
+    end
+    let!(:perm_a) do
+      create(:gdrive_synced_permission, user: user_with_inherited, item: item_a,
+        access_level: "writer", inherited_access_level: "reader", external_id: "20000000000000000001")
+    end
+
+    # Scenario 2: inherited_access_level non-nil, direct level equals inherited.
+    # access_level resets to "reader" (inherited). Group also grants "reader", so no upgrade.
+    # DB already has "reader", so no API call.
+    let!(:item_b) do
+      create(:gdrive_item, gdrive_config: config, external_id: "BBBBinheritedItemB0001")
+    end
+    let!(:group_for_b) { create(:group, joiners: [user_with_inherited]) }
+    let!(:item_grp_for_b) do
+      create(:gdrive_item_group, item: item_b, group: group_for_b, access_level: "reader")
+    end
+    let!(:perm_b) do
+      create(:gdrive_synced_permission, user: user_with_inherited, item: item_b,
+        access_level: "reader", inherited_access_level: "reader", external_id: "20000000000000000002")
+    end
+
+    # Scenario 3: inherited_access_level non-nil, direct level higher than inherited.
+    # access_level resets to "reader" (inherited), then group grants "writer" (higher), so it
+    # upgrades to "writer" via PATCH.
+    let!(:item_c) do
+      create(:gdrive_item, gdrive_config: config, external_id: "CCCCinheritedItemC0001")
+    end
+    let!(:group_for_c) { create(:group, joiners: [user_with_inherited]) }
+    let!(:item_grp_for_c) do
+      create(:gdrive_item_group, item: item_c, group: group_for_c, access_level: "writer")
+    end
+    let!(:perm_c) do
+      create(:gdrive_synced_permission, user: user_with_inherited, item: item_c,
+        access_level: "reader", inherited_access_level: "reader", external_id: "20000000000000000003")
+    end
+
+    subject(:job) do
+      described_class.new(cluster_id: Defaults.cluster.id, community_id: Defaults.community.id,
+        user_id: user_with_inherited.id)
+    end
+
+    it "uses inherited_access_level as a floor when no direct access is higher" do
+      VCR.use_cassette("gdrive/user_permission_sync_job/inherited_access_level") do
+        perform_job
+      end
+      attribs_to_check = %i[item_id item_external_id access_level]
+      synced_permissions = GDrive::SyncedPermission.where(user_id: user_with_inherited.id)
+      sp_attribs = synced_permissions.map { |sp| sp.attributes.symbolize_keys.slice(*attribs_to_check) }
+      expect(sp_attribs).to contain_exactly(
+        # No direct access; falls back to inherited "reader", downgraded from "writer" in DB
+        {item_id: item_a.id, item_external_id: "AAAAinheritedItemA0001", access_level: "reader"},
+        # Direct level equals inherited; stays at "reader"
+        {item_id: item_b.id, item_external_id: "BBBBinheritedItemB0001", access_level: "reader"},
+        # Direct level "writer" exceeds inherited "reader"; upgrades to "writer"
+        {item_id: item_c.id, item_external_id: "CCCCinheritedItemC0001", access_level: "writer"}
+      )
+    end
+  end
+
   shared_examples "removes all permissions" do
     it do
       VCR.use_cassette("gdrive/user_permission_sync_job/invalid_user") do
@@ -133,8 +207,8 @@ describe GDrive::UserPermissionSyncJob do
     end
   end
 
-  def create_synced_permission(item, external_id, level, google_email = "toxxxth@gmail.com")
+  def create_synced_permission(item, external_id, level, google_email = "toxxxth@gmail.com", **kwargs)
     create(:gdrive_synced_permission, user: user, external_id: external_id, item: item,
-      google_email: google_email, access_level: level)
+      google_email: google_email, access_level: level, **kwargs)
   end
 end

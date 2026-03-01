@@ -326,7 +326,8 @@ describe GDrive::SyncListener do
     expected_params = objects.flat_map do |obj|
       communities.map do |community|
         expected_id = obj.persisted? ? obj.id : anything
-        {:cluster_id => Defaults.cluster.id, :community_id => community.id, id_key => expected_id}
+        {:cluster_id => Defaults.cluster.id, :community_id => community.id, id_key => expected_id,
+         :refresh_synced_permissions => true}
       end
     end
     expect(calls).to match_array(expected_params)

@@ -63,6 +63,7 @@ module GDrive
 
     def upsert_synced_permission(item, user_id, permission, existing_by_user_id)
       inherited_level = inherited_access_level_for(permission)
+      direct_level = direct_access_level_for(permission)
 
       if (perm = existing_by_user_id[user_id])
         Rails.logger.info("Updating synced permission",
@@ -70,25 +71,23 @@ module GDrive
           inherited_access_level: inherited_level)
         perm.update!(external_id: permission.id, inherited_access_level: inherited_level)
       else
-        # Only create a SyncedPermission if the user has a direct (non-inherited) permission.
-        # Inherited-only users aren't managed by Gather so don't need a local record.
-        direct_level = direct_access_level_for(permission)
-        if direct_level.nil?
-          Rails.logger.info("Skipping inherited-only permission",
-            user_id: user_id, item_external_id: item.external_id, inherited_access_level: inherited_level)
-          return
-        end
-
+        # We track inherited-only permissions (no direct level) so that inherited_access_level
+        # serves as a floor in the sync algorithm. Without this, a lower-level group grant
+        # could cause the sync to attempt a Google API call that would be rejected with
+        # cannotModifyInheritedPermission. Use the inherited level as access_level since that
+        # reflects the user's actual access on Google Drive.
+        access_level = direct_level || inherited_level
         Rails.logger.info("Creating synced permission",
           user_id: user_id, item_external_id: item.external_id,
-          access_level: direct_level, inherited_access_level: inherited_level)
+          access_level: access_level, inherited_access_level: inherited_level,
+          inherited_only: direct_level.nil?)
         SyncedPermission.create!(
           item: item,
           item_external_id: item.external_id,
           user_id: user_id,
           google_email: permission.email_address,
           external_id: permission.id,
-          access_level: direct_level,
+          access_level: access_level,
           inherited_access_level: inherited_level
         )
       end

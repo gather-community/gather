@@ -30,12 +30,13 @@ describe GDrive::RefreshSyncedPermissionsJob do
     # Cassette returns:
     # - user1 (existing SyncedPermission): direct "writer" + inherited "reader" → update inherited_access_level
     # - user2 (no SyncedPermission): direct "reader", no inheritance → create SyncedPermission
-    # - user3 (no SyncedPermission): inherited "reader" only, no direct → do NOT create
+    # - user3 (no SyncedPermission): inherited "reader" only, no direct → create SyncedPermission
+    #     (so inherited_access_level floors the sync algorithm and prevents bad API calls)
     # - not_in_cluster@example.com: not a cluster user → ignore
     # - domain permission: not a user type → ignore
     # Page 2:
     # - user4 (no SyncedPermission): direct "commenter" + inherited "reader" → create SyncedPermission
-    it "updates inherited_access_level on existing records, creates for direct permissions, skips inherited-only and non-cluster users, and paginates" do
+    it "updates inherited_access_level on existing records, creates for all matched users including inherited-only, ignores non-cluster users, and paginates" do
       VCR.use_cassette("gdrive/refresh_synced_permissions_job/happy_path") do
         perform_job
       end
@@ -57,8 +58,13 @@ describe GDrive::RefreshSyncedPermissionsJob do
         external_id: "perm2222222222222222"
       )
 
-      # user3: inherited-only → no SyncedPermission created
-      expect(synced_permissions[user3.id]).to be_nil
+      # user3: inherited "reader" only → SyncedPermission created with both fields set to "reader"
+      # so the sync algorithm uses "reader" as the floor rather than attempting a lower grant
+      expect(synced_permissions[user3.id]).to have_attributes(
+        access_level: "reader",
+        inherited_access_level: "reader",
+        external_id: "perm3333333333333333"
+      )
 
       # user4: from page 2, direct "commenter" + inherited "reader" → created
       expect(synced_permissions[user4.id]).to have_attributes(
@@ -68,7 +74,7 @@ describe GDrive::RefreshSyncedPermissionsJob do
       )
 
       # not_in_cluster and domain permission: no SyncedPermission
-      expect(synced_permissions.count).to eq(3)
+      expect(synced_permissions.count).to eq(4)
     end
   end
 

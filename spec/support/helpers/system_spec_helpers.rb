@@ -1,6 +1,13 @@
 # frozen_string_literal: true
 
 module SystemSpecHelpers
+  # Sets the value of an EasyMDE markdown editor. EasyMDE hides the underlying textarea and
+  # replaces it with CodeMirror, so Capybara's fill_in can't find it.
+  def fill_in_markdown(with:)
+    find(".CodeMirror") # Wait for EasyMDE/CodeMirror to initialize
+    execute_script("document.querySelector('.CodeMirror').CodeMirror.setValue(arguments[0])", with)
+  end
+
   def reload_page
     page.evaluate_script("window.location.reload()")
   end

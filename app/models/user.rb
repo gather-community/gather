@@ -84,8 +84,9 @@ class User < ApplicationRecord
   include CustomFields
 
   ROLES = %i[super_admin cluster_admin admin biller photographer calendar_coordinator
-    meals_coordinator wikiist work_coordinator].freeze
+    meals_coordinator wikiist work_coordinator new_community_approver].freeze
   ADMIN_ROLES = %i[super_admin cluster_admin admin].freeze
+  SUPER_ADMIN_ONLY_ROLES = %i[new_community_approver].freeze
   CONTACT_TYPES = %i[email text phone].freeze
   PASSWORD_MIN_ENTROPY = 16
   PASSWORD_STRENGTH_CHECKER_OPTIONS = {use_dictionary: true, min_entropy: PASSWORD_MIN_ENTROPY}

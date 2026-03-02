@@ -1,0 +1,35 @@
+<% content_for(:title, "Community Signups") %>
+
+<% if @signups.empty? %>
+  <div class="center-notice">
+    No signups found. <%= lenses.no_result_clear_filter_link %>
+  </div>
+<% else %>
+  <table class="index">
+    <thead>
+      <tr>
+        <th>Community Name</th>
+        <th>Contact</th>
+        <th>Submitted</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @signups.each do |signup| %>
+        <tr>
+          <td><%= link_to(signup.community_name, review_communities_signup_path(signup)) %></td>
+          <td>
+            <%= signup.contact_name %><br>
+            <small><%= mail_to(signup.contact_email) %></small>
+          </td>
+          <td><%= l(signup.created_at) %></td>
+          <td>
+            <span class="label label-<%= signup.pending? ? "warning" : (signup.approved? ? "success" : "danger") %>">
+              <%= signup.status.capitalize %>
+            </span>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

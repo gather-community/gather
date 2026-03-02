@@ -1,5 +1,11 @@
 <% content_for(:title, "Communities") %>
 
+<% content_for(:action_links) do %>
+  <%- if policy(Communities::Signup.new).index? -%>
+    <%- concat(link_to(icon_tag("inbox") << " View Signups", communities_signups_path, class: "btn btn-default")) -%>
+  <%- end -%>
+<% end %>
+
 <table>
   <thead>
     <tr>

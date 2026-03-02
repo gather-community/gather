@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class HomeController < ApplicationController
-  skip_before_action :require_current_community
+  skip_before_action :check_subdomain
   skip_after_action :verify_authorized, only: :inactive
 
   def index

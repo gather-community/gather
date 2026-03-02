@@ -22,6 +22,7 @@ module ApplicationHelper
 
   def flash_messages(_opts = {})
     flash.each do |type, messages|
+      next unless FLASH_TYPE_TO_CSS.key?(type.to_sym)
       Array.wrap(messages).each { |m| concat(flash_message(type, m)) }
     end
     nil

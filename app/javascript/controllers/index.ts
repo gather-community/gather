@@ -15,3 +15,6 @@ application.register("partial-list", PartialListController)
 
 import PaymentController from "./payment_controller"
 application.register("payment", PaymentController)
+
+import Communities__SignupActionController from "./communities/signup_action_controller"
+application.register("communities--signup-action", Communities__SignupActionController)

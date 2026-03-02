@@ -39,8 +39,9 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
       "click .early": "showHideEarly",
       "click .fc-day[data-date]": "onGridCellClick",
       "focusin .fc-day[data-date]": "onGridCellFocusIn",
-      "focusin .fc-view": "onGridViewFocusIn",
+      "focusin .fc-event": "onGridEventFocusIn",
       "keydown .fc-day[data-date]": "onGridCellKeydown",
+      "keydown .fc-event": "onGridEventKeydown",
 
       /*
        * Capture header interactions before FullCalendar handles them, so we can restore focus
@@ -249,7 +250,6 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
         $allDayGrid.find(".fc-row").attr("role", "row");
         $allDayGrid.find(".fc-day").attr("role", "gridcell");
         $allDayGrid.find(".fc-row table").attr("role", "presentation");
-        this.applyFullCalendarGridKeyboard();
       }
 
       const $timeGrid = this.calendar.find(".fc-time-grid").first();
@@ -259,6 +259,8 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
         $timeGrid.find(".fc-slats td").attr("role", "gridcell");
         $timeGrid.find("table").attr("role", "presentation");
       }
+
+      this.applyFullCalendarGridKeyboard();
     }
   },
 
@@ -268,7 +270,8 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
       return;
     }
 
-    this.calendar.find(".fc-view").attr("tabindex", "0");
+    // Keep grid entry/exit on date cells only so Shift+Tab can leave naturally.
+    this.calendar.find(".fc-view").removeAttr("tabindex");
     const today = $.fullCalendar.moment();
     let focusDate = this._fcGridFocusDate;
 
@@ -298,16 +301,6 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
       return;
     }
     this.setGridFocus(date, {focus: false});
-  },
-
-  onGridViewFocusIn(e) {
-    if (!$(e.target).is(".fc-view")) {
-      return;
-    }
-    this.applyFullCalendarGridKeyboard();
-    if (this._fcGridFocusDate) {
-      this.setGridFocus(this._fcGridFocusDate, {focus: true});
-    }
   },
 
   onGridCellKeydown(e) {
@@ -346,6 +339,60 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
     e.preventDefault();
   },
 
+  onGridEventFocusIn(e) {
+    const date = this.resolveGridDateFromElement($(e.currentTarget));
+    if (!date) {
+      return;
+    }
+    this.setGridFocus(date, {focus: false});
+  },
+
+  onGridEventKeydown(e) {
+    const keyCode = e.which || e.keyCode;
+    const isNavigationKey =
+      keyCode === 37 ||
+      keyCode === 38 ||
+      keyCode === 39 ||
+      keyCode === 40 ||
+      keyCode === 33 ||
+      keyCode === 34 ||
+      keyCode === 35 ||
+      keyCode === 36;
+    if (!isNavigationKey) {
+      return;
+    }
+
+    const date = this.resolveGridDateFromElement($(e.currentTarget));
+    if (!date) {
+      return;
+    }
+
+    let nextDate = null;
+    if (keyCode === 37) {
+      nextDate = date.clone().add(-1, "day");
+    } else if (keyCode === 39) {
+      nextDate = date.clone().add(1, "day");
+    } else if (keyCode === 38) {
+      nextDate = date.clone().add(-1, "week");
+    } else if (keyCode === 40) {
+      nextDate = date.clone().add(1, "week");
+    } else if (keyCode === 36) {
+      nextDate = date.clone().startOf("week");
+    } else if (keyCode === 35) {
+      nextDate = date.clone().endOf("week").startOf("day");
+    } else if (keyCode === 33) {
+      nextDate = date.clone().add(-1, "month");
+    } else if (keyCode === 34) {
+      nextDate = date.clone().add(1, "month");
+    }
+
+    if (nextDate) {
+      this.moveGridFocusToDate(nextDate);
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  },
+
   selectDateFromGrid(date) {
     if (!this.canCreate) {
       return;
@@ -370,7 +417,7 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
 
   setGridFocus(date, options) {
     const dateString = typeof date === "string" ? date : date.format("YYYY-MM-DD");
-    const $cells = this.calendar.find(".fc-day[data-date]");
+    const $cells = this.getNavigableGridCells();
     const $target = this.getGridDayCell(dateString);
     if (!$target.length) {
       return false;
@@ -387,7 +434,27 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
 
   getGridDayCell(date) {
     const dateString = typeof date === "string" ? date : date.format("YYYY-MM-DD");
-    return this.calendar.find(`.fc-day[data-date="${dateString}"]`).first();
+    return this.getNavigableGridCells()
+      .filter((_, el) => $(el).attr("data-date") === dateString)
+      .first();
+  },
+
+  getNavigableGridCells() {
+    const view = this.calendar.fullCalendar("getView");
+    if (!view) {
+      return this.calendar.find(".fc-day[data-date]");
+    }
+
+    if (view.name === "month") {
+      return this.calendar.find(".fc-month-view .fc-day[data-date]:visible");
+    }
+
+    const $allDayCells = this.calendar.find(".fc-agenda-view .fc-day-grid .fc-day[data-date]:visible");
+    if ($allDayCells.length) {
+      return $allDayCells;
+    }
+
+    return this.calendar.find(".fc-time-grid .fc-bg .fc-day[data-date]:visible");
   },
 
   gridDateFromCell($cell) {
@@ -396,6 +463,25 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
       return null;
     }
     return $.fullCalendar.moment(dateString, "YYYY-MM-DD");
+  },
+
+  resolveGridDateFromElement($element) {
+    const $dateContainer = $element.closest("[data-date]");
+    const date = this.gridDateFromCell($dateContainer);
+    if (date) {
+      return date;
+    }
+
+    if (this._fcGridFocusDate) {
+      return $.fullCalendar.moment(this._fcGridFocusDate, "YYYY-MM-DD");
+    }
+
+    const view = this.calendar.fullCalendar("getView");
+    if (view && view.intervalStart) {
+      return view.intervalStart.clone().startOf("day");
+    }
+
+    return null;
   },
 
   onLoading(isLoading) {

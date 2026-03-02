@@ -21,7 +21,7 @@ describe "pages", js: true do
     expect(page).to have_content("This is your wiki home page!")
 
     click_link("Edit")
-    fill_in("Content", with: "Here is a link to [[Another Page]]")
+    fill_in_markdown(with: "Here is a link to [[Another Page]]")
     click_button("Save")
     expect(page).to have_content(/Page revised on .+ by Jane Doe/)
 
@@ -30,7 +30,7 @@ describe "pages", js: true do
 
     # Showing preview should not save page.
     expect do
-      fill_in("Content", with: "Version one")
+      fill_in_markdown(with: "Version one")
       click_on("Preview")
       expect(page).to have_content("This is a preview")
       expect(page).to have_css(".wiki-content", text: "Version one")
@@ -47,7 +47,7 @@ describe "pages", js: true do
     expect(page).to have_content("Version one")
 
     click_on("Edit")
-    fill_in("Content", with: "Version two")
+    fill_in_markdown(with: "Version two")
     click_button("Save")
 
     click_on("History")
@@ -62,7 +62,7 @@ describe "pages", js: true do
 
     click_on("New Wiki Page")
     fill_in("Title", with: "Boring Page")
-    fill_in("Content", with: "apple **banana** cherry")
+    fill_in_markdown(with: "apple **banana** cherry")
     click_button("Save")
     expect(page).to have_content("apple banana cherry")
 
@@ -80,7 +80,7 @@ describe "pages", js: true do
     visit("/wiki")
     expect(page).to have_content("This is your wiki home page!")
     click_on("Edit")
-    fill_in("Content", with: "New content")
+    fill_in_markdown(with: "New content")
     click_on("Preview")
     expect(page).to have_content("This is a preview")
     click_on("Cancel")
@@ -92,7 +92,7 @@ describe "pages", js: true do
     visit("/wiki/new")
 
     # Should not render preview
-    fill_in("Content", with: "**bold text**")
+    fill_in_markdown(with: "**bold text**")
     click_on("Preview")
     expect(page).to have_css(".wiki_page_title .error", text: "can't be blank")
     expect(page).not_to have_css("b", text: "bold text")
@@ -105,7 +105,7 @@ describe "pages", js: true do
       visit("/wiki")
       click_on("New Wiki Page")
       fill_in("Title", with: "A Page")
-      fill_in("Content", with: "The Description: {{description}}")
+      fill_in_markdown(with: "The Description: {{description}}")
       fill_in("Data Source", with: "http://json-schema.org/example/geo.json")
       click_button("Save")
     end
@@ -137,7 +137,7 @@ describe "pages", js: true do
       visit("/wiki")
       expect(page).not_to have_content(/Page revised on .+ by Jane Doe/)
       click_link("Edit")
-      fill_in("Content", with: "Filth")
+      fill_in_markdown(with: "Filth")
       click_button("Save")
       expect(page).not_to have_content(/Page revised on .+ by Jane Doe/)
       click_link("History")

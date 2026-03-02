@@ -157,7 +157,7 @@ en:
       people_memorial:
         user_id: "Must be an inactive user in this community. Their current profile photo will be used in the memorial."
       wiki_page:
-        content: "See the <a href='/wiki/sample'>Sample Page</a> for tips on how to create wiki content."
+        content: "See the <a href='/wiki/sample' target='_blank'>Sample Page</a> for tips on how to create wiki content."
         data_source: "Advanced. URL of a JSON data source for use with <a href='http://mustache.github.io/mustache.5.html' target='_new'>Mustache template syntax</a> in the page content."
       work_job:
         hours: "Estimated number of hours the job will take. Decimals allowed."

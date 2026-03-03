@@ -496,7 +496,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_07_130000) do
     t.datetime "updated_at", null: false
     t.index ["cluster_id"], name: "index_gdrive_migration_scans_on_cluster_id"
     t.index ["operation_id"], name: "index_gdrive_migration_scans_on_operation_id"
-    t.check_constraint "scope::text = ANY (ARRAY['full'::character varying::text, 'changes'::character varying::text, 'file_drop'::character varying::text])", name: "scope_enum"
   end
 
   create_table "gdrive_synced_permissions", force: :cascade do |t|

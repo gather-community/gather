@@ -410,6 +410,7 @@ describe UserPolicy do
         :photo_new_signed_id, :photo_destroy, :birthday_str, :child, :joined_on, :preferred_contact,
         :job_choosing_proxy_id, :allergies, :doctor, :medical, :school, :household_by_id,
         {privacy_settings: [:hide_photo_from_cluster]},
+        {meal_restriction_ids: []},
         {up_guardianships_attributes: %i[id guardian_id _destroy]}]
     end
     let(:normal_user_attribs) do

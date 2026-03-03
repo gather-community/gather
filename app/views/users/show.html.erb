@@ -88,6 +88,12 @@
                 </tr>
               <% end %>
             <% end %>
+            <% if user.meal_restriction_ids.any? %>
+              <tr>
+                <td>Meal Restrictions</td>
+                <td><%= user.meal_restrictions.map(&:absence).sort.join(", ") %></td>
+              </tr>
+            <% end %>
             <% unless @user.custom_data.undefined? %>
               <%= render("custom_fields/group_entry_show", group_entry: @user.custom_data,
                                                             hide_title: true) %>

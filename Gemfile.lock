@@ -342,6 +342,8 @@ GEM
       signet (>= 0.16, < 2.a)
     hashdiff (1.0.1)
     hashie (5.0.0)
+    hcaptcha (7.1.0)
+      json
     hirb (0.7.3)
     httpclient (2.8.3)
     i18n (1.14.8)
@@ -742,6 +744,7 @@ DEPENDENCIES
   font-awesome-sass (~> 6.0)
   google-apis-drive_v3 (~> 0.46)
   googleauth (~> 1.1)
+  hcaptcha (~> 7.1)
   hirb (~> 0.7)
   i18n-js (~> 3.0)
   icalendar (~> 2.0)

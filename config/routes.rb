@@ -13,6 +13,18 @@ Rails.application.routes.draw do
 
   resources :communities, only: :index
 
+  namespace :communities do
+    resources :signups, only: %i[index new create] do
+      collection do
+        get :submitted
+      end
+      member do
+        get :review
+        post :act
+      end
+    end
+  end
+
   resources :domains, only: %i[index show new create destroy]
 
   namespace :people do

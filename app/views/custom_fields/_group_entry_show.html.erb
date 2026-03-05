@@ -1,6 +1,6 @@
 <div class="custom-fields">
   <% if (title = group_entry.label) && !local_assigns[:hide_title] %>
-    <div class="group-title"><%= title %></div>
+    <h3 class="form-section-header"><%= title %></h3>
   <% end %>
   <% if (hint = CustomFields::EntryDecorator.new(group_entry).sanitized_hint) %>
     <div class="hint group-hint"><%= hint %></div>

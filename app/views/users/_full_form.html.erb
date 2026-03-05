@@ -75,11 +75,10 @@
     <% if policy(@user).administer? %>
       <%= f.input :roles do %>
         <div class="roles">
-          <% User::ROLES.each do |role| %>
-            <% disabled = !policy(@user).grantable_roles.include?(role) %>
-            <div class="role <%= disabled ? 'disabled' : '' %>">
+          <% policy(@user).grantable_roles.each do |role| %>
+            <div class="role">
               <label>
-                <%= f.input_field :"role_#{role}", as: :boolean, disabled: disabled %>
+                <%= f.input_field :"role_#{role}", as: :boolean %>
                 <%= t("roles.#{role}") %>
               </label>
             </div>

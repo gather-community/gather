@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2026_02_28_000001) do
+ActiveRecord::Schema[7.0].define(version: 2026_03_01_000005) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -221,6 +221,25 @@ ActiveRecord::Schema[7.0].define(version: 2026_02_28_000001) do
     t.datetime "updated_at", precision: nil, null: false
     t.index ["cluster_id"], name: "index_communities_on_cluster_id"
     t.index ["name"], name: "index_communities_on_name", unique: true
+  end
+
+  create_table "community_signups", force: :cascade do |t|
+    t.string "community_name", limit: 20, null: false
+    t.string "contact_email", limit: 254, null: false
+    t.string "contact_first_name", limit: 255, null: false
+    t.string "contact_last_name", limit: 255, null: false
+    t.string "country_code", limit: 2, default: "US", null: false
+    t.datetime "created_at", null: false
+    t.string "introduction", limit: 5000, null: false
+    t.string "message", limit: 5000
+    t.datetime "reviewed_at"
+    t.bigint "reviewed_by_id"
+    t.string "slug", limit: 20, null: false
+    t.string "status", default: "pending", null: false
+    t.string "time_zone", limit: 64, default: "UTC", null: false
+    t.datetime "updated_at", null: false
+    t.boolean "want_sample_data", default: false, null: false
+    t.index ["slug"], name: "index_community_signups_on_slug", unique: true
   end
 
   create_table "delayed_jobs", id: :serial, force: :cascade do |t|
@@ -1257,6 +1276,7 @@ ActiveRecord::Schema[7.0].define(version: 2026_02_28_000001) do
   add_foreign_key "calendar_shared_guidelines", "clusters"
   add_foreign_key "calendar_shared_guidelines", "communities"
   add_foreign_key "communities", "clusters"
+  add_foreign_key "community_signups", "users", column: "reviewed_by_id"
   add_foreign_key "domain_ownerships", "clusters"
   add_foreign_key "domain_ownerships", "communities"
   add_foreign_key "domain_ownerships", "domains"

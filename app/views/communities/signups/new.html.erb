@@ -1,0 +1,42 @@
+<% content_for(:title, "Joining Gather!") %>
+
+<p class="intro">
+  Gather is a community management platform for cohousing and other collaborative living communities.
+  To request a new community, fill out the form below. We'll review your application and follow up via email.
+  We reserve the right to decline new signups for communities that don't align with our mission.
+</p>
+
+<%= gather_form_for(@form, url: communities_signups_path, width: :full,
+      top_error_notification: false) do |f| %>
+  <h3 class="form-section-header">Contact Person</h3>
+  <p class="hint">This person will become the community's first Admin user.</p>
+
+  <%= f.input :contact_first_name, maxlength: Communities::Signup::CONTACT_NAME_MAX_LENGTH %>
+  <%= f.input :contact_last_name, maxlength: Communities::Signup::CONTACT_NAME_MAX_LENGTH %>
+  <%= f.input :contact_email, maxlength: Communities::Signup::CONTACT_EMAIL_MAX_LENGTH %>
+
+  <h3 class="form-section-header">Community Details</h3>
+
+  <%= f.input :community_name, maxlength: Communities::Signup::COMMUNITY_NAME_MAX_LENGTH %>
+  <%= f.input :slug, maxlength: Communities::Signup::SLUG_MAX_LENGTH %>
+  <%= f.input :introduction, as: :text, rows: 18,
+        input_html: {maxlength: Communities::Signup::INTRODUCTION_MAX_LENGTH} %>
+
+  <h3 class="form-section-header">Settings</h3>
+
+  <%= f.input :country_code, as: :country %>
+  <%= f.input :time_zone, as: :time_zone %>
+  <%= f.input :want_sample_data, as: :select,
+        collection: Communities::Signup::WANT_SAMPLE_DATA_OPTIONS,
+        include_blank: false %>
+
+  <h3 class="form-section-header">Final Steps</h3>
+
+  <%= f.input :hcaptcha_verified, label: "Verification", required: true do %>
+    <%= hcaptcha_tags %>
+  <% end %>
+
+  <%= form_actions do %>
+    <%= f.button :primary, "Submit Application" %>
+  <% end %>
+<% end %>

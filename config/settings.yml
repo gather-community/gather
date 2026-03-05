@@ -1,3 +1,8 @@
+hcaptcha:
+  # Test credentials that always pass: https://docs.hcaptcha.com/#integration-testing-test-keys
+  site_key: "10000000-ffff-ffff-ffff-000000000001"
+  secret_key: "0x0000000000000000000000000000000000000000"
+
 meals:
   close_cutoff_age: 2 # hours
 reminders:

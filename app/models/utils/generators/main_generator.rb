@@ -25,6 +25,9 @@ module Utils
         ActionMailer::Base.perform_deliveries = true
         cluster
       rescue StandardError => ex
+        Rails.logger.error("Error generating cluster: #{ex.message}")
+        Rails.logger.error(ex.backtrace.join("\n"))
+        Rails.logger.error("Attempting to clean up cluster, will re-raise exception after")
         # Can't create the cluster inside the transaction (see above). So we need to clean up in here instead
         # in case of error.
         ActsAsTenant.with_tenant(cluster) do

@@ -1,0 +1,95 @@
+<% content_for(:title, "Review Application: #{@signup.community_name}") %>
+
+<div class="row">
+  <div class="col-md-6">
+    <table class="key-value">
+      <tr>
+        <td>Status</td>
+        <td>
+          <span class="label label-<%= @signup.pending? ? "warning" : (@signup.approved? ? "success" : "danger") %>">
+            <%= @signup.status.capitalize %>
+          </span>
+          <% if @signup.reviewed_at %>
+            &nbsp; on <%= I18n.l(@signup.reviewed_at, format: :short) %>
+            by <%= @signup.reviewed_by&.name %>
+          <% end %>
+        </td>
+      </tr>
+      <tr>
+        <td>Contact Name</td>
+        <td><%= @signup.contact_name %></td>
+      </tr>
+      <tr>
+        <td>Contact Email</td>
+        <td><%= mail_to(@signup.contact_email) %></td>
+      </tr>
+      <tr>
+        <td>Submitted</td>
+        <td><%= I18n.l(@signup.created_at, format: :long) %></td>
+      </tr>
+      <tr>
+        <td>Community Name</td>
+        <td><%= @signup.community_name %></td>
+      </tr>
+      <tr>
+        <td>URL Slug</td>
+        <td><%= @signup.slug %></td>
+      </tr>
+      <tr>
+        <td>Country</td>
+        <td><%= @signup.country_code %></td>
+      </tr>
+      <tr>
+        <td>Time Zone</td>
+        <td><%= @signup.time_zone %></td>
+      </tr>
+      <tr>
+        <td>Sample Data</td>
+        <td><%= @signup.want_sample_data? ? "Yes" : "No" %></td>
+      </tr>
+      <tr>
+        <td>About</td>
+        <td style="white-space: pre-wrap"><%= @signup.introduction %></td>
+      </tr>
+      <% if @signup.message.present? %>
+        <tr>
+          <td><%= @signup.approved? ? "Approval Message" : "Internal Notes" %></td>
+          <td style="white-space: pre-wrap"><%= @signup.message %></td>
+        </tr>
+      <% end %>
+    </table>
+  </div>
+  <div class="col-md-6">
+    <% if @signup.pending? %>
+      <div data-controller="communities--signup-action"
+          data-communities--signup-action-contact-first-name-value="<%= @signup.contact_first_name %>"
+          data-communities--signup-action-community-name-value="<%= @signup.community_name %>"
+          data-communities--signup-action-approver-first-name-value="<%= current_user.first_name %>">
+        <%= gather_form_for(@action_form, url: act_communities_signup_path(@signup), method: :post,
+              width: :full, layout: :vertical) do |f| %>
+          <%= f.input :decision, as: :select,
+                collection: Communities::SignupActionForm::DECISION_OPTIONS,
+                include_blank: false,
+                input_html: {data: {action: "change->communities--signup-action#update"}} %>
+          <%= f.input :message, as: :text, label: false do %>
+            <label class="control-label" for="communities_signup_action_message"
+                   data-communities--signup-action-target="label" data-decision="approve">Approval Message</label>
+            <label class="control-label" for="communities_signup_action_message"
+                   data-communities--signup-action-target="label" data-decision="deny" hidden>Denial Reason (not sent to user)</label>
+            <%= f.text_area :message, rows: 14, class: "form-control",
+                  maxlength: Communities::Signup::MESSAGE_MAX_LENGTH %>
+            <p class="hint" data-communities--signup-action-target="hint" data-decision="approve">
+              <%= t("simple_form.hints.communities_signup_action.message_approve") %>
+            </p>
+            <p class="hint" data-communities--signup-action-target="hint" data-decision="deny" hidden>
+              <%= t("simple_form.hints.communities_signup_action.message_deny") %>
+            </p>
+          <% end %>
+          <%= form_actions do %>
+            <%= f.button :primary, "Submit" %>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>

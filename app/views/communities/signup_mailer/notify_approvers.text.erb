@@ -1,0 +1,10 @@
+A new community application has been submitted and is awaiting your review.
+
+Community Name: <%= @signup.community_name %>
+Contact: <%= @signup.contact_name %> <<%= @signup.contact_email %>>
+Slug: <%= @signup.slug %>
+Country: <%= @signup.country_code %>
+Time Zone: <%= @signup.time_zone %>
+Sample Data: <%= @signup.want_sample_data? ? "Yes" : "No" %>
+
+Review Application: <%= @review_url %>

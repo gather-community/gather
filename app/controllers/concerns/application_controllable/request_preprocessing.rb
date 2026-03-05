@@ -34,7 +34,7 @@ module ApplicationControllable::RequestPreprocessing
     before_action :authenticate_user!
 
     before_action :set_current_community
-    before_action :require_current_community
+    before_action :check_subdomain
     before_action :check_community_permissions
     before_action :set_tenant
     before_action :set_time_zone
@@ -42,6 +42,10 @@ module ApplicationControllable::RequestPreprocessing
     before_action :handle_impersonation
 
     rescue_from Pundit::NotAuthorizedError, with: :handle_unauthorized
+  end
+
+  def apex_domain_only
+    false
   end
 
   private
@@ -126,7 +130,7 @@ module ApplicationControllable::RequestPreprocessing
       # the resource is associated with. So we need to check access permissions for the returned community
       # and ignore it if it's not accessible. So for example, if the route is
       # https://gather.coop/groups/123, but Group 123 is in a community that the user doesn't have access to,
-      # then we should just not set the current_community. Then the `require_current_community`
+      # then we should just not set the current_community. Then the `check_subdomain`
       # filter will render a 404.
       #
       # In general, if we can glean the community from the route, but the route has no subdomain,
@@ -147,9 +151,14 @@ module ApplicationControllable::RequestPreprocessing
     end
   end
 
-  def require_current_community
-    return if !authenticated_page? || devise_controller?
-    render_error_page(:not_found) if current_community.nil?
+  def check_subdomain
+    return if devise_controller?
+    if apex_domain_only
+      ensure_apex_domain
+    else
+      return unless authenticated_page?
+      render_error_page(:not_found) if current_community.nil?
+    end
   end
 
   # Checks that the current_community is accessible by current_user.

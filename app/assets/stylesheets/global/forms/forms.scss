@@ -26,6 +26,14 @@ form {
     }
   }
 
+  // Section headers within forms, extracted from .group-title in custom_fields.scss
+  h3.form-section-header {
+    font-weight: bold;
+    border-bottom: 1px solid $light-border-color;
+    padding-bottom: 4px;
+    margin-bottom: 10px;
+  }
+
   .links {
     margin-top: -5px;
     margin-bottom: 10px;

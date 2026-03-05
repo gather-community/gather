@@ -27,7 +27,13 @@ module Communities
         super_admin: false
       ).generate
 
+      signup.mark_created!
       Communities::SignupMailer.application_approved(signup).deliver_now
+      Communities::SignupMailer.approval_created(signup).deliver_now
+    rescue => e
+      signup&.mark_failed!(message: e.message)
+      Communities::SignupMailer.approval_failed(signup).deliver_now if signup
+      raise
     end
   end
 end

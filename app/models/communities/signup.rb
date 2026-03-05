@@ -33,7 +33,8 @@ module Communities
     MESSAGE_MAX_LENGTH = 5000
     WANT_SAMPLE_DATA_OPTIONS = %i[true false].freeze
 
-    enum :status, {pending: "pending", approved: "approved", denied: "denied"}
+    enum :status, {pending: "pending", approved: "approved", denied: "denied",
+                   created: "created", failed: "failed"}
 
     belongs_to :reviewed_by, class_name: "User", optional: true
 
@@ -49,6 +50,14 @@ module Communities
 
     def approve!(reviewer, message:)
       update!(status: :approved, reviewed_by: reviewer, reviewed_at: Time.current, message: message)
+    end
+
+    def mark_created!
+      update!(status: :created)
+    end
+
+    def mark_failed!(message:)
+      update!(status: :failed, failure_message: message)
     end
   end
 end

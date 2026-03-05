@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2026_03_01_000005) do
+ActiveRecord::Schema[7.0].define(version: 2026_03_01_000006) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -230,6 +230,7 @@ ActiveRecord::Schema[7.0].define(version: 2026_03_01_000005) do
     t.string "contact_last_name", limit: 255, null: false
     t.string "country_code", limit: 2, default: "US", null: false
     t.datetime "created_at", null: false
+    t.text "failure_message"
     t.string "introduction", limit: 5000, null: false
     t.string "message", limit: 5000
     t.datetime "reviewed_at"

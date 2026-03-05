@@ -79,7 +79,7 @@ en:
         slug_html: "The first portion of your community's web address, e.g. https://<strong>yourslug</strong>.gather.coop. Lowercase letters, numbers, and hyphens; must start with a letter. Up to 20 characters."
         introduction: "Tell us a bit about your community and why you think Gather is a good fit. Please include one or more links to publicly accessible webpages (e.g. your community website, social media pages) that establish your community's identity."
       communities_signup_action:
-        message_approve: "The full approval email is shown above. Replace [ENTER A PERSONALIZED NOTE HERE] with your message, or edit the text as desired."
+        message_approve: "The full approval email is shown above. Add a personalized note to the approval email by replacing the placeholder text."
         message_deny: "Record why this application is being denied. This is for internal reference only and will not be sent to the applicant."
       meals_meal:
         formula_id: "<a href=\"/meals/formulas\">Meal formulas</a> determine how the meal cost is calculated."
@@ -203,6 +203,8 @@ en:
           pending: "Pending"
           approved: "Approved"
           denied: "Denied"
+          created: "Created"
+          failed: "Failed"
         want_sample_data:
           "true": "Yes, include sample data"
           "false": "No, don't include sample data"

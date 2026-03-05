@@ -6,8 +6,7 @@
   We reserve the right to decline new signups for communities that don't align with our mission.
 </p>
 
-<%= gather_form_for(@form, url: communities_signups_path, width: :full,
-      top_error_notification: false) do |f| %>
+<%= gather_form_for(@form, url: communities_signups_path, width: :full) do |f| %>
   <h3 class="form-section-header">Contact Person</h3>
   <p class="hint">This person will become the community's first Admin user.</p>
 

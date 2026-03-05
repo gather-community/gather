@@ -21,7 +21,8 @@ class Communities::SignupMailer < ActionMailer::Base
 
   def application_approved(signup)
     @signup = signup
-    approver_name = signup.reviewed_by.name
+    # reviewed_by is a User, which is tenant-scoped, so look it up without tenant.
+    approver_name = ActsAsTenant.without_tenant { signup.reviewed_by.name }
     mail(to: signup.contact_email,
       subject: "Your Gather community has been approved! (With a note from #{approver_name})")
   end
@@ -29,5 +30,21 @@ class Communities::SignupMailer < ActionMailer::Base
   def application_denied(signup)
     @signup = signup
     mail(to: signup.contact_email, subject: "Regarding your Gather community application")
+  end
+
+  def approval_created(signup)
+    @signup = signup
+    @signup_url = review_communities_signup_url(signup, host: Settings.url.host)
+    # reviewed_by is a User, which is tenant-scoped, so look it up without tenant.
+    reviewer_email = ActsAsTenant.without_tenant { signup.reviewed_by.email }
+    mail(to: reviewer_email, subject: "Community setup complete: #{signup.community_name}")
+  end
+
+  def approval_failed(signup)
+    @signup = signup
+    @signup_url = review_communities_signup_url(signup, host: Settings.url.host)
+    # reviewed_by is a User, which is tenant-scoped, so look it up without tenant.
+    reviewer_email = ActsAsTenant.without_tenant { signup.reviewed_by.email }
+    mail(to: reviewer_email, subject: "Community setup FAILED: #{signup.community_name}")
   end
 end

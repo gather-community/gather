@@ -139,6 +139,9 @@ Gather uses several locale files under `config/locales/en/`. Each type of string
 ## Email
 - **Text-only mailers** — Gather uses plain text email templates only. Do not create `.html.erb` mailer views.
 
+## Testing
+- **All new functionality must have test coverage.** Add specs for new models, jobs, mailers, forms, policies, and controllers. Follow existing spec patterns and directory structure.
+
 ## Code Style
 - Ruby: RuboCop with `standard` gem (Ruby 3.0 config), max line length 110
 - Empty methods use `expanded` style (not single-line)

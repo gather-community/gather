@@ -15,12 +15,14 @@ FactoryBot.define do
 
     trait :approved do
       status { "approved" }
+      reviewed_by { create(:user) }
       reviewed_at { Time.current }
       message { "Welcome! We're excited to have you on board." }
     end
 
     trait :denied do
       status { "denied" }
+      reviewed_by { create(:user) }
       reviewed_at { Time.current }
       message { "Does not meet criteria." }
     end

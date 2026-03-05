@@ -9,6 +9,7 @@ describe Utils::Generators::MainGenerator, :without_tenant, :perform_jobs do
   NO_SAMPLE_DATA_CLASSES = %w[
     Billing::Template
     Billing::TemplateMemberType
+    Communities::Signup
     Calendars::System::OtherCommunitiesMealsCalendar
     Domain
     DomainOwnership

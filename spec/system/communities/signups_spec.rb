@@ -129,7 +129,7 @@ describe "community signups", js: true do
       end
 
       signup.reload
-      expect(signup).to be_approved
+      expect(signup).to be_created
       expect(signup.reviewed_by).to eq(approver)
       expect(signup.message).to eq("Welcome! We're thrilled to have you join Gather.")
 

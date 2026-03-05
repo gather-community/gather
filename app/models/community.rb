@@ -27,7 +27,7 @@ class Community < ApplicationRecord
   acts_as_tenant :cluster
   resourcify
 
-  # The order of these matters for destruction.
+  # The order of these matters for destruction. See comments below.
   belongs_to :cluster, inverse_of: :communities
   has_many :billing_templates, class_name: "Billing::Template", inverse_of: :community, dependent: :destroy
   has_many :group_affiliations, class_name: "Groups::Affiliation", inverse_of: :community, dependent: :destroy
@@ -36,18 +36,22 @@ class Community < ApplicationRecord
   has_many :meal_formulas, class_name: "Meals::Formula", inverse_of: :community, dependent: :destroy
   has_many :meal_roles, class_name: "Meals::Role", inverse_of: :community, dependent: :destroy
   has_many :meal_types, class_name: "Meals::Type", inverse_of: :community, dependent: :destroy
-  has_many :member_types, class_name: "People::MemberType", inverse_of: :community, dependent: :destroy
+  has_many :meal_imports, class_name: "Meals::Import", inverse_of: :community, dependent: :destroy
   has_many :calendar_protocols, class_name: "Calendars::Protocol",
     inverse_of: :community, dependent: :destroy
   has_many :calendar_shared_guidelines, class_name: "Calendars::SharedGuidelines",
     inverse_of: :community, dependent: :destroy
   has_many :calendars, class_name: "Calendars::Calendar", inverse_of: :community, dependent: :destroy
   has_many :calendar_groups, class_name: "Calendars::Group", inverse_of: :community, dependent: :destroy
-  has_many :households, inverse_of: :community, dependent: :destroy
+  # Wiki pages must be destroyed before households because wiki_pages/wiki_page_versions have FKs to users.
   has_many :wiki_pages, class_name: "Wiki::Page", inverse_of: :community, dependent: :destroy
+  # Households must be destroyed before member_types because households.member_type_id has a FK constraint.
+  has_many :households, inverse_of: :community, dependent: :destroy
+  has_many :member_types, class_name: "People::MemberType", inverse_of: :community, dependent: :destroy
   has_one :subscription, inverse_of: :community, class_name: "Subscription::Subscription", dependent: :destroy
   has_one :subscription_intent, inverse_of: :community, class_name: "Subscription::Intent", dependent: :destroy
   has_many :work_periods, class_name: "Work::Period", inverse_of: :community, dependent: :destroy
+  has_one :gdrive_config, class_name: "GDrive::Config", inverse_of: :community, dependent: :destroy
   has_one :gdrive_migration_operation, class_name: "GDrive::Migration::Operation", inverse_of: :community, dependent: :destroy
   has_many :restrictions, class_name: "Meals::Restriction", inverse_of: :community, dependent: :destroy
 

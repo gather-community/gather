@@ -116,6 +116,8 @@ class User < ApplicationRecord
   has_many :memorial_messages, class_name: "People::MemorialMessage", foreign_key: :author_id, inverse_of: :author, dependent: :destroy
   has_many :children, through: :down_guardianships
 
+  has_many :feature_flag_users, class_name: "FeatureFlagUser", inverse_of: :user, dependent: :destroy
+
   # We deliberately don't use dependent: :destroy here because we want to be able to search by user ID
   # in PermissionSyncJobs
   has_many :gdrive_synced_permissions, class_name: "GDrive::SyncedPermission", inverse_of: :user,

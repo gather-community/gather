@@ -60,6 +60,21 @@ describe "community signups", js: true do
       click_button("Submit Application")
       expect(page).to have_css(".error", text: "only lowercase")
     end
+
+    scenario "shows taken error when slug matches existing community" do
+      existing = create(:community, slug: "sunrise-coho")
+      visit(new_communities_signup_path)
+      fill_in("First Name", with: "Alice")
+      fill_in("Last Name", with: "Smith")
+      fill_in("Email Address", with: "alice@example.com")
+      fill_in("Community Name", with: "Sunrise Cohousing")
+      fill_in("URL Slug", with: existing.slug)
+      select("United States", from: "Country")
+      select("Eastern Time (US & Canada)", from: "Time Zone")
+      fill_in("About Your Community", with: "We are a cohousing community. https://example.com")
+      click_button("Submit Application")
+      expect(page).to have_css(".error", text: "has already been taken")
+    end
   end
 
   describe "captcha failure" do

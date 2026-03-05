@@ -68,7 +68,8 @@ module Communities
     delegate :new_record?, :persisted?, :id, to: :@signup
 
     def slug_unique
-      return if slug.blank? || !Communities::Signup.exists?(slug: slug)
+      return if slug.blank?
+      return if Communities::Signup.where(slug: slug).none? && Community.where(slug: slug).none?
       errors.add(:slug, "has already been taken")
     end
   end

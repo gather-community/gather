@@ -3,46 +3,40 @@
 require "rails_helper"
 
 describe Community, :without_tenant do
-  # Models excluded from data-setup verification and post-destroy count checks:
-  #   - STI abstract bases (only concrete leaf subclasses are instantiated)
-  #   - Not tenant-scoped (outside the cluster/community lifecycle)
-  #   - Cluster and Community, managed directly by this test
-  #   - Side-effect models (created automatically by another factory)
-  #   - Cluster-scoped but not community-scoped (survive community deletion)
-  #   - Groups::Group, tested explicitly via group_only / group_spanning below
-  EXEMPT_MODELS = %w[
-    Billing::TemplateMemberType
-    Calendars::GuidelineInclusion
-    Calendars::Node
-    Calendars::Protocoling
-    Calendars::SharedGuidelines
-    Calendars::System::MealsCalendar
-    Calendars::System::UserAnniversariesCalendar
-    Calendars::SystemCalendar
-    Cluster
-    Communities::Signup
-    Community
-    Domain
-    DomainOwnership
-    FeatureFlag
-    FeatureFlagUser
-    Groups::Affiliation
-    Groups::Group
-    MailTestRun
-    Meals::Assignment
-    Meals::CostPart
-    Meals::FormulaPart
-    Meals::FormulaRole
-    Meals::Invitation
-    Meals::Resourcing
-    Meals::RoleReminderDelivery
-    Meals::SignupPart
-    People::Guardianship
-    Reminder
-    ReminderDelivery
-    Role
-    Wiki::PageVersion
-    Work::JobReminderDelivery
+  # Models excluded from data-setup verification and post-destroy count checks.
+  EXEMPT_MODELS = [
+    "Billing::TemplateMemberType",                  # side-effect of billing_template; destroyed with template
+    "Calendars::GuidelineInclusion",                # side-effect of calendar :with_shared_guidelines
+    "Calendars::Node",                              # STI abstract base; Calendar/Group are the leaf classes
+    "Calendars::Protocoling",                       # side-effect; created when a protocol is applied to a calendar
+    "Calendars::SharedGuidelines",                  # side-effect of calendar :with_shared_guidelines
+    "Calendars::System::MealsCalendar",             # STI intermediate base
+    "Calendars::System::UserAnniversariesCalendar", # STI intermediate base
+    "Calendars::SystemCalendar",                    # STI intermediate base
+    "Cluster",                                      # managed directly by this test; not community-scoped
+    "Communities::Signup",                          # not tenant-scoped; outside the cluster/community lifecycle
+    "Community",                                    # managed directly by this test (Defaults.community is destroyed)
+    "Domain",                                       # cluster-scoped, spans communities; orphan cleanup tested below
+    "DomainOwnership",                              # destroyed via community cascade; Domain survival tested below
+    "FeatureFlag",                                  # not tenant-scoped
+    "FeatureFlagUser",                              # not tenant-scoped
+    "Groups::Affiliation",                          # destroyed via community cascade; Group survival tested below
+    "Groups::Group",                                # cluster-scoped, spans communities; orphan cleanup tested below
+    "MailTestRun",                                  # not tenant-scoped
+    "Meals::Assignment",                            # side-effect of meal factory (assignments created inline)
+    "Meals::CostPart",                              # side-effect of meal_cost factory
+    "Meals::FormulaPart",                           # side-effect of meal_formula factory
+    "Meals::FormulaRole",                           # side-effect of meal_formula factory
+    "Meals::Invitation",                            # side-effect of meal factory (community invitations)
+    "Meals::Resourcing",                            # side-effect of meal factory (calendar associations)
+    "Meals::RoleReminderDelivery",                  # created by background jobs, not factories
+    "Meals::SignupPart",                            # side-effect of meal_signup factory
+    "People::Guardianship",                         # side-effect of household factory (child/guardian)
+    "Reminder",                                     # STI abstract base; JobReminder/RoleReminder are the leaves
+    "ReminderDelivery",                             # STI abstract base; job/role delivery subclasses are the leaves
+    "Role",                                         # Rolify; not tenant-scoped
+    "Wiki::PageVersion",                            # side-effect of wiki_page factory
+    "Work::JobReminderDelivery",                    # created by background jobs, not factories
   ].freeze
 
   it "EXEMPT_MODELS has no stale entries" do
@@ -87,9 +81,6 @@ describe Community, :without_tenant do
       create(:event)
       create(:eventlet)
       create(:calendar_protocol)
-
-      # ── Domain ────────────────────────────────────────────────────────────
-      create(:domain)
 
       # ── GDrive ────────────────────────────────────────────────────────────
       # shared_gdrive_config already created above
@@ -150,7 +141,11 @@ describe Community, :without_tenant do
       create(:work_share)
       create(:work_shift)
 
-      # ── Groups for the orphan test ────────────────────────────────────────
+      # ── Orphan tests: domain and group ────────────────────────────────────
+      domain_only     = create(:domain)
+      domain_spanning = create(:domain)
+      domain_spanning.communities << community2
+
       group_only     = create(:group)
       group_spanning = create(:group)
       group_spanning.communities << community2
@@ -174,8 +169,12 @@ describe Community, :without_tenant do
           "Expected no #{model.name} records to remain after community destroy"
       end
 
-      # A group affiliated only with the destroyed community must be gone; one that also
-      # belongs to community2 must survive.
+      # A domain/group affiliated only with the destroyed community must be gone;
+      # one that also belongs to community2 must survive.
+      expect(Domain.exists?(domain_only.id)).to be(false),
+        "domain affiliated only with the destroyed community should be gone"
+      expect(Domain.exists?(domain_spanning.id)).to be(true),
+        "domain spanning two communities should survive when only one is destroyed"
       expect(Groups::Group.exists?(group_only.id)).to be(false),
         "group affiliated only with the destroyed community should be gone"
       expect(Groups::Group.exists?(group_spanning.id)).to be(true),

@@ -5,11 +5,7 @@ require "rails_helper"
 describe Community, :without_tenant do
   # Models excluded from data-setup verification and post-destroy count checks.
   EXEMPT_MODELS = [
-    "Billing::TemplateMemberType",                  # side-effect of billing_template; destroyed with template
-    "Calendars::GuidelineInclusion",                # side-effect of calendar :with_shared_guidelines
     "Calendars::Node",                              # STI abstract base; Calendar/Group are the leaf classes
-    "Calendars::Protocoling",                       # side-effect; created when a protocol is applied to a calendar
-    "Calendars::SharedGuidelines",                  # side-effect of calendar :with_shared_guidelines
     "Calendars::System::MealsCalendar",             # STI intermediate base
     "Calendars::System::UserAnniversariesCalendar", # STI intermediate base
     "Calendars::SystemCalendar",                    # STI intermediate base
@@ -23,19 +19,10 @@ describe Community, :without_tenant do
     "Groups::Affiliation",                          # destroyed via community cascade; Group survival tested below
     "Groups::Group",                                # cluster-scoped, spans communities; orphan cleanup tested below
     "MailTestRun",                                  # not tenant-scoped
-    "Meals::Assignment",                            # side-effect of meal factory (assignments created inline)
-    "Meals::CostPart",                              # side-effect of meal_cost factory
-    "Meals::FormulaPart",                           # side-effect of meal_formula factory
-    "Meals::FormulaRole",                           # side-effect of meal_formula factory
-    "Meals::Invitation",                            # side-effect of meal factory (community invitations)
-    "Meals::Resourcing",                            # side-effect of meal factory (calendar associations)
     "Meals::RoleReminderDelivery",                  # created by background jobs, not factories
-    "Meals::SignupPart",                            # side-effect of meal_signup factory
-    "People::Guardianship",                         # side-effect of household factory (child/guardian)
     "Reminder",                                     # STI abstract base; JobReminder/RoleReminder are the leaves
     "ReminderDelivery",                             # STI abstract base; job/role delivery subclasses are the leaves
     "Role",                                         # Rolify; not tenant-scoped
-    "Wiki::PageVersion",                            # side-effect of wiki_page factory
     "Work::JobReminderDelivery",                    # created by background jobs, not factories
   ].freeze
 
@@ -66,11 +53,11 @@ describe Community, :without_tenant do
       # ── Billing ───────────────────────────────────────────────────────────
       create(:account)
       create(:statement)
-      create(:billing_template)
+      billing_template = create(:billing_template)
       create(:transaction)
 
       # ── Calendars ─────────────────────────────────────────────────────────
-      create(:calendar)
+      create(:calendar, :with_shared_guidelines)
       create(:calendar_group)
       create(:birthdays_calendar)
       create(:community_meals_calendar)
@@ -81,6 +68,7 @@ describe Community, :without_tenant do
       create(:event)
       create(:eventlet)
       create(:calendar_protocol)
+      create(:calendar_protocoling)
 
       # ── GDrive ────────────────────────────────────────────────────────────
       # shared_gdrive_config already created above
@@ -106,15 +94,17 @@ describe Community, :without_tenant do
 
       # ── People ────────────────────────────────────────────────────────────
       create(:user)
+      create(:user, :child) # also creates People::Guardianship
       create(:emergency_contact, household: shared_household)
-      create(:member_type, community: Defaults.community)
+      member_type = create(:member_type, community: Defaults.community)
+      billing_template.member_types << member_type # also creates Billing::TemplateMemberType
       create(:memorial)
       create(:memorial_message)
       create(:pet,     household: shared_household)
       create(:vehicle, household: shared_household)
 
       # ── Meals ─────────────────────────────────────────────────────────────
-      create(:meal_cost)
+      create(:meal_cost, :with_parts)
       create(:meal_formula)
       create(:meal_import)
       create(:meal)

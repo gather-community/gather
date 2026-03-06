@@ -100,6 +100,7 @@ module Groups
     before_validation :clear_mailman_list_if_empty_name
 
     validates :name, presence: true
+    validates :affiliations, presence: true
     validate :name_unique_in_all_communities
     validate :at_least_one_affiliation
 

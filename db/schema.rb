@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2026_03_01_000006) do
+ActiveRecord::Schema[7.0].define(version: 2026_03_05_000001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -468,6 +468,7 @@ ActiveRecord::Schema[7.0].define(version: 2026_03_01_000006) do
     t.bigint "cluster_id", null: false
     t.datetime "created_at", null: false
     t.string "external_id", null: false
+    t.bigint "gdrive_config_id", null: false
     t.string "google_email", limit: 256, null: false
     t.string "inherited_access_level", limit: 32
     t.string "item_external_id", limit: 128, null: false
@@ -475,6 +476,7 @@ ActiveRecord::Schema[7.0].define(version: 2026_03_01_000006) do
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false, comment: "Deliberately not a foreign key because we want to retain ID information even after user record destroyed so we can search by ID in PermissionSyncJob."
     t.index ["cluster_id"], name: "index_gdrive_synced_permissions_on_cluster_id"
+    t.index ["gdrive_config_id"], name: "index_gdrive_synced_permissions_on_gdrive_config_id"
     t.index ["item_id"], name: "index_gdrive_synced_permissions_on_item_id"
     t.index ["user_id"], name: "index_gdrive_synced_permissions_on_user_id"
     t.check_constraint "access_level::text = ANY (ARRAY['reader'::character varying, 'commenter'::character varying, 'writer'::character varying, 'fileOrganizer'::character varying]::text[])", name: "access_level_enum"
@@ -1304,6 +1306,7 @@ ActiveRecord::Schema[7.0].define(version: 2026_03_01_000006) do
   add_foreign_key "gdrive_migration_scans", "clusters"
   add_foreign_key "gdrive_migration_scans", "gdrive_migration_operations", column: "operation_id"
   add_foreign_key "gdrive_synced_permissions", "clusters"
+  add_foreign_key "gdrive_synced_permissions", "gdrive_configs"
   add_foreign_key "gdrive_tokens", "clusters"
   add_foreign_key "gdrive_tokens", "gdrive_configs"
   add_foreign_key "group_affiliations", "clusters"

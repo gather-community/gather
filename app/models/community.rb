@@ -67,6 +67,12 @@ class Community < ApplicationRecord
 
   delegate :name, to: :cluster, prefix: true
 
+  # Capture affiliated group IDs before the cascade destroys group_affiliations so we can
+  # destroy groups that end up with no remaining community affiliations (orphaned groups).
+  # prepend: true ensures this runs before the has_many :group_affiliations dependent: :destroy.
+  before_destroy :cache_affiliated_group_ids, prepend: true
+  after_destroy :destroy_orphaned_groups
+
   before_create :generate_calendar_token
   before_create :generate_sso_secret
 
@@ -165,5 +171,15 @@ class Community < ApplicationRecord
 
   def generate_sso_secret
     self.sso_secret ||= UniqueTokenGenerator.generate(self.class, :sso_secret, type: :hex32)
+  end
+
+  def cache_affiliated_group_ids
+    @affiliated_group_ids = group_affiliations.pluck(:group_id)
+  end
+
+  def destroy_orphaned_groups
+    Groups::Group.where(id: @affiliated_group_ids).each do |group|
+      group.destroy! if group.affiliations.none?
+    end
   end
 end

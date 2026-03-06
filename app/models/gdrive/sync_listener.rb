@@ -95,6 +95,7 @@ module GDrive
     # specify the community_id to use.
     def enqueue_item_sync(item_group)
       item = item_group.item
+      return if item.nil? # item and item_group may be deleted in the same transaction
       config = item.gdrive_config
       GDrive::ItemPermissionSyncJob.perform_later(cluster_id: config.cluster_id,
         community_id: config.community_id, item_id: item.id, refresh_synced_permissions: true)

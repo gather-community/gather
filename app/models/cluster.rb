@@ -13,12 +13,6 @@
 # A group of related communities.
 class Cluster < ApplicationRecord
   has_many :communities, inverse_of: :cluster, dependent: :destroy
-  # Groups are cluster-scoped but not community-scoped, so they must be destroyed at cluster level.
-  # Destroy communities first (above) so FK deps (affiliations, work_jobs, events, etc.) are gone.
-  has_many :groups, class_name: "Groups::Group", dependent: :destroy
-  # SyncedPermissions are intentionally not cascaded from User or Item (to allow post-deletion sync
-  # lookups), so they must be cleaned up at the cluster level.
-  has_many :gdrive_synced_permissions, class_name: "GDrive::SyncedPermission", dependent: :delete_all
 
   before_create :generate_sso_secret
 

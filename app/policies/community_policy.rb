@@ -9,6 +9,10 @@ class CommunityPolicy < ApplicationPolicy
     record_tied_to_user_cluster? || active_super_admin?
   end
 
+  def destroy?
+    active_super_admin?
+  end
+
   def update?
     active_admin?
   end

@@ -1,0 +1,63 @@
+<% content_for(:title, @community.name) %>
+
+<% content_for(:action_links) do %>
+  <%= link_to("Visit", url_in_community(@community), class: "btn btn-default",
+        target: "_blank", rel: "noopener") %>
+  <%= button_to("Delete", community_path(@community), method: :delete,
+        class: "btn btn-danger",
+        form: {
+          data: {
+            controller: "community-delete",
+            community_delete_slug_value: @community.slug,
+            action: "submit->community-delete#confirm"
+          }
+        }) %>
+<% end %>
+
+<table class="key-value">
+  <tr>
+    <td>ID</td>
+    <td><%= @community.id %></td>
+  </tr>
+  <tr>
+    <td>Name</td>
+    <td><%= @community.name %></td>
+  </tr>
+  <tr>
+    <td>Slug</td>
+    <td><%= @community.slug %></td>
+  </tr>
+  <tr>
+    <td>Abbreviation</td>
+    <td><%= @community.abbrv %></td>
+  </tr>
+  <tr>
+    <td>Country</td>
+    <td><%= @community.country_code %></td>
+  </tr>
+  <tr>
+    <td>Time Zone</td>
+    <td><%= @community.settings.time_zone %></td>
+  </tr>
+  <tr>
+    <td>Cluster</td>
+    <td><%= @community.cluster.name %> (ID <%= @community.cluster_id %>)</td>
+  </tr>
+  <tr>
+    <td>Created</td>
+    <td><%= @community.created_at.to_fs(:long) %></td>
+  </tr>
+  <tr>
+    <td>Subscription</td>
+    <td>
+      <% if (sub = @community.subscription) %>
+        Subscribed &mdash; <%= sub.stripe_id %>
+      <% elsif (intent = @community.subscription_intent) %>
+        Intent &mdash; <%= intent.tier %>, <%= intent.quantity %> users,
+        <%= number_to_currency(intent.price_per_user_cents / 100.0) %>/user/mo
+      <% else %>
+        None
+      <% end %>
+    </td>
+  </tr>
+</table>

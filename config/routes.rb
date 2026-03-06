@@ -11,7 +11,7 @@ Rails.application.routes.draw do
     }
   get "people/users/signed-out", to: "landing#signed_out", as: :user_signed_out
 
-  resources :communities, only: :index
+  resources :communities, only: %i[index show destroy]
 
   namespace :communities do
     resources :signups, only: %i[index new create] do

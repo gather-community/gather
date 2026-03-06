@@ -8,6 +8,18 @@ class CommunitiesController < ApplicationController
     @communities = Utils::CommunitySummarizer.new.communities(policy_scope(Community))
   end
 
+  def show
+    load_community
+    authorize(@community)
+  end
+
+  def destroy
+    load_community
+    authorize(@community)
+    CommunityDeletionJob.perform_later(@community.id)
+    redirect_to(communities_path, notice: "#{@community.name} is being deleted.")
+  end
+
   protected
 
   def apex_domain_only
@@ -15,6 +27,12 @@ class CommunitiesController < ApplicationController
   end
 
   private
+
+  def load_community
+    ActsAsTenant.without_tenant do
+      @community = Community.includes(:cluster, :subscription, :subscription_intent).find(params[:id])
+    end
+  end
 
   def sample_community
     Community.new

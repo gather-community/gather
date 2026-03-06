@@ -18,6 +18,7 @@
       <td>Rsrvs</td>
       <td>Jobs</td>
       <td>Txns</td>
+      <td>Subscription</td>
       <td colspan="2">Cluster</td>
     </tr>
   </thead>
@@ -25,7 +26,7 @@
     <% communities.each do |community| %>
       <tr>
         <td><%= community.id %></td>
-        <td><%= link_to(community.name, url_in_community(community)) %></td>
+        <td><%= link_to(community.name, community_path(community)) %></td>
         <td><%= community.created_at.to_fs(:no_time) %></td>
         <td>
           <% if community.last_login_at && (Time.zone.today - community.last_login_at.to_date).to_i < 14 %>
@@ -65,6 +66,13 @@
             <%= content_tag(:span, community.txn_count,
                   class: (Time.zone.today - community.last_txn_created_at.to_date).to_i < 30 ? "recent" : "",
                   title: community.last_txn_created_at) %>
+          <% end %>
+        </td>
+        <td>
+          <% if community.subscription_stripe_id %>
+            Subscribed
+          <% elsif community.subscription_intent_tier %>
+            Intent: <%= community.subscription_intent_tier %>
           <% end %>
         </td>
         <td><%= community.cluster_id %></td>

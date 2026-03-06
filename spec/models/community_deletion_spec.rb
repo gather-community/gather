@@ -19,11 +19,9 @@ describe Community, :without_tenant do
     "Groups::Affiliation",                          # destroyed via community cascade; Group survival tested below
     "Groups::Group",                                # cluster-scoped, spans communities; orphan cleanup tested below
     "MailTestRun",                                  # not tenant-scoped
-    "Meals::RoleReminderDelivery",                  # created by background jobs, not factories
     "Reminder",                                     # STI abstract base; JobReminder/RoleReminder are the leaves
     "ReminderDelivery",                             # STI abstract base; job/role delivery subclasses are the leaves
     "Role",                                         # Rolify; not tenant-scoped
-    "Work::JobReminderDelivery",                    # created by background jobs, not factories
   ].freeze
 
   it "EXEMPT_MODELS has no stale entries" do
@@ -112,6 +110,7 @@ describe Community, :without_tenant do
       create(:restriction)
       create(:meal_role)
       create(:meal_role_reminder)
+      create(:meal_role_reminder_delivery)
       create(:meal_signup, diner_counts: [1])
       create(:meal_type)
 
@@ -126,6 +125,7 @@ describe Community, :without_tenant do
       create(:work_assignment)
       create(:work_job)
       create(:work_job_reminder)
+      create(:work_job_reminder_delivery)
       create(:work_meal_job_sync_setting)
       create(:work_period)
       create(:work_share)

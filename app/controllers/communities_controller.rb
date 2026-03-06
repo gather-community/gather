@@ -12,6 +12,8 @@ class CommunitiesController < ApplicationController
     load_community
     authorize(@community)
     @community.subscription&.populate
+  rescue Stripe::InvalidRequestError
+    @subscription_stripe_error = true
   end
 
   def destroy

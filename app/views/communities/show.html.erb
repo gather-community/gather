@@ -43,7 +43,12 @@
       <td>Stripe ID</td>
       <td><%= sub.stripe_id %></td>
     </tr>
-    <% if sub.stripe_sub %>
+    <% if @subscription_stripe_error %>
+      <tr>
+        <td>Status</td>
+        <td class="text-muted">Subscription not found in Stripe</td>
+      </tr>
+    <% elsif sub.stripe_sub %>
       <tr>
         <td>Status</td>
         <td><%= sub.status&.humanize %></td>

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class CommunitiesController < ApplicationController
-  decorates_assigned :communities
+  decorates_assigned :communities, :community
 
   def index
     authorize(sample_community)
@@ -11,6 +11,7 @@ class CommunitiesController < ApplicationController
   def show
     load_community
     authorize(@community)
+    @community.subscription&.populate
   end
 
   def destroy

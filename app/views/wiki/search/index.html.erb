@@ -1,0 +1,103 @@
+<% content_for(:title, "Search") %>
+<%
+  source = params[:source].presence || "all"
+  show_wiki  = source.in?(%w[all wiki])
+  show_drive = source.in?(%w[all drive])
+  show_both  = show_wiki && show_drive
+%>
+
+<div data-controller="wiki--search"
+     data-wiki--search-query-value="<%= @query %>"
+     data-wiki--search-source-value="<%= source %>"
+     data-wiki--search-url-value="<%= wiki_search_path %>">
+
+  <div class="search-input-group">
+    <form action="<%= wiki_search_path %>" method="get" class="search-body-form"
+          role="search" aria-label="Wiki and Drive search">
+      <% if params[:source].present? && params[:source] != "all" %>
+        <%= hidden_field_tag :source, params[:source] %>
+      <% end %>
+      <div class="input-group">
+        <label for="search-body-input" class="sr-only">Search wiki and Google Drive</label>
+        <input type="text" id="search-body-input" name="search" value="<%= @query %>"
+               class="form-control" placeholder="Search wiki and Google Drive…" autofocus>
+        <span class="input-group-btn">
+          <button class="btn btn-default" type="submit" aria-label="Search">
+            <%= icon_tag("search") %>
+          </button>
+        </span>
+      </div>
+    </form>
+    <a href="#" data-toggle="modal" data-target="#search-tips-modal" class="search-tips-link"
+       aria-haspopup="dialog">
+      <%= icon_tag("question-circle") %> Search tips
+    </a>
+  </div>
+
+  <% if @query.present? %>
+
+    <% if show_both %>
+      <ul class="nav nav-tabs intra-tabs hidden-md hidden-lg" role="tablist">
+        <li role="presentation" class="active">
+          <a href="#wiki-pane" role="tab" data-toggle="tab">
+            <%= icon_tag("info-circle") %> Wiki
+          </a>
+        </li>
+        <li role="presentation">
+          <a href="#drive-pane" role="tab" data-toggle="tab">
+            <%= icon_tag("google", style: :brands) %> Drive
+          </a>
+        </li>
+      </ul>
+    <% end %>
+
+    <div class="tab-content <%= "search-results-columns" if show_both %>">
+
+      <% if show_wiki %>
+        <div id="wiki-pane" class="tab-pane active search-section">
+          <% if show_both %>
+            <h3 class="search-section-heading hidden-xs hidden-sm">
+              <%= icon_tag("info-circle") %> Wiki
+              <span data-wiki--search-target="wikiSpinner" class="inline-spinner hidden">
+                <%= icon_tag("circle-o-notch", class: "fa-spin") %>
+              </span>
+            </h3>
+          <% end %>
+          <div data-wiki--search-target="wikiResults" class="search-results-body">
+            <%= icon_tag("circle-o-notch", class: "fa-spin") %> Loading&hellip;
+          </div>
+        </div>
+      <% end %>
+
+      <% if show_drive %>
+        <div id="drive-pane" class="tab-pane <%= "active" unless show_wiki %> search-section">
+          <% if show_both %>
+            <h3 class="search-section-heading hidden-xs hidden-sm">
+              <%= icon_tag("google", style: :brands) %> Drive
+              <span data-wiki--search-target="driveSpinner" class="inline-spinner hidden">
+                <%= icon_tag("circle-o-notch", class: "fa-spin") %>
+              </span>
+            </h3>
+          <% end %>
+          <div data-wiki--search-target="driveResults" class="search-results-body">
+            <%= icon_tag("circle-o-notch", class: "fa-spin") %> Loading&hellip;
+          </div>
+          <div data-wiki--search-target="loadMoreDrive" class="load-more hidden">
+            <a href="#" data-action="click->wiki--search#loadMoreDrive">
+              Load more Drive results
+            </a>
+          </div>
+        </div>
+      <% end %>
+
+    </div>
+
+  <% else %>
+    <div class="center-notice">
+      Enter a search term above to search the wiki and Google Drive.
+    </div>
+  <% end %>
+
+</div>
+
+<%= render "search_tips_modal" %>

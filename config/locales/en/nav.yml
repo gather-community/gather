@@ -41,6 +41,8 @@ en:
         _self: "Wiki"
       gdrive:
         _self: "Google Drive"
+      search:
+        _self: "Search"
         migration:
           dashboard:
             status: "Status"

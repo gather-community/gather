@@ -190,22 +190,26 @@ module Work
 
     def apply_search_lens
       return if lenses[:search].blank?
+
+      filters = [{term: {community_id: current_community.id}}]
+      filters << {term: {period_id: @period.id}} if @period
+
       search = Work::Shift.search(
         query: {
-          multi_match: {
-            fields: Work::Shift.indexed_fields,
-            query: lenses[:search].value,
-            type: :cross_fields,
-            operator: :and
+          bool: {
+            must: {
+              multi_match: {
+                fields: Work::Shift.indexed_fields,
+                query: lenses[:search].value,
+                type: :cross_fields,
+                operator: :and
+              }
+            },
+            filter: filters
           }
         },
-        # We set size to 10k because we don't need to worry about restricting the result set here.
-        # It's restricted for us by the other scoping stuff.
-        # TODO: This is a big problem because it doesn't scale. We need to change the above lens application
-        # stuff to use the search fields, at least for period and community
-        size: 10_000
+        size: 500
       )
-
       @shifts = @shifts.merge(search.records.records)
     end
 

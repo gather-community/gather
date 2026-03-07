@@ -1,0 +1,98 @@
+#content.wiki--search {
+  .search-input-group {
+    margin-bottom: 20px;
+
+    .search-body-form {
+      display: inline-block;
+      vertical-align: middle;
+      width: 100%;
+      max-width: 500px;
+    }
+
+    .search-tips-link {
+      display: inline-block;
+      margin-left: 12px;
+      vertical-align: middle;
+      color: $text-muted;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+  }
+
+  // Intra-page tabs (mobile only, xs/sm)
+  ul.intra-tabs {
+    margin-bottom: 0;
+    border-bottom: none;
+
+    > li > a {
+      border-radius: 4px 4px 0 0;
+    }
+  }
+
+  // Two-column layout on md+
+  @media screen and (min-width: $screen-md-min) {
+    .search-results-columns {
+      display: flex;
+      gap: 40px;
+      align-items: flex-start;
+
+      // Override Bootstrap tab-pane visibility so both panes show as columns
+      .tab-pane {
+        display: block !important;
+        flex: 1;
+        min-width: 0;
+      }
+    }
+  }
+
+  .search-section-heading {
+    font-size: 16px;
+    font-weight: bold;
+    color: $text-muted;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-top: 0;
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid $light-border-color;
+  }
+
+  .search-results-body {
+    color: $text-muted;
+  }
+
+  .search-result-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      padding: 8px 0;
+      border-bottom: 1px solid $light-border-color;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      .result-title {
+        font-size: 15px;
+      }
+
+      .file-icon {
+        width: 16px;
+        height: 16px;
+        vertical-align: middle;
+        margin-right: 5px;
+      }
+    }
+  }
+
+  .load-more {
+    margin-top: 10px;
+    text-align: center;
+
+    &.hidden {
+      display: none;
+    }
+  }
+}

@@ -1,0 +1,63 @@
+<div id="search-tips-modal" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="search-tips-modal-label">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h2 class="modal-title" id="search-tips-modal-label">Search Tips</h2>
+      </div>
+      <div class="modal-body">
+        <p>Enter words to search both the wiki and Google Drive.</p>
+
+        <h4>Basic search</h4>
+        <table class="key-value">
+          <tr>
+            <td><code>compost bins</code></td>
+            <td>Pages and files containing both words</td>
+          </tr>
+          <tr>
+            <td><code>"compost bins"</code></td>
+            <td>The exact phrase &ldquo;compost bins&rdquo;</td>
+          </tr>
+        </table>
+
+        <h4>Special syntax</h4>
+        <table class="key-value">
+          <tr>
+            <td><code>title:compost</code></td>
+            <td>Search only in the title or page name</td>
+          </tr>
+          <tr>
+            <td><code>type:doc</code></td>
+            <td>
+              Filter Drive results by file type.
+              Options: <code>doc</code>, <code>sheet</code>, <code>slide</code>,
+              <code>pdf</code>, <code>folder</code>
+            </td>
+          </tr>
+        </table>
+
+        <h4>Combining</h4>
+        <table class="key-value">
+          <tr>
+            <td><code>title:minutes 2024</code></td>
+            <td>Files named &ldquo;minutes&rdquo; containing &ldquo;2024&rdquo;</td>
+          </tr>
+          <tr>
+            <td><code>"budget report" type:sheet</code></td>
+            <td>Google Sheets matching the phrase &ldquo;budget report&rdquo;</td>
+          </tr>
+        </table>
+
+        <p class="text-muted" style="margin-top: 15px;">
+          Use the source filter above to restrict results to Wiki only or Drive only.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

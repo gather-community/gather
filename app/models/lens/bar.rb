@@ -11,7 +11,9 @@ module Lens
     end
 
     def html(options = {})
-      h.content_tag(:form, inner, class: "form-inline lens-bar hidden-print #{options[:position]}")
+      form_options = {class: "form-inline lens-bar hidden-print #{options[:position]}"}
+      form_options[:action] = set.form_action if set.form_action
+      h.content_tag(:form, inner, form_options)
     end
 
     private

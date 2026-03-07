@@ -9,6 +9,7 @@ export default class extends Controller {
     const typed = window.prompt(`To permanently delete this community, type its slug:\n"${this.slugValue}"`)
     if (typed !== this.slugValue) {
       event.preventDefault()
+      event.stopImmediatePropagation()
     }
   }
 }

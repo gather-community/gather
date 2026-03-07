@@ -8,7 +8,7 @@ class CommunitiesController < ApplicationController
     @communities = Utils::CommunitySummarizer.new.communities(policy_scope(Community))
   end
 
-  def show
+  def admin
     load_community
     authorize(@community)
     @community.subscription&.populate

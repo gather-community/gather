@@ -3,7 +3,7 @@
 class CommunityDecorator < ApplicationDecorator
   delegate_all
 
-  def show_action_link_set
+  def admin_action_link_set
     ActionLinkSet.new(
       ActionLink.new(object, :visit, icon: "external-link", path: h.url_in_community(object),
                                      permitted: true, html: {target: "_blank", rel: "noopener"}),

@@ -26,7 +26,7 @@
     <% communities.each do |community| %>
       <tr>
         <td><%= community.id %></td>
-        <td><%= link_to(community.name, community_path(community)) %></td>
+        <td><%= link_to(community.name, admin_community_path(community)) %></td>
         <td><%= community.created_at.to_fs(:no_time) %></td>
         <td>
           <% if community.last_login_at && (Time.zone.today - community.last_login_at.to_date).to_i < 14 %>

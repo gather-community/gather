@@ -116,6 +116,14 @@ class User < ApplicationRecord
   has_many :memorial_messages, class_name: "People::MemorialMessage", foreign_key: :author_id, inverse_of: :author, dependent: :destroy
   has_many :children, through: :down_guardianships
 
+  # Calendar events may be in a different community's calendar (cross-community within a cluster).
+  # creator_id cannot be nullified (check constraint requires it for non-meal events), so we destroy.
+  # sponsor_id is nullable, so nullify is sufficient.
+  has_many :created_calendar_events, class_name: "Calendars::Event", foreign_key: :creator_id,
+    inverse_of: :creator, dependent: :destroy
+  has_many :sponsored_calendar_events, class_name: "Calendars::Event", foreign_key: :sponsor_id,
+    inverse_of: :sponsor, dependent: :nullify
+
   has_many :feature_flag_users, class_name: "FeatureFlagUser", inverse_of: :user, dependent: :destroy
 
   # We deliberately don't use dependent: :destroy here because we want to be able to search by user ID

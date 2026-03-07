@@ -32,6 +32,18 @@ describe Community, :without_tenant do
       "Remove these from EXEMPT_MODELS in community_deletion_spec.rb (class no longer exists): #{stale.join(', ')}"
   end
 
+  it "handles FK constraints when a user created/sponsored events in another community's calendar" do
+    cluster = create(:cluster)
+    ActsAsTenant.with_tenant(cluster) do
+      community2 = create(:community)
+      user = create(:user)
+      calendar2 = create(:calendar, community: community2)
+      create(:event, calendar: calendar2, creator: user)
+      create(:event, calendar: calendar2, creator: create(:user), sponsor: user)
+      expect { Defaults.community.destroy! }.not_to raise_error
+    end
+  end
+
   it "destroys all associated records without FK violations, and handles group orphaning" do
     cluster = create(:cluster)
 

@@ -200,11 +200,6 @@ en:
         active:
           active_only: "Show Active Only"
           all: "Show All"
-      wiki_search:
-        source:
-          all: "Wiki & Drive"
-          wiki: "Wiki only"
-          drive: "Drive only"
       communities_signup:
         status:
           all: "All"

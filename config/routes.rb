@@ -266,9 +266,6 @@ Rails.application.routes.draw do
   # Top-level search.
   get "search", to: "search#index", as: :search
 
-  # Must come before resources :wiki_pages so /wiki/search isn't swallowed by GET /wiki/:slug.
-  get "wiki/search", to: "wiki/search#index", as: :wiki_search
-
   resources :wiki_pages, controller: "wiki/pages", param: :slug, path: "wiki" do
     collection do
       get :all

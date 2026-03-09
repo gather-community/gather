@@ -4,7 +4,7 @@ module Wiki
   class PagesController < ApplicationController
     before_action :find_page, only: %i[history compare edit update destroy]
     before_action -> { nav_context(:wiki, :wiki) }
-    before_action -> { prepare_lenses({search: {form_action: wiki_search_path}}) },
+    before_action -> { prepare_lenses({search: {form_action: search_path}}) },
                   only: %i[show all]
 
     decorates_assigned :page, :pages, :versions

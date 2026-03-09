@@ -19,13 +19,24 @@
     }
   }
 
-  // Intra-page tabs (mobile only, xs/sm)
+  // Intra-page tabs (mobile only, xs/sm) — styled to match nav.subnav
   ul.intra-tabs {
+    font-size: 13px;
     margin-bottom: 0;
-    border-bottom: none;
 
     > li > a {
-      border-radius: 4px 4px 0 0;
+      padding: 5px 15px;
+      color: $text-muted;
+
+      i {
+        margin-right: 5px;
+      }
+    }
+
+    > li.active > a,
+    > li.active > a:hover,
+    > li.active > a:focus {
+      color: $text-color;
     }
   }
 
@@ -47,10 +58,7 @@
 
   .search-section-heading {
     font-size: 16px;
-    font-weight: bold;
     color: $text-muted;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
     margin-top: 0;
     margin-bottom: 12px;
     padding-bottom: 6px;

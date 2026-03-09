@@ -21,11 +21,12 @@ module Wiki
         }
       } do
         mappings dynamic: "false" do
-          indexes :title,        analyzer: "english_stemmed"
-          indexes :content,      analyzer: "english_stemmed"
+          indexes :kind, type: :keyword
+          indexes :title, analyzer: "english_stemmed"
+          indexes :content, analyzer: "english_stemmed"
           indexes :community_id, type: :integer
-          indexes :slug,         type: :keyword
-          indexes :updated_at,   type: :date
+          indexes :slug, type: :keyword
+          indexes :updated_at, type: :date
         end
       end
 

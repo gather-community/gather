@@ -290,13 +290,6 @@ module Nav
               path: h.gdrive_home_path,
               permitted: GDrive::BrowsePolicy.new(user, :folder).index?,
               icon: {name: "google", style: :brands}
-            },
-            {
-              name: :search,
-              parents: :wiki,
-              path: h.wiki_search_path,
-              permitted: h.policy(sample_wiki_page).show? || GDrive::BrowsePolicy.new(user, :folder).index?,
-              icon: "search"
             }
           ]
         else

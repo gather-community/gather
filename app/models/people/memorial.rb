@@ -15,6 +15,8 @@
 #
 module People
   class Memorial < ApplicationRecord
+    include MemorialSearchConfig
+
     acts_as_tenant :cluster
 
     belongs_to :user, inverse_of: :memorial

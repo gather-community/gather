@@ -4,6 +4,7 @@ export default class extends Controller {
   static targets = [
     "wikiResults", "driveResults",
     "wikiSpinner", "driveSpinner",
+    "wikiCount", "driveCount",
     "loadMoreDrive",
   ];
   static values = { url: String, query: String, source: String };
@@ -12,6 +13,8 @@ export default class extends Controller {
   declare driveResultsTarget: HTMLElement;
   declare wikiSpinnerTarget: HTMLElement;
   declare driveSpinnerTarget: HTMLElement;
+  declare wikiCountTargets: HTMLElement[];
+  declare driveCountTargets: HTMLElement[];
   declare loadMoreDriveTarget: HTMLElement;
   declare hasWikiSpinnerTarget: boolean;
   declare hasDriveSpinnerTarget: boolean;
@@ -42,14 +45,14 @@ export default class extends Controller {
 
     spinnerEl?.classList.remove("hidden");
 
-    let data: { html: string; next_page_token: string | null };
+    let data: { html: string; count: number; next_page_token: string | null };
     try {
       const resp = await fetch(url.toString(), {
         headers: { Accept: "application/json" },
       });
       data = await resp.json();
     } catch {
-      resultsEl.innerHTML = '<p class="text-danger">Error loading results. Please try again.</p>';
+      resultsEl.innerHTML = '<div class="center-notice">Error loading results. Please try again.</div>';
       spinnerEl?.classList.add("hidden");
       return;
     }
@@ -58,6 +61,9 @@ export default class extends Controller {
       resultsEl.insertAdjacentHTML("beforeend", data.html);
     } else {
       resultsEl.innerHTML = data.html;
+      const count = data.count ?? 0;
+      const countTargets = isWiki ? this.wikiCountTargets : this.driveCountTargets;
+      countTargets.forEach(el => { el.textContent = count > 0 ? ` (${count})` : ""; });
     }
 
     spinnerEl?.classList.add("hidden");

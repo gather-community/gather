@@ -21,11 +21,11 @@ module Work
         }
       } do
         mappings dynamic: "false" do
-          indexes :job_title,      analyzer: "english_stemmed"
+          indexes :job_title, analyzer: "english_stemmed"
           indexes :requester_name, analyzer: "english_stemmed"
           indexes :assignee_names, analyzer: "english_stemmed"
-          indexes :community_id,   type: :integer
-          indexes :period_id,      type: :integer
+          indexes :community_id, type: :integer
+          indexes :period_id, type: :integer
         end
       end
 

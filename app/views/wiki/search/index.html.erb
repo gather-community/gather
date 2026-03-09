@@ -40,12 +40,12 @@
       <ul class="nav nav-tabs intra-tabs hidden-md hidden-lg" role="tablist">
         <li role="presentation" class="active">
           <a href="#wiki-pane" role="tab" data-toggle="tab">
-            <%= icon_tag("info-circle") %> Wiki
+            <%= icon_tag("info-circle") %> Wiki<span data-wiki--search-target="wikiCount"></span>
           </a>
         </li>
         <li role="presentation">
           <a href="#drive-pane" role="tab" data-toggle="tab">
-            <%= icon_tag("google", style: :brands) %> Drive
+            <%= icon_tag("google", style: :brands) %> Google Drive<span data-wiki--search-target="driveCount"></span>
           </a>
         </li>
       </ul>
@@ -57,7 +57,7 @@
         <div id="wiki-pane" class="tab-pane active search-section">
           <% if show_both %>
             <h3 class="search-section-heading hidden-xs hidden-sm">
-              <%= icon_tag("info-circle") %> Wiki
+              <%= icon_tag("info-circle") %> Wiki<span data-wiki--search-target="wikiCount"></span>
               <span data-wiki--search-target="wikiSpinner" class="inline-spinner hidden">
                 <%= icon_tag("circle-o-notch", class: "fa-spin") %>
               </span>
@@ -73,7 +73,7 @@
         <div id="drive-pane" class="tab-pane <%= "active" unless show_wiki %> search-section">
           <% if show_both %>
             <h3 class="search-section-heading hidden-xs hidden-sm">
-              <%= icon_tag("google", style: :brands) %> Drive
+              <%= icon_tag("google", style: :brands) %> Google Drive<span data-wiki--search-target="driveCount"></span>
               <span data-wiki--search-target="driveSpinner" class="inline-spinner hidden">
                 <%= icon_tag("circle-o-notch", class: "fa-spin") %>
               </span>

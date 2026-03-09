@@ -25,7 +25,7 @@ describe "wiki search", js: true do
       fill_in_lens(:search, "solar")
 
       expect(page).to have_current_path(/#{Regexp.escape(wiki_search_path)}/)
-      expect(page).to have_content("Solar Panel Guide")
+      expect(page).to have_link("Solar Panel Guide", href: wiki_page_path(slug: wiki_page.slug))
     end
   end
 
@@ -59,7 +59,7 @@ describe "wiki search", js: true do
       find(".search-body-form .btn-default").click
 
       expect(page).to have_current_path(/#{Regexp.escape(wiki_search_path)}/)
-      expect(page).to have_content("Compost Bins")
+      expect(page).to have_link("Compost Bins", href: wiki_page_path(slug: wiki_page.slug))
     end
   end
 end

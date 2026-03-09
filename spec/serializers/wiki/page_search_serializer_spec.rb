@@ -12,15 +12,15 @@ describe Wiki::PageSearchSerializer do
 
   it "includes required fields" do
     expect(data).to include(
-      "id" => page.id,
-      "community_id" => community.id,
-      "title" => "Solar Panels",
-      "content" => "Lots of sun.",
-      "slug" => page.slug
+      id: page.id,
+      community_id: community.id,
+      title: "Solar Panels",
+      content: "Lots of sun.",
+      slug: page.slug
     )
   end
 
   it "includes updated_at" do
-    expect(data).to have_key("updated_at")
+    expect(data).to have_key(:updated_at)
   end
 end

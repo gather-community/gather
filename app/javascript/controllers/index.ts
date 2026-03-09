@@ -22,6 +22,9 @@ application.register("wiki--markdown-editor", Wiki__MarkdownEditorController)
 import Wiki__SearchController from "./wiki/search_controller"
 application.register("wiki--search", Wiki__SearchController)
 
+import SearchController from "./search_controller"
+application.register("search", SearchController)
+
 import Communities__SignupActionController from "./communities/signup_action_controller"
 application.register("communities--signup-action", Communities__SignupActionController)
 

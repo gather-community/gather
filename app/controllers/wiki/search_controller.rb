@@ -13,22 +13,29 @@ module Wiki
       prepare_lenses(:"wiki/search_source")
 
       @query = params[:search].to_s.strip
-      @parser = Search::QueryParser.new(@query) if @query.present?
 
       respond_to do |format|
         format.html
         format.json do
+          @parser = Search::QueryParser.new(@query) if @query.present?
           source = params[:source].to_s
           case source
           when "wiki"
+            results = fetch_wiki_results
             html = render_to_string(partial: "results_wiki", formats: [:html],
-                                    locals: {results: fetch_wiki_results, query: @query})
-            render json: {html: html, next_page_token: nil}
+                                    locals: {results: results, query: @query})
+            render json: {html: html, count: results.count, next_page_token: nil}
           when "drive"
             drive_results = fetch_drive_results
-            html = render_to_string(partial: "results_drive", formats: [:html],
-                                    locals: {results: drive_results[:files]})
-            render json: {html: html, next_page_token: drive_results[:next_page_token]}
+            if drive_results[:error] == :auth
+              html = render_to_string(partial: "results_drive_auth_error", formats: [:html], locals: {})
+              render json: {html: html, count: 0, next_page_token: nil}
+            else
+              html = render_to_string(partial: "results_drive", formats: [:html],
+                                      locals: {results: drive_results[:files]})
+              render json: {html: html, count: drive_results[:files].length,
+                            next_page_token: drive_results[:next_page_token]}
+            end
           end
         end
       end
@@ -40,13 +47,13 @@ module Wiki
       return [] if @parser.nil? || @parser.blank?
 
       Wiki::Page.search(@parser.to_es_query(community_id: current_community.id)).results
-    rescue Faraday::Error, Elasticsearch::Transport::Transport::Error => e
-      Rails.logger.error("Elasticsearch unavailable during wiki search: #{e.message}")
-      []
     end
 
     def fetch_drive_results
       return {files: [], next_page_token: nil} if @parser.nil? || @parser.blank?
+
+      reader_email = current_user.google_email
+      return {files: [], next_page_token: nil} if reader_email.blank?
 
       config = GDrive::Config.find_by(community: current_community)
       return {files: [], next_page_token: nil} if config.nil?
@@ -55,17 +62,13 @@ module Wiki
                                     callback_url: gdrive_setup_auth_callback_url(host: Settings.url.host))
       return {files: [], next_page_token: nil} unless wrapper.has_credentials?
 
-      drives = GDrive::Item.where(gdrive_config: config).drives_only
-      accessible_drives = policy_scope(drives)
-      accessible_drive_ids = accessible_drives.map(&:external_id)
-
-      searcher = GDrive::Searcher.new(wrapper: wrapper,
-                                      accessible_drive_ids: accessible_drive_ids,
-                                      parser: @parser)
+      drive_ids = config.items.drives_only.pluck(:external_id)
+      searcher = GDrive::Searcher.new(wrapper: wrapper, reader_email: reader_email,
+                                      drive_ids: drive_ids, parser: @parser)
       searcher.search(page_token: params[:page_token].presence)
     rescue Google::Apis::AuthorizationError, Signet::AuthorizationError => e
       Rails.logger.error("GDrive authorization error during search: #{e.message}")
-      {files: [], next_page_token: nil}
+      {files: [], next_page_token: nil, error: :auth}
     end
   end
 end

@@ -82,6 +82,7 @@ class User < ApplicationRecord
   include Deactivatable
   include SemicolonDisallowable
   include CustomFields
+  include UserSearchConfig
 
   ROLES = %i[super_admin cluster_admin admin biller photographer calendar_coordinator
     meals_coordinator wikiist work_coordinator new_community_approver].freeze

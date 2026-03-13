@@ -424,12 +424,34 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
     }
 
     $cells.attr("tabindex", "-1");
+    $cells.removeClass("fc-gather-grid-active");
     $target.attr("tabindex", "0");
+    $target.addClass("fc-gather-grid-active");
+    this.updateGridCellAriaStates(dateString);
     if (options && options.focus) {
       $target.focus();
     }
     this._fcGridFocusDate = dateString;
     return true;
+  },
+
+  updateGridCellAriaStates(selectedDateString) {
+    const todayString = $.fullCalendar.moment().format("YYYY-MM-DD");
+    const $cells = this.getNavigableGridCells();
+
+    $cells.each((_, cell) => {
+      const $cell = $(cell);
+      const dateString = $cell.attr("data-date");
+      const isSelected = dateString === selectedDateString;
+      const isToday = dateString === todayString;
+
+      $cell.attr("aria-selected", isSelected ? "true" : "false");
+      if (isToday) {
+        $cell.attr("aria-current", "date");
+      } else {
+        $cell.removeAttr("aria-current");
+      }
+    });
   },
 
   getGridDayCell(date) {

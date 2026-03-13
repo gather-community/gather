@@ -146,6 +146,31 @@ describe "event calendar", js: true do
     end
   end
 
+  describe "calendar grid accessibility states" do
+    let(:calendar) { create(:calendar) }
+
+    scenario "exposes selected, active, and today states on date cells" do
+      visit(calendar_events_path(calendar))
+      find(".fc-month-button").click
+
+      today = Time.zone.today
+      today_date = today.to_fs(:no_time)
+      selected_cell_selector = ".fc-month-view .fc-day[data-date][tabindex='0'][aria-selected='true']"
+
+      expect(page).to have_css(".fc-month-view .fc-day[data-date='#{today_date}'][aria-current='date']")
+      expect(page).to have_css(selected_cell_selector, count: 1)
+
+      target_date = (today.day > 1 ? today - 1.day : today + 1.day).to_fs(:no_time)
+      find(".fc-month-view .fc-day[data-date='#{target_date}']").click
+
+      expect(page).to have_css(
+        ".fc-month-view .fc-day[data-date='#{target_date}'][tabindex='0'][aria-selected='true'].fc-gather-grid-active"
+      )
+      expect(page).to have_css(".fc-month-view .fc-day[data-date='#{today_date}'][aria-current='date']")
+      expect(page).to have_css(".fc-month-view .fc-day[data-date][aria-selected='true']", count: 1)
+    end
+  end
+
   def expect_selected(cal1:, cal2:)
     expect(page).send(cal1 ? :to : :not_to, have_content("Cal1 Event"))
     expect(page).send(cal2 ? :to : :not_to, have_content("Cal2 Event"))

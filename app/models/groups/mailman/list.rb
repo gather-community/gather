@@ -102,7 +102,10 @@ module Groups
       def default_config
         DEFAULT_SETTINGS.merge(
           display_name: group_name,
-          subject_prefix: "[#{name}] "
+          subject_prefix: "[#{name}] ",
+
+          # We will be turning this on for all domains soon. This is a trial.
+          dmarc_mitigate_unconditionally: domain_name == "touchstonecohousing.org"
         )
       end
 

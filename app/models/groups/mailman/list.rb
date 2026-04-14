@@ -110,9 +110,9 @@ module Groups
       end
 
       def enforced_config
-        enforced = default_config.slice(*ENFORCED_SETTINGS)
-        enforced << :dmarc_mitigate_unconditionally if domain_name == "touchstonecohousing.org"
-        enforced
+        enforced_keys = ENFORCED_SETTINGS
+        enforced_keys << :dmarc_mitigate_unconditionally if domain_name == "touchstonecohousing.org"
+        default_config.slice(*enforced_keys)
       end
 
       private

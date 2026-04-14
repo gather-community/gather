@@ -109,6 +109,12 @@ module Groups
         )
       end
 
+      def enforced_config
+        enforced = default_config.slice(*ENFORCED_SETTINGS)
+        enforced << :dmarc_mitigate_unconditionally if domain_name == "touchstonecohousing.org"
+        enforced
+      end
+
       private
 
       def owner_moderator_memberships

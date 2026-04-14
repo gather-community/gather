@@ -28,6 +28,17 @@ describe Groups::Mailman::List do
     end
   end
 
+  describe "#enforced_config" do
+    it "includes the enforced config settings" do
+      expect(build(:group_mailman_list).enforced_config.keys).to include(*Groups::Mailman::List::ENFORCED_SETTINGS)
+    end
+
+    it "does not include non-enforced config settings" do
+      non_enforced_keys = Groups::Mailman::List::DEFAULT_SETTINGS.keys - Groups::Mailman::List::ENFORCED_SETTINGS
+      expect(build(:group_mailman_list).enforced_config.keys).not_to include(*non_enforced_keys)
+    end
+  end
+
   describe "#list_memberships" do
     let!(:mod1) { create(:user, email: "e@e.com", first_name: "Eu", last_name: "Smith") }
     let!(:mod2) { create(:user, email: "f@f.com", first_name: "Fu", last_name: "Smith") }
@@ -50,9 +61,9 @@ describe Groups::Mailman::List do
     let(:managers_can_admin_mod) { false }
     let!(:list) do
       build(:group_mailman_list, group: group,
-                                 managers_can_administer: managers_can_admin_mod,
-                                 managers_can_moderate: managers_can_admin_mod,
-                                 remote_id: "foo.bar.com")
+        managers_can_administer: managers_can_admin_mod,
+        managers_can_moderate: managers_can_admin_mod,
+        remote_id: "foo.bar.com")
     end
 
     context "for regular group" do
@@ -149,7 +160,7 @@ describe Groups::Mailman::List do
       memberships.map do |mship|
         mm_user = mship.mailman_user
         [mm_user.persisted?, mm_user.user_id, mm_user.remote_id,
-         mm_user.email, mm_user.display_name, mship.role]
+          mm_user.email, mm_user.display_name, mship.role]
       end
     end
   end

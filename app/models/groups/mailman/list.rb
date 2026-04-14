@@ -110,7 +110,7 @@ module Groups
       end
 
       def enforced_config
-        enforced_keys = ENFORCED_SETTINGS
+        enforced_keys = ENFORCED_SETTINGS.dup
         enforced_keys << :dmarc_mitigate_unconditionally if domain_name == "touchstonecohousing.org"
         default_config.slice(*enforced_keys)
       end

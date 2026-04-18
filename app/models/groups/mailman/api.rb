@@ -68,21 +68,21 @@ module Groups
       end
 
       # Assumes list_mship has an associated user remote_id.
-      def create_membership(list_mship)
+      def create_membership(list_mship, pre_approved: true)
         response = begin
-          request("members", :post, list_id: list_mship.list_id, subscriber: list_mship.subscriber,
-            role: list_mship.role, pre_verified: "true", pre_confirmed: "true", pre_approved: "true")
+          data = {list_id: list_mship.list_id, subscriber: list_mship.subscriber,
+                  role: list_mship.role, pre_verified: "true", pre_confirmed: "true"}
+          data[:pre_approved] = "true" if pre_approved
+          request("members", :post, **data)
         rescue ApiRequestError => e
-          if e.response.is_a?(Net::HTTPBadRequest) && /is already/.match?(e.response.body)
-            Rails.logger.error("Mailman subscription already exists: " \
-              "list #{list_mship.list_id}, subscriber: #{list_mship.subscriber}, role: #{list_mship.role}")
-            ErrorReporter.instance.report(
-              StandardError.new("Mailman subscription already exists"),
-              data: {list: list_mship.list_id, subscriber: list_mship.subscriber, role: list_mship.role}
-            )
+          if /Member already subscribed|is already/.match?(e.response.body)
+            Rails.logger.info("Member already subscribed")
+            return
+          elsif /Subscription request already pending/.match?(e.response.body)
+            accept_existing_subscription_request(list_mship, e)
             return
           else
-            raise e
+            raise
           end
         end
 

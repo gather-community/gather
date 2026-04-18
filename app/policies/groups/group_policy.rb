@@ -67,7 +67,7 @@ module Groups
 
       list_policy = Mailman::ListPolicy.new(user, group.mailman_list || Mailman::List.new(group: group))
       list_attribs = []
-      list_attribs.concat(%i[managers_can_administer managers_can_moderate]) if list_policy.new?
+      list_attribs.concat(%i[managers_can_administer managers_can_moderate all_cmty_members_can_send]) if list_policy.new?
       list_attribs << :id if list_policy.new?
       list_attribs << :_destroy if list_policy.destroy?
       list_attribs.concat(%i[name domain_id]) if list_policy.edit_name?

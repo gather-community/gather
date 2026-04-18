@@ -58,25 +58,41 @@ module Groups
         e.response.is_a?(Net::HTTPNotFound) ? nil : (raise e)
       end
 
-      # Loads membership ID and role based on given list_id and remote member id
+      # Loads membership ID, role, and moderation_action based on given list_id and remote member id
       def populate_membership(list_mship)
         found = request("members/find", :post, subscriber: list_mship.email, list_id: list_mship.list_id)
         raise ArgumentError, "Membership not found for #{list_mship.email}" if found["total_size"].zero?
         list_mship.remote_id = found["entries"][0]["member_id"]
         list_mship.role = found["entries"][0]["role"]
+        list_mship.moderation_action = found["entries"][0]["moderation_action"]
       end
 
       # Assumes list_mship has an associated user remote_id.
-      def create_membership(list_mship, pre_approved: true)
-        data = {list_id: list_mship.list_id, subscriber: list_mship.subscriber,
-                role: list_mship.role, pre_verified: "true", pre_confirmed: "true"}
-        data[:pre_approved] = "true" if pre_approved
-        request("members", :post, **data)
-      rescue ApiRequestError => e
-        if /Member already subscribed|is already/.match?(e.response.body)
-          Rails.logger.info("Member already subscribed")
-        elsif /Subscription request already pending/.match?(e.response.body)
-          accept_existing_subscription_request(list_mship, e)
+      def create_membership(list_mship)
+        response = begin
+          request("members", :post, list_id: list_mship.list_id, subscriber: list_mship.subscriber,
+            role: list_mship.role, pre_verified: "true", pre_confirmed: "true", pre_approved: "true")
+        rescue ApiRequestError => e
+          if e.response.is_a?(Net::HTTPBadRequest) && /is already/.match?(e.response.body)
+            Rails.logger.error("Mailman subscription already exists: " \
+              "list #{list_mship.list_id}, subscriber: #{list_mship.subscriber}, role: #{list_mship.role}")
+            ErrorReporter.instance.report(
+              StandardError.new("Mailman subscription already exists"),
+              data: {list: list_mship.list_id, subscriber: list_mship.subscriber, role: list_mship.role}
+            )
+            return
+          else
+            raise e
+          end
+        end
+
+        # The POST /members endpoint does not support setting moderation_action.
+        # So we do a subsequent PATCH to set it if it's non-nil.
+        # Exception: owner and moderator roles have moderation_action automatically set to "accept" by
+        # Mailman, so we skip the PATCH in that case.
+        if list_mship.moderation_action.present? && !(list_mship.owner_or_mod? && list_mship.default_or_accept?)
+          membership_id = response.header("Location").split("/").last
+          request("members/#{membership_id}", :patch, moderation_action: list_mship.moderation_action)
         end
       end
 

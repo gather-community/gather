@@ -71,6 +71,7 @@ run_all() {
     echo
   done
   msg_success "Gather setup complete."
+  _data_print_access_info
 }
 
 main() {
@@ -80,6 +81,7 @@ main() {
     usage
   else
     run_stage "$1"
+    _data_print_access_info
   fi
 }
 

@@ -153,20 +153,52 @@ Work::Shift.find_each { |s| s.__elasticsearch__.index_document }
 
 ## Mailman 3 Setup
 
-Only required if working on mailing list integration:
+Only required if working on mailing list integration.
+
+Mailman runs as two Docker containers (`mailman-core` and `mailman-web`) included in `docker-compose.yml`. Running `mise data` (or `docker compose up -d`) starts them alongside the other services. A Postorius admin account is created automatically with username `admin` and password `gather-mailman-dev`.
+
+### Inspecting list state (Postorius web UI)
+
+Visit [http://localhost:8000/postorius/](http://localhost:8000/postorius/) and log in with the superuser you created above. From here you can browse domains, lists, and memberships.
+
+### Inspecting list state (REST API)
+
+All REST API calls use HTTP Basic auth with `restadmin` / `restpass`. Run these from inside the devcontainer (use `mailman-core` as the hostname). From your host Mac terminal, replace `mailman-core` with `localhost`.
 
 ```bash
-mkdir ../mailman && cd ../mailman
-python3 -m venv venv
-source venv/bin/activate
-pip3 install mailman postorius hyperkitty whoosh
-mailman start
-git clone https://github.com/gather-community/mailman-suite.git
-cd mailman-suite/mailman-suite_project/
-git clone https://github.com/gather-community/discoursessoclient.git
-python3 manage.py migrate
-python3 manage.py collectstatic
-python3 manage.py runserver
+# List all mailing lists
+curl -u restadmin:restpass http://mailman-core:8001/3.1/lists
+
+# Show a specific list (replace list@domain with the actual address)
+curl -u restadmin:restpass http://mailman-core:8001/3.1/lists/list@domain
+
+# Show all members of a list
+curl -u restadmin:restpass "http://mailman-core:8001/3.1/lists/list@domain/roster/member?count=100"
+
+# Show nonmembers (allowed senders) of a list
+curl -u restadmin:restpass "http://mailman-core:8001/3.1/lists/list@domain/roster/nonmember?count=100"
+
+# Show a specific membership by ID
+curl -u restadmin:restpass http://mailman-core:8001/3.1/members/MEMBER_ID
+```
+
+### Making modifications (REST API)
+
+```bash
+# Add a member to a list
+curl -u restadmin:restpass -X POST http://mailman-core:8001/3.1/members \
+  -d "list_id=list.domain&subscriber=user@example.com&role=member&pre_verified=true&pre_confirmed=true&pre_approved=true"
+
+# Update a membership (e.g. set moderation_action to accept)
+curl -u restadmin:restpass -X PATCH http://mailman-core:8001/3.1/members/MEMBER_ID \
+  -d "moderation_action=accept"
+
+# Delete a membership
+curl -u restadmin:restpass -X DELETE http://mailman-core:8001/3.1/members/MEMBER_ID
+
+# Update list settings
+curl -u restadmin:restpass -X PATCH http://mailman-core:8001/3.1/lists/list@domain/config \
+  -d "advertised=false"
 ```
 
 ## VS Code

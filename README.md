@@ -157,20 +157,6 @@ Only required if working on mailing list integration.
 
 Mailman runs as two Docker containers (`mailman-core` and `mailman-web`) included in `docker-compose.yml`. Running `mise data` (or `docker compose up -d`) starts them alongside the other services. A Postorius admin account is created automatically with username `admin` and password `gather-mailman-dev`.
 
-### Viewing logs
-
-```bash
-docker logs mailman-core        # Mailman core logs (REST API, delivery, errors)
-docker logs mailman-web         # Postorius web UI logs
-docker logs -f mailman-core     # Follow logs in real time
-```
-
-### Dropping into a shell
-
-```bash
-docker exec -it mailman-core bash
-```
-
 ### Inspecting list state (Postorius web UI)
 
 Visit [http://localhost:8000/postorius/](http://localhost:8000/postorius/) and log in with the superuser you created above. From here you can browse domains, lists, and memberships.
@@ -213,6 +199,20 @@ curl -u restadmin:restpass -X DELETE http://mailman-core:8001/3.1/members/MEMBER
 # Update list settings
 curl -u restadmin:restpass -X PATCH http://mailman-core:8001/3.1/lists/list@domain/config \
   -d "advertised=false"
+```
+
+### Viewing logs
+
+```bash
+docker logs mailman-core        # Mailman core logs (REST API, delivery, errors)
+docker logs mailman-web         # Postorius web UI logs
+docker logs -f mailman-core     # Follow logs in real time
+```
+
+### Dropping into a shell
+
+```bash
+docker exec -it mailman-core bash
 ```
 
 ## VS Code

@@ -55,7 +55,7 @@ gem "pundit", "~> 2.5"
 gem "rails", "~> 7.0.0"
 gem "rails-backbone", "~> 1.2"
 gem "redcarpet", "~> 3.5"
-gem "redis", "~> 4.1"
+gem "redis", "~> 5.4"
 gem "rein", "~> 5.0" # This can be removed when we go to Rails 6.1.
 gem "rolify", "~> 6.0"
 gem "sentry-ruby", "~> 5.4"

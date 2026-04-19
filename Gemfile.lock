@@ -191,6 +191,7 @@ GEM
     config (4.0.0)
       deep_merge (~> 1.2, >= 1.2.1)
       dry-validation (~> 1.0, >= 1.0.0)
+    connection_pool (3.0.2)
     countries (3.1.0)
       i18n_data (~> 0.11.0)
       sixarm_ruby_unaccent (~> 1.1)
@@ -538,7 +539,10 @@ GEM
       ffi (~> 1.0)
     rdoc (6.3.4.1)
     redcarpet (3.5.1)
-    redis (4.8.0)
+    redis (5.4.1)
+      redis-client (>= 0.22.0)
+    redis-client (0.26.4)
+      connection_pool
     regexp_parser (2.11.3)
     rein (5.1.0)
       activerecord (>= 4.0.0)
@@ -774,7 +778,7 @@ DEPENDENCIES
   rails (~> 7.0.0)
   rails-backbone (~> 1.2)
   redcarpet (~> 3.5)
-  redis (~> 4.1)
+  redis (~> 5.4)
   rein (~> 5.0)
   rolify (~> 6.0)
   rspec-github

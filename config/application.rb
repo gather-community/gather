@@ -15,7 +15,7 @@ Bundler.require(*Rails.groups)
 module Gather
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults("7.0")
+    config.load_defaults("7.1")
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
@@ -30,13 +30,12 @@ module Gather
     extra_paths = [
       Rails.root.join("app", "decorators", "concerns"),
       Rails.root.join("app", "mailers", "concerns"),
-      Rails.root.join("app", "search_configs"),
-      Rails.root.join("lib")
+      Rails.root.join("app", "search_configs")
     ]
     config.autoload_paths += extra_paths
     config.eager_load_paths += extra_paths
 
-    config.add_autoload_paths_to_load_path = false
+    config.autoload_lib(ignore: %w[graphics random_data])
 
     # Use default logging formatter so that PID and timestamp are not suppressed.
     # Without this line, the default is ActiveSupport::Logger::SimpleFormatter, which
@@ -44,10 +43,6 @@ module Gather
     # The default Rails config does this only for prod, but we prefer to have the same
     # formatter for all environments.
     config.log_formatter = ::Logger::Formatter.new
-
-    # Don't autoload these directories.
-    Rails.autoloaders.main.ignore(Rails.root.join("lib", "graphics"))
-    Rails.autoloaders.main.ignore(Rails.root.join("lib", "random_data"))
 
     if Rails.env.production? && Settings.error_reporting == "email"
       config.middleware.use(ExceptionNotification::Rack,

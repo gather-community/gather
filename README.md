@@ -173,10 +173,10 @@ curl -u restadmin:restpass http://mailman-core:8001/3.1/lists
 curl -u restadmin:restpass http://mailman-core:8001/3.1/lists/list@domain
 
 # Show all members of a list
-curl -u restadmin:restpass "http://mailman-core:8001/3.1/lists/list@domain/roster/member?count=100"
+curl -u restadmin:restpass "http://mailman-core:8001/3.1/lists/list@domain/roster/member?count=100&page=1"
 
 # Show nonmembers (allowed senders) of a list
-curl -u restadmin:restpass "http://mailman-core:8001/3.1/lists/list@domain/roster/nonmember?count=100"
+curl -u restadmin:restpass "http://mailman-core:8001/3.1/lists/list@domain/roster/nonmember?count=100&page=1"
 
 # Show a specific membership by ID
 curl -u restadmin:restpass http://mailman-core:8001/3.1/members/MEMBER_ID

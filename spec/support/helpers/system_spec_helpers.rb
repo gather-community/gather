@@ -52,7 +52,7 @@ module SystemSpecHelpers
         if multiple
           span_el.find(".select2-search__field").click
         else
-          execute_script("$('#{css}').select2('open')")
+          span_el.find(".select2-selection").click
           find(".select2-search--dropdown .select2-search__field").set(value)
         end
         yield

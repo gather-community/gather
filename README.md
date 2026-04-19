@@ -201,6 +201,20 @@ curl -u restadmin:restpass -X PATCH http://mailman-core:8001/3.1/lists/list@doma
   -d "advertised=false"
 ```
 
+### Viewing logs
+
+```bash
+docker logs mailman-core        # Mailman core logs (REST API, delivery, errors)
+docker logs mailman-web         # Postorius web UI logs
+docker logs -f mailman-core     # Follow logs in real time
+```
+
+### Dropping into a shell
+
+```bash
+docker exec -it mailman-core bash
+```
+
 ## VS Code
 
 When using Dev Containers, extensions and settings are installed and configured automatically.

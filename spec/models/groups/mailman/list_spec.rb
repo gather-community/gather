@@ -77,6 +77,29 @@ describe Groups::Mailman::List do
         group.memberships.create!(group: group, user: manager2, kind: "manager")
       end
 
+      context "when all_cmty_members_can_send is true" do
+        let!(:list) do
+          build(:group_mailman_list, group: group,
+            all_cmty_members_can_send: true, remote_id: "foo.bar.com")
+        end
+
+        it "includes non-member community users as nonmembers with accept action" do
+          non_joiner_mship = list.list_memberships.find { |m| m.email == non_joiner.email }
+          expect(non_joiner_mship).to have_attributes(role: "nonmember", moderation_action: "accept")
+        end
+
+        it "does not include group members as additional nonmembers" do
+          joiner1_roles = list.list_memberships.select { |m| m.email == joiner1.email }.map(&:role)
+          expect(joiner1_roles).not_to include("nonmember")
+        end
+      end
+
+      context "when all_cmty_members_can_send is false" do
+        it "does not include non-member community users" do
+          expect(list.list_memberships.map(&:email)).not_to include(non_joiner.email)
+        end
+      end
+
       context "when managers can't administer or moderate" do
         it "returns correct list" do
           expect(list.list_memberships.map(&:list_id).uniq).to eq(["foo.bar.com"])

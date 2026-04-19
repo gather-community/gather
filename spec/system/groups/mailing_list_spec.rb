@@ -40,8 +40,11 @@ describe "mailing lists", js: true do
       click_link("Sync Now")
       expect(page).to have_content("List sync started")
 
-      # Delete the list
+      # Edit and verify the all_cmty_members_can_send checkbox is present and unchecked by default
       click_link("Edit")
+      expect(page).to have_unchecked_field("All community members can send to list?")
+
+      # Delete the list
       check("Delete this list?")
       accept_alert { click_button("Save") }
 

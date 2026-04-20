@@ -58,6 +58,17 @@ services:
     networks:
       - gather-network
 
+  # Headless Chrome for system specs (js: true). Works on both amd64 and arm64.
+  # Set SELENIUM_REMOTE_URL=http://localhost:4444/wd/hub when running system specs locally.
+  selenium-chrome:
+    image: seleniarm/standalone-chromium:latest
+    ports:
+      - "4444:4444"
+      - "5900:5900"
+    shm_size: 2g
+    networks:
+      - gather-network
+
   mailman-core:
     image: maxking/mailman-core:0.4
     platform: linux/amd64

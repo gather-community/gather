@@ -77,7 +77,15 @@ RSpec.configure do |config|
     options.add_preference(:download, prompt_for_download: false,
       default_directory: DownloadHelpers::PATH.to_s)
     options.add_preference(:browser, set_download_behavior: {behavior: "allow"})
-    Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
+
+    if (remote_url = ENV["SELENIUM_REMOTE_URL"])
+      # Use remote Selenium (e.g. the selenium-chrome Docker service) when SELENIUM_REMOTE_URL is set.
+      # This allows running system specs on Linux environments without a local Chrome install.
+      # Example: SELENIUM_REMOTE_URL=http://localhost:4444/wd/hub bundle exec rspec spec/system
+      Capybara::Selenium::Driver.new(app, browser: :remote, url: remote_url, options: options)
+    else
+      Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
+    end
   end
 
   Capybara.register_driver(:default) do |app|

@@ -7,7 +7,9 @@ module SystemSpecHelpers
 
   # Temporarily undoes any within scopes.
   def with_top_level_scope
-    within(Capybara::Node::Document.new(page, page.driver)) { yield }
+    # Use absolute XPath /html to always scope to the document root regardless of any outer within() block.
+    # Capybara::Node::Document.new(page, page.driver) no longer works correctly in Capybara 3.40.
+    within(:xpath, "/html") { yield }
   end
 
   # Fills in the given value into the given select (a Node::Element or CSS selector),

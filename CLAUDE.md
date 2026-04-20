@@ -149,6 +149,10 @@ Gather uses several locale files under `config/locales/en/`. Each type of string
 - GuardClause cop is disabled — parallel if/unless blocks are acceptable
 - `Style::Documentation` is disabled for controllers, decorators, helpers, policies, serializers
 
+## Upgrading Rails
+
+When upgrading Rails to a new version, always read the official upgrade guide at https://guides.rubyonrails.org/upgrading_ruby_on_rails.html before making changes. The guide covers breaking changes, removed features, new defaults, and required config updates for each version step.
+
 ## Tech Stack
 - Ruby 3.2.2, Node.js 18.12.1
 - Rails 7.1, PostgreSQL, Redis, Elasticsearch
@@ -163,7 +167,6 @@ Gather uses several locale files under `config/locales/en/`. Each type of string
 - Factories in `spec/factories/` organized by module
 - Shared support in `spec/support/` (contexts, helpers, matchers)
 - System tests use headless Chrome via Selenium
-<<<<<<< HEAD
 
 ## Headless Chrome for System Tests
 

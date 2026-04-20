@@ -163,7 +163,7 @@ When upgrading Rails to a new version, always read the official upgrade guide at
 
 ## Tech Stack
 - Ruby 3.2.2, Node.js 18.12.1
-- Rails 7.1, PostgreSQL, Redis, Elasticsearch
+- Rails 7.2, PostgreSQL, Redis, Elasticsearch
 - Devise + OmniAuth (Google OAuth2) for auth
 - Delayed Job for background processing
 - esbuild for JS bundling, Stimulus for frontend interactivity

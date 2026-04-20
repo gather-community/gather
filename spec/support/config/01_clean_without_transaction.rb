@@ -5,12 +5,15 @@
 # Uses DatabaseCleaner to clean up instead of relying on the transaction.
 RSpec.configure do |config|
   config.around(clean_with_transaction: false) do |example|
-    self.use_transactional_tests = false
-    example.run
-    self.use_transactional_tests = true
+    begin
+      self.use_transactional_tests = false
+      example.run
+    ensure
+      self.use_transactional_tests = true
 
-    # Clean with DatabaseCleaner because it's the easiest way to clean everything without using transactions.
-    # We don't use DatabaseCleaner for anything else.
-    DatabaseCleaner.clean_with(:deletion)
+      # Clean with DatabaseCleaner because it's the easiest way to clean everything without using transactions.
+      # We don't use DatabaseCleaner for anything else.
+      DatabaseCleaner.clean_with(:deletion)
+    end
   end
 end

@@ -7,6 +7,8 @@ class Defaults
   end
 
   def self.community
+    # If this causes a uniqueness error, it may be because there is an error in the test and then a
+    # second error, and the transaction is not getting properly rolled back.
     @community ||= FactoryBot.create(:community, name: "Default", slug: "default", abbrv: "df")
   end
 

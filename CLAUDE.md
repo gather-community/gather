@@ -131,7 +131,7 @@ Gather uses several locale files under `config/locales/en/`. Each type of string
 **`en.yml`** — application-wide UI strings:
 - `helpers.submit.{action}` or `helpers.submit.{model}.{action}` — submit button labels
 - `confirmations.{model}.{action}` — confirm dialog text for destructive actions
-- `common.*` — shared strings used across multiple modules
+- `common.*` — shared strings used across multiple strings used across multiple modules
 - `errors.messages.*` — global custom error messages
 
 **Module-specific files** (`meals.yml`, `work.yml`, `people.yml`, etc.) — flash messages, page titles, section headers, and other strings belonging entirely to one feature module.
@@ -141,6 +141,7 @@ Gather uses several locale files under `config/locales/en/`. Each type of string
 
 ## Testing
 - **All new functionality must have test coverage.** Add specs for new models, jobs, mailers, forms, policies, and controllers. Follow existing spec patterns and directory structure.
+- **System tests require headless Chrome.** See the [Selenium Docker service](#headless-chrome-for-system-tests) section below.
 
 ## Code Style
 - Ruby: RuboCop with `standard` gem (Ruby 3.0 config), max line length 110
@@ -148,9 +149,13 @@ Gather uses several locale files under `config/locales/en/`. Each type of string
 - GuardClause cop is disabled — parallel if/unless blocks are acceptable
 - `Style::Documentation` is disabled for controllers, decorators, helpers, policies, serializers
 
+## Upgrading Rails
+
+When upgrading Rails to a new version, always read the official upgrade guide at https://guides.rubyonrails.org/upgrading_ruby_on_rails.html before making changes. The guide covers breaking changes, removed features, new defaults, and required config updates for each version step.
+
 ## Tech Stack
 - Ruby 3.2.2, Node.js 18.12.1
-- Rails 7, PostgreSQL, Redis, Elasticsearch
+- Rails 7.1, PostgreSQL, Redis, Elasticsearch
 - Devise + OmniAuth (Google OAuth2) for auth
 - Delayed Job for background processing
 - esbuild for JS bundling, Stimulus for frontend interactivity
@@ -162,3 +167,16 @@ Gather uses several locale files under `config/locales/en/`. Each type of string
 - Factories in `spec/factories/` organized by module
 - Shared support in `spec/support/` (contexts, helpers, matchers)
 - System tests use headless Chrome via Selenium
+
+## Headless Chrome for System Tests
+
+System specs (`js: true`) use headless Chrome via Selenium. On macOS the locally-installed Chrome is used automatically. On Linux (e.g. the Claude Code dev container), Chrome is not available by default — add a `selenium-chrome` service to docker-compose.yml and point Capybara at it via `SELENIUM_REMOTE_URL`.
+
+### Select2 Testing (`spec/support/helpers/system_spec_helpers.rb`)
+
+Select2 v4 appends its floating dropdown to `document.body` via `AttachBody`. This means the dropdown lives outside any `within` scope. The `with_top_level_scope` helper works around this by pushing `nil` onto Capybara's internal `@scopes` stack, temporarily resetting to document root — the same mechanism used by `within_window`.
+
+Key behaviors:
+- **Single-select**: opening appends `.select2-search--dropdown .select2-search__field` to body. Use `execute_script("$('#id').select2('open')")` to open, then `find(".select2-search--dropdown .select2-search__field").set(value)` to type.
+- **Multiple-select**: uses inline search (`.select2-search__field` on the span), no dropdown search field. After clicking a result, the dropdown stays open — close it with `find("body").click`.
+- One open single-select creates **two** `.select2-container--open` elements (inline container + floating dropdown). This is normal.

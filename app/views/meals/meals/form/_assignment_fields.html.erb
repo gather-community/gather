@@ -1,2 +1,2 @@
-<%= f.input :user_id, options.merge(as: :user_select, label: false) %>
+<%= f.input :user_id, options.except(:multiple).merge(as: :user_select, label: false) %>
 <%= f.hidden_field(:role_id) %>

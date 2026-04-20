@@ -60,11 +60,6 @@ module SystemSpecHelpers
           span_el.find(".select2-search__field").click
         else
           execute_script("$('#{css}').select2('open')")
-          s2_init = page.evaluate_script("$.data(document.querySelector('#{css}'), 'select2') !== undefined && $.data(document.querySelector('#{css}'), 'select2') !== null")
-          sel_multiple = page.evaluate_script("document.querySelector('#{css}') && document.querySelector('#{css}').multiple")
-          field_count = page.evaluate_script("document.querySelectorAll('.select2-search--dropdown .select2-search__field').length")
-          open_count = page.evaluate_script("document.querySelectorAll('.select2-container--open').length")
-          raise "select2 diag: s2_init=#{s2_init} sel_multiple=#{sel_multiple} field_count=#{field_count} open_count=#{open_count} css=#{css}" unless field_count > 0
           find(".select2-search--dropdown .select2-search__field").set(value)
         end
         yield

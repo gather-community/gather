@@ -472,7 +472,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_07_130000) do
     t.index ["operation_id", "google_email"], name: "index_migration_requests_on_operation_id_and_google_email", unique: true
     t.index ["operation_id"], name: "index_gdrive_migration_requests_on_operation_id"
     t.check_constraint "char_length(opt_out_reason) <= 32767", name: "opt_out_reason_length"
-    t.check_constraint "status::text = ANY (ARRAY['new'::character varying, 'opened'::character varying, 'opted_out'::character varying]::text[])", name: "status_enum"
+    t.check_constraint "status::text = ANY (ARRAY['new'::character varying::text, 'opened'::character varying::text, 'opted_out'::character varying::text])", name: "status_enum"
   end
 
   create_table "gdrive_migration_scan_tasks", force: :cascade do |t|
@@ -498,7 +498,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_07_130000) do
     t.datetime "updated_at", null: false
     t.index ["cluster_id"], name: "index_gdrive_migration_scans_on_cluster_id"
     t.index ["operation_id"], name: "index_gdrive_migration_scans_on_operation_id"
-    t.check_constraint "scope::text = ANY (ARRAY['full'::character varying, 'changes'::character varying, 'file_drop'::character varying]::text[])", name: "scope_enum"
     t.check_constraint "status::text = ANY (ARRAY['new'::character varying::text, 'in_progress'::character varying::text, 'cancelled'::character varying::text, 'complete'::character varying::text])", name: "status_enum"
   end
 
@@ -514,11 +513,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_07_130000) do
     t.integer "item_id", null: false, comment: "Deliberately not a foreign key because we want to retain ID information even after item record destroyed so we can search by ID in PermissionSyncJob."
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false, comment: "Deliberately not a foreign key because we want to retain ID information even after user record destroyed so we can search by ID in PermissionSyncJob."
-    t.check_constraint "access_level::text = ANY (ARRAY['reader'::character varying, 'commenter'::character varying, 'writer'::character varying, 'fileOrganizer'::character varying]::text[])", name: "access_level_enum"
     t.index ["cluster_id"], name: "index_gdrive_synced_permissions_on_cluster_id"
     t.index ["gdrive_config_id"], name: "index_gdrive_synced_permissions_on_gdrive_config_id"
     t.index ["item_id"], name: "index_gdrive_synced_permissions_on_item_id"
     t.index ["user_id"], name: "index_gdrive_synced_permissions_on_user_id"
+    t.check_constraint "access_level::text = ANY (ARRAY['reader'::character varying::text, 'commenter'::character varying::text, 'writer'::character varying::text, 'fileOrganizer'::character varying::text])", name: "access_level_enum"
   end
 
   create_table "gdrive_tokens", force: :cascade do |t|

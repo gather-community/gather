@@ -60,6 +60,10 @@ module SystemSpecHelpers
           span_el.find(".select2-search__field").click
         else
           execute_script("$('#{css}').select2('open')")
+          # Diagnostic: log DOM state if search field not found
+          field_count = page.evaluate_script("document.querySelectorAll('.select2-search--dropdown .select2-search__field').length")
+          open_count = page.evaluate_script("document.querySelectorAll('.select2-container--open').length")
+          raise "select2 diagnostic: search_field_count=#{field_count} open_container_count=#{open_count} css=#{css}" unless field_count > 0
           find(".select2-search--dropdown .select2-search__field").set(value)
         end
         yield

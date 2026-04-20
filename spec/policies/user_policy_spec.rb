@@ -337,7 +337,7 @@ describe UserPolicy do
 
     context "for super admin" do
       let(:actor) { super_admin }
-      it { expect(roles).to match_array(%i[super_admin cluster_admin admin] + base_roles) }
+      it { expect(roles).to match_array(%i[super_admin cluster_admin admin new_community_approver] + base_roles) }
     end
 
     context "for cluster admin" do
@@ -506,7 +506,7 @@ describe UserPolicy do
       let(:user) { super_admin }
 
       it "should allow super admin attribs" do
-        expect(subject).to match_array(cluster_admin_attribs << :role_super_admin)
+        expect(subject).to match_array(cluster_admin_attribs + %i[role_super_admin role_new_community_approver])
       end
     end
   end

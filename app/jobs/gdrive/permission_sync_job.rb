@@ -143,15 +143,6 @@ module GDrive
         # Just go ahead and destroy the permission to match.
         log("Permission not found, skipping delete", permission)
         permission.destroy
-      elsif error.message.match?(/cannotDeletePermission/)
-        # It appears these may be due to the permission being inherited.
-        # The full error was "The authenticated user does not have the required
-        # access to delete the permission." But it seems unlikely that this is really an "access"
-        # issue because the Gather user is generally a super admin, and I was still able to list
-        # the permissions when debugging in the Ruby console. So going to log these and swallow them
-        # for now.
-        log("Swallowing cannotDeletePermission", permission)
-        permission.destroy
       elsif error.message.match?(/cannotModifyInheritedTeamDrivePermission/)
         # It is ok to swallow these if we are destroying because it just means the supplemental
         # permission was already destroyed, so it's kind of like the "not found" case

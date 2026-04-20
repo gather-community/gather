@@ -144,9 +144,9 @@ class UserPolicy < ApplicationPolicy
   end
 
   def grantable_roles
-    (active_admin? ? User::ROLES - %i[cluster_admin super_admin] : []) +
+    (active_admin? ? User::ROLES - %i[cluster_admin super_admin] - User::SUPER_ADMIN_ONLY_ROLES : []) +
       (active_cluster_admin? ? [:cluster_admin] : []) +
-      (active_super_admin? ? [:super_admin] : [])
+      (active_super_admin? ? [:super_admin] + User::SUPER_ADMIN_ONLY_ROLES : [])
   end
 
   def exportable_attributes

@@ -163,6 +163,7 @@ Gather uses several locale files under `config/locales/en/`. Each type of string
 - Factories in `spec/factories/` organized by module
 - Shared support in `spec/support/` (contexts, helpers, matchers)
 - System tests use headless Chrome via Selenium
+<<<<<<< HEAD
 
 ## Headless Chrome for System Tests
 

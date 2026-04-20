@@ -22,6 +22,7 @@ class Community < ApplicationRecord
   include SemicolonDisallowable
 
   SLUG_REGEX = /[a-z][a-z-]*/
+  SLUG_MAX_LENGTH = 63
 
   acts_as_tenant :cluster
   resourcify
@@ -55,6 +56,8 @@ class Community < ApplicationRecord
   scope :by_name_with_first, ->(c) { by_one_cmty_first(c).by_name }
 
   accepts_nested_attributes_for :restrictions
+
+  validates :slug, length: {maximum: SLUG_MAX_LENGTH}
 
   disallow_semicolons :name
 

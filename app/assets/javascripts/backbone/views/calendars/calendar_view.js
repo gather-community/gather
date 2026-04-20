@@ -21,6 +21,8 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
     this.timedEventsOnly = options.timedEventsOnly;
     this.allDayText = options.allDayText;
     this._fcHeaderLastFocusKey = null;
+    this._fcGridFocusDate = null;
+    this._fcGridShouldFocus = false;
     this.showAppropriateEarlyLink();
     this.initCalendar();
   },
@@ -35,6 +37,11 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
     return {
       "click .modal .btn-primary": "create",
       "click .early": "showHideEarly",
+      "click .fc-day[data-date]": "onGridCellClick",
+      "focusin .fc-day[data-date]": "onGridCellFocusIn",
+      "focusin .fc-event": "onGridEventFocusIn",
+      "keydown .fc-day[data-date]": "onGridCellKeydown",
+      "keydown .fc-event": "onGridEventKeydown",
 
       /*
        * Capture header interactions before FullCalendar handles them, so we can restore focus
@@ -147,9 +154,7 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
       if (start.hasTime()) {
         startTime = start.format(Gather.TIME_FORMATS.regTime);
         endTime = end.format(Gather.TIME_FORMATS.regTime);
-        body.html(
-          `Create event on <b>${date}</b> from <b>${startTime}</b> to <b>${endTime}</b>?`
-        );
+        body.html(`Create event on <b>${date}</b> from <b>${startTime}</b> to <b>${endTime}</b>?`);
       } else {
         body.html(`Create event on <b>${date}</b>?`);
       }
@@ -219,6 +224,12 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
       return;
     }
 
+    /*
+     * FullCalendar uses nested layout tables; mark wrappers presentational
+     * so screen readers announce the grid model instead of table boundaries.
+     */
+    this.calendar.find(".fc-view > table").attr("role", "presentation");
+
     if (view.name === "month") {
       const $grid = this.calendar.find(".fc-month-view").first();
       if (!$grid.length) {
@@ -227,6 +238,8 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
       $grid.attr("role", "grid");
       $grid.find(".fc-row").attr("role", "row");
       $grid.find(".fc-day").attr("role", "gridcell");
+      $grid.find(".fc-row table").attr("role", "presentation");
+      this.applyFullCalendarGridKeyboard();
       return;
     }
 
@@ -236,6 +249,7 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
         $allDayGrid.attr("role", "grid");
         $allDayGrid.find(".fc-row").attr("role", "row");
         $allDayGrid.find(".fc-day").attr("role", "gridcell");
+        $allDayGrid.find(".fc-row table").attr("role", "presentation");
       }
 
       const $timeGrid = this.calendar.find(".fc-time-grid").first();
@@ -243,8 +257,231 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
         $timeGrid.attr("role", "grid");
         $timeGrid.find(".fc-slats tr").attr("role", "row");
         $timeGrid.find(".fc-slats td").attr("role", "gridcell");
+        $timeGrid.find("table").attr("role", "presentation");
+      }
+
+      this.applyFullCalendarGridKeyboard();
+    }
+  },
+
+  applyFullCalendarGridKeyboard() {
+    const view = this.calendar.fullCalendar("getView");
+    if (!view) {
+      return;
+    }
+
+    // Keep grid entry/exit on date cells only so Shift+Tab can leave naturally.
+    this.calendar.find(".fc-view").removeAttr("tabindex");
+    const today = $.fullCalendar.moment();
+    let focusDate = this._fcGridFocusDate;
+
+    if (!focusDate) {
+      if (this.getGridDayCell(today).length) {
+        focusDate = today.format("YYYY-MM-DD");
+      } else {
+        focusDate = view.intervalStart.format("YYYY-MM-DD");
       }
     }
+
+    this.setGridFocus(focusDate, {focus: this._fcGridShouldFocus});
+    this._fcGridShouldFocus = false;
+  },
+
+  onGridCellClick(e) {
+    const date = this.gridDateFromCell($(e.currentTarget));
+    if (!date) {
+      return;
+    }
+    this.setGridFocus(date, {focus: false});
+  },
+
+  onGridCellFocusIn(e) {
+    const date = this.gridDateFromCell($(e.currentTarget));
+    if (!date) {
+      return;
+    }
+    this.setGridFocus(date, {focus: false});
+  },
+
+  onGridCellKeydown(e) {
+    const keyCode = e.which || e.keyCode;
+    const date = this.gridDateFromCell($(e.currentTarget));
+    if (!date) {
+      return;
+    }
+
+    let nextDate = null;
+    if (keyCode === 37) {
+      nextDate = date.clone().add(-1, "day");
+    } else if (keyCode === 39) {
+      nextDate = date.clone().add(1, "day");
+    } else if (keyCode === 38) {
+      nextDate = date.clone().add(-1, "week");
+    } else if (keyCode === 40) {
+      nextDate = date.clone().add(1, "week");
+    } else if (keyCode === 36) {
+      nextDate = date.clone().startOf("week");
+    } else if (keyCode === 35) {
+      nextDate = date.clone().endOf("week").startOf("day");
+    } else if (keyCode === 33) {
+      nextDate = date.clone().add(-1, "month");
+    } else if (keyCode === 34) {
+      nextDate = date.clone().add(1, "month");
+    } else if (keyCode === 13 || keyCode === 32) {
+      this.selectDateFromGrid(date);
+      e.preventDefault();
+      return;
+    } else {
+      return;
+    }
+
+    this.moveGridFocusToDate(nextDate);
+    e.preventDefault();
+  },
+
+  onGridEventFocusIn(e) {
+    const date = this.resolveGridDateFromElement($(e.currentTarget));
+    if (!date) {
+      return;
+    }
+    this.setGridFocus(date, {focus: false});
+  },
+
+  onGridEventKeydown(e) {
+    const keyCode = e.which || e.keyCode;
+    const isNavigationKey =
+      keyCode === 37 ||
+      keyCode === 38 ||
+      keyCode === 39 ||
+      keyCode === 40 ||
+      keyCode === 33 ||
+      keyCode === 34 ||
+      keyCode === 35 ||
+      keyCode === 36;
+    if (!isNavigationKey) {
+      return;
+    }
+
+    const date = this.resolveGridDateFromElement($(e.currentTarget));
+    if (!date) {
+      return;
+    }
+
+    let nextDate = null;
+    if (keyCode === 37) {
+      nextDate = date.clone().add(-1, "day");
+    } else if (keyCode === 39) {
+      nextDate = date.clone().add(1, "day");
+    } else if (keyCode === 38) {
+      nextDate = date.clone().add(-1, "week");
+    } else if (keyCode === 40) {
+      nextDate = date.clone().add(1, "week");
+    } else if (keyCode === 36) {
+      nextDate = date.clone().startOf("week");
+    } else if (keyCode === 35) {
+      nextDate = date.clone().endOf("week").startOf("day");
+    } else if (keyCode === 33) {
+      nextDate = date.clone().add(-1, "month");
+    } else if (keyCode === 34) {
+      nextDate = date.clone().add(1, "month");
+    }
+
+    if (nextDate) {
+      this.moveGridFocusToDate(nextDate);
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  },
+
+  selectDateFromGrid(date) {
+    if (!this.canCreate) {
+      return;
+    }
+    const start = date.clone().startOf("day");
+    const end = date.clone().add(1, "day").startOf("day");
+    this.calendar.fullCalendar("select", start, end);
+  },
+
+  moveGridFocusToDate(date) {
+    const dateString = date.format("YYYY-MM-DD");
+    this._fcGridFocusDate = dateString;
+
+    if (this.getGridDayCell(date).length) {
+      this.setGridFocus(dateString, {focus: true});
+      return;
+    }
+
+    this._fcGridShouldFocus = true;
+    this.calendar.fullCalendar("gotoDate", date);
+  },
+
+  setGridFocus(date, options) {
+    const dateString = typeof date === "string" ? date : date.format("YYYY-MM-DD");
+    const $cells = this.getNavigableGridCells();
+    const $target = this.getGridDayCell(dateString);
+    if (!$target.length) {
+      return false;
+    }
+
+    $cells.attr("tabindex", "-1");
+    $target.attr("tabindex", "0");
+    if (options && options.focus) {
+      $target.focus();
+    }
+    this._fcGridFocusDate = dateString;
+    return true;
+  },
+
+  getGridDayCell(date) {
+    const dateString = typeof date === "string" ? date : date.format("YYYY-MM-DD");
+    return this.getNavigableGridCells()
+      .filter((_, el) => $(el).attr("data-date") === dateString)
+      .first();
+  },
+
+  getNavigableGridCells() {
+    const view = this.calendar.fullCalendar("getView");
+    if (!view) {
+      return this.calendar.find(".fc-day[data-date]");
+    }
+
+    if (view.name === "month") {
+      return this.calendar.find(".fc-month-view .fc-day[data-date]:visible");
+    }
+
+    const $allDayCells = this.calendar.find(".fc-agenda-view .fc-day-grid .fc-day[data-date]:visible");
+    if ($allDayCells.length) {
+      return $allDayCells;
+    }
+
+    return this.calendar.find(".fc-time-grid .fc-bg .fc-day[data-date]:visible");
+  },
+
+  gridDateFromCell($cell) {
+    const dateString = $cell.data("date") || $cell.attr("data-date");
+    if (!dateString) {
+      return null;
+    }
+    return $.fullCalendar.moment(dateString, "YYYY-MM-DD");
+  },
+
+  resolveGridDateFromElement($element) {
+    const $dateContainer = $element.closest("[data-date]");
+    const date = this.gridDateFromCell($dateContainer);
+    if (date) {
+      return date;
+    }
+
+    if (this._fcGridFocusDate) {
+      return $.fullCalendar.moment(this._fcGridFocusDate, "YYYY-MM-DD");
+    }
+
+    const view = this.calendar.fullCalendar("getView");
+    if (view && view.intervalStart) {
+      return view.intervalStart.clone().startOf("day");
+    }
+
+    return null;
   },
 
   onLoading(isLoading) {

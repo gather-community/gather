@@ -36,7 +36,7 @@ module Groups
           list.config = list.default_config
         # Otherwise, the list must already exist, so we just load an abbreviated config that we enforce.
         else
-          list.config = list.default_config.slice(*List::ENFORCED_SETTINGS)
+          list.config = list.enforced_config
         end
       end
     end

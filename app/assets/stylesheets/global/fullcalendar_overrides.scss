@@ -29,4 +29,9 @@
   .fc-month-view .fc-day-grid .fc-row {
     min-height: 90px;
   }
+
+  .fc-day[tabindex="0"]:focus {
+    outline: 2px solid $theme-main;
+    outline-offset: -2px;
+  }
 }

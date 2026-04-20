@@ -13,7 +13,8 @@ module Utils
       attributes = Rails::Html::SafeListSanitizer.allowed_attributes + %w[target]
       renderer = Redcarpet::Render::HTML.new(hard_wrap: true)
       markdown = Redcarpet::Markdown.new(renderer, autolink: true, space_after_headers: true,
-                                                   tables: true, strikethrough: true)
+                                                   tables: true, strikethrough: true,
+                                                   fenced_code_blocks: true)
       sanitize(markdown.render(str), tags: tags, attributes: attributes)
     end
   end

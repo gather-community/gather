@@ -17,10 +17,11 @@
         &nbsp;
         <%= link_to("Billing", accounts_url) %>
       <% end %>
-      <% if policy(Community.new).index? %>
-        &nbsp;
-        <%= link_to("Communities", communities_url) %>
-      <% end %>
+    <% end %>
+
+    <% if current_user && policy(Community.new).index? %>
+      &nbsp;
+      <%= link_to("Communities", communities_url(host: Settings.url.host)) %>
     <% end %>
 
     <%# For test purposes only. Security risk otherwise. %>

@@ -87,7 +87,7 @@ module GDrive
       return unless Config.exists?(community_id: community_id)
 
       GDrive::UserPermissionSyncJob.perform_later(cluster_id: user.cluster_id,
-        community_id: community_id, user_id: user.id)
+        community_id: community_id, user_id: user.id, refresh_synced_permissions: true)
     end
 
     # An ItemGroup is associated with one Item, which is always associated
@@ -97,7 +97,7 @@ module GDrive
       item = item_group.item
       config = item.gdrive_config
       GDrive::ItemPermissionSyncJob.perform_later(cluster_id: config.cluster_id,
-        community_id: config.community_id, item_id: item.id)
+        community_id: config.community_id, item_id: item.id, refresh_synced_permissions: true)
     end
 
     def user_community_changed?(user)

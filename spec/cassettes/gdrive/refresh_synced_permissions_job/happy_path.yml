@@ -1,0 +1,192 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://www.googleapis.com/drive/v3/files/REFRESHitemA0001/permissions?fields=permissions(id,emailAddress,role,type,permissionDetails),nextPageToken&pageSize=100&supportsAllDrives=true
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      User-Agent:
+      - unknown/0.0.0 google-apis-drive_v3/0.46.0 Mac OS X/13.1 (gzip)
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip,deflate
+      Date:
+      - Sun, 01 Jan 2023 00:00:00 GMT
+      X-Goog-Api-Client:
+      - gl-ruby/3.2.2 gdcl/1.46.0
+      Authorization:
+      - Bearer ya29.xxx
+      Content-Type:
+      - application/x-www-form-urlencoded
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Date:
+      - Sun, 01 Jan 2023 00:00:00 GMT
+      Vary:
+      - Origin, X-Origin
+      Pragma:
+      - no-cache
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Content-Type:
+      - application/json; charset=UTF-8
+      Server:
+      - ESF
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+    body:
+      encoding: UTF-8
+      string: |
+        {
+          "kind": "drive#permissionList",
+          "nextPageToken": "page2token",
+          "permissions": [
+            {
+              "kind": "drive#permission",
+              "id": "perm1111111111111111",
+              "type": "user",
+              "emailAddress": "user1@example.com",
+              "role": "writer",
+              "permissionDetails": [
+                {
+                  "permissionType": "member",
+                  "inheritedFrom": "drive_id_xxx",
+                  "role": "reader",
+                  "inherited": true
+                },
+                {
+                  "permissionType": "file",
+                  "role": "writer",
+                  "inherited": false
+                }
+              ]
+            },
+            {
+              "kind": "drive#permission",
+              "id": "perm2222222222222222",
+              "type": "user",
+              "emailAddress": "user2@example.com",
+              "role": "reader"
+            },
+            {
+              "kind": "drive#permission",
+              "id": "perm3333333333333333",
+              "type": "user",
+              "emailAddress": "user3@example.com",
+              "role": "reader",
+              "permissionDetails": [
+                {
+                  "permissionType": "member",
+                  "inheritedFrom": "drive_id_xxx",
+                  "role": "reader",
+                  "inherited": true
+                }
+              ]
+            },
+            {
+              "kind": "drive#permission",
+              "id": "perm_unknown_user",
+              "type": "user",
+              "emailAddress": "not_in_cluster@example.com",
+              "role": "reader"
+            },
+            {
+              "kind": "drive#permission",
+              "id": "perm_domain",
+              "type": "domain",
+              "domain": "example.com",
+              "role": "reader"
+            }
+          ]
+        }
+    http_version:
+  recorded_at: Sun, 01 Jan 2023 00:00:00 GMT
+- request:
+    method: get
+    uri: https://www.googleapis.com/drive/v3/files/REFRESHitemA0001/permissions?fields=permissions(id,emailAddress,role,type,permissionDetails),nextPageToken&pageSize=100&pageToken=page2token&supportsAllDrives=true
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      User-Agent:
+      - unknown/0.0.0 google-apis-drive_v3/0.46.0 Mac OS X/13.1 (gzip)
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip,deflate
+      Date:
+      - Sun, 01 Jan 2023 00:00:01 GMT
+      X-Goog-Api-Client:
+      - gl-ruby/3.2.2 gdcl/1.46.0
+      Authorization:
+      - Bearer ya29.xxx
+      Content-Type:
+      - application/x-www-form-urlencoded
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Date:
+      - Sun, 01 Jan 2023 00:00:01 GMT
+      Vary:
+      - Origin, X-Origin
+      Pragma:
+      - no-cache
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Content-Type:
+      - application/json; charset=UTF-8
+      Server:
+      - ESF
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+    body:
+      encoding: UTF-8
+      string: |
+        {
+          "kind": "drive#permissionList",
+          "permissions": [
+            {
+              "kind": "drive#permission",
+              "id": "perm4444444444444444",
+              "type": "user",
+              "emailAddress": "user4@example.com",
+              "role": "commenter",
+              "permissionDetails": [
+                {
+                  "permissionType": "member",
+                  "inheritedFrom": "drive_id_xxx",
+                  "role": "reader",
+                  "inherited": true
+                },
+                {
+                  "permissionType": "file",
+                  "role": "commenter",
+                  "inherited": false
+                }
+              ]
+            }
+          ]
+        }
+    http_version:
+  recorded_at: Sun, 01 Jan 2023 00:00:01 GMT
+recorded_with: VCR 4.0.0

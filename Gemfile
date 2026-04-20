@@ -6,7 +6,7 @@ gem "active_model_serializers", "~> 0.10.16"
 gem "acts_as_list", "~> 0.9"
 gem "acts_as_tenant", "~> 0.4"
 gem "attribute_normalizer", "~> 1.2"
-gem "aws-sdk-s3", "~> 1.97", require: false
+gem "aws-sdk-s3", "~> 1.213", require: false
 gem "babosa", "~> 1.0"
 gem "bootsnap", "~> 1.22"
 gem "bootstrap-kaminari-views", "~> 0.0"
@@ -32,6 +32,7 @@ gem "faker", "~> 2.0"
 gem "font-awesome-sass", "~> 6.0"
 gem "google-apis-drive_v3", "~> 0.46"
 gem "googleauth", "~> 1.1"
+gem "hcaptcha", "~> 7.1"
 gem "hirb", "~> 0.7"
 gem "i18n-js", "~> 3.0"
 gem "icalendar", "~> 2.0"
@@ -49,11 +50,11 @@ gem "pg", "~> 1.6"
 gem "phony_rails", "~> 0.12"
 gem "psych", "< 4"
 gem "puma", "~> 7.2"
-gem "pundit", "~> 2.0"
+gem "pundit", "~> 2.5"
 gem "rails", "~> 7.1.1"
 gem "rails-backbone", "~> 1.2"
 gem "redcarpet", "~> 3.5"
-gem "redis", "~> 4.1"
+gem "redis", "~> 5.4"
 gem "rein", "~> 5.0" # This can be removed when we go to Rails 6.1.
 gem "rolify", "~> 6.0"
 gem "sentry-ruby", "~> 5.4"
@@ -88,7 +89,7 @@ group :development, :test do
   gem "debug", require: false
   gem "ed25519", ">= 1.2", "< 2.0" # For Capistrano
   gem "fix-db-schema-conflicts", "~> 3.0"
-  gem "launchy", "~> 2.4" # For opening screenshots
+  gem "launchy", "~> 3.1" # For opening screenshots
   gem "pry-nav", "~> 1.0"
   gem "pry-rails", "~> 0.3"
   gem "pry", "~> 0.14"
@@ -108,7 +109,7 @@ group :development, :test do
 end
 
 group :development do
-  gem "listen", "~> 3.2"
+  gem "listen", "~> 3.10"
 end
 
 group :test do

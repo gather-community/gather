@@ -13,6 +13,19 @@ en:
     labels:
       # These labels are here instead of activerecord b/c these are for things that
       # aren't ActiveRecord models.
+      communities_signup:
+        contact_first_name: "First Name"
+        contact_last_name: "Last Name"
+        contact_email: "Email Address"
+        community_name: "Community Name"
+        slug: "URL Slug"
+        introduction: "About Your Community"
+        country_code: "Country"
+        time_zone: "Time Zone"
+        want_sample_data: "Sample Data"
+      communities_signup_action:
+        decision: "Action"
+        message: "Message"
       calendars_export:
         dont_personalize: "Don't personalize events"
         own_only: "Include only your events"
@@ -61,6 +74,13 @@ en:
         comment: "A comment about this change."
     hints:
       markdown_suffix_html: "You can use <a href='/about/markdown' target='_new'>rich formatting</a>."
+      communities_signup:
+        community_name: "Up to 20 characters."
+        slug_html: "The first portion of your community's web address, e.g. https://<strong>yourslug</strong>.gather.coop. Lowercase letters, numbers, and hyphens; must start with a letter. Up to 20 characters."
+        introduction: "Tell us a bit about your community and why you think Gather is a good fit. Please include one or more links to publicly accessible webpages (e.g. your community website, social media pages) that establish your community's identity."
+      communities_signup_action:
+        message_approve: "The full approval email is shown above. Add a personalized note to the approval email by replacing the placeholder text."
+        message_deny: "Record why this application is being denied. This is for internal reference only and will not be sent to the applicant."
       meals_meal:
         formula_id: "<a href=\"/meals/formulas\">Meal formulas</a> determine how the meal cost is calculated."
         capacity: "How many people can the meal accommodate?"
@@ -103,6 +123,9 @@ en:
         mailman_list:
           name: "The first part of the address. Can only include lower-case letters, numbers, or the characters . - _."
           domain_id: "The domain name for the list address."
+          all_cmty_members_can_send:
+            single_community: "Whether all members of the community can send to this list. If unchecked, only group members can send. Does not affect who receives mail from the list."
+            multi_community: "Whether all members of the group's communities can send to this list. If unchecked, only group members can send. Does not affect who receives mail from the list."
           managers_can_administer: "Whether managers of this group should be able to change settings for this email list via the Mailman admin panel."
           managers_can_moderate: "Whether managers of this group should serve as moderators for this email list."
           _destroy: "Check this box to shut down the email list."
@@ -157,7 +180,7 @@ en:
       people_memorial:
         user_id: "Must be an inactive user in this community. Their current profile photo will be used in the memorial."
       wiki_page:
-        content: "See the <a href='/wiki/sample'>Sample Page</a> for tips on how to create wiki content."
+        content: "See the <a href='/wiki/sample' target='_blank'>Sample Page</a> for tips on how to create wiki content."
         data_source: "Advanced. URL of a JSON data source for use with <a href='http://mustache.github.io/mustache.5.html' target='_new'>Mustache template syntax</a> in the page content."
       work_job:
         hours: "Estimated number of hours the job will take. Decimals allowed."
@@ -177,6 +200,21 @@ en:
         active:
           active_only: "Show Active Only"
           all: "Show All"
+      communities_signup:
+        status:
+          all: "All"
+          pending: "Pending"
+          approved: "Approved"
+          denied: "Denied"
+          created: "Created"
+          failed: "Failed"
+        want_sample_data:
+          "true": "Yes, include sample data"
+          "false": "No, don't include sample data"
+      communities_signup_action:
+        decision:
+          approve: "Approve"
+          deny: "Deny"
       gdrive_item:
         kind:
           drive: "Shared Drive"

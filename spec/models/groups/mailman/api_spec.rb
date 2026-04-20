@@ -353,6 +353,31 @@ describe Groups::Mailman::Api do
         end
       end
 
+      context "with nonmember role and moderation_action accept" do
+        let(:mship) do
+          Groups::Mailman::ListMembership.new(list_id: "ping.tscoho.org",
+            mailman_user: mm_user, role: "nonmember", moderation_action: "accept")
+        end
+        let(:populated_mship) do
+          Groups::Mailman::ListMembership.new(list_id: "ping.tscoho.org", mailman_user: mm_user)
+        end
+
+        it "creates membership and patches moderation_action" do
+          VCR.use_cassette("groups/mailman/api/create_membership/nonmember_with_moderation_action") do
+            api.create_domain(domain)
+            api.create_list(list)
+            mm_user.remote_id = api.create_user(mm_user)
+
+            api.create_membership(mship)
+
+            api.populate_membership(populated_mship)
+            expect(populated_mship.remote_id).to eq("a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4")
+            expect(populated_mship.role).to eq("nonmember")
+            expect(populated_mship.moderation_action).to eq("accept")
+          end
+        end
+      end
+
       context "when subscription request already exists" do
         let(:list) do
           build(:group_mailman_list, name: "ping", domain: domain,

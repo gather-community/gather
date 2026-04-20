@@ -267,10 +267,10 @@ describe Groups::GroupPolicy do
         {memberships_attributes: %i[id kind user_id _destroy]}
     end
     let(:list_attribs) do
-      [mailman_list_attributes: %i[managers_can_administer managers_can_moderate id _destroy]]
+      [mailman_list_attributes: %i[managers_can_administer managers_can_moderate all_cmty_members_can_send id _destroy]]
     end
     let(:list_attribs_with_name_edit) do
-      [mailman_list_attributes: %i[managers_can_administer managers_can_moderate
+      [mailman_list_attributes: %i[managers_can_administer managers_can_moderate all_cmty_members_can_send
         id _destroy name domain_id]]
     end
     let(:permission_attribs) { %i[can_request_jobs can_administer_email_lists can_moderate_email_lists] }

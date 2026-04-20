@@ -4,7 +4,13 @@ module GDrive
   # Syncs permissions for a given Item from Gather to Google Drive.
   # Keeps track of permissions in the GDrive::SyncedPermission model.
   class ItemPermissionSyncJob < PermissionSyncJob
-    def perform(cluster_id:, community_id:, item_id:)
+    def perform(cluster_id:, community_id:, item_id:, refresh_synced_permissions: false)
+      if refresh_synced_permissions
+        Rails.logger.info("Refreshing synced permissions before item sync", item_id: item_id)
+        RefreshSyncedPermissionsJob.perform_now(cluster_id: cluster_id, community_id: community_id,
+          item_id: item_id)
+      end
+
       with_cluster_and_api_wrapper(cluster_id: cluster_id, community_id: community_id) do
         self.item_id = item_id
 
@@ -36,9 +42,9 @@ module GDrive
       # Make a hash by user_id of all existing SyncedPermissions
       self.permissions_by_user_id = GDrive::SyncedPermission.where(item_id: item_id).index_by(&:user_id)
 
-      # Clear the access level. If it's still nil at the end of this method, we should delete
-      # the permission.
-      permissions_by_user_id.values.each { |p| p.access_level = nil }
+      # Reset access_level to inherited_access_level (which may be nil). If it remains nil after
+      # processing all ItemGroups, the permission should be deleted.
+      permissions_by_user_id.values.each { |p| p.access_level = p.inherited_access_level }
 
       # If the item has been destroyed, there can't be any ItemGroups for it
       # since they are linked by a foreign key. So this loop will be a no-op.
@@ -63,11 +69,16 @@ module GDrive
 
         permission = permissions_by_user_id[user.id]
         if permission.present?
+          Rails.logger.info("Existing permission", user_id: user.id, item_external_id: item_group.item.external_id,
+            permission_id: permission.external_id, access_level: permission.access_level)
           permission.google_email = user.google_email
           if access_level_cmp(item_group.access_level, permission.access_level) == 1
+            Rails.logger.info("Setting higher access level", new_access_level: item_group.access_level)
             permission.access_level = item_group.access_level
           end
         else
+          # No existing permission was found so make a new one. It will get saved when permissions are applied.
+          Rails.logger.info("No existing permission, building")
           permissions_by_user_id[user.id] = build_synced_permission(user, item, item_group.access_level)
         end
       end

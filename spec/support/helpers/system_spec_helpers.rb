@@ -7,9 +7,14 @@ module SystemSpecHelpers
 
   # Temporarily undoes any within scopes.
   def with_top_level_scope
-    # Use absolute XPath /html to always scope to the document root regardless of any outer within() block.
-    # Capybara::Node::Document.new(page, page.driver) no longer works correctly in Capybara 3.40.
-    within(:xpath, "/html") { yield }
+    # Push nil onto Capybara's scope stack to temporarily reset to document root.
+    # This is the same mechanism used internally by Capybara's within_window.
+    # within(Capybara::Node::Document.new(...)) and within(:xpath, "/html") don't
+    # correctly restore document-level find behavior in Capybara 3.40.
+    page.instance_variable_get(:@scopes).push(nil)
+    yield
+  ensure
+    page.instance_variable_get(:@scopes).pop
   end
 
   # Fills in the given value into the given select (a Node::Element or CSS selector),
@@ -54,7 +59,7 @@ module SystemSpecHelpers
         if multiple
           span_el.find(".select2-search__field").click
         else
-          span_el.find(".select2-selection").click
+          execute_script("$('#{css}').select2('open')")
           find(".select2-search--dropdown .select2-search__field").set(value)
         end
         yield

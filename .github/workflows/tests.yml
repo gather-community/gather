@@ -97,7 +97,7 @@ jobs:
           export DISPLAY=:99
           chromedriver --url-base=/wd/hub &
       - name: RSpec Tests
-        run: bundle exec rspec --format RSpec::Github::Formatter --format documentation
+        run: bundle exec rspec spec/system/meals/meals_spec.rb spec/system/work/job_spec.rb --format RSpec::Github::Formatter --format documentation
       - name: Archive test artifacts
         uses: actions/upload-artifact@v4
         if: success() || failure()

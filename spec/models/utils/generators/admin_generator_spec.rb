@@ -30,11 +30,7 @@ describe Utils::Generators::AdminGenerator, :without_tenant, :perform_jobs do
 
     it "should send invite" do
       # admin generation should handle its own tenant setting so do it outside of block
-      size_before = ActionMailer::Base.deliveries.size
-      admin
-      new_deliveries = ActionMailer::Base.deliveries.drop(size_before)
-      expect(new_deliveries.size).to eq(1),
-        "Expected 1 email, got #{new_deliveries.size}. Subjects: #{new_deliveries.map(&:subject).inspect}"
+      expect { admin }.to change { ActionMailer::Base.deliveries.size }.by(1)
       ActsAsTenant.with_tenant(cluster) do
         expect(ActionMailer::Base.deliveries.last.subject).to eq("Instructions for Signing in to Gather")
         expect(admin.roles.map(&:name)).not_to include("super_admin")

@@ -44,15 +44,13 @@ class SystemStatus
     return @redis_up if defined?(@redis_up)
     @redis_up =
       begin
-        Rails.cache.redis.get("__foo__") # Force connection to be established
-        if Rails.cache.redis.connected?
-          true
-        else
-          Rails.logger.debug("[system status] Redis down (connected? returned false)")
-          false
-        end
+        Rails.cache.redis.with { |conn| conn.ping }
+        true
       rescue Redis::CannotConnectError
         Rails.logger.debug("[system status] Redis down (cannot connect error)")
+        false
+      rescue => e
+        Rails.logger.debug("[system status] Redis down (#{e.class}: #{e.message})")
         false
       end
   end

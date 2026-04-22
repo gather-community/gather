@@ -12,7 +12,7 @@ class ApplicationController < ActionController::Base
   include MultiCommunityCheck
 
   # Verify that controller actions are authorized.
-  after_action :verify_authorized, except: :index, unless: :devise_controller?
+  after_action :verify_authorized, unless: -> { action_name == "index" || devise_controller? }
   after_action :verify_policy_scoped, if: -> { action_name == "index" }
 
   attr_accessor :current_community

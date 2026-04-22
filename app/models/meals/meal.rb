@@ -116,14 +116,15 @@ module Meals
       validates :served_at, presence: true
       validates :community_id, presence: true
       validates :capacity, presence: true, numericality: {greater_than: 0, less_than: 500}
-      validate :enough_capacity_for_current_signups
-      validate :auto_close_between_now_and_meal_time
-      validate :title_and_entree_if_other_menu_items
-      validate :at_least_one_community
-      validate :allergens_specified_appropriately
-      validate { event_handler.validate_meal if events.any? }
       validates_with Meals::SignupsValidator
     end
+
+    validate :enough_capacity_for_current_signups, if: :main_form_or_import?
+    validate :auto_close_between_now_and_meal_time, if: :main_form_or_import?
+    validate :title_and_entree_if_other_menu_items, if: :main_form_or_import?
+    validate :at_least_one_community, if: :main_form_or_import?
+    validate :allergens_specified_appropriately, if: :main_form_or_import?
+    validate(if: :main_form_or_import?) { event_handler.validate_meal if events.any? }
 
     def self.served_within_days_from_now(days)
       within_days_from_now(:served_at, days)

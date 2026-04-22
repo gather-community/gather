@@ -15,6 +15,14 @@ bin/delayed_job run      # Background jobs (separate terminal)
 docker compose up -d     # Start PostgreSQL, Redis, Elasticsearch, Mailcatcher
 ```
 
+### Verifying a Clean Boot Before Deploying
+Development already uses `config.eager_load = true`, so boot errors surface locally. Before deploying a branch that touches gems, initializers, or models, run these three checks:
+```bash
+RAILS_ENV=development bundle exec rails runner "puts 'ok'"  # Full boot check
+RAILS_ENV=development bundle exec rake assets:precompile    # Asset pipeline
+bin/dev                                                     # Full dev server
+```
+
 ### Tests
 ```bash
 bundle exec rspec                              # All tests

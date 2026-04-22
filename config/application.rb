@@ -12,6 +12,9 @@ require "elasticsearch/rails/instrumentation"
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
+# delayed_job 4.2.0 inherits from AbstractAdapter, which Rails 7.1 removed.
+ActiveJob::QueueAdapters::AbstractAdapter = Object unless defined?(ActiveJob::QueueAdapters::AbstractAdapter)
+
 module Gather
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.

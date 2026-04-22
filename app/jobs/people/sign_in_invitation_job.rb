@@ -13,6 +13,10 @@ module People
         # Need to scope to community so folks can't invite users in communities in other clusters.
         # (ActsAsTenant prevents other clusters).
         User.in_community(community).where(id: user_ids).each do |user|
+          # Rails 7.2 fires after_commit on all instances that touched a record in a transaction
+          # (run_commit_callbacks_on_first_saved_instances_in_transaction = false). Without this,
+          # reset_reset_password_token! loads a fresh User instance that lacks the flag, and
+          # Devise's after_commit on: :create callback sends a spurious confirmation email.
           user.skip_confirmation_notification!
           token = user.reset_reset_password_token!
           AuthMailer.sign_in_invitation(user, token).deliver_now

@@ -13,6 +13,7 @@ module People
         # Need to scope to community so folks can't invite users in communities in other clusters.
         # (ActsAsTenant prevents other clusters).
         User.in_community(community).where(id: user_ids).each do |user|
+          user.skip_confirmation_notification!
           token = user.reset_reset_password_token!
           AuthMailer.sign_in_invitation(user, token).deliver_now
         rescue ActiveRecord::StatementInvalid => e

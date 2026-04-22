@@ -150,6 +150,7 @@ Gather uses several locale files under `config/locales/en/`. Each type of string
 ## Testing
 - **All new functionality must have test coverage.** Add specs for new models, jobs, mailers, forms, policies, and controllers. Follow existing spec patterns and directory structure.
 - **System tests require headless Chrome.** See the [Selenium Docker service](#headless-chrome-for-system-tests) section below.
+- **Replicate CI failures locally before iterating.** Non-browser specs (model, request, job, mailer) can be run locally with `bundle exec rspec spec/path/to/spec.rb`. This is much faster than a full CI cycle (~28 min). Add a diagnostic assertion with a descriptive failure message (e.g. `expect(count).to eq(1), "Expected 1, got #{count}. Details: #{things.inspect}"`) to extract values that aren't visible in a normal failure.
 
 ## Code Style
 - Ruby: RuboCop with `standard` gem (Ruby 3.0 config), max line length 110
@@ -163,7 +164,7 @@ When upgrading Rails to a new version, always read the official upgrade guide at
 
 ## Tech Stack
 - Ruby 3.2.2, Node.js 18.12.1
-- Rails 7.1, PostgreSQL, Redis, Elasticsearch
+- Rails 7.2, PostgreSQL, Redis, Elasticsearch
 - Devise + OmniAuth (Google OAuth2) for auth
 - Delayed Job for background processing
 - esbuild for JS bundling, Stimulus for frontend interactivity

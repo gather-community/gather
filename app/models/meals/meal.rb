@@ -110,7 +110,8 @@ module Meals
 
     normalize_attributes :title, :entrees, :side, :kids, :dessert, :notes, :capacity
 
-    validates :capacity, presence: true, numericality: {greater_than: 0, less_than: 500}, if: :main_form_or_import?
+    validates :capacity, presence: true, numericality: {greater_than: 0, less_than: 500},
+      if: :main_form_or_import?
     validates :creator_id, presence: true, if: :main_form_or_import?
     validates :formula_id, presence: true, if: :main_form_or_import?
     validates :served_at, presence: true, if: :main_form_or_import?

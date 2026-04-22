@@ -7,6 +7,7 @@ module GDrive
       skip_before_action :authenticate_user!
       skip_before_action :verify_authenticity_token
       skip_after_action :verify_authorized
+      skip_after_action :verify_policy_scoped
 
       prepend_before_action :set_current_community_from_query_string
 

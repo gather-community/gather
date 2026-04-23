@@ -77,7 +77,12 @@ RSpec.configure do |config|
     options.add_preference(:download, prompt_for_download: false,
       default_directory: DownloadHelpers::PATH.to_s)
     options.add_preference(:browser, set_download_behavior: {behavior: "allow"})
-    Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
+    if ENV["SELENIUM_REMOTE_URL"]
+      Capybara::Selenium::Driver.new(app, browser: :remote,
+        url: ENV["SELENIUM_REMOTE_URL"], options: options)
+    else
+      Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
+    end
   end
 
   Capybara.register_driver(:default) do |app|
@@ -137,8 +142,9 @@ RSpec.configure do |config|
     c.hook_into(:webmock)
     c.default_cassette_options = {match_requests_on: %i[method uri host path body]}
 
-    # We have to ignore 127.0.0.1 b/c capybara makes all sorts of requests to it.
-    c.ignore_hosts("127.0.0.1")
+    # We have to ignore 127.0.0.1 and localhost b/c capybara makes all sorts of requests to them
+    # (app server and, when using SELENIUM_REMOTE_URL, the WebDriver protocol endpoint).
+    c.ignore_hosts("127.0.0.1", "localhost")
 
     c.ignore_hosts("o1375887.ingest.sentry.io")
 

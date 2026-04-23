@@ -10,7 +10,7 @@ module Work
     skip_before_action :verify_authenticity_token, only: %i[signup unsignup]
 
     # Since we have a specially built policy object, we need to do our own custom authorization.
-    skip_after_action :verify_authorized, only: :signup
+    skip_after_action :verify_pundit_authorization, only: :signup
 
     decorates_assigned :shifts, :shift, :choosee, :meal
 

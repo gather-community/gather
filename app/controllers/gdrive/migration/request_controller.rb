@@ -7,7 +7,7 @@ module GDrive
 
       # These are public pages. Authentication comes from the token in the query string.
       skip_before_action :authenticate_user!
-      skip_after_action :verify_authorized
+      skip_after_action :verify_pundit_authorization
 
       # For signed-in pages, we redirect to the appropriate community.
       # Here we should 404 if no community, except for the callback endpoint

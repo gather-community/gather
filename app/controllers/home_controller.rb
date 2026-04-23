@@ -2,7 +2,7 @@
 
 class HomeController < ApplicationController
   skip_before_action :check_subdomain
-  skip_after_action :verify_authorized, only: :inactive
+  skip_after_action :verify_pundit_authorization, only: :inactive
 
   def index
     skip_policy_scope

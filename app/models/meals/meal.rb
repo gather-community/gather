@@ -180,7 +180,10 @@ module Meals
       to_create = new_ids - existing_ids
       to_delete = existing_ids - new_ids
 
+      $stderr.puts "COMMUNITY-BOXES-DEBUG hash=#{hash.inspect} new_ids=#{new_ids.inspect} existing_ids=#{existing_ids.inspect} to_create=#{to_create.inspect}"
+
       to_create.each { |id| invitations.build(community_id: id) }
+      $stderr.puts "COMMUNITY-BOXES-DEBUG after build invitations=#{invitations.map(&:community_id).inspect}"
 
       invitations.each do |inv|
         if to_delete.include?(inv.community_id)

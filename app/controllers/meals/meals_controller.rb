@@ -189,7 +189,11 @@ module Meals
     # Pundit built-in helper doesn't work due to namespacing
     def meal_params
       permitted = policy(@meal).permitted_attributes
+      raw_community_boxes = params.dig(:meals_meal, :community_boxes)
+      $stderr.puts "MEAL-PARAMS-DEBUG permitted_attrs=#{permitted.inspect}"
+      $stderr.puts "MEAL-PARAMS-DEBUG raw_community_boxes=#{raw_community_boxes.inspect}"
       params.require(:meals_meal).permit(permitted).tap do |permitted|
+        $stderr.puts "MEAL-PARAMS-DEBUG permitted_community_boxes=#{permitted[:community_boxes].inspect}"
         # If no allergen boxes are checked, this param won't exist at all, so old value won't get overwritten
         # We check if no_allergens is permitted to see if the user can edit allergen info. Otherwise,
         # if we add this field it causes weird errors.

@@ -142,9 +142,11 @@ RSpec.configure do |config|
     c.hook_into(:webmock)
     c.default_cassette_options = {match_requests_on: %i[method uri host path body]}
 
-    # We have to ignore 127.0.0.1 and localhost b/c capybara makes all sorts of requests to them
-    # (app server and, when using SELENIUM_REMOTE_URL, the WebDriver protocol endpoint).
-    c.ignore_hosts("127.0.0.1", "localhost")
+    # Ignore Capybara app server requests and, when using SELENIUM_REMOTE_URL, the WebDriver
+    # protocol endpoint (localhost:4444). We can't ignore all of localhost because Mailman API
+    # specs use VCR cassettes against localhost:8001.
+    c.ignore_hosts("127.0.0.1")
+    c.ignore_request { |r| URI(r.uri).then { |u| u.host == "localhost" && u.port == 4444 } }
 
     c.ignore_hosts("o1375887.ingest.sentry.io")
 

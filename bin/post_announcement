@@ -5,16 +5,16 @@
 #   bin/post_announcement "Post title" "Body in markdown"
 #
 # Required environment variables:
-#   DISCOURSE_BASE_URL                    e.g. https://your-forum.example.com
-#   DISCOURSE_API_KEY                     API key scoped to the bot user
-#   DISCOURSE_API_USERNAME                Bot account username
-#   DISCOURSE_ANNOUNCEMENTS_CATEGORY_ID   Numeric ID of the Announcements category
+#   DISCOURSE_BASE_URL                        e.g. https://support.forum.gather.coop
+#   DISCOURSE_BOT_API_KEY                     API key scoped to the bot user
+#   DISCOURSE_BOT_USERNAME                    Bot account username (e.g. gather_bot)
+#   DISCOURSE_ANNOUNCEMENTS_CATEGORY_ID       Numeric ID of the Announcements category
 
 set -euo pipefail
 
 : "${DISCOURSE_BASE_URL:?Need DISCOURSE_BASE_URL}"
-: "${DISCOURSE_API_KEY:?Need DISCOURSE_API_KEY}"
-: "${DISCOURSE_API_USERNAME:?Need DISCOURSE_API_USERNAME}"
+: "${DISCOURSE_BOT_API_KEY:?Need DISCOURSE_BOT_API_KEY}"
+: "${DISCOURSE_BOT_USERNAME:?Need DISCOURSE_BOT_USERNAME}"
 : "${DISCOURSE_ANNOUNCEMENTS_CATEGORY_ID:?Need DISCOURSE_ANNOUNCEMENTS_CATEGORY_ID}"
 
 TITLE="${1:?Usage: bin/post_announcement \"Title\" \"Body\"}"
@@ -28,8 +28,8 @@ PAYLOAD=$(jq -n \
 
 RESPONSE=$(curl -s -w "\n%{http_code}" -X POST "$DISCOURSE_BASE_URL/posts.json" \
   -H "Content-Type: application/json" \
-  -H "Api-Key: $DISCOURSE_API_KEY" \
-  -H "Api-Username: $DISCOURSE_API_USERNAME" \
+  -H "Api-Key: $DISCOURSE_BOT_API_KEY" \
+  -H "Api-Username: $DISCOURSE_BOT_USERNAME" \
   -d "$PAYLOAD")
 
 HTTP_CODE=$(echo "$RESPONSE" | tail -n1)

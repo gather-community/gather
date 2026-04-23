@@ -182,7 +182,23 @@ When upgrading Rails to a new version, always read the official upgrade guide at
 
 ## Headless Chrome for System Tests
 
-System specs (`js: true`) use headless Chrome via Selenium. On macOS the locally-installed Chrome is used automatically. On Linux (e.g. the Claude Code dev container), Chrome is not available by default — add a `selenium-chrome` service to docker-compose.yml and point Capybara at it via `SELENIUM_REMOTE_URL`.
+System specs (`js: true`) use headless Chrome via Selenium. On macOS the locally-installed Chrome is used automatically. On Linux (e.g. the Claude Code dev container), Chrome is not available by default — use the `selenium-chrome` Docker service and `SELENIUM_REMOTE_URL`.
+
+### Running system specs from the devcontainer
+
+1. Start the selenium-chrome service: `docker compose up -d selenium-chrome`
+2. Find its IP on the gather-network:
+   ```bash
+   docker inspect gather1-selenium-chrome-1 --format '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}'
+   ```
+3. Run specs with that IP:
+   ```bash
+   SELENIUM_REMOTE_URL=http://<ip>:4444/wd/hub bundle exec rspec spec/system/some_spec.rb
+   ```
+
+The `rails_helper.rb` automatically detects `SELENIUM_REMOTE_URL`, binds the test server to `0.0.0.0`, and passes `--host-resolver-rules` to Chrome so it can resolve `gatherdev.org` subdomains back to this container.
+
+To watch Chrome run (useful for debugging), open `http://<ip>:7900` in a browser (password: `secret`).
 
 ### Select2 Testing (`spec/support/helpers/system_spec_helpers.rb`)
 

@@ -50,6 +50,20 @@ services:
       timeout: 10s
       retries: 10
 
+  selenium-chrome:
+    image: selenium/standalone-chrome:latest
+    platform: linux/amd64
+    ports:
+      - "4444:4444"
+      - "7900:7900"
+    networks:
+      - gather-network
+    shm_size: 2g
+    # To run system specs locally from the devcontainer:
+    #   SELENIUM_REMOTE_URL=http://172.18.0.7:4444/wd/hub bundle exec rspec spec/system/...
+    # The IP above is this container's IP on gather-network. Check with:
+    #   docker inspect gather1-selenium-chrome-1 --format '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}'
+
   mailcatcher:
     image: schickling/mailcatcher
     ports:

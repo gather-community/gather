@@ -78,11 +78,21 @@ RSpec.configure do |config|
       default_directory: DownloadHelpers::PATH.to_s)
     options.add_preference(:browser, set_download_behavior: {behavior: "allow"})
     if ENV["SELENIUM_REMOTE_URL"]
+      # When using a remote Selenium container, Chrome can't resolve gatherdev.org to this
+      # container via normal DNS. Tell it explicitly to route all gatherdev.org requests here.
+      options.add_argument("--host-resolver-rules=MAP *.#{Settings.url.host} #{selenium_app_ip}," \
+        "MAP #{Settings.url.host} #{selenium_app_ip}")
       Capybara::Selenium::Driver.new(app, browser: :remote,
         url: ENV["SELENIUM_REMOTE_URL"], options: options)
     else
       Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
     end
+  end
+
+  # Returns this container's IP on the Docker network so a remote Selenium container can reach us.
+  def selenium_app_ip
+    require "socket"
+    Socket.ip_address_list.find { |a| a.ipv4? && !a.ipv4_loopback? }&.ip_address || "127.0.0.1"
   end
 
   Capybara.register_driver(:default) do |app|
@@ -108,6 +118,8 @@ RSpec.configure do |config|
   Capybara.always_include_port = true
   Capybara.server_port = Settings.url.port
   Capybara.app_host = "http://#{Settings.url.host}"
+  # Bind to all interfaces when using a remote Selenium container so Chrome can reach our test server.
+  Capybara.server_host = ENV["SELENIUM_REMOTE_URL"] ? "0.0.0.0" : "127.0.0.1"
 
   config.around(:each, raise_server_errors: false) do |example|
     Capybara.raise_server_errors = false
@@ -142,11 +154,12 @@ RSpec.configure do |config|
     c.hook_into(:webmock)
     c.default_cassette_options = {match_requests_on: %i[method uri host path body]}
 
-    # Ignore Capybara app server requests and, when using SELENIUM_REMOTE_URL, the WebDriver
-    # protocol endpoint (localhost:4444). We can't ignore all of localhost because Mailman API
-    # specs use VCR cassettes against localhost:8001.
-    c.ignore_hosts("127.0.0.1")
-    c.ignore_request { |r| URI(r.uri).then { |u| u.host == "localhost" && u.port == 4444 } }
+    # Ignore Capybara app server requests (127.0.0.1 normally, 0.0.0.0 with remote Selenium)
+    # and the Selenium WebDriver endpoint (localhost:4444). Can't ignore all of localhost because
+    # Mailman API specs use VCR cassettes against localhost:8001.
+    c.ignore_hosts("127.0.0.1", "0.0.0.0")
+    # Ignore WebDriver protocol requests to the Selenium server (port 4444, any host/IP).
+    c.ignore_request { |r| URI(r.uri).port == 4444 }
 
     c.ignore_hosts("o1375887.ingest.sentry.io")
 

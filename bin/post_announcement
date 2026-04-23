@@ -26,7 +26,7 @@ PAYLOAD=$(jq -n \
   --argjson category "$DISCOURSE_ANNOUNCEMENTS_CATEGORY_ID" \
   '{title: $title, raw: $raw, category: $category}')
 
-RESPONSE=$(curl -s -w "\n%{http_code}" -X POST "$DISCOURSE_BASE_URL/posts.json" \
+RESPONSE=$(curl -sv -w "\n%{http_code}" -X POST "$DISCOURSE_BASE_URL/posts.json" \
   -H "Content-Type: application/json" \
   -H "Api-Key: $DISCOURSE_BOT_API_KEY" \
   -H "Api-Username: $DISCOURSE_BOT_USERNAME" \

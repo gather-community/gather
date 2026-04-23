@@ -4,7 +4,7 @@ module People
   module Users
     # Handles redirect back from Google OAuth
     class OmniauthCallbacksController < Devise::OmniauthCallbacksController
-      skip_after_action :verify_authorized
+      skip_after_action :verify_pundit_authorization
 
       def google_oauth2
         auth = request.env["omniauth.auth"]

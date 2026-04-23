@@ -190,7 +190,7 @@ module Meals
     end
 
     def invite_attribs
-      [{community_boxes: [Community.all.map(&:id).map(&:to_s)]}]
+      [{community_boxes: {}}]
     end
 
     def menu_attribs

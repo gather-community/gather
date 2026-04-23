@@ -3,8 +3,7 @@
 # Controls landing, ping, privacy policy, and other assorted pages.
 class LandingController < ApplicationController
   skip_before_action :authenticate_user!
-  skip_after_action :verify_authorized
-  skip_after_action :verify_policy_scoped
+  skip_after_action :verify_pundit_authorization
   skip_before_action :check_subdomain
   before_action :ensure_apex_domain, only: :index
 

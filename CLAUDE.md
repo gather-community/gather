@@ -163,9 +163,11 @@ Gather uses several locale files under `config/locales/en/`. Each type of string
 
 When upgrading Rails to a new version, always read the official upgrade guide at https://guides.rubyonrails.org/upgrading_ruby_on_rails.html before making changes. The guide covers breaking changes, removed features, new defaults, and required config updates for each version step.
 
+**Do not bump `config.load_defaults` in `config/application.rb` as part of the gem version bump.** New framework defaults must be adopted one at a time — run `bin/rails app:update` to generate `config/initializers/new_framework_defaults_X_Y.rb`, then enable and test each default individually before removing the override. Bumping `load_defaults` all at once silently activates many behavior changes and makes it impossible to bisect regressions.
+
 ## Tech Stack
 - Ruby 3.2.2, Node.js 18.12.1
-- Rails 7.2, PostgreSQL, Redis, Elasticsearch
+- Rails 8.0, PostgreSQL, Redis, Elasticsearch
 - Devise + OmniAuth (Google OAuth2) for auth
 - Delayed Job for background processing
 - esbuild for JS bundling, Stimulus for frontend interactivity

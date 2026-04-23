@@ -149,6 +149,35 @@ Gather uses several locale files under `config/locales/en/`. Each type of string
 - GuardClause cop is disabled — parallel if/unless blocks are acceptable
 - `Style::Documentation` is disabled for controllers, decorators, helpers, policies, serializers
 
+## Announcing Features on the Discourse Forum
+
+When a notable feature ships, post an announcement to the Gather support forum (https://support.forum.gather.coop) using `bin/post_announcement`. Posts appear as the `Gather_Bot` user.
+
+```bash
+# Write the body to a temp file to avoid shell quoting issues, then run:
+cat > tmp/announce.txt << 'EOF'
+Your markdown body here.
+EOF
+bin/post_announcement "Post title" "$(cat tmp/announce.txt)"
+```
+
+Or write a small wrapper script to `tmp/` (gitignored) and run `bash tmp/run_announcement.sh`.
+
+**Required env vars** (set in your host shell, forwarded into the devcontainer via `remoteEnv`):
+- `DISCOURSE_BASE_URL` — e.g. `https://support.forum.gather.coop`
+- `DISCOURSE_BOT_API_KEY`
+- `DISCOURSE_BOT_USERNAME`
+- `DISCOURSE_ANNOUNCEMENTS_CATEGORY_ID`
+
+**Draft guidelines:**
+- Audience is existing Gather users (community admins and members)
+- Warm but concise — 2–3 short paragraphs max
+- Lead with what changed and why it matters to them; skip implementation detail
+- Posts appear from `Gather_Bot`, so write in first-person plural ("We're happy to share...")
+
+**Troubleshooting:**
+- 403 error: check that the bot user has `Create` permission on the Announcements category (Discourse Admin → Categories → Edit → Security)
+
 ## Upgrading Rails
 
 When upgrading Rails to a new version, always read the official upgrade guide at https://guides.rubyonrails.org/upgrading_ruby_on_rails.html before making changes. The guide covers breaking changes, removed features, new defaults, and required config updates for each version step.

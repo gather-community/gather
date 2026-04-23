@@ -11,9 +11,7 @@ class ApplicationController < ActionController::Base
   include ApplicationControllable::Users
   include MultiCommunityCheck
 
-  # Verify that controller actions are authorized.
-  after_action :verify_authorized, unless: -> { action_name == "index" || devise_controller? }
-  after_action :verify_policy_scoped, if: -> { action_name == "index" }
+  after_action :verify_pundit_authorization
 
   attr_accessor :current_community
 
@@ -28,6 +26,11 @@ class ApplicationController < ActionController::Base
   end
 
   protected
+
+  def verify_pundit_authorization
+    return if devise_controller?
+    action_name == "index" ? verify_policy_scoped : verify_authorized
+  end
 
   def nav_builder
     @nav_builder ||= Nav::Builder.new

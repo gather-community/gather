@@ -662,12 +662,18 @@ describe User do
 
     context "with event creator record" do
       let!(:event) { create(:event, creator: user) }
-      it { expect { user.destroy }.to raise_error(ActiveRecord::InvalidForeignKey) }
+      it "destroys the event" do
+        user.destroy
+        expect { event.reload }.to raise_error(ActiveRecord::RecordNotFound)
+      end
     end
 
     context "with event sponsor record" do
       let!(:event) { create(:event, sponsor: user) }
-      it { expect { user.destroy }.to raise_error(ActiveRecord::InvalidForeignKey) }
+      it "nullifies the sponsor" do
+        user.destroy
+        expect(event.reload.sponsor).to be_nil
+      end
     end
 
     context "with wiki page creator record" do

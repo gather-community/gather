@@ -14,6 +14,6 @@
 FactoryBot.define do
   factory :calendar_protocoling, class: "Calendars::Protocoling" do
     calendar
-    protocol
+    association :protocol, factory: :calendar_protocol
   end
 end

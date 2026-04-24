@@ -55,6 +55,7 @@ module Meals
     has_many :signups, class_name: "Meals::Signup", dependent: :destroy, inverse_of: :meal
     has_many :work_shifts, class_name: "Work::Shift", dependent: :destroy, inverse_of: :meal
     has_one :cost, class_name: "Meals::Cost", dependent: :destroy, inverse_of: :meal
+    has_many :messages, class_name: "Meals::Message", dependent: :destroy, inverse_of: :meal
     has_many :reminder_deliveries, class_name: "Meals::RoleReminderDelivery", inverse_of: :meal,
       dependent: :destroy
     has_many :transactions, class_name: "Billing::Transaction", as: :statementable,

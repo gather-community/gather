@@ -101,7 +101,7 @@ group :development, :test do
   gem "standard", "~> 1.53"
   gem "thin", "~> 1.7"
   gem "vcr", "~> 4.0"
-  gem "webmock", "~> 3.1"
+  gem "webmock", "~> 3.26"
 
   # Great for debugging i18n paths. Uncomment temporarily when neeeded.
   # Adds a lot of junk to the log when not needed, so only uncomment if needed.

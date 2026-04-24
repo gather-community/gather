@@ -151,6 +151,14 @@
 			}
 		}
 	},
+	// Forwards Discourse bot credentials from the host shell into the container.
+	// Set these in your host ~/.zshrc — do not commit values.
+	"remoteEnv": {
+		"DISCOURSE_BASE_URL": "${localEnv:DISCOURSE_BASE_URL}",
+		"DISCOURSE_BOT_API_KEY": "${localEnv:DISCOURSE_BOT_API_KEY}",
+		"DISCOURSE_BOT_USERNAME": "${localEnv:DISCOURSE_BOT_USERNAME}",
+		"DISCOURSE_ANNOUNCEMENTS_CATEGORY_ID": "${localEnv:DISCOURSE_ANNOUNCEMENTS_CATEGORY_ID}"
+	},
 	// Use 'postCreateCommand' to run commands after the container is created.
 	"initializeCommand": "bash ${localWorkspaceFolder}/.devcontainer/setup.sh && exit 0",
 	"postCreateCommand": "bundle install && yarn install & exit 0"

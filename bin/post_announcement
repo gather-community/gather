@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+# Posts an announcement to the Discourse support forum.
+#
+# Usage:
+#   bin/post_announcement "Post title" "Body in markdown"
+#
+# Required environment variables:
+#   DISCOURSE_BASE_URL                        e.g. https://support.forum.gather.coop
+#   DISCOURSE_BOT_API_KEY                     API key scoped to the bot user
+#   DISCOURSE_BOT_USERNAME                    Bot account username (e.g. gather_bot)
+#   DISCOURSE_ANNOUNCEMENTS_CATEGORY_ID       Numeric ID of the Announcements category
+
+set -euo pipefail
+
+: "${DISCOURSE_BASE_URL:?Need DISCOURSE_BASE_URL}"
+: "${DISCOURSE_BOT_API_KEY:?Need DISCOURSE_BOT_API_KEY}"
+: "${DISCOURSE_BOT_USERNAME:?Need DISCOURSE_BOT_USERNAME}"
+: "${DISCOURSE_ANNOUNCEMENTS_CATEGORY_ID:?Need DISCOURSE_ANNOUNCEMENTS_CATEGORY_ID}"
+
+TITLE="${1:?Usage: bin/post_announcement \"Title\" \"Body\"}"
+BODY="${2:?Usage: bin/post_announcement \"Title\" \"Body\"}"
+
+PAYLOAD=$(jq -n \
+  --arg title "$TITLE" \
+  --arg raw "$BODY" \
+  --argjson category "$DISCOURSE_ANNOUNCEMENTS_CATEGORY_ID" \
+  '{title: $title, raw: $raw, category: $category}')
+
+RESPONSE=$(curl -sv -w "\n%{http_code}" -X POST "$DISCOURSE_BASE_URL/posts.json" \
+  -H "Content-Type: application/json" \
+  -H "Api-Key: $DISCOURSE_BOT_API_KEY" \
+  -H "Api-Username: $DISCOURSE_BOT_USERNAME" \
+  -d "$PAYLOAD")
+
+HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
+BODY=$(echo "$RESPONSE" | sed '$d')
+
+if [[ "$HTTP_CODE" -ge 200 && "$HTTP_CODE" -lt 300 ]]; then
+  TOPIC_SLUG=$(echo "$BODY" | jq -r '.topic_slug // empty')
+  TOPIC_ID=$(echo "$BODY" | jq -r '.topic_id // empty')
+  echo "Posted successfully: $DISCOURSE_BASE_URL/t/$TOPIC_SLUG/$TOPIC_ID"
+else
+  echo "Error $HTTP_CODE:" >&2
+  echo "$BODY" | jq '.errors // .' >&2
+  exit 1
+fi

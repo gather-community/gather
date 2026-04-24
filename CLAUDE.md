@@ -9,6 +9,7 @@ Gather is a Ruby on Rails community management platform for cooperative housing.
 ## Common Commands
 
 ### Running the App
+
 ```bash
 bin/dev                  # Start Rails + JS build + type checking (via foreman/Procfile.dev)
 bin/delayed_job run      # Background jobs (separate terminal)
@@ -24,6 +25,7 @@ bin/dev                                                     # Full dev server
 ```
 
 ### Tests
+
 ```bash
 bundle exec rspec                              # All tests
 bundle exec rspec spec/models/user_spec.rb     # Single file
@@ -31,6 +33,7 @@ bundle exec rspec spec/models/user_spec.rb:42  # Single test by line
 ```
 
 ### Linting
+
 ```bash
 bundle exec rubocop                  # Ruby (uses standard gem + rubocop-rails)
 bundle exec rubocop -a               # Ruby auto-fix
@@ -39,12 +42,14 @@ yarn check-types                     # TypeScript type checking
 ```
 
 ### Database
+
 ```bash
 bin/rails db:migrate
 bin/rails db:setup       # Create + seed
 ```
 
 ### Rails Console
+
 ```ruby
 CH.tenant(1)  # Must set tenant before querying
 ```
@@ -52,6 +57,7 @@ CH.tenant(1)  # Must set tenant before querying
 ## Architecture
 
 ### Multi-Tenancy Hierarchy
+
 `Cluster` → `Community` → `Household` → `User`
 
 - **Cluster** is the ActsAsTenant tenant. All queries are automatically scoped to the current cluster.
@@ -59,19 +65,20 @@ CH.tenant(1)  # Must set tenant before querying
 - Users have global roles: `super_admin`, `cluster_admin`, `admin`, plus community-specific roles like `biller`, `meals_coordinator`, `work_coordinator`.
 
 ### Feature Modules
+
 Code is organized by feature domain. Each module has its own models, controllers, decorators, policies, jobs, and mailers under matching namespaces:
 
-| Module | Table Prefix | Key Models |
-|--------|-------------|------------|
-| `Meals` | `meal_` | Meal, Signup, Assignment, Formula, Role, Type |
-| `Work` | `work_` | Job, Shift, Period, Assignment |
-| `Calendars` | `calendar_` | Calendar, Event, Protocol, Group |
-| `Billing` | `billing_` | Account, Statement, Transaction, Template |
-| `People` | (none) | User, Household, MemberType, Memorial |
-| `Groups` | (none) | Group, Membership, Affiliation |
-| `Wiki` | (none) | Page |
-| `GDrive` | (none) | Config, Item, ItemGroup |
-| `CustomFields` | (none) | Dynamic JSONB-based field framework |
+| Module         | Table Prefix | Key Models                                    |
+| -------------- | ------------ | --------------------------------------------- |
+| `Meals`        | `meal_`      | Meal, Signup, Assignment, Formula, Role, Type |
+| `Work`         | `work_`      | Job, Shift, Period, Assignment                |
+| `Calendars`    | `calendar_`  | Calendar, Event, Protocol, Group              |
+| `Billing`      | `billing_`   | Account, Statement, Transaction, Template     |
+| `People`       | (none)       | User, Household, MemberType, Memorial         |
+| `Groups`       | (none)       | Group, Membership, Affiliation                |
+| `Wiki`         | (none)       | Page                                          |
+| `GDrive`       | (none)       | Config, Item, ItemGroup                       |
+| `CustomFields` | (none)       | Dynamic JSONB-based field framework           |
 
 Module namespaces are defined in files like `app/models/meals.rb` which set `table_name_prefix`.
 
@@ -82,6 +89,7 @@ Module namespaces are defined in files like `app/models/meals.rb` which set `tab
 **Decorators (Draper):** All view/presentation logic goes in decorators (`app/decorators/`), not models or helpers. `ApplicationDecorator` provides multi-community display helpers like `cmty_prefix`.
 
 **Event System (Wisper):** Models publish events that singleton listeners handle. Listener registration order matters — see `config/initializers/listeners.rb`. Key listeners:
+
 - `Work::MealJobSynchronizer` — syncs meal roles to work jobs
 - `Work::MealAssignmentSynchronizer` — syncs meal assignments to work assignments
 - `Groups::MembershipMaintainer` — manages group memberships (must run before Mailman/GDrive sync)
@@ -92,6 +100,7 @@ Module namespaces are defined in files like `app/models/meals.rb` which set `tab
 **Custom Fields:** JSONB-backed extensible fields defined declaratively on models. Community settings are implemented this way.
 
 ### Controller Conventions
+
 - `ApplicationController` includes concerns from `ApplicationControllable::*` (RequestPreprocessing, Setters, Loaders, UrlHelpers, Users, Csv)
 - `current_community` is set from the subdomain during request preprocessing
 - `current_cluster` is the ActsAsTenant current tenant
@@ -114,6 +123,7 @@ Module namespaces are defined in files like `app/models/meals.rb` which set `tab
 - **Apex-domain controllers override `apex_domain_only`** — controllers whose routes live on the apex domain (no community subdomain) must define `protected def apex_domain_only = true`. This causes `check_subdomain` to call `ensure_apex_domain` (redirecting subdomain requests to apex) instead of rendering 404 when `current_community` is nil.
 
 ### Model Conventions
+
 - `ApplicationRecord` provides `alpha_order(*args)` for case-insensitive sorting
 - `skip_listener_action` transient attribute suppresses Wisper listener side effects (used in factories/tests)
 - Models use `in_community(community)` scopes for community filtering
@@ -124,12 +134,14 @@ Module namespaces are defined in files like `app/models/meals.rb` which set `tab
 Gather uses several locale files under `config/locales/en/`. Each type of string has a canonical home:
 
 **`activerecord.yml`** — the primary source for field labels and custom error messages:
+
 - `activerecord.attributes.{model}.{field}` — field labels for ActiveRecord models (used by simple_form as first lookup); model key uses `/` separator, e.g. `meals/meal`
 - `activemodel.attributes.{model}.{field}` — same pattern for non-AR models (e.g. form objects like `calendars/event`)
 - `activerecord.models.{model}` — human-readable model names
 - `activerecord.errors.models.{model}.attributes.{field}.{error_key}` — custom validation error message overrides
 
 **`simple_form.yml`** — for form presentation strings not covered by activerecord:
+
 - `simple_form.labels.{model}.{field}` — field labels for non-AR forms that have no `activerecord.attributes` entry (e.g. `calendars_export`, `communities_signup`); model key uses `_` separator
 - `simple_form.hints.{model}.{field}` — field hint text; use `{field}_html` key for HTML content
 - `simple_form.options.{model}.{field}.{value}` — select option labels; simple_form auto-translates symbol collections using this namespace
@@ -137,6 +149,7 @@ Gather uses several locale files under `config/locales/en/`. Each type of string
 - `simple_form.prompts.{model}.{field}` — blank/prompt option for selects
 
 **`en.yml`** — application-wide UI strings:
+
 - `helpers.submit.{action}` or `helpers.submit.{model}.{action}` — submit button labels
 - `confirmations.{model}.{action}` — confirm dialog text for destructive actions
 - `common.*` — shared strings used across multiple strings used across multiple modules
@@ -145,19 +158,42 @@ Gather uses several locale files under `config/locales/en/`. Each type of string
 **Module-specific files** (`meals.yml`, `work.yml`, `people.yml`, etc.) — flash messages, page titles, section headers, and other strings belonging entirely to one feature module.
 
 ## Email
+
 - **Text-only mailers** — Gather uses plain text email templates only. Do not create `.html.erb` mailer views.
 
 ## Testing
+
 - **All new functionality must have test coverage.** Add specs for new models, jobs, mailers, forms, policies, and controllers. Follow existing spec patterns and directory structure.
 - **System tests require headless Chrome.** See the [Selenium Docker service](#headless-chrome-for-system-tests) section below.
 - **Run individual or small numbers of specs locally; use CI for full suite runs.** When fixing a specific failure, run the affected file/line with `bundle exec rspec spec/path/to/spec.rb:42` locally to confirm it passes before pushing — this avoids burning a ~28 min CI cycle on a fix that doesn't work. Only push to CI when you need the full suite run (e.g. after a Rails upgrade or broad refactor). Non-browser specs (model, request, job, mailer) run fine locally; system specs require headless Chrome (see below).
 - **Replicate CI failures locally before iterating.** Add a diagnostic assertion with a descriptive failure message (e.g. `expect(count).to eq(1), "Expected 1, got #{count}. Details: #{things.inspect}"`) to extract values that aren't visible in a normal failure.
 
 ## Code Style
+
 - Ruby: RuboCop with `standard` gem (Ruby 3.0 config), max line length 110
 - Empty methods use `expanded` style (not single-line)
 - GuardClause cop is disabled — parallel if/unless blocks are acceptable
 - `Style::Documentation` is disabled for controllers, decorators, helpers, policies, serializers
+
+## Announcing Features on the Discourse Forum
+
+When a notable feature ships, we might want to post an announcement to the Gather support forum (https://support.forum.gather.coop) using `bin/post_announcement`. Posts appear as the `Gather_Bot` user.
+
+Write a small wrapper script to `tmp/` (gitignored) and tell user to run `bash tmp/run_announcement.sh` in their own shell.
+
+**Required env vars** (set in your host shell):
+
+- `DISCOURSE_BASE_URL` — e.g. `https://support.forum.gather.coop`
+- `DISCOURSE_BOT_API_KEY`
+- `DISCOURSE_BOT_USERNAME`
+- `DISCOURSE_ANNOUNCEMENTS_CATEGORY_ID`
+
+**Draft guidelines:**
+
+- Audience is existing Gather users (community admins and members)
+- Warm but concise — 2–3 short paragraphs max
+- Lead with what changed and why it matters to them; skip implementation detail
+- Posts appear from `Gather_Bot`, so write in first-person plural ("We're happy to share...")
 
 ## Upgrading Rails
 
@@ -170,6 +206,7 @@ When upgrading Rails to a new version, always read the official upgrade guide at
 **After generating the new framework defaults file, read all the commented-out options, summarize each one for the user (what it does and any risk), and ask which ones they'd like to enable.**
 
 ## Tech Stack
+
 - Ruby 3.2.2, Node.js 18.12.1
 - Rails 8.1, PostgreSQL, Redis, Elasticsearch
 - Devise + OmniAuth (Google OAuth2) for auth
@@ -179,6 +216,7 @@ When upgrading Rails to a new version, always read the official upgrade guide at
 - Thin with SSL in development (https://gatherdev.org:3000)
 
 ## Test Organization
+
 - `spec/` mirrors `app/` structure: `models/`, `system/`, `requests/`, `decorators/`, `policies/`, `forms/`, `jobs/`, `mailers/`, `serializers/`, `validators/`, `lenses/`
 - Factories in `spec/factories/` organized by module
 - Shared support in `spec/support/` (contexts, helpers, matchers)
@@ -193,6 +231,7 @@ System specs (`js: true`) use headless Chrome via Selenium. On macOS the locally
 Select2 v4 appends its floating dropdown to `document.body` via `AttachBody`. This means the dropdown lives outside any `within` scope. The `with_top_level_scope` helper works around this by pushing `nil` onto Capybara's internal `@scopes` stack, temporarily resetting to document root — the same mechanism used by `within_window`.
 
 Key behaviors:
+
 - **Single-select**: opening appends `.select2-search--dropdown .select2-search__field` to body. Use `execute_script("$('#id').select2('open')")` to open, then `find(".select2-search--dropdown .select2-search__field").set(value)` to type.
 - **Multiple-select**: uses inline search (`.select2-search__field` on the span), no dropdown search field. After clicking a result, the dropdown stays open — close it with `find("body").click`.
 - One open single-select creates **two** `.select2-container--open` elements (inline container + floating dropdown). This is normal.

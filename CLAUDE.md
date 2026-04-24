@@ -195,6 +195,7 @@ Write a small wrapper script to `tmp/` (gitignored) and tell user to run `bash t
 - Warm but concise — 2–3 short paragraphs max
 - Lead with what changed and why it matters to them; skip implementation detail
 - Posts appear from `Gather_Bot`, so write in first-person plural ("We're happy to share...")
+- Always end the post body with: `*This post was by the Gather Bot, a bot that helps us announce new features and updates to Gather!*`
 
 ## Upgrading Rails
 

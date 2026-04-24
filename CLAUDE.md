@@ -167,6 +167,7 @@ Gather uses several locale files under `config/locales/en/`. Each type of string
 - **System tests require headless Chrome.** See the [Selenium Docker service](#headless-chrome-for-system-tests) section below.
 - **Run individual or small numbers of specs locally; use CI for full suite runs.** When fixing a specific failure, run the affected file/line with `bundle exec rspec spec/path/to/spec.rb:42` locally to confirm it passes before pushing — this avoids burning a ~28 min CI cycle on a fix that doesn't work. Only push to CI when you need the full suite run (e.g. after a Rails upgrade or broad refactor). Non-browser specs (model, request, job, mailer) run fine locally; system specs require headless Chrome (see below).
 - **Replicate CI failures locally before iterating.** Add a diagnostic assertion with a descriptive failure message (e.g. `expect(count).to eq(1), "Expected 1, got #{count}. Details: #{things.inspect}"`) to extract values that aren't visible in a normal failure.
+- **Flaky system tests: try to replicate first, then fix.** Run the specific example many times locally (`bundle exec rspec spec/path/spec.rb:42` in a loop) to confirm flakiness before patching. If local replication isn't possible (e.g. browser unavailable), apply a targeted fix and note it here. Known past flaky tests: `spec/system/work/job_spec.rb` "create, show, and update" — cocoon `remove_fields` JS animation race; fixed by adding `expect(page).to have_no_selector(...)` after the remove click to synchronize.
 
 ## Code Style
 

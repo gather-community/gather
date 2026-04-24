@@ -81,7 +81,7 @@ group :development, :test do
   gem "byebug", "~> 13.0"
   gem "capistrano-bundler", "~> 1.0"
   gem "capistrano-passenger", "~> 0.2"
-  gem "capistrano-rails", "~> 1.1"
+  gem "capistrano-rails", "~> 1.7"
   gem "capistrano-rbenv", "~> 2.1"
   gem "capistrano3-delayed-job", "~> 1.0"
   gem "capybara", "~> 3.40"

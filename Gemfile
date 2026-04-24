@@ -20,7 +20,7 @@ gem "country_select", "~> 11.0"
 gem "daemons", "~> 1.2"
 gem "datetimepicker-rails", git: "https://gitlab.com/zpaulovics/datetimepicker-rails"
 gem "delayed_job_active_record", "~> 4.1"
-gem "devise", "~> 4.7"
+gem "devise", "~> 5.0"
 gem "diffy", "~> 3.4"
 gem "draper", "~> 4.0"
 gem "dropzonejs-rails", "~> 0.7"
@@ -118,7 +118,7 @@ end
 
 gem "stripe", "~> 8.1"
 
-gem "turbo-rails", "~> 1.3"
+gem "turbo-rails", "~> 2.0"
 
 gem "money", "~> 6.16"
 

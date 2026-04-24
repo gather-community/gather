@@ -165,9 +165,13 @@ When upgrading Rails to a new version, always read the official upgrade guide at
 
 **Do not bump `config.load_defaults` in `config/application.rb` as part of the gem version bump.** New framework defaults must be adopted one at a time — run `bin/rails app:update` to generate `config/initializers/new_framework_defaults_X_Y.rb`, then enable and test each default individually before removing the override. Bumping `load_defaults` all at once silently activates many behavior changes and makes it impossible to bisect regressions.
 
+**When running `bin/rails app:update`, only keep the new `config/initializers/new_framework_defaults_X_Y.rb` file.** The command will prompt to overwrite many existing files (application.rb, environment configs, puma.rb, public error pages, bin scripts, etc.) — decline all overwrites. Use `git checkout -- <files>` to restore anything that was accidentally overwritten.
+
+**After generating the new framework defaults file, read all the commented-out options, summarize each one for the user (what it does and any risk), and ask which ones they'd like to enable.**
+
 ## Tech Stack
 - Ruby 3.2.2, Node.js 18.12.1
-- Rails 8.0, PostgreSQL, Redis, Elasticsearch
+- Rails 8.1, PostgreSQL, Redis, Elasticsearch
 - Devise + OmniAuth (Google OAuth2) for auth
 - Delayed Job for background processing
 - esbuild for JS bundling, Stimulus for frontend interactivity

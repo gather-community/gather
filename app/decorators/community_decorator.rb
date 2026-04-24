@@ -7,11 +7,12 @@ class CommunityDecorator < ApplicationDecorator
     ActionLinkSet.new(
       ActionLink.new(object, :visit, icon: "external-link", path: h.url_in_community(object),
                                      permitted: true, html: {target: "_blank", rel: "noopener"}),
-      ActionLink.new(object, :destroy, icon: "trash", path: h.community_path(object),
-                                       method: :delete, btn_class: :danger,
+      ActionLink.new(object, :destroy, icon: "trash", path: "#",
+                                       btn_class: :danger,
                                        data: {
                                          controller: "community-delete",
                                          community_delete_slug_value: object.slug,
+                                         community_delete_url_value: h.community_path(object),
                                          action: "click->community-delete#confirm"
                                        })
     )

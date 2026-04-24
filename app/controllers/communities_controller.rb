@@ -19,7 +19,11 @@ class CommunitiesController < ApplicationController
   def destroy
     load_community
     authorize(@community)
-    CommunityDeletionJob.perform_later(@community.id)
+    if params[:community_slug] != @community.slug
+      redirect_to(admin_community_path(@community), alert: "Incorrect slug. Community was not deleted.")
+      return
+    end
+    CommunityDeletionJob.perform_later(@community.id, current_user.id)
     redirect_to(communities_path, notice: "#{@community.name} is being deleted.")
   end
 

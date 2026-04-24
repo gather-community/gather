@@ -5,6 +5,11 @@ module Groups
     class ListDecorator < ApplicationDecorator
       delegate_all
 
+      def all_cmty_members_can_send_hint
+        cardinality = multi_community? ? "multi_community" : "single_community"
+        t("simple_form.hints.groups_group.mailman_list.all_cmty_members_can_send.#{cardinality}")
+      end
+
       def additional_members_ul
         email_ul(additional_members)
       end

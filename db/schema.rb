@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2026_03_05_000001) do
+ActiveRecord::Schema[7.0].define(version: 2026_04_16_033825) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -321,7 +321,7 @@ ActiveRecord::Schema[7.0].define(version: 2026_03_05_000001) do
     t.index ["group_id"], name: "index_gdrive_item_groups_on_group_id"
     t.index ["item_id", "group_id"], name: "index_gdrive_item_groups_on_item_id_and_group_id", unique: true
     t.index ["item_id"], name: "index_gdrive_item_groups_on_item_id"
-    t.check_constraint "access_level::text = ANY (ARRAY['reader'::character varying, 'commenter'::character varying, 'writer'::character varying, 'fileOrganizer'::character varying]::text[])", name: "access_level_enum"
+    t.check_constraint "access_level::text = ANY (ARRAY['reader'::character varying::text, 'commenter'::character varying::text, 'writer'::character varying::text, 'fileOrganizer'::character varying::text])", name: "access_level_enum"
   end
 
   create_table "gdrive_items", force: :cascade do |t|
@@ -433,7 +433,7 @@ ActiveRecord::Schema[7.0].define(version: 2026_03_05_000001) do
     t.index ["operation_id", "google_email"], name: "index_migration_requests_on_operation_id_and_google_email", unique: true
     t.index ["operation_id"], name: "index_gdrive_migration_requests_on_operation_id"
     t.check_constraint "char_length(opt_out_reason) <= 32767", name: "opt_out_reason_length"
-    t.check_constraint "status::text = ANY (ARRAY['new'::character varying, 'opened'::character varying, 'opted_out'::character varying]::text[])", name: "status_enum"
+    t.check_constraint "status::text = ANY (ARRAY['new'::character varying::text, 'opened'::character varying::text, 'opted_out'::character varying::text])", name: "status_enum"
   end
 
   create_table "gdrive_migration_scan_tasks", force: :cascade do |t|
@@ -459,7 +459,7 @@ ActiveRecord::Schema[7.0].define(version: 2026_03_05_000001) do
     t.datetime "updated_at", null: false
     t.index ["cluster_id"], name: "index_gdrive_migration_scans_on_cluster_id"
     t.index ["operation_id"], name: "index_gdrive_migration_scans_on_operation_id"
-    t.check_constraint "scope::text = ANY (ARRAY['full'::character varying, 'changes'::character varying, 'file_drop'::character varying]::text[])", name: "scope_enum"
+    t.check_constraint "scope::text = ANY (ARRAY['full'::character varying::text, 'changes'::character varying::text, 'file_drop'::character varying::text])", name: "scope_enum"
     t.check_constraint "status::text = ANY (ARRAY['new'::character varying::text, 'in_progress'::character varying::text, 'cancelled'::character varying::text, 'complete'::character varying::text])", name: "status_enum"
   end
 
@@ -479,7 +479,7 @@ ActiveRecord::Schema[7.0].define(version: 2026_03_05_000001) do
     t.index ["gdrive_config_id"], name: "index_gdrive_synced_permissions_on_gdrive_config_id"
     t.index ["item_id"], name: "index_gdrive_synced_permissions_on_item_id"
     t.index ["user_id"], name: "index_gdrive_synced_permissions_on_user_id"
-    t.check_constraint "access_level::text = ANY (ARRAY['reader'::character varying, 'commenter'::character varying, 'writer'::character varying, 'fileOrganizer'::character varying]::text[])", name: "access_level_enum"
+    t.check_constraint "access_level::text = ANY (ARRAY['reader'::character varying::text, 'commenter'::character varying::text, 'writer'::character varying::text, 'fileOrganizer'::character varying::text])", name: "access_level_enum"
   end
 
   create_table "gdrive_tokens", force: :cascade do |t|
@@ -506,7 +506,7 @@ ActiveRecord::Schema[7.0].define(version: 2026_03_05_000001) do
   create_table "group_mailman_lists", force: :cascade do |t|
     t.jsonb "additional_members"
     t.jsonb "additional_senders"
-    t.boolean "all_cmty_members_can_send", default: true, null: false
+    t.boolean "all_cmty_members_can_send", default: false, null: false
     t.bigint "cluster_id", null: false
     t.datetime "created_at", null: false
     t.bigint "domain_id", null: false

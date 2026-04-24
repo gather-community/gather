@@ -7,7 +7,7 @@ module Groups
       # We don't need to authenticate this since it's not showing any confidential information
       # and authentication would be a pain.
       skip_before_action :authenticate_user!
-      skip_after_action :verify_authorized
+      skip_after_action :verify_pundit_authorization
 
       def show
         ActsAsTenant.without_tenant { @list = List.find_by(remote_id: params[:list_id]) }

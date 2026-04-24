@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative("boot")
+
 require "rails/all"
 require_relative("../lib/disable_tenant_scoping")
 require_relative("../lib/console_helper")
@@ -12,18 +13,14 @@ require "elasticsearch/rails/instrumentation"
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
+# delayed_job 4.2.0 inherits from AbstractAdapter, which Rails 7.1 removed.
+ActiveJob::QueueAdapters::AbstractAdapter = Object unless defined?(ActiveJob::QueueAdapters::AbstractAdapter)
+
 module Gather
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults("7.0")
+    config.load_defaults("8.1")
 
-    # Settings in config/environments/* take precedence over those specified here.
-    # Application configuration can go into files in config/initializers
-    # -- all .rb files in that directory are automatically loaded after loading
-    # the framework and any gems in your application.
-
-    # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
-    # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
     config.time_zone = "UTC"
 
     config.i18n.load_path += Dir[Rails.root.join("config", "locales", "**", "*.{rb,yml}")]
@@ -31,10 +28,11 @@ module Gather
       Rails.root.join("app", "decorators", "concerns"),
       Rails.root.join("app", "mailers", "concerns"),
       Rails.root.join("app", "search_configs"),
-      Rails.root.join("lib")
     ]
     config.autoload_paths += extra_paths
     config.eager_load_paths += extra_paths
+
+    config.autoload_lib(ignore: %w[assets tasks])
 
     config.add_autoload_paths_to_load_path = false
 

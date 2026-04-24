@@ -3,7 +3,7 @@
   "private": "true",
   "dependencies": {
     "@hotwired/stimulus": "^3.1.1",
-    "@hotwired/turbo-rails": "^7.2.4",
+    "@hotwired/turbo-rails": "^8.0.23",
     "@stripe/stripe-js": "^5.2.0",
     "easymde": "^2.20.0"
   },

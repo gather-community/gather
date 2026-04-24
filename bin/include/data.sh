@@ -82,6 +82,12 @@ _data_test_elasticsearch() {
   curl -s "http://${_DATA_ES_HOST}:${_DATA_ES_PORT}/_cluster/health" &>/dev/null
 }
 
+_data_test_mailman() {
+  # Try Docker service name (devcontainer) then localhost port mapping (host)
+  curl -s --max-time 5 -u restadmin:restpass http://mailman-core:8001/3.1/system/versions &>/dev/null ||
+  curl -s --max-time 5 -u restadmin:restpass http://localhost:8001/3.1/system/versions &>/dev/null
+}
+
 _data_test_all_connections() {
   local all_ok=true
 
@@ -103,6 +109,14 @@ _data_test_all_connections() {
 
   printf "  %-16s " "Elasticsearch"
   if _data_test_elasticsearch; then
+    gum style --foreground 2 "✓ connected"
+  else
+    gum style --foreground 1 "✗ failed"
+    all_ok=false
+  fi
+
+  printf "  %-16s " "Mailman"
+  if _data_test_mailman; then
     gum style --foreground 2 "✓ connected"
   else
     gum style --foreground 1 "✗ failed"
@@ -204,11 +218,6 @@ _data_provision_database() {
 
   echo
   gum style --bold --foreground 2 "Database provisioned successfully!"
-  echo
-  echo "You can now start the application:"
-  echo "  bin/dev"
-  echo
-  echo "Access the app at: https://gatherdev.org:3000"
 }
 
 _data_show_existing_admin() {
@@ -338,6 +347,50 @@ _data_offer_provisioning() {
   fi
 }
 
+
+_data_set_mailman_admin_password() {
+  # The mailman-web image creates the admin with an unusable password.
+  # Set it to 'gather-mailman-dev' by writing the hash directly to SQLite.
+  local container
+  container=$(docker ps --filter "name=mailman-web" --filter "status=running" --format "{{.Names}}" 2>/dev/null | head -1)
+  [[ -z "$container" ]] && return 0
+
+  printf "  %-16s " "Mailman admin"
+  local timeout=60
+  local start=$SECONDS
+  while ! docker exec "$container" test -f /opt/mailman-web-data/mailmanweb.db 2>/dev/null; do
+    if [[ $((SECONDS - start)) -gt $timeout ]]; then
+      gum style --foreground 3 "⚠ timed out waiting for Mailman DB"
+      return 0
+    fi
+    sleep 2
+  done
+
+  if docker exec "$container" python3 -c "
+import sqlite3, hashlib, base64
+salt = 'gatherdevelopment'
+dk = hashlib.pbkdf2_hmac('sha256', b'gather-mailman-dev', salt.encode(), 390000)
+h = 'pbkdf2_sha256\$390000\$' + salt + '\$' + base64.b64encode(dk).decode()
+conn = sqlite3.connect('/opt/mailman-web-data/mailmanweb.db')
+conn.execute(\"UPDATE auth_user SET password=? WHERE username='admin'\", (h,))
+conn.commit()
+" 2>/dev/null; then
+    gum style --foreground 2 "✓ password set"
+  else
+    gum style --foreground 1 "✗ failed"
+  fi
+}
+
+_data_print_access_info() {
+  echo
+  gum style --bold "Getting Started"
+  echo
+  echo "  Start the app:    bin/dev"
+  echo "  App URL:          https://gatherdev.org:3000"
+  echo "  Mailman (Postorius): http://localhost:8000/postorius/  (admin / gather-mailman-dev)"
+  echo
+}
+
 run_data() {
   echo "Setting up data services..."
   echo
@@ -358,6 +411,7 @@ run_data() {
   if _data_test_all_connections; then
     echo
     _data_offer_provisioning
+    _data_set_mailman_admin_password
     return 0
   fi
 
@@ -372,6 +426,7 @@ run_data() {
     if _data_test_all_connections; then
       echo
       _data_offer_provisioning
+      _data_set_mailman_admin_password
       return 0
     else
       echo

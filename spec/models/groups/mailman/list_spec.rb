@@ -28,6 +28,17 @@ describe Groups::Mailman::List do
     end
   end
 
+  describe "#enforced_config" do
+    it "includes the enforced config settings" do
+      expect(build(:group_mailman_list).enforced_config.keys).to include(*Groups::Mailman::List::ENFORCED_SETTINGS)
+    end
+
+    it "does not include non-enforced config settings" do
+      non_enforced_keys = Groups::Mailman::List::DEFAULT_SETTINGS.keys - Groups::Mailman::List::ENFORCED_SETTINGS
+      expect(build(:group_mailman_list).enforced_config.keys).not_to include(*non_enforced_keys)
+    end
+  end
+
   describe "#list_memberships" do
     let!(:mod1) { create(:user, email: "e@e.com", first_name: "Eu", last_name: "Smith") }
     let!(:mod2) { create(:user, email: "f@f.com", first_name: "Fu", last_name: "Smith") }
@@ -50,9 +61,9 @@ describe Groups::Mailman::List do
     let(:managers_can_admin_mod) { false }
     let!(:list) do
       build(:group_mailman_list, group: group,
-                                 managers_can_administer: managers_can_admin_mod,
-                                 managers_can_moderate: managers_can_admin_mod,
-                                 remote_id: "foo.bar.com")
+        managers_can_administer: managers_can_admin_mod,
+        managers_can_moderate: managers_can_admin_mod,
+        remote_id: "foo.bar.com")
     end
 
     context "for regular group" do
@@ -64,6 +75,29 @@ describe Groups::Mailman::List do
         group.memberships.create!(group: group, user: joiner2, kind: "joiner")
         group.memberships.create!(group: group, user: manager1, kind: "manager")
         group.memberships.create!(group: group, user: manager2, kind: "manager")
+      end
+
+      context "when all_cmty_members_can_send is true" do
+        let!(:list) do
+          build(:group_mailman_list, group: group,
+            all_cmty_members_can_send: true, remote_id: "foo.bar.com")
+        end
+
+        it "includes non-member community users as nonmembers with accept action" do
+          non_joiner_mship = list.list_memberships.find { |m| m.email == non_joiner.email }
+          expect(non_joiner_mship).to have_attributes(role: "nonmember", moderation_action: "accept")
+        end
+
+        it "does not include group members as additional nonmembers" do
+          joiner1_roles = list.list_memberships.select { |m| m.email == joiner1.email }.map(&:role)
+          expect(joiner1_roles).not_to include("nonmember")
+        end
+      end
+
+      context "when all_cmty_members_can_send is false" do
+        it "does not include non-member community users" do
+          expect(list.list_memberships.map(&:email)).not_to include(non_joiner.email)
+        end
       end
 
       context "when managers can't administer or moderate" do
@@ -149,7 +183,7 @@ describe Groups::Mailman::List do
       memberships.map do |mship|
         mm_user = mship.mailman_user
         [mm_user.persisted?, mm_user.user_id, mm_user.remote_id,
-         mm_user.email, mm_user.display_name, mship.role]
+          mm_user.email, mm_user.display_name, mship.role]
       end
     end
   end

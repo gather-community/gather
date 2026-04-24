@@ -7,14 +7,25 @@ module Groups
     class ListMembership
       include ActiveModel::Model
 
-      attr_accessor :remote_id, :mailman_user, :list_id, :role, :moderation_action, :display_name, :by_address
+      attr_accessor :remote_id, :mailman_user, :list_id, :role, :display_name, :by_address
+
+      # moderation_action:
+      #   accept means accept outright
+      #   defer means 'default processing', which means the message goes through additional checks
+      #     and is then accepted assuming none of them fail
+      #   reject and discard have the obvious meanings
+      #   hold means hold for moderation, which is not automatic acceptance
+      #   `nil` means 'list default' (e.g. for a nonmember this would be `hold`)
+      attr_accessor :moderation_action
+
       delegate :email, to: :mailman_user
       delegate :syncable?, :remote_id, :remote_id?, to: :mailman_user, prefix: "user"
 
-      # We compare based on email and list_id because those are the two key pieces.
+      # We compare based on email, list_id, role, and moderation_action.
       # user_remote_id may or may not be available depending on what this ListMembership was built from.
       def ==(other)
-        email == other.email && list_id == other.list_id && role == other.role
+        email == other.email && list_id == other.list_id && role == other.role &&
+          moderation_action == other.moderation_action
       end
 
       def eql?(other)
@@ -22,11 +33,19 @@ module Groups
       end
 
       def hash
-        [email, list_id, role].hash
+        [email, list_id, role, moderation_action].hash
       end
 
       def name_or_email
         @name_or_email ||= display_name.presence || email
+      end
+
+      def owner_or_mod?
+        %w[owner moderator].include?(role)
+      end
+
+      def default_or_accept?
+        moderation_action.nil? || moderation_action == "accept"
       end
 
       def subscriber

@@ -6,7 +6,7 @@ module GDrive
       # These are public pages. Authentication comes from the token in the header.
       skip_before_action :authenticate_user!
       skip_before_action :verify_authenticity_token
-      skip_after_action :verify_authorized
+      skip_after_action :verify_pundit_authorization
 
       prepend_before_action :set_current_community_from_query_string
 

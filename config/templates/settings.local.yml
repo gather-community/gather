@@ -24,3 +24,8 @@ elasticsearch:
 # Redis connection
 redis:
   url: redis://redis:6379/0
+
+# Mailman API connection (uses Docker service name, same as elasticsearch/redis above)
+mailman:
+  api:
+    base_url: http://mailman-core:8001

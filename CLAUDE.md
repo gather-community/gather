@@ -190,7 +190,8 @@ Write a small wrapper script to `tmp/` (gitignored) and tell user to run `bash t
 
 **Draft guidelines:**
 
-- Audience is existing Gather users (community admins and members)
+- **Titles end with an exclamation mark** unless it really doesn't make sense
+- Audience is technically inclined but not necessarily software engineers — they know their way around a computer and are the Gather expert in their community; don't over-explain, but don't assume deep technical knowledge either
 - Warm but concise — 2–3 short paragraphs max
 - Lead with what changed and why it matters to them; skip implementation detail
 - Posts appear from `Gather_Bot`, so write in first-person plural ("We're happy to share...")

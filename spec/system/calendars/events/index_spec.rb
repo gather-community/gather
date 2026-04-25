@@ -28,7 +28,7 @@ describe "event calendar", js: true do
     end
     let!(:event2) do
       create(:event, calendar: calendar2, starts_at: time + 1.hour, ends_at: time + 2.hours,
-                     name: "Cal2 Event")
+        name: "Cal2 Event")
     end
 
     before do
@@ -155,16 +155,32 @@ describe "event calendar", js: true do
 
       today = Time.zone.today
       today_date = today.to_fs(:no_time)
-      selected_cell_selector = ".fc-month-view .fc-day[data-date][tabindex='0'][aria-selected='true']"
+      selected_cell_selector =
+        ".fc-month-view .fc-day[data-date][tabindex='0'][aria-selected='true']"
 
       expect(page).to have_css(".fc-month-view .fc-day[data-date='#{today_date}'][aria-current='date']")
       expect(page).to have_css(selected_cell_selector, count: 1)
 
-      target_date = (today.day > 1 ? today - 1.day : today + 1.day).to_fs(:no_time)
+      selected_date_before_click = find(selected_cell_selector)["data-date"]
+      target_date = page.evaluate_script(<<~JS)
+        (() => {
+          const cells = Array.from(document.querySelectorAll(".fc-month-view .fc-day[data-date]"))
+            .filter(cell => cell.offsetParent !== null);
+          const selectedIndex = cells.findIndex(cell => cell.getAttribute("aria-selected") === "true");
+          const target = cells[selectedIndex + 1] || cells[selectedIndex - 1];
+
+          return target && target.getAttribute("data-date");
+        })()
+      JS
       find(".fc-month-view .fc-day[data-date='#{target_date}']").click
 
+      expect(page).to have_no_css(
+        ".fc-month-view .fc-day[data-date='#{selected_date_before_click}'][aria-selected='true']"
+      )
+      expect(page).to have_css(".fc-month-view .fc-day[data-date='#{target_date}'][aria-selected='true']")
       expect(page).to have_css(
-        ".fc-month-view .fc-day[data-date='#{target_date}'][tabindex='0'][aria-selected='true'].fc-gather-grid-active"
+        ".fc-month-view .fc-day[data-date][tabindex='0'][aria-selected='true'].fc-gather-grid-active",
+        count: 1
       )
       expect(page).to have_css(".fc-month-view .fc-day[data-date='#{today_date}'][aria-current='date']")
       expect(page).to have_css(".fc-month-view .fc-day[data-date][aria-selected='true']", count: 1)

@@ -84,7 +84,7 @@ module Gather
 
     # We need to do this to move between subdomains and the apex domain.
     # Devise doesn't allow us to add allow_other_host to redirects so we have to disable for now.
-    config.action_controller.raise_on_open_redirects = false
+    config.action_controller.action_on_open_redirect = :log
 
     # Show a 403 page if Pundit rejects.
     config.action_dispatch.rescue_responses["Pundit::NotAuthorizedError"] = :forbidden

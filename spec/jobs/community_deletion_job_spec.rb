@@ -12,8 +12,9 @@ describe CommunityDeletionJob do
 
   context "when actor is still a super_admin" do
     it "destroys the community and logs" do
-      expect(Rails.logger).to receive(:info).with(/CommunityDeletionJob.*#{community.name}.*#{actor.email}/)
+      allow(Rails.logger).to receive(:info)
       perform_job
+      expect(Rails.logger).to have_received(:info).with(/CommunityDeletionJob.*#{community.name}.*#{actor.email}/)
       expect(Community.exists?(community.id)).to be(false)
     end
   end

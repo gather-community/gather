@@ -1,0 +1,92 @@
+<%= gather_form_for(@form, url: @form.url,
+    name: "calendars--multi-event",
+    html: {data: {
+      controller: "calendars--multi-event-form",
+      "calendars--multi-event-form-form-url-value" => form_calendars_multi_events_path
+    }}) do |f| %>
+
+  <%= f.hidden_field :origin_page %>
+
+  <div data-calendars--multi-event-form-target="loading" class="multi-event-loading hidden">
+    <span class="glyphicon glyphicon-refresh glyphicon-spin"></span>
+    Updating&hellip;
+  </div>
+
+  <%= f.input :all_day, as: :boolean %>
+
+  <%= f.input :name, maxlength: Calendars::EventForm::NAME_MAX_LENGTH %>
+
+  <%= f.input :starts_at, as: :datetime_picker, include_day_of_week: true %>
+
+  <%= f.input :ends_at, as: :datetime_picker, include_day_of_week: true %>
+
+  <%# Calendars section: cocoon nested fields, one row per CalendarSlot %>
+  <%= f.input :calendar_slots, label: t("simple_form.labels.calendars_multi_event.calendar_slots") do %>
+    <div id="calendar-slot-rows">
+      <%= f.simple_fields_for(:calendar_slots) do |sf| %>
+        <div class="nested-fields subfields multiple <%= "hidden" if sf.object.marked_for_destruction? %>">
+          <%= render("calendars/multi_events/calendar_slot_fields", f: sf) %>
+        </div>
+      <% end %>
+    </div>
+    <%= link_to_add_association_with_icon(
+      t("cocoon.add_links.calendar_slots"),
+      f,
+      :calendar_slots,
+      partial: "calendars/multi_events/calendar_slot_fields",
+      "data-association-insertion-node": "#calendar-slot-rows",
+      "data-association-insertion-method": "append"
+    ) %>
+  <% end %>
+
+  <%# Events summary — deterministic list derived from @form.event_summaries %>
+  <% if @form.event_summaries.any? %>
+    <%= f.input :events_summary, label: t("simple_form.labels.calendars_multi_event.events_summary") do %>
+      <ul class="multi-event-summary">
+        <% @form.event_summaries.each do |summary| %>
+          <% next unless summary[:calendar].present? %>
+          <li>
+            <strong><%= summary[:calendar].name %></strong>
+            <ul>
+              <% if summary[:starts_at] && summary[:ends_at] %>
+                <li><%= I18n.l(summary[:starts_at]) %> &ndash; <%= I18n.l(summary[:ends_at]) %></li>
+              <% end %>
+            </ul>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+  <% end %>
+
+  <% if policy(@event).choose_creator? %>
+    <%= f.input :creator_id, as: :user_select, context: "current_community_full_access" %>
+  <% end %>
+
+  <%= f.input :group_id, collection: @groups %>
+
+  <%= f.input :note, as: :markdown %>
+
+  <%# Guidelines: aggregated from all selected calendars, single acceptance checkbox %>
+  <% if @form.any_guidelines? %>
+    <%= f.input :guidelines, required: true do %>
+      <div id="guidelines">
+        <%= safe_render_markdown(@form.all_guidelines) %>
+      </div>
+      <label>
+        <%= f.check_box(:guidelines_ok) %>
+        <strong><%= t("simple_form.labels.calendars_multi_event.guidelines_ok") %></strong>
+      </label>
+    <% end %>
+  <% end %>
+
+  <%= form_actions do %>
+    <%= f.button :primary %>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  $(function() {
+    new Gather.Views.AjaxSelect2({el: '.calendars--multi-event-form .calendars_event_creator_id'});
+    new Gather.Views.DirtyChecker({el: '.calendars--multi-event-form'});
+  });
+<% end %>

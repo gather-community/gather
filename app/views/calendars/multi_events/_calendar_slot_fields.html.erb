@@ -1,0 +1,24 @@
+<%= f.hidden_field :id %>
+<div class="calendar-slot-row">
+  <div class="calendar-slot-fields">
+    <%= f.input :calendar_id,
+      collection: @writeable_calendars,
+      label_method: :name,
+      value_method: :id,
+      include_blank: true,
+      data: {"action" => "change->calendars--multi-event-form#calendarChanged"} %>
+
+    <%= f.input :customize_times, as: :boolean,
+      data: {"action" => "change->calendars--multi-event-form#customizeTimesChanged"} %>
+
+    <div class="customize-times-fields <%= "hidden" unless f.object.customize_times? %>">
+      <%= f.input :starts_at, as: :time_picker %>
+      <%= f.input :ends_at, as: :time_picker %>
+    </div>
+  </div>
+
+  <div class="remove-link-col">
+    <%= link_to_remove_association(icon_tag("trash"), f,
+      data: {"action" => "cocoon:after-remove->calendars--multi-event-form#calendarChanged"}) %>
+  </div>
+</div>

@@ -13,6 +13,15 @@ en:
     labels:
       # These labels are here instead of activerecord b/c these are for things that
       # aren't ActiveRecord models.
+      calendars_multi_event:
+        calendar_slots: Calendars
+        events_summary: Events
+        guidelines_ok: I agree to the above guidelines
+      calendars_calendar_slot:
+        calendar_id: Calendar
+        customize_times: Customize times
+        starts_at: Start time
+        ends_at: End time
       communities_signup:
         contact_first_name: "First Name"
         contact_last_name: "Last Name"

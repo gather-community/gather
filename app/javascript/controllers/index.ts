@@ -24,3 +24,6 @@ application.register("communities--signup-action", Communities__SignupActionCont
 
 import CommunityDeleteController from "./community_delete_controller"
 application.register("community-delete", CommunityDeleteController)
+
+import Calendars__MultiEventFormController from "./calendars/multi_event_form_controller"
+application.register("calendars--multi-event-form", Calendars__MultiEventFormController)

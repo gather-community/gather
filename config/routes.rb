@@ -154,6 +154,9 @@ Rails.application.routes.draw do
 
   namespace :calendars do
     resources :events
+    resources :multi_events, only: %i[new create edit update] do
+      collection { post :form }
+    end
     resources :protocols
     resources :groups, only: %i[new edit create update destroy]
 

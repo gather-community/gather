@@ -244,6 +244,7 @@ en:
       reminders: "Add Reminder"
       restrictions: "Add Restriction"
       signups: "Add Household"
+      calendar_slots: "Add Calendar"
       groups/group:
         memberships: "Add Member"
       meals/signup:

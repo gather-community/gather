@@ -374,6 +374,8 @@ en:
       finalize: "Finalize"
       cancel: "Cancel"
       send_message: "Message"
+    community:
+      visit: "Visit"
     billing/account:
       add_txn: "Add Transaction"
     user:

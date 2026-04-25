@@ -8,7 +8,7 @@ class UsersController < ApplicationController
 
   before_action -> { nav_context(:people, :directory) }
 
-  skip_after_action :verify_authorized, only: :unimpersonate
+  skip_after_action :verify_pundit_authorization, only: :unimpersonate
 
   decorates_assigned :household, :user, :users, :head_cook_meals
 

@@ -9,13 +9,23 @@ Gather is a Ruby on Rails community management platform for cooperative housing.
 ## Common Commands
 
 ### Running the App
+
 ```bash
 bin/dev                  # Start Rails + JS build + type checking (via foreman/Procfile.dev)
 bin/delayed_job run      # Background jobs (separate terminal)
 docker compose up -d     # Start PostgreSQL, Redis, Elasticsearch, Mailcatcher
 ```
 
+### Verifying a Clean Boot Before Deploying
+Development already uses `config.eager_load = true`, so boot errors surface locally. Before deploying a branch that touches gems, initializers, or models, run these three checks:
+```bash
+RAILS_ENV=development bundle exec rails runner "puts 'ok'"  # Full boot check
+RAILS_ENV=development bundle exec rake assets:precompile    # Asset pipeline
+bin/dev                                                     # Full dev server
+```
+
 ### Tests
+
 ```bash
 bundle exec rspec                              # All tests
 bundle exec rspec spec/models/user_spec.rb     # Single file
@@ -23,6 +33,7 @@ bundle exec rspec spec/models/user_spec.rb:42  # Single test by line
 ```
 
 ### Linting
+
 ```bash
 bundle exec rubocop                  # Ruby (uses standard gem + rubocop-rails)
 bundle exec rubocop -a               # Ruby auto-fix
@@ -31,12 +42,14 @@ yarn check-types                     # TypeScript type checking
 ```
 
 ### Database
+
 ```bash
 bin/rails db:migrate
 bin/rails db:setup       # Create + seed
 ```
 
 ### Rails Console
+
 ```ruby
 CH.tenant(1)  # Must set tenant before querying
 ```
@@ -44,6 +57,7 @@ CH.tenant(1)  # Must set tenant before querying
 ## Architecture
 
 ### Multi-Tenancy Hierarchy
+
 `Cluster` → `Community` → `Household` → `User`
 
 - **Cluster** is the ActsAsTenant tenant. All queries are automatically scoped to the current cluster.
@@ -51,19 +65,20 @@ CH.tenant(1)  # Must set tenant before querying
 - Users have global roles: `super_admin`, `cluster_admin`, `admin`, plus community-specific roles like `biller`, `meals_coordinator`, `work_coordinator`.
 
 ### Feature Modules
+
 Code is organized by feature domain. Each module has its own models, controllers, decorators, policies, jobs, and mailers under matching namespaces:
 
-| Module | Table Prefix | Key Models |
-|--------|-------------|------------|
-| `Meals` | `meal_` | Meal, Signup, Assignment, Formula, Role, Type |
-| `Work` | `work_` | Job, Shift, Period, Assignment |
-| `Calendars` | `calendar_` | Calendar, Event, Protocol, Group |
-| `Billing` | `billing_` | Account, Statement, Transaction, Template |
-| `People` | (none) | User, Household, MemberType, Memorial |
-| `Groups` | (none) | Group, Membership, Affiliation |
-| `Wiki` | (none) | Page |
-| `GDrive` | (none) | Config, Item, ItemGroup |
-| `CustomFields` | (none) | Dynamic JSONB-based field framework |
+| Module         | Table Prefix | Key Models                                    |
+| -------------- | ------------ | --------------------------------------------- |
+| `Meals`        | `meal_`      | Meal, Signup, Assignment, Formula, Role, Type |
+| `Work`         | `work_`      | Job, Shift, Period, Assignment                |
+| `Calendars`    | `calendar_`  | Calendar, Event, Protocol, Group              |
+| `Billing`      | `billing_`   | Account, Statement, Transaction, Template     |
+| `People`       | (none)       | User, Household, MemberType, Memorial         |
+| `Groups`       | (none)       | Group, Membership, Affiliation                |
+| `Wiki`         | (none)       | Page                                          |
+| `GDrive`       | (none)       | Config, Item, ItemGroup                       |
+| `CustomFields` | (none)       | Dynamic JSONB-based field framework           |
 
 Module namespaces are defined in files like `app/models/meals.rb` which set `table_name_prefix`.
 
@@ -74,6 +89,7 @@ Module namespaces are defined in files like `app/models/meals.rb` which set `tab
 **Decorators (Draper):** All view/presentation logic goes in decorators (`app/decorators/`), not models or helpers. `ApplicationDecorator` provides multi-community display helpers like `cmty_prefix`.
 
 **Event System (Wisper):** Models publish events that singleton listeners handle. Listener registration order matters — see `config/initializers/listeners.rb`. Key listeners:
+
 - `Work::MealJobSynchronizer` — syncs meal roles to work jobs
 - `Work::MealAssignmentSynchronizer` — syncs meal assignments to work assignments
 - `Groups::MembershipMaintainer` — manages group memberships (must run before Mailman/GDrive sync)
@@ -84,6 +100,7 @@ Module namespaces are defined in files like `app/models/meals.rb` which set `tab
 **Custom Fields:** JSONB-backed extensible fields defined declaratively on models. Community settings are implemented this way.
 
 ### Controller Conventions
+
 - `ApplicationController` includes concerns from `ApplicationControllable::*` (RequestPreprocessing, Setters, Loaders, UrlHelpers, Users, Csv)
 - `current_community` is set from the subdomain during request preprocessing
 - `current_cluster` is the ActsAsTenant current tenant
@@ -98,7 +115,9 @@ Module namespaces are defined in files like `app/models/meals.rb` which set `tab
 - **Use `Devise.email_regexp` for email format validation** — not `URI::MailTo::EMAIL_REGEXP`. This keeps email validation consistent with Devise's own validation on `User`.
 - **Use `I18n.l` for all date/time formatting** — never use `strftime` or `.to_s` for display. In ERB views, `l(date)` is the shorthand. Specify format with `format: :short` or `format: :long`. Date formats are defined in locale files.
 - **Index rows use hyperlinks, not button links** — make one or more meaningful fields in the row (e.g. name, title) a hyperlink pointing to the show/review page. Use the action link system (`ActionLink`/`ActionLinkSet` in decorators) for edit/delete operations, not inline button tags.
-- **Page-level action buttons use `content_for(:action_links)`** — rendered in the page header. Use `concat(link_to(icon_tag("icon") << " Label", path, class: "btn btn-..."))` inside a `content_for(:action_links)` block, wrapped in a policy check. Use `btn-primary` for the primary action and `btn-default` for secondary/gray buttons. Icons come from Font Awesome 4 via `icon_tag`.
+- **Page-level action buttons use `content_for(:action_links)`** — rendered in the page header. Icons come from Font Awesome 4 via `icon_tag`. Use `btn-primary` for the primary action, `btn-default` for secondary, `btn-danger` for destructive.
+  - **Show pages: use the decorator pattern.** Define `show_action_link_set` in the decorator returning an `ActionLinkSet` of `ActionLink` instances. In the view: `<% content_for(:action_links, resource.action_links(:show)) %>`. `ActionLink` checks the policy automatically (`{action}?`) unless you pass `permitted: true/false`. Pass `html: {target: "_blank"}` for extra link HTML attributes, `data: {key: val}` for Stimulus/data attributes, `btn_class: :danger` for destructive actions. Add labels under `action_labels.{model_i18n_key}.{action}` or `action_labels.common.{action}` in `en.yml`.
+  - **One-off action links** (e.g. on index pages): use `concat(link_to(icon_tag("icon") << " Label", path, class: "btn btn-..."))` inside the `content_for` block, wrapped in a policy check.
 - **Key-value table style for detail displays** — use `<table class="key-value">` for showing record details on show/review pages. Variants: `key-value-narrow` (narrow value column), `key-value-wide` (wide value column), `key-value-full` (full width). First `<td>` is styled as a muted label; second `<td>` holds the value.
 - **No "Back" links on show/review pages** — do not add "Back to list" or similar navigation links; this is not a Gather convention.
 - **Controller method order** — always put `index` first, followed by `show`, `new`, `edit`, `create`, `update`, `destroy`. Custom actions can go in sensible places after the standard ones.
@@ -106,6 +125,7 @@ Module namespaces are defined in files like `app/models/meals.rb` which set `tab
 - **Apex-domain controllers override `apex_domain_only`** — controllers whose routes live on the apex domain (no community subdomain) must define `protected def apex_domain_only = true`. This causes `check_subdomain` to call `ensure_apex_domain` (redirecting subdomain requests to apex) instead of rendering 404 when `current_community` is nil.
 
 ### Model Conventions
+
 - `ApplicationRecord` provides `alpha_order(*args)` for case-insensitive sorting
 - `skip_listener_action` transient attribute suppresses Wisper listener side effects (used in factories/tests)
 - Models use `in_community(community)` scopes for community filtering
@@ -116,12 +136,14 @@ Module namespaces are defined in files like `app/models/meals.rb` which set `tab
 Gather uses several locale files under `config/locales/en/`. Each type of string has a canonical home:
 
 **`activerecord.yml`** — the primary source for field labels and custom error messages:
+
 - `activerecord.attributes.{model}.{field}` — field labels for ActiveRecord models (used by simple_form as first lookup); model key uses `/` separator, e.g. `meals/meal`
 - `activemodel.attributes.{model}.{field}` — same pattern for non-AR models (e.g. form objects like `calendars/event`)
 - `activerecord.models.{model}` — human-readable model names
 - `activerecord.errors.models.{model}.attributes.{field}.{error_key}` — custom validation error message overrides
 
 **`simple_form.yml`** — for form presentation strings not covered by activerecord:
+
 - `simple_form.labels.{model}.{field}` — field labels for non-AR forms that have no `activerecord.attributes` entry (e.g. `calendars_export`, `communities_signup`); model key uses `_` separator
 - `simple_form.hints.{model}.{field}` — field hint text; use `{field}_html` key for HTML content
 - `simple_form.options.{model}.{field}.{value}` — select option labels; simple_form auto-translates symbol collections using this namespace
@@ -129,28 +151,68 @@ Gather uses several locale files under `config/locales/en/`. Each type of string
 - `simple_form.prompts.{model}.{field}` — blank/prompt option for selects
 
 **`en.yml`** — application-wide UI strings:
+
 - `helpers.submit.{action}` or `helpers.submit.{model}.{action}` — submit button labels
 - `confirmations.{model}.{action}` — confirm dialog text for destructive actions
-- `common.*` — shared strings used across multiple modules
+- `common.*` — shared strings used across multiple strings used across multiple modules
 - `errors.messages.*` — global custom error messages
 
 **Module-specific files** (`meals.yml`, `work.yml`, `people.yml`, etc.) — flash messages, page titles, section headers, and other strings belonging entirely to one feature module.
 
 ## Email
+
 - **Text-only mailers** — Gather uses plain text email templates only. Do not create `.html.erb` mailer views.
 
 ## Testing
+
 - **All new functionality must have test coverage.** Add specs for new models, jobs, mailers, forms, policies, and controllers. Follow existing spec patterns and directory structure.
+- **System tests require headless Chrome.** See the [Selenium Docker service](#headless-chrome-for-system-tests) section below.
+- **Run individual or small numbers of specs locally; use CI for full suite runs.** When fixing a specific failure, run the affected file/line with `bundle exec rspec spec/path/to/spec.rb:42` locally to confirm it passes before pushing — this avoids burning a ~28 min CI cycle on a fix that doesn't work. Only push to CI when you need the full suite run (e.g. after a Rails upgrade or broad refactor). Non-browser specs (model, request, job, mailer) run fine locally; system specs require headless Chrome (see below).
+- **Replicate CI failures locally before iterating.** Add a diagnostic assertion with a descriptive failure message (e.g. `expect(count).to eq(1), "Expected 1, got #{count}. Details: #{things.inspect}"`) to extract values that aren't visible in a normal failure.
 
 ## Code Style
+
 - Ruby: RuboCop with `standard` gem (Ruby 3.0 config), max line length 110
 - Empty methods use `expanded` style (not single-line)
 - GuardClause cop is disabled — parallel if/unless blocks are acceptable
 - `Style::Documentation` is disabled for controllers, decorators, helpers, policies, serializers
 
+## Announcing Features on the Discourse Forum
+
+When a notable feature ships, we might want to post an announcement to the Gather support forum (https://support.forum.gather.coop) using `bin/post_announcement`. Posts appear as the `Gather_Bot` user.
+
+Write a small wrapper script to `tmp/` (gitignored) and tell user to run `bash tmp/run_announcement.sh` in their own shell.
+
+**Required env vars** (set in your host shell):
+
+- `DISCOURSE_BASE_URL` — e.g. `https://support.forum.gather.coop`
+- `DISCOURSE_BOT_API_KEY`
+- `DISCOURSE_BOT_USERNAME`
+- `DISCOURSE_ANNOUNCEMENTS_CATEGORY_ID`
+
+**Draft guidelines:**
+
+- **Titles end with an exclamation mark** unless it really doesn't make sense
+- Audience is technically inclined but not necessarily software engineers — they know their way around a computer and are the Gather expert in their community; don't over-explain, but don't assume deep technical knowledge either
+- Warm but concise — 2–3 short paragraphs max
+- Lead with what changed and why it matters to them; skip implementation detail
+- Posts appear from `Gather_Bot`, so write in first-person plural ("We're happy to share...")
+- Always end the post body with: `*This post was by the Gather Bot, a bot that helps us announce new features and updates to Gather!*`
+
+## Upgrading Rails
+
+When upgrading Rails to a new version, always read the official upgrade guide at https://guides.rubyonrails.org/upgrading_ruby_on_rails.html before making changes. The guide covers breaking changes, removed features, new defaults, and required config updates for each version step.
+
+**Do not bump `config.load_defaults` in `config/application.rb` as part of the gem version bump.** New framework defaults must be adopted one at a time — run `bin/rails app:update` to generate `config/initializers/new_framework_defaults_X_Y.rb`, then enable and test each default individually before removing the override. Bumping `load_defaults` all at once silently activates many behavior changes and makes it impossible to bisect regressions.
+
+**When running `bin/rails app:update`, only keep the new `config/initializers/new_framework_defaults_X_Y.rb` file.** The command will prompt to overwrite many existing files (application.rb, environment configs, puma.rb, public error pages, bin scripts, etc.) — decline all overwrites. Use `git checkout -- <files>` to restore anything that was accidentally overwritten.
+
+**After generating the new framework defaults file, read all the commented-out options, summarize each one for the user (what it does and any risk), and ask which ones they'd like to enable.**
+
 ## Tech Stack
+
 - Ruby 3.2.2, Node.js 18.12.1
-- Rails 7, PostgreSQL, Redis, Elasticsearch
+- Rails 8.1, PostgreSQL, Redis, Elasticsearch
 - Devise + OmniAuth (Google OAuth2) for auth
 - Delayed Job for background processing
 - esbuild for JS bundling, Stimulus for frontend interactivity
@@ -158,7 +220,22 @@ Gather uses several locale files under `config/locales/en/`. Each type of string
 - Thin with SSL in development (https://gatherdev.org:3000)
 
 ## Test Organization
+
 - `spec/` mirrors `app/` structure: `models/`, `system/`, `requests/`, `decorators/`, `policies/`, `forms/`, `jobs/`, `mailers/`, `serializers/`, `validators/`, `lenses/`
 - Factories in `spec/factories/` organized by module
 - Shared support in `spec/support/` (contexts, helpers, matchers)
 - System tests use headless Chrome via Selenium
+
+## Headless Chrome for System Tests
+
+System specs (`js: true`) use headless Chrome via Selenium. On macOS the locally-installed Chrome is used automatically. On Linux (e.g. the Claude Code dev container), Chrome is not available by default — add a `selenium-chrome` service to docker-compose.yml and point Capybara at it via `SELENIUM_REMOTE_URL`.
+
+### Select2 Testing (`spec/support/helpers/system_spec_helpers.rb`)
+
+Select2 v4 appends its floating dropdown to `document.body` via `AttachBody`. This means the dropdown lives outside any `within` scope. The `with_top_level_scope` helper works around this by pushing `nil` onto Capybara's internal `@scopes` stack, temporarily resetting to document root — the same mechanism used by `within_window`.
+
+Key behaviors:
+
+- **Single-select**: opening appends `.select2-search--dropdown .select2-search__field` to body. Use `execute_script("$('#id').select2('open')")` to open, then `find(".select2-search--dropdown .select2-search__field").set(value)` to type.
+- **Multiple-select**: uses inline search (`.select2-search__field` on the span), no dropdown search field. After clicking a result, the dropdown stays open — close it with `find("body").click`.
+- One open single-select creates **two** `.select2-container--open` elements (inline container + floating dropdown). This is normal.

@@ -58,10 +58,54 @@ services:
     networks:
       - gather-network
 
+  mailman-core:
+    image: maxking/mailman-core:0.4
+    platform: linux/amd64
+    ports:
+      - "8001:8001"
+    volumes:
+      - mailman_core_data:/opt/mailman
+    environment:
+      - HYPERKITTY_API_KEY=hyperkittyapikey
+      - MTA=null
+      - MAILMAN_REST_API_PASS=restpass
+      - MAILMAN_REST_USER=restadmin
+    networks:
+      - gather-network
+
+  mailman-web:
+    image: maxking/mailman-web:0.4
+    platform: linux/amd64
+    ports:
+      - "8000:8000"
+    volumes:
+      - mailman_web_data:/opt/mailman-web-data
+      - ./docker/mailman-web-uwsgi.ini:/opt/mailman-web/uwsgi.ini
+      - ./docker/mailman-web-settings-local.py:/opt/mailman-web-data/settings_local.py
+    environment:
+      - HYPERKITTY_API_KEY=hyperkittyapikey
+      - DATABASE_TYPE=sqlite
+      - DATABASE_URL=sqlite:////opt/mailman-web-data/mailmanweb.db
+      - MAILMAN_ADMIN_USER=admin
+      - MAILMAN_ADMIN_EMAIL=admin@example.com
+      - SECRET_KEY=django-insecure-gatherdevelopment
+      - SERVE_FROM_DOMAIN=localhost
+      - MAILMAN_REST_API_URL=http://mailman-core:8001
+      - MAILMAN_REST_API_USER=restadmin
+      - MAILMAN_REST_API_PASS=restpass
+      # gethostbyname() is evaluated eagerly at import time; use localhost to avoid needing mailman-core up first
+      - MAILMAN_HOSTNAME=localhost
+    depends_on:
+      - mailman-core
+    networks:
+      - gather-network
+
 volumes:
   postgres_data:
   redis_data:
   elasticsearch_data:
+  mailman_core_data:
+  mailman_web_data:
 
 networks:
   gather-network:

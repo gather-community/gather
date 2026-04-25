@@ -146,7 +146,10 @@ describe "single sign on", js: true do
       fill_in("Email Address", with: "tom@example.com")
       fill_in("Password", with: FactoryBot::DEFAULT_PASSWORD)
       click_button("Sign In")
-      expect(current_url).to eq(valid_redirect)
+      # Use have_current_path (with implicit Capybara waiting) rather than current_url
+      # (no waiting) to handle the sign-in → SSO → external redirect chain completing
+      # asynchronously after click_button returns.
+      expect(page).to have_current_path(valid_redirect, url: true)
     end
   end
 end

@@ -42,8 +42,7 @@ describe Utils::Markdowner do
   describe "tables" do
     let(:input) { "|A|B|C|\n|---|---|---|\n|1|2|3|\n" }
     it do
-      is_expected.to eq(%(<table>\n<thead>\n<tr>\n<th>A</th>\n<th>B</th>\n<th>C</th>\n</tr>\n</thead>) +
-        %(\n<tbody>\n<tr>\n<td>1</td>\n<td>2</td>\n<td>3</td>\n</tr>\n</tbody>\n</table>\n))
+      is_expected.to eq(%(<table><thead>\n<tr>\n<th>A</th>\n<th>B</th>\n<th>C</th>\n</tr>\n</thead><tbody>\n<tr>\n<td>1</td>\n<td>2</td>\n<td>3</td>\n</tr>\n</tbody></table>\n))
     end
   end
 

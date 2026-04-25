@@ -86,7 +86,7 @@ module Groups
         # We don't allow changing the name, domain, or group after the list is created.
         # So these are the only fields we care about, and if they change, we only need
         # to sync members, not the whole list.
-        return unless attribs_changed?(list, %w[managers_can_moderate managers_can_administer])
+        return unless attribs_changed?(list, %w[managers_can_moderate managers_can_administer all_cmty_members_can_send])
         MembershipSyncJob.perform_later("Groups::Mailman::List", list.id)
       end
 

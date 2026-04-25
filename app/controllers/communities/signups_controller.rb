@@ -2,7 +2,7 @@
 
 class Communities::SignupsController < ApplicationController
   skip_before_action :authenticate_user!, only: %i[new create submitted]
-  skip_after_action :verify_authorized, only: %i[new create submitted]
+  skip_after_action :verify_pundit_authorization, only: %i[new create submitted]
 
   def index
     authorize(Communities::Signup)

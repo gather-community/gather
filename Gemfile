@@ -6,7 +6,7 @@ gem "active_model_serializers", "~> 0.10.16"
 gem "acts_as_list", "~> 0.9"
 gem "acts_as_tenant", "~> 0.4"
 gem "attribute_normalizer", "~> 1.2"
-gem "aws-sdk-s3", "~> 1.97", require: false
+gem "aws-sdk-s3", "~> 1.213", require: false
 gem "babosa", "~> 1.0"
 gem "bootsnap", "~> 1.22"
 gem "bootstrap-kaminari-views", "~> 0.0"
@@ -14,13 +14,13 @@ gem "bootstrap-sass", "~> 3.4"
 gem "browser", "~> 6"
 gem "chroma", "~> 0.2"
 gem "cocoon", "~> 1.2"
-gem "config", "~> 4.0"
-gem "country_select", "~> 4.0",
-  require: "country_select_without_sort_alphabetical" # Alpha sort is memory intensive?
+gem "config", "~> 5.0"
+gem "connection_pool", "< 3"
+gem "country_select", "~> 11.0"
 gem "daemons", "~> 1.2"
 gem "datetimepicker-rails", git: "https://gitlab.com/zpaulovics/datetimepicker-rails"
 gem "delayed_job_active_record", "~> 4.1"
-gem "devise", "~> 4.7"
+gem "devise", "~> 5.0"
 gem "diffy", "~> 3.4"
 gem "draper", "~> 4.0"
 gem "dropzonejs-rails", "~> 0.7"
@@ -46,17 +46,17 @@ gem "momentjs-rails", "~> 2.9", git: "https://github.com/derekprior/momentjs-rai
 gem "mustache", "~> 1.0"
 gem "net-http" # silence "already initialized constant" warnings. May be can go away later.
 gem "omniauth-google-oauth2", "~> 0.6"
-gem "omniauth-rails_csrf_protection", "~> 0.1" # Related to CVE 2015 9284
+gem "omniauth-rails_csrf_protection", "~> 2.0" # Related to CVE 2015 9284
 gem "pg", "~> 1.6"
 gem "phony_rails", "~> 0.12"
 gem "psych", "< 4"
 gem "puma", "~> 7.2"
-gem "pundit", "~> 2.0"
-gem "rails", "~> 7.0.0"
+gem "pundit", "~> 2.5"
+gem "rails", "~> 8.1.0"
 gem "rails-backbone", "~> 1.2"
 gem "redcarpet", "~> 3.5"
-gem "redis", "~> 4.1"
-gem "rein", "~> 5.0" # This can be removed when we go to Rails 6.1.
+gem "redis", "~> 5.4"
+gem "rein", "~> 5.0"
 gem "rolify", "~> 6.0"
 gem "sentry-ruby", "~> 5.4"
 gem "sentry-rails", "~> 5.4"
@@ -68,7 +68,6 @@ gem "stimulus-rails", "~> 1.3"
 gem "strong_password", "~> 0.0.6"
 gem "timecop", "~> 0.8"
 gem "uglifier", ">= 1.3.0"
-gem "uri", "0.10.3" # Dealing with CI being finicky, possibly remove later.
 gem "whenever", "~> 0.9"
 gem "wisper", "~> 2.0"
 gem "wisper-activerecord", "~> 1.0"
@@ -76,7 +75,7 @@ gem "wisper-activerecord", "~> 1.0"
 gem "with_advisory_lock", git: "https://github.com/ClosureTree/with_advisory_lock", branch: "master"
 
 group :development, :test do
-  gem "annotate", "~> 3.2.0"
+  gem "annotaterb", "~> 4.0"
   gem "awesome_print", "~> 1.6"
   gem "bcrypt_pbkdf", ">= 1.0", "< 2.0" # For Capistrano
   gem "byebug", "~> 13.0"
@@ -86,20 +85,20 @@ group :development, :test do
   gem "capistrano-rbenv", "~> 2.1"
   gem "capistrano3-delayed-job", "~> 1.0"
   gem "capybara", "~> 3.40"
-  gem "database_cleaner", "~> 1.7"
+  gem "database_cleaner", "~> 2.0"
   gem "debug", require: false
   gem "ed25519", ">= 1.2", "< 2.0" # For Capistrano
   gem "fix-db-schema-conflicts", "~> 3.0"
-  gem "launchy", "~> 2.4" # For opening screenshots
+  gem "launchy", "~> 3.1" # For opening screenshots
   gem "pry-nav", "~> 1.0"
   gem "pry-rails", "~> 0.3"
   gem "pry", "~> 0.14"
-  gem "rspec-rails", "~> 4.0"
+  gem "rspec-rails", "~> 6.0"
   gem "rubocop-rails", "2.9"
-  gem "rubocop", "~> 1.0"
+  gem "rubocop", "~> 1.53"
   gem "selenium-webdriver", "~> 4.0"
   gem "spring", "~> 3.0"
-  gem "standard", "~> 1.24"
+  gem "standard", "~> 1.53"
   gem "thin", "~> 1.7"
   gem "vcr", "~> 4.0"
   gem "webmock", "~> 3.1"
@@ -110,7 +109,7 @@ group :development, :test do
 end
 
 group :development do
-  gem "listen", "~> 3.2"
+  gem "listen", "~> 3.10"
 end
 
 group :test do
@@ -119,7 +118,7 @@ end
 
 gem "stripe", "~> 8.1"
 
-gem "turbo-rails", "~> 1.3"
+gem "turbo-rails", "~> 2.0"
 
 gem "money", "~> 6.16"
 

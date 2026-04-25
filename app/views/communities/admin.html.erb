@@ -1,0 +1,128 @@
+<% content_for(:title, community.name) %>
+<% content_for(:action_links, community.action_links(:admin)) %>
+
+<table class="key-value">
+  <tr>
+    <td>ID</td>
+    <td><%= community.id %></td>
+  </tr>
+  <tr>
+    <td>Name</td>
+    <td><%= community.name %></td>
+  </tr>
+  <tr>
+    <td>Slug</td>
+    <td><%= community.slug %></td>
+  </tr>
+  <tr>
+    <td>Abbreviation</td>
+    <td><%= community.abbrv %></td>
+  </tr>
+  <tr>
+    <td>Country</td>
+    <td><%= community.country_name %></td>
+  </tr>
+  <tr>
+    <td>Time Zone</td>
+    <td><%= community.settings.time_zone %></td>
+  </tr>
+  <tr>
+    <td>Cluster</td>
+    <td><%= community.cluster.name %> (ID <%= community.cluster_id %>)</td>
+  </tr>
+  <tr>
+    <td>Created</td>
+    <td><%= l(community.created_at, format: :long) %></td>
+  </tr>
+</table>
+
+<% if (sub = community.subscription) %>
+  <h2>Subscription</h2>
+  <table class="key-value">
+    <tr>
+      <td>Stripe ID</td>
+      <td><%= sub.stripe_id %></td>
+    </tr>
+    <% if @subscription_stripe_error %>
+      <tr>
+        <td>Status</td>
+        <td class="text-muted">Subscription not found in Stripe</td>
+      </tr>
+    <% elsif sub.stripe_sub %>
+      <tr>
+        <td>Status</td>
+        <td><%= sub.status&.humanize %></td>
+      </tr>
+      <tr>
+        <td>Users</td>
+        <td><%= sub.quantity %></td>
+      </tr>
+      <tr>
+        <td>Price</td>
+        <td><%= number_to_currency(sub.price_per_user_cents / 100.0) %>/user/month
+            &times; <%= sub.months_per_period %> months
+            (<%= sub.currency&.upcase %>)</td>
+      </tr>
+      <% if sub.discount_percent %>
+        <tr>
+          <td>Discount</td>
+          <td><%= sub.discount_percent %>%</td>
+        </tr>
+      <% end %>
+      <tr>
+        <td>Next Payment</td>
+        <td><%= l(sub.next_payment_date, format: :long) if sub.next_payment_date %></td>
+      </tr>
+      <tr>
+        <td>Contact</td>
+        <td><%= sub.contact_email %></td>
+      </tr>
+      <tr>
+        <td>Address</td>
+        <td>
+          <%= sub.address_line1 %><% if sub.address_line2 %>, <%= sub.address_line2 %><% end %><br>
+          <%= sub.address_city %><% if sub.address_state %>, <%= sub.address_state %><% end %>
+          <%= sub.address_postal_code %><br>
+          <%= sub.address_country %>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+<% elsif (intent = community.subscription_intent) %>
+  <h2>Subscription Intent</h2>
+  <table class="key-value">
+    <tr>
+      <td>Tier</td>
+      <td><%= intent.tier&.humanize %></td>
+    </tr>
+    <tr>
+      <td>Users</td>
+      <td><%= intent.quantity %></td>
+    </tr>
+    <tr>
+      <td>Price</td>
+      <td><%= number_to_currency(intent.price_per_user_cents / 100.0) %>/user/month
+          &times; <%= intent.months_per_period %> months
+          (<%= intent.currency&.upcase %>)</td>
+    </tr>
+    <% if intent.start_date %>
+      <tr>
+        <td>Start Date</td>
+        <td><%= l(intent.start_date, format: :long) %></td>
+      </tr>
+    <% end %>
+    <tr>
+      <td>Contact</td>
+      <td><%= intent.contact_email %></td>
+    </tr>
+    <tr>
+      <td>Address</td>
+      <td>
+        <%= intent.address_line1 %><% if intent.address_line2 %>, <%= intent.address_line2 %><% end %><br>
+        <%= intent.address_city %><% if intent.address_state %>, <%= intent.address_state %><% end %>
+        <%= intent.address_postal_code %><br>
+        <%= intent.address_country %>
+      </td>
+    </tr>
+  </table>
+<% end %>

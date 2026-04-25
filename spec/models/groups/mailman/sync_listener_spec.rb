@@ -220,10 +220,14 @@ describe Groups::Mailman::SyncListener do
   end
 
   describe "update mailman list" do
-    let!(:list) { create(:group_mailman_list, managers_can_administer: false) }
+    let!(:list) { create(:group_mailman_list, managers_can_administer: false, all_cmty_members_can_send: true) }
 
-    it "enqueues membership sync job" do
+    it "enqueues membership sync job when managers_can_administer changes" do
       expect { list.update!(managers_can_administer: true) }.to have_enqueued_membership_sync_job_with_list
+    end
+
+    it "enqueues membership sync job when all_cmty_members_can_send changes" do
+      expect { list.update!(all_cmty_members_can_send: false) }.to have_enqueued_membership_sync_job_with_list
     end
   end
 

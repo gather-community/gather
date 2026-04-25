@@ -79,7 +79,8 @@ module Groups
       end
 
       def list_memberships
-        owner_moderator_memberships + normal_memberships
+        regular = owner_moderator_memberships + normal_memberships
+        regular + community_sender_memberships(regular)
       end
 
       def syncable?
@@ -96,14 +97,32 @@ module Groups
           roles << "owner" if managers_can_administer?
           roles << "moderator" if managers_can_moderate?
         end
-        roles.map { |r| ListMembership.new(mailman_user: mm_user, list_id: remote_id, role: r) }
+        roles.map do |role|
+          ListMembership.new(
+            mailman_user: mm_user,
+            list_id: remote_id,
+            role: role,
+            # Mailman automatically sets owners & moderators to "accept", so we match that here
+            # to avoid spurious diff mismatches during sync.
+            moderation_action: %w[owner moderator].include?(role) ? "accept" : nil
+          )
+        end
       end
 
       def default_config
         DEFAULT_SETTINGS.merge(
           display_name: group_name,
-          subject_prefix: "[#{name}] "
+          subject_prefix: "[#{name}] ",
+
+          # We will be turning this on for all domains soon. This is a trial.
+          dmarc_mitigate_unconditionally: domain_name == "touchstonecohousing.org"
         )
+      end
+
+      def enforced_config
+        enforced_keys = ENFORCED_SETTINGS.dup
+        enforced_keys << :dmarc_mitigate_unconditionally if domain_name == "touchstonecohousing.org"
+        default_config.slice(*enforced_keys)
       end
 
       private
@@ -116,7 +135,10 @@ module Groups
           ability_groups.where("can_#{ability}_email_lists": true).flat_map do |ability_group|
             ability_group.members.map do |member|
               mm_user = find_or_initialize_mm_user_for(member)
-              ListMembership.new(mailman_user: mm_user, list_id: remote_id, role: role)
+              # Mailman automatically sets owners & moderators to "accept", so we match that here
+              # to avoid spurious diff mismatches during sync.
+              ListMembership.new(mailman_user: mm_user, list_id: remote_id, role: role,
+                moderation_action: "accept")
             end
           end
         end
@@ -128,6 +150,19 @@ module Groups
           mm_user = find_or_initialize_mm_user_for(mship.user)
           list_memberships_for_group_membership_and_mm_user(mship, mm_user)
         end.compact
+      end
+
+      # Returns nonmember ListMemberships (with moderation_action: "accept") for all active community
+      # members who are not already in the regular membership list. These allow community members to
+      # send to the list without receiving from it.
+      def community_sender_memberships(regular_mships)
+        return [] unless all_cmty_members_can_send?
+        regular_emails = regular_mships.map(&:email).to_set
+        ::User.active.real.in_community(communities).reject { |u| regular_emails.include?(u.email) }.map do |user|
+          mm_user = find_or_initialize_mm_user_for(user)
+          ListMembership.new(mailman_user: mm_user, list_id: remote_id,
+            role: "nonmember", moderation_action: "accept")
+        end
       end
 
       # Keeps a local hash to prevent initializing multiple Mailman::User objs for the same user.

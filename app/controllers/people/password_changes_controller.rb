@@ -4,7 +4,7 @@ module People
   # Changing password
   class PasswordChangesController < ApplicationController
     skip_before_action :authenticate_user!, only: :strength
-    skip_after_action :verify_authorized, only: :strength
+    skip_after_action :verify_pundit_authorization, only: :strength
 
     def show
       authorize(current_user, :edit?)

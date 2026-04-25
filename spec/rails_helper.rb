@@ -36,7 +36,7 @@ ActiveRecord::Migration.maintain_test_schema!
 
 RSpec.configure do |config|
   # Remove this line if you"re not using ActiveRecord or ActiveRecord fixtures
-  config.fixture_path = "#{::Rails.root}/spec/fixtures"
+  config.fixture_paths = ["#{::Rails.root}/spec/fixtures"]
 
   # If you"re not using ActiveRecord, or you"d prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
@@ -77,7 +77,12 @@ RSpec.configure do |config|
     options.add_preference(:download, prompt_for_download: false,
       default_directory: DownloadHelpers::PATH.to_s)
     options.add_preference(:browser, set_download_behavior: {behavior: "allow"})
-    Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
+    if ENV["SELENIUM_REMOTE_URL"]
+      Capybara::Selenium::Driver.new(app, browser: :remote,
+        url: ENV["SELENIUM_REMOTE_URL"], options: options)
+    else
+      Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
+    end
   end
 
   Capybara.register_driver(:default) do |app|
@@ -137,8 +142,11 @@ RSpec.configure do |config|
     c.hook_into(:webmock)
     c.default_cassette_options = {match_requests_on: %i[method uri host path body]}
 
-    # We have to ignore 127.0.0.1 b/c capybara makes all sorts of requests to it.
+    # Ignore Capybara app server requests and, when using SELENIUM_REMOTE_URL, the WebDriver
+    # protocol endpoint (localhost:4444). We can't ignore all of localhost because Mailman API
+    # specs use VCR cassettes against localhost:8001.
     c.ignore_hosts("127.0.0.1")
+    c.ignore_request { |r| URI(r.uri).then { |u| u.host == "localhost" && u.port == 4444 } }
 
     c.ignore_hosts("o1375887.ingest.sentry.io")
 

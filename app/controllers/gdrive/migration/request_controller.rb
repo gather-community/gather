@@ -7,13 +7,13 @@ module GDrive
 
       # These are public pages. Authentication comes from the token in the query string.
       skip_before_action :authenticate_user!
-      skip_after_action :verify_authorized
+      skip_after_action :verify_pundit_authorization
 
       # For signed-in pages, we redirect to the appropriate community.
       # Here we should 404 if no community, except for the callback endpoint
       before_action :ensure_community
 
-      before_action :load_and_check_request, except: [:opt_out_complete]
+      before_action :load_and_check_request
 
       decorates_assigned :migration_request
 
@@ -28,12 +28,6 @@ module GDrive
       def opt_out
         @untransferred_files = @migration_request.operation.files.where(owner: @migration_request.google_email, status: "pending")
           .order(:name).page(params[:page])
-      end
-
-      def confirm_opt_out
-        @migration_request.update!(status: "opted_out", opt_out_reason: params[:gdrive_migration_request][:opt_out_reason])
-        @migration_request.operation.files.where(owner: @migration_request.google_email, status: "pending").update_all(status: "declined")
-        redirect_to gdrive_migration_request_opt_out_complete_path
       end
 
       def confirm_opt_out

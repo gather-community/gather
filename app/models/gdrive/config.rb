@@ -37,6 +37,10 @@ module GDrive
       foreign_key: :gdrive_config_id,
       inverse_of: :gdrive_config,
       dependent: :destroy
+    has_many :synced_permissions, class_name: "GDrive::SyncedPermission",
+      foreign_key: :gdrive_config_id,
+      inverse_of: :gdrive_config,
+      dependent: :destroy
 
     validates :client_id, format: /\.apps\.googleusercontent\.com\z/
     validates :client_secret_to_write, length: {is: 35}, if: :new_record?

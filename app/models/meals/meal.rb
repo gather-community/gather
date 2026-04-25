@@ -55,6 +55,7 @@ module Meals
     has_many :signups, class_name: "Meals::Signup", dependent: :destroy, inverse_of: :meal
     has_many :work_shifts, class_name: "Work::Shift", dependent: :destroy, inverse_of: :meal
     has_one :cost, class_name: "Meals::Cost", dependent: :destroy, inverse_of: :meal
+    has_many :messages, class_name: "Meals::Message", dependent: :destroy, inverse_of: :meal
     has_many :reminder_deliveries, class_name: "Meals::RoleReminderDelivery", inverse_of: :meal,
       dependent: :destroy
     has_many :transactions, class_name: "Billing::Transaction", as: :statementable,
@@ -110,20 +111,21 @@ module Meals
 
     normalize_attributes :title, :entrees, :side, :kids, :dessert, :notes, :capacity
 
-    with_options if: :main_form_or_import? do
-      validates :creator_id, presence: true
-      validates :formula_id, presence: true
-      validates :served_at, presence: true
-      validates :community_id, presence: true
-      validates :capacity, presence: true, numericality: {greater_than: 0, less_than: 500}
-      validate :enough_capacity_for_current_signups
-      validate :auto_close_between_now_and_meal_time
-      validate :title_and_entree_if_other_menu_items
-      validate :at_least_one_community
-      validate :allergens_specified_appropriately
-      validate { event_handler.validate_meal if events.any? }
-      validates_with Meals::SignupsValidator
+    validates :capacity, presence: true, numericality: {greater_than: 0, less_than: 500},
+      if: :main_form_or_import?
+    validates :creator_id, presence: true, if: :main_form_or_import?
+    validates :formula_id, presence: true, if: :main_form_or_import?
+    validates :served_at, presence: true, if: :main_form_or_import?
+    validates :community_id, presence: true, if: :main_form_or_import?
+    validate :enough_capacity_for_current_signups, if: :main_form_or_import?
+    validate :auto_close_between_now_and_meal_time, if: :main_form_or_import?
+    validate :title_and_entree_if_other_menu_items, if: :main_form_or_import?
+    validate :at_least_one_community, if: :main_form_or_import?
+    validate :allergens_specified_appropriately, if: :main_form_or_import?
+    validate if: :main_form_or_import? do
+      event_handler.validate_meal if events.any?
     end
+    validates_with Meals::SignupsValidator, if: :main_form_or_import?
 
     def self.served_within_days_from_now(days)
       within_days_from_now(:served_at, days)

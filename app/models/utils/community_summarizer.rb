@@ -6,8 +6,10 @@ module Utils
     def communities(scope)
       ActsAsTenant.without_tenant do
         scope
-          .select("communities.*, user_stats.*, meal_stats.*, rsrv_stats.*, job_stats.*, txn_stats.*")
-          .joins(user_join, meal_join, rsrv_join, job_join, txn_join)
+          .select("communities.*, user_stats.*, meal_stats.*, rsrv_stats.*, job_stats.*, txn_stats.*,
+                   sub.stripe_id AS subscription_stripe_id,
+                   si.tier AS subscription_intent_tier")
+          .joins(user_join, meal_join, rsrv_join, job_join, txn_join, subscription_join)
           .by_name.to_a
       end
     end
@@ -60,6 +62,13 @@ module Utils
           WHERE j.created_at > c.created_at
           GROUP BY p.community_id
         ) AS job_stats ON job_stats.community_id = communities.id"
+    end
+
+    def subscription_join
+      <<~SQL
+        LEFT JOIN subscriptions sub ON sub.community_id = communities.id
+        LEFT JOIN subscription_intents si ON si.community_id = communities.id
+      SQL
     end
 
     def txn_join

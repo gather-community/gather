@@ -2,10 +2,10 @@
 
 class ActionLink < ApplicationDecorator
   attr_accessor :object, :action, :icon, :method, :path, :confirm, :confirm_args,
-    :btn_class, :permitted, :label_symbol
+    :btn_class, :permitted, :label_symbol, :extra_data, :extra_html
 
   def initialize(object, action, icon:, path:, btn_class: :default, label_symbol: action,
-    method: :get, permitted: nil, confirm: false)
+    method: :get, permitted: nil, confirm: false, data: {}, html: {})
     self.object = object
     self.action = action
     self.icon = icon
@@ -16,6 +16,8 @@ class ActionLink < ApplicationDecorator
     self.btn_class = btn_class
     self.label_symbol = label_symbol
     self.permitted = permitted
+    self.extra_data = data
+    self.extra_html = html
   end
 
   def render
@@ -23,7 +25,10 @@ class ActionLink < ApplicationDecorator
     @rendered =
       if permitted || permitted.nil? && h.policy(object).send("#{action}?")
         params = {title: label, method: method, class: "btn btn-#{btn_class}"}
-        params[:data] = {confirm: confirm_msg} if confirm_msg
+        params.merge!(extra_html)
+        data_hash = extra_data.dup
+        data_hash[:confirm] = confirm_msg if confirm_msg
+        params[:data] = data_hash unless data_hash.empty?
         h.link_to(icon_tag << label_tag, path, params)
       end
   end

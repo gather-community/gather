@@ -41,10 +41,12 @@ module GDrive
 
     belongs_to :user, inverse_of: :gdrive_synced_permissions
     belongs_to :item, class_name: "GDrive::Item", inverse_of: :synced_permissions
+    belongs_to :gdrive_config, class_name: "GDrive::Config", inverse_of: :synced_permissions
 
     before_save do
       self.item_external_id ||= item.external_id
       self.google_email ||= user.google_email
+      self.gdrive_config_id ||= item.gdrive_config_id
     end
 
     def clone_without_external_id

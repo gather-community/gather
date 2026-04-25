@@ -44,6 +44,9 @@ describe "meal create, show, update, delete", js: true do
       select("Formula 1", from: "Formula")
       expect(page).to have_content("Assistant Cook")
 
+      funtown_checked_before_save = page.evaluate_script(
+        "document.querySelector('[name*=\"community_boxes\"][id*=\"#{community2.id}\"]')?.checked"
+      )
       select_worker(users[0].name, role: hc_role)
       add_worker_field(role: ac_role)
       select_worker(users[1].name, role: ac_role)
@@ -52,7 +55,8 @@ describe "meal create, show, update, delete", js: true do
 
       find("tr", text: users[0].name).find("a", text: "[No Menu]").click
       click_link("Edit")
-      expect(page).to have_field("Funtown", checked: true)
+      expect(page).to(have_field("Funtown", checked: true),
+        "Funtown checked before save: #{funtown_checked_before_save}. community2 id: #{community2.id}")
       fill_in_menu
 
       # Show
@@ -185,9 +189,7 @@ describe "meal create, show, update, delete", js: true do
   end
 
   def select_worker(user, role:)
-    p worker_div_selector(role: role)
     select = all("#{worker_div_selector(role: role)} select")[0]
-    p select
     select2(user, from: select)
   end
 

@@ -59,7 +59,7 @@ module Calendars
       if event.linkable.present?
         polymorphic_url(event.linkable, **url_options)
       elsif event.persisted?
-        calendars_event_url(event, **url_options)
+        calendars_event_url(event.event, **url_options)
       else
         raise ArgumentError, "unpersisted events must define linkable"
       end

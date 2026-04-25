@@ -35,9 +35,9 @@ module Calendars
     def normal_eventlets
       scope = EventletPolicy::Scope.new(user, Eventlet).resolve
         .between(range)
-        .includes(:calendar)
+        .includes(:calendar, :event)
         .where(calendar: non_system_calendars)
-      scope = scope.includes(:event).where(calendar_events: {creator: user, group: nil}) if own_only
+      scope = scope.where(calendar_events: {creator: user, group: nil}) if own_only
       scope.to_a
     end
 

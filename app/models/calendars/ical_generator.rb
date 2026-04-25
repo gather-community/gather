@@ -4,18 +4,18 @@ require "icalendar"
 require "icalendar/tzinfo"
 
 module Calendars
-  # Generates ICS files for various calendars in the system from a set of Event objects.
+  # Generates ICS files for various calendars in the system from a set of Eventlet objects.
   class IcalGenerator
     include Rails.application.routes.url_helpers
 
     UID_SIGNATURE = "91a772a5ae4a"
 
-    attr_accessor :calendar_name, :grouped_events, :cal, :url_options, :groups
+    attr_accessor :calendar_name, :grouped_eventlets, :cal, :url_options, :groups
 
 
     def initialize(calendar_name:, eventlets:, url_options:)
       self.calendar_name = calendar_name
-      self.grouped_events = eventlets.group_by do |eventlet|
+      self.grouped_eventlets = eventlets.group_by do |eventlet|
         [
           eventlet.starts_at,
           eventlet.ends_at,
@@ -30,7 +30,7 @@ module Calendars
     def generate
       self.cal = Icalendar::Calendar.new
       set_timezone
-      grouped_events.each { |group| add_event_group(group) }
+      grouped_eventlets.each { |group| add_event_group(group) }
       cal.append_custom_property("X-WR-CALNAME", calendar_name)
       cal.publish
       cal.to_ical
@@ -55,23 +55,23 @@ module Calendars
       end
     end
 
-    def url_for_event(event)
-      if event.linkable.present?
-        polymorphic_url(event.linkable, **url_options)
-      elsif event.persisted?
-        calendars_event_url(event.event, **url_options)
+    def url_for_event(eventlet)
+      if eventlet.linkable.present?
+        polymorphic_url(eventlet.linkable, **url_options)
+      elsif eventlet.persisted?
+        calendars_event_url(eventlet.event, **url_options)
       else
         raise ArgumentError, "unpersisted events must define linkable"
       end
     end
 
-    # Return date or datetime depedning on if event is all_day
-    def date_or_time_value(event, attrib)
-      if event.all_day?
+    # Return date or datetime depedning on if eventlet is all_day
+    def date_or_time_value(eventlet, attrib)
+      if eventlet.all_day?
         # iCal format wants the day after the last day of the event as the end date for all day events.
-        Icalendar::Values::Date.new(event[attrib] + ((attrib == :ends_at) ? 1 : 0).days)
+        Icalendar::Values::Date.new(eventlet[attrib] + ((attrib == :ends_at) ? 1 : 0).days)
       else
-        Icalendar::Values::DateTime.new(event[attrib], tzid: tzid)
+        Icalendar::Values::DateTime.new(eventlet[attrib], tzid: tzid)
       end
     end
 

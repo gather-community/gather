@@ -176,7 +176,7 @@ describe "event calendar", js: true do
         })()
       JS
       expect(target_date).not_to eq(selected_date_before_click)
-      find(".fc-month-view .fc-day[data-date='#{target_date}']").click
+      find(selected_cell_selector).send_keys(:arrow_right)
 
       expect(page).to have_no_css(
         ".fc-month-view .fc-day[data-date='#{selected_date_before_click}'][aria-selected='true']"

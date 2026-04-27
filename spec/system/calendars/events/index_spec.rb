@@ -167,11 +167,15 @@ describe "event calendar", js: true do
           const cells = Array.from(document.querySelectorAll(".fc-month-view .fc-day[data-date]"))
             .filter(cell => cell.offsetParent !== null);
           const selectedIndex = cells.findIndex(cell => cell.getAttribute("aria-selected") === "true");
-          const target = cells[selectedIndex + 1] || cells[selectedIndex - 1];
+          const selectedDate = cells[selectedIndex].getAttribute("data-date");
+          const target = cells.find((cell, index) => {
+            return index > selectedIndex && cell.getAttribute("data-date") !== selectedDate;
+          }) || cells.find((cell) => cell.getAttribute("data-date") !== selectedDate);
 
           return target && target.getAttribute("data-date");
         })()
       JS
+      expect(target_date).not_to eq(selected_date_before_click)
       find(".fc-month-view .fc-day[data-date='#{target_date}']").click
 
       expect(page).to have_no_css(

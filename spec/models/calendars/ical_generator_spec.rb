@@ -47,7 +47,7 @@ describe Calendars::IcalGenerator do
         UID:91a772a5ae4a_#{eventlets[0].id}
         DTSTART;TZID=Etc/UTC:20210101T120000
         DTEND;TZID=Etc/UTC:20220101T130000
-        DESCRIPTION:This is a description\\nhttps://foo.com/calendars/events/#{eventlets[0].id}
+        DESCRIPTION:This is a description\\nhttps://foo.com/calendars/events/#{eventlets[0].event_id}
         LOCATION:A nice place
         SUMMARY:Some Event
         END:VEVENT
@@ -97,7 +97,7 @@ describe Calendars::IcalGenerator do
       expect(ical).to include_line(
         "DESCRIPTION:fishy fishy fishy fishy fishy fishy fishy fishy fishy fishy fis\r\n" \
         " hy fishy fishy fishy fishy fishy fishy fishy fishy fishy fishy fishy fishy\r\n" \
-        "  fishy \\nstuff\\nother stuff\\nhttps://foo.com/calendars/events/#{eventlets[0].id}"
+        "  fishy \\nstuff\\nother stuff\\nhttps://foo.com/calendars/events/#{eventlets[0].event_id}"
       )
     end
   end
@@ -118,7 +118,7 @@ describe Calendars::IcalGenerator do
 
     it "includes an appropriate url" do
       expect(ical).to include_line(
-        "DESCRIPTION:Stuff\\nhttps://foo.com/calendars/events/#{eventlets[0].id}"
+        "DESCRIPTION:Stuff\\nhttps://foo.com/calendars/events/#{eventlets[0].event_id}"
       )
     end
   end
@@ -158,7 +158,7 @@ describe Calendars::IcalGenerator do
       expect(ical.scan(/BEGIN:VEVENT/).size).to eq(2)
       expect(ical).to include_line("LOCATION:A nice place + Other place")
       expect(ical).to include_line("DESCRIPTION:This is a description\\nOther description\\n" \
-        "https://foo.com/calen\r\n dars/events/#{eventlets[0].id}")
+        "https://foo.com/calen\r\n dars/events/#{eventlets[0].event_id}")
     end
   end
 

@@ -45,7 +45,7 @@ module Groups
             update_user_and_memberships(mm_user)
           else
             mm_user.destroy
-            self.class.perform_later(mm_user.user_id)
+            self.class.perform_later(user_id: mm_user.user_id)
           end
         else
           api.delete_user(mm_user)

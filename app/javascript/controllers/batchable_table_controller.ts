@@ -1,12 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
-
-// We should move to i18n-js v4 later, which would let us get rid of this
-// gross global declaration. But to do that, we'd have to figure out how
-// to use npm packages in the legacy Backbone JS stuff since that uses
-// i18n-js too.
-declare global {
-  var I18n: {t(key:string, params:{}): string};
-}
+import i18n from "../utils/i18n";
 
 export default class extends Controller<HTMLFormElement> {
   static targets = ['allSelected', 'item'];
@@ -27,7 +20,7 @@ export default class extends Controller<HTMLFormElement> {
         return
       }
 
-      const confirmation = I18n.t(`batchable_tables.confirmations.${scope}.${key}`, {count: selectedIds.length});
+      const confirmation = i18n.t(`batchable_tables.confirmations.${scope}.${key}`, {count: selectedIds.length});
       if (confirm(confirmation)) {
         this.element.action = event.currentTarget.dataset.submitUrl;
       } else {

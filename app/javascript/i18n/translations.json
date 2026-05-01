@@ -1,0 +1,98 @@
+{
+  "en": {
+    "batchable_tables": {
+      "confirmations": {
+        "gdrive__migration__owners": {
+          "send_request": {
+            "one": "Are you sure you want to send a request email to %{count} person?",
+            "other": "Are you sure you want to send request emails to %{count} people?"
+          }
+        }
+      }
+    },
+    "common": {
+      "adults": "Adults",
+      "all": "All",
+      "all_time": "All Time",
+      "cancel": "Cancel",
+      "cancelled": "Cancelled",
+      "children": "Children",
+      "clearing_the_filter": "clearing the filters",
+      "community_count": {
+        "one": "%{count} Community",
+        "other": "%{count} Communities"
+      },
+      "create_new": "Create New",
+      "day": {
+        "one": "day",
+        "other": "days"
+      },
+      "default": "Default",
+      "edit": "Edit",
+      "false": "False",
+      "hidden": "Hidden",
+      "inactive": "Inactive",
+      "max": "Max",
+      "no_result_clear_filter_link_html": "You can try %{link}.",
+      "none": "None",
+      "num_in_total": "%{count} in total",
+      "save": "Save",
+      "this_month": "This Month",
+      "this_quarter": "This Quarter",
+      "this_year": "This Year",
+      "time_with_preposition": {
+        "at": "at %{t}",
+        "on": "on %{t}",
+        "until": "until %{t}"
+      },
+      "true": "True",
+      "unknown": "Unknown",
+      "unlimited": "Unlimited",
+      "worker": {
+        "one": "worker",
+        "other": "workers"
+      },
+      "yes": "Yes"
+    },
+    "datepicker": {
+      "dformat": "%b %d %Y",
+      "pformat": "MMM D YYYY"
+    },
+    "dropzone": {
+      "dictFileSizeUnits": {
+        "b": "B",
+        "gb": "GiB",
+        "kb": "KiB",
+        "mb": "MiB",
+        "tb": "TiB"
+      },
+      "dictFileTooBig": "File is too big ({{filesize}} MiB). Max size is {{maxFilesize}} MiB.",
+      "prompts": {
+        "default": "Click or Drag File Here",
+        "models": {
+          "calendars/calendar": "Click or Drag Photo Here",
+          "user": "Click or Drag Photo Here"
+        }
+      }
+    },
+    "errors": {
+      "messages": {
+        "doesnt_match": "Doesn't match password"
+      }
+    },
+    "meals/assignments": {
+      "change_warning": "Note: If you change meal workers, an email notification will be sent to the meals committee/manager and all current and newly assigned workers.'"
+    },
+    "password": {
+      "strength": {
+        "excellent": "Excellent (Score: %{bits})",
+        "good": "Good (Score: %{bits})",
+        "weak": "Too weak (Score: %{bits})"
+      }
+    },
+    "timepicker": {
+      "dformat": "%l:%M%P",
+      "pformat": "h:mma"
+    }
+  }
+}

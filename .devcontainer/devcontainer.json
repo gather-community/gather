@@ -17,6 +17,10 @@
 		"--group-add=docker",
 		"--privileged"
 	],
+	"mounts": [
+		"source=${localEnv:HOME}/.claude/projects,target=/home/${localEnv:USER}/.claude/projects,type=bind,consistency=cached",
+		"source=${localEnv:HOME}/.claude/.gather-devcontainer.credentials.json,target=/home/${localEnv:USER}/.claude/.credentials.json,type=bind,consistency=cached"
+	],
 	"workspaceMount": "source=${localWorkspaceFolder},target=${localWorkspaceFolder},type=bind",
 	"workspaceFolder": "${localWorkspaceFolder}",
 	// Features to add to the dev container. More info: https://containers.dev/features.
@@ -27,7 +31,11 @@
 			"moby": false
 		},
 		"ghcr.io/rails/devcontainer/features/postgres-client": {},
-		"ghcr.io/devcontainers/features/common-utils": {},
+		"ghcr.io/devcontainers/features/common-utils": {
+			"configureZshAsDefaultShell": true,
+			"upgradePackages": false,
+			"username": "${localEnv:USER}"
+		},
 		"ghcr.io/devcontainer-community/devcontainer-features/starship.rs:1": {}
 	},
 	// VS Code extensions for Ruby on Rails + TypeScript development
@@ -59,6 +67,8 @@
 				"ckolkman.vscode-postgres",
 				// Docker
 				"ms-azuretools.vscode-docker",
+				// Claude Code
+				"anthropic.claude-code",
 				// Misc utilities
 				"EditorConfig.EditorConfig",
 				"mikestead.dotenv",
@@ -151,9 +161,11 @@
 			}
 		}
 	},
-	// Forwards Discourse bot credentials from the host shell into the container.
+	// Forwards credentials from the host shell into the container.
 	// Set these in your host ~/.zshrc — do not commit values.
 	"remoteEnv": {
+		"ANTHROPIC_API_KEY": "${localEnv:ANTHROPIC_API_KEY}",
+		"GH_TOKEN": "${localEnv:CLAUDE_GATHER_GH_TOKEN}",
 		"DISCOURSE_BASE_URL": "${localEnv:DISCOURSE_BASE_URL}",
 		"DISCOURSE_BOT_API_KEY": "${localEnv:DISCOURSE_BOT_API_KEY}",
 		"DISCOURSE_BOT_USERNAME": "${localEnv:DISCOURSE_BOT_USERNAME}",
@@ -161,5 +173,6 @@
 	},
 	// Use 'postCreateCommand' to run commands after the container is created.
 	"initializeCommand": "bash ${localWorkspaceFolder}/.devcontainer/setup.sh && exit 0",
-	"postCreateCommand": "bundle install && yarn install & exit 0"
+	"postCreateCommand": "bundle install && yarn install & exit 0",
+	"postStartCommand": "sudo chown -R $(whoami) /home/${localEnv:USER}/.claude"
 }

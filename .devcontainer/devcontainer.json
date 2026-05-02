@@ -70,6 +70,18 @@
 	//   need to be installed on the host VS Code — keeping the host lean is
 	//   the intended workflow.
 	//
+	// CLAUDE CODE SETUP
+	//   Two bind mounts forward Claude state from the host into the container:
+	//     ~/.claude/projects  →  used by Claude Code to persist conversation memory
+	//       per project. Bind-mounted so memory survives container rebuilds and is
+	//       shared across all clones of the repo.
+	//     ~/.claude/.gather-devcontainer.credentials.json  →  Claude API credentials
+	//       specific to this devcontainer. Stored outside the repo and outside the
+	//       main ~/.claude/credentials so it doesn't conflict with host Claude usage.
+	//   ANTHROPIC_API_KEY is forwarded via remoteEnv from the host shell.
+	//   postStartCommand chowns ~/.claude on every start because the bind mount
+	//   can come in owned by root depending on Docker's uid mapping.
+	//
 	// STIMULUS LSP (marcoroth.stimulus-lsp) — intentionally omitted
 	//   Crashed with SIGKILL (OOM) on every start when indexing ERB templates.
 	//   Can be installed manually in the container if desired.

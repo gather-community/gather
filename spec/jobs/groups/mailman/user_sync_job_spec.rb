@@ -46,7 +46,7 @@ describe Groups::Mailman::UserSyncJob do
           let(:remote_user_exists) { false }
 
           it "deletes mailman_user record and re-enqueues job" do
-            expect { perform_job }.to have_enqueued_job(described_class).with(user.id)
+            expect { perform_job }.to have_enqueued_job(described_class).with(user_id: user.id)
             expect { mailman_user.reload }.to raise_error(ActiveRecord::RecordNotFound)
           end
         end

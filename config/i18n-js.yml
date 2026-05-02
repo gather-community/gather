@@ -1,14 +1,14 @@
 # Configures what translations get sent to JS.
 # Only those needed should be included to keep download size small.
+# Run `rails i18n:export` to regenerate app/javascript/i18n/translations.json after changing locales.
 translations:
-  - file: "app/assets/javascripts/i18n/translations.js"
-    only: [
-      "*.common.*",
-      "*.meals/assignments.*",
-      "*.datepicker.*",
-      "*.timepicker.*",
-      "*.password.strength.*",
-      "*.errors.messages.doesnt_match",
-      "*.dropzone.*",
-      "*.batchable_tables.confirmations.*"
-    ]
+  - file: "app/javascript/i18n/translations.json"
+    patterns:
+      - "*.common.*"
+      - "*.meals/assignments.*"
+      - "*.datepicker.*"
+      - "*.timepicker.*"
+      - "*.password.strength.*"
+      - "*.errors.messages.doesnt_match"
+      - "*.dropzone.*"
+      - "*.batchable_tables.confirmations.*"

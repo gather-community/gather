@@ -172,5 +172,5 @@
 	// Use 'postCreateCommand' to run commands after the container is created.
 	"initializeCommand": "bash ${localWorkspaceFolder}/.devcontainer/setup.sh && exit 0",
 	"postCreateCommand": "bundle install && yarn install & exit 0",
-	"postStartCommand": "sudo chown -R $(whoami) /home/${localEnv:USER}/.claude && mise trust"
+	"postStartCommand": "sudo chown -R $(whoami) /home/${localEnv:USER}/.claude && mise trust && bundle install"
 }

@@ -840,4 +840,4 @@ DEPENDENCIES
   with_advisory_lock!
 
 BUNDLED WITH
-   2.3.25
+  4.0.11

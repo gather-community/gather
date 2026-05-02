@@ -54,8 +54,6 @@
 				// TypeScript / JavaScript
 				"dbaeumer.vscode-eslint",
 				"esbenp.prettier-vscode",
-				// Stimulus (Hotwire)
-				"marcoroth.stimulus-lsp",
 				// General web development
 				"bradlc.vscode-tailwindcss",
 				"formulahendry.auto-rename-tag",

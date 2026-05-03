@@ -1,4 +1,93 @@
 {
+	//
+	// ─── DEVCONTAINER ARCHITECTURE NOTES ────────────────────────────────────────
+	//
+	// DOCKER LAYER CACHING & WHEN TO REBUILD
+	//   The Dockerfile builds an image in layers. Each RUN/COPY/ENV instruction is
+	//   a layer. Docker caches layers and only re-runs a layer when it or anything
+	//   above it in the file has changed.
+	//
+	//   "Rebuild Container" (normal): recreates the container from the existing
+	//   cached image. Fast. Use this when you've only changed devcontainer.json
+	//   settings, mounts, env vars, or extensions — nothing in the Dockerfile.
+	//
+	//   "Rebuild Container Without Cache": re-runs every Dockerfile layer from
+	//   scratch, pulling fresh versions of everything. Slower. Use this when you
+	//   want to:
+	//     - Pick up a new version of mise (installed via curl in the Dockerfile)
+	//     - Pick up updated apt packages
+	//     - Force a clean image after Dockerfile changes that Docker's cache
+	//       wouldn't detect (e.g. the curl'd script changed but the RUN line didn't)
+	//
+	//   Gems (in the named volume) and node_modules (in the workspace bind mount)
+	//   are NOT part of the image — they survive both types of rebuild. Only wipe
+	//   gems manually when needed: docker volume rm gather2-bundle
+	//
+	//
+	// GEMS — named Docker volume
+	//   Gems are stored in a named Docker volume (e.g. "gather2-bundle"), mounted
+	//   at /bundle, with BUNDLE_PATH=/bundle in containerEnv.
+	//
+	//   Why not vendor/bundle? Native extensions (e.g. sassc) fail to compile on
+	//   macOS APFS bind mounts from Linux — the assembler can't create .o files.
+	//
+	//   Why not the container layer? Gets wiped on every rebuild.
+	//
+	//   The volume name uses ${localWorkspaceFolderBasename} so each clone of the
+	//   repo (gather1, gather2, etc.) gets its own isolated volume.
+	//   To nuke gems: docker volume rm gather2-bundle
+	//
+	// containerEnv vs remoteEnv
+	//   containerEnv: set at Docker creation time — available to ALL processes
+	//     including lifecycle scripts (postCreateCommand, postStartCommand).
+	//   remoteEnv: set by VS Code after it attaches — only available to VS Code
+	//     terminals, NOT to lifecycle scripts.
+	//   BUNDLE_PATH must be in containerEnv because bundle install runs in
+	//   postCreateCommand.
+	//
+	// LIFECYCLE SCRIPT ORDER
+	//   postCreateCommand: runs once on container creation/rebuild. Used for
+	//     bundle install, yarn install. Must be synchronous — avoid "& exit 0"
+	//     which backgrounds everything silently.
+	//   postStartCommand: runs on every container start. Used for mise trust,
+	//     chown fixes.
+	//   waitFor: postCreateCommand holds the VS Code loading screen until
+	//     postCreateCommand finishes, so LSPs don't fail on first boot because
+	//     gems aren't installed yet.
+	//
+	// MISE TRUST
+	//   mise requires trust --yes before it will activate any project config.
+	//   Runs in both postCreateCommand (before gem install) and postStartCommand
+	//   (for subsequent starts). --yes flag makes it non-interactive.
+	//
+	// UPDATING DOCKERFILE-LEVEL TOOLS (mise, system packages)
+	//   Use "Dev Containers: Rebuild Container Without Cache" from the VS Code
+	//   command palette. Normal "Rebuild Container" uses Docker layer cache and
+	//   won't re-fetch mise or system packages.
+	//
+	// HOST VS CODE EXTENSIONS
+	//   Extensions in this file are installed inside the container. They do NOT
+	//   need to be installed on the host VS Code — keeping the host lean is
+	//   the intended workflow.
+	//
+	// CLAUDE CODE SETUP
+	//   Two bind mounts forward Claude state from the host into the container:
+	//     ~/.claude/projects  →  used by Claude Code to persist conversation memory
+	//       per project. Bind-mounted so memory survives container rebuilds and is
+	//       shared across all clones of the repo.
+	//     ~/.claude/.gather-devcontainer.credentials.json  →  Claude API credentials
+	//       specific to this devcontainer. Stored outside the repo and outside the
+	//       main ~/.claude/credentials so it doesn't conflict with host Claude usage.
+	//   ANTHROPIC_API_KEY is forwarded via remoteEnv from the host shell.
+	//   postStartCommand chowns ~/.claude on every start because the bind mount
+	//   can come in owned by root depending on Docker's uid mapping.
+	//
+	// STIMULUS LSP (marcoroth.stimulus-lsp) — intentionally omitted
+	//   Crashed with SIGKILL (OOM) on every start when indexing ERB templates.
+	//   Can be installed manually in the container if desired.
+	//
+	// ────────────────────────────────────────────────────────────────────────────
+	//
 	"name": "Gather",
 	"build": {
 		"context": "..",
@@ -17,6 +106,11 @@
 		"--group-add=docker",
 		"--privileged"
 	],
+	"mounts": [
+		"source=${localWorkspaceFolderBasename}-bundle,target=/bundle,type=volume",
+		"source=${localEnv:HOME}/.claude/projects,target=/home/${localEnv:USER}/.claude/projects,type=bind,consistency=cached",
+		"source=${localEnv:HOME}/.claude/.gather-devcontainer.credentials.json,target=/home/${localEnv:USER}/.claude/.credentials.json,type=bind,consistency=cached"
+	],
 	"workspaceMount": "source=${localWorkspaceFolder},target=${localWorkspaceFolder},type=bind",
 	"workspaceFolder": "${localWorkspaceFolder}",
 	// Features to add to the dev container. More info: https://containers.dev/features.
@@ -27,7 +121,11 @@
 			"moby": false
 		},
 		"ghcr.io/rails/devcontainer/features/postgres-client": {},
-		"ghcr.io/devcontainers/features/common-utils": {},
+		"ghcr.io/devcontainers/features/common-utils": {
+			"configureZshAsDefaultShell": true,
+			"upgradePackages": false,
+			"username": "${localEnv:USER}"
+		},
 		"ghcr.io/devcontainer-community/devcontainer-features/starship.rs:1": {}
 	},
 	// VS Code extensions for Ruby on Rails + TypeScript development
@@ -46,8 +144,6 @@
 				// TypeScript / JavaScript
 				"dbaeumer.vscode-eslint",
 				"esbenp.prettier-vscode",
-				// Stimulus (Hotwire)
-				"marcoroth.stimulus-lsp",
 				// General web development
 				"bradlc.vscode-tailwindcss",
 				"formulahendry.auto-rename-tag",
@@ -59,6 +155,8 @@
 				"ckolkman.vscode-postgres",
 				// Docker
 				"ms-azuretools.vscode-docker",
+				// Claude Code
+				"anthropic.claude-code",
 				// Misc utilities
 				"EditorConfig.EditorConfig",
 				"mikestead.dotenv",
@@ -151,9 +249,18 @@
 			}
 		}
 	},
-	// Forwards Discourse bot credentials from the host shell into the container.
+	"containerEnv": {
+		"BUNDLE_PATH": "/bundle",
+		// Points system specs at the gather-selenium container (started in postStartCommand).
+		// Must be containerEnv (not remoteEnv) so it's available to lifecycle scripts
+		// and terminals opened outside VS Code.
+		"SELENIUM_REMOTE_URL": "http://localhost:4444"
+	},
+	// Forwards credentials from the host shell into the container.
 	// Set these in your host ~/.zshrc — do not commit values.
 	"remoteEnv": {
+		"ANTHROPIC_API_KEY": "${localEnv:ANTHROPIC_API_KEY}",
+		"GH_TOKEN": "${localEnv:CLAUDE_GATHER_GH_TOKEN}",
 		"DISCOURSE_BASE_URL": "${localEnv:DISCOURSE_BASE_URL}",
 		"DISCOURSE_BOT_API_KEY": "${localEnv:DISCOURSE_BOT_API_KEY}",
 		"DISCOURSE_BOT_USERNAME": "${localEnv:DISCOURSE_BOT_USERNAME}",
@@ -161,5 +268,7 @@
 	},
 	// Use 'postCreateCommand' to run commands after the container is created.
 	"initializeCommand": "bash ${localWorkspaceFolder}/.devcontainer/setup.sh && exit 0",
-	"postCreateCommand": "bundle install && yarn install & exit 0"
+	"waitFor": "postCreateCommand",
+	"postCreateCommand": "mise trust --yes && sudo chown -R $(whoami) /bundle && gem install bundler && bundle install && yarn install",
+	"postStartCommand": "sudo chown -R $(whoami) /home/${localEnv:USER}/.claude && mise trust --yes && { docker rm -f gather-selenium 2>/dev/null || true; docker run -d --name gather-selenium --network container:$(hostname) --shm-size=2g seleniarm/standalone-chromium:latest || true; }"
 }

@@ -228,7 +228,15 @@ When upgrading Rails to a new version, always read the official upgrade guide at
 
 ## Headless Chrome for System Tests
 
-System specs (`js: true`) use headless Chrome via Selenium. On macOS the locally-installed Chrome is used automatically. On Linux (e.g. the Claude Code dev container), Chrome is not available by default — add a `selenium-chrome` service to docker-compose.yml and point Capybara at it via `SELENIUM_REMOTE_URL`.
+System specs (`js: true`) use headless Chrome via Selenium. On macOS the locally-installed Chrome is used automatically. On Linux (the dev container), `SELENIUM_REMOTE_URL` is set as a container env var pointing at a `seleniarm/standalone-chromium` container, so `bundle exec rspec` works normally — no special wrapper needed.
+
+The Selenium container is started automatically when the devcontainer starts (via `postStartCommand`) using `--network=container:<devcontainer-id>`, which **shares the devcontainer's network namespace**. This means:
+- `*.gatherdev.org` wildcard DNS (configured on the Mac host) resolves to `127.0.0.1` inside Chrome, reaching Capybara's test server
+- VCR already ignores `localhost:4444` (the Selenium WebDriver endpoint)
+
+**Why shared network namespace instead of a docker-compose service?** The Mac's wildcard DNS for `*.gatherdev.org` resolves to `127.0.0.1`. In a regular docker-compose service, `127.0.0.1` is that container's own loopback — Capybara's test server isn't there. Sharing the devcontainer's network namespace means Chrome and the test server share the same `127.0.0.1`.
+
+**Why not `selenium-manager` auto-download?** Chrome for Testing publishes `mac-arm64` (macOS) but not `linux-arm64`. The Ruby gem's Linux `selenium-manager` binary is also x86_64-only and downloads the wrong architecture on Apple Silicon devcontainers.
 
 ### Select2 Testing (`spec/support/helpers/system_spec_helpers.rb`)
 

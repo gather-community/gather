@@ -29,10 +29,7 @@ module Calendars
         Calendars::Event.model_name
       end
 
-      # Cocoon calls reflect_on_association(:calendar_slots) to find the class for new records.
-      # We handle :calendar_slots explicitly; delegate everything else to Event.
       def reflect_on_association(assoc)
-        return OpenStruct.new(klass: Calendars::CalendarSlot, options: {}) if assoc == :calendar_slots
         Calendars::Event.reflect_on_association(assoc)
       end
     end
@@ -107,6 +104,11 @@ module Calendars
     def persisted? = @event.persisted?
     def new_record? = @event.new_record?
     def id = @event.id
+    def build_calendar_slot = CalendarSlot.new
+
+    def calendar_slots_attributes=(attrs)
+      @calendar_slots = build_slots_from_attrs(attrs) if attrs.present?
+    end
 
     private
 

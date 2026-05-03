@@ -24,7 +24,7 @@
   <%= f.input :calendar_slots, label: t("simple_form.labels.calendars_multi_event.calendar_slots") do %>
     <div id="calendar-slot-rows">
       <%= f.simple_fields_for(:calendar_slots) do |sf| %>
-        <div class="nested-fields subfields multiple <%= "hidden" if sf.object.marked_for_destruction? %>">
+        <div class="nested-fields subfields multiple <%= "hidden" if sf.object&.marked_for_destruction? %>">
           <%= render("calendars/multi_events/calendar_slot_fields", f: sf) %>
         </div>
       <% end %>

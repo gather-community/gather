@@ -1,4 +1,3 @@
-<%= f.hidden_field :id %>
 <div class="calendar-slot-row">
   <div class="calendar-slot-fields">
     <%= f.input :calendar_id,
@@ -9,9 +8,9 @@
       data: {"action" => "change->calendars--multi-event-form#calendarChanged"} %>
 
     <%= f.input :customize_times, as: :boolean,
-      data: {"action" => "change->calendars--multi-event-form#customizeTimesChanged"} %>
+      input_html: {data: {"action" => "change->calendars--multi-event-form#customizeTimesChanged"}} %>
 
-    <div class="customize-times-fields <%= "hidden" unless f.object.customize_times? %>">
+    <div class="customize-times-fields <%= "hidden" unless f.object&.customize_times? %>">
       <%= f.input :starts_at, as: :time_picker %>
       <%= f.input :ends_at, as: :time_picker %>
     </div>

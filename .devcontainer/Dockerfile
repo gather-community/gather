@@ -10,16 +10,27 @@ RUN apt-get update \
   build-essential \
   ca-certificates \
   curl \
+  fonts-liberation \
   git \
   gnupg \
   htop \
   iftop \
   iproute2 \
+  libatk-bridge2.0-0 \
+  libatk1.0-0 \
+  libcups2 \
   libcurl4-openssl-dev \
+  libdrm2 \
+  libgbm1 \
   libnss3-tools \
   libreadline-dev \
   libsqlite3-dev \
   libssl-dev \
+  libxcomposite1 \
+  libxdamage1 \
+  libxfixes3 \
+  libxkbcommon0 \
+  libxrandr2 \
   libxml2-dev \
   libxslt1-dev \
   libxss1 \

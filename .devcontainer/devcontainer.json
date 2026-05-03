@@ -250,7 +250,11 @@
 		}
 	},
 	"containerEnv": {
-		"BUNDLE_PATH": "/bundle"
+		"BUNDLE_PATH": "/bundle",
+		// Points system specs at the gather-selenium container (started in postStartCommand).
+		// Must be containerEnv (not remoteEnv) so it's available to lifecycle scripts
+		// and terminals opened outside VS Code.
+		"SELENIUM_REMOTE_URL": "http://localhost:4444"
 	},
 	// Forwards credentials from the host shell into the container.
 	// Set these in your host ~/.zshrc — do not commit values.
@@ -266,5 +270,5 @@
 	"initializeCommand": "bash ${localWorkspaceFolder}/.devcontainer/setup.sh && exit 0",
 	"waitFor": "postCreateCommand",
 	"postCreateCommand": "mise trust --yes && sudo chown -R $(whoami) /bundle && gem install bundler && bundle install && yarn install",
-	"postStartCommand": "sudo chown -R $(whoami) /home/${localEnv:USER}/.claude && mise trust --yes"
+	"postStartCommand": "sudo chown -R $(whoami) /home/${localEnv:USER}/.claude && mise trust --yes && { docker rm -f gather-selenium 2>/dev/null || true; docker run -d --name gather-selenium --network container:$(hostname) --shm-size=2g seleniarm/standalone-chromium:latest || true; }"
 }

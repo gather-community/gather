@@ -1,0 +1,8 @@
+The following <%= "community".pluralize(@communities.size) %> received a final deletion warning (warning 3 of 3) today:
+
+<% @communities.each do |community| %>
+- <%= community.name %> (slug: <%= community.slug %>, id: <%= community.id %>)
+  Warning sent: <%= community.inactivity_warning_sent_at ? l(community.inactivity_warning_sent_at.to_date) : "today" %>
+<% end %>
+
+These communities will be automatically deleted approximately 7 days after the warning date if no one logs in.

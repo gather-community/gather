@@ -12,7 +12,8 @@
       <td>ID</td>
       <td>Name</td>
       <td>Created</td>
-      <td>Login?</td>
+      <td>Last Login</td>
+      <td>Warnings</td>
       <td>Users</td>
       <td>Meals</td>
       <td>Rsrvs</td>
@@ -28,9 +29,21 @@
         <td><%= community.id %></td>
         <td><%= link_to(community.name, admin_community_path(community)) %></td>
         <td><%= community.created_at.to_fs(:no_time) %></td>
+        <% days_since_login = community.last_login_at ? (Time.zone.today - community.last_login_at.to_date).to_i : nil %>
+        <td class="<%= days_since_login.nil? || days_since_login >= 90 ? "text-danger" : "" %>"
+            title="<%= community.last_login_at %>">
+          <% if community.last_login_at.nil? %>
+            Never
+          <% elsif days_since_login < 14 %>
+            <%= icon_tag("check") %> <%= l(community.last_login_at.to_date) %>
+          <% else %>
+            <%= l(community.last_login_at.to_date) %>
+          <% end %>
+        </td>
         <td>
-          <% if community.last_login_at && (Time.zone.today - community.last_login_at.to_date).to_i < 14 %>
-            <%= icon_tag("check", title: community.last_login_at) %>
+          <% if community.inactivity_warning_count > 0 %>
+            <%= content_tag(:span, "#{community.inactivity_warning_count}/3",
+                  title: community.inactivity_warning_sent_at) %>
           <% end %>
         </td>
         <td>

@@ -1,0 +1,31 @@
+The following <%= "community".pluralize(@communities.size) %> received 3 inactivity warnings and no one has logged in since. They are ready for deletion:
+
+<% @communities.each do |community| %>
+- <%= community.name %> (slug: <%= community.slug %>, id: <%= community.id %>)
+<% end %>
+
+To queue deletion, paste the following into the production Rails console.
+Replace YOUR_SUPER_ADMIN_USER_ID with your numeric user ID (must be a super_admin,
+e.g. User.find_by(email: "you@gather.coop").id).
+
+---
+actor_id = YOUR_SUPER_ADMIN_USER_ID
+
+{
+<% @communities.each do |community| %>  <%= community.id %> => "<%= community.name %>",
+<% end %>}.each do |community_id, name|
+  last_login = ActsAsTenant.without_tenant do
+    User.joins(:household)
+        .where(households: {community_id: community_id}, fake: false)
+        .maximum(:last_sign_in_at)
+  end
+  if last_login.nil? || last_login < 90.days.ago
+    CommunityDeletionJob.perform_later(community_id, actor_id)
+    puts "Queued deletion for #{name} (id=#{community_id})"
+  else
+    puts "Skipping #{name} (id=#{community_id}), active since #{last_login}"
+  end
+end
+---
+
+This notice will repeat weekly until each community is deleted or someone logs in.

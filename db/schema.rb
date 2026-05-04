@@ -10,9 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2026_04_16_033825) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_03_000001) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
+  enable_extension "pg_catalog.plpgsql"
 
   create_table "accounts", id: :serial, force: :cascade do |t|
     t.decimal "balance_due", precision: 10, scale: 2, default: "0.0", null: false
@@ -214,12 +214,16 @@ ActiveRecord::Schema[7.0].define(version: 2026_04_16_033825) do
     t.integer "cluster_id", null: false
     t.string "country_code", limit: 2, default: "US", null: false
     t.datetime "created_at", precision: nil, null: false
+    t.integer "inactivity_warning_count", default: 0, null: false
+    t.datetime "inactivity_warning_sent_at"
     t.string "name", limit: 20, null: false
     t.jsonb "settings"
     t.string "slug", null: false
     t.string "sso_secret", null: false
     t.datetime "updated_at", precision: nil, null: false
     t.index ["cluster_id"], name: "index_communities_on_cluster_id"
+    t.index ["inactivity_warning_count"], name: "index_communities_on_inactivity_warning_count"
+    t.index ["inactivity_warning_sent_at"], name: "index_communities_on_inactivity_warning_sent_at"
     t.index ["name"], name: "index_communities_on_name", unique: true
   end
 

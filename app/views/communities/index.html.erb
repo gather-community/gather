@@ -13,7 +13,7 @@
       <td>Name</td>
       <td>Created</td>
       <td>Last Login</td>
-      <td>Warnings</td>
+      <td>Status</td>
       <td>Users</td>
       <td>Meals</td>
       <td>Rsrvs</td>
@@ -41,8 +41,11 @@
           <% end %>
         </td>
         <td>
-          <% if community.inactivity_warning_count > 0 %>
-            <%= content_tag(:span, "#{community.inactivity_warning_count}/3",
+          <% if community.archived_at.present? %>
+            <%= content_tag(:span, "Archived #{l(community.archived_at.to_date)}",
+                  class: "text-danger", title: community.archived_at) %>
+          <% elsif community.inactivity_warning_count > 0 %>
+            <%= content_tag(:span, "Warning #{community.inactivity_warning_count}/3",
                   title: community.inactivity_warning_sent_at) %>
           <% end %>
         </td>

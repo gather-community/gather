@@ -6,6 +6,8 @@ describe SystemMailer do
   let(:community) { Defaults.community }
 
   describe "deletion_ready_notice" do
+    before { community.update!(archived_at: 7.days.ago) }
+
     subject(:mail) { described_class.deletion_ready_notice([community]).deliver_now }
 
     it "sends to support@gather.coop" do

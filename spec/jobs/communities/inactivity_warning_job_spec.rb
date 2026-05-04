@@ -89,9 +89,9 @@ describe Communities::InactivityWarningJob do
           inactivity_warning_sent_at: 8.days.ago)
       end
 
-      it "does not delete the community" do
+      it "archives the community" do
         perform_job
-        expect(Community.exists?(community.id)).to be(true)
+        expect(community.reload.archived_at).to be_within(5.seconds).of(Time.current)
       end
 
       it "sends a deletion ready notice to support" do
@@ -120,6 +120,37 @@ describe Communities::InactivityWarningJob do
         perform_job
         expect(Communities::InactivityMailer).not_to have_received(:warning)
         expect(community.reload.inactivity_warning_count).to eq(1)
+      end
+    end
+  end
+
+  context "when the community is already archived" do
+    before do
+      community.update!(archived_at: 30.days.ago, inactivity_warning_count: 3,
+        inactivity_warning_sent_at: 8.days.ago)
+    end
+
+    it "sends another deletion ready notice" do
+      perform_job
+      expect(SystemMailer).to have_received(:deletion_ready_notice).with([community])
+    end
+
+    it "bumps inactivity_warning_sent_at" do
+      perform_job
+      expect(community.reload.inactivity_warning_sent_at).to be_within(5.seconds).of(Time.current)
+    end
+
+    it "does not send a warning email" do
+      perform_job
+      expect(Communities::InactivityMailer).not_to have_received(:warning)
+    end
+
+    context "when the re-notification interval has not elapsed" do
+      before { community.update!(inactivity_warning_sent_at: 3.days.ago) }
+
+      it "does not send a notice" do
+        perform_job
+        expect(SystemMailer).not_to have_received(:deletion_ready_notice)
       end
     end
   end

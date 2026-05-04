@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_03_000001) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_03_000002) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -210,6 +210,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_03_000001) do
 
   create_table "communities", id: :serial, force: :cascade do |t|
     t.string "abbrv", limit: 2
+    t.datetime "archived_at"
     t.string "calendar_token", null: false
     t.integer "cluster_id", null: false
     t.string "country_code", limit: 2, default: "US", null: false
@@ -221,6 +222,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_03_000001) do
     t.string "slug", null: false
     t.string "sso_secret", null: false
     t.datetime "updated_at", precision: nil, null: false
+    t.index ["archived_at"], name: "index_communities_on_archived_at"
     t.index ["cluster_id"], name: "index_communities_on_cluster_id"
     t.index ["inactivity_warning_count"], name: "index_communities_on_inactivity_warning_count"
     t.index ["inactivity_warning_sent_at"], name: "index_communities_on_inactivity_warning_sent_at"

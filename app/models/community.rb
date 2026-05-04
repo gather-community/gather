@@ -58,6 +58,8 @@ class Community < ApplicationRecord
   scope :by_name, -> { order(:name) }
   scope :by_one_cmty_first, ->(c) { order(arel_table[:id].not_eq(c.id)) }
   scope :by_name_with_first, ->(c) { by_one_cmty_first(c).by_name }
+  scope :archived, -> { where.not(archived_at: nil) }
+  scope :not_archived, -> { where(archived_at: nil) }
 
   accepts_nested_attributes_for :restrictions
 
@@ -141,6 +143,10 @@ class Community < ApplicationRecord
 
   def self.multiple?
     count > 1
+  end
+
+  def archived?
+    archived_at.present?
   end
 
   # Satisfies a policy duck type.

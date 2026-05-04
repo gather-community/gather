@@ -1,31 +1,22 @@
-The following <%= "community".pluralize(@communities.size) %> received 3 inactivity warnings and no one has logged in since. They are ready for deletion:
+The following <%= "community".pluralize(@communities.size) %> <%= @communities.size == 1 ? "has" : "have" %> been archived due to inactivity and <%= @communities.size == 1 ? "is" : "are" %> ready for deletion:
 
 <% @communities.each do |community| %>
-- <%= community.name %> (slug: <%= community.slug %>, id: <%= community.id %>)
+- <%= community.name %> (slug: <%= community.slug %>, id: <%= community.id %>, archived: <%= l(community.archived_at.to_date) %>)
 <% end %>
 
-To queue deletion, paste the following into the production Rails console.
-Replace YOUR_SUPER_ADMIN_USER_ID with your numeric user ID (must be a super_admin,
-e.g. User.find_by(email: "you@gather.coop").id).
+Archived communities cannot be signed into or used. To permanently delete them, paste the
+following into the production Rails console. Replace YOUR_SUPER_ADMIN_USER_ID with your
+numeric user ID (must be a super_admin, e.g. User.find_by(email: "you@gather.coop").id).
 
 ---
 actor_id = YOUR_SUPER_ADMIN_USER_ID
 
-{
-<% @communities.each do |community| %>  <%= community.id %> => "<%= community.name %>",
-<% end %>}.each do |community_id, name|
-  last_login = ActsAsTenant.without_tenant do
-    User.joins(:household)
-        .where(households: {community_id: community_id}, fake: false)
-        .maximum(:last_sign_in_at)
-  end
-  if last_login.nil? || last_login < 90.days.ago
-    CommunityDeletionJob.perform_later(community_id, actor_id)
-    puts "Queued deletion for #{name} (id=#{community_id})"
-  else
-    puts "Skipping #{name} (id=#{community_id}), active since #{last_login}"
-  end
+[
+<% @communities.each do |community| %>  [<%= community.id %>, "<%= community.name %>"],
+<% end %>].each do |community_id, name|
+  CommunityDeletionJob.perform_later(community_id, actor_id)
+  puts "Queued deletion for #{name} (id=#{community_id})"
 end
 ---
 
-This notice will repeat weekly until each community is deleted or someone logs in.
+This notice will repeat weekly until each community is deleted.

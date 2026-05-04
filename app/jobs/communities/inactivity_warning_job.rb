@@ -25,6 +25,11 @@ module Communities
       return if PROTECTED_SLUGS.include?(community.slug)
       return if active_subscription?(community)
 
+      if community.archived?
+        renotify_if_due(community, deletion_ready_communities)
+        return
+      end
+
       last_login_at = last_login_for(community)
       return if reset_if_logged_in(community, last_login_at)
 
@@ -32,6 +37,13 @@ module Communities
       return if effective_last_active >= INACTIVITY_THRESHOLD.ago
 
       advance_warning_state(community, last_login_at, third_warning_communities, deletion_ready_communities)
+    end
+
+    def renotify_if_due(community, deletion_ready_communities)
+      sent_at = community.inactivity_warning_sent_at
+      return unless sent_at.nil? || sent_at < WARNING_INTERVAL.ago
+      deletion_ready_communities << community
+      community.update!(inactivity_warning_sent_at: Time.current)
     end
 
     def reset_if_logged_in(community, last_login_at)
@@ -50,8 +62,8 @@ module Communities
       elsif warning_count < MAX_WARNINGS && community.inactivity_warning_sent_at < WARNING_INTERVAL.ago
         advance_mid_warning(community, warning_count, last_login_at, third_warning_communities)
       elsif warning_count == MAX_WARNINGS && community.inactivity_warning_sent_at < WARNING_INTERVAL.ago
+        community.update!(archived_at: Time.current, inactivity_warning_sent_at: Time.current)
         deletion_ready_communities << community
-        community.update!(inactivity_warning_sent_at: Time.current)
       end
     end
 

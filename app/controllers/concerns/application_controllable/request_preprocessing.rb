@@ -157,7 +157,8 @@ module ApplicationControllable::RequestPreprocessing
       ensure_apex_domain
     else
       return unless authenticated_page?
-      render_error_page(:not_found) if current_community.nil?
+      return render_error_page(:not_found) if current_community.nil?
+      render_community_archived if current_community.archived?
     end
   end
 
@@ -247,6 +248,10 @@ module ApplicationControllable::RequestPreprocessing
   # have skipped authenticate_user, i.e. this is an unauthenticated page.
   def authenticated_page?
     current_user.present?
+  end
+
+  def render_community_archived
+    render(template: "communities/archived", status: :gone)
   end
 
   def set_current_community_from_subdomain(subdomain) # rubocop:disable Naming/AccessorMethodName

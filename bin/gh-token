@@ -1,0 +1,91 @@
+#!/usr/bin/env python3
+# Prints a GitHub App installation access token to stdout.
+# Caches to ~/.cache/gh-app-token and reuses until 5 minutes before expiry.
+# Reads GITHUB_APP_ID and GITHUB_APP_PRIVATE_KEY_PATH from the environment.
+import json
+import os
+import sys
+import time
+import urllib.request
+
+import jwt
+
+CACHE_PATH = os.path.expanduser("~/.cache/gh-app-token")
+EXPIRY_BUFFER = 300  # seconds before expiry to refresh
+
+
+def load_cached():
+    try:
+        with open(CACHE_PATH) as f:
+            data = json.load(f)
+        if data["expires_at"] - time.time() > EXPIRY_BUFFER:
+            return data["token"]
+    except (FileNotFoundError, KeyError, ValueError):
+        pass
+    return None
+
+
+def save_cached(token, expires_at):
+    os.makedirs(os.path.dirname(CACHE_PATH), exist_ok=True)
+    with open(CACHE_PATH, "w") as f:
+        json.dump({"token": token, "expires_at": expires_at}, f)
+    os.chmod(CACHE_PATH, 0o600)
+
+
+def fetch_token(app_id, key_path):
+    with open(key_path) as f:
+        private_key = f.read()
+
+    now = int(time.time())
+    jwt_token = jwt.encode(
+        {"iat": now - 60, "exp": now + 600, "iss": app_id},
+        private_key,
+        algorithm="RS256",
+    )
+
+    headers = {
+        "Authorization": f"Bearer {jwt_token}",
+        "Accept": "application/vnd.github+json",
+        "X-GitHub-Api-Version": "2022-11-28",
+    }
+
+    req = urllib.request.Request("https://api.github.com/app/installations", headers=headers)
+    with urllib.request.urlopen(req) as resp:
+        installations = json.loads(resp.read())
+
+    if not installations:
+        print("No GitHub App installations found", file=sys.stderr)
+        sys.exit(1)
+
+    installation_id = installations[0]["id"]
+    req = urllib.request.Request(
+        f"https://api.github.com/app/installations/{installation_id}/access_tokens",
+        method="POST",
+        headers=headers,
+    )
+    with urllib.request.urlopen(req) as resp:
+        result = json.loads(resp.read())
+
+    # expires_at is ISO 8601, e.g. "2026-05-04T15:00:00Z"
+    from datetime import datetime, timezone
+    expires_at = datetime.fromisoformat(result["expires_at"].replace("Z", "+00:00"))
+    expires_ts = expires_at.timestamp()
+
+    save_cached(result["token"], expires_ts)
+    return result["token"]
+
+
+def main():
+    app_id = os.environ.get("GITHUB_APP_ID")
+    key_path = os.environ.get("GITHUB_APP_PRIVATE_KEY_PATH")
+
+    if not app_id or not key_path:
+        print("GITHUB_APP_ID and GITHUB_APP_PRIVATE_KEY_PATH must be set", file=sys.stderr)
+        sys.exit(1)
+
+    token = load_cached() or fetch_token(app_id, key_path)
+    print(token)
+
+
+if __name__ == "__main__":
+    main()

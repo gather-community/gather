@@ -109,7 +109,8 @@
 	"mounts": [
 		"source=${localWorkspaceFolderBasename}-bundle,target=/bundle,type=volume",
 		"source=${localEnv:HOME}/.claude/projects,target=/home/${localEnv:USER}/.claude/projects,type=bind,consistency=cached",
-		"source=${localEnv:HOME}/.claude/.gather-devcontainer.credentials.json,target=/home/${localEnv:USER}/.claude/.credentials.json,type=bind,consistency=cached"
+		"source=${localEnv:HOME}/.claude/.gather-devcontainer.credentials.json,target=/home/${localEnv:USER}/.claude/.credentials.json,type=bind,consistency=cached",
+		"source=${localEnv:GITHUB_GATHER_AI_APP_KEY_PATH},target=/home/${localEnv:USER}/.ssh/github-bot-key.pem,type=bind,consistency=cached"
 	],
 	"workspaceMount": "source=${localWorkspaceFolder},target=${localWorkspaceFolder},type=bind",
 	"workspaceFolder": "${localWorkspaceFolder}",
@@ -254,13 +255,14 @@
 		// Points system specs at the gather-selenium container (started in postStartCommand).
 		// Must be containerEnv (not remoteEnv) so it's available to lifecycle scripts
 		// and terminals opened outside VS Code.
-		"SELENIUM_REMOTE_URL": "http://localhost:4444"
+		"SELENIUM_REMOTE_URL": "http://localhost:4444",
+		"GITHUB_APP_ID": "${localEnv:GITHUB_GATHER_AI_APP_ID}",
+		"GITHUB_APP_PRIVATE_KEY_PATH": "/home/${localEnv:USER}/.ssh/github-bot-key.pem"
 	},
 	// Forwards credentials from the host shell into the container.
 	// Set these in your host ~/.zshrc — do not commit values.
 	"remoteEnv": {
 		"ANTHROPIC_API_KEY": "${localEnv:ANTHROPIC_API_KEY}",
-		"GH_TOKEN": "${localEnv:CLAUDE_GATHER_GH_TOKEN}",
 		"DISCOURSE_BASE_URL": "${localEnv:DISCOURSE_BASE_URL}",
 		"DISCOURSE_BOT_API_KEY": "${localEnv:DISCOURSE_BOT_API_KEY}",
 		"DISCOURSE_BOT_USERNAME": "${localEnv:DISCOURSE_BOT_USERNAME}",
@@ -269,6 +271,6 @@
 	// Use 'postCreateCommand' to run commands after the container is created.
 	"initializeCommand": "bash ${localWorkspaceFolder}/.devcontainer/setup.sh && exit 0",
 	"waitFor": "postCreateCommand",
-	"postCreateCommand": "mise trust --yes && sudo chown -R $(whoami) /bundle && gem install bundler && bundle install && yarn install",
-	"postStartCommand": "sudo chown -R $(whoami) /home/${localEnv:USER}/.claude && mise trust --yes && { docker rm -f gather-selenium 2>/dev/null || true; docker run -d --name gather-selenium --network container:$(hostname) --shm-size=2g seleniarm/standalone-chromium:latest || true; }"
+	"postCreateCommand": "bash .devcontainer/post-create.sh",
+	"postStartCommand": "bash .devcontainer/post-start.sh"
 }

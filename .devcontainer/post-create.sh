@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-mkdir -p ~/.ssh && chmod 700 ~/.ssh
+sudo chown -R "$(whoami)" ~/.ssh && chmod 700 ~/.ssh
 ssh-keyscan github.com >> ~/.ssh/known_hosts
 
 mise trust --yes

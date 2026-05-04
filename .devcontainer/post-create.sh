@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+ssh-keyscan github.com >> ~/.ssh/known_hosts
+
 mise trust --yes
 sudo chown -R "$(whoami)" /bundle
 gem install bundler

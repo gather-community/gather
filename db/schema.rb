@@ -777,6 +777,7 @@ ActiveRecord::Schema[7.0].define(version: 2026_04_16_033825) do
     t.index ["cluster_id"], name: "index_meal_signup_parts_on_cluster_id"
     t.index ["signup_id"], name: "index_meal_signup_parts_on_signup_id"
     t.index ["type_id", "signup_id"], name: "index_meal_signup_parts_on_type_id_and_signup_id", unique: true
+    t.index ["type_id"], name: "index_meal_signup_parts_on_type_id"
   end
 
   create_table "meal_signups", id: :serial, force: :cascade do |t|

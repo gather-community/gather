@@ -28,7 +28,7 @@ describe "event calendar", js: true do
     end
     let!(:event2) do
       create(:event, calendar: calendar2, starts_at: time + 1.hour, ends_at: time + 2.hours,
-                     name: "Cal2 Event")
+        name: "Cal2 Event")
     end
 
     before do
@@ -143,6 +143,51 @@ describe "event calendar", js: true do
         visit(calendar_events_path(calendar))
         expect(page).not_to have_content("All Day")
       end
+    end
+  end
+
+  describe "calendar grid accessibility states" do
+    let(:calendar) { create(:calendar) }
+
+    scenario "exposes selected, active, and today states on date cells" do
+      visit(calendar_events_path(calendar))
+      find(".fc-month-button").click
+
+      today = Time.zone.today
+      today_date = today.to_fs(:no_time)
+      selected_cell_selector =
+        ".fc-month-view .fc-day[data-date][tabindex='0'][aria-selected='true']"
+
+      expect(page).to have_css(".fc-month-view .fc-day[data-date='#{today_date}'][aria-current='date']")
+      expect(page).to have_css(selected_cell_selector, count: 1)
+
+      selected_date_before_click = find(selected_cell_selector)["data-date"]
+      target_date = page.evaluate_script(<<~JS)
+        (() => {
+          const cells = Array.from(document.querySelectorAll(".fc-month-view .fc-day[data-date]"))
+            .filter(cell => cell.offsetParent !== null);
+          const selectedIndex = cells.findIndex(cell => cell.getAttribute("aria-selected") === "true");
+          const selectedDate = cells[selectedIndex].getAttribute("data-date");
+          const target = cells.find((cell, index) => {
+            return index > selectedIndex && cell.getAttribute("data-date") !== selectedDate;
+          }) || cells.find((cell) => cell.getAttribute("data-date") !== selectedDate);
+
+          return target && target.getAttribute("data-date");
+        })()
+      JS
+      expect(target_date).not_to eq(selected_date_before_click)
+      find(selected_cell_selector).send_keys(:arrow_right)
+
+      expect(page).to have_no_css(
+        ".fc-month-view .fc-day[data-date='#{selected_date_before_click}'][aria-selected='true']"
+      )
+      expect(page).to have_css(".fc-month-view .fc-day[data-date='#{target_date}'][aria-selected='true']")
+      expect(page).to have_css(
+        ".fc-month-view .fc-day[data-date][tabindex='0'][aria-selected='true'].fc-gather-grid-active",
+        count: 1
+      )
+      expect(page).to have_css(".fc-month-view .fc-day[data-date='#{today_date}'][aria-current='date']")
+      expect(page).to have_css(".fc-month-view .fc-day[data-date][aria-selected='true']", count: 1)
     end
   end
 

@@ -25,7 +25,7 @@ module Communities
       return if PROTECTED_SLUGS.include?(community.slug)
       return if active_subscription?(community)
 
-      if community.archived?
+      if community.inactive?
         renotify_if_due(community, deletion_ready_communities)
         return
       end
@@ -62,7 +62,8 @@ module Communities
       elsif warning_count < MAX_WARNINGS && community.inactivity_warning_sent_at < WARNING_INTERVAL.ago
         advance_mid_warning(community, warning_count, last_login_at, third_warning_communities)
       elsif warning_count == MAX_WARNINGS && community.inactivity_warning_sent_at < WARNING_INTERVAL.ago
-        community.update!(archived_at: Time.current, inactivity_warning_sent_at: Time.current)
+        community.deactivate
+        community.update!(inactivity_warning_sent_at: Time.current)
         deletion_ready_communities << community
       end
     end
@@ -80,7 +81,8 @@ module Communities
       sub.populate
       sub.active?
     rescue Stripe::StripeError => e
-      Rails.logger.error("InactivityWarningJob: Stripe error for #{community.name}: #{e.message}; skipping")
+      Gather::ErrorReporter.instance.report(e,
+        data: {community_id: community.id, community_name: community.name})
       true
     end
 

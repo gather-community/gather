@@ -1,10 +1,10 @@
-The following <%= "community".pluralize(@communities.size) %> <%= @communities.size == 1 ? "has" : "have" %> been archived due to inactivity and <%= @communities.size == 1 ? "is" : "are" %> ready for deletion:
+The following <%= "community".pluralize(@communities.size) %> <%= @communities.size == 1 ? "has" : "have" %> been deactivated due to inactivity and <%= @communities.size == 1 ? "is" : "are" %> ready for deletion:
 
 <% @communities.each do |community| %>
-- <%= community.name %> (slug: <%= community.slug %>, id: <%= community.id %>, archived: <%= l(community.archived_at.to_date) %>)
+- <%= community.name %> (slug: <%= community.slug %>, id: <%= community.id %>, deactivated: <%= l(community.deactivated_at.to_date) %>)
 <% end %>
 
-Archived communities cannot be signed into or used. To permanently delete them, paste the
+Deactivated communities cannot be signed into or used. To permanently delete them, paste the
 following into the production Rails console. Replace YOUR_SUPER_ADMIN_USER_ID with your
 numeric user ID (must be a super_admin, e.g. User.find_by(email: "you@gather.coop").id).
 

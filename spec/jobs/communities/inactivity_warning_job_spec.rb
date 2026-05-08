@@ -89,9 +89,9 @@ describe Communities::InactivityWarningJob do
           inactivity_warning_sent_at: 8.days.ago)
       end
 
-      it "archives the community" do
+      it "deactivates the community" do
         perform_job
-        expect(community.reload.archived_at).to be_within(5.seconds).of(Time.current)
+        expect(community.reload.deactivated_at).to be_within(5.seconds).of(Time.current)
       end
 
       it "sends a deletion ready notice to support" do
@@ -124,9 +124,9 @@ describe Communities::InactivityWarningJob do
     end
   end
 
-  context "when the community is already archived" do
+  context "when the community is already deactivated" do
     before do
-      community.update!(archived_at: 30.days.ago, inactivity_warning_count: 3,
+      community.update!(deactivated_at: 30.days.ago, inactivity_warning_count: 3,
         inactivity_warning_sent_at: 8.days.ago)
     end
 
@@ -214,18 +214,22 @@ describe Communities::InactivityWarningJob do
   end
 
   context "when the Stripe API call fails" do
+    let(:error_reporter) { instance_double(Gather::ErrorReporter, report: nil) }
+
     before do
       make_inactive
       create(:subscription, community: community)
       allow_any_instance_of(Subscription::Subscription).to receive(:populate)
         .and_raise(Stripe::StripeError.new("connection error"))
-      allow(Rails.logger).to receive(:error)
+      allow(Gather::ErrorReporter).to receive(:instance).and_return(error_reporter)
     end
 
-    it "skips the community and logs the error" do
+    it "skips the community and reports to Sentry" do
       perform_job
       expect(Communities::InactivityMailer).not_to have_received(:warning)
-      expect(Rails.logger).to have_received(:error).with(/Stripe error.*#{community.name}/)
+      expect(error_reporter).to have_received(:report)
+        .with(instance_of(Stripe::StripeError), data: {community_id: community.id,
+                                                        community_name: community.name})
     end
   end
 

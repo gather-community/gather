@@ -41,12 +41,14 @@
           <% end %>
         </td>
         <td>
-          <% if community.archived_at.present? %>
-            <%= content_tag(:span, "Archived #{l(community.archived_at.to_date)}",
-                  class: "text-danger", title: community.archived_at) %>
+          <% if community.inactive? %>
+            Deactivated
           <% elsif community.inactivity_warning_count > 0 %>
-            <%= content_tag(:span, "Warning #{community.inactivity_warning_count}/3",
-                  title: community.inactivity_warning_sent_at) %>
+            <%= "Warning #{community.inactivity_warning_count}/3" %>
+          <% elsif community.subscription_stripe_id %>
+            Subscribed
+          <% else %>
+            Trial
           <% end %>
         </td>
         <td>

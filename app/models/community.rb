@@ -19,6 +19,7 @@
 # This is what it's all about!
 class Community < ApplicationRecord
   include CustomFields
+  include Deactivatable
   include SemicolonDisallowable
 
   SLUG_REGEX = /[a-z][a-z-]*/
@@ -49,10 +50,12 @@ class Community < ApplicationRecord
   has_many :households, inverse_of: :community, dependent: :destroy
   has_many :member_types, class_name: "People::MemberType", inverse_of: :community, dependent: :destroy
   has_one :subscription, inverse_of: :community, class_name: "Subscription::Subscription", dependent: :destroy
-  has_one :subscription_intent, inverse_of: :community, class_name: "Subscription::Intent", dependent: :destroy
+  has_one :subscription_intent, inverse_of: :community, class_name: "Subscription::Intent",
+    dependent: :destroy
   has_many :work_periods, class_name: "Work::Period", inverse_of: :community, dependent: :destroy
   has_one :gdrive_config, class_name: "GDrive::Config", inverse_of: :community, dependent: :destroy
-  has_one :gdrive_migration_operation, class_name: "GDrive::Migration::Operation", inverse_of: :community, dependent: :destroy
+  has_one :gdrive_migration_operation, class_name: "GDrive::Migration::Operation", inverse_of: :community,
+    dependent: :destroy
   has_many :restrictions, class_name: "Meals::Restriction", inverse_of: :community, dependent: :destroy
 
   scope :by_name, -> { order(:name) }
@@ -67,14 +70,13 @@ class Community < ApplicationRecord
 
   delegate :name, to: :cluster, prefix: true
 
+  before_create :generate_calendar_token
+  before_create :generate_sso_secret
   # Capture affiliated group IDs before the cascade destroys group_affiliations so we can
   # destroy groups that end up with no remaining community affiliations (orphaned groups).
   # prepend: true ensures this runs before the has_many :group_affiliations dependent: :destroy.
   before_destroy :cache_affiliated_group_ids, prepend: true
   after_destroy :destroy_orphaned_groups
-
-  before_create :generate_calendar_token
-  before_create :generate_sso_secret
 
   custom_fields :settings, spec: lambda { |_cmty|
     [
@@ -100,9 +102,10 @@ class Community < ApplicationRecord
           {key: :diner, type: :integer, required: true, default: 0},
           {key: :early_menu, type: :integer, required: true, default: 10},
           {key: :late_menu, type: :integer, required: true, default: 5}
-        ]}]},
+        ]}
+      ]},
       {key: :restrictions, type: :group, fields: [
-          {key: :restriction, type: :integer}
+        {key: :restriction, type: :integer}
       ]},
       {key: :calendars, type: :group, fields: [
         {key: :kinds, type: :string},
@@ -178,7 +181,7 @@ class Community < ApplicationRecord
   end
 
   def destroy_orphaned_groups
-    Groups::Group.where(id: @affiliated_group_ids).each do |group|
+    Groups::Group.where(id: @affiliated_group_ids).find_each do |group|
       group.destroy! if group.affiliations.none?
     end
   end

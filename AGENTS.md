@@ -1,6 +1,6 @@
-# CLAUDE.md
+# AGENTS.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to Codex (Codex.ai/code) when working with code in this repository.
 
 ## About
 
@@ -198,12 +198,6 @@ Write a small wrapper script to `tmp/` (gitignored) and tell user to run `bash t
 - Lead with what changed and why it matters to them; skip implementation detail
 - Posts appear from `Gather_Bot`, so write in first-person plural ("We're happy to share...")
 - Always end the post body with: `*This post was by the Gather Bot, a bot that helps us announce new features and updates to Gather!*`
-
-## Error Handling
-
-**Never swallow exceptions silently.** If you write a `rescue` block, you must either re-raise or report to Sentry via `Gather::ErrorReporter.instance.report(e, data: {...})`. Always check with the user before suppressing an error without Sentry reporting.
-
-The only exception: errors that are part of normal expected operation (e.g. `ActiveRecord::RecordNotFound` in a `find_by` flow where nil is the expected fallback) do not need Sentry. If you're unsure whether an error is "normal operation", ask.
 
 ## Upgrading Rails
 

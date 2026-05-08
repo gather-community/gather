@@ -157,7 +157,8 @@ module ApplicationControllable::RequestPreprocessing
       ensure_apex_domain
     else
       return unless authenticated_page?
-      render_error_page(:not_found) if current_community.nil?
+      return render_error_page(:not_found) if current_community.nil?
+      render_error_page(:not_found) if current_community.inactive?
     end
   end
 

@@ -94,7 +94,7 @@ group :development, :test do
   gem "pry-rails", "~> 0.3"
   gem "pry", "~> 0.14"
   gem "rspec-rails", "~> 8.0"
-  gem "rubocop-rails", "2.9"
+  gem "rubocop-rails", "2.34.3"
   gem "rubocop", "~> 1.53"
   gem "selenium-webdriver", "~> 4.0"
   gem "spring", "~> 3.0"

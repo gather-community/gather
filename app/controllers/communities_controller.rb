@@ -5,7 +5,13 @@ class CommunitiesController < ApplicationController
 
   def index
     authorize(sample_community)
-    @communities = Utils::CommunitySummarizer.new.communities(policy_scope(Community))
+    prepare_lenses(:"communities/status")
+    communities = Utils::CommunitySummarizer.new.communities(policy_scope(Community))
+    @communities = if lenses[:status].active?
+      communities.select { |c| c.status == lenses[:status].selection }
+    else
+      communities
+    end
   end
 
   def admin

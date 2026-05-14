@@ -24,6 +24,7 @@ class Community < ApplicationRecord
 
   SLUG_REGEX = /[a-z][a-z-]*/
   SLUG_MAX_LENGTH = 63
+  STATUSES = %i[trial subscribed warning deactivated].freeze
 
   acts_as_tenant :cluster
   resourcify
@@ -164,6 +165,18 @@ class Community < ApplicationRecord
 
   def lc_abbrv
     abbrv.downcase
+  end
+
+  def status
+    if inactive?
+      :deactivated
+    elsif inactivity_warning_count > 0
+      :warning
+    elsif subscription_stripe_id
+      :subscribed
+    else
+      :trial
+    end
   end
 
   private

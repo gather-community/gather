@@ -23,7 +23,7 @@ module Billing
             statement.populate!
             AccountMailer.statement_notice(statement).deliver_now unless options[:no_mail]
           end
-        rescue StatementError => e
+        rescue StatementError, *MAIL_DELIVERY_ERRORS => e
           Gather::ErrorReporter.instance.report(e, data: {account_id: account.id})
         end
       end

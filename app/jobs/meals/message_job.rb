@@ -6,7 +6,9 @@ module Meals
     def perform(message_id)
       with_object_in_cluster_context(klass: Message, id: message_id) do |message|
         message.recipients.each do |recipient|
-          MealMailer.send(:"#{message.kind}_message", message, recipient).deliver_now
+          with_mail_delivery_resilience(data: {recipient_id: recipient.id, message_id: message_id}) do
+            MealMailer.send(:"#{message.kind}_message", message, recipient).deliver_now
+          end
         end
       end
     end

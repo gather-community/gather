@@ -2,6 +2,15 @@
 
 # Base job class.
 class ApplicationJob < ActiveJob::Base
+  MAIL_DELIVERY_ERRORS = [
+    Net::SMTPError,
+    Net::OpenTimeout,
+    Net::ReadTimeout,
+    SocketError,
+    Errno::ECONNREFUSED,
+    OpenSSL::SSL::SSLError,
+    EOFError
+  ].freeze
   queue_as :default
 
   # Our general approach to error handling in jobs is an opt-in approach to job retries.
@@ -56,6 +65,12 @@ class ApplicationJob < ActiveJob::Base
 
   def build_object_without_tenant(klass, attribs)
     ActsAsTenant.with_tenant(Cluster.find(attribs[:cluster_id])) { klass.new(attribs) }
+  end
+
+  def with_mail_delivery_resilience(data: {})
+    yield
+  rescue *MAIL_DELIVERY_ERRORS => e
+    Gather::ErrorReporter.instance.report(e, data: data)
   end
 
   def each_community

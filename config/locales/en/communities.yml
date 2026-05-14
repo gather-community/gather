@@ -1,2 +1,9 @@
 en:
   communities:
+    community:
+      statuses:
+        all: "All Statuses"
+        trial: "Trial"
+        subscribed: "Subscribed"
+        warning: "Warning"
+        deactivated: "Deactivated"

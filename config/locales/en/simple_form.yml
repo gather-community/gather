@@ -200,13 +200,6 @@ en:
         active:
           active_only: "Show Active Only"
           all: "Show All"
-      community:
-        status:
-          all: "All Statuses"
-          trial: "Trial"
-          subscribed: "Subscribed"
-          warning: "Warning"
-          deactivated: "Deactivated"
       communities_signup:
         status:
           all: "All"

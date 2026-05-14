@@ -3,7 +3,7 @@
 module Communities
   class StatusLens < Lens::SelectLens
     param_name :status
-    i18n_key "simple_form.options.community.status"
+    i18n_key "communities.community.statuses"
 
     protected
 

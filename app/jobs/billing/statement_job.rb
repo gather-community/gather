@@ -19,11 +19,14 @@ module Billing
           # Run in a transaction so that if there is an issue sending the statement,
           # it gets rolled back.
           Statement.transaction do
-            statement = Statement.new(account: account, prev_balance: account.last_statement&.total_due || 0)
-            statement.populate!
-            AccountMailer.statement_notice(statement).deliver_now unless options[:no_mail]
+            with_mail_delivery_resilience do
+              statement = Statement.new(account: account,
+                prev_balance: account.last_statement&.total_due || 0)
+              statement.populate!
+              AccountMailer.statement_notice(statement).deliver_now unless options[:no_mail]
+            end
           end
-        rescue StatementError, *MAIL_DELIVERY_ERRORS => e
+        rescue StatementError => e
           Gather::ErrorReporter.instance.report(e, data: {account_id: account.id})
         end
       end

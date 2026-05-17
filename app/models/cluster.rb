@@ -12,6 +12,8 @@
 #
 # A group of related communities.
 class Cluster < ApplicationRecord
+  encrypts :sso_secret
+
   has_many :communities, inverse_of: :cluster, dependent: :destroy
 
   before_create :generate_sso_secret

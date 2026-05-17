@@ -94,7 +94,9 @@ class User < ApplicationRecord
   acts_as_tenant :cluster
   rolify
 
-  encrypts :encryption_test
+  encrypts :medical
+  encrypts :allergies
+  encrypts :doctor
 
   attr_accessor :changing_password
   alias_method :changing_password?, :changing_password

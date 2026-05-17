@@ -25,6 +25,8 @@ module GDrive
     class Operation < ApplicationRecord
       acts_as_tenant :cluster
 
+      encrypts :webhook_secret
+
       belongs_to :community, inverse_of: :gdrive_migration_operation
       has_many :scans, class_name: "GDrive::Migration::Scan",
         inverse_of: :operation, dependent: :destroy

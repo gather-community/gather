@@ -16,6 +16,8 @@ module GDrive
   class Token < ApplicationRecord
     acts_as_tenant :cluster
 
+    encrypts :data
+
     belongs_to :gdrive_config, class_name: "GDrive::Config"
   end
 end

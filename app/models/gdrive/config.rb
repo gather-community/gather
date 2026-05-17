@@ -18,6 +18,8 @@ module GDrive
   class Config < ApplicationRecord
     acts_as_tenant :cluster
 
+    encrypts :client_secret
+
     # Holds a new client secret to write to the db.
     # We don't want to ever expose the existing client secret in the form.
     attr_accessor :client_secret_to_write

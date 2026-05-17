@@ -29,6 +29,9 @@ class Community < ApplicationRecord
   acts_as_tenant :cluster
   resourcify
 
+  encrypts :sso_secret
+  encrypts :calendar_token
+
   # The order of these matters for destruction. See comments below.
   belongs_to :cluster, inverse_of: :communities
   has_many :billing_templates, class_name: "Billing::Template", inverse_of: :community, dependent: :destroy

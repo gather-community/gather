@@ -215,6 +215,20 @@ When upgrading Rails to a new version, always read the official upgrade guide at
 
 **After generating the new framework defaults file, read all the commented-out options, summarize each one for the user (what it does and any risk), and ask which ones they'd like to enable.**
 
+## Secrets Management
+
+Gather does **not** use Rails encrypted credentials. Secrets are managed in two places:
+
+- **Local dev**: `config/settings.local.yml` (gitignored). Generated from `config/templates/settings.local.yml` by `mise conf`. Add local overrides and secrets here. Access via `Settings.some_key`.
+- **Production**: a script in `.bashrc` on each web and worker server pulls secrets from a text file on the deploy server and exports them as environment variables. Secrets use the `SETTINGS__` prefix (e.g. `SETTINGS__SOME__NESTED__KEY=value`), which the `config` gem maps to `Settings.some.nested.key`.
+
+When adding a new secret:
+1. Add it to your local `config/settings.local.yml`
+2. Document it with a blank value in `config/templates/settings.local.yml` (this file is checked in)
+3. Add the corresponding `SETTINGS__*` env var to the deploy server's secrets text file
+
+Active Record Encryption keys follow the same pattern — set them as `SETTINGS__ACTIVE_RECORD_ENCRYPTION__PRIMARY_KEY`, `SETTINGS__ACTIVE_RECORD_ENCRYPTION__DETERMINISTIC_KEY`, and `SETTINGS__ACTIVE_RECORD_ENCRYPTION__KEY_DERIVATION_SALT` in the deploy server's secrets file.
+
 ## Tech Stack
 
 - Ruby 3.2.2, Node.js 18.12.1

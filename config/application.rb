@@ -68,6 +68,13 @@ module Gather
 
     config.secret_key_base = Settings.secret_key_base
 
+    if (are = Settings.active_record_encryption)
+      config.active_record.encryption.primary_key = are.primary_key
+      config.active_record.encryption.deterministic_key = are.deterministic_key
+      config.active_record.encryption.key_derivation_salt = are.key_derivation_salt
+    end
+    config.active_record.encryption.support_unencrypted_data = true
+
     if Settings.smtp
       config.action_mailer.smtp_settings = {
         address: Settings.smtp.address.presence,

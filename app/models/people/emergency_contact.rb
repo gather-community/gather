@@ -23,6 +23,9 @@ module People
 
     acts_as_tenant :cluster
 
+    encrypts :main_phone
+    encrypts :alt_phone
+
     belongs_to :household
     normalize_attributes :name, :email, :location, :relationship
     handle_phone_types :main, :alt

@@ -199,6 +199,38 @@ Write a small wrapper script to `tmp/` (gitignored) and tell user to run `bash t
 - Posts appear from `Gather_Bot`, so write in first-person plural ("We're happy to share...")
 - Always end the post body with: `*This post was by the Gather Bot, a bot that helps us announce new features and updates to Gather!*`
 
+**Including a screenshot:**
+
+To include a screenshot, ask the user to:
+1. Take the screenshot with **Cmd+Shift+4**
+2. Drag the resulting file into the VSCode file navigator at the repo root
+3. Tell you the filename
+
+Once the file is in the repo root, upload it to Discourse, embed it in the post, then **delete the file** after the script runs successfully.
+
+If the user provides a screenshot as a local file (e.g. `Untitled.jpg` in the repo root), upload it to Discourse first, then embed the URL in the post body. Add this to the wrapper script before calling `bin/post_announcement`:
+
+```bash
+IMAGE_PATH="$(cd "$(dirname "$0")/.." && pwd)/Untitled.jpg"
+
+echo "Uploading screenshot..."
+UPLOAD_RESPONSE=$(curl -s -X POST "$DISCOURSE_BASE_URL/uploads.json" \
+  -H "Api-Key: $DISCOURSE_BOT_API_KEY" \
+  -H "Api-Username: $DISCOURSE_BOT_USERNAME" \
+  -F "files[]=@$IMAGE_PATH" \
+  -F "type=composer")
+
+IMAGE_URL=$(echo "$UPLOAD_RESPONSE" | jq -r '.url // empty')
+
+if [[ -z "$IMAGE_URL" ]]; then
+  echo "Image upload failed:" >&2
+  echo "$UPLOAD_RESPONSE" | jq '.' >&2
+  exit 1
+fi
+```
+
+Then embed in the body with `![$TITLE]($IMAGE_URL)`. After the post succeeds, delete the screenshot file from the repo root with `rm`.
+
 ## Error Handling
 
 **Never swallow exceptions silently.** If you write a `rescue` block, you must either re-raise or report to Sentry via `Gather::ErrorReporter.instance.report(e, data: {...})`. Always check with the user before suppressing an error without Sentry reporting.

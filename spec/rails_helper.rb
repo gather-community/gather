@@ -66,13 +66,21 @@ RSpec.configure do |config|
   config.include(GeneralHelpers)
 
   def register_selenium_chrome_driver(app:, headless:, user_agent: nil)
-    args = %w[disable-gpu no-sandbox disable-site-isolation-trials]
+    args = %w[
+      disable-gpu no-sandbox disable-site-isolation-trials disable-dev-shm-usage
+      disable-extensions disable-infobars disable-translate disable-sync
+      disable-background-networking disable-default-apps disable-hang-monitor
+      disable-popup-blocking disable-prompt-on-repost disable-background-timer-throttling
+      metrics-recording-only no-first-run safebrowsing-disable-auto-update
+      password-store=basic use-mock-keychain
+    ]
     args << "headless" if headless
     options = Selenium::WebDriver::Chrome::Options.new(
       args: args,
       "goog:loggingPrefs": {browser: "ALL", client: "ALL", driver: "ALL", server: "ALL"}
     )
-    options.add_argument("--window-size=1280,2048")
+    options.add_argument("--window-size=1280,1024")
+    options.add_argument("--js-flags=--max-old-space-size=256")
     options.add_argument("--user-agent=\"#{user_agent}\"") if user_agent
     options.add_preference(:download, prompt_for_download: false,
       default_directory: DownloadHelpers::PATH.to_s)

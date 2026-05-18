@@ -249,6 +249,11 @@
 			}
 		}
 	},
+	"portsAttributes": {
+		"3000": {
+			"onAutoForward": "ignore"
+		}
+	},
 	"containerEnv": {
 		"BUNDLE_PATH": "/bundle",
 		// Points system specs at the gather-selenium container (started in postStartCommand).

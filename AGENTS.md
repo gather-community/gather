@@ -1,6 +1,6 @@
-# CLAUDE.md
+# AGENTS.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to Codex (Codex.ai/code) when working with code in this repository.
 
 ## About
 
@@ -237,30 +237,6 @@ The Selenium container is started automatically when the devcontainer starts (vi
 **Why shared network namespace instead of a docker-compose service?** The Mac's wildcard DNS for `*.gatherdev.org` resolves to `127.0.0.1`. In a regular docker-compose service, `127.0.0.1` is that container's own loopback — Capybara's test server isn't there. Sharing the devcontainer's network namespace means Chrome and the test server share the same `127.0.0.1`.
 
 **Why not `selenium-manager` auto-download?** Chrome for Testing publishes `mac-arm64` (macOS) but not `linux-arm64`. The Ruby gem's Linux `selenium-manager` binary is also x86_64-only and downloads the wrong architecture on Apple Silicon devcontainers.
-
-### Debugging JS in System Tests
-
-To capture Chrome console logs (e.g. `console.log` / `console.error` calls) inside a system spec:
-
-1. Add `console.log(...)` to the TypeScript source.
-2. Rebuild the bundle: `NODE_ENV=development yarn build`
-3. **Clear the Sprockets cache** (required or Chrome will load the old fingerprinted bundle):
-   ```bash
-   rm -rf tmp/cache/assets/
-   ```
-4. In the test, after the action you want to observe:
-   ```ruby
-   sleep 2  # give Chrome time to finish
-   logs = page.driver.browser.logs.get(:browser)
-   logs.each { |l| puts "#{l.level}: #{l.message}" }
-   ```
-
-Without step 3, Sprockets serves the old fingerprinted JS file from its cache and the new `console.log` calls never appear.
-
-**Memory note:** The devcontainer has limited RAM. If system tests crash Chrome with "tab crashed", the cause is Chrome OOM. Potential remedies (in order of invasiveness):
-- Kill non-essential VSCode processes (ruby-lsp, tsc watch) to free ~1–2 GB before running the full suite.
-- `docker restart gather-selenium` to reset Chrome's in-container state.
-- The Chrome driver already includes `--disable-dev-shm-usage` to avoid the default 64 MB `/dev/shm` limit.
 
 ### Select2 Testing (`spec/support/helpers/system_spec_helpers.rb`)
 

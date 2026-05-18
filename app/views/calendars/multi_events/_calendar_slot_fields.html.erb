@@ -1,11 +1,14 @@
 <div class="calendar-slot-row">
   <div class="calendar-slot-fields">
+    <%# Hidden _destroy flag — Stimulus sets this to "1" when the remove button is clicked. %>
+    <%= f.hidden_field :_destroy %>
+
     <%= f.input :calendar_id,
       collection: @writeable_calendars,
       label_method: :name,
       value_method: :id,
       include_blank: true,
-      data: {"action" => "change->calendars--multi-event-form#calendarChanged"} %>
+      input_html: {data: {"action" => "change->calendars--multi-event-form#calendarChanged"}} %>
 
     <%= f.input :customize_times, as: :boolean,
       input_html: {data: {"action" => "change->calendars--multi-event-form#customizeTimesChanged"}} %>
@@ -17,7 +20,11 @@
   </div>
 
   <div class="remove-link-col">
-    <%= link_to_remove_association(icon_tag("trash"), f,
-      data: {"action" => "cocoon:after-remove->calendars--multi-event-form#calendarChanged"}) %>
+    <button type="button"
+            class="btn btn-link remove-calendar-btn"
+            aria-label="Remove calendar"
+            data-action="click->calendars--multi-event-form#removeSlot">
+      <%= icon_tag("trash") %>
+    </button>
   </div>
 </div>

@@ -2,15 +2,12 @@
     name: "calendars--multi-event",
     html: {data: {
       controller: "calendars--multi-event-form",
-      "calendars--multi-event-form-form-url-value" => form_calendars_multi_events_path
+      turbo_action: "morph",
+      "calendars--multi-event-form-form-url-value" => form_calendars_multi_events_path,
+      "calendars--multi-event-form-next-index-value" => @form.calendar_slots.size
     }}) do |f| %>
 
   <%= f.hidden_field :origin_page %>
-
-  <div data-calendars--multi-event-form-target="loading" class="multi-event-loading hidden">
-    <span class="glyphicon glyphicon-refresh glyphicon-spin"></span>
-    Updating&hellip;
-  </div>
 
   <%= f.input :all_day, as: :boolean %>
 
@@ -20,23 +17,33 @@
 
   <%= f.input :ends_at, as: :datetime_picker, include_day_of_week: true %>
 
-  <%# Calendars section: cocoon nested fields, one row per CalendarSlot %>
+  <%# Calendars section: Stimulus-managed nested fields, one row per CalendarSlot %>
   <%= f.input :calendar_slots, label: t("simple_form.labels.calendars_multi_event.calendar_slots") do %>
-    <div id="calendar-slot-rows">
+    <div id="calendar-slot-rows" data-calendars--multi-event-form-target="slotContainer">
       <%= f.simple_fields_for(:calendar_slots) do |sf| %>
         <div class="nested-fields subfields multiple <%= "hidden" if sf.object&.marked_for_destruction? %>">
           <%= render("calendars/multi_events/calendar_slot_fields", f: sf) %>
         </div>
       <% end %>
     </div>
-    <%= link_to_add_association_with_icon(
-      t("cocoon.add_links.calendar_slots"),
-      f,
-      :calendar_slots,
-      partial: "calendars/multi_events/calendar_slot_fields",
-      "data-association-insertion-node": "#calendar-slot-rows",
-      "data-association-insertion-method": "append"
-    ) %>
+
+    <%# Template element cloned by Stimulus when "Add Calendar" is clicked.
+        __INDEX__ is replaced client-side with a unique timestamp integer,
+        giving each new slot a distinct set of name/id attributes. %>
+    <template data-calendars--multi-event-form-target="slotTemplate">
+      <%= f.simple_fields_for(:calendar_slots, Calendars::CalendarSlot.new,
+                              child_index: "__INDEX__") do |sf| %>
+        <div class="nested-fields subfields multiple">
+          <%= render("calendars/multi_events/calendar_slot_fields", f: sf) %>
+        </div>
+      <% end %>
+    </template>
+
+    <button type="button"
+            class="btn btn-link add-calendar-btn"
+            data-action="click->calendars--multi-event-form#addSlot">
+      <%= icon_tag("plus") %> <%= t("cocoon.add_links.calendar_slots") %>
+    </button>
   <% end %>
 
   <%# Events summary — deterministic list derived from @form.event_summaries %>

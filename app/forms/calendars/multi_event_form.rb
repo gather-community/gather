@@ -15,6 +15,8 @@ module Calendars
 
     attr_reader :event, :calendar_slots
 
+    delegate :creator, to: :@event
+
     normalize_attributes :kind, :note
 
     validates :name, presence: true, length: {maximum: NAME_MAX_LENGTH}

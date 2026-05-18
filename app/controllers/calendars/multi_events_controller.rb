@@ -58,8 +58,11 @@ module Calendars
       end
     end
 
-    # AJAX: re-renders the _multi_form partial on calendar selection change.
-    # Populates the form from params but does NOT save anything.
+    # AJAX: re-renders the _multi_form partial on calendar selection change or
+    # field blur. Populates the form from params but does NOT save anything.
+    # Errors for fields not in params[:_touched] are stripped so untouched
+    # fields don't surface premature validation errors. :base errors are
+    # likewise hidden until real form submission.
     def form
       @form = MultiEventForm.new(
         action: :form,
@@ -67,6 +70,7 @@ module Calendars
         params: params.require(:calendars_event)
       )
       authorize_form(@form.persisted? ? :update? : :create?)
+      filter_errors_to_touched_fields
       prep_form_vars
       render(partial: "multi_form")
     end
@@ -91,6 +95,15 @@ module Calendars
     def writeable_calendars
       @writeable_calendars ||=
         CalendarPolicy::Scope.new(current_user, Calendar.in_community(current_community)).resolve_for_create
+    end
+
+    def filter_errors_to_touched_fields
+      @form.valid? # populate errors
+      touched = Array(params[:_touched]).map { |n| n[/\[([^\]]+)\]\z/, 1]&.to_sym }.compact.uniq
+      @form.errors.attribute_names.each do |attr|
+        # :base errors stay hidden on AJAX rerenders — they only appear on submit.
+        @form.errors.delete(attr) if attr == :base || !touched.include?(attr)
+      end
     end
 
     def prep_form_vars

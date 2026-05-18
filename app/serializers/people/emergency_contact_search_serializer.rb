@@ -7,7 +7,7 @@ module People
 
     def kind = "emergency_contact"
 
-    def community_id = object.household.community_id
+    def community_id = object.household&.community_id
 
     def relationship = object.relationship.to_s
 

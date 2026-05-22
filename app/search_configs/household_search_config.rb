@@ -28,7 +28,11 @@ module HouseholdSearchConfig
     end
 
     after_save :update_search_index
-    after_destroy { __elasticsearch__.delete_document }
+    after_destroy do
+      __elasticsearch__.delete_document
+    rescue Elasticsearch::Transport::Transport::Errors::NotFound
+      nil
+    end
 
     def update_search_index
       if deactivated_at.present?

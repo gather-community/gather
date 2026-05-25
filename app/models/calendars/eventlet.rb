@@ -49,6 +49,7 @@ module Calendars
     scope :between, ->(range) { where("calendar_eventlets.starts_at < ? AND calendar_eventlets.ends_at > ?", range.last, range.first) }
 
     before_validation :normalize
+    validate :all_day_permitted
 
     def uid
       # System calendars that make unpersisted events should set
@@ -109,8 +110,11 @@ module Calendars
 
     private
 
+    def all_day_permitted
+      errors.add(:all_day, :not_allowed) if all_day? && rule_set.timed_events_only?
+    end
+
     def normalize
-      event.all_day = false if rule_set.timed_events_only?
       return unless all_day?
       self.starts_at = starts_at.midnight
       self.ends_at = ends_at.midnight + 1.day - 1.second

@@ -66,9 +66,7 @@ describe Calendars::Eventlet do
 
           it do
             eventlet.validate
-            expect(eventlet.all_day).to be(false)
-            expect(eventlet.starts_at.to_fs(:default)).to eq("2016-04-07T12:00:00")
-            expect(eventlet.ends_at.to_fs(:default)).to eq("2016-04-07T13:00:00")
+            expect(eventlet.errors[:all_day]).to include("not allowed for this calendar")
           end
         end
       end

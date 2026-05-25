@@ -66,7 +66,7 @@ describe Calendars::Eventlet do
 
           it do
             eventlet.validate
-            expect(eventlet.errors[:all_day]).to include("not allowed for this calendar")
+            expect(eventlet.errors[:base]).to include("All-day events are not allowed for this calendar")
           end
         end
       end

@@ -111,7 +111,7 @@ module Calendars
     private
 
     def all_day_permitted
-      errors.add(:all_day, :not_allowed) if all_day? && rule_set.timed_events_only?
+      errors.add(:base, :all_day_not_allowed) if all_day? && rule_set.timed_events_only?
     end
 
     def normalize

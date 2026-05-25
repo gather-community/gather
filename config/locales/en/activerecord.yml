@@ -309,8 +309,8 @@ en:
               before_meal_time: "must be after the meal time (%{time})"
         calendars/eventlet:
           attributes:
-            all_day:
-              not_allowed: "not allowed for this calendar"
+            base:
+              all_day_not_allowed: "All-day events are not allowed for this calendar"
         user:
           password:
             password_strength: "Your password was too weak. Try making it longer or adding special characters."

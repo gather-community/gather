@@ -88,7 +88,6 @@ group :development, :test do
   gem "database_cleaner", "~> 2.0"
   gem "debug", require: false
   gem "ed25519", ">= 1.2", "< 2.0" # For Capistrano
-  gem "fix-db-schema-conflicts", "~> 3.0"
   gem "launchy", "~> 3.1" # For opening screenshots
   gem "pry-nav", "~> 1.0"
   gem "pry-rails", "~> 0.3"

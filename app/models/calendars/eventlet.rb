@@ -8,7 +8,6 @@
 #  cluster_id  :bigint           not null
 #  event_id    :bigint           not null
 #  calendar_id :bigint           not null
-#  all_day     :boolean          default(FALSE), not null
 #  starts_at   :datetime         not null
 #  ends_at     :datetime         not null
 #  created_at  :datetime         not null
@@ -36,6 +35,7 @@ module Calendars
     belongs_to :calendar, class_name: "Calendars::Calendar", inverse_of: :eventlets
 
     delegate :name, :kind, :meal?, :meal_id, :creator, :creator_id, :group, :note, to: :event
+    delegate :all_day, :all_day?, to: :event
 
     # Satisfies ducktype expected by policies. Prefer more explicit variants creator_community
     # and sponsor_community on Event for other uses.
@@ -110,7 +110,7 @@ module Calendars
     private
 
     def normalize
-      self.all_day = false if rule_set.timed_events_only?
+      event.all_day = false if rule_set.timed_events_only?
       return unless all_day?
       self.starts_at = starts_at.midnight
       self.ends_at = ends_at.midnight + 1.day - 1.second

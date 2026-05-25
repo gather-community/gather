@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_17_175130) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_25_000001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -86,7 +86,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_17_175130) do
   end
 
   create_table "calendar_eventlets", force: :cascade do |t|
-    t.boolean "all_day", default: false, null: false
     t.bigint "calendar_id", null: false
     t.bigint "cluster_id", null: false
     t.datetime "created_at", null: false

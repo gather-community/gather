@@ -103,8 +103,7 @@ describe "periods", js: true do
     click_button("Save")
     click_on("Qux")
     click_on("Edit")
-    expect(all(".priority-icon")[0]).to have_content("★")
-    expect(all(".priority-icon")[1]).to have_content("☆")
+    expect(all(".priority-icon", minimum: 2).map(&:text)).to eq(["★", "☆"])
 
     # Test dirty check - Testing dirty check is not working currently.
     # The confirmation dialog does not seem to show.

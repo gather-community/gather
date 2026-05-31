@@ -32,7 +32,7 @@ describe "meal signups", js: true do
     fill_in("Comments", with: "Extra tasty please")
     click_button("Save")
     expect(page).to have_alert("Signup saved successfully")
-    expect(page).not_to have_alert("Signup saved successfully")
+    expect(page).not_to have_css(".alert-success")
 
     # Edit existing
     all("select[id$=_count]")[0].select("3")

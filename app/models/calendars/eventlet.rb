@@ -4,18 +4,20 @@
 #
 # Table name: calendar_eventlets
 #
-#  id          :bigint           not null, primary key
-#  cluster_id  :bigint           not null
-#  event_id    :bigint           not null
-#  calendar_id :bigint           not null
-#  starts_at   :datetime         not null
-#  ends_at     :datetime         not null
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
+#  id           :bigint           not null, primary key
+#  cluster_id   :bigint           not null
+#  event_id     :bigint           not null
+#  calendar_id  :bigint           not null
+#  start_offset :integer          not null, default: 0
+#  end_offset   :integer          not null, default: 0
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
 #
 module Calendars
   class Eventlet < ApplicationRecord
     acts_as_tenant :cluster
+
+    MAX_OFFSET_SECONDS = 12.hours.to_i
 
     attr_accessor :guidelines_ok
 
@@ -45,11 +47,26 @@ module Calendars
     delegate :name, to: :calendar, prefix: true
     delegate :access_level, :fixed_start_time?, :fixed_end_time?, :requires_kind?, to: :rule_set
 
-    # Specifying the table name here is temporarily required for some queries because calendar_events also has these columns.
-    scope :between, ->(range) { where("calendar_eventlets.starts_at < ? AND calendar_eventlets.ends_at > ?", range.last, range.first) }
+    # Loose pre-filter expands the window by MAX_OFFSET_SECONDS so the conditions are sargable
+    # (uses indexes on calendar_events.starts_at and .ends_at). Tight filters then eliminate
+    # false positives introduced by the expansion.
+    scope :between, ->(range) {
+      joins(:event)
+        .where("calendar_events.starts_at < ? AND calendar_events.ends_at > ?",
+          range.last + MAX_OFFSET_SECONDS,
+          range.first - MAX_OFFSET_SECONDS)
+        .where(
+          "calendar_events.starts_at + (calendar_eventlets.start_offset * interval '1 second') < ?",
+          range.last
+        )
+        .where(
+          "calendar_events.ends_at + (calendar_eventlets.end_offset * interval '1 second') > ?",
+          range.first
+        )
+    }
 
-    before_validation :normalize
     validate :all_day_permitted
+    validate :offsets_within_max
 
     def uid
       # System calendars that make unpersisted events should set
@@ -63,6 +80,14 @@ module Calendars
     def location
       # Explicit location will always be returned if it's set.
       @location || (persisted? ? calendar_name : nil)
+    end
+
+    def starts_at
+      event.starts_at + start_offset.seconds
+    end
+
+    def ends_at
+      event.ends_at + end_offset.seconds
     end
 
     def seconds
@@ -114,10 +139,9 @@ module Calendars
       errors.add(:base, :all_day_not_allowed) if all_day? && rule_set.timed_events_only?
     end
 
-    def normalize
-      return unless all_day?
-      self.starts_at = starts_at.midnight
-      self.ends_at = ends_at.midnight + 1.day - 1.second
+    def offsets_within_max
+      errors.add(:start_offset, :too_large) if start_offset.abs > MAX_OFFSET_SECONDS
+      errors.add(:end_offset, :too_large) if end_offset.abs > MAX_OFFSET_SECONDS
     end
   end
 end

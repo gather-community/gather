@@ -130,13 +130,14 @@ module Calendars
           event: Event.new(
             name: [assignment.job_title, meal_for(assignment)&.title_or_no_title].compact.join(": "),
             note: assignment.job_description,
-            all_day: !assignment.date_time?
+            all_day: !assignment.date_time?,
+            starts_at: assignment.date_time? ? assignment.starts_at : assignment.starts_at.midnight,
+            ends_at: assignment.date_time? ? assignment.ends_at :
+              assignment.ends_at.midnight + 1.day - 1.second
           ),
           location: meal_for(assignment)&.location_name,
           linkable: assignment.linkable,
-          uid: "#{uid_prefix}_#{assignment.id}",
-          starts_at: assignment.date_time? ? assignment.starts_at : assignment.starts_at.midnight,
-          ends_at: assignment.date_time? ? assignment.ends_at : assignment.ends_at.midnight + 1.day - 1.second
+          uid: "#{uid_prefix}_#{assignment.id}"
         )
       end
 
@@ -145,7 +146,7 @@ module Calendars
         eventlet = eventlet_for(assignment)
         eventlet.event.name = "#{eventlet.event.name} (Start)"
         eventlet.uid = "#{eventlet.uid}_Start"
-        eventlet.ends_at = eventlet.starts_at + 1.day - 1.second
+        eventlet.event.ends_at = eventlet.event.starts_at + 1.day - 1.second
         eventlet
       end
 
@@ -154,7 +155,7 @@ module Calendars
         eventlet = eventlet_for(assignment)
         eventlet.event.name = "#{eventlet.event.name} (End)"
         eventlet.uid = "#{eventlet.uid}_End"
-        eventlet.starts_at = eventlet.ends_at - 1.day + 1.second
+        eventlet.event.starts_at = eventlet.event.ends_at - 1.day + 1.second
         eventlet
       end
 

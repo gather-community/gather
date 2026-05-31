@@ -4,14 +4,14 @@
 #
 # Table name: calendar_eventlets
 #
-#  id          :bigint           not null, primary key
-#  cluster_id  :bigint           not null
-#  event_id    :bigint           not null
-#  calendar_id :bigint           not null
-#  starts_at   :datetime         not null
-#  ends_at     :datetime         not null
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
+#  id           :bigint           not null, primary key
+#  cluster_id   :bigint           not null
+#  event_id     :bigint           not null
+#  calendar_id  :bigint           not null
+#  start_offset :integer          not null, default: 0
+#  end_offset   :integer          not null, default: 0
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
 #
 FactoryBot.define do
   factory :eventlet, class: "Calendars::Eventlet" do
@@ -21,13 +21,15 @@ FactoryBot.define do
       group { nil }
       note { nil }
       all_day { false }
+      starts_at { Time.current.tomorrow.midnight }
+      ends_at { starts_at + 55.minutes }
     end
 
     event do |evaluator|
       overrides = {
         calendar: calendar,
-        starts_at: starts_at,
-        ends_at: ends_at,
+        starts_at: evaluator.starts_at,
+        ends_at: evaluator.ends_at,
         all_day: evaluator.all_day
       }
       overrides[:name] = evaluator.name if evaluator.name.present?
@@ -39,7 +41,7 @@ FactoryBot.define do
     end
 
     calendar
-    starts_at { Time.current.tomorrow.midnight }
-    ends_at { starts_at + 55.minutes }
+    start_offset { 0 }
+    end_offset { 0 }
   end
 end

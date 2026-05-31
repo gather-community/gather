@@ -65,6 +65,8 @@ module Calendars
     delegate :name, :community, to: :creator, prefix: true
     delegate :community, to: :sponsor, prefix: true, allow_nil: true
 
+    before_validation :normalize_all_day_times
+
     # Temporary method to dual write Eventlet model
     before_save :sync_eventlet
 
@@ -134,17 +136,21 @@ module Calendars
 
     private
 
+    def normalize_all_day_times
+      return unless all_day?
+      self.starts_at = starts_at.midnight
+      self.ends_at = ends_at.midnight + 1.day - 1.second
+    end
+
     def sync_eventlet
       return if dont_sync_eventlet
 
       # Ensure only one
-      (eventlets[1..-1] || []).each(&:destroy)
+      (eventlets[1..] || []).each(&:destroy)
       eventlet = eventlets[0] || eventlets.build
 
       eventlet.event_id = id
       eventlet.calendar_id = calendar_id
-      eventlet.starts_at = starts_at
-      eventlet.ends_at = ends_at
     end
   end
 end

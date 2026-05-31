@@ -8,7 +8,6 @@
 #  cluster_id  :bigint           not null
 #  event_id    :bigint           not null
 #  calendar_id :bigint           not null
-#  all_day     :boolean          default(FALSE), not null
 #  starts_at   :datetime         not null
 #  ends_at     :datetime         not null
 #  created_at  :datetime         not null
@@ -21,13 +20,15 @@ FactoryBot.define do
       creator { nil }
       group { nil }
       note { nil }
+      all_day { false }
     end
 
     event do |evaluator|
       overrides = {
         calendar: calendar,
         starts_at: starts_at,
-        ends_at: ends_at
+        ends_at: ends_at,
+        all_day: evaluator.all_day
       }
       overrides[:name] = evaluator.name if evaluator.name.present?
       overrides[:creator] = evaluator.creator if evaluator.creator.present?

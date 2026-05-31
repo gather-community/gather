@@ -8,7 +8,6 @@
 #  cluster_id  :bigint           not null
 #  event_id    :bigint           not null
 #  calendar_id :bigint           not null
-#  all_day     :boolean          default(FALSE), not null
 #  starts_at   :datetime         not null
 #  ends_at     :datetime         not null
 #  created_at  :datetime         not null
@@ -36,6 +35,7 @@ module Calendars
     belongs_to :calendar, class_name: "Calendars::Calendar", inverse_of: :eventlets
 
     delegate :name, :kind, :meal?, :meal_id, :creator, :creator_id, :group, :note, to: :event
+    delegate :all_day, :all_day?, to: :event
 
     # Satisfies ducktype expected by policies. Prefer more explicit variants creator_community
     # and sponsor_community on Event for other uses.
@@ -49,6 +49,7 @@ module Calendars
     scope :between, ->(range) { where("calendar_eventlets.starts_at < ? AND calendar_eventlets.ends_at > ?", range.last, range.first) }
 
     before_validation :normalize
+    validate :all_day_permitted
 
     def uid
       # System calendars that make unpersisted events should set
@@ -109,8 +110,11 @@ module Calendars
 
     private
 
+    def all_day_permitted
+      errors.add(:base, :all_day_not_allowed) if all_day? && rule_set.timed_events_only?
+    end
+
     def normalize
-      self.all_day = false if rule_set.timed_events_only?
       return unless all_day?
       self.starts_at = starts_at.midnight
       self.ends_at = ends_at.midnight + 1.day - 1.second

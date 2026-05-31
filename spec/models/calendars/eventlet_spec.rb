@@ -8,7 +8,6 @@
 #  cluster_id  :bigint           not null
 #  event_id    :bigint           not null
 #  calendar_id :bigint           not null
-#  all_day     :boolean          default(FALSE), not null
 #  starts_at   :datetime         not null
 #  ends_at     :datetime         not null
 #  created_at  :datetime         not null
@@ -67,9 +66,7 @@ describe Calendars::Eventlet do
 
           it do
             eventlet.validate
-            expect(eventlet.all_day).to be(false)
-            expect(eventlet.starts_at.to_fs(:default)).to eq("2016-04-07T12:00:00")
-            expect(eventlet.ends_at.to_fs(:default)).to eq("2016-04-07T13:00:00")
+            expect(eventlet.errors[:base]).to include("All-day events are not allowed for this calendar")
           end
         end
       end

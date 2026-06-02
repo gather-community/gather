@@ -370,7 +370,8 @@ GEM
       railties (>= 6.0.0)
     json (2.19.5)
     jsonapi-renderer (0.2.2)
-    jwt (2.7.1)
+    jwt (2.10.3)
+      base64
     kaminari (1.2.2)
       activesupport (>= 4.1.0)
       kaminari-actionview (= 1.2.2)

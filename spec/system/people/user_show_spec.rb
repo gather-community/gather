@@ -20,7 +20,7 @@ describe "user show" do
       visit(user_path(user))
       expect(page).to have_title(user.decorate.full_name)
       expect(page).to have_content(user.email)
-      expect(page).to have_content("Past Head Cook Meals")
+      expect(page).to have_content("Recent Head Cook Meals")
       expect(page).to have_content("Foodz")
     end
   end

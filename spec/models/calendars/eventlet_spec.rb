@@ -40,55 +40,6 @@ describe Calendars::Eventlet do
     end
   end
 
-  describe "offset validation" do
-    let(:max) { Calendars::Eventlet::MAX_OFFSET_SECONDS }
-
-    it "accepts offsets within the maximum" do
-      eventlet = build(:eventlet, start_offset: max, end_offset: -max)
-      eventlet.validate
-      expect(eventlet.errors[:start_offset]).to be_empty
-      expect(eventlet.errors[:end_offset]).to be_empty
-    end
-
-    it "rejects start_offset exceeding the maximum" do
-      eventlet = build(:eventlet, start_offset: max + 1)
-      eventlet.validate
-      expect(eventlet.errors[:start_offset]).not_to be_empty
-    end
-
-    it "rejects end_offset exceeding the maximum in magnitude" do
-      eventlet = build(:eventlet, end_offset: -(max + 1))
-      eventlet.validate
-      expect(eventlet.errors[:end_offset]).not_to be_empty
-    end
-  end
-
-  describe "all_day_permitted" do
-    let(:eventlet) { build(:eventlet, all_day: true) }
-
-    before do
-      allow(eventlet).to receive(:rule_set).and_return(double(timed_events_only?: timed_only))
-    end
-
-    context "with calendar permitting all day events" do
-      let(:timed_only) { false }
-
-      it "is valid" do
-        eventlet.validate
-        expect(eventlet.errors[:base]).to be_empty
-      end
-    end
-
-    context "with calendar not permitting all day events" do
-      let(:timed_only) { true }
-
-      it "adds an error" do
-        eventlet.validate
-        expect(eventlet.errors[:base]).to include("All-day events are not allowed for this calendar")
-      end
-    end
-  end
-
   describe "location" do
     let(:calendar) { create(:calendar, name: "Fun Room") }
     subject(:location) { eventlet.location }

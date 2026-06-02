@@ -65,9 +65,6 @@ module Calendars
         )
     }
 
-    validate :all_day_permitted
-    validate :offsets_within_max
-
     def uid
       # System calendars that make unpersisted events should set
       # uid or the export process will raise an error.
@@ -131,17 +128,6 @@ module Calendars
     def rule_set
       # Don't memoize this, it causes all kinds of bugs. Worth the performance hit.
       Rules::RuleSet.build_for(calendar: calendar, kind: kind)
-    end
-
-    private
-
-    def all_day_permitted
-      errors.add(:base, :all_day_not_allowed) if all_day? && rule_set.timed_events_only?
-    end
-
-    def offsets_within_max
-      errors.add(:start_offset, :too_large) if start_offset.abs > MAX_OFFSET_SECONDS
-      errors.add(:end_offset, :too_large) if end_offset.abs > MAX_OFFSET_SECONDS
     end
   end
 end

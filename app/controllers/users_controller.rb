@@ -67,8 +67,8 @@ class UsersController < ApplicationController
     @households_and_members = @user.all_households.map do |h|
       [h.decorate, load_showable_users_and_children_in(h)]
     end.to_h
-    @head_cook_meals = policy_scope(Meals::Meal).worked_by(@user, head_cook_only: true).includes(:signups)
-      .past.not_cancelled.newest_first
+    @head_cook_meals = policy_scope(Meals::Meal).worked_by(@user, head_cook_only: true)
+      .includes(:community, signups: :parts).past.not_cancelled.newest_first.limit(10)
     @memberships = @user.group_memberships.positive.by_group_name
   end
 

@@ -211,9 +211,9 @@ module Calendars
       skip_policy_scope # This is checked in EventFinder and system calendars
       range = Time.zone.parse(params[:start])..Time.zone.parse(params[:end])
       calendars = Calendar.where(id: params[:calendar_ids]&.split(" "))
-      events = EventFinder.new(range: range, calendars: calendars, user: current_user).events
+      eventlets = EventFinder.new(range: range, calendars: calendars, user: current_user).eventlets
       # The adapter option removes the root.
-      render(json: events, adapter: :attributes, origin_page: params[:origin_page])
+      render(json: eventlets, adapter: :attributes, origin_page: params[:origin_page])
     end
 
     def prep_form_vars

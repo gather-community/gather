@@ -67,11 +67,12 @@ module Calendars
 
     # Return date or datetime depedning on if eventlet is all_day
     def date_or_time_value(eventlet, attrib)
+      time = eventlet.public_send(attrib)
       if eventlet.all_day?
         # iCal format wants the day after the last day of the event as the end date for all day events.
-        Icalendar::Values::Date.new(eventlet[attrib] + ((attrib == :ends_at) ? 1 : 0).days)
+        Icalendar::Values::Date.new(time + ((attrib == :ends_at) ? 1 : 0).days)
       else
-        Icalendar::Values::DateTime.new(eventlet[attrib], tzid: tzid)
+        Icalendar::Values::DateTime.new(time, tzid: tzid)
       end
     end
 

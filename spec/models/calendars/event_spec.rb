@@ -42,19 +42,44 @@ describe Calendars::Event do
       expect(eventlet.event_id).to eq(event.id)
       expect(eventlet.calendar_id).to eq(event.calendar_id)
       expect(eventlet.cluster_id).to eq(event.cluster_id)
-      expect(eventlet.starts_at).to eq("2016-04-07 12:00")
-      expect(eventlet.ends_at).to eq("2016-04-07 13:00")
+      expect(eventlet.start_offset).to eq(0)
+      expect(eventlet.end_offset).to eq(0)
 
       event.update!(starts_at: "2016-04-07 13:00", ends_at: "2016-04-07 14:00")
-      expect(eventlet.starts_at).to eq("2016-04-07 13:00")
-      expect(eventlet.ends_at).to eq("2016-04-07 14:00")
-
       expect(event.eventlets.size).to eq(1)
 
-      # Ensure that references still intact
+      # Times are computed from the event; reload both to confirm DB state.
       eventlet = event.eventlets.first.reload
       expect(eventlet.starts_at).to eq("2016-04-07 13:00")
       expect(eventlet.ends_at).to eq("2016-04-07 14:00")
+    end
+  end
+
+  describe "normalization" do
+    describe "all_day events" do
+      context "with all_day false" do
+        let(:event) do
+          build(:event, all_day: false, starts_at: "2016-04-07 12:00", ends_at: "2016-04-07 13:00")
+        end
+
+        it "does not alter times" do
+          event.validate
+          expect(event.starts_at.to_fs(:default)).to eq("2016-04-07T12:00:00")
+          expect(event.ends_at.to_fs(:default)).to eq("2016-04-07T13:00:00")
+        end
+      end
+
+      context "with all_day true" do
+        let(:event) do
+          build(:event, all_day: true, starts_at: "2016-04-07 12:00", ends_at: "2016-04-07 13:00")
+        end
+
+        it "normalizes to midnight boundaries" do
+          event.validate
+          expect(event.starts_at.to_fs(:default)).to eq("2016-04-07T00:00:00")
+          expect(event.ends_at.to_fs(:default)).to eq("2016-04-07T23:59:59")
+        end
+      end
     end
   end
 

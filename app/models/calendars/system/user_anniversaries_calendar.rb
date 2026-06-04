@@ -102,10 +102,10 @@ module Calendars
           calendar: self,
           event: Event.new(
             name: title,
-            all_day: true
+            all_day: true,
+            starts_at: date.in_time_zone,
+            ends_at: date.in_time_zone + 1.day - 1.second
           ),
-          starts_at: date.in_time_zone,
-          ends_at: date.in_time_zone + 1.day - 1.second,
           linkable: user,
           uid: "#{slug}_#{user.id}"
         )

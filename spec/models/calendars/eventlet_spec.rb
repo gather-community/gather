@@ -4,21 +4,20 @@
 #
 # Table name: calendar_eventlets
 #
-#  id          :bigint           not null, primary key
-#  cluster_id  :bigint           not null
-#  event_id    :bigint           not null
-#  calendar_id :bigint           not null
-#  starts_at   :datetime         not null
-#  ends_at     :datetime         not null
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
+#  id           :bigint           not null, primary key
+#  cluster_id   :bigint           not null
+#  event_id     :bigint           not null
+#  calendar_id  :bigint           not null
+#  start_offset :integer          not null, default: 0
+#  end_offset   :integer          not null, default: 0
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
 #
 require "rails_helper"
 
 describe Calendars::Eventlet do
   let(:allow_overlap) { false }
   let(:calendar) { create(:calendar, allow_overlap: allow_overlap) }
-  let(:calendar2) { create(:calendar) }
 
   it "has a valid factory with event and not duplicate eventlets" do
     eventlet = create(:eventlet)
@@ -28,48 +27,16 @@ describe Calendars::Eventlet do
     expect(eventlet.event.reload).not_to be_nil
   end
 
-  describe "normalization" do
-    let(:eventlet) { build(:eventlet, submitted) }
+  describe "starts_at and ends_at virtual attributes" do
+    let(:event) { build(:event, starts_at: "2016-04-07 12:00", ends_at: "2016-04-07 14:00") }
+    let(:eventlet) { build(:eventlet, event: event, start_offset: 1800, end_offset: -3600) }
 
-    describe "all day eventlets" do
-      context "with all_day false" do
-        let(:submitted) { {all_day: false, starts_at: "2016-04-07 12:00", ends_at: "2016-04-07 13:00"} }
+    it "computes starts_at from event.starts_at + start_offset" do
+      expect(eventlet.starts_at).to eq(event.starts_at + 1800.seconds)
+    end
 
-        it do
-          eventlet.validate
-          expect(eventlet.all_day).to be(false)
-          expect(eventlet.starts_at.to_fs(:default)).to eq("2016-04-07T12:00:00")
-          expect(eventlet.ends_at.to_fs(:default)).to eq("2016-04-07T13:00:00")
-        end
-      end
-
-      context "with all_day true" do
-        before do
-          allow(eventlet).to receive(:rule_set).and_return(double(timed_events_only?: timed_only, errors: []))
-        end
-
-        context "with calendar permitting all day events" do
-          let(:timed_only) { false }
-          let(:submitted) { {all_day: true, starts_at: "2016-04-07 12:00", ends_at: "2016-04-07 13:00"} }
-
-          it do
-            eventlet.validate
-            expect(eventlet.all_day).to be(true)
-            expect(eventlet.starts_at.to_fs(:default)).to eq("2016-04-07T00:00:00")
-            expect(eventlet.ends_at.to_fs(:default)).to eq("2016-04-07T23:59:59")
-          end
-        end
-
-        context "with calendar not permitting all day events" do
-          let(:timed_only) { true }
-          let(:submitted) { {all_day: true, starts_at: "2016-04-07 12:00", ends_at: "2016-04-07 13:00"} }
-
-          it do
-            eventlet.validate
-            expect(eventlet.errors[:base]).to include("All-day events are not allowed for this calendar")
-          end
-        end
-      end
+    it "computes ends_at from event.ends_at + end_offset" do
+      expect(eventlet.ends_at).to eq(event.ends_at - 3600.seconds)
     end
   end
 

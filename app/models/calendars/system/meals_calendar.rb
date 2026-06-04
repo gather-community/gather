@@ -67,14 +67,14 @@ module Calendars
           # We don't save the events since that's not how system calendars work.
           Eventlet.new(
             calendar: self,
-            starts_at: meal.served_at,
-            ends_at: meal.served_at + MEAL_DURATION,
             uid: "#{slug}_#{meal.id}",
             location: meal.location_name,
             linkable: meal,
             event: Event.new(
               name: title,
               meal_id: meal.id,
+              starts_at: meal.served_at,
+              ends_at: meal.served_at + MEAL_DURATION,
               note: note_for_meal(meal: meal, signup: signup)
             )
           )

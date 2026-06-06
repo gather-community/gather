@@ -14,7 +14,7 @@ module Calendars
 
     def initialize(calendar_name:, eventlets:, url_options:)
       self.calendar_name = calendar_name
-      recurring, non_recurring = eventlets.partition { |e| e.is_a?(RecurringOccurrence) }
+      recurring, non_recurring = eventlets.partition { |e| !e.persisted? && e.linkable.is_a?(Event) }
       self.grouped_eventlets = non_recurring.group_by do |eventlet|
         [
           eventlet.starts_at,
@@ -24,8 +24,9 @@ module Calendars
           eventlet.name
         ]
       end.values
-      # One representative per recurring event series — the series UID is based on event_id.
-      self.recurring_representatives = recurring.uniq(&:event_id)
+      # One representative per (event series, calendar) pair — each calendar may have a different
+      # display offset, producing a separate RRULE VEVENT.
+      self.recurring_representatives = recurring.uniq { |e| [e.linkable.id, e.calendar_id] }
       self.url_options = url_options
     end
 
@@ -59,13 +60,16 @@ module Calendars
     end
 
     def add_recurring_event(occurrence)
-      event = occurrence.event
+      # linkable is the persisted parent event — use it for RRULE and URL.
+      # Apply the eventlet's offset to DTSTART/DTEND so each calendar's display time is correct.
+      parent = occurrence.linkable
       cal.event do |e|
-        e.uid = [UID_SIGNATURE, event.id].join("_")
-        # DTSTART/DTEND must use the first occurrence so the RRULE expansion is correct.
-        e.dtstart = date_or_time_value(event.starts_at, all_day: occurrence.all_day?)
-        e.dtend = date_or_time_value(event.ends_at, all_day: occurrence.all_day?, is_end: true)
-        e.rrule = Icalendar::Values::Recur.new(event.schedule.rrules.first.to_ical)
+        e.uid = [UID_SIGNATURE, parent.id, occurrence.calendar_id].join("_")
+        e.dtstart = date_or_time_value(parent.starts_at + occurrence.start_offset.seconds,
+          all_day: occurrence.all_day?)
+        e.dtend = date_or_time_value(parent.ends_at + occurrence.end_offset.seconds,
+          all_day: occurrence.all_day?, is_end: true)
+        e.rrule = Icalendar::Values::Recur.new(parent.schedule.rrules.first.to_ical)
         e.location = occurrence.location
         e.summary = occurrence.name
         e.description = ([occurrence.note] + [url_for_event(occurrence)]).compact.join("\n")

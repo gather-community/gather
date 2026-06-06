@@ -164,12 +164,21 @@ describe Calendars::EventFinder do
       described_class.new(range: range, calendars: [cal1], user: user, own_only: false).eventlets
     end
 
-    it "returns a RecurringOccurrence for the in-range occurrence" do
-      recurring = eventlets.select { |e| e.is_a?(Calendars::RecurringOccurrence) }
+    it "returns a non-persisted occurrence eventlet for the in-range occurrence" do
+      recurring = eventlets.select { |e| !e.persisted? && e.linkable.is_a?(Calendars::Event) }
       expect(recurring.size).to eq(1)
-      expect(recurring.first.event).to eq(recurring_event)
+      expect(recurring.first.linkable).to eq(recurring_event)
       expect(recurring.first.starts_at).to be_within(1.second).of(anchor + 1.day)
       expect(recurring.first.ends_at).to be_within(1.second).of(anchor + 1.day + 1.hour)
+    end
+
+    it "applies the eventlet start/end offsets to each occurrence" do
+      eventlet = recurring_event.eventlets.first
+      eventlet.update_columns(start_offset: -900, end_offset: 300)
+      occ = eventlets.select { |e| !e.persisted? && e.linkable.is_a?(Calendars::Event) }
+        .find { |o| o.linkable == recurring_event }
+      expect(occ.starts_at).to be_within(1.second).of(anchor + 1.day - 900.seconds)
+      expect(occ.ends_at).to be_within(1.second).of(anchor + 1.day + 1.hour + 300.seconds)
     end
 
     it "does not return the real eventlet for a recurring event" do
@@ -190,8 +199,8 @@ describe Calendars::EventFinder do
           recurrence_rule: IceCube::Rule.weekly.to_hash)
       end
 
-      it "returns no RecurringOccurrences for that event" do
-        recurring = eventlets.select { |e| e.is_a?(Calendars::RecurringOccurrence) }
+      it "returns no occurrence eventlets for that event" do
+        recurring = eventlets.select { |e| !e.persisted? && e.linkable.is_a?(Calendars::Event) }
         expect(recurring).to be_empty
       end
     end
@@ -205,7 +214,7 @@ describe Calendars::EventFinder do
       end
 
       it "is excluded from results" do
-        recurring = eventlets.select { |e| e.is_a?(Calendars::RecurringOccurrence) }
+        recurring = eventlets.select { |e| !e.persisted? && e.linkable.is_a?(Calendars::Event) }
         expect(recurring).to be_empty
       end
     end
@@ -216,7 +225,7 @@ describe Calendars::EventFinder do
       end
 
       it "excludes recurring occurrences" do
-        recurring = eventlets.select { |e| e.is_a?(Calendars::RecurringOccurrence) }
+        recurring = eventlets.select { |e| !e.persisted? && e.linkable.is_a?(Calendars::Event) }
         expect(recurring).to be_empty
       end
     end
@@ -225,7 +234,7 @@ describe Calendars::EventFinder do
       it "excludes recurring occurrences from filtered-out calendars" do
         null_scope = double(resolve: Calendars::Eventlet.none)
         allow(Calendars::EventletPolicy::Scope).to receive(:new).and_return(null_scope)
-        recurring = eventlets.select { |e| e.is_a?(Calendars::RecurringOccurrence) }
+        recurring = eventlets.select { |e| !e.persisted? && e.linkable.is_a?(Calendars::Event) }
         expect(recurring).to be_empty
       end
     end

@@ -49,10 +49,33 @@ module Calendars
     def recurring_occurrences
       return [] if own_only
       recurring_eventlet_scope.flat_map do |eventlet|
-        eventlet.event.occurrences_between(range).map do |occ_starts_at, occ_ends_at|
-          RecurringOccurrence.new(eventlet, occ_starts_at, occ_ends_at)
+        event = eventlet.event
+        base_start_off = eventlet.start_offset
+        base_end_off = eventlet.end_offset
+        event.occurrences_between(range).map do |occ_s, occ_e|
+          build_occurrence_eventlet(eventlet, occ_s, occ_e, base_start_off, base_end_off)
         end
       end
+    end
+
+    def build_occurrence_eventlet(base_eventlet, occ_s, occ_e, base_start_off, base_end_off)
+      parent = base_eventlet.event
+      te = build_transient_event(parent, base_eventlet.calendar, occ_s, occ_e)
+      Eventlet.new(event: te, calendar: base_eventlet.calendar,
+        start_offset: base_start_off, end_offset: base_end_off)
+        .tap do |occ|
+          occ.uid = te.uid
+          occ.linkable = parent
+          occ.location = base_eventlet.location
+        end
+    end
+
+    def build_transient_event(parent, calendar, starts_at, ends_at)
+      Event.new(
+        name: parent.name, kind: parent.kind, note: parent.note, all_day: parent.all_day,
+        creator: parent.creator, group: parent.group, meal_id: parent.meal_id,
+        calendar: calendar, starts_at: starts_at, ends_at: ends_at
+      ).tap { |e| e.uid = "#{parent.id}_#{starts_at.to_i}" }
     end
 
     def recurring_eventlet_scope
@@ -62,14 +85,15 @@ module Calendars
         .where(calendar: non_system_calendars)
         .where("calendar_events.starts_at < ?", range.last)
         .where(
-          "calendar_events.recurrence_end_date IS NULL OR calendar_events.recurrence_end_date >= ?",
+          "calendar_events.recurrence_end_date IS NULL " \
+          "OR calendar_events.recurrence_end_date >= ?",
           range.first.to_date
         )
         .includes(:calendar, :event)
     end
 
     def system_eventlets
-      # If own_only is true, we exclude all system eventlets because all such eventlets are created by the system.
+      # own_only excludes system eventlets — all system eventlets are created by the system, not a user.
       return [] if own_only
       system_calendars.map { |c| c.eventlets_between(range, actor: user) }.flatten
     end

@@ -186,6 +186,13 @@ describe Calendars::Event do
           event.update!(recurrence_rule: weekly_until_rule)
           expect(event.recurrence_end_date).to eq(Date.new(2026, 6, 30))
         end
+
+        it "recomputes correctly after a DB round-trip (JSONB returns string keys)" do
+          event = create(:event, recurrence_rule: weekly_until_rule)
+          event.reload
+          event.update!(name: "Updated")
+          expect(event.recurrence_end_date).to eq(Date.new(2026, 6, 30))
+        end
       end
 
       context "with a rule having a count" do

@@ -95,7 +95,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_04_133830) do
     t.datetime "updated_at", null: false
     t.index ["calendar_id"], name: "index_calendar_eventlets_on_calendar_id"
     t.index ["cluster_id"], name: "index_calendar_eventlets_on_cluster_id"
-    t.index ["event_id", "calendar_id"], name: "index_calendar_eventlets_on_event_id_and_calendar_id", unique: true
     t.index ["event_id"], name: "index_calendar_eventlets_on_event_id"
   end
 

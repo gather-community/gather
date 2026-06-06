@@ -10,12 +10,12 @@ module Calendars
 
     UID_SIGNATURE = "91a772a5ae4a"
 
-    attr_accessor :calendar_name, :grouped_eventlets, :cal, :url_options, :groups
-
+    attr_accessor :calendar_name, :grouped_eventlets, :recurring_representatives, :cal, :url_options
 
     def initialize(calendar_name:, eventlets:, url_options:)
       self.calendar_name = calendar_name
-      self.grouped_eventlets = eventlets.group_by do |eventlet|
+      recurring, non_recurring = eventlets.partition { |e| e.is_a?(RecurringOccurrence) }
+      self.grouped_eventlets = non_recurring.group_by do |eventlet|
         [
           eventlet.starts_at,
           eventlet.ends_at,
@@ -24,6 +24,8 @@ module Calendars
           eventlet.name
         ]
       end.values
+      # One representative per recurring event series — the series UID is based on event_id.
+      self.recurring_representatives = recurring.uniq(&:event_id)
       self.url_options = url_options
     end
 
@@ -31,6 +33,7 @@ module Calendars
       self.cal = Icalendar::Calendar.new
       set_timezone
       grouped_eventlets.each { |group| add_event_group(group) }
+      recurring_representatives.each { |occ| add_recurring_event(occ) }
       cal.append_custom_property("X-WR-CALNAME", calendar_name)
       cal.publish
       cal.to_ical
@@ -45,13 +48,27 @@ module Calendars
         # UID should be unique within the calendar. It is how the importing system determines which
         # events have changed when it refreshes the calendar.
         e.uid = [UID_SIGNATURE, group[0].uid].join("_")
-        e.dtstart = date_or_time_value(group[0], :starts_at)
-        e.dtend = date_or_time_value(group[0], :ends_at)
+        e.dtstart = date_or_time_value(group[0].starts_at, all_day: group[0].all_day?)
+        e.dtend = date_or_time_value(group[0].ends_at, all_day: group[0].all_day?, is_end: true)
         e.location = group.map(&:location).join(" + ")
         e.summary = group[0].name
         # Google calendar doesn't display the given ICS URL attribute it seems (as of 7/14/2018)
         # so we include it at the end of the description instead.
         e.description = (group.map(&:note) + [url_for_event(group[0])]).compact.join("\n")
+      end
+    end
+
+    def add_recurring_event(occurrence)
+      event = occurrence.event
+      cal.event do |e|
+        e.uid = [UID_SIGNATURE, event.id].join("_")
+        # DTSTART/DTEND must use the first occurrence so the RRULE expansion is correct.
+        e.dtstart = date_or_time_value(event.starts_at, all_day: occurrence.all_day?)
+        e.dtend = date_or_time_value(event.ends_at, all_day: occurrence.all_day?, is_end: true)
+        e.rrule = Icalendar::Values::Recur.new(event.schedule.rrules.first.to_ical)
+        e.location = occurrence.location
+        e.summary = occurrence.name
+        e.description = ([occurrence.note] + [url_for_event(occurrence)]).compact.join("\n")
       end
     end
 
@@ -65,12 +82,11 @@ module Calendars
       end
     end
 
-    # Return date or datetime depedning on if eventlet is all_day
-    def date_or_time_value(eventlet, attrib)
-      time = eventlet.public_send(attrib)
-      if eventlet.all_day?
-        # iCal format wants the day after the last day of the event as the end date for all day events.
-        Icalendar::Values::Date.new(time + ((attrib == :ends_at) ? 1 : 0).days)
+    def date_or_time_value(time, all_day:, is_end: false)
+      if all_day
+        date = time.to_date
+        date += 1.day if is_end
+        Icalendar::Values::Date.new(date)
       else
         Icalendar::Values::DateTime.new(time, tzid: tzid)
       end

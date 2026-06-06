@@ -4,21 +4,23 @@
 #
 # Table name: calendar_events
 #
-#  id          :integer          not null, primary key
-#  all_day     :boolean          default(FALSE), not null
-#  calendar_id :integer          not null
-#  cluster_id  :integer          not null
-#  created_at  :datetime         not null
-#  creator_id  :integer
-#  ends_at     :datetime         not null
-#  group_id    :bigint
-#  kind        :string
-#  meal_id     :integer
-#  name        :string(24)       not null
-#  note        :text
-#  sponsor_id  :integer
-#  starts_at   :datetime         not null
-#  updated_at  :datetime         not null
+#  id                  :integer          not null, primary key
+#  all_day             :boolean          default(FALSE), not null
+#  calendar_id         :integer          not null
+#  cluster_id          :integer          not null
+#  created_at          :datetime         not null
+#  creator_id          :integer
+#  ends_at             :datetime         not null
+#  group_id            :bigint
+#  kind                :string
+#  meal_id             :integer
+#  name                :string(24)       not null
+#  note                :text
+#  recurrence_end_date :date
+#  recurrence_rule     :jsonb
+#  sponsor_id          :integer
+#  starts_at           :datetime         not null
+#  updated_at          :datetime         not null
 #
 module Calendars
   class Event < ApplicationRecord
@@ -69,6 +71,7 @@ module Calendars
 
     # Temporary method to dual write Eventlet model
     before_save :sync_eventlet
+    before_save :compute_recurrence_end_date
 
     before_save lambda { |r| meal&.event_handler&.sync_resourcings(r) }
 
@@ -134,12 +137,45 @@ module Calendars
       calendar.allow_overlap?
     end
 
+    def recurring?
+      recurrence_rule.present?
+    end
+
+    # Returns an IceCube::Schedule anchored at starts_at with the stored recurrence rule.
+    def schedule
+      return nil unless recurring?
+      IceCube::Schedule.new(starts_at).tap do |s|
+        s.add_recurrence_rule(IceCube::Rule.from_hash(recurrence_rule))
+      end
+    end
+
+    # Returns an array of [occ_starts_at, occ_ends_at] pairs for each occurrence in the given range.
+    def occurrences_between(range)
+      return [] unless recurring?
+      duration = ends_at - starts_at
+      schedule.occurrences_between(range.first, range.last).map { |t| [t, t + duration] }
+    end
+
     private
 
     def normalize_all_day_times
       return unless all_day?
       self.starts_at = starts_at.midnight
       self.ends_at = ends_at.midnight + 1.day - 1.second
+    end
+
+    def compute_recurrence_end_date
+      return self.recurrence_end_date = nil unless recurring?
+      # Rebuild via ice_cube so we get consistent symbol-keyed hashes regardless of whether
+      # recurrence_rule came from in-memory assignment (symbol keys) or a JSONB read (string keys).
+      rule_hash = schedule.rrules.first.to_hash
+      self.recurrence_end_date = if rule_hash[:until]
+        # ice_cube serializes time values as {time: <Time>, zone: "..."}
+        ice_time = rule_hash[:until]
+        (ice_time.is_a?(Hash) ? ice_time[:time] : ice_time).to_date
+      elsif rule_hash[:count]
+        schedule.last&.to_date
+      end
     end
 
     def sync_eventlet

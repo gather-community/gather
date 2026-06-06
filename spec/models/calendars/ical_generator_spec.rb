@@ -131,6 +131,77 @@ describe Calendars::IcalGenerator do
     end
   end
 
+  context "with a recurring event" do
+    # First occurrence: Monday 2021-01-04. The occurrence passed in represents the following Monday.
+    let(:event) do
+      create(:event,
+        starts_at: Time.zone.parse("2021-01-04 12:00"),
+        ends_at: Time.zone.parse("2021-01-04 13:00"),
+        recurrence_rule: IceCube::Rule.weekly.to_hash)
+    end
+    let(:eventlet) { event.eventlets.first }
+    let(:second_occurrence) do
+      Calendars::RecurringOccurrence.new(
+        eventlet,
+        Time.zone.parse("2021-01-11 12:00"),
+        Time.zone.parse("2021-01-11 13:00")
+      )
+    end
+
+    context "with a single RecurringOccurrence" do
+      let(:eventlets) { [second_occurrence] }
+
+      it "emits one VEVENT" do
+        expect(ical.scan("BEGIN:VEVENT").size).to eq(1)
+      end
+
+      it "uses the event starts_at (first occurrence) as DTSTART, not the occurrence time" do
+        expect(ical).to include_line("DTSTART;TZID=Etc/UTC:20210104T120000")
+      end
+
+      it "uses the event ends_at (first occurrence) as DTEND" do
+        expect(ical).to include_line("DTEND;TZID=Etc/UTC:20210104T130000")
+      end
+
+      it "includes a weekly RRULE" do
+        expect(ical).to include_line("RRULE:FREQ=WEEKLY")
+      end
+
+      it "uses the event id (not occurrence-specific id) in the UID" do
+        expect(ical).to include_line("UID:91a772a5ae4a_#{event.id}")
+      end
+
+      it "includes the event URL in the description" do
+        expect(ical).to include("https://foo.com/calendars/events/#{event.id}")
+      end
+    end
+
+    context "with multiple RecurringOccurrences from the same event" do
+      let(:third_occurrence) do
+        Calendars::RecurringOccurrence.new(
+          eventlet,
+          Time.zone.parse("2021-01-18 12:00"),
+          Time.zone.parse("2021-01-18 13:00")
+        )
+      end
+      let(:eventlets) { [second_occurrence, third_occurrence] }
+
+      it "emits only one VEVENT for the series" do
+        expect(ical.scan("BEGIN:VEVENT").size).to eq(1)
+      end
+    end
+
+    context "mixed with a regular non-recurring eventlet" do
+      let(:plain_eventlet) { create(:eventlet, starts_at: "2021-01-05 10:00", ends_at: "2021-01-05 11:00") }
+      let(:eventlets) { [second_occurrence, plain_eventlet] }
+
+      it "emits separate VEVENTs for recurring and non-recurring events" do
+        expect(ical.scan("BEGIN:VEVENT").size).to eq(2)
+        expect(ical).to include_line("RRULE:FREQ=WEEKLY")
+      end
+    end
+  end
+
   context "with groupable eventlets" do
     let(:user) { create(:user) }
     let(:eventlets) do
@@ -155,7 +226,7 @@ describe Calendars::IcalGenerator do
     end
 
     it "groups first two eventlets" do
-      expect(ical.scan(/BEGIN:VEVENT/).size).to eq(2)
+      expect(ical.scan("BEGIN:VEVENT").size).to eq(2)
       expect(ical).to include_line("LOCATION:A nice place + Other place")
       expect(ical).to include_line("DESCRIPTION:This is a description\\nOther description\\n" \
         "https://foo.com/calen\r\n dars/events/#{eventlets[0].event_id}")

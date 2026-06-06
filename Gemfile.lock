@@ -787,6 +787,7 @@ DEPENDENCIES
   hirb (~> 0.7)
   i18n-js (~> 4.2)
   icalendar (~> 2.0)
+  ice_cube (~> 0.16)
   image_processing (~> 1.14)
   inline_svg (~> 1.8)
   jquery-rails (~> 4.6)

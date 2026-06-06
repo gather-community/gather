@@ -54,6 +54,74 @@ bin/rails db:setup       # Create + seed
 CH.tenant(1)  # Must set tenant before querying
 ```
 
+### Taking Screenshots
+
+The dev server must be running first (`bin/dev` won't stay up in the background because foreman's esbuild watcher requires stdin). Start just the web server and build JS assets separately:
+
+```bash
+yarn build                          # One-off JS build (no watch)
+bundle exec thin start --ssl --ssl-key-file config/ssl/gatherdev.org.key \
+  --ssl-cert-file config/ssl/gatherdev.org.crt &   # Rails on https://foo.gatherdev.org:3000
+```
+
+Screenshots use the Selenium container (`gather-selenium`) via a Ruby script with `selenium-webdriver`. The container shares `vibrant_borg`'s network namespace; reach it from this container at `172.18.0.3:4444`. The app is at `172.18.0.2`. Use `--host-resolver-rules` to make Chrome resolve both apex and wildcard subdomains to `172.18.0.2`.
+
+```ruby
+# tmp/screenshot.rb — adapt as needed
+require 'selenium-webdriver'
+
+SELENIUM_URL  = 'http://172.18.0.3:4444'
+APP_IP        = '172.18.0.2'
+APEX_URL      = 'https://gatherdev.org:3000'
+COMMUNITY_URL = 'https://foo.gatherdev.org:3000'  # adjust community slug
+EMAIL         = 'user@example.com'                 # set a known password first (see below)
+PASSWORD      = 'testtest1'
+
+options = Selenium::WebDriver::Chrome::Options.new
+options.add_argument('--ignore-certificate-errors')
+options.add_argument("--host-resolver-rules=MAP *.gatherdev.org #{APP_IP},MAP gatherdev.org #{APP_IP}")
+options.add_argument('--window-size=1280,900')
+
+driver = Selenium::WebDriver.for(:remote, url: SELENIUM_URL, options: options)
+wait   = Selenium::WebDriver::Wait.new(timeout: 10)
+
+def full_page_screenshot(driver, path)
+  height = driver.execute_script("return Math.max(document.body.scrollHeight, document.documentElement.scrollHeight)")
+  driver.manage.window.resize_to(1280, height)
+  sleep 0.5
+  driver.save_screenshot(path)
+  driver.manage.window.resize_to(1280, 900)
+end
+
+begin
+  driver.navigate.to("#{APEX_URL}/people/users/sign-in")
+  wait.until { driver.find_element(id: 'user_email') }
+  driver.find_element(id: 'user_email').send_keys(EMAIL)
+  driver.find_element(id: 'user_password').send_keys(PASSWORD)
+  driver.find_element(css: 'input[type=submit]').click
+  sleep 3
+
+  driver.navigate.to("#{COMMUNITY_URL}/some/path")
+  sleep 4
+  full_page_screenshot(driver, 'tmp/screenshot.png')
+ensure
+  driver.quit
+end
+```
+
+To set a known password for any user before running the script:
+
+```ruby
+# bundle exec rails runner this snippet
+CH.tenant(1)
+u = User.find_by(email: 'user@example.com')
+u.password = u.password_confirmation = 'testtest1'
+u.skip_reconfirmation!
+u.save!(validate: false)
+```
+
+Run the script with `bundle exec ruby tmp/screenshot.rb`. Output PNGs go in `tmp/` (gitignored).
+
 ## Architecture
 
 ### Multi-Tenancy Hierarchy

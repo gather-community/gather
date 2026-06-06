@@ -129,6 +129,18 @@ When using the Rails console, set a tenant first:
 CH.tenant(1)  # Use Community ID 1
 ```
 
+## Common Shortcuts
+
+Short scripts in `bin/` for frequent tasks:
+
+```bash
+bin/c    # rails console
+bin/db   # rails dbconsole (psql)
+bin/dm   # db:migrate
+bin/dr   # db:rollback (accepts STEP=n)
+bin/dmr  # db:migrate:redo (accepts STEP=n)
+```
+
 ## Caching
 
 Caching is off by default in development. Enable temporarily with:

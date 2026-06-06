@@ -21,3 +21,6 @@
     </li>
   <% end %>
 </ul>
+<% unless local_assigns[:nested] || local_assigns[:checkboxes] == false %>
+  <a href="#" class="select-all-link">Select All</a>
+<% end %>

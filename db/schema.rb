@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_04_000001) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_04_133830) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -111,6 +111,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_04_000001) do
     t.integer "meal_id"
     t.string "name", limit: 24, null: false
     t.text "note"
+    t.date "recurrence_end_date"
+    t.jsonb "recurrence_rule"
     t.integer "sponsor_id"
     t.datetime "starts_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
@@ -120,6 +122,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_04_000001) do
     t.index ["ends_at"], name: "index_calendar_events_on_ends_at"
     t.index ["group_id"], name: "index_calendar_events_on_group_id"
     t.index ["meal_id"], name: "index_calendar_events_on_meal_id"
+    t.index ["recurrence_end_date"], name: "index_calendar_events_on_recurrence_end_date"
     t.index ["sponsor_id"], name: "index_calendar_events_on_sponsor_id"
     t.index ["starts_at"], name: "index_calendar_events_on_starts_at"
     t.check_constraint "(meal_id IS NULL) = (creator_id IS NOT NULL)", name: "meal_or_creator"

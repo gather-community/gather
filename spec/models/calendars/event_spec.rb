@@ -4,21 +4,23 @@
 #
 # Table name: calendar_events
 #
-#  id          :integer          not null, primary key
-#  all_day     :boolean          default(FALSE), not null
-#  calendar_id :integer          not null
-#  cluster_id  :integer          not null
-#  created_at  :datetime         not null
-#  creator_id  :integer
-#  ends_at     :datetime         not null
-#  group_id    :bigint
-#  kind        :string
-#  meal_id     :integer
-#  name        :string(24)       not null
-#  note        :text
-#  sponsor_id  :integer
-#  starts_at   :datetime         not null
-#  updated_at  :datetime         not null
+#  id                  :integer          not null, primary key
+#  all_day             :boolean          default(FALSE), not null
+#  calendar_id         :integer          not null
+#  cluster_id          :integer          not null
+#  created_at          :datetime         not null
+#  creator_id          :integer
+#  ends_at             :datetime         not null
+#  group_id            :bigint
+#  kind                :string
+#  meal_id             :integer
+#  name                :string(24)       not null
+#  note                :text
+#  recurrence_end_date :date
+#  recurrence_rule     :jsonb
+#  sponsor_id          :integer
+#  starts_at           :datetime         not null
+#  updated_at          :datetime         not null
 #
 require "rails_helper"
 
@@ -96,6 +98,113 @@ describe Calendars::Event do
       expect(meal.event_handler).to receive(:validate_event).with(event)
       expect(meal.event_handler).to receive(:sync_resourcings).with(event)
       meal.save!
+    end
+  end
+
+  describe "recurrence" do
+    let(:weekly_rule) { IceCube::Rule.weekly.to_hash }
+    let(:weekly_until_rule) { IceCube::Rule.weekly.until(Date.new(2026, 6, 30)).to_hash }
+    let(:weekly_count_rule) { IceCube::Rule.weekly.count(3).to_hash }
+
+    describe "#recurring?" do
+      it "is false with no rule" do
+        expect(build(:event)).not_to be_recurring
+      end
+
+      it "is true with a rule" do
+        expect(build(:event, recurrence_rule: weekly_rule)).to be_recurring
+      end
+    end
+
+    describe "#schedule" do
+      it "is nil with no rule" do
+        expect(build(:event).schedule).to be_nil
+      end
+
+      it "returns an IceCube::Schedule with the stored rule" do
+        event = build(:event, recurrence_rule: weekly_rule)
+        expect(event.schedule).to be_a(IceCube::Schedule)
+        expect(event.schedule.rrules.size).to eq(1)
+      end
+    end
+
+    describe "#occurrences_between" do
+      let(:range) { Time.zone.parse("2026-06-01")..Time.zone.parse("2026-06-30 23:59:59") }
+      # Mondays in June 2026: 1, 8, 15, 22, 29
+      let(:event) do
+        build(:event,
+          starts_at: Time.zone.parse("2026-06-01 10:00"),
+          ends_at: Time.zone.parse("2026-06-01 11:00"),
+          recurrence_rule: weekly_rule)
+      end
+
+      it "returns empty array with no rule" do
+        expect(build(:event).occurrences_between(range)).to eq([])
+      end
+
+      it "returns [starts_at, ends_at] pairs for each occurrence in range" do
+        result = event.occurrences_between(range)
+        expect(result.size).to eq(5)
+        expect(result.first).to eq([Time.zone.parse("2026-06-01 10:00"), Time.zone.parse("2026-06-01 11:00")])
+        expect(result.last).to eq([Time.zone.parse("2026-06-29 10:00"), Time.zone.parse("2026-06-29 11:00")])
+      end
+
+      it "preserves the event duration for each occurrence" do
+        event_with_2h = build(:event,
+          starts_at: Time.zone.parse("2026-06-01 10:00"),
+          ends_at: Time.zone.parse("2026-06-01 12:00"),
+          recurrence_rule: weekly_rule)
+        result = event_with_2h.occurrences_between(range)
+        result.each do |starts, ends|
+          expect(ends - starts).to eq(2.hours)
+        end
+      end
+    end
+
+    describe "recurrence_end_date" do
+      context "with no rule" do
+        it "is nil" do
+          expect(create(:event).recurrence_end_date).to be_nil
+        end
+      end
+
+      context "with an infinite rule" do
+        it "is nil" do
+          expect(create(:event, recurrence_rule: weekly_rule).recurrence_end_date).to be_nil
+        end
+      end
+
+      context "with a rule having an until date" do
+        it "stores the until date" do
+          event = create(:event, recurrence_rule: weekly_until_rule)
+          expect(event.recurrence_end_date).to eq(Date.new(2026, 6, 30))
+        end
+
+        it "updates when rule is replaced" do
+          event = create(:event, recurrence_rule: weekly_rule)
+          expect(event.recurrence_end_date).to be_nil
+          event.update!(recurrence_rule: weekly_until_rule)
+          expect(event.recurrence_end_date).to eq(Date.new(2026, 6, 30))
+        end
+
+        it "recomputes correctly after a DB round-trip (JSONB returns string keys)" do
+          event = create(:event, recurrence_rule: weekly_until_rule)
+          event.reload
+          event.update!(name: "Updated")
+          expect(event.recurrence_end_date).to eq(Date.new(2026, 6, 30))
+        end
+      end
+
+      context "with a rule having a count" do
+        it "stores the date of the last occurrence" do
+          # 3 weekly occurrences starting 2026-06-01: Jun 1, 8, 15
+          event = create(:event,
+            starts_at: Time.zone.parse("2026-06-01 10:00"),
+            ends_at: Time.zone.parse("2026-06-01 11:00"),
+            recurrence_rule: weekly_count_rule)
+          expect(event.recurrence_end_date).to eq(Date.new(2026, 6, 15))
+        end
+      end
     end
   end
 

@@ -5,6 +5,7 @@ Gather.Views.Calendars.CalendarPageView = Backbone.View.extend({
     this.calendarId = options.calendarId;
     this.listView = options.listView;
     this.linkManager = options.linkManager;
+    window.addEventListener("popstate", this.onPopState.bind(this));
     this.updateCalendarSource();
   },
 
@@ -13,8 +14,16 @@ Gather.Views.Calendars.CalendarPageView = Backbone.View.extend({
     "calendarSelectionChanged": "updateCalendarSource"
   },
 
+  onPopState() {
+    const url = new URL(window.location.href);
+    this._restoringHistory = true;
+    this.calendarView.navigateTo(url.searchParams.get("view"), url.searchParams.get("date"));
+  },
+
   onViewRender() {
-    this.linkManager.update(this.calendarView.viewType(), this.calendarView.date());
+    this.linkManager.update(this.calendarView.viewType(), this.calendarView.date(),
+      {skipUrl: this._restoringHistory});
+    this._restoringHistory = false;
   },
 
   updateCalendarSource() {

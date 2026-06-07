@@ -1,8 +1,8 @@
 Gather.Views.Calendars.CalendarLinkManager = Backbone.View.extend({
-  update(viewType, date) {
+  update(viewType, date, {skipUrl = false} = {}) {
     const qsParams = {view: viewType, date};
     this.updatePermalink(qsParams);
-    this.updateBrowserUrl(qsParams);
+    if (!skipUrl) this.updateBrowserUrl(qsParams);
   },
 
   updatePermalink(qsParams) {

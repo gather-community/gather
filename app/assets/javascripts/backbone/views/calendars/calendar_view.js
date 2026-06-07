@@ -567,6 +567,16 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
       .intervalStart.format(Gather.TIME_FORMATS.compactDate);
   },
 
+  // Navigate to the given URL-style view param and date string, falling back to the
+  // current view/initial date if either is absent (e.g. when restoring a history entry
+  // that pre-dates any URL params being set).
+  navigateTo(urlViewParam, dateParam) {
+    const viewType = this.URL_PARAMS_TO_VIEW_TYPES[urlViewParam] ||
+      this.calendar.fullCalendar("getView").name;
+    const date = dateParam || this.viewParams.date;
+    this.calendar.fullCalendar("changeView", viewType, date);
+  },
+
   hasEventInInterval(start, end) {
     const matches = this.calendar.fullCalendar(
       "clientEvents",

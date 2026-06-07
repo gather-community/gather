@@ -84,6 +84,18 @@ describe "event calendar", js: true do
       expect(page).to have_current_path(/[?&]view=month/)
     end
 
+    scenario "back button restores previous calendar position" do
+      visit(calendar_events_path(calendar1))
+      expect(page).to have_content("Cal1 Event") # event is on current week
+
+      find(".fc-next-button").click
+      expect(page).to have_current_path(/[?&]date=\d{4}-\d{2}-\d{2}/)
+      expect(page).not_to have_content("Cal1 Event") # navigated away from event's week
+
+      page.evaluate_script("window.history.back()")
+      expect(page).to have_content("Cal1 Event") # calendar returned to event's week
+    end
+
     describe "all events page" do
       let!(:community2) { create(:community) }
 

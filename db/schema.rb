@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_04_133830) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_07_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -83,6 +83,20 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_04_133830) do
     t.decimal "value", precision: 10, scale: 2, null: false
     t.index ["cluster_id"], name: "index_billing_templates_on_cluster_id"
     t.index ["community_id"], name: "index_billing_templates_on_community_id"
+  end
+
+  create_table "calendar_event_overrides", force: :cascade do |t|
+    t.bigint "cluster_id", null: false
+    t.datetime "created_at", null: false
+    t.boolean "deleted", default: false, null: false
+    t.datetime "ends_at"
+    t.bigint "eventlet_id", null: false
+    t.datetime "occurrence_start", null: false
+    t.datetime "starts_at"
+    t.datetime "updated_at", null: false
+    t.index ["cluster_id"], name: "index_calendar_event_overrides_on_cluster_id"
+    t.index ["eventlet_id", "occurrence_start"], name: "index_event_overrides_on_eventlet_and_occurrence", unique: true
+    t.index ["eventlet_id"], name: "index_calendar_event_overrides_on_eventlet_id"
   end
 
   create_table "calendar_eventlets", force: :cascade do |t|
@@ -1267,6 +1281,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_04_133830) do
   add_foreign_key "billing_template_member_types", "people_member_types", column: "member_type_id"
   add_foreign_key "billing_templates", "clusters"
   add_foreign_key "billing_templates", "communities"
+  add_foreign_key "calendar_event_overrides", "calendar_eventlets", column: "eventlet_id"
+  add_foreign_key "calendar_event_overrides", "clusters"
   add_foreign_key "calendar_eventlets", "calendar_events", column: "event_id"
   add_foreign_key "calendar_eventlets", "calendar_nodes", column: "calendar_id"
   add_foreign_key "calendar_eventlets", "clusters"

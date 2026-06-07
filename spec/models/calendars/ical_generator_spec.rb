@@ -268,6 +268,60 @@ describe Calendars::IcalGenerator do
         expect(ical).to include_line("RRULE:FREQ=WEEKLY")
       end
     end
+
+    context "with a deleted occurrence override" do
+      let(:base_eventlet) { event.eventlets.first }
+      let(:deleted_occ_time) { Time.zone.parse("2021-01-11 12:00") }
+      let(:eventlets) { [second_occ] }
+
+      before do
+        create(:event_override, eventlet: base_eventlet,
+          occurrence_start: deleted_occ_time, deleted: true)
+      end
+
+      it "emits one VEVENT (the series)" do
+        expect(ical.scan("BEGIN:VEVENT").size).to eq(1)
+      end
+
+      it "includes an EXDATE for the deleted occurrence" do
+        expect(ical).to include_line("EXDATE;TZID=Etc/UTC:20210111T120000")
+      end
+    end
+
+    context "with a moved occurrence override" do
+      let(:base_eventlet) { event.eventlets.first }
+      let(:original_occ_time) { Time.zone.parse("2021-01-11 12:00") }
+      let(:new_start) { Time.zone.parse("2021-01-12 09:00") }
+      let(:new_end) { Time.zone.parse("2021-01-12 10:00") }
+      let(:eventlets) { [second_occ] }
+
+      before do
+        create(:event_override, eventlet: base_eventlet,
+          occurrence_start: original_occ_time, starts_at: new_start, ends_at: new_end)
+      end
+
+      it "emits two VEVENTs: the series and the override" do
+        expect(ical.scan("BEGIN:VEVENT").size).to eq(2)
+      end
+
+      it "includes an EXDATE suppressing the original occurrence time" do
+        expect(ical).to include_line("EXDATE;TZID=Etc/UTC:20210111T120000")
+      end
+
+      it "emits a VEVENT with RECURRENCE-ID for the original time" do
+        expect(ical).to include_line("RECURRENCE-ID;TZID=Etc/UTC:20210111T120000")
+      end
+
+      it "uses the override times as DTSTART/DTEND on the replacement VEVENT" do
+        expect(ical).to include_line("DTSTART;TZID=Etc/UTC:20210112T090000")
+        expect(ical).to include_line("DTEND;TZID=Etc/UTC:20210112T100000")
+      end
+
+      it "uses the same UID for both the series and the override VEVENT" do
+        uids = ical.scan(/UID:.*/).map { |l| l.strip }
+        expect(uids.uniq.size).to eq(1)
+      end
+    end
   end
 
   context "with groupable eventlets" do

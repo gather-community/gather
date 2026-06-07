@@ -11,12 +11,23 @@ describe Calendars::EventletSerializer do
       it { is_expected.to eq("/calendars/events/#{eventlet.event.id}") }
     end
 
-    context "with linkable" do
+    context "with linkable but no occurrence_start (e.g. system calendar eventlet)" do
       let(:meal) { create(:meal) }
       let(:eventlet) { build(:eventlet, linkable: meal) }
       subject(:url) { described_class.new(eventlet).url }
 
       it { is_expected.to eq("/meals/#{meal.id}") }
+    end
+
+    context "with linkable and occurrence_start (transient recurring occurrence)" do
+      let(:event) { create(:event) }
+      let(:occ_time) { Time.zone.parse("2025-06-10 10:00") }
+      let(:eventlet) do
+        build(:eventlet, linkable: event).tap { |e| e.occurrence_start = occ_time }
+      end
+      subject(:url) { described_class.new(eventlet).url }
+
+      it { is_expected.to eq("/calendars/events/#{event.id}?occurrence=#{occ_time.to_i}") }
     end
   end
 

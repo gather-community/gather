@@ -28,6 +28,7 @@ module Calendars
       # display offset, producing a separate RRULE VEVENT.
       self.recurring_representatives = recurring.uniq { |e| [e.linkable.id, e.calendar_id] }
       self.url_options = url_options
+      load_series_overrides
     end
 
     def generate
@@ -41,6 +42,23 @@ module Calendars
     end
 
     private
+
+    def load_series_overrides
+      parent_event_ids = recurring_representatives.map { |r| r.linkable.id }.uniq
+      if parent_event_ids.empty?
+        @series_overrides = {}
+        return
+      end
+
+      base_eventlets = Eventlet.where(event_id: parent_event_ids)
+        .index_by { |e| [e.event_id, e.calendar_id] }
+      overrides_by_eventlet = EventOverride.where(eventlet_id: base_eventlets.values.map(&:id))
+        .group_by(&:eventlet_id)
+
+      @series_overrides = base_eventlets.transform_values do |eventlet|
+        overrides_by_eventlet[eventlet.id] || []
+      end
+    end
 
     def add_event_group(group)
       raise ArgumentError, "all events must specify uid" if group[0].uid.nil?
@@ -63,6 +81,8 @@ module Calendars
       # linkable is the persisted parent event — use it for RRULE and URL.
       # Apply the eventlet's offset to DTSTART/DTEND so each calendar's display time is correct.
       parent = occurrence.linkable
+      deleted_overrides, moved_overrides = series_overrides_for(occurrence).partition(&:deleted?)
+
       cal.event do |e|
         e.uid = [UID_SIGNATURE, parent.id, occurrence.calendar_id].join("_")
         e.dtstart = date_or_time_value(parent.starts_at + occurrence.start_offset.seconds,
@@ -73,6 +93,32 @@ module Calendars
         e.location = occurrence.location
         e.summary = occurrence.name
         e.description = ([occurrence.note] + [url_for_event(occurrence)]).compact.join("\n")
+        apply_exdates(e, deleted_overrides + moved_overrides, occurrence)
+      end
+
+      moved_overrides.each { |override| add_override_event(occurrence, override) }
+    end
+
+    def series_overrides_for(occurrence)
+      @series_overrides[[occurrence.linkable.id, occurrence.calendar_id]] || []
+    end
+
+    def apply_exdates(ical_event, overrides, occurrence)
+      exdates = overrides.map(&:occurrence_start)
+      return unless exdates.any?
+      ical_event.exdate = exdates.map { |t| date_or_time_value(t, all_day: occurrence.all_day?) }
+    end
+
+    def add_override_event(series_occurrence, override)
+      parent = series_occurrence.linkable
+      cal.event do |e|
+        e.uid = [UID_SIGNATURE, parent.id, series_occurrence.calendar_id].join("_")
+        e.recurrence_id = date_or_time_value(override.occurrence_start, all_day: series_occurrence.all_day?)
+        e.dtstart = date_or_time_value(override.starts_at, all_day: series_occurrence.all_day?)
+        e.dtend = date_or_time_value(override.ends_at, all_day: series_occurrence.all_day?, is_end: true)
+        e.location = series_occurrence.location
+        e.summary = series_occurrence.name
+        e.description = ([series_occurrence.note] + [url_for_event(series_occurrence)]).compact.join("\n")
       end
     end
 

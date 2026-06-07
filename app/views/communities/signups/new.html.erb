@@ -17,7 +17,13 @@
   <h3 class="form-section-header">Community Details</h3>
 
   <%= f.input :community_name, maxlength: Communities::Signup::COMMUNITY_NAME_MAX_LENGTH %>
-  <%= f.input :slug, maxlength: Communities::Signup::SLUG_MAX_LENGTH %>
+  <%= f.input :slug do %>
+    <div class="input-group" style="max-width: 28em">
+      <span class="input-group-addon">https://</span>
+      <%= f.input_field :slug, class: "form-control", maxlength: Communities::Signup::SLUG_MAX_LENGTH, autocomplete: "off" %>
+      <span class="input-group-addon">.gather.coop</span>
+    </div>
+  <% end %>
   <%= f.input :introduction, as: :text, rows: 18,
         input_html: {maxlength: Communities::Signup::INTRODUCTION_MAX_LENGTH} %>
 

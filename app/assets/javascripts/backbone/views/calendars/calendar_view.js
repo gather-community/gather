@@ -197,7 +197,27 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
     if (!isActivationKey) {
       return;
     }
+    const helper = Gather.Utils && Gather.Utils.FullCalendarHeaderA11y;
+    const key = helper && helper.focusKeyFromElement && helper.focusKeyFromElement(e.currentTarget);
+    if (this.isViewControlKey(key)) {
+      this._fcHeaderLastFocusKey = null;
+      this._fcGridFocusDate = null;
+      this._fcGridShouldFocus = true;
+      setTimeout(() => this.focusGridAfterViewControlActivation(), 0);
+      return;
+    }
     this.captureHeaderControlActivation(e);
+  },
+
+  isViewControlKey(key) {
+    return Object.keys(this.URL_PARAMS_TO_VIEW_TYPES)
+      .some((viewType) => this.URL_PARAMS_TO_VIEW_TYPES[viewType] === key);
+  },
+
+  focusGridAfterViewControlActivation() {
+    if (this._fcGridShouldFocus) {
+      this.applyFullCalendarGridKeyboard();
+    }
   },
 
   applyFullCalendarHeaderA11y() {
@@ -229,6 +249,7 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
      * so screen readers announce the grid model instead of table boundaries.
      */
     this.calendar.find(".fc-view > table").attr("role", "presentation");
+    this.applyFullCalendarGridDateLabels();
 
     if (view.name === "month") {
       const $grid = this.calendar.find(".fc-month-view").first();
@@ -262,6 +283,18 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
 
       this.applyFullCalendarGridKeyboard();
     }
+  },
+
+  applyFullCalendarGridDateLabels() {
+    this.calendar.find(".fc-bg .fc-day[data-date]:visible").each((_, cell) => {
+      const $cell = $(cell);
+      const dateString = $cell.attr("data-date");
+      const date = $.fullCalendar.moment(dateString, "YYYY-MM-DD");
+
+      if (date.isValid()) {
+        $cell.attr("aria-label", date.format("dddd, MMMM D, YYYY"));
+      }
+    });
   },
 
   applyFullCalendarGridKeyboard() {

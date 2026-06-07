@@ -70,8 +70,33 @@ describe "event calendar", js: true do
       expect(page).to have_title("Yum")
     end
 
+    scenario "URL stays clean on load, then both params appear after navigation" do
+      visit(calendar_events_path(calendar1))
+      expect(page).to have_css(".fc-agendaWeek-button.fc-state-active") # calendar fully loaded
+      expect(current_url).not_to match(/[?&]view=/)
+      expect(current_url).not_to match(/[?&]date=/)
+
+      find(".fc-next-button").click
+      expect(page).to have_current_path(/[?&]view=week/)
+      expect(page).to have_current_path(/[?&]date=\d{4}-\d{2}-\d{2}/)
+
+      find(".fc-month-button").click
+      expect(page).to have_current_path(/[?&]view=month/)
+    end
+
     describe "all events page" do
       let!(:community2) { create(:community) }
+
+      scenario "URL stays clean on load, then both params appear after navigation" do
+        visit(calendars_events_path)
+        expect(page).to have_css(".fc-agendaWeek-button.fc-state-active")
+        expect(current_url).not_to match(/[?&]view=/)
+        expect(current_url).not_to match(/[?&]date=/)
+
+        find(".fc-next-button").click
+        expect(page).to have_current_path(/[?&]view=week/)
+        expect(page).to have_current_path(/[?&]date=\d{4}-\d{2}-\d{2}/)
+      end
 
       scenario "permalink" do
         visit(calendars_events_path)

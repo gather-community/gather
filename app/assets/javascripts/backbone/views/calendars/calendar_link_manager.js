@@ -9,14 +9,17 @@ Gather.Views.Calendars.CalendarLinkManager = Backbone.View.extend({
     return this.updateLink(this.$("#permalink"), qsParams);
   },
 
-  // Use replaceState on first render (preserves initial history entry), pushState on
-  // subsequent navigations so the browser back button steps through calendar dates.
+  // Skip URL update on the initial render so the URL stays clean on page load,
+  // matching lens behaviour (params only appear after the user navigates).
+  // Subsequent navigations push a history entry so the URL stays in sync.
   updateBrowserUrl(qsParams) {
+    if (!this._initialized) {
+      this._initialized = true;
+      return;
+    }
     const url = new URL(window.location.href);
     Object.keys(qsParams).forEach(k => url.searchParams.set(k, qsParams[k]));
-    const method = this._initialized ? "pushState" : "replaceState";
-    history[method](null, "", url.pathname + url.search);
-    this._initialized = true;
+    history.pushState(null, "", url.pathname + url.search);
   },
 
   updateLink(link, qsParams) {

@@ -34,7 +34,7 @@ module Calendars
       self.cal = Icalendar::Calendar.new
       set_timezone
       grouped_eventlets.each { |group| add_event_group(group) }
-      recurring_representatives.each { |occ| add_recurring_event(occ) }
+      recurring_representatives.each { |event| add_recurring_event(event) }
       cal.append_custom_property("X-WR-CALNAME", calendar_name)
       cal.publish
       cal.to_ical
@@ -59,20 +59,20 @@ module Calendars
       end
     end
 
-    def add_recurring_event(occurrence)
+    def add_recurring_event(event)
       # linkable is the persisted parent event — use it for RRULE and URL.
       # Apply the eventlet's offset to DTSTART/DTEND so each calendar's display time is correct.
-      parent = occurrence.linkable
+      parent = event.linkable
       cal.event do |e|
-        e.uid = [UID_SIGNATURE, parent.id, occurrence.calendar_id].join("_")
-        e.dtstart = date_or_time_value(parent.starts_at + occurrence.start_offset.seconds,
-          all_day: occurrence.all_day?)
-        e.dtend = date_or_time_value(parent.ends_at + occurrence.end_offset.seconds,
-          all_day: occurrence.all_day?, is_end: true)
+        e.uid = [UID_SIGNATURE, parent.id, event.calendar_id].join("_")
+        e.dtstart = date_or_time_value(parent.starts_at + event.start_offset.seconds,
+          all_day: event.all_day?)
+        e.dtend = date_or_time_value(parent.ends_at + event.end_offset.seconds,
+          all_day: event.all_day?, is_end: true)
         e.rrule = Icalendar::Values::Recur.new(parent.schedule.rrules.first.to_ical)
-        e.location = occurrence.location
-        e.summary = occurrence.name
-        e.description = ([occurrence.note] + [url_for_event(occurrence)]).compact.join("\n")
+        e.location = event.location
+        e.summary = event.name
+        e.description = ([event.note] + [url_for_event(event)]).compact.join("\n")
       end
     end
 

@@ -45,6 +45,8 @@ module Calendars
     attr_writer :uid
 
     has_many :eventlets, inverse_of: :event, dependent: :destroy, autosave: true
+    has_many :event_overrides, class_name: "Calendars::EventOverride", inverse_of: :event,
+      dependent: :destroy
     belongs_to :creator, class_name: "User"
     belongs_to :sponsor, class_name: "User"
     belongs_to :calendar, inverse_of: :events

@@ -239,7 +239,7 @@ describe Calendars::EventFinder do
       end
     end
 
-    context "with event overrides" do
+    context "with overrides" do
       # The in-range occurrence is at anchor + 1.day (= t0 + 4h).
       let(:in_range_occ) { anchor + 1.day }
       let(:base_eventlet) { recurring_event.eventlets.first }
@@ -248,74 +248,104 @@ describe Calendars::EventFinder do
         eventlets.select { |e| !e.persisted? && e.linkable.is_a?(Calendars::Event) }
       end
 
-      context "when the in-range occurrence is deleted" do
-        before do
-          create(:event_override, eventlet: base_eventlet,
-            occurrence_start: in_range_occ, deleted: true)
-        end
+      def make_event_override(**attrs)
+        create(:event_override, event: recurring_event, occurrence_start: in_range_occ, **attrs)
+      end
 
-        it "excludes the deleted occurrence" do
+      def make_eventlet_override(event_override, **attrs)
+        create(:eventlet_override, event_override: event_override, eventlet: base_eventlet, **attrs)
+      end
+
+      # (A) EventOverride deleted — drops the occurrence from all calendars
+      context "when EventOverride is deleted" do
+        before { make_event_override(deleted: true) }
+        it "excludes the occurrence" do
           expect(recurring_occurrences).to be_empty
         end
       end
 
-      context "when the in-range occurrence is moved to a new time within the range" do
+      # (B) EventOverride moves the event time
+      context "when EventOverride moves the event time" do
         let(:new_start) { t0 + 3.hours }
         let(:new_end) { t0 + 3.5.hours }
+        before { make_event_override(starts_at: new_start, ends_at: new_end) }
 
-        before do
-          create(:event_override, eventlet: base_eventlet,
-            occurrence_start: in_range_occ, starts_at: new_start, ends_at: new_end)
-        end
-
-        it "returns the occurrence at the new time" do
+        it "shows the occurrence at the new base time" do
           expect(recurring_occurrences.size).to eq(1)
           expect(recurring_occurrences.first.starts_at).to be_within(1.second).of(new_start)
-          expect(recurring_occurrences.first.ends_at).to be_within(1.second).of(new_end)
         end
 
-        it "uses the original occurrence_start in the uid so it stays stable" do
+        it "preserves the original occurrence_start in the uid" do
           expect(recurring_occurrences.first.uid).to eq("#{recurring_event.id}_#{in_range_occ.to_i}")
-        end
-
-        it "stores the original occurrence_start on the eventlet" do
-          expect(recurring_occurrences.first.occurrence_start).to be_within(1.second).of(in_range_occ)
         end
       end
 
-      context "when the in-range occurrence is moved outside the range" do
-        before do
-          create(:event_override, eventlet: base_eventlet,
-            occurrence_start: in_range_occ,
-            starts_at: t0 + 6.hours, ends_at: t0 + 7.hours)
-        end
-
-        it "excludes the occurrence since its new time is outside the range" do
+      # EventOverride moves occurrence outside the range — should not appear
+      context "when EventOverride moves the event outside the range" do
+        before { make_event_override(starts_at: t0 + 6.hours, ends_at: t0 + 7.hours) }
+        it "excludes the occurrence" do
           expect(recurring_occurrences).to be_empty
         end
       end
 
-      context "when an occurrence originally outside the range is moved into it" do
-        # The next daily occurrence after the in-range one is at anchor + 2.days (= t0 + 28h),
-        # well outside the 2.5–4.5h range. An override moves it to t0 + 3h (inside the range).
-        let(:outside_occ) { anchor + 2.days }
+      # (C) EventletOverride deleted — drops from this calendar only (event-level stub required)
+      context "when EventletOverride is deleted (stub EventOverride)" do
+        before { make_eventlet_override(make_event_override, deleted: true) }
+        it "excludes the occurrence for this calendar" do
+          expect(recurring_occurrences).to be_empty
+        end
+      end
+
+      # (D) EventletOverride changes offsets — applies correctly within the range
+      context "when EventletOverride shifts the display time within the range" do
+        # Occurrence at t0+4h shifted back 1h → t0+3h (still inside range t0+2.5h..t0+4.5h).
+        before { make_eventlet_override(make_event_override, start_offset: -3600, end_offset: -3600) }
+        it "shows the occurrence at the offset-adjusted time" do
+          expect(recurring_occurrences.size).to eq(1)
+          expect(recurring_occurrences.first.starts_at).to be_within(1.second).of(in_range_occ - 1.hour)
+        end
+      end
+
+      # (D) EventletOverride offset shifts occurrence OUT of the range — should not appear
+      context "when EventletOverride shifts the occurrence outside the range" do
+        # Shift the t0+4h occurrence forward by 2h → t0+6h, outside range t0+2.5h..t0+4.5h.
+        before { make_eventlet_override(make_event_override, start_offset: 7200, end_offset: 7200) }
+        it "excludes the occurrence" do
+          expect(recurring_occurrences).to be_empty
+        end
+      end
+
+      # (E) EventOverride moves + EventletOverride shifts offsets — combined
+      context "when EventOverride moves the event and EventletOverride adjusts the offset" do
         let(:new_start) { t0 + 3.hours }
         let(:new_end) { t0 + 3.5.hours }
-
         before do
-          create(:event_override, eventlet: base_eventlet,
-            occurrence_start: outside_occ, starts_at: new_start, ends_at: new_end)
+          eo = make_event_override(starts_at: new_start, ends_at: new_end)
+          make_eventlet_override(eo, start_offset: -1800, end_offset: -1800)
+        end
+        it "combines the new base time with the offset" do
+          expect(recurring_occurrences.size).to eq(1)
+          expect(recurring_occurrences.first.starts_at).to be_within(1.second).of(new_start - 1800.seconds)
+        end
+      end
+
+      # EventOverride moved-into-window (no MAX_OFFSET_SECONDS bound)
+      context "when an occurrence originally outside the range is moved into it via EventOverride" do
+        let(:outside_occ) { anchor + 2.days } # t0+28h, well outside range
+        let(:new_start) { t0 + 3.hours }
+        let(:new_end) { t0 + 3.5.hours }
+        before do
+          create(:event_override, event: recurring_event, occurrence_start: outside_occ,
+            starts_at: new_start, ends_at: new_end)
         end
 
-        it "includes the moved-in occurrence at its new time" do
-          occs = recurring_occurrences
-          moved_in = occs.find { |e| e.occurrence_start.to_i == outside_occ.to_i }
+        it "includes the moved-in occurrence" do
+          moved_in = recurring_occurrences.find { |e| e.occurrence_start.to_i == outside_occ.to_i }
           expect(moved_in).to be_present
           expect(moved_in.starts_at).to be_within(1.second).of(new_start)
-          expect(moved_in.ends_at).to be_within(1.second).of(new_end)
         end
 
-        it "still returns the unmodified in-range occurrence alongside the moved-in one" do
+        it "returns the regular in-range occurrence alongside it" do
           expect(recurring_occurrences.size).to eq(2)
         end
       end

@@ -43,21 +43,28 @@ module Calendars
 
     private
 
+    def series_context_for(occurrence)
+      parent = occurrence.linkable
+      base_eventlet = @base_eventlets_by_key[[parent.id, occurrence.calendar_id]]
+      event_overrides = @event_overrides_by_event[parent.id] || []
+      [parent, base_eventlet, event_overrides]
+    end
+
     def load_series_overrides
       parent_event_ids = recurring_representatives.map { |r| r.linkable.id }.uniq
       if parent_event_ids.empty?
-        @series_overrides = {}
+        @event_overrides_by_event = {}
+        @base_eventlets_by_key = {}
+        @eventlet_overrides_by_eventlet = {}
         return
       end
 
-      base_eventlets = Eventlet.where(event_id: parent_event_ids)
-        .index_by { |e| [e.event_id, e.calendar_id] }
-      overrides_by_eventlet = EventOverride.where(eventlet_id: base_eventlets.values.map(&:id))
-        .group_by(&:eventlet_id)
+      @event_overrides_by_event = EventOverride.where(event_id: parent_event_ids)
+        .includes(:eventlet_overrides)
+        .group_by(&:event_id)
 
-      @series_overrides = base_eventlets.transform_values do |eventlet|
-        overrides_by_eventlet[eventlet.id] || []
-      end
+      @base_eventlets_by_key = Eventlet.where(event_id: parent_event_ids)
+        .index_by { |e| [e.event_id, e.calendar_id] }
     end
 
     def add_event_group(group)
@@ -80,8 +87,7 @@ module Calendars
     def add_recurring_event(occurrence)
       # linkable is the persisted parent event — use it for RRULE and URL.
       # Apply the eventlet's offset to DTSTART/DTEND so each calendar's display time is correct.
-      parent = occurrence.linkable
-      deleted_overrides, moved_overrides = series_overrides_for(occurrence).partition(&:deleted?)
+      parent, base_eventlet, event_overrides = series_context_for(occurrence)
 
       cal.event do |e|
         e.uid = [UID_SIGNATURE, parent.id, occurrence.calendar_id].join("_")
@@ -93,33 +99,69 @@ module Calendars
         e.location = occurrence.location
         e.summary = occurrence.name
         e.description = ([occurrence.note] + [url_for_event(occurrence)]).compact.join("\n")
-        apply_exdates(e, deleted_overrides + moved_overrides, occurrence)
+        apply_exdates(e, event_overrides, base_eventlet, occurrence)
       end
 
-      moved_overrides.each { |override| add_override_event(occurrence, override) }
+      emit_recurrence_id_vevents(event_overrides, base_eventlet, occurrence)
     end
 
-    def series_overrides_for(occurrence)
-      @series_overrides[[occurrence.linkable.id, occurrence.calendar_id]] || []
-    end
-
-    def apply_exdates(ical_event, overrides, occurrence)
-      exdates = overrides.map(&:occurrence_start)
+    # Emits EXDATE lines for every overridden occurrence (deleted or moved at either level).
+    # Importing clients use EXDATE to suppress the RRULE-generated occurrence at that time.
+    def apply_exdates(ical_event, event_overrides, base_eventlet, occurrence)
+      exdates = event_overrides.map do |eo|
+        # iCal occurrence time for this calendar = original occurrence + base eventlet offset.
+        eo.occurrence_start + (base_eventlet&.start_offset || 0).seconds
+      end
       return unless exdates.any?
       ical_event.exdate = exdates.map { |t| date_or_time_value(t, all_day: occurrence.all_day?) }
     end
 
-    def add_override_event(series_occurrence, override)
-      parent = series_occurrence.linkable
-      cal.event do |e|
-        e.uid = [UID_SIGNATURE, parent.id, series_occurrence.calendar_id].join("_")
-        e.recurrence_id = date_or_time_value(override.occurrence_start, all_day: series_occurrence.all_day?)
-        e.dtstart = date_or_time_value(override.starts_at, all_day: series_occurrence.all_day?)
-        e.dtend = date_or_time_value(override.ends_at, all_day: series_occurrence.all_day?, is_end: true)
-        e.location = series_occurrence.location
-        e.summary = series_occurrence.name
-        e.description = ([series_occurrence.note] + [url_for_event(series_occurrence)]).compact.join("\n")
+    # Emits a replacement VEVENT (with RECURRENCE-ID) for each override that moves rather than
+    # deletes an occurrence. Handles the five combinations documented in the class header.
+    def emit_recurrence_id_vevents(event_overrides, base_eventlet, occurrence)
+      event_overrides.each do |event_override|
+        elo = find_eventlet_override(event_override, base_eventlet)
+        next if event_override.deleted? || elo&.deleted?
+        next unless event_override.starts_at || elo
+        recurrence_id_time = event_override.occurrence_start +
+          (base_eventlet&.start_offset || 0).seconds
+        new_start, new_end = resolve_override_times(event_override, elo, base_eventlet, occurrence)
+        add_override_vevent(occurrence, recurrence_id_time, new_start, new_end)
       end
+    end
+
+    def add_override_vevent(occurrence, recurrence_id_time, new_start, new_end)
+      cal.event do |e|
+        e.uid = [UID_SIGNATURE, occurrence.linkable.id, occurrence.calendar_id].join("_")
+        e.recurrence_id = date_or_time_value(recurrence_id_time, all_day: occurrence.all_day?)
+        e.dtstart = date_or_time_value(new_start, all_day: occurrence.all_day?)
+        e.dtend = date_or_time_value(new_end, all_day: occurrence.all_day?, is_end: true)
+        e.location = occurrence.location
+        e.summary = occurrence.name
+        e.description = ([occurrence.note] + [url_for_event(occurrence)]).compact.join("\n")
+      end
+    end
+
+    # Computes the new DTSTART/DTEND for a RECURRENCE-ID VEVENT, combining any EventOverride
+    # time change with any EventletOverride offset change.
+    def resolve_override_times(event_override, eventlet_override, base_eventlet, occurrence)
+      parent = occurrence.linkable
+      duration = parent.ends_at - parent.starts_at
+
+      # EventOverride provides new absolute event times; fall back to the occurrence's original time.
+      base_s = event_override.starts_at || event_override.occurrence_start
+      base_e = event_override.ends_at || (event_override.occurrence_start + duration)
+
+      # EventletOverride provides a per-occurrence offset; fall back to the base eventlet's offset.
+      start_off = eventlet_override&.start_offset || base_eventlet&.start_offset || 0
+      end_off = eventlet_override&.end_offset || base_eventlet&.end_offset || 0
+
+      [base_s + start_off.seconds, base_e + end_off.seconds]
+    end
+
+    def find_eventlet_override(event_override, base_eventlet)
+      return nil unless base_eventlet
+      event_override.eventlet_overrides.find { |elo| elo.eventlet_id == base_eventlet.id }
     end
 
     def url_for_event(eventlet)

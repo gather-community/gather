@@ -40,7 +40,7 @@ module Calendars
 
     belongs_to :event, class_name: "Calendars::Event", inverse_of: :eventlets
     belongs_to :calendar, class_name: "Calendars::Calendar", inverse_of: :eventlets
-    has_many :overrides, class_name: "Calendars::EventOverride", inverse_of: :eventlet,
+    has_many :eventlet_overrides, class_name: "Calendars::EventletOverride", inverse_of: :eventlet,
       dependent: :destroy
 
     delegate :name, :kind, :meal?, :meal_id, :creator, :creator_id, :group, :note, to: :event

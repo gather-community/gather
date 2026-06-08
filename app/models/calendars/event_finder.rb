@@ -50,59 +50,82 @@ module Calendars
       return [] if own_only
       base_eventlets = recurring_eventlet_scope.to_a
       return [] if base_eventlets.empty?
-      overrides_by_eventlet = load_overrides(base_eventlets.map(&:id))
-      base_eventlets.flat_map { |e| occurrences_for_eventlet(e, overrides_by_eventlet) }
+
+      # One query for event-level overrides (with eventlet_overrides eagerly loaded).
+      event_overrides_by_event = load_event_overrides(base_eventlets.map { |e| e.event.id })
+
+      base_eventlets.flat_map do |eventlet|
+        overrides = event_overrides_by_event[eventlet.event.id] || {}
+        occurrences_for_eventlet(eventlet, overrides)
+      end
     end
 
-    def occurrences_for_eventlet(eventlet, overrides_by_eventlet)
-      overrides = overrides_by_eventlet[eventlet.id] || {}
-      base_start_off = eventlet.start_offset
-      base_end_off = eventlet.end_offset
-      from_schedule, seen = scheduled_occurrences(eventlet, overrides, base_start_off, base_end_off)
-      from_schedule + moved_in_occurrences(eventlet, overrides, seen, base_start_off, base_end_off)
+    def load_event_overrides(event_ids)
+      EventOverride
+        .where(event_id: event_ids)
+        .includes(:eventlet_overrides)
+        .group_by(&:event_id)
+        .transform_values { |os| os.index_by(&:occurrence_start) }
     end
 
-    # Expands IceCube occurrences in range, applying deletion/move overrides.
-    # Returns [eventlet_list, seen_occ_starts_hash] so the caller can detect moved-in ones.
-    def scheduled_occurrences(eventlet, overrides, base_start_off, base_end_off)
+    def occurrences_for_eventlet(eventlet, event_overrides)
+      from_schedule, seen = scheduled_occurrences(eventlet, event_overrides)
+      from_schedule + moved_in_occurrences(eventlet, event_overrides, seen)
+    end
+
+    # Expands IceCube occurrences using a looser range (±MAX_OFFSET_SECONDS) so that EventletOverride
+    # offsets can shift an occurrence into the visible window. Applies a tight range.cover? afterward.
+    # Returns [eventlet_list, seen_occ_starts_hash] for the moved-in pass.
+    def scheduled_occurrences(eventlet, event_overrides)
+      expanded = (range.first - Eventlet::MAX_OFFSET_SECONDS)..(range.last + Eventlet::MAX_OFFSET_SECONDS)
       seen = {}
-      results = eventlet.event.occurrences_between(range).filter_map do |occ_s, occ_e|
+      results = eventlet.event.occurrences_between(expanded).filter_map do |occ_s, occ_e|
         seen[occ_s] = true
-        override = overrides[occ_s]
-        next if override&.deleted?
-        actual_s = override&.starts_at || occ_s
-        actual_e = override&.ends_at || occ_e
-        next unless range.cover?(actual_s)
-        build_occurrence_eventlet(eventlet, occ_s, actual_s, actual_e, base_start_off, base_end_off)
+        event_override = event_overrides[occ_s]
+        next if event_override&.deleted?
+        base_s = event_override&.starts_at || occ_s
+        base_e = event_override&.ends_at || occ_e
+        eventlet_override = find_eventlet_override(event_override, eventlet)
+        next if eventlet_override&.deleted?
+        start_off, end_off = resolve_offsets(eventlet, eventlet_override)
+        next unless range.cover?(base_s + start_off.seconds)
+        build_occurrence_eventlet(eventlet, occ_s, base_s, base_e, start_off, end_off)
       end
       [results, seen]
     end
 
-    # Returns transient eventlets for overrides that move an occurrence into the range from outside it.
-    def moved_in_occurrences(eventlet, overrides, seen, base_start_off, base_end_off)
-      overrides.filter_map do |occ_s, override|
+    # Returns transient eventlets for EventOverrides that move an occurrence into the range from outside it.
+    # EventletOverride offsets are bounded by MAX_OFFSET_SECONDS, so the expanded-range trick above
+    # handles those — this path is only needed for unbounded EventOverride time changes.
+    def moved_in_occurrences(eventlet, event_overrides, seen)
+      event_overrides.filter_map do |occ_s, event_override|
         next if seen.key?(occ_s)
-        next if override.deleted?
-        next unless override.starts_at && range.cover?(override.starts_at)
-        build_occurrence_eventlet(eventlet, occ_s, override.starts_at, override.ends_at,
-          base_start_off, base_end_off)
+        next if event_override.deleted?
+        next unless event_override.starts_at && range.cover?(event_override.starts_at)
+        eventlet_override = find_eventlet_override(event_override, eventlet)
+        next if eventlet_override&.deleted?
+        start_off, end_off = resolve_offsets(eventlet, eventlet_override)
+        build_occurrence_eventlet(eventlet, occ_s, event_override.starts_at, event_override.ends_at,
+          start_off, end_off)
       end
     end
 
-    # Returns overrides keyed by eventlet_id, then by occurrence_start.
-    def load_overrides(eventlet_ids)
-      EventOverride
-        .where(eventlet_id: eventlet_ids)
-        .group_by(&:eventlet_id)
-        .transform_values { |os| os.index_by(&:occurrence_start) }
+    def find_eventlet_override(event_override, eventlet)
+      event_override&.eventlet_overrides&.find { |eo| eo.eventlet_id == eventlet.id }
     end
 
-    def build_occurrence_eventlet(base_eventlet, original_occ_s, actual_s, actual_e,
-      base_start_off, base_end_off)
+    def resolve_offsets(eventlet, eventlet_override)
+      [
+        eventlet_override&.start_offset || eventlet.start_offset,
+        eventlet_override&.end_offset || eventlet.end_offset
+      ]
+    end
+
+    def build_occurrence_eventlet(base_eventlet, original_occ_s, base_s, base_e, start_off, end_off)
       parent = base_eventlet.event
-      te = build_transient_event(parent, base_eventlet.calendar, actual_s, actual_e)
+      te = build_transient_event(parent, base_eventlet.calendar, base_s, base_e)
       Eventlet.new(event: te, calendar: base_eventlet.calendar,
-        start_offset: base_start_off, end_offset: base_end_off)
+        start_offset: start_off, end_offset: end_off)
         .tap do |occ|
           # UID is based on the original occurrence time so it stays stable even when moved.
           occ.uid = "#{parent.id}_#{original_occ_s.to_i}"

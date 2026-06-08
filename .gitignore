@@ -20,6 +20,7 @@
 
 /config/database.yml
 /config/database.yml.bak
+/docker-compose.override.yml
 /config/settings.local.yml
 /config/settings.local.yml.bak
 /config/settings/*.local.yml

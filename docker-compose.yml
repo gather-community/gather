@@ -109,4 +109,5 @@ volumes:
 
 networks:
   gather-network:
+    name: ${COMPOSE_PROJECT_NAME:-gather}-network
     external: true

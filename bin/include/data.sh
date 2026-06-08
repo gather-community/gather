@@ -6,6 +6,7 @@ _DATA_PG_HOST=""
 _DATA_PG_PORT=""
 _DATA_PG_USER=""
 _DATA_PG_PASSWORD=""
+_DATA_PG_DATABASE=""
 _DATA_REDIS_URL=""
 _DATA_ES_HOST=""
 _DATA_ES_PORT=""
@@ -38,6 +39,7 @@ _data_load_config() {
   _DATA_PG_PORT="$(_data_yq_read "$database_yml" '.default.port' '5432')"
   _DATA_PG_USER="$(_data_yq_read "$database_yml" '.default.username' '')"
   _DATA_PG_PASSWORD="$(_data_yq_read "$database_yml" '.default.password' '')"
+  _DATA_PG_DATABASE="$(_data_yq_read "$database_yml" '.development.database' 'gather_development')"
 
   _DATA_REDIS_URL="$(_data_yq_read "$settings_yml" '.redis.url' '')"
 
@@ -127,8 +129,10 @@ _data_test_all_connections() {
 }
 
 _data_start_docker_services() {
-  msg_success "==> Creating Docker network..."
-  docker network create gather-network 2>/dev/null || true
+  local network_name
+  network_name="$(basename "$ROOT_DIR")-network"
+  msg_success "==> Creating Docker network (${network_name})..."
+  docker network create "$network_name" 2>/dev/null || true
 
   msg_success "==> Starting Docker services..."
   if ! docker compose up -d; then
@@ -151,9 +155,9 @@ _data_start_docker_services() {
 
 _data_database_exists() {
   if [[ -n "$_DATA_PG_PASSWORD" ]]; then
-    PGPASSWORD="$_DATA_PG_PASSWORD" psql -h "$_DATA_PG_HOST" -p "$_DATA_PG_PORT" -U "$_DATA_PG_USER" -d gather_development -c "SELECT 1" &>/dev/null
+    PGPASSWORD="$_DATA_PG_PASSWORD" psql -h "$_DATA_PG_HOST" -p "$_DATA_PG_PORT" -U "$_DATA_PG_USER" -d "$_DATA_PG_DATABASE" -c "SELECT 1" &>/dev/null
   else
-    psql -h "$_DATA_PG_HOST" -p "$_DATA_PG_PORT" ${_DATA_PG_USER:+-U "$_DATA_PG_USER"} -d gather_development -c "SELECT 1" &>/dev/null
+    psql -h "$_DATA_PG_HOST" -p "$_DATA_PG_PORT" ${_DATA_PG_USER:+-U "$_DATA_PG_USER"} -d "$_DATA_PG_DATABASE" -c "SELECT 1" &>/dev/null
   fi
 }
 
@@ -168,9 +172,9 @@ _data_get_super_admin() {
   "
   local result
   if [[ -n "$_DATA_PG_PASSWORD" ]]; then
-    result="$(PGPASSWORD="$_DATA_PG_PASSWORD" psql -h "$_DATA_PG_HOST" -p "$_DATA_PG_PORT" -U "$_DATA_PG_USER" -d gather_development -t -A -F'|' -c "$query" 2>/dev/null)"
+    result="$(PGPASSWORD="$_DATA_PG_PASSWORD" psql -h "$_DATA_PG_HOST" -p "$_DATA_PG_PORT" -U "$_DATA_PG_USER" -d "$_DATA_PG_DATABASE" -t -A -F'|' -c "$query" 2>/dev/null)"
   else
-    result="$(psql -h "$_DATA_PG_HOST" -p "$_DATA_PG_PORT" ${_DATA_PG_USER:+-U "$_DATA_PG_USER"} -d gather_development -t -A -F'|' -c "$query" 2>/dev/null)"
+    result="$(psql -h "$_DATA_PG_HOST" -p "$_DATA_PG_PORT" ${_DATA_PG_USER:+-U "$_DATA_PG_USER"} -d "$_DATA_PG_DATABASE" -t -A -F'|' -c "$query" 2>/dev/null)"
   fi
   echo "$result"
 }

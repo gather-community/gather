@@ -101,7 +101,7 @@
 	"updateRemoteUserUID": true,
 	"runArgs": [
 		"--add-host=host.docker.internal:host-gateway",
-		"--network=gather-network",
+		"--network=${localWorkspaceFolderBasename}-network",
 		"--userns=host",
 		"--group-add=docker",
 		"--privileged"

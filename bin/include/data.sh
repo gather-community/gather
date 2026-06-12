@@ -360,23 +360,24 @@ _data_set_mailman_admin_password() {
   [[ -z "$container" ]] && return 0
 
   printf "  %-16s " "Mailman admin"
-  local timeout=60
-  local start=$SECONDS
-  while ! docker exec "$container" test -f /opt/mailman-web-data/mailmanweb.db 2>/dev/null; do
-    if [[ $((SECONDS - start)) -gt $timeout ]]; then
-      gum style --foreground 3 "⚠ timed out waiting for Mailman DB"
-      return 0
-    fi
-    sleep 2
-  done
+  if ! docker exec "$container" test -f /opt/mailman-web-data/mailmanweb.db 2>/dev/null; then
+    gum style --foreground 3 "⚠ still initializing (run mise data again later)"
+    return 0
+  fi
 
-  if docker exec "$container" python3 -c "
-import sqlite3, hashlib, base64
+  # Compute the hash natively (fast), then write it into the emulated container (cheap SQLite update).
+  local pw_hash
+  pw_hash=$(python3 -c "
+import hashlib, base64
 salt = 'gatherdevelopment'
 dk = hashlib.pbkdf2_hmac('sha256', b'gather-mailman-dev', salt.encode(), 390000)
-h = 'pbkdf2_sha256\$390000\$' + salt + '\$' + base64.b64encode(dk).decode()
+print('pbkdf2_sha256\$390000\$' + salt + '\$' + base64.b64encode(dk).decode())
+")
+
+  if timeout 10 docker exec -e MAILMAN_PW_HASH="$pw_hash" "$container" python3 -c "
+import sqlite3, os
 conn = sqlite3.connect('/opt/mailman-web-data/mailmanweb.db')
-conn.execute(\"UPDATE auth_user SET password=? WHERE username='admin'\", (h,))
+conn.execute(\"UPDATE auth_user SET password=? WHERE username='admin'\", (os.environ['MAILMAN_PW_HASH'],))
 conn.commit()
 " 2>/dev/null; then
     gum style --foreground 2 "✓ password set"

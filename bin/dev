@@ -1,7 +1,26 @@
 #!/usr/bin/env bash
+set -euo pipefail
 
-if ! foreman version &> /dev/null
-then
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+# Check if port 3000 is already claimed by another dev env on the Mac host.
+# Rails runs inside the devcontainer; VS Code forwards :3000, so a conflict means
+# another dev env's Rails server is running.
+if nc -z host.docker.internal 3000 2>/dev/null; then
+  echo "Port 3000 is already in use on the host."
+
+  current_env="$(basename "$ROOT_DIR")"
+  owner=$(docker ps --format "{{.Names}}" 2>/dev/null \
+    | grep -oE "^gather[^-]+" | sort -u \
+    | grep -v "^${current_env}$" || true)
+  [[ -n "$owner" ]] && echo "In use by: $owner (devcontainer port forward)"
+
+  echo ""
+  echo "Stop the other dev env's Rails server first, then re-run bin/dev."
+  exit 1
+fi
+
+if ! foreman version &> /dev/null; then
   echo "Installing foreman..."
   gem install foreman
 fi

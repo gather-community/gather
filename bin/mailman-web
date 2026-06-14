@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+# Binds Mailman's web UI port to the Mac host so you can access it in a browser.
+# Usage: bin/mailman-web [stop]
+set -euo pipefail
+
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$ROOT_DIR"
+
+COMPOSE_FILES="docker-compose.yml"
+[[ -f docker-compose.override.yml ]] && COMPOSE_FILES="$COMPOSE_FILES:docker-compose.override.yml"
+
+port_owner() {
+  local port="$1"
+  docker ps --format "{{.Names}}\t{{.Ports}}" 2>/dev/null \
+    | awk -F'\t' -v p=":${port}->" '$2 ~ p {print $1; exit}'
+}
+
+case "${1:-}" in
+  stop)
+    docker compose up -d --force-recreate mailman-web
+    echo "mailman-web host port binding removed."
+    ;;
+  "")
+    owner=$(port_owner 8000)
+    if [[ -n "$owner" ]]; then
+      echo "Error: port 8000 is already in use."
+      echo "In use by: $owner"
+      echo "To free it: docker stop $owner"
+      exit 1
+    fi
+
+    local_output=""
+    if ! local_output=$(COMPOSE_FILE="$COMPOSE_FILES:docker-compose.expose.yml" \
+        docker compose up -d --force-recreate mailman-web 2>&1); then
+      echo "$local_output"
+      exit 1
+    fi
+
+    echo "mailman-web exposed at http://localhost:8000"
+    echo "To remove: bin/mailman-web stop"
+    ;;
+  *)
+    echo "Usage: bin/mailman-web [stop]"
+    exit 1
+    ;;
+esac

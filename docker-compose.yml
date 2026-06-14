@@ -5,8 +5,6 @@ services:
       POSTGRES_USER: gather
       POSTGRES_PASSWORD: gather
       POSTGRES_DB: gather_development
-    ports:
-      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
@@ -19,8 +17,6 @@ services:
 
   redis:
     image: redis:7-alpine
-    ports:
-      - "6379:6379"
     volumes:
       - redis_data:/data
     networks:
@@ -37,9 +33,6 @@ services:
       - discovery.type=single-node
       - "ES_JAVA_OPTS=-Xms200m -Xmx200m"
       - xpack.security.enabled=false
-    ports:
-      - "9200:9200"
-      - "9300:9300"
     volumes:
       - elasticsearch_data:/usr/share/elasticsearch/data
     networks:
@@ -52,17 +45,12 @@ services:
 
   mailcatcher:
     image: schickling/mailcatcher
-    ports:
-      - "1025:1025"
-      - "1080:1080"
     networks:
       - gather-network
 
   mailman-core:
     image: maxking/mailman-core:0.4
     platform: linux/amd64
-    ports:
-      - "8001:8001"
     volumes:
       - mailman_core_data:/opt/mailman
     environment:
@@ -76,8 +64,6 @@ services:
   mailman-web:
     image: maxking/mailman-web:0.4
     platform: linux/amd64
-    ports:
-      - "8000:8000"
     volumes:
       - mailman_web_data:/opt/mailman-web-data
       - ./docker/mailman-web-uwsgi.ini:/opt/mailman-web/uwsgi.ini

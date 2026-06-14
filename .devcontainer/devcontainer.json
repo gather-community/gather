@@ -246,7 +246,8 @@
 						"source.fixAll.eslint": "explicit"
 					}
 				},
-				"prettier.tabWidth": 2
+				"prettier.tabWidth": 2,
+			"remote.autoForwardPortsSource": "process"
 			}
 		}
 	},
@@ -268,7 +269,6 @@
 		"DISCOURSE_BOT_USERNAME": "${localEnv:DISCOURSE_BOT_USERNAME}",
 		"DISCOURSE_ANNOUNCEMENTS_CATEGORY_ID": "${localEnv:DISCOURSE_ANNOUNCEMENTS_CATEGORY_ID}"
 	},
-	// Use 'postCreateCommand' to run commands after the container is created.
 	"initializeCommand": "bash ${localWorkspaceFolder}/.devcontainer/setup.sh && exit 0",
 	"waitFor": "postCreateCommand",
 	"postCreateCommand": "bash .devcontainer/post-create.sh",

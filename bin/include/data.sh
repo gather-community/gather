@@ -391,7 +391,7 @@ _data_print_access_info() {
   echo
   echo "  Start the app:    bin/dev"
   echo "  App URL:          https://gatherdev.org:3000"
-  echo "  Mailman (Postorius): http://localhost:8000/postorius/  (admin / gather-mailman-dev)"
+  echo "  Mailman (Postorius): run bin/mailman-web, then visit port 8000/postorius/  (admin / gather-mailman-dev)"
   echo
 }
 

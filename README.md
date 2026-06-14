@@ -126,7 +126,19 @@ All dev envs are symmetrical — no host port bindings for any service. The devc
 
 ### Setting up a secondary instance
 
-Just clone and run `mise setup` as normal — no extra configuration needed.
+Replacing N with a unique suffix of your choice, run:
+
+```
+git clone https://github.com/gather-community/gather.git gatherN
+cd gatherN
+code .
+```
+
+Inside the container, run:
+
+```
+mise setup
+```
 
 ### Checking for port conflicts
 

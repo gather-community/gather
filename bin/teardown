@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+# Tears down a dev environment: stops all Docker containers, removes volumes, devcontainer, and network.
+# Run from the Mac host in the project root directory.
+# Usage: bin/teardown
+set -euo pipefail
+
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$ROOT_DIR"
+NAME="$(basename "$ROOT_DIR")"
+
+echo "This will permanently delete all Docker resources for '$NAME':"
+echo "  • Docker Compose services (postgres, redis, elasticsearch, mailcatcher, mailman-*)"
+echo "  • All database and service data volumes"
+echo "  • Dev container"
+echo "  • Gem bundle volume (${NAME}-bundle)"
+echo "  • Docker network (${NAME}-network)"
+echo ""
+echo "Source code in $ROOT_DIR will not be touched."
+echo ""
+read -r -p "Continue? [y/N] " confirm
+[[ "${confirm,,}" == "y" ]] || { echo "Aborted."; exit 0; }
+echo ""
+
+echo "==> Stopping compose services and removing volumes..."
+docker compose down -v 2>/dev/null || true
+
+echo "==> Removing devcontainer..."
+container_ids=$(docker ps -a --filter "label=devcontainer.local_folder=$ROOT_DIR" -q)
+if [[ -n "$container_ids" ]]; then
+  # shellcheck disable=SC2086
+  docker rm -f $container_ids
+  echo "    Removed."
+else
+  echo "    No devcontainer found for $ROOT_DIR."
+fi
+
+echo "==> Removing gem bundle volume (${NAME}-bundle)..."
+if docker volume inspect "${NAME}-bundle" &>/dev/null; then
+  docker volume rm "${NAME}-bundle"
+  echo "    Removed."
+else
+  echo "    Not found, skipping."
+fi
+
+echo "==> Removing Docker network (${NAME}-network)..."
+if docker network inspect "${NAME}-network" &>/dev/null; then
+  docker network rm "${NAME}-network"
+  echo "    Removed."
+else
+  echo "    Not found, skipping."
+fi
+
+echo ""
+echo "Done. '$NAME' dev environment fully removed."

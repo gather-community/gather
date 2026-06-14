@@ -140,6 +140,22 @@ Inside the container, run:
 mise setup
 ```
 
+### Tearing down a dev env
+
+To fully remove a dev environment and free up all its Docker resources, run from your Mac terminal in the project directory:
+
+```bash
+bin/teardown
+```
+
+This removes:
+- All Docker Compose services and their data volumes (postgres, redis, elasticsearch, mailcatcher, mailman-*)
+- The devcontainer
+- The gem bundle volume (`<name>-bundle`)
+- The Docker network (`<name>-network`)
+
+Your source code is not touched. To bring the environment back up, reopen the folder in VS Code and run `mise setup`.
+
 ### Checking for port conflicts
 
 `bin/dev` checks automatically whether port 3000 is already claimed before starting Rails. If another dev env owns it, you'll see which one and be told to stop it first.

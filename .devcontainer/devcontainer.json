@@ -269,6 +269,16 @@
 		"DISCOURSE_BOT_USERNAME": "${localEnv:DISCOURSE_BOT_USERNAME}",
 		"DISCOURSE_ANNOUNCEMENTS_CATEGORY_ID": "${localEnv:DISCOURSE_ANNOUNCEMENTS_CATEGORY_ID}"
 	},
+	// Port 3000 is Thin (Rails). VS Code auto-detects it and shows an "Open in Browser"
+	// notification, but the URL it generates (http://localhost:3000) is wrong — the app
+	// uses SSL and a custom hostname (https://gatherdev.org:3000). Suppress the popup so
+	// it doesn't mislead; bin/dev prints the correct URL in the terminal banner instead.
+	"portsAttributes": {
+		"3000": {
+			"label": "Rails (use https://gatherdev.org:3000)",
+			"onAutoForward": "silent"
+		}
+	},
 	"initializeCommand": "bash ${localWorkspaceFolder}/.devcontainer/setup.sh && exit 0",
 	"waitFor": "postCreateCommand",
 	"postCreateCommand": "bash .devcontainer/post-create.sh",

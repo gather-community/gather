@@ -149,12 +149,12 @@ bin/teardown
 ```
 
 This removes:
-- All Docker Compose services and their data volumes (postgres, redis, elasticsearch, mailcatcher, mailman-*)
+
+- All Docker Compose services and their data volumes (postgres, redis, elasticsearch, mailcatcher, mailman-\*)
 - The devcontainer
 - The gem bundle volume (`<name>-bundle`)
 - The Docker network (`<name>-network`)
-
-Your source code is not touched. To bring the environment back up, reopen the folder in VS Code and run `mise setup`.
+- The entire gatherN directory
 
 ### Checking for port conflicts
 

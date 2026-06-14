@@ -1,21 +1,23 @@
 #!/usr/bin/env bash
-# Tears down a dev environment: stops all Docker containers, removes volumes, devcontainer, and network.
-# Run from the Mac host in the project root directory.
+# Tears down a dev environment: stops all Docker containers, removes volumes, devcontainer, network, and source code.
+# Run from the Mac host in the project root directory AFTER closing the VS Code window for this project.
 # Usage: bin/teardown
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 NAME="$(basename "$ROOT_DIR")"
+PARENT_DIR="$(dirname "$ROOT_DIR")"
 
-echo "This will permanently delete all Docker resources for '$NAME':"
+echo "This will permanently delete all Docker resources and source code for '$NAME':"
 echo "  • Docker Compose services (postgres, redis, elasticsearch, mailcatcher, mailman-*)"
 echo "  • All database and service data volumes"
 echo "  • Dev container"
 echo "  • Gem bundle volume (${NAME}-bundle)"
 echo "  • Docker network (${NAME}-network)"
+echo "  • Source code directory: $ROOT_DIR"
 echo ""
-echo "Source code in $ROOT_DIR will not be touched."
+echo "Make sure you have closed the VS Code window for this project before continuing."
 echo ""
 read -r -p "Continue? [y/N] " confirm
 [[ "${confirm,,}" == "y" ]] || { echo "Aborted."; exit 0; }
@@ -49,6 +51,11 @@ if docker network inspect "${NAME}-network" &>/dev/null; then
 else
   echo "    Not found, skipping."
 fi
+
+echo "==> Removing source code directory..."
+cd "$PARENT_DIR"
+rm -rf "$ROOT_DIR"
+echo "    Removed $ROOT_DIR."
 
 echo ""
 echo "Done. '$NAME' dev environment fully removed."

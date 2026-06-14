@@ -189,6 +189,7 @@ _data_collect_admin_config() {
   _DATA_ADMIN_FNAME="$(gum input --placeholder "First name")"
   _DATA_ADMIN_LNAME="$(gum input --placeholder "Last name")"
   _DATA_ADMIN_EMAIL="$(gum input --placeholder "Email")"
+  _DATA_ADMIN_PASSWORD="$(gum input --password --placeholder "Password")"
 }
 
 _data_provision_database() {
@@ -214,6 +215,7 @@ _data_provision_database() {
       ADMIN_FNAME="$_DATA_ADMIN_FNAME" \
       ADMIN_LNAME="$_DATA_ADMIN_LNAME" \
       ADMIN_EMAIL="$_DATA_ADMIN_EMAIL" \
+      ADMIN_PASSWORD="$_DATA_ADMIN_PASSWORD" \
       SUPER_ADMIN=y 2>&1 | filter_noise
   if [[ ${PIPESTATUS[0]} -ne 0 ]]; then
     msg_error "Failed to create cluster"

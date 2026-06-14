@@ -20,7 +20,7 @@ echo ""
 echo "Make sure you have closed the VS Code window for this project before continuing."
 echo ""
 read -r -p "Continue? [y/N] " confirm
-[[ "${confirm,,}" == "y" ]] || { echo "Aborted."; exit 0; }
+[[ "$(echo "$confirm" | tr '[:upper:]' '[:lower:]')" == "y" ]] || { echo "Aborted."; exit 0; }
 echo ""
 
 echo "==> Stopping compose services and removing volumes..."

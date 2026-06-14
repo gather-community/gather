@@ -3,9 +3,22 @@ set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
+# Check if port 3000 is already in use locally (stale Thin process in this container).
+if nc -z localhost 3000 2>/dev/null; then
+  echo "Port 3000 is already in use inside this container (stale server process?)."
+  echo ""
+  echo "Find and kill the process: lsof -i :3000"
+  echo "Then re-run bin/dev."
+  exit 1
+fi
+
 # Check if port 3000 is already claimed by another dev env on the Mac host.
-# Rails runs inside the devcontainer; VS Code forwards :3000, so a conflict means
-# another dev env's Rails server is running.
+# NOTE: VS Code forwards ports to 127.0.0.1 on the Mac, which is NOT reachable via
+# host.docker.internal from inside the container. This check catches processes that
+# bind to 0.0.0.0 on the Mac (e.g. another devcontainer's VS Code tunnel), but will
+# miss conflicts where the Mac's localhost:3000 is taken by a VS Code port forward.
+# If VS Code forwards this container's port 3000 to localhost:3001 instead of :3000,
+# it means something else has the Mac's port 3000 — check the VS Code Ports panel.
 if nc -z host.docker.internal 3000 2>/dev/null; then
   echo "Port 3000 is already in use on the host."
 
@@ -28,5 +41,7 @@ fi
 echo "**************************************************"
 echo "Access server at https://gatherdev.org:3000"
 echo "Run: tail -f log/development.log to see log"
+echo "Verify VS Code Ports panel shows 3000 → localhost:3000"
+echo "(not :3001 — that means another server holds Mac port 3000)"
 echo "**************************************************"
 foreman start -f Procfile.dev "$@"

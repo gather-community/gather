@@ -10,6 +10,8 @@ gem install bundler
 bundle install
 yarn install
 
+mise run setup
+
 # Install gh-token helper so `gh` auto-authenticates via GitHub App credentials
 sudo cp bin/gh-token /usr/local/bin/gh-token
 # shellcheck disable=SC2016

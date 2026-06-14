@@ -12,8 +12,6 @@ Development is supported on Linux and macOS. Windows is not supported.
 
 ## Quick Start
 
-### Using Dev Container (Recommended)
-
 The easiest way to get started is with VS Code and Dev Containers:
 
 1. Install [Docker](https://www.docker.com/) and [VS Code](https://code.visualstudio.com/)
@@ -28,34 +26,6 @@ The easiest way to get started is with VS Code and Dev Containers:
    ```bash
    mise setup
    ```
-
-### Manual Setup
-
-If not using Dev Containers:
-
-```bash
-git clone https://github.com/gather-community/gather.git
-cd gather
-git checkout develop
-mise setup
-```
-
-The setup script will guide you through:
-
-- Checking dependencies
-- Generating configuration files
-- Starting data services (PostgreSQL, Redis, Elasticsearch)
-- Provisioning the database with an admin user
-- Installing SSL certificates
-
-Once complete, start the application:
-
-```bash
-bin/dev           # Start Rails server with foreman
-bin/delayed_job run  # Start background job processor (separate terminal)
-```
-
-Then visit https://gatherdev.org:3000 and sign in with the credentials shown during setup.
 
 ## System Dependencies
 
@@ -112,6 +82,101 @@ The `mise data` stage will create an admin user for development. If you need to 
    bin/delayed_job run  # Start background job processor (separate terminal)
    ```
    Job logs go to `log/development.log`. The `log/delayed_job.log` file contains only initialization and job state information.
+
+## Running Multiple Dev Envs
+
+Multiple clones of the repo (e.g. `gather1`, `gather2`) can run simultaneously on the same machine. Each gets its own isolated Docker network and database, named after the workspace folder.
+
+Each new instance adds about 3 GB of memory. Ensure your Docker is configured to allow this.
+
+### How isolation works
+
+The devcontainer joins a network named `<folder>-network` (e.g. `gather2-network`). Docker services started by `docker compose up -d` join the same network, so the devcontainer can reach them by hostname (`postgres`, `redis`, `elasticsearch`, `mailman-core`) without any host port bindings. Services in different instances are on separate networks and cannot see each other.
+
+```
+┌──────────────────────────────── Mac Host ──────────────────────────────────────────────┐
+│                                                                                         │
+│   Browser      :3000 ◄── VS Code (process-detect)    :1080 :8000 ◄── Docker host bind  │
+│                      (one dev env at a time)           (opt-in, one dev env at a time)  │
+│                          │                                │      │                       │
+└──────────────────────────┼────────────────────────────────┼──────┼─────────────────── ─ ┘
+                           │                                │      │
+     ┌─────────────────────┼──── gather1-network ───────────┼──────┼─────────────────┐
+     │                     │                                │      │                 │
+     │  ┌──────────────────▼────────────────────┐  ┌───────▼──┐ ┌─▼───────────┐    │
+     │  │        gather1 devcontainer            │  │mailcatch │ │ mailman-web │    │
+     │  │   Rails :3000    Selenium :4444        │  │:1025/1080│ │    :8000    │    │
+     │  └──────────────────────────────────────┘  └──────────┘ └─────────────┘    │
+     │  postgres:5432  redis:6379  elasticsearch:9200  mailman-core:8001           │
+     └───────────────────────────────────────────────────────────────────────────────┘
+
+     ┌──────────────────────── gather2-network ─────────────────────────────────────────┐
+     │                                                                                   │
+     │  ┌──────────────────────────────────────┐  ┌──────────┐ ┌─────────────┐         │
+     │  │        gather2 devcontainer           │  │mailcatch │ │ mailman-web │         │
+     │  │   Rails :3000    Selenium :4444       │  │:1025/1080│ │    :8000    │         │
+     │  └──────────────────────────────────────┘  └──────────┘ └─────────────┘         │
+     │  postgres:5432  redis:6379  elasticsearch:9200  mailman-core:8001                │
+     └─────────────────────────────────────────────────────────────────────────────────┘
+```
+
+All dev envs are symmetrical — no host port bindings for any service. The devcontainer is on the same Docker network, so services are reachable by hostname (`psql -h postgres`, `redis-cli -h redis`, etc.) from the devcontainer terminal without any host bindings.
+
+**Rails on :3000** runs inside the devcontainer. VS Code detects the process binding and forwards it to the host automatically (`remote.autoForwardPortsSource: "process"` in `devcontainer.json`).
+
+### Setting up a secondary instance
+
+Replacing N with a unique suffix of your choice, run:
+
+```
+git clone https://github.com/gather-community/gather.git gatherN
+cd gatherN
+code .
+```
+
+Inside the container, run:
+
+```
+mise setup
+```
+
+### Tearing down a dev env
+
+To fully remove a dev environment and free up all its Docker resources, run from your Mac terminal in the project directory:
+
+```bash
+bin/teardown
+```
+
+This removes:
+
+- All Docker Compose services and their data volumes (postgres, redis, elasticsearch, mailcatcher, mailman-\*)
+- The devcontainer
+- The gem bundle volume (`<name>-bundle`)
+- The Docker network (`<name>-network`)
+- The entire gatherN directory
+
+### Checking for port conflicts
+
+`bin/dev` checks automatically whether port 3000 is already claimed before starting Rails. If another dev env owns it, you'll see which one and be told to stop it first.
+
+### Exposing sibling container UIs
+
+Mailcatcher and the Mailman web UI are sibling containers — VS Code can't port-forward them. When you need to view one in a browser, run:
+
+```bash
+bin/mailcatcher       # http://localhost:1080  (SMTP: localhost:1025)
+bin/mailman-web       # http://localhost:8000
+```
+
+This recreates that container with a host port binding. If another dev env already has that port bound, the script will report which container owns it and how to stop it. Only one dev env can expose each service at a time.
+
+To remove the binding when done:
+
+```bash
+bin/mailcatcher stop
+bin/mailman-web stop
+```
 
 ## Secrets & Configuration
 
@@ -179,11 +244,11 @@ Mailman runs as two Docker containers (`mailman-core` and `mailman-web`) include
 
 ### Inspecting list state (Postorius web UI)
 
-Visit [http://localhost:8000/postorius/](http://localhost:8000/postorius/) and log in with the superuser you created above. From here you can browse domains, lists, and memberships.
+Run `bin/mailman-web` first to bind port 8000, then visit [http://localhost:8000/postorius/](http://localhost:8000/postorius/) and log in with the superuser you created above. From here you can browse domains, lists, and memberships.
 
 ### Inspecting list state (REST API)
 
-All REST API calls use HTTP Basic auth with `restadmin` / `restpass`. Run these from inside the devcontainer (use `mailman-core` as the hostname). From your host Mac terminal, replace `mailman-core` with `localhost`.
+All REST API calls use HTTP Basic auth with `restadmin` / `restpass`. Run these from inside the devcontainer using `mailman-core` as the hostname (mailman-core has no host port binding, so these commands won't work from the Mac terminal).
 
 ```bash
 # List all mailing lists

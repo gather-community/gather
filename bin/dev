@@ -1,13 +1,66 @@
 #!/usr/bin/env bash
+set -euo pipefail
 
-if ! foreman version &> /dev/null
-then
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+# Check if port 3000 is already in use locally (stale Thin process in this container).
+if nc -z localhost 3000 2>/dev/null; then
+  echo "Port 3000 is already in use inside this container (stale server process?)."
+  echo ""
+  echo "Find and kill the process: lsof -i :3000"
+  echo "Then re-run bin/dev."
+  exit 1
+fi
+
+# Check if port 3000 is already claimed by another dev env on the Mac host.
+# NOTE: VS Code forwards ports to 127.0.0.1 on the Mac, which is NOT reachable via
+# host.docker.internal from inside the container. This check catches processes that
+# bind to 0.0.0.0 on the Mac (e.g. another devcontainer's VS Code tunnel), but will
+# miss conflicts where the Mac's localhost:3000 is taken by a VS Code port forward.
+# If VS Code forwards this container's port 3000 to localhost:3001 instead of :3000,
+# it means something else has the Mac's port 3000 — check the VS Code Ports panel.
+if nc -z host.docker.internal 3000 2>/dev/null; then
+  echo "Port 3000 is already in use on the host."
+
+  current_env="$(basename "$ROOT_DIR")"
+  owner=$(docker ps --format "{{.Names}}" 2>/dev/null \
+    | grep -oE "^gather[^-]+" | sort -u \
+    | grep -v "^${current_env}$" || true)
+  [[ -n "$owner" ]] && echo "In use by: $owner (devcontainer port forward)"
+
+  echo ""
+  echo "Stop the other dev env's Rails server first, then re-run bin/dev."
+  exit 1
+fi
+
+if ! foreman version &> /dev/null; then
   echo "Installing foreman..."
   gem install foreman
 fi
 
-echo "**************************************************"
-echo "Access server at https://gatherdev.org:3000"
-echo "Run: tail -f log/development.log to see log"
-echo "**************************************************"
+# After Thin binds port 3000, print a prominent banner reminding the user to verify
+# VS Code forwarded to localhost:3000 (not :3001). This runs in the background so it
+# appears after startup noise settles rather than being buried by foreman's output.
+# We can't detect the Mac-side conflict pre-flight: VS Code binds forwarded ports to
+# 127.0.0.1 on the Mac, which isn't reachable via host.docker.internal.
+(
+  for _ in $(seq 1 30); do
+    nc -z localhost 3000 2>/dev/null && break
+    sleep 1
+  done
+  sleep 2
+  echo ""
+  echo "========================================================"
+  echo "  Server up: https://gatherdev.org:3000"
+  echo ""
+  echo "  ACTION: Check VS Code Ports panel (bottom bar > PORTS)"
+  echo "  Port 3000 should show Forwarded Address: localhost:3000"
+  echo "  If it shows localhost:3001 — another server holds Mac"
+  echo "  port 3000. Stop it, then restart bin/dev."
+  echo "========================================================"
+  echo ""
+) &
+CHECKER_PID=$!
+
 foreman start -f Procfile.dev "$@"
+kill "$CHECKER_PID" 2>/dev/null || true

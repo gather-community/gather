@@ -27,6 +27,7 @@ namespace :db do
       email: ENV.fetch("ADMIN_EMAIL"),
       first_name: ENV.fetch("ADMIN_FNAME"),
       last_name: ENV.fetch("ADMIN_LNAME"),
+      password: ENV["ADMIN_PASSWORD"],
       super_admin: %w[yes y].include?(ENV["SUPER_ADMIN"] || "no")
     ).generate
   end

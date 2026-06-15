@@ -183,6 +183,30 @@ describe "event calendar", js: true do
     end
   end
 
+  describe "calendar view switching" do
+    let(:calendar) { create(:calendar) }
+
+    scenario "renders week, day, and month grids after keyboard view changes" do
+      visit(calendar_events_path(calendar))
+
+      expect(page).to have_css(".fc-agendaWeek-view .fc-time-grid")
+      find(".fc-agendaWeek-button").send_keys(:enter)
+      expect_active_gridcell(".fc-agendaWeek-view .fc-day[data-date][tabindex='0']")
+
+      find(".fc-agendaDay-button").send_keys(:enter)
+      expect(page).to have_css(".fc-agendaDay-view .fc-time-grid")
+      expect_active_gridcell(".fc-agendaDay-view .fc-day[data-date][tabindex='0']")
+
+      find(".fc-month-button").send_keys(:enter)
+      expect(page).to have_css(".fc-month-view .fc-bg .fc-day[data-date]")
+      expect_active_gridcell(".fc-month-view .fc-day[data-date][tabindex='0']")
+
+      find(".fc-agendaWeek-button").send_keys(:enter)
+      expect(page).to have_css(".fc-agendaWeek-view .fc-time-grid")
+      expect_active_gridcell(".fc-agendaWeek-view .fc-day[data-date][tabindex='0']")
+    end
+  end
+
   describe "calendar grid accessibility states" do
     let(:calendar) { create(:calendar) }
 
@@ -192,10 +216,14 @@ describe "event calendar", js: true do
 
       today = Time.zone.today
       today_date = today.to_fs(:no_time)
+      today_label = page.evaluate_script("moment('#{today_date}', 'YYYY-MM-DD').format('dddd, MMMM D, YYYY')")
       selected_cell_selector =
         ".fc-month-view .fc-day[data-date][tabindex='0'][aria-selected='true']"
 
       expect(page).to have_css(".fc-month-view .fc-day[data-date='#{today_date}'][aria-current='date']")
+      expect(page).to have_css(
+        ".fc-month-view .fc-day[data-date='#{today_date}'][aria-label='#{today_label}']"
+      )
       expect(page).to have_css(selected_cell_selector, count: 1)
 
       selected_date_before_click = find(selected_cell_selector)["data-date"]
@@ -225,6 +253,24 @@ describe "event calendar", js: true do
       )
       expect(page).to have_css(".fc-month-view .fc-day[data-date='#{today_date}'][aria-current='date']")
       expect(page).to have_css(".fc-month-view .fc-day[data-date][aria-selected='true']", count: 1)
+
+      next_month_date = today.next_month.beginning_of_month.to_fs(:no_time)
+      page.execute_script("$('#calendar').fullCalendar('next')")
+      expect(page).to have_css(".fc-month-view .fc-day[data-date='#{next_month_date}'][aria-label]")
+      expect(page).to have_css(".fc-month-view .fc-day[data-date][aria-label]", minimum: 1)
+      rerendered_cell = page.evaluate_script(<<~JS)
+        (() => {
+          const cell = document.querySelector(".fc-month-view .fc-day[data-date='#{next_month_date}']");
+          const date = cell.getAttribute("data-date");
+
+          return {
+            date,
+            label: cell.getAttribute("aria-label"),
+            expectedLabel: moment(date, "YYYY-MM-DD").format("dddd, MMMM D, YYYY")
+          };
+        })()
+      JS
+      expect(rerendered_cell["label"]).to eq(rerendered_cell["expectedLabel"])
     end
   end
 
@@ -239,5 +285,10 @@ describe "event calendar", js: true do
     path = cur_calendar_id ? "/calendars/#{cur_calendar_id}/events" : "/calendars/events"
     permalink_url = "#{path}?view=month&date=#{time2_ymd}"
     expect(page).to have_css(%(a#permalink[href="#{permalink_url}"]))
+  end
+
+  def expect_active_gridcell(selector)
+    expect(page).to have_css(selector)
+    expect(page.evaluate_script("document.activeElement.matches(#{selector.to_json})")).to be(true)
   end
 end

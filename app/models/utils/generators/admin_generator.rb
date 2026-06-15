@@ -6,7 +6,7 @@ module Utils
     class AdminGenerator < Generator
       include ActiveModel::Model
 
-      attr_accessor :community, :cluster, :admin, :email, :first_name, :last_name, :super_admin
+      attr_accessor :community, :cluster, :admin, :email, :first_name, :last_name, :password, :super_admin
 
       def generate
         admin = nil
@@ -34,7 +34,7 @@ module Utils
       end
 
       def add_password
-        admin.password = admin.password_confirmation = People::PasswordGenerator.instance.generate
+        admin.password = admin.password_confirmation = password || People::PasswordGenerator.instance.generate
       end
 
       def invite

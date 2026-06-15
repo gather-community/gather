@@ -18,7 +18,7 @@ en:
         contact_last_name: "Last Name"
         contact_email: "Email Address"
         community_name: "Community Name"
-        slug: "URL Slug"
+        slug: "Community URL"
         introduction: "About Your Community"
         country_code: "Country"
         time_zone: "Time Zone"
@@ -76,7 +76,7 @@ en:
       markdown_suffix_html: "You can use <a href='/about/markdown' target='_new'>rich formatting</a>."
       communities_signup:
         community_name: "Up to 20 characters."
-        slug_html: "The first portion of your community's web address, e.g. https://<strong>yourslug</strong>.gather.coop. Lowercase letters, numbers, and hyphens; must start with a letter. Up to 20 characters."
+        slug: "Lowercase letters, numbers, and hyphens; must start with a letter. Up to 20 characters."
         introduction: "Tell us a bit about your community and why you think Gather is a good fit. Please include one or more links to publicly accessible webpages (e.g. your community website, social media pages) that establish your community's identity."
       communities_signup_action:
         message_approve: "The full approval email is shown above. Add a personalized note to the approval email by replacing the placeholder text."

@@ -8,6 +8,13 @@
 /* eslint-enable */
 
 window.Gather = {
+  TIME_FORMATS: {
+    fullDatetime: "ddd MMM D YYYY h:mm a",
+    machineDatetime: "YYYY-MM-DD HH:mm",
+    regDate: "ddd MMM DD YYYY",
+    regTime: "h:mm a",
+    compactDate: "YYYY-MM-DD"
+  },
   Models: {},
   Collections: {},
   Routers: {},

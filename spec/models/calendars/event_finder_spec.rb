@@ -122,7 +122,7 @@ describe Calendars::EventFinder do
 
         it "respects policy scope for non-system calendars" do
           null_scope = double(resolve: Calendars::Eventlet.none)
-          expect(Calendars::EventletPolicy::Scope).to receive(:new).and_return(null_scope)
+          expect(Calendars::EventletPolicy::Scope).to receive(:new).at_least(:once).and_return(null_scope)
           is_expected.to contain_exactly(eventlet2_1, eventlet4_1)
         end
       end
@@ -139,6 +139,103 @@ describe Calendars::EventFinder do
         it "still returns eventlets" do
           is_expected.to contain_exactly(eventlet1_2, eventlet1_3, eventlet1_4, eventlet2_1, eventlet4_1)
         end
+      end
+    end
+  end
+
+  describe "recurring occurrences" do
+    # Range: t0+2.5h .. t0+4.5h (2-hour window)
+    # A daily event anchored 20 hours before t0 has occurrences at t0-20h, t0+4h, t0+28h, etc.
+    # t0+4h is inside the range, so we expect one RecurringOccurrence.
+    let(:daily_rule) { IceCube::Rule.daily.to_hash }
+    let(:anchor) { t0 - 20.hours }
+
+    let!(:recurring_event) do
+      create(:event, calendar: cal1, creator: user,
+        starts_at: anchor, ends_at: anchor + 1.hour, recurrence_rule: daily_rule)
+    end
+
+    # Non-recurring sibling on cal1 to confirm normal eventlets still work alongside recurring ones.
+    let!(:plain_event) do
+      create(:event, calendar: cal1, starts_at: t0 + 3.hours, ends_at: t0 + 4.hours)
+    end
+
+    subject(:eventlets) do
+      described_class.new(range: range, calendars: [cal1], user: user, own_only: false).eventlets
+    end
+
+    it "returns a non-persisted occurrence eventlet for the in-range occurrence" do
+      recurring = eventlets.select { |e| !e.persisted? && e.linkable.is_a?(Calendars::Event) }
+      expect(recurring.size).to eq(1)
+      expect(recurring.first.linkable).to eq(recurring_event)
+      expect(recurring.first.starts_at).to be_within(1.second).of(anchor + 1.day)
+      expect(recurring.first.ends_at).to be_within(1.second).of(anchor + 1.day + 1.hour)
+    end
+
+    it "applies the eventlet start/end offsets to each occurrence" do
+      eventlet = recurring_event.eventlets.first
+      eventlet.update_columns(start_offset: -900, end_offset: 300)
+      occ = eventlets.select { |e| !e.persisted? && e.linkable.is_a?(Calendars::Event) }
+        .find { |o| o.linkable == recurring_event }
+      expect(occ.starts_at).to be_within(1.second).of(anchor + 1.day - 900.seconds)
+      expect(occ.ends_at).to be_within(1.second).of(anchor + 1.day + 1.hour + 300.seconds)
+    end
+
+    it "does not return the real eventlet for a recurring event" do
+      real_eventlet = recurring_event.eventlets.first
+      expect(eventlets).not_to include(real_eventlet)
+    end
+
+    it "still returns normal eventlets for non-recurring events" do
+      plain_eventlet = plain_event.eventlets.first
+      expect(eventlets).to include(plain_eventlet)
+    end
+
+    context "when the recurring event has no occurrence in the range" do
+      # A weekly event anchored 3 days ago has no occurrence in a 2-hour window today.
+      let!(:recurring_event) do
+        create(:event, calendar: cal1, creator: user,
+          starts_at: t0 - 3.days, ends_at: t0 - 3.days + 1.hour,
+          recurrence_rule: IceCube::Rule.weekly.to_hash)
+      end
+
+      it "returns no occurrence eventlets for that event" do
+        recurring = eventlets.select { |e| !e.persisted? && e.linkable.is_a?(Calendars::Event) }
+        expect(recurring).to be_empty
+      end
+    end
+
+    context "when the recurring series ended before the range" do
+      # Rule has an explicit until date in the past, so compute_recurrence_end_date stores yesterday.
+      let!(:recurring_event) do
+        create(:event, calendar: cal1, creator: user,
+          starts_at: t0 - 5.days, ends_at: t0 - 5.days + 1.hour,
+          recurrence_rule: IceCube::Rule.daily.until(t0 - 1.day).to_hash)
+      end
+
+      it "is excluded from results" do
+        recurring = eventlets.select { |e| !e.persisted? && e.linkable.is_a?(Calendars::Event) }
+        expect(recurring).to be_empty
+      end
+    end
+
+    context "with own_only true" do
+      subject(:eventlets) do
+        described_class.new(range: range, calendars: [cal1], user: user, own_only: true).eventlets
+      end
+
+      it "excludes recurring occurrences" do
+        recurring = eventlets.select { |e| !e.persisted? && e.linkable.is_a?(Calendars::Event) }
+        expect(recurring).to be_empty
+      end
+    end
+
+    context "when the policy scope excludes the calendar" do
+      it "excludes recurring occurrences from filtered-out calendars" do
+        null_scope = double(resolve: Calendars::Eventlet.none)
+        allow(Calendars::EventletPolicy::Scope).to receive(:new).and_return(null_scope)
+        recurring = eventlets.select { |e| !e.persisted? && e.linkable.is_a?(Calendars::Event) }
+        expect(recurring).to be_empty
       end
     end
   end

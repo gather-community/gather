@@ -6,6 +6,7 @@ _DATA_PG_HOST=""
 _DATA_PG_PORT=""
 _DATA_PG_USER=""
 _DATA_PG_PASSWORD=""
+_DATA_PG_DATABASE=""
 _DATA_REDIS_URL=""
 _DATA_ES_HOST=""
 _DATA_ES_PORT=""
@@ -38,6 +39,7 @@ _data_load_config() {
   _DATA_PG_PORT="$(_data_yq_read "$database_yml" '.default.port' '5432')"
   _DATA_PG_USER="$(_data_yq_read "$database_yml" '.default.username' '')"
   _DATA_PG_PASSWORD="$(_data_yq_read "$database_yml" '.default.password' '')"
+  _DATA_PG_DATABASE="$(_data_yq_read "$database_yml" '.development.database' 'gather_development')"
 
   _DATA_REDIS_URL="$(_data_yq_read "$settings_yml" '.redis.url' '')"
 
@@ -127,8 +129,10 @@ _data_test_all_connections() {
 }
 
 _data_start_docker_services() {
-  msg_success "==> Creating Docker network..."
-  docker network create gather-network 2>/dev/null || true
+  local network_name
+  network_name="$(basename "$ROOT_DIR")-network"
+  msg_success "==> Creating Docker network (${network_name})..."
+  docker network create "$network_name" 2>/dev/null || true
 
   msg_success "==> Starting Docker services..."
   if ! docker compose up -d; then
@@ -151,9 +155,9 @@ _data_start_docker_services() {
 
 _data_database_exists() {
   if [[ -n "$_DATA_PG_PASSWORD" ]]; then
-    PGPASSWORD="$_DATA_PG_PASSWORD" psql -h "$_DATA_PG_HOST" -p "$_DATA_PG_PORT" -U "$_DATA_PG_USER" -d gather_development -c "SELECT 1" &>/dev/null
+    PGPASSWORD="$_DATA_PG_PASSWORD" psql -h "$_DATA_PG_HOST" -p "$_DATA_PG_PORT" -U "$_DATA_PG_USER" -d "$_DATA_PG_DATABASE" -c "SELECT 1" &>/dev/null
   else
-    psql -h "$_DATA_PG_HOST" -p "$_DATA_PG_PORT" ${_DATA_PG_USER:+-U "$_DATA_PG_USER"} -d gather_development -c "SELECT 1" &>/dev/null
+    psql -h "$_DATA_PG_HOST" -p "$_DATA_PG_PORT" ${_DATA_PG_USER:+-U "$_DATA_PG_USER"} -d "$_DATA_PG_DATABASE" -c "SELECT 1" &>/dev/null
   fi
 }
 
@@ -168,9 +172,9 @@ _data_get_super_admin() {
   "
   local result
   if [[ -n "$_DATA_PG_PASSWORD" ]]; then
-    result="$(PGPASSWORD="$_DATA_PG_PASSWORD" psql -h "$_DATA_PG_HOST" -p "$_DATA_PG_PORT" -U "$_DATA_PG_USER" -d gather_development -t -A -F'|' -c "$query" 2>/dev/null)"
+    result="$(PGPASSWORD="$_DATA_PG_PASSWORD" psql -h "$_DATA_PG_HOST" -p "$_DATA_PG_PORT" -U "$_DATA_PG_USER" -d "$_DATA_PG_DATABASE" -t -A -F'|' -c "$query" 2>/dev/null)"
   else
-    result="$(psql -h "$_DATA_PG_HOST" -p "$_DATA_PG_PORT" ${_DATA_PG_USER:+-U "$_DATA_PG_USER"} -d gather_development -t -A -F'|' -c "$query" 2>/dev/null)"
+    result="$(psql -h "$_DATA_PG_HOST" -p "$_DATA_PG_PORT" ${_DATA_PG_USER:+-U "$_DATA_PG_USER"} -d "$_DATA_PG_DATABASE" -t -A -F'|' -c "$query" 2>/dev/null)"
   fi
   echo "$result"
 }
@@ -185,6 +189,7 @@ _data_collect_admin_config() {
   _DATA_ADMIN_FNAME="$(gum input --placeholder "First name")"
   _DATA_ADMIN_LNAME="$(gum input --placeholder "Last name")"
   _DATA_ADMIN_EMAIL="$(gum input --placeholder "Email")"
+  _DATA_ADMIN_PASSWORD="$(gum input --password --placeholder "Password")"
 }
 
 _data_provision_database() {
@@ -210,6 +215,7 @@ _data_provision_database() {
       ADMIN_FNAME="$_DATA_ADMIN_FNAME" \
       ADMIN_LNAME="$_DATA_ADMIN_LNAME" \
       ADMIN_EMAIL="$_DATA_ADMIN_EMAIL" \
+      ADMIN_PASSWORD="$_DATA_ADMIN_PASSWORD" \
       SUPER_ADMIN=y 2>&1 | filter_noise
   if [[ ${PIPESTATUS[0]} -ne 0 ]]; then
     msg_error "Failed to create cluster"
@@ -356,23 +362,24 @@ _data_set_mailman_admin_password() {
   [[ -z "$container" ]] && return 0
 
   printf "  %-16s " "Mailman admin"
-  local timeout=60
-  local start=$SECONDS
-  while ! docker exec "$container" test -f /opt/mailman-web-data/mailmanweb.db 2>/dev/null; do
-    if [[ $((SECONDS - start)) -gt $timeout ]]; then
-      gum style --foreground 3 "⚠ timed out waiting for Mailman DB"
-      return 0
-    fi
-    sleep 2
-  done
+  if ! docker exec "$container" test -f /opt/mailman-web-data/mailmanweb.db 2>/dev/null; then
+    gum style --foreground 3 "⚠ still initializing (run mise data again later)"
+    return 0
+  fi
 
-  if docker exec "$container" python3 -c "
-import sqlite3, hashlib, base64
+  # Compute the hash natively (fast), then write it into the emulated container (cheap SQLite update).
+  local pw_hash
+  pw_hash=$(python3 -c "
+import hashlib, base64
 salt = 'gatherdevelopment'
 dk = hashlib.pbkdf2_hmac('sha256', b'gather-mailman-dev', salt.encode(), 390000)
-h = 'pbkdf2_sha256\$390000\$' + salt + '\$' + base64.b64encode(dk).decode()
+print('pbkdf2_sha256\$390000\$' + salt + '\$' + base64.b64encode(dk).decode())
+")
+
+  if timeout 10 docker exec -e MAILMAN_PW_HASH="$pw_hash" "$container" python3 -c "
+import sqlite3, os
 conn = sqlite3.connect('/opt/mailman-web-data/mailmanweb.db')
-conn.execute(\"UPDATE auth_user SET password=? WHERE username='admin'\", (h,))
+conn.execute(\"UPDATE auth_user SET password=? WHERE username='admin'\", (os.environ['MAILMAN_PW_HASH'],))
 conn.commit()
 " 2>/dev/null; then
     gum style --foreground 2 "✓ password set"
@@ -387,7 +394,7 @@ _data_print_access_info() {
   echo
   echo "  Start the app:    bin/dev"
   echo "  App URL:          https://gatherdev.org:3000"
-  echo "  Mailman (Postorius): http://localhost:8000/postorius/  (admin / gather-mailman-dev)"
+  echo "  Mailman (Postorius): run bin/mailman-web, then visit port 8000/postorius/  (admin / gather-mailman-dev)"
   echo
 }
 

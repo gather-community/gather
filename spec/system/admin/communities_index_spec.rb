@@ -22,4 +22,24 @@ describe "communities index" do
     expect(page).to have_content("Default")
     expect(page).to have_content("Other Community")
   end
+
+  scenario "status lens", js: true do
+    communityB.update!(deactivated_at: Time.current)
+
+    visit(communities_path)
+    expect(page).to have_content("Default")
+    expect(page).to have_content("Other Community")
+
+    select_lens(:status, "Deactivated")
+    expect(page).not_to have_content("Default")
+    expect(page).to have_content("Other Community")
+
+    select_lens(:status, "Trial")
+    expect(page).to have_content("Default")
+    expect(page).not_to have_content("Other Community")
+
+    select_lens(:status, "All Statuses")
+    expect(page).to have_content("Default")
+    expect(page).to have_content("Other Community")
+  end
 end

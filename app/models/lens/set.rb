@@ -3,7 +3,7 @@
 module Lens
   # Models a set of parameters and parameter values that scope an index view.
   class Set
-    attr_accessor :storage, :lenses, :route_params, :context, :visible
+    attr_accessor :lenses, :route_params, :context, :visible
     alias_method :visible?, :visible
 
     delegate :html, to: :bar
@@ -19,9 +19,6 @@ module Lens
       self.lenses ||= []
       self.visible = true
 
-      self.storage = Storage.new(session: context.session, community_id: context.current_community&.id,
-        controller_path: context.controller_path, action_name: context.action_name,
-        persist: context.own_cluster?, reset: route_params[:clearlenses].present?)
       build_lenses(lens_names)
     end
 
@@ -87,11 +84,7 @@ module Lens
         options: options,
         context: context,
         route_params: route_params,
-        storage: storage,
-
-        # This should be removed eventually. The choosee lens is the only one using it currently.
-        # A better way would be to request it be injected in the call to prepare_lenses.
-        # Would have to add a spec to Lens::Set for this.
+        # TODO: inject set via prepare_lenses instead of passing through the build chain
         set: self
       )
 

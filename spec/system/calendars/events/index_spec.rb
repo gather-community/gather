@@ -46,22 +46,37 @@ describe "event calendar", js: true do
       expect(page).not_to have_content("Cal1 Event")
       find(".fc-month-button").click
       expect(page).to have_css(".fc-month-button.fc-state-active")
-      sleep(1) # Wait for lens to be updated
 
-      # Test permalink and calendar links update correctly.
       expect_correct_permalink(cur_calendar_id: calendar1.id)
 
-      # Test saved view respected across calendars.
+      # Sidebar calendar links carry the current view and date.
       click_link("Bar Room")
       expect(page).to have_css(".fc-month-button.fc-state-active")
       expect(page).to have_css(".fc-header-toolbar h2", text: time2_my)
 
-      # Test saved view respected on back button click.
-      find(".fc-agendaWeek-button").click
-      sleep(1) # Wait for lens to be updated
-      page.evaluate_script("window.history.back()")
-      expect(page).to have_title("Foo Room")
+      # Second link click — view and date still carry through from the URL.
+      click_link("Foo Room")
+      expect(page).to have_css(".fc-month-button.fc-state-active")
+      expect(page).to have_css(".fc-header-toolbar h2", text: time2_my)
+    end
+
+    scenario "All link navigates to combined events page and carries view/date" do
+      visit(calendar_events_path(calendar1))
       expect(page).to have_css(".fc-agendaWeek-button.fc-state-active")
+      find(".fc-next-button").click
+      find(".fc-month-button").click
+      expect(page).to have_css(".fc-month-button.fc-state-active")
+
+      # The All link gets QS params rewritten just like per-calendar links.
+      all_href = find("a.calendar-link", text: "All")["href"]
+      expect(all_href).to match(%r{/calendars/events})
+      expect(all_href).to match(/[?&]view=month/)
+      expect(all_href).to match(/[?&]date=\d{4}-\d{2}-\d{2}/)
+
+      # Clicking it lands on the combined events page at the same position.
+      click_link("All")
+      expect(page).to have_title("Events & Reservations")
+      expect(page).to have_css(".fc-month-button.fc-state-active")
     end
 
     scenario "meal link works" do
@@ -70,18 +85,64 @@ describe "event calendar", js: true do
       expect(page).to have_title("Yum")
     end
 
-    scenario "URL stays clean on load, then both params appear after navigation" do
+    scenario "sidebar links stay clean on load (no date or view until user navigates)" do
+      visit(calendar_events_path(calendar1))
+      expect(page).to have_css(".fc-agendaWeek-button.fc-state-active")
+      link_href = find("a", text: "Bar Room")["href"]
+      expect(link_href).not_to match(/[?&]date=/)
+      expect(link_href).not_to match(/[?&]view=/)
+    end
+
+    scenario "URL stays clean on load; date appears after navigation, view only after view change" do
       visit(calendar_events_path(calendar1))
       expect(page).to have_css(".fc-agendaWeek-button.fc-state-active") # calendar fully loaded
       expect(current_url).not_to match(/[?&]view=/)
       expect(current_url).not_to match(/[?&]date=/)
 
       find(".fc-next-button").click
-      expect(page).to have_current_path(/[?&]view=week/)
       expect(page).to have_current_path(/[?&]date=\d{4}-\d{2}-\d{2}/)
+      expect(current_url).not_to match(/[?&]view=/) # view not added by next/prev
 
       find(".fc-month-button").click
       expect(page).to have_current_path(/[?&]view=month/)
+      expect(page).to have_current_path(/[?&]date=\d{4}-\d{2}-\d{2}/)
+
+      find(".fc-next-button").click
+      expect(page).to have_current_path(/[?&]view=month/) # view persists after subsequent navigation
+    end
+
+    scenario "view param in URL on load carries through to sidebar links without any navigation" do
+      # Loading with a permalink-style URL and clicking a sidebar link directly (no next/prev).
+      visit(calendar_events_path(calendar1, view: "month", date: time2_ymd))
+      expect(page).to have_css(".fc-month-button.fc-state-active")
+      click_link("Bar Room")
+      expect(page).to have_css(".fc-month-button.fc-state-active")
+      expect(page).to have_css(".fc-header-toolbar h2", text: time2_my)
+
+      # Second link click — view and date still carry via the URL params on the destination page.
+      click_link("Foo Room")
+      expect(page).to have_css(".fc-month-button.fc-state-active")
+      expect(page).to have_css(".fc-header-toolbar h2", text: time2_my)
+    end
+
+    scenario "early morning toggle updates URL and carries through sidebar links" do
+      visit(calendar_events_path(calendar1))
+      expect(page).to have_css(".fc-agendaWeek-button.fc-state-active")
+
+      find("#show-early").click
+      expect(page).to have_current_path(/[?&]early=true/)
+
+      # Toggling off removes the param.
+      find("#hide-early").click
+      expect(current_url).not_to match(/[?&]early=/)
+
+      # Sidebar links carry the early param to the destination calendar.
+      find("#show-early").click
+      expect(page).to have_current_path(/[?&]early=true/)
+      click_link("Bar Room")
+      expect(page).to have_css(".fc-agendaWeek-button.fc-state-active") # calendar loaded
+      expect(current_url).to match(/[?&]early=true/)
+      expect(page).to have_css("#hide-early", visible: true) # early morning is active
     end
 
     scenario "back button restores previous calendar position" do
@@ -99,14 +160,18 @@ describe "event calendar", js: true do
     describe "all events page" do
       let!(:community2) { create(:community) }
 
-      scenario "URL stays clean on load, then both params appear after navigation" do
+      scenario "URL stays clean on load; date appears after navigation, view only after view change" do
         visit(calendars_events_path)
         expect(page).to have_css(".fc-agendaWeek-button.fc-state-active")
         expect(current_url).not_to match(/[?&]view=/)
         expect(current_url).not_to match(/[?&]date=/)
 
         find(".fc-next-button").click
-        expect(page).to have_current_path(/[?&]view=week/)
+        expect(page).to have_current_path(/[?&]date=\d{4}-\d{2}-\d{2}/)
+        expect(current_url).not_to match(/[?&]view=/) # view not added by next/prev
+
+        find(".fc-month-button").click
+        expect(page).to have_current_path(/[?&]view=month/)
         expect(page).to have_current_path(/[?&]date=\d{4}-\d{2}-\d{2}/)
       end
 
@@ -147,15 +212,24 @@ describe "event calendar", js: true do
     context "with default calendar view" do
       let!(:calendar3) { create(:calendar, name: "Baz Room", default_calendar_view: "month") }
 
-      scenario "default calendar view is respected unless overridden" do
+      scenario "default calendar view is always used on load" do
         visit(calendar_events_path(calendar3))
         expect(page).to have_css(".fc-month-button.fc-state-active")
         find(".fc-agendaWeek-button").click
-        sleep(1) # Wait for lens to be updated
         click_link("Events")
         click_link("Baz Room")
         expect(page).to have_title("Baz Room")
+        expect(page).to have_css(".fc-month-button.fc-state-active")
+      end
+
+      scenario "a previous visit with a view param does not override default_calendar_view" do
+        # Visiting with ?view=week stores the value in the lens session.
+        visit(calendar_events_path(calendar3, view: "week"))
         expect(page).to have_css(".fc-agendaWeek-button.fc-state-active")
+
+        # A subsequent clean load must use default_calendar_view, not the stale session value.
+        visit(calendar_events_path(calendar3))
+        expect(page).to have_css(".fc-month-button.fc-state-active")
       end
     end
   end

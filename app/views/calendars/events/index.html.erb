@@ -60,11 +60,10 @@
       feedPath: <%= json(@feed_path) %>,
       newPath: <%= json(@new_event_path) %>,
       viewParams: <%= json(
-        viewType: lenses[:view].value,
-        # We specify a default current date so that it matches the community timezone.
-        # This is mostly for tests as weird boundary conditions can occur.
-        date: lenses[:date].value || Time.current.to_date,
-        earlyMorning: lenses[:early].value
+        viewType: params[:view].presence,
+        # Default to the community-timezone current date so tests don't hit DST boundaries.
+        date: params[:date].presence || Time.current.to_date,
+        earlyMorning: params[:early].presence
       ) %>,
       defaultViewType: <%= json(calendar&.default_calendar_view) %>,
       ruleSet: <%= json(@rule_set_serializer) %>,
@@ -78,7 +77,8 @@
       communityId: <%= json(current_community&.id) %>
     });
     var linkManager = new Gather.Views.Calendars.CalendarLinkManager({
-      el: '#calendar-and-sidebar'
+      el: '#calendar-and-sidebar',
+      calendarId: <%= json(params[:calendar_id]) %>
     });
     new Gather.Views.Calendars.CalendarPageView({
       el: '#calendar-and-sidebar',

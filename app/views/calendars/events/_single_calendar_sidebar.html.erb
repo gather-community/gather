@@ -2,6 +2,6 @@
 <% if @calendars.any? %>
   <section>
     <h3 class="top">Calendars</h3>
-    <%= render("calendars/calendar_list", nodes: @calendars, checkboxes: false) %>
+    <%= render("calendars/calendar_list", nodes: @calendars, checkboxes: false, show_all_link: true) %>
   </section>
 <% end %>

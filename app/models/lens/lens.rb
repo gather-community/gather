@@ -2,11 +2,9 @@
 
 module Lens
   class Lens
-    attr_accessor :options, :context, :store, :route_params, :set
+    attr_accessor :options, :context, :route_params, :set
 
     delegate :blank?, :present?, to: :value
-
-    VALUE_CHAR_LIMIT = 32
 
     def self.class_var_get_or_set(name, value, default: nil)
       name = "@@#{name}"
@@ -25,13 +23,12 @@ module Lens
       name.underscore.gsub(/_lens\z/, "")
     end
 
-    def initialize(options:, context:, storage:, route_params:, set:)
+    def initialize(options:, context:, route_params:, set:)
       self.options = options
       self.context = context
       self.route_params = route_params
-      self.store = options[:global] ? storage.global_store : storage.action_store
-      self.value = route_param_given? ? route_param : value
       self.set = set
+      self.value = route_param
     end
 
     def full_name
@@ -64,7 +61,7 @@ module Lens
     end
 
     def value
-      store[param_name.to_s].presence
+      @value.presence
     end
 
     protected
@@ -75,22 +72,7 @@ module Lens
 
     private
 
-    def value=(val)
-      if val.nil?
-        store.delete(param_name.to_s)
-      else
-        store[param_name.to_s] = truncate(val)
-      end
-    end
-
-    # Make sure val isn't too huge and doesn't blow up the session cookie.
-    def truncate(val)
-      if val.is_a?(String)
-        val[0...VALUE_CHAR_LIMIT]
-      else
-        val
-      end
-    end
+    attr_writer :value
 
     def route_param
       route_params[param_name].presence

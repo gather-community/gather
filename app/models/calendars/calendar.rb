@@ -27,6 +27,7 @@ module Calendars
   class Calendar < Node
     include AttachmentFormable
     include SemicolonDisallowable
+    include CalendarSearchConfig
 
     DEFAULT_CALENDAR_VIEWS = %i[week month].freeze
     COLORS = %w[#68adb1 #c67033 #910843 #d63679 #424ea8 #7c4d17 #a8982b #97a90e #308c58 #4795d3

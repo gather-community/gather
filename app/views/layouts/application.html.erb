@@ -31,6 +31,8 @@
                 Skip to Content
               </a>
               <% if user_signed_in? && current_community %>
+                <%= link_to(icon_tag("search"), search_path, class: "search-nav-link",
+                            title: "Search", aria: {label: "Search"}) %>
                 <ul class="nav">
                   <%= render("layouts/personal_dropdown") %>
                 </ul>
@@ -75,6 +77,10 @@
             <span class="icon-bar"></span>
           </button>
           <%= link_to(image_tag("logo-white.png"), logo_link_url, class: "logo", alt: "Home") %>
+          <% if user_signed_in? && current_community %>
+            <%= link_to(icon_tag("search"), search_path, class: "search-nav-link mobile-search-link",
+                        title: "Search", aria: {label: "Search"}) %>
+          <% end %>
         </div>
 
         <% if user_signed_in? && current_community %>

@@ -23,6 +23,7 @@ module Billing
   # Models a transaction in a billing account.
   class Transaction < ApplicationRecord
     include Transactable
+    include TransactionSearchConfig
 
     DESCRIPTION_MAX_LENGTH = 255
 

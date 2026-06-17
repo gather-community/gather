@@ -263,6 +263,9 @@ Rails.application.routes.draw do
     end
   end
 
+  # Top-level search.
+  get "search", to: "search#index", as: :search
+
   resources :wiki_pages, controller: "wiki/pages", param: :slug, path: "wiki" do
     collection do
       get :all

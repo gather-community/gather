@@ -24,11 +24,15 @@ module Work
           indexes :job_title, analyzer: "english_stemmed"
           indexes :requester_name, analyzer: "english_stemmed"
           indexes :assignee_names, analyzer: "english_stemmed"
+          indexes :community_id, type: :integer
+          indexes :period_id, type: :integer
         end
       end
 
+      # Explicit list of text fields for multi_match queries.
+      # Does not include integer filter fields (community_id, period_id).
       def self.indexed_fields
-        mappings.to_hash[:properties].keys
+        %i[job_title requester_name assignee_names]
       end
     end
 

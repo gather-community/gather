@@ -1,0 +1,27 @@
+<% if results.empty? %>
+  <div class="center-notice">No results found.</div>
+<% else %>
+  <ul class="search-result-list">
+    <% results.each do |result| %>
+      <% src = result._source %>
+      <% kind = src.kind %>
+      <li>
+        <div class="result-title">
+          <%
+            title = search_result_title(kind, src, result.highlight)
+            url   = search_result_url(kind, src)
+          %>
+          <%= url ? link_to(title, url) : title %>
+        </div>
+        <div class="result-meta text-muted">
+          <%= search_result_kind_icon(kind) %> <%= search_result_kind_label(kind) %>
+        </div>
+        <% if (snippet = result.highlight&.content&.first || result.highlight&.description&.first ||
+                          result.highlight&.note&.first || result.highlight&.notes&.first ||
+                          result.highlight&.body&.first) %>
+          <div class="result-snippet detail"><%= raw(snippet) %>&hellip;</div>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

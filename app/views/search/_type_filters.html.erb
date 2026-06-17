@@ -1,0 +1,25 @@
+<div class="type-filter-list" data-search-target="typeFilters">
+  <% type_groups = [
+    {label: "Wiki pages",         value: "wiki_page"},
+    {label: "Events",             value: "event"},
+    {label: "Calendars",          value: "calendar"},
+    {label: "Groups",             value: "group"},
+    {label: "People",             value: "user"},
+    {label: "Households",         value: "household"},
+    {label: "Meals",              value: "meal"},
+    {label: "Memorials",          value: "memorial"},
+    {label: "Emergency contacts", value: "emergency_contact"},
+    {label: "Pets",               value: "pet"},
+    {label: "Vehicles",           value: "vehicle"},
+    {label: "Transactions",       value: "transaction"},
+    {label: "Google Drive",       value: "drive"},
+  ] %>
+  <% type_groups.each do |type| %>
+    <label class="type-filter-item">
+      <input type="checkbox" value="<%= type[:value] %>"
+             <%= "checked" if @types.include?(type[:value]) %>
+             data-action="change->search#typeChanged">
+      <%= type[:label] %>
+    </label>
+  <% end %>
+</div>

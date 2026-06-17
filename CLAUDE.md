@@ -187,6 +187,7 @@ Module namespaces are defined in files like `app/models/meals.rb` which set `tab
   - **Show pages: use the decorator pattern.** Define `show_action_link_set` in the decorator returning an `ActionLinkSet` of `ActionLink` instances. In the view: `<% content_for(:action_links, resource.action_links(:show)) %>`. `ActionLink` checks the policy automatically (`{action}?`) unless you pass `permitted: true/false`. Pass `html: {target: "_blank"}` for extra link HTML attributes, `data: {key: val}` for Stimulus/data attributes, `btn_class: :danger` for destructive actions. Add labels under `action_labels.{model_i18n_key}.{action}` or `action_labels.common.{action}` in `en.yml`.
   - **One-off action links** (e.g. on index pages): use `concat(link_to(icon_tag("icon") << " Label", path, class: "btn btn-..."))` inside the `content_for` block, wrapped in a policy check.
 - **Key-value table style for detail displays** — use `<table class="key-value">` for showing record details on show/review pages. Variants: `key-value-narrow` (narrow value column), `key-value-wide` (wide value column), `key-value-full` (full width). First `<td>` is styled as a muted label; second `<td>` holds the value.
+- **Empty-state / prompt messages use `<div class="center-notice">`** — use this for "no items found" messages on index pages and for empty-state prompts (e.g. "Enter a search term above…"). Do not use `<p class="text-muted">` for these messages.
 - **No "Back" links on show/review pages** — do not add "Back to list" or similar navigation links; this is not a Gather convention.
 - **Controller method order** — always put `index` first, followed by `show`, `new`, `edit`, `create`, `update`, `destroy`. Custom actions can go in sensible places after the standard ones.
 - **Public controllers must guard shared template policy calls** — when a controller skips `authenticate_user!` (e.g. for a public signup page), shared templates like `_footer.html.erb` and `_nav.html.erb` still render with `current_user = nil`. Any `policy()` call in those templates must be wrapped in `if current_user`, because `ApplicationPolicy#initialize` raises `Pundit::NotAuthorizedError` when user is nil. Always guard: `<% if current_user && policy(Foo.new).action? %>`.
@@ -237,6 +238,44 @@ Gather uses several locale files under `config/locales/en/`. Each type of string
 - **System tests require headless Chrome.** See the [Selenium Docker service](#headless-chrome-for-system-tests) section below.
 - **Run individual or small numbers of specs locally; use CI for full suite runs.** When fixing a specific failure, run the affected file/line with `bundle exec rspec spec/path/to/spec.rb:42` locally to confirm it passes before pushing — this avoids burning a ~28 min CI cycle on a fix that doesn't work. Only push to CI when you need the full suite run (e.g. after a Rails upgrade or broad refactor). Non-browser specs (model, request, job, mailer) run fine locally; system specs require headless Chrome (see below).
 - **Replicate CI failures locally before iterating.** Add a diagnostic assertion with a descriptive failure message (e.g. `expect(count).to eq(1), "Expected 1, got #{count}. Details: #{things.inspect}"`) to extract values that aren't visible in a normal failure.
+
+**Use system specs (`spec/system/`)** as the ultimate end to end test when the thing being tested involves user interaction with a rendered page — clicking links, filling in forms, seeing content, navigating between pages, or JavaScript behavior. System specs run a real browser (headless Chrome via Selenium) and are the right tool for:
+- Form flows (create/edit/delete with validation feedback)
+- Multi-step user journeys or navigation paths
+- Stimulus/JS-driven interactions (AJAX loading, dynamic UI)
+- Content that depends on the view layer (decorators, partials, lenses)
+- Verifying what a user actually sees on a page
+
+Use `login_as(actor, scope: :user)` (Warden helper) and `visit`/`click_on`/`fill_in`/`have_content` etc. Tag with `js: true` only when the test requires JavaScript execution.
+
+**Use request specs (`spec/requests/`)** when there is no meaningful browser interaction to test — the value is in the HTTP response itself or a server-side side effect. Request specs hit the stack at the Rack level (no browser) and are the right tool for:
+- JSON/API endpoints (asserting on `response.parsed_body`, status codes, headers)
+- Non-HTML responses like ICS calendar exports or webhook receivers
+- OAuth/auth callbacks where the logic is in the redirect and session state
+- Side effects triggered by a request (jobs enqueued, records created) that don't need a rendered view
+- Authorization redirects for unauthenticated access (faster than a full system spec)
+
+Use `sign_in(actor)` (Devise helper) and `get`/`post`/`delete` etc. Mock or stub collaborators where it makes the test clearer (e.g. stubbing ES or Drive calls).
+
+**When a controller has both HTML and JSON responses** (e.g. wiki search), write a system spec for the HTML/interactive flow and a request spec for the JSON endpoint separately.
+
+**Model specs (`spec/models/`)** — test validations, scopes, callbacks, instance methods, and class methods directly on the model. Use `build`/`create` factories. Don't test pure framework behavior (e.g. that `belongs_to` works). Concerns with their own logic get their own spec file under `spec/models/concerns/`.
+
+**Policy specs (`spec/policies/`)** — test each `action?` method against the full set of relevant user roles. Use `include_context "policy permissions"` for the standard role actors (`admin`, `user`, `other_user`, etc.), the `permissions :action? do` block helper, and `it_behaves_like` shared examples. Also test scoping and `permitted_attributes` if the policy defines it.
+
+**Decorator specs (`spec/decorators/`)** — test presentation and formatting logic by calling decorator methods directly (`record.decorate`). Assert on the returned strings or HTML fragments. Do not use a browser; decorators are plain Ruby objects.
+
+**Form specs (`spec/forms/`)** — test form objects (subclasses of the `Calendars::EventForm` pattern) by instantiating them directly with params and calling `save`. Test validation errors, attribute parsing/normalization, and the happy-path save. Don't duplicate model validations that are already covered in model specs.
+
+**Job specs (`spec/jobs/`)** — use `include_context "jobs"` and call `perform_job`. Test which records are acted on, which mailer methods are called (stub the mailer, assert `.with` arguments using `mlrdbl` message doubler), and which side effects occur (records updated, other jobs enqueued). Use `Timecop` where time-sensitivity matters.
+
+**Mailer specs (`spec/mailers/`)** — call the mailer method directly (`described_class.some_action(args).deliver_now`) and assert on `mail.to`, `mail.subject`, and `mail.body.encoded`. All templates are text-only; check text body content, not HTML parts.
+
+**Serializer specs (`spec/serializers/`)** — instantiate the serializer directly (`described_class.new(record).as_json`) and assert on the returned hash keys and values. Useful for Elasticsearch index serializers where field names and types must be exact.
+
+**Lens specs (`spec/lenses/`)** — only write these for lenses with non-trivial selection or defaulting logic. Instantiate the lens with doubles for `context`, `storage`, and `set`. Test `#selection` (which record is chosen by default) and `#render`/`#empty?` behavior. Simple lenses (pure select from param) don't need dedicated specs.
+
+**Validator specs (`spec/validators/`)** — build a model instance that exercises the validator and assert `be_valid` / `have_errors`. Only write a dedicated spec file for a custom validator if it is reused across multiple models; otherwise, cover it in the model spec.
 
 ## Code Style
 

@@ -1,0 +1,12 @@
+<% if results.empty? %>
+  <div class="center-notice">No Drive files found.</div>
+<% else %>
+  <ul class="search-result-list">
+    <% results.each do |file| %>
+      <li>
+        <%= image_tag(file.icon_link, class: "file-icon", alt: "") %>
+        <%= link_to(file.name, file.web_view_link, target: "_blank") %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

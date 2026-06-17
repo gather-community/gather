@@ -18,6 +18,8 @@
 #
 module People
   class Pet < ApplicationRecord
+    include PetSearchConfig
+
     acts_as_tenant :cluster
 
     belongs_to :household, inverse_of: :pets

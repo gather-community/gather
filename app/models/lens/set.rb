@@ -3,7 +3,7 @@
 module Lens
   # Models a set of parameters and parameter values that scope an index view.
   class Set
-    attr_accessor :storage, :lenses, :route_params, :context, :visible
+    attr_accessor :storage, :lenses, :route_params, :context, :visible, :form_action
     alias_method :visible?, :visible
 
     delegate :html, to: :bar

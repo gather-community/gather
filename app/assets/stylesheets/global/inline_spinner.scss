@@ -1,0 +1,9 @@
+.inline-spinner {
+  color: $text-muted;
+  font-size: 90%;
+  margin-left: 5px;
+
+  &.hidden {
+    display: none;
+  }
+}

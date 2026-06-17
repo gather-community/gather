@@ -11,10 +11,9 @@ describe CommunityLens do
            current_cluster: Defaults.cluster)
   end
   let(:view_context) { double(select_tag: nil, load_communities_in_cluster: Community.all, url_for: "") }
-  let(:storage) { double(action_store: {}) }
   let(:subdomain) { false }
   let(:lens) do
-    params = {options: {}, context: context, route_params: route_params, storage: storage, set: nil}
+    params = {options: {}, context: context, route_params: route_params, set: nil}
     params[:options][:clearable] = clearable
     params[:options][:subdomain] = subdomain
     described_class.new(**params)
@@ -22,6 +21,43 @@ describe CommunityLens do
 
   before do
     allow(lens).to receive(:h).and_return(view_context)
+  end
+
+  describe "#clearable_and_active?" do
+    subject(:clearable_and_active) { lens.clearable_and_active? }
+
+    context "with clearable lens" do
+      let(:clearable) { true }
+
+      context "when nothing selected" do
+        let(:route_params) { {} }
+        it { is_expected.to be(false) }
+      end
+
+      context "when explicitly set to all" do
+        let(:route_params) { {community: "all"} }
+        it { is_expected.to be(false) }
+      end
+
+      context "when a specific community is selected" do
+        let(:route_params) { {community: "community2"} }
+        it { is_expected.to be(true) }
+      end
+
+      context "when set to current community" do
+        let(:route_params) { {community: "this"} }
+        it { is_expected.to be(true) }
+      end
+    end
+
+    context "with non-clearable lens" do
+      let(:clearable) { false }
+
+      context "when a specific community is selected" do
+        let(:route_params) { {community: "community2"} }
+        it { is_expected.to be(false) }
+      end
+    end
   end
 
   describe "#selection" do

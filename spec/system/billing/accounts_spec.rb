@@ -163,9 +163,9 @@ describe "accounts", js: true do
       expect(lens_selected_option(:community).text).to eq(community2.name)
       expect(page).not_to have_lens_clear_link
 
-      # Should remember selected community.
+      # Revisiting without QS resets to default (no session persistence).
       visit(yours_accounts_path)
-      expect(page).to have_content("Your #{community2.name} Account")
+      expect(page).to have_content("Your #{community1.name} Account")
     end
   end
 

@@ -115,8 +115,12 @@ describe "community signups", js: true do
       expect(page).not_to have_content(approved_signup.community_name)
     end
 
-    scenario "can switch to show all applications" do
+    scenario "status lens filters applications" do
       visit(communities_signups_path)
+      select_lens(:status, "Approved")
+      expect(page).not_to have_content(pending_signup.community_name)
+      expect(page).to have_content(approved_signup.community_name)
+
       select_lens(:status, "All")
       expect(page).to have_content(pending_signup.community_name)
       expect(page).to have_content(approved_signup.community_name)

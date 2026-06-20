@@ -176,7 +176,6 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
     this.applyFullCalendarHeaderA11y();
     this.applyFullCalendarGridA11y();
     this.$el.trigger("viewRender"); // Notify other views
-    this.saveViewParams();
   },
 
   captureHeaderControlActivation(e) {
@@ -600,6 +599,16 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
       .intervalStart.format(Gather.TIME_FORMATS.compactDate);
   },
 
+  // Navigate to the given URL-style view param and date string, falling back to the
+  // current view/initial date if either is absent (e.g. when restoring a history entry
+  // that pre-dates any URL params being set).
+  navigateTo(urlViewParam, dateParam) {
+    const viewType = this.URL_PARAMS_TO_VIEW_TYPES[urlViewParam] ||
+      this.calendar.fullCalendar("getView").name;
+    const date = dateParam || this.viewParams.date;
+    this.calendar.fullCalendar("changeView", viewType, date);
+  },
+
   hasEventInInterval(start, end) {
     const matches = this.calendar.fullCalendar(
       "clientEvents",
@@ -661,7 +670,9 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
     this.viewParams.earlyMorning = !this.viewParams.earlyMorning;
     this.showAppropriateEarlyLink();
     this.calendar.fullCalendar("option", "minTime", this.minTime());
-    this.saveViewParams();
+    // Explicitly notify the link manager; minTime changes don't always re-fire
+    // eventAfterAllRender since FullCalendar may skip the event rendering pipeline.
+    this.$el.trigger("viewRender");
   },
 
   showAppropriateEarlyLink() {
@@ -673,27 +684,5 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
     });
   },
 
-  expireCurrentDateSettingAfterOneHour(settings) {
-    if (settings.savedAt) {
-      const settingsAge = moment
-        .duration(moment().diff(moment(settings.savedAt)))
-        .asSeconds();
-      if (settingsAge > 3600) {
-        delete settings.date;
-      }
-    }
-  },
-
-  saveViewParams() {
-    $.ajax({
-      url: "/calendars/events/",
-      method: "GET",
-      data: {
-        update_lenses: 1,
-        view: this.viewType(),
-        date: this.date(),
-        early: this.viewParams.earlyMorning,
-      },
-    });
-  },
 });
+

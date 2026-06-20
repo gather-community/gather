@@ -38,7 +38,7 @@ Gather.Views.Work.ShiftsView = Backbone.View.extend({
     event.preventDefault();
     $.ajax({
       method: "post",
-      url: `/work/signups/${card.data("id")}/signup`,
+      url: `/work/signups/${card.data("id")}/signup${window.location.search}`,
       success: response => this.updateShiftAndSynopsis(card, response)
     });
   },
@@ -54,7 +54,7 @@ Gather.Views.Work.ShiftsView = Backbone.View.extend({
     event.preventDefault();
     $.ajax({
       method: "post",
-      url: `/work/signups/${card.data("id")}/unsignup`,
+      url: `/work/signups/${card.data("id")}/unsignup${window.location.search}`,
       data: {_method: "delete"},
       success: response => this.updateShiftAndSynopsis(card, response)
     });

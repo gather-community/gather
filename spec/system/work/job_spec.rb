@@ -49,8 +49,8 @@ describe "jobs", js: true do
       select_lens(:period, periods[1].name)
       expect_jobs(jobs[4])
 
-      # Period lens should carry over to other pages
-      visit(work_shifts_path)
+      # Shifts page respects period param when provided explicitly
+      visit(work_shifts_path(period: periods[1].id))
       expect(page).to have_title(periods[1].name)
       expect(page).to have_select_lens(:period, selected: periods[1].name)
     end

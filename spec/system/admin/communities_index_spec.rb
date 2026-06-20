@@ -31,7 +31,7 @@ describe "communities index" do
     expect(page).to have_content("Other Community")
 
     select_lens(:status, "Deactivated")
-    expect(page).not_to have_content("Default")
+    expect(page).not_to have_link("Default")  # cluster is also named "Default"; check link not text
     expect(page).to have_content("Other Community")
 
     select_lens(:status, "Trial")

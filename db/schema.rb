@@ -782,6 +782,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_07_130000) do
     t.index ["meal_signup_part_id", "meal_restriction_id"], name: "signup_part_restriction_index"
   end
 
+  create_table "meal_restrictions_users", id: false, force: :cascade do |t|
+    t.bigint "meal_restriction_id", null: false
+    t.bigint "user_id", null: false
+    t.index ["meal_restriction_id", "user_id"], name: "index_meal_restrictions_users_on_restriction_and_user"
+    t.index ["user_id", "meal_restriction_id"], name: "index_meal_restrictions_users_on_user_and_restriction"
+  end
+
   create_table "meal_roles", force: :cascade do |t|
     t.integer "cluster_id", null: false
     t.integer "community_id", null: false
@@ -816,6 +823,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_07_130000) do
     t.index ["cluster_id"], name: "index_meal_signup_parts_on_cluster_id"
     t.index ["signup_id"], name: "index_meal_signup_parts_on_signup_id"
     t.index ["type_id", "signup_id"], name: "index_meal_signup_parts_on_type_id_and_signup_id", unique: true
+    t.index ["type_id"], name: "index_meal_signup_parts_on_type_id"
   end
 
   create_table "meal_signups", id: :serial, force: :cascade do |t|
@@ -1119,6 +1127,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_07_130000) do
     t.string "remember_token"
     t.datetime "reset_password_sent_at", precision: nil
     t.string "reset_password_token"
+    t.jsonb "restrictions", default: "{}"
     t.string "school"
     t.jsonb "settings", default: {}, null: false
     t.integer "sign_in_count", default: 0, null: false

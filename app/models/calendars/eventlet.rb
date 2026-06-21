@@ -24,6 +24,11 @@ module Calendars
     # For system calendar event exports. See the reader method below.
     attr_writer :uid
 
+    # Set on transient recurring-occurrence eventlets by EventFinder to identify which occurrence
+    # this represents (the original, pre-override start time). Used by EventletSerializer to
+    # include the occurrence in the show-page URL so the controller knows which one was clicked.
+    attr_accessor :occurrence_start
+
     # For system calendars event exports. See the reader method below.
     attr_writer :location
 
@@ -35,6 +40,8 @@ module Calendars
 
     belongs_to :event, class_name: "Calendars::Event", inverse_of: :eventlets
     belongs_to :calendar, class_name: "Calendars::Calendar", inverse_of: :eventlets
+    has_many :eventlet_overrides, class_name: "Calendars::EventletOverride", inverse_of: :eventlet,
+      dependent: :destroy
 
     delegate :name, :kind, :meal?, :meal_id, :creator, :creator_id, :group, :note, to: :event
     delegate :all_day, :all_day?, to: :event

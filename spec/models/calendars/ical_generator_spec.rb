@@ -268,6 +268,154 @@ describe Calendars::IcalGenerator do
         expect(ical).to include_line("RRULE:FREQ=WEEKLY")
       end
     end
+
+    # Shared helpers for override specs — all reference the second Monday (2021-01-11 12:00).
+    let(:occ_time) { Time.zone.parse("2021-01-11 12:00") }
+    let(:base_eventlet) { event.eventlets.first }
+
+    def event_override_for(**attrs)
+      create(:event_override, event: event, occurrence_start: occ_time, **attrs)
+    end
+
+    def eventlet_override_for(event_override, **attrs)
+      create(:eventlet_override, event_override: event_override, eventlet: base_eventlet, **attrs)
+    end
+
+    # (A) EventOverride deleted — EXDATE only, no replacement VEVENT
+    context "(A) EventOverride deleted" do
+      let(:eventlets) { [second_occ] }
+      before { event_override_for(deleted: true) }
+
+      it "emits one VEVENT (the series)" do
+        expect(ical.scan("BEGIN:VEVENT").size).to eq(1)
+      end
+
+      it "includes an EXDATE for the deleted occurrence" do
+        expect(ical).to include_line("EXDATE;TZID=Etc/UTC:20210111T120000")
+      end
+    end
+
+    # (B) EventOverride moves the occurrence — EXDATE + RECURRENCE-ID VEVENT
+    context "(B) EventOverride moves the occurrence" do
+      let(:eventlets) { [second_occ] }
+      before do
+        event_override_for(starts_at: Time.zone.parse("2021-01-12 09:00"),
+          ends_at: Time.zone.parse("2021-01-12 10:00"))
+      end
+
+      it "emits two VEVENTs: the series and the replacement" do
+        expect(ical.scan("BEGIN:VEVENT").size).to eq(2)
+      end
+
+      it "includes EXDATE for the original time" do
+        expect(ical).to include_line("EXDATE;TZID=Etc/UTC:20210111T120000")
+      end
+
+      it "includes RECURRENCE-ID pointing to the original time" do
+        expect(ical).to include_line("RECURRENCE-ID;TZID=Etc/UTC:20210111T120000")
+      end
+
+      it "uses the new times in the replacement VEVENT" do
+        expect(ical).to include_line("DTSTART;TZID=Etc/UTC:20210112T090000")
+        expect(ical).to include_line("DTEND;TZID=Etc/UTC:20210112T100000")
+      end
+
+      it "shares the UID between the series and the replacement VEVENT" do
+        expect(ical.scan(/UID:.*/).map(&:strip).uniq.size).to eq(1)
+      end
+    end
+
+    # (C) EventletOverride deleted (stub EventOverride) — EXDATE for this calendar, no replacement
+    context "(C) EventletOverride deleted (calendar-only deletion)" do
+      let(:eventlets) { [second_occ] }
+      before { eventlet_override_for(event_override_for, deleted: true) }
+
+      it "emits one VEVENT (the series)" do
+        expect(ical.scan("BEGIN:VEVENT").size).to eq(1)
+      end
+
+      it "includes an EXDATE for the deleted occurrence" do
+        expect(ical).to include_line("EXDATE;TZID=Etc/UTC:20210111T120000")
+      end
+    end
+
+    # (C2) EventletOverride on one calendar must not suppress the occurrence on the other calendar
+    context "(C2) EventletOverride deletes an occurrence on one calendar but not another" do
+      let(:other_calendar) { create(:calendar) }
+      let(:other_eventlet) { create(:eventlet, event: event, calendar: other_calendar) }
+      let(:second_occ_other_cal) do
+        transient = Calendars::Event.new(
+          name: event.name, all_day: event.all_day, creator: event.creator,
+          calendar: other_calendar,
+          starts_at: Time.zone.parse("2021-01-11 12:00"),
+          ends_at: Time.zone.parse("2021-01-11 13:00")
+        )
+        transient.uid = "#{event.id}_#{Time.zone.parse("2021-01-11 12:00").to_i}"
+        Calendars::Eventlet.new(event: transient, calendar: other_calendar, start_offset: 0, end_offset: 0)
+          .tap { |e| e.uid = transient.uid }.tap { |e| e.linkable = event }
+      end
+      let(:eventlets) { [second_occ, second_occ_other_cal] }
+
+      before do
+        eo = event_override_for
+        create(:eventlet_override, event_override: eo, eventlet: other_eventlet, deleted: true)
+      end
+
+      it "emits two VEVENTs (one series per calendar)" do
+        expect(ical.scan("BEGIN:VEVENT").size).to eq(2)
+      end
+
+      it "includes an EXDATE on the deleted calendar's VEVENT" do
+        expect(ical).to include_line("EXDATE;TZID=Etc/UTC:20210111T120000")
+      end
+
+      it "does not include an EXDATE on the unaffected calendar's VEVENT" do
+        # The EXDATE should appear exactly once — only for the deleted calendar, not the other.
+        expect(ical.scan("EXDATE").size).to eq(1)
+      end
+    end
+
+    # (D) EventletOverride changes offsets (stub EventOverride) — EXDATE + RECURRENCE-ID with shifted time
+    context "(D) EventletOverride shifts the display time" do
+      let(:eventlets) { [second_occ] }
+      before { eventlet_override_for(event_override_for, start_offset: -3600, end_offset: -3600) }
+
+      it "emits two VEVENTs: the series and the replacement" do
+        expect(ical.scan("BEGIN:VEVENT").size).to eq(2)
+      end
+
+      it "includes EXDATE for the original iCal occurrence time" do
+        expect(ical).to include_line("EXDATE;TZID=Etc/UTC:20210111T120000")
+      end
+
+      it "includes RECURRENCE-ID at the original time" do
+        expect(ical).to include_line("RECURRENCE-ID;TZID=Etc/UTC:20210111T120000")
+      end
+
+      it "uses the offset-adjusted time in the replacement VEVENT" do
+        # occurrence_start 12:00 + start_offset -3600s = 11:00
+        expect(ical).to include_line("DTSTART;TZID=Etc/UTC:20210111T110000")
+      end
+    end
+
+    # (E) EventOverride moves + EventletOverride shifts — combined times
+    context "(E) EventOverride moves and EventletOverride shifts offset" do
+      let(:eventlets) { [second_occ] }
+      before do
+        eo = event_override_for(starts_at: Time.zone.parse("2021-01-12 09:00"),
+          ends_at: Time.zone.parse("2021-01-12 10:00"))
+        eventlet_override_for(eo, start_offset: -1800, end_offset: -1800)
+      end
+
+      it "emits two VEVENTs" do
+        expect(ical.scan("BEGIN:VEVENT").size).to eq(2)
+      end
+
+      it "uses the combined times: new base + offset" do
+        # 09:00 + (-1800s = -30min) = 08:30
+        expect(ical).to include_line("DTSTART;TZID=Etc/UTC:20210112T083000")
+      end
+    end
   end
 
   context "with groupable eventlets" do

@@ -48,23 +48,88 @@ module Calendars
 
     def recurring_occurrences
       return [] if own_only
-      recurring_eventlet_scope.flat_map do |eventlet|
-        event = eventlet.event
-        base_start_off = eventlet.start_offset
-        base_end_off = eventlet.end_offset
-        event.occurrences_between(range).map do |occ_s, occ_e|
-          build_occurrence_eventlet(eventlet, occ_s, occ_e, base_start_off, base_end_off)
-        end
+      base_eventlets = recurring_eventlet_scope.to_a
+      return [] if base_eventlets.empty?
+
+      # One query for event-level overrides (with eventlet_overrides eagerly loaded).
+      event_overrides_by_event = load_event_overrides(base_eventlets.map { |e| e.event.id })
+
+      base_eventlets.flat_map do |eventlet|
+        overrides = event_overrides_by_event[eventlet.event.id] || {}
+        occurrences_for_eventlet(eventlet, overrides)
       end
     end
 
-    def build_occurrence_eventlet(base_eventlet, occ_s, occ_e, base_start_off, base_end_off)
+    def load_event_overrides(event_ids)
+      EventOverride
+        .where(event_id: event_ids)
+        .includes(:eventlet_overrides)
+        .group_by(&:event_id)
+        .transform_values { |os| os.index_by(&:occurrence_start) }
+    end
+
+    def occurrences_for_eventlet(eventlet, event_overrides)
+      from_schedule, seen = scheduled_occurrences(eventlet, event_overrides)
+      from_schedule + moved_in_occurrences(eventlet, event_overrides, seen)
+    end
+
+    # Expands IceCube occurrences using a looser range (±MAX_OFFSET_SECONDS) so that EventletOverride
+    # offsets can shift an occurrence into the visible window. Applies a tight range.cover? afterward.
+    # Returns [eventlet_list, seen_occ_starts_hash] for the moved-in pass.
+    def scheduled_occurrences(eventlet, event_overrides)
+      expanded = (range.first - Eventlet::MAX_OFFSET_SECONDS)..(range.last + Eventlet::MAX_OFFSET_SECONDS)
+      seen = {}
+      results = eventlet.event.occurrences_between(expanded).filter_map do |occ_s, occ_e|
+        seen[occ_s] = true
+        event_override = event_overrides[occ_s]
+        next if event_override&.deleted?
+        base_s = event_override&.starts_at || occ_s
+        base_e = event_override&.ends_at || occ_e
+        eventlet_override = find_eventlet_override(event_override, eventlet)
+        next if eventlet_override&.deleted?
+        start_off, end_off = resolve_offsets(eventlet, eventlet_override)
+        next unless range.cover?(base_s + start_off.seconds)
+        build_occurrence_eventlet(eventlet, occ_s, base_s, base_e, start_off, end_off)
+      end
+      [results, seen]
+    end
+
+    # Returns transient eventlets for EventOverrides that move an occurrence into the range from outside it.
+    # EventletOverride offsets are bounded by MAX_OFFSET_SECONDS, so the expanded-range trick above
+    # handles those — this path is only needed for unbounded EventOverride time changes.
+    def moved_in_occurrences(eventlet, event_overrides, seen)
+      event_overrides.filter_map do |occ_s, event_override|
+        next if seen.key?(occ_s)
+        next if event_override.deleted?
+        next unless event_override.starts_at && range.cover?(event_override.starts_at)
+        eventlet_override = find_eventlet_override(event_override, eventlet)
+        next if eventlet_override&.deleted?
+        start_off, end_off = resolve_offsets(eventlet, eventlet_override)
+        build_occurrence_eventlet(eventlet, occ_s, event_override.starts_at, event_override.ends_at,
+          start_off, end_off)
+      end
+    end
+
+    def find_eventlet_override(event_override, eventlet)
+      event_override&.eventlet_overrides&.find { |eo| eo.eventlet_id == eventlet.id }
+    end
+
+    def resolve_offsets(eventlet, eventlet_override)
+      [
+        eventlet_override&.start_offset || eventlet.start_offset,
+        eventlet_override&.end_offset || eventlet.end_offset
+      ]
+    end
+
+    def build_occurrence_eventlet(base_eventlet, original_occ_s, base_s, base_e, start_off, end_off)
       parent = base_eventlet.event
-      te = build_transient_event(parent, base_eventlet.calendar, occ_s, occ_e)
+      te = build_transient_event(parent, base_eventlet.calendar, base_s, base_e)
       Eventlet.new(event: te, calendar: base_eventlet.calendar,
-        start_offset: base_start_off, end_offset: base_end_off)
+        start_offset: start_off, end_offset: end_off)
         .tap do |occ|
-          occ.uid = te.uid
+          # UID is based on the original occurrence time so it stays stable even when moved.
+          occ.uid = "#{parent.id}_#{original_occ_s.to_i}"
+          occ.occurrence_start = original_occ_s
           occ.linkable = parent
           occ.location = base_eventlet.location
         end

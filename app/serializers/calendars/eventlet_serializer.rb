@@ -9,7 +9,7 @@ module Calendars
 
     def url
       if object.linkable.present?
-        polymorphic_path(object.linkable)
+        polymorphic_path(object.linkable, occurrence: object.occurrence_start&.to_i)
       elsif object.persisted?
         calendars_event_path(object.event, origin_page: instance_options[:origin_page])
       else

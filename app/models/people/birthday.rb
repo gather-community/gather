@@ -32,7 +32,7 @@ module People
       elsif date.nil?
         nil
       else
-        I18n.l(date, format: full? ? :default : :short_birthday)
+        I18n.l(date, format: full? ? :default : :month_day)
       end
     end
 
@@ -72,7 +72,7 @@ module People
     end
 
     def format
-      full? ? :default : :short_birthday
+      full? ? :default : :month_day
     end
 
     def validate

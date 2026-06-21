@@ -1,5 +1,9 @@
-<% content_for(:title, "Event: #{event.name}") %>
-<% content_for(:action_links, event.action_links) %>
+<% event = occurrence.series_event.decorate %>
+<% calendar = occurrence.calendar.decorate %>
+<% meal = event.meal %>
+
+<% content_for(:title, "Event: #{occurrence.name}") %>
+<% content_for(:action_links, event.action_links(:show)) %>
 
 <% content_for(:mobile_back_link) do %>
   <%= render partial: "shared/mobile_back_link", locals: {label: "Calendars", path: calendars_events_path } %>
@@ -15,8 +19,14 @@
   </tr>
   <tr>
     <td>Date/Time</td>
-    <td><%= event.timespan %></td>
+    <td><strong><%= occurrence.timespan %></strong></td>
   </tr>
+  <% if occurrence.recurrence_description %>
+    <tr>
+      <td>Repeats</td>
+      <td><span class="hint"><%= occurrence.recurrence_description %></span></td>
+    </tr>
+  <% end %>
   <% if meal %>
     <tr>
       <td>Meal</td>
@@ -56,12 +66,6 @@
     <tr>
       <td>Note</td>
       <td><%= event.rendered_note %></td>
-    </tr>
-  <% end %>
-  <% if event.eventlets.count > 1 %>
-    <tr>
-      <td>Visible Eventlet Count</td>
-      <td><%= event.eventlets.select { |e| Calendars::EventletPolicy.new(current_user, e).show? }.count %></td>
     </tr>
   <% end %>
 </table>

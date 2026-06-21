@@ -9,9 +9,11 @@ module Calendars
 
     def url
       if object.linkable.present?
+        # linkable is the base eventlet for recurring occurrences (→ eventlet show page), or a
+        # meal/job/user for system calendars (→ that resource's page).
         polymorphic_path(object.linkable, occurrence: object.occurrence_start&.to_i)
       elsif object.persisted?
-        calendars_event_path(object.event, origin_page: instance_options[:origin_page])
+        calendars_eventlet_path(object, origin_page: instance_options[:origin_page])
       else
         raise ArgumentError, "unpersisted eventlets must define linkable"
       end

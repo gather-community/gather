@@ -8,7 +8,7 @@ describe Calendars::EventletSerializer do
       let(:eventlet) { create(:eventlet) }
       subject(:url) { described_class.new(eventlet).url }
 
-      it { is_expected.to eq("/calendars/events/#{eventlet.event.id}") }
+      it { is_expected.to eq("/calendars/eventlets/#{eventlet.id}") }
     end
 
     context "with linkable but no occurrence_start (e.g. system calendar eventlet)" do
@@ -20,14 +20,15 @@ describe Calendars::EventletSerializer do
     end
 
     context "with linkable and occurrence_start (transient recurring occurrence)" do
-      let(:event) { create(:event) }
+      # linkable is the persisted base eventlet; the occurrence URL is eventlet-centric.
+      let(:base_eventlet) { create(:eventlet) }
       let(:occ_time) { Time.zone.parse("2025-06-10 10:00") }
       let(:eventlet) do
-        build(:eventlet, linkable: event).tap { |e| e.occurrence_start = occ_time }
+        build(:eventlet, linkable: base_eventlet).tap { |e| e.occurrence_start = occ_time }
       end
       subject(:url) { described_class.new(eventlet).url }
 
-      it { is_expected.to eq("/calendars/events/#{event.id}?occurrence=#{occ_time.to_i}") }
+      it { is_expected.to eq("/calendars/eventlets/#{base_eventlet.id}?occurrence=#{occ_time.to_i}") }
     end
   end
 

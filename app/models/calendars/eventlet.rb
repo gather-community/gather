@@ -72,6 +72,34 @@ module Calendars
         )
     }
 
+    # Builds a transient (non-persisted) eventlet representing a single occurrence of a recurring
+    # series, anchored to a persisted base eventlet. Shared by EventFinder (bulk expansion) and
+    # OccurrenceResolver (single-occurrence lookup) so the two paths can't diverge.
+    #
+    # occurrence_start is the original, pre-override start time (stable identity). starts_at/ends_at
+    # are the resolved event times for this occurrence (after any EventOverride move); the offsets are
+    # applied on top to get the displayed times.
+    def self.build_occurrence(base_eventlet:, occurrence_start:, starts_at:, ends_at:,
+      start_offset:, end_offset:)
+      parent = base_eventlet.event
+      transient_event = Event.new(
+        name: parent.name, kind: parent.kind, note: parent.note, all_day: parent.all_day,
+        creator: parent.creator, group: parent.group, meal_id: parent.meal_id,
+        calendar: base_eventlet.calendar, starts_at: starts_at, ends_at: ends_at
+      ).tap { |e| e.uid = "#{parent.id}_#{starts_at.to_i}" }
+
+      new(event: transient_event, calendar: base_eventlet.calendar,
+        start_offset: start_offset, end_offset: end_offset).tap do |occ|
+        # UID is based on the original occurrence time so it stays stable even when moved.
+        occ.uid = "#{parent.id}_#{occurrence_start.to_i}"
+        occ.occurrence_start = occurrence_start
+        # linkable points at the persisted base eventlet; the real series Event is reached via
+        # linkable.event. This makes serializer/ical URLs naturally eventlet-centric.
+        occ.linkable = base_eventlet
+        occ.location = base_eventlet.location
+      end
+    end
+
     def uid
       # System calendars that make unpersisted events should set
       # uid or the export process will raise an error.

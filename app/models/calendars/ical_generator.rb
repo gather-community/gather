@@ -14,7 +14,7 @@ module Calendars
 
     def initialize(calendar_name:, eventlets:, url_options:)
       self.calendar_name = calendar_name
-      recurring, non_recurring = eventlets.partition { |e| !e.persisted? && e.linkable.is_a?(Event) }
+      recurring, non_recurring = eventlets.partition { |e| !e.persisted? && e.linkable.is_a?(Eventlet) }
       self.grouped_eventlets = non_recurring.group_by do |eventlet|
         [
           eventlet.starts_at,
@@ -44,27 +44,23 @@ module Calendars
     private
 
     def series_context_for(occurrence)
-      parent = occurrence.linkable
-      base_eventlet = @base_eventlets_by_key[[parent.id, occurrence.calendar_id]]
+      # linkable is the persisted base eventlet; the real series event is reached via .event.
+      base_eventlet = occurrence.linkable
+      parent = base_eventlet.event
       event_overrides = @event_overrides_by_event[parent.id] || []
       [parent, base_eventlet, event_overrides]
     end
 
     def load_series_overrides
-      parent_event_ids = recurring_representatives.map { |r| r.linkable.id }.uniq
+      parent_event_ids = recurring_representatives.map { |r| r.linkable.event_id }.uniq
       if parent_event_ids.empty?
         @event_overrides_by_event = {}
-        @base_eventlets_by_key = {}
-        @eventlet_overrides_by_eventlet = {}
         return
       end
 
       @event_overrides_by_event = EventOverride.where(event_id: parent_event_ids)
         .includes(:eventlet_overrides)
         .group_by(&:event_id)
-
-      @base_eventlets_by_key = Eventlet.where(event_id: parent_event_ids)
-        .index_by { |e| [e.event_id, e.calendar_id] }
     end
 
     def add_event_group(group)
@@ -137,7 +133,7 @@ module Calendars
 
     def add_override_vevent(occurrence, recurrence_id_time, new_start, new_end)
       cal.event do |e|
-        e.uid = [UID_SIGNATURE, occurrence.linkable.id, occurrence.calendar_id].join("_")
+        e.uid = [UID_SIGNATURE, occurrence.linkable.event_id, occurrence.calendar_id].join("_")
         e.recurrence_id = date_or_time_value(recurrence_id_time, all_day: occurrence.all_day?)
         e.dtstart = date_or_time_value(new_start, all_day: occurrence.all_day?)
         e.dtend = date_or_time_value(new_end, all_day: occurrence.all_day?, is_end: true)
@@ -150,7 +146,7 @@ module Calendars
     # Computes the new DTSTART/DTEND for a RECURRENCE-ID VEVENT, combining any EventOverride
     # time change with any EventletOverride offset change.
     def resolve_override_times(event_override, eventlet_override, base_eventlet, occurrence)
-      parent = occurrence.linkable
+      parent = base_eventlet.event
       duration = parent.ends_at - parent.starts_at
 
       # EventOverride provides new absolute event times; fall back to the occurrence's original time.
@@ -171,9 +167,10 @@ module Calendars
 
     def url_for_event(eventlet)
       if eventlet.linkable.present?
+        # Recurring occurrence → base eventlet → eventlet show page; system calendars → meal/job/user.
         polymorphic_url(eventlet.linkable, **url_options)
       elsif eventlet.persisted?
-        calendars_event_url(eventlet.event, **url_options)
+        calendars_eventlet_url(eventlet, **url_options)
       else
         raise ArgumentError, "unpersisted events must define linkable"
       end

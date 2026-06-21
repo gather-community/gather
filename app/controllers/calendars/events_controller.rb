@@ -27,10 +27,13 @@ module Calendars
     end
 
     def show
-      @event = Event.find(params[:id])
-      authorize(@event)
-      @calendar = @event.calendar
-      @meal = @event.meal
+      # The canonical show page is now eventlet-centric (Calendars::EventletsController). Redirect any
+      # lingering event-id links (exported .ics URLs, old feed links, bookmarks) to the eventlet page,
+      # preserving the occurrence so recurring-series links keep working.
+      event = Event.find(params[:id])
+      authorize(event)
+      redirect_to(calendars_eventlet_path(event.eventlets.first,
+        occurrence: params[:occurrence], origin_page: params[:origin_page]))
     end
 
     def new

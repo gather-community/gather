@@ -105,10 +105,15 @@ module Calendars
       emit_recurrence_id_vevents(event_overrides, base_eventlet, occurrence)
     end
 
-    # Emits EXDATE lines for every overridden occurrence (deleted or moved at either level).
-    # Importing clients use EXDATE to suppress the RRULE-generated occurrence at that time.
+    # Emits EXDATE lines for occurrences that are suppressed on this calendar.
+    # An EXDATE is needed when the occurrence is deleted/moved at the event level, or when there is
+    # an eventlet-level override for this calendar's eventlet (deleted or offset-shifted).
+    # Overrides that only affect a different calendar's eventlet must not produce an EXDATE here,
+    # or the occurrence would vanish from this calendar with no replacement VEVENT.
     def apply_exdates(ical_event, event_overrides, base_eventlet, occurrence)
-      exdates = event_overrides.map do |eo|
+      exdates = event_overrides.filter_map do |eo|
+        elo = find_eventlet_override(eo, base_eventlet)
+        next unless eo.deleted? || eo.starts_at || elo
         # iCal occurrence time for this calendar = original occurrence + base eventlet offset.
         eo.occurrence_start + (base_eventlet&.start_offset || 0).seconds
       end

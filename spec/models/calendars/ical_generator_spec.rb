@@ -339,6 +339,42 @@ describe Calendars::IcalGenerator do
       end
     end
 
+    # (C2) EventletOverride on one calendar must not suppress the occurrence on the other calendar
+    context "(C2) EventletOverride deletes an occurrence on one calendar but not another" do
+      let(:other_calendar) { create(:calendar) }
+      let(:other_eventlet) { create(:eventlet, event: event, calendar: other_calendar) }
+      let(:second_occ_other_cal) do
+        transient = Calendars::Event.new(
+          name: event.name, all_day: event.all_day, creator: event.creator,
+          calendar: other_calendar,
+          starts_at: Time.zone.parse("2021-01-11 12:00"),
+          ends_at: Time.zone.parse("2021-01-11 13:00")
+        )
+        transient.uid = "#{event.id}_#{Time.zone.parse("2021-01-11 12:00").to_i}"
+        Calendars::Eventlet.new(event: transient, calendar: other_calendar, start_offset: 0, end_offset: 0)
+          .tap { |e| e.uid = transient.uid }.tap { |e| e.linkable = event }
+      end
+      let(:eventlets) { [second_occ, second_occ_other_cal] }
+
+      before do
+        eo = event_override_for
+        create(:eventlet_override, event_override: eo, eventlet: other_eventlet, deleted: true)
+      end
+
+      it "emits two VEVENTs (one series per calendar)" do
+        expect(ical.scan("BEGIN:VEVENT").size).to eq(2)
+      end
+
+      it "includes an EXDATE on the deleted calendar's VEVENT" do
+        expect(ical).to include_line("EXDATE;TZID=Etc/UTC:20210111T120000")
+      end
+
+      it "does not include an EXDATE on the unaffected calendar's VEVENT" do
+        # The EXDATE should appear exactly once — only for the deleted calendar, not the other.
+        expect(ical.scan("EXDATE").size).to eq(1)
+      end
+    end
+
     # (D) EventletOverride changes offsets (stub EventOverride) — EXDATE + RECURRENCE-ID with shifted time
     context "(D) EventletOverride shifts the display time" do
       let(:eventlets) { [second_occ] }

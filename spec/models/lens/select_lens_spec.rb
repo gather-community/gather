@@ -44,9 +44,8 @@ describe Lens::SelectLens do
   let(:context) { double }
   let(:base_option) { nil }
   let(:initial_selection) { nil }
-  let(:storage) { double(action_store: {}) }
   let(:lens) do
-    params = {options: {}, context: context, route_params: route_params, storage: storage, set: nil}
+    params = {options: {}, context: context, route_params: route_params, set: nil}
     params[:options][:base_option] = base_option unless base_option.nil?
     params[:options][:initial_selection] = initial_selection unless initial_selection.nil?
     params[:options][:clearable] = clearable
@@ -77,12 +76,6 @@ describe Lens::SelectLens do
 
       context "when invalid route param given" do
         let(:route_params) { {view: "tablez"} }
-        it { is_expected.to be_nil }
-      end
-
-      context "when invalid value stored in storage" do
-        let(:route_params) { {} }
-        let(:storage) { double(action_store: {"view" => "tablez"}) }
         it { is_expected.to be_nil }
       end
     end
@@ -313,18 +306,6 @@ describe Lens::SelectLens do
 
         context "with explicit route params" do
           let(:route_params) { {view: "tableall"} }
-
-          it "overrides the initial selection" do
-            expect(view_context).to receive(:options_for_select)
-              .with([["Album", nil], %w[Table table], ["Table w/ Inactive", "tableall"]], "tableall")
-              .and_return("<option ...>")
-            lens.render
-          end
-        end
-
-        context "with value in store" do
-          let(:route_params) { {} }
-          let(:storage) { double(action_store: {"view" => "tableall"}) }
 
           it "overrides the initial selection" do
             expect(view_context).to receive(:options_for_select)

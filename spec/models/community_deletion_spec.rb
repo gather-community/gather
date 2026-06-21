@@ -77,6 +77,12 @@ describe Community, :without_tenant do
       create(:your_meals_calendar)
       create(:event)
       create(:eventlet)
+      recurring_event = create(:event, recurrence_rule: IceCube::Rule.weekly.to_hash)
+      occ_start = recurring_event.occurrences_between(Time.current..1.year.from_now).first.first
+      event_override = create(:event_override, event: recurring_event, occurrence_start: occ_start,
+        deleted: true)
+      create(:eventlet_override, event_override: event_override,
+        eventlet: recurring_event.eventlets.first, deleted: true)
       create(:calendar_protocol)
       create(:calendar_protocoling)
 

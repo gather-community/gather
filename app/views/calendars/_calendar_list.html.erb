@@ -1,4 +1,17 @@
 <ul class="no-bullets <%= local_assigns[:nested] ? "nested" : "calendar-list" %>">
+  <% if !local_assigns[:nested] && local_assigns[:show_all_link] %>
+    <li>
+      <div class="calendar">
+        <svg class="swatch" viewBox="0 0 16 16" width="16" height="16"
+             xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <% Calendars::Calendar::COLORS.first(4).each_with_index do |color, i| %>
+            <rect x="<%= (i % 2) * 9 %>" y="<%= (i / 2) * 9 %>" width="7" height="7" fill="<%= color %>"/>
+          <% end %>
+        </svg>
+        <%= link_to "All", calendars_events_path, class: "calendar-link" %>
+      </div>
+    </li>
+  <% end %>
   <% nodes.each do |node, children| %>
     <li>
       <% if node.group? %>

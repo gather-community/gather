@@ -5,11 +5,9 @@ require "rails_helper"
 describe Work::PeriodLens do
   let(:view_context) { double(select_tag: nil) }
   let(:context) { double(current_community: Defaults.community, view_context: view_context) }
-  let(:storage) { double(global_store: {}) }
   let(:set) { double }
   let(:lens) do
-    described_class.new(context: context, options: {}, route_params: route_params,
-                        storage: storage, set: set)
+    described_class.new(context: context, options: {}, route_params: route_params, set: set)
   end
 
   describe "#selection" do

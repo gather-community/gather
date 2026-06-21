@@ -5,15 +5,12 @@ module Calendars
   class EventsController < ApplicationController
     include Lensable
 
-    BASE_LENSES = %i[calendars/view_type calendars/date calendars/early_morning].freeze
-
     decorates_assigned :event, :calendar, :calendars, :meal
 
     before_action -> { nav_context(:calendars, :events) }
 
     def index
-      set_no_cache # Cache means lens would not be respected on back button click.
-      return update_lenses_and_quit(*BASE_LENSES) if params[:update_lenses]
+      set_no_cache # no-store forces a full page reload on back, keeping the URL params canonical.
       return render_json_event_list if request.xhr?
 
       calendar_scope = policy_scope(Node).in_community(current_community).active
@@ -169,7 +166,6 @@ module Calendars
       # Kind-specific rules will be enforced through validation.
       sample_eventlet = Eventlet.new(calendar: @calendar, event: Event.new(creator: current_user, kind: nil))
       authorize(sample_eventlet)
-      prepare_lenses(*BASE_LENSES)
       @can_create_event = policy(sample_eventlet).create?
 
       @rule_set = sample_eventlet.rule_set
@@ -189,7 +185,7 @@ module Calendars
 
     def prep_combined_index(calendar_scope)
       authorize(Event)
-      prepare_lenses(*[community: {clearable: false}].concat(BASE_LENSES))
+      prepare_lenses(community: {clearable: false})
       @rule_set_serializer = {}
       @can_create_event = writeable_calendars.any?
       # Include the old, non-scoped key for backwards compatibility during deploy.

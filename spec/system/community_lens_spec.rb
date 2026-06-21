@@ -68,10 +68,11 @@ describe "community lens", js: true do
       expect(page).to have_echoed_url_param("community", "community2")
       expect(lens_selected_option(:community).text).to eq("Community 2")
       expect(page).not_to have_css(".lens-bar a.clear")
-      visit(yours_accounts_path)
 
+      # Revisiting without QS resets to default (no session persistence).
+      visit(yours_accounts_path)
       expect(page).to have_echoed_url(yours_accounts_path)
-      expect(lens_selected_option(:community).text).to eq("Community 2")
+      expect(lens_selected_option(:community).text).to eq("Community 3")
     end
   end
 end

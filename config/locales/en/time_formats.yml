@@ -7,7 +7,8 @@ en:
     formats:
       default: "%b %d %Y"
       full_month_year: "%B %Y"
-      short_birthday: "%b %d"
+      # Month and day without year, e.g. "Jun 21" (birthdays, yearly recurrence descriptions).
+      month_day: "%b %d"
       wday_no_year: "%a %b %d"
       full_wday_only: "%A"
   time:

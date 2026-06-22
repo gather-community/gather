@@ -154,6 +154,7 @@ Rails.application.routes.draw do
 
   namespace :calendars do
     resources :events
+    resources :eventlets, only: :show
     resources :protocols
     resources :groups, only: %i[new edit create update destroy]
 

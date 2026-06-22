@@ -37,7 +37,7 @@ describe "calendar events JSON endpoint" do
       expect(entry["start"]).to eq("2026-06-18T10:00:00")
       expect(entry["end"]).to eq("2026-06-18T11:00:00")
       expect(entry["calendarId"]).to eq(calendar.id)
-      expect(entry["url"]).to include("/calendars/events/")
+      expect(entry["url"]).to include("/calendars/eventlets/#{event.eventlets.first.id}")
       expect(entry).to have_key("editable")
       expect(entry).to have_key("backgroundColor")
     end
@@ -59,7 +59,7 @@ describe "calendar events JSON endpoint" do
       expect(entry["start"]).to eq("2026-06-15T14:00:00")
       expect(entry["end"]).to eq("2026-06-15T15:00:00")
       expect(entry["calendarId"]).to eq(calendar.id)
-      expect(entry["url"]).to include("/calendars/events/#{event.id}")
+      expect(entry["url"]).to include("/calendars/eventlets/#{event.eventlets.first.id}?occurrence=")
       expect(entry).to have_key("editable")
       expect(entry).to have_key("backgroundColor")
     end

@@ -122,25 +122,8 @@ module Calendars
     end
 
     def build_occurrence_eventlet(base_eventlet, original_occ_s, base_s, base_e, start_off, end_off)
-      parent = base_eventlet.event
-      te = build_transient_event(parent, base_eventlet.calendar, base_s, base_e)
-      Eventlet.new(event: te, calendar: base_eventlet.calendar,
-        start_offset: start_off, end_offset: end_off)
-        .tap do |occ|
-          # UID is based on the original occurrence time so it stays stable even when moved.
-          occ.uid = "#{parent.id}_#{original_occ_s.to_i}"
-          occ.occurrence_start = original_occ_s
-          occ.linkable = parent
-          occ.location = base_eventlet.location
-        end
-    end
-
-    def build_transient_event(parent, calendar, starts_at, ends_at)
-      Event.new(
-        name: parent.name, kind: parent.kind, note: parent.note, all_day: parent.all_day,
-        creator: parent.creator, group: parent.group, meal_id: parent.meal_id,
-        calendar: calendar, starts_at: starts_at, ends_at: ends_at
-      ).tap { |e| e.uid = "#{parent.id}_#{starts_at.to_i}" }
+      Eventlet.build_occurrence(base_eventlet: base_eventlet, occurrence_start: original_occ_s,
+        starts_at: base_s, ends_at: base_e, start_offset: start_off, end_offset: end_off)
     end
 
     def recurring_eventlet_scope

@@ -32,6 +32,18 @@ describe Calendars::EventletSerializer do
     end
   end
 
+  describe "serialized ids" do
+    # The grid's drag handler keys updates off event_id (the events endpoint), so the feed must carry
+    # both the eventlet id and the event id, since the two are not aligned in production.
+    let(:eventlet) { create(:eventlet) }
+    subject(:attrs) { described_class.new(eventlet, scope: create(:user)).serializable_hash }
+
+    it "includes both the eventlet id and the event id" do
+      expect(attrs[:id]).to eq(eventlet.id)
+      expect(attrs[:event_id]).to eq(eventlet.event_id)
+    end
+  end
+
   describe "#class_name" do
     let(:user) { create(:user) }
     subject(:class_name) { described_class.new(eventlet, scope: user).class_name }

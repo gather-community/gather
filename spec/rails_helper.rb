@@ -66,7 +66,7 @@ RSpec.configure do |config|
   config.include(GeneralHelpers)
 
   def register_selenium_chrome_driver(app:, headless:, user_agent: nil)
-    args = %w[disable-gpu no-sandbox disable-site-isolation-trials]
+    args = %w[disable-gpu no-sandbox disable-site-isolation-trials disable-dev-shm-usage]
     args << "headless" if headless
     options = Selenium::WebDriver::Chrome::Options.new(
       args: args,

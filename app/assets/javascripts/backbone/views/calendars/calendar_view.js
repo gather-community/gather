@@ -547,7 +547,8 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
       revertFunc();
     } else {
       $.ajax({
-        url: `/calendars/events/${event.id}`,
+        // The feed is eventlet-centric (event.id is the eventlet id); the update endpoint wants event id.
+        url: `/calendars/events/${event.eventId}`,
         method: "POST",
         data: {
           _method: "PATCH",

@@ -4,8 +4,8 @@
   "dependencies": {
     "@hotwired/stimulus": "^3.2.2",
     "@hotwired/turbo-rails": "^8.0.23",
-    "@stripe/stripe-js": "^9.3.1",
-    "easymde": "^2.20.0",
+    "@stripe/stripe-js": "^9.5.0",
+    "easymde": "^2.21.0",
     "i18n-js": "^4.0.0"
   },
   "scripts": {
@@ -14,11 +14,11 @@
   },
   "devDependencies": {
     "@types/gapi": "^0.0.47",
-    "@types/google.picker": "^0.0.39",
-    "@types/jquery": "^3.5.14",
+    "@types/google.picker": "^0.0.52",
+    "@types/jquery": "^4.0.0",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
-    "esbuild": "^0.25.0",
+    "esbuild": "^0.28.1",
     "eslint": "^7.32.0",
     "typescript": "~6.0.3"
   }

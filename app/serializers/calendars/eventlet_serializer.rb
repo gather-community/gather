@@ -4,8 +4,8 @@ module Calendars
   class EventletSerializer < ApplicationSerializer
     include Rails.application.routes.url_helpers
 
-    attributes :id, :url, :title, :start, :end, :editable, :class_name, :calendar_allows_overlap,
-      :calendar_id, :background_color, :border_color
+    attributes :id, :event_id, :url, :title, :start, :end, :editable, :class_name,
+      :calendar_allows_overlap, :calendar_id, :background_color, :border_color
 
     def url
       if object.linkable.present?

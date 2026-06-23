@@ -238,6 +238,32 @@ Gather uses several locale files under `config/locales/en/`. Each type of string
 - **Run individual or small numbers of specs locally; use CI for full suite runs.** When fixing a specific failure, run the affected file/line with `bundle exec rspec spec/path/to/spec.rb:42` locally to confirm it passes before pushing — this avoids burning a ~28 min CI cycle on a fix that doesn't work. Only push to CI when you need the full suite run (e.g. after a Rails upgrade or broad refactor). Non-browser specs (model, request, job, mailer) run fine locally; system specs require headless Chrome (see below).
 - **Replicate CI failures locally before iterating.** Add a diagnostic assertion with a descriptive failure message (e.g. `expect(count).to eq(1), "Expected 1, got #{count}. Details: #{things.inspect}"`) to extract values that aren't visible in a normal failure.
 
+## Handling Dependabot Batches
+
+**Trigger phrase:** when the user says **"combine the dependabot PRs"** (or similar — "batch the dependabot updates", "deal with all the dependabot PRs at once"), run this full procedure end to end: combine the open updates into one branch, open a PR, and poll CI per the section below. Don't ask for confirmation on the mechanics — just do it, then report the result.
+
+Merging dependabot branches one at a time is slow (each merge rebases all the others) and merging them together conflicts on lockfiles. Instead, **rebuild the bumps on top of current `develop` and regenerate the lockfiles** — never merge the dependabot branches themselves, because they're often cut from an older `develop` and carry unrelated drift.
+
+1. **List the open updates:** `gh pr list --author "app/dependabot" --limit 100 --json number,title`.
+2. **Branch from current develop:** `git switch -c combined-dependabot origin/develop` (after `git fetch origin`).
+3. **Decide what to include.** Exclude stale/superseded branches: bumps for a major version line you're no longer on (e.g. Rails 7.0.x security branches when you're on 8.1), and older duplicates when a newer bump for the same package exists (take the newest, let the older PR auto-close). When two branches target the same package, only the newest goes in.
+4. **Get each branch's intended bump** so you apply it faithfully: `git diff origin/develop origin/dependabot/<branch> -- Gemfile` (or `package.json`). Ignore any hunks that are just develop drift (e.g. an unrelated gem being removed/added) — apply only the dependency line the PR is actually about.
+5. **Apply the version bumps directly to the live manifests** (`Gemfile`, `package.json`) on the new branch — edit the constraint lines, do not merge branches.
+6. **Regenerate lockfiles cleanly:** `bundle install` then `yarn install`. For a **transitive** gem bump (one not named in `Gemfile`, e.g. `jwt`), bump it explicitly with `bundle update <gem> --conservative`. Note `~>` constraints may resolve to a newer patch/minor than the dependabot PR named (e.g. `~> 0.81` landing 0.82.0) — that's fine.
+7. **Sanity-check before pushing** (cheap, catches the worst of major bumps before a ~28 min CI cycle): `RAILS_ENV=development bundle exec rails runner "puts 'ok'"` (boot), `yarn build` (esbuild), and for type-only bumps a `tsc` pass. Type checking is **not** in CI, so it won't gate the build — but still surface any new errors a major `@types/*` bump introduces.
+8. **Verify only the 4 expected files changed** (`Gemfile`, `Gemfile.lock`, `package.json`, `yarn.lock`) via `git status --short` — no drift leaked in.
+9. **Commit, push, open one PR.** In the PR body, list every bump with its PR number and add `Closes #…` for each. Dependabot auto-closes its own PRs once it sees the dependency updated on `develop` after merge (including superseded duplicates), so the individual PRs clean themselves up.
+
+## Polling CI After Opening a PR
+
+**Always poll CI after opening a new PR (or pushing fixes to one), and keep going until the build is green or the only failures are known flappers.** Do not declare success or walk away while checks are pending or red.
+
+- **Poll every 5 minutes.** The Gather suite takes ~28–30 min. Use a background watcher (`gh pr checks <pr> --watch --interval 300`) so you're notified on completion; relaunch it if the watch window lapses while checks are still pending.
+- **On failure, investigate before re-running.** Pull the failed job log (`gh run view --job <id> --log-failed`), identify the failing spec, and reproduce locally (`bundle exec rspec <file>:<line>`, several times for system specs). Fix real failures and push.
+- **Only treat a failure as a flapper with evidence — never assume.** A failure counts as a known flapper only if you can point to prior occurrences: it passes on local re-run **and** there's a documented history of the same flap (git log/blame referencing it, an existing skip/retry annotation, a prior CI run, or a tracking issue). `StaleElementReferenceError` and other Selenium timing errors in system specs are common flap shapes, but the shape alone is not evidence — confirm the specific spec has flapped before. **Do not hallucinate a flapper to dismiss a red build.** If you can't substantiate it, treat the failure as real.
+- **Re-running CI:** the integration token may lack permission to `gh run rerun`/`gh run cancel` (403 "Resource not accessible by integration"). When it does, re-trigger with an empty commit (`git commit --allow-empty`) and tell the user they'll need to cancel runs from the GitHub Actions UI themselves.
+- **Don't modify an unrelated pre-existing flake to make a PR green** — especially on a narrow PR like a dependency bump. Re-run CI and note the flake instead.
+
 ## Code Style
 
 - Ruby: RuboCop with `standard` gem (Ruby 3.0 config), max line length 110

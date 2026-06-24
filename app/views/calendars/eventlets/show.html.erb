@@ -1,6 +1,6 @@
 <% event = occurrence.series_event.decorate %>
 <% calendar = occurrence.calendar.decorate %>
-<% meal = event.meal %>
+<% meal = event.meal&.decorate %>
 
 <% content_for(:title, "Event: #{occurrence.name}") %>
 <% content_for(:action_links, event.action_links(:show)) %>

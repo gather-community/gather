@@ -87,6 +87,25 @@ describe "calendar eventlet show page" do
     end
   end
 
+  context "with a meal event" do
+    let!(:calendar) { create(:calendar, community: community, meal_hostable: true) }
+    let!(:meal) do
+      create(:meal, :with_menu, community: community, calendars: [calendar], title: "Tasty Tacos").tap do |m|
+        m.build_events
+        m.save!
+      end
+    end
+    let(:event) { meal.events.first }
+    let(:eventlet) { event.eventlets.first }
+
+    it "renders the meal title and a link to the meal" do
+      get(calendars_eventlet_path(eventlet))
+      expect(response).to have_http_status(:success)
+      expect(response.body).to include("Tasty Tacos")
+      expect(response.body).to include(meal_path(meal))
+    end
+  end
+
   context "with the legacy event show URL" do
     let!(:event) do
       create(:event, calendar: calendar, creator: user,

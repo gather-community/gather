@@ -9,7 +9,7 @@ class DomainsController < ApplicationController
 
   def index
     authorize(sample_domain)
-    @domains = policy_scope(Domain).in_community(current_community)
+    @domains = policy_scope(Domain).in_community(current_community).by_name
   end
 
   def show

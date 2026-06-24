@@ -15,6 +15,7 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
     this.viewParams = options.viewParams;
     this.defaultViewType = options.defaultViewType || "week";
     this.calendar = this.$("#calendar");
+    this.liveRegion = this.$("#calendar-live-region");
     this.ruleSet = options.ruleSet;
     this.canCreate = options.canCreate;
     this.calendarId = options.calendarId;
@@ -23,6 +24,7 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
     this._fcHeaderLastFocusKey = null;
     this._fcGridFocusDate = null;
     this._fcGridShouldFocus = false;
+    this._calendarLiveRegionText = null;
     this.showAppropriateEarlyLink();
     this.initCalendar();
   },
@@ -79,6 +81,7 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
       loading: this.onLoading.bind(this),
       eventDrop: this.onEventChange.bind(this),
       eventResize: this.onEventChange.bind(this),
+      viewRender: this.updateCalendarLiveRegion.bind(this),
       eventAfterAllRender: this.onViewRender.bind(this),
     });
   },
@@ -175,7 +178,27 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
   onViewRender() {
     this.applyFullCalendarHeaderA11y();
     this.applyFullCalendarGridA11y();
+    this.updateCalendarLiveRegion();
     this.$el.trigger("viewRender"); // Notify other views
+  },
+
+  updateCalendarLiveRegion() {
+    const view = this.calendar.fullCalendar("getView");
+    if (!this.liveRegion.length) {
+      return;
+    }
+
+    if (!view || view.name !== "month") {
+      this.liveRegion.text("");
+      this._calendarLiveRegionText = null;
+      return;
+    }
+
+    const message = `Calendar now showing ${view.intervalStart.format("MMMM YYYY")}`;
+    if (message !== this._calendarLiveRegionText) {
+      this.liveRegion.text(message);
+      this._calendarLiveRegionText = message;
+    }
   },
 
   captureHeaderControlActivation(e) {

@@ -78,7 +78,6 @@
 	//     ~/.claude/.gather-devcontainer.credentials.json  →  Claude API credentials
 	//       specific to this devcontainer. Stored outside the repo and outside the
 	//       main ~/.claude/credentials so it doesn't conflict with host Claude usage.
-	//   ANTHROPIC_API_KEY is forwarded via remoteEnv from the host shell.
 	//   postStartCommand chowns ~/.claude on every start because the bind mount
 	//   can come in owned by root depending on Docker's uid mapping.
 	//
@@ -263,7 +262,6 @@
 	// Forwards credentials from the host shell into the container.
 	// Set these in your host ~/.zshrc — do not commit values.
 	"remoteEnv": {
-		"ANTHROPIC_API_KEY": "${localEnv:ANTHROPIC_API_KEY}",
 		"DISCOURSE_BASE_URL": "${localEnv:DISCOURSE_BASE_URL}",
 		"DISCOURSE_BOT_API_KEY": "${localEnv:DISCOURSE_BOT_API_KEY}",
 		"DISCOURSE_BOT_USERNAME": "${localEnv:DISCOURSE_BOT_USERNAME}",

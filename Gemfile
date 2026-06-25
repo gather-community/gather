@@ -69,7 +69,7 @@ gem "stimulus-rails", "~> 1.3"
 gem "strong_password", "~> 0.0.6"
 gem "timecop", "~> 0.9"
 gem "uglifier", ">= 1.3.0"
-gem "whenever", "~> 0.9"
+gem "whenever", "~> 1.1"
 gem "wisper", "~> 2.0"
 gem "wisper-activerecord", "~> 1.0"
 # Using master branch b/c we want the ! variant of the lock method and disable_query_cache

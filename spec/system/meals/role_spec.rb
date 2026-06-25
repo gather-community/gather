@@ -57,7 +57,8 @@ describe "roles", js: true do
 
   scenario "deactivate/activate/delete" do
     visit(edit_meals_role_path(roles.first))
-    accept_confirm { click_on("Deactivate") }
+    click_on("Deactivate")
+    click_modal_button
 
     expect_success
     click_link("#{roles.first.title} (Inactive)")
@@ -67,7 +68,8 @@ describe "roles", js: true do
     expect(page).not_to have_content("#{roles.first.title} (Inactive)")
     click_link(roles.first.title)
 
-    accept_confirm { click_on("Delete") }
+    click_on("Delete")
+    click_modal_button
 
     expect_success
     expect(page).not_to have_content(roles.first.title)

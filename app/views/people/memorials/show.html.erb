@@ -38,7 +38,8 @@
             <% if policy(message).destroy? %>
               <%= link_to("Delete", people_memorial_message_path(memorial, message),
                           method: :delete,
-                          data: {confirm: I18n.t("confirmations.people/memorial_message.destroy")}) %>
+                          data: {controller: "confirm", action: "confirm#check",
+                                 confirm_message_value: I18n.t("confirmations.people/memorial_message.destroy")}) %>
             <% end %>
           </div>
         </div>

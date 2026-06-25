@@ -68,8 +68,9 @@ module Billing
     def link_attribs(type)
       return unless type == :paypal
       if pay_with_paypal_me? && paypal_friend?
-        {data: {confirm: "Please **do not** select 'Paying for goods or a service?' if prompted "\
-          "to avoid being charged a fee."}}
+        {data: {controller: "confirm", action: "confirm#check",
+                confirm_message_value: "Please <strong>do not</strong> select 'Paying for goods or " \
+                  "a service?' if prompted to avoid being charged a fee."}}
       else
         {}
       end

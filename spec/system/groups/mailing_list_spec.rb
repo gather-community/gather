@@ -46,7 +46,8 @@ describe "mailing lists", js: true do
 
       # Delete the list
       check("Delete this list?")
-      accept_alert { click_button("Save") }
+      click_button("Save")
+      click_modal_button
 
       # Open page again to verify list is gone
       click_link("Knitting Club")

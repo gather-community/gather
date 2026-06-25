@@ -17,7 +17,9 @@ Gather.Views.Work.ShiftsView = Backbone.View.extend({
 
   events: {
     "click .signup-link": "handleSignupClick",
-    "confirm:complete .cancel-link a": "handleCancelClick"
+    // Confirmation is handled by the `confirm` Stimulus controller on the link, which re-fires
+    // this click once the user confirms. See controllers/confirm_controller.ts.
+    "click .cancel-link a": "handleCancelClick"
   },
 
   refresh() {
@@ -43,10 +45,7 @@ Gather.Views.Work.ShiftsView = Backbone.View.extend({
     });
   },
 
-  handleCancelClick(event, confirmAnswer) {
-    if (!confirmAnswer) {
-      return;
-    }
+  handleCancelClick(event) {
     const card = this.$(event.target).closest(".shift-card");
     const link = this.$(event.target).closest(".cancel-link");
     link.find("a").hide();

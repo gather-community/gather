@@ -119,7 +119,8 @@ describe "periods", js: true do
     visit(work_periods_path)
     click_on("Baz")
     click_on("Edit")
-    accept_confirm { click_on("Delete") }
+    click_on("Delete")
+    click_modal_button
     expect(page).to have_content("deleted successfully")
   end
 

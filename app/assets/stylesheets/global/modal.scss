@@ -1,0 +1,86 @@
+// Generic app modal (see layouts/_modal.html.erb + modal_controller.ts). Built bespoke rather
+// than via the Bootstrap modal plugin so the Stimulus controller owns show/hide and the mobile
+// bottom-sheet layout, but reuses Bootstrap 3 inner classes (.modal-header/.modal-body/etc).
+
+body.gather-modal-open {
+  overflow: hidden; // prevent the page behind the overlay from scrolling
+}
+
+.gather-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: $zindex-modal;
+}
+
+// `display` lives here (not on `.gather-modal`) so the shared `.hiding` class — which is imported
+// before this file and has equal specificity — still hides the modal.
+.gather-modal:not(.hiding) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gather-modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.gather-modal-dialog {
+  position: relative;
+  z-index: 1;
+  width: 500px;
+  max-width: calc(100% - #{$grid-gutter-width});
+  max-height: calc(100% - #{$grid-gutter-width});
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 6px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+
+  .modal-header {
+    border-bottom: none; // override Bootstrap's default divider line
+    padding-bottom: 0; // gap to body is governed solely by .modal-body's top padding
+  }
+
+  .modal-body {
+    overflow-y: auto; // long content (e.g. server error HTML) scrolls within the dialog
+  }
+
+  .gather-modal-input {
+    margin: 0 15px 15px;
+    width: calc(100% - 30px);
+  }
+
+  .modal-footer {
+    border-top: none; // override Bootstrap's default divider line (keep Bootstrap's top padding)
+
+    // Equal-width buttons so OK/Cancel line up.
+    .btn {
+      min-width: 90px;
+    }
+
+    .btn + .btn {
+      margin-left: 10px;
+    }
+  }
+}
+
+// Mobile: bottom sheet — full width, anchored to the bottom, only as tall as its content.
+@media screen and (max-width: $screen-xs-max) {
+  .gather-modal:not(.hiding) {
+    align-items: flex-end;
+  }
+
+  .gather-modal-dialog {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 6px 6px 0 0;
+  }
+}

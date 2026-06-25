@@ -41,7 +41,8 @@ describe "memorials", js: true do
       expect_success
       click_link("John Smith")
       within(".action-links") { click_link("Edit") }
-      within(".action-links") { accept_confirm { click_link("Delete") } }
+      within(".action-links") { click_link("Delete") }
+      click_modal_button
 
       expect_success
       expect(page).to have_content("No memorials found")
@@ -74,15 +75,14 @@ describe "memorials", js: true do
     expect(page).to have_content("My new message")
     within(all(".message").last) { click_link("Edit") }
     click_button("Cancel")
-    within(all(".message").last) do
-      click_link("Edit")
-    end
+    within(all(".message").last) { click_link("Edit") }
     find("#people_memorial_message_body").set("My newer message")
     click_button("Save")
 
     expect_success
     expect(page).to have_content("My newer message")
-    within(all(".message").last) { accept_confirm { click_link("Delete") } }
+    within(all(".message").last) { click_link("Delete") }
+    click_modal_button
 
     expect_success
     expect(page).not_to have_content("My newer message")

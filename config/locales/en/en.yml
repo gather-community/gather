@@ -64,6 +64,14 @@ en:
     messages:
       no_semicolons: "Semicolons not allowed"
 
+  # App modal button labels + default titles (mirrors the `modal` keys in
+  # app/javascript/i18n/translations.json).
+  modal:
+    ok: "OK"
+    cancel: "Cancel"
+    confirm_title: "Confirm"
+    alert_title: "Notice"
+
   confirmations:
     billing/template:
       destroy: "Are you sure you want to delete the template '%{description}' for %{member_types}? This action cannot be undone."

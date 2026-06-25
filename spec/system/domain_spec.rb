@@ -54,7 +54,8 @@ describe "domains", js: true do
 
       scenario "delete" do
         visit(domain_path(domain4))
-        accept_confirm { click_on("Delete") }
+        click_on("Delete")
+        click_modal_button
         expect_success
 
         expect(page).not_to have_content(domain4.name)

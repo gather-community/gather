@@ -114,12 +114,14 @@ describe "gdrive items", js: true do
 
           # Remove group from drive (should enqueue job)
           expect do
-            accept_confirm { find("i.fa-times").click }
+            find("i.fa-times").click
+            click_modal_button
             expect(page).not_to have_content("Stuff")
           end.to have_enqueued_job(GDrive::ItemPermissionSyncJob)
 
           # Remove Drive 1 (it appears below the non-existent drive so it's the 2nd trash icon)
-          accept_confirm { all("i.fa-trash")[1].click }
+          all("i.fa-trash")[1].click
+          click_modal_button
           expect(page).not_to have_content("Drive 1")
         end
       end

@@ -83,14 +83,16 @@ describe "calendars", js: true do
 
     scenario "deactivate/activate/delete calendar" do
       visit(edit_calendar_path(calendars.first))
-      accept_confirm { click_on("Deactivate") }
+      click_on("Deactivate")
+      click_modal_button
       expect_success
       click_on("#{calendars.first.name} (Inactive)")
       click_on("reactivate it")
       expect_success
       expect(page).not_to have_content("#{calendars.first.name} (Inactive)")
       click_on(calendars.first.name)
-      accept_confirm { click_on("Delete") }
+      click_on("Delete")
+      click_modal_button
       expect_success
       expect(page).not_to have_content(calendars.first.name)
     end
@@ -113,8 +115,8 @@ describe "calendars", js: true do
       expect(page).to have_content("Group2.1")
 
       click_on("Group")
-      puts "--------------------------------------------------"
-      accept_confirm { click_on("Delete") }
+      click_on("Delete")
+      click_modal_button
       expect_success
       # Cal1 and Cal3 have the same rank (2) after group is deleted. Cal1 comes first
       # because it is first alphabetically.
@@ -135,8 +137,9 @@ describe "calendars", js: true do
         click_on("Cmty Mealz")
         expect_image_upload(state: :existing, path: /chomsky/)
 
-        message = accept_confirm { click_on("Deactivate") }
-        expect(message).to match(/Are you sure you want to/) # Not missing translation
+        click_on("Deactivate")
+        expect_modal(text: /Are you sure you want to/) # Not missing translation
+        click_modal_button
         expect_success
         expect(page).to have_content("Cmty Mealz (Inactive)")
       end

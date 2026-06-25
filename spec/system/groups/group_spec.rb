@@ -78,7 +78,8 @@ describe "groups", js: true do
 
     scenario "deactivate/activate/delete" do
       visit(edit_groups_group_path(group1))
-      accept_confirm { click_on("Deactivate") }
+      click_on("Deactivate")
+      click_modal_button
       expect_success
 
       click_link("Edit")
@@ -87,7 +88,8 @@ describe "groups", js: true do
 
       expect(page).not_to have_content("#{group1.name} (Inactive)")
       click_link("Edit")
-      accept_confirm { click_on("Delete") }
+      click_on("Delete")
+      click_modal_button
       expect_success
 
       expect(page).not_to have_content(group1.name)

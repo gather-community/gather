@@ -425,4 +425,46 @@ module SystemSpecHelpers
   def click_print_button
     first(:css, ".btn-print").click
   end
+
+  # Helpers for the app modal (layouts/_modal.html.erb + modal_controller.ts). The modal element
+  # is always present in the DOM and toggled visible by removing the `hiding` class. It lives at
+  # document.body, so the helpers reset to the top-level scope (like the select2 helpers) so they
+  # work even when called from inside a `within` block.
+  def modal_selector
+    ".gather-modal:not(.hiding)"
+  end
+
+  def expect_modal(title: nil, text: nil)
+    with_top_level_scope do
+      expect(page).to have_css(modal_selector, wait: Capybara.default_max_wait_time)
+      expect(page).to have_css("#{modal_selector} .modal-title", text: title) if title
+      expect(page).to have_css("#{modal_selector} .modal-body", text: text) if text
+    end
+  end
+
+  def expect_no_modal
+    with_top_level_scope { expect(page).to have_no_css(modal_selector) }
+  end
+
+  # Clicks one of the modal's footer buttons by its label (defaults to the confirm "OK" button).
+  def click_modal_button(label = I18n.t("modal.ok"))
+    with_top_level_scope { within("#{modal_selector} .modal-footer") { click_on(label) } }
+  end
+
+  # Types into the modal's text input (used by promptModal).
+  def fill_in_modal(value)
+    with_top_level_scope { find("#{modal_selector} .gather-modal-input").set(value) }
+  end
+
+  # Dismisses the modal without choosing a button. `via` is :x, :escape, or :overlay.
+  def dismiss_modal(via: :escape)
+    with_top_level_scope do
+      case via
+      when :x then find("#{modal_selector} .modal-header .close").click
+      when :escape then find("body").send_keys(:escape)
+      when :overlay then find("#{modal_selector} .gather-modal-overlay").click(x: 5, y: 5)
+      else raise ArgumentError, "unknown dismiss method: #{via}"
+      end
+    end
+  end
 end

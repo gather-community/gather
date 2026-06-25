@@ -284,6 +284,24 @@ describe "event calendar", js: true do
   describe "calendar grid accessibility states" do
     let(:calendar) { create(:calendar) }
 
+    scenario "announces month changes in a live region" do
+      visit(calendar_events_path(calendar))
+      find(".fc-month-button").click
+
+      expect(page).to have_css(
+        "#calendar-live-region[aria-live='polite'][aria-atomic='true']",
+        visible: false
+      )
+
+      next_month = Time.zone.today.next_month.strftime("%B %Y")
+      find(".fc-next-button").click
+      expect(page).to have_css(
+        "#calendar-live-region",
+        text: "Calendar now showing #{next_month}",
+        visible: false
+      )
+    end
+
     scenario "exposes selected, active, and today states on date cells" do
       visit(calendar_events_path(calendar))
       find(".fc-month-button").click

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_27_000003) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_27_000004) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -1046,6 +1046,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_27_000003) do
     t.index ["cluster_id"], name: "index_statements_on_cluster_id"
     t.index ["created_at"], name: "index_statements_on_created_at"
     t.index ["due_on"], name: "index_statements_on_due_on"
+  end
+
+  create_table "stripe_webhook_events", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "event_id"
+    t.string "event_type"
+    t.jsonb "payload", null: false
+    t.datetime "updated_at", null: false
+    t.index ["event_id"], name: "index_stripe_webhook_events_on_event_id"
   end
 
   create_table "subscription_intents", force: :cascade do |t|

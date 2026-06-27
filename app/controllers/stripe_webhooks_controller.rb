@@ -9,11 +9,15 @@ class StripeWebhooksController < ApplicationController
   skip_after_action :verify_pundit_authorization
 
   def create
-    event = construct_event
+    payload = request.body.read
+    event = construct_event(payload)
     return head(:bad_request) if event.nil?
 
     # Log on entry with safe identifiers only (no PII / no payload dump).
     Rails.logger.info("Stripe webhook received: id=#{event.id} type=#{event.type}")
+
+    # Persist the raw payload for debugging before doing any processing.
+    StripeWebhookEvent.record!(event, JSON.parse(payload))
 
     case event.type
     when "invoice.paid"
@@ -36,9 +40,9 @@ class StripeWebhooksController < ApplicationController
 
   private
 
-  def construct_event
+  def construct_event(payload)
     Stripe::Webhook.construct_event(
-      request.body.read,
+      payload,
       request.headers["Stripe-Signature"],
       Settings.stripe.webhook_signing_secret
     )

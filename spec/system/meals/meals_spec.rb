@@ -88,7 +88,8 @@ describe "meal create, show, update, delete", js: true do
       # Delete
       find("a", text: "Southern Beans").click
       click_link("Edit")
-      accept_confirm { click_on("Delete") }
+      click_on("Delete")
+      click_modal_button
       expect_success
       expect(page).not_to have_content("Southern Beans and Rice")
     end
@@ -113,7 +114,8 @@ describe "meal create, show, update, delete", js: true do
       click_link("Edit")
       fill_in("Ingredient Cost", with: "125.66")
       fill_in("Pantry Reimbursable Cost", with: "12.30")
-      accept_alert { select2("Jo Fiz", from: "#meals_meal_cost_attributes_reimbursee_id") }
+      select2("Jo Fiz", from: "#meals_meal_cost_attributes_reimbursee_id")
+      click_modal_button
       choose("Balance Credit")
       click_button("Save")
       expect_success
@@ -146,8 +148,9 @@ describe "meal create, show, update, delete", js: true do
         click_link("Edit")
         expect(page).not_to have_content("Delete Meal")
         add_worker_field(role: ac_role)
-        message = accept_confirm { select_worker(actor.name, role: ac_role) }
-        expect(message).to match(/If you change meal workers/)
+        select_worker(actor.name, role: ac_role)
+        expect_modal(text: /If you change meal workers/)
+        click_modal_button
 
         expect do
           click_button("Save")
@@ -213,10 +216,12 @@ describe "meal create, show, update, delete", js: true do
     page.driver.go_back
 
     # Close/reopen
-    accept_confirm { click_link("Close") }
+    click_link("Close")
+    click_modal_button
     expect_success
     click_link("Southern Beans")
-    accept_confirm { click_link("Reopen") }
+    click_link("Reopen")
+    click_modal_button
     expect_success
   end
 end

@@ -1,0 +1,17 @@
+<%# Generic app modal. Behavior lives in modal_controller.ts; opened imperatively via utils/modal.ts. %>
+<div data-controller="modal" class="gather-modal hiding"
+     data-action="keydown.esc@window->modal#dismiss">
+  <div class="gather-modal-overlay" data-action="click->modal#dismiss"></div>
+  <div class="gather-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="gather-modal-title">
+    <div class="modal-header" data-modal-target="header">
+      <button class="close" type="button" data-action="click->modal#dismiss" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h2 class="modal-title" id="gather-modal-title" data-modal-target="title"></h2>
+    </div>
+    <div class="modal-body" data-modal-target="body"></div>
+    <input type="text" class="form-control gather-modal-input hiding" data-modal-target="input"
+           data-action="keydown.enter->modal#inputSubmit">
+    <div class="modal-footer" data-modal-target="footer"></div>
+  </div>
+</div>

@@ -566,9 +566,11 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
   },
 
   onEventChange(event, _, revertFunc) {
-    if (!confirm(`Are you sure you want to move the event '${event.title}?'`)) {
-      revertFunc();
-    } else {
+    window.Modal.confirmModal(`Are you sure you want to move the event '${event.title}?'`).then(ok => {
+      if (!ok) {
+        revertFunc();
+        return;
+      }
       $.ajax({
         // The feed is eventlet-centric (event.id is the eventlet id); the update endpoint wants event id.
         url: `/calendars/events/${event.eventId}`,
@@ -582,13 +584,10 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
         },
         error(xhr) {
           revertFunc();
-          Gather.errorModal
-            .modal("show")
-            .find(".modal-body")
-            .html(xhr.responseText);
+          window.Modal.alertModal(xhr.responseText, {title: "Error", label: "Close"});
         },
       });
-    }
+    });
   },
 
   create() {

@@ -31,7 +31,8 @@
             <% if policy(shift).unsignup? && assignment.user == @choosee %>
               <span class="cancel-link">
                 &nbsp;<%= link_to(icon_tag("close", title: I18n.t("common.cancel")), "javascript:void(0)",
-                  "data-confirm": t("confirmations.work/shift.unsignup")) %>
+                  data: {controller: "confirm", action: "confirm#check",
+                         confirm_message_value: t("confirmations.work/shift.unsignup")}) %>
                 <%= inline_loading_indicator %>
               </span>
             <% end %>

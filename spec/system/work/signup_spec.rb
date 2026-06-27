@@ -110,7 +110,8 @@ describe "signups", js: true do
         # Unsignup via #show page
         click_on("Cook")
         expect(page).to have_content(jobs[0].description)
-        accept_confirm { click_on("Remove Signup") }
+        click_on("Remove Signup")
+        click_modal_button
 
         within(".shift-card[data-id='#{jobs[0].shifts[0].id}']") do
           expect(page).not_to have_content(actor.name)
@@ -118,7 +119,8 @@ describe "signups", js: true do
           expect(page).to have_content(actor.name)
 
           # Unsignup via 'x' link
-          accept_confirm { find(".cancel-link a").click }
+          find(".cancel-link a").click
+          click_modal_button
           expect(page).not_to have_content(actor.name)
         end
 

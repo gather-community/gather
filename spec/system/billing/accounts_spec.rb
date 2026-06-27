@@ -63,16 +63,18 @@ describe "accounts", js: true do
       click_button("Confirm")
       expect_success("Transaction added successfully.")
 
-      message = accept_confirm { click_link("Apply Late Fees") }
-      expect(message).to include("Are you sure? Fees will be charged to 1 households")
+      click_link("Apply Late Fees")
+      expect_modal(text: "Are you sure? Fees will be charged to 1 households")
+      click_modal_button
       expect_success("Late fees applied")
       click_link(account2.household.name)
       find(:xpath, "//tr[td[contains(text(), 'New Charges')]]//a").click
       expect(page).to have_content("Late payment fee $2.51")
       click_link("Billing")
 
-      message = accept_confirm { click_link("Send Statements") }
-      expect(message).to include("Are you sure? Statements will be sent out to 2 households.")
+      click_link("Send Statements")
+      expect_modal(text: "Are you sure? Statements will be sent out to 2 households.")
+      click_modal_button
       expect_success("Statement generation started.")
 
       click_link(account1.household.name)

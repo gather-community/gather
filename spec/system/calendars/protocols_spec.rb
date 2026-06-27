@@ -78,7 +78,8 @@ describe "protocols", js: true do
 
     scenario "delete" do
       visit(edit_calendars_protocol_path(protocols.first))
-      accept_confirm { click_on("Delete") }
+      click_on("Delete")
+      click_modal_button
       expect_success
       expect(page).to have_css("table.index tr", count: 2)
     end

@@ -23,7 +23,8 @@ describe "sign in invitations", js: true, perform_jobs: true do
           full_sign_in_as(actor)
           click_on("People")
           click_on(invitee.name)
-          accept_confirm { click_on("Invite") }
+          click_on("Invite")
+          click_modal_button
           expect_success(/Invitation sent./)
           full_sign_out
         end
@@ -70,7 +71,8 @@ describe "sign in invitations", js: true, perform_jobs: true do
           click_on("People")
           click_on(invitee.name)
           expect(page).to have_css("a.btn", text: "Invite")
-          accept_confirm { click_on("Invite") }
+          click_on("Invite")
+          click_modal_button
           expect_success(/Invitation sent./)
           full_sign_out
         end

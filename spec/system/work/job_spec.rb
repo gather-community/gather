@@ -170,7 +170,8 @@ describe "jobs", js: true do
 
     scenario "delete" do
       visit(edit_work_job_path(jobs[1]))
-      accept_confirm { click_on("Delete") }
+      click_on("Delete")
+      click_modal_button
       expect_success
       expect(page).not_to have_content(jobs[1].title)
     end

@@ -25,6 +25,20 @@ describe Community do
     expect(community.calendar_token).to match(/\A[0-9a-zA-Z_-]{20}\z/)
   end
 
+  it "upcases country_code on save" do
+    community = create(:community, country_code: "gb")
+    expect(community.country_code).to eq("GB")
+  end
+
+  describe "messaging accounts" do
+    let!(:account) { create(:messaging_account, community: community) }
+
+    it "are destroyed with the community" do
+      community.destroy
+      expect { account.reload }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
+
   describe "destruction" do
     context "with dependent models" do
       let!(:meal_type) { create(:meal_type, community: community) }

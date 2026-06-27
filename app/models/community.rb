@@ -35,6 +35,7 @@ class Community < ApplicationRecord
   # The order of these matters for destruction. See comments below.
   belongs_to :cluster, inverse_of: :communities
   has_many :billing_templates, class_name: "Billing::Template", inverse_of: :community, dependent: :destroy
+  has_many :messaging_accounts, class_name: "Messaging::Account", inverse_of: :community, dependent: :destroy
   has_many :group_affiliations, class_name: "Groups::Affiliation", inverse_of: :community, dependent: :destroy
   has_many :domain_ownerships, class_name: "DomainOwnership", inverse_of: :community, dependent: :destroy
   has_many :meals, class_name: "Meals::Meal", inverse_of: :community, dependent: :destroy
@@ -73,6 +74,10 @@ class Community < ApplicationRecord
   disallow_semicolons :name
 
   delegate :name, to: :cluster, prefix: true
+
+  # Country codes are ISO 3166-1 alpha-2 and must be stored uppercase so lookups
+  # (e.g. Messaging::Account currency selection) are reliable.
+  before_validation { self.country_code = country_code&.upcase }
 
   before_create :generate_calendar_token
   before_create :generate_sso_secret

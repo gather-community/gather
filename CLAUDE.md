@@ -199,6 +199,22 @@ Module namespaces are defined in files like `app/models/meals.rb` which set `tab
 - Models use `in_community(community)` scopes for community filtering
 - `active` scopes filter deactivated records
 
+### Adding a New Model
+
+When introducing a new model, follow the established conventions:
+
+- **Namespace by feature module.** Put the model under its module namespace (e.g. `app/models/messaging/account.rb`) and add a `app/models/<module>.rb` defining `table_name_prefix` (e.g. `"messaging_"`). Only set `self.table_name = "..."` when overriding the prefix (as `Billing` does).
+- **Tenant scoping is mandatory.** Every model must declare `acts_as_tenant :cluster`, and its migration must add `cluster_id` (`null: false`, foreign key). This is enforced by the wholesome specs below.
+- **Money** is stored as an integer `amount_cents` column (newer models, e.g. `Messaging::Transaction`) or `decimal(10, 2)` (older Billing models) — match the surrounding feature.
+- **Add a factory** under `spec/factories/<module>/` and a model spec.
+- **Decorators/policies** come only when the model becomes user-facing.
+
+**Three "wholesome" specs iterate over every model — a new model must satisfy all three (or be added to the relevant allowlist):**
+
+- [spec/models/tenancy_spec.rb](spec/models/tenancy_spec.rb) — every model must have `acts_as_tenant`. Allowlist (`ALLOWLISTED_CLASSES`) only for genuinely non-tenant models.
+- [spec/models/utils/generators/main_generator_spec.rb](spec/models/utils/generators/main_generator_spec.rb) — every model must get at least one record from sample-data generation, **or** be added to `NO_SAMPLE_DATA_CLASSES` (use this for models created on demand, e.g. via a webhook).
+- [spec/models/community_deletion_spec.rb](spec/models/community_deletion_spec.rb) — every tenant model needs a factory call in the setup and must cascade to zero rows when a community is destroyed (wire `dependent: :destroy` from `Community` and/or its parent), **or** be added to `EXEMPT_MODELS`. Prefer wiring the cascade so deletion is actually tested.
+
 ### Locale Files
 
 Gather uses several locale files under `config/locales/en/`. Each type of string has a canonical home:

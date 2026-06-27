@@ -38,6 +38,9 @@ module Communities
 
     belongs_to :reviewed_by, class_name: "User", optional: true
 
+    # Country codes are ISO 3166-1 alpha-2 and must be stored uppercase to match Community.
+    before_validation { self.country_code = country_code&.upcase }
+
     validates :slug, uniqueness: true
 
     def contact_name

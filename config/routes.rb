@@ -29,6 +29,12 @@ Rails.application.routes.draw do
     end
   end
 
+  # Stripe webhook endpoint. Lives on the apex domain (Stripe posts to a fixed URL) and is
+  # authenticated by signature verification, not by session. See Stripe::WebhooksController.
+  namespace :stripe do
+    post "webhooks", to: "webhooks#create"
+  end
+
   resources :domains, only: %i[index show new create destroy]
 
   namespace :people do

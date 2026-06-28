@@ -51,3 +51,8 @@ stripe:
   api_key: sk_test_xxx
   publishable_key: pk_test_xxx
   billing_portal_url: https://billing.stripe.com/p/login/test_xxx
+  # Used to verify incoming webhook signatures. Override per environment.
+  webhook_signing_secret: whsec_test_xxx
+  messaging:
+    # The Stripe product whose purchase tops up a messaging account. Override per environment.
+    topup_product_id: prod_test_messaging_topup

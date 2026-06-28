@@ -108,6 +108,9 @@ describe Community, :without_tenant do
       create(:group_mailman_user)
       create(:group_membership)
 
+      # ── Messaging ─────────────────────────────────────────────────────────
+      create(:messaging_transaction) # also creates a Messaging::Account
+
       # ── People ────────────────────────────────────────────────────────────
       create(:user)
       create(:user, :child) # also creates People::Guardianship

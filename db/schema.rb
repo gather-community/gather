@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_07_130000) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_27_000004) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -873,6 +873,31 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_07_130000) do
     t.index ["served_at"], name: "index_meals_on_served_at"
   end
 
+  create_table "messaging_accounts", force: :cascade do |t|
+    t.bigint "cluster_id", null: false
+    t.bigint "community_id", null: false
+    t.datetime "created_at", null: false
+    t.string "currency", limit: 3, null: false
+    t.datetime "updated_at", null: false
+    t.index ["cluster_id"], name: "index_messaging_accounts_on_cluster_id"
+    t.index ["community_id"], name: "index_messaging_accounts_on_community_id", unique: true
+  end
+
+  create_table "messaging_transactions", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.integer "amount_cents", null: false
+    t.bigint "cluster_id", null: false
+    t.datetime "created_at", null: false
+    t.bigint "creator_id"
+    t.string "description", limit: 255, null: false
+    t.string "stripe_invoice_line_item_id"
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_messaging_transactions_on_account_id"
+    t.index ["cluster_id"], name: "index_messaging_transactions_on_cluster_id"
+    t.index ["creator_id"], name: "index_messaging_transactions_on_creator_id"
+    t.index ["stripe_invoice_line_item_id"], name: "index_messaging_transactions_on_stripe_invoice_line_item_id", unique: true
+  end
+
   create_table "people_emergency_contacts", id: :serial, force: :cascade do |t|
     t.string "alt_phone"
     t.integer "cluster_id", null: false
@@ -1021,6 +1046,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_07_130000) do
     t.index ["cluster_id"], name: "index_statements_on_cluster_id"
     t.index ["created_at"], name: "index_statements_on_created_at"
     t.index ["due_on"], name: "index_statements_on_due_on"
+  end
+
+  create_table "stripe_webhook_events", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "event_id", null: false
+    t.string "event_type", null: false
+    t.jsonb "payload", null: false
+    t.datetime "updated_at", null: false
+    t.index ["event_id"], name: "index_stripe_webhook_events_on_event_id"
   end
 
   create_table "subscription_intents", force: :cascade do |t|
@@ -1412,6 +1446,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_07_130000) do
   add_foreign_key "meals", "communities"
   add_foreign_key "meals", "meal_formulas", column: "formula_id"
   add_foreign_key "meals", "users", column: "creator_id"
+  add_foreign_key "messaging_accounts", "clusters"
+  add_foreign_key "messaging_accounts", "communities"
+  add_foreign_key "messaging_transactions", "clusters"
+  add_foreign_key "messaging_transactions", "messaging_accounts", column: "account_id"
+  add_foreign_key "messaging_transactions", "users", column: "creator_id"
   add_foreign_key "people_emergency_contacts", "clusters"
   add_foreign_key "people_emergency_contacts", "households"
   add_foreign_key "people_guardianships", "clusters"

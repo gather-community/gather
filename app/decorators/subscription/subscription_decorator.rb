@@ -16,7 +16,7 @@ module Subscription
     end
 
     def last_invoice_amount
-      Money.from_cents(last_invoice_amount_cents).format
+      Money.from_cents(last_invoice_amount_cents, currency).format
     end
 
     def submit_button_label

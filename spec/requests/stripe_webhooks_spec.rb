@@ -17,8 +17,8 @@ describe "Stripe webhooks" do
         post_event(invoice_paid_event(line_amount: 1500))
 
         expect(response).to have_http_status(:ok)
-        expect(StripeWebhookEvent.count).to eq(1)
-        saved = StripeWebhookEvent.first
+        expect(Stripe::WebhookEvent.count).to eq(1)
+        saved = Stripe::WebhookEvent.first
         expect(saved.event_type).to eq("invoice.paid")
         expect(saved.payload["id"]).to eq("evt_test")
         with_default_tenant do
@@ -92,7 +92,7 @@ describe "Stripe webhooks" do
         headers: {"Content-Type" => "application/json", "Stripe-Signature" => "t=123,v1=bogus"})
 
       expect(response).to have_http_status(:bad_request)
-      expect(StripeWebhookEvent.count).to eq(0)
+      expect(Stripe::WebhookEvent.count).to eq(0)
       with_default_tenant { expect(Messaging::Transaction.count).to eq(0) }
     end
   end

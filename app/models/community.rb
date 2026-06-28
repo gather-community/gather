@@ -26,6 +26,22 @@ class Community < ApplicationRecord
   SLUG_MAX_LENGTH = 63
   STATUSES = %i[trial subscribed warning deactivated].freeze
 
+  # Maps an ISO 3166-1 alpha-2 country code (uppercase) to its default ISO 4217 currency
+  # (lowercase, to match Stripe and the money gem). Covers Stripe-supported countries;
+  # extend as Stripe adds markets. Source: https://stripe.com/global
+  COUNTRY_CURRENCIES = {
+    "AE" => "aed", "AT" => "eur", "AU" => "aud", "BE" => "eur", "BG" => "bgn",
+    "BR" => "brl", "CA" => "cad", "CH" => "chf", "CY" => "eur", "CZ" => "czk",
+    "DE" => "eur", "DK" => "dkk", "EE" => "eur", "ES" => "eur", "FI" => "eur",
+    "FR" => "eur", "GB" => "gbp", "GI" => "gbp", "GR" => "eur", "HK" => "hkd",
+    "HR" => "eur", "HU" => "huf", "ID" => "idr", "IE" => "eur", "IN" => "inr",
+    "IT" => "eur", "JP" => "jpy", "LI" => "chf", "LT" => "eur", "LU" => "eur",
+    "LV" => "eur", "MT" => "eur", "MX" => "mxn", "MY" => "myr", "NL" => "eur",
+    "NO" => "nok", "NZ" => "nzd", "PL" => "pln", "PT" => "eur", "RO" => "ron",
+    "SE" => "sek", "SG" => "sgd", "SI" => "eur", "SK" => "eur", "TH" => "thb",
+    "US" => "usd"
+  }.freeze
+
   acts_as_tenant :cluster
   resourcify
 
@@ -173,6 +189,11 @@ class Community < ApplicationRecord
 
   def lc_abbrv
     abbrv.downcase
+  end
+
+  # The default currency for the community's country, or nil if unsupported.
+  def default_currency
+    COUNTRY_CURRENCIES[country_code]
   end
 
   def status

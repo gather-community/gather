@@ -8,7 +8,7 @@ describe "tenancy" do
     roles schema_migrations users_roles mail_test_runs meal_restrictions_signup_parts
     stripe_webhook_events].freeze
   ALLOWLISTED_CLASSES = %w[Communities::Signup Role Cluster FeatureFlag FeatureFlagUser MailTestRun
-    StripeWebhookEvent].freeze
+    Stripe::WebhookEvent].freeze
 
   it "all tables except allowlisted ones have cluster_id" do
     ApplicationRecord.connection.tables.each do |table|

@@ -3,18 +3,6 @@
 require "rails_helper"
 
 describe Messaging::Account do
-  describe ".currency_for" do
-    it "maps a supported country code to its currency" do
-      community = build(:community, country_code: "CA")
-      expect(described_class.currency_for(community)).to eq("cad")
-    end
-
-    it "returns nil for an unsupported country code" do
-      community = build(:community, country_code: "ZZ")
-      expect(described_class.currency_for(community)).to be_nil
-    end
-  end
-
   describe "#balance" do
     let(:account) { create(:messaging_account, currency: "usd") }
 

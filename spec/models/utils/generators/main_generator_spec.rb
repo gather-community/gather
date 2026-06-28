@@ -37,7 +37,7 @@ describe Utils::Generators::MainGenerator, :without_tenant, :perform_jobs do
     People::MemberType
     Subscription::Subscription
     Subscription::Intent
-    StripeWebhookEvent
+    Stripe::WebhookEvent
     Wiki::Page
     Wiki::PageVersion
     Work::JobReminderDelivery

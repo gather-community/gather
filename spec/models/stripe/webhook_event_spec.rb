@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe StripeWebhookEvent do
+describe Stripe::WebhookEvent do
   describe ".record!" do
     it "stores the event id, type, and raw payload" do
       event = Stripe::Event.construct_from(id: "evt_123", type: "invoice.paid")

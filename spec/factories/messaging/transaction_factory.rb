@@ -19,5 +19,6 @@ FactoryBot.define do
     account factory: :messaging_account
     description { "Messaging bundle top-up" }
     amount_cents { 1000 }
+    sequence(:stripe_invoice_line_item_id) { |n| "il_test#{n}" }
   end
 end

@@ -30,6 +30,16 @@ describe Community do
     expect(community.country_code).to eq("GB")
   end
 
+  describe "#default_currency" do
+    it "maps a supported country code to its currency" do
+      expect(build(:community, country_code: "CA").default_currency).to eq("cad")
+    end
+
+    it "is nil for an unsupported country code" do
+      expect(build(:community, country_code: "ZZ").default_currency).to be_nil
+    end
+  end
+
   describe "messaging accounts" do
     let!(:account) { create(:messaging_account, community: community) }
 

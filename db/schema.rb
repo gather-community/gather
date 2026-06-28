@@ -1050,8 +1050,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_27_000004) do
 
   create_table "stripe_webhook_events", force: :cascade do |t|
     t.datetime "created_at", null: false
-    t.string "event_id"
-    t.string "event_type"
+    t.string "event_id", null: false
+    t.string "event_type", null: false
     t.jsonb "payload", null: false
     t.datetime "updated_at", null: false
     t.index ["event_id"], name: "index_stripe_webhook_events_on_event_id"

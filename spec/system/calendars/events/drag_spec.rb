@@ -10,8 +10,10 @@ describe "dragging a calendar event", js: true do
   let(:calendar) { create(:calendar, selected_by_default: true) }
 
   # Next-week noon so the event is comfortably in the future (avoids the can't-change-the-past rule)
-  # and visible after a single click on "next week".
-  let(:starts_at) { Time.current.next_week(:wednesday) + 12.hours }
+  # and visible after a single click on "next week". FullCalendar's week view starts on Sunday, so we
+  # compute the target off a Sunday-based week (not Rails' Monday default) — otherwise on Sundays the
+  # event would fall in the currently-shown week and the single "next" click would scroll past it.
+  let(:starts_at) { Time.current.beginning_of_week(:sunday) + 1.week + 3.days + 12.hours }
 
   # Production eventlet ids are not aligned with event ids (eventlets were backfilled for pre-existing
   # events). In a fresh test DB the first event would get event.id == eventlet.id, masking a drag
@@ -41,7 +43,8 @@ describe "dragging a calendar event", js: true do
   end
 
   scenario "confirming the move persists the new time" do
-    accept_confirm { drag_vertically(find(".fc-event", text: "Draggable"), by: 140) }
+    drag_vertically(find(".fc-event", text: "Draggable"), by: 140)
+    click_modal_button
 
     expect(eventually { event.reload.starts_at > starts_at }).to(
       be(true), "Expected the event to move to a later time, but starts_at stayed #{event.reload.starts_at}"
@@ -49,7 +52,8 @@ describe "dragging a calendar event", js: true do
   end
 
   scenario "cancelling the move leaves the event untouched" do
-    dismiss_confirm { drag_vertically(find(".fc-event", text: "Draggable"), by: 140) }
+    drag_vertically(find(".fc-event", text: "Draggable"), by: 140)
+    click_modal_button(I18n.t("modal.cancel"))
 
     # Give any (erroneously fired) request time to land, then confirm nothing changed.
     sleep(1)

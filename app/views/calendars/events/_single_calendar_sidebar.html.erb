@@ -1,7 +1,13 @@
-<%= image_tag(calendar.photo_variant(:thumb), alt: calendar.name) %><br/><br/>
-<% if @calendars.any? %>
-  <section>
-    <h3 class="top">Calendars</h3>
-    <%= render("calendars/calendar_list", nodes: @calendars, checkboxes: false, show_all_link: true) %>
+<%= image_tag(calendar.photo_variant(:thumb), alt: calendar.name) %><br><br>
+<% if calendars.any? %>
+  <section role="region" aria-labelledby="sidebar-calendar-list-heading" tabindex="-1">
+    <h3 id="sidebar-calendar-list-heading" class="top">Calendars</h3>
+    <%= render(
+      "calendars/calendar_list",
+      nodes: calendars,
+      checkboxes: false,
+      show_all_link: true,
+      group_heading_level: 4
+    ) %>
   </section>
 <% end %>

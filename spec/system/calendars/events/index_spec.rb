@@ -93,6 +93,17 @@ describe "event calendar", js: true do
       expect(link_href).not_to match(/[?&]view=/)
     end
 
+    scenario "sidebar calendar list is exposed as a labeled landmark", js: false do
+      calendar_group = create(:calendar_group, name: "Reservations")
+      create(:calendar, name: "Study Room", group: calendar_group)
+
+      visit(calendar_events_path(calendar1))
+      expect_sidebar_calendar_list_landmark
+
+      visit(calendars_events_path)
+      expect_sidebar_calendar_list_landmark
+    end
+
     scenario "URL stays clean on load; date appears after navigation, view only after view change" do
       visit(calendar_events_path(calendar1))
       expect(page).to have_css(".fc-agendaWeek-button.fc-state-active") # calendar fully loaded
@@ -382,5 +393,17 @@ describe "event calendar", js: true do
   def expect_active_gridcell(selector)
     expect(page).to have_css(selector)
     expect(page.evaluate_script("document.activeElement.matches(#{selector.to_json})")).to be(true)
+  end
+
+  def expect_sidebar_calendar_list_landmark
+    expect(page).to have_css(
+      "section[role='region'][aria-labelledby='sidebar-calendar-list-heading'][tabindex='-1'] " \
+        "h3#sidebar-calendar-list-heading",
+      text: "Calendars"
+    )
+    expect(page).to have_css(
+      "section[role='region'][aria-labelledby='sidebar-calendar-list-heading'] h4.group",
+      text: "Reservations"
+    )
   end
 end

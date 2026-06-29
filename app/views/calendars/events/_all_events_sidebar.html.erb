@@ -1,6 +1,6 @@
-<% if @calendars.any? %>
-  <section class="calendar-list-wrapper">
-    <h3 class="top">Calendars</h3>
-    <%= render("calendars/calendar_list", nodes: @calendars) %>
+<% if calendars.any? %>
+  <section class="calendar-list-wrapper" role="region" aria-labelledby="sidebar-calendar-list-heading" tabindex="-1">
+    <h3 id="sidebar-calendar-list-heading" class="top">Calendars</h3>
+    <%= render("calendars/calendar_list", nodes: calendars, group_heading_level: 4) %>
   </section>
 <% end %>

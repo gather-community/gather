@@ -49,7 +49,6 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
        * Capture header interactions before FullCalendar handles them, so we can restore focus
        * after the header re-renders (navigation/view changes).
        */
-      [`focusin ${headerControlSelector}`]: "captureHeaderControlActivation",
       [`mousedown ${headerControlSelector}`]: "captureHeaderControlActivation",
       [`keydown ${headerControlSelector}`]:
         "captureHeaderControlActivationOnKeydown",

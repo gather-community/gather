@@ -1,3 +1,4 @@
+<% group_heading_level = local_assigns.fetch(:group_heading_level, 3) %>
 <ul class="no-bullets <%= local_assigns[:nested] ? "nested" : "calendar-list" %>">
   <% if !local_assigns[:nested] && local_assigns[:show_all_link] %>
     <li>
@@ -16,17 +17,18 @@
     <li>
       <% if node.group? %>
         <% next if children.empty? %>
-        <div class="group"><%= node.name %></div>
+        <%= content_tag(:"h#{group_heading_level}", node.name, class: "group") %>
         <%= render("calendars/calendar_list", local_assigns.merge(nodes: children, nested: true)) %>
       <% else %>
         <div class="calendar">
-          <% unless local_assigns[:checkboxes] == false %>
+          <% if local_assigns[:checkboxes] == false %>
+            <%= node.swatch %>
+            <%= link_to(node.name, calendar_events_path(node), class: "calendar-link") %>
+          <% else %>
             <label>
               <%= check_box_tag("calendar", node.id, false, autocomplete: "off") %>
-          <% end %>
-          <%= node.swatch %>
-          <%= link_to(node.name, calendar_events_path(node), class: "calendar-link") %>
-          <% unless local_assigns[:checkboxes] == false %>
+              <%= node.swatch %>
+              <%= link_to(node.name, calendar_events_path(node), class: "calendar-link") %>
             </label>
           <% end %>
         </div>
@@ -35,5 +37,5 @@
   <% end %>
 </ul>
 <% unless local_assigns[:nested] || local_assigns[:checkboxes] == false %>
-  <a href="#" class="select-all-link">Select All</a>
+  <button type="button" class="select-all-link">Select All</button>
 <% end %>

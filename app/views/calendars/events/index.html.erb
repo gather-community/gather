@@ -46,9 +46,9 @@
   </div>
   <div id="sidebar">
     <% if calendar %>
-      <%= render("single_calendar_sidebar", calendar: calendar) %>
+      <%= render("single_calendar_sidebar", calendar: calendar, calendars: @calendars) %>
     <% else %>
-      <%= render("all_events_sidebar") %>
+      <%= render("all_events_sidebar", calendars: @calendars) %>
     <% end %>
   </div>
 </div>

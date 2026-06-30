@@ -59,6 +59,13 @@ RSpec.configure do |config|
   config.infer_spec_type_from_file_location!
 
   config.include(FactoryBot::Syntax::Methods)
+
+  # factory_bot 5.0 flipped the default to build (rather than create) associated records when
+  # the parent is built. Many of our factories assign built associations to models that validate
+  # the foreign key id directly (e.g. Meals::Cost#reimbursee_id, Meals::Meal#creator_id), so a
+  # built-but-unsaved association leaves the id nil and fails validation. Restore the pre-5.0
+  # behavior of always creating associated records.
+  FactoryBot.use_parent_strategy = false
   config.include(Warden::Test::Helpers)
   config.include(SystemSpecHelpers, type: :system)
   config.include(DownloadHelpers, type: :system)

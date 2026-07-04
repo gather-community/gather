@@ -4,18 +4,44 @@
 #
 # Table name: subscriptions
 #
-#  id           :bigint           not null, primary key
-#  cluster_id   :bigint           not null
-#  community_id :bigint           not null
-#  created_at   :datetime         not null
-#  stripe_id    :string           not null
-#  updated_at   :datetime         not null
+#  id                              :bigint           not null, primary key
+#  cluster_id                      :bigint           not null
+#  community_id                    :bigint           not null
+#  created_at                      :datetime         not null
+#  payment_intent_next_action_type :string
+#  payment_intent_status           :string
+#  setup_intent_next_action_type   :string
+#  setup_intent_status             :string
+#  stripe_id                       :string           not null
+#  stripe_status                   :string
+#  sync_error                      :string
+#  synced_at                       :datetime
+#  updated_at                      :datetime         not null
 #
 module Subscription
   # Models a subscription of Gather product itself.
   class Subscription < ApplicationRecord
     # Override suffix
     self.table_name = "subscriptions"
+
+    # The next_action type Stripe sets on a payment/setup intent whose bank account must be
+    # verified via microdeposits (as opposed to generic 3DS-style authentication).
+    MICRODEPOSITS = "verify_with_microdeposits"
+
+    # detailed_status values that mean the community is a paying (or actively-onboarding) customer.
+    GOOD_STANDING_STATUSES =
+      %i[active scheduled needs_payment_method awaiting_microdeposits payment_processing incomplete].freeze
+
+    # detailed_status values that mean a subscription exists but is not in good standing.
+    PROBLEM_STATUSES = %i[incomplete_expired past_due unpaid canceled].freeze
+
+    # Stripe subscription statuses that map directly to a detailed_status with no intent nuance.
+    SIMPLE_STATUS_MAP = {
+      "incomplete_expired" => :incomplete_expired,
+      "past_due" => :past_due,
+      "unpaid" => :unpaid,
+      "canceled" => :canceled
+    }.freeze
 
     acts_as_tenant :cluster
 
@@ -39,6 +65,94 @@ module Subscription
       )
       Rails.logger.info("Loaded subscription: #{stripe_sub}")
       stripe_sub
+    end
+
+    # Fetches live data from Stripe (via populate) and caches the key status signals locally so
+    # that detailed_status/community-status can be computed without a Stripe call. This is the
+    # single shared sync operation used by the nightly job, webhooks, page loads, the resync-all
+    # action, and the inactivity job. Leaves stripe_sub populated for callers that need it.
+    def sync!
+      return if stripe_id.nil? || !persisted?
+      populate
+      update!(synced_attributes.merge(synced_at: Time.current, sync_error: nil))
+      self
+    rescue Stripe::StripeError => e
+      update!(synced_at: Time.current, sync_error: e.message)
+      Gather::ErrorReporter.instance.report(e, data: {subscription_id: id, community_id: community_id})
+      self
+    end
+
+    # The exhaustive, human-meaningful subscription status, derived purely from the locally-cached
+    # columns (no Stripe call). Separate from Community#status.
+    def detailed_status
+      self.class.derive_detailed_status(
+        stripe_status: stripe_status,
+        payment_intent_status: payment_intent_status,
+        payment_intent_next_action_type: payment_intent_next_action_type,
+        setup_intent_status: setup_intent_status,
+        setup_intent_next_action_type: setup_intent_next_action_type,
+        synced_at: synced_at
+      )
+    end
+
+    # Pure mapping from the cached signal columns to a detailed_status symbol. Kept as a class
+    # method taking raw values so Community can reuse it over summarizer-selected virtual attributes
+    # without loading a Subscription. The two Stripe intent types are kept separate: a true
+    # future-dated sub has a setup intent and no invoice; when both are present it's the brief lag
+    # window of an invoiced sub whose just-saved payment method hasn't propagated to the invoice yet.
+    def self.derive_detailed_status(stripe_status:, payment_intent_status:, payment_intent_next_action_type:,
+      setup_intent_status:, setup_intent_next_action_type:, synced_at:)
+      return :unknown if synced_at.nil? || stripe_status.nil?
+      case stripe_status
+      when "active"
+        derive_active_status(payment_intent_status, payment_intent_next_action_type,
+          setup_intent_status, setup_intent_next_action_type)
+      when "incomplete"
+        derive_incomplete_status(payment_intent_status, payment_intent_next_action_type)
+      else
+        SIMPLE_STATUS_MAP.fetch(stripe_status, :other) # :other = trialing/paused, never produced by Gather
+      end
+    end
+
+    # active in Stripe: either a future-dated sub (setup intent, no invoice) or a normal invoiced sub.
+    def self.derive_active_status(pi_status, pi_next_action, si_status, si_next_action)
+      if si_status.present? && pi_status.blank?
+        derive_future_active_status(si_status, si_next_action)
+      else
+        derive_invoiced_active_status(pi_status, pi_next_action, si_status)
+      end
+    end
+
+    def self.derive_future_active_status(status, next_action_type)
+      return :awaiting_microdeposits if next_action_type == MICRODEPOSITS
+      case status
+      when "processing" then :payment_processing # bank setup settling
+      when "requires_payment_method" then :needs_payment_method # no payment method entered yet
+      else :scheduled # payment method ready, awaiting the future start date
+      end
+    end
+
+    def self.derive_invoiced_active_status(status, next_action_type, si_status)
+      return :awaiting_microdeposits if next_action_type == MICRODEPOSITS
+      return :payment_processing if status == "processing"
+      # The payment-method-not-yet-attached lag edge (setup succeeded, invoice PI still needs a method).
+      return :payment_processing if status == "requires_payment_method" && si_status == "succeeded"
+      :active
+    end
+
+    # incomplete in Stripe is always invoiced (first invoice not yet paid).
+    def self.derive_incomplete_status(status, next_action_type)
+      return :awaiting_microdeposits if next_action_type == MICRODEPOSITS
+      return :payment_processing if status == "processing"
+      :incomplete
+    end
+
+    def subscription_good_standing?
+      GOOD_STANDING_STATUSES.include?(detailed_status)
+    end
+
+    def subscription_problem?
+      PROBLEM_STATUSES.include?(detailed_status)
     end
 
     def status
@@ -206,6 +320,19 @@ module Subscription
     end
 
     private
+
+    # The signal columns cached from the live Stripe object during sync!.
+    def synced_attributes
+      pi = stripe_sub.latest_invoice&.payment_intent
+      si = stripe_sub.pending_setup_intent
+      {
+        stripe_status: stripe_sub.status,
+        payment_intent_status: pi&.status,
+        payment_intent_next_action_type: pi&.next_action&.type,
+        setup_intent_status: si&.status,
+        setup_intent_next_action_type: si&.next_action&.type
+      }
+    end
 
     def payment_or_setup_intent
       if no_invoice?

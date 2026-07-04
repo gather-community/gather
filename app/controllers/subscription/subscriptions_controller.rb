@@ -70,7 +70,9 @@ module Subscription
       Sentry.configure_scope do |scope|
         scope.set_context("subscription", stripe_subscription_id: subscription.stripe_id)
       end
-      subscription.populate
+      # sync! fetches live from Stripe (populating stripe_sub for this request) and write-caches the
+      # status locally. New/unpersisted subscriptions short-circuit inside sync! and skip the fetch.
+      subscription.sync!
       subscription
     end
   end

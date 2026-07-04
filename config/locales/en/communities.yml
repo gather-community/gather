@@ -5,5 +5,6 @@ en:
         all: "All Statuses"
         trial: "Trial"
         subscribed: "Subscribed"
+        problem: "Problem"
         warning: "Warning"
         deactivated: "Deactivated"

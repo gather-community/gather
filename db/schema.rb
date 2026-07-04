@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_27_000004) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_04_000001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -1085,7 +1085,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_27_000004) do
     t.bigint "cluster_id", null: false
     t.bigint "community_id", null: false
     t.datetime "created_at", null: false
+    t.string "payment_intent_next_action_type"
+    t.string "payment_intent_status"
+    t.string "setup_intent_next_action_type"
+    t.string "setup_intent_status"
     t.string "stripe_id", null: false
+    t.string "stripe_status"
+    t.string "sync_error"
+    t.datetime "synced_at"
     t.datetime "updated_at", null: false
     t.index ["cluster_id"], name: "index_subscriptions_on_cluster_id"
     t.index ["community_id"], name: "index_subscriptions_on_community_id", unique: true

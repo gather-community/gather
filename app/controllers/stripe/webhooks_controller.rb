@@ -23,6 +23,11 @@ module Stripe
       case event.type
       when "invoice.paid"
         TopupProcessor.new(event).process
+        enqueue_sync(event.data.object.subscription)
+      when "invoice.payment_failed", "invoice.payment_action_required", "invoice.finalized"
+        enqueue_sync(event.data.object.subscription)
+      when "customer.subscription.created", "customer.subscription.updated", "customer.subscription.deleted"
+        enqueue_sync(event.data.object.id)
       end
 
       head(:ok)
@@ -36,6 +41,18 @@ module Stripe
     end
 
     private
+
+    # Enqueues a cache refresh for the subscription a webhook event affects. Maps the Stripe
+    # subscription id back to our record (across tenants), mirroring TopupProcessor. A no-op when
+    # the id is blank or unknown to us. customer.subscription.updated is the catch-all that fires
+    # when ACH clears (incomplete -> active) and when microdeposit verification completes.
+    def enqueue_sync(stripe_subscription_id)
+      return if stripe_subscription_id.blank?
+      subscription = ActsAsTenant.without_tenant do
+        ::Subscription::Subscription.find_by(stripe_id: stripe_subscription_id)
+      end
+      ::Subscription::SyncJob.perform_later(subscription.id) if subscription
+    end
 
     def construct_event(payload)
       ::Stripe::Webhook.construct_event(

@@ -85,6 +85,24 @@ describe "Stripe webhooks" do
     end
   end
 
+  describe "subscription cache sync" do
+    it "enqueues a sync for the affected subscription on customer.subscription.updated" do
+      expect { post_event(subscription_updated_event) }
+        .to have_enqueued_job(Subscription::SyncJob).with(subscription.id)
+      expect(response).to have_http_status(:ok)
+    end
+
+    it "enqueues a sync on invoice.paid alongside top-up processing" do
+      expect { post_event(invoice_paid_event(line_amount: 1500)) }
+        .to have_enqueued_job(Subscription::SyncJob).with(subscription.id)
+    end
+
+    it "does not enqueue a sync for a subscription unknown in our DB" do
+      expect { post_event(subscription_updated_event(id: "sub_unknown")) }
+        .not_to have_enqueued_job(Subscription::SyncJob)
+    end
+  end
+
   context "with an invalid signature" do
     it "returns 400 and creates nothing" do
       payload = JSON.generate(invoice_paid_event)
@@ -106,6 +124,13 @@ describe "Stripe webhooks" do
         id: "in_test", object: "invoice", subscription: subscription, currency: line_currency,
         lines: {object: "list", data: [invoice_line(product, line_amount, line_currency)]}
       }}
+    }
+  end
+
+  def subscription_updated_event(id: stripe_sub_id)
+    {
+      id: "evt_test", object: "event", type: "customer.subscription.updated",
+      data: {object: {id: id, object: "subscription", status: "active"}}
     }
   end
 

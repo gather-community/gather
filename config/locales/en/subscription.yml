@@ -1,0 +1,15 @@
+en:
+  subscription:
+    detailed_statuses:
+      active: "Active"
+      scheduled: "Scheduled"
+      needs_payment_method: "Needs payment"
+      awaiting_microdeposits: "Needs bank verify"
+      payment_processing: "Processing"
+      incomplete: "Awaiting payment"
+      incomplete_expired: "Expired"
+      past_due: "Past due"
+      unpaid: "Unpaid"
+      canceled: "Canceled"
+      other: "Unknown"
+      unknown: "Unknown"

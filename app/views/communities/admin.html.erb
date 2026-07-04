@@ -54,6 +54,14 @@
         <td><%= sub.status&.humanize %></td>
       </tr>
       <tr>
+        <td>Detailed Status</td>
+        <td><%= t("subscription.detailed_statuses.#{sub.detailed_status}") %></td>
+      </tr>
+      <tr>
+        <td>Last Synced</td>
+        <td><%= l(sub.synced_at, format: :long) if sub.synced_at %></td>
+      </tr>
+      <tr>
         <td>Users</td>
         <td><%= sub.quantity %></td>
       </tr>

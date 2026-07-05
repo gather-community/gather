@@ -42,9 +42,11 @@ describe Subscription::Subscription do
         expect(derive(stripe_status: "active", payment_intent_status: "succeeded")).to eq(:active)
       end
 
-      it "is :payment_processing while an ACH payment settles" do
+      it "stays :active while a routine recurring ACH renewal settles" do
+        # An active sub has already collected its first payment, so a processing renewal is expected
+        # background activity, not a surfaced 'processing' state.
         expect(derive(stripe_status: "active", payment_intent_status: "processing"))
-          .to eq(:payment_processing)
+          .to eq(:active)
       end
 
       it "is :awaiting_microdeposits when the payment intent needs bank verification" do

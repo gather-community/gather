@@ -221,7 +221,8 @@ class UsersController < ApplicationController
       redirect_to(user_signed_out_url(host: Settings.url.host), allow_other_host: true,
         notice: I18n.t("people.deletion.self_success"))
     else
-      redirect_to(users_path, notice: I18n.t("deactivatable.user.success.hard_destroy"))
+      flash[:success] = I18n.t("deactivatable.user.success.hard_destroy")
+      redirect_to(users_path)
     end
   end
 

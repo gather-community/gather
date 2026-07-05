@@ -20,7 +20,7 @@ describe "household deletion", js: true do
     fill_in_modal("Doomed House")
     click_modal_button
 
-    expect(page).to have_css("div.alert-info", text: /permanently deleted/)
+    expect(page).to have_css("div.alert-success", text: /permanently deleted/)
     expect(Household.exists?(household.id)).to be(false)
     expect(User.exists?(member.id)).to be(false)
   end

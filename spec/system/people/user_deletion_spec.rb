@@ -21,7 +21,7 @@ describe "user deletion", js: true do
       fill_in_modal("Delete Meplease")
       click_modal_button
 
-      expect(page).to have_css("div.alert-info", text: /permanently deleted/)
+      expect(page).to have_css("div.alert-success", text: /permanently deleted/)
       expect(User.exists?(target.id)).to be(false)
       # Directory no longer lists them.
       expect(page).to have_no_content("Delete Meplease")

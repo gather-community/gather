@@ -75,7 +75,8 @@ class HouseholdsController < ApplicationController
         alert: I18n.t("people.deletion.confirmation_mismatch"))
     end
     People::HouseholdDeletion.new(household: @household, actor: current_user).perform!
-    redirect_to(households_path, notice: I18n.t("deactivatable.household.success.hard_destroy"))
+    flash[:success] = I18n.t("deactivatable.household.success.hard_destroy")
+    redirect_to(households_path)
   end
 
   protected

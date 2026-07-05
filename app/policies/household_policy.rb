@@ -1,12 +1,14 @@
 # frozen_string_literal: true
 
 class HouseholdPolicy < ApplicationPolicy
-  alias household record
+  alias_method :household, :record
 
   class Scope < Scope
     def resolve
       result = allow_all_records_in_cluster_if_user_is_active
-      active_admin? ? result : result.active
+      result = result.active unless active_admin?
+      # Never surface the per-community "Deleted Member" placeholder household.
+      result.non_placeholder
     end
 
     def administerable
@@ -78,14 +80,12 @@ class HouseholdPolicy < ApplicationPolicy
     params.delete(:community_id)
   end
 
+  # Whether this actor may hard-delete the household at all (governs whether the button renders).
+  # Member users and their shared records are anonymized/cascaded by People::HouseholdDeletion,
+  # so no per-user or signup/account reference checks are needed here. Warn-only conditions
+  # (outstanding balance, external ward, last admin) come from People::HouseholdDeletion.blockers.
   def destroy?
-    active_admin? && destroy_users? &&
-      Meals::Signup.where(household: household).none? &&
-      Billing::Account.where(household: household).none?
-  end
-
-  def destroy_users?
-    household.users.all? { |u| UserPolicy.new(user, u).destroy? }
+    active_admin? && !household.deleted_placeholder?
   end
 
   def permitted_attributes
@@ -95,9 +95,9 @@ class HouseholdPolicy < ApplicationPolicy
     permitted << :member_type_id if change_member_type?
     permitted << {vehicles_attributes: %i[id make model color plate _destroy]}
     permitted << {emergency_contacts_attributes: %i[id name relationship main_phone alt_phone
-                                                    email location country_code _destroy]}
+      email location country_code _destroy]}
     permitted << {pets_attributes: %i[id name species color vet caregivers
-                                      health_issues _destroy]}
+      health_issues _destroy]}
     permitted
   end
 end

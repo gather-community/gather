@@ -58,9 +58,15 @@ class HouseholdDecorator < ApplicationDecorator
   def edit_action_link_set
     ActionLinkSet.new(
       ActionLink.new(object, :deactivate, icon: "times-circle", path: h.deactivate_household_path(object),
-                                          method: :put, confirm: {name: name}),
-      ActionLink.new(object, :destroy, icon: "trash", path: h.household_path(object), method: :delete,
-                                       confirm: {name: name})
+        method: :put, confirm: {name: name}),
+      ActionLink.new(object, :destroy, icon: "trash", path: "#",
+        data: {
+          controller: "record-delete",
+          "record-delete-url-value": h.household_path(object),
+          "record-delete-confirm-token-value": name,
+          "record-delete-kind-value": "household",
+          action: "record-delete#confirm"
+        })
     )
   end
 end

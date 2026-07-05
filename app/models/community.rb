@@ -183,6 +183,15 @@ class Community < ApplicationRecord
     (households - Array.wrap(hholds_to_save)).each(&:destroy)
   end
 
+  # The per-community "Deleted Member" placeholder user. Records authored by a deleted member
+  # (meals, wiki pages, calendar events) are reassigned to this user so community history
+  # survives anonymized. Created lazily on first deletion — never seeded — so a fresh community
+  # has no placeholder (keeps the "no sample data" generator invariants intact). It lives in its
+  # own deactivated placeholder household and is excluded from directories, selects, etc.
+  def deleted_member
+    households.find_by(deleted_placeholder: true)&.users&.first || create_deleted_member
+  end
+
   def subdomain
     slug
   end
@@ -209,6 +218,16 @@ class Community < ApplicationRecord
   end
 
   private
+
+  # Deactivated ⇒ email is not required and it's excluded from active-scoped lists for free.
+  # Rescues a unique-index race (two concurrent deletions) by re-reading the winner's row.
+  def create_deleted_member
+    household = households.create!(name: "Deleted Members", deleted_placeholder: true)
+    household.users.create!(deleted_placeholder: true, first_name: "Deleted", last_name: "Member",
+      child: false, deactivated_at: Time.current)
+  rescue ActiveRecord::RecordNotUnique
+    households.find_by(deleted_placeholder: true).users.first
+  end
 
   def generate_calendar_token
     self.calendar_token ||= UniqueTokenGenerator.generate(self.class, :calendar_token)

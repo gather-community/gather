@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_27_000004) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_01_000001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -609,6 +609,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_27_000004) do
     t.integer "community_id", null: false
     t.datetime "created_at", precision: nil, null: false
     t.datetime "deactivated_at", precision: nil
+    t.boolean "deleted_placeholder", default: false, null: false
     t.string "garage_nums"
     t.string "keyholders"
     t.bigint "member_type_id"
@@ -619,6 +620,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_27_000004) do
     t.index ["cluster_id"], name: "index_households_on_cluster_id"
     t.index ["community_id", "name"], name: "index_households_on_community_id_and_name", unique: true
     t.index ["community_id"], name: "index_households_on_community_id"
+    t.index ["community_id"], name: "index_one_placeholder_household_per_community", unique: true, where: "deleted_placeholder"
     t.index ["deactivated_at"], name: "index_households_on_deactivated_at"
     t.index ["member_type_id"], name: "index_households_on_member_type_id"
     t.index ["name"], name: "index_households_on_name"
@@ -1128,6 +1130,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_27_000004) do
     t.inet "current_sign_in_ip"
     t.jsonb "custom_data", default: {}, null: false
     t.datetime "deactivated_at", precision: nil
+    t.boolean "deleted_placeholder", default: false, null: false
     t.string "doctor"
     t.string "email", limit: 255
     t.string "encrypted_password", default: "", null: false
@@ -1166,6 +1169,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_27_000004) do
     t.index ["deactivated_at"], name: "index_users_on_deactivated_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["google_email"], name: "index_users_on_google_email", unique: true
+    t.index ["household_id"], name: "index_one_placeholder_user_per_household", unique: true, where: "deleted_placeholder"
     t.index ["household_id"], name: "index_users_on_household_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.check_constraint "email IS NOT NULL OR confirmed_at IS NULL", name: "unconfirmed_if_no_email"

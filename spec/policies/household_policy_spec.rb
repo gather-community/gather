@@ -90,6 +90,9 @@ describe HouseholdPolicy do
       it_behaves_like "permits cluster admins only"
     end
 
+    # Permission only governs whether the delete button renders. Member users, signups and
+    # (zero-balance) accounts are cascaded/anonymized by People::HouseholdDeletion, so they no
+    # longer block here; warn-only conditions live in People::HouseholdDeletion.blockers.
     permissions :destroy? do
       let(:user) { create(:user) }
       let(:admin) { create(:admin) }
@@ -100,18 +103,13 @@ describe HouseholdPolicy do
         it_behaves_like "permits admins but not regular users"
       end
 
-      context "with non-deletable user" do
+      context "with members who have authored events" do
         let!(:event) { create(:event, creator: household.users[0]) }
-        it_behaves_like "forbids all"
+        it_behaves_like "permits admins but not regular users"
       end
 
-      context "with signup" do
-        let!(:signup) { create(:meal_signup, household: household, diner_counts: [2, 1]) }
-        it_behaves_like "forbids all"
-      end
-
-      context "with account" do
-        let!(:account) { create(:account, household: household) }
+      context "for the Deleted Member placeholder household" do
+        let(:household) { Defaults.community.deleted_member.household }
         it_behaves_like "forbids all"
       end
     end
@@ -199,6 +197,14 @@ describe HouseholdPolicy do
       context "for inactive user" do
         let(:actor) { inactive_user }
         it { is_expected.to be_empty }
+      end
+
+      context "with a Deleted Member placeholder household present" do
+        let(:actor) { admin }
+        let!(:placeholder_household) { Defaults.community.deleted_member.household }
+        it "excludes the placeholder household even from an admin's scope" do
+          is_expected.not_to include(placeholder_household)
+        end
       end
     end
 

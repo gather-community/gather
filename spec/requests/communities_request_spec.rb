@@ -12,20 +12,20 @@ describe "communities request" do
   end
 
   describe "destroy" do
-    context "with wrong community_slug" do
+    context "with wrong confirmation" do
       it "redirects back with alert and does not enqueue job" do
         expect do
-          delete community_path(community), params: {community_slug: "wrong-slug"}
+          delete community_path(community), params: {confirmation: "wrong-slug"}
         end.not_to have_enqueued_job(CommunityDeletionJob)
         expect(response).to redirect_to(admin_community_path(community))
         expect(flash[:alert]).to eq("Incorrect slug. Community was not deleted.")
       end
     end
 
-    context "with correct community_slug" do
+    context "with correct confirmation" do
       it "enqueues job with community and actor ids and redirects" do
         expect do
-          delete community_path(community), params: {community_slug: community.slug}
+          delete community_path(community), params: {confirmation: community.slug}
         end.to have_enqueued_job(CommunityDeletionJob).with(community.id, actor.id)
         expect(response).to redirect_to(communities_path)
       end

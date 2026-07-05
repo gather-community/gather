@@ -187,6 +187,14 @@ module Subscription
     # This happens for subscriptions that start at a future date since we don't prorate
     # and don't do a $0 invoice, we instead use a SetupIntent, and so Stripe considers
     # the sub active even though the SetupIntent still hasn't been finished.
+    # Whether a monthly messaging topup can be added/changed now: the base subscription must be a
+    # live, invoiceable sub (active and not future-dated) with a saved payment method we can charge
+    # immediately. Future-dated subs have no payment method attached yet, so they're excluded.
+    def messaging_topup_editable?
+      return false unless persisted? && active? && !future?
+      stripe_sub&.customer&.invoice_settings&.default_payment_method.present?
+    end
+
     def needs_payment_method?
       return nil if stripe_sub.nil?
       active? && payment_or_setup_intent&.status == "requires_payment_method"

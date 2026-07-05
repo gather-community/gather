@@ -1,41 +1,53 @@
 # frozen_string_literal: true
 
 module Stripe
-  # Processes a Stripe `invoice.paid` event: if the invoice includes a paid line for the
-  # recognized messaging top-up product, credits the community's messaging account with a
-  # top-up transaction. Idempotent (keyed on the invoice line item id) so Stripe retries
-  # are safe. Tenant is resolved from our own Subscription records, not from Stripe.
+  # Processes Stripe invoice webhooks for the monthly messaging topup: credits a community's
+  # Messaging::Account wallet when a topup invoice *finalizes* (so slow ACH payments don't delay
+  # usable credit), and reverses that credit with an offsetting transaction only when Stripe gives
+  # up collecting (invoice marked uncollectible or voided). Both are idempotent so Stripe retries are
+  # safe. Tenant/community is resolved from our own Subscription::MessagingTopup records — the topup
+  # is its own Stripe subscription, so its invoices carry the messaging product's line.
   #
-  # This class reopens the stripe gem's Stripe namespace, so app constants are referenced
-  # with a leading :: (a bare `Subscription`, for instance, would resolve to the gem's
-  # Stripe::Subscription).
+  # This class reopens the stripe gem's Stripe namespace, so app constants are referenced with a
+  # leading :: (a bare `Subscription`, for instance, would resolve to the gem's Stripe::Subscription).
   class TopupProcessor
-    TOPUP_DESCRIPTION = "Messaging bundle top-up"
+    CREDIT_DESCRIPTION = "Monthly messaging topup"
+    REVERSAL_DESCRIPTION = "Reversal of uncollected messaging topup"
 
     def initialize(event)
       @event = event
       @invoice = event.data.object
     end
 
-    def process
-      lines = topup_lines
-      return if lines.empty? # Not a messaging top-up; ignore (the common case).
+    # Credits the wallet for each messaging line on a finalized invoice.
+    def credit
+      each_topup_line { |community, line| credit_line(community, line) }
+    end
 
-      subscription = find_subscription
-      if subscription.nil?
-        report("Stripe messaging top-up invoice has no matching subscription")
-        return
-      end
-
-      ::ActsAsTenant.with_tenant(subscription.cluster) do
-        community = subscription.community
-        lines.each { |line| credit(community, line) }
-      end
+    # Reverses those credits when the invoice is abandoned (uncollectible/voided).
+    def reverse
+      each_topup_line { |_community, line| reverse_line(line) }
     end
 
     private
 
     attr_reader :event, :invoice
+
+    def each_topup_line
+      lines = topup_lines
+      return if lines.empty? # Not a messaging invoice; ignore (the common case).
+
+      topup = find_topup
+      if topup.nil?
+        report("Stripe messaging invoice has no matching topup subscription")
+        return
+      end
+
+      ::ActsAsTenant.with_tenant(topup.cluster) do
+        community = topup.community
+        lines.each { |line| yield(community, line) }
+      end
+    end
 
     def topup_lines
       product_id = ::Messaging::Account::PRODUCT_ID
@@ -43,15 +55,15 @@ module Stripe
       invoice.lines.data.select { |line| line.price&.product == product_id }
     end
 
-    def find_subscription
+    def find_topup
       sub_id = invoice.subscription
       return nil if sub_id.blank?
       ::ActsAsTenant.without_tenant do
-        ::Subscription::Subscription.find_by(stripe_id: sub_id)
+        ::Subscription::MessagingTopup.find_by(stripe_id: sub_id)
       end
     end
 
-    def credit(community, line)
+    def credit_line(community, line)
       return if ::Messaging::Transaction.exists?(stripe_invoice_line_item_id: line.id)
 
       currency = account_currency(community, line)
@@ -61,16 +73,32 @@ module Stripe
         a.currency = currency
       end
       account.transactions.create!(
-        amount_cents: line.price.unit_amount,
-        description: TOPUP_DESCRIPTION,
+        # line.amount is what was actually invoiced (proration-correct), unlike price.unit_amount.
+        amount_cents: line.amount,
+        description: CREDIT_DESCRIPTION,
         stripe_invoice_line_item_id: line.id
       )
     end
 
-    # Resolves the account currency for this community/line, or nil (after reporting) if it can't
-    # be determined or the Stripe charge currency doesn't match. A mismatch means something is
-    # misconfigured (e.g. a bundle priced in the wrong currency), so we give up rather than record
-    # a top-up in the wrong currency.
+    def reverse_line(line)
+      reversal_key = "#{line.id}:reversal"
+      return if ::Messaging::Transaction.exists?(stripe_invoice_line_item_id: reversal_key)
+
+      # Reverse the exact amount we credited. If nothing was credited (e.g. the finalize event never
+      # reached us), there's nothing to undo.
+      original = ::Messaging::Transaction.find_by(stripe_invoice_line_item_id: line.id)
+      return if original.nil?
+
+      original.account.transactions.create!(
+        amount_cents: -original.amount_cents,
+        description: REVERSAL_DESCRIPTION,
+        stripe_invoice_line_item_id: reversal_key
+      )
+    end
+
+    # Resolves the account currency for this community/line, or nil (after reporting) if it can't be
+    # determined or the Stripe charge currency doesn't match. A mismatch means something is
+    # misconfigured, so we give up rather than record a credit in the wrong currency.
     def account_currency(community, line)
       currency = community.default_currency
       if currency.blank?
@@ -78,7 +106,7 @@ module Stripe
         return nil
       end
       if line.currency.present? && line.currency != currency
-        report("Stripe messaging top-up currency mismatch: line=#{line.currency} account=#{currency}")
+        report("Stripe messaging topup currency mismatch: line=#{line.currency} account=#{currency}")
         return nil
       end
       currency

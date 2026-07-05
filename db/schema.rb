@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_04_000001) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_05_000001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -1081,6 +1081,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_04_000001) do
     t.index ["community_id"], name: "index_subscription_intents_on_community_id", unique: true
   end
 
+  create_table "subscription_messaging_topups", force: :cascade do |t|
+    t.bigint "cluster_id", null: false
+    t.bigint "community_id", null: false
+    t.datetime "created_at", null: false
+    t.string "stripe_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cluster_id"], name: "index_subscription_messaging_topups_on_cluster_id"
+    t.index ["community_id"], name: "index_subscription_messaging_topups_on_community_id", unique: true
+    t.index ["stripe_id"], name: "index_subscription_messaging_topups_on_stripe_id", unique: true
+  end
+
   create_table "subscriptions", force: :cascade do |t|
     t.bigint "cluster_id", null: false
     t.bigint "community_id", null: false
@@ -1484,6 +1495,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_04_000001) do
   add_foreign_key "statements", "clusters"
   add_foreign_key "subscription_intents", "clusters"
   add_foreign_key "subscription_intents", "communities"
+  add_foreign_key "subscription_messaging_topups", "clusters"
+  add_foreign_key "subscription_messaging_topups", "communities"
   add_foreign_key "subscriptions", "clusters"
   add_foreign_key "subscriptions", "communities"
   add_foreign_key "transactions", "accounts"

@@ -1,0 +1,41 @@
+<%# Modal for choosing the monthly messaging topup. Reuses the .gather-modal CSS shell but is driven
+    by the messaging-topup Stimulus controller (not the generic modal), because it needs radios, a
+    live proration notice, and its own submit. current_cents preselects the matching radio. %>
+<% current_cents = topup&.amount_cents %>
+<div class="gather-modal hiding" data-messaging-topup-target="modal"
+     data-action="keydown.esc@window->messaging-topup#close">
+  <div class="gather-modal-overlay" data-action="click->messaging-topup#close"></div>
+  <div class="gather-modal-dialog" role="dialog" aria-modal="true">
+    <div class="modal-header">
+      <button class="close" type="button" data-action="click->messaging-topup#close" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h2 class="modal-title">Monthly Messaging Topup</h2>
+    </div>
+    <div class="modal-body">
+      <p class="hint">
+        Choose how much messaging credit to add to your balance each month. Your payment method on
+        file is charged automatically.
+      </p>
+      <label class="radio">
+        <input type="radio" name="topup_choice" value="none"
+               data-action="messaging-topup#choose" <%= "checked" if current_cents.nil? %>>
+        None
+      </label>
+      <% options.each do |opt| %>
+        <label class="radio">
+          <input type="radio" name="topup_choice" value="<%= opt[:cents] %>"
+                 data-messaging-topup-label="<%= opt[:label] %>"
+                 data-action="messaging-topup#choose" <%= "checked" if opt[:cents] == current_cents %>>
+          <%= opt[:label] %>/month
+        </label>
+      <% end %>
+      <p class="messaging-topup-notice text-muted" data-messaging-topup-target="notice" hidden></p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-default" data-action="messaging-topup#close">Cancel</button>
+      <button type="button" class="btn btn-primary" data-messaging-topup-target="save"
+              data-action="messaging-topup#save" disabled>Save</button>
+    </div>
+  </div>
+</div>

@@ -30,6 +30,11 @@ module Subscription
       if @subscription.new_record? || @subscription.incomplete_expired?
         @intent = Intent.find_by(community: current_community)
       end
+
+      # The monthly messaging topup is its own Stripe subscription; load it (live) for the Messaging
+      # section rendered on the post-payment view.
+      @messaging_topup = current_community.messaging_topup&.tap(&:populate)
+      @messaging_account = current_community.messaging_account
     end
 
     def start_payment

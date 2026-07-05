@@ -138,6 +138,7 @@ describe Community, :without_tenant do
       # ── Subscription ──────────────────────────────────────────────────────
       create(:subscription_intent, community: Defaults.community)
       create(:subscription, community: Defaults.community)
+      create(:messaging_topup, community: Defaults.community)
 
       # ── Wiki ──────────────────────────────────────────────────────────────
       create(:wiki_page)

@@ -20,16 +20,7 @@ module Stripe
       # Persist the raw payload for debugging before doing any processing.
       WebhookEvent.record!(event, JSON.parse(payload))
 
-      case event.type
-      when "invoice.paid"
-        TopupProcessor.new(event).process
-        enqueue_sync(event.data.object.subscription)
-      when "invoice.payment_failed", "invoice.payment_action_required", "invoice.finalized"
-        enqueue_sync(event.data.object.subscription)
-      when "customer.subscription.created", "customer.subscription.updated", "customer.subscription.deleted"
-        enqueue_sync(event.data.object.id)
-      end
-
+      handle_event(event)
       head(:ok)
     end
 
@@ -41,6 +32,24 @@ module Stripe
     end
 
     private
+
+    def handle_event(event)
+      case event.type
+      when "invoice.finalized"
+        # Credit the messaging wallet as soon as the invoice is finalized, before payment clears, so
+        # slow ACH payments don't delay usable credit.
+        TopupProcessor.new(event).credit
+        enqueue_sync(event.data.object.subscription)
+      when "invoice.marked_uncollectible", "invoice.voided"
+        # Stripe gave up collecting: reverse any messaging credit we made for this invoice.
+        TopupProcessor.new(event).reverse
+        enqueue_sync(event.data.object.subscription)
+      when "invoice.paid", "invoice.payment_failed", "invoice.payment_action_required"
+        enqueue_sync(event.data.object.subscription)
+      when "customer.subscription.created", "customer.subscription.updated", "customer.subscription.deleted"
+        enqueue_sync(event.data.object.id)
+      end
+    end
 
     # Enqueues a cache refresh for the subscription a webhook event affects. Maps the Stripe
     # subscription id back to our record (across tenants), mirroring TopupProcessor. A no-op when

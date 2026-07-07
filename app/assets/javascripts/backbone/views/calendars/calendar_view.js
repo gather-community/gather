@@ -693,9 +693,13 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
     const eventKey = this.eventCountKey(event);
     const start = event.start.clone();
     const end = this.eventEnd(event);
+    const visibleRange = this.visibleDateRange();
+    if (!visibleRange) {
+      return;
+    }
+
     this._renderedEventRangesByKey[eventKey] = {start, end};
 
-    const visibleRange = this.visibleDateRange();
     let date = (start.isAfter(visibleRange.start) ? start : visibleRange.start)
       .clone()
       .startOf("day");
@@ -718,9 +722,16 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
 
   visibleDateRange() {
     const view = this.calendar.fullCalendar("getView");
+    const start = view && (view.start || view.intervalStart);
+    const end = view && (view.end || view.intervalEnd);
+
+    if (!start || !end) {
+      return null;
+    }
+
     return {
-      start: (view && (view.start || view.intervalStart)).clone(),
-      end: (view && (view.end || view.intervalEnd)).clone(),
+      start: start.clone(),
+      end: end.clone(),
     };
   },
 

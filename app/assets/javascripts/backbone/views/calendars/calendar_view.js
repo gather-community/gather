@@ -25,6 +25,8 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
     this._fcGridFocusDate = null;
     this._fcGridShouldFocus = false;
     this._calendarLiveRegionText = null;
+    this._renderedEventDateKeys = {};
+    this._renderedEventRangesByKey = {};
     this.showAppropriateEarlyLink();
     this.initCalendar();
   },
@@ -80,7 +82,11 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
       loading: this.onLoading.bind(this),
       eventDrop: this.onEventChange.bind(this),
       eventResize: this.onEventChange.bind(this),
-      viewRender: this.updateCalendarLiveRegion.bind(this),
+      viewRender: () => {
+        this.resetRenderedEventCounts();
+        this.updateCalendarLiveRegion({includeEmptyState: false});
+      },
+      eventAfterRender: this.trackRenderedEventCount.bind(this),
       eventAfterAllRender: this.onViewRender.bind(this),
     });
   },
@@ -181,22 +187,47 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
     this.$el.trigger("viewRender"); // Notify other views
   },
 
-  updateCalendarLiveRegion() {
+  updateCalendarLiveRegion(options) {
     const view = this.calendar.fullCalendar("getView");
     if (!this.liveRegion.length) {
       return;
     }
 
-    if (!view || view.name !== "month") {
+    if (!view) {
       this.liveRegion.text("");
       this._calendarLiveRegionText = null;
       return;
     }
 
-    const message = `Calendar now showing ${view.intervalStart.format("MMMM YYYY")}`;
+    const message = this.calendarLiveRegionMessage(view, options || {});
     if (message !== this._calendarLiveRegionText) {
       this.liveRegion.text(message);
       this._calendarLiveRegionText = message;
+    }
+  },
+
+  calendarLiveRegionMessage(view, options) {
+    const messageParts = [];
+    if (view.name === "month") {
+      messageParts.push(`Calendar now showing ${view.intervalStart.format("MMMM YYYY")}`);
+    }
+
+    if (
+      options.includeEmptyState !== false &&
+      (view.name === "agendaWeek" || view.name === "month")
+    ) {
+      const eventCount = this.renderedEventCountInInterval(view.intervalStart, view.intervalEnd);
+      messageParts.push(`${this.eventCountLabel(eventCount)} ${this.eventCountPeriodForView(view)}`);
+    }
+
+    return messageParts.join(". ");
+  },
+
+  eventCountPeriodForView(view) {
+    if (view.name === "agendaWeek") {
+      return "this week";
+    } else {
+      return "this month";
     }
   },
 
@@ -307,13 +338,20 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
   },
 
   applyFullCalendarGridDateLabels() {
+    const view = this.calendar.fullCalendar("getView");
     this.calendar.find(".fc-bg .fc-day[data-date]:visible").each((_, cell) => {
       const $cell = $(cell);
       const dateString = $cell.attr("data-date");
       const date = $.fullCalendar.moment(dateString, "YYYY-MM-DD");
 
       if (date.isValid()) {
-        $cell.attr("aria-label", date.format("dddd, MMMM D, YYYY"));
+        const showCount =
+          view && (view.name === "month" || view.name === "agendaDay" || view.name === "agendaWeek");
+        let label = date.format("dddd, MMMM D, YYYY");
+        if (showCount) {
+          label += `, ${this.eventCountLabel(this.renderedEventCountOnDay(date))}`;
+        }
+        $cell.attr("aria-label", label);
       }
     });
   },
@@ -522,10 +560,10 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
     }
 
     if (view.name === "month") {
-      return this.calendar.find(".fc-month-view .fc-day[data-date]:visible");
+      return this.calendar.find(".fc-month-view .fc-bg .fc-day[data-date]:visible");
     }
 
-    const $allDayCells = this.calendar.find(".fc-agenda-view .fc-day-grid .fc-day[data-date]:visible");
+    const $allDayCells = this.calendar.find(".fc-agenda-view .fc-day-grid .fc-bg .fc-day[data-date]:visible");
     if ($allDayCells.length) {
       return $allDayCells;
     }
@@ -631,12 +669,78 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
     this.calendar.fullCalendar("changeView", viewType, date);
   },
 
-  hasEventInInterval(start, end) {
-    const matches = this.calendar.fullCalendar(
-      "clientEvents",
-      (event) => event.start.isBefore(end) && event.end.isAfter(start)
-    );
-    return matches.length > 0;
+  resetRenderedEventCounts() {
+    this._renderedEventDateKeys = {};
+    this._renderedEventRangesByKey = {};
+  },
+
+  eventCountLabel(eventCount) {
+    if (eventCount === 0) {
+      return "No events";
+    } else if (eventCount === 1) {
+      return "1 event";
+    } else {
+      return `${eventCount} events`;
+    }
+  },
+
+  trackRenderedEventCount(event, el) {
+    const $el = $(el);
+    if ($el.hasClass("fc-bg-event")) {
+      return;
+    }
+
+    const eventKey = this.eventCountKey(event);
+    const start = event.start.clone();
+    const end = this.eventEnd(event);
+    this._renderedEventRangesByKey[eventKey] = {start, end};
+
+    const visibleRange = this.visibleDateRange();
+    let date = (start.isAfter(visibleRange.start) ? start : visibleRange.start)
+      .clone()
+      .startOf("day");
+    const lastDate = (end.isBefore(visibleRange.end) ? end : visibleRange.end)
+      .clone()
+      .subtract(1, "second")
+      .startOf("day");
+    while (!date.isAfter(lastDate, "day")) {
+      const dateString = date.format("YYYY-MM-DD");
+      this._renderedEventDateKeys[dateString] = this._renderedEventDateKeys[dateString] || {};
+      this._renderedEventDateKeys[dateString][eventKey] = true;
+      date.add(1, "day");
+    }
+  },
+
+  eventCountKey(event) {
+    const id = event.id || event.eventId || event._id || event.title;
+    return `${id}-${event.start.format()}-${this.eventEnd(event).format()}`;
+  },
+
+  visibleDateRange() {
+    const view = this.calendar.fullCalendar("getView");
+    return {
+      start: (view && (view.start || view.intervalStart)).clone(),
+      end: (view && (view.end || view.intervalEnd)).clone(),
+    };
+  },
+
+  eventEnd(event) {
+    if (event.end) {
+      return event.end;
+    }
+
+    return event.start.clone().add(1, event.allDay ? "day" : "second");
+  },
+
+  renderedEventCountInInterval(start, end) {
+    return Object.values(this._renderedEventRangesByKey)
+      .filter((range) => range.start.isBefore(end) && range.end.isAfter(start))
+      .length;
+  },
+
+  renderedEventCountOnDay(date) {
+    const dateString = date.format("YYYY-MM-DD");
+    return Object.keys(this._renderedEventDateKeys[dateString] || {}).length;
   },
 
   applyFixedTimes(start, end) {

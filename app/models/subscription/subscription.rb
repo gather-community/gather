@@ -134,7 +134,11 @@ module Subscription
 
     def self.derive_invoiced_active_status(status, next_action_type, si_status)
       return :awaiting_microdeposits if next_action_type == MICRODEPOSITS
-      return :payment_processing if status == "processing"
+      # A processing payment intent on an *active* sub is a routine recurring renewal settling (ACH
+      # takes days). The sub already collected its first payment — otherwise Stripe would still have it
+      # as "incomplete" (we create with payment_behavior: default_incomplete) — so this is expected
+      # background activity, not something to surface. First payments and future-dated setups still
+      # report :payment_processing via the incomplete and setup-intent paths.
       # The payment-method-not-yet-attached lag edge (setup succeeded, invoice PI still needs a method).
       return :payment_processing if status == "requires_payment_method" && si_status == "succeeded"
       :active
@@ -190,16 +194,6 @@ module Subscription
     def needs_payment_method?
       return nil if stripe_sub.nil?
       active? && payment_or_setup_intent&.status == "requires_payment_method"
-    end
-
-    def payment_processing?
-      return nil if stripe_sub.nil?
-      stripe_sub.latest_invoice&.payment_intent&.status == "processing" ||
-        stripe_sub.pending_setup_intent&.status == "processing" ||
-        # There seems to be a short delay between when the SetupIntent is marked 'succeeded'
-        # and when the subscription default_payment_method gets updated. If we load the page
-        # inside that delay, we should say 'processing'.
-        needs_payment_method? && stripe_sub.pending_setup_intent&.status == "succeeded"
     end
 
     def payment_method_types

@@ -28,7 +28,7 @@
     Your subscription is active but we still need to collect your payment information.
   </div>
   <%= render("pre_payment", subscription: subscription) %>
-<% elsif subscription.payment_processing? %>
+<% elsif subscription.detailed_status == :payment_processing %>
   <div class="topline">
     Your subscription payment is processing. This can take a few days depending on the
     payment method. In the meantime, you are welcome to use Gather!

@@ -102,7 +102,7 @@ module Subscription
       stripe_sub = Stripe::Subscription.create(
         customer: customer.id,
         items: [{price: price.id}],
-        default_payment_method: customer.invoice_settings.default_payment_method,
+        default_payment_method: subscription.default_payment_method_id,
         payment_settings: {save_default_payment_method: "on_subscription"}
       )
       community.create_messaging_topup!(stripe_id: stripe_sub.id)

@@ -192,7 +192,15 @@ module Subscription
     # immediately. Future-dated subs have no payment method attached yet, so they're excluded.
     def messaging_topup_editable?
       return false unless persisted? && active? && !future?
-      stripe_sub&.customer&.invoice_settings&.default_payment_method.present?
+      default_payment_method_id.present?
+    end
+
+    # The payment method the topup subscription should reuse. We save it on the subscription itself
+    # (save_default_payment_method: "on_subscription"), so prefer that; fall back to the customer's
+    # invoice-settings default for older/hand-configured customers.
+    def default_payment_method_id
+      return nil if stripe_sub.nil?
+      stripe_sub.default_payment_method || stripe_sub.customer&.invoice_settings&.default_payment_method
     end
 
     def needs_payment_method?

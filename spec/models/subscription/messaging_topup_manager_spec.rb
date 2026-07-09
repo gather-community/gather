@@ -5,10 +5,13 @@ require "rails_helper"
 describe Subscription::MessagingTopupManager do
   let(:community) { Defaults.community } # country_code US => usd
   let(:customer) do
-    double(id: "cus_1", invoice_settings: double(default_payment_method: "pm_1"))
+    double(id: "cus_1", invoice_settings: double(default_payment_method: nil))
   end
   let(:subscription) do
-    build(:subscription, community: community).tap { |s| s.stripe_sub = double(customer: customer) }
+    build(:subscription, community: community).tap do |s|
+      # The base subscription saves the card on the subscription itself, not on the customer.
+      s.stripe_sub = double(customer: customer, default_payment_method: "pm_1")
+    end
   end
   subject(:manager) { described_class.new(community: community, subscription: subscription) }
 

@@ -11,7 +11,7 @@ module Subscription
     def preview
       subscription = load_authorize_and_populate
       manager = MessagingTopupManager.new(community: current_community, subscription: subscription)
-      render(json: manager.preview(validated_cents) || {})
+      render(json: format_preview(manager.preview(validated_cents)))
     end
 
     def update
@@ -35,6 +35,19 @@ module Subscription
       authorize(subscription, :update_messaging_topup?)
       raise Pundit::NotAuthorizedError unless subscription.messaging_topup_editable?
       subscription
+    end
+
+    # Shapes the manager's raw proration into what the modal JS renders. A negative immediate charge
+    # (from a decrease/removal) is presented as a credit. Returns {} when there's nothing to preview
+    # (first activation), so the JS falls back to its full-month copy.
+    def format_preview(result)
+      return {} if result.nil?
+      cents = result[:immediate_charge_cents]
+      {
+        immediate_charge: Money.from_cents(cents.abs, result[:currency]).format,
+        is_credit: cents.negative?,
+        next_bill_date: I18n.l(result[:next_bill_date])
+      }
     end
 
     # Ensures the posted amount is one of the offered per-currency tiers — never trust the client.

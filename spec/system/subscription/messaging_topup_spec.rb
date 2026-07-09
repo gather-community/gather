@@ -17,8 +17,9 @@ describe "messaging monthly topup", js: true do
       pending_setup_intent: nil,
       current_period_end: 1.month.from_now.to_i,
       discount: nil,
+      default_payment_method: default_payment_method,
       customer: double(id: "cus_1", email: "biller@example.com",
-        invoice_settings: double(default_payment_method: default_payment_method)),
+        invoice_settings: double(default_payment_method: nil)),
       items: double(data: [double(quantity: 3,
         price: double(unit_amount: 600, currency: "usd", recurring: double(interval_count: 3),
           product: double(metadata: {"tier" => "standard"})))]))
@@ -66,6 +67,27 @@ describe "messaging monthly topup", js: true do
 
     expect(page).to have_content("Your monthly messaging topup has been updated")
     expect(page).to have_content("$5.00/month")
+  end
+
+  context "when a topup already exists" do
+    let!(:topup) { create(:messaging_topup, community: actor.community, stripe_id: "sub_topup1") }
+
+    scenario "changing the amount shows the real prorated charge" do
+      allow(Stripe::Price).to receive(:list).and_return(double(data: []))
+      allow(Stripe::Price).to receive(:create).and_return(double(id: "price_1"))
+      allow(Stripe::Invoice).to receive(:upcoming).and_return(
+        double(lines: double(data: [double(proration: true, amount: 342)]))
+      )
+
+      visit(subscription_path)
+      expect(page).to have_content("$5.00/month")
+
+      click_link("Edit")
+      find("label", text: "$10.00/month").click
+      # The notice reflects the Stripe-computed proration, not a hard-coded amount.
+      expect(page).to have_content("$3.42 today (prorated)")
+      expect(page).to have_content("$10.00 per month")
+    end
   end
 
   context "when the base subscription has no saved payment method" do

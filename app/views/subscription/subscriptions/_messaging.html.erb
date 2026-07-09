@@ -20,7 +20,8 @@
         <td>
           <%= topup ? topup.amount_display : "None" %>
           <% if editable %>
-            <%= link_to(topup ? "Edit" : "Add", "#", data: {action: "messaging-topup#open"}) %>
+            <%= link_to(topup ? "Edit" : "Add", "#", class: "messaging-topup-edit",
+                  data: {action: "messaging-topup#open"}) %>
           <% end %>
         </td>
       </tr>

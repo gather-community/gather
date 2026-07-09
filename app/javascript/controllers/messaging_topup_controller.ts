@@ -5,7 +5,7 @@ import {jsonFetch} from "../utils/json_fetch";
  * Drives the monthly messaging topup modal on the subscription page. Opens the .gather-modal shell,
  * shows an accurate charge/proration notice as the choice changes (first activation is a full month
  * today with no proration; changing an existing topup fetches the real prorated amount from Stripe),
- * and submits the chosen amount (or a removal) as a Rails form.
+ * and submits the chosen amount (or a removal) over AJAX behind the global loader.
  */
 export default class extends Controller {
   static targets = ["modal", "notice", "save"];
@@ -76,24 +76,32 @@ export default class extends Controller {
     this.showNotice(`Now ${when}, then ${label} per month from ${result.next_bill_date}.`);
   }
 
-  save(): void {
+  // Submits the change over AJAX behind the global loader. The server credits the wallet
+  // synchronously, so on success we reload to the (green) success flash with the balance already
+  // updated. On failure we keep the modal open and show the reason plus an operator reference and
+  // the time it was attempted.
+  async save(): Promise<void> {
     const selected = this.selectedValue();
     if (selected === null || !this.changed(selected)) {
       return;
     }
-    const form = document.createElement("form");
-    form.method = "post";
-    form.action = this.updateUrlValue;
-    this.appendHidden(form, "_method", selected === "none" ? "delete" : "patch");
-    if (selected !== "none") {
-      this.appendHidden(form, "cents", selected);
+    const attemptedAt = new Date().toLocaleString();
+    this.saveTarget.disabled = true;
+    this.showLoader();
+    try {
+      const result = selected === "none"
+        ? await jsonFetch(this.updateUrlValue, {method: "DELETE"})
+        : await jsonFetch(this.updateUrlValue, {method: "PATCH", body: {cents: selected}});
+      if (result && result.ok) {
+        window.location.reload(); // keep the loader up through the reload
+        return;
+      }
+      this.showError(result, attemptedAt);
+    } catch {
+      this.showError(null, attemptedAt);
     }
-    const csrfMeta = document.querySelector<HTMLMetaElement>("meta[name=\"csrf-token\"]");
-    if (csrfMeta) {
-      this.appendHidden(form, "authenticity_token", csrfMeta.content);
-    }
-    document.body.appendChild(form);
-    form.submit();
+    this.hideLoader();
+    this.saveTarget.disabled = false;
   }
 
   // Whether `selected` differs from the currently-saved topup ("none" when there is none).
@@ -110,17 +118,30 @@ export default class extends Controller {
   private showNotice(text: string): void {
     this.noticeTarget.textContent = text;
     this.noticeTarget.hidden = false;
+    this.noticeTarget.classList.remove("messaging-topup-notice--error");
   }
 
   private hideNotice(): void {
     this.noticeTarget.hidden = true;
   }
 
-  private appendHidden(form: HTMLFormElement, name: string, value: string): void {
-    const input = document.createElement("input");
-    input.type = "hidden";
-    input.name = name;
-    input.value = value;
-    form.appendChild(input);
+  // result is the JSON body ({error, reference}) on a handled failure, or null when the request
+  // never completed. attemptedAt is the local time the user clicked Save, for operator debugging.
+  private showError(result: {[key: string]: any} | null, attemptedAt: string): void {
+    const reason = (result && result.error) || "Something went wrong and your topup was not changed.";
+    const reference = result && result.reference ? ` Reference: ${result.reference}.` : "";
+    this.showNotice(
+      `${reason}${reference} (Attempted ${attemptedAt}.) `
+      + "If this keeps happening, please contact Gather support with that reference and time."
+    );
+    this.noticeTarget.classList.add("messaging-topup-notice--error");
+  }
+
+  private showLoader(): void {
+    document.getElementById("glb-load-ind")?.classList.remove("hiding");
+  }
+
+  private hideLoader(): void {
+    document.getElementById("glb-load-ind")?.classList.add("hiding");
   }
 }

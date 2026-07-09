@@ -37,12 +37,13 @@ module Stripe
       case event.type
       when "invoice.finalized"
         # Credit the messaging wallet as soon as the invoice is finalized, before payment clears, so
-        # slow ACH payments don't delay usable credit.
-        TopupProcessor.new(event).credit
+        # slow ACH payments don't delay usable credit. (The save flow also credits synchronously;
+        # this is the idempotent backstop for that and the source of truth for cycle renewals.)
+        TopupProcessor.new(event.data.object, event: event).credit
         enqueue_sync(event.data.object.subscription)
       when "invoice.marked_uncollectible", "invoice.voided"
         # Stripe gave up collecting: reverse any messaging credit we made for this invoice.
-        TopupProcessor.new(event).reverse
+        TopupProcessor.new(event.data.object, event: event).reverse
         enqueue_sync(event.data.object.subscription)
       when "invoice.paid", "invoice.payment_failed", "invoice.payment_action_required"
         enqueue_sync(event.data.object.subscription)

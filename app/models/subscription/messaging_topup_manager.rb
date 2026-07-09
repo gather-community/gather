@@ -36,12 +36,15 @@ module Subscription
 
     # Points the monthly topup at `cents` per month. Creates the topup subscription on first use
     # (full month billed now), else swaps the item price and invoices the proration immediately.
+    # Returns the finalized Stripe invoice this produced (or nil), so the caller can credit the
+    # wallet synchronously — the invoice is finalized during this call even for ACH (only settlement
+    # is delayed), so the balance is usable immediately.
     def set_amount!(cents)
       price = find_or_create_price(cents, required_currency)
       if existing_item
         Stripe::SubscriptionItem.update(existing_item.id, price: price.id,
           proration_behavior: "always_invoice")
-        topup
+        latest_invoice
       else
         create_subscription(price)
       end
@@ -103,9 +106,17 @@ module Subscription
         customer: customer.id,
         items: [{price: price.id}],
         default_payment_method: subscription.default_payment_method_id,
-        payment_settings: {save_default_payment_method: "on_subscription"}
+        payment_settings: {save_default_payment_method: "on_subscription"},
+        expand: ["latest_invoice"]
       )
       community.create_messaging_topup!(stripe_id: stripe_sub.id)
+      stripe_sub.latest_invoice
+    end
+
+    # The topup subscription's most recent invoice (finalized after an item change with
+    # always_invoice), with lines available for synchronous crediting.
+    def latest_invoice
+      Stripe::Subscription.retrieve(id: topup.stripe_id, expand: ["latest_invoice"]).latest_invoice
     end
 
     # The current topup subscription's single item, or nil when there's no topup yet.

@@ -14,9 +14,11 @@ module Stripe
     CREDIT_DESCRIPTION = "Monthly messaging topup"
     REVERSAL_DESCRIPTION = "Reversal of uncollected messaging topup"
 
-    def initialize(event)
+    # invoice is a Stripe invoice object; event is the originating webhook event when there is one
+    # (nil when crediting synchronously from the save flow — used only for error reporting).
+    def initialize(invoice, event: nil)
+      @invoice = invoice
       @event = event
-      @invoice = event.data.object
     end
 
     # Credits the wallet for each messaging line on a finalized invoice.
@@ -78,6 +80,10 @@ module Stripe
         description: CREDIT_DESCRIPTION,
         stripe_invoice_line_item_id: line.id
       )
+    rescue ::ActiveRecord::RecordNotUnique
+      # Raced with the webhook (or a retry) crediting the same line — the unique index on
+      # stripe_invoice_line_item_id already recorded it. Nothing more to do.
+      nil
     end
 
     def reverse_line(line)
@@ -113,10 +119,9 @@ module Stripe
     end
 
     def report(message)
-      ::Gather::ErrorReporter.instance.report(
-        StandardError.new(message),
-        data: {stripe_event_id: event.id, event_type: event.type, invoice_id: invoice.id}
-      )
+      data = {invoice_id: invoice.id}
+      data.merge!(stripe_event_id: event.id, event_type: event.type) if event
+      ::Gather::ErrorReporter.instance.report(StandardError.new(message), data: data)
     end
   end
 end

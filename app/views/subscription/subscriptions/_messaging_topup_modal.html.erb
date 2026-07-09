@@ -17,23 +17,25 @@
         Choose how much messaging credit to add to your balance each month. Your payment method on
         file is charged automatically.
       </p>
-      <div class="radio">
-        <label>
-          <input type="radio" name="topup_choice" value="none"
-                 data-action="messaging-topup#choose" <%= "checked" if current_cents.nil? %>>
-          None
-        </label>
-      </div>
-      <% options.each do |opt| %>
+      <div class="messaging-topup-options">
         <div class="radio">
           <label>
-            <input type="radio" name="topup_choice" value="<%= opt[:cents] %>"
-                   data-messaging-topup-label="<%= opt[:label] %>"
-                   data-action="messaging-topup#choose" <%= "checked" if opt[:cents] == current_cents %>>
-            <%= opt[:label] %>/month
+            <input type="radio" name="topup_choice" value="none"
+                   data-action="messaging-topup#choose" <%= "checked" if current_cents.nil? %>>
+            None
           </label>
         </div>
-      <% end %>
+        <% options.each do |opt| %>
+          <div class="radio">
+            <label>
+              <input type="radio" name="topup_choice" value="<%= opt[:cents] %>"
+                     data-messaging-topup-label="<%= opt[:label] %>"
+                     data-action="messaging-topup#choose" <%= "checked" if opt[:cents] == current_cents %>>
+              <%= opt[:label] %>/month
+            </label>
+          </div>
+        <% end %>
+      </div>
       <p class="messaging-topup-notice text-muted" data-messaging-topup-target="notice" hidden></p>
     </div>
     <div class="modal-footer">

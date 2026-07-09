@@ -2,3 +2,13 @@
 .messaging-topup-edit {
   margin-left: 15px;
 }
+
+// Indent the topup radio options by the modal body's padding width.
+.messaging-topup-options {
+  padding-left: 15px;
+}
+
+// A failed save reason shown in the modal.
+.messaging-topup-notice--error {
+  color: $brand-danger;
+}

@@ -42,10 +42,13 @@ describe "messaging monthly topup", js: true do
   end
 
   scenario "adding a monthly topup from None" do
-    # Stub the Stripe writes the save performs.
+    # Stub the Stripe writes the save performs. The created subscription returns a finalized invoice
+    # so the controller can credit the wallet synchronously.
     allow(Stripe::Price).to receive(:list).and_return(double(data: []))
     allow(Stripe::Price).to receive(:create).and_return(double(id: "price_1"))
-    allow(Stripe::Subscription).to receive(:create).and_return(double(id: "sub_topup_new"))
+    allow(Stripe::Subscription).to receive(:create).and_return(
+      double(id: "sub_topup_new", latest_invoice: fake_finalized_invoice("sub_topup_new", 500))
+    )
 
     visit(subscription_path)
 
@@ -65,8 +68,18 @@ describe "messaging monthly topup", js: true do
 
     click_button("Save")
 
-    expect(page).to have_content("Your monthly messaging topup has been updated")
+    # Reloads to the green success flash with the wallet already credited synchronously.
+    expect(page).to have_content("Your monthly messaging topup is set")
     expect(page).to have_content("$5.00/month")
+    expect(page).to have_css(".alert-success")
+  end
+
+  # A finalized invoice carrying one messaging-product line, as the credit path reads it.
+  def fake_finalized_invoice(sub_id, amount)
+    product_id = Settings.stripe.messaging.topup_product_id
+    double("invoice", id: "in_new", subscription: sub_id, currency: "usd",
+      lines: double(data: [double(id: "il_new", amount: amount, currency: "usd",
+        price: double(product: product_id))]))
   end
 
   context "when a topup already exists" do

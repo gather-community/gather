@@ -3,16 +3,37 @@
 module Stripe
   # Processes Stripe invoice webhooks for the monthly messaging topup: credits a community's
   # Messaging::Account wallet when a topup invoice *finalizes* (so slow ACH payments don't delay
-  # usable credit), and reverses that credit with an offsetting transaction only when Stripe gives
-  # up collecting (invoice marked uncollectible or voided). Both are idempotent so Stripe retries are
-  # safe. Tenant/community is resolved from our own Subscription::MessagingTopup records — the topup
-  # is its own Stripe subscription, so its invoices carry the messaging product's line.
+  # usable credit), and reverses that credit with an offsetting transaction when Stripe gives up
+  # collecting. "Gives up" has two shapes depending on the account's failed-payment setting: the
+  # invoice is marked uncollectible/voided, OR the subscription itself is canceled with the invoice
+  # left unpaid (Stripe's default) — handle_topup_cancellation covers the latter. Everything is
+  # idempotent so Stripe retries are safe. Tenant/community is resolved from our own
+  # Subscription::MessagingTopup records — the topup is its own Stripe subscription, so its invoices
+  # carry the messaging product's line.
   #
   # This class reopens the stripe gem's Stripe namespace, so app constants are referenced with a
   # leading :: (a bare `Subscription`, for instance, would resolve to the gem's Stripe::Subscription).
   class TopupProcessor
     CREDIT_DESCRIPTION = "Monthly messaging topup"
     REVERSAL_DESCRIPTION = "Reversal of uncollected messaging topup"
+
+    # Handles a topup subscription being canceled (customer.subscription.deleted) — e.g. Stripe's
+    # dunning canceling it after a failed payment. Any invoice we credited that's still unpaid is
+    # reversed and voided, then the local record is removed so the community shows no topup (and can
+    # add a fresh one). A normal end-of-cycle cancellation (from a user removal) has only paid
+    # invoices, so nothing is reversed or voided.
+    def self.handle_topup_cancellation(subscription_id)
+      topup = ::ActsAsTenant.without_tenant do
+        ::Subscription::MessagingTopup.find_by(stripe_id: subscription_id)
+      end
+      return if topup.nil?
+
+      ::Stripe::Invoice.list(subscription: subscription_id, status: "open").data.each do |invoice|
+        new(invoice).reverse # idempotent; only reverses lines we actually credited
+        ::Stripe::Invoice.void_invoice(invoice.id) # abandon it in Stripe (fires invoice.voided, a no-op)
+      end
+      ::ActsAsTenant.with_tenant(topup.cluster) { topup.destroy! }
+    end
 
     # invoice is a Stripe invoice object; event is the originating webhook event when there is one
     # (nil when crediting synchronously from the save flow — used only for error reporting).
@@ -23,25 +44,27 @@ module Stripe
 
     # Credits the wallet for each messaging line on a finalized invoice.
     def credit
-      each_topup_line { |community, line| credit_line(community, line) }
+      each_topup_line(report_missing: true) { |community, line| credit_line(community, line) }
     end
 
-    # Reverses those credits when the invoice is abandoned (uncollectible/voided).
+    # Reverses those credits when the invoice is abandoned. report_missing is false because a missing
+    # local record here is legitimate — e.g. our own void (from handle_topup_cancellation) fires an
+    # invoice.voided after the record is already gone; there is simply nothing to reverse.
     def reverse
-      each_topup_line { |_community, line| reverse_line(line) }
+      each_topup_line(report_missing: false) { |_community, line| reverse_line(line) }
     end
 
     private
 
     attr_reader :event, :invoice
 
-    def each_topup_line
+    def each_topup_line(report_missing:)
       lines = topup_lines
       return if lines.empty? # Not a messaging invoice; ignore (the common case).
 
       topup = find_topup
       if topup.nil?
-        report("Stripe messaging invoice has no matching topup subscription")
+        report("Stripe messaging invoice has no matching topup subscription") if report_missing
         return
       end
 

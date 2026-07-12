@@ -129,6 +129,41 @@ describe "Stripe webhooks" do
     end
   end
 
+  describe "topup subscription canceled with an unpaid invoice (customer.subscription.deleted)" do
+    before { post_event(invoice_event("invoice.finalized", line_amount: 1500)) } # credits $15
+
+    it "reverses the credit, voids the open invoice, and removes the topup record" do
+      open_invoice = double("invoice", id: "in_open", subscription: topup_sub_id, currency: "usd",
+        lines: double(data: [double(id: "il_test1", amount: 1500, currency: "usd",
+          price: double(product: product_id))]))
+      allow(Stripe::Invoice).to receive(:list)
+        .with(subscription: topup_sub_id, status: "open").and_return(double(data: [open_invoice]))
+      expect(Stripe::Invoice).to receive(:void_invoice).with("in_open")
+
+      post_event(subscription_deleted_event(id: topup_sub_id))
+
+      expect(response).to have_http_status(:ok)
+      with_default_tenant do
+        account = Messaging::Account.first
+        expect(account.balance_cents).to eq(0)
+        expect(account.transactions.find_by(stripe_invoice_line_item_id: "il_test1:reversal").amount_cents)
+          .to eq(-1500)
+        expect(Subscription::MessagingTopup.exists?(stripe_id: topup_sub_id)).to be(false)
+      end
+    end
+
+    it "leaves a canceled base subscription (no topup record) untouched" do
+      allow(Stripe::Invoice).to receive(:list)
+      post_event(subscription_deleted_event(id: stripe_sub_id))
+
+      expect(Stripe::Invoice).not_to have_received(:list)
+      with_default_tenant do
+        expect(Subscription::MessagingTopup.exists?(stripe_id: topup_sub_id)).to be(true)
+        expect(Messaging::Account.first.balance_cents).to eq(1500) # credit untouched
+      end
+    end
+  end
+
   describe "subscription cache sync" do
     it "enqueues a sync for the affected subscription on customer.subscription.updated" do
       expect { post_event(subscription_updated_event) }
@@ -177,6 +212,13 @@ describe "Stripe webhooks" do
     {
       id: "evt_test", object: "event", type: "customer.subscription.updated",
       data: {object: {id: id, object: "subscription", status: "active"}}
+    }
+  end
+
+  def subscription_deleted_event(id:)
+    {
+      id: "evt_test", object: "event", type: "customer.subscription.deleted",
+      data: {object: {id: id, object: "subscription", status: "canceled"}}
     }
   end
 

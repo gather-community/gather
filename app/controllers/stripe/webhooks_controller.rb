@@ -47,7 +47,12 @@ module Stripe
         enqueue_sync(event.data.object.subscription)
       when "invoice.paid", "invoice.payment_failed", "invoice.payment_action_required"
         enqueue_sync(event.data.object.subscription)
-      when "customer.subscription.created", "customer.subscription.updated", "customer.subscription.deleted"
+      when "customer.subscription.deleted"
+        # If a topup sub was canceled with an unpaid invoice (Stripe's default failed-payment action),
+        # reverse and void it. No-op for a canceled base subscription.
+        TopupProcessor.handle_topup_cancellation(event.data.object.id)
+        enqueue_sync(event.data.object.id)
+      when "customer.subscription.created", "customer.subscription.updated"
         enqueue_sync(event.data.object.id)
       end
     end

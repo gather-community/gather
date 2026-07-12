@@ -106,6 +106,11 @@ module Subscription
         customer: customer.id,
         items: [{price: price.id}],
         default_payment_method: subscription.default_payment_method_id,
+        # error_if_incomplete makes a card decline raise synchronously (a clear failure at save,
+        # with nothing credited) rather than leaving an unpaid invoice we'd credit then reverse.
+        # ACH is unaffected: its payment goes to `processing` and the subscription is `active`, which
+        # is not "incomplete", so it still credits on finalize and only reverses on a later bounce.
+        payment_behavior: "error_if_incomplete",
         payment_settings: {save_default_payment_method: "on_subscription"},
         expand: ["latest_invoice"]
       )

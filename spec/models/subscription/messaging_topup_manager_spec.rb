@@ -26,7 +26,8 @@ describe Subscription::MessagingTopupManager do
     context "when no topup subscription exists yet" do
       it "creates a monthly subscription billed now and persists the local record" do
         expect(Stripe::Subscription).to receive(:create).with(
-          hash_including(customer: "cus_1", default_payment_method: "pm_1")
+          hash_including(customer: "cus_1", default_payment_method: "pm_1",
+            payment_behavior: "error_if_incomplete")
         ).and_return(double(id: "sub_topup_new", latest_invoice: double("invoice")))
 
         expect { manager.set_amount!(500) }.to change(Subscription::MessagingTopup, :count).by(1)

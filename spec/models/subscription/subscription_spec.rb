@@ -194,6 +194,30 @@ describe Subscription::Subscription do
     end
   end
 
+  describe "#microdeposit_verification_url" do
+    let(:sub) { create(:subscription) }
+
+    def stub_next_action(next_action)
+      sub.stripe_sub = double(latest_invoice: double(payment_intent: double(next_action: next_action)))
+    end
+
+    it "returns the hosted URL when microdeposit verification is pending" do
+      stub_next_action(double(type: "verify_with_microdeposits",
+        verify_with_microdeposits: double(hosted_verification_url: "https://verify.test/abc")))
+      expect(sub.microdeposit_verification_url).to eq("https://verify.test/abc")
+    end
+
+    it "is nil for a different next action" do
+      stub_next_action(double(type: "redirect_to_url"))
+      expect(sub.microdeposit_verification_url).to be_nil
+    end
+
+    it "is nil when there is no next action" do
+      stub_next_action(nil)
+      expect(sub.microdeposit_verification_url).to be_nil
+    end
+  end
+
   describe "#messaging_topup_editable?" do
     let(:sub) { create(:subscription) }
 

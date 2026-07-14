@@ -19,6 +19,7 @@ describe "messaging topup requests" do
   def fake_finalized_invoice(sub_id, amount)
     product_id = Settings.stripe.messaging.topup_product_id
     double("invoice", id: "in_1", subscription: sub_id, currency: "usd",
+      payment_intent: double(status: "succeeded"), # card paid instantly
       lines: double(data: [double(id: "il_1", amount: amount, currency: "usd",
         price: double(product: product_id))]))
   end

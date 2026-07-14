@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_05_000001) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_14_000001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -890,12 +890,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_05_000001) do
     t.datetime "created_at", null: false
     t.bigint "creator_id"
     t.string "description", limit: 255, null: false
+    t.string "stripe_event_id"
     t.string "stripe_invoice_line_item_id"
     t.datetime "updated_at", null: false
     t.index ["account_id"], name: "index_messaging_transactions_on_account_id"
     t.index ["cluster_id"], name: "index_messaging_transactions_on_cluster_id"
     t.index ["creator_id"], name: "index_messaging_transactions_on_creator_id"
-    t.index ["stripe_invoice_line_item_id"], name: "index_messaging_transactions_on_stripe_invoice_line_item_id", unique: true
+    t.index ["stripe_event_id"], name: "index_messaging_transactions_on_stripe_event_id"
+    t.index ["stripe_invoice_line_item_id"], name: "index_messaging_transactions_on_stripe_invoice_line_item_id"
   end
 
   create_table "people_emergency_contacts", id: :serial, force: :cascade do |t|

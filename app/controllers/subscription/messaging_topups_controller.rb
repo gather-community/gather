@@ -23,7 +23,9 @@ module Subscription
       subscription = load_authorize_and_populate
       manager = MessagingTopupManager.new(community: current_community, subscription: subscription)
       invoice = manager.set_amount!(validated_cents)
-      Stripe::TopupProcessor.new(invoice).credit if invoice
+      # Credit synchronously from the just-finalized invoice (idempotent with the webhooks), but only
+      # if the payment is already settled or in-flight — same rule as invoice.finalized.
+      Stripe::TopupProcessor.new(invoice).credit_if_settled_or_in_flight if invoice
       flash[:success] = t("subscription.messaging_topup.updated", balance: current_balance.format)
       render(json: {ok: true})
     rescue Stripe::StripeError => e
@@ -49,6 +51,8 @@ module Subscription
     # A clear failure reason plus an operator handle (Stripe request id). The JS adds the local time
     # the user attempted the change.
     def render_stripe_error(error)
+      EventLog.emit(event_name: "topup_error", community_id: current_community.id,
+        description: error.message, reference: error.request_id)
       render(json: {ok: false, error: error.message, reference: error.request_id},
         status: :unprocessable_entity)
     end

@@ -41,19 +41,25 @@ module Subscription
     # is delayed), so the balance is usable immediately.
     def set_amount!(cents)
       price = find_or_create_price(cents, required_currency)
-      if existing_item
-        Stripe::SubscriptionItem.update(existing_item.id, price: price.id,
-          proration_behavior: "always_invoice")
-        latest_invoice
-      else
-        create_subscription(price)
-      end
+      invoice =
+        if existing_item
+          Stripe::SubscriptionItem.update(existing_item.id, price: price.id,
+            proration_behavior: "always_invoice")
+          latest_invoice
+        else
+          create_subscription(price)
+        end
+      EventLog.emit(event_name: "topup_set", community_id: community.id,
+        description: "Set monthly messaging topup", amount_cents: cents, invoice_id: invoice&.id)
+      invoice
     end
 
     # Schedules removal at the end of the current paid month. Idempotent-ish: a no-op if none exists.
     def cancel!
       return if topup.nil?
       Stripe::Subscription.update(topup.stripe_id, cancel_at_period_end: true)
+      EventLog.emit(event_name: "topup_canceled", community_id: community.id,
+        description: "Scheduled monthly messaging topup cancellation")
     end
 
     # Previews the immediate proration for changing an existing topup to `cents`. Returns
@@ -112,16 +118,19 @@ module Subscription
         # is not "incomplete", so it still credits on finalize and only reverses on a later bounce.
         payment_behavior: "error_if_incomplete",
         payment_settings: {save_default_payment_method: "on_subscription"},
-        expand: ["latest_invoice"]
+        # Expand the payment_intent so the synchronous credit can read its status (processing vs paid)
+        # without a second API call.
+        expand: ["latest_invoice.payment_intent"]
       )
       community.create_messaging_topup!(stripe_id: stripe_sub.id)
       stripe_sub.latest_invoice
     end
 
     # The topup subscription's most recent invoice (finalized after an item change with
-    # always_invoice), with lines available for synchronous crediting.
+    # always_invoice), with its payment_intent expanded for synchronous crediting.
     def latest_invoice
-      Stripe::Subscription.retrieve(id: topup.stripe_id, expand: ["latest_invoice"]).latest_invoice
+      Stripe::Subscription.retrieve(id: topup.stripe_id, expand: ["latest_invoice.payment_intent"])
+        .latest_invoice
     end
 
     # The current topup subscription's single item, or nil when there's no topup yet.

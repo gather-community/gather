@@ -28,14 +28,14 @@ describe Subscription::MessagingTopupManager do
         expect(Stripe::Subscription).to receive(:create).with(
           hash_including(customer: "cus_1", default_payment_method: "pm_1",
             payment_behavior: "error_if_incomplete")
-        ).and_return(double(id: "sub_topup_new", latest_invoice: double("invoice")))
+        ).and_return(double(id: "sub_topup_new", latest_invoice: double("invoice", id: "in_x")))
 
         expect { manager.set_amount!(500) }.to change(Subscription::MessagingTopup, :count).by(1)
         expect(community.reload.messaging_topup.stripe_id).to eq("sub_topup_new")
       end
 
       it "returns the finalized invoice for synchronous crediting" do
-        invoice = double("invoice")
+        invoice = double("invoice", id: "in_x")
         allow(Stripe::Subscription).to receive(:create)
           .and_return(double(id: "sub_topup_new", latest_invoice: invoice))
         expect(manager.set_amount!(500)).to eq(invoice)
@@ -43,7 +43,7 @@ describe Subscription::MessagingTopupManager do
 
       it "creates a monthly ($/mo) price under the messaging product" do
         allow(Stripe::Subscription).to receive(:create)
-          .and_return(double(id: "sub_topup_new", latest_invoice: double("invoice")))
+          .and_return(double(id: "sub_topup_new", latest_invoice: double("invoice", id: "in_x")))
         expect(Stripe::Price).to receive(:create).with(
           hash_including(unit_amount: 500, currency: "usd",
             recurring: {interval: "month", interval_count: 1})
@@ -57,7 +57,7 @@ describe Subscription::MessagingTopupManager do
 
       before do
         allow(Stripe::Subscription).to receive(:retrieve).and_return(
-          double(items: double(data: [double(id: "si_1")]), latest_invoice: double("invoice"))
+          double(items: double(data: [double(id: "si_1")]), latest_invoice: double("invoice", id: "in_x"))
         )
       end
 

@@ -78,6 +78,7 @@ describe "messaging monthly topup", js: true do
   def fake_finalized_invoice(sub_id, amount)
     product_id = Settings.stripe.messaging.topup_product_id
     double("invoice", id: "in_new", subscription: sub_id, currency: "usd",
+      payment_intent: double(status: "succeeded"), # card paid instantly -> credit synchronously
       lines: double(data: [double(id: "il_new", amount: amount, currency: "usd",
         price: double(product: product_id))]))
   end

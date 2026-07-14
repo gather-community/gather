@@ -9,7 +9,10 @@
   <div class="topline">
     Your bank account requires verification.
     <% if subscription.microdeposit_verification_url %>
-      Use the button below once the microdeposits arrive (a day or two), then check back here.
+      A <%= link_to("microdeposit", Subscription::Subscription::MICRODEPOSIT_HELP_URL,
+            target: "_blank", rel: "noopener") %>
+      will land in your account in a day or two — use the button below to enter its code, then check
+      back here.
     <% else %>
       Please check your email for instructions and check back here once verification is complete.
     <% end %>

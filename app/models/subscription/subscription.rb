@@ -228,8 +228,13 @@ module Subscription
       payment_or_setup_intent&.next_action&.type == "verify_with_microdeposits"
     end
 
-    # Stripe's hosted page where the customer enters the microdeposit amounts (or, in test mode, the
-    # descriptor code) to verify their bank account. nil unless microdeposit verification is pending.
+    # Stripe's customer-facing explainer for micro-deposit verification.
+    MICRODEPOSIT_HELP_URL =
+      "https://support.stripe.com/questions/verify-a-new-ach-direct-debit-customer-using-micro-deposits"
+
+    # Stripe's hosted page where the customer enters the microdeposit's descriptor code (or, for the
+    # amount-based method, the deposit amounts) to verify their bank account. nil unless microdeposit
+    # verification is pending.
     def microdeposit_verification_url
       return nil if stripe_sub.nil?
       action = payment_or_setup_intent&.next_action

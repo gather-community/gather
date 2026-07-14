@@ -11,8 +11,7 @@
     <% if subscription.microdeposit_verification_url %>
       A <%= link_to("microdeposit", Subscription::Subscription::MICRODEPOSIT_HELP_URL,
             target: "_blank", rel: "noopener") %>
-      will land in your account in a day or two — use the button below to enter its code, then check
-      back here.
+      will land in your account in a day or two. Use the button below to complete verification.
     <% else %>
       Please check your email for instructions and check back here once verification is complete.
     <% end %>

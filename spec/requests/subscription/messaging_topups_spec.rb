@@ -25,6 +25,7 @@ describe "messaging topup requests" do
   end
 
   before do
+    create(:feature_flag, name: "messaging", status: true)
     use_user_subdomain(actor)
     sign_in(actor)
     allow(Stripe::Subscription).to receive(:retrieve).and_return(fake_main_sub)
@@ -74,6 +75,17 @@ describe "messaging topup requests" do
 
       expect(response).to have_http_status(:ok)
       expect(response.parsed_body["ok"]).to be(true)
+    end
+  end
+
+  describe "with the messaging feature flag off" do
+    before { FeatureFlag.find_by(name: "messaging").update!(status: false) }
+
+    it "refuses to change the topup" do
+      expect(Stripe::Subscription).not_to receive(:create)
+      expect do
+        patch(subscription_messaging_topup_path, params: {cents: 500}, as: :json)
+      end.to raise_error(Pundit::NotAuthorizedError)
     end
   end
 end

@@ -167,6 +167,20 @@ Module namespaces are defined in files like `app/models/meals.rb` which set `tab
 
 **Custom Fields:** JSONB-backed extensible fields defined declaratively on models. Community settings are implemented this way.
 
+**Feature Flags:** Unshipped features are gated by the `FeatureFlag` model (not tenant-scoped; rows are created/toggled manually, e.g. in the console). Call it **directly** from controllers and templates — don't wrap it in a helper:
+
+```ruby
+FeatureFlag.lookup("messaging").on?(current_user)
+```
+
+- Use `lookup(name)`, not `find_by(name:)` — it returns an unsaved, default-**off** flag when the row doesn't exist, so a feature is off everywhere until you explicitly turn it on (and there's no nil to guard).
+- **Always pass `current_user`.** With the default `interface: "basic"` the flag is a global on/off and the user is ignored; switching a flag to `interface: "user"` makes it check per-user membership (`feature_flag_users`), which lets you enable a feature for just yourself in production. Passing the user means that switch needs no code change. (`on?` raises if a `"user"`-interface flag gets no user.)
+- Gate **both** the UI and the endpoints — hiding a link doesn't stop a direct request. Also skip any expensive work (e.g. external API calls) the hidden feature would trigger.
+- Don't gate inbound webhooks/background reconciliation: turning a flag off shouldn't strand data that already exists.
+- Specs that exercise a flagged feature must turn it on: `create(:feature_flag, name: "messaging", status: true)`.
+
+Existing flags: `messaging`, `gdrive`, `restrictions`.
+
 ### Controller Conventions
 
 - `ApplicationController` includes concerns from `ApplicationControllable::*` (RequestPreprocessing, Setters, Loaders, UrlHelpers, Users, Csv)

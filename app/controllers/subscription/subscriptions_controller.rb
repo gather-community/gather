@@ -32,7 +32,9 @@ module Subscription
       end
 
       # The monthly messaging topup is its own Stripe subscription; load it (live) for the Messaging
-      # section rendered on the post-payment view.
+      # section rendered on the post-payment view. Skipped (along with its Stripe call) while
+      # messaging is behind its flag.
+      return unless FeatureFlag.lookup("messaging").on?(current_user)
       @messaging_topup = current_community.messaging_topup&.tap(&:populate)
       @messaging_account = current_community.messaging_account
     end

@@ -34,6 +34,7 @@ describe "messaging monthly topup", js: true do
   end
 
   before do
+    create(:feature_flag, name: "messaging", status: true)
     allow(Stripe::Subscription).to receive(:retrieve) do |args|
       args[:id].to_s.start_with?("sub_topup") ? fake_topup_sub(amount_cents: 500) : fake_main_sub
     end
@@ -111,6 +112,17 @@ describe "messaging monthly topup", js: true do
       visit(subscription_path)
       expect(page).to have_content("None")
       expect(page).to have_no_link("Add")
+    end
+  end
+
+  context "with the messaging feature flag off" do
+    before { FeatureFlag.find_by(name: "messaging").update!(status: false) }
+
+    scenario "the Messaging section is hidden entirely" do
+      visit(subscription_path)
+      expect(page).to have_content("App Subscription") # page still renders
+      expect(page).to have_no_content("Monthly Topup")
+      expect(page).to have_no_content("Current Balance")
     end
   end
 end

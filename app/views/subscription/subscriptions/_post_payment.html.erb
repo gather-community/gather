@@ -12,5 +12,9 @@
   </table>
 </p>
 
-<%= render("messaging", subscription: subscription,
-      topup: @messaging_topup&.decorate, account: @messaging_account) %>
+<%# Hidden until the rest of messaging is ready to ship. Passing the user lets the flag be flipped to
+    the "user" interface and enabled for individual users. %>
+<% if FeatureFlag.lookup("messaging").on?(current_user) %>
+  <%= render("messaging", subscription: subscription,
+        topup: @messaging_topup&.decorate, account: @messaging_account) %>
+<% end %>

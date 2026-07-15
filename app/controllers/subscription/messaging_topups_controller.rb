@@ -3,8 +3,10 @@
 module Subscription
   # Add/change/remove a community's monthly messaging topup. All actions operate on the community's
   # base Subscription (authorized via update_messaging_topup?) and require it to be editable (active,
-  # not future-dated, with a payment method on file).
+  # not future-dated, with a payment method on file). Gated by the messaging feature flag.
   class MessagingTopupsController < ApplicationController
+    before_action :verify_messaging_enabled
+
     # Returns the immediate prorated charge for changing an existing topup to params[:cents], as JSON
     # consumed by the modal. First activation has no proration, so this returns {} (the JS shows the
     # full-month copy instead).
@@ -42,6 +44,11 @@ module Subscription
     end
 
     private
+
+    # Defense in depth: the UI is hidden while the flag is off, but the endpoints must be too.
+    def verify_messaging_enabled
+      raise Pundit::NotAuthorizedError unless FeatureFlag.lookup("messaging").on?(current_user)
+    end
 
     def current_balance
       account = current_community.reload.messaging_account

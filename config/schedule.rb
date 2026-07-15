@@ -21,6 +21,10 @@ every 1.day, at: "2:30 am" do
   enqueue("Subscription::SyncAllJob")
 end
 
+every 1.day, at: "2:45 am" do
+  enqueue("Subscription::RefreshPricingDataJob")
+end
+
 every 1.day, at: "3:00 am" do
   enqueue("Communities::InactivityWarningJob")
 end

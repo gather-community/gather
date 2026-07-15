@@ -122,6 +122,34 @@ u.save!(validate: false)
 
 Run the script with `bundle exec ruby tmp/screenshot.rb`. Output PNGs go in `tmp/` (gitignored).
 
+### Adding Screenshots to a PR
+
+GitHub's drag-and-drop uploads go to its `user-attachments` CDN through a browser-only, session-authenticated endpoint — there is **no public API for it**, so screenshots can't be attached that way from here. Don't ask the user to drag files in; use this instead (the repo is public, so raw URLs render):
+
+1. Crop the dead space off the full-page screenshot — `vips` is installed:
+
+```bash
+vips crop tmp/shot.png tmp/pr_shot.png 0 0 1280 680   # args: x y width height
+```
+
+2. Commit the image and push. `tmp/` is gitignored, so force-add:
+
+```bash
+git add -f tmp/pr_shot.png
+git commit -m "Add PR screenshot (temporary)"
+git push
+```
+
+3. Embed it in the PR body using a **SHA-pinned** raw URL with that commit's SHA:
+
+```
+https://raw.githubusercontent.com/gather-community/gather/<SHA>/tmp/pr_shot.png
+```
+
+4. Delete the image in a follow-up commit and push.
+
+The URL keeps rendering after the delete because the blob still exists at the pinned SHA, so the PR shows the images while the merged tree stays clean — only the blobs remain in history (a few hundred KB). **Pin to the SHA, not a branch name**; a branch-based URL breaks the moment the file is deleted.
+
 ## Architecture
 
 ### Multi-Tenancy Hierarchy
@@ -284,6 +312,10 @@ Merging dependabot branches one at a time is slow (each merge rebases all the ot
 8. **Sanity-check before pushing** (cheap, catches the worst of major bumps before a ~28 min CI cycle): `RAILS_ENV=development bundle exec rails runner "puts 'ok'"` (boot), `yarn build` (esbuild), and for type-only bumps a `tsc` pass. Type checking is **not** in CI, so it won't gate the build — but still surface any new errors a major `@types/*` bump introduces.
 9. **Verify only the expected files changed** (`Gemfile`, `Gemfile.lock`, `package.json`, `yarn.lock` — plus any deliberate follow-up like an added gem line) via `git status --short` — no drift leaked in.
 10. **Commit, push, open one PR.** In the PR body, list every bump with its PR number and add `Closes #…` for each, plus the breaking-change review from step 7 (per-gem: what changed, whether it affects us, action taken). Dependabot auto-closes its own PRs once it sees the dependency updated on `develop` after merge (including superseded duplicates), so the individual PRs clean themselves up.
+
+## Missing SSH Key When Pushing
+
+The SSH key lives on the Mac host and is forwarded into the devcontainer via VSCode's agent socket — it is not in the container's `~/.ssh`. If a push fails with `Permission denied (publickey)` and `ssh-add -l` reports "The agent has no identities" (typical after the host reboots), **ask the user to run a `git pull` on the host**. That reloads the key into the host's agent, and the forwarded agent picks it up immediately — no container restart needed. Don't work around it by reconfiguring git credential helpers or fiddling with keys in the container.
 
 ## Polling CI After Opening a PR
 

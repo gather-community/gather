@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_14_000001) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_15_000001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -1057,6 +1057,24 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_14_000001) do
     t.jsonb "payload", null: false
     t.datetime "updated_at", null: false
     t.index ["event_id"], name: "index_stripe_webhook_events_on_event_id"
+  end
+
+  create_table "subscription_exchange_rates", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "currency", null: false
+    t.datetime "fetched_at", null: false
+    t.decimal "rate", precision: 18, scale: 8, null: false
+    t.datetime "updated_at", null: false
+    t.index ["currency"], name: "index_subscription_exchange_rates_on_currency", unique: true
+  end
+
+  create_table "subscription_inflation_readings", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "fetched_at", null: false
+    t.decimal "index_value", precision: 12, scale: 4, null: false
+    t.datetime "updated_at", null: false
+    t.integer "year", null: false
+    t.index ["year"], name: "index_subscription_inflation_readings_on_year", unique: true
   end
 
   create_table "subscription_intents", force: :cascade do |t|

@@ -44,7 +44,7 @@ module Subscription
     def find_or_create_price
       match = Stripe::Price.list.data.detect do |price|
         price.product == product.id &&
-          price.unit_amount == intent.price_per_user_cents * intent.months_per_period &&
+          price.unit_amount == unit_amount &&
           price.currency == intent.currency &&
           price.recurring.interval == "month" &&
           price.recurring.interval_count == intent.months_per_period
@@ -54,11 +54,22 @@ module Subscription
 
     def create_price
       Stripe::Price.create(
-        unit_amount: intent.price_per_user_cents * intent.months_per_period,
+        unit_amount: unit_amount,
         currency: intent.currency,
         recurring: {interval: "month", interval_count: intent.months_per_period},
         product: product.id
       )
+    end
+
+    # The per-period price in the smallest currency unit, computed from the tier/currency/period by
+    # the app's price calculator (inflation-adjusted, localized). A Stripe Price is only ever
+    # touched inside #register, so this is computed only when someone actually subscribes.
+    def unit_amount
+      @unit_amount ||= PriceCalculator.new(
+        tier: intent.tier,
+        currency: intent.currency,
+        months_per_period: intent.months_per_period
+      ).unit_amount_cents
     end
 
     def find_or_create_customer

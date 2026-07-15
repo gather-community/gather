@@ -45,3 +45,9 @@ stripe:
   webhook_signing_secret:  # whsec_... (printed by `stripe listen`)
   messaging:
     topup_product_id:      # prod_... (a product created in Stripe TEST mode; topup prices live under it)
+
+# Subscription price-calculator data sources. The exchange rate provider (open.er-api.com) needs
+# no key. The CPI provider (US BLS) needs a free registration key: https://data.bls.gov/registrationEngine/
+pricing:
+  cpi:
+    api_key:

@@ -56,3 +56,18 @@ stripe:
   messaging:
     # The Stripe product whose purchase tops up a messaging account. Override per environment.
     topup_product_id: prod_test_messaging_topup
+
+# External data sources for the self-serve subscription price calculator. Fetched nightly by
+# Subscription::RefreshPricingDataJob and cached in the DB.
+pricing:
+  exchange_rate:
+    # open.er-api.com is free and needs no key. Swap base_url/api_key for a paid provider.
+    base_url: https://open.er-api.com/v6/latest
+    api_key: ~
+  cpi:
+    # US BLS public data API (v2 is a POST endpoint). series_id CUUR0000SA0 = CPI-U, US city
+    # average, all items (NSA). api_key is a free BLS registration key required by v2; set it via
+    # SETTINGS__PRICING__CPI__API_KEY in prod.
+    base_url: https://api.bls.gov/publicAPI/v2/timeseries/data/
+    series_id: CUUR0000SA0
+    api_key: ~

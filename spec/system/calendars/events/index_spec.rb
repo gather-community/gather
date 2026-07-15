@@ -313,26 +313,64 @@ describe "event calendar", js: true do
       )
     end
 
+    scenario "announces empty week and month views in a live region" do
+      visit(calendar_events_path(calendar))
+
+      expect(page).to have_css("#calendar-live-region", text: "No events this week", visible: false)
+
+      find(".fc-agendaDay-button").click
+      expect(page).to have_css("#calendar-live-region", text: "", visible: false)
+
+      find(".fc-month-button").click
+      expect(page).to have_css("#calendar-live-region", text: "No events this month", visible: false)
+    end
+
+    scenario "announces event counts for views and focused day cells" do
+      today = Time.zone.today
+      create(:event, calendar: calendar, all_day: true, starts_at: today.in_time_zone,
+        ends_at: today.in_time_zone + 1.day - 1.second)
+
+      visit(calendar_events_path(calendar))
+
+      today_label = page.evaluate_script(
+        "`${moment('#{today.to_fs(:no_time)}', 'YYYY-MM-DD').format('dddd, MMMM D, YYYY')}, 1 event`"
+      )
+
+      expect(page).to have_css("#calendar-live-region", text: "1 event this week", visible: false)
+      expect(page).to have_css(
+        ".fc-agendaWeek-view .fc-day-grid .fc-bg .fc-day[data-date='#{today.to_fs(:no_time)}']" \
+        "[aria-label='#{today_label}']"
+      )
+
+      find(".fc-month-button").click
+      expect(page).to have_css("#calendar-live-region", text: "1 event this month", visible: false)
+      expect(page).to have_css(
+        ".fc-month-view .fc-bg .fc-day[data-date='#{today.to_fs(:no_time)}'][aria-label='#{today_label}']"
+      )
+    end
+
     scenario "exposes selected, active, and today states on date cells" do
       visit(calendar_events_path(calendar))
       find(".fc-month-button").click
 
       today = Time.zone.today
       today_date = today.to_fs(:no_time)
-      today_label = page.evaluate_script("moment('#{today_date}', 'YYYY-MM-DD').format('dddd, MMMM D, YYYY')")
+      today_label = page.evaluate_script(
+        "`${moment('#{today_date}', 'YYYY-MM-DD').format('dddd, MMMM D, YYYY')}, No events`"
+      )
       selected_cell_selector =
-        ".fc-month-view .fc-day[data-date][tabindex='0'][aria-selected='true']"
+        ".fc-month-view .fc-bg .fc-day[data-date][tabindex='0'][aria-selected='true']"
 
       expect(page).to have_css(".fc-month-view .fc-day[data-date='#{today_date}'][aria-current='date']")
       expect(page).to have_css(
-        ".fc-month-view .fc-day[data-date='#{today_date}'][aria-label='#{today_label}']"
+        ".fc-month-view .fc-bg .fc-day[data-date='#{today_date}'][aria-label='#{today_label}']"
       )
       expect(page).to have_css(selected_cell_selector, count: 1)
 
       selected_date_before_click = find(selected_cell_selector)["data-date"]
       target_date = page.evaluate_script(<<~JS)
         (() => {
-          const cells = Array.from(document.querySelectorAll(".fc-month-view .fc-day[data-date]"))
+          const cells = Array.from(document.querySelectorAll(".fc-month-view .fc-bg .fc-day[data-date]"))
             .filter(cell => cell.offsetParent !== null);
           const selectedIndex = cells.findIndex(cell => cell.getAttribute("aria-selected") === "true");
           const selectedDate = cells[selectedIndex].getAttribute("data-date");
@@ -351,25 +389,32 @@ describe "event calendar", js: true do
       )
       expect(page).to have_css(".fc-month-view .fc-day[data-date='#{target_date}'][aria-selected='true']")
       expect(page).to have_css(
-        ".fc-month-view .fc-day[data-date][tabindex='0'][aria-selected='true'].fc-gather-grid-active",
+        ".fc-month-view .fc-bg .fc-day[data-date][tabindex='0'][aria-selected='true'].fc-gather-grid-active",
         count: 1
+      )
+      target_label = page.evaluate_script(
+        "`${moment('#{target_date}', 'YYYY-MM-DD').format('dddd, MMMM D, YYYY')}, No events`"
+      )
+      expect(page).to have_css(
+        ".fc-month-view .fc-bg .fc-day[data-date='#{target_date}']" \
+        "[aria-label='#{target_label}'][tabindex='0']"
       )
       expect(page).to have_css(".fc-month-view .fc-day[data-date='#{today_date}'][aria-current='date']")
       expect(page).to have_css(".fc-month-view .fc-day[data-date][aria-selected='true']", count: 1)
 
       next_month_date = today.next_month.beginning_of_month.to_fs(:no_time)
       page.execute_script("$('#calendar').fullCalendar('next')")
-      expect(page).to have_css(".fc-month-view .fc-day[data-date='#{next_month_date}'][aria-label]")
-      expect(page).to have_css(".fc-month-view .fc-day[data-date][aria-label]", minimum: 1)
+      expect(page).to have_css(".fc-month-view .fc-bg .fc-day[data-date='#{next_month_date}'][aria-label]")
+      expect(page).to have_css(".fc-month-view .fc-bg .fc-day[data-date][aria-label]", minimum: 1)
       rerendered_cell = page.evaluate_script(<<~JS)
         (() => {
-          const cell = document.querySelector(".fc-month-view .fc-day[data-date='#{next_month_date}']");
+          const cell = document.querySelector(".fc-month-view .fc-bg .fc-day[data-date='#{next_month_date}']");
           const date = cell.getAttribute("data-date");
 
           return {
             date,
             label: cell.getAttribute("aria-label"),
-            expectedLabel: moment(date, "YYYY-MM-DD").format("dddd, MMMM D, YYYY")
+            expectedLabel: `${moment(date, "YYYY-MM-DD").format("dddd, MMMM D, YYYY")}, No events`
           };
         })()
       JS

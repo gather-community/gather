@@ -1070,7 +1070,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_14_000001) do
     t.bigint "community_id", null: false
     t.string "contact_email", null: false
     t.datetime "created_at", null: false
-    t.string "currency", null: false
     t.decimal "discount_percent", precision: 6, scale: 2
     t.integer "months_per_period", null: false
     t.jsonb "payment_method_types", null: false

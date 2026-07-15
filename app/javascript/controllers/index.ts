@@ -32,3 +32,6 @@ application.register("modal", ModalController);
 
 import ConfirmController from "./confirm_controller";
 application.register("confirm", ConfirmController);
+
+import MessagingTopupController from "./messaging_topup_controller";
+application.register("messaging-topup", MessagingTopupController);

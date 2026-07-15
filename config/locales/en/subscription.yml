@@ -1,5 +1,8 @@
 en:
   subscription:
+    messaging_topup:
+      updated: "Your monthly messaging topup is set. Your messaging balance is now %{balance}."
+      canceled: "Your monthly messaging topup will be canceled at the end of the current billing month."
     detailed_statuses:
       active: "Active"
       scheduled: "Scheduled"

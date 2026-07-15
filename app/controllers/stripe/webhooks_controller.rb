@@ -14,22 +14,12 @@ module Stripe
       event = construct_event(payload)
       return head(:bad_request) if event.nil?
 
-      # Log on entry with safe identifiers only (no PII / no payload dump).
-      Rails.logger.info("Stripe webhook received: id=#{event.id} type=#{event.type}")
-
-      # Persist the raw payload for debugging before doing any processing.
+      # Persist the raw payload for debugging before doing any processing. Then emit a greppable line
+      # tying this webhook to a community; the full payload lives in the DB by webhook_id.
       WebhookEvent.record!(event, JSON.parse(payload))
+      log_webhook_arrival(event)
 
-      case event.type
-      when "invoice.paid"
-        TopupProcessor.new(event).process
-        enqueue_sync(event.data.object.subscription)
-      when "invoice.payment_failed", "invoice.payment_action_required", "invoice.finalized"
-        enqueue_sync(event.data.object.subscription)
-      when "customer.subscription.created", "customer.subscription.updated", "customer.subscription.deleted"
-        enqueue_sync(event.data.object.id)
-      end
-
+      handle_event(event)
       head(:ok)
     end
 
@@ -41,6 +31,52 @@ module Stripe
     end
 
     private
+
+    def handle_event(event)
+      object = event.data.object
+      case object.object
+      when "invoice"
+        reconcile_topup(event, object)
+        enqueue_sync(object.subscription)
+      when "subscription"
+        enqueue_sync(object.id)
+      end
+    end
+
+    # Drives the wallet from the invoice's payment lifecycle (see TopupProcessor). Non-topup invoices
+    # are a no-op inside the processor.
+    def reconcile_topup(event, invoice)
+      processor = TopupProcessor.new(invoice, event: event)
+      case event.type
+      when "invoice.finalized" then processor.credit_if_settled_or_in_flight
+      when "invoice.paid" then processor.credit
+      when "invoice.payment_failed", "invoice.voided", "invoice.marked_uncollectible" then processor.claw_back
+      end
+    end
+
+    # Emits a SUBSCRIPTION-EVENT-LINE tying this webhook to a community (resolved from the base
+    # subscription or the topup subscription id), so it's searchable in BetterStack.
+    def log_webhook_arrival(event)
+      ::Subscription::EventLog.emit(
+        event_name: "webhook_arrived",
+        community_id: community_id_for(event),
+        webhook_type: event.type,
+        webhook_id: event.id
+      )
+    end
+
+    def community_id_for(event)
+      object = event.data.object
+      sub_id = case object.object
+      when "invoice" then object.subscription
+      when "subscription" then object.id
+      end
+      return nil if sub_id.blank?
+      ActsAsTenant.without_tenant do
+        (::Subscription::Subscription.find_by(stripe_id: sub_id) ||
+          ::Subscription::MessagingTopup.find_by(stripe_id: sub_id))&.community_id
+      end
+    end
 
     # Enqueues a cache refresh for the subscription a webhook event affects. Maps the Stripe
     # subscription id back to our record (across tenants), mirroring TopupProcessor. A no-op when

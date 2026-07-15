@@ -73,6 +73,8 @@ class Community < ApplicationRecord
   has_one :subscription, inverse_of: :community, class_name: "Subscription::Subscription", dependent: :destroy
   has_one :subscription_intent, inverse_of: :community, class_name: "Subscription::Intent",
     dependent: :destroy
+  has_one :messaging_topup, inverse_of: :community, class_name: "Subscription::MessagingTopup",
+    dependent: :destroy
   has_many :work_periods, class_name: "Work::Period", inverse_of: :community, dependent: :destroy
   has_one :gdrive_config, class_name: "GDrive::Config", inverse_of: :community, dependent: :destroy
   has_one :gdrive_migration_operation, class_name: "GDrive::Migration::Operation", inverse_of: :community,
@@ -194,6 +196,12 @@ class Community < ApplicationRecord
   # The default currency for the community's country, or nil if unsupported.
   def default_currency
     COUNTRY_CURRENCIES[country_code]
+  end
+
+  # The community's single messaging wallet, or nil if it has never been funded. There is at most
+  # one (unique index on messaging_accounts.community_id).
+  def messaging_account
+    messaging_accounts.first
   end
 
   def status

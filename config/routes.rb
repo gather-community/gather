@@ -368,6 +368,9 @@ Rails.application.routes.draw do
     post "/start-payment", to: "subscriptions#start_payment", as: :start_payment
     get "/payment", to: "subscriptions#payment", as: :payment
     get "/success", to: "subscriptions#success", as: :success
+    post "/messaging-topup/preview", to: "messaging_topups#preview", as: :messaging_topup_preview
+    patch "/messaging-topup", to: "messaging_topups#update", as: :messaging_topup
+    delete "/messaging-topup", to: "messaging_topups#destroy"
   end
 
   get "sso", to: "single_sign_on#sign_on"

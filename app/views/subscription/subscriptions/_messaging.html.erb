@@ -1,0 +1,46 @@
+<%# The Messaging section: the wallet balance plus the monthly topup (its own Stripe subscription).
+    topup is a decorated Subscription::MessagingTopup or nil; account is a Messaging::Account or nil. %>
+<% options = Subscription::MessagingTopup.options_for(current_community.default_currency) %>
+<% editable = subscription.messaging_topup_editable? && (options.any? || topup) %>
+<% balance = account&.balance || Money.new(0, current_community.default_currency || "usd") %>
+<div data-controller="messaging-topup"
+     data-messaging-topup-preview-url-value="<%= subscription_messaging_topup_preview_path %>"
+     data-messaging-topup-update-url-value="<%= subscription_messaging_topup_path %>"
+     data-messaging-topup-current-cents-value="<%= topup&.amount_cents || 0 %>"
+     data-messaging-topup-has-topup-value="<%= topup.present? %>">
+  <h2>Messaging</h2>
+  <p>
+    <table class="key-value">
+      <tr>
+        <td>Current Balance</td>
+        <td><%= balance.format %></td>
+      </tr>
+      <tr>
+        <td>Monthly Topup</td>
+        <td>
+          <%= topup ? topup.amount_display : "None" %>
+          <% if editable %>
+            <%= link_to(topup ? "Edit" : "Add", "#", class: "messaging-topup-edit",
+                  data: {action: "messaging-topup#open"}) %>
+          <% end %>
+        </td>
+      </tr>
+      <% if topup&.active? %>
+        <tr>
+          <td>Next Payment Date</td>
+          <td><%= I18n.l(topup.next_bill_date) %></td>
+        </tr>
+      <% end %>
+      <% if topup && (status = topup.status_display) %>
+        <tr>
+          <td>Status</td>
+          <td><%= status %></td>
+        </tr>
+      <% end %>
+    </table>
+  </p>
+
+  <% if editable %>
+    <%= render("messaging_topup_modal", topup: topup, options: options) %>
+  <% end %>
+</div>

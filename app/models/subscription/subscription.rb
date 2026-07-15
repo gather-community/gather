@@ -191,6 +191,22 @@ module Subscription
     # This happens for subscriptions that start at a future date since we don't prorate
     # and don't do a $0 invoice, we instead use a SetupIntent, and so Stripe considers
     # the sub active even though the SetupIntent still hasn't been finished.
+    # Whether a monthly messaging topup can be added/changed now: the base subscription must be a
+    # live, invoiceable sub (active and not future-dated) with a saved payment method we can charge
+    # immediately. Future-dated subs have no payment method attached yet, so they're excluded.
+    def messaging_topup_editable?
+      return false unless persisted? && active? && !future?
+      default_payment_method_id.present?
+    end
+
+    # The payment method the topup subscription should reuse. We save it on the subscription itself
+    # (save_default_payment_method: "on_subscription"), so prefer that; fall back to the customer's
+    # invoice-settings default for older/hand-configured customers.
+    def default_payment_method_id
+      return nil if stripe_sub.nil?
+      stripe_sub.default_payment_method || stripe_sub.customer&.invoice_settings&.default_payment_method
+    end
+
     def needs_payment_method?
       return nil if stripe_sub.nil?
       active? && payment_or_setup_intent&.status == "requires_payment_method"
@@ -204,6 +220,20 @@ module Subscription
     def payment_requires_microdeposits?
       return nil if stripe_sub.nil?
       payment_or_setup_intent&.next_action&.type == "verify_with_microdeposits"
+    end
+
+    # Stripe's customer-facing explainer for micro-deposit verification.
+    MICRODEPOSIT_HELP_URL =
+      "https://support.stripe.com/questions/verify-a-new-ach-direct-debit-customer-using-micro-deposits"
+
+    # Stripe's hosted page where the customer enters the microdeposit's descriptor code (or, for the
+    # amount-based method, the deposit amounts) to verify their bank account. nil unless microdeposit
+    # verification is pending.
+    def microdeposit_verification_url
+      return nil if stripe_sub.nil?
+      action = payment_or_setup_intent&.next_action
+      return nil unless action&.type == "verify_with_microdeposits"
+      action.verify_with_microdeposits.hosted_verification_url
     end
 
     def contact_email

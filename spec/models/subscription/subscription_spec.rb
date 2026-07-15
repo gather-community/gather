@@ -195,4 +195,63 @@ describe Subscription::Subscription do
       build(:subscription).sync!
     end
   end
+
+  describe "#microdeposit_verification_url" do
+    let(:sub) { create(:subscription) }
+
+    def stub_next_action(next_action)
+      sub.stripe_sub = double(latest_invoice: double(payment_intent: double(next_action: next_action)))
+    end
+
+    it "returns the hosted URL when microdeposit verification is pending" do
+      stub_next_action(double(type: "verify_with_microdeposits",
+        verify_with_microdeposits: double(hosted_verification_url: "https://verify.test/abc")))
+      expect(sub.microdeposit_verification_url).to eq("https://verify.test/abc")
+    end
+
+    it "is nil for a different next action" do
+      stub_next_action(double(type: "redirect_to_url"))
+      expect(sub.microdeposit_verification_url).to be_nil
+    end
+
+    it "is nil when there is no next action" do
+      stub_next_action(nil)
+      expect(sub.microdeposit_verification_url).to be_nil
+    end
+  end
+
+  describe "#messaging_topup_editable?" do
+    let(:sub) { create(:subscription) }
+
+    def stub_stripe(default_pm:, customer_pm: nil, status: "active", invoice: double("invoice"))
+      sub.stripe_sub = double("Stripe::Subscription", status: status, latest_invoice: invoice,
+        default_payment_method: default_pm,
+        customer: double(invoice_settings: double(default_payment_method: customer_pm)))
+    end
+
+    it "is true when the payment method is saved on the subscription itself" do
+      stub_stripe(default_pm: "pm_1")
+      expect(sub.messaging_topup_editable?).to be(true)
+    end
+
+    it "falls back to the customer's invoice-settings default payment method" do
+      stub_stripe(default_pm: nil, customer_pm: "pm_2")
+      expect(sub.messaging_topup_editable?).to be(true)
+    end
+
+    it "is false with no saved payment method anywhere" do
+      stub_stripe(default_pm: nil, customer_pm: nil)
+      expect(sub.messaging_topup_editable?).to be(false)
+    end
+
+    it "is false for a future-dated (no-invoice) subscription" do
+      stub_stripe(default_pm: "pm_1", invoice: nil)
+      expect(sub.messaging_topup_editable?).to be(false)
+    end
+
+    it "is false when the subscription is not active" do
+      stub_stripe(default_pm: "pm_1", status: "past_due")
+      expect(sub.messaging_topup_editable?).to be(false)
+    end
+  end
 end

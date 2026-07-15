@@ -132,11 +132,11 @@ GitHub's drag-and-drop uploads go to its `user-attachments` CDN through a browse
 vips crop tmp/shot.png tmp/pr_shot.png 0 0 1280 680   # args: x y width height
 ```
 
-2. Commit the image and push. `tmp/` is gitignored, so force-add:
+2. Commit the image and push. `tmp/` is gitignored, so force-add. Tag the message with `[skip ci]` — this commit is a throwaway that never reaches `develop`, and a full CI run on it wastes ~28 min of runner time:
 
 ```bash
 git add -f tmp/pr_shot.png
-git commit -m "Add PR screenshot (temporary)"
+git commit -m "Add PR screenshot (temporary) [skip ci]"
 git push
 ```
 
@@ -146,9 +146,17 @@ git push
 https://raw.githubusercontent.com/gather-community/gather/<SHA>/tmp/pr_shot.png
 ```
 
-4. Delete the image in a follow-up commit and push.
+4. Delete the image in a follow-up commit and push, also with `[skip ci]`:
+
+```bash
+git rm --cached tmp/pr_shot.png
+git commit -m "Remove PR screenshots from the tree [skip ci]"
+git push
+```
 
 The URL keeps rendering after the delete because the blob still exists at the pinned SHA, so the PR shows the images while the merged tree stays clean — only the blobs remain in history (a few hundred KB). **Pin to the SHA, not a branch name**; a branch-based URL breaks the moment the file is deleted.
+
+Both commits change no application code, so skipping CI on them is safe — the last code commit's green run still certifies the code. If you forget `[skip ci]` and a needless run starts, you can't stop it yourself: `gh run cancel` returns `HTTP 403: Resource not accessible by integration`. **Ask the user to cancel it from the GitHub Actions UI.**
 
 ## Architecture
 

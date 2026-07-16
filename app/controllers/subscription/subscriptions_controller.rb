@@ -2,7 +2,7 @@
 
 module Subscription
   class SubscriptionsController < ApplicationController
-    decorates_assigned :subscription, :intent, with: SubscriptionDecorator
+    decorates_assigned :subscription, with: SubscriptionDecorator
 
     # For now, we test this flow manually. Important combinations to test:
     #   * Past start_date, card
@@ -27,10 +27,6 @@ module Subscription
     def show
       @subscription = load_auth_and_populate_subscription(or_initialize: true)
 
-      if @subscription.new_record? || @subscription.incomplete_expired?
-        @intent = Intent.find_by(community: current_community)
-      end
-
       # The monthly messaging topup is its own Stripe subscription; load it (live) for the Messaging
       # section rendered on the post-payment view. Skipped (along with its Stripe call) while
       # messaging is behind its flag.
@@ -39,14 +35,31 @@ module Subscription
       @messaging_account = current_community.messaging_account
     end
 
+    # Self-serve signup: pick a plan and enter a billing address. Reached when the community has no
+    # subscription, or has one that's dead (canceled / incomplete_expired) and needs a fresh start.
+    def new
+      authorize(Subscription.find_or_initialize_by(community: current_community), :new?)
+      @form = SignupForm.new(community: current_community)
+    end
+
+    def create
+      authorize(Subscription.find_or_initialize_by(community: current_community), :create?)
+      @form = SignupForm.new(community: current_community, params: params.require(:subscription_signup))
+      # save registers the subscription with Stripe (replacing any dead one), after which the
+      # customer pays on the existing payment page.
+      if @form.save
+        redirect_to(subscription_payment_path)
+      else
+        render(:new, status: :unprocessable_entity)
+      end
+    end
+
     def start_payment
       subscription = load_auth_and_populate_subscription(or_initialize: true)
-      if subscription.active? && subscription.needs_payment_method?
-        # No action needed here, we just redirect.
-      elsif subscription.new_record? || subscription.incomplete_expired?
-        intent = Intent.find_by!(community: current_community)
-        Registrar.new(intent: intent).register
-      elsif !(subscription.incomplete? || subscription.past_due?)
+      if subscription.new_record? || subscription.dead?
+        # Nothing to pay against — send them through self-serve signup to create a fresh sub.
+        redirect_to(subscription_new_path) and return
+      elsif !(subscription.needs_payment_method? || subscription.payable_invoice?)
         raise "Invalid subscription status #{subscription.status}"
       end
       redirect_to(subscription_payment_path)

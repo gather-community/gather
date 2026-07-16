@@ -1,6 +1,11 @@
 en:
   activemodel:
     attributes:
+      subscription/signup:
+        tier: "Plan"
+        months_per_period: "Billing period"
+        quantity: "Number of users"
+        contact_email: "Billing contact email"
       calendars/event:
         calendar: "Calendar"
         pre_notice: "Notice"

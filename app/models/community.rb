@@ -71,8 +71,6 @@ class Community < ApplicationRecord
   has_many :households, inverse_of: :community, dependent: :destroy
   has_many :member_types, class_name: "People::MemberType", inverse_of: :community, dependent: :destroy
   has_one :subscription, inverse_of: :community, class_name: "Subscription::Subscription", dependent: :destroy
-  has_one :subscription_intent, inverse_of: :community, class_name: "Subscription::Intent",
-    dependent: :destroy
   has_one :messaging_topup, inverse_of: :community, class_name: "Subscription::MessagingTopup",
     dependent: :destroy
   has_many :work_periods, class_name: "Work::Period", inverse_of: :community, dependent: :destroy
@@ -196,6 +194,14 @@ class Community < ApplicationRecord
   # The default currency for the community's country, or nil if unsupported.
   def default_currency
     COUNTRY_CURRENCIES[country_code]
+  end
+
+  # How many seats we'd bill this community for: real (non-sample) adults with full access who
+  # haven't been deactivated. Used to pre-fill the seat count on the self-serve subscription form;
+  # the customer can adjust it before paying. Not enforced against the live subscription quantity.
+  def billable_seat_count
+    User.joins(:household).where(households: {community_id: id})
+      .real.active.adults.full_access.count
   end
 
   # The community's single messaging wallet, or nil if it has never been funded. There is at most

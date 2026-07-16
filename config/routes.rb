@@ -365,6 +365,8 @@ Rails.application.routes.draw do
 
   namespace :subscription do
     get "/", to: "subscriptions#show"
+    get "/new", to: "subscriptions#new", as: :new
+    post "/", to: "subscriptions#create", as: :create
     post "/start-payment", to: "subscriptions#start_payment", as: :start_payment
     get "/payment", to: "subscriptions#payment", as: :payment
     get "/success", to: "subscriptions#success", as: :success

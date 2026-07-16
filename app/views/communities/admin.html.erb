@@ -96,41 +96,4 @@
       </tr>
     <% end %>
   </table>
-<% elsif (intent = community.subscription_intent) %>
-  <h2>Subscription Intent</h2>
-  <table class="key-value">
-    <tr>
-      <td>Tier</td>
-      <td><%= intent.tier&.humanize %></td>
-    </tr>
-    <tr>
-      <td>Users</td>
-      <td><%= intent.quantity %></td>
-    </tr>
-    <tr>
-      <td>Price</td>
-      <td><%= number_to_currency(intent.price_per_user_cents / 100.0) %>/user/month
-          &times; <%= intent.months_per_period %> months
-          (<%= intent.currency&.upcase %>)</td>
-    </tr>
-    <% if intent.start_date %>
-      <tr>
-        <td>Start Date</td>
-        <td><%= l(intent.start_date, format: :long) %></td>
-      </tr>
-    <% end %>
-    <tr>
-      <td>Contact</td>
-      <td><%= intent.contact_email %></td>
-    </tr>
-    <tr>
-      <td>Address</td>
-      <td>
-        <%= intent.address_line1 %><% if intent.address_line2 %>, <%= intent.address_line2 %><% end %><br>
-        <%= intent.address_city %><% if intent.address_state %>, <%= intent.address_state %><% end %>
-        <%= intent.address_postal_code %><br>
-        <%= intent.address_country %>
-      </td>
-    </tr>
-  </table>
 <% end %>

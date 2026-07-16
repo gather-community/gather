@@ -35,3 +35,6 @@ application.register("confirm", ConfirmController);
 
 import MessagingTopupController from "./messaging_topup_controller";
 application.register("messaging-topup", MessagingTopupController);
+
+import Subscription__AddressController from "./subscription/address_controller";
+application.register("subscription--address", Subscription__AddressController);

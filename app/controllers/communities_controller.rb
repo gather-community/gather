@@ -48,7 +48,7 @@ class CommunitiesController < ApplicationController
 
   def load_community
     ActsAsTenant.without_tenant do
-      @community = Community.includes(:cluster, :subscription, :subscription_intent).find(params[:id])
+      @community = Community.includes(:cluster, :subscription).find(params[:id])
     end
   end
 

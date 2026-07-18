@@ -75,7 +75,7 @@ describe Messaging::CostCalculator do
 
     it "reports the provider carrying the country" do
       expect(quote(body: "Hi", country: "US").provider).to eq(:telnyx)
-      expect(quote(body: "Hi", country: "NZ").provider).to eq(:twilio)
+      expect(quote(body: "Hi", country: "GB").provider).to eq(:telnyx)
     end
   end
 

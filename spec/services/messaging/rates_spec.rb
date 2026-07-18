@@ -16,19 +16,18 @@ describe Messaging::Rates do
 
   describe ".supported_countries" do
     it "lists every carried country, sorted" do
-      expect(described_class.supported_countries).to eq(%w[AU CA GB NZ US])
+      expect(described_class.supported_countries).to eq(%w[AU CA GB US])
     end
   end
 
   describe ".provider_for" do
     it "routes each country to the provider that carries it" do
       expect(described_class.provider_for("US")).to eq(Messaging::Providers::Telnyx)
-      expect(described_class.provider_for("CA")).to eq(Messaging::Providers::Telnyx)
-      expect(described_class.provider_for("NZ")).to eq(Messaging::Providers::Twilio)
+      expect(described_class.provider_for("GB")).to eq(Messaging::Providers::Telnyx)
     end
 
     it "raises UnsupportedCountryError for a country nobody carries" do
-      expect { described_class.provider_for("FR") }
+      expect { described_class.provider_for("NZ") }
         .to raise_error(described_class::UnsupportedCountryError)
     end
   end
@@ -36,7 +35,7 @@ describe Messaging::Rates do
   describe ".cost_per_segment" do
     it "returns the carrying provider's all-in cost as a BigDecimal" do
       expect(described_class.cost_per_segment("US")).to eq(BigDecimal("0.009"))
-      expect(described_class.cost_per_segment("NZ")).to eq(BigDecimal("0.105"))
+      expect(described_class.cost_per_segment("GB")).to eq(BigDecimal("0.055"))
     end
   end
 

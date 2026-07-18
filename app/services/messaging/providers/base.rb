@@ -2,12 +2,12 @@
 
 module Messaging
   module Providers
-    # Base class for an SMS provider (Twilio, Telnyx, ...). Each provider owns the set of
+    # Base class for an SMS provider (currently just Telnyx). Each provider owns the set of
     # countries it carries and our all-in cost per segment for each — see the RATES constant on
-    # a subclass. Pricing is a hardcoded table rather than a live API lookup: neither provider
-    # exposes carrier pass-through fees programmatically (Twilio's Pricing API omits them;
-    # Telnyx has no pricing API at all), so a fetched price would be wrong anyway. Sending will
-    # hang off these same classes later; for now they answer only "what does a segment cost?".
+    # a subclass. Pricing is a hardcoded table rather than a live API lookup: providers don't
+    # expose carrier pass-through fees programmatically (Telnyx has no pricing API at all), so a
+    # fetched price would be wrong anyway. Sending will hang off these same classes later; for
+    # now they answer only "what does a segment cost?".
     #
     # Which provider carries which country is resolved by Messaging::Rates, not here. A country
     # belongs to exactly one provider.

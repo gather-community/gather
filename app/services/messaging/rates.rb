@@ -2,9 +2,10 @@
 
 module Messaging
   # The single source of truth for which countries we can send SMS to, which provider carries
-  # each, and our all-in cost per segment. It stitches together the per-provider rate tables
-  # (Providers::Telnyx, Providers::Twilio) into one country => provider map, and is what
-  # CostCalculator and the top-up flow query.
+  # each, and our all-in cost per segment. It stitches the per-provider rate tables (currently
+  # just Providers::Telnyx) into one country => provider map, and is what CostCalculator and the
+  # top-up flow query. The multi-provider machinery stays even with one provider today, so adding
+  # another later is just a new adapter in PROVIDERS.
   #
   # Two design notes:
   #
@@ -19,9 +20,9 @@ module Messaging
   module Rates
     class UnsupportedCountryError < StandardError; end
 
-    # Providers are listed most-preferred first only for the conflict message; there should
-    # never actually be an overlap.
-    PROVIDERS = [Providers::Telnyx, Providers::Twilio].freeze
+    # Every SMS provider we price against. One entry today; the conflict check in #table guards
+    # the invariant that no two providers claim the same country once there's more than one.
+    PROVIDERS = [Providers::Telnyx].freeze
 
     class << self
       def supported?(country_code)

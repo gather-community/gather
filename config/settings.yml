@@ -73,8 +73,8 @@ pricing:
     api_key: ~
 
 # Messaging (outbound SMS) settings. Per-segment prices are NOT here — they're hardcoded, per
-# country, in Messaging::Providers::* (Twilio/Telnyx expose no usable pricing API). This holds
-# only the tuning knob.
+# country, in Messaging::Providers::* (Telnyx exposes no usable pricing API). This holds only
+# the tuning knob.
 messaging:
   # Multiplier applied to our all-in provider cost per segment to get the price we charge
   # communities. 0.2 = a 20% markup. Applied to the all-in cost (base price plus, in the US/CA,
@@ -84,20 +84,9 @@ messaging:
   # the account separately. See Messaging::CostCalculator.
   markup: 0.2
 
-# Twilio and Telnyx credentials, for SENDING SMS (pricing is hardcoded, so these aren't needed
-# to quote a cost). Deliberately blank here; set per environment (config/settings.local.yml in
-# dev, SETTINGS__*__ in production).
-#
-# Twilio uses an API key, not the account auth token: a key is scoped and revocable on its own,
-# whereas leaking the auth token means rotating account-wide credentials. `sid` is the key SID
-# (SK...) and doubles as the HTTP Basic username; `account_sid` (AC...) identifies the account
-# and is embedded in the path of account-scoped endpoints like message sending.
-twilio:
-  sid:
-  client_secret:
-  account_sid:
-
-# Telnyx uses a bearer API key (it has no scoped-key model — a leaked key is full account
-# access, so guard it accordingly).
+# Telnyx credentials, for SENDING SMS (pricing is hardcoded, so this isn't needed to quote a
+# cost). Deliberately blank here; set per environment (config/settings.local.yml in dev,
+# SETTINGS__TELNYX__API_KEY in production). Telnyx uses a bearer API key with no scoped-key model
+# — a leaked key is full account access, so guard it accordingly.
 telnyx:
   api_key:

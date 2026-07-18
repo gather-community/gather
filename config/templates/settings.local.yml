@@ -54,13 +54,6 @@ pricing:
 
 # SMS provider credentials — only needed for SENDING (pricing is hardcoded). Leave blank if
 # you're not testing sends locally.
-# Twilio API key: create at https://console.twilio.com/us1/account/keys-credentials/api-keys
-# `sid` is the key SID (SK...); `client_secret` is shown only once at creation.
-# `account_sid` (AC...) is on the console dashboard.
-twilio:
-  sid:
-  client_secret:
-  account_sid:
 # Telnyx bearer API key: create in the Mission Control portal under Auth.
 telnyx:
   api_key:

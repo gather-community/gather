@@ -26,14 +26,4 @@ describe "Messaging provider rate tables" do
       expect(described_class.cost_per_segment("GB")).to eq(BigDecimal("0.055"))
     end
   end
-
-  describe Messaging::Providers::Twilio do
-    it "carries only NZ, which Telnyx can't two-way" do
-      expect(described_class.countries).to contain_exactly("NZ")
-    end
-
-    it "prices NZ all-in" do
-      expect(described_class.cost_per_segment("NZ")).to eq(BigDecimal("0.105"))
-    end
-  end
 end

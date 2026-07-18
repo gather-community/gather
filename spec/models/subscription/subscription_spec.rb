@@ -253,5 +253,11 @@ describe Subscription::Subscription do
       stub_stripe(default_pm: "pm_1", status: "past_due")
       expect(sub.messaging_topup_editable?).to be(false)
     end
+
+    it "is false when we can't send SMS to the community's country" do
+      sub.community.update_column(:country_code, "FR")
+      stub_stripe(default_pm: "pm_1")
+      expect(sub.messaging_topup_editable?).to be(false)
+    end
   end
 end

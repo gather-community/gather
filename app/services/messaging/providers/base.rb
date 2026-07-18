@@ -29,7 +29,7 @@ module Messaging
           "USD"
         end
 
-        # Short symbol naming the provider, e.g. :twilio. Used for display and (later) routing a
+        # Short symbol naming the provider, e.g. :telnyx. Used for display and (later) routing a
         # send to the right adapter.
         def key
           name.demodulize.underscore.to_sym

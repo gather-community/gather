@@ -84,6 +84,16 @@ describe Community do
     end
   end
 
+  describe "#messaging_supported?" do
+    it "is true where we can send SMS" do
+      expect(build(:community, country_code: "US").messaging_supported?).to be(true)
+    end
+
+    it "is false where we can't, so the top-up flow can be gated" do
+      expect(build(:community, country_code: "FR").messaging_supported?).to be(false)
+    end
+  end
+
   describe "messaging accounts" do
     let!(:account) { create(:messaging_account, community: community) }
 

@@ -121,6 +121,11 @@ end
 
 gem "stripe", "~> 8.1"
 
+gem "twilio-ruby", "~> 7.8"
+
+# GSM-7/UCS-2 encoding detection and SMS segment counting, for pricing outbound SMS.
+gem "smstools", "~> 0.2"
+
 gem "turbo-rails", "~> 2.0"
 
 gem "money", "~> 7.0"

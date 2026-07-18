@@ -55,6 +55,7 @@ module People
 
     def reassign_authored_records
       reassign(Meals::Meal.where(creator: user), :creator_id, &:community)
+      reassign(Meals::Message.where(sender: user), :sender_id, &:community)
       reassign(Calendars::Event.where(creator: user), :creator_id, &:community)
       reassign(Meals::Import.where(user: user), :user_id, &:community)
       reassign(Wiki::Page.where(creator: user), :creator_id, &:community)

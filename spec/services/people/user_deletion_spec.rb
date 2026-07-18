@@ -14,6 +14,7 @@ describe People::UserDeletion do
       page = create(:wiki_page, creator: user, updater: user)
       event = create(:event, creator: user)
       import = create(:meal_import, user: user)
+      message = create(:meal_message, sender: user)
 
       described_class.new(user: user, actor: actor).perform!
 
@@ -26,6 +27,9 @@ describe People::UserDeletion do
       expect(page.updater).to eq(placeholder)
       expect(event.reload.creator).to eq(placeholder)
       expect(import.reload.user).to eq(placeholder)
+      # meal_messages.sender_id is NOT NULL and has no FK constraint, so a missed reassignment
+      # leaves a dangling id rather than raising — assert the sender resolves.
+      expect(message.reload.sender).to eq(placeholder)
     end
 
     it "cascade-destroys the user's dependent records" do

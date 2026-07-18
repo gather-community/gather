@@ -259,11 +259,16 @@ When introducing a new model, follow the established conventions:
 - **Add a factory** under `spec/factories/<module>/` and a model spec.
 - **Decorators/policies** come only when the model becomes user-facing.
 
-**Three "wholesome" specs iterate over every model — a new model must satisfy all three (or be added to the relevant allowlist):**
+**Four "wholesome" specs iterate over every model — a new model must satisfy all four (or be added to the relevant allowlist):**
 
 - [spec/models/tenancy_spec.rb](spec/models/tenancy_spec.rb) — every model must have `acts_as_tenant`. Allowlist (`ALLOWLISTED_CLASSES`) only for genuinely non-tenant models.
 - [spec/models/utils/generators/main_generator_spec.rb](spec/models/utils/generators/main_generator_spec.rb) — every model must get at least one record from sample-data generation, **or** be added to `NO_SAMPLE_DATA_CLASSES` (use this for models created on demand, e.g. via a webhook).
 - [spec/models/community_deletion_spec.rb](spec/models/community_deletion_spec.rb) — every tenant model needs a factory call in the setup and must cascade to zero rows when a community is destroyed (wire `dependent: :destroy` from `Community` and/or its parent), **or** be added to `EXEMPT_MODELS`. Prefer wiring the cascade so deletion is actually tested.
+- [spec/services/people/deletion_dispositions_spec.rb](spec/services/people/deletion_dispositions_spec.rb) — every model must appear in both `USER_DISPOSITIONS` and `HOUSEHOLD_DISPOSITIONS`, declaring what happens to its rows when a user or household is permanently deleted: `:none`, `:destroy`, `:anonymize`, `:nullify`, `:retain`, or `:subject`. There is no allowlist — a new model must be classified. Models declared `:none` are checked by reflection to confirm they really have no association to the deleted record.
+
+The dispositions map is a **declaration**, not an assertion — it does not read `People::UserDeletion`'s implementation, so it must be updated alongside that service. Its job is to make you consider deletion when adding a model. Behavior is verified in [user_deletion_spec.rb](spec/services/people/user_deletion_spec.rb) and [household_deletion_spec.rb](spec/services/people/household_deletion_spec.rb).
+
+**Watch for foreign keys with no DB constraint** (e.g. `meal_messages.sender_id`, `gdrive_synced_permissions.user_id`). A missed reassignment on a constrained column raises at deletion time; on an unconstrained one it silently leaves a dangling id, and the association reads back as `nil`. Assert the association *resolves* (`expect(record.reload.sender).to eq(placeholder)`), not merely that the delete succeeded.
 
 ### Locale Files
 

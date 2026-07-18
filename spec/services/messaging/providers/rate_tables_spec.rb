@@ -16,10 +16,14 @@ describe "Messaging provider rate tables" do
       expect(described_class.cost_per_segment("US")).to eq(BigDecimal("0.009"))
     end
 
-    it "prices the other countries at their all-in figures" do
-      expect(described_class.cost_per_segment("CA")).to eq(BigDecimal("0.020"))
-      expect(described_class.cost_per_segment("AU")).to eq(BigDecimal("0.07"))
-      expect(described_class.cost_per_segment("GB")).to eq(BigDecimal("0.04"))
+    it "prices Canada at base plus its worst-case carrier fee" do
+      # 0.0025 base + 0.008845 (Rogers/Fido, dearest CA send-side carrier fee).
+      expect(described_class.cost_per_segment("CA")).to eq(BigDecimal("0.011345"))
+    end
+
+    it "prices AU and GB at their all-in figures (no separate carrier fees)" do
+      expect(described_class.cost_per_segment("AU")).to eq(BigDecimal("0.05"))
+      expect(described_class.cost_per_segment("GB")).to eq(BigDecimal("0.055"))
     end
   end
 

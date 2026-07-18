@@ -11,6 +11,25 @@ describe "communities request" do
     sign_in(actor)
   end
 
+  describe "index" do
+    it "renders the detailed subscription status and derived community status" do
+      create(:subscription, community: community, stripe_status: "past_due", synced_at: Time.current)
+      get communities_path
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include("Past due") # detailed subscription label
+      expect(response.body).to include("Problem")  # derived community status label
+    end
+  end
+
+  describe "resync_all" do
+    it "enqueues the sync-all job and redirects to the index" do
+      expect do
+        post resync_all_communities_path
+      end.to have_enqueued_job(Subscription::SyncAllJob)
+      expect(response).to redirect_to(communities_path)
+    end
+  end
+
   describe "destroy" do
     context "with wrong confirmation" do
       it "redirects back with alert and does not enqueue job" do

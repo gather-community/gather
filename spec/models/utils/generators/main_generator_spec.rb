@@ -37,6 +37,9 @@ describe Utils::Generators::MainGenerator, :without_tenant, :perform_jobs do
     People::MemberType
     Subscription::Subscription
     Subscription::Intent
+    Subscription::MessagingTopup
+    Subscription::ExchangeRate
+    Subscription::InflationReading
     Stripe::WebhookEvent
     Wiki::Page
     Wiki::PageVersion

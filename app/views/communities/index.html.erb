@@ -80,7 +80,7 @@
         </td>
         <td>
           <% if community.subscription_stripe_id %>
-            Subscribed
+            <%= t("subscription.detailed_statuses.#{community.subscription_detailed_status}") %>
           <% elsif community.subscription_intent_tier %>
             Intent: <%= community.subscription_intent_tier %>
           <% end %>

@@ -75,15 +75,15 @@ module Communities
       third_warning_communities << community if next_count == MAX_WARNINGS
     end
 
+    # Skips inactivity warnings for communities with a subscription in good standing. Uses the
+    # shared sync! op (live Stripe fetch + local cache) so there's no duplicated Stripe code, then
+    # reads the cached result. sync! reports Stripe errors to Sentry and records sync_error; on such
+    # an error we treat the community as subscribed (skip the warning) to stay fail-safe.
     def active_subscription?(community)
       sub = community.subscription
       return false if sub.nil?
-      sub.populate
-      sub.active?
-    rescue Stripe::StripeError => e
-      Gather::ErrorReporter.instance.report(e,
-        data: {community_id: community.id, community_name: community.name})
-      true
+      sub.sync!
+      sub.subscription_good_standing? || sub.sync_error.present?
     end
 
     def last_login_for(community)

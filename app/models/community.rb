@@ -24,7 +24,7 @@ class Community < ApplicationRecord
 
   SLUG_REGEX = /[a-z][a-z-]*/
   SLUG_MAX_LENGTH = 63
-  STATUSES = %i[trial subscribed warning deactivated].freeze
+  STATUSES = %i[trial subscribed problem warning deactivated].freeze
 
   # Maps an ISO 3166-1 alpha-2 country code (uppercase) to its default ISO 4217 currency
   # (lowercase, to match Stripe and the money gem). Covers Stripe-supported countries;
@@ -72,6 +72,8 @@ class Community < ApplicationRecord
   has_many :member_types, class_name: "People::MemberType", inverse_of: :community, dependent: :destroy
   has_one :subscription, inverse_of: :community, class_name: "Subscription::Subscription", dependent: :destroy
   has_one :subscription_intent, inverse_of: :community, class_name: "Subscription::Intent",
+    dependent: :destroy
+  has_one :messaging_topup, inverse_of: :community, class_name: "Subscription::MessagingTopup",
     dependent: :destroy
   has_many :work_periods, class_name: "Work::Period", inverse_of: :community, dependent: :destroy
   has_one :gdrive_config, class_name: "GDrive::Config", inverse_of: :community, dependent: :destroy
@@ -205,16 +207,56 @@ class Community < ApplicationRecord
     COUNTRY_CURRENCIES[country_code]
   end
 
+  # The community's single messaging wallet, or nil if it has never been funded. There is at most
+  # one (unique index on messaging_accounts.community_id).
+  def messaging_account
+    messaging_accounts.first
+  end
+
   def status
     if inactive?
       :deactivated
     elsif inactivity_warning_count > 0
       :warning
-    elsif subscription_stripe_id
+    elsif subscription_problem?
+      :problem
+    elsif subscription_subscribed?
       :subscribed
     else
       :trial
     end
+  end
+
+  # The subscription's detailed_status, computed from either the CommunitySummarizer's virtual
+  # attributes (index context, no N+1) or the loaded subscription association. Returns :unknown
+  # when there is no subscription.
+  def subscription_detailed_status
+    Subscription::Subscription.derive_detailed_status(
+      stripe_status: subscription_signal(:stripe_status),
+      payment_intent_status: subscription_signal(:payment_intent_status),
+      payment_intent_next_action_type: subscription_signal(:payment_intent_next_action_type),
+      setup_intent_status: subscription_signal(:setup_intent_status),
+      setup_intent_next_action_type: subscription_signal(:setup_intent_next_action_type),
+      synced_at: subscription_signal(:synced_at)
+    )
+  end
+
+  def subscription_present?
+    if has_attribute?("subscription_stripe_id")
+      self["subscription_stripe_id"].present?
+    else
+      subscription.present?
+    end
+  end
+
+  def subscription_subscribed?
+    subscription_present? &&
+      Subscription::Subscription::GOOD_STANDING_STATUSES.include?(subscription_detailed_status)
+  end
+
+  def subscription_problem?
+    subscription_present? &&
+      Subscription::Subscription::PROBLEM_STATUSES.include?(subscription_detailed_status)
   end
 
   private
@@ -227,6 +269,17 @@ class Community < ApplicationRecord
       child: false, deactivated_at: Time.current)
   rescue ActiveRecord::RecordNotUnique
     households.find_by(deleted_placeholder: true).users.first
+  end
+
+  # Reads a subscription signal from the summarizer's virtual attribute (aliased as
+  # subscription_<name>) when present, else from the loaded subscription association.
+  def subscription_signal(name)
+    key = "subscription_#{name}"
+    if has_attribute?(key)
+      self[key]
+    else
+      subscription&.public_send(name)
+    end
   end
 
   def generate_calendar_token

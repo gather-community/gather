@@ -30,6 +30,50 @@ describe Community do
     expect(community.country_code).to eq("GB")
   end
 
+  describe "#status" do
+    # Sets a subscription with the given cached detailed_status signals.
+    def subscribe(stripe_status:, **signals)
+      create(:subscription, community: community, stripe_status: stripe_status,
+        synced_at: Time.current, **signals)
+    end
+
+    it "is :trial with no subscription" do
+      expect(community.status).to eq(:trial)
+    end
+
+    it "is :subscribed with a healthy subscription" do
+      subscribe(stripe_status: "active", payment_intent_status: "succeeded")
+      expect(community.reload.status).to eq(:subscribed)
+    end
+
+    it "is :subscribed while a signup is in progress (incomplete)" do
+      subscribe(stripe_status: "incomplete", payment_intent_status: "requires_payment_method")
+      expect(community.reload.status).to eq(:subscribed)
+    end
+
+    it "is :problem when the subscription is past_due/canceled/unpaid/expired" do
+      subscribe(stripe_status: "canceled")
+      expect(community.reload.status).to eq(:problem)
+    end
+
+    it "is :trial when the subscription has never synced" do
+      create(:subscription, community: community) # synced_at nil => :unknown
+      expect(community.reload.status).to eq(:trial)
+    end
+
+    it "prefers :warning over :problem" do
+      subscribe(stripe_status: "canceled")
+      community.update!(inactivity_warning_count: 1)
+      expect(community.reload.status).to eq(:warning)
+    end
+
+    it "prefers :deactivated over everything" do
+      subscribe(stripe_status: "active", payment_intent_status: "succeeded")
+      community.update!(deactivated_at: Time.current, inactivity_warning_count: 1)
+      expect(community.reload.status).to eq(:deactivated)
+    end
+  end
+
   describe "#default_currency" do
     it "maps a supported country code to its currency" do
       expect(build(:community, country_code: "CA").default_currency).to eq("cad")

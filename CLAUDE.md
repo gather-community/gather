@@ -122,6 +122,42 @@ u.save!(validate: false)
 
 Run the script with `bundle exec ruby tmp/screenshot.rb`. Output PNGs go in `tmp/` (gitignored).
 
+### Adding Screenshots to a PR
+
+GitHub's drag-and-drop uploads go to its `user-attachments` CDN through a browser-only, session-authenticated endpoint — there is **no public API for it**, so screenshots can't be attached that way from here. Don't ask the user to drag files in; use this instead (the repo is public, so raw URLs render):
+
+1. Crop the dead space off the full-page screenshot — `vips` is installed:
+
+```bash
+vips crop tmp/shot.png tmp/pr_shot.png 0 0 1280 680   # args: x y width height
+```
+
+2. Commit the image and push. `tmp/` is gitignored, so force-add. Tag the message with `[skip ci]` — this commit is a throwaway that never reaches `develop`, and a full CI run on it wastes ~28 min of runner time:
+
+```bash
+git add -f tmp/pr_shot.png
+git commit -m "Add PR screenshot (temporary) [skip ci]"
+git push
+```
+
+3. Embed it in the PR body using a **SHA-pinned** raw URL with that commit's SHA:
+
+```
+https://raw.githubusercontent.com/gather-community/gather/<SHA>/tmp/pr_shot.png
+```
+
+4. Delete the image in a follow-up commit and push, also with `[skip ci]`:
+
+```bash
+git rm --cached tmp/pr_shot.png
+git commit -m "Remove PR screenshots from the tree [skip ci]"
+git push
+```
+
+The URL keeps rendering after the delete because the blob still exists at the pinned SHA, so the PR shows the images while the merged tree stays clean — only the blobs remain in history (a few hundred KB). **Pin to the SHA, not a branch name**; a branch-based URL breaks the moment the file is deleted.
+
+Both commits change no application code, so skipping CI on them is safe — the last code commit's green run still certifies the code. If you forget `[skip ci]` and a needless run starts, you can't stop it yourself: `gh run cancel` returns `HTTP 403: Resource not accessible by integration`. **Ask the user to cancel it from the GitHub Actions UI.**
+
 ## Architecture
 
 ### Multi-Tenancy Hierarchy
@@ -166,6 +202,20 @@ Module namespaces are defined in files like `app/models/meals.rb` which set `tab
 **Lenses:** Filtering/search UI framework in `app/lenses/`. Controllers call `prepare_lenses(:search, :community, ...)` to set up filters.
 
 **Custom Fields:** JSONB-backed extensible fields defined declaratively on models. Community settings are implemented this way.
+
+**Feature Flags:** Unshipped features are gated by the `FeatureFlag` model (not tenant-scoped; rows are created/toggled manually, e.g. in the console). Call it **directly** from controllers and templates — don't wrap it in a helper:
+
+```ruby
+FeatureFlag.lookup("messaging").on?(current_user)
+```
+
+- Use `lookup(name)`, not `find_by(name:)` — it returns an unsaved, default-**off** flag when the row doesn't exist, so a feature is off everywhere until you explicitly turn it on (and there's no nil to guard).
+- **Always pass `current_user`.** With the default `interface: "basic"` the flag is a global on/off and the user is ignored; switching a flag to `interface: "user"` makes it check per-user membership (`feature_flag_users`), which lets you enable a feature for just yourself in production. Passing the user means that switch needs no code change. (`on?` raises if a `"user"`-interface flag gets no user.)
+- Gate **both** the UI and the endpoints — hiding a link doesn't stop a direct request. Also skip any expensive work (e.g. external API calls) the hidden feature would trigger.
+- Don't gate inbound webhooks/background reconciliation: turning a flag off shouldn't strand data that already exists.
+- Specs that exercise a flagged feature must turn it on: `create(:feature_flag, name: "messaging", status: true)`.
+
+Existing flags: `messaging`, `gdrive`, `restrictions`.
 
 ### Controller Conventions
 
@@ -271,6 +321,10 @@ Merging dependabot branches one at a time is slow (each merge rebases all the ot
 8. **Sanity-check before pushing** (cheap, catches the worst of major bumps before a ~28 min CI cycle): `RAILS_ENV=development bundle exec rails runner "puts 'ok'"` (boot), `yarn build` (esbuild), and for type-only bumps a `tsc` pass. Type checking is **not** in CI, so it won't gate the build — but still surface any new errors a major `@types/*` bump introduces.
 9. **Verify only the expected files changed** (`Gemfile`, `Gemfile.lock`, `package.json`, `yarn.lock` — plus any deliberate follow-up like an added gem line) via `git status --short` — no drift leaked in.
 10. **Commit, push, open one PR.** In the PR body, list every bump with its PR number and add `Closes #…` for each, plus the breaking-change review from step 7 (per-gem: what changed, whether it affects us, action taken). Dependabot auto-closes its own PRs once it sees the dependency updated on `develop` after merge (including superseded duplicates), so the individual PRs clean themselves up.
+
+## Missing SSH Key When Pushing
+
+The SSH key lives on the Mac host and is forwarded into the devcontainer via VSCode's agent socket — it is not in the container's `~/.ssh`. If a push fails with `Permission denied (publickey)` and `ssh-add -l` reports "The agent has no identities" (typical after the host reboots), **ask the user to run a `git pull` on the host**. That reloads the key into the host's agent, and the forwarded agent picks it up immediately — no container restart needed. Don't work around it by reconfiguring git credential helpers or fiddling with keys in the container.
 
 ## Polling CI After Opening a PR
 

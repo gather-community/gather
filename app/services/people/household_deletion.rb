@@ -20,7 +20,7 @@ module People
     def self.blockers(household)
       reasons = []
       if Billing::Account.outstanding_balance?(household)
-        reasons << I18n.t("people.deletion.blockers.household_balance", name: household.name)
+        reasons << I18n.t("people.deletion.blockers.balance", name: household.name)
       end
       wards = external_wards(household)
       if wards.any?

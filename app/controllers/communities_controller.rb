@@ -17,9 +17,14 @@ class CommunitiesController < ApplicationController
   def admin
     load_community
     authorize(@community)
-    @community.subscription&.populate
-  rescue Stripe::InvalidRequestError
-    @subscription_stripe_error = true
+    @community.subscription&.sync!
+    @subscription_stripe_error = @community.subscription&.sync_error.present?
+  end
+
+  def resync_all
+    authorize(sample_community, :index?)
+    Subscription::SyncAllJob.perform_later
+    redirect_to(communities_path, notice: "Subscription resync started. Refresh in a minute to see updates.")
   end
 
   def destroy

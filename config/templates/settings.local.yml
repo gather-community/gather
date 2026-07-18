@@ -35,3 +35,19 @@ redis:
 mailman:
   api:
     base_url: http://mailman-core:8001
+
+# Stripe (test mode) — only needed for local subscription + messaging-topup testing.
+# Leave blank otherwise; the junk defaults in config/settings.yml keep the app booting.
+# Restart the server after changing these (topup_product_id is read once at boot).
+stripe:
+  api_key:                 # sk_test_... (Stripe test secret key)
+  publishable_key:         # pk_test_... (test publishable key, for the base-sub payment form)
+  webhook_signing_secret:  # whsec_... (printed by `stripe listen`)
+  messaging:
+    topup_product_id:      # prod_... (a product created in Stripe TEST mode; topup prices live under it)
+
+# Subscription price-calculator data sources. The exchange rate provider (open.er-api.com) needs
+# no key. The CPI provider (US BLS) needs a free registration key: https://data.bls.gov/registrationEngine/
+pricing:
+  cpi:
+    api_key:

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_01_000001) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_15_000001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -892,12 +892,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_01_000001) do
     t.datetime "created_at", null: false
     t.bigint "creator_id"
     t.string "description", limit: 255, null: false
+    t.string "stripe_event_id"
     t.string "stripe_invoice_line_item_id"
     t.datetime "updated_at", null: false
     t.index ["account_id"], name: "index_messaging_transactions_on_account_id"
     t.index ["cluster_id"], name: "index_messaging_transactions_on_cluster_id"
     t.index ["creator_id"], name: "index_messaging_transactions_on_creator_id"
-    t.index ["stripe_invoice_line_item_id"], name: "index_messaging_transactions_on_stripe_invoice_line_item_id", unique: true
+    t.index ["stripe_event_id"], name: "index_messaging_transactions_on_stripe_event_id"
+    t.index ["stripe_invoice_line_item_id"], name: "index_messaging_transactions_on_stripe_invoice_line_item_id"
   end
 
   create_table "people_emergency_contacts", id: :serial, force: :cascade do |t|
@@ -1059,6 +1061,24 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_01_000001) do
     t.index ["event_id"], name: "index_stripe_webhook_events_on_event_id"
   end
 
+  create_table "subscription_exchange_rates", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "currency", null: false
+    t.datetime "fetched_at", null: false
+    t.decimal "rate", precision: 18, scale: 8, null: false
+    t.datetime "updated_at", null: false
+    t.index ["currency"], name: "index_subscription_exchange_rates_on_currency", unique: true
+  end
+
+  create_table "subscription_inflation_readings", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "fetched_at", null: false
+    t.decimal "index_value", precision: 12, scale: 4, null: false
+    t.datetime "updated_at", null: false
+    t.integer "year", null: false
+    t.index ["year"], name: "index_subscription_inflation_readings_on_year", unique: true
+  end
+
   create_table "subscription_intents", force: :cascade do |t|
     t.string "address_city", null: false
     t.string "address_country", null: false
@@ -1070,7 +1090,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_01_000001) do
     t.bigint "community_id", null: false
     t.string "contact_email", null: false
     t.datetime "created_at", null: false
-    t.string "currency", null: false
     t.decimal "discount_percent", precision: 6, scale: 2
     t.integer "months_per_period", null: false
     t.jsonb "payment_method_types", null: false
@@ -1083,11 +1102,29 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_01_000001) do
     t.index ["community_id"], name: "index_subscription_intents_on_community_id", unique: true
   end
 
-  create_table "subscriptions", force: :cascade do |t|
+  create_table "subscription_messaging_topups", force: :cascade do |t|
     t.bigint "cluster_id", null: false
     t.bigint "community_id", null: false
     t.datetime "created_at", null: false
     t.string "stripe_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cluster_id"], name: "index_subscription_messaging_topups_on_cluster_id"
+    t.index ["community_id"], name: "index_subscription_messaging_topups_on_community_id", unique: true
+    t.index ["stripe_id"], name: "index_subscription_messaging_topups_on_stripe_id", unique: true
+  end
+
+  create_table "subscriptions", force: :cascade do |t|
+    t.bigint "cluster_id", null: false
+    t.bigint "community_id", null: false
+    t.datetime "created_at", null: false
+    t.string "payment_intent_next_action_type"
+    t.string "payment_intent_status"
+    t.string "setup_intent_next_action_type"
+    t.string "setup_intent_status"
+    t.string "stripe_id", null: false
+    t.string "stripe_status"
+    t.string "sync_error"
+    t.datetime "synced_at"
     t.datetime "updated_at", null: false
     t.index ["cluster_id"], name: "index_subscriptions_on_cluster_id"
     t.index ["community_id"], name: "index_subscriptions_on_community_id", unique: true
@@ -1481,6 +1518,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_01_000001) do
   add_foreign_key "statements", "clusters"
   add_foreign_key "subscription_intents", "clusters"
   add_foreign_key "subscription_intents", "communities"
+  add_foreign_key "subscription_messaging_topups", "clusters"
+  add_foreign_key "subscription_messaging_topups", "communities"
   add_foreign_key "subscriptions", "clusters"
   add_foreign_key "subscriptions", "communities"
   add_foreign_key "transactions", "accounts"

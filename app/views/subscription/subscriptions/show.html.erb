@@ -7,9 +7,21 @@
   <%= render("pre_payment", subscription: intent) %>
 <% elsif subscription.payment_requires_microdeposits? %>
   <div class="topline">
-    Your bank account requires verification. Please check your email for instructions and check back
-    here once verification is complete.
+    Your bank account requires verification.
+    <% if subscription.microdeposit_verification_url %>
+      A <%= link_to("microdeposit", Subscription::Subscription::MICRODEPOSIT_HELP_URL,
+            target: "_blank", rel: "noopener") %>
+      will land in your account in a day or two. Use the button below to complete verification.
+    <% else %>
+      Please check your email for instructions and check back here once verification is complete.
+    <% end %>
   </div>
+  <% if subscription.microdeposit_verification_url %>
+    <p>
+      <%= link_to("Verify your bank account", subscription.microdeposit_verification_url,
+            class: "btn btn-primary", target: "_blank", rel: "noopener") %>
+    </p>
+  <% end %>
   <%= render("post_payment", subscription: subscription) %>
   <p>
     You can visit our
@@ -28,7 +40,7 @@
     Your subscription is active but we still need to collect your payment information.
   </div>
   <%= render("pre_payment", subscription: subscription) %>
-<% elsif subscription.payment_processing? %>
+<% elsif subscription.detailed_status == :payment_processing %>
   <div class="topline">
     Your subscription payment is processing. This can take a few days depending on the
     payment method. In the meantime, you are welcome to use Gather!

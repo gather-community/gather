@@ -10,7 +10,6 @@ en:
       self_success: "Your account has been permanently deleted."
       blockers:
         balance: "The household '%{name}' has an outstanding balance that must be settled first."
-        household_balance: "The household '%{name}' has an outstanding balance that must be settled first."
         guardian: "They are the guardian of %{names}; delete or reassign those members first."
         external_ward: "Members of this household are the guardian of %{names} in other households; delete or reassign those members first."
         last_admin: "They are the community's only administrator; grant another member the admin role first."

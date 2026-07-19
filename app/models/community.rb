@@ -204,6 +204,12 @@ class Community < ApplicationRecord
     messaging_accounts.first
   end
 
+  # Whether we can send SMS to this community's country, and therefore whether it may buy
+  # messaging bundles. Gate the top-up flow on this — see Messaging::Rates.
+  def messaging_supported?
+    Messaging::Rates.supported?(country_code)
+  end
+
   def status
     if inactive?
       :deactivated

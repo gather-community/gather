@@ -51,3 +51,9 @@ stripe:
 pricing:
   cpi:
     api_key:
+
+# SMS provider credentials — only needed for SENDING (pricing is hardcoded). Leave blank if
+# you're not testing sends locally.
+# Telnyx bearer API key: create in the Mission Control portal under Auth.
+telnyx:
+  api_key:

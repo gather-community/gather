@@ -193,8 +193,11 @@ module Subscription
     # the sub active even though the SetupIntent still hasn't been finished.
     # Whether a monthly messaging topup can be added/changed now: the base subscription must be a
     # live, invoiceable sub (active and not future-dated) with a saved payment method we can charge
-    # immediately. Future-dated subs have no payment method attached yet, so they're excluded.
+    # immediately, AND we must actually be able to send SMS to the community's country — there's no
+    # point funding a wallet we can never spend. Future-dated subs have no payment method attached
+    # yet, so they're excluded.
     def messaging_topup_editable?
+      return false unless community.messaging_supported?
       return false unless persisted? && active? && !future?
       default_payment_method_id.present?
     end

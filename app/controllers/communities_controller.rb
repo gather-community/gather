@@ -30,7 +30,7 @@ class CommunitiesController < ApplicationController
   def destroy
     load_community
     authorize(@community)
-    if params[:community_slug] != @community.slug
+    if params[:confirmation] != @community.slug
       redirect_to(admin_community_path(@community), alert: "Incorrect slug. Community was not deleted.")
       return
     end

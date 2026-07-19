@@ -167,12 +167,14 @@ en:
         activate: "Household activated successfully."
         deactivate: "Household deactivated successfully."
         destroy: "Household deleted successfully."
+        hard_destroy: "Household and all its members were permanently deleted."
     user:
       success:
         activate: "User activated successfully."
         activate_unconfirmed: "User activated successfully, but they will need an invitation to sign in. Click 'Invite' below to invite them."
         deactivate: "User deactivated successfully."
         destroy: "User deleted successfully."
+        hard_destroy: "User was permanently deleted."
       error:
         activate: "Error during activation: %{message}"
         deactivate: "Error during deactivation: %{message}"
@@ -391,6 +393,10 @@ en:
       update_photo: "Edit Photo"
       invite: "Invite"
       impersonate: "Impersonate"
+      destroy: "Delete Permanently"
+      delete_self: "Delete My Account"
+    household:
+      destroy: "Delete Permanently"
     wiki/page:
       history: "History"
     work/job:

@@ -13,7 +13,10 @@ class UserPolicy < ApplicationPolicy
         else
           scope.all_in_community_or_adult_in_cluster(user.community)
         end
-      active_admin? ? result : result.active
+      result = result.active unless active_admin?
+      # Never surface the per-community "Deleted Member" placeholder (directory, admin inactive
+      # view, CSV export, and all select2 dropdowns derive from this scope).
+      result.non_placeholder
     end
   end
 
@@ -26,6 +29,7 @@ class UserPolicy < ApplicationPolicy
   end
 
   def show?
+    return false if record.deleted_placeholder?
     self? || active_admin? ||
       (active? && ((record.adult? && record_tied_to_user_cluster?) || record_tied_to_user_community?))
   end
@@ -53,21 +57,13 @@ class UserPolicy < ApplicationPolicy
     active_admin? && !self? && record.full_access? && admin_level(user) >= admin_level(record)
   end
 
-  # We don't allow destroy if the user is referred to from an independent record in the community, such
-  # as a child (guardian), event (creator, sponsor), wiki page (creator, updater), etc.
-  # Records that are not independent, i.e., that make no sense without the user (e.g. work share,
-  # job choosing proxy), can be dependendly destroyed or nullified.
+  # Whether this actor may hard-delete the user at all (governs whether the button renders).
+  # Shared records that would otherwise block deletion are anonymized to the community's
+  # "Deleted Member" placeholder by People::UserDeletion, so no reference checks are needed here.
+  # Conditions that should merely warn (unsettled balance, guardianship, last admin) are
+  # surfaced by People::UserDeletion.blockers, not by returning false — the button stays enabled.
   def destroy?
-    active_admin? &&
-      Meals::Meal.where(creator: record).none? &&
-      Meals::Assignment.where(user: record).none? &&
-      People::Guardianship.related_to(record).none? &&
-      People::Memorial.where(user: record).none? &&
-      People::MemorialMessage.where(author: record).none? &&
-      Calendars::Event.related_to(record).none? &&
-      Wiki::Page.related_to(record).none? &&
-      Wiki::PageVersion.where(updater: record).none? &&
-      Work::Assignment.where(user: record).none?
+    !record.deleted_placeholder? && (self? || active_admin? || guardian?)
   end
 
   def activate?

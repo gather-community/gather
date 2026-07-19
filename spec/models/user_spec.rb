@@ -688,14 +688,23 @@ describe User do
 
     context "with memorial" do
       let!(:memorial) { create(:memorial, user: user) }
-      it "deletes cleanly" do
+
+      # A memorial outlives the account and carries its own copy of the name/community/photo,
+      # so the link is simply nullified. See People::Memorial.
+      it "keeps the memorial and nullifies the link" do
+        name = memorial.name
         user.destroy
-        expect { memorial.reload }.to raise_error(ActiveRecord::RecordNotFound)
+        expect(memorial.reload.user_id).to be_nil
+        expect(memorial.name).to eq(name)
       end
     end
 
     context "with memorial message" do
       let!(:memorial_message) { create(:memorial_message, author: user) }
+
+      # A raw destroy still cascades, which is what keeps community teardown working.
+      # People::UserDeletion reassigns the messages first, so they survive that path —
+      # see the anonymization spec in people/user_deletion_spec.rb.
       it "deletes cleanly" do
         user.destroy
         expect { memorial_message.reload }.to raise_error(ActiveRecord::RecordNotFound)

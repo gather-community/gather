@@ -259,11 +259,16 @@ When introducing a new model, follow the established conventions:
 - **Add a factory** under `spec/factories/<module>/` and a model spec.
 - **Decorators/policies** come only when the model becomes user-facing.
 
-**Three "wholesome" specs iterate over every model — a new model must satisfy all three (or be added to the relevant allowlist):**
+**Four "wholesome" specs iterate over every model — a new model must satisfy all four (or be added to the relevant allowlist):**
 
 - [spec/models/tenancy_spec.rb](spec/models/tenancy_spec.rb) — every model must have `acts_as_tenant`. Allowlist (`ALLOWLISTED_CLASSES`) only for genuinely non-tenant models.
 - [spec/models/utils/generators/main_generator_spec.rb](spec/models/utils/generators/main_generator_spec.rb) — every model must get at least one record from sample-data generation, **or** be added to `NO_SAMPLE_DATA_CLASSES` (use this for models created on demand, e.g. via a webhook).
 - [spec/models/community_deletion_spec.rb](spec/models/community_deletion_spec.rb) — every tenant model needs a factory call in the setup and must cascade to zero rows when a community is destroyed (wire `dependent: :destroy` from `Community` and/or its parent), **or** be added to `EXEMPT_MODELS`. Prefer wiring the cascade so deletion is actually tested.
+- [spec/services/people/deletion_dispositions_spec.rb](spec/services/people/deletion_dispositions_spec.rb) — every model must appear in both `USER_DISPOSITIONS` and `HOUSEHOLD_DISPOSITIONS`, declaring what happens to its rows when a user or household is permanently deleted: `:none`, `:destroy`, `:anonymize`, `:nullify`, `:retain`, or `:subject`. There is no allowlist — a new model must be classified. Models declared `:none` are checked by reflection to confirm they really have no association to the deleted record.
+
+The dispositions map is a **declaration**, not an assertion — it does not read `People::UserDeletion`'s implementation, so it must be updated alongside that service. Its job is to make you consider deletion when adding a model. Behavior is verified in [user_deletion_spec.rb](spec/services/people/user_deletion_spec.rb) and [household_deletion_spec.rb](spec/services/people/household_deletion_spec.rb).
+
+**Watch for foreign keys with no DB constraint** (e.g. `gdrive_synced_permissions.user_id`, which is deliberately unconstrained so rows outlive the user — see below). A missed reassignment on a constrained column raises at deletion time; on an unconstrained one it silently leaves a dangling id, and the association reads back as `nil`. Assert the association *resolves* (`expect(record.reload.sender).to eq(placeholder)`), not merely that the delete succeeded. Prefer adding the FK constraint when the column isn't deliberately loose — `meal_messages.sender_id` was unconstrained and silently accumulated dangling rows until one was added.
 
 ### Locale Files
 
@@ -300,6 +305,7 @@ Gather uses several locale files under `config/locales/en/`. Each type of string
 ## Testing
 
 - **All new functionality must have test coverage.** Add specs for new models, jobs, mailers, forms, policies, and controllers. Follow existing spec patterns and directory structure.
+- **Prefer system specs (`js: true`) for anything exercised through the browser** — clicking buttons, opening modals, submitting forms, and asserting the resulting UI. Reach for request/controller specs only when the flow under test is *not* a browser flow (JSON APIs, webhooks, or pure redirect/authorization checks with no UI). Model/service/policy logic still gets its own unit specs.
 - **System tests require headless Chrome.** See the [Selenium Docker service](#headless-chrome-for-system-tests) section below.
 - **Run individual or small numbers of specs locally; use CI for full suite runs.** When fixing a specific failure, run the affected file/line with `bundle exec rspec spec/path/to/spec.rb:42` locally to confirm it passes before pushing — this avoids burning a ~28 min CI cycle on a fix that doesn't work. Only push to CI when you need the full suite run (e.g. after a Rails upgrade or broad refactor). Non-browser specs (model, request, job, mailer) run fine locally; system specs require headless Chrome (see below).
 - **Replicate CI failures locally before iterating.** Add a diagnostic assertion with a descriptive failure message (e.g. `expect(count).to eq(1), "Expected 1, got #{count}. Details: #{things.inspect}"`) to extract values that aren't visible in a normal failure.

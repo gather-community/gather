@@ -27,7 +27,7 @@ class UserDecorator < ApplicationDecorator
   end
 
   def first_name_with_inactive
-    "#{first_name}#{active? ? "" : " (Inactive)"}"
+    "#{first_name}#{" (Inactive)" unless active?}"
   end
 
   def birthday_formatted
@@ -152,8 +152,15 @@ class UserDecorator < ApplicationDecorator
     ActionLinkSet.new(
       ActionLink.new(object, :deactivate, icon: "times-circle", path: h.deactivate_user_path(object),
         method: :put, confirm: {name: name}),
-      ActionLink.new(object, :destroy, icon: "trash", path: h.user_path(object), method: :delete,
-        confirm: {name: name})
+      ActionLink.new(object, :destroy, icon: "trash", path: "#",
+        label_symbol: ((object == h.current_user) ? :delete_self : :destroy),
+        data: {
+          controller: "record-delete",
+          "record-delete-url-value": h.user_path(object),
+          "record-delete-confirm-token-value": "#{object.first_name} #{object.last_name}",
+          "record-delete-kind-value": "user",
+          action: "record-delete#confirm"
+        })
     )
   end
 end

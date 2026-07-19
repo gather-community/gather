@@ -70,6 +70,9 @@ class Community < ApplicationRecord
   # Households must be destroyed before member_types because households.member_type_id has a FK constraint.
   has_many :households, inverse_of: :community, dependent: :destroy
   has_many :member_types, class_name: "People::MemberType", inverse_of: :community, dependent: :destroy
+  # Memorials outlive their users, so they no longer cascade via households → users and need
+  # their own link to the community.
+  has_many :memorials, class_name: "People::Memorial", inverse_of: :community, dependent: :destroy
   has_one :subscription, inverse_of: :community, class_name: "Subscription::Subscription", dependent: :destroy
   has_one :subscription_intent, inverse_of: :community, class_name: "Subscription::Intent",
     dependent: :destroy
@@ -185,6 +188,15 @@ class Community < ApplicationRecord
     (households - Array.wrap(hholds_to_save)).each(&:destroy)
   end
 
+  # The per-community "Deleted Member" placeholder user. Records authored by a deleted member
+  # (meals, wiki pages, calendar events) are reassigned to this user so community history
+  # survives anonymized. Created lazily on first deletion — never seeded — so a fresh community
+  # has no placeholder (keeps the "no sample data" generator invariants intact). It lives in its
+  # own deactivated placeholder household and is excluded from directories, selects, etc.
+  def deleted_member
+    households.find_by(deleted_placeholder: true)&.users&.first || create_deleted_member
+  end
+
   def subdomain
     slug
   end
@@ -257,6 +269,16 @@ class Community < ApplicationRecord
   end
 
   private
+
+  # Deactivated ⇒ email is not required and it's excluded from active-scoped lists for free.
+  # Rescues a unique-index race (two concurrent deletions) by re-reading the winner's row.
+  def create_deleted_member
+    household = households.create!(name: "Deleted Members", deleted_placeholder: true)
+    household.users.create!(deleted_placeholder: true, first_name: "Deleted", last_name: "Member",
+      child: false, deactivated_at: Time.current)
+  rescue ActiveRecord::RecordNotUnique
+    households.find_by(deleted_placeholder: true).users.first
+  end
 
   # Reads a subscription signal from the summarizer's virtual attribute (aliased as
   # subscription_<name>) when present, else from the loaded subscription association.

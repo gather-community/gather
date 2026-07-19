@@ -680,7 +680,7 @@ GEM
       actionpack (>= 7.0)
       activemodel (>= 7.0)
     smstools (0.2.2)
-    spring (3.1.1)
+    spring (4.7.0)
     sprockets (4.2.2)
       concurrent-ruby (~> 1.0)
       logger
@@ -852,7 +852,7 @@ DEPENDENCIES
   serviceworker-rails (~> 0.7)
   simple_form (~> 5.0)
   smstools (~> 0.2)
-  spring (~> 3.0)
+  spring (~> 4.7)
   sprockets-rails (~> 3.4)
   standard (~> 1.53)
   stimulus-rails (~> 1.3)

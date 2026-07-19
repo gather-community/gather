@@ -100,7 +100,7 @@ group :development, :test do
   gem "rubocop-rails", "2.35.5"
   gem "rubocop", "~> 1.87"
   gem "selenium-webdriver", "~> 4.44"
-  gem "spring", "~> 3.0"
+  gem "spring", "~> 4.7"
   gem "standard", "~> 1.53"
   gem "thin", "~> 1.7"
   gem "vcr", "~> 6.4"

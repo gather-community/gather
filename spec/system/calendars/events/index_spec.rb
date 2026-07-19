@@ -332,21 +332,273 @@ describe "event calendar", js: true do
 
       visit(calendar_events_path(calendar))
 
-      today_label = page.evaluate_script(
-        "`${moment('#{today.to_fs(:no_time)}', 'YYYY-MM-DD').format('dddd, MMMM D, YYYY')}, 1 event`"
-      )
+      week_today_label = expected_date_label(today, prefix: "All Day", count: "1 event")
+      month_today_label = expected_date_label(today, count: "1 event")
 
       expect(page).to have_css("#calendar-live-region", text: "1 event this week", visible: false)
       expect(page).to have_css(
         ".fc-agendaWeek-view .fc-day-grid .fc-bg .fc-day[data-date='#{today.to_fs(:no_time)}']" \
-        "[aria-label='#{today_label}']"
+        "[aria-label='#{week_today_label}']"
       )
 
       find(".fc-month-button").click
       expect(page).to have_css("#calendar-live-region", text: "1 event this month", visible: false)
       expect(page).to have_css(
-        ".fc-month-view .fc-bg .fc-day[data-date='#{today.to_fs(:no_time)}'][aria-label='#{today_label}']"
+        ".fc-month-view .fc-bg .fc-day[data-date='#{today.to_fs(:no_time)}']" \
+        "[aria-label='#{month_today_label}']"
       )
+    end
+
+    scenario "supports keyboard navigation and labels for day and week time slots" do
+      visit(calendar_events_path(calendar))
+
+      today = Time.zone.today
+      today_date = today.to_fs(:no_time)
+      current_week_other_day = today.wday.zero? ? today + 1.day : today - 1.day
+      current_week_other_date = current_week_other_day.to_fs(:no_time)
+      all_day_selector =
+        ".fc-agendaWeek-view .fc-day-grid .fc-bg .fc-day[data-date='#{today_date}']"
+      current_week_all_day_selector =
+        ".fc-agendaWeek-view .fc-day-grid .fc-bg .fc-day[data-date='#{current_week_other_date}']"
+      first_slot_selector =
+        ".fc-agendaWeek-view .fc-gather-time-slot[data-date='#{today_date}'][data-time='06:00:00']"
+      current_week_slot_selector =
+        ".fc-agendaWeek-view .fc-gather-time-slot" \
+        "[data-date='#{current_week_other_date}'][data-time='06:00:00']"
+
+      all_day_label = expected_date_label(today, prefix: "All Day", include_week_context: true)
+      current_week_all_day_label =
+        expected_date_label(current_week_other_day, prefix: "All Day", include_week_context: true)
+      first_slot_label = expected_time_slot_label(today, "06:00:00", include_week_context: true)
+      current_week_slot_label =
+        expected_time_slot_label(current_week_other_day, "06:00:00", include_week_context: true)
+
+      expect(page).to have_css("#{all_day_selector}[aria-label='#{all_day_label}']")
+      expect(page).to have_css("#{current_week_all_day_selector}[aria-label='#{current_week_all_day_label}']")
+      expect(page).to have_css("#{first_slot_selector}[aria-label='#{first_slot_label}']")
+      expect(page).to have_css("#{current_week_slot_selector}[aria-label='#{current_week_slot_label}']")
+      week_grid_label = expected_grid_label(".fc-agendaWeek-view", "Week calendar")
+      expect(page).to have_css(
+        ".fc-agendaWeek-view[role='grid'][aria-label='#{week_grid_label}']"
+      )
+      expect(page).to have_no_css(".fc-agendaWeek-view .fc-time-grid[role='grid']")
+      expect(page).to have_no_css(".fc-agendaWeek-view .fc-time-grid .fc-bg .fc-day[aria-label]")
+      expect(page).to have_css("#{first_slot_selector}[aria-hidden='true']")
+      expect(page).to have_css(".fc-agendaWeek-view .fc-slats[aria-hidden='true']")
+
+      find("#{all_day_selector}[tabindex='0']").send_keys(:tab)
+      tab_target = page.evaluate_script(<<~JS)
+        (() => {
+          const el = document.activeElement;
+          if (!el || el === document.body) {
+            return {ok: true, reason: "body"};
+          }
+          const role = el.getAttribute("role");
+          const label = el.getAttribute("aria-label") || el.getAttribute("aria-labelledby");
+          const inUnlabeledGrid = role === "grid" && !label;
+          const isTimeGridChrome = !!(el.closest && el.closest(".fc-time-grid") &&
+            !el.classList.contains("fc-gather-time-slot") && !el.classList.contains("fc-event"));
+          return {
+            ok: !inUnlabeledGrid && !isTimeGridChrome,
+            role,
+            label,
+            className: el.className,
+            id: el.id
+          };
+        })()
+      JS
+      expect(tab_target["ok"]).to eq(true),
+        "Tab from all-day landed on unlabeled calendar chrome: #{tab_target.inspect}"
+
+      find("#{all_day_selector}[tabindex='0']").send_keys(:arrow_down)
+      expect_active_gridcell("#{first_slot_selector}[tabindex='0']")
+      expect(page).to have_css(
+        "#{first_slot_selector}[role='button']:not([aria-hidden='true'])"
+      )
+      expect(page).to have_no_css("#{first_slot_selector}[aria-selected]")
+      expect(page).to have_no_css("#{first_slot_selector}[aria-describedby]")
+      expect(page).to have_css(
+        ".fc-agendaWeek-view .fc-gather-time-slot[data-time='06:30:00'][aria-hidden='true']",
+        minimum: 1
+      )
+      expect(page).to have_no_css(
+        ".fc-agendaWeek-view .fc-gather-time-slot[aria-selected='false']"
+      )
+
+      find(first_slot_selector).send_keys(:arrow_down)
+      half_hour_selector =
+        ".fc-agendaWeek-view .fc-gather-time-slot[data-date='#{today_date}']" \
+        "[data-time='06:30:00']"
+      expect_active_gridcell("#{half_hour_selector}[tabindex='0']")
+      half_hour_label = expected_time_slot_label(today, "06:30:00", include_week_context: true)
+      expect(page).to have_css("#{half_hour_selector}[aria-label='#{half_hour_label}']")
+
+      find(half_hour_selector).send_keys(:arrow_up)
+      expect_active_gridcell(
+        "#{first_slot_selector}[role='button'][tabindex='0']:not([aria-hidden='true'])"
+      )
+      expect(page).to have_css("#{half_hour_selector}[aria-hidden='true']:not([role])")
+
+      find(first_slot_selector).send_keys(:arrow_up)
+      expect_active_gridcell("#{all_day_selector}[tabindex='0']")
+
+      find("#{all_day_selector}[tabindex='0']").send_keys(:arrow_down)
+      move = page.evaluate_script(<<~JS)
+        (() => {
+          const current = document.querySelector(#{first_slot_selector.to_json});
+          const currentDate = current.getAttribute("data-date");
+          const slots = Array.from(
+            document.querySelectorAll(
+              ".fc-agendaWeek-view .fc-gather-time-slot[data-time='06:00:00']"
+            )
+          );
+          const next = slots.find((slot) => slot.getAttribute("data-date") > currentDate);
+          if (next) {
+            return {date: next.getAttribute("data-date"), key: "ArrowRight"};
+          }
+          const prev = [...slots].reverse()
+            .find((slot) => slot.getAttribute("data-date") < currentDate);
+          return prev && {date: prev.getAttribute("data-date"), key: "ArrowLeft"};
+        })()
+      JS
+      expect(move).to be_present
+      find(first_slot_selector).send_keys(move["key"] == "ArrowRight" ? :arrow_right : :arrow_left)
+      adjacent_slot_selector =
+        ".fc-agendaWeek-view .fc-gather-time-slot[data-date='#{move['date']}']" \
+        "[data-time='06:00:00']"
+      expect_active_gridcell("#{adjacent_slot_selector}[tabindex='0']")
+
+      find(adjacent_slot_selector).send_keys(:enter)
+      expect(page).to have_content(/Create event on.+6:00 am to 6:30 am/i)
+      expect(page).to have_css(
+        "#create-confirm-modal[role='dialog'][aria-modal='true']" \
+        "[aria-labelledby='create-confirm-modal-title']"
+      )
+      expect(page).to have_css("#create-confirm-modal-title", text: "Create Event?")
+      expect(page).to have_css("#create-confirm-modal .btn-default:focus", text: "Cancel")
+      expect(page).to have_css(".fc-helper-container .fc-event")
+
+      find("#create-confirm-modal .btn-default").send_keys(:escape)
+      expect(page).to have_no_css(".modal.in")
+      expect(page).to have_no_css(".fc-helper-container .fc-event")
+      expect_active_gridcell("#{adjacent_slot_selector}[tabindex='0']")
+      find(".fc-today-button").click
+      find(".fc-agendaDay-button").click
+      expect(page).to have_css(".fc-agendaDay-view .fc-time-grid")
+
+      day_all_day_selector =
+        ".fc-agendaDay-view .fc-day-grid .fc-bg .fc-day[data-date='#{today_date}']"
+      day_first_slot_selector =
+        ".fc-agendaDay-view .fc-gather-time-slot[data-date='#{today_date}'][data-time='06:00:00']"
+      day_all_day_label = expected_date_label(today, prefix: "All Day", include_week_context: true)
+      day_first_slot_label = expected_time_slot_label(today, "06:00:00", include_week_context: true)
+
+      expect(page).to have_css("#{day_all_day_selector}[aria-label='#{day_all_day_label}']")
+      expect(page).to have_css("#{day_first_slot_selector}[aria-label='#{day_first_slot_label}']")
+      day_grid_label = expected_grid_label(".fc-agendaDay-view", "Day calendar")
+      expect(page).to have_css(".fc-agendaDay-view[role='grid'][aria-label='#{day_grid_label}']")
+
+      find(day_all_day_selector).send_keys(:arrow_down)
+      expect_active_gridcell("#{day_first_slot_selector}[tabindex='0']")
+
+      find("#show-early").click
+      midnight_slot_selector =
+        ".fc-agendaDay-view .fc-gather-time-slot[data-date='#{today_date}'][data-time='00:00:00']"
+      expect(page).to have_css(".fc-agendaDay-view .fc-divider[aria-hidden='true']", visible: false)
+      page.execute_script("document.querySelector(#{midnight_slot_selector.to_json}).focus()")
+      expect_active_gridcell("#{midnight_slot_selector}[role='button'][tabindex='0']")
+      expect(page).to have_no_css("#{midnight_slot_selector}[aria-selected]")
+      find(midnight_slot_selector).send_keys(:arrow_up)
+      expect_active_gridcell("#{day_all_day_selector}[tabindex='0']")
+    end
+
+    scenario "preserves the focused time slot when arrow navigation crosses weeks" do
+      visit(calendar_events_path(calendar))
+
+      last_date = all(".fc-agendaWeek-view .fc-gather-time-slot[data-time='06:00:00']")
+        .last["data-date"]
+      first_new_week_date = Date.iso8601(last_date).next_day
+      second_new_week_date = first_new_week_date.next_day
+      last_slot_selector =
+        ".fc-agendaWeek-view .fc-gather-time-slot[data-date='#{last_date}'][data-time='06:00:00']"
+      first_new_week_slot_selector =
+        ".fc-agendaWeek-view .fc-gather-time-slot" \
+        "[data-date='#{first_new_week_date.to_fs(:no_time)}'][data-time='06:00:00']"
+      second_new_week_slot_selector =
+        ".fc-agendaWeek-view .fc-gather-time-slot" \
+        "[data-date='#{second_new_week_date.to_fs(:no_time)}'][data-time='06:00:00']"
+
+      page.execute_script(<<~JS)
+        window.calendarFocusedSlot = document.querySelector(#{last_slot_selector.to_json});
+        window.calendarFocusedSlot.focus();
+      JS
+      find(last_slot_selector).send_keys(:arrow_right)
+
+      expect_active_gridcell("#{first_new_week_slot_selector}[tabindex='0']")
+      first_new_week_label =
+        expected_time_slot_label(first_new_week_date, "06:00:00", include_week_context: true)
+      expect(page).to have_css(
+        "#{first_new_week_slot_selector}[aria-label='#{first_new_week_label}']"
+      )
+      expect(page).to have_css(
+        "#calendar-grid-focus-live-region[aria-live='assertive'][aria-atomic='true']",
+        text: first_new_week_label,
+        visible: false
+      )
+      expect(page.evaluate_script(
+        "window.calendarFocusedSlot === document.activeElement"
+      )).to eq(true)
+
+      find(first_new_week_slot_selector).send_keys(:arrow_right)
+      expect_active_gridcell("#{second_new_week_slot_selector}[tabindex='0']")
+    end
+
+    scenario "preserves the focused all-day cell when arrow navigation crosses weeks" do
+      visit(calendar_events_path(calendar))
+
+      all_day_cells = all(
+        ".fc-agendaWeek-view .fc-day-grid .fc-bg .fc-day[data-date]"
+      )
+      last_date = all_day_cells.last["data-date"]
+      first_new_week_date = Date.iso8601(last_date).next_day
+      second_new_week_date = first_new_week_date.next_day
+      last_cell_selector =
+        ".fc-agendaWeek-view .fc-day-grid .fc-bg .fc-day[data-date='#{last_date}']"
+      first_new_week_cell_selector =
+        ".fc-agendaWeek-view .fc-day-grid .fc-bg .fc-day" \
+        "[data-date='#{first_new_week_date.to_fs(:no_time)}']"
+      second_new_week_cell_selector =
+        ".fc-agendaWeek-view .fc-day-grid .fc-bg .fc-day" \
+        "[data-date='#{second_new_week_date.to_fs(:no_time)}']"
+
+      page.execute_script(<<~JS)
+        window.calendarFocusedAllDayCell = document.querySelector(#{last_cell_selector.to_json});
+        window.calendarFocusedAllDayCell.focus();
+      JS
+      find(last_cell_selector).send_keys(:arrow_right)
+
+      expect_active_gridcell("#{first_new_week_cell_selector}[tabindex='0']")
+      first_new_week_label =
+        expected_date_label(
+          first_new_week_date,
+          prefix: "All Day",
+          count: nil,
+          include_week_context: true
+        )
+      expect(page).to have_css(
+        "#{first_new_week_cell_selector}[aria-label='#{first_new_week_label}']"
+      )
+      expect(page).to have_css(
+        "#calendar-grid-focus-live-region[aria-live='assertive'][aria-atomic='true']",
+        text: first_new_week_label,
+        visible: false
+      )
+      expect(page.evaluate_script(
+        "window.calendarFocusedAllDayCell === document.activeElement"
+      )).to eq(true)
+
+      find(first_new_week_cell_selector).send_keys(:arrow_right)
+      expect_active_gridcell("#{second_new_week_cell_selector}[tabindex='0']")
     end
 
     scenario "exposes selected, active, and today states on date cells" do
@@ -355,9 +607,7 @@ describe "event calendar", js: true do
 
       today = Time.zone.today
       today_date = today.to_fs(:no_time)
-      today_label = page.evaluate_script(
-        "`${moment('#{today_date}', 'YYYY-MM-DD').format('dddd, MMMM D, YYYY')}, No events`"
-      )
+      today_label = expected_date_label(today)
       selected_cell_selector =
         ".fc-month-view .fc-bg .fc-day[data-date][tabindex='0'][aria-selected='true']"
 
@@ -408,7 +658,8 @@ describe "event calendar", js: true do
       expect(page).to have_css(".fc-month-view .fc-bg .fc-day[data-date][aria-label]", minimum: 1)
       rerendered_cell = page.evaluate_script(<<~JS)
         (() => {
-          const cell = document.querySelector(".fc-month-view .fc-bg .fc-day[data-date='#{next_month_date}']");
+          const selector = ".fc-month-view .fc-bg .fc-day[data-date='#{next_month_date}']";
+          const cell = document.querySelector(selector);
           const date = cell.getAttribute("data-date");
 
           return {
@@ -420,6 +671,66 @@ describe "event calendar", js: true do
       JS
       expect(rerendered_cell["label"]).to eq(rerendered_cell["expectedLabel"])
     end
+  end
+
+  def expected_date_label(date, prefix: nil, count: "No events", include_week_context: false)
+    date_label = page.evaluate_script(
+      "moment('#{date.to_fs(:no_time)}', 'YYYY-MM-DD').format('dddd, MMMM D, YYYY')"
+    )
+    if date == Time.zone.today
+      date_label = "Today, #{date_label}"
+    elsif include_week_context && current_week?(date)
+      date_label = "This week, #{date_label}"
+    end
+    [prefix, date_label, count].compact.join(", ")
+  end
+
+  def expected_time_slot_label(date, time, include_week_context: false)
+    date_label = page.evaluate_script(
+      "moment('#{date.to_fs(:no_time)}', 'YYYY-MM-DD').format('dddd, MMMM D, YYYY')"
+    )
+    if date == Time.zone.today
+      date_label = "Today, #{date_label}"
+    elsif include_week_context && current_week?(date)
+      date_label = "This week, #{date_label}"
+    end
+    time_label = page.evaluate_script(<<~JS)
+      (() => {
+        const time = moment(#{time.to_json}, "HH:mm:ss");
+        return time.minutes() === 0 ? time.format("h A") : time.format("h mm A");
+      })()
+    JS
+    "#{date_label}, #{time_label}"
+  end
+
+  def expected_grid_label(view_selector, view_name)
+    page.evaluate_script(<<~JS)
+      (() => {
+        const viewSelector = #{view_selector.to_json};
+        const viewName = #{view_name.to_json};
+        const times = Array.from(
+          document.querySelectorAll(`${viewSelector} .fc-slats tr[data-time]`)
+        ).map((row) => row.getAttribute("data-time"));
+        const start = moment(times[0], "HH:mm:ss");
+        const end = moment(times[times.length - 1], "HH:mm:ss");
+        const slotMinutes = times.length > 1
+          ? moment(times[1], "HH:mm:ss").diff(start, "minutes")
+          : 30;
+        end.add(slotMinutes > 0 ? slotMinutes : 30, "minutes");
+        const label = (time) => time.minutes() === 0
+          ? time.format("h A")
+          : time.format("h mm A");
+        const interval = slotMinutes === 30
+          ? "half-hour time slots"
+          : `${slotMinutes}-minute time slots`;
+        return `${viewName}. All Day row followed by ${interval} from ${label(start)} ` +
+          `to ${label(end)}. Use arrow keys to navigate`;
+      })()
+    JS
+  end
+
+  def current_week?(date)
+    date.beginning_of_week(:sunday) == Time.zone.today.beginning_of_week(:sunday)
   end
 
   def expect_selected(cal1:, cal2:)
@@ -436,8 +747,7 @@ describe "event calendar", js: true do
   end
 
   def expect_active_gridcell(selector)
-    expect(page).to have_css(selector)
-    expect(page.evaluate_script("document.activeElement.matches(#{selector.to_json})")).to be(true)
+    expect(page).to have_css("#{selector}:focus")
   end
 
   def expect_sidebar_calendar_list_landmark

@@ -3,8 +3,12 @@
 require "rails_helper"
 
 # Covers dragging (and resizing) an event on the calendar grid, which sends an XHR update to
-# EventsController#update. The grid feed is eventlet-centric: the serialized FullCalendar `id` is the
-# eventlet id, but the update endpoint is keyed by event id, so the drag handler must send the event id.
+# EventletsController#update. The grid feed is eventlet-centric, so the serialized FullCalendar `id`
+# is the eventlet id, which is what the drag handler posts.
+#
+# A drag asks up to two scope questions before saving: which calendars (only when the event spans
+# more than one) and which occurrences (only when it recurs). When neither applies it falls back to
+# a plain confirmation.
 describe "dragging a calendar event", js: true do
   let(:actor) { create(:user) }
   let(:calendar) { create(:calendar, selected_by_default: true) }
@@ -26,9 +30,19 @@ describe "dragging a calendar event", js: true do
     create(:eventlet, event: decoy, calendar: create(:calendar))
   end
 
+  # Overridden by the contexts below. These have to be declared out here, not in the contexts, so
+  # that they're built before the `before` block visits the page — an inner-context `let!` runs after
+  # an outer-context `before`, which would leave the feed showing a plain single-calendar event.
+  let(:recurrence) { nil }
+  let(:second_calendar) { nil }
+
   let!(:event) do
     create(:event, calendar: calendar, creator: actor, name: "Draggable",
-      starts_at: starts_at, ends_at: starts_at + 1.hour)
+      starts_at: starts_at, ends_at: starts_at + 1.hour, recurrence_rule: recurrence)
+  end
+
+  let!(:other_eventlet) do
+    second_calendar && Calendars::Eventlet.create!(event_id: event.id, calendar: second_calendar)
   end
 
   before do
@@ -58,6 +72,61 @@ describe "dragging a calendar event", js: true do
     # Give any (erroneously fired) request time to land, then confirm nothing changed.
     sleep(1)
     expect(event.reload.starts_at).to be_within(1.second).of(starts_at)
+  end
+
+  context "with an event on more than one calendar" do
+    let(:calendar2) { create(:calendar, selected_by_default: true) }
+    let(:second_calendar) { calendar2 }
+
+    scenario "moving on this calendar only shifts that eventlet's offset" do
+      drag_vertically(find(".fc-event", text: "Draggable", match: :first), by: 140)
+      click_modal_button("Only on #{calendar.name}")
+
+      expect(eventually { event.eventlets.find_by(calendar_id: calendar.id).start_offset.positive? })
+        .to be(true), "Expected this calendar's eventlet to gain a positive start_offset"
+      expect(event.reload.starts_at).to be_within(1.second).of(starts_at)
+      expect(other_eventlet.reload.start_offset).to eq(0)
+    end
+
+    scenario "moving on all calendars shifts the event itself" do
+      drag_vertically(find(".fc-event", text: "Draggable", match: :first), by: 140)
+      click_modal_button("Move on all calendars")
+
+      expect(eventually { event.reload.starts_at > starts_at })
+        .to be(true), "Expected the event itself to move, but starts_at stayed #{event.reload.starts_at}"
+      expect(other_eventlet.reload.start_offset).to eq(0)
+    end
+
+    scenario "cancelling at the calendar prompt leaves everything untouched" do
+      drag_vertically(find(".fc-event", text: "Draggable", match: :first), by: 140)
+      click_modal_button(I18n.t("modal.cancel"))
+
+      sleep(1)
+      expect(event.reload.starts_at).to be_within(1.second).of(starts_at)
+      expect(event.eventlets.pluck(:start_offset)).to all(eq(0))
+    end
+  end
+
+  context "with a recurring event" do
+    let(:recurrence) { IceCube::Rule.weekly.to_hash }
+
+    scenario "moving only this occurrence creates an override and leaves the series alone" do
+      drag_vertically(find(".fc-event", text: "Draggable", match: :first), by: 140)
+      click_modal_button("Only this occurrence")
+
+      expect(eventually { event.event_overrides.any? })
+        .to be(true), "Expected an EventOverride to be created for the dragged occurrence"
+      expect(event.reload.starts_at).to be_within(1.second).of(starts_at)
+    end
+
+    scenario "moving the whole series shifts the event itself" do
+      drag_vertically(find(".fc-event", text: "Draggable", match: :first), by: 140)
+      click_modal_button("The whole series")
+
+      expect(eventually { event.reload.starts_at > starts_at })
+        .to be(true), "Expected the series anchor to move, but starts_at stayed #{event.reload.starts_at}"
+      expect(event.event_overrides).to be_empty
+    end
   end
 
   # Simulates a real mouse drag of a FullCalendar (jQuery-UI-based) event. HTML5 drag_to does not work

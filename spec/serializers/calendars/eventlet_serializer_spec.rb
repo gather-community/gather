@@ -70,6 +70,11 @@ describe Calendars::EventletSerializer do
       it "reports the full eventlet count" do
         expect(attrs[:eventlet_count]).to eq(2)
       end
+
+      it "names the other calendars for the move-scope prompt" do
+        expect(attrs[:calendar_name]).to eq(eventlet.calendar_name)
+        expect(attrs[:other_calendar_names]).to eq([Calendars::Calendar.last.name])
+      end
     end
 
     context "with a transient recurring occurrence" do

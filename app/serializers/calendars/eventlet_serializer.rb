@@ -6,7 +6,8 @@ module Calendars
 
     attributes :id, :event_id, :url, :title, :start, :end, :editable, :class_name,
       :calendar_allows_overlap, :calendar_id, :background_color, :border_color,
-      :occurrence_start, :recurring, :eventlet_count
+      :occurrence_start, :recurring, :eventlet_count, :calendar_name, :other_calendar_names,
+      :eventlet_id
 
     def url
       if object.linkable.present?
@@ -53,6 +54,24 @@ module Calendars
     # transient and never draggable, so they report 1.
     def eventlet_count
       series_event&.persisted? ? series_event.eventlets.size : 1
+    end
+
+    # The persisted eventlet a drag should write to. `id` can't serve this purpose: for a recurring
+    # occurrence the serialized row is transient so its id is nil, and reusing the base eventlet's id
+    # across occurrences would make FullCalendar treat them as one group and drag them together.
+    def eventlet_id
+      return object.id if object.persisted?
+      object.linkable.is_a?(Calendars::Eventlet) ? object.linkable.id : nil
+    end
+
+    # calendar_name needs no method here; AMS falls through to Eventlet#calendar_name.
+
+    # The other calendars this event appears on, named in the "move on all calendars" prompt so the
+    # user can see exactly what else they're about to move.
+    def other_calendar_names
+      return [] unless series_event&.persisted?
+      series_event.eventlets.reject { |e| e.calendar_id == object.calendar_id }
+        .map(&:calendar_name).sort
     end
 
     def class_name

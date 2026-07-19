@@ -302,6 +302,33 @@ Gather uses several locale files under `config/locales/en/`. Each type of string
 
 - **Text-only mailers** — Gather uses plain text email templates only. Do not create `.html.erb` mailer views.
 
+## Starting New Work
+
+**Trigger:** when the user asks to start on something new (a new feature, fix, or task that isn't a continuation of the current branch's work), run this before writing any code. Don't ask for confirmation on the mechanics — do it, then report which branch you're on.
+
+**Order matters: roll back before switching branches.** Migration files only exist on the branch that added them. Once you `git switch` away, `db:rollback` can't reverse migrations whose files are no longer on disk — so the tables/columns get stranded in your dev DB, and the next `db:migrate` bakes them into `db/schema.rb` as drift you can accidentally commit.
+
+1. **Roll back the current branch's migrations, while still on that branch.** Count them first:
+
+   ```bash
+   git diff --name-only origin/develop...HEAD -- db/migrate/ | wc -l
+   bin/rails db:rollback STEP=<count>   # skip if count is 0
+   ```
+
+   If the branch is already merged to `develop`, skip the rollback — those migrations are permanent now.
+
+2. **Confirm the working tree is clean**, including `db/schema.rb`. A dirty `schema.rb` after the rollback means the DB still has something the branch doesn't declare; sort that out before moving on rather than carrying it forward. Never commit a `schema.rb` whose diff is unrelated to the work at hand.
+
+3. **Pull develop and branch off it:**
+
+   ```bash
+   git fetch origin && git switch develop && git pull
+   git switch -c <new-branch-name>
+   bin/rails db:migrate   # no-op if step 1 was clean; verify schema.rb stays unchanged
+   ```
+
+**Irreversible migrations.** If a rollback fails because a migration has no `down` (or is destructive enough that reversing it loses dev data), stop and tell the user rather than forcing it. The escape hatch is a full reset — `db:drop db:create db:schema:load` then `rake db:new_cluster` — but note there is **no `db/seeds.rb`**, so this regenerates fresh sample data with new emails and IDs, and any hand-built dev state (feature flag rows, Stripe test objects tied to old IDs) has to be rebuilt. Don't reset without asking.
+
 ## Testing
 
 - **All new functionality must have test coverage.** Add specs for new models, jobs, mailers, forms, policies, and controllers. Follow existing spec patterns and directory structure.

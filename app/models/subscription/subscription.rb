@@ -8,6 +8,7 @@
 #  cluster_id                      :bigint           not null
 #  community_id                    :bigint           not null
 #  created_at                      :datetime         not null
+#  paid_through                    :date
 #  payment_intent_next_action_type :string
 #  payment_intent_status           :string
 #  setup_intent_next_action_type   :string
@@ -20,6 +21,29 @@
 #
 module Subscription
   # Models a subscription of Gather product itself.
+  #
+  # #detailed_status (derived below, purely from the cached columns) is the single source of truth
+  # for "what's going on with this subscription" and drives what the /subscription page offers the
+  # customer. The exhaustive set:
+  #
+  #   (no subscription)     Never subscribed, or fully reset      -> self-serve subscribe
+  #   :incomplete           First invoice unpaid                   -> complete payment (Elements)
+  #   :needs_payment_method Future-dated sub, no payment method    -> enter payment method
+  #   :awaiting_microdeposits Bank verification pending            -> hosted verification URL
+  #   :payment_processing   ACH/first payment settling             -> informational, wait
+  #   :scheduled            Future-dated, payment method ready     -> informational
+  #   :active               Healthy                                -> nothing (optionally update PM)
+  #   :past_due             Renewal failed, Stripe retrying        -> revive: pay the open invoice
+  #   :unpaid               Dunning exhausted, invoice still open  -> revive, else re-subscribe
+  #   :incomplete_expired   First-payment window elapsed; dead     -> re-subscribe
+  #   :canceled             Ended; dead                            -> re-subscribe
+  #   :other                trialing/paused; Gather never produces these
+  #   :unknown              Not yet synced                         -> resync
+  #
+  # Note "dead" vs "revivable": our Stripe dunning is configured to leave a failed sub *unpaid*
+  # rather than cancel it, so past_due/unpaid keep a payable open invoice and can be revived in
+  # place. Only incomplete_expired (abandoned first payment) and canceled (staff/scheduled cancel)
+  # are terminal and require a brand-new subscription.
   class Subscription < ApplicationRecord
     # Override suffix
     self.table_name = "subscriptions"
@@ -212,6 +236,33 @@ module Subscription
       active? && payment_or_setup_intent&.status == "requires_payment_method"
     end
 
+    # PaymentIntent statuses we can still drive to completion from our own Elements form.
+    CONFIRMABLE_PI_STATUSES = %w[requires_payment_method requires_action requires_confirmation].freeze
+
+    # Whether an open invoice with a confirmable PaymentIntent exists — i.e. the customer can pay
+    # this subscription's outstanding invoice in place and thereby fix it, rather than starting over.
+    # This is what makes past_due/unpaid revivable: paying the open invoice returns the sub to
+    # active, updating the payment method along the way.
+    def payable_invoice?
+      return false if stripe_sub.nil?
+      invoice = stripe_sub.latest_invoice
+      return false unless invoice&.status == "open"
+      CONFIRMABLE_PI_STATUSES.include?(invoice.payment_intent&.status)
+    end
+
+    # Terminal in Stripe — can never be revived, so the only remedy is a brand-new subscription.
+    # canceled and incomplete_expired are always dead; unpaid is dead only if dunning left no
+    # payable invoice behind (with our "leave unpaid" setting it normally does).
+    def dead?
+      return false if stripe_sub.nil?
+      canceled? || incomplete_expired? || (unpaid? && !payable_invoice?)
+    end
+
+    # Whether the customer can fix this subscription by paying an outstanding invoice.
+    def revivable?
+      (past_due? || unpaid? || incomplete?) && payable_invoice?
+    end
+
     def payment_method_types
       return nil if stripe_sub.nil?
       payment_or_setup_intent.payment_method_types
@@ -349,13 +400,28 @@ module Subscription
     def synced_attributes
       pi = stripe_sub.latest_invoice&.payment_intent
       si = stripe_sub.pending_setup_intent
-      {
+      attribs = {
         stripe_status: stripe_sub.status,
         payment_intent_status: pi&.status,
         payment_intent_next_action_type: pi&.next_action&.type,
         setup_intent_status: si&.status,
         setup_intent_next_action_type: si&.next_action&.type
       }
+      # Only advance paid_through when there's actually a paid invoice to advance it to. A past_due
+      # or unpaid sub's latest invoice is *not* paid, and must leave the last-paid date standing —
+      # that date is precisely what says how much paid time they have left.
+      paid = derive_paid_through
+      paid.nil? ? attribs : attribs.merge(paid_through: paid)
+    end
+
+    # The period end of the most recent successfully-paid invoice, or nil if the latest invoice
+    # isn't paid. The invoice's line period is used rather than the subscription's
+    # current_period_end, which advances to the unpaid period the moment a renewal is invoiced.
+    def derive_paid_through
+      invoice = stripe_sub.latest_invoice
+      return nil unless invoice&.status == "paid"
+      stamp = invoice.lines&.data&.last&.period&.end
+      stamp.nil? ? nil : Time.zone.at(stamp).to_date
     end
 
     def payment_or_setup_intent

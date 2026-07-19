@@ -130,9 +130,12 @@ describe Subscription::Subscription do
   describe "#sync!" do
     let(:sub) { create(:subscription) }
 
-    def fake_stripe_sub(status:, payment_intent: nil, setup_intent: nil)
-      double("Stripe::Subscription", status: status,
-        latest_invoice: payment_intent && double(payment_intent: payment_intent),
+    def fake_stripe_sub(status:, payment_intent: nil, setup_intent: nil, invoice_status: nil,
+      period_end: nil)
+      invoice = payment_intent && double("Stripe::Invoice", payment_intent: payment_intent,
+        status: invoice_status,
+        lines: double(data: [double(period: double(end: period_end))]))
+      double("Stripe::Subscription", status: status, latest_invoice: invoice,
         pending_setup_intent: setup_intent)
     end
 
@@ -193,6 +196,72 @@ describe Subscription::Subscription do
     it "no-ops on an unpersisted record" do
       expect(Stripe::Subscription).not_to receive(:retrieve)
       build(:subscription).sync!
+    end
+
+    describe "paid_through" do
+      def sync_with(invoice_status:, period_end: nil, sub_status: "active")
+        pi = double(status: "succeeded", next_action: nil)
+        allow(Stripe::Subscription).to receive(:retrieve).and_return(
+          fake_stripe_sub(status: sub_status, payment_intent: pi, invoice_status: invoice_status,
+            period_end: period_end)
+        )
+        sub.sync!
+        sub.reload
+      end
+
+      it "advances to the paid invoice's period end" do
+        sync_with(invoice_status: "paid", period_end: Time.zone.parse("2026-09-01").to_i)
+        expect(sub.paid_through).to eq(Date.new(2026, 9, 1))
+      end
+
+      it "leaves paid_through untouched when the latest invoice is not paid" do
+        # A past_due renewal must not wipe the date that says how much paid time is left.
+        sub.update!(paid_through: Date.new(2026, 8, 1))
+        sync_with(invoice_status: "open", sub_status: "past_due")
+        expect(sub.paid_through).to eq(Date.new(2026, 8, 1))
+      end
+
+      it "stays nil when there has never been a paid invoice" do
+        sync_with(invoice_status: "open", sub_status: "incomplete")
+        expect(sub.paid_through).to be_nil
+      end
+    end
+  end
+
+  describe "revive vs re-subscribe predicates" do
+    let(:sub) { build(:subscription) }
+
+    def with_stripe(status:, invoice_status: nil, pi_status: nil)
+      invoice = invoice_status && double("Stripe::Invoice", status: invoice_status,
+        payment_intent: pi_status && double(status: pi_status))
+      sub.stripe_sub = double("Stripe::Subscription", status: status, latest_invoice: invoice)
+    end
+
+    it "treats an open invoice with a confirmable PI as payable (revivable)" do
+      with_stripe(status: "past_due", invoice_status: "open", pi_status: "requires_payment_method")
+      expect(sub.payable_invoice?).to be(true)
+      expect(sub.revivable?).to be(true)
+      expect(sub.dead?).to be(false)
+    end
+
+    it "is not payable once the invoice is no longer open" do
+      with_stripe(status: "past_due", invoice_status: "void", pi_status: "requires_payment_method")
+      expect(sub.payable_invoice?).to be(false)
+      expect(sub.revivable?).to be(false)
+    end
+
+    it "treats canceled and incomplete_expired as dead" do
+      with_stripe(status: "canceled")
+      expect(sub.dead?).to be(true)
+      with_stripe(status: "incomplete_expired")
+      expect(sub.dead?).to be(true)
+    end
+
+    it "treats unpaid as dead only when no payable invoice remains" do
+      with_stripe(status: "unpaid", invoice_status: "open", pi_status: "requires_payment_method")
+      expect(sub.dead?).to be(false)
+      with_stripe(status: "unpaid", invoice_status: "void")
+      expect(sub.dead?).to be(true)
     end
   end
 

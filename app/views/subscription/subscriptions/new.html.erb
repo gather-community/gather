@@ -1,0 +1,54 @@
+<% content_for(:title, "Subscribe to Gather") %>
+<% content_for(:local_javascript, javascript_include_tag("https://js.stripe.com/v3/")) %>
+<% content_for(:local_viewport, "minimum-scale=1") %>
+
+<% currency = @form.currency %>
+
+<p class="intro">
+  Choose a plan and enter your billing details. Prices are per user, and you can pick the plan that
+  fits your community's budget — every tier includes all of Gather.
+</p>
+
+<h2>Plans <small class="text-muted">(<%= currency.upcase %>, per user)</small></h2>
+<table class="table" style="max-width: 40em">
+  <thead>
+    <tr><th>Tier</th><th>Monthly</th><th>Yearly <small class="text-muted">(save 10%)</small></th></tr>
+  </thead>
+  <tbody>
+    <% Subscription::PriceCalculator::TIERS.each do |tier| %>
+      <tr>
+        <td><%= tier.capitalize %></td>
+        <td><%= Money.from_cents(@form.price_cents(tier, 1), currency).format %>/mo</td>
+        <td><%= Money.from_cents(@form.price_cents(tier, 12), currency).format %>/yr</td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= gather_form_for(@form, url: subscription_create_path, width: :full,
+      html: {data: {controller: "subscription--address",
+                    "subscription--address-publishable-key-value": Settings.stripe.publishable_key,
+                    "subscription--address-allowed-countries-value": Community::COUNTRY_CURRENCIES.keys.to_json}}) do |f| %>
+
+  <h3 class="form-section-header">Your plan</h3>
+  <%= f.input :tier, collection: Subscription::PriceCalculator::TIERS.map { |t| [t.capitalize, t] },
+        include_blank: false %>
+  <%= f.input :months_per_period, as: :radio_buttons,
+        collection: [["Monthly", 1], ["Yearly (save 10%)", 12]], include_blank: false %>
+  <%= f.input :quantity, as: :integer %>
+
+  <h3 class="form-section-header">Billing contact</h3>
+  <%= f.input :contact_email, as: :email %>
+
+  <h3 class="form-section-header">Billing address</h3>
+  <div data-subscription--address-target="mount"></div>
+  <% Subscription::Intent::ADDRESS_ATTRIBS.each do |attrib| %>
+    <%= f.hidden_field attrib,
+          data: {"subscription--address-target": "field", "address-field": attrib} %>
+  <% end %>
+
+  <%= form_actions do %>
+    <%= f.button :primary, "Continue to payment",
+          data: {"subscription--address-target": "submit"}, disabled: true %>
+  <% end %>
+<% end %>

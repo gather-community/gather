@@ -97,13 +97,11 @@ describe Community do
     context "with dependent models" do
       let!(:meal_type) { create(:meal_type, community: community) }
       let!(:subscription) { create(:subscription, community: community) }
-      let!(:subscription_intent) { create(:subscription_intent, community: community) }
 
       it "destroys them" do
         community.destroy
         expect { meal_type.reload }.to raise_error(ActiveRecord::RecordNotFound)
         expect { subscription.reload }.to raise_error(ActiveRecord::RecordNotFound)
-        expect { subscription_intent.reload }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
 
@@ -145,6 +143,20 @@ describe Community do
           expect { domain.reload }.not_to raise_error
         end
       end
+    end
+  end
+
+  describe "#billable_seat_count" do
+    let(:community) { create(:community) }
+
+    it "counts real, active, full-access adults and excludes the rest" do
+      create(:user, community: community) # counted
+      create(:user, community: community) # counted
+      create(:user, :child, community: community) # excluded: child (not an adult, no full access)
+      create(:user, :inactive, community: community) # excluded: deactivated
+      create(:user, community: community, fake: true) # excluded: sample data
+
+      expect(community.billable_seat_count).to eq(2)
     end
   end
 end

@@ -136,7 +136,6 @@ describe Community, :without_tenant do
       create(:meal_type)
 
       # ── Subscription ──────────────────────────────────────────────────────
-      create(:subscription_intent, community: Defaults.community)
       create(:subscription, community: Defaults.community)
       create(:messaging_topup, community: Defaults.community)
 

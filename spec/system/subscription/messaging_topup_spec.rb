@@ -10,10 +10,13 @@ describe "messaging monthly topup", js: true do
   let(:default_payment_method) { "pm_1" }
 
   # A fully-populated fake base subscription — enough for the show page + messaging_topup_editable?.
+  # The invoice carries status/lines because sync! caches paid_through from the last paid invoice.
   def fake_main_sub
     double("Stripe::Subscription",
       status: "active",
-      latest_invoice: double(payment_intent: double(status: "succeeded", next_action: nil, amount: 1800)),
+      latest_invoice: double(status: "paid",
+        payment_intent: double(status: "succeeded", next_action: nil, amount: 1800),
+        lines: double(data: [double(period: double(end: 1.month.from_now.to_i))])),
       pending_setup_intent: nil,
       current_period_end: 1.month.from_now.to_i,
       discount: nil,

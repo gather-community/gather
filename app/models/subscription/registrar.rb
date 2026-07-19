@@ -83,7 +83,7 @@ module Subscription
         email: intent.contact_email,
         name: intent.community_name,
         description: intent.community_name,
-        address: ADDRESS_FIELDS.map { |f| [f, intent["address_#{f}"]] }.to_h
+        address: ADDRESS_FIELDS.index_with { |f| intent.public_send("address_#{f}") }
       )
     end
 

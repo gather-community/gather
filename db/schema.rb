@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_15_000001) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_16_000002) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -1077,29 +1077,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_15_000001) do
     t.index ["year"], name: "index_subscription_inflation_readings_on_year", unique: true
   end
 
-  create_table "subscription_intents", force: :cascade do |t|
-    t.string "address_city", null: false
-    t.string "address_country", null: false
-    t.string "address_line1", null: false
-    t.string "address_line2"
-    t.string "address_postal_code"
-    t.string "address_state"
-    t.bigint "cluster_id", null: false
-    t.bigint "community_id", null: false
-    t.string "contact_email", null: false
-    t.datetime "created_at", null: false
-    t.decimal "discount_percent", precision: 6, scale: 2
-    t.integer "months_per_period", null: false
-    t.jsonb "payment_method_types", null: false
-    t.integer "price_per_user_cents", null: false
-    t.integer "quantity", null: false
-    t.date "start_date"
-    t.string "tier", null: false
-    t.datetime "updated_at", null: false
-    t.index ["cluster_id"], name: "index_subscription_intents_on_cluster_id"
-    t.index ["community_id"], name: "index_subscription_intents_on_community_id", unique: true
-  end
-
   create_table "subscription_messaging_topups", force: :cascade do |t|
     t.bigint "cluster_id", null: false
     t.bigint "community_id", null: false
@@ -1115,6 +1092,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_15_000001) do
     t.bigint "cluster_id", null: false
     t.bigint "community_id", null: false
     t.datetime "created_at", null: false
+    t.date "paid_through"
     t.string "payment_intent_next_action_type"
     t.string "payment_intent_status"
     t.string "setup_intent_next_action_type"
@@ -1512,8 +1490,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_15_000001) do
   add_foreign_key "reminders", "work_jobs", column: "job_id"
   add_foreign_key "statements", "accounts"
   add_foreign_key "statements", "clusters"
-  add_foreign_key "subscription_intents", "clusters"
-  add_foreign_key "subscription_intents", "communities"
   add_foreign_key "subscription_messaging_topups", "clusters"
   add_foreign_key "subscription_messaging_topups", "communities"
   add_foreign_key "subscriptions", "clusters"

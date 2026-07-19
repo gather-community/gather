@@ -1,39 +1,32 @@
 # frozen_string_literal: true
 
-# == Schema Information
-#
-# Table name: subscription_intents
-#
-#  id                   :bigint           not null, primary key
-#  address_city         :string           not null
-#  address_country      :string           not null
-#  address_line1        :string           not null
-#  address_line2        :string
-#  address_postal_code  :string
-#  address_state        :string
-#  cluster_id           :bigint           not null
-#  community_id         :bigint           not null
-#  contact_email        :string           not null
-#  created_at           :datetime         not null
-#  discount_percent     :decimal(6, 2)
-#  months_per_period    :integer          not null
-#  payment_method_types :jsonb            not null
-#  price_per_user_cents :integer          not null
-#  quantity             :integer          not null
-#  start_date           :date
-#  tier                 :string           not null
-#  updated_at           :datetime         not null
-#
 module Subscription
-  # Models a subscription of Gather product itself.
-  class Intent < ApplicationRecord
-    acts_as_tenant :cluster
+  # An in-memory description of the subscription a community is about to create: what they picked
+  # (tier, billing period, seats) plus who/where to bill. Built by SignupForm and handed to
+  # Registrar, which turns it into a real Stripe subscription.
+  #
+  # Deliberately NOT persisted. It used to be a staff-created AR record, which meant stale rows hung
+  # around forever after registration and confused the picture of what a community was actually on.
+  # Now it lives only for the duration of the request that registers the subscription. Bespoke
+  # pricing, if we ever need it again, should come from Stripe coupons / promotion codes rather than
+  # a stored per-community price.
+  #
+  # The price isn't stored either — it's computed from (tier, currency, months_per_period) by
+  # PriceCalculator. The derived price methods mirror Subscription's, so SubscriptionDecorator can
+  # render an Intent and a live Subscription identically.
+  class Intent
+    include ActiveModel::Model
 
-    belongs_to :community, inverse_of: :subscription_intent
+    ADDRESS_ATTRIBS = %i[
+      address_line1 address_line2 address_city address_state address_postal_code address_country
+    ].freeze
+
+    attr_accessor :community, :contact_email, :tier, :months_per_period, :quantity,
+      :payment_method_types, :discount_percent, :start_date, *ADDRESS_ATTRIBS
 
     delegate :name, to: :community, prefix: true
 
-    # Currency is derived from the community's country. Kept as `currency` so that
+    # Currency is derived from the community's country, not chosen or stored. Named `currency` so
     # SubscriptionDecorator can treat Intent and Subscription polymorphically.
     def currency
       community.default_currency
@@ -47,10 +40,24 @@ module Subscription
       false
     end
 
+    # What Stripe will charge per seat per billing period (yearly already has its 10% baked in).
+    def unit_amount_cents
+      @unit_amount_cents ||= PriceCalculator.new(tier: tier, currency: currency,
+        months_per_period: months_per_period).unit_amount_cents
+    end
+
+    # Per seat per month. Mirrors Subscription#price_per_user_cents, which divides the Stripe
+    # unit_amount by the period length.
+    def price_per_user_cents
+      unit_amount_cents / months_per_period
+    end
+
     def total_per_invoice
       quantity * price_per_user_cents * months_per_period * (1 - (discount_percent || 0) / 100)
     end
 
+    # Self-serve subscriptions always start immediately, so these are only ever true for a
+    # hand-built Intent with an explicit start_date (e.g. a staff-run migration in the console).
     def future?
       start_date.present? && start_date > Time.zone.today
     end

@@ -74,6 +74,9 @@ en:
         comment: "A comment about this change."
     hints:
       markdown_suffix_html: "You can use <a href='/about/markdown' target='_new'>rich formatting</a>."
+      subscription_signup:
+        quantity: "Pre-filled from your current member count; adjust if needed."
+        contact_email: "Where we'll send invoices and receipts."
       communities_signup:
         community_name: "Up to 20 characters."
         slug: "Lowercase letters, numbers, and hyphens; must start with a letter. Up to 20 characters."

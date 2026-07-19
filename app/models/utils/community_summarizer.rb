@@ -13,8 +13,7 @@ module Utils
                    sub.payment_intent_next_action_type AS subscription_payment_intent_next_action_type,
                    sub.setup_intent_status AS subscription_setup_intent_status,
                    sub.setup_intent_next_action_type AS subscription_setup_intent_next_action_type,
-                   sub.synced_at AS subscription_synced_at,
-                   si.tier AS subscription_intent_tier")
+                   sub.synced_at AS subscription_synced_at")
           .joins(user_join, meal_join, rsrv_join, job_join, txn_join, subscription_join)
           .by_name.to_a
       end
@@ -73,7 +72,6 @@ module Utils
     def subscription_join
       <<~SQL
         LEFT JOIN subscriptions sub ON sub.community_id = communities.id
-        LEFT JOIN subscription_intents si ON si.community_id = communities.id
       SQL
     end
 

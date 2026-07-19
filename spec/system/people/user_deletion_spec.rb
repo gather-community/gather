@@ -36,7 +36,7 @@ describe "user deletion", js: true do
       fill_in_modal("Delete Meplease")
       click_modal_button
 
-      expect(page).to have_css("div.alert-warning", text: /outstanding balance/)
+      expect(page).to have_css("div.alert-warning", text: /unsettled account balance/)
       expect(User.exists?(target.id)).to be(true)
     end
 

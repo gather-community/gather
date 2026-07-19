@@ -27,8 +27,6 @@ describe People::UserDeletion do
       expect(page.updater).to eq(placeholder)
       expect(event.reload.creator).to eq(placeholder)
       expect(import.reload.user).to eq(placeholder)
-      # meal_messages.sender_id is NOT NULL and has no FK constraint, so a missed reassignment
-      # leaves a dangling id rather than raising — assert the sender resolves.
       expect(message.reload.sender).to eq(placeholder)
     end
 
@@ -63,7 +61,7 @@ describe People::UserDeletion do
 
   describe ".blockers" do
     # An account is auto-created for a household in its community; give it a non-zero balance.
-    def give_outstanding_balance(household)
+    def give_unsettled_balance(household)
       account = household.accounts.first || create(:account, :no_activity, household: household)
       account.update!(total_new_charges: 50)
     end
@@ -72,16 +70,16 @@ describe People::UserDeletion do
       expect(described_class.blockers(create(:user))).to eq([])
     end
 
-    it "blocks an adult whose household has an outstanding balance" do
+    it "blocks an adult whose household has an unsettled balance" do
       user = create(:user)
-      give_outstanding_balance(user.household)
-      expect(described_class.blockers(user)).to include(match(/outstanding balance/))
+      give_unsettled_balance(user.household)
+      expect(described_class.blockers(user)).to include(match(/unsettled account balance/))
     end
 
-    it "does NOT block a child whose household has an outstanding balance" do
+    it "does NOT block a child whose household has an unsettled balance" do
       household = create(:household, member_count: 0)
       child = create(:user, :child, household: household)
-      give_outstanding_balance(household)
+      give_unsettled_balance(household)
       expect(described_class.blockers(child)).to eq([])
     end
 

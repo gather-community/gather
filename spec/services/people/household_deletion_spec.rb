@@ -35,12 +35,12 @@ describe People::HouseholdDeletion do
       expect(described_class.blockers(household)).to eq([])
     end
 
-    it "blocks a household with an outstanding balance" do
+    it "blocks a household with an unsettled balance" do
       household = create(:household, member_count: 0)
       create(:user, household: household)
       account = household.accounts.first || create(:account, :no_activity, household: household)
       account.update!(total_new_charges: 50)
-      expect(described_class.blockers(household)).to include(match(/outstanding balance/))
+      expect(described_class.blockers(household)).to include(match(/unsettled account balance/))
     end
 
     it "blocks when a member guardians a child in another household" do

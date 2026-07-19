@@ -268,7 +268,7 @@ When introducing a new model, follow the established conventions:
 
 The dispositions map is a **declaration**, not an assertion — it does not read `People::UserDeletion`'s implementation, so it must be updated alongside that service. Its job is to make you consider deletion when adding a model. Behavior is verified in [user_deletion_spec.rb](spec/services/people/user_deletion_spec.rb) and [household_deletion_spec.rb](spec/services/people/household_deletion_spec.rb).
 
-**Watch for foreign keys with no DB constraint** (e.g. `meal_messages.sender_id`, `gdrive_synced_permissions.user_id`). A missed reassignment on a constrained column raises at deletion time; on an unconstrained one it silently leaves a dangling id, and the association reads back as `nil`. Assert the association *resolves* (`expect(record.reload.sender).to eq(placeholder)`), not merely that the delete succeeded.
+**Watch for foreign keys with no DB constraint** (e.g. `gdrive_synced_permissions.user_id`, which is deliberately unconstrained so rows outlive the user — see below). A missed reassignment on a constrained column raises at deletion time; on an unconstrained one it silently leaves a dangling id, and the association reads back as `nil`. Assert the association *resolves* (`expect(record.reload.sender).to eq(placeholder)`), not merely that the delete succeeded. Prefer adding the FK constraint when the column isn't deliberately loose — `meal_messages.sender_id` was unconstrained and silently accumulated dangling rows until one was added.
 
 ### Locale Files
 

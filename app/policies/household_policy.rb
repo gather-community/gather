@@ -83,7 +83,7 @@ class HouseholdPolicy < ApplicationPolicy
   # Whether this actor may hard-delete the household at all (governs whether the button renders).
   # Member users and their shared records are anonymized/cascaded by People::HouseholdDeletion,
   # so no per-user or signup/account reference checks are needed here. Warn-only conditions
-  # (outstanding balance, external ward, last admin) come from People::HouseholdDeletion.blockers.
+  # (unsettled balance, external ward, last admin) come from People::HouseholdDeletion.blockers.
   def destroy?
     active_admin? && !household.deleted_placeholder?
   end

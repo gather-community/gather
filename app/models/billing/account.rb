@@ -61,9 +61,11 @@ module Billing
       self.current_balance = balance_due + total_new_charges
     end
 
-    # True if the household has any account carrying a non-zero running balance. Uses the same
-    # 0.01 epsilon as the `active` scope so a settled account reading e.g. 0.00 does not count.
-    def self.outstanding_balance?(household)
+    # True if the household has any account carrying a non-zero running balance, in EITHER
+    # direction — a credit the community owes the household counts just as much as money owed to
+    # the community, since deleting the household would strand it. Uses the same 0.01 epsilon as
+    # the `active` scope so a settled account reading e.g. 0.00 does not count.
+    def self.unsettled_balance?(household)
       for_household(household).where("ABS(current_balance) >= 0.01").exists?
     end
 

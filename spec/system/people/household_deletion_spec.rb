@@ -25,7 +25,7 @@ describe "household deletion", js: true do
     expect(User.exists?(member.id)).to be(false)
   end
 
-  scenario "refuses when the household has an outstanding balance" do
+  scenario "refuses when the household has an unsettled balance" do
     account = household.accounts.first || create(:account, :no_activity, household: household)
     account.update!(total_new_charges: 50)
     visit(edit_household_path(household))
@@ -34,7 +34,7 @@ describe "household deletion", js: true do
     fill_in_modal("Doomed House")
     click_modal_button
 
-    expect(page).to have_css("div.alert-warning", text: /outstanding balance/)
+    expect(page).to have_css("div.alert-warning", text: /unsettled account balance/)
     expect(Household.exists?(household.id)).to be(true)
   end
 end

@@ -19,7 +19,7 @@ module People
     # @return [Array<String>] reasons deletion is blocked; empty means it may proceed.
     def self.blockers(household)
       reasons = []
-      if Billing::Account.outstanding_balance?(household)
+      if Billing::Account.unsettled_balance?(household)
         reasons << I18n.t("people.deletion.blockers.balance", name: household.name)
       end
       wards = external_wards(household)

@@ -76,8 +76,12 @@ describe "deletion dispositions", :without_tenant do
     "GDrive::Migration::Request" => :none,
     "GDrive::Migration::Scan" => :none,
     "GDrive::Migration::ScanTask" => :none,
-    # Deliberately dependent: nil (see User#gdrive_synced_permissions) — PermissionSyncJob searches
-    # by user id to revoke the Google-side permission, so the row must outlive the user.
+    # Deliberately dependent: nil (see User#gdrive_synced_permissions). The row holds the
+    # Google-side permission id (external_id), which lives nowhere else and is required to revoke
+    # the permission. Destroying the user enqueues a UserPermissionSyncJob (GDrive::SyncListener
+    # #destroy_user_successful); it recomputes access from the now-absent group memberships, gets
+    # nil, revokes the Drive permission, and only then destroys the row. So :retain is transient —
+    # the row (and its google_email) outlives the user just long enough to cut off Drive access.
     "GDrive::SyncedPermission" => :retain,
     "GDrive::Token" => :none,
     "Groups::Affiliation" => :none,
@@ -96,7 +100,8 @@ describe "deletion dispositions", :without_tenant do
     "Meals::Import" => :anonymize,
     "Meals::Invitation" => :none,
     "Meals::Meal" => :anonymize,
-    # Community history sent to the team/diners; sender_id is NOT NULL so it must be repointed.
+    # Community history sent to the team/diners; sender_id is NOT NULL and FK-constrained, so it
+    # must be repointed.
     "Meals::Message" => :anonymize,
     "Meals::Resourcing" => :none,
     "Meals::Restriction" => :none,

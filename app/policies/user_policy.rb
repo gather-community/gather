@@ -60,7 +60,7 @@ class UserPolicy < ApplicationPolicy
   # Whether this actor may hard-delete the user at all (governs whether the button renders).
   # Shared records that would otherwise block deletion are anonymized to the community's
   # "Deleted Member" placeholder by People::UserDeletion, so no reference checks are needed here.
-  # Conditions that should merely warn (outstanding balance, guardianship, last admin) are
+  # Conditions that should merely warn (unsettled balance, guardianship, last admin) are
   # surfaced by People::UserDeletion.blockers, not by returning false — the button stays enabled.
   def destroy?
     !record.deleted_placeholder? && (self? || active_admin? || guardian?)

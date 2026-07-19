@@ -43,6 +43,13 @@ module Calendars
     has_many :eventlet_overrides, class_name: "Calendars::EventletOverride", inverse_of: :eventlet,
       dependent: :destroy
 
+    # The `between` scope and EventFinder both pre-filter on the event's own times widened by
+    # MAX_OFFSET_SECONDS, so an offset beyond that bound would make the eventlet silently invisible
+    # in the calendar grid. EventletOverride enforces the same bound on its own offsets.
+    validates :start_offset, :end_offset,
+      inclusion: {in: -MAX_OFFSET_SECONDS..MAX_OFFSET_SECONDS}
+    validate :start_before_end
+
     delegate :name, :kind, :meal?, :meal_id, :creator, :creator_id, :group, :note, to: :event
     delegate :all_day, :all_day?, to: :event
 
@@ -163,6 +170,16 @@ module Calendars
     def rule_set
       # Don't memoize this, it causes all kinds of bugs. Worth the performance hit.
       Rules::RuleSet.build_for(calendar: calendar, kind: kind)
+    end
+
+    private
+
+    # The offsets are applied to the event's times independently, so a large start_offset paired with
+    # a small end_offset can invert the eventlet even when the parent event's range is valid.
+    def start_before_end
+      return if event&.starts_at.blank? || event&.ends_at.blank?
+      return if start_offset.blank? || end_offset.blank?
+      errors.add(:end_offset, "must be after start time") unless ends_at > starts_at
     end
   end
 end

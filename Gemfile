@@ -119,7 +119,7 @@ group :test do
   gem "rspec-github", require: false
 end
 
-gem "stripe", "~> 8.1"
+gem "stripe", "~> 19.3"
 
 # GSM-7/UCS-2 encoding detection and SMS segment counting, for pricing outbound SMS.
 gem "smstools", "~> 0.2"

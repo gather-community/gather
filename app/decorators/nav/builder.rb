@@ -132,7 +132,7 @@ module Nav
           sample_household = Household.new(community: community)
           sample_user = User.new(household: sample_household)
           sample_vehicle = People::Vehicle.new(household: Household.new(community: community))
-          sample_memorial = People::Memorial.new(user: sample_user)
+          sample_memorial = People::Memorial.new(community: community)
           [
             {
               name: :directory,

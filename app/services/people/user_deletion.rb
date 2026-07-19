@@ -61,6 +61,7 @@ module People
       reassign(Wiki::Page.where(creator: user), :creator_id, &:community)
       reassign(Wiki::Page.where(updater: user), :updater_id, &:community)
       reassign(Wiki::PageVersion.where(updater: user), :updater_id) { |v| v.page.community }
+      reassign(People::MemorialMessage.where(author: user), :author_id, &:community)
 
       # Optional attribution — no need to preserve; nullify.
       Messaging::Transaction.where(creator: user).update_all(creator_id: nil)

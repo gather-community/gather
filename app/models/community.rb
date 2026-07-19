@@ -70,6 +70,9 @@ class Community < ApplicationRecord
   # Households must be destroyed before member_types because households.member_type_id has a FK constraint.
   has_many :households, inverse_of: :community, dependent: :destroy
   has_many :member_types, class_name: "People::MemberType", inverse_of: :community, dependent: :destroy
+  # Memorials outlive their users, so they no longer cascade via households → users and need
+  # their own link to the community.
+  has_many :memorials, class_name: "People::Memorial", inverse_of: :community, dependent: :destroy
   has_one :subscription, inverse_of: :community, class_name: "Subscription::Subscription", dependent: :destroy
   has_one :subscription_intent, inverse_of: :community, class_name: "Subscription::Intent",
     dependent: :destroy

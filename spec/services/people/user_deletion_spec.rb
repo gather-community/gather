@@ -30,6 +30,52 @@ describe People::UserDeletion do
       expect(message.reload.sender).to eq(placeholder)
     end
 
+    it "anonymizes memorial messages the user wrote" do
+      memorial_message = create(:memorial_message, author: user)
+
+      described_class.new(user: user, actor: actor).perform!
+
+      expect(memorial_message.reload.author).to eq(community.deleted_member)
+    end
+
+    context "when the user has a memorial" do
+      let!(:memorial) { create(:memorial, user: user, obituary: "A good neighbor.") }
+
+      it "keeps the memorial standing on its own" do
+        described_class.new(user: user, actor: actor).perform!
+
+        memorial.reload
+        expect(memorial.user_id).to be_nil
+        expect(memorial.name).to eq(user.name)
+        expect(memorial.community).to eq(community)
+        expect(memorial.obituary).to eq("A good neighbor.")
+      end
+
+      it "keeps its own copy of the photo once the user's is purged" do
+        photo_user = create(:user, :with_photo)
+        photo_memorial = create(:memorial, user: photo_user)
+
+        # The memorial copies the photo to its OWN blob on save. Sharing the user's blob would
+        # mean has_one_attached's purge_later took the memorial's image down with the user.
+        expect(photo_memorial.photo).to be_attached
+        expect(photo_memorial.photo.blob.id).not_to eq(photo_user.photo.blob.id)
+        bytes = photo_memorial.photo.download
+        expect(bytes).to eq(photo_user.photo.download)
+
+        described_class.new(user: photo_user, actor: actor).perform!
+
+        expect(photo_memorial.reload.photo).to be_attached
+        expect(photo_memorial.photo.download).to eq(bytes)
+      end
+
+      it "keeps the memorial when the whole household is deleted" do
+        People::HouseholdDeletion.new(household: user.household, actor: actor).perform!
+
+        expect(memorial.reload.user_id).to be_nil
+        expect(memorial.community).to eq(community)
+      end
+    end
+
     it "cascade-destroys the user's dependent records" do
       meal = create(:meal, head_cook: user)
       expect(Meals::Assignment.where(user: user)).to be_present

@@ -10,7 +10,7 @@ module People
 
     def index
       authorize(sample_memorial)
-      @memorials = policy_scope(Memorial).in_community(current_community).by_user_name
+      @memorials = policy_scope(Memorial).in_community(current_community).by_name
     end
 
     def show
@@ -72,8 +72,7 @@ module People
     end
 
     def sample_memorial
-      Memorial.new(death_year: Time.current.year,
-                   user: User.new(household: Household.new(community: current_community)))
+      Memorial.new(death_year: Time.current.year, community: current_community)
     end
 
     # Pundit built-in helper doesn't work due to namespacing

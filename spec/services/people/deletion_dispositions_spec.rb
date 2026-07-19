@@ -116,8 +116,11 @@ describe "deletion dispositions", :without_tenant do
     "People::EmergencyContact" => :none,
     "People::Guardianship" => :destroy,
     "People::MemberType" => :none,
-    "People::Memorial" => :destroy,
-    "People::MemorialMessage" => :destroy,
+    # A memorial outlives the account — having one means the person has died, and it is community
+    # history. It carries its own copy of the name, community, and photo, so the link is nullified
+    # rather than the record destroyed. Messages on it are likewise community history.
+    "People::Memorial" => {user_id: :nullify},
+    "People::MemorialMessage" => :anonymize,
     "People::Pet" => :none,
     "People::Vehicle" => :none,
     "Reminder" => :none,

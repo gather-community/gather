@@ -117,7 +117,13 @@ class User < ApplicationRecord
   has_many :down_guardianships, class_name: "People::Guardianship", foreign_key: :guardian_id,
     dependent: :destroy, inverse_of: :guardian
   has_many :guardians, through: :up_guardianships
-  has_one :memorial, class_name: "People::Memorial", inverse_of: :user, dependent: :destroy
+  # A memorial outlives the account: if someone has one they have died, and the memorial is
+  # community history. It copies the name/community/photo it displays, so nullifying is safe.
+  has_one :memorial, class_name: "People::Memorial", inverse_of: :user, dependent: :nullify
+  # Messages are community history too, and People::UserDeletion reassigns them to the Deleted
+  # Member placeholder before destroying the user — so in that path this cascade finds nothing.
+  # It stays :destroy as the backstop for a raw user.destroy, notably the community teardown
+  # (community → households → users), where the messages should go away with everything else.
   has_many :memorial_messages, class_name: "People::MemorialMessage", foreign_key: :author_id,
     inverse_of: :author, dependent: :destroy
   has_many :children, through: :down_guardianships

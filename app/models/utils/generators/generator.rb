@@ -24,8 +24,10 @@ module Utils
         Rails.root.join("lib/random_data/#{str}").to_s
       end
 
+      # psych 4+ made YAML.load_file safe by default, which rejects the timestamp scalars and
+      # symbol keys in the data files. These are trusted, checked-in fixtures, so permit both.
       def load_yaml(path)
-        YAML.load_file(resource_path("data/#{path}"))
+        YAML.safe_load_file(resource_path("data/#{path}"), permitted_classes: [Symbol, Time])
       end
 
       def distrib_rand(*pcts)

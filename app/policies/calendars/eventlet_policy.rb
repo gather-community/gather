@@ -28,7 +28,8 @@ module Calendars
       active? && !forbidden_by_protocol?
     end
 
-    # All mutations should happen via the Event controller and policy
+    # Creation and deletion still happen via the Event controller and policy. Only the drag-and-drop
+    # time change is handled directly by EventletsController#update.
     def create?
       calendar.active? && !calendar.system? &&
         active? && !read_only_or_forbidden_by_protocol? && !meal?
@@ -42,6 +43,18 @@ module Calendars
     def destroy?
       !calendar.system? && !read_only_or_forbidden_by_protocol? && !meal? &&
         (admin_or_coord? || active_creator_or_group_member? && (future? || recently_created?))
+    end
+
+    # Mirrors EventPolicy#privileged_change?. Admins and coordinators may move an eventlet that has
+    # already begun; everyone else is restricted by EventletForm#restrict_changes_in_past.
+    def privileged_change?
+      update? && admin_or_coord?
+    end
+
+    # Drag-and-drop sends the dropped absolute times plus the two scope choices. The offsets
+    # themselves are computed server-side, never sent by the client.
+    def permitted_attributes
+      %i[starts_at ends_at occurrence_start calendar_scope series_scope]
     end
 
     private

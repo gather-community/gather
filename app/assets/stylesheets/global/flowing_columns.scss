@@ -54,3 +54,10 @@
     column-count: 4;
   }
 }
+
+// Layout where content flows horizontally from one row to the next.
+.flowing-rows {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 10px;
+}

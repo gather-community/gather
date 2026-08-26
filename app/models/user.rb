@@ -335,6 +335,15 @@ class User < ApplicationRecord
     self[:privacy_settings] = settings
   end
 
+  def meal_restriction_ids=(ids)
+    ids = Array(ids).reject(&:blank?).map(&:to_i)
+    self[:meal_restriction_ids] = ids
+  end
+
+  def meal_restrictions
+    Meals::Restriction.where(id: meal_restriction_ids)
+  end
+
   def activate
     super
     household.user_activated

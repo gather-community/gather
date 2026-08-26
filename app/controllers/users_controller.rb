@@ -328,6 +328,8 @@ class UsersController < ApplicationController
     @user.household = @user.household.decorate
     @max_photo_size = User.validators_on(:photo).detect { |v| v.is_a?(FileSizeValidator) }.options[:max]
     @member_types = People::MemberType.in_community(@user.community).by_name
+    @meal_restrictions = Meals::Restriction.where(community: @user.community, deactivated: false)
+                                           .order(:absence)
   end
 
   def sample_user

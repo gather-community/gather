@@ -93,7 +93,7 @@ module Work
         lenses.hide!
       else
         authorize(@period, :report_wrapper?)
-        flash.now[:notice] = t("work.phase_notices.report.archived") if @period.archived?
+        flash.now[:alert] = t("work.phase_notices.report.archived") if @period.archived?
         @work_report = Report.new(period: @period, user: current_user) if policy(@period).report?
       end
     end

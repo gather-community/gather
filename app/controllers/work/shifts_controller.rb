@@ -36,7 +36,7 @@ module Work
         if request.xhr?
           render_shifts_and_pagination_json
         elsif @period.archived?
-          flash.now[:notice] = t("work.phase_notices.shifts.archived")
+          flash.now[:alert] = t("work.phase_notices.shifts.archived")
         end
       end
     end

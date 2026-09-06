@@ -17,7 +17,7 @@ module Work
         return if redirect_to_sole_period_or_load_selectable(:jobs)
         lenses.hide!
       else
-        flash.now[:notice] = t("work.phase_notices.jobs.archived") if @period.archived?
+        flash.now[:alert] = t("work.phase_notices.jobs.archived") if @period.archived?
         scope_jobs
       end
     end

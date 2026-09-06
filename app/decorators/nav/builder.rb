@@ -224,23 +224,28 @@ module Nav
           sample_period = Work::Period.new(community: community)
           sample_job = Work::Job.new(period: sample_period)
           sample_shift = Work::Shift.new(job: sample_job)
+          # Stay within the current period (if any) when switching between work sub-pages.
+          # The current period's slug is the :period_id segment on scoped content pages, or the
+          # :id on the periods CRUD pages (e.g. /work/periods/summertime).
+          period = h.params[:period_id].presence ||
+            (h.params[:id].presence if h.params[:controller] == "work/periods")
           [
             {
               name: :signups,
               parents: :work,
-              path: h.work_shifts_path,
+              path: period ? h.work_period_shifts_path(period) : h.work_shifts_path,
               permitted: h.policy(sample_shift).index_wrapper?,
               icon: "check"
             }, {
               name: :report,
               parents: :work,
-              path: h.work_report_path,
+              path: period ? h.work_period_report_path(period) : h.work_report_path,
               permitted: h.policy(sample_period).report_wrapper?,
               icon: "line-chart"
             }, {
               name: :jobs,
               parents: :work,
-              path: h.work_jobs_path,
+              path: period ? h.work_period_jobs_path(period) : h.work_jobs_path,
               permitted: h.policy(sample_job).index?,
               icon: "wrench"
             }, {
@@ -406,7 +411,7 @@ module Nav
         i18n_key_parts.concat(Array.wrap(item[:parents]))
         i18n_key_parts << (item[:i18n_key] || item[:name])
         i18n_key = i18n_key_parts.join(".")
-        name = t("#{i18n_key}._self", default: t(i18n_key))
+        t("#{i18n_key}._self", default: t(i18n_key))
       end
       params = {}
       params[:method] = item[:method]

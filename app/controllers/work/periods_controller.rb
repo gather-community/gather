@@ -18,13 +18,19 @@ module Work
       @periods = policy_scope(Period).in_community(current_community).newest_first.page(params[:page])
     end
 
+    def show
+      @period = Period.in_community(current_community).find_by!(slug: params[:id])
+      authorize(@period)
+      prep_form_vars
+    end
+
     def new
       @period = Period.new_with_defaults(current_community)
       if params[:clone_from]
         old_period = Period.find(params[:clone_from])
         cloner = PeriodCloner.new(old_period: old_period, new_period: @period)
         cloner.copy_attributes_and_shares
-        flash.now[:notice] = "Some data have been copied from the period '#{old_period.name}'. "\
+        flash.now[:notice] = "Some data have been copied from the period '#{old_period.name}'. " \
           "Please review and adjust below. Jobs will be copied when you save the period."
       end
       authorize(@period)
@@ -32,14 +38,8 @@ module Work
       prep_form_vars
     end
 
-    def show
-      @period = Period.find(params[:id])
-      authorize(@period)
-      prep_form_vars
-    end
-
     def edit
-      @period = Period.find(params[:id])
+      @period = Period.in_community(current_community).find_by!(slug: params[:id])
       authorize(@period)
       prep_form_vars
       flash.now[:alert] = t("work/shares.change_warning") unless period.draft? || period.archived?
@@ -63,7 +63,7 @@ module Work
     end
 
     def update
-      @period = Period.find(params[:id])
+      @period = Period.in_community(current_community).find_by!(slug: params[:id])
       authorize(@period)
       if @period.update(period_params)
         QuotaCalculator.new(@period).recalculate_and_save
@@ -75,20 +75,31 @@ module Work
       end
     end
 
+    # Overrides Destructible#destroy because periods are looked up by slug, not numeric id.
+    def destroy
+      @period = Period.in_community(current_community).find_by!(slug: params[:id])
+      authorize(@period)
+      @period.destroy
+      after_destroy(@period)
+      redirect_to(work_periods_path)
+    end
+
     def report
       prepare_lenses(:"work/period")
-      @period = lenses[:period].selection
+      load_period
       if @period.nil?
         authorize(sample_period, :report_wrapper?)
+        return if redirect_to_sole_period_or_load_selectable(:report)
         lenses.hide!
       else
         authorize(@period, :report_wrapper?)
+        flash.now[:notice] = t("work.phase_notices.report.archived") if @period.archived?
         @work_report = Report.new(period: @period, user: current_user) if policy(@period).report?
       end
     end
 
     def review_notices
-      @period = Period.find(params[:id])
+      @period = Period.in_community(current_community).find_by!(slug: params[:id])
       authorize(@period)
       if !(@period.ready? || @period.open?)
         @error = "Notices can't be sent because the period is not in the 'ready' or 'open' phase."
@@ -104,7 +115,7 @@ module Work
     end
 
     def send_notices
-      @period = Period.find(params[:id])
+      @period = Period.in_community(current_community).find_by!(slug: params[:id])
       authorize(@period)
       JobChoosingNoticeJob.perform_later(@period.id)
       flash[:success] = "Notices are on the way!"

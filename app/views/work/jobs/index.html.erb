@@ -2,12 +2,16 @@
 <% content_for(:action_links) do %>
   <% if @period && policy(sample_job).create? %>
     <%= link_to(icon_tag("plus") << " Create Job",
-      new_work_job_path(period: @period.id), class: "btn btn-primary") %>
+      new_work_period_job_path(@period), class: "btn btn-primary") %>
   <% end %>
 <% end %>
 
 <% if @period.nil? %>
-  <%= render("work/shared/no_period_notice") %>
+  <% if @periods.present? %>
+    <%= render("work/shared/period_picker", periods: @periods, section: :jobs) %>
+  <% else %>
+    <%= render("work/shared/no_period_notice") %>
+  <% end %>
 <% elsif jobs.empty? %>
   <div class="center-notice">
     No jobs found. <%= lenses.no_result_clear_filter_link %>

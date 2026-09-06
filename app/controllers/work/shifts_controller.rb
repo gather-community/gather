@@ -27,6 +27,7 @@ module Work
       @shifts = @shifts.none unless policy(sample_shift).index?
 
       if @period.nil?
+        return if redirect_to_sole_period_or_load_selectable(:signups)
         lenses.hide!
       else
         scope_shifts
@@ -73,7 +74,7 @@ module Work
         else
           flash[:success] = "You signed up successfully. Hooray!"
         end
-        redirect_to(work_shifts_path)
+        redirect_to(work_period_shifts_path(@period))
       end
     end
 
@@ -96,7 +97,7 @@ module Work
         rescue NotSignedUpError
           flash[:error] = t("work/shift.not_signed_up")
         end
-        redirect_to(work_shifts_path)
+        redirect_to(work_period_shifts_path(@period))
       end
     end
 
@@ -118,7 +119,7 @@ module Work
       end
       names << :"work/period" << {"work/choosee": {chooser: current_user}}
       prepare_lenses(*names)
-      @period = lenses[:period].selection
+      load_period
       @choosee = lenses[:choosee].selection || current_user
       return if @choosee == current_user
       flash.now[:notice] = t("work.choosing_as", name: choosee.full_name)

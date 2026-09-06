@@ -8,20 +8,24 @@ module Work
 
     def show_action_link_set
       ActionLinkSet.new(
-        ActionLink.new(object, :edit, icon: "pencil", path: h.edit_work_job_path(object))
+        ActionLink.new(object, :edit, icon: "pencil", path: h.edit_work_period_job_path(period, object))
       )
     end
 
     def edit_action_link_set
       ActionLinkSet.new(
-        ActionLink.new(object, :destroy, icon: "trash", path: h.work_job_path(object),
-                                         method: :delete, confirm: {title: title})
+        ActionLink.new(object, :destroy, icon: "trash", path: h.work_period_job_path(period, object),
+          method: :delete, confirm: {title: title})
       )
     end
 
     def link_with_icons
-      h.link_to(title, h.policy(object).edit? ? h.edit_work_job_path(object) : h.work_job_path(object)) <<
-        icons
+      path = if h.policy(object).edit?
+        h.edit_work_period_job_path(period, object)
+      else
+        h.work_period_job_path(period, object)
+      end
+      h.link_to(title, path) << icons
     end
 
     def title_with_icon
@@ -35,7 +39,7 @@ module Work
     end
 
     def total_slots_formatted
-      total_slots >= Shift::UNLIMITED_SLOTS ? h.t("common.unlimited") : total_slots
+      (total_slots >= Shift::UNLIMITED_SLOTS) ? h.t("common.unlimited") : total_slots
     end
 
     private

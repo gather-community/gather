@@ -49,7 +49,7 @@ describe WorkMailer do
     let(:fc_job) { double(title: "Junk") }
     let(:period) do
       double(id: 123, auto_open_time: Time.zone.parse("2018-08-15 19:00"), staggered?: staggered,
-             community: Defaults.community, quota_none?: false)
+             community: Defaults.community, quota_none?: false, to_param: "period-123")
     end
     let(:synopsis) do
       double(user_regular_got: 5, user_adjusted_quota: 15.5, user_need: 10.5,
@@ -101,10 +101,10 @@ describe WorkMailer do
   end
 
   def have_correct_shifts_url(community)
-    contain_community_url(community, "/work/signups?period_id=123")
+    contain_community_url(community, "/work/period-123/signups")
   end
 
   def have_correct_shift_url(shift)
-    contain_community_url(shift.community, "/work/signups/#{shift.id}")
+    contain_community_url(shift.community, "/work/#{shift.job.period.slug}/signups/#{shift.id}")
   end
 end

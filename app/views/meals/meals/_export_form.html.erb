@@ -1,0 +1,12 @@
+<div class="export-link-with-form">
+  <%= icon_tag("download") %> <%= link_to(label, "#",
+        onclick: "$(this).closest('.export-link-with-form')
+          .find('form').css({display: 'inline-block'}); return false;") %>
+  &nbsp;
+  <%= form_tag(path, method: :get) do %>
+    <%# Two of these forms render on this page, so the select needs a unique ID. %>
+    <%= select_tag(:dates, options_for_select([["Select Dates", nil]].concat(ranges)),
+          id: "#{name}-dates",
+          onchange: "if ($(this.form.dates).val() != '') this.form.submit()") %>
+  <% end %>
+</div>

@@ -104,6 +104,7 @@ Rails.application.routes.draw do
     collection do
       get :jobs
       get :report
+      get :export_signups, path: "signups"
       get :worker_form, path: "worker-form"
       get :reimbursee_paypal_email, path: "reimbursee-paypal-email"
     end

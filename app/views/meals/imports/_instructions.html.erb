@@ -58,31 +58,6 @@
   </tr>
 </table>
 
-<h2>Using a Downloaded File</h2>
-
-<p>
-  The meals CSV you can download from the <%= link_to("meals page", meals_path) %> is designed to be
-  edited and re-uploaded here. A few things to know:
-</p>
-
-<ul>
-  <li>
-    Its Action column is set to 'update' on every row, so re-uploading an unedited file changes
-    nothing. Change a row's Action to 'create' (and clear its ID) to add a new meal instead.
-  </li>
-  <li>
-    The extra columns it carries beyond those listed above &mdash; Title, menu items, Status,
-    diner counts, costs and so on &mdash; are ignored on import. Editing them here has no effect;
-    edit those on the meal itself.
-  </li>
-  <li>
-    It only has a column for each <em>active</em> meal role. If a meal has a worker assigned to a
-    role that has since been deactivated, re-uploading the file removes that assignment. Likewise,
-    a meal whose worker has since been deactivated can't be re-imported &mdash; and because one bad
-    row fails the whole file, remove such rows before uploading.
-  </li>
-</ul>
-
 <h2>Example Data</h2>
 
 <table id="example-csv">

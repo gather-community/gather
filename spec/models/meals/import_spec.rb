@@ -69,6 +69,49 @@ describe Meals::Import do
       end
     end
 
+    context "with export-only headers" do
+      let!(:calendar) { create(:calendar, name: "Dining Room", meal_hostable: true) }
+      let!(:formula) { create(:meal_formula, is_default: true, parts_attrs: [{type: "Adult"}]) }
+      let(:csv) do
+        prepare_fixture("meals/import/export_only_headers.csv",
+          calendar_name: [calendar.name], type_name: [formula.types.first.name])
+      end
+
+      it "ignores the export-only columns but still reports genuinely bad ones" do
+        expect(import.errors_by_row).to eq(
+          "1" => ["Invalid column headers: Diners: Nonexistent, Junk"]
+        )
+      end
+    end
+
+    context "with a file produced by the meal CSV exporter" do
+      let!(:calendar) { create(:calendar, name: "Dining Room", meal_hostable: true) }
+      let!(:formula) { create(:meal_formula, :with_two_roles, is_default: true) }
+      let!(:asst_cook) { create(:user) }
+      let!(:meals) do
+        [
+          create(:meal, :with_menu, formula: formula, calendars: [calendar], community: community,
+            communities: [community], asst_cooks: [asst_cook], served_at: "2019-01-31 12:00"),
+          create(:meal, formula: formula, calendars: [calendar], community: community,
+            communities: [community, other_community], served_at: "2019-02-05 18:00")
+        ]
+      end
+      let(:csv) do
+        Meals::MealCsvExporter.new(Meals::Meal.hosted_by(community).oldest_first, community: community,
+          policy: Meals::MealPolicy.new(user, Meals::Meal.new(community: community))).to_csv
+      end
+
+      it "round trips with no errors and no new meals" do
+        expect { import }.not_to change(Meals::Meal, :count)
+        expect(import.errors_by_row).to eq({})
+        meals.each(&:reload)
+        expect(meals[0].calendars).to eq([calendar])
+        expect(meals[0].formula).to eq(formula)
+        expect(meals[0].assignments.map(&:user)).to contain_exactly(meals[0].head_cook, asst_cook)
+        expect(meals[1].communities).to contain_exactly(community, other_community)
+      end
+    end
+
     context "with missing required headers" do
       let!(:formula) { create(:meal_formula, name: "Foo") }
       let(:csv) { prepare_fixture("meals/import/missing_required_headers.csv") }

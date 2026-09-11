@@ -7,6 +7,7 @@ module Work
 
     before_action -> { nav_context(:work, :periods) }, except: :report
     before_action -> { nav_context(:work, :report) }, only: :report
+    before_action :require_period, only: %i[show edit update destroy review_notices send_notices]
 
     decorates_assigned :period, :periods
 
@@ -19,7 +20,6 @@ module Work
     end
 
     def show
-      @period = Period.in_community(current_community).find_by!(slug: params[:id])
       authorize(@period)
       prep_form_vars
     end
@@ -39,7 +39,6 @@ module Work
     end
 
     def edit
-      @period = Period.in_community(current_community).find_by!(slug: params[:id])
       authorize(@period)
       prep_form_vars
       flash.now[:alert] = t("work/shares.change_warning") unless period.draft? || period.archived?
@@ -63,7 +62,6 @@ module Work
     end
 
     def update
-      @period = Period.in_community(current_community).find_by!(slug: params[:id])
       authorize(@period)
       if @period.update(period_params)
         QuotaCalculator.new(@period).recalculate_and_save
@@ -75,9 +73,9 @@ module Work
       end
     end
 
-    # Overrides Destructible#destroy because periods are looked up by slug, not numeric id.
+    # Overrides Destructible#destroy, which looks records up by numeric id; @period is already loaded
+    # from the slug by the load_period before_action.
     def destroy
-      @period = Period.in_community(current_community).find_by!(slug: params[:id])
       authorize(@period)
       @period.destroy
       after_destroy(@period)
@@ -86,7 +84,6 @@ module Work
 
     def report
       prepare_lenses(:"work/period")
-      load_period
       if @period.nil?
         authorize(sample_period, :report_wrapper?)
         return if redirect_to_sole_period_or_load_selectable(:report)
@@ -99,7 +96,6 @@ module Work
     end
 
     def review_notices
-      @period = Period.in_community(current_community).find_by!(slug: params[:id])
       authorize(@period)
       if !(@period.ready? || @period.open?)
         @error = "Notices can't be sent because the period is not in the 'ready' or 'open' phase."
@@ -115,7 +111,6 @@ module Work
     end
 
     def send_notices
-      @period = Period.in_community(current_community).find_by!(slug: params[:id])
       authorize(@period)
       JobChoosingNoticeJob.perform_later(@period.id)
       flash[:success] = "Notices are on the way!"
@@ -129,6 +124,10 @@ module Work
     end
 
     private
+
+    def require_period
+      render_not_found unless @period
+    end
 
     def work_report
       @work_report_decorated ||= ReportDecorator.new(@work_report)

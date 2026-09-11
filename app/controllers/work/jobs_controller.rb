@@ -11,7 +11,6 @@ module Work
     def index
       authorize(sample_job)
       prepare_lenses(:"work/preassigned", :"work/requester", :"work/period")
-      load_period
       @jobs = policy_scope(Job).includes(:requester, :period).in_community(current_community)
       if @period.nil?
         return if redirect_to_sole_period_or_load_selectable(:jobs)
@@ -33,7 +32,6 @@ module Work
     end
 
     def new
-      load_period
       return render_not_found if @period.nil?
       @job = Job.new(period: @period)
       @job.shifts.build

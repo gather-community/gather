@@ -5,7 +5,7 @@ module Nav
   class Builder < ApplicationDecorator
     delegate_all
 
-    attr_accessor :context
+    attr_accessor :context, :current_period
 
     def initialize
       self.context = {}
@@ -225,10 +225,8 @@ module Nav
           sample_job = Work::Job.new(period: sample_period)
           sample_shift = Work::Shift.new(job: sample_job)
           # Stay within the current period (if any) when switching between work sub-pages.
-          # The current period's slug is the :period_id segment on scoped content pages, or the
-          # :id on the periods CRUD pages (e.g. /work/periods/summertime).
-          period = h.params[:period_id].presence ||
-            (h.params[:id].presence if h.params[:controller] == "work/periods")
+          # Set by Work::WorkController#load_period.
+          period = current_period
           [
             {
               name: :signups,

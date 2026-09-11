@@ -17,11 +17,13 @@ module Work
     helper_method :sample_shift, :synopsis, :shift_policy, :cache_key
 
     def index
+      # Do this first, before anything builds a sample shift: it can affect policies and the cache
+      # key, and building a sample shift would attach a stray unsaved job to @period that this save
+      # would then try (and fail) to persist.
+      @period&.auto_open_if_appropriate
+
       authorize(sample_shift, :index_wrapper?)
       prepare_lenses_and_set_contextual_vars
-
-      # Need to do this early because it could affect policies and cache key.
-      @period&.auto_open_if_appropriate
 
       @shifts = policy_scope(Shift)
       @shifts = @shifts.none unless policy(sample_shift).index?
@@ -119,7 +121,6 @@ module Work
       end
       names << :"work/period" << {"work/choosee": {chooser: current_user}}
       prepare_lenses(*names)
-      load_period
       @choosee = lenses[:choosee].selection || current_user
       return if @choosee == current_user
       flash.now[:notice] = t("work.choosing_as", name: choosee.full_name)

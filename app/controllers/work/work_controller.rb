@@ -5,15 +5,22 @@ module Work
   class WorkController < ApplicationController
     helper_method :sample_period
 
+    before_action :load_period
+
     protected
 
     def sample_period
       Period.new(community: current_community)
     end
 
-    # Loads the period identified by the :period_id path segment into @period, if any.
+    # Loads @period from the period slug in the URL — the :period_id segment on the scoped content
+    # pages, or the :id on a periods CRUD page (e.g. /work/periods/summertime) — and hands it to the
+    # nav so its sub-links stay within the current period. @period is nil on landing/index/new pages;
+    # actions that require a period guard for that themselves.
     def load_period
-      @period = Period.in_community(current_community).find_by(slug: params[:period_id])
+      slug = params[:period_id].presence || params[:id].presence
+      @period = Period.in_community(current_community).find_by(slug: slug) if slug
+      nav_builder.current_period = @period
     end
 
     # For landing (no period_id) pages: if exactly one selectable period exists, redirect straight

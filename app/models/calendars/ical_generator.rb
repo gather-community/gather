@@ -166,9 +166,13 @@ module Calendars
     end
 
     def url_for_event(eventlet)
-      if eventlet.linkable.present?
+      linkable = eventlet.linkable
+      if linkable.is_a?(Work::Shift)
+        # Work shift show pages are period-scoped, so they can't be reached polymorphically.
+        work_period_shift_url(linkable.period, linkable, **url_options)
+      elsif linkable.present?
         # Recurring occurrence → base eventlet → eventlet show page; system calendars → meal/job/user.
-        polymorphic_url(eventlet.linkable, **url_options)
+        polymorphic_url(linkable, **url_options)
       elsif eventlet.persisted?
         calendars_eventlet_url(eventlet, **url_options)
       else

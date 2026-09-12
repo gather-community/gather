@@ -9,7 +9,7 @@ module Work
     end
 
     def link_with_icons
-      h.link_to(job_title, object, class: "title") << icons
+      h.link_to(job_title, h.work_period_shift_path(period, object), class: "title") << icons
     end
 
     # Returns formatted times. Examples:
@@ -56,7 +56,7 @@ module Work
       blobs = (worker_names << empty_total_slots).compact
       blobs = [t("work.no_signups")] if blobs.empty?
       blobs.map! { |b| h.content_tag(:li, b) } if style == :li
-      separator = style == :comma_sep ? ", " : ""
+      separator = (style == :comma_sep) ? ", " : ""
       blobs.reduce(&sep(separator))
     end
 
@@ -79,15 +79,18 @@ module Work
     end
 
     def show_action_link_set
-      links = [ActionLink.new(object, :edit_job, icon: "pencil", path: h.edit_work_job_path(job),
-                                                 permitted: h.policy(job).edit?)]
+      links = [ActionLink.new(object, :edit_job, icon: "pencil",
+        path: h.edit_work_period_job_path(period, job),
+        permitted: h.policy(job).edit?)]
       links <<
         if user_signed_up?(h.current_user)
-          ActionLink.new(object, :unsignup, icon: "times", path: h.unsignup_work_shift_path(object),
-                                            btn_class: :danger, method: :delete, confirm: true)
+          ActionLink.new(object, :unsignup, icon: "times",
+            path: h.unsignup_work_period_shift_path(period, object),
+            btn_class: :danger, method: :delete, confirm: true)
         else
-          ActionLink.new(object, :signup, icon: "bolt", path: h.signup_work_shift_path(object),
-                                          btn_class: :primary, method: :post)
+          ActionLink.new(object, :signup, icon: "bolt",
+            path: h.signup_work_period_shift_path(period, object),
+            btn_class: :primary, method: :post)
         end
       ActionLinkSet.new(*links)
     end

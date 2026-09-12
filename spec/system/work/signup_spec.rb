@@ -27,6 +27,19 @@ describe "signups", js: true do
   context "with jobs" do
     include_context "with jobs"
 
+    # With multiple periods the bare signups path shows the picker, so target the period directly.
+    let(:page_path) { work_period_shifts_path(periods[0]) }
+
+    scenario "period picker with multiple selectable periods" do
+      visit(work_shifts_path)
+      within(".period-picker") do
+        expect(page).to have_link(periods[0].name, href: %r{/work/#{periods[0].slug}/signups})
+        expect(page).to have_content(periods[0].decorate.date_range)
+      end
+      click_on(periods[1].name)
+      expect(page).to have_title(periods[1].name)
+    end
+
     context "in draft phase" do
       before { periods[0].update!(phase: "draft") }
 
@@ -153,12 +166,12 @@ describe "signups", js: true do
       scenario do
         visit(page_path)
         time = I18n.l(open_time, format: :wday_no_year)
-        expect(page).to have_content("You have signed up for 0/32 hours. "\
+        expect(page).to have_content("You have signed up for 0/32 hours. " \
           "You can start choosing jobs on #{time}")
         Timecop.freeze(open_time + 2.minutes) do
           visit(page_path)
           time = I18n.l(open_time + 5.minutes, format: :time_only)
-          expect(page).to have_content("You have signed up for 0/32 hours. "\
+          expect(page).to have_content("You have signed up for 0/32 hours. " \
             "Your round limit is 11 hours and will rise to 22 at #{time}")
         end
         expect(periods[0].reload.phase).to eq("open")
@@ -169,22 +182,22 @@ describe "signups", js: true do
   context "with past, present, and future jobs" do
     let!(:period) do
       create(:work_period, starts_on: Time.zone.today - 83.days, ends_on: Time.zone.today + 7.days,
-                           phase: "open")
+        phase: "open")
     end
     let!(:jobs) do
       [
         create(:work_job, period: period, title: "Moldy Oldy", time_type: "date_only",
-                          shift_slots: 1,
-                          shift_starts: [Time.current - 2.days],
-                          shift_ends: [Time.current - 2.days]),
+          shift_slots: 1,
+          shift_starts: [2.days.ago],
+          shift_ends: [2.days.ago]),
         create(:work_job, period: period, title: "Current Durrant", time_type: "date_only",
-                          shift_slots: 1,
-                          shift_starts: [Time.current - 1.day],
-                          shift_ends: [Time.current + 1.day]),
+          shift_slots: 1,
+          shift_starts: [1.day.ago],
+          shift_ends: [1.day.from_now]),
         create(:work_job, period: period, title: "Future Scoocher", time_type: "date_only",
-                          shift_slots: 1,
-                          shift_starts: [Time.current + 2.days],
-                          shift_ends: [Time.current + 2.days])
+          shift_slots: 1,
+          shift_starts: [2.days.from_now],
+          shift_ends: [2.days.from_now])
       ]
     end
 

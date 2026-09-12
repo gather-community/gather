@@ -9,6 +9,6 @@ This reminder includes the following note:
 --------------
 <% end %>
 
-See the job description here: <%= work_shift_url(@shift) %>.
+See the job description here: <%= work_period_shift_url(@shift.job.period, @shift) %>.
 
 Thanks for your service to the community!

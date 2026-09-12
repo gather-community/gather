@@ -77,6 +77,11 @@ describe "periods", js: true do
     expect(page).to have_content("Churl Rox")
     expect(page).to have_content("½ Share")
 
+    # Sub-nav links stay within this period even on the periods CRUD pages.
+    expect(page).to have_link("Signups", href: %r{/work/qux/signups})
+    expect(page).to have_link("Jobs", href: %r{/work/qux/jobs})
+    expect(page).to have_link("Report", href: %r{/work/qux/report})
+
     click_on("Edit")
     expect(page).to have_select("Churl Rox", selected: "½ Share")
     expect(page).to have_select("Blep Cruller", selected: "")
@@ -149,8 +154,7 @@ describe "periods", js: true do
       click_on("Save")
       expect(page).to have_success_alert
 
-      click_on("Jobs")
-      select_lens(:period, "Delta")
+      visit(work_period_jobs_path(Work::Period.find_by!(name: "Delta")))
       expect(page).to have_content("Frungler")
     end
 
@@ -169,8 +173,7 @@ describe "periods", js: true do
       click_on("Save")
       expect(page).to have_success_alert
 
-      click_on("Jobs")
-      select_lens(:period, "Delta")
+      visit(work_period_jobs_path(Work::Period.find_by!(name: "Delta")))
       expect(page).not_to have_content("Frungler")
     end
   end

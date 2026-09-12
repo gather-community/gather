@@ -3,7 +3,7 @@
 <% content_for(:action_links, shift.action_links) %>
 
 <% content_for(:mobile_back_link) do %>
-  <%= render partial: "shared/mobile_back_link", locals: {label: "Signups", path: work_shifts_path } %>
+  <%= render partial: "shared/mobile_back_link", locals: {label: "Signups", path: work_period_shifts_path(shift.job.period) } %>
 <% end %>
 
 <h2><%= shift.times %></h2>

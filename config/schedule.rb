@@ -29,6 +29,10 @@ every 1.day, at: "3:00 am" do
   enqueue("Communities::InactivityWarningJob")
 end
 
+every 1.day, at: "3:15 am" do
+  enqueue("Work::ArchivePeriodsJob")
+end
+
 every 1.day, at: "4:30 am" do
   enqueue("CleanupJob")
   enqueue("GDrive::Migration::WebhookRefreshJob")

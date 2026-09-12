@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_19_000002) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_20_000001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -1325,11 +1325,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_19_000002) do
     t.decimal "quota", precision: 10, scale: 2, default: "0.0", null: false
     t.string "quota_type", default: "none", null: false
     t.integer "round_duration"
+    t.string "slug", null: false
     t.date "starts_on", null: false
     t.datetime "updated_at", precision: nil, null: false
     t.integer "workers_per_round"
     t.index ["cluster_id"], name: "index_work_periods_on_cluster_id"
     t.index ["community_id", "name"], name: "index_work_periods_on_community_id_and_name", unique: true
+    t.index ["community_id", "slug"], name: "index_work_periods_on_community_id_and_slug", unique: true
     t.index ["community_id"], name: "index_work_periods_on_community_id"
     t.index ["meal_job_requester_id"], name: "index_work_periods_on_meal_job_requester_id"
     t.index ["starts_on", "ends_on"], name: "index_work_periods_on_starts_on_and_ends_on"

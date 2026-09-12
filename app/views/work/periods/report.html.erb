@@ -1,7 +1,11 @@
 <% content_for(:title, +"Work Report" << (@period ? ": #{@period.name}" : "")) %>
 
 <% if @period.nil? %>
-  <%= render("work/shared/no_period_notice") %>
+  <% if @periods.present? %>
+    <%= render("work/shared/period_picker", periods: @periods, section: :report) %>
+  <% else %>
+    <%= render("work/shared/no_period_notice") %>
+  <% end %>
 <% elsif !policy(@period).report? && @period.draft? %>
   <div class="center-notice">
     <%= t("work.phase_notices.report.draft") %>

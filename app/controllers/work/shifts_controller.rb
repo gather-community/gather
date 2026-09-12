@@ -17,16 +17,19 @@ module Work
     helper_method :sample_shift, :synopsis, :shift_policy, :cache_key
 
     def index
+      # Do this first, before anything builds a sample shift: it can affect policies and the cache
+      # key, and building a sample shift would attach a stray unsaved job to @period that this save
+      # would then try (and fail) to persist.
+      @period&.auto_open_if_appropriate
+
       authorize(sample_shift, :index_wrapper?)
       prepare_lenses_and_set_contextual_vars
-
-      # Need to do this early because it could affect policies and cache key.
-      @period&.auto_open_if_appropriate
 
       @shifts = policy_scope(Shift)
       @shifts = @shifts.none unless policy(sample_shift).index?
 
       if @period.nil?
+        return if redirect_to_sole_period_or_load_selectable(:signups)
         lenses.hide!
       else
         scope_shifts
@@ -35,7 +38,7 @@ module Work
         if request.xhr?
           render_shifts_and_pagination_json
         elsif @period.archived?
-          flash.now[:notice] = t("work.phase_notices.shifts.archived")
+          flash.now[:alert] = t("work.phase_notices.shifts.archived")
         end
       end
     end
@@ -73,7 +76,7 @@ module Work
         else
           flash[:success] = "You signed up successfully. Hooray!"
         end
-        redirect_to(work_shifts_path)
+        redirect_to(work_period_shifts_path(@period))
       end
     end
 
@@ -96,7 +99,7 @@ module Work
         rescue NotSignedUpError
           flash[:error] = t("work/shift.not_signed_up")
         end
-        redirect_to(work_shifts_path)
+        redirect_to(work_period_shifts_path(@period))
       end
     end
 
@@ -118,7 +121,6 @@ module Work
       end
       names << :"work/period" << {"work/choosee": {chooser: current_user}}
       prepare_lenses(*names)
-      @period = lenses[:period].selection
       @choosee = lenses[:choosee].selection || current_user
       return if @choosee == current_user
       flash.now[:notice] = t("work.choosing_as", name: choosee.full_name)

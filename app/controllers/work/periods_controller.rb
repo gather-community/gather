@@ -125,10 +125,6 @@ module Work
 
     private
 
-    def require_period
-      render_not_found unless @period
-    end
-
     def work_report
       @work_report_decorated ||= ReportDecorator.new(@work_report)
     end

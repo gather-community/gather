@@ -23,6 +23,13 @@ module Work
       nav_builder.current_period = @period
     end
 
+    # For actions that can't function without a period, e.g. anything nested under the :period_id
+    # segment. Lives here rather than on PeriodsController because the scoped content controllers
+    # need it too.
+    def require_period
+      render_not_found unless @period
+    end
+
     # For landing (no period_id) pages: if exactly one selectable period exists, redirect straight
     # into it; otherwise load the selectable periods for the picker. Returns true iff redirected.
     def redirect_to_sole_period_or_load_selectable(section)

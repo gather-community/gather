@@ -8,7 +8,9 @@ module Work
     # Converts Synopsis to nice string. See spec for data examples.
     def to_s
       return @to_s if defined?(@to_s)
-      return (@to_s = nil) if empty?
+      # A user with no share has no obligations to report but may still be waiting on a round to
+      # open, and we owe them that explanation.
+      return (@to_s = nil) if empty? && !staggering?
       sentences = %i[for_user for_household].map do |who|
         next unless send(who)
         chunks = send(who).map { |i| chunk_for_item(i) }

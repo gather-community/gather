@@ -12,6 +12,9 @@ module Work
     # Since we have a specially built policy object, we need to do our own custom authorization.
     skip_after_action :verify_pundit_authorization, only: :signup
 
+    # index doubles as the landing page, so it copes with a nil period itself. The rest can't.
+    before_action :require_period, only: %i[show signup unsignup]
+
     decorates_assigned :shifts, :shift, :choosee, :meal
 
     helper_method :sample_shift, :synopsis, :shift_policy, :cache_key
@@ -44,7 +47,7 @@ module Work
     end
 
     def show
-      @shift = Shift.find(params[:id])
+      @shift = find_shift_in_period
       authorize(@shift)
       @meal = @shift.meal
     end
@@ -53,7 +56,7 @@ module Work
     # If there are no slots left, shift card will include error message.
     def signup
       prepare_lenses_and_set_contextual_vars
-      @shift = Shift.find(params[:id])
+      @shift = find_shift_in_period
 
       begin
         authorize_and_do_signup_or_raise_error
@@ -82,7 +85,7 @@ module Work
 
     def unsignup
       prepare_lenses_and_set_contextual_vars
-      @shift = Shift.find(params[:id])
+      @shift = find_shift_in_period
       authorize(@shift)
 
       if request.xhr?
@@ -124,6 +127,13 @@ module Work
       @choosee = lenses[:choosee].selection || current_user
       return if @choosee == current_user
       flash.now[:notice] = t("work.choosing_as", name: choosee.full_name)
+    end
+
+    # Shifts are addressed as /work/:period_slug/signups/:id, so the shift must actually belong to
+    # the period named in the URL. Scoping the lookup keeps that promise, and in particular stops a
+    # requester from naming some other period in order to have the round limit computed against it.
+    def find_shift_in_period
+      Shift.in_period(@period).find(params[:id])
     end
 
     def render_shift_and_synopsis_json

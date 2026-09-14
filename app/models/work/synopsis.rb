@@ -17,10 +17,14 @@ module Work
       self.user = user
       @portions_for = {}
       @shares_for = {}
-      return if !(period.open? || period.ready?) || period.quota_none? || portions_for(:user).zero?
+      return if !(period.open? || period.ready?) || period.quota_none?
+
+      # Staggering applies to everyone in the period, including users with no share, so it has to
+      # be computed before we bail out on zero portion. See #target_share.
+      handle_staggering
+      return if portions_for(:user).zero?
       self.for_user = obligations_for(:user)
       period.quota_by_person? ? handle_by_person_quota : handle_by_household_quota
-      handle_staggering
     end
 
     def empty?
@@ -29,6 +33,12 @@ module Work
 
     def staggering?
       staggering.present?
+    end
+
+    # The user's currently assigned fixed-slot hours for this period. Unlike #for_user this is
+    # available even for a user with no share, so the round limit can be checked for them too.
+    def regular_hours_for_user
+      @regular_hours_for_user ||= assigned_hours_for(:user, REGULAR_BUCKET)
     end
 
     private
@@ -52,12 +62,23 @@ module Work
     end
 
     def round_calculator
-      @round_calculator ||= RoundCalculator.new(target_share: shares_for(:user).first)
+      @round_calculator ||= RoundCalculator.new(target_share: target_share)
+    end
+
+    # A user with no share still gets a round limit: we treat them like a share with no need, which
+    # means a limit of zero until the final round. The unsaved share is not in period.shares, so it
+    # plays no part in computing the round schedule for anyone else.
+    def target_share
+      shares_for(:user).first || Share.new(period: period, user: user, portion: 0)
     end
 
     def obligations_for(who)
       buckets.map do |bucket|
-        hours = assigned_hours_for(who, bucket)
+        hours = if who == :user && bucket == REGULAR_BUCKET
+          regular_hours_for_user
+        else
+          assigned_hours_for(who, bucket)
+        end
         ttl = quota_for(who, bucket)
         ok = round_next_half(hours) >= round_next_half(ttl)
         {bucket: bucket, got: hours, ttl: ttl, ok: ok}

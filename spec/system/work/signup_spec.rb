@@ -176,6 +176,36 @@ describe "signups", js: true do
         end
         expect(periods[0].reload.phase).to eq("open")
       end
+
+      describe "round limit enforcement" do
+        # The round limit two minutes in is 11 hours, so this one can't be taken yet.
+        let!(:big_job) do
+          create(:work_job, period: periods[0], title: "Marathon", hours: 20, shift_count: 1)
+        end
+
+        scenario "hides signup for a shift over the limit, on both index and show" do
+          Timecop.freeze(open_time + 2.minutes) do
+            # Visiting the index flips the period from ready to open.
+            visit(page_path)
+
+            within(".shift-card[data-id='#{jobs[1].shifts[0].id}']") do
+              expect(page).to have_link("Sign Up!")
+            end
+            within(".shift-card[data-id='#{big_job.shifts[0].id}']") do
+              expect(page).not_to have_link("Sign Up!")
+            end
+
+            # The show page builds its button from a plain policy lookup with no synopsis handed
+            # in, so it has to reach the same answer on its own.
+            visit(work_period_shift_path(periods[0], big_job.shifts[0]))
+            expect(page).to have_content("Marathon")
+            expect(page).not_to have_link("Sign Up")
+
+            visit(work_period_shift_path(periods[0], jobs[1].shifts[0]))
+            expect(page).to have_link("Sign Up")
+          end
+        end
+      end
     end
   end
 

@@ -193,4 +193,39 @@ describe Work::Synopsis do
       end
     end
   end
+  # Users with no share of the workload still fall under the round schedule, so staggering has to be
+  # computed for them even though they have no obligations to report.
+  describe "staggering for a user with no share" do
+    let(:staggered_period) do
+      create(:work_period, quota_type: "by_person", quota: 23.4, phase: "open", pick_type: "staggered",
+                           auto_open_time: Time.current - 1.minute, round_duration: 5,
+                           max_rounds_per_worker: 3, workers_per_round: 10)
+    end
+    let(:synopsis) { described_class.new(period: staggered_period, user: user) }
+
+    before { staggered_period.shares.create!(user: user2, portion: 1) }
+
+    shared_examples_for "limit of zero until the final round" do
+      it "reports no obligations but a limit of zero" do
+        expect(synopsis).to be_empty
+        expect(synopsis).to be_staggering
+        expect(synopsis.staggering[:prev_limit]).to eq(0)
+        expect(synopsis.staggering[:next_starts_at]).to be_present
+      end
+
+      it "lifts the limit once the final round starts" do
+        staggered_period.update!(auto_open_time: Time.current - 1.day)
+        expect(synopsis.staggering[:prev_limit]).to be_nil
+      end
+    end
+
+    context "with no share row at all" do
+      it_behaves_like "limit of zero until the final round"
+    end
+
+    context "with a share row of zero portion" do
+      before { staggered_period.shares.create!(user: user, portion: 0) }
+      it_behaves_like "limit of zero until the final round"
+    end
+  end
 end

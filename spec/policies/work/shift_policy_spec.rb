@@ -8,7 +8,8 @@ describe Work::ShiftPolicy do
   describe "permissions" do
     include_context "policy permissions"
     let(:phase) { "open" }
-    let(:period) { create(:work_period, phase: phase) }
+    let(:period) { create(:work_period, phase: phase, **period_attribs) }
+    let(:period_attribs) { {} }
     let(:slot_type) { "fixed" }
     let(:job) { create(:work_job, period: period, hours: 3, slot_type: slot_type) }
     let(:shift) { create(:work_shift, job: job, hours: 3) }
@@ -46,8 +47,15 @@ describe Work::ShiftPolicy do
       end
 
       context "with synopsis for round limit checking" do
+        # Staggering only exists on a staggered period, and pick_type is forced back to free_for_all
+        # unless a quota is in effect, so both have to be set for the synopsis to be believable.
+        let(:period_attribs) do
+          {pick_type: "staggered", quota_type: "by_person", auto_open_time: "2018-01-01 12:00",
+           round_duration: 5, max_rounds_per_worker: 3, workers_per_round: 10}
+        end
         let(:synopsis) do
-          double(for_user: [{got: picked}], staggering: {prev_limit: limit}, "staggering?": true)
+          double(period: period, regular_hours_for_user: picked, staggering: {prev_limit: limit},
+            "staggering?": true)
         end
         subject(:permitted) { described_class.new(user, shift, synopsis: synopsis).signup? }
 
@@ -77,6 +85,30 @@ describe Work::ShiftPolicy do
           context "with full community job" do
             let(:slot_type) { "full_single" }
             it { is_expected.to be(true) }
+          end
+
+          context "with no synopsis injected" do
+            subject(:permitted) { described_class.new(user, shift).signup? }
+
+            it "builds its own synopsis for the shift's period and still denies" do
+              expect(Work::Synopsis).to receive(:new).with(period: period, user: user)
+                .and_return(synopsis)
+              expect(permitted).to be(false)
+            end
+          end
+
+          context "with synopsis built for a different period" do
+            let(:other_period) { create(:work_period, phase: "open") }
+            let(:wrong_synopsis) do
+              double(period: other_period, "staggering?": false)
+            end
+            subject(:permitted) { described_class.new(user, shift, synopsis: wrong_synopsis).signup? }
+
+            it "ignores it and builds one for the shift's period" do
+              expect(Work::Synopsis).to receive(:new).with(period: period, user: user)
+                .and_return(synopsis)
+              expect(permitted).to be(false)
+            end
           end
         end
       end

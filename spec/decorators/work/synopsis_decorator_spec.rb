@@ -211,5 +211,21 @@ describe Work::SynopsisDecorator do
         is_expected.to eq("You have signed up for <b>0/28.5</b> hours.")
       end
     end
+
+    # Such a user has no obligations to report, but is still waiting on a round to open, and the
+    # page would otherwise offer them no explanation for the absent signup links.
+    context "for a user with no share" do
+      let(:synopsis) do
+        described_class.new(
+          double("done?": nil, "empty?": true, "staggering?": true, for_user: nil,
+            for_household: nil, staggering: staggering)
+        )
+      end
+      let(:staggering) { {prev_limit: 0, next_limit: nil, next_starts_at: next_starts_at} }
+
+      it "still says when they can start choosing" do
+        is_expected.to eq("You can start choosing jobs at 7:30pm.")
+      end
+    end
   end
 end

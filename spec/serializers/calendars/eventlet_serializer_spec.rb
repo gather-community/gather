@@ -19,6 +19,15 @@ describe Calendars::EventletSerializer do
       it { is_expected.to eq("/meals/#{meal.id}") }
     end
 
+    context "with work shift linkable (your jobs system calendar)" do
+      # Shift show pages are period-scoped, so they can't be reached polymorphically.
+      let(:shift) { create(:work_shift) }
+      let(:eventlet) { build(:eventlet, linkable: shift) }
+      subject(:url) { described_class.new(eventlet).url }
+
+      it { is_expected.to eq("/work/#{shift.period.slug}/signups/#{shift.id}") }
+    end
+
     context "with linkable and occurrence_start (transient recurring occurrence)" do
       # linkable is the persisted base eventlet; the occurrence URL is eventlet-centric.
       let(:base_eventlet) { create(:eventlet) }

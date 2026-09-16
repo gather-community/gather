@@ -85,6 +85,25 @@ describe "event calendar", js: true do
       expect(page).to have_title("Yum")
     end
 
+    context "with a work shift on the Your Jobs calendar" do
+      let!(:jobs_calendar) { create(:your_jobs_calendar, name: "Your Jobs") }
+      let(:period) do
+        create(:work_period, phase: "open", starts_on: Time.current.to_date - 30.days,
+          ends_on: Time.current.to_date + 30.days)
+      end
+      let(:shift) do
+        create(:work_job, period: period, title: "Dish Washing",
+          shift_starts: [time], shift_ends: [time + 2.hours]).shifts.first
+      end
+      let!(:assignment) { create(:work_assignment, shift: shift, user: actor) }
+
+      scenario "shift shows on the grid and links to its period-scoped page" do
+        visit(calendar_events_path(jobs_calendar))
+        click_on("Dish Washing")
+        expect(page).to have_current_path(work_period_shift_path(period, shift))
+      end
+    end
+
     scenario "sidebar links stay clean on load (no date or view until user navigates)" do
       visit(calendar_events_path(calendar1))
       expect(page).to have_css(".fc-agendaWeek-button.fc-state-active")

@@ -6,7 +6,7 @@ require "icalendar/tzinfo"
 module Calendars
   # Generates ICS files for various calendars in the system from a set of Eventlet objects.
   class IcalGenerator
-    include Rails.application.routes.url_helpers
+    include LinkableUrls
 
     UID_SIGNATURE = "91a772a5ae4a"
 
@@ -167,12 +167,9 @@ module Calendars
 
     def url_for_event(eventlet)
       linkable = eventlet.linkable
-      if linkable.is_a?(Work::Shift)
-        # Work shift show pages are period-scoped, so they can't be reached polymorphically.
-        work_period_shift_url(linkable.period, linkable, **url_options)
-      elsif linkable.present?
-        # Recurring occurrence → base eventlet → eventlet show page; system calendars → meal/job/user.
-        polymorphic_url(linkable, **url_options)
+      if linkable.present?
+        # Recurring occurrence → base eventlet → eventlet show page; system calendars → meal/shift/user.
+        linkable_url(linkable, **url_options)
       elsif eventlet.persisted?
         calendars_eventlet_url(eventlet, **url_options)
       else

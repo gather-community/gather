@@ -73,6 +73,26 @@ describe "calendar events JSON endpoint" do
     end
   end
 
+  context "with a work shift on the Your Jobs system calendar" do
+    # Shift show pages are period-scoped, so the feed can't build their URLs polymorphically.
+    let!(:calendar) { create(:your_jobs_calendar, community: community) }
+    let(:period) do
+      create(:work_period, community: community, phase: "open",
+        starts_on: "2026-06-01", ends_on: "2026-06-30")
+    end
+    let(:shift) do
+      create(:work_job, period: period, shift_starts: ["2026-06-18 10:00"],
+        shift_ends: ["2026-06-18 12:00"]).shifts.first
+    end
+    let!(:assignment) { create(:work_assignment, shift: shift, user: user) }
+
+    it "returns the period-scoped shift URL" do
+      data = fetch_events
+      expect(data.size).to eq(1)
+      expect(data.first["url"]).to eq("/work/#{period.slug}/signups/#{shift.id}")
+    end
+  end
+
   context "with a recurring event whose series ended before the range" do
     let!(:event) do
       create(:event, calendar: calendar, creator: user,

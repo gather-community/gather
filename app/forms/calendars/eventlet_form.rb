@@ -33,6 +33,7 @@ module Calendars
     validates :series_scope, inclusion: {in: SERIES_SCOPES}
     validate :start_before_end
     validate :occurrence_present_when_needed
+    validate :offsets_within_range
     validate :restrict_changes_in_past
     validate :no_overlap
     validate :apply_rules
@@ -94,8 +95,8 @@ module Calendars
 
     # Moves the whole series on this calendar only, by shifting this eventlet's offsets.
     def move_eventlet
-      eventlet.start_offset = (starts_at - event.starts_at).round
-      eventlet.end_offset = (ends_at - event.ends_at).round
+      eventlet.start_offset = dragged_start_offset
+      eventlet.end_offset = dragged_end_offset
       persist(eventlet)
     end
 
@@ -108,8 +109,8 @@ module Calendars
 
       override = anchor.eventlet_overrides.detect { |o| o.eventlet_id == eventlet.id } ||
         anchor.eventlet_overrides.build(eventlet: eventlet)
-      override.start_offset = (starts_at - occurrence_base_starts_at).round
-      override.end_offset = (ends_at - occurrence_base_ends_at).round
+      override.start_offset = dragged_start_offset
+      override.end_offset = dragged_end_offset
       persist(override)
     end
 
@@ -156,6 +157,19 @@ module Calendars
       event.ends_at - event.starts_at
     end
 
+    # This eventlet's offsets for a this-calendar drag: how far the dropped times sit from the base
+    # this drag is measured against. The whole series measures against the event; a single occurrence
+    # measures against that occurrence's (possibly already-overridden) times.
+    def dragged_start_offset
+      base = (series_scope == "occurrence") ? occurrence_base_starts_at : event.starts_at
+      (starts_at - base).round
+    end
+
+    def dragged_end_offset
+      base = (series_scope == "occurrence") ? occurrence_base_ends_at : event.ends_at
+      (ends_at - base).round
+    end
+
     # === Validations ===
 
     def start_before_end
@@ -172,6 +186,20 @@ module Calendars
       elsif !event.schedule.occurs_at?(occurrence_start)
         errors.add(:occurrence_start, "is not a valid occurrence in this series")
       end
+    end
+
+    # A this-calendar drag is stored as an offset from the event's shared time, and both Eventlet and
+    # EventletOverride cap that offset at MAX_OFFSET_SECONDS so the eventlet stays inside the window the
+    # grid query pre-filters on. Catch an over-cap drag here so the user gets a plain explanation
+    # instead of the raw "start offset is not included in the list" model error. All-calendars drags
+    # move the event itself and have no such cap, so they're left alone.
+    def offsets_within_range
+      return if errors.any? || calendar_scope != "this"
+      return if starts_at.blank? || ends_at.blank?
+      max = Eventlet::MAX_OFFSET_SECONDS
+      return if dragged_start_offset.abs <= max && dragged_end_offset.abs <= max
+      errors.add(:base, "An event's times on its different calendars can't be more than " \
+        "#{max / 1.hour} hours apart. To move it further, choose “Move on all calendars.”")
     end
 
     # Mirrors EventForm#restrict_changes_in_past. Meal events are exempt because they're maintained

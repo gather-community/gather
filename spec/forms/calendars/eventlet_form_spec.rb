@@ -29,6 +29,15 @@ describe Calendars::EventletForm do
       expect(eventlet.reload.start_offset).to eq(0)
     end
 
+    it "allows a move well beyond the eventlet offset cap (no per-calendar offset involved)" do
+      two_days = 2.days
+      form = submit(calendar_scope: "all", series_scope: "series",
+        starts_at: (base_start + two_days).iso8601, ends_at: (base_end + two_days).iso8601)
+
+      expect(form.save).to be(true)
+      expect(event.reload.starts_at).to eq(base_start + two_days)
+    end
+
     it "accounts for the dragged eventlet's existing offsets" do
       eventlet.update!(start_offset: -1.hour.to_i, end_offset: -1.hour.to_i)
 
@@ -64,13 +73,15 @@ describe Calendars::EventletForm do
       expect(other.reload.start_offset).to eq(0)
     end
 
-    it "rejects a drag beyond the max offset" do
+    it "rejects a drag beyond the max offset with a plain-language message" do
       too_far = Calendars::Eventlet::MAX_OFFSET_SECONDS + 1.hour
       form = submit(calendar_scope: "this", series_scope: "series",
         starts_at: (base_start + too_far).iso8601, ends_at: (base_end + too_far).iso8601)
 
       expect(form.save).to be(false)
-      expect(form.errors[:start_offset]).to be_present
+      # The friendly form-level message, not the raw "start offset is not included" model error.
+      expect(form.errors[:base].join).to match(/can't be more than 12 hours apart/i)
+      expect(form.errors[:start_offset]).to be_empty
     end
   end
 

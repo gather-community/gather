@@ -1152,13 +1152,34 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
   },
 
   onEventChange(event, _, revertFunc) {
+    const times = this.dragTimes(event);
     this.promptForDragScope(event).then(scope => {
       if (!scope) {
         revertFunc();
         return;
       }
-      this.submitDrag(event, scope, revertFunc);
+      this.submitDrag(event, times, scope, revertFunc);
     });
+  },
+
+  /*
+   * The start/end a drag should be saved with. For a timed event on a single-calendar page the
+   * calendar's fixed start/end time rules are applied, the same as when selecting a new event, so a
+   * drag onto a non-permitted time snaps into place instead of being bounced back by a server error
+   * modal. The rule set is only present on a single-calendar page and is built with a nil kind, so
+   * kind-specific rules still fall to server-side validation. All-day events have no time-of-day to
+   * snap (and their exclusive end is reconciled server-side), so they pass through unchanged.
+   */
+  dragTimes(event) {
+    const start = event.start.clone();
+    const end = this.eventEnd(event).clone();
+
+    if (event.allDay || !this.ruleSet) {
+      return {start, end};
+    }
+
+    const [fixedStart, fixedEnd] = this.applyFixedTimes(start, end);
+    return {start: fixedStart, end: fixedEnd};
   },
 
   /*
@@ -1230,7 +1251,7 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
     return $("<div>").text(text).html();
   },
 
-  submitDrag(event, scope, revertFunc) {
+  submitDrag(event, times, scope, revertFunc) {
     $.ajax({
       // eventletId rather than id: a recurring occurrence's row is transient and has no id of its
       // own, so it carries the id of the persisted base eventlet it was built from. The offsets are
@@ -1240,8 +1261,8 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
       data: {
         _method: "PATCH",
         calendars_eventlet: {
-          starts_at: event.start.format(),
-          ends_at: this.eventEnd(event).format(),
+          starts_at: times.start.format(),
+          ends_at: times.end.format(),
           occurrence_start: event.occurrenceStart,
           calendar_scope: scope.calendarScope,
           series_scope: scope.seriesScope,

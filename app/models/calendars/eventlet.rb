@@ -48,7 +48,7 @@ module Calendars
     # invariant enforced for every writer by a DB check constraint (see the migration that adds
     # eventlet_start/end_offset_within_bounds); EventletForm#offsets_within_range gives the friendly
     # message on the drag path before the constraint is ever reached.
-    validate :start_before_end
+    before_save :assert_start_before_end
 
     delegate :name, :kind, :meal?, :meal_id, :creator, :creator_id, :group, :note, to: :event
     delegate :all_day, :all_day?, to: :event
@@ -175,11 +175,15 @@ module Calendars
     private
 
     # The offsets are applied to the event's times independently, so a large start_offset paired with
-    # a small end_offset can invert the eventlet even when the parent event's range is valid.
-    def start_before_end
+    # a small end_offset can invert the eventlet even when the parent event's range is valid. This is
+    # a data invariant no correct caller should reach (EventletForm rejects it with a user-facing
+    # message first), so assert it loudly rather than add a validation error that could fail silently
+    # if never surfaced — see CLAUDE.md "Invariants vs. validations".
+    def assert_start_before_end
       return if event&.starts_at.blank? || event&.ends_at.blank?
       return if start_offset.blank? || end_offset.blank?
-      errors.add(:end_offset, "must be after start time") unless ends_at > starts_at
+      return if ends_at > starts_at
+      raise "Eventlet offsets would invert it: ends_at (#{ends_at}) is not after starts_at (#{starts_at})"
     end
   end
 end

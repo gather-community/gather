@@ -36,31 +36,36 @@ describe Calendars::Eventlet do
       expect { create(:eventlet, start_offset: -max, end_offset: max) }.not_to raise_error
     end
 
+    # Offsets are pushed out of bounds in a direction that doesn't invert the eventlet, so the DB
+    # constraint (not the start-before-end assertion) is what trips.
     it "rejects a start_offset beyond the bound at the database level" do
       eventlet = create(:eventlet)
-      eventlet.start_offset = max + 1
+      eventlet.start_offset = -max - 1
       expect { eventlet.save(validate: false) }
         .to raise_error(ActiveRecord::StatementInvalid, /eventlet_start_offset_within_bounds/)
     end
 
     it "rejects an end_offset beyond the bound at the database level" do
       eventlet = create(:eventlet)
-      eventlet.end_offset = -max - 1
+      eventlet.end_offset = max + 1
       expect { eventlet.save(validate: false) }
         .to raise_error(ActiveRecord::StatementInvalid, /eventlet_end_offset_within_bounds/)
     end
 
-    it "rejects offsets that invert the eventlet" do
-      event = build(:event, starts_at: "2016-04-07 12:00", ends_at: "2016-04-07 13:00")
-      eventlet = build(:eventlet, event: event, start_offset: 2.hours.to_i, end_offset: 0)
-      expect(eventlet).not_to be_valid
-      expect(eventlet.errors[:end_offset]).to include("must be after start time")
+    # Inversion is a data invariant no correct caller should reach, so it raises on save rather than
+    # adding a validation error that could pass unnoticed if the message is never surfaced.
+    it "raises rather than persisting offsets that invert the eventlet" do
+      event = create(:event, starts_at: "2026-04-07 12:00", ends_at: "2026-04-07 13:00")
+      eventlet = event.eventlets.first
+      expect { eventlet.update(start_offset: 2.hours.to_i, end_offset: 0) }
+        .to raise_error(/would invert/i)
     end
 
-    it "allows offsets that shift the eventlet without inverting it" do
-      event = build(:event, starts_at: "2016-04-07 12:00", ends_at: "2016-04-07 13:00")
-      expect(build(:eventlet, event: event, start_offset: 2.hours.to_i,
-        end_offset: 2.hours.to_i)).to be_valid
+    it "persists offsets that shift the eventlet without inverting it" do
+      event = create(:event, starts_at: "2026-04-07 12:00", ends_at: "2026-04-07 13:00")
+      eventlet = event.eventlets.first
+      expect { eventlet.update!(start_offset: 2.hours.to_i, end_offset: 2.hours.to_i) }
+        .not_to raise_error
     end
   end
 

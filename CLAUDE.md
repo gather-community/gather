@@ -249,6 +249,17 @@ Existing flags: `messaging`, `gdrive`, `restrictions`.
 - Models use `in_community(community)` scopes for community filtering
 - `active` scopes filter deactivated records
 
+### Invariants vs. Validations
+
+`ActiveModel` validations are for **user-facing input a person can correct** — they add an error object that only helps if the message is rendered on a form. They belong on the form model (see the form-model convention above), not scattered on the AR model.
+
+They are the **wrong tool for a data invariant** that no correct caller should ever violate. A validation fails *silently*: if the record is saved by a code path that doesn't surface `errors` (a background job, a sync callback, a console, another model's `autosave`), `save` just returns `false` and the violation passes unnoticed. Enforce invariants loudly instead:
+
+- **Single-row / single-column invariant** → a **DB check constraint** (add it in the migration; it holds for every writer and can never render a cryptic AR message on a form). Example: the `eventlet_*_offset_within_bounds` constraints on `calendar_eventlets`.
+- **Cross-record invariant a constraint can't express** (it depends on another row/table) → a **raising assertion** in a `before_save` (or the method that would produce the bad state), so a violation fails fast and visibly rather than returning `false`. Example: `Calendars::Eventlet#assert_start_before_end`.
+
+Reserve validations for input a user can fix, and keep the friendly message on the form.
+
 ### Adding a New Model
 
 When introducing a new model, follow the established conventions:

@@ -54,6 +54,27 @@ bin/rails db:setup       # Create + seed
 CH.tenant(1)  # Must set tenant before querying
 ```
 
+### Writing Plans
+
+Plan files are written to `~/.claude/plans/`, which is outside the VSCode workspace — so they never
+show up in the Explorer and their workspace-relative markdown links don't resolve. Always do both of
+these after writing a plan:
+
+1. Copy it into `tmp/` with a descriptive name (`tmp/` is gitignored, so it stays out of the tree):
+
+```bash
+cp ~/.claude/plans/<generated-name>.md tmp/<descriptive-name>-plan.md
+```
+
+2. Open that copy in the editor — the `code` CLI is on PATH in the devcontainer:
+
+```bash
+code tmp/<descriptive-name>-plan.md
+```
+
+Reference code from plans with workspace-relative markdown links (`[event.rb:183](app/models/calendars/event.rb#L183)`)
+so they're clickable from the `tmp/` copy.
+
 ### Taking Screenshots
 
 The dev server must be running first (`bin/dev` won't stay up in the background because foreman's esbuild watcher requires stdin). Start just the web server and build JS assets separately:

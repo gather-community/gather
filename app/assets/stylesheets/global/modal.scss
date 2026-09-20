@@ -61,9 +61,31 @@ body.gather-modal-open {
   .modal-footer {
     border-top: none; // override Bootstrap's default divider line (keep Bootstrap's top padding)
 
-    // Equal-width buttons so OK/Cancel line up.
+    // Single row, right-aligned. Flex (rather than Bootstrap's text-align) so an over-long label
+    // shrinks its own button instead of wrapping the row onto a second line.
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-end;
+
+    // Bootstrap's clearfix pseudo-elements would otherwise become stray flex items.
+    &::before,
+    &::after {
+      display: none;
+    }
+
     .btn {
-      min-width: 90px;
+      min-width: 90px; // equal-width buttons so OK/Cancel line up
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    // Cancel (first) and the primary action (last) have fixed, short labels and always show in
+    // full; any shrinking is absorbed by the variable-length choices in between, e.g. "Move only
+    // on <calendar name>".
+    .btn:first-child,
+    .btn:last-child {
+      flex-shrink: 0;
     }
 
     .btn + .btn {
@@ -82,5 +104,11 @@ body.gather-modal-open {
     width: 100%;
     max-width: 100%;
     border-radius: 6px 6px 0 0;
+
+    // The equal-width minimum would push a three-button row off a narrow screen, so let the
+    // buttons shrink to whatever fits (truncating their labels) instead.
+    .modal-footer .btn {
+      min-width: 0;
+    }
   }
 }

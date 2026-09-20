@@ -80,7 +80,7 @@ describe "dragging a calendar event", js: true do
 
     scenario "moving on this calendar only shifts that eventlet's offset" do
       drag_vertically(find(".fc-event", text: "Draggable", match: :first), by: 140)
-      click_modal_button("Only on #{calendar.name}")
+      click_modal_button("Move only on #{calendar.name}")
 
       expect(eventually { event.eventlets.find_by(calendar_id: calendar.id).start_offset.positive? })
         .to be(true), "Expected this calendar's eventlet to gain a positive start_offset"
@@ -90,7 +90,7 @@ describe "dragging a calendar event", js: true do
 
     scenario "moving on all calendars shifts the event itself" do
       drag_vertically(find(".fc-event", text: "Draggable", match: :first), by: 140)
-      click_modal_button("Move on all calendars")
+      click_modal_button("Move on all")
 
       expect(eventually { event.reload.starts_at > starts_at })
         .to be(true), "Expected the event itself to move, but starts_at stayed #{event.reload.starts_at}"

@@ -646,18 +646,18 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
       return Promise.resolve("all");
     }
 
-    const others = event.otherCalendarNames || [];
-    const allLabel = others.length
-      ? `Move on all calendars (${[event.calendarName].concat(others).join(", ")})`
-      : "Move on all calendars";
+    // The dragged calendar leads the list, marked so it's obvious which one "move only on" means.
+    const dragged = `<li><strong>${this.escapeHtml(event.calendarName)}</strong> (selected)</li>`;
+    const others = (event.otherCalendarNames || []).map(name => `<li>${this.escapeHtml(name)}</li>`);
 
     return window.Modal.choiceModal(
-      `'${event.title}' appears on more than one calendar. Which should be moved?`,
+      `<p>'${this.escapeHtml(event.title)}' appears on more than one calendar:</p>` +
+        `<ul>${dragged}${others.join("")}</ul>`,
       [
-        {label: `Only on ${event.calendarName}`, value: "this"},
-        {label: allLabel, value: "all", variant: "primary"},
+        {label: `Move only on ${event.calendarName}`, value: "this"},
+        {label: "Move on all", value: "all", variant: "primary"},
       ],
-      {title: "Move event"}
+      {title: "Move multi-calendar event"}
     );
   },
 
@@ -667,13 +667,18 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
     }
 
     return window.Modal.choiceModal(
-      `'${event.title}' repeats. Which occurrences should be moved?`,
+      `<p>'${this.escapeHtml(event.title)}' repeats. Which occurrences should be moved?</p>`,
       [
         {label: "Only this occurrence", value: "occurrence"},
         {label: "The whole series", value: "series", variant: "primary"},
       ],
-      {title: "Move event"}
+      {title: "Move recurring event"}
     );
+  },
+
+  // Modal content is interpolated as HTML, so event and calendar names have to be escaped.
+  escapeHtml(text) {
+    return $("<div>").text(text).html();
   },
 
   submitDrag(event, scope, revertFunc) {

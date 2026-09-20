@@ -4,6 +4,7 @@ gum = "latest"
 node = { version = "18.12.1", postinstall = "corepack enable" }
 ruby = "3.2.2"
 shfmt = "latest"
+stripe = "latest"
 yq = "latest"
 
 [tasks.setup]

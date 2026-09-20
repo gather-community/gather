@@ -89,20 +89,29 @@ describe Subscription::MessagingTopupManager do
     before do
       allow(Stripe::Price).to receive(:list).and_return(double(data: []))
       allow(Stripe::Price).to receive(:create).and_return(price)
-      allow(Stripe::Subscription).to receive(:retrieve).and_return(
-        double(items: double(data: [double(id: "si_1")]),
-          current_period_end: Time.zone.local(2026, 8, 1).to_i)
-      )
+      item = stripe_subscription_item_double(id: "si_1",
+        current_period_end: Time.zone.local(2026, 8, 1).to_i)
+      allow(Stripe::Subscription).to receive(:retrieve)
+        .and_return(stripe_subscription_double(items: [item]))
     end
 
     it "sums the proration lines of the previewed invoice" do
-      allow(Stripe::Invoice).to receive(:upcoming).and_return(
-        double(lines: double(data: [
-          double(proration: true, amount: 250),
-          double(proration: false, amount: 500)
-        ]))
+      allow(Stripe::Invoice).to receive(:create_preview).and_return(
+        stripe_invoice_double(lines: [
+          stripe_invoice_line_double(proration: true, amount: 250),
+          stripe_invoice_line_double(proration: false, amount: 500)
+        ])
       )
       expect(manager.preview(500)[:immediate_charge_cents]).to eq(250)
+    end
+
+    it "passes the item swap under subscription_details, as Basil requires" do
+      expect(Stripe::Invoice).to receive(:create_preview).with(
+        hash_including(subscription: "sub_topup_x",
+          subscription_details: {items: [{id: "si_1", price: "price_1"}],
+                                 proration_behavior: "create_prorations"})
+      ).and_return(stripe_invoice_double(lines: []))
+      manager.preview(500)
     end
 
     it "returns nil when there is no existing topup (first activation has no proration)" do

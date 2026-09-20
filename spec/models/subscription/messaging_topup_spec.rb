@@ -33,10 +33,12 @@ describe Subscription::MessagingTopup do
     let(:topup) { build(:messaging_topup) }
 
     it "reads amount, currency and status from the populated Stripe subscription" do
-      topup.stripe_sub = double(
-        status: "active", cancel_at_period_end: false, current_period_end: Time.zone.local(2026, 8, 1).to_i,
-        items: double(data: [double(price: double(unit_amount: 500, currency: "usd"))]),
-        latest_invoice: nil
+      item = stripe_subscription_item_double(
+        current_period_end: Time.zone.local(2026, 8, 1).to_i,
+        price: double(unit_amount: 500, currency: "usd")
+      )
+      topup.stripe_sub = stripe_subscription_double(
+        status: "active", cancel_at_period_end: false, items: [item], latest_invoice: nil
       )
       expect(topup.amount_cents).to eq(500)
       expect(topup.currency).to eq("usd")

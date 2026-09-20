@@ -8,20 +8,24 @@ describe "messaging topup requests" do
   let!(:subscription) { create(:subscription, community: community, stripe_id: "sub_main1") }
 
   def fake_main_sub
-    double("Stripe::Subscription", status: "active",
-      latest_invoice: double(payment_intent: double(status: "succeeded", next_action: nil, amount: 1800)),
-      pending_setup_intent: nil, default_payment_method: "pm_1",
+    pi = double("Stripe::PaymentIntent", status: "succeeded", next_action: nil, amount: 1800)
+    stripe_subscription_double(
+      status: "active", pending_setup_intent: nil, default_payment_method: "pm_1",
+      latest_invoice: stripe_invoice_double(payment_intent: pi),
       customer: double(id: "cus_1", email: "b@example.com",
-        invoice_settings: double(default_payment_method: nil)))
+        invoice_settings: double(default_payment_method: nil))
+    )
   end
 
   # A finalized invoice carrying one messaging-product line, as the synchronous credit path reads it.
   def fake_finalized_invoice(sub_id, amount)
     product_id = Settings.stripe.messaging.topup_product_id
-    double("invoice", id: "in_1", subscription: sub_id, currency: "usd",
-      payment_intent: double(status: "succeeded"), # card paid instantly
-      lines: double(data: [double(id: "il_1", amount: amount, currency: "usd",
-        price: double(product: product_id))]))
+    stripe_invoice_double(
+      id: "in_1", currency: "usd", subscription: sub_id,
+      payment_intent: double("Stripe::PaymentIntent", status: "succeeded"), # card paid instantly
+      lines: [stripe_invoice_line_double(id: "il_1", amount: amount, currency: "usd",
+        product: product_id)]
+    )
   end
 
   before do

@@ -52,9 +52,21 @@ describe "Stripe webhooks" do
       with_default_tenant { expect(Messaging::Account.first.balance_cents).to eq(1500) }
     end
 
-    it "credits the actual invoiced (prorated) amount, not the price's unit amount" do
-      post_event(invoice_event("invoice.paid", line_amount: 300, unit_amount: 1500))
+    it "credits the actual invoiced (prorated) line amount" do
+      post_event(invoice_event("invoice.paid", line_amount: 300))
       with_default_tenant { expect(Messaging::Transaction.first.amount_cents).to eq(300) }
+    end
+
+    # Stripe does not expand `payments` on webhook deliveries, so this is the production path.
+    it "resolves the PaymentIntent by listing payments when the payload omits them" do
+      expect(Stripe::InvoicePayment).to receive(:list).with(invoice: "in_test")
+        .and_return(double(data: [double(is_default: true,
+          payment: double(payment_intent: "pi_test"))]))
+      stub_pi("processing")
+
+      post_event(invoice_event("invoice.finalized", line_amount: 1500, payments: false))
+
+      with_default_tenant { expect(Messaging::Account.first.balance_cents).to eq(1500) }
     end
 
     it "is idempotent across redelivery (no double credit)" do
@@ -174,18 +186,25 @@ describe "Stripe webhooks" do
     end
   end
 
-  # Minimal invoice event payload (stripe ~> 8.1 shape). unit_amount defaults to line_amount (they
-  # differ only for proration lines). payment_intent is an id the finalize path retrieves.
+  # Minimal invoice event payload in the Basil (2025-03-31) shape: the subscription moved under
+  # `parent` and the PaymentIntent under `payments`. Pass payments: false to model a real webhook
+  # delivery, which does not expand `payments` — InvoiceFields then lists them instead.
   def invoice_event(type, subscription: topup_sub_id, product: product_id, line_amount: 1000,
-    unit_amount: nil, line_currency: "usd")
+    line_currency: "usd", payments: true)
+    invoice = {
+      id: "in_test", object: "invoice", currency: line_currency,
+      parent: {type: "subscription_details", subscription_details: {subscription: subscription}},
+      lines: {object: "list", data: [invoice_line(product, line_amount, line_currency)]}
+    }
+    invoice[:payments] = {object: "list", data: [invoice_payment]} if payments
+    {id: "evt_test", object: "event", type: type, data: {object: invoice}}
+  end
+
+  # An invoice's payment record. `payment.payment_intent` is an id the processor resolves.
+  def invoice_payment
     {
-      id: "evt_test", object: "event", type: type,
-      data: {object: {
-        id: "in_test", object: "invoice", subscription: subscription, currency: line_currency,
-        payment_intent: "pi_test",
-        lines: {object: "list", data: [invoice_line(product, line_amount, unit_amount || line_amount,
-          line_currency)]}
-      }}
+      id: "inpay_test", object: "invoice_payment", is_default: true, status: "paid",
+      invoice: "in_test", payment: {type: "payment_intent", payment_intent: "pi_test"}
     }
   end
 
@@ -196,11 +215,12 @@ describe "Stripe webhooks" do
     }
   end
 
-  def invoice_line(product, amount, unit_amount, currency)
+  # Basil replaced the line's embedded `price` object with `pricing.price_details`, which carries
+  # only the price and product ids — the unit amount is no longer on the line at all.
+  def invoice_line(product, amount, currency)
     {
       id: "il_test1", object: "line_item", amount: amount, currency: currency,
-      price: {id: "price_test", object: "price", product: product, unit_amount: unit_amount,
-              currency: currency}
+      pricing: {type: "price_details", price_details: {price: "price_test", product: product}}
     }
   end
 

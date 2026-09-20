@@ -11,26 +11,28 @@ describe "messaging monthly topup", js: true do
 
   # A fully-populated fake base subscription — enough for the show page + messaging_topup_editable?.
   def fake_main_sub
-    double("Stripe::Subscription",
-      status: "active",
-      latest_invoice: double(payment_intent: double(status: "succeeded", next_action: nil, amount: 1800)),
-      pending_setup_intent: nil,
-      current_period_end: 1.month.from_now.to_i,
-      discount: nil,
-      default_payment_method: default_payment_method,
+    pi = double("Stripe::PaymentIntent", status: "succeeded", next_action: nil, amount: 1800)
+    item = stripe_subscription_item_double(
+      quantity: 3, current_period_end: 1.month.from_now.to_i,
+      price: double(unit_amount: 600, currency: "usd", recurring: double(interval_count: 3),
+        product: double(metadata: {"tier" => "standard"}))
+    )
+    stripe_subscription_double(
+      status: "active", pending_setup_intent: nil, discounts: [],
+      default_payment_method: default_payment_method, items: [item],
+      latest_invoice: stripe_invoice_double(payment_intent: pi),
       customer: double(id: "cus_1", email: "biller@example.com",
-        invoice_settings: double(default_payment_method: nil)),
-      items: double(data: [double(quantity: 3,
-        price: double(unit_amount: 600, currency: "usd", recurring: double(interval_count: 3),
-          product: double(metadata: {"tier" => "standard"})))]))
+        invoice_settings: double(default_payment_method: nil))
+    )
   end
 
   def fake_topup_sub(amount_cents:)
-    double("Stripe::Subscription",
-      status: "active", cancel_at_period_end: false, current_period_end: 1.month.from_now.to_i,
-      latest_invoice: nil,
-      items: double(data: [double(id: "si_1",
-        price: double(unit_amount: amount_cents, currency: "usd"))]))
+    item = stripe_subscription_item_double(
+      id: "si_1", current_period_end: 1.month.from_now.to_i,
+      price: double(unit_amount: amount_cents, currency: "usd")
+    )
+    stripe_subscription_double(status: "active", cancel_at_period_end: false,
+      latest_invoice: nil, items: [item])
   end
 
   before do
@@ -78,10 +80,13 @@ describe "messaging monthly topup", js: true do
   # A finalized invoice carrying one messaging-product line, as the credit path reads it.
   def fake_finalized_invoice(sub_id, amount)
     product_id = Settings.stripe.messaging.topup_product_id
-    double("invoice", id: "in_new", subscription: sub_id, currency: "usd",
-      payment_intent: double(status: "succeeded"), # card paid instantly -> credit synchronously
-      lines: double(data: [double(id: "il_new", amount: amount, currency: "usd",
-        price: double(product: product_id))]))
+    stripe_invoice_double(
+      id: "in_new", currency: "usd", subscription: sub_id,
+      # card paid instantly -> credit synchronously
+      payment_intent: double("Stripe::PaymentIntent", status: "succeeded"),
+      lines: [stripe_invoice_line_double(id: "il_new", amount: amount, currency: "usd",
+        product: product_id)]
+    )
   end
 
   context "when a topup already exists" do
@@ -90,8 +95,8 @@ describe "messaging monthly topup", js: true do
     scenario "changing the amount shows the real prorated charge" do
       allow(Stripe::Price).to receive(:list).and_return(double(data: []))
       allow(Stripe::Price).to receive(:create).and_return(double(id: "price_1"))
-      allow(Stripe::Invoice).to receive(:upcoming).and_return(
-        double(lines: double(data: [double(proration: true, amount: 342)]))
+      allow(Stripe::Invoice).to receive(:create_preview).and_return(
+        stripe_invoice_double(lines: [stripe_invoice_line_double(proration: true, amount: 342)])
       )
 
       visit(subscription_path)

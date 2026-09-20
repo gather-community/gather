@@ -98,11 +98,11 @@ module Stripe
     def topup_lines
       product_id = ::Messaging::Account::PRODUCT_ID
       return [] if product_id.blank?
-      invoice.lines.data.select { |line| line.price&.product == product_id }
+      invoice.lines.data.select { |line| line.pricing&.price_details&.product == product_id }
     end
 
     def find_topup
-      sub_id = invoice.subscription
+      sub_id = InvoiceFields.subscription_id(invoice)
       return nil if sub_id.blank?
       ::ActsAsTenant.without_tenant do
         ::Subscription::MessagingTopup.find_by(stripe_id: sub_id)
@@ -116,13 +116,10 @@ module Stripe
       ::Messaging::Account.find_by!(community: community)
     end
 
-    # The PaymentIntent's status, retrieving it when the invoice only carries the id (webhook path);
-    # the synchronous save path passes the invoice with payment_intent expanded.
+    # The PaymentIntent's status. InvoiceFields fetches it when the webhook payload didn't carry it
+    # expanded; the synchronous save path passes an invoice that already has it.
     def payment_intent_status
-      pi = invoice.payment_intent
-      return nil if pi.nil?
-      pi = ::Stripe::PaymentIntent.retrieve(pi) if pi.is_a?(String)
-      pi.status
+      InvoiceFields.payment_intent(invoice)&.status
     end
 
     # Resolves the account currency, or nil (after logging) if it can't be determined or the Stripe

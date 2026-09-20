@@ -68,20 +68,32 @@ module Subscription
     def preview(cents)
       return nil if existing_item.nil?
       price = find_or_create_price(cents, required_currency)
-      invoice = Stripe::Invoice.upcoming(
+      # Basil renamed Invoice.upcoming to create_preview and nested the subscription_* params
+      # under subscription_details.
+      invoice = Stripe::Invoice.create_preview(
         customer: customer.id,
         subscription: topup.stripe_id,
-        subscription_items: [{id: existing_item.id, price: price.id}],
-        subscription_proration_behavior: "create_prorations"
+        subscription_details: {
+          items: [{id: existing_item.id, price: price.id}],
+          proration_behavior: "create_prorations"
+        }
       )
       {
-        immediate_charge_cents: invoice.lines.data.select { |l| l.proration }.sum(&:amount),
+        immediate_charge_cents: invoice.lines.data.select { |l| proration_line?(l) }.sum(&:amount),
         next_bill_date: topup.next_bill_date,
         currency: required_currency
       }
     end
 
     private
+
+    # Basil moved a line's proration flag under parent.<type>_details. A preview of a subscription
+    # item swap produces subscription_item lines; invoice_item lines are checked too so an
+    # invoice-item proration isn't silently dropped from the total.
+    def proration_line?(line)
+      details = line.parent&.subscription_item_details || line.parent&.invoice_item_details
+      details&.proration == true
+    end
 
     def required_currency
       currency = community.default_currency
@@ -120,7 +132,7 @@ module Subscription
         payment_settings: {save_default_payment_method: "on_subscription"},
         # Expand the payment_intent so the synchronous credit can read its status (processing vs paid)
         # without a second API call.
-        expand: ["latest_invoice.payment_intent"]
+        expand: ["latest_invoice.payments.data.payment.payment_intent"]
       )
       community.create_messaging_topup!(stripe_id: stripe_sub.id)
       stripe_sub.latest_invoice
@@ -129,8 +141,8 @@ module Subscription
     # The topup subscription's most recent invoice (finalized after an item change with
     # always_invoice), with its payment_intent expanded for synchronous crediting.
     def latest_invoice
-      Stripe::Subscription.retrieve(id: topup.stripe_id, expand: ["latest_invoice.payment_intent"])
-        .latest_invoice
+      Stripe::Subscription.retrieve(id: topup.stripe_id,
+        expand: ["latest_invoice.payments.data.payment.payment_intent"]).latest_invoice
     end
 
     # The current topup subscription's single item, or nil when there's no topup yet.

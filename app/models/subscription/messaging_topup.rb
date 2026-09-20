@@ -57,7 +57,8 @@ module Subscription
       return if stripe_id.nil?
       self.stripe_sub = Stripe::Subscription.retrieve(
         id: stripe_id,
-        expand: %w[items.data.price latest_invoice.payment_intent customer.invoice_settings]
+        expand: %w[items.data.price customer.invoice_settings
+          latest_invoice.payments.data.payment.payment_intent]
       )
     end
 
@@ -92,12 +93,15 @@ module Subscription
     end
 
     def payment_processing?
-      stripe_sub&.latest_invoice&.payment_intent&.status == "processing"
+      Stripe::InvoiceFields.payment_intent(stripe_sub&.latest_invoice)&.status == "processing"
     end
 
+    # Basil moved the billing period onto the item; the topup is always a single-item subscription.
     def next_bill_date
       return nil if stripe_sub.nil?
-      Time.zone.at(stripe_sub.current_period_end).to_date
+      period_end = item&.current_period_end
+      return nil if period_end.nil?
+      Time.zone.at(period_end).to_date
     end
   end
 end

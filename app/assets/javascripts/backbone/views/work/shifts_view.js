@@ -11,6 +11,7 @@ Gather.Views.Work.ShiftsView = Backbone.View.extend({
      */
     this.pendingSignups = 0;
     this.signupGeneration = 0;
+    this.refreshPending = false;
 
     this.resetRefreshInterval();
   },
@@ -34,11 +35,16 @@ Gather.Views.Work.ShiftsView = Backbone.View.extend({
   },
 
   refresh() {
-    // A refresh sent now would be rendered against state the pending signup hasn't reached yet.
-    if (this.pendingSignups > 0) {
+    /*
+     * A refresh sent now would be rendered against state the pending signup hasn't reached yet. And
+     * a second refresh while one is outstanding is worse than useless: the two responses can arrive
+     * in either order, so the older list could end up replacing the newer one.
+     */
+    if (this.pendingSignups > 0 || this.refreshPending) {
       return;
     }
     const generation = this.signupGeneration;
+    this.refreshPending = true;
     $.ajax({
       url: window.location.href,
       cache: false,
@@ -49,6 +55,9 @@ Gather.Views.Work.ShiftsView = Backbone.View.extend({
         }
         this.$(".shifts-main").replaceWith(response.shifts);
         this.$(".pagination-wrapper").replaceWith(response.pagination);
+      },
+      complete: () => {
+        this.refreshPending = false;
       }
     });
   },

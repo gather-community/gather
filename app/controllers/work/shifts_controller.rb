@@ -173,37 +173,28 @@ module Work
       apply_date_range_lens
     end
 
-    # We use a custom authorization flow here.
+    # We do our own authorization here so that we can tell the user why a signup was refused. The
+    # link they clicked may have been out of date: their own signup landed already, or someone else
+    # took the last slot. Those refusals belong on the shift card as a message, so we ask the policy
+    # for its reason and raise the matching error; the rest are real authorization failures. These
+    # are the same errors #signup_user raises when a competing request beats us to the write.
     def authorize_and_do_signup_or_raise_error
       policy = shift_policy(@shift)
-      return @shift.signup_user(@choosee) if policy.signup?
-      error = signup_denial_error(policy)
-      # At this point we don't know what caused the auth fail, so force a failure.
-      return authorize(@shift, :fail?) if error.nil?
-      raise error
+      reason = policy.with_reason.signup?
+      return @shift.signup_user(@choosee) if reason.nil?
+      error = signup_errors[reason]
+      raise error if error
+      raise Pundit::NotAuthorizedError, query: :signup?, record: @shift, policy: policy
     end
 
-    # Works out why the policy refused a signup, in the cases where the reason is something the user
-    # can see and act on: their own signup landed already, someone else took the last slot, or
-    # they're out of hours for this round. The signup link they clicked may simply be out of date,
-    # so these become a message on the shift card rather than an authorization failure they can't do
-    # anything with. Returns nil when the refusal is a genuine authorization failure. These are the
-    # same errors #signup_user raises when a competing request beats us to the write.
-    def signup_denial_error(policy)
-      return unless signups_possible_for_period?(policy)
-      if !@shift.double_signups_allowed? && @shift.user_signed_up?(@choosee)
-        AlreadySignedUpError
-      elsif @shift.taken?
-        SlotsExceededError
-      elsif policy.round_limit_exceeded?
-        RoundLimitExceededError
-      end
-    end
-
-    # Whether a signup on this page is possible at all, leaving aside the shift's own state (full,
-    # already signed up, over the round limit). Mirrors the other conditions in ShiftPolicy#signup?.
-    def signups_possible_for_period?(policy)
-      policy.index? && (@shift.period_open? || @shift.period_published?)
+    # Reasons ShiftPolicy can give for refusing a signup that the user can see and act on, mapped to
+    # the errors that put each one on the shift card. Any other reason is an authorization failure.
+    # A method rather than a constant because these classes are defined in work/shift.rb, which
+    # isn't necessarily loaded when this class body is evaluated.
+    def signup_errors
+      {already_signed_up: AlreadySignedUpError,
+       slots_exceeded: SlotsExceededError,
+       round_limit_exceeded: RoundLimitExceededError}
     end
 
     def raise_stubbed_error_in_test_mode

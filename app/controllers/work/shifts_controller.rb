@@ -146,10 +146,12 @@ module Work
     # We render shifts and pagination separately so we don't have to render the "choose as" dropdown
     # every refresh (saving a few database hits).
     def render_shifts_and_pagination_json
-      render(json: {
+      json = {
         shifts: render_to_string(partial: "shifts"),
         pagination: render_to_string(partial: "pagination")
-      })
+      }
+      delay_rendered_response_in_test_mode
+      render(json: json)
     end
 
     def sample_shift
@@ -171,22 +173,48 @@ module Work
       apply_date_range_lens
     end
 
+    # We use a custom authorization flow here.
     def authorize_and_do_signup_or_raise_error
-      # We use a custom authorization flow here.
-      # If authorization fails due to round limit being exceeded, raise a special error.
       policy = shift_policy(@shift)
-      if policy.signup?
-        @shift.signup_user(@choosee)
+      return @shift.signup_user(@choosee) if policy.signup?
+      error = signup_denial_error(policy)
+      # At this point we don't know what caused the auth fail, so force a failure.
+      return authorize(@shift, :fail?) if error.nil?
+      raise error
+    end
+
+    # Works out why the policy refused a signup, in the cases where the reason is something the user
+    # can see and act on: their own signup landed already, someone else took the last slot, or
+    # they're out of hours for this round. The signup link they clicked may simply be out of date,
+    # so these become a message on the shift card rather than an authorization failure they can't do
+    # anything with. Returns nil when the refusal is a genuine authorization failure. These are the
+    # same errors #signup_user raises when a competing request beats us to the write.
+    def signup_denial_error(policy)
+      return unless signups_possible_for_period?(policy)
+      if !@shift.double_signups_allowed? && @shift.user_signed_up?(@choosee)
+        AlreadySignedUpError
+      elsif @shift.taken?
+        SlotsExceededError
       elsif policy.round_limit_exceeded?
-        raise RoundLimitExceededError
-      else
-        # At this point we don't know what cause the auth fail, so force a failure.
-        authorize(@shift, :fail?)
+        RoundLimitExceededError
       end
+    end
+
+    # Whether a signup on this page is possible at all, leaving aside the shift's own state (full,
+    # already signed up, over the round limit). Mirrors the other conditions in ShiftPolicy#signup?.
+    def signups_possible_for_period?(policy)
+      policy.index? && (@shift.period_open? || @shift.period_published?)
     end
 
     def raise_stubbed_error_in_test_mode
       raise ENV["STUB_SIGNUP_ERROR"].constantize if Rails.env.test? && ENV["STUB_SIGNUP_ERROR"]
+    end
+
+    # Simulates a slow network: the response is already rendered, so it carries pre-delay state.
+    # Lets a system spec keep a refresh in flight across a signup. See spec/system/work/signup_spec.rb.
+    def delay_rendered_response_in_test_mode
+      return unless Rails.env.test? && ENV["STUB_SHIFTS_RESPONSE_DELAY"]
+      sleep(ENV["STUB_SHIFTS_RESPONSE_DELAY"].to_f)
     end
 
     def apply_shift_lens

@@ -48,6 +48,11 @@ module Calendars
       params = params.permit(eventlet_policy.permitted_attributes) if params.respond_to?(:permit)
       @starts_at = parse_time(params[:starts_at])
       @ends_at = parse_time(params[:ends_at])
+      # FullCalendar reports an all-day event's end as the exclusive day-after-midnight, but we store
+      # an inclusive end (23:59:59 on the last day). Pull it back so a dragged all-day event lands on
+      # the right day instead of gaining a day. A drag never changes whether an event is all-day, so
+      # this keys off the event's existing flag rather than anything the client sends.
+      @ends_at -= 1.second if @ends_at && event.all_day?
       @occurrence_start = parse_unix(params[:occurrence_start])
       @calendar_scope = params[:calendar_scope].presence || "all"
       @series_scope = params[:series_scope].presence || "series"

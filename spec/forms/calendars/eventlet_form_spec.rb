@@ -85,6 +85,25 @@ describe Calendars::EventletForm do
     end
   end
 
+  describe "an all-day event" do
+    let(:eventlet) do
+      create(:eventlet, calendar: calendar, all_day: true,
+        starts_at: base_start.midnight, ends_at: base_start.midnight)
+    end
+
+    it "keeps it all-day on the dropped day, converting FullCalendar's exclusive end" do
+      target = (base_start + 2.days).to_date
+      # FullCalendar posts the exclusive day-after as the all-day end; we store an inclusive end.
+      form = submit(calendar_scope: "all", series_scope: "series",
+        starts_at: target.to_s, ends_at: (target + 1).to_s)
+
+      expect(form.save).to be(true)
+      expect(event.reload).to be_all_day
+      expect(event.starts_at).to eq(target.in_time_zone.midnight)
+      expect(event.ends_at).to eq(target.in_time_zone.midnight + 1.day - 1.second)
+    end
+  end
+
   context "with a recurring event" do
     before { event.update!(recurrence_rule: IceCube::Rule.weekly.to_hash) }
 

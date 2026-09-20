@@ -13,13 +13,4 @@ class SystemMailer < ActionMailer::Base # rubocop:disable Rails/ApplicationMaile
       subject: "Final deletion warnings sent to #{n} #{"community".pluralize(n)}"
     )
   end
-
-  def deletion_ready_notice(communities)
-    @communities = communities
-    n = communities.size
-    mail(
-      to: "support@gather.coop",
-      subject: "#{n} #{"community".pluralize(n)} ready for deletion"
-    )
-  end
 end

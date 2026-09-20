@@ -3,7 +3,7 @@
 <% content_for(:action_links, job.action_links) %>
 
 <% content_for(:mobile_back_link) do %>
-  <%= render partial: "shared/mobile_back_link", locals: {label: "Jobs", path: work_jobs_path } %>
+  <%= render partial: "shared/mobile_back_link", locals: {label: "Jobs", path: work_period_jobs_path(job.period) } %>
 <% end %>
 
 <table class="key-value">

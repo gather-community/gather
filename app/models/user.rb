@@ -19,6 +19,7 @@
 #  current_sign_in_ip     :inet
 #  custom_data            :jsonb            not null
 #  deactivated_at         :datetime
+#  deleted_placeholder    :boolean          default(FALSE), not null
 #  doctor                 :string
 #  email                  :string(255)
 #  encrypted_password     :string           default(""), not null
@@ -116,8 +117,15 @@ class User < ApplicationRecord
   has_many :down_guardianships, class_name: "People::Guardianship", foreign_key: :guardian_id,
     dependent: :destroy, inverse_of: :guardian
   has_many :guardians, through: :up_guardianships
-  has_one :memorial, class_name: "People::Memorial", inverse_of: :user, dependent: :destroy
-  has_many :memorial_messages, class_name: "People::MemorialMessage", foreign_key: :author_id, inverse_of: :author, dependent: :destroy
+  # A memorial outlives the account: if someone has one they have died, and the memorial is
+  # community history. It copies the name/community/photo it displays, so nullifying is safe.
+  has_one :memorial, class_name: "People::Memorial", inverse_of: :user, dependent: :nullify
+  # Messages are community history too, and People::UserDeletion reassigns them to the Deleted
+  # Member placeholder before destroying the user — so in that path this cascade finds nothing.
+  # It stays :destroy as the backstop for a raw user.destroy, notably the community teardown
+  # (community → households → users), where the messages should go away with everything else.
+  has_many :memorial_messages, class_name: "People::MemorialMessage", foreign_key: :author_id,
+    inverse_of: :author, dependent: :destroy
   has_many :children, through: :down_guardianships
 
   # Calendar events may be in a different community's calendar (cross-community within a cluster).
@@ -145,6 +153,8 @@ class User < ApplicationRecord
   has_many :work_shares, class_name: "Work::Share", inverse_of: :user, dependent: :destroy
 
   scope :real, -> { where(fake: false) }
+  # Excludes the per-community "Deleted Member" placeholder that anonymized records point to.
+  scope :non_placeholder, -> { where(deleted_placeholder: false) }
   scope :all_in_community_or_adult_in_cluster, lambda { |c|
     joins(household: :community)
       .where("communities.id = ? OR users.child = 'f'", c.id)
@@ -224,7 +234,8 @@ class User < ApplicationRecord
   validates :last_name, presence: true
   validates :up_guardianships, presence: true, if: :child?
   validates :password, presence: true, if: :password_required?
-  validates :password, password_strength: PASSWORD_STRENGTH_CHECKER_OPTIONS, if: :password_required_and_not_blank?
+  validates :password, password_strength: PASSWORD_STRENGTH_CHECKER_OPTIONS,
+    if: :password_required_and_not_blank?
 
   validates :password, confirmation: true
   validate :certify_13_or_older_if_full_access_child_or_child_becoming_adult
@@ -247,9 +258,8 @@ class User < ApplicationRecord
   # This is needed for remembering users across sessions because users don't always have passwords.
   before_create { self.remember_token ||= UniqueTokenGenerator.generate(self.class, :remember_token) }
   before_save { raise People::AdultWithGuardianError if adult? && guardians.present? }
+  after_validation :log_errors, if: proc { |m| m.errors }
   before_save :unconfirm_if_no_email
-
-  after_validation :log_errors, if: Proc.new { |m| m.errors }
 
   def log_errors
     Rails.logger.debug("USER-VALIDATION-ERRORS-LINE", errors: errors.full_messages.join(";"))
@@ -300,7 +310,7 @@ class User < ApplicationRecord
   end
 
   def name
-    "#{first_name} #{last_name}#{active? ? nil : " (Inactive)"}"
+    "#{first_name} #{last_name}#{" (Inactive)" unless active?}"
   end
 
   def life_stage

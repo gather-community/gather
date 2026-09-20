@@ -12,21 +12,27 @@ module Work
     # Since we have a specially built policy object, we need to do our own custom authorization.
     skip_after_action :verify_pundit_authorization, only: :signup
 
+    # index doubles as the landing page, so it copes with a nil period itself. The rest can't.
+    before_action :require_period, only: %i[show signup unsignup]
+
     decorates_assigned :shifts, :shift, :choosee, :meal
 
     helper_method :sample_shift, :synopsis, :shift_policy, :cache_key
 
     def index
+      # Do this first, before anything builds a sample shift: it can affect policies and the cache
+      # key, and building a sample shift would attach a stray unsaved job to @period that this save
+      # would then try (and fail) to persist.
+      @period&.auto_open_if_appropriate
+
       authorize(sample_shift, :index_wrapper?)
       prepare_lenses_and_set_contextual_vars
-
-      # Need to do this early because it could affect policies and cache key.
-      @period&.auto_open_if_appropriate
 
       @shifts = policy_scope(Shift)
       @shifts = @shifts.none unless policy(sample_shift).index?
 
       if @period.nil?
+        return if redirect_to_sole_period_or_load_selectable(:signups)
         lenses.hide!
       else
         scope_shifts
@@ -35,13 +41,13 @@ module Work
         if request.xhr?
           render_shifts_and_pagination_json
         elsif @period.archived?
-          flash.now[:notice] = t("work.phase_notices.shifts.archived")
+          flash.now[:alert] = t("work.phase_notices.shifts.archived")
         end
       end
     end
 
     def show
-      @shift = Shift.find(params[:id])
+      @shift = find_shift_in_period
       authorize(@shift)
       @meal = @shift.meal
     end
@@ -50,7 +56,7 @@ module Work
     # If there are no slots left, shift card will include error message.
     def signup
       prepare_lenses_and_set_contextual_vars
-      @shift = Shift.find(params[:id])
+      @shift = find_shift_in_period
 
       begin
         authorize_and_do_signup_or_raise_error
@@ -73,13 +79,13 @@ module Work
         else
           flash[:success] = "You signed up successfully. Hooray!"
         end
-        redirect_to(work_shifts_path)
+        redirect_to(work_period_shifts_path(@period))
       end
     end
 
     def unsignup
       prepare_lenses_and_set_contextual_vars
-      @shift = Shift.find(params[:id])
+      @shift = find_shift_in_period
       authorize(@shift)
 
       if request.xhr?
@@ -96,7 +102,7 @@ module Work
         rescue NotSignedUpError
           flash[:error] = t("work/shift.not_signed_up")
         end
-        redirect_to(work_shifts_path)
+        redirect_to(work_period_shifts_path(@period))
       end
     end
 
@@ -118,10 +124,16 @@ module Work
       end
       names << :"work/period" << {"work/choosee": {chooser: current_user}}
       prepare_lenses(*names)
-      @period = lenses[:period].selection
       @choosee = lenses[:choosee].selection || current_user
       return if @choosee == current_user
       flash.now[:notice] = t("work.choosing_as", name: choosee.full_name)
+    end
+
+    # Shifts are addressed as /work/:period_slug/signups/:id, so the shift must actually belong to
+    # the period named in the URL. Scoping the lookup keeps that promise, and in particular stops a
+    # requester from naming some other period in order to have the round limit computed against it.
+    def find_shift_in_period
+      Shift.in_period(@period).find(params[:id])
     end
 
     def render_shift_and_synopsis_json

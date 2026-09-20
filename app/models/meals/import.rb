@@ -22,6 +22,13 @@ module Meals
 
     BASIC_HEADERS = %i[served_at calendars formula communities action id].freeze
     REQUIRED_HEADERS = %i[served_at calendars].freeze
+
+    # Columns that Meals::MealCsvExporter emits but that we don't read. We skip these explicitly,
+    # rather than ignoring all unrecognized headers, so that a typo'd header is still an error.
+    EXPORT_ONLY_HEADERS = %i[title entrees side kids dessert notes allergens capacity status
+      signup_count spots_left ingredient_cost pantry_cost total_cost payment_method
+      reimbursee].freeze
+
     DB_ID_REGEX = /\A\d+\z/
 
     acts_as_tenant :cluster
@@ -165,7 +172,7 @@ module Meals
       row.each_with_index do |cell, col_index|
         if (attrib = untranslate_header(cell) || role_from_header(cell))
           header_map[col_index] = attrib
-        else
+        elsif !export_only_header?(cell)
           bad_headers << cell
         end
       end
@@ -185,8 +192,23 @@ module Meals
       @untranslate_dict[str.downcase]
     end
 
-    def translate_header(header)
-      I18n.t("csv.headers.meals/meal.#{header}", default: :"csv.headers.common.#{header}")
+    def translate_header(header, **opts)
+      I18n.t("csv.headers.meals/meal.#{header}", default: :"csv.headers.common.#{header}", **opts)
+    end
+
+    # Columns emitted by the exporter that we read past. See EXPORT_ONLY_HEADERS.
+    def export_only_header?(str)
+      @export_only_dict ||= EXPORT_ONLY_HEADERS.to_set { |h| translate_header(h).downcase }
+      @export_only_dict.include?(str.downcase) || type_column_header?(str)
+    end
+
+    # The per-Meals::Type diner count and price columns can't be listed statically. We match them
+    # against the community's active type names only, so a typo in one is still an error.
+    def type_column_header?(str)
+      @active_type_names ||= Meals::Type.in_community(community).active.pluck(:name)
+      @active_type_names.any? do |name|
+        %i[diner_count type_price].any? { |key| translate_header(key, type: name).casecmp?(str) }
+      end
     end
 
     def role_from_header(cell)

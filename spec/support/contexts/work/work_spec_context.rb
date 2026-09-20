@@ -10,7 +10,7 @@ shared_context "work" do
 
         scenario "index" do
           visit(page_path)
-          expect(page).to have_content("There are no active work periods. Please create one first.")
+          expect(page).to have_content("There are no accessible periods. Please see the periods page.")
         end
       end
 

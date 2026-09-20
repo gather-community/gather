@@ -4,7 +4,11 @@
 <% end %>
 
 <% if @period.nil? %>
-  <%= render("work/shared/no_period_notice") %>
+  <% if @periods.present? %>
+    <%= render("work/shared/period_picker", periods: @periods, section: :signups) %>
+  <% else %>
+    <%= render("work/shared/no_period_notice") %>
+  <% end %>
 <% else %>
   <%= render("shifts") %>
   <div class="row table-footer">
@@ -18,6 +22,7 @@
 <% end %>
 <%= javascript_tag do %>
   $(function() {
-    new Gather.Views.Work.ShiftsView({el: '#content', autorefresh: <%= @autorefresh.to_json %>});
+    new Gather.Views.Work.ShiftsView({el: '#content', autorefresh: <%= @autorefresh.to_json %>,
+      period: <%= raw(@period&.slug.to_json) %>});
   });
 <% end %>

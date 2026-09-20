@@ -19,7 +19,7 @@ describe "jobs", js: true do
     let!(:period) { create(:work_period) }
 
     scenario "index" do
-      visit(page_path)
+      visit(work_period_jobs_path(period))
       expect(page).to have_content("No jobs found")
     end
   end
@@ -29,7 +29,7 @@ describe "jobs", js: true do
     include_context "with assignments"
 
     scenario "index" do
-      visit(work_jobs_path)
+      visit(work_period_jobs_path(periods[0]))
       expect(page).to have_title("Jobs")
       expect_jobs(*jobs[0..3])
       expect(page).to have_content("Cook")
@@ -49,14 +49,14 @@ describe "jobs", js: true do
       select_lens(:period, periods[1].name)
       expect_jobs(jobs[4])
 
-      # Shifts page respects period param when provided explicitly
-      visit(work_shifts_path(period: periods[1].id))
+      # Shifts page for the selected period.
+      visit(work_period_shifts_path(periods[1]))
       expect(page).to have_title(periods[1].name)
       expect(page).to have_select_lens(:period, selected: periods[1].name)
     end
 
     scenario "create, show, and update" do
-      visit(work_jobs_path)
+      visit(work_period_jobs_path(periods[0]))
       click_link("Create")
       fill_in("Title", with: "AAA Painter")
       fill_in("Hours", with: "2")
@@ -73,7 +73,7 @@ describe "jobs", js: true do
       within(all(".work_job_reminders .nested-fields")[1]) do
         find(".work_job_reminders_abs_rel select").select("Exact Time")
         pick_datetime(".work_job_reminders_abs_time", day: 15, hour: 4,
-                                                      next_click: ".work_job_reminders_abs_rel label")
+          next_click: ".work_job_reminders_abs_rel label")
         fill_in("Note", with: "Go to town")
       end
 
@@ -162,14 +162,14 @@ describe "jobs", js: true do
     end
 
     scenario "view meal job" do
-      visit(work_jobs_path)
+      visit(work_period_jobs_path(periods[0]))
       click_on("Cook")
       expect(page).to have_content("This is job was synchronized from the meals system and can't")
       expect(page).not_to have_field("Title")
     end
 
     scenario "delete" do
-      visit(edit_work_job_path(jobs[1]))
+      visit(edit_work_period_job_path(jobs[1].period, jobs[1]))
       click_on("Delete")
       click_modal_button
       expect_success
@@ -180,7 +180,7 @@ describe "jobs", js: true do
       include_context "reminders"
 
       let(:actor) { create(:user) }
-      let(:one_week_hence) { Time.zone.now + 7.days }
+      let(:one_week_hence) { 7.days.from_now }
       let!(:job) { create(:work_job, period: periods[0], shift_count: 2) }
       let!(:reminder1) { create_work_job_reminder(job, one_week_hence) }
       let!(:reminder2) { create_work_job_reminder(job, 1, "days_before", note: "Sharpen the knife") }
@@ -188,10 +188,10 @@ describe "jobs", js: true do
       let!(:assignments2) { create_list(:work_assignment, 3, shift: job.shifts[1]) }
 
       scenario "show" do
-        visit(work_jobs_path)
+        visit(work_period_jobs_path(periods[0]))
         click_on(job.title)
         expect(page).to have_content(job.title)
-        expect(page).to have_content("At #{I18n.l(one_week_hence).gsub('  ', ' ')}")
+        expect(page).to have_content("At #{I18n.l(one_week_hence).gsub("  ", " ")}")
         expect(page).to have_content(/1 day before: Sharpen the knife/)
         (assignments1 + assignments2).map(&:user).each do |user|
           expect(page).to have_content(user.name)

@@ -101,3 +101,13 @@
 
   <%= gather_paginate(meals) %>
 <% end %>
+
+<% if policy(sample_meal).export? %>
+  <footer id="local-footer" class="footer-links">
+    <%= render("export_form", name: "meals", path: meals_path(format: :csv),
+          label: "Download Meals as CSV", ranges: @meal_ranges) %>
+    &nbsp;&nbsp;
+    <%= render("export_form", name: "signups", path: export_signups_meals_path(format: :csv),
+          label: "Download Meal Signups as CSV", ranges: @meal_ranges) %>
+  </footer>
+<% end %>

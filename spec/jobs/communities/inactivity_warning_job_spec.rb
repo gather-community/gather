@@ -13,7 +13,6 @@ describe Communities::InactivityWarningJob do
   before do
     allow(Communities::InactivityMailer).to receive(:warning).and_return(mail_dbl)
     allow(SystemMailer).to receive(:inactivity_warning_summary).and_return(mail_dbl)
-    allow(SystemMailer).to receive(:deletion_ready_notice).and_return(mail_dbl)
     # Default: no subscription
     allow(community).to receive(:subscription).and_return(nil)
   end
@@ -94,12 +93,7 @@ describe Communities::InactivityWarningJob do
         expect(community.reload.deactivated_at).to be_within(5.seconds).of(Time.current)
       end
 
-      it "sends a deletion ready notice to support" do
-        perform_job
-        expect(SystemMailer).to have_received(:deletion_ready_notice).with([community])
-      end
-
-      it "updates inactivity_warning_sent_at so the notice repeats weekly" do
+      it "updates inactivity_warning_sent_at" do
         perform_job
         expect(community.reload.inactivity_warning_sent_at).to be_within(5.seconds).of(Time.current)
       end
@@ -130,28 +124,16 @@ describe Communities::InactivityWarningJob do
         inactivity_warning_sent_at: 8.days.ago)
     end
 
-    it "sends another deletion ready notice" do
-      perform_job
-      expect(SystemMailer).to have_received(:deletion_ready_notice).with([community])
-    end
-
-    it "bumps inactivity_warning_sent_at" do
-      perform_job
-      expect(community.reload.inactivity_warning_sent_at).to be_within(5.seconds).of(Time.current)
-    end
-
     it "does not send a warning email" do
       perform_job
       expect(Communities::InactivityMailer).not_to have_received(:warning)
     end
 
-    context "when the re-notification interval has not elapsed" do
-      before { community.update!(inactivity_warning_sent_at: 3.days.ago) }
-
-      it "does not send a notice" do
-        perform_job
-        expect(SystemMailer).not_to have_received(:deletion_ready_notice)
-      end
+    it "leaves the warning state untouched" do
+      perform_job
+      community.reload
+      expect(community.inactivity_warning_count).to eq(3)
+      expect(community.inactivity_warning_sent_at).to be_within(5.seconds).of(8.days.ago)
     end
   end
 

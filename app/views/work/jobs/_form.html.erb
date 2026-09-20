@@ -1,4 +1,5 @@
-<%= gather_form_for(job) do |f| %>
+<% job_url = job.new_record? ? work_period_jobs_path(job.period) : work_period_job_path(job.period, job) %>
+<%= gather_form_for(job, url: job_url) do |f| %>
   <%= f.input :period_id do %>
     <strong><%= @job.period_name %></strong>
     <%= f.hidden_field :period_id %>

@@ -41,13 +41,13 @@ class UsersController < ApplicationController
       format.json do
         extra_data = params.key?(:data) ? JSON.parse(params[:data]) : nil
         @users = UserSelectScoper.new(scope_name: params[:context], actor: current_user,
-                                      community: current_community,
-                                      extra_data: extra_data).resolve
+          community: current_community,
+          extra_data: extra_data).resolve
         @users = @users.matching(params[:search])
         @users = @users.in_community(params[:community_id]) if params[:community_id]
         @users = @users.page(params[:page]).per(20)
         render(json: @users.decorate, meta: {more: @users.next_page.present?}, root: "results",
-               each_serializer: UserSerializer, hide_inactive_in_name: true)
+          each_serializer: UserSerializer, hide_inactive_in_name: true)
       end
 
       format.csv do
@@ -80,6 +80,19 @@ class UsersController < ApplicationController
     authorize(@user)
   end
 
+  def edit
+    @user = User.find(params[:id])
+
+    # We don't allow editing household data via a child's form since it's complicated when
+    # a child belongs to more than one household. But there needs to be a way for admins
+    # to edit the household, so we set household_by_id to true for children which shows the
+    # household dropdown. We a show a caveat in the hint so folks don't get worked up about it.
+    # We don't need to set this for non-admins since they can't change the household anyway.
+    @user.household_by_id = @user.child? && policy(@user).administer?
+    authorize(@user)
+    prepare_user_form
+  end
+
   def create
     @user = User.new
     return unless bootstrap_household
@@ -96,19 +109,6 @@ class UsersController < ApplicationController
     end
   end
 
-  def edit
-    @user = User.find(params[:id])
-
-    # We don't allow editing household data via a child's form since it's complicated when
-    # a child belongs to more than one household. But there needs to be a way for admins
-    # to edit the household, so we set household_by_id to true for children which shows the
-    # household dropdown. We a show a caveat in the hint so folks don't get worked up about it.
-    # We don't need to set this for non-admins since they can't change the household anyway.
-    @user.household_by_id = @user.child? && policy(@user).administer?
-    authorize(@user)
-    prepare_user_form
-  end
-
   def update
     @user = User.find(params[:id])
     return unless bootstrap_household
@@ -122,6 +122,22 @@ class UsersController < ApplicationController
       prepare_user_form
       render(:edit)
     end
+  end
+
+  # Overrides Destructible#destroy: hard-deletes the user, anonymizing their shared records.
+  # Blockers (balance, guardianship, last admin) leave the button enabled but refuse with a
+  # flash. A typed confirmation (full name or email) is re-validated server-side.
+  def destroy
+    @user = User.find(params[:id])
+    authorize(@user)
+    reasons = People::UserDeletion.blockers(@user)
+    return redirect_to(edit_user_path(@user), alert: deletion_blocked_message(reasons)) if reasons.any?
+    unless deletion_confirmation_matches?("#{@user.first_name} #{@user.last_name}", @user.email)
+      return redirect_to(edit_user_path(@user), alert: I18n.t("people.deletion.confirmation_mismatch"))
+    end
+    deleting_self = @user == current_user
+    People::UserDeletion.new(user: @user, actor: current_user).perform!
+    redirect_after_user_deletion(deleting_self)
   end
 
   def update_setting
@@ -197,6 +213,19 @@ class UsersController < ApplicationController
 
   private
 
+  def redirect_after_user_deletion(deleting_self)
+    if deleting_self
+      sign_out(current_user)
+      # The signed-out landing page lives on the apex domain (see after_sign_out_path_for), and
+      # the user's community context is gone, so redirect there explicitly.
+      redirect_to(user_signed_out_url(host: Settings.url.host), allow_other_host: true,
+        notice: I18n.t("people.deletion.self_success"))
+    else
+      flash[:success] = I18n.t("deactivatable.user.success.hard_destroy")
+      redirect_to(users_path)
+    end
+  end
+
   def load_users
     prepare_user_lenses
     @community = current_community
@@ -216,11 +245,11 @@ class UsersController < ApplicationController
 
   def prepare_user_lenses
     prepare_lenses({community: {clearable: false}},
-                   :"people/life_stage",
-                   {"people/sort":
-                     {base_option: current_community.settings.people.default_directory_sort.to_sym}},
-                   :"people/view",
-                   :search)
+      :"people/life_stage",
+      {"people/sort":
+        {base_option: current_community.settings.people.default_directory_sort.to_sym}},
+      :"people/view",
+      :search)
   end
 
   def prepare_custom_data_infrastructure
@@ -332,7 +361,7 @@ class UsersController < ApplicationController
   def flash_on_update
     # Unlike with create, confirmation instructions are sent automatically by Devise because
     # we didn't opt out of them.
-    msg = @user == current_user ? +"Profile updated successfully." : +"User updated successfully."
+    msg = (@user == current_user) ? +"Profile updated successfully." : +"User updated successfully."
     if @user.unconfirmed_email?
       if @user == current_user
         msg << " You need to confirm your new email address. "

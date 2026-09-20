@@ -250,80 +250,39 @@ describe UserPolicy do
       it_behaves_like "permits self (active or not) and guardians"
     end
 
+    # Permission only governs whether the delete button renders; anonymization means shared
+    # records (meals, wiki, events) no longer block deletion. Warn-only conditions (balance,
+    # guardianship, last admin) live in People::UserDeletion.blockers, not here.
     permissions :destroy? do
-      let(:user) { create(:user) }
       let(:admin) { create(:admin) }
-      let(:super_admin) { create(:super_admin) }
       let(:record) { create(:user) }
 
-      context "with non-restricted associations" do
-        let!(:proxier) { create(:user, job_choosing_proxy: record) }
-        let!(:share) { create(:work_share, user: record) }
-        let!(:membership) { create(:group_membership, user: record) }
-
-        it_behaves_like "permits admins but not regular users"
+      it "permits admins" do
+        expect(subject).to permit(admin, record)
       end
 
-      context "with assignments" do
-        let!(:assignment) { create(:work_assignment, user: record) }
-        it_behaves_like "forbids all"
+      it "permits the user themselves (self-deletion)" do
+        expect(subject).to permit(record, record)
       end
 
-      context "with child" do
-        let!(:child) { create(:user, :child, guardians: [record]) }
-        it_behaves_like "forbids all"
+      it "permits a guardian to delete their own child" do
+        parent = create(:user)
+        child = create(:user, :child, guardians: [parent])
+        expect(subject).to permit(parent, child)
       end
 
-      context "with guardian" do
-        let(:record) { create(:user, :child) }
-        it_behaves_like "forbids all"
+      it "forbids an unrelated regular user" do
+        expect(subject).not_to permit(create(:user), record)
       end
 
-      context "with created meals" do
-        let!(:meal) { create(:meal, creator: record) }
-        it_behaves_like "forbids all"
+      it "forbids deleting the Deleted Member placeholder, even for admins" do
+        expect(subject).not_to permit(admin, Defaults.community.deleted_member)
       end
 
-      context "with own events" do
-        let!(:event) { create(:event, creator: record) }
-        it_behaves_like "forbids all"
-      end
-
-      context "with sponsored events" do
-        let!(:event) { create(:event, sponsor: record) }
-        it_behaves_like "forbids all"
-      end
-
-      context "with wiki page creation" do
-        let!(:page) { create(:wiki_page, creator: record) }
-        it_behaves_like "forbids all"
-      end
-
-      context "with wiki page update" do
-        let!(:page) { create(:wiki_page, updater: record) }
-        it_behaves_like "forbids all"
-      end
-
-      context "with memorial" do
-        let!(:memorial) { create(:memorial, user: record) }
-        it_behaves_like "forbids all"
-      end
-
-      context "with memorial message" do
-        let!(:memorial_message) { create(:memorial_message, author: record) }
-        it_behaves_like "forbids all"
-      end
-
-      context "with wiki page version update" do
-        let!(:page) { create(:wiki_page) }
-
-        before do
-          page.update!(content: "x", updater: record)
-          page.update!(content: "y", updater: create(:user))
-          # Only relation at this point should be to second page version
-        end
-
-        it_behaves_like "forbids all"
+      it "still permits deletion when the user has authored records" do
+        create(:meal, creator: record)
+        create(:wiki_page, creator: record)
+        expect(subject).to permit(admin, record)
       end
     end
   end
@@ -394,6 +353,15 @@ describe UserPolicy do
 
       it "does not return inactive users" do
         is_expected.to contain_exactly(user, other_user, userB, admin, cluster_admin, child, other_child)
+      end
+    end
+
+    context "with a Deleted Member placeholder present" do
+      let(:actor) { admin }
+      let!(:placeholder) { Defaults.community.deleted_member }
+
+      it "excludes the placeholder even from an admin's scope" do
+        is_expected.not_to include(placeholder)
       end
     end
   end

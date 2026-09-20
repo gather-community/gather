@@ -15,11 +15,18 @@ module Meals
     before_action -> { nav_context(:meals, :meals) }, except: %i[jobs report]
 
     def index
-      prepare_lenses(:search, :"meals/time", :community)
+      respond_to do |format|
+        format.html { index_html }
+        format.csv { index_csv }
+      end
+    end
 
-      authorize(sample_meal)
-      load_meals(:index)
-      load_communities_in_cluster
+    def export_signups
+      authorize(sample_meal, :export_signups?)
+      filename = csv_filename(:community, "meal-signups", *csv_date_params)
+      csv = SignupCsvExporter.new(csv_signups, policy: policy(sample_signup),
+        community: current_community).to_csv
+      send_data(csv, filename: filename, type: :csv)
     end
 
     def jobs
@@ -179,12 +186,73 @@ module Meals
       case params[:action]
       when "show", "summary"
         Meal.find_by(id: params[:id]).try(:community)
-      when "index", "jobs", "report", "reports"
+      when "index", "jobs", "report", "reports", "export_signups"
         current_user.community
       end
     end
 
     private
+
+    def index_html
+      prepare_lenses(:search, :"meals/time", :community)
+      authorize(sample_meal)
+      load_meals(:index)
+      load_communities_in_cluster
+      @meal_ranges = meal_date_ranges if policy(sample_meal).export?
+    end
+
+    def index_csv
+      authorize(sample_meal, :export?)
+      filename = csv_filename(:community, "meals", *csv_date_params)
+      csv = MealCsvExporter.new(csv_meals, policy: policy(sample_meal),
+        community: current_community).to_csv
+      send_data(csv, filename: filename, type: :csv)
+    end
+
+    # The CSV exports deliberately ignore the index lenses; they're scoped by the date range
+    # chosen in the export form instead.
+    def csv_meals
+      policy_scope(Meal).hosted_by(current_community).in_time_range(csv_date_range).oldest_first
+    end
+
+    # Signups are scoped via the already-authorized meal scope. A Meals::SignupPolicy::Scope would
+    # be a second, otherwise-unused definition of which signups a user can see; don't add one.
+    def csv_signups
+      Signup.where(meal: csv_meals).joins(:meal).joins(household: :community)
+        .includes(:household, {parts: :type}, {meal: %i[formula calendars]})
+        .order("meals.served_at", "communities.abbrv", "households.name")
+    end
+
+    def csv_date_params
+      @csv_date_params ||= begin
+        parts = params[:dates].to_s.split("-")
+        raise ActionController::BadRequest, "Invalid dates param" unless parts.size == 2
+        parts
+      end
+    end
+
+    def csv_date_range
+      first, last = csv_date_params.map { |str| Date.strptime(str, "%Y%m%d") }
+      first.in_time_zone..last.in_time_zone.end_of_day
+    rescue Date::Error
+      raise ActionController::BadRequest, "Invalid dates param"
+    end
+
+    def meal_date_ranges
+      scope = policy_scope(Meal).hosted_by(current_community)
+      first, last = scope.minimum(:served_at), scope.maximum(:served_at)
+      builder = DateRangeBuilder.new(max_range: first && [first.to_date, last.to_date],
+        trim_ranges: false)
+      builder.add_months(4)
+      builder.add_quarters(4)
+      builder.add_years
+      builder.add_all_time
+      builder.pairs
+    end
+
+    def sample_signup
+      Signup.new(meal: sample_meal)
+    end
 
     # Pundit built-in helper doesn't work due to namespacing
     def meal_params

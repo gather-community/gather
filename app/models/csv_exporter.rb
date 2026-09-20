@@ -47,11 +47,21 @@ class CsvExporter
   end
 
   def headers
-    columns.map { |c| I18n.t("csv.headers.#{klass.model_name.i18n_key}.#{c}") }
+    columns.map { |c| header_for(c) }
+  end
+
+  # Overridable so subclasses can support column objects other than plain symbols.
+  def header_for(column)
+    I18n.t("csv.headers.#{klass.model_name.i18n_key}.#{column}")
   end
 
   def row_for(object)
     decorated = decorator_class.new(object)
-    columns.map { |c| decorated.send(c) }
+    columns.map { |c| value_for(decorated, c) }
+  end
+
+  # Overridable, see header_for.
+  def value_for(decorated, column)
+    decorated.send(column)
   end
 end

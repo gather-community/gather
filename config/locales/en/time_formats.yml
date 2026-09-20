@@ -7,6 +7,10 @@ en:
     formats:
       default: "%b %d %Y"
       full_month_year: "%B %Y"
+      # Abbreviated month without year, e.g. "Jun" (work period ranges on month boundaries).
+      month: "%b"
+      # Abbreviated month and year, e.g. "Jun 2026" (work period ranges on month boundaries).
+      month_year: "%b %Y"
       # Month and day without year, e.g. "Jun 21" (birthdays, yearly recurrence descriptions).
       month_day: "%b %d"
       wday_no_year: "%a %b %d"

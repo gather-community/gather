@@ -11,11 +11,12 @@ module Work
     def index
       authorize(sample_job)
       prepare_lenses(:"work/preassigned", :"work/requester", :"work/period")
-      @period = lenses[:period].selection
       @jobs = policy_scope(Job).includes(:requester, :period).in_community(current_community)
       if @period.nil?
+        return if redirect_to_sole_period_or_load_selectable(:jobs)
         lenses.hide!
       else
+        flash.now[:alert] = t("work.phase_notices.jobs.archived") if @period.archived?
         scope_jobs
       end
     end
@@ -25,14 +26,14 @@ module Work
       @reminders = job.meal_role? ? job.meal_role.reminders : job.reminders
       authorize(@job)
       if policy(sample_job).edit? && job.meal_role?
-        flash.now[:notice] = "This is job was synchronized from the meals system and can't be edited "\
+        flash.now[:notice] = "This is job was synchronized from the meals system and can't be edited " \
           "directly. It will be automatically updated to reflect newly added or changed meals."
       end
     end
 
     def new
-      return render_not_found if params[:period].blank?
-      @job = Job.new(period_id: params[:period])
+      return render_not_found if @period.nil?
+      @job = Job.new(period: @period)
       @job.shifts.build
       @job.reminders.build(rel_magnitude: 1, rel_unit_sign: "days_before")
       authorize(@job)
@@ -52,7 +53,7 @@ module Work
       if @job.save
         flash[:success] = "Job created successfully."
         QuotaCalculator.new(@job.period).recalculate_and_save
-        redirect_to(work_jobs_path)
+        redirect_to(work_period_jobs_path(@job.period))
       else
         prep_form_vars
         render(:new)
@@ -65,7 +66,7 @@ module Work
       if @job.update(job_params)
         QuotaCalculator.new(@job.period).recalculate_and_save
         flash[:success] = "Job updated successfully."
-        redirect_to(work_jobs_path)
+        redirect_to(work_period_jobs_path(@job.period))
       else
         prep_form_vars
         render(:edit)

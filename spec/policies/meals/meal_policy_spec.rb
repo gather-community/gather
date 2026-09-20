@@ -58,7 +58,7 @@ describe Meals::MealPolicy do
       end
     end
 
-    permissions :new?, :create?, :import?, :change_date_loc?,
+    permissions :new?, :create?, :import?, :export?, :export_signups?, :change_date_loc?,
       :change_workers_without_notification? do
       it_behaves_like "permits admins or special role but not regular users", :meals_coordinator
     end
@@ -425,6 +425,40 @@ describe Meals::MealPolicy do
       it "should have nothing" do
         expect(subject).to be_empty
       end
+    end
+  end
+
+  describe "exportable_attributes" do
+    include_context "policy permissions"
+    subject(:exportable) { described_class.new(actor, sample_meal).exportable_attributes }
+    let(:sample_meal) { Meals::Meal.new(community: community) }
+    let(:base_attribs) do
+      %i[served_at calendars formula action id roles title entrees side kids dessert notes
+        allergens capacity status signup_count spots_left diner_counts]
+    end
+    let(:cost_attribs) do
+      %i[ingredient_cost pantry_cost total_cost payment_method reimbursee type_prices]
+    end
+
+    context "with regular user" do
+      let(:actor) { user }
+      it { is_expected.to match_array(base_attribs) }
+    end
+
+    context "with meals coordinator" do
+      let(:actor) { meals_coordinator }
+      it { is_expected.to match_array(base_attribs + cost_attribs) }
+    end
+
+    context "with biller" do
+      let(:actor) { biller }
+      it { is_expected.to match_array(base_attribs + cost_attribs) }
+    end
+
+    context "with multiple communities" do
+      let(:actor) { meals_coordinator }
+      let!(:community2) { communityB }
+      it { is_expected.to match_array(base_attribs + %i[communities] + cost_attribs) }
     end
   end
 

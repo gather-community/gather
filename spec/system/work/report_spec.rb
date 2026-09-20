@@ -6,7 +6,7 @@ describe "report", js: true do
   include_context "work"
 
   let(:actor) { create(:user, first_name: "Donnell", last_name: "Corkery") }
-  let(:page_path) { work_report_path(period: periods[0].try(:id)) }
+  let(:page_path) { periods.first ? work_period_report_path(periods.first) : work_report_path }
 
   before do
     use_user_subdomain(actor)

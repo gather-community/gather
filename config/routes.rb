@@ -104,6 +104,7 @@ Rails.application.routes.draw do
     collection do
       get :jobs
       get :report
+      get :export_signups, path: "signups"
       get :worker_form, path: "worker-form"
       get :reimbursee_paypal_email, path: "reimbursee-paypal-email"
     end
@@ -338,13 +339,7 @@ Rails.application.routes.draw do
   end
 
   namespace :work do
-    resources :shifts, path: :signups, only: %i[index show] do
-      member do
-        post :signup
-        delete :unsignup
-      end
-    end
-    resources :jobs
+    # Period management (not period-scoped). Period slugs are the :id.
     resources :periods do
       member do
         get :review_notices
@@ -352,7 +347,24 @@ Rails.application.routes.draw do
       end
     end
     resource :settings, only: %i[edit update]
+
+    # Landing pages (no period selected) — show a period picker or redirect to the sole period.
+    get "signups", to: "shifts#index", as: :shifts
+    get "jobs", to: "jobs#index", as: :jobs
     get "report", to: "periods#report", as: :report
+
+    # Period-scoped content pages. The :period_id segment is a period slug.
+    scope ":period_id", as: :period do
+      resources :shifts, path: :signups, only: %i[index show] do
+        member do
+          post :signup
+          delete :unsignup
+        end
+      end
+      resources :jobs
+      get "report", to: "periods#report", as: :report
+    end
+
     get "/", to: redirect("/work/signups")
   end
 

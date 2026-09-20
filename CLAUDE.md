@@ -54,6 +54,27 @@ bin/rails db:setup       # Create + seed
 CH.tenant(1)  # Must set tenant before querying
 ```
 
+### Writing Plans
+
+Plan files are written to `~/.claude/plans/`, which is outside the VSCode workspace — so they never
+show up in the Explorer and their workspace-relative markdown links don't resolve. Always do both of
+these after writing a plan:
+
+1. Copy it into `tmp/` with a descriptive name (`tmp/` is gitignored, so it stays out of the tree):
+
+```bash
+cp ~/.claude/plans/<generated-name>.md tmp/<descriptive-name>-plan.md
+```
+
+2. Open that copy in the editor — the `code` CLI is on PATH in the devcontainer:
+
+```bash
+code tmp/<descriptive-name>-plan.md
+```
+
+Reference code from plans with workspace-relative markdown links (`[event.rb:183](app/models/calendars/event.rb#L183)`)
+so they're clickable from the `tmp/` copy.
+
 ### Taking Screenshots
 
 The dev server must be running first (`bin/dev` won't stay up in the background because foreman's esbuild watcher requires stdin). Start just the web server and build JS assets separately:
@@ -270,11 +291,16 @@ When introducing a new model, follow the established conventions:
 - **Add a factory** under `spec/factories/<module>/` and a model spec.
 - **Decorators/policies** come only when the model becomes user-facing.
 
-**Three "wholesome" specs iterate over every model — a new model must satisfy all three (or be added to the relevant allowlist):**
+**Four "wholesome" specs iterate over every model — a new model must satisfy all four (or be added to the relevant allowlist):**
 
 - [spec/models/tenancy_spec.rb](spec/models/tenancy_spec.rb) — every model must have `acts_as_tenant`. Allowlist (`ALLOWLISTED_CLASSES`) only for genuinely non-tenant models.
 - [spec/models/utils/generators/main_generator_spec.rb](spec/models/utils/generators/main_generator_spec.rb) — every model must get at least one record from sample-data generation, **or** be added to `NO_SAMPLE_DATA_CLASSES` (use this for models created on demand, e.g. via a webhook).
 - [spec/models/community_deletion_spec.rb](spec/models/community_deletion_spec.rb) — every tenant model needs a factory call in the setup and must cascade to zero rows when a community is destroyed (wire `dependent: :destroy` from `Community` and/or its parent), **or** be added to `EXEMPT_MODELS`. Prefer wiring the cascade so deletion is actually tested.
+- [spec/services/people/deletion_dispositions_spec.rb](spec/services/people/deletion_dispositions_spec.rb) — every model must appear in both `USER_DISPOSITIONS` and `HOUSEHOLD_DISPOSITIONS`, declaring what happens to its rows when a user or household is permanently deleted: `:none`, `:destroy`, `:anonymize`, `:nullify`, `:retain`, or `:subject`. There is no allowlist — a new model must be classified. Models declared `:none` are checked by reflection to confirm they really have no association to the deleted record.
+
+The dispositions map is a **declaration**, not an assertion — it does not read `People::UserDeletion`'s implementation, so it must be updated alongside that service. Its job is to make you consider deletion when adding a model. Behavior is verified in [user_deletion_spec.rb](spec/services/people/user_deletion_spec.rb) and [household_deletion_spec.rb](spec/services/people/household_deletion_spec.rb).
+
+**Watch for foreign keys with no DB constraint** (e.g. `gdrive_synced_permissions.user_id`, which is deliberately unconstrained so rows outlive the user — see below). A missed reassignment on a constrained column raises at deletion time; on an unconstrained one it silently leaves a dangling id, and the association reads back as `nil`. Assert the association *resolves* (`expect(record.reload.sender).to eq(placeholder)`), not merely that the delete succeeded. Prefer adding the FK constraint when the column isn't deliberately loose — `meal_messages.sender_id` was unconstrained and silently accumulated dangling rows until one was added.
 
 ### Locale Files
 
@@ -308,9 +334,37 @@ Gather uses several locale files under `config/locales/en/`. Each type of string
 
 - **Text-only mailers** — Gather uses plain text email templates only. Do not create `.html.erb` mailer views.
 
+## Starting New Work
+
+**Trigger:** when the user asks to start on something new (a new feature, fix, or task that isn't a continuation of the current branch's work), run this before writing any code. Don't ask for confirmation on the mechanics — do it, then report which branch you're on.
+
+**Order matters: roll back before switching branches.** Migration files only exist on the branch that added them. Once you `git switch` away, `db:rollback` can't reverse migrations whose files are no longer on disk — so the tables/columns get stranded in your dev DB, and the next `db:migrate` bakes them into `db/schema.rb` as drift you can accidentally commit.
+
+1. **Roll back the current branch's migrations, while still on that branch.** Count them first:
+
+   ```bash
+   git diff --name-only origin/develop...HEAD -- db/migrate/ | wc -l
+   bin/rails db:rollback STEP=<count>   # skip if count is 0
+   ```
+
+   If the branch is already merged to `develop`, skip the rollback — those migrations are permanent now.
+
+2. **Confirm the working tree is clean**, including `db/schema.rb`. A dirty `schema.rb` after the rollback means the DB still has something the branch doesn't declare; sort that out before moving on rather than carrying it forward. Never commit a `schema.rb` whose diff is unrelated to the work at hand.
+
+3. **Pull develop and branch off it:**
+
+   ```bash
+   git fetch origin && git switch develop && git pull
+   git switch -c <new-branch-name>
+   bin/rails db:migrate   # no-op if step 1 was clean; verify schema.rb stays unchanged
+   ```
+
+**Irreversible migrations.** If a rollback fails because a migration has no `down` (or is destructive enough that reversing it loses dev data), stop and tell the user rather than forcing it. The escape hatch is a full reset — `db:drop db:create db:schema:load` then `rake db:new_cluster` — but note there is **no `db/seeds.rb`**, so this regenerates fresh sample data with new emails and IDs, and any hand-built dev state (feature flag rows, Stripe test objects tied to old IDs) has to be rebuilt. Don't reset without asking.
+
 ## Testing
 
 - **All new functionality must have test coverage.** Add specs for new models, jobs, mailers, forms, policies, and controllers. Follow existing spec patterns and directory structure.
+- **Prefer system specs (`js: true`) for anything exercised through the browser** — clicking buttons, opening modals, submitting forms, and asserting the resulting UI. Reach for request/controller specs only when the flow under test is *not* a browser flow (JSON APIs, webhooks, or pure redirect/authorization checks with no UI). Model/service/policy logic still gets its own unit specs.
 - **System tests require headless Chrome.** See the [Selenium Docker service](#headless-chrome-for-system-tests) section below.
 - **Run individual or small numbers of specs locally; use CI for full suite runs.** When fixing a specific failure, run the affected file/line with `bundle exec rspec spec/path/to/spec.rb:42` locally to confirm it passes before pushing — this avoids burning a ~28 min CI cycle on a fix that doesn't work. Only push to CI when you need the full suite run (e.g. after a Rails upgrade or broad refactor). Non-browser specs (model, request, job, mailer) run fine locally; system specs require headless Chrome (see below).
 - **Replicate CI failures locally before iterating.** Add a diagnostic assertion with a descriptive failure message (e.g. `expect(count).to eq(1), "Expected 1, got #{count}. Details: #{things.inspect}"`) to extract values that aren't visible in a normal failure.

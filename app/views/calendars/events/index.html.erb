@@ -20,21 +20,24 @@
 <div id="calendar-and-sidebar">
   <div id="calendar-col">
     <div id="calendar-live-region" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+    <div id="calendar-grid-focus-live-region" class="sr-only" aria-live="assertive" aria-atomic="true"></div>
     <div id="calendar"></div>
     <footer>
       <%= link_to("Permalink", @permalink, id: "permalink") %> &nbsp;
       <a href="#" class="early" id="show-early">Show Early Morning</a>
       <a href="#" class="early" id="hide-early">Hide Early Morning</a>
     </footer>
-    <div id="create-confirm-modal" class="modal fade">
+    <div id="create-confirm-modal" class="modal fade" tabindex="-1" role="dialog"
+         aria-modal="true" aria-labelledby="create-confirm-modal-title"
+         aria-describedby="create-confirm-modal-body">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span></button>
-            <h2 class="modal-title">Create Event?</h2>
+            <h2 class="modal-title" id="create-confirm-modal-title">Create Event?</h2>
           </div>
-          <div class="modal-body">
+          <div class="modal-body" id="create-confirm-modal-body">
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>

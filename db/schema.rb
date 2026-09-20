@@ -613,6 +613,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_20_000001) do
     t.integer "community_id", null: false
     t.datetime "created_at", precision: nil, null: false
     t.datetime "deactivated_at", precision: nil
+    t.boolean "deleted_placeholder", default: false, null: false
     t.string "garage_nums"
     t.string "keyholders"
     t.bigint "member_type_id"
@@ -623,6 +624,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_20_000001) do
     t.index ["cluster_id"], name: "index_households_on_cluster_id"
     t.index ["community_id", "name"], name: "index_households_on_community_id_and_name", unique: true
     t.index ["community_id"], name: "index_households_on_community_id"
+    t.index ["community_id"], name: "index_one_placeholder_household_per_community", unique: true, where: "deleted_placeholder"
     t.index ["deactivated_at"], name: "index_households_on_deactivated_at"
     t.index ["member_type_id"], name: "index_households_on_member_type_id"
     t.index ["name"], name: "index_households_on_name"
@@ -958,12 +960,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_20_000001) do
   create_table "people_memorials", force: :cascade do |t|
     t.integer "birth_year"
     t.bigint "cluster_id", null: false
+    t.bigint "community_id", null: false
     t.datetime "created_at", null: false
     t.integer "death_year", null: false
+    t.string "first_name", null: false
+    t.string "last_name", null: false
     t.text "obituary"
     t.datetime "updated_at", null: false
-    t.bigint "user_id", null: false
+    t.bigint "user_id"
     t.index ["cluster_id"], name: "index_people_memorials_on_cluster_id"
+    t.index ["community_id"], name: "index_people_memorials_on_community_id"
     t.index ["user_id"], name: "index_people_memorials_on_user_id", unique: true
   end
 
@@ -1169,6 +1175,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_20_000001) do
     t.inet "current_sign_in_ip"
     t.jsonb "custom_data", default: {}, null: false
     t.datetime "deactivated_at", precision: nil
+    t.boolean "deleted_placeholder", default: false, null: false
     t.string "doctor"
     t.string "email", limit: 255
     t.string "encrypted_password", default: "", null: false
@@ -1207,6 +1214,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_20_000001) do
     t.index ["deactivated_at"], name: "index_users_on_deactivated_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["google_email"], name: "index_users_on_google_email", unique: true
+    t.index ["household_id"], name: "index_one_placeholder_user_per_household", unique: true, where: "deleted_placeholder"
     t.index ["household_id"], name: "index_users_on_household_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.check_constraint "email IS NOT NULL OR confirmed_at IS NULL", name: "unconfirmed_if_no_email"
@@ -1321,11 +1329,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_20_000001) do
     t.decimal "quota", precision: 10, scale: 2, default: "0.0", null: false
     t.string "quota_type", default: "none", null: false
     t.integer "round_duration"
+    t.string "slug", null: false
     t.date "starts_on", null: false
     t.datetime "updated_at", precision: nil, null: false
     t.integer "workers_per_round"
     t.index ["cluster_id"], name: "index_work_periods_on_cluster_id"
     t.index ["community_id", "name"], name: "index_work_periods_on_community_id_and_name", unique: true
+    t.index ["community_id", "slug"], name: "index_work_periods_on_community_id_and_slug", unique: true
     t.index ["community_id"], name: "index_work_periods_on_community_id"
     t.index ["meal_job_requester_id"], name: "index_work_periods_on_meal_job_requester_id"
     t.index ["starts_on", "ends_on"], name: "index_work_periods_on_starts_on_and_ends_on"
@@ -1468,6 +1478,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_20_000001) do
   add_foreign_key "meal_invitations", "clusters"
   add_foreign_key "meal_invitations", "communities"
   add_foreign_key "meal_invitations", "meals"
+  add_foreign_key "meal_messages", "users", column: "sender_id"
   add_foreign_key "meal_resourcings", "calendar_nodes", column: "calendar_id"
   add_foreign_key "meal_resourcings", "clusters"
   add_foreign_key "meal_resourcings", "meals"
@@ -1502,6 +1513,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_20_000001) do
   add_foreign_key "people_memorial_messages", "people_memorials", column: "memorial_id"
   add_foreign_key "people_memorial_messages", "users", column: "author_id"
   add_foreign_key "people_memorials", "clusters"
+  add_foreign_key "people_memorials", "communities"
   add_foreign_key "people_memorials", "users"
   add_foreign_key "people_pets", "clusters"
   add_foreign_key "people_pets", "households"

@@ -24,8 +24,8 @@ application.register("wiki--markdown-editor", Wiki__MarkdownEditorController);
 import Communities__SignupActionController from "./communities/signup_action_controller";
 application.register("communities--signup-action", Communities__SignupActionController);
 
-import CommunityDeleteController from "./community_delete_controller";
-application.register("community-delete", CommunityDeleteController);
+import RecordDeleteController from "./record_delete_controller";
+application.register("record-delete", RecordDeleteController);
 
 import ModalController from "./modal_controller";
 application.register("modal", ModalController);

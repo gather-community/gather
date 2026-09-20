@@ -2,7 +2,7 @@
 
 module Calendars
   class EventletSerializer < ApplicationSerializer
-    include Rails.application.routes.url_helpers
+    include LinkableUrls
 
     attributes :id, :event_id, :url, :title, :start, :end, :editable, :class_name,
       :calendar_allows_overlap, :calendar_id, :background_color, :border_color,
@@ -12,8 +12,8 @@ module Calendars
     def url
       if object.linkable.present?
         # linkable is the base eventlet for recurring occurrences (→ eventlet show page), or a
-        # meal/job/user for system calendars (→ that resource's page).
-        polymorphic_path(object.linkable, occurrence: object.occurrence_start&.to_i)
+        # meal/shift/user for system calendars (→ that resource's page).
+        linkable_path(object.linkable, occurrence: object.occurrence_start&.to_i)
       elsif object.persisted?
         calendars_eventlet_path(object, origin_page: instance_options[:origin_page])
       else

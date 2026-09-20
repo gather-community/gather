@@ -1,0 +1,38 @@
+// The period selector shown when landing on a work page without a period in the URL.
+.period-picker {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  margin: 30px auto;
+
+  .period-card {
+    display: block;
+    width: 300px;
+    padding: 20px 15px;
+    border: 1px solid $gray-light;
+    border-radius: 4px;
+    text-align: center;
+    text-decoration: none;
+    color: $text-color;
+    background-color: #fff;
+
+    &:hover,
+    &:focus {
+      border-color: $theme-accent;
+      background-color: $gray-lighterer;
+    }
+
+    .name {
+      display: block;
+      font-size: $font-size-large;
+      font-weight: bold;
+    }
+
+    .dates {
+      display: block;
+      margin-top: 5px;
+      color: $text-muted;
+    }
+  }
+}

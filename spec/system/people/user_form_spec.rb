@@ -295,9 +295,10 @@ describe "user form", js: true, perform_jobs: true do
 
       visit(edit_path)
       expect(page).not_to have_content("reactivate")
-      click_on("Delete")
+      click_on("Delete Permanently")
+      fill_in_modal("#{user.first_name} #{user.last_name}")
       click_modal_button
-      expect_success
+      expect_success(/permanently deleted/)
 
       expect { user.reload }.to raise_error(ActiveRecord::RecordNotFound)
     end

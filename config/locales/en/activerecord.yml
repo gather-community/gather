@@ -360,6 +360,8 @@ en:
               different_length_shifts: "All shfits must be the same length."
         work/period:
           attributes:
+            name:
+              reserved_slug: "is a reserved word, please choose another"
             ends_on:
               not_after_start: "must be after start date"
             auto_open_time:

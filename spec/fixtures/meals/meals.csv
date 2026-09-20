@@ -1,0 +1,3 @@
+Date/Time,Locations,Formula,Communities,Action,ID,Head Cook,Assistant Cook,Title,Entrees,Side,Kids,Dessert,Notes,Allergens,Capacity,Status,Total Diners,Spots Left,Diners: Adult,Diners: Senior,Diners: Teen,Ingredient Cost,Pantry Cost,Total Cost,Payment Method,Reimbursee,Price: Adult,Price: Senior,Price: Teen
+2018-10-15T18:00:00,Dining Room,Standard,Default,update,*meal_id1*,Jo Cook,,Stew,Beef stew,,,,,None,50,finalized,0,50,0,,0,84.50,8.45,92.95,paypal,Jo Cook,4.25,,3.25
+2018-11-05T18:00:00,Dining Room,Standard,Default; Bravo,update,*meal_id2*,Jo Cook,Al Helper,Tacos,Tacos al pastor,Rice,Quesadillas,Flan,Bring a plate,Dairy; Soy,60,open,4,56,3,,1,,,,,,,,

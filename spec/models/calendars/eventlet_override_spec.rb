@@ -25,13 +25,19 @@ describe Calendars::EventletOverride do
       it { is_expected.to be_valid }
     end
 
-    context "when offset exceeds MAX_OFFSET_SECONDS" do
+    # The offset bound is a DB check constraint, not a model validation (see the migration), so it's
+    # enforced at the database level for every writer.
+    context "when an offset exceeds MAX_OFFSET_SECONDS" do
       subject do
         build(:eventlet_override, event_override: event_override, eventlet: eventlet,
           start_offset: Calendars::Eventlet::MAX_OFFSET_SECONDS + 1)
       end
-      it { is_expected.to be_invalid }
-      it { expect(subject.tap(&:valid?).errors[:start_offset]).to be_present }
+
+      it "is rejected at the database level" do
+        expect { subject.save(validate: false) }.to raise_error(
+          ActiveRecord::StatementInvalid, /eventlet_override_start_offset_within_bounds/
+        )
+      end
     end
 
     context "when not deleted and no offsets" do

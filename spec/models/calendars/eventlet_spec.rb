@@ -27,23 +27,27 @@ describe Calendars::Eventlet do
     expect(eventlet.event.reload).not_to be_nil
   end
 
-  describe "offset validations" do
+  describe "offsets" do
     let(:max) { described_class::MAX_OFFSET_SECONDS }
 
+    # The bound is a DB check constraint, not a model validation, so it's tested at the database
+    # level. EventletForm#offsets_within_range gives the user-facing message on the drag path.
     it "allows offsets at the bound" do
-      expect(build(:eventlet, start_offset: -max, end_offset: max)).to be_valid
+      expect { create(:eventlet, start_offset: -max, end_offset: max) }.not_to raise_error
     end
 
-    it "rejects a start_offset beyond the bound" do
-      eventlet = build(:eventlet, start_offset: max + 1)
-      expect(eventlet).not_to be_valid
-      expect(eventlet.errors[:start_offset]).to be_present
+    it "rejects a start_offset beyond the bound at the database level" do
+      eventlet = create(:eventlet)
+      eventlet.start_offset = max + 1
+      expect { eventlet.save(validate: false) }
+        .to raise_error(ActiveRecord::StatementInvalid, /eventlet_start_offset_within_bounds/)
     end
 
-    it "rejects an end_offset beyond the bound" do
-      eventlet = build(:eventlet, end_offset: -max - 1)
-      expect(eventlet).not_to be_valid
-      expect(eventlet.errors[:end_offset]).to be_present
+    it "rejects an end_offset beyond the bound at the database level" do
+      eventlet = create(:eventlet)
+      eventlet.end_offset = -max - 1
+      expect { eventlet.save(validate: false) }
+        .to raise_error(ActiveRecord::StatementInvalid, /eventlet_end_offset_within_bounds/)
     end
 
     it "rejects offsets that invert the eventlet" do

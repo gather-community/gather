@@ -43,11 +43,11 @@ module Calendars
     has_many :eventlet_overrides, class_name: "Calendars::EventletOverride", inverse_of: :eventlet,
       dependent: :destroy
 
-    # The `between` scope and EventFinder both pre-filter on the event's own times widened by
-    # MAX_OFFSET_SECONDS, so an offset beyond that bound would make the eventlet silently invisible
-    # in the calendar grid. EventletOverride enforces the same bound on its own offsets.
-    validates :start_offset, :end_offset,
-      inclusion: {in: -MAX_OFFSET_SECONDS..MAX_OFFSET_SECONDS}
+    # An offset beyond MAX_OFFSET_SECONDS falls outside the window the `between` scope and EventFinder
+    # pre-filter on, which would make the eventlet silently vanish from the grid. That bound is a data
+    # invariant enforced for every writer by a DB check constraint (see the migration that adds
+    # eventlet_start/end_offset_within_bounds); EventletForm#offsets_within_range gives the friendly
+    # message on the drag path before the constraint is ever reached.
     validate :start_before_end
 
     delegate :name, :kind, :meal?, :meal_id, :creator, :creator_id, :group, :note, to: :event

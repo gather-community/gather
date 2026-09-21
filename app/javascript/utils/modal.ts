@@ -45,6 +45,32 @@ export const confirmModal = (content: string, options: ConfirmOptions = {}): Pro
   ],
 }).then((result) => result.index === 1);
 
+export interface ModalChoice<T> {
+  label: string;
+  value: T;
+  variant?: "primary" | "default" | "danger";
+}
+interface ChoiceOptions {
+  title?: string;
+  cancelLabel?: string;
+}
+/*
+ * Like confirmModal but with an arbitrary number of choices alongside Cancel. Resolves the chosen
+ * value, or null on Cancel/X/overlay/Esc. Cancel is button 0, matching confirmModal's ordering.
+ */
+export const choiceModal = <T>(
+  content: string,
+  choices: ModalChoice<T>[],
+  options: ChoiceOptions = {}
+): Promise<T | null> => showModal({
+    title: options.title || i18n.t("modal.confirm_title"),
+    content,
+    buttons: [
+      {label: options.cancelLabel || i18n.t("modal.cancel"), variant: "default"},
+      ...choices.map((choice) => ({label: choice.label, variant: choice.variant || "default"})),
+    ],
+  }).then((result) => (result.index >= 1 ? choices[result.index - 1].value : null));
+
 interface PromptOptions extends Omit<ConfirmOptions, "title"> {
   title: string; // Required — the caller must supply a prompt title
   value?: string;
@@ -65,4 +91,4 @@ export const promptModal = (
 }).then((result) => (result.index === 1 ? (result.value ?? "") : null));
 
 // Expose for the Backbone/legacy sprockets bundle (mirrors how utils/i18n.ts sets window.I18n).
-(window as any).Modal = {showModal, alertModal, confirmModal, promptModal};
+(window as any).Modal = {showModal, alertModal, confirmModal, choiceModal, promptModal};

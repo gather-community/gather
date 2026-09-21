@@ -55,6 +55,22 @@ describe Calendars::Event do
       expect(eventlet.starts_at).to eq("2016-04-07 13:00")
       expect(eventlet.ends_at).to eq("2016-04-07 14:00")
     end
+
+    it "leaves extra eventlets on other calendars alone when the event is saved" do
+      event = create(:event, calendar: calendar)
+      extra = Calendars::Eventlet.create!(event_id: event.id, calendar: calendar2,
+        start_offset: -1.hour.to_i)
+
+      # Must re-find rather than reload: dont_sync_eventlet is a plain attr_accessor, so a reloaded
+      # instance would keep the factory's bypass set and the callback would never run.
+      described_class.find(event.id).update!(starts_at: "2016-04-07 13:00", ends_at: "2016-04-07 14:00")
+
+      expect(Calendars::Eventlet.where(event_id: event.id).pluck(:id)).to contain_exactly(
+        event.eventlets.first.id, extra.id
+      )
+      expect(extra.reload.calendar_id).to eq(calendar2.id)
+      expect(extra.start_offset).to eq(-1.hour.to_i)
+    end
   end
 
   describe "normalization" do

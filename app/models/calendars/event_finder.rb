@@ -40,7 +40,8 @@ module Calendars
         .between(range)
         .joins(:event)
         .where(calendar_events: {recurrence_rule: nil})
-        .includes(:calendar, :event)
+        # event: :eventlets is preloaded so EventletSerializer#eventlet_count doesn't N+1 across the feed.
+        .includes(:calendar, event: :eventlets)
         .where(calendar: non_system_calendars)
       scope = scope.where(calendar_events: {creator: user, group: nil}) if own_only
       scope.to_a
@@ -137,7 +138,8 @@ module Calendars
           "OR calendar_events.recurrence_end_date >= ?",
           range.first.to_date
         )
-        .includes(:calendar, :event)
+        # event: :eventlets is preloaded so EventletSerializer#eventlet_count doesn't N+1 across the feed.
+        .includes(:calendar, event: :eventlets)
     end
 
     def system_eventlets

@@ -183,12 +183,22 @@ module Calendars
     def sync_eventlet
       return if dont_sync_eventlet
 
-      # Ensure only one
-      (eventlets[1..] || []).each(&:destroy)
-      eventlet = eventlets[0] || eventlets.build
+      # Only ensures the invariant that every event has at least one eventlet. It deliberately does
+      # not touch existing eventlets: an event may legitimately have several, each on its own
+      # calendar with its own offsets, and this callback fires on every save (event form, meal
+      # autosave, sample data), so mutating them here would clobber that.
+      #
+      # In particular we don't reassign an existing eventlet's calendar_id. Nothing changes an
+      # event's calendar after creation (calendar_id is excluded from EventPolicy#permitted_attributes,
+      # and Meals::EventHandler matches events by calendar rather than reassigning), and since
+      # `eventlets` is unordered, doing so would pick an arbitrary eventlet and could collide with
+      # the unique index on [event_id, calendar_id].
+      # `load` rather than `empty?` so the association is populated and cached afterward. The previous
+      # implementation loaded it as a side effect of `eventlets[0]`, and callers rely on
+      # event.eventlets being readable after a save without issuing a fresh (tenant-scoped) query.
+      return unless eventlets.load.empty?
 
-      eventlet.event_id = id
-      eventlet.calendar_id = calendar_id
+      eventlets.build(calendar_id: calendar_id)
     end
   end
 end

@@ -43,6 +43,13 @@ module Calendars
     has_many :eventlet_overrides, class_name: "Calendars::EventletOverride", inverse_of: :eventlet,
       dependent: :destroy
 
+    # An offset beyond MAX_OFFSET_SECONDS falls outside the window the `between` scope and EventFinder
+    # pre-filter on, which would make the eventlet silently vanish from the grid. That bound is a data
+    # invariant enforced for every writer by a DB check constraint (see the migration that adds
+    # eventlet_start/end_offset_within_bounds); EventletForm#offsets_within_range gives the friendly
+    # message on the drag path before the constraint is ever reached.
+    before_save :assert_start_before_end
+
     delegate :name, :kind, :meal?, :meal_id, :creator, :creator_id, :group, :note, to: :event
     delegate :all_day, :all_day?, to: :event
 
@@ -163,6 +170,20 @@ module Calendars
     def rule_set
       # Don't memoize this, it causes all kinds of bugs. Worth the performance hit.
       Rules::RuleSet.build_for(calendar: calendar, kind: kind)
+    end
+
+    private
+
+    # The offsets are applied to the event's times independently, so a large start_offset paired with
+    # a small end_offset can invert the eventlet even when the parent event's range is valid. This is
+    # a data invariant no correct caller should reach (EventletForm rejects it with a user-facing
+    # message first), so assert it loudly rather than add a validation error that could fail silently
+    # if never surfaced — see CLAUDE.md "Invariants vs. validations".
+    def assert_start_before_end
+      return if event&.starts_at.blank? || event&.ends_at.blank?
+      return if start_offset.blank? || end_offset.blank?
+      return if ends_at > starts_at
+      raise "Eventlet offsets would invert it: ends_at (#{ends_at}) is not after starts_at (#{starts_at})"
     end
   end
 end

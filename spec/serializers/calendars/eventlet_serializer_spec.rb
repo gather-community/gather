@@ -53,6 +53,58 @@ describe Calendars::EventletSerializer do
     end
   end
 
+  describe "drag scope attributes" do
+    # These drive the two drag prompts: "this calendar vs. all calendars" (eventlet_count) and
+    # "this occurrence vs. the whole series" (recurring + occurrence_start).
+    subject(:attrs) { described_class.new(eventlet, scope: create(:user)).serializable_hash }
+
+    context "with a plain non-recurring eventlet" do
+      let(:eventlet) { create(:eventlet) }
+
+      it "reports no occurrence, not recurring, and a single eventlet" do
+        expect(attrs[:occurrence_start]).to be_nil
+        expect(attrs[:recurring]).to be(false)
+        expect(attrs[:eventlet_count]).to eq(1)
+      end
+    end
+
+    context "with an event spanning multiple calendars" do
+      let(:eventlet) { create(:eventlet) }
+
+      before do
+        Calendars::Eventlet.create!(event_id: eventlet.event_id, calendar: create(:calendar),
+          start_offset: -1.hour.to_i)
+      end
+
+      it "reports the full eventlet count" do
+        expect(attrs[:eventlet_count]).to eq(2)
+      end
+
+      it "names the other calendars for the move-scope prompt" do
+        expect(attrs[:calendar_name]).to eq(eventlet.calendar_name)
+        expect(attrs[:other_calendar_names]).to eq([Calendars::Calendar.last.name])
+      end
+    end
+
+    context "with a transient recurring occurrence" do
+      let(:base_eventlet) do
+        create(:eventlet).tap do |e|
+          e.event.update!(recurrence_rule: IceCube::Rule.weekly.to_hash)
+        end
+      end
+      let(:occ_time) { Time.zone.parse("2025-06-10 10:00") }
+      let(:eventlet) do
+        build(:eventlet, linkable: base_eventlet).tap { |e| e.occurrence_start = occ_time }
+      end
+
+      it "reports the occurrence and resolves recurring/count through the series event" do
+        expect(attrs[:occurrence_start]).to eq(occ_time.to_i)
+        expect(attrs[:recurring]).to be(true)
+        expect(attrs[:eventlet_count]).to eq(1)
+      end
+    end
+  end
+
   describe "#class_name" do
     let(:user) { create(:user) }
     subject(:class_name) { described_class.new(eventlet, scope: user).class_name }

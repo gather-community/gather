@@ -1152,27 +1152,110 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
   },
 
   onEventChange(event, _, revertFunc) {
-    window.Modal.confirmModal(`Are you sure you want to move the event '${event.title}?'`).then(ok => {
-      if (!ok) {
+    this.promptForDragScope(event).then(scope => {
+      if (!scope) {
         revertFunc();
         return;
       }
-      $.ajax({
-        // The feed is eventlet-centric (event.id is the eventlet id); the update endpoint wants event id.
-        url: `/calendars/events/${event.eventId}`,
-        method: "POST",
-        data: {
-          _method: "PATCH",
-          calendars_event: {
-            starts_at: event.start.format(),
-            ends_at: event.end.format(),
-          },
-        },
-        error(xhr) {
-          revertFunc();
-          window.Modal.alertModal(xhr.responseText, {title: "Error", label: "Close"});
-        },
+      this.submitDrag(event, scope, revertFunc);
+    });
+  },
+
+  /*
+   * Asks which scope the drag applies to, as up to two modals shown one after the other. The
+   * calendar question comes first, and only when the event spans more than one calendar; the
+   * series question only when the event recurs. When neither applies there's still a plain
+   * confirmation, so a drag is never silently saved. Resolves null if the user cancels at any point.
+   */
+  promptForDragScope(event) {
+    const multiCalendar = event.eventletCount > 1;
+    if (!multiCalendar && !event.recurring) {
+      return window.Modal
+        .confirmModal(`Are you sure you want to move the event '${event.title}?'`)
+        .then(ok => (ok ? {calendarScope: "all", seriesScope: "series"} : null));
+    }
+
+    return this.promptForCalendarScope(event, multiCalendar).then(calendarScope => {
+      if (!calendarScope) {
+        return null;
+      }
+
+      return this.promptForSeriesScope(event).then(seriesScope => {
+        if (!seriesScope) {
+          return null;
+        }
+
+        return {calendarScope, seriesScope};
       });
+    });
+  },
+
+  promptForCalendarScope(event, multiCalendar) {
+    if (!multiCalendar) {
+      return Promise.resolve("all");
+    }
+
+    // The dragged calendar leads the list, marked so it's obvious which one "move only on" means.
+    const dragged = `<li><strong>${this.escapeHtml(event.calendarName)}</strong> (selected)</li>`;
+    const others = (event.otherCalendarNames || []).map(name => `<li>${this.escapeHtml(name)}</li>`);
+
+    return window.Modal.choiceModal(
+      `<p>'${this.escapeHtml(event.title)}' appears on more than one calendar:</p>` +
+        `<ul>${dragged}${others.join("")}</ul>`,
+      [
+        {label: `Move only on ${event.calendarName}`, value: "this"},
+        {label: "Move on all", value: "all", variant: "primary"},
+      ],
+      {title: "Move multi-calendar event"}
+    );
+  },
+
+  promptForSeriesScope(event) {
+    if (!event.recurring) {
+      return Promise.resolve("series");
+    }
+
+    return window.Modal.choiceModal(
+      `<p>'${this.escapeHtml(event.title)}' repeats. Which occurrences should be moved?</p>`,
+      [
+        {label: "Only this occurrence", value: "occurrence"},
+        {label: "The whole series", value: "series", variant: "primary"},
+      ],
+      {title: "Move recurring event"}
+    );
+  },
+
+  // Modal content is interpolated as HTML, so event and calendar names have to be escaped.
+  escapeHtml(text) {
+    return $("<div>").text(text).html();
+  },
+
+  submitDrag(event, scope, revertFunc) {
+    $.ajax({
+      // eventletId rather than id: a recurring occurrence's row is transient and has no id of its
+      // own, so it carries the id of the persisted base eventlet it was built from. The offsets are
+      // worked out server-side from these absolute times.
+      url: `/calendars/eventlets/${event.eventletId}`,
+      method: "POST",
+      data: {
+        _method: "PATCH",
+        calendars_eventlet: {
+          starts_at: event.start.format(),
+          ends_at: this.eventEnd(event).format(),
+          occurrence_start: event.occurrenceStart,
+          calendar_scope: scope.calendarScope,
+          series_scope: scope.seriesScope,
+        },
+      },
+      success: () => {
+        // An occurrence override can move an event out of, or into, the current view, so refetch
+        // rather than trusting the optimistic position FullCalendar already rendered.
+        this.calendar.fullCalendar("refetchEvents");
+      },
+      error(xhr) {
+        revertFunc();
+        window.Modal.alertModal(xhr.responseText, {title: "Error", label: "Close"});
+      },
     });
   },
 

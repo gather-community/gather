@@ -125,3 +125,58 @@ describe "calendar eventlet show page" do
     end
   end
 end
+
+describe "calendar eventlet drag update" do
+  let(:community) { create(:community) }
+  let!(:user) { create(:user, community: community) }
+  let!(:calendar) { create(:calendar, community: community, allow_overlap: true) }
+  let(:starts_at) { Time.current.next_week.midnight + 12.hours }
+  let!(:event) do
+    create(:event, calendar: calendar, creator: user, starts_at: starts_at,
+      ends_at: starts_at + 1.hour)
+  end
+  let(:eventlet) { event.eventlets.first }
+
+  before do
+    use_user_subdomain(user)
+    sign_in(user)
+  end
+
+  def drag(params)
+    patch(calendars_eventlet_path(eventlet), params: {calendars_eventlet: params}, xhr: true)
+  end
+
+  it "moves the eventlet's offsets for a this-calendar drag" do
+    drag(calendar_scope: "this", series_scope: "series",
+      starts_at: (starts_at + 30.minutes).iso8601, ends_at: (starts_at + 90.minutes).iso8601)
+
+    expect(response).to have_http_status(:ok)
+    expect(eventlet.reload.start_offset).to eq(30.minutes.to_i)
+    expect(event.reload.starts_at).to eq(starts_at)
+  end
+
+  it "moves the event for an all-calendars drag" do
+    drag(calendar_scope: "all", series_scope: "series",
+      starts_at: (starts_at + 2.hours).iso8601, ends_at: (starts_at + 3.hours).iso8601)
+
+    expect(response).to have_http_status(:ok)
+    expect(event.reload.starts_at).to eq(starts_at + 2.hours)
+  end
+
+  it "renders the error partial with a 422 when invalid" do
+    drag(calendar_scope: "this", series_scope: "series",
+      starts_at: (starts_at + 1.hour).iso8601, ends_at: starts_at.iso8601)
+
+    expect(response).to have_http_status(:unprocessable_entity)
+    expect(response.body).to include("must be after start time")
+  end
+
+  it "denies a user with no rights to the eventlet" do
+    other = create(:user, community: create(:community))
+    sign_in(other)
+    expect do
+      drag(calendar_scope: "this", series_scope: "series",
+        starts_at: starts_at.iso8601, ends_at: (starts_at + 1.hour).iso8601)
+    end.to raise_error(Pundit::NotAuthorizedError)
+  end
+end

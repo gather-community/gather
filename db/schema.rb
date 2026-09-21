@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_20_000001) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_20_000001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -112,6 +112,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_20_000001) do
     t.index ["event_override_id", "eventlet_id"], name: "index_eventlet_overrides_on_override_and_eventlet", unique: true
     t.index ["event_override_id"], name: "index_calendar_eventlet_overrides_on_event_override_id"
     t.index ["eventlet_id"], name: "index_calendar_eventlet_overrides_on_eventlet_id"
+    t.check_constraint "end_offset >= '-43200'::integer AND end_offset <= 43200", name: "eventlet_override_end_offset_within_bounds"
+    t.check_constraint "start_offset >= '-43200'::integer AND start_offset <= 43200", name: "eventlet_override_start_offset_within_bounds"
   end
 
   create_table "calendar_eventlets", force: :cascade do |t|
@@ -126,6 +128,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_20_000001) do
     t.index ["cluster_id"], name: "index_calendar_eventlets_on_cluster_id"
     t.index ["event_id", "calendar_id"], name: "index_calendar_eventlets_on_event_id_and_calendar_id", unique: true
     t.index ["event_id"], name: "index_calendar_eventlets_on_event_id"
+    t.check_constraint "end_offset >= '-43200'::integer AND end_offset <= 43200", name: "eventlet_end_offset_within_bounds"
+    t.check_constraint "start_offset >= '-43200'::integer AND start_offset <= 43200", name: "eventlet_start_offset_within_bounds"
   end
 
   create_table "calendar_events", id: :serial, force: :cascade do |t|

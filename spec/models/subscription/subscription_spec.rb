@@ -131,9 +131,11 @@ describe Subscription::Subscription do
     let(:sub) { create(:subscription) }
 
     def fake_stripe_sub(status:, payment_intent: nil, setup_intent: nil)
-      double("Stripe::Subscription", status: status,
-        latest_invoice: payment_intent && double(payment_intent: payment_intent),
-        pending_setup_intent: setup_intent)
+      stripe_subscription_double(
+        status: status,
+        latest_invoice: payment_intent && stripe_invoice_double(payment_intent: payment_intent),
+        pending_setup_intent: setup_intent
+      )
     end
 
     context "for an invoiced active subscription" do
@@ -200,7 +202,10 @@ describe Subscription::Subscription do
     let(:sub) { create(:subscription) }
 
     def stub_next_action(next_action)
-      sub.stripe_sub = double(latest_invoice: double(payment_intent: double(next_action: next_action)))
+      pi = double("Stripe::PaymentIntent", next_action: next_action)
+      sub.stripe_sub = stripe_subscription_double(
+        latest_invoice: stripe_invoice_double(payment_intent: pi)
+      )
     end
 
     it "returns the hosted URL when microdeposit verification is pending" do

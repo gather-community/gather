@@ -105,7 +105,8 @@ module Subscription
     def create_subscription
       Stripe::Subscription.create(
         customer: customer.id,
-        coupon: coupon&.id,
+        # Basil replaced the top-level `coupon` param with a `discounts` array.
+        discounts: coupon.nil? ? nil : [{coupon: coupon.id}],
         items: [{price: price.id, quantity: intent.quantity}],
         payment_behavior: "default_incomplete",
         backdate_start_date: intent.backdated? ? intent.start_date_to_timestamp : nil,

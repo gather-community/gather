@@ -37,7 +37,7 @@ module Stripe
       case object.object
       when "invoice"
         reconcile_topup(event, object)
-        enqueue_sync(object.subscription)
+        enqueue_sync(InvoiceFields.subscription_id(object))
       when "subscription"
         enqueue_sync(object.id)
       end
@@ -68,7 +68,7 @@ module Stripe
     def community_id_for(event)
       object = event.data.object
       sub_id = case object.object
-      when "invoice" then object.subscription
+      when "invoice" then InvoiceFields.subscription_id(object)
       when "subscription" then object.id
       end
       return nil if sub_id.blank?

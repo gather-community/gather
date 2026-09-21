@@ -71,6 +71,7 @@ RSpec.configure do |config|
   config.include(DownloadHelpers, type: :system)
   config.include(RequestSpecHelpers, type: :request)
   config.include(GeneralHelpers)
+  config.include(StripeHelpers)
 
   def register_selenium_chrome_driver(app:, headless:, user_agent: nil)
     args = %w[disable-gpu no-sandbox disable-site-isolation-trials disable-dev-shm-usage]

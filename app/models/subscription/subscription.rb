@@ -45,7 +45,14 @@ module Subscription
 
     acts_as_tenant :cluster
 
-    attr_accessor :stripe_sub
+    attr_reader :stripe_sub
+
+    # Custom writer so the memoized PaymentIntent can't outlive the object it was read from —
+    # populate can run more than once on an instance, and specs assign stripe_sub directly.
+    def stripe_sub=(value)
+      remove_instance_variable(:@invoice_payment_intent) if defined?(@invoice_payment_intent)
+      @stripe_sub = value
+    end
 
     belongs_to :community, inverse_of: :subscription
 
@@ -60,8 +67,12 @@ module Subscription
       return if stripe_id.nil?
       self.stripe_sub = Stripe::Subscription.retrieve(
         id: stripe_id,
-        expand: %w[customer.invoice_settings items.data.price.product latest_invoice.payment_intent
-                   pending_setup_intent]
+        # Stripe allows at most 4 levels of expansion and counts `data` as one, so the
+        # PaymentIntent itself (latest_invoice.payments.data.payment.payment_intent) is one level
+        # too deep to expand. Expanding `payments` is as far as we can go; InvoiceFields retrieves
+        # the intent from the id that leaves behind.
+        expand: %w[customer.invoice_settings items.data.price.product pending_setup_intent
+          discounts latest_invoice.payments]
       )
       Rails.logger.info("Loaded subscription: #{stripe_sub}")
       stripe_sub
@@ -265,15 +276,19 @@ module Subscription
       stripe_sub.latest_invoice.nil?
     end
 
+    # Basil moved the billing period off the subscription and onto each item. We only ever create
+    # single-item subscriptions, so the first item's period is the subscription's period.
     def next_payment_date
       return nil if stripe_sub.nil?
-      Time.zone.at(stripe_sub&.current_period_end).to_date
+      period_end = stripe_sub.items.data[0]&.current_period_end
+      return nil if period_end.nil?
+      Time.zone.at(period_end).to_date
     end
 
     def last_invoice_amount_cents
       return nil if stripe_sub.nil?
       return 0 if no_invoice?
-      stripe_sub.latest_invoice.payment_intent.amount
+      invoice_payment_intent&.amount
     end
 
     def client_secret
@@ -311,9 +326,15 @@ module Subscription
       stripe_sub.items.data[0].quantity
     end
 
+    # Basil replaced the single `discount` with a `discounts` array and moved the coupon under
+    # `source`. We only ever attach one coupon (see Registrar). The coupon is an id string unless
+    # it was expanded, so fetch it when needed.
     def discount_percent
       return nil if stripe_sub.nil?
-      stripe_sub.discount&.coupon&.percent_off
+      coupon = stripe_sub.discounts&.first&.source&.coupon
+      return nil if coupon.nil?
+      coupon = Stripe::Coupon.retrieve(coupon) if coupon.is_a?(String)
+      coupon.percent_off
     end
 
     def address_line1
@@ -350,7 +371,7 @@ module Subscription
 
     # The signal columns cached from the live Stripe object during sync!.
     def synced_attributes
-      pi = stripe_sub.latest_invoice&.payment_intent
+      pi = invoice_payment_intent
       si = stripe_sub.pending_setup_intent
       {
         stripe_status: stripe_sub.status,
@@ -365,8 +386,15 @@ module Subscription
       if no_invoice?
         stripe_sub.pending_setup_intent
       else
-        stripe_sub.latest_invoice.payment_intent
+        invoice_payment_intent
       end
+    end
+
+    # The latest invoice's PaymentIntent, memoized so the several readers that need it don't each
+    # risk a fetch when it arrives unexpanded. See Stripe::InvoiceFields.
+    def invoice_payment_intent
+      return @invoice_payment_intent if defined?(@invoice_payment_intent)
+      @invoice_payment_intent = Stripe::InvoiceFields.payment_intent(stripe_sub&.latest_invoice)
     end
   end
 end

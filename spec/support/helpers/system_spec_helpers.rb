@@ -467,4 +467,19 @@ module SystemSpecHelpers
       end
     end
   end
+
+  # Forces the eventlet id sequence well ahead of the event id sequence so an event and its eventlet
+  # can't share an id. In prod they never do (eventlets were backfilled), but in the test DB they can
+  # coincide, which would let a drag handler that posts the event id to the eventlet endpoint slip
+  # through. This is done explicitly rather than with decoy records because Postgres sequences aren't
+  # rolled back between examples, so an earlier spec's records shift the gap unpredictably. GREATEST
+  # keeps the sequence from ever moving backward onto an existing id.
+  def diverge_eventlet_ids!
+    conn = ActiveRecord::Base.connection
+    event_seq = conn.select_value("SELECT pg_get_serial_sequence('calendar_events', 'id')")
+    eventlet_seq = conn.select_value("SELECT pg_get_serial_sequence('calendar_eventlets', 'id')")
+    event_last = conn.select_value("SELECT last_value FROM #{event_seq}").to_i
+    eventlet_last = conn.select_value("SELECT last_value FROM #{eventlet_seq}").to_i
+    conn.execute("SELECT setval('#{eventlet_seq}', #{[eventlet_last, event_last + 1000].max})")
+  end
 end

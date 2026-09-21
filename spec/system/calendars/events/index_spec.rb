@@ -534,16 +534,17 @@ describe "event calendar", js: true do
     scenario "preserves the focused time slot when arrow navigation crosses weeks" do
       visit(calendar_events_path(calendar))
 
-      # The time slots are built by JS once the calendar has rendered, so wait for the full week
-      # before reading a date off it. Reading straight after #visit can catch the grid mid-render,
-      # where the last matching slot has no data-date yet and the date parse below blows up.
-      slot_selector = ".fc-agendaWeek-view .fc-gather-time-slot[data-time='06:00:00']"
-      expect(page).to have_css(slot_selector, count: 7) # One slot per day of the week.
-      last_date = all(slot_selector).last["data-date"]
-      first_new_week_date = Date.iso8601(last_date).next_day
+      # Work out the last day of the displayed week rather than reading it back out of the grid.
+      # The time slots are injected by our own JS after FullCalendar renders, and they're rebuilt
+      # from scratch on each render, so a handle on one of them can go stale under us and hand back
+      # a nil date. Waiting for the specific slot we're about to focus is both safer and a clearer
+      # failure if the grid never arrives.
+      last_date = Time.zone.today.end_of_week(:sunday)
+      first_new_week_date = last_date.next_day
       second_new_week_date = first_new_week_date.next_day
       last_slot_selector =
-        ".fc-agendaWeek-view .fc-gather-time-slot[data-date='#{last_date}'][data-time='06:00:00']"
+        ".fc-agendaWeek-view .fc-gather-time-slot" \
+        "[data-date='#{last_date.to_fs(:no_time)}'][data-time='06:00:00']"
       first_new_week_slot_selector =
         ".fc-agendaWeek-view .fc-gather-time-slot" \
         "[data-date='#{first_new_week_date.to_fs(:no_time)}'][data-time='06:00:00']"
@@ -551,6 +552,7 @@ describe "event calendar", js: true do
         ".fc-agendaWeek-view .fc-gather-time-slot" \
         "[data-date='#{second_new_week_date.to_fs(:no_time)}'][data-time='06:00:00']"
 
+      expect(page).to have_css(last_slot_selector)
       page.execute_script(<<~JS)
         window.calendarFocusedSlot = document.querySelector(#{last_slot_selector.to_json});
         window.calendarFocusedSlot.focus();
@@ -579,14 +581,12 @@ describe "event calendar", js: true do
     scenario "preserves the focused all-day cell when arrow navigation crosses weeks" do
       visit(calendar_events_path(calendar))
 
-      # Wait for the full week before reading a date off it, as above.
-      cell_selector = ".fc-agendaWeek-view .fc-day-grid .fc-bg .fc-day[data-date]"
-      expect(page).to have_css(cell_selector, count: 7) # One cell per day of the week.
-      last_date = all(cell_selector).last["data-date"]
-      first_new_week_date = Date.iso8601(last_date).next_day
+      # Derive the last day of the week and wait for its cell, as above.
+      last_date = Time.zone.today.end_of_week(:sunday)
+      first_new_week_date = last_date.next_day
       second_new_week_date = first_new_week_date.next_day
       last_cell_selector =
-        ".fc-agendaWeek-view .fc-day-grid .fc-bg .fc-day[data-date='#{last_date}']"
+        ".fc-agendaWeek-view .fc-day-grid .fc-bg .fc-day[data-date='#{last_date.to_fs(:no_time)}']"
       first_new_week_cell_selector =
         ".fc-agendaWeek-view .fc-day-grid .fc-bg .fc-day" \
         "[data-date='#{first_new_week_date.to_fs(:no_time)}']"
@@ -594,6 +594,7 @@ describe "event calendar", js: true do
         ".fc-agendaWeek-view .fc-day-grid .fc-bg .fc-day" \
         "[data-date='#{second_new_week_date.to_fs(:no_time)}']"
 
+      expect(page).to have_css(last_cell_selector)
       page.execute_script(<<~JS)
         window.calendarFocusedAllDayCell = document.querySelector(#{last_cell_selector.to_json});
         window.calendarFocusedAllDayCell.focus();

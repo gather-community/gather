@@ -67,8 +67,12 @@ module Subscription
       return if stripe_id.nil?
       self.stripe_sub = Stripe::Subscription.retrieve(
         id: stripe_id,
-        expand: %w[customer.invoice_settings items.data.price.product pending_setup_intent discounts
-          latest_invoice.payments.data.payment.payment_intent]
+        # Stripe allows at most 4 levels of expansion and counts `data` as one, so the
+        # PaymentIntent itself (latest_invoice.payments.data.payment.payment_intent) is one level
+        # too deep to expand. Expanding `payments` is as far as we can go; InvoiceFields retrieves
+        # the intent from the id that leaves behind.
+        expand: %w[customer.invoice_settings items.data.price.product pending_setup_intent
+          discounts latest_invoice.payments]
       )
       Rails.logger.info("Loaded subscription: #{stripe_sub}")
       stripe_sub

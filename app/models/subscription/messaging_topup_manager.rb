@@ -130,9 +130,9 @@ module Subscription
         # is not "incomplete", so it still credits on finalize and only reverses on a later bounce.
         payment_behavior: "error_if_incomplete",
         payment_settings: {save_default_payment_method: "on_subscription"},
-        # Expand the payment_intent so the synchronous credit can read its status (processing vs paid)
-        # without a second API call.
-        expand: ["latest_invoice.payments.data.payment.payment_intent"]
+        # Expand the invoice's payments so the synchronous credit can resolve the PaymentIntent
+        # (the intent itself is past Stripe's 4-level expansion limit; InvoiceFields fetches it).
+        expand: ["latest_invoice.payments"]
       )
       community.create_messaging_topup!(stripe_id: stripe_sub.id)
       stripe_sub.latest_invoice
@@ -142,7 +142,7 @@ module Subscription
     # always_invoice), with its payment_intent expanded for synchronous crediting.
     def latest_invoice
       Stripe::Subscription.retrieve(id: topup.stripe_id,
-        expand: ["latest_invoice.payments.data.payment.payment_intent"]).latest_invoice
+        expand: ["latest_invoice.payments"]).latest_invoice
     end
 
     # The current topup subscription's single item, or nil when there's no topup yet.

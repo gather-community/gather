@@ -57,8 +57,8 @@ module Subscription
       return if stripe_id.nil?
       self.stripe_sub = Stripe::Subscription.retrieve(
         id: stripe_id,
-        expand: %w[items.data.price customer.invoice_settings
-          latest_invoice.payments.data.payment.payment_intent]
+        # See Subscription#populate on why this stops at `payments`.
+        expand: %w[items.data.price customer.invoice_settings latest_invoice.payments]
       )
     end
 

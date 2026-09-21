@@ -55,7 +55,7 @@ describe Work::ShiftPolicy do
         end
         let(:synopsis) do
           double(period: period, regular_hours_for_user: picked, staggering: {prev_limit: limit},
-            "staggering?": true)
+            staggering?: true)
         end
         subject(:permitted) { described_class.new(user, shift, synopsis: synopsis).signup? }
 
@@ -100,7 +100,7 @@ describe Work::ShiftPolicy do
           context "with synopsis built for a different period" do
             let(:other_period) { create(:work_period, phase: "open") }
             let(:wrong_synopsis) do
-              double(period: other_period, "staggering?": false)
+              double(period: other_period, staggering?: false)
             end
             subject(:permitted) { described_class.new(user, shift, synopsis: wrong_synopsis).signup? }
 
@@ -111,6 +111,57 @@ describe Work::ShiftPolicy do
             end
           end
         end
+      end
+    end
+
+    # The controller turns these into messages on the shift card, so the names matter.
+    describe "reason for refusing a signup" do
+      subject(:reason) { described_class.new(user, shift).with_reason.signup? }
+
+      it { is_expected.to be_nil }
+
+      context "with period in draft" do
+        let(:phase) { "draft" }
+        it { is_expected.to eq(:not_permitted) }
+      end
+
+      context "with period no longer taking signups" do
+        let(:phase) { "archived" }
+        it { is_expected.to eq(:period_closed) }
+      end
+
+      context "when already signed up" do
+        before do
+          allow(shift).to receive(:user_signed_up?).and_return(true)
+          allow(shift).to receive(:double_signups_allowed?).and_return(false)
+        end
+
+        it { is_expected.to eq(:already_signed_up) }
+
+        # Their own signup explains the full shift, so it's the more useful of the two.
+        context "when the shift is full as a result" do
+          before { allow(shift).to receive(:taken?).and_return(true) }
+          it { is_expected.to eq(:already_signed_up) }
+        end
+      end
+
+      context "when someone else took the last slot" do
+        before { allow(shift).to receive(:taken?).and_return(true) }
+        it { is_expected.to eq(:slots_exceeded) }
+      end
+
+      context "when over the round limit" do
+        let(:period_attribs) do
+          {pick_type: "staggered", quota_type: "by_person", auto_open_time: "2018-01-01 12:00",
+           round_duration: 5, max_rounds_per_worker: 3, workers_per_round: 10}
+        end
+        let(:synopsis) do
+          double(period: period, regular_hours_for_user: 11, staggering: {prev_limit: 12},
+            staggering?: true)
+        end
+        subject(:reason) { described_class.new(user, shift, synopsis: synopsis).with_reason.signup? }
+
+        it { is_expected.to eq(:round_limit_exceeded) }
       end
     end
 

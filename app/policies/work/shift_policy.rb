@@ -29,12 +29,17 @@ module Work
       index?
     end
 
-    def signup?
-      index? &&
-        (shift.period_open? || shift.period_published?) &&
-        (shift.double_signups_allowed? || !shift.user_signed_up?(user)) &&
-        !shift.taken? &&
-        !round_limit_exceeded?
+    # The signup link a user clicked can be out of date by the time it reaches us, so this check
+    # names its conditions: the caller can ask why it refused and tell the user, rather than treating
+    # every refusal as an authorization failure. Reasons are ordered so the most specific and most
+    # actionable one wins: a signup of the user's own that already landed explains a full shift, and
+    # either explains more than the round limit does.
+    permission :signup? do
+      deny_unless(:not_permitted) { index? }
+      deny_unless(:period_closed) { shift.period_open? || shift.period_published? }
+      deny_if(:already_signed_up) { !shift.double_signups_allowed? && shift.user_signed_up?(user) }
+      deny_if(:slots_exceeded) { shift.taken? }
+      deny_if(:round_limit_exceeded) { round_limit_exceeded? }
     end
 
     def unsignup?

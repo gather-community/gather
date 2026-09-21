@@ -82,7 +82,30 @@ class ApplicationPolicy
 
   include MultiCommunityCheck
 
+  # Blocks of named conditions, keyed by permission check name. See `permission`.
+  class_attribute :denial_conditions, default: {}, instance_accessor: false
+
   attr_reader :user, :record
+
+  # Most permission checks are plain predicate methods. A check declared with `permission` is built
+  # from named conditions instead, so that as well as answering yes or no it can say which condition
+  # refused it:
+  #
+  #   permission :signup? do
+  #     deny_unless(:period_closed) { shift.period_open? }
+  #     deny_if(:slots_exceeded) { shift.taken? }
+  #   end
+  #
+  #   policy.signup?             # => false
+  #   policy.with_reason.signup? # => :slots_exceeded, or nil when the check passes
+  #
+  # Conditions run in order and the first to refuse wins, so lead with the reasons a caller most
+  # wants to hear about. The predicate method is defined for you, so the two answers are read off
+  # one set of conditions and can't drift apart.
+  def self.permission(name, &conditions)
+    self.denial_conditions = denial_conditions.merge(name.to_sym => conditions)
+    define_method(name) { denial_reason(name).nil? }
+  end
 
   def initialize(user, record)
     @user = user
@@ -121,9 +144,21 @@ class ApplicationPolicy
     false
   end
 
-  # Used to force an authorization failure in some cases.
-  def fail?
-    false
+  # Answers permission checks with their reason for refusing instead of with a boolean, e.g.
+  # `policy.with_reason.signup?`. See `permission` for how a check declares its reasons.
+  def with_reason
+    ReasonedChecks.new(self)
+  end
+
+  # Returns nil if the named permission check passes, or the symbol naming the first condition that
+  # refused it. Only works for checks declared with `permission`; normally called via `with_reason`.
+  def denial_reason(name)
+    conditions = self.class.denial_conditions[name.to_sym]
+    raise ArgumentError, "#{name} is not declared with `permission` on #{self.class}" if conditions.nil?
+    catch(:denied) do
+      instance_eval(&conditions)
+      nil
+    end
   end
 
   def attribute_permitted?(attrib)
@@ -137,6 +172,15 @@ class ApplicationPolicy
   protected
 
   delegate :active?, to: :user
+
+  # For use inside a `permission` block: refuses the check with the given reason.
+  def deny_if(reason)
+    throw(:denied, reason) if yield
+  end
+
+  def deny_unless(reason)
+    throw(:denied, reason) unless yield
+  end
 
   def active_in_community?
     active? && record_tied_to_user_community? || active_admin?
@@ -250,6 +294,25 @@ class ApplicationPolicy
       1
     else
       0
+    end
+  end
+
+  # Wraps a policy so permission checks answer with their reason for refusing. Checks not declared
+  # with `permission` raise, rather than answering nil and reading as though they had passed.
+  class ReasonedChecks
+    def initialize(policy)
+      @policy = policy
+    end
+
+    def respond_to_missing?(name, include_private = false)
+      @policy.respond_to?(name, include_private) || super
+    end
+
+    private
+
+    def method_missing(name, *)
+      return super unless @policy.respond_to?(name)
+      @policy.denial_reason(name)
     end
   end
 end

@@ -146,6 +146,79 @@ describe "signups", js: true do
       end
     end
 
+    describe "refresh overlapping a signup", clean_with_transaction: false do
+      let(:shift) { jobs[0].shifts[0] }
+      let(:card) { ".shift-card[data-id='#{shift.id}']" }
+
+      before { periods[0].update!(phase: "open") }
+
+      # A refresh response is rendered when the request reaches the server but can arrive at the
+      # browser well after that. If a signup happens in between, the response carries markup from
+      # before the signup, and applying it used to wipe the signup off the card until the next
+      # refresh came around. STUB_SHIFTS_RESPONSE_DELAY holds the rendered response back so we can
+      # land it after the signup on purpose.
+      scenario "stale refresh response doesn't undo the signup" do
+        with_env("STUB_SHIFTS_RESPONSE_DELAY" => "3") do
+          visit(page_path)
+          expect(page).to have_css(card)
+
+          # Autorefresh fires every second in test mode. Give it time to send one request, then stop
+          # the timer so that delayed response is the last thing that can touch the shift list.
+          sleep(1.5)
+          stop_all_timers
+
+          within(card) do
+            click_on("Sign Up!")
+            expect(page).to have_content(actor.name)
+          end
+
+          # A successful signup restarts the refresh timer, so stop it again before waiting.
+          stop_all_timers
+          wait_for_ajax
+
+          expect(page).to have_css("#{card}.mine")
+          within(card) do
+            expect(page).to have_content(actor.name)
+            expect(page).not_to have_link("Sign Up!")
+          end
+        end
+      end
+    end
+
+    describe "signing up from a card that is out of date", clean_with_transaction: false do
+      let(:shift) { jobs[0].shifts[0] }
+      let(:card) { ".shift-card[data-id='#{shift.id}']" }
+
+      before { periods[0].update!(phase: "open") }
+
+      # The signup link can still be on screen when the signup it offers is no longer possible: the
+      # user's own signup landed in another request, or someone else took the last slot. Clicking it
+      # has to come back as a message on the card, not as an authorization failure.
+      scenario "when the user is already signed up" do
+        visit(page_path)
+        expect(page).to have_css(card)
+        stop_all_timers
+        shift.signup_user(actor)
+
+        within(card) do
+          click_on("Sign Up!")
+          expect(page).to have_content("You've already signed up for this shift.")
+        end
+      end
+
+      scenario "when someone else took the last slot" do
+        visit(page_path)
+        expect(page).to have_css(card)
+        stop_all_timers
+        shift.signup_user(users[2])
+
+        within(card) do
+          click_on("Sign Up!")
+          expect(page).to have_content("Sorry, looks like someone beat you to it!")
+        end
+      end
+    end
+
     describe "staggering and auto open" do
       let(:open_time) { Time.current.tomorrow.midnight + 12.hours }
       let!(:share) { create(:work_share, period: periods[0], user: actor) }
@@ -278,6 +351,21 @@ describe "signups", js: true do
         expect(page).to have_select_lens(:dates, selected: "Current & Future")
         expect(page).to have_lens_clear_link
       end
+    end
+  end
+
+  # Clears every timer the page has going, including the autorefresh one. Backbone keeps the shifts
+  # view private, so there is no handle to clear it by; timer ids are small sequential integers.
+  def stop_all_timers
+    page.execute_script("for (var i = 1; i < 1000; i++) { clearInterval(i); }")
+  end
+
+  # Waits for in-flight jQuery requests to land, for cases where nothing on the page will change
+  # when they do.
+  def wait_for_ajax
+    40.times do
+      break if page.evaluate_script("jQuery.active").zero?
+      sleep(0.25)
     end
   end
 end

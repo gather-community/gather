@@ -146,10 +146,12 @@ module Work
     # We render shifts and pagination separately so we don't have to render the "choose as" dropdown
     # every refresh (saving a few database hits).
     def render_shifts_and_pagination_json
-      render(json: {
+      json = {
         shifts: render_to_string(partial: "shifts"),
         pagination: render_to_string(partial: "pagination")
-      })
+      }
+      delay_rendered_response_in_test_mode
+      render(json: json)
     end
 
     def sample_shift
@@ -171,22 +173,39 @@ module Work
       apply_date_range_lens
     end
 
+    # We do our own authorization here so that we can tell the user why a signup was refused. The
+    # link they clicked may have been out of date: their own signup landed already, or someone else
+    # took the last slot. Those refusals belong on the shift card as a message, so we ask the policy
+    # for its reason and raise the matching error; the rest are real authorization failures. These
+    # are the same errors #signup_user raises when a competing request beats us to the write.
     def authorize_and_do_signup_or_raise_error
-      # We use a custom authorization flow here.
-      # If authorization fails due to round limit being exceeded, raise a special error.
       policy = shift_policy(@shift)
-      if policy.signup?
-        @shift.signup_user(@choosee)
-      elsif policy.round_limit_exceeded?
-        raise RoundLimitExceededError
-      else
-        # At this point we don't know what cause the auth fail, so force a failure.
-        authorize(@shift, :fail?)
-      end
+      reason = policy.with_reason.signup?
+      return @shift.signup_user(@choosee) if reason.nil?
+      error = signup_errors[reason]
+      raise error if error
+      raise Pundit::NotAuthorizedError, query: :signup?, record: @shift, policy: policy
+    end
+
+    # Reasons ShiftPolicy can give for refusing a signup that the user can see and act on, mapped to
+    # the errors that put each one on the shift card. Any other reason is an authorization failure.
+    # A method rather than a constant because these classes are defined in work/shift.rb, which
+    # isn't necessarily loaded when this class body is evaluated.
+    def signup_errors
+      {already_signed_up: AlreadySignedUpError,
+       slots_exceeded: SlotsExceededError,
+       round_limit_exceeded: RoundLimitExceededError}
     end
 
     def raise_stubbed_error_in_test_mode
       raise ENV["STUB_SIGNUP_ERROR"].constantize if Rails.env.test? && ENV["STUB_SIGNUP_ERROR"]
+    end
+
+    # Simulates a slow network: the response is already rendered, so it carries pre-delay state.
+    # Lets a system spec keep a refresh in flight across a signup. See spec/system/work/signup_spec.rb.
+    def delay_rendered_response_in_test_mode
+      return unless Rails.env.test? && ENV["STUB_SHIFTS_RESPONSE_DELAY"]
+      sleep(ENV["STUB_SHIFTS_RESPONSE_DELAY"].to_f)
     end
 
     def apply_shift_lens

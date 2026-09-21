@@ -20,15 +20,13 @@ describe "dragging a calendar event", js: true do
   let(:starts_at) { Time.current.beginning_of_week(:sunday) + 1.week + 3.days + 12.hours }
 
   # Production eventlet ids are not aligned with event ids (eventlets were backfilled for pre-existing
-  # events). In a fresh test DB the first event would get event.id == eventlet.id, masking a drag
-  # handler that posts the eventlet id to the event endpoint. Advancing only the eventlet sequence
-  # forces the two to diverge, the way they do in prod.
-  let!(:divergence) do
-    decoy = create(:event)
-    # A second eventlet on the decoy event (on a different calendar, to satisfy the uniqueness index)
-    # advances only the eventlet sequence, not the event sequence.
-    create(:eventlet, event: decoy, calendar: create(:calendar))
-  end
+  # events). In a fresh test DB an event and its eventlet can share an id, masking a drag handler that
+  # posts the eventlet id to the event endpoint. Force the eventlet id sequence well ahead of the
+  # event id sequence so the two diverge the way they do in prod. This has to be explicit: Postgres
+  # sequences aren't rolled back between examples, so any earlier spec's records shift the gap
+  # unpredictably (a decoy-record trick flakes on run order). GREATEST keeps the sequence from ever
+  # moving backward onto an existing id.
+  let!(:divergence) { diverge_eventlet_ids! }
 
   # Overridden by the contexts below. These have to be declared out here, not in the contexts, so
   # that they're built before the `before` block visits the page — an inner-context `let!` runs after

@@ -20,12 +20,9 @@ describe "dragging an event on a fixed-time calendar", js: true do
   let(:starts_at) { Time.current.beginning_of_week(:sunday) + 1.week + 3.days + 13.hours }
   let(:ends_at) { starts_at.change(hour: 17) }
 
-  # Production eventlet ids aren't aligned with event ids (eventlets were backfilled). Advancing only
-  # the eventlet sequence forces the divergence so a handler posting the wrong id would be caught.
-  let!(:divergence) do
-    decoy = create(:event)
-    create(:eventlet, event: decoy, calendar: create(:calendar))
-  end
+  # Production eventlet ids aren't aligned with event ids (eventlets were backfilled); force the gap
+  # so a handler posting the wrong id would be caught. See diverge_eventlet_ids! for why it's explicit.
+  let!(:divergence) { diverge_eventlet_ids! }
 
   let!(:event) do
     create(:event, calendar: calendar, creator: actor, name: "Fixed",

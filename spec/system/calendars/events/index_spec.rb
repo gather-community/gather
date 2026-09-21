@@ -534,8 +534,12 @@ describe "event calendar", js: true do
     scenario "preserves the focused time slot when arrow navigation crosses weeks" do
       visit(calendar_events_path(calendar))
 
-      last_date = all(".fc-agendaWeek-view .fc-gather-time-slot[data-time='06:00:00']")
-        .last["data-date"]
+      # The time slots are built by JS once the calendar has rendered, so wait for the full week
+      # before reading a date off it. Reading straight after #visit can catch the grid mid-render,
+      # where the last matching slot has no data-date yet and the date parse below blows up.
+      slot_selector = ".fc-agendaWeek-view .fc-gather-time-slot[data-time='06:00:00']"
+      expect(page).to have_css(slot_selector, count: 7) # One slot per day of the week.
+      last_date = all(slot_selector).last["data-date"]
       first_new_week_date = Date.iso8601(last_date).next_day
       second_new_week_date = first_new_week_date.next_day
       last_slot_selector =
@@ -575,10 +579,10 @@ describe "event calendar", js: true do
     scenario "preserves the focused all-day cell when arrow navigation crosses weeks" do
       visit(calendar_events_path(calendar))
 
-      all_day_cells = all(
-        ".fc-agendaWeek-view .fc-day-grid .fc-bg .fc-day[data-date]"
-      )
-      last_date = all_day_cells.last["data-date"]
+      # Wait for the full week before reading a date off it, as above.
+      cell_selector = ".fc-agendaWeek-view .fc-day-grid .fc-bg .fc-day[data-date]"
+      expect(page).to have_css(cell_selector, count: 7) # One cell per day of the week.
+      last_date = all(cell_selector).last["data-date"]
       first_new_week_date = Date.iso8601(last_date).next_day
       second_new_week_date = first_new_week_date.next_day
       last_cell_selector =

@@ -46,7 +46,7 @@ gem "kaminari", "~> 1.0"
 gem "momentjs-rails", "~> 2.9", git: "https://github.com/derekprior/momentjs-rails", branch: "main"
 gem "mustache", "~> 1.1"
 gem "net-http" # silence "already initialized constant" warnings. May be can go away later.
-gem "omniauth-google-oauth2", "~> 0.6"
+gem "omniauth-google-oauth2", "~> 1.2"
 gem "omniauth-rails_csrf_protection", "~> 2.0" # Related to CVE 2015 9284
 gem "pg", "~> 1.6"
 gem "phony_rails", "~> 0.12"

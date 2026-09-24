@@ -20,8 +20,11 @@
 	//       wouldn't detect (e.g. the curl'd script changed but the RUN line didn't)
 	//
 	//   Gems (in the named volume) and node_modules (in the workspace bind mount)
-	//   are NOT part of the image — they survive both types of rebuild. Only wipe
-	//   gems manually when needed: docker volume rm gather2-bundle
+	//   are NOT part of the image — they survive both types of rebuild. That is
+	//   usually what you want, but gems with native extensions are built against a
+	//   specific Ruby/OS, so a base-image change can strand them. post-create.sh
+	//   fingerprints the toolchain and rebuilds the volume by itself when it
+	//   changes, so a rebuild is all you need — no manual volume wiping.
 	//
 	//
 	// GEMS — named Docker volume
@@ -35,7 +38,8 @@
 	//
 	//   The volume name uses ${localWorkspaceFolderBasename} so each clone of the
 	//   repo (gather1, gather2, etc.) gets its own isolated volume.
-	//   To nuke gems: docker volume rm gather2-bundle
+	//   To nuke gems by hand (rarely needed — see the toolchain stamp in
+	//   post-create.sh): docker volume rm gather2-bundle
 	//
 	// containerEnv vs remoteEnv
 	//   containerEnv: set at Docker creation time — available to ALL processes

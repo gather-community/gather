@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM ubuntu:24.04
 ARG USERNAME=gatherdev
 
 # Ensure binding is always 0.0.0.0
@@ -16,9 +16,9 @@ RUN apt-get update \
   htop \
   iftop \
   iproute2 \
-  libatk-bridge2.0-0 \
-  libatk1.0-0 \
-  libcups2 \
+  libatk-bridge2.0-0t64 \
+  libatk1.0-0t64 \
+  libcups2t64 \
   libcurl4-openssl-dev \
   libdrm2 \
   libgbm1 \
@@ -35,7 +35,7 @@ RUN apt-get update \
   libxslt1-dev \
   libxss1 \
   libyaml-dev \
-  libvips \
+  libvips42t64 \
   libvips-dev \
   make \
   pkg-config \
@@ -51,7 +51,11 @@ RUN apt-get update \
   zlib1g-dev
 
 # Create user
-RUN groupadd --gid 1000 $USERNAME \
+# Ubuntu 24.04 ships a default "ubuntu" user owning UID/GID 1000, which we need for
+# our own user, so drop whatever holds 1000 before creating it.
+RUN if id -u 1000 >/dev/null 2>&1; then userdel -r "$(id -un 1000)" 2>/dev/null || true; fi \
+  && if getent group 1000 >/dev/null 2>&1; then groupdel "$(getent group 1000 | cut -d: -f1)"; fi \
+  && groupadd --gid 1000 $USERNAME \
   && useradd --uid 1000 --gid 1000 -m -s /bin/bash $USERNAME \
   && echo "$USERNAME ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/$USERNAME \
   && chmod 0440 /etc/sudoers.d/$USERNAME

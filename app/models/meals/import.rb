@@ -170,6 +170,8 @@ module Meals
       self.header_map = {}
       bad_headers = []
       row.each_with_index do |cell, col_index|
+        # Spreadsheet exports often include blank trailing columns. We ignore them.
+        next if cell.blank?
         if (attrib = untranslate_header(cell) || role_from_header(cell))
           header_map[col_index] = attrib
         elsif !export_only_header?(cell)

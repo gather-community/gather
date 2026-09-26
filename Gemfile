@@ -6,9 +6,9 @@ gem "active_model_serializers", "~> 0.10.16"
 gem "acts_as_list", "~> 1.2"
 gem "acts_as_tenant", "~> 0.4"
 gem "attribute_normalizer", "~> 1.2"
-gem "aws-sdk-s3", "~> 1.226", require: false
+gem "aws-sdk-s3", "~> 1.232", require: false
 gem "babosa", "~> 1.0"
-gem "bootsnap", "~> 1.24"
+gem "bootsnap", "~> 1.26"
 gem "bootstrap-kaminari-views", "~> 0.0"
 gem "bootstrap-sass", "~> 3.4"
 gem "browser", "~> 6"
@@ -31,14 +31,14 @@ gem "exception_notification", "~> 5.0"
 gem "factory_bot_rails", "~> 6.5"
 gem "faker", "~> 3.8"
 gem "font-awesome-sass", "~> 6.7"
-gem "google-apis-drive_v3", "~> 0.81"
+gem "google-apis-drive_v3", "~> 0.87"
 gem "googleauth", "~> 1.17"
 gem "hcaptcha", "~> 7.1"
 gem "hirb", "~> 0.7"
 gem "i18n-js", "~> 4.2"
 gem "icalendar", "~> 2.12"
 gem "ice_cube", "~> 0.16"
-gem "image_processing", "~> 2.0"
+gem "image_processing", "~> 2.1"
 gem "inline_svg", "~> 1.8"
 gem "jquery-rails", "~> 4.6"
 gem "jsbundling-rails", "~> 1.3"
@@ -79,7 +79,7 @@ gem "wisper-activerecord", "~> 1.0"
 gem "with_advisory_lock", git: "https://github.com/ClosureTree/with_advisory_lock", branch: "master"
 
 group :development, :test do
-  gem "annotaterb", "~> 4.23"
+  gem "annotaterb", "~> 4.25"
   gem "awesome_print", "~> 1.6"
   gem "bcrypt_pbkdf", ">= 1.0", "< 2.0" # For Capistrano
   gem "byebug", "~> 13.0"
@@ -97,14 +97,14 @@ group :development, :test do
   gem "pry-rails", "~> 0.3"
   gem "pry", "~> 0.14"
   gem "rspec-rails", "~> 8.0"
-  gem "rubocop-rails", "2.35.5"
-  gem "rubocop", "~> 1.87"
+  gem "rubocop-rails", "2.36.0"
+  gem "rubocop", "~> 1.88"
   gem "selenium-webdriver", "~> 4.44"
   gem "spring", "~> 4.7"
   gem "standard", "~> 1.53"
   gem "thin", "~> 1.7"
   gem "vcr", "~> 6.4"
-  gem "webmock", "~> 3.1"
+  gem "webmock", "~> 3.26"
 
   # Great for debugging i18n paths. Uncomment temporarily when neeeded.
   # Adds a lot of junk to the log when not needed, so only uncomment if needed.
@@ -126,6 +126,6 @@ gem "smstools", "~> 0.2"
 
 gem "turbo-rails", "~> 2.0"
 
-gem "money", "~> 7.0"
+gem "money", "~> 7.1"
 
 gem "logtail-rails", "~> 0.2.12"

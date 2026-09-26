@@ -145,8 +145,11 @@ module Calendars
       starts_at.try(:future?)
     end
 
+    # A transient recurring occurrence has no created_at of its own, so it asks its base eventlet:
+    # "recently created" means the series was just made.
     def recently_created?
-      Time.current - created_at < 1.hour
+      base = linkable.is_a?(Eventlet) ? linkable : self
+      base.created_at.present? && Time.current - base.created_at < 1.hour
     end
 
     def guidelines_ok?

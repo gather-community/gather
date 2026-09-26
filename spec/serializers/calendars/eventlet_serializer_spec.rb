@@ -38,6 +38,13 @@ describe Calendars::EventletSerializer do
       subject(:url) { described_class.new(eventlet).url }
 
       it { is_expected.to eq("/calendars/eventlets/#{base_eventlet.id}?occurrence=#{occ_time.to_i}") }
+
+      it "carries origin_page so the show page's actions return to the combined view" do
+        url = described_class.new(eventlet, origin_page: "combined").url
+        expect(url).to eq(
+          "/calendars/eventlets/#{base_eventlet.id}?occurrence=#{occ_time.to_i}&origin_page=combined"
+        )
+      end
     end
   end
 

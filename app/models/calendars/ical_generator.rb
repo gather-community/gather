@@ -91,7 +91,7 @@ module Calendars
           all_day: occurrence.all_day?)
         e.dtend = date_or_time_value(parent.ends_at + occurrence.end_offset.seconds,
           all_day: occurrence.all_day?, is_end: true)
-        e.rrule = Icalendar::Values::Recur.new(parent.schedule.rrules.first.to_ical)
+        e.rrule = recur_value(parent.schedule.rrules.first, all_day: occurrence.all_day?)
         e.location = occurrence.location
         e.summary = occurrence.name
         e.description = ([occurrence.note] + [url_for_event(occurrence)]).compact.join("\n")
@@ -99,6 +99,15 @@ module Calendars
       end
 
       emit_recurrence_id_vevents(event_overrides, base_eventlet, occurrence)
+    end
+
+    # RFC 5545 requires UNTIL to match DTSTART's value type. An all-day series has a DATE DTSTART,
+    # but ice_cube always writes UNTIL as a UTC timestamp, so rewrite it as the last occurrence's
+    # local date. (until_time is re-zoned to the stored zone, so to_date is the local date.)
+    def recur_value(rule, all_day:)
+      recur = Icalendar::Values::Recur.new(rule.to_ical)
+      recur.until = rule.until_time.to_date.strftime("%Y%m%d") if all_day && rule.until_time
+      recur
     end
 
     # Emits EXDATE lines for occurrences that are suppressed on this calendar.

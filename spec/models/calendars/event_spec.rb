@@ -211,6 +211,18 @@ describe Calendars::Event do
         end
       end
 
+      context "with a zoned until time in the evening, west of UTC" do
+        around { |example| Time.use_zone("America/Toronto") { example.run } }
+
+        it "stores the local date, not the next day's UTC date" do
+          start = Time.zone.parse("2026-10-01 21:00")
+          rule = IceCube::Rule.weekly.until(Time.zone.parse("2026-10-15 21:00"))
+          event = create(:event, starts_at: start, ends_at: start + 1.hour, recurrence_rule: rule.to_hash)
+          event.reload.update!(name: "Updated")
+          expect(event.recurrence_end_date).to eq(Date.new(2026, 10, 15))
+        end
+      end
+
       context "with a rule having a count" do
         it "stores the date of the last occurrence" do
           # 3 weekly occurrences starting 2026-06-01: Jun 1, 8, 15

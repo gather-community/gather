@@ -3,7 +3,7 @@
 <% meal = event.meal&.decorate %>
 
 <% content_for(:title, "Event: #{occurrence.name}") %>
-<% content_for(:action_links, event.action_links(:show)) %>
+<% content_for(:action_links, occurrence.action_links(:show)) %>
 
 <% content_for(:mobile_back_link) do %>
   <%= render partial: "shared/mobile_back_link", locals: {label: "Calendars", path: calendars_events_path } %>

@@ -57,7 +57,8 @@ describe Subscription::MessagingTopupManager do
 
       before do
         allow(Stripe::Subscription).to receive(:retrieve).and_return(
-          double(items: double(data: [double(id: "si_1")]), latest_invoice: double("invoice", id: "in_x"))
+          double(status: "active", cancel_at_period_end: false,
+            items: double(data: [double(id: "si_1")]), latest_invoice: double("invoice", id: "in_x"))
         )
       end
 
@@ -67,12 +68,89 @@ describe Subscription::MessagingTopupManager do
         )
         manager.set_amount!(500)
       end
+
+      it "does not touch cancel_at_period_end when nothing is scheduled" do
+        allow(Stripe::SubscriptionItem).to receive(:update)
+        expect(Stripe::Subscription).not_to receive(:update)
+        manager.set_amount!(500)
+      end
+    end
+
+    # Re-adding a topup during its wind-down must genuinely revive it. The Stripe item still exists
+    # while cancelling, so without clearing cancel_at_period_end the price swap lands on a
+    # subscription that is still ending and the user wrongly believes they re-subscribed.
+    context "when the existing topup is winding down" do
+      let!(:topup) { create(:messaging_topup, community: community, stripe_id: "sub_topup_x") }
+
+      before do
+        allow(Stripe::Subscription).to receive(:retrieve).and_return(
+          double(status: "active", cancel_at_period_end: true,
+            items: double(data: [double(id: "si_1")]), latest_invoice: double("invoice", id: "in_x"))
+        )
+        allow(Stripe::SubscriptionItem).to receive(:update)
+      end
+
+      it "clears cancel_at_period_end so the topup is genuinely revived" do
+        expect(Stripe::Subscription).to receive(:update)
+          .with("sub_topup_x", cancel_at_period_end: false)
+        manager.set_amount!(500)
+      end
+
+      # Reviving before the swap means a failure clearing the cancellation leaves the topup untouched
+      # rather than repriced but still dying.
+      it "revives before repricing" do
+        calls = []
+        allow(Stripe::Subscription).to receive(:update) { calls << :resume }
+        allow(Stripe::SubscriptionItem).to receive(:update) { calls << :reprice }
+        manager.set_amount!(500)
+        expect(calls).to eq([:resume, :reprice])
+      end
+
+      it "revives and reprices when the community picks a different amount" do
+        expect(Stripe::Subscription).to receive(:update)
+          .with("sub_topup_x", cancel_at_period_end: false)
+        expect(Stripe::SubscriptionItem).to receive(:update).with(
+          "si_1", hash_including(price: "price_1", proration_behavior: "always_invoice")
+        )
+        manager.set_amount!(2000)
+      end
+
+      it "keeps the local record rather than creating a second one" do
+        expect { manager.set_amount!(500) }.not_to change(Subscription::MessagingTopup, :count)
+        expect(community.reload.messaging_topup.stripe_id).to eq("sub_topup_x")
+      end
+    end
+
+    # Once Stripe has actually canceled, the item and price are still readable, so repricing would
+    # target a dead subscription. The stale row is reaped and a fresh subscription created instead.
+    context "when the existing topup's Stripe subscription has already ended" do
+      let!(:topup) { create(:messaging_topup, community: community, stripe_id: "sub_topup_dead") }
+
+      before do
+        allow(Stripe::Subscription).to receive(:retrieve).and_return(
+          double(status: "canceled", cancel_at_period_end: false,
+            items: double(data: [double(id: "si_1")]), latest_invoice: nil)
+        )
+      end
+
+      it "reaps the stale row and creates a fresh subscription" do
+        expect(Stripe::SubscriptionItem).not_to receive(:update)
+        expect(Stripe::Subscription).to receive(:create)
+          .and_return(double(id: "sub_topup_new", latest_invoice: double("invoice", id: "in_x")))
+
+        manager.set_amount!(500)
+
+        expect(community.reload.messaging_topup.stripe_id).to eq("sub_topup_new")
+        expect(Subscription::MessagingTopup.where(stripe_id: "sub_topup_dead")).to be_empty
+      end
     end
   end
 
   describe "#cancel!" do
     it "schedules cancellation at period end" do
       create(:messaging_topup, community: community, stripe_id: "sub_topup_x")
+      allow(Stripe::Subscription).to receive(:retrieve)
+        .and_return(stripe_subscription_double(status: "active", cancel_at_period_end: false))
       expect(Stripe::Subscription).to receive(:update).with("sub_topup_x", cancel_at_period_end: true)
       manager.cancel!
     end
@@ -80,6 +158,14 @@ describe Subscription::MessagingTopupManager do
     it "is a no-op when there is no topup" do
       expect(Stripe::Subscription).not_to receive(:update)
       manager.cancel!
+    end
+
+    it "reaps the local row instead of cancelling a subscription Stripe has already ended" do
+      create(:messaging_topup, community: community, stripe_id: "sub_topup_dead")
+      allow(Stripe::Subscription).to receive(:retrieve)
+        .and_return(stripe_subscription_double(status: "canceled", cancel_at_period_end: false))
+      expect(Stripe::Subscription).not_to receive(:update)
+      expect { manager.cancel! }.to change(Subscription::MessagingTopup, :count).by(-1)
     end
   end
 
@@ -91,8 +177,9 @@ describe Subscription::MessagingTopupManager do
       allow(Stripe::Price).to receive(:create).and_return(price)
       item = stripe_subscription_item_double(id: "si_1",
         current_period_end: Time.zone.local(2026, 8, 1).to_i)
-      allow(Stripe::Subscription).to receive(:retrieve)
-        .and_return(stripe_subscription_double(items: [item]))
+      allow(Stripe::Subscription).to receive(:retrieve).and_return(
+        stripe_subscription_double(status: "active", cancel_at_period_end: false, items: [item])
+      )
     end
 
     it "sums the proration lines of the previewed invoice" do

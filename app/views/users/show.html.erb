@@ -19,7 +19,12 @@
         <% end %>
         <% @memberships.each do |mship| %>
           <% icon = mship.manager? ? "users-cog" : "users" %>
-          <%= link_to(icon_tag(icon) << " " << mship.group_name, mship.group, class: "pill pill-normal") %>
+          <% label = icon_tag(icon) << " " << mship.group_name %>
+          <% if policy(mship.group).show? %>
+            <%= link_to(label, mship.group, class: "pill pill-normal") %>
+          <% else %>
+            <div class="pill pill-normal"><%= label %></div>
+          <% end %>
         <% end %>
       </div>
       <div class="col-sm-8">

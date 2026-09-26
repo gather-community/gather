@@ -14,6 +14,9 @@
 module ApplicationControllable::RequestPreprocessing
   extend ActiveSupport::Concern
 
+  # Reported in place of Pundit::NotAuthorizedError, which Sentry is configured to ignore.
+  class InternalLinkDenied < StandardError; end
+
   included do
     # This indicates to acts_as_tenant that we're planning to set the tenant via a before_action
     # The actual before_action (set_tenant) is called below.
@@ -204,6 +207,7 @@ module ApplicationControllable::RequestPreprocessing
     }
 
     if user_signed_in?
+      Sentry.set_user(id: real_current_user.id)
       data[:user] = {
         id: real_current_user.id,
         name: real_current_user.name,
@@ -232,9 +236,27 @@ module ApplicationControllable::RequestPreprocessing
     if current_user&.inactive?
       redirect_to(inactive_path)
     else
+      # Sentry ignores these (see config/initializers/sentry.rb). But a denial reached from a link on
+      # one of our own pages usually means the UI offered something the policy forbids, so report it.
+      report_internal_link_denial(exception) if internal_referrer?
       # This will be handled by Rails and 403 page will be rendered.
       raise exception
     end
+  end
+
+  def report_internal_link_denial(exception)
+    policy = exception.policy&.class&.name
+    # The message is used for grouping in Sentry, so keep it to policy and query.
+    error = InternalLinkDenied.new("#{policy}##{exception.query}")
+    Gather::ErrorReporter.instance.report(error, level: :warning,
+      data: {referrer: request.referer, url: request.url})
+  end
+
+  def internal_referrer?
+    host = URI.parse(request.referer.to_s).host
+    host.present? && (host == Settings.url.host || host.end_with?(".#{Settings.url.host}"))
+  rescue URI::InvalidURIError
+    false
   end
 
   # If route community is specified explicitly via community_for_route, should we redirect the user

@@ -4,7 +4,7 @@ source "https://rubygems.org"
 
 gem "active_model_serializers", "~> 0.10.16"
 gem "acts_as_list", "~> 1.2"
-gem "acts_as_tenant", "~> 0.4"
+gem "acts_as_tenant", "~> 2.0"
 gem "attribute_normalizer", "~> 1.2"
 gem "aws-sdk-s3", "~> 1.226", require: false
 gem "babosa", "~> 1.0"

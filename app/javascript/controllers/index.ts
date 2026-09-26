@@ -35,3 +35,6 @@ application.register("confirm", ConfirmController);
 
 import MessagingTopupController from "./messaging_topup_controller";
 application.register("messaging-topup", MessagingTopupController);
+
+import Calendars__EventletDeleteController from "./calendars/eventlet_delete_controller";
+application.register("calendars--eventlet-delete", Calendars__EventletDeleteController);

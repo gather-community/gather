@@ -180,3 +180,86 @@ describe "calendar eventlet drag update" do
     end.to raise_error(Pundit::NotAuthorizedError)
   end
 end
+
+describe "calendar eventlet delete" do
+  let(:community) { create(:community) }
+  let!(:user) { create(:user, community: community) }
+  let!(:calendar) { create(:calendar, community: community, name: "Main Hall") }
+  # Weekly at 6pm. Started two weeks ago and created long ago, so the creator can no longer delete
+  # the whole series, only future occurrences.
+  let(:series_start) { 2.weeks.ago.midnight + 18.hours }
+  let!(:event) do
+    create(:event, calendar: calendar, creator: user, name: "Weekly Event", starts_at: series_start,
+      ends_at: series_start + 1.hour, recurrence_rule: IceCube::Rule.weekly.to_hash)
+  end
+  let(:eventlet) { event.eventlets.first }
+  let(:future_occ) { series_start + 3.weeks }
+
+  before do
+    event.update_columns(created_at: 1.month.ago)
+    eventlet.update_columns(created_at: 1.month.ago)
+    use_user_subdomain(user)
+    sign_in(user)
+  end
+
+  def delete_eventlet(origin_page: nil, **params)
+    delete(calendars_eventlet_path(eventlet, origin_page: origin_page), params: {calendars_eventlet: params})
+  end
+
+  # Requests clear the tenant, so checks made afterward need it set again.
+  def after_request(&block)
+    ActsAsTenant.with_tenant(Defaults.cluster, &block)
+  end
+
+  it "deletes a future occurrence and returns to the calendar on its date" do
+    delete_eventlet(calendar_scope: "all", series_scope: "occurrence", occurrence_start: future_occ.to_i)
+
+    after_request do
+      expect(event.event_overrides.sole).to have_attributes(deleted: true, occurrence_start: future_occ)
+    end
+    expect(response).to redirect_to(calendar_events_path(calendar, date: future_occ.to_date.to_fs(:no_time)))
+    expect(flash[:success]).to eq("The occurrence was deleted.")
+  end
+
+  it "returns to the combined view when that's where the user came from" do
+    delete_eventlet(origin_page: "combined", calendar_scope: "all", series_scope: "following",
+      occurrence_start: future_occ.to_i)
+
+    expect(response).to redirect_to(calendars_events_path(date: future_occ.to_date.to_fs(:no_time)))
+    after_request { expect(event.reload.recurrence_end_date).to eq((future_occ - 1.week).to_date) }
+  end
+
+  it "refuses to let the creator delete a series that has started" do
+    expect do
+      delete_eventlet(calendar_scope: "all", series_scope: "series")
+    end.to raise_error(Pundit::NotAuthorizedError)
+    after_request { expect(Calendars::Event.exists?(event.id)).to be(true) }
+  end
+
+  it "refuses to let the creator delete a past occurrence" do
+    expect do
+      delete_eventlet(calendar_scope: "all", series_scope: "occurrence", occurrence_start: series_start.to_i)
+    end.to raise_error(Pundit::NotAuthorizedError)
+  end
+
+  it "404s for an occurrence that was already deleted" do
+    create(:event_override, event: event, occurrence_start: future_occ, deleted: true)
+    expect do
+      delete_eventlet(calendar_scope: "all", series_scope: "occurrence", occurrence_start: future_occ.to_i)
+    end.to raise_error(ActiveRecord::RecordNotFound)
+  end
+
+  it "shows an error for an invalid choice without deleting anything" do
+    delete_eventlet(calendar_scope: "this", series_scope: "series")
+
+    expect(flash[:error]).to eq("This event is only on one calendar")
+    after_request { expect(Calendars::Event.exists?(event.id)).to be(true) }
+  end
+
+  it "doesn't let the old event delete route bypass the series rule" do
+    expect do
+      delete(calendars_event_path(event))
+    end.to raise_error(Pundit::NotAuthorizedError)
+    after_request { expect(Calendars::Event.exists?(event.id)).to be(true) }
+  end
+end

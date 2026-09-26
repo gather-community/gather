@@ -6,6 +6,27 @@ en:
           start: "%{base} (Start)"
           end: "%{base} (End)"
     all_day: "All Day"
+    eventlet_deletion:
+      success:
+        event: "Event deleted successfully."
+        series: "All occurrences of the event were deleted."
+        following: "This and all following occurrences of the event were deleted."
+        occurrence: "The occurrence was deleted."
+        calendar_series: "The event was removed from %{calendar}."
+        calendar_occurrence: "The occurrence was removed from %{calendar}."
+      prompts:
+        calendar:
+          title: "Delete multi-calendar event"
+          content: "'%{name}' appears on more than one calendar:"
+          this: "Delete only from %{calendar}"
+          all: "Delete from all calendars"
+        series:
+          title: "Delete recurring event"
+          content_all: "'%{name}' repeats. Which occurrences should be deleted?"
+          content_this: "'%{name}' repeats. Which occurrences should be deleted from %{calendar}?"
+          occurrence: "Only this occurrence"
+          following: "This and following"
+          series: "All occurrences"
   calendars/protocol:
     applicability: "Applicability"
     no_kinds_html: "This community has no event types defined. See the <a href='%{url}'>settings page</a>."

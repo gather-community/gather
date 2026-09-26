@@ -1,5 +1,6 @@
 import {Controller} from "@hotwired/stimulus";
 import {promptModal} from "../utils/modal";
+import {submitHiddenForm} from "../utils/hidden_form";
 
 /*
  * Generic "type a token to confirm, then POST a DELETE form" flow, shared by user, household,
@@ -43,26 +44,6 @@ export default class extends Controller {
       return;
     }
 
-    const form = document.createElement("form");
-    form.method = "post";
-    form.action = this.urlValue;
-    this.appendHidden(form, "_method", "delete");
-    this.appendHidden(form, "confirmation", typed);
-
-    const csrfMeta = document.querySelector<HTMLMetaElement>("meta[name=\"csrf-token\"]");
-    if (csrfMeta) {
-      this.appendHidden(form, "authenticity_token", csrfMeta.content);
-    }
-
-    document.body.appendChild(form);
-    form.submit();
-  }
-
-  private appendHidden(form: HTMLFormElement, name: string, value: string) {
-    const input = document.createElement("input");
-    input.type = "hidden";
-    input.name = name;
-    input.value = value;
-    form.appendChild(input);
+    submitHiddenForm(this.urlValue, "delete", {confirmation: typed});
   }
 }

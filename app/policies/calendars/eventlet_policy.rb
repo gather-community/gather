@@ -28,8 +28,10 @@ module Calendars
       active? && !forbidden_by_protocol?
     end
 
-    # Creation and deletion still happen via the Event controller and policy. Only the drag-and-drop
-    # time change is handled directly by EventletsController#update.
+    # Creation still happens via the Event controller and policy. Drag-and-drop time changes
+    # (EventletsController#update) and deletions that need a scope choice (EventletsController#destroy)
+    # are handled directly. For a recurring occurrence, destroy? is asked of the resolved transient
+    # occurrence, so future? refers to that occurrence rather than the series start.
     def create?
       calendar.active? && !calendar.system? &&
         active? && !read_only_or_forbidden_by_protocol? && !meal?
@@ -55,6 +57,11 @@ module Calendars
     # themselves are computed server-side, never sent by the client.
     def permitted_attributes
       %i[starts_at ends_at occurrence_start calendar_scope series_scope]
+    end
+
+    # Deletion sends the scope choices and the occurrence. See EventletDeletionForm.
+    def permitted_attributes_for_destroy
+      %i[occurrence_start calendar_scope series_scope]
     end
 
     private

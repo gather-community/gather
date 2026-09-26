@@ -112,6 +112,17 @@ describe Meals::Import do
       end
     end
 
+    context "with blank header columns" do
+      let!(:formula) { create(:meal_formula, is_default: true) }
+      let!(:calendar) { create(:calendar, name: "Large") }
+      let(:csv) { "Date/Time,Locations,,Head Cook,\n2019-01-31 12:00,Large,,,\n" }
+
+      it "ignores the blank columns" do
+        expect(import).to be_successful
+        expect(Meals::Meal.count).to eq(1)
+      end
+    end
+
     context "with missing required headers" do
       let!(:formula) { create(:meal_formula, name: "Foo") }
       let(:csv) { prepare_fixture("meals/import/missing_required_headers.csv") }

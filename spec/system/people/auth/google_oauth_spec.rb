@@ -143,15 +143,74 @@ describe "google oauth" do
     end
   end
 
-  context "without oauth stubbed", desktop: true do
-    context "with invalid query params on callback" do
-      it "should show error" do
-        expect(Gather::ErrorReporter.instance).to receive(:report) do |error|
-          expect(error.message).to eq("OAuth failure")
+  context "with oauth failure" do
+    before do
+      OmniAuth.config.test_mode = true
+      OmniAuth.config.mock_auth[:google_oauth2] = failure_type
+    end
+
+    context "when user cancels on Google" do
+      let(:failure_type) { :access_denied }
+
+      it "should show cancelled message without reporting" do
+        expect(Gather::ErrorReporter.instance).not_to receive(:report)
+        visit "/"
+        expect_sign_in_with_google_link_and_click
+        expect(page).to be_signed_out_root
+        expect(page).to have_content("Could not sign you in from Google because the sign-in was cancelled.")
+      end
+    end
+
+    context "with csrf failure" do
+      let(:failure_type) { :csrf_detected }
+
+      context "when not signed in" do
+        it "should ask user to try again without reporting" do
+          expect(Gather::ErrorReporter.instance).not_to receive(:report)
+          visit "/"
+          expect_sign_in_with_google_link_and_click
+          expect(page).to be_signed_out_root
+          expect(page).to have_content("your sign-in session expired. Please try again.")
         end
-        visit "/people/users/auth/google_oauth2/callback" # No params
+      end
+
+      context "when already signed in" do
+        let(:existing_google_id) { "foo@gmail.com" }
+
+        it "should redirect to home without error" do
+          expect(Gather::ErrorReporter.instance).not_to receive(:report)
+          login_as(user, scope: :user)
+          visit "/people/users/auth/google_oauth2/callback"
+          expect(page).to have_signed_in_user(user)
+          expect(page).not_to have_content("Could not sign you in")
+        end
+      end
+    end
+
+    context "with other failure", desktop: true do
+      let(:failure_type) { :invalid_credentials }
+
+      it "should report without request env" do
+        expect(Gather::ErrorReporter.instance).to receive(:report) do |error, **kwargs|
+          expect(error.message).to eq("OAuth failure")
+          expect(kwargs).not_to have_key(:env)
+          expect(kwargs[:data][:error_type]).to eq(:invalid_credentials)
+        end
+        visit "/"
+        expect_sign_in_with_google_link_and_click
         expect(page).to be_signed_out_root
         expect(page).to have_content("Could not sign you in from Google because of an unspecified error.")
+      end
+    end
+  end
+
+  context "without oauth stubbed", desktop: true do
+    context "with invalid query params on callback" do
+      it "should treat as expired session without reporting" do
+        expect(Gather::ErrorReporter.instance).not_to receive(:report)
+        visit "/people/users/auth/google_oauth2/callback" # No params
+        expect(page).to be_signed_out_root
+        expect(page).to have_content("your sign-in session expired. Please try again.")
       end
     end
   end

@@ -1,4 +1,4 @@
-3# frozen_string_literal: true
+# frozen_string_literal: true
 
 require "rails_helper"
 
@@ -46,6 +46,23 @@ describe "calendars", js: true do
       expect(page).to have_content(/Cal1.+Group.+  Cal2.+  Cal3.+Cal5.+Cal4/m)
       all(".move-links .up")[3].click
       expect(page).to have_content(/Cal1.+Group.+  Cal3.+  Cal2.+Cal5.+Cal4/m)
+    end
+
+    context "as calendar coordinator" do
+      let(:actor) { create(:calendar_coordinator) }
+
+      scenario "index without admin-only controls" do
+        visit(calendars_path)
+        expect(page).to have_title("Calendars")
+        expect(page).to have_content(/Group.+  Cal2.+  Cal3.+Cal1.+Cal4.+Cal5/m)
+        expect(page).to have_link("Create Calendar")
+        expect(page).not_to have_link("Create Group")
+        within("table.index") do
+          expect(page).to have_link("Cal1")
+          expect(page).not_to have_link("Group")
+          expect(page).not_to have_css(".move-links")
+        end
+      end
     end
 
     scenario "create and update calendar" do

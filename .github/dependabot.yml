@@ -16,6 +16,15 @@ updates:
         update-types:
           - "minor"
           - "patch"
+    ignore:
+      # The Elasticsearch gems must track our ES 7 server, so they only move as part of a
+      # deliberate ES upgrade. Ignore rules also apply to security updates, so patch
+      # releases stay unignored to let security fixes within the 7.x line through.
+      # Alerts still appear in the Security tab regardless.
+      - dependency-name: "elasticsearch*"
+        update-types:
+          - "version-update:semver-major"
+          - "version-update:semver-minor"
 
   - package-ecosystem: "npm"
     directory: "/"

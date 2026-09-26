@@ -25,7 +25,7 @@ module Utils
       end
 
       def load_yaml(path)
-        YAML.load_file(resource_path("data/#{path}"))
+        YAML.safe_load_file(resource_path("data/#{path}"), permitted_classes: [Symbol, Time, Date])
       end
 
       def distrib_rand(*pcts)

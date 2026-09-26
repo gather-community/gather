@@ -10,7 +10,7 @@ module Calendars
     before_action -> { nav_context(:calendars, :calendars) }
 
     def index
-      authorize(sample_node)
+      authorize(sample_calendar)
       prep_calendar_table
     end
 

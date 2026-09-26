@@ -102,7 +102,7 @@ group :development, :test do
   gem "selenium-webdriver", "~> 4.44"
   gem "spring", "~> 4.7"
   gem "standard", "~> 1.53"
-  gem "thin", "~> 1.7"
+  gem "thin", "~> 2.0"
   gem "vcr", "~> 6.4"
   gem "webmock", "~> 3.1"
 

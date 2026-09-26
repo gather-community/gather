@@ -39,7 +39,20 @@ module Stripe
         reconcile_topup(event, object)
         enqueue_sync(InvoiceFields.subscription_id(object))
       when "subscription"
+        reap_ended_topup(object.id) if event.type == "customer.subscription.deleted"
         enqueue_sync(object.id)
+      end
+    end
+
+    # A topup subscription reaching its scheduled end. The local row must go, because a canceled
+    # subscription reads back from Stripe as a healthy active topup — cancel_at_period_end flips to
+    # false and the item and price stay readable — so the row would otherwise present a dead topup as
+    # live forever. The wallet balance is untouched; see MessagingTopup#reap_if_canceled!. A no-op for
+    # the base subscription's id, which enqueue_sync handles instead.
+    def reap_ended_topup(stripe_subscription_id)
+      return if stripe_subscription_id.blank?
+      ActsAsTenant.without_tenant do
+        ::Subscription::MessagingTopup.find_by(stripe_id: stripe_subscription_id)&.reap!
       end
     end
 

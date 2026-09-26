@@ -26,19 +26,32 @@ describe "messaging monthly topup", js: true do
     )
   end
 
-  def fake_topup_sub(amount_cents:)
+  # status/cancel_at_period_end are parameterized because the wind-down and the completed
+  # cancellation are the two states the page has to tell apart, and Stripe reports them confusingly:
+  # while cancelling the status is still "active", and once canceled cancel_at_period_end flips back
+  # to false while the item and price stay readable.
+  def fake_topup_sub(amount_cents:, status: "active", cancel_at_period_end: false)
     item = stripe_subscription_item_double(
-      id: "si_1", current_period_end: 1.month.from_now.to_i,
+      id: "si_1", current_period_end: topup_period_end.to_i,
       price: double(unit_amount: amount_cents, currency: "usd")
     )
-    stripe_subscription_double(status: "active", cancel_at_period_end: false,
+    stripe_subscription_double(status: status, cancel_at_period_end: cancel_at_period_end,
       latest_invoice: nil, items: [item])
   end
+
+  let(:topup_period_end) { 1.month.from_now }
+  let(:topup_status) { "active" }
+  let(:topup_canceling) { false }
 
   before do
     create(:feature_flag, name: "messaging", status: true)
     allow(Stripe::Subscription).to receive(:retrieve) do |args|
-      args[:id].to_s.start_with?("sub_topup") ? fake_topup_sub(amount_cents: 500) : fake_main_sub
+      if args[:id].to_s.start_with?("sub_topup")
+        fake_topup_sub(amount_cents: 500, status: topup_status,
+          cancel_at_period_end: topup_canceling)
+      else
+        fake_main_sub
+      end
     end
     use_user_subdomain(actor)
     login_as(actor, scope: :user)
@@ -107,6 +120,114 @@ describe "messaging monthly topup", js: true do
       # The notice reflects the Stripe-computed proration, not a hard-coded amount.
       expect(page).to have_content("$3.42 today (prorated)")
       expect(page).to have_content("$10.00 per month")
+    end
+
+    scenario "a running topup shows its next payment date and no status" do
+      visit(subscription_path)
+
+      expect(page).to have_content("Next Payment Date")
+      expect(page).to have_content(I18n.l(topup_period_end.to_date))
+      expect(page).to have_no_content("Canceling on")
+      expect(page).to have_link("Edit")
+    end
+
+    # The wind-down: the community chose None, Stripe keeps the subscription "active" until the
+    # paid-through date, and from here no further invoice is generated — so no charge and no credit.
+    # The page must not advertise money that will never move.
+    context "while a cancellation is pending" do
+      let(:topup_canceling) { true }
+
+      scenario "shows None with the wind-down date and no payment date" do
+        visit(subscription_path)
+
+        # The chosen amount is None: nothing more will be billed.
+        expect(page).to have_content("None")
+        expect(page).to have_no_content("$5.00/month")
+        # The end date is not a payment date, so only the Status row carries it.
+        expect(page).to have_no_content("Next Payment Date")
+        expect(page).to have_content("Canceling on #{I18n.l(topup_period_end.to_date)}")
+      end
+
+      scenario "the modal preselects None, not the amount winding down" do
+        visit(subscription_path)
+        click_link("Add")
+
+        expect(page).to have_content("Choose how much messaging credit")
+        expect(find("input[name='topup_choice'][value='none']")).to be_checked
+        expect(find("input[name='topup_choice'][value='500']")).not_to be_checked
+
+        # Re-picking None changes nothing, so there is nothing to save.
+        find("label", text: "None").click
+        expect(page).to have_button("Save", disabled: true)
+      end
+
+      # Reviving at the existing amount reuses the same Stripe price, so nothing prorates. The copy
+      # must not promise a charge today.
+      scenario "re-adding the same amount promises no charge today" do
+        allow(Stripe::Price).to receive(:list).and_return(double(data: []))
+        allow(Stripe::Price).to receive(:create).and_return(double(id: "price_1"))
+        allow(Stripe::Invoice).to receive(:create_preview).and_return(
+          stripe_invoice_double(lines: [stripe_invoice_line_double(proration: false, amount: 500)])
+        )
+
+        visit(subscription_path)
+        click_link("Add")
+        find("label", text: "$5.00/month").click
+
+        expect(page).to have_content("Starting next billing month you'll be charged $5.00 per month")
+        expect(page).to have_no_content("charged $5.00 today")
+        expect(page).to have_no_content("(prorated)")
+        expect(page).to have_button("Save", disabled: false)
+      end
+
+      scenario "re-adding revives the topup rather than repricing a dying one" do
+        allow(Stripe::Price).to receive(:list).and_return(double(data: []))
+        allow(Stripe::Price).to receive(:create).and_return(double(id: "price_1"))
+        allow(Stripe::Invoice).to receive(:create_preview).and_return(
+          stripe_invoice_double(lines: [stripe_invoice_line_double(proration: true, amount: 250)])
+        )
+        allow(Stripe::SubscriptionItem).to receive(:update)
+        # The revive: without this the price swap lands on a subscription that is still ending.
+        expect(Stripe::Subscription).to receive(:update)
+          .with("sub_topup1", cancel_at_period_end: false)
+
+        visit(subscription_path)
+        click_link("Add")
+        find("label", text: "$10.00/month").click
+        expect(page).to have_content("$2.50 today (prorated)")
+
+        click_button("Save")
+        expect(page).to have_content("Your monthly messaging topup is set")
+      end
+    end
+
+    # After Stripe actually cancels, nothing about the payload marks the topup as dead except the
+    # status, so a stale row would render as a healthy active topup forever.
+    context "once Stripe has completed the cancellation" do
+      let(:topup_status) { "canceled" }
+
+      scenario "shows no live topup and clears the stale record" do
+        visit(subscription_path)
+
+        expect(page).to have_content("Monthly Topup")
+        expect(page).to have_content("None")
+        expect(page).to have_no_content("$5.00/month")
+        expect(page).to have_no_content("Next Payment Date")
+        expect(page).to have_no_content("Canceling on")
+        # The Add link is back, because adding now means a brand-new subscription.
+        expect(page).to have_link("Add")
+        expect(Subscription::MessagingTopup.count).to eq(0)
+      end
+
+      scenario "the wallet balance survives the cancellation" do
+        account = create(:messaging_account, community: actor.community)
+        create(:messaging_transaction, account: account, amount_cents: 1496)
+
+        visit(subscription_path)
+
+        expect(page).to have_content("Current Balance")
+        expect(page).to have_content("$14.96")
+      end
     end
   end
 

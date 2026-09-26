@@ -13,6 +13,39 @@ describe Subscription::MessagingTopupDecorator do
     end
   end
 
+  describe "#selected_cents" do
+    it "is the amount when the topup is running" do
+      allow(topup).to receive_messages(canceling?: false, amount_cents: 1000)
+      expect(decorator.selected_cents).to eq(1000)
+    end
+
+    # Once cancellation is pending no further invoice is generated, so the amount still sitting on the
+    # Stripe item is not something the community has chosen or will be billed.
+    it "is nil while a cancellation is pending" do
+      allow(topup).to receive_messages(canceling?: true, amount_cents: 1000)
+      expect(decorator.selected_cents).to be_nil
+    end
+  end
+
+  describe "#show_next_payment_date?" do
+    it "is true for a cleanly active topup" do
+      allow(topup).to receive_messages(active?: true, canceling?: false)
+      expect(decorator.show_next_payment_date?).to be(true)
+    end
+
+    # The status stays "active" during the wind-down, but that date is when it ends, not a payment
+    # date: this period is already paid and no new invoice will be generated.
+    it "is false while a cancellation is pending" do
+      allow(topup).to receive_messages(active?: true, canceling?: true)
+      expect(decorator.show_next_payment_date?).to be(false)
+    end
+
+    it "is false when the topup is not active" do
+      allow(topup).to receive_messages(active?: false, canceling?: false)
+      expect(decorator.show_next_payment_date?).to be(false)
+    end
+  end
+
   describe "#status_display" do
     it "is nil when the topup is cleanly active" do
       allow(topup).to receive_messages(canceling?: false, past_due?: false, payment_processing?: false)

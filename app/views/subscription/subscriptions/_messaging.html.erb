@@ -3,10 +3,14 @@
 <% options = Subscription::MessagingTopup.options_for(current_community.default_currency) %>
 <% editable = subscription.messaging_topup_editable? && (options.any? || topup) %>
 <% balance = account&.balance || Money.new(0, current_community.default_currency || "usd") %>
+<%# The effectively-chosen amount, nil once a cancellation is pending — see
+    MessagingTopupDecorator#selected_cents. Everything the user sees keys off this, not off whether a
+    Stripe subscription happens to still exist, so the page never advertises money that won't move. %>
+<% selected_cents = topup&.selected_cents %>
 <div data-controller="messaging-topup"
      data-messaging-topup-preview-url-value="<%= subscription_messaging_topup_preview_path %>"
      data-messaging-topup-update-url-value="<%= subscription_messaging_topup_path %>"
-     data-messaging-topup-current-cents-value="<%= topup&.amount_cents || 0 %>"
+     data-messaging-topup-current-cents-value="<%= selected_cents || 0 %>"
      data-messaging-topup-has-topup-value="<%= topup.present? %>">
   <h2>Messaging</h2>
   <p>
@@ -18,14 +22,14 @@
       <tr>
         <td>Monthly Topup</td>
         <td>
-          <%= topup ? topup.amount_display : "None" %>
+          <%= selected_cents ? topup.amount_display : "None" %>
           <% if editable %>
-            <%= link_to(topup ? "Edit" : "Add", "#", class: "messaging-topup-edit",
+            <%= link_to(selected_cents ? "Edit" : "Add", "#", class: "messaging-topup-edit",
                   data: {action: "messaging-topup#open"}) %>
           <% end %>
         </td>
       </tr>
-      <% if topup&.active? %>
+      <% if topup&.show_next_payment_date? %>
         <tr>
           <td>Next Payment Date</td>
           <td><%= I18n.l(topup.next_bill_date) %></td>

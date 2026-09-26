@@ -30,8 +30,20 @@ module Subscription
       @subscription = subscription
     end
 
+    # The community's local topup row, or nil. A row whose Stripe subscription has already ended is
+    # reaped and treated as nil: its item and price stay readable after cancellation, so without this
+    # set_amount! would try to reprice a dead subscription instead of creating a fresh one. Also the
+    # self-healing fallback for a missed customer.subscription.deleted — the unique index on
+    # community_id means a stale row would otherwise block a new topup entirely.
     def topup
-      @topup ||= community.messaging_topup
+      @topup ||= begin
+        record = community.messaging_topup
+        if record&.reap_if_canceled!
+          community.reload_messaging_topup
+          record = nil
+        end
+        record
+      end
     end
 
     # Points the monthly topup at `cents` per month. Creates the topup subscription on first use
@@ -43,6 +55,11 @@ module Subscription
       price = find_or_create_price(cents, required_currency)
       invoice =
         if existing_item
+          # Revive first if a cancellation is pending, else the price swap lands on a subscription
+          # that is still ending and the user believes they re-subscribed when they haven't. Doing it
+          # before the swap means a failure here leaves the topup untouched rather than repriced but
+          # still dying.
+          resume! if topup.canceling?
           Stripe::SubscriptionItem.update(existing_item.id, price: price.id,
             proration_behavior: "always_invoice")
           latest_invoice
@@ -86,6 +103,16 @@ module Subscription
     end
 
     private
+
+    # Clears a scheduled cancellation so the topup keeps running. The amount itself is handled by the
+    # caller's item swap, so a revive prorates exactly as a change on a live topup does: back to the
+    # same amount reuses the same Stripe price and therefore costs nothing, while a different amount
+    # charges or credits the prorated difference for the remainder of the month.
+    def resume!
+      Stripe::Subscription.update(topup.stripe_id, cancel_at_period_end: false)
+      EventLog.emit(event_name: "topup_resumed", community_id: community.id,
+        description: "Cleared scheduled monthly messaging topup cancellation")
+    end
 
     # Basil moved a line's proration flag under parent.<type>_details. A preview of a subscription
     # item swap produces subscription_item lines; invoice_item lines are checked too so an

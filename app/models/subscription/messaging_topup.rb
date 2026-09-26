@@ -87,9 +87,41 @@ module Subscription
     end
 
     # True once a removal has been scheduled: the topup keeps running until the paid-through date,
-    # then Stripe cancels it. See MessagingTopupManager#cancel!.
+    # then Stripe cancels it. See MessagingTopupManager#cancel!. Note this is *not* true afterwards:
+    # Stripe flips cancel_at_period_end back to false when it actually cancels. See #canceled?.
     def canceling?
       stripe_sub&.cancel_at_period_end == true
+    end
+
+    # True once the Stripe subscription has actually ended. Terminal, so a row in this state is
+    # stale and should be reaped — see #reap_if_canceled!.
+    def canceled?
+      status == "canceled"
+    end
+
+    # Reconciles a local row whose Stripe subscription has already ended, destroying it and returning
+    # true when that has happened (else false). Needed because a canceled subscription is not
+    # self-evidently dead when read back: Stripe flips cancel_at_period_end to false and leaves the
+    # item and its price readable, so a stale row reads as a perfectly healthy active topup. With the
+    # row gone the UI shows "None" and MessagingTopupManager#set_amount! creates a fresh
+    # subscription, which is the correct behaviour after a real cancellation.
+    #
+    # The wallet balance is deliberately untouched: those credits were paid for and messaging keeps
+    # working until they are spent.
+    def reap_if_canceled!
+      populate if stripe_sub.nil?
+      return false unless canceled?
+      reap!
+      true
+    end
+
+    # Destroys the local row for a topup whose Stripe subscription has ended. Called directly by the
+    # customer.subscription.deleted webhook, where the event is itself proof the subscription ended
+    # and re-reading its status from Stripe would be redundant.
+    def reap!
+      EventLog.emit(event_name: "topup_ended", community_id: community_id,
+        description: "Cleared local record of an ended monthly messaging topup", stripe_id: stripe_id)
+      destroy
     end
 
     def payment_processing?

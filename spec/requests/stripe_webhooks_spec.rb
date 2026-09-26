@@ -174,6 +174,51 @@ describe "Stripe webhooks" do
     end
   end
 
+  # A canceled topup subscription reads back from Stripe as a healthy active topup —
+  # cancel_at_period_end flips to false and the item and price stay readable — so the local row must
+  # go when the cancellation completes or the page shows a dead topup as live indefinitely.
+  describe "a topup subscription reaching its scheduled end" do
+    it "clears the local topup record" do
+      post_event(subscription_deleted_event(id: topup_sub_id))
+
+      expect(response).to have_http_status(:ok)
+      with_default_tenant { expect(Subscription::MessagingTopup.count).to eq(0) }
+    end
+
+    # Those credits were paid for and messaging works until they are spent.
+    it "leaves the wallet balance untouched" do
+      account = create(:messaging_account, community: community)
+      create(:messaging_transaction, account: account, amount_cents: 1496)
+
+      post_event(subscription_deleted_event(id: topup_sub_id))
+
+      with_default_tenant { expect(account.reload.balance_cents).to eq(1496) }
+    end
+
+    it "leaves the base subscription alone and still syncs it" do
+      expect { post_event(subscription_deleted_event(id: stripe_sub_id)) }
+        .to have_enqueued_job(Subscription::SyncJob).with(subscription.id)
+      with_default_tenant do
+        expect(Subscription::Subscription.count).to eq(1)
+        expect(Subscription::MessagingTopup.count).to eq(1)
+      end
+    end
+
+    it "ignores a subscription unknown to us" do
+      post_event(subscription_deleted_event(id: "sub_unknown"))
+
+      expect(response).to have_http_status(:ok)
+      with_default_tenant { expect(Subscription::MessagingTopup.count).to eq(1) }
+    end
+
+    # Only the deleted event means the subscription has ended. An update while winding down must not
+    # reap the row: the topup is still live and still owed the month already paid for.
+    it "does not reap on customer.subscription.updated" do
+      post_event(subscription_updated_event(id: topup_sub_id))
+      with_default_tenant { expect(Subscription::MessagingTopup.count).to eq(1) }
+    end
+  end
+
   context "with an invalid signature" do
     it "returns 400 and creates nothing" do
       payload = JSON.generate(invoice_event("invoice.paid"))
@@ -212,6 +257,16 @@ describe "Stripe webhooks" do
     {
       id: "evt_test", object: "event", type: "customer.subscription.updated",
       data: {object: {id: id, object: "subscription", status: "active"}}
+    }
+  end
+
+  # Stripe clears cancel_at_period_end when it actually cancels, which is why the event type rather
+  # than the payload is what tells us the subscription has ended.
+  def subscription_deleted_event(id: stripe_sub_id)
+    {
+      id: "evt_test", object: "event", type: "customer.subscription.deleted",
+      data: {object: {id: id, object: "subscription", status: "canceled",
+                      cancel_at_period_end: false}}
     }
   end
 

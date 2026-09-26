@@ -1,7 +1,9 @@
 <%# Modal for choosing the monthly messaging topup. Reuses the .gather-modal CSS shell but is driven
     by the messaging-topup Stimulus controller (not the generic modal), because it needs radios, a
-    live proration notice, and its own submit. current_cents preselects the matching radio. %>
-<% current_cents = topup&.amount_cents %>
+    live proration notice, and its own submit. current_cents preselects the matching radio; it is the
+    effectively-chosen amount, so a pending cancellation preselects None (what the user chose) rather
+    than the amount that is winding down. %>
+<% current_cents = topup&.selected_cents %>
 <div class="gather-modal hiding" data-messaging-topup-target="modal"
      data-action="keydown.esc@window->messaging-topup#close">
   <div class="gather-modal-overlay" data-action="click->messaging-topup#close"></div>

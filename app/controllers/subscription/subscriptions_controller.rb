@@ -35,7 +35,7 @@ module Subscription
       # section rendered on the post-payment view. Skipped (along with its Stripe call) while
       # messaging is behind its flag.
       return unless FeatureFlag.lookup("messaging").on?(current_user)
-      @messaging_topup = current_community.messaging_topup&.tap(&:populate)
+      @messaging_topup = live_messaging_topup
       @messaging_account = current_community.messaging_account
     end
 
@@ -66,6 +66,16 @@ module Subscription
     end
 
     private
+
+    # The community's monthly topup, live from Stripe, or nil when there is none. A row whose Stripe
+    # subscription has already ended is reaped rather than rendered: after cancellation Stripe clears
+    # cancel_at_period_end and leaves the item and price readable, so a stale row reads back as a
+    # healthy active topup and the page would show a dead topup as live. Backstop for a missed
+    # customer.subscription.deleted webhook, so the page is right on the next load either way.
+    def live_messaging_topup
+      topup = current_community.messaging_topup&.tap(&:populate)
+      topup&.reap_if_canceled! ? nil : topup
+    end
 
     def load_auth_and_populate_subscription(or_initialize: false)
       subscription = if or_initialize

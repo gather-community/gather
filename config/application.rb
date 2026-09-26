@@ -83,7 +83,10 @@ module Gather
         authentication: Settings.smtp.authentication.presence&.to_sym,
         user_name: Settings.smtp.user_name.presence,
         password: Settings.smtp.password.presence,
-        enable_starttls_auto: Settings.smtp.enable_starttls_auto
+        enable_starttls_auto: Settings.smtp.enable_starttls_auto,
+        # The mail gem defaults are 5s, which our provider sometimes exceeds when greeting.
+        open_timeout: 10,
+        read_timeout: 30
       }
     end
 

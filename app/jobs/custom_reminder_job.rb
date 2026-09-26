@@ -8,13 +8,21 @@ class CustomReminderJob < ReminderJob
       clean_old_deliveries
       scheduled_deliveries_by_community.each do |community, deliveries|
         with_cluster(community.cluster) do
-          deliveries.each(&:deliver!)
+          deliveries.each { |delivery| deliver_resiliently(delivery) }
         end
       end
     end
   end
 
   private
+
+  # A delivery error for one recipient shouldn't abort the run. Otherwise the delivery isn't
+  # destroyed and the recipients before the failure get a duplicate on the next run.
+  def deliver_resiliently(delivery)
+    delivery.deliver! do |send_one|
+      with_mail_delivery_resilience(data: {reminder_delivery_id: delivery.id}) { send_one.call }
+    end
+  end
 
   def clean_old_deliveries
     ReminderDelivery.too_old.delete_all

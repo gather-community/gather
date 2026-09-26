@@ -15,7 +15,8 @@ class LandingController < ApplicationController
     if (@invite_token = params[:token])
       flash.now[:notice] = "Welcome to Gather! Please choose a sign in option below."
     end
-    render(layout: false)
+    # Force HTML so requests with a JSON Accept header (usually bots) don't raise MissingTemplate.
+    render(layout: false, formats: :html)
   end
 
   # Used by uptime checker
@@ -34,7 +35,7 @@ class LandingController < ApplicationController
   end
 
   def public_static
-    render_not_found unless %w[privacy-policy markdown].include?(params[:page])
+    return render_not_found unless %w[privacy-policy markdown].include?(params[:page])
     render(params[:page].tr("-", "_"))
   end
 end

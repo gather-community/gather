@@ -43,6 +43,12 @@ describe "messaging monthly topup", js: true do
   let(:topup_status) { "active" }
   let(:topup_canceling) { false }
 
+  # The Messaging section's wrapper. Assertions about rows like "Next Payment Date" must be scoped to
+  # it, because the App Subscription section above has rows of the same name.
+  def messaging_section
+    "[data-controller='messaging-topup']"
+  end
+
   before do
     create(:feature_flag, name: "messaging", status: true)
     allow(Stripe::Subscription).to receive(:retrieve) do |args|
@@ -122,13 +128,17 @@ describe "messaging monthly topup", js: true do
       expect(page).to have_content("$10.00 per month")
     end
 
+    # Scoped to the Messaging section throughout: the App Subscription section has its own "Next
+    # Payment Date" row, so an unscoped assertion would pass or fail on the wrong one.
     scenario "a running topup shows its next payment date and no status" do
       visit(subscription_path)
 
-      expect(page).to have_content("Next Payment Date")
-      expect(page).to have_content(I18n.l(topup_period_end.to_date))
-      expect(page).to have_no_content("Canceling on")
-      expect(page).to have_link("Edit")
+      within(messaging_section) do
+        expect(page).to have_content("Next Payment Date")
+        expect(page).to have_content(I18n.l(topup_period_end.to_date))
+        expect(page).to have_no_content("Canceling on")
+        expect(page).to have_link("Edit")
+      end
     end
 
     # The wind-down: the community chose None, Stripe keeps the subscription "active" until the
@@ -140,12 +150,14 @@ describe "messaging monthly topup", js: true do
       scenario "shows None with the wind-down date and no payment date" do
         visit(subscription_path)
 
-        # The chosen amount is None: nothing more will be billed.
-        expect(page).to have_content("None")
-        expect(page).to have_no_content("$5.00/month")
-        # The end date is not a payment date, so only the Status row carries it.
-        expect(page).to have_no_content("Next Payment Date")
-        expect(page).to have_content("Canceling on #{I18n.l(topup_period_end.to_date)}")
+        within(messaging_section) do
+          # The chosen amount is None: nothing more will be billed.
+          expect(page).to have_content("None")
+          expect(page).to have_no_content("$5.00/month")
+          # The end date is not a payment date, so only the Status row carries it.
+          expect(page).to have_no_content("Next Payment Date")
+          expect(page).to have_content("Canceling on #{I18n.l(topup_period_end.to_date)}")
+        end
       end
 
       scenario "the modal preselects None, not the amount winding down" do
@@ -209,13 +221,15 @@ describe "messaging monthly topup", js: true do
       scenario "shows no live topup and clears the stale record" do
         visit(subscription_path)
 
-        expect(page).to have_content("Monthly Topup")
-        expect(page).to have_content("None")
-        expect(page).to have_no_content("$5.00/month")
-        expect(page).to have_no_content("Next Payment Date")
-        expect(page).to have_no_content("Canceling on")
-        # The Add link is back, because adding now means a brand-new subscription.
-        expect(page).to have_link("Add")
+        within(messaging_section) do
+          expect(page).to have_content("Monthly Topup")
+          expect(page).to have_content("None")
+          expect(page).to have_no_content("$5.00/month")
+          expect(page).to have_no_content("Next Payment Date")
+          expect(page).to have_no_content("Canceling on")
+          # The Add link is back, because adding now means a brand-new subscription.
+          expect(page).to have_link("Add")
+        end
         expect(Subscription::MessagingTopup.count).to eq(0)
       end
 

@@ -88,6 +88,7 @@ describe Subscription::MessagingTopupManager do
             items: double(data: [double(id: "si_1")]), latest_invoice: double("invoice", id: "in_x"))
         )
         allow(Stripe::SubscriptionItem).to receive(:update)
+        allow(Stripe::Subscription).to receive(:update)
       end
 
       it "clears cancel_at_period_end so the topup is genuinely revived" do

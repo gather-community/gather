@@ -21,7 +21,7 @@ class ApplicationJob < ActiveJob::Base
   # if observability of all errors is desired, they must be caught and reported manually.
   #
   # For retries, our standard best practice is to use:
-  #     retry_on(ArgumentError, wait: :exponentially_longer) # default is 5 attempts
+  #     retry_on(ArgumentError, wait: :polynomially_longer) # default is 5 attempts
   #
   # Logging for the retry behavior can be seen in log/<environment>.log. The Delayed Job log
   # at log/delayed_job.log will always say "failed after 1 attempt" because the error only

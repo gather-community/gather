@@ -74,6 +74,22 @@ describe Community do
     end
   end
 
+  describe "#activate" do
+    let(:community) do
+      create(:community, deactivated_at: 1.day.ago, inactivity_warning_count: 3,
+        inactivity_warning_sent_at: 1.day.ago)
+    end
+
+    it "reactivates and clears inactivity warning state" do
+      community.activate
+      community.reload
+      expect(community).to be_active
+      expect(community.inactivity_warning_count).to eq(0)
+      expect(community.inactivity_warning_sent_at).to be_nil
+      expect(community.status).to eq(:trial)
+    end
+  end
+
   describe "#default_currency" do
     it "maps a supported country code to its currency" do
       expect(build(:community, country_code: "CA").default_currency).to eq("cad")

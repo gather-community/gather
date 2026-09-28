@@ -22,6 +22,14 @@ describe CommunityPolicy do
       end
     end
 
+    permissions :activate? do
+      it "permits super admins only" do
+        expect(subject).to permit(super_admin_cmtyX, record)
+        expect(subject).not_to permit(cluster_admin, record)
+        expect(subject).not_to permit(admin, record)
+      end
+    end
+
     permissions :update? do
       it_behaves_like "permits admins but not regular users"
     end

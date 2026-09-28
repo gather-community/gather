@@ -1,3 +1,4 @@
+<% content_for(:flashes, inactive_notice(community)) if community.inactive? %>
 <% content_for(:title, community.name) %>
 <% content_for(:action_links, community.action_links(:admin)) %>
 
@@ -33,6 +34,10 @@
   <tr>
     <td>Created</td>
     <td><%= l(community.created_at, format: :long) %></td>
+  </tr>
+  <tr>
+    <td>Status</td>
+    <td><%= t("communities.community.statuses.#{community.status}") %></td>
   </tr>
 </table>
 

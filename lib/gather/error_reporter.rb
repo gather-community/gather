@@ -4,9 +4,10 @@ module Gather
   class ErrorReporter
     include Singleton
 
-    def report(error, env: nil, data: {})
+    def report(error, env: nil, data: {}, level: :error)
       if Settings.error_reporting == "sentry" && Rails.env.production?
         Sentry.with_scope do |scope|
+          scope.set_level(level)
           storytime = error.respond_to?(:storytime) ? {storytime: error.storytime} : {}
           scope.set_context("Gather", data.merge(request_env: env).merge(storytime))
           Sentry.capture_exception(error)

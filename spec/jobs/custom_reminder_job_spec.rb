@@ -80,6 +80,23 @@ describe CustomReminderJob do
       end
     end
 
+    context "when delivery to one recipient fails" do
+      let(:work_job) do
+        create(:work_job, period: periodA, shift_starts: ["2018-01-01 11:30"], shift_slots: 2)
+      end
+      let!(:assign1) { work_job.shifts[0].assignments.create!(user: userA1) }
+      let!(:assign2) { work_job.shifts[0].assignments.create!(user: userA2) }
+      let!(:reminder) { create_work_job_reminder(work_job, "2018-01-01 6:00") }
+
+      it "reports the error, still sends to the others, and doesn't redeliver" do
+        failing = double.tap { |d| allow(d).to receive(:deliver_now).and_raise(Net::ReadTimeout) }
+        expect(WorkMailer).to receive(:job_reminder).and_return(failing, mlrdbl)
+        expect(Gather::ErrorReporter.instance).to receive(:report).once
+        perform_job
+        expect(ReminderDelivery.count).to eq(0)
+      end
+    end
+
     context "with one reminder already sent and one too far in past" do
       let(:work_job1) do
         create(:work_job, period: periodB, shift_starts: ["2018-01-02 12:00"], shift_slots: 1)

@@ -32,8 +32,13 @@ class ReminderDelivery < ApplicationRecord
   delegate :abs_time, :rel_magnitude, :rel_sign, :abs_time?, :rel_days?, to: :reminder
   delegate :community, to: :event
 
+  # If a block is given, it is called once per assignment with a callable that sends that
+  # assignment's mail, so callers can handle delivery errors per recipient.
   def deliver!
-    assignments.each { |assignment| send_mail(assignment) }
+    assignments.each do |assignment|
+      send_one = -> { send_mail(assignment) }
+      block_given? ? yield(send_one) : send_one.call
+    end
     destroy
   end
 

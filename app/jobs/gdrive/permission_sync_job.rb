@@ -31,9 +31,7 @@ module GDrive
     end
 
     def access_level_cmp(level_a, level_b)
-      index_a = ItemGroup::ACCESS_LEVELS.index(level_a&.to_sym) || -1
-      index_b = ItemGroup::ACCESS_LEVELS.index(level_b&.to_sym) || -1
-      index_a <=> index_b
+      SyncedPermission.level_index(level_a) <=> SyncedPermission.level_index(level_b)
     end
 
     def apply_permission_changes(permission)
@@ -43,7 +41,11 @@ module GDrive
         external_id: permission.external_id,
         item_external_id: permission.item_external_id,
         item_id: permission.item_id)
-      if permission.access_level.nil?
+      if permission.unmanaged?
+        # The user holds a role Gather can't grant, e.g. shared drive Manager. Leave it alone on Google.
+        Rails.logger.info("Leaving unmanaged permission alone")
+        permission.save! if permission.persisted? && permission.changed?
+      elsif permission.access_level.nil?
         Rails.logger.info("Destroying")
         destroy_permission(permission)
       elsif permission.new_record?

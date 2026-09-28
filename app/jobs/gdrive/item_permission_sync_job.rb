@@ -7,7 +7,9 @@ module GDrive
     def perform(cluster_id:, community_id:, item_id:, refresh_synced_permissions: false)
       if refresh_synced_permissions
         Rails.logger.info("Refreshing synced permissions before item sync", item_id: item_id)
-        RefreshSyncedPermissionsJob.perform_now(cluster_id: cluster_id, community_id: community_id,
+        # Call perform directly so errors propagate rather than being swallowed by the inner job's
+        # rescue_from. Proceeding on partially refreshed data can cause bad permission changes.
+        RefreshSyncedPermissionsJob.new.perform(cluster_id: cluster_id, community_id: community_id,
           item_id: item_id)
       end
 

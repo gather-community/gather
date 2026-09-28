@@ -177,6 +177,60 @@ describe GDrive::ItemPermissionSyncJob do
     end
   end
 
+  context "with roles Gather doesn't manage" do
+    let!(:managed_item) do
+      create(:gdrive_item, gdrive_config: config, external_id: "0AGH_tsBj1z-UNMANAGED001")
+    end
+
+    # Inherited Manager with a stale "writer" in the DB and no group: must not be downgraded or removed.
+    let!(:user_d) { create(:user, google_email: "ddd_unmanaged@example.com") }
+    let!(:perm_d) do
+      create(:gdrive_synced_permission, user: user_d, item: managed_item,
+        access_level: "writer", inherited_access_level: "organizer", external_id: "20000000000000000001")
+    end
+
+    # Direct owner who is in a group granting "writer": must not be downgraded.
+    let!(:user_e) { create(:user, google_email: "eee_unmanaged@example.com") }
+    let!(:group_for_e) { create(:group, joiners: [user_e]) }
+    let!(:item_grp_for_e) do
+      create(:gdrive_item_group, item: managed_item, group: group_for_e, access_level: "writer")
+    end
+    let!(:perm_e) do
+      create(:gdrive_synced_permission, user: user_e, item: managed_item,
+        access_level: "owner", inherited_access_level: "owner", external_id: "20000000000000000002")
+    end
+
+    subject(:job) do
+      described_class.new(cluster_id: Defaults.cluster.id, community_id: Defaults.community.id,
+        item_id: managed_item.id)
+    end
+
+    it "makes no API calls and keeps the unmanaged levels" do
+      # No cassette interactions, so any API call would fail.
+      VCR.use_cassette("gdrive/item_permission_sync_job/unmanaged_no_requests", record: :none) do
+        perform_job
+      end
+      expect(perm_d.reload.access_level).to eq("organizer")
+      expect(perm_e.reload.access_level).to eq("owner")
+    end
+  end
+
+  context "with refresh that fails" do
+    subject(:job) do
+      described_class.new(cluster_id: Defaults.cluster.id, community_id: Defaults.community.id,
+        item_id: item.id, refresh_synced_permissions: true)
+    end
+
+    # Use the production rescue behavior, where the inner job's rescue_from used to swallow the error.
+    it "reports the error once and doesn't proceed with the sync" do
+      expect_any_instance_of(GDrive::RefreshSyncedPermissionsJob).to receive(:perform)
+        .and_raise(ActiveRecord::StatementInvalid)
+      expect_any_instance_of(described_class).not_to receive(:handle_item_with_lock)
+      expect(Gather::ErrorReporter.instance).to receive(:report).once
+      with_env("RESCUE_FROM_JOB_EXCEPTIONS" => "true") { perform_job }
+    end
+  end
+
   context "with deleted item" do
     it "removes all permissions" do
       item.destroy

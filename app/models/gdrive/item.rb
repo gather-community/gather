@@ -30,6 +30,7 @@ module GDrive
 
     scope :in_community, ->(c) { joins(:gdrive_config).where(gdrive_configs: {community_id: c.id}) }
     scope :drives_only, -> { where(kind: "drive") }
+    scope :accessible, -> { where(error_type: nil).or(where.not(error_type: "inaccessible")) }
 
     delegate :community, to: :gdrive_config
 

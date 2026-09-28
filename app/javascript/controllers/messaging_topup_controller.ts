@@ -104,9 +104,15 @@ export default class extends Controller {
     this.saveTarget.disabled = false;
   }
 
-  // Whether `selected` differs from the currently-saved topup ("none" when there is none).
+  /*
+   * Whether `selected` differs from the effectively-chosen amount ("none" when there is none, which
+   * includes a topup that is winding down — see MessagingTopupDecorator#selected_cents). Kept
+   * separate from hasTopup, which says only whether a Stripe subscription exists to reprice: during
+   * a wind-down the chosen amount is "none" but a change still prorates rather than billing a full
+   * month, so the two must not be conflated.
+   */
   private changed(selected: string): boolean {
-    const current = this.hasTopupValue ? String(this.currentCentsValue) : "none";
+    const current = this.currentCentsValue > 0 ? String(this.currentCentsValue) : "none";
     return selected !== current;
   }
 

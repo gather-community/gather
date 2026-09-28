@@ -74,10 +74,13 @@ module Subscription
 
     # Shapes the manager's raw proration into what the modal JS renders. A negative immediate charge
     # (from a decrease/removal) is presented as a credit. Returns {} when there's nothing to preview
-    # (first activation), so the JS falls back to its full-month copy.
+    # (first activation) or nothing to move, so the JS falls back to its "from next month" copy rather
+    # than promising a charge of $0.00 — which is what reviving a winding-down topup at its existing
+    # amount produces, since it reuses the same Stripe price.
     def format_preview(result)
       return {} if result.nil?
       cents = result[:immediate_charge_cents]
+      return {} if cents.zero?
       {
         immediate_charge: Money.from_cents(cents.abs, result[:currency]).format,
         is_credit: cents.negative?,

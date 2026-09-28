@@ -11,7 +11,7 @@
           <div>
             <%= render("move_links", node: node) %>
             <div class="icon"><%= icon_tag("folder-open") %></div>
-            <%= link_to(node.name, edit_calendars_group_path(node)) %>
+            <%= link_to_if(policy(node).edit?, node.name, edit_calendars_group_path(node)) %>
           </div>
         </td>
         <td></td>

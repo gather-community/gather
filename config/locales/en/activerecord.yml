@@ -288,6 +288,7 @@ en:
           attributes:
             name:
               invalid: "Contains invalid characters"
+              taken: "Another list on this domain already uses this name"
         groups/membership:
           attributes:
             user_id:

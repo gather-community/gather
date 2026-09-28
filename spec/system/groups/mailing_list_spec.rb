@@ -54,6 +54,17 @@ describe "mailing lists", js: true do
       expect(page).to have_content("This group has no attached email list")
     end
 
+    context "with list name already used on domain" do
+      let!(:other_list) { create(:group_mailman_list, domain: domain, name: "knitting") }
+
+      scenario "shows error" do
+        visit(edit_groups_group_path(group))
+        fill_in("groups_group_mailman_list_attributes_name", with: "knitting")
+        click_button("Save")
+        expect(page).to have_content("Another list on this domain already uses this name")
+      end
+    end
+
     context "with few add'l members/senders" do
       let!(:list) do
         create(:group_mailman_list, group: group, domain: domain, name: "knitting",

@@ -13,11 +13,11 @@ module People
 
         if auth.info[:email].blank?
           reason = "Google did not provide an email address. Please notify an administrator."
-          fail_with_msg(reason: reason)
+          fail_with_msg(reason)
         # If invite token is present, try to find user by that.
         elsif invite_token && (by_token = User.with_reset_password_token(invite_token))
           if !by_token.reset_password_period_valid?
-            fail_with_msg(reason: "your invitation has expired")
+            fail_with_msg("your invitation has expired")
 
           # If we find them but they are signing in with the wrong google_email, notify them.
           elsif !by_token.google_email.nil? && by_token.google_email != auth.info[:email]
@@ -42,15 +42,33 @@ module People
       end
 
       def failure
-        p request.user_agent
-        unless browser.bot?
-          Rails.logger.info("OAuth failed: #{failure_message}")
-          Gather::ErrorReporter.instance.report(StandardError.new("OAuth failure"), env: request.env, data: {failure_message: failure_message})
+        error_type = request.env["omniauth.error.type"]
+        Rails.logger.info("OAuth failed: #{error_type} #{failure_message}")
+        case error_type
+        when :access_denied
+          # User cancelled on Google's consent screen.
+          fail_with_msg("the sign-in was cancelled")
+        when :csrf_detected
+          # Callback was replayed (back button, tab restore) after its state was already used.
+          if user_signed_in?
+            redirect_to(after_sign_in_path_for(current_user))
+          else
+            fail_with_msg("your sign-in session expired. Please try again")
+          end
+        else
+          report_unexpected_failure(error_type)
         end
-        fail_with_msg("of an unspecified error. The administrators have been notified")
       end
 
       private
+
+      def report_unexpected_failure(error_type)
+        unless browser.bot?
+          Gather::ErrorReporter.instance.report(StandardError.new("OAuth failure"),
+            data: {error_type: error_type, failure_message: failure_message})
+        end
+        fail_with_msg("of an unspecified error. The administrators have been notified")
+      end
 
       def fail_with_msg(msg)
         set_flash_message(:error, :failure, kind: "Google", reason: msg)

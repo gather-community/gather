@@ -27,6 +27,13 @@ class CommunitiesController < ApplicationController
     redirect_to(communities_path, notice: "Subscription resync started. Refresh in a minute to see updates.")
   end
 
+  def activate
+    load_community
+    authorize(@community)
+    ActsAsTenant.with_tenant(@community.cluster) { @community.activate }
+    redirect_to(admin_community_path(@community), notice: I18n.t("deactivatable.community.success.activate"))
+  end
+
   def destroy
     load_community
     authorize(@community)

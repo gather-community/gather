@@ -30,6 +30,28 @@ describe "communities request" do
     end
   end
 
+  describe "activate" do
+    it "reactivates the community and redirects to the admin page" do
+      community.update!(deactivated_at: Time.current, inactivity_warning_count: 3)
+      put activate_community_path(community)
+      expect(response).to redirect_to(admin_community_path(community))
+      expect(community.reload).to be_active
+      expect(community.inactivity_warning_count).to eq(0)
+    end
+
+    context "as a non-super-admin" do
+      let!(:actor) { create(:admin) }
+
+      it "is denied and leaves the community deactivated" do
+        community.update!(deactivated_at: Time.current)
+        expect do
+          put activate_community_path(community)
+        end.to raise_error(Pundit::NotAuthorizedError)
+        expect(community.reload).to be_inactive
+      end
+    end
+  end
+
   describe "destroy" do
     context "with wrong confirmation" do
       it "redirects back with alert and does not enqueue job" do

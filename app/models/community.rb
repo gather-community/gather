@@ -222,6 +222,12 @@ class Community < ApplicationRecord
     Messaging::Rates.supported?(country_code)
   end
 
+  # Also clears the inactivity warning state. Otherwise InactivityWarningJob would see the maxed-out
+  # warning count and stale sent_at and immediately deactivate the community again.
+  def activate
+    update!(deactivated_at: nil, inactivity_warning_count: 0, inactivity_warning_sent_at: nil)
+  end
+
   def status
     if inactive?
       :deactivated

@@ -132,6 +132,10 @@ en:
       unsignup: "Are you sure you want to remove your name from this job?"
 
   activatables:
+    community:
+      one_html: "This community was deactivated at %{time}."
+      two_html: "You can %{link}."
+      three: "reactivate it"
     user:
       one_html: "This user was marked inactive at %{time}."
       two_html: "You can %{link}."
@@ -162,6 +166,9 @@ en:
       three: "reactivate it"
 
   deactivatable:
+    community:
+      success:
+        activate: "Community reactivated successfully."
     household:
       success:
         activate: "Household activated successfully."

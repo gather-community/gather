@@ -60,7 +60,8 @@ module Work
     validates :hours_per_shift, presence: true, if: :date_only_full_community_multiple_slot?
     validates :description, presence: true
     validate :valid_shift_count
-    validate :no_duplicate_start_end_times
+    # Meal job shifts are distinguished by meal, so two same-day meals can share times.
+    validate :no_duplicate_start_end_times, unless: :meal_role?
     validate :shifts_same_length_for_date_time_full_multiple
     validate :hours_per_shift_evenly_divides_hours
 

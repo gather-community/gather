@@ -82,6 +82,24 @@ describe Calendars::Eventlet do
     end
   end
 
+  describe "recently_created?" do
+    let(:base) { create(:eventlet) }
+    let(:occurrence) do
+      described_class.build_occurrence(base_eventlet: base, occurrence_start: base.starts_at + 1.week,
+        starts_at: base.starts_at + 1.week, ends_at: base.ends_at + 1.week, start_offset: 0, end_offset: 0)
+    end
+
+    it "asks the base eventlet for a transient occurrence, which has no created_at of its own" do
+      expect(occurrence).to be_recently_created
+      base.update_columns(created_at: 2.hours.ago)
+      expect(occurrence).not_to be_recently_created
+    end
+
+    it "is false for an unsaved eventlet" do
+      expect(build(:eventlet)).not_to be_recently_created
+    end
+  end
+
   describe "location" do
     let(:calendar) { create(:calendar, name: "Fun Room") }
     subject(:location) { eventlet.location }

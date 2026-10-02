@@ -170,11 +170,12 @@ module Calendars
       return self.recurrence_end_date = nil unless recurring?
       # Rebuild via ice_cube so we get consistent symbol-keyed hashes regardless of whether
       # recurrence_rule came from in-memory assignment (symbol keys) or a JSONB read (string keys).
-      rule_hash = schedule.rrules.first.to_hash
-      self.recurrence_end_date = if rule_hash[:until]
-        # ice_cube serializes time values as {time: <Time>, zone: "..."}
-        ice_time = rule_hash[:until]
-        (ice_time.is_a?(Hash) ? ice_time[:time] : ice_time).to_date
+      rule = schedule.rrules.first
+      rule_hash = rule.to_hash
+      self.recurrence_end_date = if rule.until_time
+        # until_time is re-zoned to the stored zone, so an evening UNTIL gives its local date rather
+        # than the next day's UTC date. (The serialized hash holds the UTC time.)
+        rule.until_time.to_date
       elsif rule_hash[:count]
         schedule.last&.to_date
       end

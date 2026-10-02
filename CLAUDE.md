@@ -461,6 +461,28 @@ fi
 
 Then embed in the body with `![$TITLE]($IMAGE_URL)`. After the post succeeds, delete the screenshot file from the repo root with `rm`.
 
+## Flagging Privacy Policy and Terms of Use Impact
+
+The Privacy Policy ([config/locales/en/privacy_policy.md](config/locales/en/privacy_policy.md)) and Terms of Use ([config/locales/en/terms_of_use.md](config/locales/en/terms_of_use.md)) describe what Gather actually does. They go stale when the code changes and they don't.
+
+**Whenever the work you're doing may make either document inaccurate or incomplete, say so to the user** — in your summary of the work and in the PR description. Name the document, the section, and the specific reason. Read the current document first so you're flagging a real gap, not a guess.
+
+**Never edit these documents yourself**, even when the needed change seems obvious. Legal text needs a human decision. Your job is only to point out that a review is needed and why.
+
+Typical triggers:
+
+- **New personal data collected or stored** — a new field on users, households, children, or anything that identifies a person (including logs, IP addresses, or uploaded files).
+- **New sharing or visibility** — data becoming visible to a wider audience (e.g. community → cluster, members → public), or a change to privacy settings or roles that can see data.
+- **New third-party service or subprocessor** that receives user data (e.g. a new email, SMS, payment, analytics, logging, storage, or AI provider), or a change in what an existing one receives.
+- **New tracking** — cookies beyond the session cookie, analytics, or anything that monitors activity.
+- **New outbound communication channels** — new kinds of email, SMS, or push notifications, especially anything not strictly tied to community activity.
+- **Data retention or deletion changes** — user/household/community deletion, inactivity handling, backups, exports, or anonymization.
+- **Children** — anything affecting how minors' data is collected, shown, or how they get sign-in access.
+- **Payments and paid features** — new fees, subscription or refund behavior, credits, or anything Gather charges for.
+- **New user-generated content features** or new ways users can interact with or contact each other.
+- **Third-party integrations** that act on users' behalf (e.g. new Google Drive scopes or behavior).
+- **Account and access rules** — who can sign up, sign-in methods, admin powers, suspension.
+
 ## Error Handling
 
 **Never swallow exceptions silently.** If you write a `rescue` block, you must either re-raise or report to Sentry via `Gather::ErrorReporter.instance.report(e, data: {...})`. Always check with the user before suppressing an error without Sentry reporting.

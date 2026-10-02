@@ -37,9 +37,15 @@ Rails.application.configure do
   config.log_tags = [:request_id]
 
   # Ship logs to Better Stack (Logtail) when a source token is configured; otherwise keep Rails'
-  # default logger so logs are still written locally.
+  # default logger so logs are still written locally. Each source has its own ingesting host and
+  # rejects its token anywhere else. The gem swallows delivery errors, so a missing host would
+  # silently drop every log. Fail at boot instead.
   if Settings.logtail.source_token.present?
-    config.logger = Logtail::Logger.create_default_logger(Settings.logtail.source_token)
+    if Settings.logtail.ingesting_host.blank?
+      raise "Settings.logtail.ingesting_host must be set when Settings.logtail.source_token is set"
+    end
+    config.logger = Logtail::Logger.create_default_logger(Settings.logtail.source_token,
+      ingesting_host: Settings.logtail.ingesting_host)
   end
 
   config.log_level = :debug

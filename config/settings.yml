@@ -91,7 +91,10 @@ messaging:
 telnyx:
   api_key:
 
-# Better Stack (Logtail) source token for shipping production logs. Deliberately blank here; set
-# SETTINGS__LOGTAIL__SOURCE_TOKEN in production. When blank, Rails' default logger is used.
+# Better Stack (Logtail) source token and ingesting host for shipping production logs. Both are
+# shown on the source's page in Better Stack. Deliberately blank here; set
+# SETTINGS__LOGTAIL__SOURCE_TOKEN and SETTINGS__LOGTAIL__INGESTING_HOST in production. When the
+# token is blank, Rails' default logger is used; when it's set, the host is required.
 logtail:
   source_token:
+  ingesting_host:

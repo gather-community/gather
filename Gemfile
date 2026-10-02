@@ -56,7 +56,7 @@ gem "pundit", "~> 2.5"
 gem "rails", "~> 8.1.0"
 gem "rails-backbone", "~> 1.2"
 gem "redcarpet", "~> 3.6"
-gem "redis", "~> 5.4"
+gem "redis", "~> 6.0"
 gem "rein", "~> 5.0"
 gem "rolify", "~> 6.0"
 # image_processing 2.0 made the variant processor a soft dependency; we use the :vips

@@ -18,13 +18,13 @@ en:
         calendar:
           title: "Delete multi-calendar event"
           content: "'%{name}' appears on more than one calendar:"
-          this: "Delete only from %{calendar}"
+          this: "Delete from %{calendar}"
           all: "Delete from all calendars"
         series:
           title: "Delete recurring event"
           content_all: "'%{name}' repeats. Which occurrences should be deleted?"
           content_this: "'%{name}' repeats. Which occurrences should be deleted from %{calendar}?"
-          occurrence: "Only this occurrence"
+          occurrence: "This only"
           following: "This and following"
           series: "All occurrences"
   calendars/protocol:

@@ -84,12 +84,14 @@ module Calendars
       recurring = series_event.recurring?
       calendar_scopes = multi_calendar ? choices.keys.select { |scope| choices[scope].any? } : ["all"]
       {
-        calendar: (calendar_delete_prompt(calendar_scopes, final: !recurring) if multi_calendar),
+        calendar: (calendar_delete_prompt(calendar_scopes) if multi_calendar),
         series: (calendar_scopes.index_with { |s| series_delete_prompt(s, choices[s]) } if recurring)
       }
     end
 
-    def calendar_delete_prompt(calendar_scopes, final:)
+    # Every choice is styled as a delete, even when a series question follows, since each is labeled
+    # "Delete…".
+    def calendar_delete_prompt(calendar_scopes)
       others = series_event.eventlets.reject { |e| e.calendar_id == calendar.id }.map(&:calendar_name).sort
       items = [h.content_tag(:li, h.safe_join([h.content_tag(:strong, calendar.name), " (selected)"]))] +
         others.map { |name| h.content_tag(:li, name) }
@@ -101,7 +103,7 @@ module Calendars
         ]),
         choices: calendar_scopes.map do |scope|
           {label: t("calendars.eventlet_deletion.prompts.calendar.#{scope}", calendar: calendar.name),
-           value: scope, variant: final ? "danger" : "default"}
+           value: scope, variant: "danger"}
         end
       }
     end

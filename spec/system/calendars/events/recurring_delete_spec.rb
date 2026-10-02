@@ -44,7 +44,7 @@ describe "deleting a recurring or multi-calendar event", js: true do
       visit_occurrence(1)
       click_on("Delete")
       expect_modal(title: "Delete recurring event", text: "'Weekly Event' repeats")
-      click_modal_button("Only this occurrence")
+      click_modal_button("This only")
 
       expect(page).to have_success_alert("The occurrence was deleted.")
       expect(page).to have_no_css("div.fc-title", text: "Weekly Event")
@@ -95,7 +95,7 @@ describe "deleting a recurring or multi-calendar event", js: true do
       expect_modal(title: "Delete recurring event")
       with_top_level_scope do
         within("#{modal_selector} .modal-footer") do
-          expect(page).to have_button("Only this occurrence")
+          expect(page).to have_button("This only")
           expect(page).to have_button("This and following")
           expect(page).to have_no_button("All occurrences")
         end
@@ -110,9 +110,9 @@ describe "deleting a recurring or multi-calendar event", js: true do
       visit_occurrence(1)
       click_on("Delete")
       expect_modal(title: "Delete multi-calendar event", text: "Guest Room")
-      click_modal_button("Delete only from Main Hall")
+      click_modal_button("Delete from Main Hall")
       expect_modal(title: "Delete recurring event", text: "deleted from Main Hall")
-      click_modal_button("Only this occurrence")
+      click_modal_button("This only")
 
       expect(page).to have_success_alert("The occurrence was removed from Main Hall.")
       expect(page).to have_no_css("div.fc-title", text: "Weekly Event")

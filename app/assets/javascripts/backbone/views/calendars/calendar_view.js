@@ -1239,7 +1239,7 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
     return window.Modal.choiceModal(
       `<p>'${this.escapeHtml(event.title)}' repeats. Which occurrences should be moved?</p>`,
       [
-        {label: "Only this occurrence", value: "occurrence"},
+        {label: "This only", value: "occurrence"},
         {label: "The whole series", value: "series", variant: "primary"},
       ],
       {title: "Move recurring event"}

@@ -90,3 +90,8 @@ messaging:
 # — a leaked key is full account access, so guard it accordingly.
 telnyx:
   api_key:
+
+# Better Stack (Logtail) source token for shipping production logs. Deliberately blank here; set
+# SETTINGS__LOGTAIL__SOURCE_TOKEN in production. When blank, Rails' default logger is used.
+logtail:
+  source_token:

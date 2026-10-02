@@ -36,7 +36,11 @@ Rails.application.configure do
   # Prepend all log lines with the following tags.
   config.log_tags = [:request_id]
 
-  config.logger = Logtail::Logger.create_default_logger("3mgVU1SKiL2gb3ETgQooWPTE")
+  # Ship logs to Better Stack (Logtail) when a source token is configured; otherwise keep Rails'
+  # default logger so logs are still written locally.
+  if Settings.logtail.source_token.present?
+    config.logger = Logtail::Logger.create_default_logger(Settings.logtail.source_token)
+  end
 
   config.log_level = :debug
 

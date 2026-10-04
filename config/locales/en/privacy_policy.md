@@ -1,4 +1,4 @@
-This privacy policy explains what personal information Gather collects, how it is used and shared, and the choices you have. It applies to the Gather website and service, operated by [Gather legal entity name] ("Gather", "we", "us"). Your use of Gather is also governed by our [Terms of Use](/about/terms-of-use).
+This privacy policy explains what personal information Gather collects, how it is used and shared, and the choices you have. It applies to the Gather website and service, operated by CommunitySoft Cooperative, a Wisconsin cooperative ("Gather", "we", "us"). Your use of Gather is also governed by our [Terms of Use](/about/terms-of-use).
 
 #### Communities and Gather
 
@@ -81,13 +81,15 @@ Other than the above, and other members of your community and cluster as describ
 
   * **While your account is active**, we keep your information so the service works for you and your community.
   * **Deactivated accounts**: When someone leaves a community, administrators typically deactivate their account. Deactivated accounts can no longer sign in, but their information is kept so the community's records stay complete, and so the account can be reactivated if needed.
-  * **Deleted accounts**: Administrators can permanently delete a person or household. This removes their personal information. Some records that form part of the community's shared history (such as meals they organized, wiki pages they edited, or calendar events they created) are kept but reassigned to a "Deleted Member" placeholder, so they no longer identify the person.
+  * **Deleting your own account**: You can permanently delete your own account from your profile, and parents/guardians can delete their children's accounts. Administrators can also delete any account in their community. Deleting an account removes the person's personal information. Some records that form part of the community's shared history (such as meals they organized, wiki pages they edited, or calendar events they created) are kept but reassigned to a "Deleted Member" placeholder, so they no longer identify the person.
+  * **Deleting a household**: Community administrators can permanently delete an entire household. This deletes every member of the household as described above, along with the household's information, including its billing account and statements, meal sign-ups, vehicles, pets, and emergency contacts.
+  * **When deletion isn't available yet**: To protect the community's records, an account or household can't be deleted while the household has an unsettled account balance, while the person is still a parent/guardian of children in Gather (their children must be deleted or reassigned first), or if it would leave the community without an administrator. Once these are resolved, deletion can proceed.
   * **Inactive communities**: If no one in a community signs in for more than 90 days, we email the community's administrators up to three warnings, one week apart. If no one signs in after the final warning, we permanently delete the community and its information. Communities with an active paid subscription are not deleted for inactivity.
   * **Backups and logs** are kept for a limited time ([N] days for backups, [N] days for logs) and then deleted.
 
 #### Your rights and choices
 
-You can review and update most of your information by signing in and editing your profile, and the profiles of your children. You can also ask your community's administrators, or us at support@gather.coop, to:
+You can review and update most of your information by signing in and editing your profile, and the profiles of your children. You can also delete your account, and your children's accounts, yourself (see "How long do we keep your information?" above). You can also ask your community's administrators, or us at support@gather.coop, to:
 
   * give you a copy of your personal information;
   * correct information that is inaccurate;
@@ -166,7 +168,7 @@ Communities may define other policies in addition to this and instruct the admin
 Pursuant to COPPA, we declare the following:
 
 * We don't require a parent/guardian to disclose more information about a child than is reasonably necessary to facilitate interaction and foster community as described above.
-* Parents/guardians can review their children's personal information, direct us to delete it, and refuse to allow any further collection or use of the child's information.
+* Parents/guardians can review their children's personal information, delete it (or direct us to delete it), and refuse to allow any further collection or use of the child's information.
 * We don't disclose any children's information to any third parties other than community members as listed above and the service providers who help us run Gather.
 * Parents/guardians may exercise any of the above stated rights by emailing support@gather.coop.
 
@@ -182,6 +184,6 @@ We may update this policy as Gather changes. If we make material changes, we wil
 
 If you have any questions regarding this privacy policy, or want to exercise any of the rights described above, you may contact us using the information below.
 
-Gather<br/>220 Collingwood St #140<br/>Ann Arbor, MI 48103<br/>USA<br/>support@gather.coop
+CommunitySoft Cooperative (Gather)<br/>220 Collingwood St #140<br/>Ann Arbor, MI 48103<br/>USA<br/>support@gather.coop
 
 Last Edited on [YYYY-MM-DD]

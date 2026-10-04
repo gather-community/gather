@@ -1,4 +1,4 @@
-These Terms of Use ("Terms") govern your use of Gather (the "Service"), operated by [Gather legal entity name] ("Gather", "we", "us"). By signing in to or using the Service, you agree to these Terms. If you do not agree, do not use the Service.
+These Terms of Use ("Terms") govern your use of Gather (the "Service"), operated by CommunitySoft Cooperative, a Wisconsin cooperative ("Gather", "we", "us"). By signing in to or using the Service, you agree to these Terms. If you do not agree, do not use the Service.
 
 Our [Privacy Policy](/about/privacy-policy) explains how we collect, use, and share personal information, and forms part of these Terms.
 
@@ -84,7 +84,7 @@ The Service works with third-party services, such as Google (sign-in and Google 
 
 #### 11. Inactive communities, suspension, and termination
 
-* You may stop using the Service at any time. Your community administrator can deactivate your account, and you can ask your administrator or us to delete it.
+* You may stop using the Service at any time. You can permanently delete your own account (and your children's accounts) from your profile, and your community administrator can deactivate or delete it. Administrators can also delete an entire household. Deletion may be unavailable until the household's account balance is settled, children are deleted or reassigned, or another administrator is in place. Our Privacy Policy describes what deletion removes and what remains with the community.
 * If no one in a community signs in for an extended period, we will send administrators a series of email warnings and may then permanently delete the community and its data. Communities with an active paid subscription are not deleted for inactivity. Current timeframes are described in those warning emails and our Privacy Policy.
 * We may suspend or terminate access for a person or community that violates these Terms, fails to pay fees that are due, or creates a risk to the Service or others. Where reasonable, we will give notice and a chance to fix the problem first.
 * If a community stops using Gather, its administrators may request an export of community data within [30] days, after which we may delete it.
@@ -106,7 +106,7 @@ To the extent permitted by law, you (or, for administrators acting for a communi
 
 #### 15. Governing law and disputes
 
-These Terms are governed by the laws of [the State of Michigan, USA], without regard to conflict-of-law rules. Before filing a claim, please contact us at support@gather.coop so we can try to resolve the issue informally. Any dispute that can't be resolved informally will be heard in the courts located in [Washtenaw County, Michigan], unless the law where you live gives you the right to bring it elsewhere.
+These Terms are governed by the laws of [the State of Wisconsin, USA], without regard to conflict-of-law rules. Before filing a claim, please contact us at support@gather.coop so we can try to resolve the issue informally. Any dispute that can't be resolved informally will be heard in the courts located in [county], [state], unless the law where you live gives you the right to bring it elsewhere.
 
 #### 16. Changes to these Terms
 
@@ -120,6 +120,6 @@ These Terms, together with our Privacy Policy and any order or subscription term
 
 If you have questions about these Terms, contact us at:
 
-Gather<br/>220 Collingwood St #140<br/>Ann Arbor, MI 48103<br/>USA<br/>support@gather.coop
+CommunitySoft Cooperative (Gather)<br/>220 Collingwood St #140<br/>Ann Arbor, MI 48103<br/>USA<br/>support@gather.coop
 
 Last Edited on [YYYY-MM-DD]

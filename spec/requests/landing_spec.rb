@@ -12,9 +12,16 @@ describe "landing pages" do
   end
 
   describe "public_static" do
-    it "renders a known page" do
+    it "renders the privacy policy" do
       get("/about/privacy-policy")
       expect(response).to have_http_status(200)
+      expect(response.body).to include("Service providers")
+    end
+
+    it "renders the terms of use" do
+      get("/about/terms-of-use")
+      expect(response).to have_http_status(200)
+      expect(response.body).to include("Acceptable use")
     end
 
     it "returns 404 for an unknown page" do

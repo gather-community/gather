@@ -1,0 +1,3 @@
+<% content_for(:title, "Terms of Use") %>
+
+<%= safe_render_markdown(File.read(Rails.root.join("config/locales/en/terms_of_use.md"))) %>

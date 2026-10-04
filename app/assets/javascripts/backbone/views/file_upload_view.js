@@ -50,8 +50,9 @@ Gather.Views.FileUploadView = Backbone.View.extend({
   },
 
   /*
-   * On iOS (every browser, since they all use WebKit), uploading a photo straight from the picker
-   * sends the request with an empty body (Content-Length: 0), which Rails rejects as "Bad Request".
+   * WebKit bug 319985 (Safari/iOS 26.5+, so every iOS browser) can send a disk-backed File with an
+   * empty body (Content-Length: 0), which Rails rejects as "Bad Request". The service worker no longer
+   * re-issues POSTs, which is the main trigger, but per the bug report it can happen without one too.
    * Reading the bytes into an in-memory Blob first gives the request a real body.
    * Dropzone takes the filename from the original file, so the Blob doesn't need one.
    */

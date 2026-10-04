@@ -62,15 +62,15 @@ Gather can help a community track meal charges, other charges, payments, and acc
 
 * Some communities pay a subscription fee for Gather, and may purchase prepaid credits for text (SMS) messaging. Fees, billing frequency, and currency are shown when the subscription or purchase is made.
 * Payments are processed by our payment provider, Stripe. Gather does not store full card or bank account numbers.
-* Subscriptions renew automatically until canceled. [Describe cancellation terms, e.g., "You can cancel at any time; cancellation takes effect at the end of the current billing period."]
+* Subscriptions renew automatically until canceled. You can cancel at any time; cancellation takes effect at the end of the current billing period.
 * [Describe refund policy, e.g., "Fees and unused messaging credits are non-refundable except where required by law."]
-* We may change prices on at least [30] days' notice to the community's administrators. If you don't agree to a change, you may cancel before it takes effect.
+* We may change prices on at least 30 days' notice to the community's administrators. If you don't agree to a change, you may cancel before it takes effect.
 * You are responsible for any applicable taxes.
 
 #### 8. Email and text messages
 
 * Gather sends email notifications related to your community (for example, meal and work reminders, statements, and account notices). These are part of the Service; some can be adjusted in your settings.
-* If your community uses text messaging, you will receive text messages only at a phone number you or your community has provided for that purpose. Message and data rates from your carrier may apply. [Describe how to opt out, e.g., "Reply STOP to unsubscribe."]
+* If your community uses text messaging, you will receive text messages only at a phone number you or your community has provided for that purpose. Message and data rates from your carrier may apply. Reply STOP to unsubscribe.
 
 #### 9. Third-party services
 

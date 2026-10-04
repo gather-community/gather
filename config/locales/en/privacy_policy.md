@@ -137,7 +137,7 @@ Gather then contacts the owners of files in the standard Google folder and asks 
 
 We collect your email address in order to send useful notifications (e.g. meal reminders, work reminders, statement notices) and messages sent to community email lists you belong to. Some notifications can be turned off in your settings. Messages needed to operate your account, such as sign-in and password emails, cannot be turned off while your account is active.
 
-If your community uses text messaging, you may receive text messages at a phone number in your profile. Your phone number is used only for community-related messages. [Describe how to opt out, e.g., "Reply STOP to stop receiving text messages."]
+If your community uses text messaging, you may receive text messages at a phone number in your profile. Your phone number is used only for community-related messages. Reply STOP to stop receiving text messages.
 
 We do not send advertising or other unsolicited emails or text messages.
 

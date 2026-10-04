@@ -131,6 +131,33 @@ describe Calendars::IcalGenerator do
     end
   end
 
+  context "with a recurring series that has an end date" do
+    let(:all_day) { false }
+    let(:start) { Time.zone.parse("2021-01-04 12:00") }
+    let(:event) do
+      create(:event, all_day: all_day, starts_at: start, ends_at: start + 1.hour,
+        recurrence_rule: IceCube::Rule.weekly.until(start + 2.weeks).to_hash)
+    end
+    let(:base_eventlet) { event.eventlets.first }
+    let(:eventlets) do
+      [Calendars::Eventlet.build_occurrence(base_eventlet: base_eventlet, occurrence_start: event.starts_at,
+        starts_at: event.starts_at, ends_at: event.ends_at, start_offset: 0, end_offset: 0)]
+    end
+
+    it "writes UNTIL as a UTC timestamp for a timed series" do
+      expect(ical).to include_line("RRULE:FREQ=WEEKLY;UNTIL=20210118T120000Z")
+    end
+
+    context "when the series is all-day" do
+      let(:all_day) { true }
+
+      it "writes UNTIL as a date, matching the date-only DTSTART" do
+        expect(ical).to include_line("DTSTART;VALUE=DATE:20210104")
+        expect(ical).to include_line("RRULE:FREQ=WEEKLY;UNTIL=20210118")
+      end
+    end
+  end
+
   context "with a recurring event" do
     # First occurrence: Monday 2021-01-04. The eventlets represent the second and third Mondays,
     # built the same way EventFinder builds them (non-persisted, linkable = base eventlet).

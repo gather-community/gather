@@ -62,10 +62,12 @@ body.gather-modal-open {
     border-top: none; // override Bootstrap's default divider line (keep Bootstrap's top padding)
 
     // Single row, right-aligned. Flex (rather than Bootstrap's text-align) so an over-long label
-    // shrinks its own button instead of wrapping the row onto a second line.
+    // wraps within its own button instead of wrapping the row onto a second line. Buttons stretch
+    // to the height of the tallest one so a row with a wrapped label stays even.
     display: flex;
     flex-wrap: nowrap;
     justify-content: flex-end;
+    align-items: stretch;
 
     // Bootstrap's clearfix pseudo-elements would otherwise become stray flex items.
     &::before,
@@ -75,17 +77,12 @@ body.gather-modal-open {
 
     .btn {
       min-width: 90px; // equal-width buttons so OK/Cancel line up
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
+      white-space: normal; // wrap long labels, e.g. "Move only on <calendar name>"
 
-    // Cancel (first) and the primary action (last) have fixed, short labels and always show in
-    // full; any shrinking is absorbed by the variable-length choices in between, e.g. "Move only
-    // on <calendar name>".
-    .btn:first-child,
-    .btn:last-child {
-      flex-shrink: 0;
+      // Center the label vertically in a button stretched taller than its own text.
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .btn + .btn {
@@ -106,7 +103,7 @@ body.gather-modal-open {
     border-radius: 6px 6px 0 0;
 
     // The equal-width minimum would push a three-button row off a narrow screen, so let the
-    // buttons shrink to whatever fits (truncating their labels) instead.
+    // buttons shrink to whatever fits (wrapping their labels) instead.
     .modal-footer .btn {
       min-width: 0;
     }

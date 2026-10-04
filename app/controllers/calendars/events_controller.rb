@@ -4,6 +4,7 @@ module Calendars
   # Main events controller.
   class EventsController < ApplicationController
     include Lensable
+    include EventContextRedirectable
 
     decorates_assigned :event, :calendar, :calendars, :meal
 
@@ -91,7 +92,7 @@ module Calendars
       authorize(@event)
       if @form.save
         flash[:success] = "Event created successfully."
-        redirect_to_event_in_context(@form)
+        redirect_to_form_in_context(@form)
       else
         prep_form_vars
         render(:new)
@@ -116,7 +117,7 @@ module Calendars
           head(:ok)
         else
           flash[:success] = "Event updated successfully."
-          redirect_to_event_in_context(@form)
+          redirect_to_form_in_context(@form)
         end
       else
         if request.xhr?
@@ -141,7 +142,7 @@ module Calendars
       authorize(@event)
       @event.destroy
       flash[:success] = "Event deleted successfully."
-      redirect_to_event_in_context(@form)
+      redirect_to_form_in_context(@form)
     end
 
     protected
@@ -245,13 +246,9 @@ module Calendars
       @calendars = []
     end
 
-    def redirect_to_event_in_context(event_form)
-      params = {date: event_form.starts_at&.to_fs(:no_time)}
-      if event_form.origin_page == "combined"
-        redirect_to(calendars_events_path(params))
-      else
-        redirect_to(calendar_events_path(event_form.calendar, params))
-      end
+    def redirect_to_form_in_context(event_form)
+      redirect_to_event_in_context(starts_at: event_form.starts_at, calendar: event_form.calendar,
+        origin_page: event_form.origin_page)
     end
   end
 end

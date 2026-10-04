@@ -23,6 +23,7 @@ module Calendars
 
     include ActiveModel::Conversion
     include ActiveModel::Validations
+    include OccurrenceOverrides
 
     attr_reader :eventlet, :starts_at, :ends_at, :occurrence_start, :calendar_scope, :series_scope
 
@@ -112,8 +113,7 @@ module Calendars
       anchor = find_or_initialize_event_override
       return false unless persist(anchor)
 
-      override = anchor.eventlet_overrides.detect { |o| o.eventlet_id == eventlet.id } ||
-        anchor.eventlet_overrides.build(eventlet: eventlet)
+      override = find_or_initialize_eventlet_override(anchor)
       override.start_offset = dragged_start_offset
       override.end_offset = dragged_end_offset
       persist(override)
@@ -123,18 +123,6 @@ module Calendars
       return true if record.save
       record.errors.each { |e| errors.add(e.attribute, e.message) }
       false
-    end
-
-    def find_or_initialize_event_override
-      existing_event_override ||
-        event.event_overrides.build(occurrence_start: occurrence_start)
-    end
-
-    def existing_event_override
-      # Matched on unix seconds rather than by equality, mirroring OccurrenceResolver, so sub-second
-      # drift in the stored value can't cause a duplicate override.
-      return nil if occurrence_start.blank?
-      event.event_overrides.detect { |o| o.occurrence_start.to_i == occurrence_start.to_i }
     end
 
     # === Time math ===
@@ -184,13 +172,7 @@ module Calendars
 
     def occurrence_present_when_needed
       return unless series_scope == "occurrence"
-      if occurrence_start.blank?
-        errors.add(:occurrence_start, "is required to change a single occurrence")
-      elsif !event.recurring?
-        errors.add(:base, "This event is not part of a series")
-      elsif !event.schedule.occurs_at?(occurrence_start)
-        errors.add(:occurrence_start, "is not a valid occurrence in this series")
-      end
+      validate_occurrence_in_series
     end
 
     # A this-calendar drag is stored as an offset from the event's shared time, and both Eventlet and
@@ -250,11 +232,6 @@ module Calendars
       Time.zone.parse(value.to_s)
     rescue ArgumentError
       nil
-    end
-
-    def parse_unix(value)
-      return nil if value.blank?
-      Time.zone.at(value.to_i)
     end
   end
 end

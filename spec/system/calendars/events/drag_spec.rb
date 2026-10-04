@@ -110,7 +110,7 @@ describe "dragging a calendar event", js: true do
 
     scenario "moving only this occurrence creates an override and leaves the series alone" do
       drag_vertically(find(".fc-event", text: "Draggable", match: :first), by: 140)
-      click_modal_button("Only this occurrence")
+      click_modal_button("This only")
 
       expect(eventually { event.event_overrides.any? })
         .to be(true), "Expected an EventOverride to be created for the dragged occurrence"

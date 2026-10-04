@@ -13,7 +13,13 @@ module Calendars
       if object.linkable.present?
         # linkable is the base eventlet for recurring occurrences (→ eventlet show page), or a
         # meal/shift/user for system calendars (→ that resource's page).
-        linkable_path(object.linkable, occurrence: object.occurrence_start&.to_i)
+        if object.linkable.is_a?(Calendars::Eventlet)
+          # origin_page lets the show page's edit/delete actions return to the combined view.
+          calendars_eventlet_path(object.linkable, occurrence: object.occurrence_start&.to_i,
+            origin_page: instance_options[:origin_page])
+        else
+          linkable_path(object.linkable)
+        end
       elsif object.persisted?
         calendars_eventlet_path(object, origin_page: instance_options[:origin_page])
       else

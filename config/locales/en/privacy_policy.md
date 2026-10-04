@@ -182,8 +182,8 @@ We may update this policy as Gather changes. If we make material changes, we wil
 
 #### Contacting Us
 
-If you have any questions regarding this privacy policy, or want to exercise any of the rights described above, you may contact us using the information below.
+If you have any questions regarding this privacy policy, or want to exercise any of the rights described above, you may contact us at:
 
-CommunitySoft Cooperative (Gather)<br/>220 Collingwood St #140<br/>Ann Arbor, MI 48103<br/>USA<br/>support@gather.coop
+CommunitySoft Cooperative (Gather)<br/>support@gather.coop
 
 Last Edited on [YYYY-MM-DD]

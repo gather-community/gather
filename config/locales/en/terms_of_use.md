@@ -106,7 +106,7 @@ To the extent permitted by law, you (or, for administrators acting for a communi
 
 #### 15. Governing law and disputes
 
-These Terms are governed by the laws of [the State of Wisconsin, USA], without regard to conflict-of-law rules. Before filing a claim, please contact us at support@gather.coop so we can try to resolve the issue informally. Any dispute that can't be resolved informally will be heard in the courts located in [county], [state], unless the law where you live gives you the right to bring it elsewhere.
+These Terms are governed by the laws of the State of Wisconsin, USA, without regard to conflict-of-law rules. Before filing a claim, please contact us at support@gather.coop so we can try to resolve the issue informally. Any dispute that can't be resolved informally will be heard in the courts located in Barron County, Wisconsin, unless the law where you live gives you the right to bring it elsewhere.
 
 #### 16. Changes to these Terms
 
@@ -120,6 +120,6 @@ These Terms, together with our Privacy Policy and any order or subscription term
 
 If you have questions about these Terms, contact us at:
 
-CommunitySoft Cooperative (Gather)<br/>220 Collingwood St #140<br/>Ann Arbor, MI 48103<br/>USA<br/>support@gather.coop
+CommunitySoft Cooperative (Gather)<br/>support@gather.coop
 
 Last Edited on [YYYY-MM-DD]

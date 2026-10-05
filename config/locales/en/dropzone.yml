@@ -1,6 +1,8 @@
 en:
   dropzone:
     dictFileTooBig: "File is too big ({{filesize}} MiB). Max size is {{maxFilesize}} MiB."
+    # Not a Dropzone option; used by our transformFile in file_upload_view.js.
+    dictFileUnreadable: "Couldn't read this file. Please try again, or choose a different one."
     dictFileSizeUnits:
       tb: "TiB"
       gb: "GiB"

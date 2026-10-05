@@ -67,6 +67,7 @@
         "tb": "TiB"
       },
       "dictFileTooBig": "File is too big ({{filesize}} MiB). Max size is {{maxFilesize}} MiB.",
+      "dictFileUnreadable": "Couldn't read this file. Please try again, or choose a different one.",
       "prompts": {
         "default": "Click or Drag File Here",
         "models": {

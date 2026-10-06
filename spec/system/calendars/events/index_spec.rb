@@ -309,10 +309,45 @@ describe "event calendar", js: true do
       expect(page).to have_css(".fc-agendaWeek-view .fc-time-grid")
       expect_active_gridcell(".fc-agendaWeek-view .fc-day[data-date][tabindex='0']")
     end
+
+    scenario "tab reviews current week events from an empty all-day cell",
+      browser_timezone: true do
+      date = Date.new(2026, 9, 1)
+      create(:event, calendar: calendar, name: "First Wednesday Event", all_day: true,
+        starts_at: date.next_day.in_time_zone, ends_at: date.next_day.end_of_day)
+      create(:event, calendar: calendar, name: "Second Wednesday Event", all_day: true,
+        starts_at: date.next_day.in_time_zone, ends_at: date.next_day.end_of_day)
+      visit(calendar_events_path(calendar, view: "week", date: date.to_fs(:no_time)))
+
+      find(".fc-agendaWeek-button").send_keys(:enter)
+      expect_active_gridcell(".fc-agendaWeek-view .fc-day-grid .fc-bg .fc-day[data-date][tabindex='0']")
+      active_cell_selector = page.evaluate_script(<<~JS)
+        (() => {
+          const cell = document.activeElement;
+          return `.fc-agendaWeek-view .fc-day-grid .fc-bg .fc-day` +
+            `[data-date='${cell.getAttribute("data-date")}']`;
+        })()
+      JS
+      expect(page).to have_css("#{active_cell_selector}[aria-controls]")
+
+      find("#{active_cell_selector}:focus").send_keys(:tab)
+      expect(page).to have_css(".fc-event:focus", text: "First Wednesday Event")
+
+      find(".fc-event:focus").send_keys([:shift, :tab])
+      expect_active_gridcell("#{active_cell_selector}[tabindex='0']")
+    end
   end
 
   describe "calendar grid accessibility states" do
     let(:calendar) { create(:calendar) }
+
+    before(:each, browser_timezone: true) do
+      page.driver.browser.execute_cdp("Emulation.setTimezoneOverride", timezoneId: "America/New_York")
+    end
+
+    after(:each, browser_timezone: true) do
+      page.driver.browser.execute_cdp("Emulation.setTimezoneOverride", timezoneId: "")
+    end
 
     scenario "announces month changes in a live region" do
       visit(calendar_events_path(calendar))
@@ -366,6 +401,287 @@ describe "event calendar", js: true do
         ".fc-month-view .fc-bg .fc-day[data-date='#{today.to_fs(:no_time)}']" \
         "[aria-label='#{month_today_label}']"
       )
+    end
+
+    scenario "announces event navigation instructions when entering each grid view" do
+      visit(calendar_events_path(calendar))
+
+      expect(page).to have_css(
+        ".fc-agendaWeek-view[role='grid'][aria-label*='#{event_navigation_instructions}']"
+      )
+
+      find(".fc-month-button").click
+      expect(page).to have_css(
+        ".fc-month-view[role='grid']" \
+        "[aria-label='Month calendar. #{event_navigation_instructions}']"
+      )
+    end
+
+    scenario "reviews current month events from an empty date and returns to that month cell" do
+      event_date = Time.zone.today.next_day
+      create(:event, calendar: calendar, name: "Board Social", all_day: true,
+        starts_at: event_date.in_time_zone, ends_at: event_date.end_of_day)
+
+      visit(calendar_events_path(calendar))
+      find(".fc-month-button").click
+
+      empty_cell = month_day_cell_selector(Time.zone.today)
+      page.execute_script("document.querySelector(#{empty_cell.to_json}).focus()")
+      find(empty_cell).send_keys(:tab)
+      expect(page).to have_css(".fc-event:focus", text: "Board Social")
+      find(".fc-event:focus").send_keys(:escape)
+      event_cell = month_day_cell_selector(event_date)
+      expect_active_gridcell("#{event_cell}[tabindex='0']")
+
+      page.execute_script("document.querySelector(#{event_cell.to_json}).focus()")
+      expect(page).to have_css("#{event_cell}[aria-controls]")
+      find(event_cell).send_keys(:tab)
+
+      expect(page).to have_css(
+        ".fc-event:focus[data-fc-a11y-primary='true'][aria-keyshortcuts~='Escape']",
+        text: "Board Social"
+      )
+      focused_label = page.evaluate_script("document.activeElement.getAttribute('aria-label')")
+      expect(focused_label).to include("Board Social", "All-day event", accessible_date(event_date))
+
+      find(".fc-event:focus").send_keys(:escape)
+      expect_active_gridcell("#{event_cell}[tabindex='0']")
+    end
+
+    scenario "reviews multiple timed events for a slot and returns without losing the slot" do
+      event_date = Time.zone.today
+      starts_at = event_date.in_time_zone + 9.hours
+      create(:event, calendar: calendar, name: "First Meeting",
+        starts_at: starts_at, ends_at: starts_at + 1.hour)
+      create(:event, calendar: calendar, name: "Second Meeting",
+        starts_at: starts_at + 15.minutes, ends_at: starts_at + 75.minutes)
+
+      visit(calendar_events_path(calendar))
+
+      slot_selector =
+        ".fc-agendaWeek-view .fc-gather-time-slot" \
+        "[data-date='#{event_date.to_fs(:no_time)}'][data-time='09:00:00']"
+      page.execute_script("document.querySelector(#{slot_selector.to_json}).focus()")
+      expect(page).to have_css("#{slot_selector}[aria-controls]")
+      find(slot_selector).send_keys(:tab)
+
+      first_label = page.evaluate_script("document.activeElement.getAttribute('aria-label')")
+      expect(first_label).to include("Timed event", accessible_date(event_date), "9 AM")
+      page.execute_script(<<~JS)
+        window.calendarGridAccessibilityMutationCount = 0;
+        window.calendarGridAccessibilityMutationObserver = new MutationObserver((mutations) => {
+          window.calendarGridAccessibilityMutationCount += mutations.length;
+        });
+        window.calendarGridAccessibilityMutationObserver.observe(
+          document.querySelector("#calendar"),
+          {
+            attributes: true,
+            subtree: true,
+            attributeFilter: [
+              "aria-current",
+              "aria-hidden",
+              "aria-selected",
+              "class",
+              "role",
+              "tabindex"
+            ]
+          }
+        );
+      JS
+
+      find(".fc-event:focus").send_keys(:tab)
+      second_label = page.evaluate_script("document.activeElement.getAttribute('aria-label')")
+      expect([first_label, second_label].join(" ")).to include("First Meeting", "Second Meeting")
+      expect(second_label).not_to eq(first_label)
+      expect(page.evaluate_script("window.calendarGridAccessibilityMutationCount")).to eq(0)
+
+      find(".fc-event:focus").send_keys(:escape)
+      expect_active_gridcell("#{slot_selector}[tabindex='0']")
+    end
+
+    scenario "labels all-day and multi-day events once in keyboard navigation" do
+      event_date = Time.zone.today
+      create(:event, calendar: calendar, name: "Holiday", all_day: true,
+        starts_at: event_date.in_time_zone, ends_at: event_date.end_of_day)
+      create(:event, calendar: calendar, name: "Long Retreat", all_day: true,
+        starts_at: event_date.in_time_zone, ends_at: (event_date + 10.days).end_of_day)
+
+      visit(calendar_events_path(calendar, view: "month", date: event_date.to_fs(:no_time)))
+
+      holiday_label = find(".fc-event", text: "Holiday")["aria-label"]
+      expect(holiday_label).to include("All-day event on #{accessible_date(event_date)}")
+
+      retreat_events = all(".fc-event", text: "Long Retreat")
+      expect(retreat_events.size).to be > 1
+      expect(page).to have_css(
+        ".fc-event[data-fc-a11y-primary='true'][tabindex='0']",
+        text: "Long Retreat",
+        count: 1
+      )
+      expect(page).to have_css(
+        ".fc-event[data-fc-a11y-primary='false'][tabindex='-1']",
+        text: "Long Retreat",
+        minimum: 1
+      )
+      expect(retreat_events.first["aria-label"]).to include(
+        "Multi-day all-day event from #{accessible_date(event_date)} through " \
+        "#{accessible_date(event_date + 10.days)}"
+      )
+
+      event_cell = month_day_cell_selector(event_date)
+      page.execute_script("document.querySelector(#{event_cell.to_json}).focus()")
+      find(event_cell).send_keys(:tab)
+      focused_labels = [page.evaluate_script("document.activeElement.getAttribute('aria-label')")]
+      find(".fc-event:focus").send_keys(:tab)
+      focused_labels << page.evaluate_script("document.activeElement.getAttribute('aria-label')")
+      expect(focused_labels.join(" ")).to include("Holiday", "Long Retreat")
+      find(".fc-event:focus").send_keys(:escape)
+      expect_active_gridcell("#{event_cell}[tabindex='0']")
+    end
+
+    scenario "reviews all current month events beside the selected date", browser_timezone: true do
+      date = Date.new(2026, 7, 31)
+      %w[Bertie Lou Third].each do |name|
+        create(:event, calendar: calendar, name: name, all_day: true,
+          starts_at: date.in_time_zone, ends_at: date.end_of_day)
+      end
+      create(:event, calendar: calendar, name: "Izzy", all_day: true,
+        starts_at: date.next_day.in_time_zone, ends_at: date.next_day.end_of_day)
+      visit(calendar_events_path(calendar, view: "month", date: date.to_fs(:no_time)))
+
+      cell = month_day_cell_selector(date)
+      page.execute_script("document.querySelector(#{cell.to_json}).focus()")
+      find(cell).send_keys(:tab)
+      names = []
+      4.times do |index|
+        names << page.evaluate_script("document.activeElement.textContent")
+        find(".fc-event:focus").send_keys(:tab) if index < 3
+      end
+      expect(names.map(&:strip)).to contain_exactly("Bertie", "Lou", "Third", "Izzy")
+      find(".fc-event:focus").send_keys([:shift, :tab])
+      find(".fc-event:focus").send_keys([:shift, :tab])
+      find(".fc-event:focus").send_keys([:shift, :tab])
+      find(".fc-event:focus").send_keys([:shift, :tab])
+      expect_active_gridcell("#{cell}[tabindex='0']")
+      find(cell).send_keys(:tab)
+      4.times { find(".fc-event:focus").send_keys(:tab) }
+      expect(page).to have_css(
+        "#calendar-live-region",
+        text: "No more events in this view. Press Tab again to leave the calendar.",
+        visible: false
+      )
+      expect(page).to have_css(".fc-event:focus", text: "Izzy")
+      find(".fc-event:focus").send_keys(:tab)
+      expect(page.evaluate_script("!document.querySelector('#calendar').contains(document.activeElement)"))
+        .to eq(true)
+    end
+
+    scenario "reviews all current week events from its all-day cell", browser_timezone: true do
+      date = Date.new(2026, 9, 1)
+      create(:event, calendar: calendar, name: "TEST",
+        starts_at: date.in_time_zone + 8.hours + 30.minutes, ends_at: date.in_time_zone + 9.hours)
+      create(:event, calendar: calendar, name: "Test 2",
+        starts_at: date.in_time_zone + 8.hours, ends_at: date.in_time_zone + 9.hours)
+      create(:event, calendar: calendar, name: "Tuesday all-day", all_day: true,
+        starts_at: date.in_time_zone, ends_at: date.end_of_day)
+      create(:event, calendar: calendar, name: "CONFERENCE", all_day: true,
+        starts_at: date.next_day.in_time_zone, ends_at: (date + 4.days).end_of_day)
+      visit(calendar_events_path(calendar, view: "week", date: date.to_fs(:no_time)))
+
+      cell = ".fc-agendaWeek-view .fc-day-grid .fc-bg .fc-day[data-date='#{date.to_fs(:no_time)}']"
+      conference_cell =
+        ".fc-agendaWeek-view .fc-day-grid .fc-bg .fc-day" \
+        "[data-date='#{date.next_day.to_fs(:no_time)}']"
+      page.execute_script("document.querySelector(#{cell.to_json}).focus()")
+      find(cell).send_keys(:tab)
+      labels = [page.evaluate_script("document.activeElement.getAttribute('aria-label')")]
+      3.times do
+        find(".fc-event:focus").send_keys(:tab)
+        labels << page.evaluate_script("document.activeElement.getAttribute('aria-label')")
+      end
+      expect(labels.join(" ")).to include("TEST", "Test 2", "Tuesday all-day", "CONFERENCE")
+      find(".fc-event:focus").send_keys(:tab)
+      expect(page).to have_css(
+        "#calendar-live-region",
+        text: "No more events in this view. Press Tab again to leave the calendar.",
+        visible: false
+      )
+      expect(page).to have_css(".fc-event:focus", text: "CONFERENCE")
+      find(".fc-event:focus").send_keys(:tab)
+      expect(page).to have_css("#permalink:focus")
+      find("#permalink:focus").send_keys([:shift, :tab])
+      expect(page).to have_css(".fc-event:focus", text: "CONFERENCE")
+      conference_label = page.evaluate_script("document.activeElement.getAttribute('aria-label')")
+      expect(conference_label).to include(
+        "Press Escape to return to All Day, #{accessible_date(date.next_day)}"
+      )
+      find(".fc-event:focus").send_keys(:escape)
+      expect_active_gridcell("#{conference_cell}[tabindex='0']")
+      find(conference_cell).send_keys([:alt, :arrow_down])
+      expect(page).to have_css(".fc-event:focus", text: "CONFERENCE")
+    end
+
+    scenario "reviews only focused day events with alt down", browser_timezone: true do
+      date = Date.new(2026, 9, 1)
+      create(:event, calendar: calendar, name: "TEST",
+        starts_at: date.in_time_zone + 8.hours + 30.minutes, ends_at: date.in_time_zone + 9.hours)
+      create(:event, calendar: calendar, name: "Test 2",
+        starts_at: date.in_time_zone + 8.hours, ends_at: date.in_time_zone + 9.hours)
+      create(:event, calendar: calendar, name: "Tuesday all-day", all_day: true,
+        starts_at: date.in_time_zone, ends_at: date.end_of_day)
+      create(:event, calendar: calendar, name: "CONFERENCE", all_day: true,
+        starts_at: date.next_day.in_time_zone, ends_at: (date + 4.days).end_of_day)
+      visit(calendar_events_path(calendar, view: "week", date: date.to_fs(:no_time)))
+
+      cell = ".fc-agendaWeek-view .fc-day-grid .fc-bg .fc-day[data-date='#{date.to_fs(:no_time)}']"
+      page.execute_script("document.querySelector(#{cell.to_json}).focus()")
+      find(cell).send_keys([:alt, :arrow_down])
+      labels = [page.evaluate_script("document.activeElement.getAttribute('aria-label')")]
+      2.times do
+        find(".fc-event:focus").send_keys(:tab)
+        labels << page.evaluate_script("document.activeElement.getAttribute('aria-label')")
+      end
+      expect(labels.join(" ")).to include("TEST", "Test 2", "Tuesday all-day")
+      expect(labels.join(" ")).not_to include("CONFERENCE")
+      3.times { find(".fc-event:focus").send_keys([:shift, :tab]) }
+      expect_active_gridcell("#{cell}[tabindex='0']")
+    end
+
+    scenario "reaches visible overnight continuations at midnight and clipped six AM", browser_timezone: true do
+      date = Date.new(2026, 10, 2)
+      create(:event, calendar: calendar, name: "24 hr Progressive Dinner",
+        starts_at: date.in_time_zone + 6.hours, ends_at: date.next_day.in_time_zone + 7.hours)
+      visit(calendar_events_path(calendar, view: "week", date: date.to_fs(:no_time)))
+
+      ["06:00:00", "00:00:00"].each do |time|
+        find(".early").click if time == "00:00:00"
+        slot = ".fc-agendaWeek-view .fc-gather-time-slot" \
+          "[data-date='#{date.next_day.to_fs(:no_time)}'][data-time='#{time}']"
+        page.execute_script("document.querySelector(#{slot.to_json}).focus()")
+        expect(page).to have_css("#{slot}[aria-controls]")
+        find(slot).send_keys([:alt, :arrow_down])
+        expect(page).to have_css(".fc-event:focus", text: "24 hr Progressive Dinner")
+        label = page.evaluate_script("document.activeElement.getAttribute('aria-label')")
+        expect(label).to include("Multi-day timed event",
+          accessible_date(date), accessible_date(date.next_day))
+        expect(label).to include("Press Escape to return to #{accessible_date(date.next_day)}")
+        find(".fc-event:focus").send_keys(:escape)
+        expect_active_gridcell("#{slot}[tabindex='0']")
+        find(slot).send_keys(:tab)
+        find(".fc-event:focus").send_keys([:shift, :tab])
+        expect_active_gridcell("#{slot}[tabindex='0']")
+        find(slot).send_keys(:tab)
+        find(".fc-event:focus").send_keys(:tab)
+        expect(page).to have_css(
+          "#calendar-live-region",
+          text: "No more events in this view. Press Tab again to leave the calendar.",
+          visible: false
+        )
+        expect(page).to have_css(".fc-event:focus", text: "24 hr Progressive Dinner")
+        find(".fc-event:focus").send_keys(:tab)
+        expect(page.evaluate_script("!document.querySelector('#calendar').contains(document.activeElement)"))
+          .to eq(true)
+      end
     end
 
     scenario "supports keyboard navigation and labels for day and week time slots" do
@@ -748,9 +1064,25 @@ describe "event calendar", js: true do
           ? "half-hour time slots"
           : `${slotMinutes}-minute time slots`;
         return `${viewName}. All Day row followed by ${interval} from ${label(start)} ` +
-          `to ${label(end)}. Use arrow keys to navigate`;
+          `to ${label(end)}. #{event_navigation_instructions}`;
       })()
     JS
+  end
+
+  def event_navigation_instructions
+    "Use arrow keys to navigate. Tab reviews events in the current view or leaves the calendar " \
+      "when there are none. Alt+Down reviews events for the focused date or time. " \
+      "Escape returns from an event to its calendar location"
+  end
+
+  def month_day_cell_selector(date)
+    ".fc-month-view .fc-bg .fc-day[data-date='#{date.to_fs(:no_time)}']"
+  end
+
+  def accessible_date(date)
+    page.evaluate_script(
+      "moment('#{date.to_fs(:no_time)}', 'YYYY-MM-DD').format('dddd, MMMM D, YYYY')"
+    )
   end
 
   def current_week?(date)

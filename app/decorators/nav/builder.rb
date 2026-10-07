@@ -401,16 +401,17 @@ module Nav
       filter_and_set_active_items(items)
     end
 
+    def label(item)
+      return item[:name] if item[:name].is_a?(String)
+      i18n_key_parts = ["nav_links"]
+      i18n_key_parts.concat(Array.wrap(item[:parents]))
+      i18n_key_parts << (item[:i18n_key] || item[:name])
+      i18n_key = i18n_key_parts.join(".")
+      t("#{i18n_key}._self", default: :"#{i18n_key}")
+    end
+
     def link(item, tab: false, icon: true)
-      name = if item[:name].is_a?(String)
-        item[:name]
-      else
-        i18n_key_parts = ["nav_links"]
-        i18n_key_parts.concat(Array.wrap(item[:parents]))
-        i18n_key_parts << (item[:i18n_key] || item[:name])
-        i18n_key = i18n_key_parts.join(".")
-        t("#{i18n_key}._self", default: t(i18n_key))
-      end
+      name = label(item)
       params = {}
       params[:method] = item[:method]
       params[:role] = "tab" if tab

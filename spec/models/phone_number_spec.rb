@@ -50,9 +50,7 @@ describe People::PhoneNumber do
 
         context "with other locale" do
           around do |example|
-            I18n.locale = :fr
-            example.run
-            I18n.locale = :en
+            I18n.with_locale(:fr) { example.run }
           end
 
           it "should use correct country name" do

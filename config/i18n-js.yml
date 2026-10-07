@@ -1,6 +1,8 @@
 # Configures what translations get sent to JS.
 # Only those needed should be included to keep download size small.
-# Run `rails i18n:export` to regenerate app/javascript/i18n/translations.json after changing locales.
+# After changing locales, regenerate app/javascript/i18n/translations.json with:
+#   bundle exec i18n export -c config/i18n-js.yml -r config/environment.rb
+# CI fails if the committed file is out of date (spec/i18n_spec.rb).
 translations:
   - file: "app/javascript/i18n/translations.json"
     patterns:
@@ -12,3 +14,5 @@ translations:
       - "*.errors.messages.doesnt_match"
       - "*.dropzone.*"
       - "*.batchable_tables.confirmations.*"
+      - "*.modal.*"
+      - "*.payment.*"

@@ -180,7 +180,7 @@ module FormHelper
   def link_to_add(wrapper_tag, args)
     f = args[:f]
     link_text = I18n.t("cocoon.add_links.#{f.object.class.model_name.i18n_key}.#{args[:assoc]}",
-                        default: I18n.t("cocoon.add_links.#{args[:assoc]}"))
+                        default: :"cocoon.add_links.#{args[:assoc]}")
     content_tag(wrapper_tag, class: "add-link-wrapper") do
       options = {}
       options[:partial] = args[:wrapper_partial]

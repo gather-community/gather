@@ -2,7 +2,7 @@
 <% (@title_footnote = yield(:title_footnote)) %>
 <% @title_no_html = yield(:title_no_html) %>
 <!DOCTYPE html>
-<html>
+<html lang="<%= I18n.locale %>" dir="ltr">
 <head>
   <%= render("layouts/head") %>
 </head>
@@ -86,7 +86,7 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
                       aria-haspopup="true" aria-expanded="false" aria-label="Show menu">
                       <%= icon_tag(item[:icon]) %>
-                      <%= t("nav_links.main.#{item[:name]}") %>
+                      <%= nav_builder.label(item) %>
                       <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">

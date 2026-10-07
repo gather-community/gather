@@ -43,8 +43,8 @@ module AccountsHelper
 
   def statement_confirm_msg
     msg = +"Are you sure? Statements will be sent out to #{@statement_accounts} households."
-    msg << "\n\n" << t(".no_users", count: @no_user_accounts) if @no_user_accounts > 0
-    msg << "\n\n" << t(".recent_statements", count: @recent_stmt_accounts) if @recent_stmt_accounts > 0
+    msg << "\n\n" << t("accounts.index.no_users", count: @no_user_accounts) if @no_user_accounts > 0
+    msg << "\n\n" << t("accounts.index.recent_statements", count: @recent_stmt_accounts) if @recent_stmt_accounts > 0
     msg
   end
 end

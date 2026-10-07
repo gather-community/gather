@@ -16,6 +16,18 @@ describe People::CsvExporter do
       end
 
       context "with other locale" do
+        # fr only translates a few headers so far. Production falls back to English for the rest, but
+        # tests raise on missing translations, so fill the gaps with English the way fallbacks would.
+        before do
+          en_headers = I18n.t("csv.headers", locale: :en)
+          fr_headers = I18n.t("csv.headers", locale: :fr)
+          I18n.backend.store_translations(:fr, csv: {headers: en_headers.deep_merge(fr_headers)})
+        end
+
+        after do
+          I18n.reload!
+        end
+
         it "should use locale specific headers" do
           with_locale(:fr) do
             expect(exporter.to_csv).to match(/,Prénom,/)

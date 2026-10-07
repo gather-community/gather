@@ -262,7 +262,7 @@ module Work
 
     # Cache key for the index page.
     def cache_key
-      chunks = [@choosee.id, @period, @shifts, lenses, params[:page] || 1]
+      chunks = [I18n.locale, @choosee.id, @period, @shifts, lenses, params[:page] || 1]
 
       # Need to include current minutes/5 if staggered because the round limit calculations
       # may change things just with the passage of time. We know things only change this way at 5-minute

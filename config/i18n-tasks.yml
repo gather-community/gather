@@ -1,0 +1,88 @@
+# i18n-tasks finds missing and unused translations: https://github.com/glebm/i18n-tasks
+# Checked in CI by spec/i18n_spec.rb. Run `bundle exec i18n-tasks health` locally for a full report.
+
+base_locale: en
+locales: [en, fr, fr-CA, es, de, sv, nb, fi, nl, it]
+
+data:
+  read:
+    - config/locales/%{locale}.yml
+    - config/locales/%{locale}/*.yml
+
+  # Translations shipped by gems. Counted as present, never reported as unused or written to.
+  external:
+    <% {"activesupport" => "lib/active_support/locale", "activemodel" => "lib/active_model/locale",
+        "activerecord" => "lib/active_record/locale", "actionview" => "lib/action_view/locale",
+        "rails-i18n" => "rails/locale", "devise-i18n" => "rails/locales"}.each do |gem, dir| %>
+    - "<%= Gem.loaded_specs[gem].full_gem_path %>/<%= dir %>/%{locale}.yml"
+    <% end %>
+
+  # Keeps new keys in the file their siblings already live in.
+  router: conservative_router
+
+  yaml:
+    write:
+      line_width: -1
+
+search:
+  paths:
+    - app/
+    - config/initializers/
+    - lib/
+  relative_roots:
+    - app/controllers
+    - app/helpers
+    - app/mailers
+    - app/views
+  exclude:
+    - app/assets/images
+    - app/assets/fonts
+    - app/assets/builds
+    - app/javascript/i18n/translations.json
+  only: ["*.rb", "*.erb", "*.rake", "*.js", "*.ts", "*.coffee"]
+  # RailsModelMatcher is deliberately omitted: it drops the namespace from model keys (Work::Job ->
+  # activerecord.attributes.job.*), producing false positives. human_attribute_name falls back anyway.
+  ast_matchers:
+    - "I18n::Tasks::Scanners::AstMatchers::DefaultI18nSubjectMatcher"
+
+# The built-in scanners ignore t calls with a receiver, so decorators' h.t("...") and the JS i18n.t("...")
+# would otherwise be invisible.
+<% I18n::Tasks.add_scanner "I18n::Tasks::Scanners::PatternMapper",
+     only: %w[*.rb *.erb *.js *.ts *.coffee],
+     patterns: [['\\b(?:h|i18n|I18n|window\\.I18n)\\.t[( ]\\s*%{key}', "%{key}"]] %>
+
+ignore_missing:
+  # default_i18n_subject runs in the protected meal_message helper, but action_name is the public
+  # normal_message/cancellation_message action that called it, and those keys exist.
+  - meal_mailer.meal_message.subject
+
+# Keys looked up by frameworks or by dynamically built key strings, which the scanner can't see.
+ignore_unused:
+  - "{activerecord,activemodel}.*"
+  - "simple_form.*"
+  - "custom_fields.*"
+  - "{devise,views.pagination,helpers}.*"
+  - "{date,time,datetime,number,errors}.*"
+  - "{datepicker,timepicker,dayViewHeaderFormat}"
+  - "{datepicker,timepicker}.*"
+  # Read by JS (see config/i18n-js.yml) or built from variables at runtime.
+  - "{modal,payment,password,dropzone,batchable_tables}.*"
+  - "nav_links.*"                         # Utils::Nav builds keys from menu item names
+  - "activatables.*"                      # keyed by model i18n_key
+  - "cocoon.add_links.*"                  # FormHelper#link_to_add, keyed by association
+  - "{community_lens,date_range_lens}.*"  # Lens i18n_key + option names
+  - "calendars.{all,community,your}_*"    # system calendar names
+  - "calendars/protocol.durations.*"
+  - "common.time_with_preposition.*"
+  - "gdrive.item_kinds.*"
+  - "meals.form.summaries.*"
+  - "work.synopsis.*"
+  - "work/job_reminder.relative.*"
+  - "{meal_mailer,work_mailer}.*.subject" # default_i18n_subject
+  # Baseline from when the unused check was turned on. These may be dead; resolve them as each
+  # module is converted rather than adding to this list.
+  - "common.community_count.*"
+  - "calendars.exports.jobs.summary_with_suffix.*"
+  - "meals.finalizing.{duplicates,success}"
+  - "meals/formulas.calc_types.*"
+  - "work/jobs.shifts"

@@ -432,6 +432,7 @@ en:
       rescan: "Rescan"
       summary: "Summary"
       finalize: "Finalize"
+      unfinalize: "Unfinalize"
       cancel: "Cancel"
       send_message: "Message"
     community:

@@ -3,6 +3,7 @@
 # Root mailer for all mailers.
 class ApplicationMailer < ActionMailer::Base
   include SubdomainSettable
+  include RecipientLocale
   default from: Settings.email.from, reply_to: Settings.email.from
 
   protected

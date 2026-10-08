@@ -7,6 +7,7 @@
 #
 # It is used for community signup notifications which are not tenant-scoped.
 class Communities::SignupMailer < ActionMailer::Base
+  include RecipientLocale
   default from: Settings.email.from
 
   def notify_approvers(signup)

@@ -12,6 +12,10 @@ module Calendars
     # based on the community calendar token.
     skip_before_action :authenticate_user!, only: :nonpersonalized
 
+    # Calendar apps fetch these feeds without a person's browser behind the request, so they're rendered in
+    # the default locale rather than whatever Accept-Language the calendar app happens to send.
+    skip_around_action :switch_locale, only: %i[personalized nonpersonalized]
+
     def index
       skip_policy_scope
       authorize(current_community, policy_class: ExportPolicy)

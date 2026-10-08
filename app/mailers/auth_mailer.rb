@@ -11,6 +11,8 @@
 # So each method in here should consider these things separately. Many of them don't apply, but care
 # should be taken all the same.
 class AuthMailer < Devise::Mailer
+  include RecipientLocale
+
   # Need to set `from` here separately because we're not inheriting from ApplicationMailer
   default template_path: "auth_mailer", from: Settings.email.from
 

@@ -30,7 +30,10 @@ describe People::Birthday do
         expect(user.birthdate.year).to eq(4)
         expect(user.birthdate.month).to eq(2)
         expect(user.birthdate.day).to eq(day)
-        expect(user.birthdate).to eq(Date.new(4, 2, day))
+        # Compare as ISO strings: Date#== compares Julian day numbers, and year 4 falls before the
+        # Gregorian reform, so the same Y/M/D differs depending on which calendar the DB driver
+        # decodes into (pg 1.7 decodes proleptic Gregorian; Date.new defaults to Julian here).
+        expect(user.birthdate.iso8601).to eq(Date.new(4, 2, day).iso8601)
         str = "Feb #{day.to_s.rjust(2, '0')}"
         expect(user.birthday_str).to eq(str)
         expect(user.reload.birthday_str).to eq(str)

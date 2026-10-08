@@ -113,6 +113,9 @@ describe "jobs", js: true do
         expect(page).to have_selector("input[value='Go to town']")
         find("a.remove_fields").click
       end
+      # Cocoon hides the removed row asynchronously; wait for that so the index below doesn't
+      # pick up the row we just removed.
+      expect(page).to have_css(".work_job_reminders .nested-fields", count: 1)
       within(all(".work_job_reminders .nested-fields")[0]) do
         expect(page).to have_selector("input[value='Clean the lint trap']")
         find(".work_job_reminders_rel_magnitude input").set("3.5")

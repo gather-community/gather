@@ -67,7 +67,9 @@ describe "event calendar", js: true do
       find(".fc-month-button").click
       expect(page).to have_css(".fc-month-button.fc-state-active")
 
-      # The All link gets QS params rewritten just like per-calendar links.
+      # The All link gets QS params rewritten just like per-calendar links. The JS does this after
+      # the view changes, so wait for it before reading the href.
+      expect(page).to have_css("a.calendar-link[href*='view=month']", text: "All")
       all_href = find("a.calendar-link", text: "All")["href"]
       expect(all_href).to match(%r{/calendars/events})
       expect(all_href).to match(/[?&]view=month/)
@@ -553,9 +555,12 @@ describe "event calendar", js: true do
         "[data-date='#{second_new_week_date.to_fs(:no_time)}'][data-time='06:00:00']"
 
       expect(page).to have_css(last_slot_selector)
+      # Record the slot that actually receives the keypress rather than grabbing one up front: the
+      # initial events load can land after the grid first renders and rebuild every slot, which
+      # would leave an earlier handle pointing at a detached node.
       page.execute_script(<<~JS)
-        window.calendarFocusedSlot = document.querySelector(#{last_slot_selector.to_json});
-        window.calendarFocusedSlot.focus();
+        document.addEventListener("keydown", (e) => { window.calendarFocusedSlot = e.target; },
+          {capture: true, once: true});
       JS
       find(last_slot_selector).send_keys(:arrow_right)
 

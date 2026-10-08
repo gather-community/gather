@@ -15,7 +15,7 @@ module Utils
       def filter_item(item_hash)
         # Check to see if this item has been customized
         translated_name = I18n.t("nav_links.#{item_hash[:name]}._self",
-                                 default: I18n.t("nav_links.#{item_hash[:name]}"))
+                                 default: :"nav_links.#{item_hash[:name]}")
         if customizations[translated_name]
           item_hash[:path] = customizations[translated_name]
           customizations.delete(translated_name)

@@ -16,7 +16,7 @@ describe "periods", js: true do
       name: "Bar",
       starts_on: "2017-05-01",
       ends_on: "2017-08-31",
-      phase: "active")
+      phase: "open")
   end
   let!(:period3) do
     create(:work_period,

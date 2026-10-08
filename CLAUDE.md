@@ -302,6 +302,20 @@ The dispositions map is a **declaration**, not an assertion — it does not read
 
 **Watch for foreign keys with no DB constraint** (e.g. `gdrive_synced_permissions.user_id`, which is deliberately unconstrained so rows outlive the user — see below). A missed reassignment on a constrained column raises at deletion time; on an unconstrained one it silently leaves a dangling id, and the association reads back as `nil`. Assert the association *resolves* (`expect(record.reload.sender).to eq(placeholder)`), not merely that the delete succeeded. Prefer adding the FK constraint when the column isn't deliberately loose — `meal_messages.sender_id` was unconstrained and silently accumulated dangling rows until one was added.
 
+### User-Facing Strings
+
+**Hard-coded user-facing strings are forbidden.** Gather is being translated into several languages, so every piece of text a user can see must go through I18n. That includes page text, headings, labels, buttons, link text, flash messages, validation errors, email subjects and bodies, JS alerts and confirms, `alt`/`title`/`placeholder`/`aria-label` attributes, select options, and CSV headers. This applies to all new and changed code, even in modules whose existing strings haven't been converted yet. (Exempt: logs, exception messages, Rake output, and mail that only goes to Gather operators, such as the exception notifier and `SystemMailer`.)
+
+- **Views:** use lazy lookup (`t(".title")`). The key resolves from the template path (`app/views/meals/meals/show.html.erb` → `meals.meals.show.title`) and lives in that module's YAML file (`meals.yml`). Strings shared across modules go under `common.*`. Decorators use `h.t(...)` with a full key.
+- **Never build a sentence by concatenating fragments**, because word order differs between languages. Use one key with interpolation (`%{name}`). When the sentence contains a link or markup, use an `_html` key and pass the link in as a variable: `t(".notice_html", link: link_to(...))`.
+- **Pluralize with `count:`** and `one`/`other` sub-keys, never `String#pluralize` or `"#{n} things"` on display text.
+- **Model and form errors use symbol keys** (`errors.add(:base, :too_many)`) with the message in `activerecord.errors…`/`activemodel.errors…`, not literal strings.
+- **Dates and times** go through `I18n.l` with a named format (see the controller conventions).
+- **JS strings:** use `i18n.t("...")` from `app/javascript/utils/i18n.ts` (or `I18n.t` in the legacy Backbone bundle). Add the key's namespace to `config/i18n-js.yml` if it isn't exported yet, then regenerate the bundle: `bundle exec i18n export -c config/i18n-js.yml -r config/environment.rb`.
+- **Fragment caches** must include `I18n.locale` in the cache key.
+- **Missing translations raise** in development and test (`config.i18n.raise_on_missing_translations`).
+- **[spec/i18n_spec.rb](spec/i18n_spec.rb) runs in CI** (config in `config/i18n-tasks.yml`). It fails on keys used in code but missing from `en`, on unused keys, on interpolation variables that differ between locales, and on a stale JS export. Run `bundle exec i18n-tasks missing -l en` and `bundle exec i18n-tasks unused -l en` locally. When a key is built dynamically (`t("gdrive.item_kinds.#{kind}")`), add a pattern to `ignore_unused` with a comment saying where it's used. Delete keys that are really unused.
+
 ### Locale Files
 
 Gather uses several locale files under `config/locales/en/`. Each type of string has a canonical home:
@@ -325,7 +339,7 @@ Gather uses several locale files under `config/locales/en/`. Each type of string
 
 - `helpers.submit.{action}` or `helpers.submit.{model}.{action}` — submit button labels
 - `confirmations.{model}.{action}` — confirm dialog text for destructive actions
-- `common.*` — shared strings used across multiple strings used across multiple modules
+- `common.*` — shared strings used across multiple modules
 - `errors.messages.*` — global custom error messages
 
 **Module-specific files** (`meals.yml`, `work.yml`, `people.yml`, etc.) — flash messages, page titles, section headers, and other strings belonging entirely to one feature module.

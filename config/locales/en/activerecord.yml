@@ -81,11 +81,13 @@ en:
         pantry_calc_type: "Calculation Type"
         is_default: "Default formula?"
         parts: "Meal Types"
+        pantry_fee: "Pantry Fee"
         pantry_fee_formatted: "Pantry Fee"
         pantry_reimbursement: "Allow pantry reimbursement?"
         takeout: "Allow takeout requests?"
         role_ids: "Roles"
       meals/formula_part:
+        name: "Name"
         type_id: "Type"
         share_formatted: "Price/Share"
         portion_size: "Portion Size"

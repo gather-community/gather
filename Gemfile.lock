@@ -248,6 +248,9 @@ GEM
       railties (>= 7.0)
       responders
       warden (~> 1.2.3)
+    devise-i18n (1.16.1)
+      devise (>= 5.0.0)
+      rails-i18n
     diff-lcs (1.6.2)
     diffy (3.4.4)
     draper (4.0.6)
@@ -345,6 +348,8 @@ GEM
       logger
     hcaptcha (7.1.0)
       json
+    highline (3.1.2)
+      reline
     hirb (0.7.3)
     httpclient (2.8.3)
     i18n (1.15.2)
@@ -352,6 +357,18 @@ GEM
     i18n-js (4.2.4)
       glob (>= 0.4.0)
       i18n
+    i18n-tasks (1.1.2)
+      activesupport (>= 4.0.2)
+      ast (>= 2.1.0)
+      erubi
+      highline (>= 3.0.0)
+      i18n
+      parser (>= 3.2.2.1)
+      prism
+      rails-i18n
+      rainbow (>= 2.2.2, < 4.0)
+      ruby-progressbar (~> 1.8, >= 1.8.1)
+      terminal-table (>= 1.5.1)
     icalendar (2.12.3)
       base64
       ice_cube (~> 0.16)
@@ -555,6 +572,9 @@ GEM
     rails-html-sanitizer (1.7.1)
       loofah (~> 2.25, >= 2.25.2)
       nokogiri (>= 1.15.7, != 1.16.7, != 1.16.6, != 1.16.5, != 1.16.4, != 1.16.3, != 1.16.2, != 1.16.1, != 1.16.0.rc1, != 1.16.0)
+    rails-i18n (8.1.0)
+      i18n (>= 0.7, < 2)
+      railties (>= 8.0.0, < 9)
     railties (8.1.4)
       actionpack (= 8.1.4)
       activesupport (= 8.1.4)
@@ -728,6 +748,8 @@ GEM
       bigdecimal
       logger
     strong_password (0.0.10)
+    terminal-table (4.0.0)
+      unicode-display_width (>= 1.1.1, < 4)
     thin (1.8.2)
       daemons (~> 1.0, >= 1.0.9)
       eventmachine (~> 1.0, >= 1.0.4)
@@ -811,6 +833,7 @@ DEPENDENCIES
   debug
   delayed_job_active_record (~> 4.1)
   devise (~> 5.0)
+  devise-i18n (~> 1.16)
   diffy (~> 3.4)
   draper (~> 4.0)
   dropzonejs-rails (~> 0.7)
@@ -827,6 +850,7 @@ DEPENDENCIES
   hcaptcha (~> 7.1)
   hirb (~> 0.7)
   i18n-js (~> 4.2)
+  i18n-tasks (~> 1.1)
   icalendar (~> 2.12)
   ice_cube (~> 0.16)
   image_processing (~> 2.0)
@@ -853,6 +877,7 @@ DEPENDENCIES
   pundit (~> 2.5)
   rails (~> 8.1.0)
   rails-backbone (~> 1.2)
+  rails-i18n (~> 8.1)
   redcarpet (~> 3.6)
   redis (~> 5.4)
   rein (~> 5.0)

@@ -21,6 +21,7 @@ gem "daemons", "~> 1.2"
 gem "datetimepicker-rails", git: "https://gitlab.com/zpaulovics/datetimepicker-rails"
 gem "delayed_job_active_record", "~> 4.1"
 gem "devise", "~> 5.0"
+gem "devise-i18n", "~> 1.16"
 gem "diffy", "~> 3.4"
 gem "draper", "~> 4.0"
 gem "dropzonejs-rails", "~> 0.7"
@@ -55,6 +56,7 @@ gem "puma", "~> 8.0"
 gem "pundit", "~> 2.5"
 gem "rails", "~> 8.1.0"
 gem "rails-backbone", "~> 1.2"
+gem "rails-i18n", "~> 8.1"
 gem "redcarpet", "~> 3.6"
 gem "redis", "~> 5.4"
 gem "rein", "~> 5.0"
@@ -92,6 +94,7 @@ group :development, :test do
   gem "database_cleaner", "~> 2.0"
   gem "debug", require: false
   gem "ed25519", ">= 1.2", "< 2.0" # For Capistrano
+  gem "i18n-tasks", "~> 1.1", require: false
   gem "launchy", "~> 3.1" # For opening screenshots
   gem "pry-nav", "~> 1.0"
   gem "pry-rails", "~> 0.3"

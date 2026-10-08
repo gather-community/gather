@@ -64,13 +64,15 @@ en:
     messages:
       no_semicolons: "Semicolons not allowed"
 
-  # App modal button labels + default titles (mirrors the `modal` keys in
-  # app/javascript/i18n/translations.json).
+  # App modal button labels + default titles (exported to JS via config/i18n-js.yml).
   modal:
     ok: "OK"
     cancel: "Cancel"
     confirm_title: "Confirm"
     alert_title: "Notice"
+
+  payment:
+    accountholder_required: "Please specify the accountholder name."
 
   confirmations:
     billing/template:
@@ -430,6 +432,7 @@ en:
       rescan: "Rescan"
       summary: "Summary"
       finalize: "Finalize"
+      unfinalize: "Unfinalize"
       cancel: "Cancel"
       send_message: "Message"
     community:

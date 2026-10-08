@@ -90,15 +90,15 @@
       "confirm_title": "Confirm",
       "ok": "OK"
     },
-    "payment": {
-      "accountholder_required": "Please specify the accountholder name."
-    },
     "password": {
       "strength": {
         "excellent": "Excellent (Score: %{bits})",
         "good": "Good (Score: %{bits})",
         "weak": "Too weak (Score: %{bits})"
       }
+    },
+    "payment": {
+      "accountholder_required": "Please specify the accountholder name."
     },
     "timepicker": {
       "dformat": "%l:%M%P",

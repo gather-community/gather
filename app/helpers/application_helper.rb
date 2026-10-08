@@ -30,7 +30,8 @@ module ApplicationHelper
 
   def flash_message(type, text)
     content_tag(:div, text, class: "alert #{bootstrap_class_for(type)} fade in") do
-      content_tag(:button, "x", class: "close", "aria-label": "Close", data: {dismiss: "alert"}) << text
+      content_tag(:button, "x", class: "close", "aria-label": t("common.close"),
+        data: {dismiss: "alert"}) << text
     end
   end
 
@@ -60,11 +61,12 @@ module ApplicationHelper
   end
 
   def generated_time
-    content_tag(:div, "Generated: #{l(Time.current)}", id: "gen-time")
+    content_tag(:div, t("common.generated_at", time: l(Time.current)), id: "gen-time")
   end
 
   def print_button
-    button_tag(type: "button", class: "btn btn-default btn-print icon-only", "aria-label": "Print") do
+    button_tag(type: "button", class: "btn btn-default btn-print icon-only",
+      "aria-label": t("common.print")) do
       icon_tag("print")
     end
   end
@@ -84,7 +86,8 @@ module ApplicationHelper
   end
 
   def inline_loading_indicator
-    image_tag("load-ind-small.gif", class: "loading-indicator", style: "display: none", alt: "Loading indicator")
+    image_tag("load-ind-small.gif", class: "loading-indicator", style: "display: none",
+      alt: t("common.loading_indicator"))
   end
 
   # The logo should take the user back to their home cmty root if they are in a different one.

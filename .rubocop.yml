@@ -1,6 +1,7 @@
 require:
   - rubocop-rails
   - standard
+  - ./lib/rubocop/cop/gather/hard_coded_string.rb
 
 inherit_gem:
   standard:
@@ -84,3 +85,14 @@ Bundler:
 
 Rails:
   Enabled: true
+
+# Flags hard-coded user-facing strings (see "User-Facing Strings" in CLAUDE.md). Enabled only for files whose
+# strings have been moved to locale files: add paths here as modules are converted, and disable inline (with a
+# reason) for strings that aren't user-facing. ERB files are covered by .erb_lint.yml.
+# spec/lint/hard_coded_strings_spec.rb runs this in CI.
+Gather/HardCodedString:
+  Enabled: true
+  Include:
+    - app/helpers/application_helper.rb
+    - app/decorators/nav/**/*.rb
+    - app/models/utils/nav/**/*.rb

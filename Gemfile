@@ -94,6 +94,7 @@ group :development, :test do
   gem "database_cleaner", "~> 2.0"
   gem "debug", require: false
   gem "ed25519", ">= 1.2", "< 2.0" # For Capistrano
+  gem "erb_lint", "~> 0.9", require: false
   gem "i18n-tasks", "~> 1.1", require: false
   gem "launchy", "~> 3.1" # For opening screenshots
   gem "pry-nav", "~> 1.0"

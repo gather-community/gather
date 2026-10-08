@@ -10,6 +10,10 @@
         }
       }
     },
+    "calendar_nav_popover": {
+      "dismiss": "Dismiss",
+      "message_html": "<b>Reservations</b> is now called <b>Calendars</b>! Check it out!"
+    },
     "common": {
       "adults": "Adults",
       "all": "All",
@@ -18,6 +22,7 @@
       "cancelled": "Cancelled",
       "children": "Children",
       "clearing_the_filter": "clearing the filters",
+      "close": "Close",
       "community_count": {
         "one": "%{count} Community",
         "other": "%{count} Communities"
@@ -30,12 +35,15 @@
       "default": "Default",
       "edit": "Edit",
       "false": "False",
+      "generated_at": "Generated: %{time}",
       "hidden": "Hidden",
       "inactive": "Inactive",
+      "loading_indicator": "Loading indicator",
       "max": "Max",
       "no_result_clear_filter_link_html": "You can try %{link}.",
       "none": "None",
       "num_in_total": "%{count} in total",
+      "print": "Print",
       "save": "Save",
       "this_month": "This Month",
       "this_quarter": "This Quarter",

@@ -10,25 +10,24 @@
   <div id="navs" class="hidden-print">
     <% if impersonated_user %>
       <div id="impersonation-notice" class="hidden-print">
-        You are impersonating <%= impersonated_user.name %>. Any actions you take will appear to have
-        been taken by them.
-        <%= link_to("Stop Impersonating", unimpersonate_user_path(impersonated_user), method: :post) %>
+        <%= t(".impersonation_notice", name: impersonated_user.name) %>
+        <%= link_to(t(".stop_impersonating"), unimpersonate_user_path(impersonated_user), method: :post) %>
       </div>
     <% end %>
     <%# DESKTOP/TABLET NAVS %>
     <nav class="navbar navbar-default hidden-xs">
       <div class="nav-wrapper">
         <div class="logo nav-1 hidden-sm">
-          <%= link_to(image_tag("logo-white.png"), logo_link_url, alt: "Home") %>
+          <%= link_to(image_tag("logo-white.png"), logo_link_url, alt: t(".home")) %>
         </div>
         <div class="nav-2-3-4">
           <div class="nav-2-3">
             <div class="logo nav-2 hidden visible-sm">
-              <%= link_to(image_tag("logo-white.png"), logo_link_url, alt: "Home") %>
+              <%= link_to(image_tag("logo-white.png"), logo_link_url, alt: t(".home")) %>
             </div>
             <div class="nav-3 personal-nav">
               <a href="#content" id="skip-link">
-                Skip to Content
+                <%= t(".skip_to_content") %>
               </a>
               <% if user_signed_in? && current_community %>
                 <ul class="nav">
@@ -68,13 +67,13 @@
       <div class="container-fluid" class="nav-wrapper">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-            data-target="#mobile-nav" aria-expanded="false" aria-label="Show menu">
-            <span class="sr-only">Toggle navigation</span>
+            data-target="#mobile-nav" aria-expanded="false" aria-label="<%= t(".show_menu") %>">
+            <span class="sr-only"><%= t(".toggle_navigation") %></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <%= link_to(image_tag("logo-white.png"), logo_link_url, class: "logo", alt: "Home") %>
+          <%= link_to(image_tag("logo-white.png"), logo_link_url, class: "logo", alt: t(".home")) %>
         </div>
 
         <% if user_signed_in? && current_community %>
@@ -84,7 +83,7 @@
                 <% if (sub_items = nav_builder.sub_items(item[:name])).size > 1 %>
                   <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                      aria-haspopup="true" aria-expanded="false" aria-label="Show menu">
+                      aria-haspopup="true" aria-expanded="false" aria-label="<%= t(".show_menu") %>">
                       <%= icon_tag(item[:icon]) %>
                       <%= nav_builder.label(item) %>
                       <span class="caret"></span>
@@ -160,18 +159,18 @@
   <%= render("layouts/footer") %>
 
   <div id="glb-load-ind" class="foreground-loader hiding">
-    <%= image_tag("glb-load-ind.gif", alt: "Loading indicator") %>
-    <div>Loading</div>
+    <%= image_tag("glb-load-ind.gif", alt: t("common.loading_indicator")) %>
+    <div><%= t(".loading") %></div>
   </div>
 
   <%= render("layouts/modal") %>
 
   <div class="add-to-home">
-    <div class="btn btn-primary">Add Gather To Your Home Screen</div>
+    <div class="btn btn-primary"><%= t(".add_to_home_screen") %></div>
     <a href="#" class="opt-out">&times;</a>
   </div>
 
-  <%= javascript_tag do %>
+  <script>
     $(function() {
       new Gather.Views.AddToHomeScreenView({el: '.add-to-home', host: <%=json Settings.url.host %>});
       <% if current_user && current_user.created_at < Time.zone.parse("2021-06-01") &&
@@ -179,6 +178,6 @@
         new Gather.Views.CalendarNavLinkPopoverView({el: '#navs'});
       <% end %>
     });
-  <% end %>
+  </script>
 </body>
 </html>

@@ -31,6 +31,13 @@ class ApplicationJob < ActiveJob::Base
   # The retry behavior described above has been tested manually and works.
   rescue_from StandardError, with: :rescue_from_exception
 
+  # ActiveJob runs each job in the locale that was active when it was enqueued, which for a job enqueued
+  # during a web request is the requester's browser language. Jobs act on behalf of the whole community,
+  # not that one person, so they run in the default locale instead.
+  around_perform do |_job, block|
+    I18n.with_locale(I18n.default_locale, &block)
+  end
+
   protected
 
   def rescue_from_exception(exception)

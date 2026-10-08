@@ -236,7 +236,7 @@ FeatureFlag.lookup("messaging").on?(current_user)
 - Don't gate inbound webhooks/background reconciliation: turning a flag off shouldn't strand data that already exists.
 - Specs that exercise a flagged feature must turn it on: `create(:feature_flag, name: "messaging", status: true)`.
 
-Existing flags: `messaging`, `gdrive`, `restrictions`.
+Existing flags: `messaging`, `gdrive`, `restrictions`, `i18n` (lets chosen users see unreleased locales; see below).
 
 ### Controller Conventions
 
@@ -315,6 +315,12 @@ The dispositions map is a **declaration**, not an assertion — it does not read
 - **Fragment caches** must include `I18n.locale` in the cache key.
 - **Missing translations raise** in development and test (`config.i18n.raise_on_missing_translations`).
 - **[spec/i18n_spec.rb](spec/i18n_spec.rb) runs in CI** (config in `config/i18n-tasks.yml`). It fails on keys used in code but missing from `en`, on unused keys, on interpolation variables that differ between locales, and on a stale JS export. Run `bundle exec i18n-tasks missing -l en` and `bundle exec i18n-tasks unused -l en` locally. When a key is built dynamically (`t("gdrive.item_kinds.#{kind}")`), add a pattern to `ignore_unused` with a comment saying where it's used. Delete keys that are really unused.
+
+**How the locale is chosen** ([lib/gather/locales.rb](lib/gather/locales.rb)):
+
+- **Web requests** use the best match for the browser's `Accept-Language` header among `Gather::Locales::RELEASED` (currently only `en`), via the `ApplicationControllable::Locale` around_action. Users with the `i18n` feature flag (`"user"` interface) can also get unreleased locales; set your browser's language to preview one. Everything runs inside `I18n.with_locale`. Never assign `I18n.locale =`, because it leaks across requests.
+- **Email** renders in the recipient's locale via the `RecipientLocale` mailer concern, which every mailer must include ([spec](spec/mailers/recipient_locale_spec.rb)). For now that's always the default locale. Don't rely on the ambient locale in mailers: ActiveJob restores the *sender's* locale when delivering.
+- **Jobs** (`ApplicationJob`) and **calendar feeds** run in the default locale.
 
 ### Locale Files
 

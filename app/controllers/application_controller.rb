@@ -10,6 +10,7 @@ class ApplicationController < ActionController::Base
   include ApplicationControllable::UrlHelpers
   include ApplicationControllable::Users
   include MultiCommunityCheck
+  include ApplicationControllable::Locale # Must come after RequestPreprocessing. See the concern.
 
   after_action :verify_pundit_authorization
 

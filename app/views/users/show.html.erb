@@ -63,7 +63,7 @@
           <% if user.preferred_contact %>
             <tr>
               <td>Preferred Contact Method</td>
-              <td><%= t("simple_form.options.user.preferred_contact.#{user.preferred_contact}") %></td>
+              <td><%= user.preferred_contact %></td><%# The decorator translates it. %>
             </tr>
           <% end %>
           <% if policy(user).show_personal_info? %>

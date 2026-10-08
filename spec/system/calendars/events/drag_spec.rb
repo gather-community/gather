@@ -117,13 +117,30 @@ describe "dragging a calendar event", js: true do
       expect(event.reload.starts_at).to be_within(1.second).of(starts_at)
     end
 
-    scenario "moving the whole series shifts the event itself" do
+    scenario "moving all occurrences from a later one shifts the series without re-anchoring it" do
+      # Show the second occurrence, so a re-anchoring bug can't hide behind dragging the first.
+      find(".fc-next-button").click
       drag_vertically(find(".fc-event", text: "Draggable", match: :first), by: 140)
-      click_modal_button("The whole series")
+      click_modal_button("All occurrences")
 
       expect(eventually { event.reload.starts_at > starts_at })
-        .to be(true), "Expected the series anchor to move, but starts_at stayed #{event.reload.starts_at}"
+        .to be(true), "Expected the series to move, but starts_at stayed #{event.reload.starts_at}"
+      expect(event.starts_at.to_date).to eq(starts_at.to_date),
+        "Expected the series to keep its first occurrence, but it now starts #{event.starts_at}"
       expect(event.event_overrides).to be_empty
+    end
+
+    scenario "a refused move shows why, reverts, and reloads the grid" do
+      # Deleted elsewhere after the grid loaded, so the server refuses the drag.
+      create(:event_override, event: event, occurrence_start: starts_at, deleted: true)
+
+      drag_vertically(find(".fc-event", text: "Draggable", match: :first), by: 140)
+      click_modal_button("This only")
+
+      expect(page).to have_css(modal_selector, text: "This occurrence no longer exists")
+      click_modal_button("Close")
+      # The refetch drops the deleted occurrence from the grid.
+      expect(page).not_to have_css(".fc-event", text: "Draggable")
     end
   end
 

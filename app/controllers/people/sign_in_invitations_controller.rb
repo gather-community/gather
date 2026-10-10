@@ -12,7 +12,7 @@ module People
     def create
       authorize(sample_user, policy_class: SignInInvitationsPolicy)
       if params[:to_invite].blank?
-        flash[:error] = "You didn't select any users."
+        flash[:error] = t("people.sign_in_invitations.none_selected")
       else
         People::SignInInvitationJob.perform_later(current_community.id, params[:to_invite])
         flash[:success] = t("people.sign_in_invitations.sent", count: params[:to_invite].size)

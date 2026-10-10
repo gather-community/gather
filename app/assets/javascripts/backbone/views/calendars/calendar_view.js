@@ -1240,7 +1240,7 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
       `<p>'${this.escapeHtml(event.title)}' repeats. Which occurrences should be moved?</p>`,
       [
         {label: "This only", value: "occurrence"},
-        {label: "The whole series", value: "series", variant: "primary"},
+        {label: "All occurrences", value: "series", variant: "primary"},
       ],
       {title: "Move recurring event"}
     );
@@ -1273,8 +1273,11 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
         // rather than trusting the optimistic position FullCalendar already rendered.
         this.calendar.fullCalendar("refetchEvents");
       },
-      error(xhr) {
+      error: (xhr) => {
         revertFunc();
+        // The server may have refused because the event changed since the grid loaded (e.g. the
+        // series started, or the occurrence was deleted elsewhere), so start the next try from fresh data.
+        this.calendar.fullCalendar("refetchEvents");
         window.Modal.alertModal(xhr.responseText, {title: "Error", label: "Close"});
       },
     });

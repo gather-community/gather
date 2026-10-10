@@ -314,6 +314,11 @@ The dispositions map is a **declaration**, not an assertion — it does not read
 - **JS strings:** use `i18n.t("...")` from `app/javascript/utils/i18n.ts` (or `I18n.t` in the legacy Backbone bundle). Add the key's namespace to `config/i18n-js.yml` if it isn't exported yet, then regenerate the bundle: `bundle exec i18n export -c config/i18n-js.yml -r config/environment.rb`.
 - **Fragment caches** must include `I18n.locale` in the cache key.
 - **Missing translations raise** in development and test (`config.i18n.raise_on_missing_translations`).
+- **Linters enforce this in converted code.** Directories whose strings have been moved to locale files are listed in `.erb_lint.yml` (`glob`, for views) and `.rubocop.yml` (`Gather/HardCodedString` `Include`, for Ruby). [spec/lint/hard_coded_strings_spec.rb](spec/lint/hard_coded_strings_spec.rb) runs both in CI. When you finish converting a directory, add it to those lists. Run them locally with `bundle exec erb_lint --lint-all` and `bundle exec rubocop --only Gather/HardCodedString`.
+  - Views get three checks: literal text between tags (`HardCodedString`), literal `aria-label`/`alt`/`title`/`placeholder` values ([.erb_linters/hard_coded_attribute.rb](.erb_linters/hard_coded_attribute.rb)), and text-like string literals inside ERB tags.
+  - The Ruby cop ([lib/rubocop/cop/gather/hard_coded_string.rb](lib/rubocop/cop/gather/hard_coded_string.rb)) flags strings that start with a capitalized word ("Close", "Generated: …"). It skips exception and log messages.
+  - Put inline JS in `<script>` tags rather than `javascript_tag` blocks, so the view linter skips it.
+  - For a genuine false positive, disable inline and say why: `# rubocop:disable Gather/HardCodedString` or `<%# erb_lint:disable HardCodedString %>` on the same line.
 - **[spec/i18n_spec.rb](spec/i18n_spec.rb) runs in CI** (config in `config/i18n-tasks.yml`). It fails on keys used in code but missing from `en`, on unused keys, on interpolation variables that differ between locales, and on a stale JS export. Run `bundle exec i18n-tasks missing -l en` and `bundle exec i18n-tasks unused -l en` locally. When a key is built dynamically (`t("gdrive.item_kinds.#{kind}")`), add a pattern to `ignore_unused` with a comment saying where it's used. Delete keys that are really unused.
 
 **How the locale is chosen** ([lib/gather/locales.rb](lib/gather/locales.rb)):
@@ -340,6 +345,8 @@ Gather uses several locale files under `config/locales/en/`. Each type of string
 - `simple_form.options.{model}.{field}.{value}` — select option labels; simple_form auto-translates symbol collections using this namespace
 - `simple_form.placeholders.{model}.{field}` — input placeholder text
 - `simple_form.prompts.{model}.{field}` — blank/prompt option for selects
+
+**`layouts.yml`** — the page layout (`layouts.*`), shared partials (`shared.*`) and other app-wide views (`home.*`), mostly via lazy lookup.
 
 **`en.yml`** — application-wide UI strings:
 

@@ -16,3 +16,4 @@ translations:
       - "*.batchable_tables.confirmations.*"
       - "*.modal.*"
       - "*.payment.*"
+      - "*.calendar_nav_popover.*"

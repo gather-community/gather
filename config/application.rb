@@ -32,7 +32,7 @@ module Gather
     config.autoload_paths += extra_paths
     config.eager_load_paths += extra_paths
 
-    config.autoload_lib(ignore: %w[assets tasks])
+    config.autoload_lib(ignore: %w[assets rubocop tasks])
 
     config.add_autoload_paths_to_load_path = false
 

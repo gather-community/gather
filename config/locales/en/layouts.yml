@@ -1,0 +1,38 @@
+# Strings for the page layout, shared partials and other app-wide views.
+en:
+  layouts:
+    application:
+      impersonation_notice: "You are impersonating %{name}. Any actions you take will appear to have been taken by them."
+      stop_impersonating: "Stop Impersonating"
+      home: "Home"
+      skip_to_content: "Skip to Content"
+      show_menu: "Show menu"
+      toggle_navigation: "Toggle navigation"
+      loading: "Loading"
+      add_to_home_screen: "Add Gather To Your Home Screen"
+    footer:
+      privacy_policy: "Privacy Policy"
+      credits: "Credits"
+      settings: "Settings"
+      subscription: "Subscription"
+      billing: "Billing"
+      communities: "Communities"
+      resync_subscriptions: "Resync subscriptions"
+    head:
+      # The browser tab title. The page title is already HTML-escaped, hence _html.
+      title_html: "Gather: %{title}"
+    personal_dropdown:
+      show_menu: "Show personal dropdown menu"
+  shared:
+    dropzone:
+      image_attachment: "Image attachment"
+    mobile_back_link:
+      back_to_html: "Back to %{label}"
+  home:
+    inactive:
+      title: "Account Inactive"
+      body: "Your account is not active. You can still view your accounts and edit your profile. See the menu at the top-right of the screen."
+  # Announcement shown once to accounts created before the 2021 rename (CalendarNavLinkPopoverView, JS).
+  calendar_nav_popover:
+    message_html: "<b>Reservations</b> is now called <b>Calendars</b>! Check it out!"
+    dismiss: "Dismiss"

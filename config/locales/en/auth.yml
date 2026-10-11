@@ -58,10 +58,9 @@ en:
       send_instructions: "You will receive an email with instructions for how to unlock your account in a few minutes."
       send_paranoid_instructions: "If your account exists, you will receive an email with instructions for how to unlock it in a few minutes."
       unlocked: "Your account has been unlocked successfully. Please sign in to continue."
-    # Overrides of devise-i18n's wording ("Log in", "Forgot your password?") to keep ours.
+    # Overrides devise-i18n's "Forgot your password?" to keep our wording.
     shared:
       links:
-        sign_in: "Sign in"
         forgot_your_password: "Don't know your password?"
   auth_mailer:
     cant_reset_password:

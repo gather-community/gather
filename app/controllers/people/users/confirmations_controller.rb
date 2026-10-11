@@ -5,6 +5,16 @@ module People
     # Handles reconfirming email, but not initial confirmation, as that is handled through the sign-in
     # invitation process.
     class ConfirmationsController < Devise::ConfirmationsController
+      # Devise's "resend confirmation instructions" form isn't offered (it never rendered: the stock view had
+      # no page title). Confirmation emails are re-sent from the user's profile instead.
+      def new
+        raise ActionController::RoutingError, "Not Found"
+      end
+
+      def create
+        raise ActionController::RoutingError, "Not Found"
+      end
+
       # GET /resource/confirmation?confirmation_token=abcdef
       def show
         self.resource = resource_class.confirm_by_token(params[:confirmation_token])

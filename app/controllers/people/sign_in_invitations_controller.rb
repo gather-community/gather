@@ -13,6 +13,7 @@ module People
       authorize(sample_user, policy_class: SignInInvitationsPolicy)
       if params[:to_invite].blank?
         flash[:error] = t("people.sign_in_invitations.none_selected")
+        redirect_to(new_people_sign_in_invitation_path)
       else
         People::SignInInvitationJob.perform_later(current_community.id, params[:to_invite])
         flash[:success] = t("people.sign_in_invitations.sent", count: params[:to_invite].size)

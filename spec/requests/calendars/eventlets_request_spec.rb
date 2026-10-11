@@ -188,7 +188,7 @@ describe "calendar eventlet drag update" do
         starts_at: (occurrence + 1.hour).iso8601, ends_at: (occurrence + 2.hours).iso8601)
 
       expect(response).to have_http_status(:unprocessable_entity)
-      expect(response.body).to include("Choose “This only” to move one occurrence")
+      expect(response.body).to include("Choose “This and following” to change it from this date on")
       expect(event.reload.starts_at).to eq(starts_at)
       expect(deleted_override.reload.occurrence_start).to eq(starts_at + 2.weeks)
     end
@@ -284,5 +284,53 @@ describe "calendar eventlet delete" do
       delete(calendars_event_path(event))
     end.to raise_error(Pundit::NotAuthorizedError)
     after_request { expect(Calendars::Event.exists?(event.id)).to be(true) }
+  end
+end
+
+describe "calendar eventlet move choices" do
+  let(:community) { create(:community) }
+  let!(:user) { create(:user, community: community) }
+  let!(:calendar) { create(:calendar, community: community, allow_overlap: true) }
+  # A weekly series whose first occurrence has passed, created long enough ago not to be exempt.
+  let(:starts_at) { 6.days.ago.midnight + 12.hours }
+  let!(:event) do
+    create(:event, calendar: calendar, creator: user, starts_at: starts_at, ends_at: starts_at + 1.hour,
+      recurrence_rule: IceCube::Rule.weekly.to_hash).tap do |e|
+      e.update_columns(created_at: 2.weeks.ago)
+      e.eventlets.update_all(created_at: 2.weeks.ago)
+    end
+  end
+  let(:eventlet) { event.eventlets.first }
+
+  before do
+    use_user_subdomain(user)
+    sign_in(user)
+  end
+
+  def move_choices(occurrence_start)
+    get(move_choices_calendars_eventlet_path(eventlet), params: {occurrence_start: occurrence_start.to_i},
+      xhr: true)
+    response.parsed_body
+  end
+
+  it "offers the creator this and following occurrences of a future occurrence" do
+    body = move_choices(starts_at + 1.week)
+
+    expect(response).to have_http_status(:ok)
+    expect(body["choices"]).to eq("this" => [], "all" => %w[occurrence following])
+    expect(body).not_to have_key("refusal_html")
+  end
+
+  it "offers nothing on a past occurrence, and says why" do
+    body = move_choices(starts_at)
+
+    expect(body["choices"]).to eq("this" => [], "all" => [])
+    expect(CGI.unescapeHTML(body["refusal_html"]))
+      .to include("Start Time: can't be changed after event begins")
+  end
+
+  it "denies a user with no rights to the eventlet" do
+    sign_in(create(:user, community: create(:community)))
+    expect { move_choices(starts_at + 1.week) }.to raise_error(Pundit::NotAuthorizedError)
   end
 end

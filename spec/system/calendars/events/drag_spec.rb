@@ -130,18 +130,96 @@ describe "dragging a calendar event", js: true do
       expect(event.event_overrides).to be_empty
     end
 
-    scenario "a refused move shows why, reverts, and reloads the grid" do
-      # Deleted elsewhere after the grid loaded, so the server refuses the drag.
+    scenario "offers only the choices that apply to the dragged occurrence" do
+      # The first occurrence: "This and following" would mean the same as all of them.
+      drag_vertically(find(".fc-event", text: "Draggable", match: :first), by: 140)
+      expect(modal_button_labels).to eq(["Cancel", "This only", "All occurrences"])
+      click_modal_button("Cancel")
+
+      find(".fc-next-button").click
+      drag_vertically(find(".fc-event", text: "Draggable", match: :first), by: 140)
+      expect(modal_button_labels).to eq(["Cancel", "This only", "This and following", "All occurrences"])
+      click_modal_button("Cancel")
+    end
+
+    scenario "moving this and following occurrences leaves earlier ones in place" do
+      find(".fc-next-button").click
+      drag_vertically(find(".fc-event", text: "Draggable", match: :first), by: 140)
+      click_modal_button("This and following")
+
+      expect(eventually { Calendars::Event.where.not(id: event.id).any? })
+        .to be(true), "Expected the series to be split into a new, moved series"
+      continuation = Calendars::Event.where.not(id: event.id).sole
+      expect(continuation.starts_at).to be > starts_at + 1.week
+      expect(event.reload.starts_at).to be_within(1.second).of(starts_at)
+      expect(event.schedule.occurrences(starts_at + 5.weeks).size).to eq(1)
+    end
+
+    scenario "a move that's no longer allowed is refused when the modal would open" do
+      # Deleted elsewhere after the grid loaded.
       create(:event_override, event: event, occurrence_start: starts_at, deleted: true)
 
       drag_vertically(find(".fc-event", text: "Draggable", match: :first), by: 140)
-      click_modal_button("This only")
 
       expect(page).to have_css(modal_selector, text: "This occurrence no longer exists")
       click_modal_button("Close")
       # The refetch drops the deleted occurrence from the grid.
       expect(page).not_to have_css(".fc-event", text: "Draggable")
     end
+
+    scenario "a move refused on submit shows why, reverts, and reloads the grid" do
+      drag_vertically(find(".fc-event", text: "Draggable", match: :first), by: 140)
+      expect(modal_button_labels).to include("This only")
+      # Deleted elsewhere while the modal was open, so the server refuses the drag.
+      create(:event_override, event: event, occurrence_start: starts_at, deleted: true)
+      click_modal_button("This only")
+
+      expect(page).to have_css(modal_selector, text: "This occurrence no longer exists")
+      click_modal_button("Close")
+      expect(page).not_to have_css(".fc-event", text: "Draggable")
+    end
+
+    context "when the series starts while the grid is open" do
+      # Moving the clock after the grid has loaded, rather than before, is the point: the grid knows
+      # nothing about the change, but the modal still offers only what's allowed now. Travel, not
+      # freeze, so the browser and server keep ticking.
+      before { Timecop.travel(starts_at + 1.minute) }
+      after { Timecop.return }
+
+      scenario "a later occurrence offers only this one, or this and following" do
+        find(".fc-next-button").click
+        drag_vertically(find(".fc-event", text: "Draggable", match: :first), by: 140)
+        expect(modal_button_labels).to eq(["Cancel", "This only", "This and following"])
+      end
+    end
+  end
+
+  scenario "resizing an event changes its end but not its start" do
+    resize_vertically(find(".fc-event", text: "Draggable"), by: 80)
+    click_modal_button
+
+    expect(eventually { event.reload.ends_at > starts_at + 1.hour })
+      .to be(true), "Expected the end to move later, but ends_at stayed #{event.reload.ends_at}"
+    expect(event.starts_at).to be_within(1.second).of(starts_at)
+  end
+
+  def modal_button_labels
+    with_top_level_scope { find("#{modal_selector} .modal-footer").all("button").map(&:text) }
+  end
+
+  # Drags the event's bottom edge, where FullCalendar puts its resize handle (shown only on hover).
+  # Selenium offsets are from the element's center, so this aims a few pixels above the bottom.
+  def resize_vertically(element, by:)
+    bottom = (element.native.size.height / 2) - 3
+    page.driver.browser.action
+      .move_to(element.native, 0, bottom)
+      .pause(duration: 0.2)
+      .click_and_hold
+      .pause(duration: 0.1)
+      .move_by(0, by / 2).pause(duration: 0.1)
+      .move_by(0, by - (by / 2)).pause(duration: 0.1)
+      .release
+      .perform
   end
 
   # Simulates a real mouse drag of a FullCalendar (jQuery-UI-based) event. HTML5 drag_to does not work

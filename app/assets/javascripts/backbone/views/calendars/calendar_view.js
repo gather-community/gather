@@ -1183,67 +1183,110 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
   },
 
   /*
-   * Asks which scope the drag applies to, as up to two modals shown one after the other. The
-   * calendar question comes first, and only when the event spans more than one calendar; the
-   * series question only when the event recurs. When neither applies there's still a plain
-   * confirmation, so a drag is never silently saved. Resolves null if the user cancels at any point.
+   * Asks which scope the drag applies to. The server says which choices this user may make for this
+   * eventlet right now (see EventletForm.allowed_choices), so a grid that has been open for hours
+   * never offers a stale one. Up to two modals follow, one after the other: the calendar question
+   * when both calendar choices are allowed, then the series question when the event recurs and more
+   * than one series choice is allowed. When no question is needed there's still a plain
+   * confirmation, so a drag is never silently saved. Resolves null if the move is cancelled or not
+   * allowed.
    */
   promptForDragScope(event) {
-    const multiCalendar = event.eventletCount > 1;
-    if (!multiCalendar && !event.recurring) {
-      return window.Modal
-        .confirmModal(`Are you sure you want to move the event '${event.title}?'`)
-        .then(ok => (ok ? {calendarScope: "all", seriesScope: "series"} : null));
-    }
-
-    return this.promptForCalendarScope(event, multiCalendar).then(calendarScope => {
-      if (!calendarScope) {
+    return this.fetchMoveChoices(event).then(result => {
+      if (!result) {
         return null;
       }
 
-      return this.promptForSeriesScope(event).then(seriesScope => {
-        if (!seriesScope) {
+      const calendarScopes = ["this", "all"].filter(scope => result.choices[scope].length > 0);
+      if (calendarScopes.length === 0) {
+        // Something changed since the grid loaded (e.g. the occurrence has begun), so refresh it once
+        // the alert is closed, by which time the caller has reverted the drag.
+        window.Modal.alertModal(result.refusal_html, this.errorModalOptions())
+          .then(() => this.calendar.fullCalendar("refetchEvents"));
+        return null;
+      }
+
+      return this.promptForCalendarScope(event, calendarScopes).then(calendarScope => {
+        if (!calendarScope) {
           return null;
         }
 
-        return {calendarScope, seriesScope};
+        const seriesScopes = result.choices[calendarScope];
+        const asked = calendarScopes.length > 1 || (event.recurring && seriesScopes.length > 1);
+        return this.promptForSeriesScope(event, seriesScopes).then(seriesScope => {
+          if (!seriesScope) {
+            return null;
+          }
+          const scope = {calendarScope, seriesScope};
+          return asked ? scope : this.confirmMove(event, seriesScope).then(ok => (ok ? scope : null));
+        });
       });
     });
   },
 
-  promptForCalendarScope(event, multiCalendar) {
-    if (!multiCalendar) {
-      return Promise.resolve("all");
+  // Resolves {choices, refusal_html} from the server, or null (after telling the user) on failure.
+  fetchMoveChoices(event) {
+    Gather.loadingIndicator.toggle(true);
+    return new Promise(resolve => {
+      $.ajax({
+        url: `/calendars/eventlets/${event.eventletId}/move_choices`,
+        data: {"occurrence_start": event.occurrenceStart},
+        success: resolve,
+        error: () => {
+          window.Modal.alertModal(I18n.t("calendars.drag.load_error"), this.errorModalOptions());
+          resolve(null);
+        },
+        complete: () => Gather.loadingIndicator.toggle(false),
+      });
+    });
+  },
+
+  confirmMove(event, seriesScope) {
+    const key = seriesScope === "occurrence" ? "confirm_occurrence" : "confirm";
+    return window.Modal.confirmModal(I18n.t(`calendars.drag.${key}`, {name: this.escapeHtml(event.title)}));
+  },
+
+  promptForCalendarScope(event, calendarScopes) {
+    if (calendarScopes.length === 1) {
+      return Promise.resolve(calendarScopes[0]);
     }
 
     // The dragged calendar leads the list, marked so it's obvious which one "move only on" means.
-    const dragged = `<li><strong>${this.escapeHtml(event.calendarName)}</strong> (selected)</li>`;
+    const selected = I18n.t("calendars.drag.calendar.selected");
+    const dragged = `<li><strong>${this.escapeHtml(event.calendarName)}</strong> ${selected}</li>`;
     const others = (event.otherCalendarNames || []).map(name => `<li>${this.escapeHtml(name)}</li>`);
+    const content = I18n.t("calendars.drag.calendar.content", {name: this.escapeHtml(event.title)});
 
     return window.Modal.choiceModal(
-      `<p>'${this.escapeHtml(event.title)}' appears on more than one calendar:</p>` +
-        `<ul>${dragged}${others.join("")}</ul>`,
+      `<p>${content}</p><ul>${dragged}${others.join("")}</ul>`,
       [
-        {label: `Move only on ${event.calendarName}`, value: "this"},
-        {label: "Move on all", value: "all", variant: "primary"},
+        {label: I18n.t("calendars.drag.calendar.this", {calendar: event.calendarName}), value: "this"},
+        {label: I18n.t("calendars.drag.calendar.all"), value: "all", variant: "primary"},
       ],
-      {title: "Move multi-calendar event"}
+      {title: I18n.t("calendars.drag.calendar.title")}
     );
   },
 
-  promptForSeriesScope(event) {
-    if (!event.recurring) {
-      return Promise.resolve("series");
+  // Asks only when there's a real choice. The last (broadest) option is the primary one.
+  promptForSeriesScope(event, seriesScopes) {
+    if (!event.recurring || seriesScopes.length === 1) {
+      return Promise.resolve(seriesScopes[0]);
     }
 
+    const content = I18n.t("calendars.drag.series.content", {name: this.escapeHtml(event.title)});
     return window.Modal.choiceModal(
-      `<p>'${this.escapeHtml(event.title)}' repeats. Which occurrences should be moved?</p>`,
-      [
-        {label: "This only", value: "occurrence"},
-        {label: "All occurrences", value: "series", variant: "primary"},
-      ],
-      {title: "Move recurring event"}
+      `<p>${content}</p>`,
+      seriesScopes.map((scope, i) => ({
+        label: I18n.t(`calendars.drag.series.${scope}`),
+        value: scope,
+        variant: i === seriesScopes.length - 1 ? "primary" : "default",
+      })),
+      {title: I18n.t("calendars.drag.series.title")}
     );
+  },
+
+  errorModalOptions() {
+    return {title: I18n.t("calendars.drag.error_title"), label: I18n.t("common.close")};
   },
 
   // Modal content is interpolated as HTML, so event and calendar names have to be escaped.
@@ -1278,7 +1321,7 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
         // The server may have refused because the event changed since the grid loaded (e.g. the
         // series started, or the occurrence was deleted elsewhere), so start the next try from fresh data.
         this.calendar.fullCalendar("refetchEvents");
-        window.Modal.alertModal(xhr.responseText, {title: "Error", label: "Close"});
+        window.Modal.alertModal(xhr.responseText, this.errorModalOptions());
       },
     });
   },

@@ -13,6 +13,24 @@ en:
         kind: "Type"
         note: "Note"
         guidelines: "Guidelines"
+    errors:
+      models:
+        # EventletForm (drag-and-drop), which takes Calendars::Eventlet's model name.
+        calendars/eventlet:
+          attributes:
+            base:
+              occurrence_missing: "This occurrence no longer exists. Reload the calendar and try again."
+              one_calendar: "This event is only on one calendar."
+              offsets_too_far_apart: "An event's times on its different calendars can't be more than %{hours} hours apart. To move it further, choose “Move on all calendars.”"
+              series_started: "This series has already started. Choose “This and following” to change it from this date on."
+              following_from_past: "Occurrences that have already begun can't be moved with “This and following.”"
+              fixed_pattern: "This series repeats in a fixed pattern that doesn't include the new time, so its occurrences can't be moved there. Choose “This only” to move one occurrence."
+              overlap: "This event overlaps an existing one"
+            starts_at:
+              changed_after_start: "can't be changed after event begins"
+            ends_at:
+              before_start: "must be after start time"
+              in_past: "can't be changed to a time in the past"
   activerecord:
     models:
       meals/meal: "Meal"

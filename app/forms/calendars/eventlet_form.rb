@@ -3,23 +3,30 @@
 module Calendars
   # Handles a drag-and-drop time change to a single eventlet in the calendar grid.
   #
-  # A drag carries two independent scope choices, and the four combinations map onto four different
-  # rows:
+  # A drag carries two independent scope choices. The calendar scope picks between moving the
+  # underlying event, carrying every eventlet with it ("all"), and changing only this eventlet's
+  # offsets ("this"). The series scope picks which occurrences of a recurring event move:
   #
-  #                  | series scope            | occurrence scope
-  #   ---------------|-------------------------|--------------------------------
-  #   all calendars  | Event#starts_at/ends_at  | EventOverride#starts_at/ends_at
-  #   this calendar  | Eventlet#*_offset        | EventletOverride#*_offset
+  #                  | occurrence               | following                  | series
+  #   ---------------|--------------------------|----------------------------|-------------------------
+  #   all calendars  | EventOverride times      | split off a new, moved     | Event#starts_at/ends_at
+  #                  |                          | series from here           |
+  #   this calendar  | EventletOverride offsets | split, then change the new | Eventlet#*_offset
+  #                  |                          | series' eventlet offsets   |
   #
-  # "All calendars" moves the underlying event, carrying every eventlet with it. "This calendar" leaves
-  # the event alone and changes only this eventlet's offsets.
-  #
-  # The client sends the dropped absolute times; all offsets are computed here. A series-scope drag is
+  # The client sends the dropped absolute times; all offsets are computed here. Every drag is
   # measured from the occurrence that was dragged, which for a recurring event needn't be the first,
-  # and moves every occurrence by that same distance.
+  # and a following- or series-scope drag moves every affected occurrence by that same distance.
+  #
+  # Which choices to offer is worked out here too (.allowed_choices), so the rules live in one place.
   class EventletForm
     CALENDAR_SCOPES = %w[this all].freeze
-    SERIES_SCOPES = %w[series occurrence].freeze
+    SERIES_SCOPES = %w[occurrence following series].freeze
+
+    # The checks that don't depend on where the eventlet is dropped, so they can decide which choices
+    # to offer before the drag is submitted. See #permitted?.
+    CHOICE_CHECKS = %i[occurrence_resolvable scope_combination_allowed restrict_changes_in_past
+      restrict_series_moves_after_start restrict_following_from_past].freeze
 
     include ActiveModel::Conversion
     include ActiveModel::Validations
@@ -34,9 +41,12 @@ module Calendars
     validates :series_scope, inclusion: {in: SERIES_SCOPES}
     validate :start_before_end
     validate :occurrence_resolvable
+    validate :scope_combination_allowed
     validate :offsets_within_range
     validate :restrict_changes_in_past
+    validate :restrict_drop_in_past
     validate :restrict_series_moves_after_start
+    validate :restrict_following_from_past
     validate :series_pattern_allows_move
     validate :no_overlap
     validate :apply_rules
@@ -44,6 +54,35 @@ module Calendars
     def self.model_name
       Calendars::Eventlet.model_name
     end
+
+    # The scope combinations the given user may choose for this eventlet/occurrence right now, as
+    # {"this" => [series scopes...], "all" => [series scopes...]}. Drives the drag modal's options.
+    def self.allowed_choices(eventlet:, occurrence_start:, user:)
+      multi_calendar = eventlet.event.eventlets.size > 1
+      CALENDAR_SCOPES.index_with do |calendar_scope|
+        # The calendar question is only asked when there's more than one calendar.
+        next [] if calendar_scope == "this" && !multi_calendar
+        SERIES_SCOPES.select do |series_scope|
+          form = for_choice(eventlet, occurrence_start, user, calendar_scope, series_scope)
+          # "Following" from the first occurrence is the same as all of them, so don't offer both.
+          form.series_scope == form.effective_series_scope && form.permitted?
+        end
+      end
+    end
+
+    # A form for the plainest move of this eventlet (one occurrence, or the event itself), with
+    # errors saying why it can't be moved. For when .allowed_choices offers nothing.
+    def self.refusal(eventlet:, occurrence_start:, user:)
+      series_scope = eventlet.event.recurring? ? "occurrence" : "series"
+      for_choice(eventlet, occurrence_start, user, "all", series_scope).tap(&:permitted?)
+    end
+
+    def self.for_choice(eventlet, occurrence_start, user, calendar_scope, series_scope)
+      new(eventlet: eventlet, current_user: user,
+        params: {calendar_scope: calendar_scope, series_scope: series_scope,
+                 occurrence_start: occurrence_start&.to_i})
+    end
+    private_class_method :for_choice
 
     def initialize(eventlet:, current_user: nil, params: {})
       @eventlet = eventlet
@@ -68,15 +107,33 @@ module Calendars
       # so a failure partway through must undo the rest. Paths report failure by returning false.
       ActiveRecord::Base.transaction do
         saved =
-          case [calendar_scope, series_scope]
+          case [calendar_scope, effective_series_scope]
           when %w[all series] then move_event
+          when %w[all following] then move_following
           when %w[all occurrence] then move_occurrence
           when %w[this series] then move_eventlet
+          when %w[this following] then move_following_eventlets
           when %w[this occurrence] then move_eventlet_occurrence
           end
         raise ActiveRecord::Rollback unless saved
         true
       end || false
+    end
+
+    # Whether this user may make this choice at all, before knowing where it's dropped. Leaves the
+    # reasons in errors when not.
+    def permitted?
+      errors.clear
+      return false unless eventlet_policy.update?
+      CHOICE_CHECKS.each { |check| send(check) }
+      errors.empty?
+    end
+
+    # "Following" from the series' first occurrence leaves nothing behind, so it's treated as moving
+    # the whole series.
+    def effective_series_scope
+      return series_scope unless series_scope == "following" && event.recurring? && occurrence_start
+      event.schedule.previous_occurrence(occurrence_start) ? "following" : "series"
     end
 
     def persisted?
@@ -103,7 +160,7 @@ module Calendars
     end
 
     def recurring_series_move?
-      series_scope == "series" && event.recurring?
+      effective_series_scope == "series" && event.recurring?
     end
 
     # This calendar's own override of the dragged occurrence, if it has one.
@@ -126,13 +183,25 @@ module Calendars
         form.errors.each { |e| errors.add(e.attribute, e.message) }
         return false
       end
+      move_dragged_override(dragged_override)
+    end
 
-      # An occurrence that was already moved on all calendars keeps its own time when the series
-      # moves, so it needs the same shift to land where it was dropped.
-      return true unless dragged_override&.starts_at
-      dragged_override.starts_at = start_shift.apply(dragged_override.starts_at)
-      dragged_override.ends_at = end_shift.apply(dragged_override.ends_at)
-      persist(dragged_override)
+    # Moves this and later occurrences on every calendar by the drag distance, leaving earlier ones
+    # alone, by splitting off a new series from the dragged occurrence.
+    def move_following
+      # Loaded before the split, which moves these same records to the new series in place.
+      dragged_override = existing_event_override
+      SeriesSplitter.new(event).split_at(occurrence_start, start_shift: start_shift, end_shift: end_shift)
+      move_dragged_override(dragged_override)
+    end
+
+    # An occurrence that was already moved on all calendars keeps its own time when the series moves,
+    # so it needs the same shift to land where it was dropped.
+    def move_dragged_override(override)
+      return true unless override&.starts_at
+      override.starts_at = start_shift.apply(override.starts_at)
+      override.ends_at = end_shift.apply(override.ends_at)
+      persist(override)
     end
 
     # Moves one occurrence on every calendar, leaving the rest of the series alone. The occurrence's
@@ -148,13 +217,30 @@ module Calendars
     # Moves every occurrence on this calendar only, by shifting this eventlet's offsets.
     def move_eventlet
       override = dragged_eventlet_override
-      eventlet.start_offset, eventlet.end_offset = series_offsets
-      return false unless persist(eventlet)
-      return true unless override
+      shift_offsets(eventlet, override, override && dragged_override_offsets)
+    end
 
-      # The dragged occurrence's own offsets on this calendar replace the eventlet's, so they need
-      # the same change for it to land where it was dropped.
-      override.start_offset, override.end_offset = dragged_override_offsets
+    # Moves this and later occurrences on this calendar only. The series is split where it is, then
+    # the new series' eventlet for this calendar gets the new offsets.
+    def move_following_eventlets
+      # Worked out before the split, which moves the override to the new series' eventlet in place,
+      # after which it can no longer be found from this eventlet.
+      override = dragged_eventlet_override
+      override_offsets = override && dragged_override_offsets
+      no_shift = WallClockShift.new(occurrence_start, occurrence_start)
+      continuation = SeriesSplitter.new(event).split_at(occurrence_start, start_shift: no_shift,
+        end_shift: no_shift)
+      target = continuation.eventlets.detect { |e| e.calendar_id == eventlet.calendar_id }
+      shift_offsets(target, override, override_offsets)
+    end
+
+    # Gives the eventlet this drag's new offsets. The dragged occurrence's own offsets on this
+    # calendar replace the eventlet's, so they need the same change for it to land where it was dropped.
+    def shift_offsets(target_eventlet, override, override_offsets)
+      target_eventlet.start_offset, target_eventlet.end_offset = series_offsets
+      return false unless persist(target_eventlet)
+      return true unless override
+      override.start_offset, override.end_offset = override_offsets
       persist(override)
     end
 
@@ -199,13 +285,14 @@ module Calendars
       (ends_at - occurrence.ends_at).round
     end
 
-    # This eventlet's new offsets for a this-calendar series drag.
+    # This eventlet's new offsets for a this-calendar series or following drag.
     def series_offsets
       [eventlet.start_offset + start_delta, eventlet.end_offset + end_delta]
     end
 
-    # The dragged occurrence's own override offsets after a this-calendar series drag. An offset the
-    # override doesn't set falls back to the eventlet's, which is already moving, so it stays unset.
+    # The dragged occurrence's own override offsets after a this-calendar series or following drag.
+    # An offset the override doesn't set falls back to the eventlet's, which is already moving, so it
+    # stays unset.
     def dragged_override_offsets
       override = dragged_eventlet_override
       [override.start_offset&.+(start_delta), override.end_offset&.+(end_delta)]
@@ -243,16 +330,23 @@ module Calendars
 
     def start_before_end
       return if starts_at.blank? || ends_at.blank?
-      errors.add(:ends_at, "must be after start time") if starts_at >= ends_at
+      errors.add(:ends_at, :before_start) if starts_at >= ends_at
     end
 
     # Every drag of a recurring event is measured from the dragged occurrence, so it has to be named
-    # and still exist. A single-occurrence drag also needs the event to be recurring at all.
+    # and still exist. A single-occurrence or following drag also needs the event to be recurring.
     def occurrence_resolvable
-      return unless event.recurring? || series_scope == "occurrence"
+      return unless event.recurring? || series_scope != "series"
       validate_occurrence_in_series
       return if errors.any? || occurrence
-      errors.add(:base, "This occurrence no longer exists. Reload the calendar and try again.")
+      errors.add(:base, :occurrence_missing)
+    end
+
+    # A series' end date belongs to the event, not to each eventlet, so on an event with only one
+    # calendar, "this calendar" and "all calendars" are the same thing. Deletion has the same rule.
+    def scope_combination_allowed
+      return unless calendar_scope == "this" && series_scope == "following"
+      errors.add(:base, :one_calendar) if event.eventlets.size < 2
     end
 
     # A this-calendar drag is stored as an offset from the event's shared time, and both Eventlet and
@@ -265,18 +359,24 @@ module Calendars
       return if starts_at.blank? || ends_at.blank?
       max = Eventlet::MAX_OFFSET_SECONDS
       return if offsets_to_write.all? { |offset| offset.abs <= max }
-      errors.add(:base, "An event's times on its different calendars can't be more than " \
-        "#{max / 1.hour} hours apart. To move it further, choose “Move on all calendars.”")
+      errors.add(:base, :offsets_too_far_apart, hours: max / 1.hour)
     end
 
     # Mirrors EventForm#restrict_changes_in_past, but for the dragged occurrence rather than the
     # series as a whole. Meal events are exempt because they're maintained by the meal event handler
     # rather than by hand.
     def restrict_changes_in_past
-      return if occurrence.nil? || eventlet.meal? || eventlet_policy.privileged_change?
-      return if eventlet.recently_created?
-      errors.add(:starts_at, "can't be changed after event begins") if occurrence.starts_at.past?
-      errors.add(:ends_at, "can't be changed to a time in the past") if ends_at&.past?
+      return if past_change_exempt?
+      errors.add(:starts_at, :changed_after_start) if occurrence.starts_at.past?
+    end
+
+    def restrict_drop_in_past
+      return if past_change_exempt?
+      errors.add(:ends_at, :in_past) if ends_at&.past?
+    end
+
+    def past_change_exempt?
+      occurrence.nil? || eventlet.meal? || eventlet_policy.privileged_change? || eventlet.recently_created?
     end
 
     # Moving every occurrence of a series that has started would move past ones too, which nobody,
@@ -285,20 +385,28 @@ module Calendars
     def restrict_series_moves_after_start
       return unless recurring_series_move?
       return if event.recently_created? || !event.starts_at.past?
-      errors.add(:base, "This series has already started, so moving all occurrences would change " \
-        "past ones. Choose “This only” to move one occurrence.")
+      errors.add(:base, :series_started)
+    end
+
+    # The same rule for "This and following": the occurrences it moves must all be in the future. The
+    # dragged occurrence is the earliest of them, so it's the one checked, by where it was before the
+    # drag; where it's dropped doesn't matter. Applies to admins too.
+    def restrict_following_from_past
+      return unless effective_series_scope == "following" && occurrence&.starts_at&.past?
+      errors.add(:base, :following_from_past)
     end
 
     # A rule pinned to particular days or times (e.g. "every Tuesday") can't follow its start to a
     # slot the pattern excludes: the series would stay put and its overrides would no longer line up.
     def series_pattern_allows_move
-      return if errors.any? || !(recurring_series_move? && calendar_scope == "all")
-      new_start = start_shift.apply(event.starts_at)
+      return if errors.any? || calendar_scope != "all" || !event.recurring?
+      return if effective_series_scope == "occurrence"
+      old_start = (effective_series_scope == "following") ? occurrence_start : event.starts_at
+      new_start = start_shift.apply(old_start)
       # The UNTIL moves along with the start, so only the pattern itself is checked.
       rule = IceCube::Rule.from_hash(event.recurrence_rule).until(nil)
       return if IceCube::Schedule.new(new_start) { |s| s.add_recurrence_rule(rule) }.occurs_at?(new_start)
-      errors.add(:base, "This series repeats in a fixed pattern that doesn't include the new time, " \
-        "so all its occurrences can't be moved there. Choose “This only” to move one occurrence.")
+      errors.add(:base, :fixed_pattern)
     end
 
     # Overlap is checked at the eventlet level rather than the event level, since two eventlets on
@@ -308,7 +416,7 @@ module Calendars
       clashes = Eventlet.between(starts_at..ends_at)
         .where(calendar_id: eventlet.calendar_id)
         .where.not(id: eventlet.id)
-      errors.add(:base, "This event overlaps an existing one") if clashes.any?
+      errors.add(:base, :overlap) if clashes.any?
     end
 
     # Runs the calendar's protocol rules against a stand-in event carrying the dropped times, so an

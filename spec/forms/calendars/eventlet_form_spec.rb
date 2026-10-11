@@ -14,8 +14,10 @@ describe Calendars::EventletForm do
   let(:eventlet) { create(:eventlet, calendar: calendar, starts_at: base_start, ends_at: base_end) }
   let(:event) { eventlet.event }
 
+  let(:user) { admin }
+
   def submit(params)
-    described_class.new(eventlet: eventlet, current_user: admin, params: params)
+    described_class.new(eventlet: eventlet, current_user: user, params: params)
   end
 
   describe "all calendars + whole series" do
@@ -188,6 +190,22 @@ describe Calendars::EventletForm do
 
         it_behaves_like "a drag that leaves the series untouched"
       end
+
+      context "when the occurrence was already shifted on this calendar" do
+        # The setup shifts the fifth occurrence +15 minutes on this calendar.
+        let(:occurrence) { base_start + 4.weeks }
+
+        it "shows it at the dropped time, net of that shift" do
+          expect(form.save).to be(true)
+
+          expect(override_for(occurrence).starts_at).to eq(occurrence + 105.minutes)
+          shown = Calendars::OccurrenceResolver.new(eventlet, occurrence.to_i).resolve
+          expect(shown.starts_at).to eq(occurrence + 2.hours)
+          expect(shown.ends_at).to eq(occurrence + 3.hours)
+        end
+
+        it_behaves_like "a drag that leaves the series untouched"
+      end
     end
 
     describe "this calendar + this occurrence" do
@@ -233,10 +251,103 @@ describe Calendars::EventletForm do
       end
     end
 
-    describe "this calendar + whole series" do
+    describe "all calendars + all occurrences" do
+      # Dragging the second occurrence an hour later.
       let(:params) do
-        {calendar_scope: "this", series_scope: "series",
-         starts_at: (base_start + 30.minutes).iso8601, ends_at: (base_end + 45.minutes).iso8601}
+        {calendar_scope: "all", series_scope: "series", occurrence_start: occurrence.to_i,
+         starts_at: (occurrence + 1.hour).iso8601, ends_at: (occurrence + 2.hours).iso8601}
+      end
+
+      def occurrence_times
+        window = (base_start - 1.day)..(base_start + 5.weeks + 12.hours)
+        event.reload.occurrences_between(window).map { |s, e| [s.to_time, e] }
+      end
+
+      it "shifts every occurrence by the drag distance rather than re-anchoring on the dragged one" do
+        before = occurrence_times
+        expect(form.save).to be(true)
+        expect(occurrence_times).to eq(before.map { |s, e| [s + 1.hour, e + 1.hour] })
+      end
+
+      it "re-keys the other overrides, keeping an already-moved occurrence at its own time" do
+        expect(form.save).to be(true)
+
+        moved = override_for(base_start + 2.weeks + 1.hour)
+        expect(moved.starts_at).to eq(base_start + 2.weeks + 1.hour)
+        expect(override_for(base_start + 3.weeks + 1.hour)).to be_deleted
+        expect(override_for(base_start + 4.weeks + 1.hour).eventlet_overrides.sole.start_offset)
+          .to eq(15.minutes.to_i)
+      end
+
+      context "when resizing" do
+        let(:params) do
+          {calendar_scope: "all", series_scope: "series", occurrence_start: occurrence.to_i,
+           starts_at: occurrence.iso8601, ends_at: (occurrence + 90.minutes).iso8601}
+        end
+
+        it "changes the series' duration but not its start" do
+          expect(form.save).to be(true)
+          expect(event.reload.starts_at).to eq(base_start)
+          expect(event.ends_at).to eq(base_start + 90.minutes)
+        end
+      end
+
+      context "when the dragged occurrence was already moved on all calendars" do
+        before do
+          create(:event_override, event: event, occurrence_start: occurrence,
+            starts_at: occurrence + 1.hour, ends_at: occurrence + 2.hours)
+        end
+
+        # Shown at +1h, dropped at +3h: two hours later.
+        let(:params) do
+          {calendar_scope: "all", series_scope: "series", occurrence_start: occurrence.to_i,
+           starts_at: (occurrence + 3.hours).iso8601, ends_at: (occurrence + 4.hours).iso8601}
+        end
+
+        it "lands it at the drop, leaving other moved occurrences where they were" do
+          expect(form.save).to be(true)
+
+          expect(event.reload.starts_at).to eq(base_start + 2.hours)
+          dragged = override_for(occurrence + 2.hours)
+          expect(dragged.starts_at).to eq(occurrence + 3.hours)
+          expect(dragged.ends_at).to eq(occurrence + 4.hours)
+          expect(override_for(base_start + 2.weeks + 2.hours).starts_at).to eq(base_start + 2.weeks + 1.hour)
+        end
+      end
+
+      context "with a rule pinned to the series' weekday" do
+        before do
+          weekday = base_start.strftime("%A").downcase.to_sym
+          event.update!(recurrence_rule: IceCube::Rule.weekly.day(weekday).to_hash)
+        end
+
+        it "allows a move within the same day" do
+          expect(form.save).to be(true)
+          expect(event.reload.starts_at).to eq(base_start + 1.hour)
+        end
+
+        context "when moving to another day" do
+          let(:dragged_occurrence) { nil }
+          let(:params) do
+            {calendar_scope: "all", series_scope: "series", occurrence_start: occurrence.to_i,
+             starts_at: (occurrence + 1.day).iso8601, ends_at: (occurrence + 1.day + 1.hour).iso8601}
+          end
+
+          it "is refused" do
+            expect(form.save).to be(false)
+            expect(form.errors[:base].join).to match(/fixed pattern/)
+          end
+
+          it_behaves_like "a drag that leaves the series untouched"
+        end
+      end
+    end
+
+    describe "this calendar + all occurrences" do
+      # Dragging the second occurrence, 30 minutes later at the start and 45 at the end.
+      let(:params) do
+        {calendar_scope: "this", series_scope: "series", occurrence_start: occurrence.to_i,
+         starts_at: (occurrence + 30.minutes).iso8601, ends_at: (occurrence + 105.minutes).iso8601}
       end
 
       # Changes this eventlet's offsets, so only the event and the overrides must stay put.
@@ -249,6 +360,118 @@ describe Calendars::EventletForm do
         expect(other_eventlet.reload.start_offset).to eq(0)
         expect(series_snapshot(excluding: nil).except(:eventlets)).to eq(before)
       end
+
+      context "when the dragged occurrence was already shifted on this calendar" do
+        # The setup shifts the fifth occurrence +15 minutes here. Shown at +15m, dropped at +45m.
+        let(:occurrence) { base_start + 4.weeks }
+        let(:params) do
+          {calendar_scope: "this", series_scope: "series", occurrence_start: occurrence.to_i,
+           starts_at: (occurrence + 45.minutes).iso8601, ends_at: (occurrence + 105.minutes).iso8601}
+        end
+
+        it "lands it at the drop and moves the rest of the series by the same distance" do
+          expect(form.save).to be(true)
+
+          expect(eventlet.reload.start_offset).to eq(30.minutes.to_i)
+          shown = Calendars::OccurrenceResolver.new(eventlet, occurrence.to_i).resolve
+          expect(shown.starts_at).to eq(occurrence + 45.minutes)
+          expect(shown.ends_at).to eq(occurrence + 105.minutes)
+        end
+      end
+    end
+
+    context "with a series that has started" do
+      # Frozen after setup rather than around it, so the series wasn't "recently created".
+      before { Timecop.freeze(base_start + 1.day) }
+      after { Timecop.return }
+
+      context "as the creator" do
+        let(:user) { event.creator }
+        let(:params) do
+          {calendar_scope: "all", series_scope: "occurrence", occurrence_start: occurrence.to_i,
+           starts_at: (occurrence + 1.hour).iso8601, ends_at: (occurrence + 2.hours).iso8601}
+        end
+
+        it "allows moving a future occurrence" do
+          expect(form.save).to be(true)
+        end
+
+        context "with a past occurrence" do
+          let(:dragged_occurrence) { nil }
+          let(:occurrence) { base_start }
+
+          it "refuses the move" do
+            expect(form.save).to be(false)
+            expect(form.errors[:starts_at]).to include("can't be changed after event begins")
+          end
+
+          it_behaves_like "a drag that leaves the series untouched"
+        end
+
+        context "with an occurrence in progress" do
+          let(:dragged_occurrence) { nil }
+
+          before { Timecop.freeze(occurrence + 30.minutes) }
+
+          it "refuses the move" do
+            expect(form.save).to be(false)
+            expect(form.errors[:starts_at]).to include("can't be changed after event begins")
+          end
+        end
+      end
+
+      context "as an admin, moving a past occurrence" do
+        let(:occurrence) { base_start }
+        let(:params) do
+          {calendar_scope: "all", series_scope: "occurrence", occurrence_start: occurrence.to_i,
+           starts_at: (base_start + 2.days).iso8601, ends_at: (base_start + 2.days + 1.hour).iso8601}
+        end
+
+        it "allows it" do
+          expect(form.save).to be(true)
+        end
+      end
+
+      %w[all this].each do |calendar_scope|
+        context "moving all occurrences (#{calendar_scope} calendars)" do
+          let(:dragged_occurrence) { nil }
+          let(:params) do
+            {calendar_scope: calendar_scope, series_scope: "series", occurrence_start: occurrence.to_i,
+             starts_at: (occurrence + 1.hour).iso8601, ends_at: (occurrence + 2.hours).iso8601}
+          end
+
+          it "refuses even an admin, since past occurrences would move" do
+            expect(form.save).to be(false)
+            expect(form.errors[:base].join).to match(/already started.*“This only”/)
+          end
+
+          it_behaves_like "a drag that leaves the series untouched"
+
+          context "when the series was created moments ago" do
+            before { event.update_columns(created_at: 10.minutes.ago) }
+
+            it "allows it" do
+              expect(form.save).to be(true)
+            end
+          end
+        end
+      end
+    end
+
+    context "when the dragged occurrence was deleted in the meantime" do
+      let(:dragged_occurrence) { nil }
+      let(:occurrence) { base_start + 3.weeks }
+      let(:params) do
+        {calendar_scope: "all", series_scope: "series", occurrence_start: occurrence.to_i,
+         starts_at: (occurrence + 1.hour).iso8601, ends_at: (occurrence + 2.hours).iso8601}
+      end
+
+      it "is refused" do
+        expect(form.save).to be(false)
+        expect(form.errors[:base].join).to match(/no longer exists/)
+      end
+
+      it_behaves_like "a drag that leaves the series untouched"
     end
 
     context "with an occurrence that isn't in the series" do

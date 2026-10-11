@@ -171,6 +171,29 @@ describe "calendar eventlet drag update" do
     expect(response.body).to include("must be after start time")
   end
 
+  # The modal offers "All occurrences" from whatever the grid showed, but the series may have started
+  # by the time the request lands. The server has to catch it either way.
+  context "with a series whose first occurrence has passed" do
+    let(:starts_at) { 6.days.ago.midnight + 12.hours }
+    let(:occurrence) { starts_at + 1.week }
+
+    let!(:deleted_override) do
+      event.update!(recurrence_rule: IceCube::Rule.weekly.to_hash)
+      event.update_columns(created_at: 2.weeks.ago)
+      create(:event_override, event: event, occurrence_start: starts_at + 2.weeks, deleted: true)
+    end
+
+    it "refuses to move all occurrences, changing nothing" do
+      drag(calendar_scope: "all", series_scope: "series", occurrence_start: occurrence.to_i,
+        starts_at: (occurrence + 1.hour).iso8601, ends_at: (occurrence + 2.hours).iso8601)
+
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response.body).to include("Choose “This only” to move one occurrence")
+      expect(event.reload.starts_at).to eq(starts_at)
+      expect(deleted_override.reload.occurrence_start).to eq(starts_at + 2.weeks)
+    end
+  end
+
   it "denies a user with no rights to the eventlet" do
     other = create(:user, community: create(:community))
     sign_in(other)

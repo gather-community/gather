@@ -73,6 +73,8 @@ module Calendars
 
     # Temporary method to dual write Eventlet model
     before_save :sync_eventlet
+    # Must run before compute_recurrence_end_date so the end date is worked out from the shifted UNTIL.
+    before_save :shift_series_dependents
     before_save :compute_recurrence_end_date
 
     before_save lambda { |r| meal&.event_handler&.sync_resourcings(r) }
@@ -164,6 +166,44 @@ module Calendars
       return unless all_day?
       self.starts_at = starts_at.midnight
       self.ends_at = ends_at.midnight + 1.day - 1.second
+    end
+
+    # Overrides are keyed by the occurrence's scheduled start, and an UNTIL is a time, so both have to
+    # follow when the series' start moves or they'd stop lining up with the schedule: a deleted
+    # occurrence would come back, a moved one would show twice, and a later-moved series would lose its
+    # last occurrence to the old UNTIL. Applies to every writer, which is why it's here and not on a form.
+    #
+    # An override keeps its own starts_at/ends_at: an occurrence someone moved stays where they put it.
+    # Calendar-only overrides need nothing, since their offsets are relative to the occurrence.
+    def shift_series_dependents
+      return unless persisted? && recurring? && will_save_change_to_starts_at?
+      shift = WallClockShift.new(starts_at_was, starts_at)
+      return if shift.zero?
+      # A caller that sets the rule in the same save has decided on its UNTIL itself.
+      shift_recurrence_until(shift) unless will_save_change_to_recurrence_rule?
+      rekey_event_overrides(shift)
+    end
+
+    def shift_recurrence_until(shift)
+      rule = IceCube::Rule.from_hash(recurrence_rule)
+      return unless rule.until_time
+      rule.until(shift.apply(rule.until_time))
+      self.recurrence_rule = rule.to_hash
+    end
+
+    # Rows are rewritten in the shift's direction (latest first when moving later) so no intermediate
+    # key collides with the unique index on [event_id, occurrence_start]. update_columns skips the
+    # override's own in-series validation, so the result is checked against the new schedule after.
+    # Works on the association's records so any already loaded by a caller are updated in place.
+    def rekey_event_overrides(shift)
+      overrides = event_overrides.sort_by(&:occurrence_start)
+      overrides.reverse! if starts_at > starts_at_was
+      overrides.each { |o| o.update_columns(occurrence_start: shift.apply(o.occurrence_start)) }
+
+      new_schedule = schedule
+      stranded = overrides.map(&:occurrence_start).reject { |t| new_schedule.occurs_at?(t) }
+      return if stranded.empty?
+      raise "Moving event #{id} would leave overrides off its schedule at #{stranded.join(", ")}"
     end
 
     def compute_recurrence_end_date

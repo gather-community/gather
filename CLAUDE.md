@@ -77,6 +77,8 @@ so they're clickable from the `tmp/` copy.
 
 ### Taking Screenshots
 
+This section covers how to take screenshots. For when you must take them (any UI change, by default), see [Screenshotting UI Changes](#screenshotting-ui-changes).
+
 The dev server must be running first (`bin/dev` won't stay up in the background because foreman's esbuild watcher requires stdin). Start just the web server and build JS assets separately:
 
 ```bash
@@ -417,6 +419,15 @@ Merging dependabot branches one at a time is slow (each merge rebases all the ot
 
 The SSH key lives on the Mac host and is forwarded into the devcontainer via VSCode's agent socket — it is not in the container's `~/.ssh`. If a push fails with `Permission denied (publickey)` and `ssh-add -l` reports "The agent has no identities" (typical after the host reboots), **ask the user to run a `git pull` on the host**. That reloads the key into the host's agent, and the forwarded agent picks it up immediately — no container restart needed. Don't work around it by reconfiguring git credential helpers or fiddling with keys in the container.
 
+## Screenshotting UI Changes
+
+**Trigger:** any change a user can see in the browser, such as a new or changed page, form, modal, button, or layout, or any CSS or JS change. Screenshots are part of the work. Take them by default without being asked, and don't report the work as done or open the PR until you have done this.
+
+1. **Screenshot every affected state**, following [Taking Screenshots](#taking-screenshots). Cover more than the happy path: also capture empty states, validation errors, other roles (e.g. admin vs. regular member), and long or unusual data where it matters.
+2. **Scrutinize each screenshot before going further.** Open it with the Read tool and look closely. Ask whether it shows the feature *working*, not just rendering. Check that the right data appears, that nothing is missing or duplicated, that no text is a raw translation key or reads "translation missing", that alignment and spacing match the surrounding UI, and that nothing overflows or overlaps. Passing specs don't settle this. Screenshots have caught many bugs that the specs missed.
+3. **Fix what you find, then re-shoot** until the screenshots look right. Tell the user about anything you couldn't fix.
+4. **Put the final screenshots in the PR description**, following [Adding Screenshots to a PR](#adding-screenshots-to-a-pr), with a sentence on what each one shows.
+
 ## Writing PR Descriptions
 
 Write PR descriptions for a reviewer who knows Gather but hasn't followed this work. They should be able to understand the change, and judge the decisions in it, without reading the diff first. #1354 is a good model.
@@ -437,8 +448,9 @@ Write PR descriptions for a reviewer who knows Gather but hasn't followed this w
 4. **What happens now:** the new behavior, grouped by what the user does (each choice, each flow), not by file. Say why each rule is the way it is.
 5. **How it works:** one subsection per significant piece (new class, callback, form change, JS). Explain the reasoning for anything a reviewer should look at closely: why it lives where it does, why it raises, ordering constraints, alternatives considered.
 6. **Tests:** grouped by spec file, in plain language. Note any test you confirmed fails without the fix (by temporarily removing the fix).
-7. **Not in this PR:** related work deliberately left out, and where it's planned.
-8. **Privacy Policy / Terms of Use:** the flag described in [Flagging Privacy Policy and Terms of Use Impact](#flagging-privacy-policy-and-terms-of-use-impact), or "No impact" with a one-line reason.
+7. **Screenshots** (for UI changes): see [Screenshotting UI Changes](#screenshotting-ui-changes).
+8. **Not in this PR:** related work deliberately left out, and where it's planned.
+9. **Privacy Policy / Terms of Use:** the flag described in [Flagging Privacy Policy and Terms of Use Impact](#flagging-privacy-policy-and-terms-of-use-impact), or "No impact" with a one-line reason.
 
 Link files with repo-relative markdown links. End with the attribution line. Dependabot batch PRs keep their own required content (see [Handling Dependabot Batches](#handling-dependabot-batches)), written in the same plain style.
 

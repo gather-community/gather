@@ -310,7 +310,8 @@ class User < ApplicationRecord
   end
 
   def name
-    "#{first_name} #{last_name}#{" (Inactive)" unless active?}"
+    full = "#{first_name} #{last_name}"
+    active? ? full : I18n.t("common.with_inactive", name: full)
   end
 
   def life_stage

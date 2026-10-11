@@ -28,10 +28,6 @@
         "other": "%{count} Communities"
       },
       "create_new": "Create New",
-      "day": {
-        "one": "day",
-        "other": "days"
-      },
       "default": "Default",
       "edit": "Edit",
       "false": "False",

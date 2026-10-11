@@ -5,20 +5,21 @@ require "better_html/tree/tag"
 
 module ERBLint
   module Linters
-    # Flags literal text in user-visible HTML attributes, e.g. aria-label="Close". The built-in
-    # HardCodedString linter only checks text between tags. Values built with ERB
+    # Flags literal text in user-visible HTML attributes, e.g. aria-label="Close" or the value of a submit
+    # button. The built-in HardCodedString linter only checks text between tags. Values built with ERB
     # (aria-label="<%= t(".close") %>") are fine.
     class HardCodedAttribute < Linter
       include LinterRegistry
 
       ATTRIBUTES = %w[aria-label alt title placeholder].freeze
+      BUTTON_INPUT_TYPES = %w[submit button reset].freeze
 
       def run(processed_source)
         processed_source.parser.nodes_with_type(:tag).each do |tag_node|
           tag = BetterHtml::Tree::Tag.from_node(tag_node)
           next if tag.closing?
 
-          ATTRIBUTES.each do |name|
+          visible_attributes(tag).each do |name|
             attribute = tag.attributes[name]
             next if attribute&.value_node.nil? || contains_erb?(attribute.value_node)
             next unless attribute.value.match?(/[[:alpha:]]/)
@@ -28,6 +29,11 @@ module ERBLint
       end
 
       private
+
+      def visible_attributes(tag)
+        return ATTRIBUTES unless tag.name == "input" && BUTTON_INPUT_TYPES.include?(tag.attributes["type"]&.value)
+        ATTRIBUTES + ["value"]
+      end
 
       def contains_erb?(node)
         node.to_a.any? { |child| child.is_a?(BetterHtml::AST::Node) && (child.type == :erb || contains_erb?(child)) }

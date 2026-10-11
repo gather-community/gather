@@ -126,7 +126,7 @@ describe "google oauth" do
           visit("/")
           expect_sign_in_with_google_link_and_click
           expect(page).to be_signed_out_root
-          expect(page).to have_content("you must use an invititation when first signing in")
+          expect(page).to have_content("you must use an invitation when first signing in")
         end
       end
 

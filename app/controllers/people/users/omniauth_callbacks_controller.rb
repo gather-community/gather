@@ -12,20 +12,19 @@ module People
         by_google_id = User.from_omniauth(auth) # May be nil
 
         if auth.info[:email].blank?
-          reason = "Google did not provide an email address. Please notify an administrator."
-          fail_with_msg(reason)
+          fail_with_reason(:no_email)
         # If invite token is present, try to find user by that.
         elsif invite_token && (by_token = User.with_reset_password_token(invite_token))
           if !by_token.reset_password_period_valid?
-            fail_with_msg("your invitation has expired")
+            fail_with_reason(:invitation_expired)
 
           # If we find them but they are signing in with the wrong google_email, notify them.
           elsif !by_token.google_email.nil? && by_token.google_email != auth.info[:email]
-            fail_with_msg("you must sign in with the Google ID #{by_token.google_email}")
+            fail_with_reason(:wrong_google_id, google_id: by_token.google_email)
 
           # If there is a different user with that google_email, notify them.
           elsif by_google_id.present? && by_google_id != by_token
-            fail_with_msg("your Google ID #{auth.info[:email]} is associated with another user")
+            fail_with_reason(:google_id_taken, google_id: auth.info[:email])
           else
             clean_up_sign_in(by_token, auth)
           end
@@ -34,10 +33,10 @@ module People
           if by_google_id.confirmed? || by_google_id.email == by_google_id.google_email
             clean_up_sign_in(by_google_id, auth)
           else
-            fail_with_msg("you must use an invititation when first signing in")
+            fail_with_reason(:invitation_required)
           end
         else
-          fail_with_msg("your Google ID #{auth.info[:email]} was not found in the system")
+          fail_with_reason(:google_id_not_found, google_id: auth.info[:email])
         end
       end
 
@@ -47,13 +46,13 @@ module People
         case error_type
         when :access_denied
           # User cancelled on Google's consent screen.
-          fail_with_msg("the sign-in was cancelled")
+          fail_with_reason(:cancelled)
         when :csrf_detected
           # Callback was replayed (back button, tab restore) after its state was already used.
           if user_signed_in?
             redirect_to(after_sign_in_path_for(current_user))
           else
-            fail_with_msg("your sign-in session expired. Please try again")
+            fail_with_reason(:session_expired)
           end
         else
           report_unexpected_failure(error_type)
@@ -67,11 +66,12 @@ module People
           Gather::ErrorReporter.instance.report(StandardError.new("OAuth failure"),
             data: {error_type: error_type, failure_message: failure_message})
         end
-        fail_with_msg("of an unspecified error. The administrators have been notified")
+        fail_with_reason(:unexpected)
       end
 
-      def fail_with_msg(msg)
-        set_flash_message(:error, :failure, kind: "Google", reason: msg)
+      def fail_with_reason(key, **interpolations)
+        reason = t("people.users.omniauth_failure_reasons.#{key}", **interpolations)
+        set_flash_message(:error, :failure, kind: "Google", reason: reason) # rubocop:disable Gather/HardCodedString -- brand name
         redirect_to(sign_in_url)
       end
 

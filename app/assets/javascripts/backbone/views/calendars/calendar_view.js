@@ -78,6 +78,7 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
       allDayText: this.allDayText,
       selectOverlap: this.selectOverlap.bind(this),
       eventOverlap: this.eventOverlap.bind(this),
+      eventAllow: this.eventAllow.bind(this),
       selectable: this.canCreate,
       selectHelper: true,
       longPressDelay: 500,
@@ -124,6 +125,28 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
       stillEvent.calendarId !== movingEvent.calendarId ||
       stillEvent.calendarAllowsOverlap
     );
+  },
+
+  /*
+   * A drag can't move an event between the all-day row and the time grid. The server keeps an
+   * event's all-day setting as it is, so a timed event dropped in the all-day row would be saved as
+   * a 24-hour timed event, and an all-day event dropped in the grid would be refused. Changing it is
+   * done in the event form instead. FullCalendar snaps a disallowed drop back without sending it.
+   *
+   * FullCalendar passes the event as it would be after the drop, so its allDay always matches the
+   * drop location; the stored event still has the original. Month view has no time grid: every drop
+   * there lands on a whole day, and a timed event keeps its own times, so nothing is blocked there.
+   */
+  eventAllow(dropLocation, draggedEvent) {
+    if (this.calendar.fullCalendar("getView").name === "month") {
+      return true;
+    }
+    /*
+     * Matched on FullCalendar's own _id. A string argument would match our id, which every
+     * occurrence of a series shares.
+     */
+    const [original] = this.calendar.fullCalendar("clientEvents", e => e._id === draggedEvent._id);
+    return dropLocation.start.hasTime() === !original.allDay;
   },
 
   onSelect(start, end, _, view) {

@@ -25,8 +25,8 @@ module Calendars
 
     # The checks that don't depend on where the eventlet is dropped, so they can decide which choices
     # to offer before the drag is submitted. See #permitted?.
-    CHOICE_CHECKS = %i[occurrence_resolvable scope_combination_allowed restrict_changes_in_past
-      restrict_series_moves_after_start restrict_following_from_past].freeze
+    CHOICE_CHECKS = %i[occurrence_resolvable scope_combination_allowed restrict_all_calendars_to_editors
+      restrict_changes_in_past restrict_series_moves_after_start restrict_following_from_past].freeze
 
     include ActiveModel::Conversion
     include ActiveModel::Validations
@@ -42,6 +42,7 @@ module Calendars
     validate :start_before_end
     validate :occurrence_resolvable
     validate :scope_combination_allowed
+    validate :restrict_all_calendars_to_editors
     validate :offsets_within_range
     validate :restrict_changes_in_past
     validate :restrict_drop_in_past
@@ -347,6 +348,14 @@ module Calendars
     def scope_combination_allowed
       return unless calendar_scope == "this" && series_scope == "following"
       errors.add(:base, :one_calendar) if event.eventlets.size < 2
+    end
+
+    # Moving on all calendars changes the event on every calendar it's on, so the user has to be able
+    # to edit all of them, not just the one they dragged on. EventsController checks the same thing for
+    # the event form, and deletion does for its all-calendars choices.
+    def restrict_all_calendars_to_editors
+      return unless calendar_scope == "all" && event.eventlets.size > 1
+      errors.add(:base, :other_calendar_not_editable) unless EventPolicy.new(current_user, event).update?
     end
 
     # A this-calendar drag is stored as an offset from the event's shared time, and both Eventlet and

@@ -329,6 +329,30 @@ describe "calendar eventlet move choices" do
       .to include("Start Time: can't be changed after event begins")
   end
 
+  it "offers only the event itself for a plain event" do
+    plain = create(:event, calendar: calendar, creator: user, starts_at: 1.week.from_now,
+      ends_at: 1.week.from_now + 1.hour)
+    get(move_choices_calendars_eventlet_path(plain.eventlets.first), xhr: true)
+
+    expect(response.parsed_body["choices"]).to eq("this" => [], "all" => ["series"])
+  end
+
+  it "offers nothing on a deleted occurrence, and says why" do
+    create(:event_override, event: event, occurrence_start: starts_at + 1.week, deleted: true)
+    body = move_choices(starts_at + 1.week)
+
+    expect(body["choices"]).to eq("this" => [], "all" => [])
+    expect(body["refusal_html"]).to include("This occurrence no longer exists")
+  end
+
+  it "doesn't offer moving on all calendars when another one is read-only to the user" do
+    read_only = create(:calendar, community: create(:community))
+    create(:calendar_protocol, calendars: [read_only], other_communities: "read_only")
+    event.eventlets.create!(calendar: read_only)
+
+    expect(move_choices(starts_at + 1.week)["choices"]).to eq("this" => %w[occurrence following], "all" => [])
+  end
+
   it "denies a user with no rights to the eventlet" do
     sign_in(create(:user, community: create(:community)))
     expect { move_choices(starts_at + 1.week) }.to raise_error(Pundit::NotAuthorizedError)

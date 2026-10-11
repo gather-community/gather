@@ -21,6 +21,7 @@ en:
             base:
               occurrence_missing: "This occurrence no longer exists. Reload the calendar and try again."
               one_calendar: "This event is only on one calendar."
+              other_calendar_not_editable: "You can't change this event on all of its calendars. Choose “Move only on” this calendar instead."
               offsets_too_far_apart: "An event's times on its different calendars can't be more than %{hours} hours apart. To move it further, choose “Move on all calendars.”"
               series_started: "This series has already started. Choose “This and following” to change it from this date on."
               following_from_past: "Occurrences that have already begun can't be moved with “This and following.”"

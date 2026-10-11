@@ -149,6 +149,27 @@ describe Calendars::EventletDeletionForm do
     end
   end
 
+  describe "a series split off by a drag" do
+    # A "This and following" drag moves week 2 onward an hour later, onto a new series.
+    let!(:split_off) do
+      shift = Calendars::WallClockShift.new(occ(2), occ(2) + 1.hour)
+      Calendars::SeriesSplitter.new(event).split_at(occ(2), start_shift: shift, end_shift: shift)
+    end
+    let(:split_off_eventlet) { split_off.eventlets.first }
+
+    it "deletes this and following from it, leaving the original alone" do
+      expect(build_form(calendar_scope: "all", series_scope: "following", occurrence: occ(4) + 1.hour,
+        target: split_off_eventlet).save).to be(true)
+      expect(visible_starts).to eq([occ(0), occ(1), occ(2) + 1.hour, occ(3) + 1.hour])
+    end
+
+    it "deletes all of it, leaving the original alone" do
+      expect(build_form(calendar_scope: "all", series_scope: "series", target: split_off_eventlet).save)
+        .to be(true)
+      expect(visible_starts).to eq([occ(0), occ(1)])
+    end
+  end
+
   describe "all calendars + whole series" do
     it "destroys the event" do
       expect(build_form(calendar_scope: "all", series_scope: "series").save).to be(true)

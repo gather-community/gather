@@ -29,6 +29,12 @@ en:
       failure: "Could not sign you in from %{kind} because %{reason}."
       success: "Successfully authenticated from %{kind} account."
     passwords:
+      new:
+        title: "Forgot Password"
+        instructions: "Enter your email address to have instructions sent to you via email. Follow the instructions in the email to reset your password. The email may take a few moments to arrive."
+      edit:
+        title: "Enter a New Password"
+        instructions: "Enter a new password below and you will be signed in to Gather."
       no_token: "You can't access this page without coming from a password reset email. If you do come from a password reset email, please make sure you used the full URL provided."
       send_instructions: "You will receive an email with instructions on how to reset your password in a few minutes."
       send_paranoid_instructions: "If your email address exists in our database, you will receive a password recovery link at your email address in a few minutes."
@@ -43,6 +49,8 @@ en:
       update_needs_confirmation: "You updated your account successfully, but we need to verify your new email address. Please check your email and follow the confirm link to confirm your new email address."
       updated: "Your account has been updated successfully."
     sessions:
+      new:
+        title: "Sign In"
       signed_in: "Signed in successfully."
       signed_out: "Signed out successfully."
       already_signed_out: "Signed out successfully."
@@ -50,6 +58,30 @@ en:
       send_instructions: "You will receive an email with instructions for how to unlock your account in a few minutes."
       send_paranoid_instructions: "If your account exists, you will receive an email with instructions for how to unlock it in a few minutes."
       unlocked: "Your account has been unlocked successfully. Please sign in to continue."
+    # Overrides devise-i18n's "Forgot your password?" to keep our wording.
+    shared:
+      links:
+        forgot_your_password: "Don't know your password?"
+  auth_mailer:
+    cant_reset_password:
+      request_received: "We received a request to reset your password."
+      no_full_access: "Unfortunately, your profile does not have full system access and so you are not permitted to sign in."
+      contact_admin: "Please contact your Gather administrator if you feel this is in error."
+    confirmation_instructions:
+      use_link: "Please confirm your new email address using this link:"
+      thanks: "Thanks for your cooperation with this important security measure!"
+    reset_password_instructions:
+      use_link: "We received a request to reset your password. To do so, please use this link:"
+      ignore: "If you did not make this request, simply ignore this email and your password will remain unchanged."
+    sign_in_invitation:
+      subject: "Instructions for Signing in to Gather"
+      invited: "You have been invited to sign in to Gather, %{community}'s community management system!"
+      click_link: "Please click the link below to begin."
+      choose_method: "From there you can choose to sign in with Google or a password. If you haven't set a password yet you will be able to."
+      expiry:
+        one: "This link will expire in %{count} day."
+        other: "This link will expire in %{count} days."
+      see_you: "Hope to see you soon!"
   errors:
     messages:
       already_confirmed: "was already confirmed, please try signing in"

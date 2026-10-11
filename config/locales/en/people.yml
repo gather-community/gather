@@ -4,6 +4,39 @@ en:
       sent:
         one: "Invitation sent."
         other: "Invitations sent."
+      none_selected: "You didn't select any users."
+      new:
+        title: "Invite Users to Sign In"
+        no_users: "No users found."
+        instructions_html: "Check the users you'd like to invite. Users with %{icon} by their names have never signed in."
+        select_no_sign_ins: "Select All No-Sign-Ins"
+        select_all: "Select All"
+        send: "Send Invitations"
+    password_changes:
+      success: "Password changed successfully."
+      show:
+        title: "Change Password"
+      password_fields:
+        new_password: "New Password"
+        retype_new_password: "Re-type New Password"
+        reveal: "Reveal passwords"
+        mask: "Mask passwords"
+    users:
+      confirmations:
+        sign_in_to_use_gather: "Please sign in to use Gather."
+        expired_signed_in: "The confirmation period has expired. Please use the 'Resend confirmation instructions' link below to try again."
+        expired_signed_out: "The confirmation period has expired. Please sign in using your old email address and try again."
+      # Each completes Devise's "Could not sign you in from Google because %{reason}." (devise.omniauth_callbacks.failure).
+      omniauth_failure_reasons:
+        no_email: "Google did not provide an email address. Please notify an administrator."
+        invitation_expired: "your invitation has expired"
+        wrong_google_id: "you must sign in with the Google ID %{google_id}"
+        google_id_taken: "your Google ID %{google_id} is associated with another user"
+        invitation_required: "you must use an invitation when first signing in"
+        google_id_not_found: "your Google ID %{google_id} was not found in the system"
+        cancelled: "the sign-in was cancelled"
+        session_expired: "your sign-in session expired. Please try again"
+        unexpected: "of an unspecified error. The administrators have been notified"
     deletion:
       blocked_intro: "This can't be permanently deleted yet:"
       confirmation_mismatch: "The confirmation text didn't match, so nothing was deleted."

@@ -1,4 +1,4 @@
-<% content_for(:title, "Sign In") %>
+<% content_for(:title, t(".title")) %>
 
 <%= gather_form_for(resource, layout: :vertical, width: :narrow, as: resource_name,
                               url: session_path(resource_name)) do |f| %>
@@ -8,7 +8,7 @@
 
   <%= form_actions do %>
     <div class="secondary-links">
-      <%= link_to("Don't know your password?", reset_password_path) %>
+      <%= link_to(t("devise.shared.links.forgot_your_password"), reset_password_path) %>
     </div>
     <div class="buttons">
       <%= f.button(:primary, :sign_in) %>

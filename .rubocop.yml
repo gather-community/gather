@@ -96,3 +96,7 @@ Gather/HardCodedString:
     - app/helpers/application_helper.rb
     - app/decorators/nav/**/*.rb
     - app/models/utils/nav/**/*.rb
+    - app/controllers/people/users/**/*.rb
+    - app/controllers/people/password_changes_controller.rb
+    - app/controllers/people/sign_in_invitations_controller.rb
+    - app/mailers/auth_mailer.rb

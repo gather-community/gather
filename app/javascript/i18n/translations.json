@@ -14,6 +14,28 @@
       "dismiss": "Dismiss",
       "message_html": "<b>Reservations</b> is now called <b>Calendars</b>! Check it out!"
     },
+    "calendars": {
+      "drag": {
+        "calendar": {
+          "all": "Move on all",
+          "content": "'%{name}' appears on more than one calendar:",
+          "selected": "(selected)",
+          "this": "Move only on %{calendar}",
+          "title": "Move multi-calendar event"
+        },
+        "confirm": "Are you sure you want to move the event '%{name}'?",
+        "confirm_occurrence": "Are you sure you want to move this occurrence of '%{name}'?",
+        "error_title": "Error",
+        "load_error": "We couldn't check how this event can be moved. Please try again.",
+        "series": {
+          "content": "'%{name}' repeats. Which occurrences should be moved?",
+          "following": "This and following",
+          "occurrence": "This only",
+          "series": "All occurrences",
+          "title": "Move recurring event"
+        }
+      }
+    },
     "common": {
       "adults": "Adults",
       "all": "All",

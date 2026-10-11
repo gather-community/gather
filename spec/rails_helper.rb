@@ -68,6 +68,7 @@ RSpec.configure do |config|
   FactoryBot.use_parent_strategy = false
   config.include(Warden::Test::Helpers)
   config.include(SystemSpecHelpers, type: :system)
+  config.include(CalendarDragHelpers, type: :system)
   config.include(DownloadHelpers, type: :system)
   config.include(RequestSpecHelpers, type: :request)
   config.include(GeneralHelpers)

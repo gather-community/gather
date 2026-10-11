@@ -158,6 +158,31 @@ describe Calendars::IcalGenerator do
     end
   end
 
+  context "with a series split in two by a drag" do
+    # Mondays at noon; a "This and following" drag moved the third Monday onward to 1pm.
+    let(:start) { Time.zone.parse("2021-01-04 12:00") }
+    let(:event) do
+      create(:event, starts_at: start, ends_at: start + 1.hour, recurrence_rule: IceCube::Rule.weekly.to_hash)
+    end
+    let!(:split_off) do
+      cut = start + 2.weeks
+      shift = Calendars::WallClockShift.new(cut, cut + 1.hour)
+      Calendars::SeriesSplitter.new(event).split_at(cut, start_shift: shift, end_shift: shift)
+    end
+    let(:eventlets) do
+      range = start..(start + 5.weeks)
+      Calendars::EventFinder.new(range: range, calendars: [event.calendar], user: create(:admin)).eventlets
+    end
+
+    it "exports each series once, the original ending where the new one begins" do
+      expect(ical.scan("BEGIN:VEVENT").size).to eq(2)
+      expect(ical).to include_line("DTSTART;TZID=Etc/UTC:20210104T120000")
+      expect(ical).to include_line("RRULE:FREQ=WEEKLY;UNTIL=20210111T120000Z")
+      expect(ical).to include_line("DTSTART;TZID=Etc/UTC:20210118T130000")
+      expect(ical).to include_line("RRULE:FREQ=WEEKLY")
+    end
+  end
+
   context "with a recurring event" do
     # First occurrence: Monday 2021-01-04. The eventlets represent the second and third Mondays,
     # built the same way EventFinder builds them (non-persisted, linkable = base eventlet).

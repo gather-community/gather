@@ -165,7 +165,10 @@ Rails.application.routes.draw do
 
   namespace :calendars do
     resources :events
-    resources :eventlets, only: %i[show update destroy]
+    resources :eventlets, only: %i[show update destroy] do
+      # Which scope choices a drag of this eventlet may offer. See EventletsController#move_choices.
+      get :move_choices, on: :member
+    end
     resources :protocols
     resources :groups, only: %i[new edit create update destroy]
 

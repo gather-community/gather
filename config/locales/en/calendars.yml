@@ -6,6 +6,24 @@ en:
           start: "%{base} (Start)"
           end: "%{base} (End)"
     all_day: "All Day"
+    # The drag-and-drop move modal in the calendar grid (calendar_view.js).
+    drag:
+      confirm: "Are you sure you want to move the event '%{name}'?"
+      confirm_occurrence: "Are you sure you want to move this occurrence of '%{name}'?"
+      error_title: "Error"
+      load_error: "We couldn't check how this event can be moved. Please try again."
+      calendar:
+        title: "Move multi-calendar event"
+        content: "'%{name}' appears on more than one calendar:"
+        selected: "(selected)"
+        this: "Move only on %{calendar}"
+        all: "Move on all"
+      series:
+        title: "Move recurring event"
+        content: "'%{name}' repeats. Which occurrences should be moved?"
+        occurrence: "This only"
+        following: "This and following"
+        series: "All occurrences"
     eventlet_deletion:
       success:
         event: "Event deleted successfully."

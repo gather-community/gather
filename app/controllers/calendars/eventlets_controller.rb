@@ -55,12 +55,29 @@ module Calendars
         origin_page: params[:origin_page])
     end
 
+    # The scope choices the drag modal may offer for this eventlet (and occurrence, for a recurring
+    # event), worked out by EventletForm when the modal opens so they reflect the clock and the user
+    # now rather than when the grid loaded. When nothing is allowed, includes why, formatted like the
+    # error a refused drag would get. XHR only.
+    def move_choices
+      @eventlet = Eventlet.find(params[:id])
+      authorize(@eventlet, :update?)
+      args = {eventlet: @eventlet, occurrence_start: params[:occurrence_start].presence, user: current_user}
+      choices = EventletForm.allowed_choices(**args)
+      json = {choices: choices}
+      if choices.values.all?(&:empty?)
+        json[:refusal_html] = render_to_string(partial: "calendars/events/update_error_messages",
+          locals: {errors: EventletForm.refusal(**args).errors}, formats: [:html])
+      end
+      render(json: json)
+    end
+
     protected
 
     # See def'n in ApplicationController for documentation.
     def community_for_route
       case params[:action]
-      when "show", "update", "destroy"
+      when "show", "update", "destroy", "move_choices"
         Eventlet.find_by(id: params[:id]).try(:community)
       end
     end

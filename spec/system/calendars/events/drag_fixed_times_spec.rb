@@ -50,30 +50,14 @@ describe "dragging an event on a fixed-time calendar", js: true do
     expect(event.reload.ends_at).to eq(ends_at)
   end
 
-  # Mirrors the helpers in drag_spec.rb: FullCalendar's jQuery-UI drag needs a real pointer with
-  # intermediate moves, and the DB update lands asynchronously after the XHR so Capybara's own
-  # waiting doesn't cover it.
-  def drag_vertically(element, by:)
-    step = (by / 4.0).round
-    page.driver.browser.action
-      .move_to(element.native)
-      .pause(duration: 0.1)
-      .click_and_hold
-      .pause(duration: 0.1)
-      .move_by(0, step).pause(duration: 0.1)
-      .move_by(0, step).pause(duration: 0.1)
-      .move_by(0, step).pause(duration: 0.1)
-      .move_by(0, by - 3 * step).pause(duration: 0.1)
-      .release
-      .perform
-  end
+  # The end is pinned to 17:00, so stretching it snaps straight back. The move is still confirmed and
+  # saved, unchanged: a resize can't break the protocol, it just can't change anything here.
+  scenario "resizing snaps the end back to the fixed time" do
+    resize_vertically(find(".fc-event", text: "Fixed"), by: 80)
+    click_modal_button
 
-  def eventually(timeout: 5)
-    deadline = Process.clock_gettime(Process::CLOCK_MONOTONIC) + timeout
-    loop do
-      return true if yield
-      return false if Process.clock_gettime(Process::CLOCK_MONOTONIC) > deadline
-      sleep(0.1)
-    end
+    sleep(1)
+    expect(event.reload.starts_at).to be_within(1.second).of(starts_at)
+    expect(event.ends_at).to eq(ends_at)
   end
 end

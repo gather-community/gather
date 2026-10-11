@@ -6,11 +6,17 @@ require "rails_helper"
 # EventletsController#update. The grid feed is eventlet-centric, so the serialized FullCalendar `id`
 # is the eventlet id, which is what the drag handler posts.
 #
-# A drag asks up to two scope questions before saving: which calendars (only when the event spans
-# more than one) and which occurrences (only when it recurs). When neither applies it falls back to
-# a plain confirmation.
+# Before asking anything, a drag fetches the choices this user may make right now
+# (EventletsController#move_choices). Then it asks up to two questions: which calendars (only when
+# both calendar choices are allowed) and which occurrences (only when the event recurs and there's
+# more than one choice). When no question is needed it falls back to a plain confirmation.
+#
+# All-day and month-view drags are in drag_all_day_spec.rb; fixed-time calendars in
+# drag_fixed_times_spec.rb.
 describe "dragging a calendar event", js: true do
   let(:actor) { create(:user) }
+  let(:event_creator) { actor }
+  let(:event_name) { "Draggable" }
   let(:calendar) { create(:calendar, selected_by_default: true) }
 
   # Next-week noon so the event is comfortably in the future (avoids the can't-change-the-past rule)
@@ -33,9 +39,11 @@ describe "dragging a calendar event", js: true do
   # an outer-context `before`, which would leave the feed showing a plain single-calendar event.
   let(:recurrence) { nil }
   let(:second_calendar) { nil }
+  let(:page_path) { calendar_events_path(calendar) }
+  let(:setup_before_visit) { nil }
 
   let!(:event) do
-    create(:event, calendar: calendar, creator: actor, name: "Draggable",
+    create(:event, calendar: calendar, creator: event_creator, name: event_name,
       starts_at: starts_at, ends_at: starts_at + 1.hour, recurrence_rule: recurrence)
   end
 
@@ -46,16 +54,30 @@ describe "dragging a calendar event", js: true do
   before do
     # Sanity check the divergence setup so a future factory change can't silently neuter this spec.
     expect(event.eventlets.first.id).not_to eq(event.id)
+    setup_before_visit
 
     use_user_subdomain(actor)
     login_as(actor, scope: :user)
-    visit(calendar_events_path(calendar))
+    visit(page_path)
     find(".fc-next-button").click
-    expect(page).to have_css(".fc-event", text: "Draggable")
+    expect(page).to have_css(".fc-event", text: event_name)
+  end
+
+  def draggable
+    find(".fc-event", text: event_name, match: :first)
+  end
+
+  # Gives any (erroneously fired) request time to land, then checks the event didn't change.
+  def expect_unchanged
+    sleep(1)
+    expect(event.reload.starts_at).to be_within(1.second).of(starts_at)
+    expect(event.ends_at).to be_within(1.second).of(starts_at + 1.hour)
+    expect(event.event_overrides).to be_empty
+    expect(Calendars::Event.where.not(id: event.id).where(name: event_name)).to be_empty
   end
 
   scenario "confirming the move persists the new time" do
-    drag_vertically(find(".fc-event", text: "Draggable"), by: 140)
+    drag_vertically(draggable, by: 140)
     click_modal_button
 
     expect(eventually { event.reload.starts_at > starts_at }).to(
@@ -64,12 +86,110 @@ describe "dragging a calendar event", js: true do
   end
 
   scenario "cancelling the move leaves the event untouched" do
-    drag_vertically(find(".fc-event", text: "Draggable"), by: 140)
+    drag_vertically(draggable, by: 140)
     click_modal_button(I18n.t("modal.cancel"))
+    expect_unchanged
+  end
 
-    # Give any (erroneously fired) request time to land, then confirm nothing changed.
-    sleep(1)
-    expect(event.reload.starts_at).to be_within(1.second).of(starts_at)
+  scenario "dragging to another day keeps the time" do
+    drag_horizontally(draggable, columns: 1)
+    click_modal_button
+
+    expect(eventually { event.reload.starts_at.to_date == (starts_at + 1.day).to_date })
+      .to be(true), "Expected the event to move to the next day, but it starts #{event.reload.starts_at}"
+    expect(event.starts_at).to be_within(1.second).of(starts_at + 1.day)
+  end
+
+  scenario "resizing an event changes its end but not its start" do
+    resize_vertically(draggable, by: 80)
+    click_modal_button
+
+    expect(eventually { event.reload.ends_at > starts_at + 1.hour })
+      .to be(true), "Expected the end to move later, but ends_at stayed #{event.reload.ends_at}"
+    expect(event.starts_at).to be_within(1.second).of(starts_at)
+  end
+
+  context "with HTML in the event's name" do
+    let(:event_name) { "Draggable <b>x</b>" }
+
+    scenario "shows the name as text in the modal" do
+      drag_vertically(draggable, by: 140)
+
+      expect(page).to have_css(modal_selector, text: "Draggable <b>x</b>")
+      expect(page).not_to have_css("#{modal_selector} b")
+      click_modal_button(I18n.t("modal.cancel"))
+    end
+  end
+
+  context "with an event the user can't edit" do
+    let(:event_creator) { create(:user) }
+
+    scenario "can't be dragged" do
+      drag_vertically(draggable, by: 140)
+
+      expect(page).not_to have_css(modal_selector)
+      expect_unchanged
+    end
+  end
+
+  context "on the combined calendar page" do
+    let(:page_path) { calendars_events_path }
+
+    scenario "drags work the same way" do
+      drag_vertically(draggable, by: 140)
+      click_modal_button
+
+      expect(eventually { event.reload.starts_at > starts_at })
+        .to be(true), "Expected the event to move, but starts_at stayed #{event.reload.starts_at}"
+    end
+  end
+
+  context "on a calendar that doesn't allow overlaps" do
+    let(:calendar) { create(:calendar, selected_by_default: true, allow_overlap: false) }
+    # Covers the whole afternoon, so any drop below the event lands on it.
+    let(:setup_before_visit) do
+      create(:event, calendar: calendar, name: "Blocker", starts_at: starts_at + 90.minutes,
+        ends_at: starts_at + 8.hours)
+    end
+
+    scenario "a drop onto another event is blocked without asking or saving" do
+      drag_vertically(draggable, by: 140)
+
+      expect(page).not_to have_css(modal_selector)
+      expect_unchanged
+    end
+  end
+
+  context "on a calendar whose protocol limits events to an hour" do
+    let(:setup_before_visit) { create(:calendar_protocol, calendars: [calendar], max_length_minutes: 60) }
+
+    scenario "lengthening an event past the limit is refused with the reason" do
+      resize_vertically(draggable, by: 80)
+      click_modal_button
+
+      expect(page).to have_css(modal_selector, text: "Can be at most 1 hour after start time")
+      click_modal_button("Close")
+      expect_unchanged
+    end
+  end
+
+  context "when the move choices can't be loaded" do
+    around do |example|
+      raise_server_errors = Capybara.raise_server_errors
+      Capybara.raise_server_errors = false
+      example.run
+    ensure
+      Capybara.raise_server_errors = raise_server_errors
+    end
+
+    scenario "says so and puts the event back" do
+      allow(Calendars::EventletForm).to receive(:allowed_choices).and_raise("Simulated failure")
+      drag_vertically(draggable, by: 140)
+
+      expect(page).to have_css(modal_selector, text: "We couldn't check how this event can be moved")
+      click_modal_button("Close")
+      expect_unchanged
+    end
   end
 
   context "with an event on more than one calendar" do
@@ -77,7 +197,7 @@ describe "dragging a calendar event", js: true do
     let(:second_calendar) { calendar2 }
 
     scenario "moving on this calendar only shifts that eventlet's offset" do
-      drag_vertically(find(".fc-event", text: "Draggable", match: :first), by: 140)
+      drag_vertically(draggable, by: 140)
       click_modal_button("Move only on #{calendar.name}")
 
       expect(eventually { event.eventlets.find_by(calendar_id: calendar.id).start_offset.positive? })
@@ -87,7 +207,7 @@ describe "dragging a calendar event", js: true do
     end
 
     scenario "moving on all calendars shifts the event itself" do
-      drag_vertically(find(".fc-event", text: "Draggable", match: :first), by: 140)
+      drag_vertically(draggable, by: 140)
       click_modal_button("Move on all")
 
       expect(eventually { event.reload.starts_at > starts_at })
@@ -96,12 +216,31 @@ describe "dragging a calendar event", js: true do
     end
 
     scenario "cancelling at the calendar prompt leaves everything untouched" do
-      drag_vertically(find(".fc-event", text: "Draggable", match: :first), by: 140)
+      drag_vertically(draggable, by: 140)
       click_modal_button(I18n.t("modal.cancel"))
 
-      sleep(1)
-      expect(event.reload.starts_at).to be_within(1.second).of(starts_at)
+      expect_unchanged
       expect(event.eventlets.pluck(:start_offset)).to all(eq(0))
+    end
+
+    context "that recurs" do
+      let(:recurrence) { IceCube::Rule.weekly.to_hash }
+
+      scenario "asks the calendar question, then the series question, and moves this and following here" do
+        find(".fc-next-button").click
+        drag_vertically(draggable, by: 140)
+        click_modal_button("Move only on #{calendar.name}")
+        expect(modal_button_labels).to eq(["Cancel", "This only", "This and following", "All occurrences"])
+        click_modal_button("This and following")
+
+        expect(eventually { Calendars::Event.where.not(id: event.id).any? })
+          .to be(true), "Expected the series to be split"
+        split_off = Calendars::Event.where.not(id: event.id).sole
+        expect(split_off.starts_at).to be_within(1.second).of(starts_at + 1.week)
+        expect(split_off.eventlets.find_by(calendar_id: calendar.id).start_offset).to be_positive
+        expect(split_off.eventlets.find_by(calendar_id: calendar2.id).start_offset).to eq(0)
+        expect(event.reload.starts_at).to be_within(1.second).of(starts_at)
+      end
     end
   end
 
@@ -109,7 +248,7 @@ describe "dragging a calendar event", js: true do
     let(:recurrence) { IceCube::Rule.weekly.to_hash }
 
     scenario "moving only this occurrence creates an override and leaves the series alone" do
-      drag_vertically(find(".fc-event", text: "Draggable", match: :first), by: 140)
+      drag_vertically(draggable, by: 140)
       click_modal_button("This only")
 
       expect(eventually { event.event_overrides.any? })
@@ -120,7 +259,7 @@ describe "dragging a calendar event", js: true do
     scenario "moving all occurrences from a later one shifts the series without re-anchoring it" do
       # Show the second occurrence, so a re-anchoring bug can't hide behind dragging the first.
       find(".fc-next-button").click
-      drag_vertically(find(".fc-event", text: "Draggable", match: :first), by: 140)
+      drag_vertically(draggable, by: 140)
       click_modal_button("All occurrences")
 
       expect(eventually { event.reload.starts_at > starts_at })
@@ -130,45 +269,115 @@ describe "dragging a calendar event", js: true do
       expect(event.event_overrides).to be_empty
     end
 
-    scenario "a refused move shows why, reverts, and reloads the grid" do
-      # Deleted elsewhere after the grid loaded, so the server refuses the drag.
+    scenario "moving this and following occurrences leaves earlier ones in place" do
+      find(".fc-next-button").click
+      drag_vertically(draggable, by: 140)
+      click_modal_button("This and following")
+
+      expect(eventually { Calendars::Event.where.not(id: event.id).any? })
+        .to be(true), "Expected the series to be split into a new, moved series"
+      split_off = Calendars::Event.where.not(id: event.id).sole
+      expect(split_off.starts_at).to be > starts_at + 1.week
+      expect(event.reload.starts_at).to be_within(1.second).of(starts_at)
+      expect(event.schedule.occurrences(starts_at + 5.weeks).size).to eq(1)
+    end
+
+    scenario "offers only the choices that apply to the dragged occurrence" do
+      # The first occurrence: "This and following" would mean the same as all of them.
+      drag_vertically(draggable, by: 140)
+      expect(modal_button_labels).to eq(["Cancel", "This only", "All occurrences"])
+      click_modal_button("Cancel")
+
+      find(".fc-next-button").click
+      drag_vertically(draggable, by: 140)
+      expect(modal_button_labels).to eq(["Cancel", "This only", "This and following", "All occurrences"])
+      click_modal_button("Cancel")
+    end
+
+    scenario "cancelling at the series question leaves everything untouched" do
+      find(".fc-next-button").click
+      drag_vertically(draggable, by: 140)
+      click_modal_button("Cancel")
+      expect_unchanged
+    end
+
+    scenario "resizing one occurrence asks which occurrences, then lengthens only that one" do
+      find(".fc-next-button").click
+      resize_vertically(draggable, by: 80)
+      click_modal_button("This only")
+
+      expect(eventually { event.event_overrides.any? }).to be(true), "Expected an override for the occurrence"
+      override = event.event_overrides.sole
+      expect(override.starts_at).to be_within(1.second).of(starts_at + 1.week)
+      expect(override.ends_at).to be > starts_at + 1.week + 1.hour
+      expect(event.reload.ends_at).to be_within(1.second).of(starts_at + 1.hour)
+    end
+
+    scenario "a move that's no longer allowed is refused when the modal would open" do
+      # Deleted elsewhere after the grid loaded.
       create(:event_override, event: event, occurrence_start: starts_at, deleted: true)
 
-      drag_vertically(find(".fc-event", text: "Draggable", match: :first), by: 140)
-      click_modal_button("This only")
+      drag_vertically(draggable, by: 140)
 
       expect(page).to have_css(modal_selector, text: "This occurrence no longer exists")
       click_modal_button("Close")
       # The refetch drops the deleted occurrence from the grid.
-      expect(page).not_to have_css(".fc-event", text: "Draggable")
+      expect(page).not_to have_css(".fc-event", text: event_name)
     end
-  end
 
-  # Simulates a real mouse drag of a FullCalendar (jQuery-UI-based) event. HTML5 drag_to does not work
-  # with FullCalendar, so we drive the pointer directly with intermediate moves to trigger the drag.
-  def drag_vertically(element, by:)
-    step = (by / 4.0).round
-    page.driver.browser.action
-      .move_to(element.native)
-      .pause(duration: 0.1)
-      .click_and_hold
-      .pause(duration: 0.1)
-      .move_by(0, step).pause(duration: 0.1)
-      .move_by(0, step).pause(duration: 0.1)
-      .move_by(0, step).pause(duration: 0.1)
-      .move_by(0, by - 3 * step).pause(duration: 0.1)
-      .release
-      .perform
-  end
+    scenario "a move refused on submit shows why, reverts, and reloads the grid" do
+      drag_vertically(draggable, by: 140)
+      expect(modal_button_labels).to include("This only")
+      # Deleted elsewhere while the modal was open, so the server refuses the drag.
+      create(:event_override, event: event, occurrence_start: starts_at, deleted: true)
+      click_modal_button("This only")
 
-  # Polls the block until it returns truthy or the timeout elapses (the DB update lands asynchronously
-  # after the XHR completes, so Capybara's own waiting doesn't cover it).
-  def eventually(timeout: 5)
-    deadline = Process.clock_gettime(Process::CLOCK_MONOTONIC) + timeout
-    loop do
-      return true if yield
-      return false if Process.clock_gettime(Process::CLOCK_MONOTONIC) > deadline
-      sleep(0.1)
+      expect(page).to have_css(modal_selector, text: "This occurrence no longer exists")
+      click_modal_button("Close")
+      expect(page).not_to have_css(".fc-event", text: event_name)
+    end
+
+    # Moving the clock after the grid has loaded, rather than before, is the point: the grid knows
+    # nothing about the change, but the modal still offers only what's allowed now. Travel, not
+    # freeze, so the browser and server keep ticking.
+    context "when the series starts while the grid is open" do
+      before { Timecop.travel(starts_at + 1.minute) }
+      after { Timecop.return }
+
+      scenario "a later occurrence offers only this one, or this and following" do
+        find(".fc-next-button").click
+        drag_vertically(draggable, by: 140)
+        expect(modal_button_labels).to eq(["Cancel", "This only", "This and following"])
+      end
+    end
+
+    context "once the first occurrence has passed" do
+      before { Timecop.travel(starts_at + 1.day) }
+      after { Timecop.return }
+
+      scenario "the creator can't move it, and is told why straight away" do
+        drag_vertically(draggable, by: 140)
+
+        expect(page).to have_css(modal_selector, text: "can't be changed after event begins")
+        click_modal_button("Close")
+        expect_unchanged
+      end
+
+      context "as an admin" do
+        let(:actor) { create(:admin) }
+
+        scenario "with only one choice allowed, just confirms moving this occurrence" do
+          drag_vertically(draggable, by: 140)
+
+          expect(page).to have_css(modal_selector,
+            text: "Are you sure you want to move this occurrence of 'Draggable'?")
+          click_modal_button
+
+          expect(eventually { event.event_overrides.any? })
+            .to be(true), "Expected an override for the past occurrence"
+          expect(event.reload.starts_at).to be_within(1.second).of(starts_at)
+        end
+      end
     end
   end
 end

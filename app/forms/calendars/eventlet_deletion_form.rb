@@ -156,17 +156,9 @@ module Calendars
       override.update!(deleted: true, starts_at: nil, ends_at: nil)
     end
 
-    # Ends the series with the occurrence just before this one, and drops overrides for occurrences
-    # that no longer exist. UNTIL is inclusive, so setting it to the last kept occurrence is exact.
+    # Ends the series with the occurrence just before this one.
     def end_series_before_occurrence
-      last_kept = event.schedule.previous_occurrence(occurrence_start)
-      rule = IceCube::Rule.from_hash(event.recurrence_rule)
-      rule.count(nil)
-      # previous_occurrence returns an IceCube::Occurrence, which ice_cube can't serialize. to_time
-      # unwraps it to a zoned time, which serializes as {time:, zone:} and round-trips through JSONB.
-      rule.until(last_kept.to_time)
-      event.event_overrides.where(occurrence_start: occurrence_start..).destroy_all
-      event.update!(recurrence_rule: rule.to_hash)
+      SeriesSplitter.new(event).truncate_before(occurrence_start)
     end
 
     # Removes the event from this calendar, or deletes it outright if this is its last calendar.

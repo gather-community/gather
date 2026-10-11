@@ -62,11 +62,10 @@
           <label>
             <%= pf.input_field :hide_photo_from_cluster, as: :boolean,
               input_html: { checked: @user.privacy_settings["hide_photo_from_cluster"] } %>
-            Don't show photo to users at <%= @user.other_cluster_communities.map(&:abbrv).join(", ") %>
+            <%= t(".hide_photo_from_cluster", communities: @user.other_cluster_communities.map(&:abbrv).join(", ")) %>
           </label>
           <div class="hint">
-            For more info on privacy settings, see the
-            <%= link_to("privacy policy", "/about/privacy-policy") %>.
+            <%= t(".privacy_hint_html", link: link_to(t(".privacy_policy"), "/about/privacy-policy")) %>
           </div>
         <% end %>
       <% end %>
@@ -99,14 +98,16 @@
         <div id="household-fields" class="<%= 'hiding' if @user.household_by_id? %>">
           <div class="row title">
             <div class="col-sm-8 col-sm-offset-2">
-              <h2>Household Info</h2>
+              <h2><%= t(".household_info") %></h2>
               <p>
-                The below fields are associated with the
-                <%= @user.household_name || "user's" %> household.
-                Changing them here will change them for <em>all users in the household</em>.
+                <% if @user.household_name %>
+                  <%= t(".household_note_named_html", name: @user.household_name) %>
+                <% else %>
+                  <%= t(".household_note_unnamed_html") %>
+                <% end %>
                 <% if @user.persisted? && policy(@user).administer? %>
-                  <br/>You can also <%= link_to("move them to another household", "#",
-                    class: "change-household") %>.
+                  <br/><%= t(".move_household_html",
+                    link: link_to(t(".move_household_link"), "#", class: "change-household")) %>
                 <% end %>
               </p>
             </div>

@@ -7,6 +7,10 @@ en:
     children: "Children"
     clearing_the_filter: "clearing the filters"
     create_new: "Create New"
+    # Placeholder for an empty value in a details table.
+    none_bracketed: "[None]"
+    # A person or household name marked as inactive.
+    with_inactive: "%{name} (Inactive)"
     close: "Close"
     print: "Print"
     loading_indicator: "Loading indicator"
@@ -512,9 +516,6 @@ en:
       check: "Check payment badge"
       cash: "Cash payment badge"
 
-  households:
-    greeting: "Dear %{name} Household,"
-
   roles:
     admin: "Admin"
     calendar_coordinator: "Calendar Coordinator"
@@ -556,11 +557,6 @@ en:
       subject: "Job Reminder: %{title}%{note}%{times}"
     job_choosing_notice:
       subject: "Job Choosing is Coming Up!"
-
-  users:
-    greeting: "Dear %{name},"
-    preferred_contact_tooltip: "Prefers to be contacted via: %{method}"
-    all_users: "All Users"
 
   date_range_lens:
     past_12: "Past 12 Months"

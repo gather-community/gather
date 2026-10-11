@@ -3,7 +3,7 @@
 # Only views whose strings have been moved to locale files are linted: add their directories to `glob` as
 # modules are converted. spec/lint/hard_coded_strings_spec.rb runs this in CI.
 EnableDefaultLinters: false
-glob: "app/views/{layouts,shared,home,devise,auth_mailer,people/password_changes,people/sign_in_invitations}/**/*.erb"
+glob: "app/views/{layouts,shared,home,devise,auth_mailer,people,users,households}/**/*.erb"
 linters:
   # Literal text between tags. Contents of <script> tags are skipped.
   HardCodedString:

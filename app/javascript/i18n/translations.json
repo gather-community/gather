@@ -60,6 +60,7 @@
       "max": "Max",
       "no_result_clear_filter_link_html": "You can try %{link}.",
       "none": "None",
+      "none_bracketed": "[None]",
       "num_in_total": "%{count} in total",
       "print": "Print",
       "save": "Save",
@@ -74,6 +75,7 @@
       "true": "True",
       "unknown": "Unknown",
       "unlimited": "Unlimited",
+      "with_inactive": "%{name} (Inactive)",
       "worker": {
         "one": "worker",
         "other": "workers"

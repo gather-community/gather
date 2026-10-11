@@ -8,8 +8,8 @@ class HouseholdDecorator < ApplicationDecorator
   end
 
   def name_with_prefix
-    suffix = (active? ? "" : " (Inactive)").to_s
-    "#{cmty_prefix}#{object.name}#{suffix}"
+    name = "#{cmty_prefix}#{object.name}"
+    active? ? name : I18n.t("common.with_inactive", name: name)
   end
 
   def selected_option_tag
@@ -17,12 +17,13 @@ class HouseholdDecorator < ApplicationDecorator
   end
 
   def emergency_contacts_html
-    return "[None]" if emergency_contacts.empty?
+    return h.t("common.none_bracketed") if emergency_contacts.empty?
     emergency_contacts.map do |contact|
       foreign = contact.country_code != h.current_community.country_code
       phone_format = foreign ? :international : :national
       h.content_tag(:div, class: "emergency-contact") do
-        lines = [contact.name_relationship, contact.location]
+        lines = [h.t("households.emergency_contact", name: contact.name, relationship: contact.relationship),
+          contact.location]
         lines.concat(contact.phones.map { |p| h.phone_link(p, show_country: foreign, format: phone_format) })
         lines << h.link_to(contact.email, "mailto:#{contact.email}") if contact.email.present?
         h.safe_join(lines, h.tag(:br))
@@ -31,17 +32,20 @@ class HouseholdDecorator < ApplicationDecorator
   end
 
   def pets_html
-    return "[None]" if pets.empty?
+    return h.t("common.none_bracketed") if pets.empty?
     pets.map do |pet|
       h.content_tag(:div, class: "pet") do
         lines = []
-        lines << "#{pet.name} (#{pet.color} #{pet.species})"
-        lines << (h.content_tag(:span, "Vet", class: "inner-label") << pet.vet) if pet.vet.present?
+        lines << h.t("households.pets.summary", name: pet.name, color: pet.color, species: pet.species)
+        if pet.vet.present?
+          lines << (h.content_tag(:span, h.t("households.pets.vet"), class: "inner-label") << pet.vet)
+        end
         if pet.caregivers.present?
-          lines << (h.content_tag(:span, "Caregivers", class: "inner-label") << pet.caregivers)
+          label = h.content_tag(:span, h.t("households.pets.caregivers"), class: "inner-label")
+          lines << (label << pet.caregivers)
         end
         if pet.health_issues.present?
-          lines << (h.content_tag(:span, "Health Issues", class: "inner-label") <<
+          lines << (h.content_tag(:span, h.t("households.pets.health_issues"), class: "inner-label") <<
             h.simple_format(pet.health_issues))
         end
         h.safe_join(lines, h.tag(:br))

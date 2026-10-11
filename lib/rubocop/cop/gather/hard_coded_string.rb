@@ -6,7 +6,7 @@ module RuboCop
       # Flags string literals that look like user-facing text, which belongs in a locale file instead.
       # See "User-Facing Strings" in CLAUDE.md. "Looks like text" means starting with a capitalized word
       # ("Close", "Privacy policy", "Generated: #{time}"), which CSS classes, keys and format strings don't.
-      # Exception messages and log lines are developer-facing, so they're ignored.
+      # Exception messages, log lines and association class names are developer-facing, so they're ignored.
       #
       # @example
       #   # bad
@@ -34,7 +34,7 @@ module RuboCop
 
         def check(node, text)
           return unless text.is_a?(String) && TEXT.match?(text)
-          return if developer_facing?(node)
+          return if developer_facing?(node) || class_name_option?(node)
           add_offense(node)
         end
 
@@ -44,6 +44,12 @@ module RuboCop
               exception_new?(send) ||
               send.receiver&.source&.match?(/\A(Rails\.)?logger\z/)
           end
+        end
+
+        # e.g. belongs_to :guardian, class_name: "User"
+        def class_name_option?(node)
+          node.parent&.pair_type? && node.parent.value.equal?(node) &&
+            node.parent.key.sym_type? && node.parent.key.value == :class_name
         end
 
         def exception_new?(send)

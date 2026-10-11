@@ -52,4 +52,11 @@ describe RuboCop::Cop::Gather::HardCodedString do
       Rails.logger.info("Request started")
     RUBY
   end
+
+  it "ignores association class names" do
+    expect_no_offenses(<<~RUBY)
+      belongs_to :guardian, class_name: "User"
+      has_many :pets, class_name: "People::Pet", dependent: :destroy
+    RUBY
+  end
 end

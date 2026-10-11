@@ -12,6 +12,56 @@ en:
         select_no_sign_ins: "Select All No-Sign-Ins"
         select_all: "Select All"
         send: "Send Invitations"
+    memorials:
+      created: "Memorial created successfully."
+      updated: "Memorial updated successfully."
+      index:
+        title: "Memorials"
+        create: "Create Memorial"
+        no_memorials: "No memorials found."
+        photo_of: "Photo of %{name}"
+      show:
+        memorials: "Memorials"
+        photo_of: "Photo of %{name}"
+        obituary: "Obituary"
+        community_memories: "Community Memories"
+      new:
+        title: "Create Memorial"
+      edit:
+        title: "Edit Memorial: %{name}"
+    memorial_messages:
+      created: "Thanks for your message."
+      updated: "Message updated successfully."
+      edit:
+        title: "Edit Memorial Message"
+    member_types:
+      created: "Member type created successfully."
+      updated: "Member type updated successfully."
+      index:
+        title: "Member Types"
+        create: "Create Member Type"
+        explanation: "Member types are assigned to households and allow customization of recurring billing charges."
+        no_member_types: "No member types found."
+        name: "Name"
+      new:
+        title: "Create Member Type"
+      edit:
+        title: "Edit Member Type: %{name}"
+    vehicles:
+      index:
+        title: "Vehicles"
+        no_vehicles: "No vehicles found."
+        vehicle: "Make/Model/Color/Plate"
+        owner: "Owner"
+    settings:
+      edit:
+        title: "People Settings"
+    birthdays:
+      index:
+        title: "Birthdays"
+        no_users: "No users found."
+        # Shown when a user's birthday is unknown.
+        unknown: "?"
     password_changes:
       success: "Password changed successfully."
       show:
@@ -46,3 +96,107 @@ en:
         guardian: "They are the guardian of %{names}; delete or reassign those members first."
         external_ward: "Members of this household are the guardian of %{names} in other households; delete or reassign those members first."
         last_admin: "They are the community's only administrator; grant another member the admin role first."
+  users:
+    greeting: "Dear %{name},"
+    photo_of: "Photo of %{name}"
+    confirmation_resent: "Instructions sent."
+    email_change_canceled: "Email change canceled."
+    created: "User created successfully."
+    created_and_invited: "User created and invited successfully."
+    updated: "User updated successfully."
+    profile_updated: "Profile updated successfully."
+    confirm_new_email_self: "You need to confirm your new email address. Please check your email at %{email}."
+    confirm_new_email_other: "This user needs to confirm their new email address (%{email})."
+    invitation_invalidated: "However, this change may have invalidated a sign-in invitation. You may want to send a new one."
+    household_hint:
+      choose_html: "Choose an existing household for this user. If one doesn't exist you must %{link}."
+      create_link: "create it first"
+      child_note: "Due to a system limitation, all Gather users must belong to a single household, but children may have parents or guardians from multiple households. All system functions involving children treat all parents/guardians and all households associated with the child equally."
+    preferred_contact_tooltip: "Prefers to be contacted via: %{method}"
+    all_users: "All Users"
+    index:
+      title: "Directory"
+      print_title: "%{community} Directory"
+      show_action_menu: "Show user action dropdown menu"
+      create_adult: "Create Adult"
+      create_child: "Create Child"
+      invite_to_sign_in: "Invite To Sign In"
+      no_users: "No users found."
+      name: "Name"
+      unit: "Unit"
+      email: "Email"
+      mobile_phone: "Mobile Phone"
+      home_phone: "Home Phone"
+      work_phone: "Work Phone"
+      preferred_contact: "Pref"
+      download_csv: "Download as CSV"
+    show:
+      directory: "Directory"
+      email: "Email"
+      pending_confirmation: "Pending confirmation: %{email}"
+      resend_confirmation: "Resend confirmation instructions"
+      cancel_change: "Cancel change"
+      unconfirmed: "* This address has not yet been confirmed, use with caution."
+      phone: "Phone"
+      preferred_contact: "Preferred Contact Method"
+      birthday: "Birthday"
+      age: "Age"
+      joined_on: "Join Date"
+      recent_head_cook_meals: "Recent Head Cook Meals"
+      date: "Date"
+      meal_title: "Title"
+      signups: "Signups"
+    new:
+      title: "Create User"
+    edit:
+      profile: "Profile"
+      edit_user: "Edit User: %{name}"
+      edit_photo: "Edit Photo: %{name}"
+    full_form:
+      hide_photo_from_cluster: "Don't show photo to users at %{communities}"
+      privacy_hint_html: "For more info on privacy settings, see the %{link}."
+      privacy_policy: "privacy policy"
+      household_info: "Household Info"
+      household_note_named_html: "The below fields are associated with the %{name} household. Changing them here will change them for <em>all users in the household</em>."
+      household_note_unnamed_html: "The below fields are associated with the user's household. Changing them here will change them for <em>all users in the household</em>."
+      move_household_html: "You can also %{link}."
+      move_household_link: "move them to another household"
+  households:
+    greeting: "Dear %{name} Household,"
+    created: "Household created successfully."
+    updated: "Household updated successfully."
+    emergency_contact: "%{name} (%{relationship})"
+    pets:
+      summary: "%{name} (%{color} %{species})"
+      vet: "Vet"
+      caregivers: "Caregivers"
+      health_issues: "Health Issues"
+    # Unit and garage numbers, e.g. "#12".
+    number: "#%{number}"
+    index:
+      title: "Households"
+      create: "Create Household"
+      no_households: "No households found."
+      name: "Name"
+      unit: "Unit #"
+      users: "Users"
+    show:
+      title: "Household: %{name}"
+      households: "Households"
+      missing_photo: "Missing user photo"
+    new:
+      title: "Create Household"
+    edit:
+      title: "Edit Household: %{name}"
+    attribs:
+      household: "Household"
+      members: "Members"
+      vehicles: "Vehicles"
+      garage: "Garage"
+      member_type: "Member Type"
+      emergency_contacts: "Emergency Contacts"
+      pets: "Pets"
+      keyholders: "Extra Unit Keyholders"
+    unit_community:
+      unit: "Unit"
+      community: "Community"

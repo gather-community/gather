@@ -16,7 +16,7 @@ module People
       @memorial_message.assign_attributes(memorial_message_params.merge(author: current_user))
       authorize(@memorial_message)
       @memorial_message.save!
-      flash[:success] = "Thanks for your message."
+      flash[:success] = t("people.memorial_messages.created")
       redirect_to(@memorial_message.memorial)
     end
 
@@ -26,7 +26,7 @@ module People
       if params[:cancel]
         redirect_to(@memorial_message.memorial)
       elsif @memorial_message.update(memorial_message_params)
-        flash[:success] = "Message updated successfully."
+        flash[:success] = t("people.memorial_messages.updated")
         redirect_to(@memorial_message.memorial)
       else
         render(:edit)

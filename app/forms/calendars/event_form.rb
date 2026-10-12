@@ -1,8 +1,20 @@
 # frozen_string_literal: true
 
 module Calendars
+  # Creates and edits events, including repeating ones.
+  #
+  # Editing a repeating event (a "series edit") works from one of its occurrences, the one the user
+  # opened. The form shows that occurrence's times and the series' repeat settings, and the user picks
+  # whether the change applies to all occurrences or to this one and the ones after it (SeriesChoices
+  # says which are allowed). A change of time is the move from that occurrence to the new times, the
+  # same as dragging it, so the series' start is never re-anchored on the opened occurrence.
   class EventForm
     NAME_MAX_LENGTH = 24
+    REPEAT_FIELDS = %i[repeat_frequency repeat_interval repeat_monthly_by repeat_ends repeat_ends_on
+      repeat_count].freeze
+
+    # Attributes a "This and following" edit gives the new series, rather than the original.
+    SPLIT_ATTRIBUTES = %w[name note kind sponsor_id creator_id group_id all_day].freeze
 
     include ActiveModel::Conversion
     include ActiveModel::Validations
@@ -11,7 +23,7 @@ module Calendars
     extend AttributeNormalizer::ClassMethods
 
     # These are persisted attributes that are persisted to the database.
-    delegate :starts_at, :ends_at, :note, :name, :kind, :sponsor_id, :all_day, :creator_id, :group_id, to: :event
+    delegate :note, :name, :kind, :sponsor_id, :all_day, :creator_id, :group_id, to: :event
 
     # These are ephemeral attributes that are not persisted to the database.
     # origin_page tracks the page that the event was created from, so we can redirect back to it after creation.
@@ -20,9 +32,11 @@ module Calendars
 
     alias :all_day? :all_day
 
-    attr_reader :event
+    attr_reader :event, :pattern, :occurrence_start, :series_scope
 
     delegate :creator, to: :event
+    delegate :frequency, :interval, :monthly_by, :ends, :ends_on, :count, to: :pattern, prefix: :repeat,
+      allow_nil: true
 
     normalize_attributes :kind, :note
 
@@ -31,6 +45,8 @@ module Calendars
     validate :guidelines_accepted
     validate :start_before_end
     validate :restrict_changes_in_past
+    validate :repeat_settings_valid
+    validate :series_edit_allowed
     validate :no_overlap
     validate :apply_rules
     validate lambda { |r| meal&.event_handler&.validate_event(r.event) }
@@ -51,6 +67,10 @@ module Calendars
     # params is a hash of parameters that will be used to initialize the event.
     # params can be a regular Hash or an ActionController::Parameters object.
     #
+    # The :edit and :update actions edit a repeating event as a series (see the class comment), with
+    # params[:occurrence_start] naming the occurrence it was opened from. Other callers that set an
+    # event's times directly, such as a drag (EventletForm), use a different action.
+    #
     # This method will filter permitted attributes based on the policy for the event.
     def initialize(action: nil, current_user: nil, event: nil, id: nil, params: nil)
       @current_user = current_user
@@ -69,6 +89,8 @@ module Calendars
         @event = Event.find(id)
       end
 
+      @series_edit = @event.persisted? && @event.recurring? && %i[edit update].include?(@action)
+      extract_series_params(params)
       parse_starts_and_ends_at(params)
       set_default_starts_and_ends_at(params) if @action == :new
 
@@ -93,6 +115,10 @@ module Calendars
 
     def save
       return false unless valid?
+      return save_series_edit if series_edit?
+      if pattern && recurrence_offered?
+        @event.recurrence_rule = pattern.to_rule_hash(starts_at, all_day: all_day?)
+      end
       @event.save
     end
 
@@ -108,7 +134,58 @@ module Calendars
       end
     end
 
+    def series_edit?
+      @series_edit
+    end
+
+    # The start and end shown in the form. In a series edit, they're the opened occurrence's, as
+    # scheduled, so the change is measured from it.
+    def starts_at
+      series_edit? ? (@form_starts_at || occurrence_start) : event.starts_at
+    end
+
+    def ends_at
+      series_edit? ? (@form_ends_at || occurrence_start + series_duration) : event.ends_at
+    end
+
+    # Whether the form offers repeat settings: not for meal events, and only on calendars that allow
+    # repeating events (Calendar#allows_recurring_events?).
+    def recurrence_offered?
+      !event.meal? && repeat_calendars.all?(&:allows_recurring_events?)
+    end
+
+    # Why repeat settings aren't offered here, for the note shown in their place, or nil if they are.
+    def recurrence_blockers
+      return [] if event.meal?
+      repeat_calendars.flat_map(&:recurrence_blockers).uniq
+    end
+
+    # Whether the repeat settings can be edited: a series made elsewhere may repeat in a way the form
+    # can't show (RecurrencePattern.from_rule), and is then kept as it is.
+    def pattern_editable?
+      !pattern.nil?
+    end
+
+    # The opened occurrence on the event's own calendar, with any change to it applied. Nil if it
+    # doesn't exist, e.g. it was deleted in another tab.
+    def opened_occurrence
+      return @opened_occurrence if defined?(@opened_occurrence)
+      @opened_occurrence = OccurrenceResolver.new(primary_eventlet, occurrence_start.to_i).resolve
+    end
+
+    # The event's eventlet on its own calendar.
+    def primary_eventlet
+      event.eventlets.detect { |e| e.calendar_id == event.calendar_id } || event.eventlets.first
+    end
+
+    # The multi-occurrence choices allowed for this series edit, from this occurrence.
+    def series_scope_options
+      series_choices.allowed_scopes
+    end
+
     private
+
+    attr_reader :current_user
 
     delegate(
       :calendar_allows_overlap?,
@@ -135,6 +212,27 @@ module Calendars
       @event_policy ||= EventPolicy.new(@current_user, @event)
     end
 
+    # Repeat settings, and for a series edit the occurrence and the choice of occurrences, aren't event
+    # attributes, so they're taken out before the rest are assigned.
+    def extract_series_params(params)
+      params ||= {}
+      @original_pattern = RecurrencePattern.from_rule(@event.recurrence_rule)
+      repeat_params = REPEAT_FIELDS.index_with { |field| params.delete(field) }
+      @pattern =
+        if repeat_params.values.any?(&:present?) && !@event.meal?
+          RecurrencePattern.new(**repeat_params.transform_keys { |k| k.to_s.delete_prefix("repeat_").to_sym })
+        else
+          @original_pattern
+        end
+      return unless series_edit?
+
+      occurrence_param = params.delete(:occurrence_start)
+      @occurrence_start = occurrence_param.present? ? Time.zone.at(occurrence_param.to_i) : @event.starts_at
+      options = series_scope_options
+      @series_scope = params.delete(:series_scope).presence ||
+        (options.include?("series") ? "series" : options.first)
+    end
+
     def parse_starts_and_ends_at(params)
       if params.present?
         # Parse the starts_at and ends_at from the params if they are present.
@@ -142,8 +240,15 @@ module Calendars
         # because then they would overwrite the values we may set in set_default_starts_and_ends_at.
         starts_at_param = params.delete(:starts_at)
         ends_at_param = params.delete(:ends_at)
-        @event.starts_at = Time.zone.parse(starts_at_param) if starts_at_param.present?
-        @event.ends_at = Time.zone.parse(ends_at_param) if ends_at_param.present?
+        starts = Time.zone.parse(starts_at_param) if starts_at_param.present?
+        ends = Time.zone.parse(ends_at_param) if ends_at_param.present?
+        if series_edit?
+          @form_starts_at = starts
+          @form_ends_at = ends
+        else
+          @event.starts_at = starts if starts
+          @event.ends_at = ends if ends
+        end
       end
     end
 
@@ -168,10 +273,114 @@ module Calendars
 
     def normalize
       @event.all_day = false if rule_set.timed_events_only?
-      return unless all_day?
-      @event.starts_at = starts_at.midnight
-      @event.ends_at = ends_at.midnight + 1.day - 1.second
+      return unless all_day? && starts_at && ends_at
+      assign_times(starts_at.midnight, ends_at.midnight + 1.day - 1.second)
     end
+
+    def assign_times(starts, ends)
+      if series_edit?
+        @form_starts_at = starts
+        @form_ends_at = ends
+      else
+        @event.starts_at = starts
+        @event.ends_at = ends
+      end
+    end
+
+    # === Series edits ===
+
+    def series_choices
+      @series_choices ||= SeriesChoices.new(event: event, occurrence_start: occurrence_start,
+        occurrence_starts_at: opened_occurrence&.starts_at)
+    end
+
+    def effective_series_scope
+      series_choices.effective_scope(series_scope)
+    end
+
+    def series_duration
+      (event.ends_at_in_database || event.ends_at) - (event.starts_at_in_database || event.starts_at)
+    end
+
+    # The move the change makes to the opened occurrence, as wall-clock shifts of its start and end.
+    def start_shift
+      WallClockShift.new(occurrence_start, starts_at)
+    end
+
+    def end_shift
+      WallClockShift.new(occurrence_start + series_duration, ends_at)
+    end
+
+    # Occurrences that have been moved or deleted in the part of the series this edit changes.
+    def changed_occurrences
+      overrides = event.event_overrides.to_a
+      return overrides unless effective_series_scope == "following"
+      overrides.select { |o| o.occurrence_start >= occurrence_start }
+    end
+
+    def days_changed?
+      return false unless @original_pattern && pattern
+      @original_pattern.days_key(occurrence_start) != pattern.days_key(starts_at)
+    end
+
+    def ends_changed?
+      return false unless @original_pattern && pattern
+      @original_pattern.ends_key != pattern.ends_key
+    end
+
+    def save_series_edit
+      ActiveRecord::Base.transaction do
+        (effective_series_scope == "following") ? save_following : save_whole_series
+      end
+      true
+    end
+
+    def save_whole_series
+      shift = start_shift
+      event.starts_at = shift.apply(event.starts_at)
+      event.ends_at = end_shift.apply(event.ends_at)
+      if pattern
+        rule = pattern.to_rule_hash(event.starts_at, all_day: all_day?)
+        drop_overrides_past_end(event.event_overrides, rule, event.starts_at, shift)
+        event.recurrence_rule = rule
+      end
+      clear_offsets(event.eventlets) if event.will_save_change_to_all_day?
+      event.save!
+    end
+
+    # The original keeps everything up to the opened occurrence; the new series starting there gets
+    # the changes. Its rule only changes if the repeat settings did, since otherwise the original's,
+    # picked up from the cut (SeriesSplitter#continuation_rule), is already right.
+    def save_following
+      changes = event.changes.slice(*SPLIT_ATTRIBUTES).transform_values(&:last)
+      event.restore_attributes
+      rule = pattern.to_rule_hash(starts_at, all_day: changes.fetch("all_day", all_day?)) if pattern &&
+        (days_changed? || ends_changed?)
+      split_off = SeriesSplitter.new(event).split_at(occurrence_start, start_shift: start_shift,
+        end_shift: end_shift, rule: rule)
+      split_off.assign_attributes(changes)
+      clear_offsets(split_off.eventlets) if changes.key?("all_day")
+      split_off.save!
+    end
+
+    # Shortening the end leaves changes to occurrences that no longer exist. They're removed, the same
+    # as "delete this and following" does (SeriesSplitter#truncate_before).
+    def drop_overrides_past_end(overrides, rule, new_start, shift)
+      schedule = IceCube::Schedule.new(new_start) { |s| s.add_recurrence_rule(IceCube::Rule.from_hash(rule)) }
+      return unless schedule.terminating?
+      last = schedule.last.to_time
+      overrides.destroy(overrides.select { |o| shift.apply(o.occurrence_start) > last })
+    end
+
+    # An all-day event can't start earlier or later on one calendar than another.
+    def clear_offsets(eventlets)
+      eventlets.each do |eventlet|
+        eventlet.start_offset = 0
+        eventlet.end_offset = 0
+      end
+    end
+
+    # === Validations ===
 
     def guidelines_accepted
       return unless new_record? && calendar.guidelines? && !guidelines_ok?
@@ -197,14 +406,22 @@ module Calendars
       errors.add(:base, :overlap) if query.any?
     end
 
+    # In a series edit, the rules are checked against the edited occurrence's new times.
     def apply_rules
       return if errors.any?
-      rule_set.errors(event).each { |e| errors.add(*e) }
+      target = event
+      if series_edit?
+        target = event.dup.tap { |e| e.assign_attributes(starts_at: starts_at, ends_at: ends_at) }
+      end
+      rule_set.errors(target).each { |e| errors.add(*e) }
     end
 
+    # A series edit follows SeriesChoices instead: whether past occurrences may change depends on which
+    # occurrences the edit applies to.
     def restrict_changes_in_past
       # We don't want to restrict changes in the past for meal events because they are created and updated
       # by the meal event handler.
+      return if series_edit?
       return if !persisted? || recently_created? || event.meal? || event_policy.privileged_change?
       if will_save_change_to_starts_at? && starts_at_was&.past?
         errors.add(:starts_at, :changed_after_start)
@@ -212,6 +429,42 @@ module Calendars
       if will_save_change_to_ends_at? && ends_at&.past? # rubocop:disable Style/GuardClause # || structure
         errors.add(:ends_at, :in_past)
       end
+    end
+
+    def repeat_settings_valid
+      return unless pattern&.recurring?
+      return errors.add(:repeat_frequency, :not_offered) if !series_edit? && !recurrence_offered?
+      unless pattern.valid?
+        pattern.errors.each { |e| errors.add(:"repeat_#{e.attribute}", e.message) }
+        return
+      end
+      return if starts_at.blank? || ends_at.blank?
+      if pattern.ends == "on_date" && pattern.ends_on < starts_at.to_date
+        errors.add(:repeat_ends_on, :before_start)
+      elsif ends_at - starts_at > pattern.min_gap
+        errors.add(:base, :longer_than_repeat)
+      end
+    end
+
+    def series_edit_allowed
+      return unless series_edit?
+      return errors.add(:base, :occurrence_missing) unless opened_occurrence
+      return errors.add(:repeat_frequency, :stop_repeating) if pattern && !pattern.recurring?
+      # The chosen scope's own reason if it has one, e.g. a started series for "All occurrences".
+      refusal = series_choices.refusal(series_scope) ||
+        (series_scope_options.include?(series_scope) ? nil : :no_series_choice)
+      return errors.add(:base, refusal) if refusal
+      return if changed_occurrences.empty?
+      if days_changed?
+        errors.add(:base, :pattern_change_with_changes, count: changed_occurrences.size)
+      elsif event.will_save_change_to_all_day?
+        errors.add(:base, :all_day_change_with_changes, count: changed_occurrences.size)
+      end
+    end
+
+    # The calendars a repeating event would be on: those it's on, or for a new one, its calendar.
+    def repeat_calendars
+      event.eventlets.any? ? event.eventlets.map(&:calendar) : [event.calendar].compact
     end
   end
 end

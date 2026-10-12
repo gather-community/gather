@@ -65,7 +65,9 @@ module Calendars
         id: params[:id],
         params: {
           origin_page: params[:origin_page],
-          guidelines_ok: "1"
+          guidelines_ok: "1",
+          # Which occurrence of a repeating event the form was opened from. See EventForm.
+          occurrence_start: params[:occurrence]
         }
       )
       @event = @form.event

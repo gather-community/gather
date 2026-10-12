@@ -13,13 +13,32 @@ en:
         kind: "Type"
         note: "Note"
         guidelines: "Guidelines"
+        repeat_frequency: "Repeats"
+        repeat_interval: "Every"
+        repeat_monthly_by: "On"
+        repeat_ends: "Ends"
+        repeat_ends_on: "End date"
+        repeat_count: "Number of times"
+        series_scope: "Change"
     errors:
       models:
-        # EventForm, which takes Calendars::Event's model name.
+        # EventForm, which takes Calendars::Event's model name. The series messages match EventletForm's
+        # below, as both use SeriesChoices.
         calendars/event:
           attributes:
             base:
               overlap: "This event overlaps an existing one"
+              series_started: "This series has already started, so changing all occurrences would change past ones. Choose “This and following” to change it from this date on."
+              following_from_past: "This occurrence has already begun, so it and the ones after it can't be changed together. Open a later occurrence to change the series from then on."
+              no_series_choice: "This series can't be changed from this occurrence. Open an occurrence that hasn't happened yet to change the series from then on."
+              occurrence_missing: "This occurrence no longer exists. Go back to the calendar and try again."
+              longer_than_repeat: "The event is longer than the time between repeats, so its occurrences would overlap."
+              pattern_change_with_changes:
+                one: "1 occurrence in the part being changed has been moved or deleted, so the days it repeats on can't change. Undo that change first, or change the series from a later date."
+                other: "%{count} occurrences in the part being changed have been moved or deleted, so the days it repeats on can't change. Undo those changes first, or change the series from a later date."
+              all_day_change_with_changes:
+                one: "1 occurrence in the part being changed has been moved or deleted, so it can't switch between all-day and timed. Undo that change first, or change the series from a later date."
+                other: "%{count} occurrences in the part being changed have been moved or deleted, so it can't switch between all-day and timed. Undo those changes first, or change the series from a later date."
             guidelines:
               not_accepted: "You must agree to the guidelines"
             starts_at:
@@ -27,6 +46,11 @@ en:
             ends_at:
               before_start: "must be after start time"
               in_past: "can't be changed to a time in the past"
+            repeat_frequency:
+              not_offered: "isn't available on this calendar"
+              stop_repeating: "can't be changed to Never. To stop the series, delete this and the following occurrences."
+            repeat_ends_on:
+              before_start: "must be on or after the start date"
         # EventletForm (drag-and-drop) and EventletDeletionForm, which take Calendars::Eventlet's model name.
         calendars/eventlet:
           attributes:

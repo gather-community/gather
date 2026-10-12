@@ -131,10 +131,9 @@ module Calendars
     end
 
     # "Following" from the series' first occurrence leaves nothing behind, so it's treated as moving
-    # the whole series.
+    # the whole series. See SeriesChoices.
     def effective_series_scope
-      return series_scope unless series_scope == "following" && event.recurring? && occurrence_start
-      event.schedule.previous_occurrence(occurrence_start) ? "following" : "series"
+      series_choices.effective_scope(series_scope)
     end
 
     def persisted?
@@ -160,6 +159,11 @@ module Calendars
         end
     end
 
+    def series_choices
+      @series_choices ||= SeriesChoices.new(event: event, occurrence_start: occurrence_start,
+        occurrence_starts_at: occurrence&.starts_at)
+    end
+
     def recurring_series_move?
       effective_series_scope == "series" && event.recurring?
     end
@@ -177,7 +181,8 @@ module Calendars
     def move_event
       # Loaded before the event moves; Event re-keys these same records in place when it saves.
       dragged_override = existing_event_override if event.recurring?
-      form = EventForm.new(action: :update, current_user: current_user, event: event,
+      # :move rather than :update, which would edit the series from an occurrence (EventForm).
+      form = EventForm.new(action: :move, current_user: current_user, event: event,
         params: {starts_at: start_shift.apply(event.starts_at).iso8601,
                  ends_at: end_shift.apply(event.ends_at).iso8601})
       unless form.save
@@ -388,21 +393,18 @@ module Calendars
       occurrence.nil? || eventlet.meal? || eventlet_policy.privileged_change? || eventlet.recently_created?
     end
 
-    # Moving every occurrence of a series that has started would move past ones too, which nobody,
-    # admins included, should do as a side effect. "Started" goes by the schedule's first slot, so a
-    # series whose first occurrence was deleted or moved later still counts.
+    # Moving every occurrence of a series that has started would move past ones too. See SeriesChoices.
     def restrict_series_moves_after_start
       return unless recurring_series_move?
-      return if event.recently_created? || !event.starts_at.past?
-      errors.add(:base, :series_started)
+      refusal = series_choices.refusal("series")
+      errors.add(:base, refusal) if refusal
     end
 
-    # The same rule for "This and following": the occurrences it moves must all be in the future. The
-    # dragged occurrence is the earliest of them, so it's the one checked, by where it was before the
-    # drag; where it's dropped doesn't matter. Applies to admins too.
+    # "This and following" from an occurrence that has begun would move it. See SeriesChoices.
     def restrict_following_from_past
-      return unless effective_series_scope == "following" && occurrence&.starts_at&.past?
-      errors.add(:base, :following_from_past)
+      return unless effective_series_scope == "following" && occurrence
+      refusal = series_choices.refusal("following")
+      errors.add(:base, refusal) if refusal
     end
 
     # A rule pinned to particular days or times (e.g. "every Tuesday") can't follow its start to a

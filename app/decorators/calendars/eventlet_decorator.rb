@@ -25,10 +25,17 @@ module Calendars
 
     def show_action_link_set
       ActionLinkSet.new(
+        # The occurrence goes along so the event form edits the series from this occurrence on.
         ActionLink.new(series_event, :edit, icon: "pencil",
-          path: h.edit_calendars_event_path(series_event, url_params)),
+          path: h.edit_calendars_event_path(series_event,
+            url_params.merge(occurrence: object.occurrence_start&.to_i))),
         delete_action_link
       )
+    end
+
+    # On the event form for a repeating event: deleting asks which occurrences, as on this page.
+    def edit_action_link_set
+      ActionLinkSet.new(delete_action_link)
     end
 
     # Human-readable recurrence pattern, e.g. "Weekly on Mondays at 6:00pm until Aug 31 2026".

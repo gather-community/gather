@@ -105,3 +105,61 @@ describe "calendar events JSON endpoint" do
     end
   end
 end
+
+# Editing a repeating event works from the occurrence it was opened from. See Calendars::EventForm.
+describe "calendar event edit page for a repeating event" do
+  let(:community) { create(:community) }
+  let!(:user) { create(:user, community: community) }
+  let!(:calendar) { create(:calendar, community: community, allow_overlap: true) }
+  let(:start) { Time.zone.now.next_week.midnight + 18.hours }
+  let!(:event) do
+    create(:event, calendar: calendar, creator: user, name: "Book club", starts_at: start,
+      ends_at: start + 1.hour, recurrence_rule: IceCube::Rule.weekly.day(start.wday).to_hash)
+  end
+  let(:eventlet) { event.eventlets.first }
+  let(:occurrence) { start + 2.weeks }
+
+  before do
+    use_user_subdomain(user)
+    sign_in(user)
+  end
+
+  it "links from an occurrence's page to editing from that occurrence" do
+    get(calendars_eventlet_path(eventlet, occurrence: occurrence.to_i))
+    edit_path = edit_calendars_event_path(event, occurrence: occurrence.to_i)
+    expect(response.body).to include(edit_path.gsub("&", "&amp;"))
+  end
+
+  it "shows the occurrence's times and the choice of which occurrences to change" do
+    get(edit_calendars_event_path(event, occurrence: occurrence.to_i))
+
+    expect(response).to have_http_status(:ok)
+    page = Capybara.string(response.body)
+    # The opened occurrence's date, not the series' first. (The picker pads the hour with a space.)
+    expect(page.find_field("calendars_event[starts_at]").value.squish)
+      .to eq(I18n.l(occurrence, format: "%a %b %d %Y %l:%M%P").squish)
+    expect(page).to have_field("calendars_event[series_scope]", with: "series")
+    expect(page).to have_field("calendars_event[series_scope]", with: "following")
+    expect(page).to have_field("calendars_event[occurrence_start]", type: :hidden, with: occurrence.to_i.to_s)
+  end
+
+  it "deletes the way the occurrence page does, asking which occurrences" do
+    get(edit_calendars_event_path(event, occurrence: occurrence.to_i))
+    page = Capybara.string(response.body)
+    expect(page).to have_css("a[data-controller='calendars--eventlet-delete']")
+    expect(page).to have_no_css("a[href='#{calendars_event_path(event)}'][data-method='delete']")
+  end
+
+  it "saves this and following as a new series" do
+    patch(calendars_event_path(event), params: {calendars_event: {
+      occurrence_start: occurrence.to_i, series_scope: "following", name: "Reading group",
+      starts_at: occurrence.iso8601, ends_at: (occurrence + 1.hour).iso8601
+    }})
+
+    expect(response).to have_http_status(:redirect)
+    expect(event.reload.name).to eq("Book club")
+    ActsAsTenant.with_tenant(event.cluster) do
+      expect(Calendars::Event.where.not(id: event.id).sole.name).to eq("Reading group")
+    end
+  end
+end

@@ -422,4 +422,350 @@ describe Calendars::EventForm do
       end
     end
   end
+
+  # See EventForm's class comment for how a repeating event is created and edited.
+  describe "repeating events" do
+    let(:allow_overlap) { true }
+    # Mondays at 6pm, starting next week, so nothing is in the past.
+    let(:start) { Time.zone.now.next_week.midnight + 18.hours }
+    let(:repeat_defaults) do
+      {repeat_frequency: "weekly", repeat_interval: "1", repeat_monthly_by: "day_of_month",
+       repeat_ends: "never"}
+    end
+
+    def wk(n)
+      start + n.weeks
+    end
+
+    def create_form(starts_at: start, ends_at: start + 1.hour, all_day: false, on: calendar, **repeat)
+      described_class.new(action: :create, current_user: current_user,
+        params: {calendar_id: on.id, name: "Book club", guidelines_ok: "1", all_day: all_day,
+                 starts_at: starts_at.iso8601, ends_at: ends_at.iso8601, **repeat_defaults, **repeat})
+    end
+
+    def first_starts(event, count = 4)
+      event.reload.schedule.first(count).map(&:to_time)
+    end
+
+    describe "creating" do
+      it "saves a weekly series starting on the start date" do
+        form = create_form
+        expect(form.save).to be(true)
+        expect(first_starts(form.event)).to eq([wk(0), wk(1), wk(2), wk(3)])
+      end
+
+      it "saves a daily series every N days" do
+        form = create_form(repeat_frequency: "daily", repeat_interval: "3")
+        expect(form.save).to be(true)
+        expect(first_starts(form.event, 3)).to eq([start, start + 3.days, start + 6.days])
+      end
+
+      it "saves a monthly series on the start's nth weekday" do
+        form = create_form(repeat_frequency: "monthly", repeat_monthly_by: "day_of_week")
+        expect(form.save).to be(true)
+        nth = ((start.day - 1) / 7) + 1
+        expect(first_starts(form.event, 3).map { |t| [t.wday, [((t.day - 1) / 7) + 1, nth].min] })
+          .to all(eq([start.wday, [nth, 4].min]))
+      end
+
+      it "saves a yearly series" do
+        form = create_form(repeat_frequency: "yearly")
+        expect(form.save).to be(true)
+        expect(first_starts(form.event, 2)).to eq([start, start + 1.year])
+      end
+
+      it "ends on a date" do
+        form = create_form(repeat_ends: "on_date", repeat_ends_on: I18n.l(wk(2).to_date, format: "%b %d %Y"))
+        expect(form.save).to be(true)
+        expect(first_starts(form.event, 10)).to eq([wk(0), wk(1), wk(2)])
+        expect(form.event.recurrence_end_date).to eq(wk(2).to_date)
+      end
+
+      it "ends after a number of times" do
+        form = create_form(repeat_ends: "after_count", repeat_count: "5")
+        expect(form.save).to be(true)
+        expect(first_starts(form.event, 10).size).to eq(5)
+      end
+
+      it "saves an all-day series" do
+        day = start.to_date
+        form = create_form(all_day: true, starts_at: day.in_time_zone, ends_at: day.in_time_zone,
+          repeat_ends: "on_date", repeat_ends_on: (day + 14).to_s)
+        expect(form.save).to be(true)
+        expect(first_starts(form.event, 10).map(&:to_date)).to eq([day, day + 7, day + 14])
+      end
+
+      it "keeps the local time across a DST change" do
+        Time.use_zone("America/Toronto") do
+          dst_start = Time.zone.parse("2030-10-28 19:00")
+          form = create_form(starts_at: dst_start, ends_at: dst_start + 1.hour)
+          expect(form.save).to be(true)
+          expect(first_starts(form.event, 2).last.strftime("%H:%M %Z")).to eq("19:00 EST")
+        end
+      end
+
+      it "doesn't repeat when Repeats is Never" do
+        form = create_form(repeat_frequency: "none")
+        expect(form.save).to be(true)
+        expect(form.event.reload).not_to be_recurring
+      end
+
+      it "makes an existing one-off event repeat" do
+        event = create(:event, calendar: calendar, creator: current_user, starts_at: start,
+          ends_at: start + 1.hour)
+        form = described_class.new(action: :update, current_user: current_user, id: event.id,
+          params: {guidelines_ok: "1", **repeat_defaults})
+        expect(form.save).to be(true)
+        expect(first_starts(event, 2)).to eq([wk(0), wk(1)])
+      end
+
+      describe "refusals" do
+        it "refuses an end date before the start" do
+          form = create_form(repeat_ends: "on_date", repeat_ends_on: (start.to_date - 1).to_s)
+          expect(form.save).to be(false)
+          expect(form.errors[:repeat_ends_on]).to include("must be on or after the start date")
+        end
+
+        it "refuses an event longer than the time between repeats" do
+          form = create_form(repeat_frequency: "daily", ends_at: start + 25.hours)
+          expect(form.save).to be(false)
+          expect(form.errors[:base].join).to match(/longer than the time between repeats/)
+        end
+
+        it "refuses a count below two and an interval below one" do
+          expect(create_form(repeat_ends: "after_count", repeat_count: "1").tap(&:save).errors[:repeat_count])
+            .to be_present
+          expect(create_form(repeat_interval: "0").tap(&:save).errors[:repeat_interval]).to be_present
+        end
+
+        context "on a calendar that doesn't allow repeating events" do
+          let(:allow_overlap) { false }
+
+          it "says so, and why" do
+            form = create_form
+            expect(form.recurrence_offered?).to be(false)
+            expect(form.recurrence_blockers).to eq([:overlap_not_allowed])
+            expect(form.save).to be(false)
+            expect(form.errors[:repeat_frequency]).to include("isn't available on this calendar")
+          end
+        end
+      end
+
+      it "ignores repeat settings on a meal event" do
+        meal = create(:meal, calendars: [calendar])
+        event = create(:event, creator: nil, calendar: calendar, meal: meal, kind: "_meal",
+          starts_at: meal.served_at - 1.hour, ends_at: meal.served_at + 1.hour)
+        form = described_class.new(action: :update, current_user: create(:admin), id: event.id,
+          params: {guidelines_ok: "1", **repeat_defaults})
+        expect(form.recurrence_offered?).to be(false)
+        form.save
+        expect(event.reload).not_to be_recurring
+      end
+    end
+
+    describe "editing a series" do
+      let!(:event) do
+        create(:event, calendar: calendar, creator: current_user, name: "Book club", starts_at: start,
+          ends_at: start + 1.hour,
+          recurrence_rule: IceCube::Rule.weekly.day(start.wday).to_hash).tap do |e|
+          e.update_columns(created_at: 1.week.ago)
+          e.eventlets.update_all(created_at: 1.week.ago)
+        end
+      end
+
+      def edit_form(occurrence:, scope: nil, user: current_user, **params)
+        described_class.new(action: :update, current_user: user, id: event.id,
+          params: {guidelines_ok: "1", occurrence_start: occurrence.to_i, series_scope: scope, **params})
+      end
+
+      def split_off
+        Calendars::Event.where.not(id: event.id).sole
+      end
+
+      it "shows the opened occurrence's times" do
+        form = edit_form(occurrence: wk(2))
+        expect([form.starts_at, form.ends_at]).to eq([wk(2), wk(2) + 1.hour])
+      end
+
+      it "offers both choices before the series starts, defaulting to all occurrences" do
+        form = edit_form(occurrence: wk(2))
+        expect(form.series_scope_options).to eq(%w[following series])
+        expect(form.series_scope).to eq("series")
+      end
+
+      it "doesn't offer this and following from the first occurrence" do
+        expect(edit_form(occurrence: wk(0)).series_scope_options).to eq(%w[series])
+      end
+
+      describe "all occurrences" do
+        it "moves every occurrence by the change to the opened one, without re-anchoring on it" do
+          form = edit_form(occurrence: wk(2), scope: "series",
+            starts_at: (wk(2) + 1.hour).iso8601, ends_at: (wk(2) + 2.hours).iso8601)
+          expect(form.save).to be(true)
+          expect(first_starts(event)).to eq([wk(0), wk(1), wk(2), wk(3)].map { |t| t + 1.hour })
+        end
+
+        it "changes other fields on every occurrence" do
+          expect(edit_form(occurrence: wk(2), scope: "series", name: "Reading group").save).to be(true)
+          expect(event.reload.name).to eq("Reading group")
+          expect(Calendars::Event.count).to eq(1)
+        end
+      end
+
+      describe "this and following" do
+        it "gives the change to a new series from the opened occurrence, leaving earlier ones" do
+          expect(edit_form(occurrence: wk(2), scope: "following", name: "Reading group").save).to be(true)
+
+          expect(event.reload.name).to eq("Book club")
+          expect(first_starts(event, 10)).to eq([wk(0), wk(1)])
+          expect(split_off.name).to eq("Reading group")
+          expect(first_starts(split_off, 2)).to eq([wk(2), wk(3)])
+        end
+
+        it "moves the new series by the change to the opened occurrence" do
+          form = edit_form(occurrence: wk(2), scope: "following",
+            starts_at: (wk(2) + 1.day + 1.hour).iso8601, ends_at: (wk(2) + 1.day + 2.hours).iso8601)
+          expect(form.save).to be(true)
+          expect(first_starts(event, 10)).to eq([wk(0), wk(1)])
+          expect(first_starts(split_off, 2)).to eq([wk(2) + 1.day + 1.hour, wk(3) + 1.day + 1.hour])
+        end
+      end
+
+      context "once the series has started" do
+        before { Timecop.freeze(start + 1.day) }
+        after { Timecop.return }
+
+        it "offers only this and following, from a future occurrence" do
+          expect(edit_form(occurrence: wk(2)).series_scope_options).to eq(%w[following])
+        end
+
+        it "refuses all occurrences, even for an admin" do
+          form = edit_form(occurrence: wk(2), scope: "series", user: create(:admin), name: "Renamed")
+          expect(form.save).to be(false)
+          expect(form.errors[:base].join).to match(/already started/)
+          expect(event.reload.name).to eq("Book club")
+        end
+
+        it "offers nothing from a past occurrence" do
+          form = edit_form(occurrence: wk(0), name: "Renamed")
+          expect(form.series_scope_options).to be_empty
+          expect(form.save).to be(false)
+          expect(form.errors[:base].join).to match(/can't be changed from this occurrence/)
+        end
+      end
+
+      describe "changing the pattern" do
+        def daily
+          repeat_defaults.merge(repeat_frequency: "daily")
+        end
+
+        it "is allowed with no changed occurrences" do
+          expect(edit_form(occurrence: wk(1), scope: "series", **daily).save).to be(true)
+          expect(first_starts(event, 3)).to eq([start, start + 1.day, start + 2.days])
+        end
+
+        context "with a deleted occurrence" do
+          before { create(:event_override, event: event, occurrence_start: wk(3), deleted: true) }
+
+          it "is refused for the part with it" do
+            form = edit_form(occurrence: wk(1), scope: "series", **daily)
+            expect(form.save).to be(false)
+            expect(form.errors[:base].join).to match(/1 occurrence in the part being changed/)
+          end
+
+          it "is allowed from after it" do
+            expect(edit_form(occurrence: wk(4), scope: "following", **daily).save).to be(true)
+            expect(first_starts(split_off, 2)).to eq([wk(4), wk(4) + 1.day])
+          end
+        end
+
+        it "counts a move to another weekday" do
+          create(:event_override, event: event, occurrence_start: wk(3), deleted: true)
+          form = edit_form(occurrence: wk(1), scope: "series", **repeat_defaults,
+            starts_at: (wk(1) + 1.day).iso8601, ends_at: (wk(1) + 1.day + 1.hour).iso8601)
+          expect(form.save).to be(false)
+          expect(form.errors[:base].join).to match(/days it repeats on/)
+        end
+      end
+
+      describe "changing the end" do
+        it "removes changes to occurrences past a new, earlier end" do
+          kept = create(:event_override, event: event, occurrence_start: wk(1), deleted: true)
+          dropped = create(:event_override, event: event, occurrence_start: wk(5), deleted: true)
+          form = edit_form(occurrence: wk(0), scope: "series", **repeat_defaults,
+            repeat_ends: "on_date", repeat_ends_on: wk(3).to_date.to_s)
+
+          expect(form.save).to be(true)
+          expect(first_starts(event, 10).last).to eq(wk(3))
+          expect(Calendars::EventOverride.where(id: kept.id)).to exist
+          expect(Calendars::EventOverride.where(id: dropped.id)).not_to exist
+        end
+
+        it "can end after a number of times" do
+          form = edit_form(occurrence: wk(0), scope: "series", **repeat_defaults,
+            repeat_ends: "after_count", repeat_count: "3")
+          expect(form.save).to be(true)
+          expect(first_starts(event, 10).size).to eq(3)
+        end
+      end
+
+      describe "switching to all-day" do
+        it "is refused with changed occurrences" do
+          create(:event_override, event: event, occurrence_start: wk(3), deleted: true)
+          form = edit_form(occurrence: wk(0), scope: "series", all_day: true)
+          expect(form.save).to be(false)
+          expect(form.errors[:base].join).to match(/switch between all-day and timed/)
+        end
+
+        it "clears each calendar's offsets" do
+          event.eventlets.first.update!(start_offset: -30.minutes.to_i, end_offset: 30.minutes.to_i)
+          expect(edit_form(occurrence: wk(0), scope: "series", all_day: true).save).to be(true)
+          expect(event.reload).to be_all_day
+          expect(event.eventlets.map { |e| [e.start_offset, e.end_offset] }).to eq([[0, 0]])
+        end
+
+        it "makes only the new series all-day with this and following" do
+          event.eventlets.first.update!(start_offset: -30.minutes.to_i, end_offset: 30.minutes.to_i)
+          expect(edit_form(occurrence: wk(2), scope: "following", all_day: true).save).to be(true)
+          expect(event.reload).not_to be_all_day
+          expect(split_off).to be_all_day
+          expect(split_off.eventlets.map { |e| [e.start_offset, e.end_offset] }).to eq([[0, 0]])
+        end
+      end
+
+      it "refuses changing Repeats to Never" do
+        form = edit_form(occurrence: wk(0), scope: "series", **repeat_defaults, repeat_frequency: "none")
+        expect(form.save).to be(false)
+        expect(form.errors[:repeat_frequency].join).to match(/delete this and the following/)
+      end
+
+      it "refuses editing from an occurrence deleted in the meantime" do
+        create(:event_override, event: event, occurrence_start: wk(2), deleted: true)
+        form = edit_form(occurrence: wk(2), scope: "following", name: "Renamed")
+        expect(form.save).to be(false)
+        expect(form.errors[:base].join).to match(/no longer exists/)
+      end
+
+      it "checks protocol rules against the new times" do
+        create(:calendar_protocol, calendars: [calendar], max_length_minutes: 60)
+        form = edit_form(occurrence: wk(2), scope: "series",
+          starts_at: wk(2).iso8601, ends_at: (wk(2) + 2.hours).iso8601)
+        expect(form.save).to be(false)
+        expect(form.errors.full_messages.join).to match(/1 hour/)
+      end
+
+      context "with a pattern the form can't show" do
+        before { event.update!(recurrence_rule: IceCube::Rule.weekly.day(:monday, :thursday).to_hash) }
+
+        it "keeps the pattern while changing other things" do
+          rule = event.reload.recurrence_rule
+          form = edit_form(occurrence: event.starts_at, scope: "series", name: "Renamed")
+          expect(form.pattern_editable?).to be(false)
+          expect(form.save).to be(true)
+          expect(event.reload.recurrence_rule).to eq(rule)
+          expect(event.name).to eq("Renamed")
+        end
+      end
+    end
+  end
 end

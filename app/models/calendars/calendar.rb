@@ -105,7 +105,17 @@ module Calendars
     # allows overlaps, with none of the protocol rules a series can't keep to
     # (Protocol::RECURRENCE_BLOCKING_RULES).
     def allows_recurring_events?
-      allow_overlap? && Protocol.matching(self, :any).none?(&:blocks_recurrence?)
+      recurrence_blockers.empty?
+    end
+
+    # Why repeating events aren't allowed here, as symbols: :overlap_not_allowed and/or the names of
+    # the protocol rules that block them. Empty if they're allowed.
+    def recurrence_blockers
+      blockers = allow_overlap? ? [] : [:overlap_not_allowed]
+      rules = Protocol.matching(self, :any).flat_map do |protocol|
+        Protocol::RECURRENCE_BLOCKING_RULES.select { |rule| protocol[rule].present? }
+      end
+      blockers + rules.uniq
     end
 
     # Whether a repeating event on this calendar has an occurrence today or later. Series that have

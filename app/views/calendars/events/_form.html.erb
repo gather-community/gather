@@ -3,6 +3,9 @@
 
   <%= f.hidden_field :calendar_id %>
   <%= f.hidden_field :origin_page %>
+  <% if @form.series_edit? %>
+    <%= f.hidden_field :occurrence_start, value: @form.occurrence_start.to_i %>
+  <% end %>
   <%= f.input :calendar do %>
     <%= image_tag(calendar.photo_variant(:thumb), alt: calendar.name) %><br/>
     <%= calendar.name %>
@@ -38,6 +41,8 @@
 
   <%= f.input :ends_at, as: :datetime_picker, include_day_of_week: true,
     wrapper_html: { class: event.fixed_end_time? ? "no-time-picker" : "" } %>
+
+  <%= render("repeat_fields", f: f) %>
 
   <% unless event.meal? %>
     <% if @kinds.present? && event.requires_kind? %>

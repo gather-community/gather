@@ -13,12 +13,15 @@ declare const Gather: any;
  * The event form's behavior in the browser:
  * - shows only the pre-notices for the chosen kind (ones that don't name kinds always show);
  * - drops the time from the date pickers while "All-day event" is ticked;
+ * - shows only the repeat fields that apply (see _repeat_fields.html.erb), and keeps the unit after the
+ *   interval ("weeks") in step with the frequency and number;
  * - starts the shared Backbone helpers the form uses: the searchable pickers for the creator and
  *   sponsor, and the unsaved-changes check. Those are used across many forms, so they're started
  *   from here rather than converted with this form.
  */
 export default class extends Controller<HTMLFormElement> {
-  static targets = ["kind", "allDay", "kindNotice"];
+  static targets = ["kind", "allDay", "kindNotice", "repeatFrequency", "repeatInterval", "repeatEnds",
+    "repeatDetail"];
   static values = {communityId: Number};
 
   declare readonly hasKindTarget: boolean;
@@ -26,6 +29,11 @@ export default class extends Controller<HTMLFormElement> {
   declare readonly hasAllDayTarget: boolean;
   declare readonly allDayTarget: HTMLInputElement;
   declare readonly kindNoticeTargets: HTMLElement[];
+  declare readonly hasRepeatFrequencyTarget: boolean;
+  declare readonly repeatFrequencyTarget: HTMLSelectElement;
+  declare readonly repeatIntervalTarget: HTMLInputElement;
+  declare readonly repeatEndsTarget: HTMLSelectElement;
+  declare readonly repeatDetailTargets: HTMLElement[];
   declare readonly communityIdValue: number;
 
   private dateFormat: string = null;
@@ -36,6 +44,7 @@ export default class extends Controller<HTMLFormElement> {
       this.dateFormat = $(this.element).find(".datetimepicker input").data("dateOptions").format;
       this.kindChanged();
       this.allDayChanged();
+      this.repeatChanged();
 
       new Gather.Views.AjaxSelect2({
         el: ".calendars_event_sponsor_id",
@@ -69,5 +78,35 @@ export default class extends Controller<HTMLFormElement> {
     $(this.element).find(".datetimepicker").each((_: number, el: HTMLElement) => {
       $(el).data("DateTimePicker").format(format);
     });
+  }
+
+  /*
+   * Each repeat detail field names when it's shown in data-repeat-show: "repeats" whenever the event
+   * repeats, "monthly" for a monthly series, and "on_date" or "after_count" for that kind of end.
+   */
+  repeatChanged() {
+    if (!this.hasRepeatFrequencyTarget) {
+      return;
+    }
+    const frequency = this.repeatFrequencyTarget.value;
+    const repeats = Boolean(frequency) && frequency !== "none";
+    const ends = this.repeatEndsTarget.value;
+    const shown: Record<string, boolean> = {
+      repeats,
+      monthly: frequency === "monthly",
+      "on_date": repeats && ends === "on_date",
+      "after_count": repeats && ends === "after_count",
+    };
+    this.repeatDetailTargets.forEach((field) => {
+      field.style.display = shown[field.dataset.repeatShow] ? "" : "none";
+    });
+
+    // The units are translated on the server: {"weekly": {"one": "week", "other": "weeks"}, ...}.
+    const units = JSON.parse(this.repeatIntervalTarget.dataset.units || "{}");
+    const hint = this.repeatIntervalTarget.closest(".form-group")?.querySelector(".hint");
+    if (repeats && units[frequency] && hint) {
+      const count = parseInt(this.repeatIntervalTarget.value, 10);
+      hint.textContent = count === 1 ? units[frequency].one : units[frequency].other;
+    }
   }
 }

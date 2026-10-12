@@ -137,6 +137,31 @@ en:
         title: "Edit Event: %{name}"
       form:
         agree_to_guidelines: "I agree to the above guidelines"
+      # Repeat settings in the event form.
+      repeat_fields:
+        repeat_units:
+          daily:
+            one: "day"
+            other: "days"
+          weekly:
+            one: "week"
+            other: "weeks"
+          monthly:
+            one: "month"
+            other: "months"
+          yearly:
+            one: "year"
+            other: "years"
+        series_note: "Opened from the occurrence on %{date}. Changes start from this occurrence."
+        pattern_fixed: "This event repeats in a way this form can't show (%{description}), so its repeat settings can't be changed here."
+        recurrence_unavailable: "Repeating events aren't available on this calendar because %{reasons}."
+        recurrence_blockers:
+          overlap_not_allowed: "events on it can't overlap"
+          fixed_start_time: "it has a fixed start time"
+          fixed_end_time: "it has a fixed end time"
+          max_lead_days: "it limits how far ahead events can be booked"
+          max_days_per_year: "it limits the days booked per year"
+          max_minutes_per_year: "it limits the time booked per year"
     eventlets:
       show:
         title: "Event: %{name}"

@@ -39,8 +39,13 @@ module Calendars
     # moved keeps its own time and a calendar-only change follows its occurrence. Overrides are moved
     # through the original event's association, so any a caller already has loaded are updated in
     # place rather than left pointing at the old event.
-    def split_at(occurrence_start, start_shift:, end_shift:)
+    #
+    # rule replaces the rule the new series would otherwise carry on with, for a split that also changes
+    # how it repeats (EventForm). Changes past a shortened end are dropped rather than moved, as their
+    # occurrences no longer exist.
+    def split_at(occurrence_start, start_shift:, end_shift:, rule: nil)
       continuation = build_continuation(occurrence_start, start_shift, end_shift)
+      continuation.recurrence_rule = rule if rule
       continuation.save!
       move_overrides(occurrence_start, continuation, start_shift)
       # Last, since it destroys any overrides still on the original event from the cut on.
@@ -80,7 +85,10 @@ module Calendars
 
     def move_overrides(occurrence_start, continuation, start_shift)
       eventlets_by_calendar = continuation.eventlets.index_by(&:calendar_id)
+      last = continuation.schedule.terminating? ? continuation.schedule.last.to_time : nil
       moving = event.event_overrides.select { |o| o.occurrence_start >= occurrence_start }
+      past_end, moving = moving.partition { |o| last && start_shift.apply(o.occurrence_start) > last }
+      past_end.each(&:destroy!)
       moving.each do |override|
         override.update!(event: continuation, occurrence_start: start_shift.apply(override.occurrence_start))
         override.eventlet_overrides.each do |eo|

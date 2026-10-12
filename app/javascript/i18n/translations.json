@@ -76,10 +76,6 @@
       "unknown": "Unknown",
       "unlimited": "Unlimited",
       "with_inactive": "%{name} (Inactive)",
-      "worker": {
-        "one": "worker",
-        "other": "workers"
-      },
       "yes": "Yes"
     },
     "datepicker": {
@@ -107,6 +103,34 @@
     "errors": {
       "messages": {
         "doesnt_match": "Doesn't match password"
+      }
+    },
+    "meals": {
+      "report_charts": {
+        "avg_cost": "Avg. Cost",
+        "avg_full_meal_price": "Avg. Full Meal Price",
+        "avg_servings": "Avg. Servings",
+        "avg_servings_per_meal": "Avg. Servings per Meal",
+        "meals": "Meals",
+        "month": "Month",
+        "number_of_meals": "Number of Meals",
+        "titles": {
+          "community_rep": "Avg. Community Representation at Meals",
+          "community_rep_community": "Avg. Community Representation at %{community} Meals",
+          "cost_by_month": "Avg. Full Meal Price by Month",
+          "cost_by_month_community": "Avg. Full %{community} Meal Price by Month",
+          "cost_by_weekday": "Avg. Full Meal Price by Weekday",
+          "cost_by_weekday_community": "Avg. Full %{community} Meal Price by Weekday",
+          "meal_types": "Avg. Meal Types at Meals",
+          "meal_types_community": "Avg. Meal Types at %{community} Meals",
+          "meals_by_month": "Number of Meals by Month",
+          "meals_by_month_community": "Number of %{community} Meals by Month",
+          "servings_by_month": "Avg. Servings per Meal by Month",
+          "servings_by_month_community": "Avg. Servings per %{community} Meal by Month",
+          "servings_by_weekday": "Avg. Servings per Meal by Weekday",
+          "servings_by_weekday_community": "Avg. Servings per %{community} Meal by Weekday"
+        },
+        "weekday": "Weekday"
       }
     },
     "meals/assignments": {

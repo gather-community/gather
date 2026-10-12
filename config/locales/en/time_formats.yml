@@ -13,6 +13,8 @@ en:
       month_year: "%b %Y"
       # Month and day without year, e.g. "Jun 21" (birthdays, yearly recurrence descriptions).
       month_day: "%b %d"
+      # Abbreviated weekday only, e.g. "Mon" (meals report chart labels).
+      wday: "%a"
       wday_no_year: "%a %b %d"
       full_wday_only: "%A"
   time:

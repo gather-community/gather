@@ -32,9 +32,6 @@ en:
     "true": "True"
     unknown: "Unknown"
     unlimited: "Unlimited"
-    worker:
-      one: "worker"
-      other: "workers"
     "yes": "Yes"
     time_with_preposition:
       "on": "on %{t}"
@@ -533,24 +530,6 @@ en:
       home: "h"
       work: "w"
       mobile: "m"
-
-  meal_mailer:
-    meal_reminder:
-      subject: "Meal Reminder: %{datetime} - %{title} at %{location}"
-      body:
-        diner_count:
-          one: "There is %{count} diner signed up from your household."
-          other: "There are %{count} diners signed up from your household."
-    role_reminder:
-      subject: "Job Reminder: %{role} on %{datetime} at %{location}%{note}"
-    worker_change_notice:
-      subject: "Meal Job Assignment Change Notice"
-    cook_menu_reminder:
-      subject: "Menu Reminder: Please Post Menu for %{date}"
-    normal_message:
-      subject: "Message about Meal on %{datetime}"
-    cancellation_message:
-      subject: "Meal on %{datetime} CANCELLED"
 
   work_mailer:
     job_reminder:

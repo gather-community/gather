@@ -105,4 +105,16 @@ Gather/HardCodedString:
     - app/models/user.rb
     - app/models/household.rb
     - app/models/people/**/*.rb
+    - app/controllers/meals/meals_controller.rb
+    - app/controllers/meals/messages_controller.rb
+    - app/controllers/meals/signups_controller.rb
+    - app/controllers/meals/finalize_controller.rb
+    - app/controllers/meals/settings_controller.rb
+    - app/decorators/meals/meal_decorator.rb
+    - app/decorators/meals/portion_count_builder.rb
+    - app/decorators/meals/signup_decorator.rb
+    - app/decorators/meals/report_decorator.rb
+    - app/helpers/meals_helper.rb
+    - app/mailers/meal_mailer.rb
+    - app/models/meals/report.rb
     - app/mailers/auth_mailer.rb

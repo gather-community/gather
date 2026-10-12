@@ -1,8 +1,12 @@
 <%= @household.greeting %>
 
-This is a reminder that you are signed up for the meal '<%= @meal.title_or_no_title %>' on <%= @meal.served_at_wday_no_year %><%= @meal.location_name_with_at %>.
+<% if @meal.location_name -%>
+<%= t(".reminder_at_location", title: @meal.title_or_no_title, date: @meal.served_at_wday_no_year, location: @meal.location_name) %>
+<% else -%>
+<%= t(".reminder", title: @meal.title_or_no_title, date: @meal.served_at_wday_no_year) %>
+<% end -%>
 
-<%= t("meal_mailer.meal_reminder.body.diner_count", count: @signup.total) %><% if @signup.comments.present? %> Your signup included the following comments:
+<%= t("meal_mailer.meal_reminder.body.diner_count", count: @signup.total) %><% if @signup.comments.present? %> <%= t(".comments_intro") %>
 --------------
 <%= @signup.comments %>
 --------------
@@ -11,13 +15,13 @@ This is a reminder that you are signed up for the meal '<%= @meal.title_or_no_ti
 <% end %>
 
 <% if @assigns.any? -%>
-The meal staff is:
+<%= t(".staff") %>
 
 <% @assigns.each do |a| -%>
-- <%= a.role_title %>: <%= a.user.name %>
+<%= t(".staff_member", role: a.role_title, name: a.user.name) %>
 <% end -%>
 <% end %>
 
 <%= render("meal_link") -%>
 
-Bon appetit!
+<%= t(".bon_appetit") %>

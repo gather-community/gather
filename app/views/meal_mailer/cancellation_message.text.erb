@@ -1,8 +1,12 @@
 <%= @recipient.greeting %>
 
-We regret to inform you that the meal '<%= @meal.title_or_no_title %>' on <%= @meal.served_at_wday_no_year %><%= @meal.location_name_with_at %> has been CANCELLED.
+<% if @meal.location_name -%>
+<%= t(".regret_at_location", title: @meal.title_or_no_title, date: @meal.served_at_wday_no_year, location: @meal.location_name) %>
+<% else -%>
+<%= t(".regret", title: @meal.title_or_no_title, date: @meal.served_at_wday_no_year) %>
+<% end -%>
 
-<%= @message.sender_name %> sent the following message in regard to the cancellation:
+<%= t(".sender_wrote", sender: @message.sender_name) %>
 
 --------------
 <%= @message.body %>

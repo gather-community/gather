@@ -1,21 +1,21 @@
 <section id="meal-menu">
-  <h2 class="menu-label">menu</h2>
+  <h2 class="menu-label"><%= t(".menu") %></h2>
   <%= render("meals/meals/time_cook") %>
   <div id="details">
     <% if meal.location_name %>
       <div class="chunk">
-        At <%= meal.location_name %>
+        <%= t(".at_location", location: meal.location_name) %>
       </div>
     <% end %>
     <% if multi_community? %>
       <div class="chunk">
-        for <%= meal.communities.map(&:name).join(', ') %>
+        <%= t(".for_communities", communities: meal.communities.map(&:name).join(", ")) %>
       </div>
     <% end %>
     <% meal.assignments_by_role.each do |role, assignments| %>
       <div class="chunk">
         <%= role.title %>
-        <%= "[None]" if assignments.empty? %>
+        <%= t("common.none_bracketed") if assignments.empty? %>
         <% assignments.each do |a| %>
           <div class="job"><%= a.user.decorate.link %></div>
         <% end %>
@@ -29,12 +29,12 @@
       <section><%= safe_render_markdown(text) %></section>
     <% end %>
     <hr/>
-    <div class="menu-label smaller">allergens</div>
+    <div class="menu-label smaller"><%= t(".allergens") %></div>
     <section>
       <% if meal.allergens? %>
         <%= meal.allergens.join(", ") %>
       <% else %>
-        [None]
+        <%= t("common.none_bracketed") %>
       <% end %>
     </section>
     <% if meal.menu_posted_at.present? %>
@@ -42,6 +42,6 @@
     <% end %>
   <% else %>
     <hr/>
-    No menu posted yet.
+    <%= t(".no_menu") %>
   <% end %>
 </section>

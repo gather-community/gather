@@ -1,22 +1,21 @@
 <% if account.present? && account.credit_exceeded? && signup.new_record? %>
   <%= t("meals.over_limit_notice_html", community: meal.community.name,
-        account_link: link_to("account", yours_accounts_path(community: meal.community_id)),
+        account_link: link_to(t(".account"), yours_accounts_path(community: meal.community_id)),
         limit: number_to_currency(account.credit_limit)) %>
 <% elsif meal.closed? || meal.finalized? %>
   <% if signup.new_record? %>
-    You have not signed up for this meal and it is now closed.
+    <%= t(".closed_not_signed_up") %>
   <% else %>
     <%= render("signup_read_only") %>
   <% end %>
 <% elsif signup.new_record? && meal.full? %>
-  You have not signed up for this meal and it is now full.
-  You can check back later to see if a spot opens up.
+  <%= t(".full_not_signed_up") %>
 
 <%# By this point we have checked for some of the common reasons why you can't sign up, but not all %>
 <%# So now we check the policy for any other reasons. %>
 <% elsif signup.new_record? && !policy(signup).create? || signup.persisted? && !policy(signup).update? %>
   <% if signup.new_record? %>
-    You have not signed up for this meal.
+    <%= t(".not_signed_up") %>
   <% else %>
     <%= render("signup_read_only") %>
   <% end %>
@@ -27,7 +26,7 @@
     <%= f.input(:meal_id, as: :hidden) %>
 
     <% if local_assigns[:ajax_success] %>
-      <div class="alert alert-success alert-minimal">Signup saved successfully</div>
+      <div class="alert alert-success alert-minimal"><%= t(".saved") %></div>
     <% end %>
 
     <p>
@@ -37,8 +36,8 @@
       <% if meal.auto_close_time.present? %>
         &bull;
         <span class="auto-close-time <%= "auto-close-time-soon" if meal.auto_close_time_soon? %>">
-          Closes on <%= l(meal.auto_close_time, format: :wday_no_year_no_time) %>
-          at <%= l(meal.auto_close_time, format: :time_only) %>
+          <%= t(".closes_at", date: l(meal.auto_close_time, format: :wday_no_year_no_time),
+                time: l(meal.auto_close_time, format: :time_only)) %>
         </span>
       <% end %>
     </p>
@@ -63,11 +62,11 @@
     </div>
     <% unless @expand_signup_form %>
       <button class="btn btn-primary" data-toggle="signup-form" data-toggle-preserve-link="false">
-        Sign Up
+        <%= t(".sign_up") %>
       </button>
     <% end %>
 
-    <%= javascript_tag do %>
+    <script>
       $(function() {
         new Gather.Views.DirtyChecker({el: '.meals--signup-form'});
         new Gather.Views.Meals.SignupAjaxFormView({
@@ -76,6 +75,6 @@
         });
         new Gather.Views.Meals.SignupView({el: '.signup-fields'});
       });
-    <% end %>
+    </script>
   <% end %>
 <% end %>

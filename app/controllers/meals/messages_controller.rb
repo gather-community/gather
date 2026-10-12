@@ -24,7 +24,7 @@ module Meals
       authorize(@message)
       if @message.save
         @meal.cancel! if @message.cancellation?
-        flash[:success] = "Message sent successfully."
+        flash[:success] = t("meals.messages.sent")
         MessageJob.perform_later(@message.id)
         redirect_to(meal_path(@meal))
       else

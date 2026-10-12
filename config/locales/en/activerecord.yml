@@ -323,6 +323,27 @@ en:
           exceeded_spots:
             one: "Based on the number of spots remaining, you can only sign up one person."
             other: "Based on the number of spots remaining, you can sign up a maximum of %{count} people."
+          nobody_signed_up: "You must sign up at least one person"
+          duplicate_types: "Please sign up each type only once"
+        meals/meal:
+          attributes:
+            capacity:
+              below_signups: "must be at least %{count} due to current signups"
+            title:
+              blank_with_menu: "can't be blank if other menu items entered"
+            entrees:
+              blank_with_menu: "can't be blank if other menu items entered"
+            invitations:
+              none: "you must invite at least one community"
+            auto_close_time:
+              not_before_meal: "must be between now and the meal time"
+            allergens:
+              none_checked: "at least one box must be checked if menu entered"
+              none_with_others: "'None' can't be selected if other allergens present"
+        meals/assignment:
+          attributes:
+            user_id:
+              role_not_in_formula: "Role '%{role}' does not match the selected formula"
         calendars/event:
           attributes:
             starts_at:

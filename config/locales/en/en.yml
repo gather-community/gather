@@ -33,6 +33,7 @@ en:
     unknown: "Unknown"
     unlimited: "Unlimited"
     "yes": "Yes"
+    "no": "No"
     time_with_preposition:
       "on": "on %{t}"
       "at": "at %{t}"
@@ -415,6 +416,17 @@ en:
         community:
           bad_id: "Could not find a community with ID %{str}"
           bad_name: "Could not find a community named '%{str}'"
+        file_empty: "File is empty"
+        invalid_headers: "Invalid column headers: %{headers}"
+        missing_columns: "Missing columns: %{columns}"
+        invalid_action: "Invalid action: %{action}"
+        action_not_permitted: "Action not permitted (%{action})"
+        served_at_required: "Date/time is required"
+        invalid_served_at: "'%{str}' is not a valid date/time"
+        calendars_required: "Calendar(s) are required"
+        meal_id_not_found: "Could not find meal with ID '%{id}'"
+        meal_not_found: "Could not find meal served at %{time} at locations: %{locations}"
+        delete_failed: "Error deleting meal %{id}: '%{error}'"
         user:
           bad_id: "Could not find a user with ID %{str}"
           bad_name: "Could not find a user named '%{str}'"

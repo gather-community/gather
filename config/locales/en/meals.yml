@@ -65,6 +65,17 @@ en:
     unfinalized: "Meal unfinalized successfully."
     cant_reopen_past_close: "You can't reopen this meal because its auto-close time is in the past. Please change or remove the auto-close time before proceeding."
     not_closed_before_summary: "Note: This meal is not yet closed and people can still sign up for it. You should close the meal before printing this summary."
+    formula_created: "Formula created successfully."
+    formula_updated: "Formula updated successfully."
+    type_created: "Type created successfully."
+    type_updated: "Type updated successfully."
+    role_created: "Role created successfully."
+    role_updated: "Role updated successfully."
+    restrictions_updated: "Updated successfully."
+    # Name of the calendar event created for a meal.
+    event_name: "Meal: %{title}"
+    event_errors: "The following error(s) occurred in making a %{calendar} event for this meal: %{errors}."
+    event_error: "%{attribute}: %{message}"
     signup_not_recorded: "Your signup could not be recorded because the meal is full or no longer open."
     report:
       subhead_community: "%{range}, %{community} meals only"
@@ -264,6 +275,102 @@ en:
           formula_changed: "The formula for this meal has been changed, which may make other roles available for assignment below. To see any new meal roles, please save the meal and return to this page. Existing worker assignments won't be deleted if their roles are not associated with the new formula."
         menu:
           allergens: "Allergens"
+    formulas:
+      index:
+        title: "Meal Formulas"
+        create: "Create Formula"
+        explanation: "Meal formulas allow customizing how meal costs and portion counts are calculated."
+        no_formulas: "No formulas found."
+        name: "Name"
+        meals: "Meals"
+        created_on: "Created On"
+      show:
+        title: "Meal Formula: %{name}"
+        formulas: "Formulas"
+        meal_calculations: "Meal Calculations"
+        pantry_calculations: "Pantry Calculations"
+      new:
+        title: "New Meal Formula"
+      edit:
+        title: "Edit Meal Formula: %{name}"
+      form:
+        meal_calculations: "Meal Calculations"
+        pantry_calculations: "Pantry Calculations"
+    types:
+      index:
+        title: "Meal Types"
+        create: "Create Type"
+        explanation: "Meal types give diners different options when signing up for a meal and can be assigned different costs and portion sizes in meal formulas."
+        no_types: "No types found."
+      new:
+        title: "Create Meal Type"
+      edit:
+        title: "Edit Meal Type: %{name}"
+    roles:
+      index:
+        title: "Meal Roles"
+        create: "Create Role"
+        explanation: "Meal roles represent the various jobs involved in producing a meal."
+        no_roles: "No roles found."
+      new:
+        title: "Create Meal Role"
+      edit:
+        title: "Edit Meal Role: %{title}"
+    restrictions:
+      edit:
+        title: "Meals Settings: Dietary Restrictions"
+        restriction: "Restriction"
+        opposite: "Opposite"
+        deactivated: "Deactivated?"
+      restriction_fields:
+        restriction_placeholder: "e.g. Gluten"
+        opposite_placeholder: "e.g. Gluten-free"
+        restriction: "Restriction"
+        opposite: "Opposite"
+    imports:
+      # Placeholder names for the example table when the community has no calendars or formula yet.
+      sample_calendar_1: "Dining Room"
+      sample_calendar_2: "Kitchen"
+      sample_formula: "Main Formula"
+      new:
+        title: "Import Meals"
+        intro: "You can import meals using CSV format. Spreadsheet applications like Excel or Google Spreadsheets can export to CSV format, which you can then import to Gather."
+      show:
+        title: "Import Meals"
+      form:
+        upload_file: "Upload File"
+      results:
+        succeeded: "Your import succeeded!"
+        check_meals_html: "Check out the %{link} to see your imported meals."
+        meals_page: "meals page"
+        crashed: "We encountered an unexpected error during import."
+        crashed_try_again_html: "Please %{link}, and contact your administrator if the error persists."
+        try_again_below: "try again below"
+        issues: "There were one or more issues with your meal data."
+        resolve_html: "Please resolve the issues below and %{link}."
+        try_again: "try again"
+        row: "Row %{number}"
+      # Column names in these instructions come from csv.headers.meals/meal so they match what the import accepts.
+      instructions:
+        data_format: "Data Format"
+        use_columns: "Construct your import file using the following columns:"
+        served_at: "Required. The date and time of the meal. Use an unambiguous format like YYYY-MM-DD HH:MM"
+        calendars_html: "Required. The location(s) of the meal. Use exact names or numeric IDs of calendars from the %{link}."
+        calendar_system: "calendar system"
+        formula_html: "Optional. The %{link} for the meal. Use the exact formula name or numeric ID. Defaults to the default formula if not given."
+        formula: "formula"
+        communities: "Optional. Which communities are invited to the meal. Use exact names, abbreviations, or numeric IDs, separated by semicolons. Defaults to all communities if not given."
+        role_column_html: "&lt;<em>Role Name</em>&gt; or %{role}&lt;<em>Role ID</em>&gt;"
+        roles_html: "Optional. Specify workers for the meal by adding one column per %{link}. Use exact worker names or numeric IDs separated by semicolons."
+        meal_role: "meal role"
+        action: "Optional. Specify 'create', 'update', or 'destroy'. Defaults to 'create' if not given. If 'update' or 'destroy' is given, matches meal based on ID if given, or date/time and locations otherwise."
+        id: "Optional. The ID of the meal to update/destroy. Ignored if action is 'create'."
+        example_data: "Example Data"
+        # Sample worker names in the example table.
+        sample_worker_1: "Sally Jones"
+        sample_workers_2: "Mohammed Iris; Sundar Premji"
+        sample_worker_3: "Li Yun"
+        sample_workers_4: "Tamika Johnson; Silvia Rodriguez"
     messages:
       sent: "Message sent successfully."
       new:

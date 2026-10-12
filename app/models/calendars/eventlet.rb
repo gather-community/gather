@@ -49,6 +49,7 @@ module Calendars
     # eventlet_start/end_offset_within_bounds); EventletForm#offsets_within_range gives the friendly
     # message on the drag path before the constraint is ever reached.
     before_save :assert_start_before_end
+    before_save :assert_calendar_allows_recurrence
 
     delegate :name, :kind, :meal?, :meal_id, :creator, :creator_id, :group, :note, to: :event
     delegate :all_day, :all_day?, to: :event
@@ -176,6 +177,16 @@ module Calendars
     end
 
     private
+
+    # Adding a calendar to a repeating event needs that calendar to allow them. See
+    # Event#assert_calendars_allow_recurrence for why this raises.
+    def assert_calendar_allows_recurrence
+      return unless event&.recurring?
+      return unless new_record? || will_save_change_to_calendar_id?
+      return if calendar.allows_recurring_events?
+      raise "Calendar #{calendar_id} doesn't allow repeating events, so it can't be added to " \
+        "event #{event_id}"
+    end
 
     # The offsets are applied to the event's times independently, so a large start_offset paired with
     # a small end_offset can invert the eventlet even when the parent event's range is valid. This is

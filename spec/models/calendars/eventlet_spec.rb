@@ -69,6 +69,23 @@ describe Calendars::Eventlet do
     end
   end
 
+  describe "adding a calendar to a repeating event" do
+    let(:series) do
+      create(:event, calendar: create(:calendar, allow_overlap: true),
+        recurrence_rule: IceCube::Rule.weekly.to_hash)
+    end
+
+    it "raises when the calendar doesn't allow repeating events" do
+      blocked = create(:calendar, allow_overlap: false)
+      expect { series.eventlets.create!(calendar: blocked) }
+        .to raise_error(/Calendar #{blocked.id} doesn't allow repeating events/)
+    end
+
+    it "is fine when the calendar allows them" do
+      expect { series.eventlets.create!(calendar: create(:calendar, allow_overlap: true)) }.not_to raise_error
+    end
+  end
+
   describe "starts_at and ends_at virtual attributes" do
     let(:event) { build(:event, starts_at: "2016-04-07 12:00", ends_at: "2016-04-07 14:00") }
     let(:eventlet) { build(:eventlet, event: event, start_offset: 1800, end_offset: -3600) }

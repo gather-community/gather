@@ -5,8 +5,9 @@ require "rails_helper"
 describe Calendars::EventletDeletionForm do
   let(:admin) { create(:admin) }
   let(:creator) { create(:user) }
-  let(:calendar) { create(:calendar, name: "Main Hall") }
-  let(:calendar2) { create(:calendar, name: "Guest Room") }
+  # Repeating events need calendars that allow overlaps (Calendar#allows_recurring_events?).
+  let(:calendar) { create(:calendar, name: "Main Hall", allow_overlap: true) }
+  let(:calendar2) { create(:calendar, name: "Guest Room", allow_overlap: true) }
 
   # Weekly at 6pm, starting next week so no occurrence is in the past.
   let(:series_start) { Time.zone.now.next_week.midnight + 18.hours }
@@ -321,7 +322,7 @@ describe Calendars::EventletDeletionForm do
 
     context "when the event's other calendar is read-only for the creator" do
       let(:other_community) { create(:community) }
-      let(:calendar2) { create(:calendar, community: other_community) }
+      let(:calendar2) { create(:calendar, community: other_community, allow_overlap: true) }
 
       before do
         create(:calendar_protocol, calendars: [calendar2], other_communities: "read_only")

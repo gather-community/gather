@@ -7,7 +7,8 @@ describe Calendars::EventFinder do
   let(:t0) { Time.current.midnight }
   let(:range) { (t0 + 2.5.hours)..(t0 + 4.5.hours) }
   let(:group) { create(:group) }
-  let!(:cal1) { create(:calendar) }
+  # Allows overlaps so it can hold repeating events (Calendar#allows_recurring_events?).
+  let!(:cal1) { create(:calendar, allow_overlap: true) }
   let!(:cal2) { create(:community_meals_calendar) }
   let!(:cal3) { create(:calendar) }
   let!(:cal4) { create(:other_communities_meals_calendar) }
@@ -225,8 +226,21 @@ describe Calendars::EventFinder do
         described_class.new(range: range, calendars: [cal1], user: user, own_only: true).eventlets
       end
 
-      it "excludes recurring occurrences" do
-        recurring = eventlets.select { |e| !e.persisted? && e.linkable.is_a?(Calendars::Eventlet) }
+      def recurring
+        eventlets.select { |e| !e.persisted? && e.linkable.is_a?(Calendars::Eventlet) }
+      end
+
+      it "includes the user's own recurring occurrences" do
+        expect(recurring.map(&:linkable)).to eq([recurring_event.eventlets.first])
+      end
+
+      it "excludes recurring occurrences created by someone else" do
+        recurring_event.update!(creator: create(:user))
+        expect(recurring).to be_empty
+      end
+
+      it "excludes the user's group's recurring occurrences" do
+        recurring_event.update!(group: create(:group))
         expect(recurring).to be_empty
       end
     end

@@ -269,7 +269,7 @@ describe Calendars::IcalGenerator do
     end
 
     context "with occurrence eventlets from the same event on different calendars" do
-      let(:other_calendar) { create(:calendar) }
+      let(:other_calendar) { create(:calendar, allow_overlap: true) }
       let(:other_eventlet) { create(:eventlet, event: event, calendar: other_calendar) }
       let(:second_occ_other_cal) do
         occurrence_eventlet(other_eventlet,
@@ -376,7 +376,7 @@ describe Calendars::IcalGenerator do
 
     # (C2) EventletOverride on one calendar must not suppress the occurrence on the other calendar
     context "(C2) EventletOverride deletes an occurrence on one calendar but not another" do
-      let(:other_calendar) { create(:calendar) }
+      let(:other_calendar) { create(:calendar, allow_overlap: true) }
       let(:other_eventlet) { create(:eventlet, event: event, calendar: other_calendar) }
       let(:second_occ_other_cal) do
         occurrence_eventlet(other_eventlet,

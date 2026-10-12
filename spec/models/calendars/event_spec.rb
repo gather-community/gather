@@ -235,8 +235,33 @@ describe Calendars::Event do
       end
     end
 
+    describe "on a calendar that doesn't allow repeating events" do
+      let(:blocked) { create(:calendar, allow_overlap: false) }
+
+      it "raises when saving a new series" do
+        expect { create(:event, calendar: blocked, recurrence_rule: weekly_rule) }
+          .to raise_error(/can't be on calendar\(s\) #{blocked.id}/)
+      end
+
+      it "raises when an event starts repeating" do
+        event = create(:event, calendar: blocked)
+        expect { event.update!(recurrence_rule: weekly_rule) }.to raise_error(/doesn't allow|don't allow/)
+        expect(event.reload).not_to be_recurring
+      end
+
+      it "doesn't check saves that leave the repeat rule alone" do
+        event = create(:event, calendar: create(:calendar, allow_overlap: true), recurrence_rule: weekly_rule)
+        # Not possible through the app while the series is still to come; stands in for one that ended.
+        event.calendar.update_columns(allow_overlap: false)
+        expect { event.update!(name: "Renamed") }.not_to raise_error
+      end
+    end
+
     describe "shifting a series' start" do
       around { |example| Time.use_zone("America/Toronto") { example.run } }
+
+      # Repeating events need a calendar that allows overlaps (Calendar#allows_recurring_events?).
+      let(:allow_overlap) { true }
 
       # Tuesdays at 7pm. Toronto falls back on 2026-11-01, so later occurrences cross a DST change.
       let(:series_start) { Time.zone.parse("2026-10-13 19:00") }

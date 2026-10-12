@@ -112,7 +112,7 @@ describe Calendars::EventletSerializer do
 
     context "with a transient recurring occurrence" do
       let(:base_eventlet) do
-        create(:eventlet).tap do |e|
+        create(:eventlet, calendar: create(:calendar, allow_overlap: true)).tap do |e|
           e.event.update!(recurrence_rule: IceCube::Rule.weekly.to_hash)
         end
       end

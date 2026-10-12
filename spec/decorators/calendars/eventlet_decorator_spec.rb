@@ -3,7 +3,7 @@
 require "rails_helper"
 
 describe Calendars::EventletDecorator do
-  let(:calendar) { create(:calendar) }
+  let(:calendar) { create(:calendar, allow_overlap: true) }
 
   describe "#recurrence_description" do
     context "with a non-recurring eventlet" do

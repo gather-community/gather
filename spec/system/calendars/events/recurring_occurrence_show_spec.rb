@@ -7,7 +7,7 @@ require "rails_helper"
 # the test env so a browser can't observe a 404. This spec exercises the real click-through flow.
 describe "recurring occurrence show page", js: true do
   let(:user) { create(:user) }
-  let!(:calendar) { create(:calendar, name: "Foo Room", selected_by_default: true) }
+  let!(:calendar) { create(:calendar, name: "Foo Room", selected_by_default: true, allow_overlap: true) }
 
   # Weekly, anchored to 8am today, so exactly one occurrence (today) appears in the current week view.
   let!(:event) do

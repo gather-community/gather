@@ -5,8 +5,8 @@ require "rails_helper"
 describe Calendars::SeriesSplitter do
   around { |example| Time.use_zone("America/Toronto") { example.run } }
 
-  let(:calendar) { create(:calendar) }
-  let(:calendar2) { create(:calendar) }
+  let(:calendar) { create(:calendar, allow_overlap: true) }
+  let(:calendar2) { create(:calendar, allow_overlap: true) }
 
   # Tuesdays at 7pm. Toronto falls back on 2026-11-01, so the series crosses a DST change.
   let(:series_start) { Time.zone.parse("2026-10-13 19:00") }

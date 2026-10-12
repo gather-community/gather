@@ -5,7 +5,7 @@ module Meals
     delegate_all
 
     def title_or_no_title
-      title || h.t("meals.no_menu_title")
+      title || I18n.t("meals.no_menu_title")
     end
 
     def link(*url_args)

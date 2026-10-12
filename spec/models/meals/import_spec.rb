@@ -69,6 +69,18 @@ describe Meals::Import do
       end
     end
 
+    # Files are exported in the exporting user's language, but imports run in a background job.
+    context "with headers in another language" do
+      let!(:default_formula) { create(:meal_formula, is_default: true) }
+      let!(:calendar) { create(:calendar, name: "Cuisine") }
+      let(:csv) { prepare_fixture("meals/import/other_locale.csv") }
+
+      it "recognizes them" do
+        expect(import).to be_successful
+        expect(Meals::Meal.last.calendars).to eq([calendar])
+      end
+    end
+
     context "with export-only headers" do
       let!(:calendar) { create(:calendar, name: "Dining Room", meal_hostable: true) }
       let!(:formula) { create(:meal_formula, is_default: true, parts_attrs: [{type: "Adult"}]) }

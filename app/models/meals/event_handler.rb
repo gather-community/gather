@@ -37,12 +37,11 @@ module Meals
           if error.attribute == :base
             error.message
           else
-            "#{Calendars::EventForm.human_attribute_name(error.attribute)}: #{error.message}"
+            I18n.t("meals.event_error", attribute: Calendars::EventForm.human_attribute_name(error.attribute),
+              message: error.message)
           end
         end.join(", ")
-        meal.errors.add(:base,
-          "The following error(s) occurred in making a #{event.calendar_name} event " \
-          "for this meal: #{errors}.")
+        meal.errors.add(:base, I18n.t("meals.event_errors", calendar: event.calendar_name, errors: errors))
       end
 
       # Since we are copying these errors to the meal base, we don't need them in the
@@ -87,11 +86,15 @@ module Meals
       meal.new_record? || meal.will_save_change_to_served_at? || meal.will_save_change_to_title?
     end
 
+    # The event name is stored and shown to the whole community, so it's built in the default locale rather
+    # than the locale of whoever happened to save the meal.
     def event_name
-      prefix = "Meal:"
-      title = truncate(meal.decorate.title_or_no_title,
-        length: Calendars::EventForm::NAME_MAX_LENGTH - prefix.size - 1, escape: false)
-      "#{prefix} #{title}"
+      I18n.with_locale(I18n.default_locale) do
+        overhead = I18n.t("meals.event_name", title: "").size
+        title = truncate(meal.decorate.title_or_no_title,
+          length: Calendars::EventForm::NAME_MAX_LENGTH - overhead, escape: false)
+        I18n.t("meals.event_name", title: title)
+      end
     end
 
     def settings

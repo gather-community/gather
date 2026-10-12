@@ -72,7 +72,7 @@ module Meals
     end
 
     def delivery_type
-      "Meals::RoleReminderDelivery"
+      "Meals::RoleReminderDelivery" # rubocop:disable Gather/HardCodedString -- class name
     end
 
     def event_key

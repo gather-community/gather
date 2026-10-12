@@ -58,6 +58,7 @@
       "inactive": "Inactive",
       "loading_indicator": "Loading indicator",
       "max": "Max",
+      "no": "No",
       "no_result_clear_filter_link_html": "You can try %{link}.",
       "none": "None",
       "none_bracketed": "[None]",

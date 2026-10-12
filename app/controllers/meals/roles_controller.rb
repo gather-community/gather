@@ -30,7 +30,7 @@ module Meals
       @role.assign_attributes(role_params.merge(community_id: current_community.id))
       authorize(@role)
       if @role.save
-        flash[:success] = "Role created successfully."
+        flash[:success] = t("meals.role_created")
         redirect_to(meals_roles_path)
       else
         render(:new)
@@ -41,7 +41,7 @@ module Meals
       @role = Meals::Role.find(params[:id])
       authorize(@role)
       if @role.update(role_params)
-        flash[:success] = "Role updated successfully."
+        flash[:success] = t("meals.role_updated")
         redirect_to(meals_roles_path)
       else
         render(:edit)

@@ -17,7 +17,9 @@ describe "dragging a calendar event", js: true do
   let(:actor) { create(:user) }
   let(:event_creator) { actor }
   let(:event_name) { "Draggable" }
-  let(:calendar) { create(:calendar, selected_by_default: true) }
+  # Allows overlaps so it can hold repeating events (Calendar#allows_recurring_events?); the overlap
+  # context below turns it off for a plain event.
+  let(:calendar) { create(:calendar, selected_by_default: true, allow_overlap: true) }
 
   # Next-week noon so the event is comfortably in the future (avoids the can't-change-the-past rule)
   # and visible after a single click on "next week". FullCalendar's week view starts on Sunday, so we
@@ -193,7 +195,7 @@ describe "dragging a calendar event", js: true do
   end
 
   context "with an event on more than one calendar" do
-    let(:calendar2) { create(:calendar, selected_by_default: true) }
+    let(:calendar2) { create(:calendar, selected_by_default: true, allow_overlap: true) }
     let(:second_calendar) { calendar2 }
 
     scenario "moving on this calendar only shifts that eventlet's offset" do

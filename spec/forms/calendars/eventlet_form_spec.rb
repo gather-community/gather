@@ -1542,20 +1542,6 @@ describe Calendars::EventletForm do
       end
     end
 
-    it "refuses an overlap with another event on a recurring occurrence" do
-      calendar.update!(allow_overlap: false)
-      event.update!(recurrence_rule: IceCube::Rule.weekly.to_hash)
-      occurrence = base_start + 1.week
-      create(:eventlet, calendar: calendar, starts_at: occurrence + 3.hours, ends_at: occurrence + 4.hours)
-
-      form = submit(calendar_scope: "all", series_scope: "occurrence", occurrence_start: occurrence.to_i,
-        starts_at: (occurrence + 3.hours).iso8601, ends_at: (occurrence + 4.hours).iso8601)
-
-      expect(form.save).to be(false)
-      expect(form.errors[:base]).to include("This event overlaps an existing one")
-      expect(event.event_overrides.reload).to be_empty
-    end
-
     it "requires an occurrence for a drag of a recurring series" do
       event.update!(recurrence_rule: IceCube::Rule.weekly.to_hash)
       form = submit(calendar_scope: "all", series_scope: "series",

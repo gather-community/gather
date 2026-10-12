@@ -48,7 +48,6 @@ module Calendars
     end
 
     def recurring_occurrences
-      return [] if own_only
       base_eventlets = recurring_eventlet_scope.to_a
       return [] if base_eventlets.empty?
 
@@ -128,7 +127,7 @@ module Calendars
     end
 
     def recurring_eventlet_scope
-      EventletPolicy::Scope.new(user, Eventlet).resolve
+      scope = EventletPolicy::Scope.new(user, Eventlet).resolve
         .joins(:event)
         .where.not(calendar_events: {recurrence_rule: nil})
         .where(calendar: non_system_calendars)
@@ -140,6 +139,8 @@ module Calendars
         )
         # event: :eventlets is preloaded so EventletSerializer#eventlet_count doesn't N+1 across the feed.
         .includes(:calendar, event: :eventlets)
+      # Same as non_recurring_eventlets: the user's own events, not their groups'.
+      own_only ? scope.where(calendar_events: {creator: user, group: nil}) : scope
     end
 
     def system_eventlets

@@ -85,6 +85,30 @@ describe "protocols", js: true do
     end
   end
 
+  context "with a repeating event on a calendar" do
+    let!(:calendar) { create(:calendar, community: community, name: "Courtyard", allow_overlap: true) }
+    let!(:protocol) do
+      create(:calendar_protocol, community: community, calendars: [calendar], name: "Stuff",
+        pre_notice: "Foo notice")
+    end
+
+    before do
+      start = 1.day.from_now.change(hour: 18)
+      create(:event, calendar: calendar, starts_at: start, ends_at: start + 1.hour,
+        recurrence_rule: IceCube::Rule.weekly.to_hash)
+    end
+
+    scenario "adding a rule that repeating events can't keep to is refused with the reason" do
+      visit(edit_calendars_protocol_path(protocol))
+      fill_in("Max. Advance Time", with: "30")
+      click_button("Save")
+
+      expect(page).to have_content("Fixed times, lead days and yearly limits can't apply to Courtyard, " \
+        "which have repeating events.")
+      expect(protocol.reload.max_lead_days).to be_nil
+    end
+  end
+
   context "with protocol with inactive calendar" do
     let!(:calendar) { create(:calendar, :inactive, community: community, name: "Log Drivings") }
     let!(:protocol) do

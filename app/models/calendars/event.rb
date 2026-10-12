@@ -55,6 +55,11 @@ module Calendars
 
     scope :between, ->(range) { where("starts_at < ? AND ends_at > ?", range.last, range.first) }
     scope :related_to, ->(user) { where(creator: user).or(where(sponsor: user)) }
+    scope :recurring, -> { where.not(recurrence_rule: nil) }
+    # Series with an occurrence on or after the date. One with no end date always has one.
+    scope :recurring_through, lambda { |date|
+      recurring.where("recurrence_end_date IS NULL OR recurrence_end_date >= ?", date)
+    }
 
     # Satisfies ducktype expected by policies. Prefer more explicit variants creator_community
     # and sponsor_community for other uses.
@@ -76,6 +81,7 @@ module Calendars
     # Must run before compute_recurrence_end_date so the end date is worked out from the shifted UNTIL.
     before_save :shift_series_dependents
     before_save :compute_recurrence_end_date
+    before_save :assert_calendars_allow_recurrence
 
     before_save lambda { |r| meal&.event_handler&.sync_resourcings(r) }
 
@@ -204,6 +210,18 @@ module Calendars
       stranded = overrides.map(&:occurrence_start).reject { |t| new_schedule.occurs_at?(t) }
       return if stranded.empty?
       raise "Moving event #{id} would leave overrides off its schedule at #{stranded.join(", ")}"
+    end
+
+    # Repeating events are only allowed on calendars that allow them (Calendar#allows_recurring_events?).
+    # The forms explain this to the user before saving. This catches any other writer, since a series
+    # on such a calendar would break its overlap or protocol rules on occurrences nothing checks.
+    # Eventlet#assert_calendar_allows_recurrence covers adding a calendar to an existing series.
+    def assert_calendars_allow_recurrence
+      return unless recurring? && will_save_change_to_recurrence_rule?
+      blocked = eventlets.map(&:calendar).compact.reject(&:allows_recurring_events?)
+      return if blocked.empty?
+      raise "Repeating event #{id || "(new)"} can't be on calendar(s) #{blocked.map(&:id).join(", ")}, " \
+        "which don't allow repeating events"
     end
 
     def compute_recurrence_end_date

@@ -5,7 +5,7 @@ require "rails_helper"
 describe "calendar eventlet show page" do
   let(:community) { create(:community) }
   let!(:user) { create(:user, community: community) }
-  let!(:calendar) { create(:calendar, community: community) }
+  let!(:calendar) { create(:calendar, community: community, allow_overlap: true) }
 
   before do
     use_user_subdomain(user)
@@ -207,7 +207,7 @@ end
 describe "calendar eventlet delete" do
   let(:community) { create(:community) }
   let!(:user) { create(:user, community: community) }
-  let!(:calendar) { create(:calendar, community: community, name: "Main Hall") }
+  let!(:calendar) { create(:calendar, community: community, name: "Main Hall", allow_overlap: true) }
   # Weekly at 6pm. Started two weeks ago and created long ago, so the creator can no longer delete
   # the whole series, only future occurrences.
   let(:series_start) { 2.weeks.ago.midnight + 18.hours }
@@ -346,7 +346,7 @@ describe "calendar eventlet move choices" do
   end
 
   it "doesn't offer moving on all calendars when another one is read-only to the user" do
-    read_only = create(:calendar, community: create(:community))
+    read_only = create(:calendar, community: create(:community), allow_overlap: true)
     create(:calendar_protocol, calendars: [read_only], other_communities: "read_only")
     event.eventlets.create!(calendar: read_only)
 

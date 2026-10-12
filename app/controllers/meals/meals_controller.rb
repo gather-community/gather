@@ -85,7 +85,7 @@ module Meals
       @meal.build_events
       authorize(@meal)
       if @meal.save
-        flash[:success] = "Meal created successfully."
+        flash[:success] = t("meals.created")
         redirect_to(meals_path)
       else
         prep_form_vars
@@ -100,7 +100,7 @@ module Meals
       @meal.assign_attributes(meal_params)
       @meal.build_events
       if @meal.save
-        flash[:success] = "Meal updated successfully."
+        flash[:success] = t("meals.updated")
         @worker_change_notifier.check_and_send!
         redirect_to(meals_path)
       else
@@ -113,7 +113,7 @@ module Meals
       @meal = Meal.find(params[:id])
       authorize(@meal)
       @meal.close!
-      flash[:success] = "Meal closed successfully."
+      flash[:success] = t("meals.closed")
       redirect_to(meals_path)
     end
 
@@ -121,12 +121,11 @@ module Meals
       @meal = Meal.find(params[:id])
       authorize(@meal)
       if @meal.auto_close_time_in_past?
-        flash[:error] = "You can't reopen this meal because its auto-close time is in the past. " \
-          "Please change or remove the auto-close time before proceeding."
+        flash[:error] = t("meals.cant_reopen_past_close")
         redirect_to(meal_path(@meal))
       else
         @meal.reopen!
-        flash[:success] = "Meal reopened successfully."
+        flash[:success] = t("meals.reopened")
         redirect_to(meals_path)
       end
     end
@@ -135,7 +134,7 @@ module Meals
       @meal = Meal.find(params[:id])
       authorize(@meal)
       Finalizer.new(@meal).unfinalize!
-      flash[:success] = "Meal unfinalized successfully."
+      flash[:success] = t("meals.unfinalized")
       redirect_to(meal_path(@meal))
     end
 
@@ -147,8 +146,7 @@ module Meals
       load_signups
       @cost_calculator = CostCalculator.build(@meal)
       return unless @meal.open? && current_user == @meal.head_cook
-      flash.now[:alert] = "Note: This meal is not yet closed and people can still sign up for it. " \
-        "You should close the meal before printing this summary."
+      flash.now[:alert] = t("meals.not_closed_before_summary")
     end
 
     # Renders just the workers section of the form. Accepts a formula_id, and sets the

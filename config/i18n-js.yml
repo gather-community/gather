@@ -17,4 +17,5 @@ translations:
       - "*.modal.*"
       - "*.payment.*"
       - "*.calendar_nav_popover.*"
+      - "*.meals.report_charts.*"
       - "*.calendars.drag.*"

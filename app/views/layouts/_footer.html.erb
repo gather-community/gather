@@ -2,7 +2,7 @@
   while the footer content maxes out at 1200px. %>
 <div id="global-footer-wrapper">
   <footer id="global-footer" class="hidden-print footer-links">
-    <%= link_to(t(".privacy_policy"), "/about/privacy-policy") %>&nbsp;&nbsp;<%# erb_lint:disable HardCodedString %>
+    <%= link_to(t(".privacy_policy"), "/about/privacy-policy") %>&nbsp;&nbsp;
     <%= link_to(t(".credits"), "https://github.com/sassafrastech/gather/blob/master/credits.md") %>
     <% if current_user && current_community %>
       <% if policy(current_community).update? %>

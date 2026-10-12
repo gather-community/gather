@@ -54,6 +54,237 @@ en:
       cancelled: "The meal was not finalized. You can edit it below and try again, or click 'Cancel' below to return to the meals page."
       success: "Meal finalized successfully"
       review_and_confirm_html: "<strong>Note:</strong> This meal has not been finalized yet. Please review and confirm your entries below. This information cannot be changed once billing statements are sent out, so be careful."
+    sign_up: "Sign Up"
+    closes_soon: "Closes Soon!"
+    no_menu_title: "[No Menu]"
+    takeout: "Takeout"
+    created: "Meal created successfully."
+    updated: "Meal updated successfully."
+    closed: "Meal closed successfully."
+    reopened: "Meal reopened successfully."
+    unfinalized: "Meal unfinalized successfully."
+    cant_reopen_past_close: "You can't reopen this meal because its auto-close time is in the past. Please change or remove the auto-close time before proceeding."
+    not_closed_before_summary: "Note: This meal is not yet closed and people can still sign up for it. You should close the meal before printing this summary."
+    signup_not_recorded: "Your signup could not be recorded because the meal is full or no longer open."
+    report:
+      subhead_community: "%{range}, %{community} meals only"
+    # Read by Gather.Views.Meals.ReportChartsView (JS). Each title has a variant naming the community,
+    # used when the cluster has more than one.
+    report_charts:
+      avg_servings: "Avg. Servings"
+      avg_servings_per_meal: "Avg. Servings per Meal"
+      avg_cost: "Avg. Cost"
+      avg_full_meal_price: "Avg. Full Meal Price"
+      meals: "Meals"
+      number_of_meals: "Number of Meals"
+      weekday: "Weekday"
+      month: "Month"
+      titles:
+        servings_by_month: "Avg. Servings per Meal by Month"
+        servings_by_month_community: "Avg. Servings per %{community} Meal by Month"
+        cost_by_month: "Avg. Full Meal Price by Month"
+        cost_by_month_community: "Avg. Full %{community} Meal Price by Month"
+        meals_by_month: "Number of Meals by Month"
+        meals_by_month_community: "Number of %{community} Meals by Month"
+        servings_by_weekday: "Avg. Servings per Meal by Weekday"
+        servings_by_weekday_community: "Avg. Servings per %{community} Meal by Weekday"
+        cost_by_weekday: "Avg. Full Meal Price by Weekday"
+        cost_by_weekday_community: "Avg. Full %{community} Meal Price by Weekday"
+        community_rep: "Avg. Community Representation at Meals"
+        community_rep_community: "Avg. Community Representation at %{community} Meals"
+        meal_types: "Avg. Meal Types at Meals"
+        meal_types_community: "Avg. Meal Types at %{community} Meals"
+    portion_counts:
+      diners:
+        one: "%{count} diner"
+        other: "%{count} diners"
+      portions_html:
+        one: "<strong>%{count}</strong> portion"
+        other: "<strong>%{count}</strong> portions"
+      category_portions_html:
+        one: "<strong>%{count} %{category}</strong> portion"
+        other: "<strong>%{count} %{category}</strong> portions"
+      # Category label for formula parts with no category, when other parts have one.
+      other_category: "other"
+      # The * refers to the footnote on the summary page.
+      summary_html: "This meal has %{diners} and will require approximately %{portions}.*"
+      summary_list_html: "This meal has %{diners} and will require approximately: %{portions}.*"
+    meals:
+      index:
+        title: "Meals"
+        show_action_menu: "Show meal action dropdown menu"
+        create: "Create Meal"
+        import: "Import Meals"
+        no_meals: "No meals found."
+        date_time: "Date/Time"
+        location: "Location"
+        cook: "Cook"
+        meal_title: "Title"
+        going: "Going?"
+        signups: "Signups"
+        full: "[Full]"
+        not_going: "No"
+        meal_by_cook_html: "%{meal} by %{cook}"
+        time_at_location: "%{time} at %{location}"
+        signed_up_html: "%{signups} signed up"
+        household_signed_up_html: "%{diners} signed up from your household"
+        edit_signup: "(Edit)"
+        download_meals_csv: "Download Meals as CSV"
+        download_signups_csv: "Download Meal Signups as CSV"
+      show:
+        untitled: "Untitled Meal"
+        meals: "Meals"
+        previous_meal: "Previous Meal"
+        next_meal: "Next Meal"
+        your_order: "Your Order"
+        helping_out: "Helping Out"
+      new:
+        title: "Create Meal"
+        missing_prereqs_html: "Before you can create a meal, there must be %{items}."
+        formula: "an applicable cost formula"
+        calendar: "at least one meal-hostable calendar"
+      edit:
+        title: "Edit Meal"
+        title_with_meal: "Edit Meal: %{title}"
+      signup_form:
+        account: "account"
+        closed_not_signed_up: "You have not signed up for this meal and it is now closed."
+        full_not_signed_up: "You have not signed up for this meal and it is now full. You can check back later to see if a spot opens up."
+        not_signed_up: "You have not signed up for this meal."
+        saved: "Signup saved successfully"
+        closes_at: "Closes on %{date} at %{time}"
+        sign_up: "Sign Up"
+      household_worker_form:
+        worker_role: "%{name} - %{role}"
+        no_more_workers: "This meal doesn't need any more workers."
+        still_needs_html:
+          one: "This meal still needs <b>%{count} worker</b>."
+          other: "This meal still needs <b>%{count} workers</b>."
+        help_out: "Help Out"
+      summary:
+        untitled: "Untitled Meal"
+        signups: "Signups"
+        total: "Total"
+        late_signups: "Late Signups"
+        portion_footnote_html: "* Total portions calculated using portion size values in %{link}."
+        meal_formula: "meal formula"
+        grocery_calculator: "Grocery Calculator"
+        fixed_cost_html: "Based on the fixed cost of this meal, ingredients should cost no more than %{amount}, not including pantry/staple items (see your community's meals guidelines for a list of qualifying staple items)."
+        proportional_cost: "Based on the cost-sharing formula of this meal, the below table shows how much can be spent on ingredients depending on the desired meal price. Spending limits don't include pantry/staple items (see your community's meals guidelines for a list of qualifying staple items)."
+        meal_price: "Meal Price"
+        max_ingredient_cost: "Max Ingredient Cost"
+        cook_reimbursement: "Cook Reimbursement"
+      summary_signups_header:
+        community: "Cmty"
+        household: "Household"
+        takeout: "Takeout"
+        comments: "Comments"
+      menu:
+        menu: "menu"
+        at_location: "At %{location}"
+        for_communities: "for %{communities}"
+        allergens: "allergens"
+        no_menu: "No menu posted yet."
+      jobs:
+        title: "Meal Jobs"
+        title_for_user: "Meal Jobs: %{name}"
+        no_jobs: "No jobs found."
+        meal_at_location_html: "%{meal} at %{location}"
+        role_workers_html: "%{role}: %{workers}"
+      cost_info:
+        cost: "Cost"
+        unknown: "?"
+        included: "%{label} (Included)"
+        proportional: "This meal uses a proportional formula so cost calculations will be performed after the meal has taken place and is finalized."
+      who_is_going:
+        title: "Who is Going?"
+        nobody: "Nobody, yet!"
+        household_count: "%{household} (%{count})"
+      time_cook:
+        chefs_hat: "Chef's hat"
+      signup_read_only:
+        part: "%{count} %{type}"
+        takeout_requested: "Takeout requested"
+        quoted_comments: "\"%{comments}\""
+      report:
+        title: "Meals Report"
+        no_data: "No matching meal data found for %{range}. The report includes finalized meals only."
+        all_time: "All-Time"
+        community_all_time: "%{community} All-Time"
+        overall_all_time: "Overall All-Time"
+        meals: "Meals"
+        servings: "Servings"
+        cost: "Cost"
+        by_month: "By Month"
+        by_weekday: "By Weekday"
+        by_community: "By Community"
+        by_type: "By Type"
+        by_category: "By Category"
+        footnote:
+          one: "The above statistics include finalized, non-cancelled meals only. There was %{count} cancelled meal in this period."
+          other: "The above statistics include finalized, non-cancelled meals only. There were %{count} cancelled meals in this period."
+        footnote_community:
+          one: "The above statistics include finalized, non-cancelled meals only. There was %{count} cancelled meal at %{community} in this period."
+          other: "The above statistics include finalized, non-cancelled meals only. There were %{count} cancelled meals at %{community} in this period."
+      report_main_table:
+        totals: "Totals"
+        general_averages: "General Averages"
+        community_representation: "Avg. Community Representation"
+        meals: "Meals"
+        servings: "Servings"
+        cost: "Cost"
+        full_meal_price: "Full Meal Price"
+        total: "Total"
+      report_type_table:
+        avg_servings: "Avg. Servings"
+        percent: "Percent"
+      export_form:
+        select_dates: "Select Dates"
+      reimb_form:
+        meal: "Meal:"
+        by_cook: "By %{cook}"
+        time_at_location: "%{time} at %{location}"
+        ingredients: "Amount spent for ingredients:"
+        pantry: "Amount spent on pantry/staple items:"
+        total: "Total amount to be reimbursed:"
+        # Blank for writing in an amount on the printed form.
+        amount_blank: "$"
+        method: "Reimbursement method:"
+        account_credit: "Account credit"
+        check_payable: "Check payable to:"
+        paypal: "PayPal to email address:"
+      form:
+        general:
+          communities: "Communities"
+        expenses:
+          check_hint: "Reimbursee will receive a check for the ingredient cost."
+          credit_hint: "Reimbursee will receive a credit to their Gather account in the amount of the ingredient cost."
+          paypal_hint: "Reimbursee will receive a PayPal payment in the amount of the ingredient cost. Users can change their PayPal email address by editing their profile."
+        workers:
+          formula_changed: "The formula for this meal has been changed, which may make other roles available for assignment below. To see any new meal roles, please save the meal and return to this page. Existing worker assignments won't be deleted if their roles are not associated with the new formula."
+        menu:
+          allergens: "Allergens"
+    messages:
+      sent: "Message sent successfully."
+      new:
+        cancel_title: "Cancel Meal"
+        dont_cancel: "Don't Cancel Meal"
+        send_and_cancel: "Send Message and Cancel Meal"
+    finalize:
+      title: "Finalize Meal: %{title}"
+      untitled: "Untitled"
+      confirm:
+        household: "Household"
+        calculated_cost: "Calculated Cost"
+        cook_reimbursement_request: "Cook Reimbursement Request"
+      complete:
+        success: "Meal finalized successfully!"
+        check: "Please send a check to %{name} for %{amount} now."
+        credit: "%{name}'s Gather account has been credited %{amount}."
+        paypal: "Please send %{amount} to %{email} via PayPal now."
+    settings:
+      edit:
+        title: "Meals Settings: General"
   meals/assignments:
     change_warning: "Note: If you change meal workers, an email notification will be sent to the meals committee/manager and all current and newly assigned workers.'"
   meals/formulas:
@@ -82,3 +313,50 @@ en:
       full: "Full"
   meals/messages:
     cancel_notice_html: "Cancelling a meal cannot be undone. Please send a message explaining why the meal was cancelled. The meal will not be cancelled until the message is sent."
+  meal_mailer:
+    meal_link:
+      see_more: "See more about the meal here: %{url}"
+    meal_reminder:
+      subject: "Meal Reminder: %{datetime} - %{title} at %{location}"
+      reminder: "This is a reminder that you are signed up for the meal '%{title}' on %{date}."
+      reminder_at_location: "This is a reminder that you are signed up for the meal '%{title}' on %{date} at %{location}."
+      comments_intro: "Your signup included the following comments:"
+      staff: "The meal staff is:"
+      staff_member: "- %{role}: %{name}"
+      bon_appetit: "Bon appetit!"
+      body:
+        diner_count:
+          one: "There is %{count} diner signed up from your household."
+          other: "There are %{count} diners signed up from your household."
+    role_reminder:
+      subject: "Job Reminder: %{role} on %{datetime} at %{location}%{note}"
+      scheduled: "This is a reminder that you are scheduled as %{role} for the meal '%{title}' on %{date}."
+      shift: "Your shift is on %{times}. The meal is scheduled to be served at %{time}."
+      shift_at_location: "Your shift is on %{times} at %{location}. The meal is scheduled to be served at %{time}."
+      note_intro: "This reminder includes the following note:"
+      crucial: "Your help is crucial! Please arrive promptly for your shift!"
+      contacts_intro: "Here is some contact information for other workers for the meal:"
+      contact: "%{role}: %{name}, %{email}, %{phones}"
+    worker_change_notice:
+      subject: "Meal Job Assignment Change Notice"
+      intro: "%{name} just made the following change(s) to the meal '%{title}' on %{date}."
+      intro_at_location: "%{name} just made the following change(s) to the meal '%{title}' on %{date} at %{location}."
+      added: "- %{name} was added as %{role}"
+      removed: "- %{name} was removed as %{role}"
+      thanks: "Thanks and enjoy!"
+    cook_menu_reminder:
+      subject: "Menu Reminder: Please Post Menu for %{date}"
+      second_reminder: "** Second Reminder **"
+      reminder: "This is a reminder to post a menu for your meal on %{date}."
+      asap: "Please post a menu as soon as possible so that residents can plan ahead and to ensure good attendance!"
+      post_here: "You can post a menu by going here:"
+      thanks: "Thanks!"
+    normal_message:
+      subject: "Message about Meal on %{datetime}"
+      intro: "%{sender} sent the following message in regard to the meal '%{title}' on %{date}."
+      intro_at_location: "%{sender} sent the following message in regard to the meal '%{title}' on %{date} at %{location}."
+    cancellation_message:
+      subject: "Meal on %{datetime} CANCELLED"
+      regret: "We regret to inform you that the meal '%{title}' on %{date} has been CANCELLED."
+      regret_at_location: "We regret to inform you that the meal '%{title}' on %{date} at %{location} has been CANCELLED."
+      sender_wrote: "%{sender} sent the following message in regard to the cancellation:"

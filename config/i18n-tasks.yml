@@ -67,6 +67,7 @@ ignore_unused:
   - "{datepicker,timepicker}.*"
   # Read by JS (see config/i18n-js.yml) or built from variables at runtime.
   - "{modal,payment,password,dropzone,batchable_tables}.*"
+  - "meals.report_charts.titles.*"         # ReportChartsView#title builds these keys
   - "nav_links.*"                         # Utils::Nav builds keys from menu item names
   - "activatables.*"                      # keyed by model i18n_key
   - "cocoon.add_links.*"                  # FormHelper#link_to_add, keyed by association

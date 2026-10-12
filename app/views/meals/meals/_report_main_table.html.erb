@@ -4,19 +4,19 @@
 <table class="by-<%= name %> stats <%= multi_community? ? 'multi-community' : '' %>">
   <tr class="surheader">
     <th></th>
-    <th colspan="3" class="totals">Totals</th>
-    <th colspan="2" class="general-avg">General Averages</th>
+    <th colspan="3" class="totals"><%= t(".totals") %></th>
+    <th colspan="2" class="general-avg"><%= t(".general_averages") %></th>
     <% if multi_community? %>
-      <th colspan="<%= @communities.size %>" class="cmty-rep">Avg. Community Representation</th>
+      <th colspan="<%= @communities.size %>" class="cmty-rep"><%= t(".community_representation") %></th>
     <% end %>
   </tr>
   <tr class="header">
     <th></th>
-    <th class="totals">Meals</th>
-    <th class="totals">Servings</th>
-    <th class="totals">Cost</th>
-    <th class="general-avg">Full Meal Price</th>
-    <th class="general-avg">Servings</th>
+    <th class="totals"><%= t(".meals") %></th>
+    <th class="totals"><%= t(".servings") %></th>
+    <th class="totals"><%= t(".cost") %></th>
+    <th class="general-avg"><%= t(".full_meal_price") %></th>
+    <th class="general-avg"><%= t(".servings") %></th>
     <% if multi_community? %>
       <% @communities.each do |community| %>
         <th class="cmty-rep"><%= community.name %></th>
@@ -29,7 +29,7 @@
       <td>
         <%=
           case period
-          when :all then "Total"
+          when :all then t(".total")
           when Date then l(period, format: period_format)
           else period
           end %>

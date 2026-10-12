@@ -19,7 +19,7 @@ module Meals
 
     def takeout_cell
       return "" unless takeout?
-      safe_str << "✔" << nbsp << "Takeout"
+      safe_str << "✔" << nbsp << h.t("meals.takeout")
     end
 
     # Returns the household name or, if not persisted, a select2 control for selecting it.

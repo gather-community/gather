@@ -1,4 +1,4 @@
-<% content_for(:title, "Finalize Meal: #{@meal.title || "Untitled"}") %>
+<% content_for(:title, t("meals.finalize.title", title: @meal.title || t("meals.finalize.untitled"))) %>
 
 <%= render("meals/meals/time_cook") %>
 
@@ -7,13 +7,13 @@
 
   <table class="index confirm">
     <tr>
-      <th>Household</th>
+      <th><%= t(".household") %></th>
       <% meal.types.each do |type| %>
         <th><%= type.name %></th>
       <% end %>
     </tr>
     <tr class="cost">
-      <td><strong>Calculated Cost</strong></td>
+      <td><strong><%= t(".calculated_cost") %></strong></td>
       <% meal.types.each do |type| %>
         <td><%= number_to_currency(@calculator.price_for(type)) %></td>
       <% end %>
@@ -28,7 +28,7 @@
     <% end %>
   </table>
 
-  <h2>Cook Reimbursement Request</h2>
+  <h2><%= t(".cook_reimbursement_request") %></h2>
   <table class="key-value key-value-narrow">
     <tr>
       <td><%= t("activerecord.attributes.meals/cost.ingredient_cost") %></td>

@@ -1,15 +1,14 @@
-<% content_for(:title, "Meals Report") %>
+<% content_for(:title, t(".title")) %>
 
 <% if meals_report.empty? %>
   <div class="center-notice">
-    No matching meal data found for <%= meals_report.range_formatted %>.
-    The report includes finalized meals only.
+    <%= t(".no_data", range: meals_report.range_formatted) %>
   </div>
 <% else %>
   <div class="report">
     <div class="overview row">
       <div class="set col-sm-4 <%= multi_community? ? "col-sm-offset-1" : "col-sm-offset-4" %>">
-        <div class="title"><%= multi_community? ? "#{@community.name} " : "" %>All-Time</div>
+        <div class="title"><%= multi_community? ? t(".community_all_time", community: @community.name) : t(".all_time") %></div>
         <table class="numbers">
           <tr class="numbers">
             <td><%= number_with_delimiter(meals_report.overview[@community.id]["ttl_meals"]) %></td>
@@ -17,15 +16,15 @@
             <td><%= number_to_currency(meals_report.overview[@community.id]["ttl_cost"]) %></td>
           </tr>
           <tr class="captions">
-            <td>Meals</td>
-            <td>Servings</td>
-            <td>Cost</td>
+            <td><%= t(".meals") %></td>
+            <td><%= t(".servings") %></td>
+            <td><%= t(".cost") %></td>
           </tr>
         </table>
       </div>
       <% if multi_community? %>
         <div class="set col-sm-4 col-sm-offset-2">
-          <div class="title">Overall All-Time</div>
+          <div class="title"><%= t(".overall_all_time") %></div>
           <table class="numbers">
             <tr class="numbers">
               <td><%= number_with_delimiter(meals_report.overview[:all]["ttl_meals"]) %></td>
@@ -33,9 +32,9 @@
               <td><%= number_to_currency(meals_report.overview[:all]["ttl_cost"]) %></td>
             </tr>
             <tr class="captions">
-              <td>Meals</td>
-              <td>Servings</td>
-              <td>Cost</td>
+              <td><%= t(".meals") %></td>
+              <td><%= t(".servings") %></td>
+              <td><%= t(".cost") %></td>
             </tr>
           </table>
         </div>
@@ -59,18 +58,18 @@
           </div>
         </div>
 
-        <h2 class="with-subhead">By Month</h2>
+        <h2 class="with-subhead"><%= t(".by_month") %></h2>
         <%= meals_report.subhead %>
         <%= render("report_main_table", name: "month",
                                         data: meals_report.by_month, period_format: :full_month_year) %>
 
-        <h2 class="with-subhead">By Weekday</h2>
+        <h2 class="with-subhead"><%= t(".by_weekday") %></h2>
         <%= meals_report.subhead %>
         <%= render("report_main_table", name: "weekday",
                                         data: meals_report.by_weekday, period_format: :full_wday_only) %>
 
         <% if multi_community? %>
-          <h2 class="with-subhead">By Community</h2>
+          <h2 class="with-subhead"><%= t(".by_community") %></h2>
           <%= meals_report.subhead(current_cmty_only: false) %>
           <%= render("report_main_table", name: "community", data: meals_report.by_community,
                                           highlight: @community.name) %>
@@ -79,14 +78,14 @@
     </div>
     <div class="row">
       <div class="col-sm-6">
-        <h2 class="with-subhead">By Type</h2>
+        <h2 class="with-subhead"><%= t(".by_type") %></h2>
         <%= meals_report.subhead %>
         <%= render("report_type_table", name: "type", data: meals_report.by_type) %>
       </div>
       <%# This report table can be empty even if the rest has data %>
       <% unless meals_report.by_category.empty? %>
         <div class="col-sm-6">
-          <h2 class="with-subhead">By Category</h2>
+          <h2 class="with-subhead"><%= t(".by_category") %></h2>
           <%= meals_report.subhead %>
           <%= render("report_type_table", name: "category", data: meals_report.by_category) %>
         </div>
@@ -95,20 +94,22 @@
     <div class="row">
       <div class="col-sm-12">
         <div class="footnote">
-          The above statistics include finalized, non-cancelled meals only.
-          There were <%= meals_report.cancelled %> cancelled meals
-          <%= multi_community? ? "at #{@community.name} " : "" %>in this period.
+          <% if multi_community? %>
+            <%= t(".footnote_community", count: meals_report.cancelled, community: @community.name) %>
+          <% else %>
+            <%= t(".footnote", count: meals_report.cancelled) %>
+          <% end %>
         </div>
       </div>
     </div>
   </div>
 
-  <%= javascript_tag do %>
+  <script>
     $(function() { new Gather.Views.Meals.ReportChartsView(<%=json(
       el: "#charts",
       data: meals_report.chart_data,
       cmty: @community.abbrv,
       multiCommunity: multi_community?
       )%>); });
-  <% end %>
+  </script>
 <% end %>

@@ -6,7 +6,8 @@ module Calendars
     class MaxLengthMinutesRule < Rule
       def check(event)
         event.ends_at - event.starts_at <= value * 60 ||
-          [:ends_at, "Can be at most #{Utils::TimeUtils.humanize_interval(value * 60)} after start time"]
+          [:ends_at,
+            I18n.t("calendars.rules.max_length", length: Utils::TimeUtils.humanize_interval(value * 60))]
       end
     end
   end

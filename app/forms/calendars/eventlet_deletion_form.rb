@@ -186,9 +186,9 @@ module Calendars
     def scope_combination_allowed
       return if errors.any?
       if calendar_scope == "this" && series_scope == "following"
-        errors.add(:base, "“This and following” can only be deleted from all calendars")
+        errors.add(:base, :following_only_all_calendars)
       elsif calendar_scope == "this" && event.eventlets.size < 2
-        errors.add(:base, "This event is only on one calendar")
+        errors.add(:base, :one_calendar)
       end
     end
 

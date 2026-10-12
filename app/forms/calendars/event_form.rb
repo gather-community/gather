@@ -175,12 +175,18 @@ module Calendars
 
     def guidelines_accepted
       return unless new_record? && calendar.guidelines? && !guidelines_ok?
-      errors.add(:guidelines, "You must agree to the guidelines")
+      errors.add(:guidelines, :not_accepted)
+    end
+
+    # The :guidelines field is only a checkbox wrapper, but ActiveModel reads the attribute when it
+    # builds the error message above.
+    def guidelines
+      nil
     end
 
     def start_before_end
       return unless starts_at.present? && ends_at.present? && starts_at >= ends_at
-      errors.add(:ends_at, "must be after start time")
+      errors.add(:ends_at, :before_start)
     end
 
     def no_overlap
@@ -188,7 +194,7 @@ module Calendars
       query = Event.between(starts_at..ends_at)
       query = query.where(calendar_id: calendar_id)
       query = query.where("id != #{id}") if persisted?
-      errors.add(:base, "This event overlaps an existing one") if query.any?
+      errors.add(:base, :overlap) if query.any?
     end
 
     def apply_rules
@@ -201,10 +207,10 @@ module Calendars
       # by the meal event handler.
       return if !persisted? || recently_created? || event.meal? || event_policy.privileged_change?
       if will_save_change_to_starts_at? && starts_at_was&.past?
-        errors.add(:starts_at, "can't be changed after event begins")
+        errors.add(:starts_at, :changed_after_start)
       end
       if will_save_change_to_ends_at? && ends_at&.past? # rubocop:disable Style/GuardClause # || structure
-        errors.add(:ends_at, "can't be changed to a time in the past")
+        errors.add(:ends_at, :in_past)
       end
     end
   end

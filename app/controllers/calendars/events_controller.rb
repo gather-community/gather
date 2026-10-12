@@ -91,7 +91,7 @@ module Calendars
 
       authorize(@event)
       if @form.save
-        flash[:success] = "Event created successfully."
+        flash[:success] = t("calendars.event_created")
         redirect_to_form_in_context(@form)
       else
         prep_form_vars
@@ -116,7 +116,7 @@ module Calendars
         if request.xhr?
           head(:ok)
         else
-          flash[:success] = "Event updated successfully."
+          flash[:success] = t("calendars.event_updated")
           redirect_to_form_in_context(@form)
         end
       else
@@ -141,7 +141,7 @@ module Calendars
       @event = @form.event
       authorize(@event)
       @event.destroy
-      flash[:success] = "Event deleted successfully."
+      flash[:success] = t("calendars.event_deleted")
       redirect_to_form_in_context(@form)
     end
 
@@ -171,7 +171,7 @@ module Calendars
 
       @rule_set = sample_eventlet.rule_set
       if @rule_set.access_level(current_user.community) == "read_only"
-        flash.now[:notice] = "Only #{@calendar.community_name} residents may reserve this calendar."
+        flash.now[:notice] = t("calendars.residents_only", community: @calendar.community_name)
       end
       @rule_set_serializer = build_attribute_serializer(@rule_set, creator_community: Community.first,
         serializer: RuleSetSerializer)

@@ -31,7 +31,7 @@ module Calendars
       @calendar.assign_attributes(calendar_params)
       authorize(@calendar)
       if @calendar.save
-        flash[:success] = "Calendar created successfully."
+        flash[:success] = t("calendars.created")
         redirect_to(calendars_path)
       else
         prep_form_vars
@@ -43,7 +43,7 @@ module Calendars
       @calendar = Calendar.find(params[:id])
       authorize(@calendar)
       if @calendar.update(calendar_params)
-        flash[:success] = "Calendar updated successfully."
+        flash[:success] = t("calendars.updated")
         redirect_to(calendars_path)
       else
         prep_form_vars

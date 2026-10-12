@@ -23,7 +23,7 @@ module Calendars
       @group.assign_attributes(group_params)
       authorize(@group)
       if @group.save
-        flash[:success] = "Group created successfully."
+        flash[:success] = t("calendars.group_created")
         redirect_to(calendars_path)
       else
         render(:new)
@@ -34,7 +34,7 @@ module Calendars
       @group = Group.find(params[:id])
       authorize(@group)
       if @group.update(group_params)
-        flash[:success] = "Group updated successfully."
+        flash[:success] = t("calendars.group_updated")
         redirect_to(calendars_path)
       else
         render(:edit)

@@ -481,14 +481,6 @@ en:
         user: "Click or Drag Photo Here"
         calendars/calendar: "Click or Drag Photo Here"
 
-  calendars:
-    your_meals: "Meals You're Attending"
-    all_meals: "All Meals"
-    community_meals: "%{community} Meals"
-    community_events: "%{community} Events"
-    your_events: "Your Events"
-    your_jobs: "Your Jobs"
-
   titles:
     meals/messages: "Send Meal Message"
 
@@ -558,9 +550,3 @@ en:
   search_lens:
     prompt: "Search..."
 
-  calendar_exports:
-    meals:
-      diner_count:
-        one: "%{count} diner from your household"
-        other: "%{count} diners from your household"
-      signup_comments: "Signup comments:\n%{comments}"

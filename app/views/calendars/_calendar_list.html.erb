@@ -9,7 +9,7 @@
             <rect x="<%= (i % 2) * 9 %>" y="<%= (i / 2) * 9 %>" width="7" height="7" fill="<%= color %>"/>
           <% end %>
         </svg>
-        <%= link_to "All", calendars_events_path, class: "calendar-link" %>
+        <%= link_to t("calendars.calendar_list.all"), calendars_events_path, class: "calendar-link" %>
       </div>
     </li>
   <% end %>
@@ -37,5 +37,5 @@
   <% end %>
 </ul>
 <% unless local_assigns[:nested] || local_assigns[:checkboxes] == false %>
-  <button type="button" class="select-all-link">Select All</button>
+  <button type="button" class="select-all-link"><%= t("calendars.calendar_list.select_all") %></button>
 <% end %>

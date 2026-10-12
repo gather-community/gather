@@ -38,13 +38,13 @@ module Calendars
     def eventlet_matches_event
       return unless event_override && eventlet
       return if eventlet.event_id == event_override.event_id
-      errors.add(:eventlet, "must belong to the same event as the override")
+      errors.add(:eventlet, :different_event)
     end
 
     def override_has_purpose
       return if deleted?
       return if !start_offset.nil? || !end_offset.nil?
-      errors.add(:base, "must either delete the occurrence or provide offset changes")
+      errors.add(:base, :no_change)
     end
   end
 end

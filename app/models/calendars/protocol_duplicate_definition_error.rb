@@ -8,7 +8,7 @@ module Calendars
     def initialize(attrib: nil, protocols: nil)
       self.attrib = attrib
       self.protocols = protocols
-      super("Multiple protocols define #{attrib}")
+      super("Multiple protocols define #{attrib}") # rubocop:disable Gather/HardCodedString -- exception message
     end
   end
 end

@@ -32,7 +32,7 @@ module Calendars
       @protocol.assign_attributes(protocol_params)
       authorize(@protocol)
       if @protocol.save
-        flash[:success] = "Protocol created successfully."
+        flash[:success] = t("calendars.protocol_created")
         redirect_to(calendars_protocols_path)
       else
         prep_form_vars
@@ -44,7 +44,7 @@ module Calendars
       @protocol = Protocol.find(params[:id])
       authorize(@protocol)
       if @protocol.update(protocol_params)
-        flash[:success] = "Protocol updated successfully."
+        flash[:success] = t("calendars.protocol_updated")
         redirect_to(calendars_protocols_path)
       else
         prep_form_vars

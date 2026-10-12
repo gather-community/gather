@@ -115,3 +115,12 @@ Gather/HardCodedString:
     - app/helpers/meals_helper.rb
     - app/mailers/meal_mailer.rb
     - app/mailers/auth_mailer.rb
+    - app/controllers/calendars/**/*.rb
+    - app/decorators/calendars/**/*.rb
+    - app/models/calendars/**/*.rb
+    - app/forms/calendars/**/*.rb
+    - app/lenses/calendars/**/*.rb
+    - app/jobs/calendars/**/*.rb
+    - app/policies/calendars/**/*.rb
+    - app/serializers/calendars/**/*.rb
+    - app/services/calendars/**/*.rb

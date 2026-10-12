@@ -15,10 +15,24 @@ en:
         guidelines: "Guidelines"
     errors:
       models:
-        # EventletForm (drag-and-drop), which takes Calendars::Eventlet's model name.
+        # EventForm, which takes Calendars::Event's model name.
+        calendars/event:
+          attributes:
+            base:
+              overlap: "This event overlaps an existing one"
+            guidelines:
+              not_accepted: "You must agree to the guidelines"
+            starts_at:
+              changed_after_start: "can't be changed after event begins"
+            ends_at:
+              before_start: "must be after start time"
+              in_past: "can't be changed to a time in the past"
+        # EventletForm (drag-and-drop) and EventletDeletionForm, which take Calendars::Eventlet's model name.
         calendars/eventlet:
           attributes:
             base:
+              not_recurring: "This event is not part of a series"
+              following_only_all_calendars: "“This and following” can only be deleted from all calendars"
               occurrence_missing: "This occurrence no longer exists. Reload the calendar and try again."
               one_calendar: "This event is only on one calendar."
               other_calendar_not_editable: "You can't change this event on all of its calendars. Choose “Move only on” this calendar instead."
@@ -27,6 +41,9 @@ en:
               following_from_past: "Occurrences that have already begun can't be moved with “This and following.”"
               fixed_pattern: "This series repeats in a fixed pattern that doesn't include the new time, so its occurrences can't be moved there. Choose “This only” to move one occurrence."
               overlap: "This event overlaps an existing one"
+            occurrence_start:
+              required_for_single: "is required to change a single occurrence"
+              not_in_series: "is not a valid occurrence in this series"
             starts_at:
               changed_after_start: "can't be changed after event begins"
             ends_at:
@@ -354,6 +371,18 @@ en:
           attributes:
             base:
               all_day_not_allowed: "All-day events are not allowed for this calendar"
+        calendars/event_override:
+          attributes:
+            occurrence_start:
+              not_in_series: "is not a valid occurrence in this series"
+            ends_at:
+              before_start: "must be after start time"
+        calendars/eventlet_override:
+          attributes:
+            base:
+              no_change: "must either delete the occurrence or provide offset changes"
+            eventlet:
+              different_event: "must belong to the same event as the override"
         user:
           password:
             password_strength: "Your password was too weak. Try making it longer or adding special characters."

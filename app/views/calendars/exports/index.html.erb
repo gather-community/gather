@@ -1,72 +1,60 @@
-<% content_for(:title, "Calendar Export") %>
+<% content_for(:title, t(".title")) %>
 <% decorator = Calendars::ExportDecorator.new(current_community, current_user) %>
 
 <div class="calendars-and-url">
   <section class="calendar-list-wrapper">
-    <h2 class="top">Select Calendars</h2>
+    <h2 class="top"><%= t(".select_calendars") %></h2>
     <%= render("calendars/calendar_list", nodes: @calendars) %>
   </section>
   <section class="export-url-and-options">
-    <h2 class="top">Export Link</h2>
+    <h2 class="top"><%= t(".export_link") %></h2>
 
     <%= simple_form_for(:calendars_export) do |f| %>
       <input type="text" id="export-url" readonly/>
       <div class="sub-links">
-        <a href="#" id="copy-link">Copy Link</a>&nbsp;&nbsp;&nbsp;
-        <a href="#" id="visit-link">Visit Link in Browser</a>
+        <a href="#" id="copy-link"><%= t(".copy_link") %></a>&nbsp;&nbsp;&nbsp;
+        <a href="#" id="visit-link"><%= t(".visit_link") %></a>
       </div>
       <small class="details">
         <span class="personalized">
-          This is your personalized export link for the selected calendars.
+          <%= t(".personalized") %>
         </span>
-        If you change the calendar selection (by checking the boxes), the link will
-        change accordingly. Changing the options below will also change the link.
+        <%= t(".selection_changes_link") %>
       </small>
       <div class="options">
-        <h3>Options</h3>
+        <h3><%= t(".options") %></h3>
         <%= f.input(:dont_personalize, as: :boolean) %>
         <%= f.input(:own_only, as: :boolean) %>
       </div>
     <% end %>
 
-    <h2>Import Instructions</h2>
+    <h2><%= t(".import_instructions") %></h2>
 
-    <h3><%= icon_tag("brands google") %> Google Calendar</h3>
-    <h4>Method 1</h4>
-    If you are signed in to your Google account, try simply clicking 'Visit Link in Browser' above.
-    Google Calendar should open on its own and ask you to import.
-    <h4>Method 2</h4>
+    <h3><%= icon_tag("brands google") %> <%= t(".google_calendar") %></h3>
+    <h4><%= t(".method_1") %></h4>
+    <%= t(".google_method_1") %>
+    <h4><%= t(".method_2") %></h4>
     <ol>
-      <li>Click 'Copy Link' above to copy the calendar URL to the clipboard.</li>
-      <li>On the left of the Google Calendar screen, click the '+' next to 'Add a friend's calendar'.</li>
-      <li>Click 'From URL'.</li>
-      <li>Paste the URL you copied above.</li>
-      <li>Click 'Add Calendar'.</li>
-      <li>The events should appear on your calendar after a few seconds.</li>
+      <% t(".google_steps").each do |step| %>
+        <li><%= step %></li>
+      <% end %>
     </ol>
 
-    <h3><%= icon_tag("apple") %> Apple Calendar</h3>
-    <h4>Method 1</h4>
-    Try simply clicking 'Visit Link in Browser' above. If your browser is set to handle
-    webcal links with Apple Calendar, it may just work!
-    <h4>Method 2</h4>
+    <h3><%= icon_tag("apple") %> <%= t(".apple_calendar") %></h3>
+    <h4><%= t(".method_1") %></h4>
+    <%= t(".apple_method_1") %>
+    <h4><%= t(".method_2") %></h4>
     <ol>
-      <li>Click 'Copy Link' above to copy the calendar URL to the clipboard.</li>
-      <li>Open Apple Calendar.</li>
-      <li>Click the 'File' menu.</li>
-      <li>Click 'Subscribe' or 'New Calendar Subscription'.</li>
-      <li>Paste the URL you copied above.</li>
-      <li>Click OK/Subscribe.</li>
-      <li>Set subscription options if prompted. Recommended auto-refresh interval is 'every hour'.</li>
-      <li>The events should now appear on your calendar.</li>
+      <% t(".apple_steps").each do |step| %>
+        <li><%= step %></li>
+      <% end %>
     </ol>
   </section>
 </div>
 
 <div class="footnote">
-  If you accidentally share your personalized calendar links and want to make them private again,
-  <%= link_to("click here to reset your secret token", calendars_exports_reset_token_path, method: :put) %>.
-  Note: This will make the old links inoperative, so you will need to update your calendar app.
+  <%= t(".reset_token_html",
+        link: link_to(t(".reset_token_link"), calendars_exports_reset_token_path, method: :put)) %>
 </div>
 
 <%= javascript_tag do %>

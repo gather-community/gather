@@ -275,7 +275,7 @@ describe "calendar eventlet delete" do
   it "shows an error for an invalid choice without deleting anything" do
     delete_eventlet(calendar_scope: "this", series_scope: "series")
 
-    expect(flash[:error]).to eq("This event is only on one calendar")
+    expect(flash[:error]).to eq("This event is only on one calendar.")
     after_request { expect(Calendars::Event.exists?(event.id)).to be(true) }
   end
 

@@ -1,7 +1,7 @@
 <%= image_tag(calendar.photo_variant(:thumb), alt: calendar.name) %><br><br>
 <% if calendars.any? %>
   <section role="region" aria-labelledby="sidebar-calendar-list-heading" tabindex="-1">
-    <h3 id="sidebar-calendar-list-heading" class="top">Calendars</h3>
+    <h3 id="sidebar-calendar-list-heading" class="top"><%= t(".calendars") %></h3>
     <%= render(
       "calendars/calendar_list",
       nodes: calendars,

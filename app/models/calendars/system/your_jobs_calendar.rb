@@ -109,7 +109,9 @@ module Calendars
 
       def event_attribs(assignment)
         # These prefixes match legacy export uid prefixes
+        # rubocop:disable Gather/HardCodedString -- UID prefixes, not displayed
         uid_prefix = assignment.is_a?(Work::Assignment) ? "Work_Assignment" : "Meals_Assignment"
+        # rubocop:enable Gather/HardCodedString
         {
           name: [assignment.job_title, meal_for(assignment)&.title_or_no_title].compact.join(": "),
           location: meal_for(assignment)&.location_name,
@@ -124,7 +126,9 @@ module Calendars
 
       def eventlet_for(assignment)
         # These prefixes match legacy export uid prefixes
+        # rubocop:disable Gather/HardCodedString -- UID prefixes, not displayed
         uid_prefix = assignment.is_a?(Work::Assignment) ? "Work_Assignment" : "Meals_Assignment"
+        # rubocop:enable Gather/HardCodedString
         Eventlet.new(
           calendar: self,
           event: Event.new(
@@ -144,7 +148,7 @@ module Calendars
       # Assumes assignment is date_only type.
       def multi_day_start_eventlet_for(assignment)
         eventlet = eventlet_for(assignment)
-        eventlet.event.name = "#{eventlet.event.name} (Start)"
+        eventlet.event.name = I18n.t("calendars.job_start", name: eventlet.event.name)
         eventlet.uid = "#{eventlet.uid}_Start"
         eventlet.event.ends_at = eventlet.event.starts_at + 1.day - 1.second
         eventlet
@@ -153,7 +157,7 @@ module Calendars
       # Assumes assignment is date_only type.
       def multi_day_end_eventlet_for(assignment)
         eventlet = eventlet_for(assignment)
-        eventlet.event.name = "#{eventlet.event.name} (End)"
+        eventlet.event.name = I18n.t("calendars.job_end", name: eventlet.event.name)
         eventlet.uid = "#{eventlet.uid}_End"
         eventlet.event.starts_at = eventlet.event.ends_at - 1.day + 1.second
         eventlet

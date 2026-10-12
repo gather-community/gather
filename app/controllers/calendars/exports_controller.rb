@@ -43,7 +43,7 @@ module Calendars
     def reset_token
       authorize(current_community, policy_class: ExportPolicy)
       current_user.reset_calendar_token!
-      flash[:success] = "Token reset successfully."
+      flash[:success] = t("calendars.token_reset")
       redirect_to(calendars_exports_path)
     end
 
@@ -81,12 +81,13 @@ module Calendars
     end
 
     def calendar_name
+      abbrv = current_community.abbrv
       if params[:calendars] == "all"
-        "All #{current_community.abbrv} Calendars"
+        t("calendars.feed_names.all", community: abbrv)
       elsif calendars.size == 1
-        "#{current_community.abbrv} #{calendars[0].name}"
+        t("calendars.feed_names.single", community: abbrv, calendar: calendars[0].name)
       else
-        "#{calendars.size} #{current_community.abbrv} Calendars"
+        t("calendars.feed_names.multiple", community: abbrv, count: calendars.size)
       end
     end
   end

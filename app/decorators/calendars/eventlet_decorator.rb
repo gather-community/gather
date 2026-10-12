@@ -44,7 +44,7 @@ module Calendars
     def recurrence_description
       return nil unless series_event.recurring?
       rule = series_event.schedule.rrules.first
-      base = shorten_day_of_month(strip_end_clause(rule.to_s))
+      base = shorten_day_of_month(without_end(rule).to_s)
       [base, anchor_day_phrase(rule), time_phrase, end_clause].reject(&:blank?).join(" ")
     end
 
@@ -93,7 +93,8 @@ module Calendars
     # "Delete…".
     def calendar_delete_prompt(calendar_scopes)
       others = series_event.eventlets.reject { |e| e.calendar_id == calendar.id }.map(&:calendar_name).sort
-      items = [h.content_tag(:li, h.safe_join([h.content_tag(:strong, calendar.name), " (selected)"]))] +
+      items = [h.content_tag(:li, t("calendars.eventlet_deletion.prompts.calendar.selected_html",
+        name: h.content_tag(:strong, calendar.name)))] +
         others.map { |name| h.content_tag(:li, name) }
       {
         title: t("calendars.eventlet_deletion.prompts.calendar.title"),
@@ -130,33 +131,34 @@ module Calendars
       text.gsub(/(\d+(?:st|nd|rd|th)) days? of the month/, '\1')
     end
 
-    # Drops IceCube's trailing "until <date>" / "<N> times"; we rebuild the end clause in #end_clause.
-    def strip_end_clause(text)
-      text.sub(/ until .+\z| \d+ times\z/, "")
+    # The rule without its until/count, since IceCube's description of those ("until <date>" /
+    # "<N> times") is replaced by #end_clause.
+    def without_end(rule)
+      IceCube::Rule.from_hash(rule.to_hash.except(:until, :count))
     end
 
     # "until Aug 31 2026" for both explicit-until and count-limited rules, from the precomputed
     # recurrence_end_date (the until date, or the date of the last occurrence for count rules).
     def end_clause
       return "" unless series_event.recurrence_end_date
-      "until #{I18n.l(series_event.recurrence_end_date, format: :default)}"
+      t("calendars.recurrence.until_date", date: I18n.l(series_event.recurrence_end_date, format: :default))
     end
 
     # The weekday (weekly) or day-of-month (monthly) implied by the anchor, but only when the rule
     # doesn't already state it. Empty string when nothing needs adding.
     def anchor_day_phrase(rule)
-      h = rule.to_hash
-      validations = h[:validations] || {}
-      case h[:rule_type]
-      when "IceCube::WeeklyRule"
+      validations = rule.to_hash[:validations] || {}
+      starts_at = series_event.starts_at
+      case rule
+      when IceCube::WeeklyRule
         return "" if validations[:day].present?
-        "on #{series_event.starts_at.strftime("%A")}s"
-      when "IceCube::MonthlyRule"
+        t("calendars.recurrence.on_weekdays")[starts_at.wday]
+      when IceCube::MonthlyRule
         return "" if validations[:day_of_week].present? || validations[:day_of_month].present?
-        "on the #{series_event.starts_at.day.ordinalize}"
-      when "IceCube::YearlyRule"
+        t("calendars.recurrence.on_day_of_month", ordinal: starts_at.day.ordinalize)
+      when IceCube::YearlyRule
         return "" if validations[:month_of_year].present? || validations[:day_of_year].present?
-        "on #{I18n.l(series_event.starts_at.to_date, format: :month_day)}"
+        t("calendars.recurrence.on_date", date: I18n.l(starts_at.to_date, format: :month_day))
       else
         ""
       end
@@ -165,7 +167,7 @@ module Calendars
     def time_phrase
       return "" if all_day?
       # :time_only space-pads single-digit hours (" 6:00pm"); strip so we don't double the space.
-      "at #{I18n.l(series_event.starts_at, format: :time_only).strip}"
+      t("calendars.recurrence.at_time", time: I18n.l(series_event.starts_at, format: :time_only).strip)
     end
   end
 end

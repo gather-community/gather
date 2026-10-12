@@ -1,19 +1,19 @@
 <% if calendar %>
   <% content_for(:title, calendar.name) %>
 <% else %>
-  <% content_for(:title, "Events & Reservations") %>
+  <% content_for(:title, t(".title")) %>
 <% end %>
 
 <% content_for(:action_links) do %>
   <%- if calendar && policy(calendar).edit? -%>
-    <%- concat(link_to(icon_tag("pencil") << " Edit Calendar", edit_calendar_path(calendar),
+    <%- concat(link_to(icon_tag("pencil") << " " << t(".edit_calendar"), edit_calendar_path(calendar),
                class: "btn btn-default")) -%>
   <%- end -%>
-  <%- concat(link_to(icon_tag("download") << " Export",
+  <%- concat(link_to(icon_tag("download") << " " << t(".export"),
              calendars_exports_path(calendar ? {calendar_id: calendar.id} : {}),
              class: "btn btn-default")) -%>
   <%- if @can_create_event -%>
-    <%- concat(link_to(icon_tag("plus") << " Create Event", @new_event_path, class: "btn btn-primary")) -%>
+    <%- concat(link_to(icon_tag("plus") << " " << t(".create_event"), @new_event_path, class: "btn btn-primary")) -%>
   <%- end -%>
 <% end %>
 
@@ -23,9 +23,9 @@
     <div id="calendar-grid-focus-live-region" class="sr-only" aria-live="assertive" aria-atomic="true"></div>
     <div id="calendar"></div>
     <footer>
-      <%= link_to("Permalink", @permalink, id: "permalink") %> &nbsp;
-      <a href="#" class="early" id="show-early">Show Early Morning</a>
-      <a href="#" class="early" id="hide-early">Hide Early Morning</a>
+      <%= link_to(t(".permalink"), @permalink, id: "permalink") %> &nbsp;
+      <a href="#" class="early" id="show-early"><%= t(".show_early") %></a>
+      <a href="#" class="early" id="hide-early"><%= t(".hide_early") %></a>
     </footer>
     <div id="create-confirm-modal" class="modal fade" tabindex="-1" role="dialog"
          aria-modal="true" aria-labelledby="create-confirm-modal-title"
@@ -33,15 +33,15 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <button type="button" class="close" data-dismiss="modal" aria-label="<%= t("common.close") %>">
               <span aria-hidden="true">&times;</span></button>
-            <h2 class="modal-title" id="create-confirm-modal-title">Create Event?</h2>
+            <h2 class="modal-title" id="create-confirm-modal-title"><%= t(".create_confirm_title") %></h2>
           </div>
           <div class="modal-body" id="create-confirm-modal-body">
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-primary">OK</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal"><%= t(".cancel") %></button>
+            <button type="button" class="btn btn-primary"><%= t(".ok") %></button>
           </div>
         </div>
       </div>

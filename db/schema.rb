@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_01_000001) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_12_000001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -1208,6 +1208,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_01_000001) do
     t.string "unconfirmed_email", limit: 255
     t.datetime "updated_at", precision: nil, null: false
     t.string "work_phone"
+    t.jsonb "notification_prefs", default: {}, null: false
     t.index ["alternate_id"], name: "index_users_on_alternate_id"
     t.index ["cluster_id"], name: "index_users_on_cluster_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
@@ -1222,6 +1223,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_01_000001) do
     t.check_constraint "full_access = true OR confirmed_at IS NULL", name: "full_access_not_confirmed"
     t.check_constraint "full_access = true OR google_email IS NULL", name: "full_access_no_google_email"
     t.check_constraint "full_access = true OR reset_password_token IS NULL", name: "full_access_reset_password_token"
+    t.check_constraint "jsonb_typeof(notification_prefs) = 'object'::text", name: "notification_prefs_object"
   end
 
   create_table "users_roles", id: false, force: :cascade do |t|

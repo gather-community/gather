@@ -2,8 +2,6 @@
 
 # Sends emails related to billing/accounts.
 class AccountMailer < ApplicationMailer
-  attr_reader :community
-
   def statement_notice(statement)
     load_statement_vars(statement)
     statement_mail(subject: "New Account Statement for #{community.name}")

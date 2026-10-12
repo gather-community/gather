@@ -3,8 +3,6 @@
 module GDrive
   module Migration
     class Mailer < ApplicationMailer
-      attr_reader :community
-
       def migration_request(migration_request)
         @migration_request = migration_request
         @operation = @migration_request.operation

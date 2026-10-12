@@ -86,6 +86,15 @@ class UserPolicy < ApplicationPolicy
     update_info?
   end
 
+  # Only users themselves, so that a missed reminder can't be traced to someone else's change.
+  def update_notification_prefs?
+    self?
+  end
+
+  def permitted_notification_pref_attributes
+    People::NotificationPreferencesForm.field_names
+  end
+
   # Only needed for folks who otherwise couldn't edit this user (i.e. not self, guardians, or admins).
   def update_photo?
     !update_info? && active_with_community_role?(:photographer)

@@ -56,6 +56,10 @@ Rails.application.routes.draw do
     end
   end
 
+  scope module: :people do
+    resource :notification_preferences, path: "notifications", only: %i[show update]
+  end
+
   resources :users do
     collection do
       patch :update_setting, path: "update-setting"

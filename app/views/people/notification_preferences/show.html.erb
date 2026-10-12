@@ -1,0 +1,42 @@
+<% content_for(:title, t(".title")) %>
+
+<p><%= t(".intro") %></p>
+
+<%= gather_form_for(@form, url: notification_preferences_path, method: :patch,
+                           width: :narrow, layout: :vertical) do |f| %>
+  <% @form.configurable_kinds_by_section.each do |section, kinds| %>
+    <h2><%= t("people.notification_preferences.sections.#{section}") %></h2>
+    <% kinds.each do |kind| %>
+      <%= f.input(People::NotificationPreferencesForm.field_name(kind, :email), as: :boolean,
+                  label: t("people.notification_preferences.kinds.#{kind.key}")) %>
+    <% end %>
+  <% end %>
+  <%= form_actions do %>
+    <%= f.button(:primary) %>
+  <% end %>
+<% end %>
+
+<h2><%= t(".always_sent") %></h2>
+<p class="hint"><%= t(".always_sent_hint") %></p>
+<ul>
+  <% @form.required_kinds.each do |kind| %>
+    <li><%= t("people.notification_preferences.kinds.#{kind.key}") %></li>
+  <% end %>
+</ul>
+
+<h2><%= t(".email_lists") %></h2>
+<% if @groups_with_lists.any? %>
+  <p class="hint"><%= t(".email_lists_hint") %></p>
+  <table class="index part-width">
+    <tbody>
+      <% @groups_with_lists.each do |group| %>
+        <tr>
+          <td><%= link_to(group.name, groups_group_path(group)) %></td>
+          <td><%= group.mailman_list.fqdn_listname %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p><%= t(".no_email_lists") %></p>
+<% end %>

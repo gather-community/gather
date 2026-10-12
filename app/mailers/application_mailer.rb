@@ -18,6 +18,11 @@ class ApplicationMailer < ActionMailer::Base
   # and whether users have opted out of a given type of mail.
   # Mails to households should be addressed to all the household users, not to each user separately.
   #
+  # Also filters out users who have turned off this kind of notification. The kind comes from
+  # People::NotificationCatalog, looked up by mailer action unless passed as `notification:`.
+  # Raises if the action isn't in the catalog, so every email has to be accounted for on the
+  # notification preferences page.
+  #
   # Also filters out fake users so that emails are not sent to their fake addresses.
   # Also filters out unconfirmed email addresses for security purposes (note that confirmation/password/
   # invite emails are sent with the AuthMailer which doesn't inherit from this class).
@@ -25,7 +30,8 @@ class ApplicationMailer < ActionMailer::Base
   # If self.community returns a non-nil value, sets the appropriate subdomain.
   def mail(params)
     include_inactive = params.delete(:include_inactive)
-    params[:to] = resolve_recipients(params[:to], include_inactive: include_inactive)
+    kind = notification_kind(params.delete(:notification))
+    params[:to] = resolve_recipients(params[:to], include_inactive: include_inactive, kind: kind)
     return if params[:to].empty?
     raise "@community must be set or community method overridden to send mail" unless community
     with_community_subdomain(community) do
@@ -35,7 +41,13 @@ class ApplicationMailer < ActionMailer::Base
 
   private
 
-  def resolve_recipients(recipients, include_inactive:)
+  def notification_kind(key)
+    return People::NotificationCatalog.find(key) if key
+    People::NotificationCatalog.for_mailer_action(self.class, action_name) ||
+      raise("#{self.class.name}##{action_name} must be listed in People::NotificationCatalog")
+  end
+
+  def resolve_recipients(recipients, include_inactive:, kind:)
     users_or_strings = Array.wrap(recipients).map do |recipient|
       if recipient.is_a?(User)
         resolve_user(recipient)
@@ -64,6 +76,10 @@ class ApplicationMailer < ActionMailer::Base
     else
       users_or_strings.reject { |us| us.is_a?(User) && us.inactive? }
     end
+
+    # This comes after the inactive logic so that an active user opting out doesn't cause
+    # mail to go to inactive users instead.
+    users_or_strings = users_or_strings.reject { |us| us.is_a?(User) && !us.notification_enabled?(kind.key) }
 
     users_or_strings.map { |us| us.is_a?(User) ? us.email : us }
   end

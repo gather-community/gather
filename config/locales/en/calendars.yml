@@ -71,6 +71,46 @@ en:
     calendar_list:
       all: "All"
       select_all: "Select All"
+      deselect_all: "Deselect All"
+    # Text built by the calendar grid's JavaScript (calendar_view.js), mostly for screen readers.
+    grid:
+      create_confirm:
+        same_day_html: "Create event on <b>%{date}</b>?"
+        same_day_times_html: "Create event on <b>%{date}</b> from <b>%{start}</b> to <b>%{end}</b>?"
+        range_html: "Create event from <b>%{start}</b> to <b>%{end}</b>?"
+      now_showing: "Calendar now showing %{month}"
+      event_count:
+        zero: "No events"
+        one: "%{count} event"
+        other: "%{count} events"
+      event_count_this_week:
+        zero: "No events this week"
+        one: "%{count} event this week"
+        other: "%{count} events this week"
+      event_count_this_month:
+        zero: "No events this month"
+        one: "%{count} event this month"
+        other: "%{count} events this month"
+      month_calendar: "Month calendar"
+      day_calendar: "Day calendar"
+      week_calendar: "Week calendar"
+      # %{view} is day_calendar or week_calendar; %{slots} is half_hour_slots or minute_slots.
+      agenda_label: "%{view}. Use arrow keys to navigate"
+      agenda_label_all_day: "%{view}. All Day row. Use arrow keys to navigate"
+      agenda_label_slots: "%{view}. Grid of %{slots}. Use arrow keys to navigate"
+      agenda_label_all_day_slots: "%{view}. All Day row followed by %{slots}. Use arrow keys to navigate"
+      half_hour_slots: "half-hour time slots from %{start} to %{end}"
+      minute_slots: "%{minutes}-minute time slots from %{start} to %{end}"
+      today_date: "Today, %{date}"
+      this_week_date: "This week, %{date}"
+      header:
+        toolbar: "Calendar controls"
+        previous: "Previous"
+        next: "Next"
+        today: "Today"
+        day_view: "Day view"
+        week_view: "Week view"
+        month_view: "Month view"
     events:
       index:
         title: "Events & Reservations"

@@ -27,7 +27,7 @@ module GDrive
       @item_group.assign_attributes(item_group_params)
 
       if @item_group.save
-        flash[:success] = "Group added successfully."
+        flash[:success] = t("gdrive.group_added")
         redirect_to(gdrive_config_path)
       else
         render(:new)

@@ -19,8 +19,6 @@ module Stripe
   # This class reopens the stripe gem's Stripe namespace, so app constants are referenced with a
   # leading :: (a bare `Subscription`, for instance, would resolve to the gem's Stripe::Subscription).
   class TopupProcessor
-    CREDIT_DESCRIPTION = "Monthly messaging topup"
-    REVERSAL_DESCRIPTION = "Reversal of uncollected messaging topup"
     CREDITED_PI_STATUSES = %w[processing succeeded].freeze
 
     # invoice is a Stripe invoice object; event is the originating webhook event when there is one
@@ -83,7 +81,7 @@ module Stripe
     def post_transaction(account, line, delta)
       account.transactions.create!(
         amount_cents: delta,
-        description: delta.positive? ? CREDIT_DESCRIPTION : REVERSAL_DESCRIPTION,
+        description: I18n.t("subscription.messaging_transactions.#{delta.positive? ? "credit" : "reversal"}"),
         stripe_invoice_line_item_id: line.id,
         stripe_event_id: event&.id
       )

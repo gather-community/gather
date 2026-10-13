@@ -22,3 +22,5 @@ translations:
       - "*.calendars.grid.*"
       - "*.calendars.calendar_list.*"
       - "*.wiki.help"
+      - "*.subscription.topup_notices.*"
+      - "*.communities.signup_action.*"

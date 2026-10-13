@@ -26,6 +26,6 @@ class UserSelectInput < SimpleForm::Inputs::CollectionSelectInput
                                  community: current_community).resolve
     options[:collection] = users
     options[:include_blank] = options[:allow_clear] == true
-    options[:prompt] = options[:allow_clear] == true ? false : "Select User ..."
+    options[:prompt] = (options[:allow_clear] == true) ? false : I18n.t("common.select_user")
   end
 end

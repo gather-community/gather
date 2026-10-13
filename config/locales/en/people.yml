@@ -1,5 +1,10 @@
 en:
   people:
+    # The placeholder household and user that a deleted member's records are reassigned to.
+    deleted_placeholder:
+      household: "Deleted Members"
+      first_name: "Deleted"
+      last_name: "Member"
     notification_preferences:
       updated: "Your notification preferences have been saved."
       sections:

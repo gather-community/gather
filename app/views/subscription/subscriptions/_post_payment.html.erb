@@ -1,9 +1,9 @@
-<h2>App Subscription</h2>
+<h2><%= t(".title") %></h2>
 <p>
   <table class="key-value">
     <%= render("email_row", subscription: subscription) %>
     <tr>
-      <td>Next Payment Date</td>
+      <td><%= t(".next_payment_date") %></td>
       <td>
         <%= I18n.l(subscription.next_payment_date) %>
       </td>

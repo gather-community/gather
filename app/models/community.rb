@@ -121,7 +121,10 @@ class Community < ApplicationRecord
       ]},
       {key: :meals, type: :group, fields: [
         {key: :reimb_instructions, type: :markdown},
+        # A starter-content default, translated with the other starter content (see the i18n plan).
+        # rubocop:disable Gather/HardCodedString
         {key: :allergens, type: :text, required: true, default: "Dairy, Shellfish, Soy, Nuts"},
+        # rubocop:enable Gather/HardCodedString
         {key: :default_capacity, type: :integer, required: true, default: 50},
         {key: :show_reimb_form, type: :boolean, default: false},
         {key: :cooks_can_finalize, type: :boolean, default: false},
@@ -279,9 +282,11 @@ class Community < ApplicationRecord
   # Deactivated ⇒ email is not required and it's excluded from active-scoped lists for free.
   # Rescues a unique-index race (two concurrent deletions) by re-reading the winner's row.
   def create_deleted_member
-    household = households.create!(name: "Deleted Members", deleted_placeholder: true)
-    household.users.create!(deleted_placeholder: true, first_name: "Deleted", last_name: "Member",
-      child: false, deactivated_at: Time.current)
+    household = households.create!(deleted_placeholder: true,
+      name: I18n.t("people.deleted_placeholder.household"))
+    household.users.create!(deleted_placeholder: true, child: false, deactivated_at: Time.current,
+      first_name: I18n.t("people.deleted_placeholder.first_name"),
+      last_name: I18n.t("people.deleted_placeholder.last_name"))
   rescue ActiveRecord::RecordNotUnique
     households.find_by(deleted_placeholder: true).users.first
   end

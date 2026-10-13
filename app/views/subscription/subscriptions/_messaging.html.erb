@@ -12,32 +12,32 @@
      data-messaging-topup-update-url-value="<%= subscription_messaging_topup_path %>"
      data-messaging-topup-current-cents-value="<%= selected_cents || 0 %>"
      data-messaging-topup-has-topup-value="<%= topup.present? %>">
-  <h2>Messaging</h2>
+  <h2><%= t(".title") %></h2>
   <p>
     <table class="key-value">
       <tr>
-        <td>Current Balance</td>
+        <td><%= t(".current_balance") %></td>
         <td><%= balance.format %></td>
       </tr>
       <tr>
-        <td>Monthly Topup</td>
+        <td><%= t(".monthly_topup") %></td>
         <td>
-          <%= selected_cents ? topup.amount_display : "None" %>
+          <%= selected_cents ? topup.amount_display : t(".none") %>
           <% if editable %>
-            <%= link_to(selected_cents ? "Edit" : "Add", "#", class: "messaging-topup-edit",
+            <%= link_to(selected_cents ? t(".edit") : t(".add"), "#", class: "messaging-topup-edit",
                   data: {action: "messaging-topup#open"}) %>
           <% end %>
         </td>
       </tr>
       <% if topup&.show_next_payment_date? %>
         <tr>
-          <td>Next Payment Date</td>
+          <td><%= t(".next_payment_date") %></td>
           <td><%= I18n.l(topup.next_bill_date) %></td>
         </tr>
       <% end %>
       <% if topup && (status = topup.status_display) %>
         <tr>
-          <td>Status</td>
+          <td><%= t(".status") %></td>
           <td><%= status %></td>
         </tr>
       <% end %>

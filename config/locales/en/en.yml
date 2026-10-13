@@ -1,5 +1,9 @@
 en:
   common:
+    settings: "Settings"
+    settings_updated: "Settings updated successfully."
+    open_date_picker: "Open date picker"
+    select_user: "Select User ..."
     adults: "Adults"
     all: "All"
     cancel: "Cancel"
@@ -66,6 +70,8 @@ en:
 
   errors:
     messages:
+      invalid_yaml: "Invalid YAML"
+      invalid_custom_field_spec: "This specification is invalid. Please contact Gather support for assistance."
       no_semicolons: "Semicolons not allowed"
 
   # App modal button labels + default titles (exported to JS via config/i18n-js.yml).
@@ -522,6 +528,9 @@ en:
 
   community_lens:
     all: "All Communities"
+
+  lens_bar:
+    clear_filter: "Clear Filter"
 
   search_lens:
     prompt: "Search..."

@@ -90,3 +90,24 @@ en:
         closed: "Anybody in the above communities can see this group but only admins and the group's managers can add people to it."
         hidden: "Only the group's managers and admins for the above communities and can see and add people to this group."
         everybody: "Everybody in the above communities can see this group, and is a member by default. People can chose to opt out if they wish."
+  domains:
+    created: "Domain created successfully."
+    index:
+      title: "Domains"
+      add: "Add Domain"
+      intro_html: "These are the domains on which you can create email lists. For instructions on adding a domain, click %{link}."
+      none_found: "No domains found."
+    new:
+      title: "Add Domain"
+      intro: "To add a domain to Gather:"
+      consider: "Consider whether there are mailboxes, forwarding addresses, or mailing lists defined for this domain."
+      mailboxes_html: "<strong>Mailboxes:</strong> If there are mailboxes defined for this domain, they will stop working if you direct the domain to Gather. To avoid this, you can use a subdomain, e.g. lists.yourdomain.com instead of yourdomain.com."
+      forwarding_html: "<strong>Forwarding addresses:</strong> If there are forwarding addresses defined for this domain, you can migrate them to Gather. Please contact %{email}."
+      lists_html: "<strong>Mailing lists:</strong> If there are mailing lists defined for this domain, you can migrate them to Gather. Please contact %{email}."
+      create: "Create the domain below by entering the full domain name, e.g. \"yourdomain.com\" and clicking \"Save\"."
+      migrating: "If you are migrating forwarding addresses or mailing lists, ensure these are set up on Gather and ready to receive email when you update the domain to point to Gather."
+      dns: "Finally, update the domain to point to Gather. Set the following three DNS records:"
+    show:
+      domain: "Domain"
+      communities: "Communities"
+      lists: "Mailman Lists"

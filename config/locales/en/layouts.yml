@@ -100,7 +100,9 @@ en:
           ---
 
           nice!
-        html: |-
+        # Not named html or *_html: Rails treats such keys as already-safe HTML, so the
+        # tags in this example would render instead of being shown as typed.
+        raw_markup: |-
           If you are an advanced user and want to use raw HTML, try it out!
 
           For instance, <blockquote>you might want to use block quotes</blockquote>.

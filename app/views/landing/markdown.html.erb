@@ -4,7 +4,7 @@
   <p><%= t(".intro_html") %></p>
 
   <%# Each example is shown as typed, then rendered by the same Markdown renderer the rest of Gather uses. %>
-  <% %w[formatting lists headers tables links images rule html].each_with_index do |example, i| %>
+  <% %w[formatting lists headers tables links images rule raw_markup].each_with_index do |example, i| %>
     <% source = t(".examples.#{example}") %>
     <div class="row">
       <div class="markdown">

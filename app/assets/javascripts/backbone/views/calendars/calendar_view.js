@@ -193,9 +193,13 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
       if (start.hasTime()) {
         startTime = start.format(Gather.TIME_FORMATS.regTime);
         endTime = end.format(Gather.TIME_FORMATS.regTime);
-        body.html(`Create event on <b>${date}</b> from <b>${startTime}</b> to <b>${endTime}</b>?`);
+        body.html(I18n.t("calendars.grid.create_confirm.same_day_times_html", {
+          date,
+          start: startTime,
+          end: endTime,
+        }));
       } else {
-        body.html(`Create event on <b>${date}</b>?`);
+        body.html(I18n.t("calendars.grid.create_confirm.same_day_html", {date}));
       }
     } else {
       if (start.hasTime()) {
@@ -205,7 +209,7 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
         startTime = start.format(Gather.TIME_FORMATS.regDate);
         endTime = end.format(Gather.TIME_FORMATS.regDate);
       }
-      body.html(`Create event from <b>${startTime}</b> to <b>${endTime}</b>?`);
+      body.html(I18n.t("calendars.grid.create_confirm.range_html", {start: startTime, end: endTime}));
     }
 
     this.showCreateConfirmModal(modal);
@@ -271,7 +275,8 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
   calendarLiveRegionMessage(view, options) {
     const messageParts = [];
     if (view.name === "month") {
-      messageParts.push(`Calendar now showing ${view.intervalStart.format("MMMM YYYY")}`);
+      const month = view.intervalStart.format("MMMM YYYY");
+      messageParts.push(I18n.t("calendars.grid.now_showing", {month}));
     }
 
     if (
@@ -279,18 +284,12 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
       (view.name === "agendaWeek" || view.name === "month")
     ) {
       const eventCount = this.renderedEventCountInInterval(view.intervalStart, view.intervalEnd);
-      messageParts.push(`${this.eventCountLabel(eventCount)} ${this.eventCountPeriodForView(view)}`);
+      messageParts.push(view.name === "agendaWeek"
+        ? I18n.t("calendars.grid.event_count_this_week", {count: eventCount})
+        : I18n.t("calendars.grid.event_count_this_month", {count: eventCount}));
     }
 
     return messageParts.join(". ");
-  },
-
-  eventCountPeriodForView(view) {
-    if (view.name === "agendaWeek") {
-      return "this week";
-    } else {
-      return "this month";
-    }
   },
 
   captureHeaderControlActivation(e) {
@@ -342,10 +341,7 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
     }
 
     const focusKeyToRestore = this._fcHeaderLastFocusKey;
-    helper.enhance(this.calendar, {
-      toolbarLabel: "Calendar controls",
-      focusKeyToRestore,
-    });
+    helper.enhance(this.calendar, {focusKeyToRestore});
 
     // Always clear after attempting restore to avoid stealing focus on later renders.
     if (focusKeyToRestore) {
@@ -373,7 +369,7 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
       }
       $grid.attr({
         role: "grid",
-        "aria-label": "Month calendar",
+        "aria-label": I18n.t("calendars.grid.month_calendar"),
       });
       $grid.find(".fc-row").attr("role", "row");
       $grid.find(".fc-day").attr("role", "gridcell");
@@ -423,37 +419,35 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
   },
 
   agendaGridLabel(view) {
-    const viewName = view.name === "agendaDay" ? "Day calendar" : "Week calendar";
-    const range = this.visibleTimedSlotRangeLabel();
-    if (!range) {
-      const structure = this.timedEventsOnly ? "" : " All Day row.";
-      return `${viewName}.${structure} Use arrow keys to navigate`;
+    const viewName = view.name === "agendaDay"
+      ? I18n.t("calendars.grid.day_calendar")
+      : I18n.t("calendars.grid.week_calendar");
+    const slots = this.timedSlotsLabel();
+    if (this.timedEventsOnly) {
+      return slots
+        ? I18n.t("calendars.grid.agenda_label_slots", {view: viewName, slots})
+        : I18n.t("calendars.grid.agenda_label", {view: viewName});
     }
-    const timedSlots = `${this.timeSlotIntervalLabel()} ${range}`;
-    const structure = this.timedEventsOnly
-      ? `Grid of ${timedSlots}`
-      : `All Day row followed by ${timedSlots}`;
-    return (
-      `${viewName}. ${structure}. ` +
-      "Use arrow keys to navigate"
-    );
+    return slots
+      ? I18n.t("calendars.grid.agenda_label_all_day_slots", {view: viewName, slots})
+      : I18n.t("calendars.grid.agenda_label_all_day", {view: viewName});
   },
 
-  visibleTimedSlotRangeLabel() {
+  // E.g. "half-hour time slots from 6 AM to 12 AM". Null if no slots are showing.
+  timedSlotsLabel() {
     const times = this.slotTimes();
     if (!times.length) {
       return null;
     }
+    const minutes = this.slotDurationMinutes(times);
     const start = $.fullCalendar.moment(times[0], "HH:mm:ss");
     const end = $.fullCalendar
       .moment(times[times.length - 1], "HH:mm:ss")
-      .add(this.slotDurationMinutes(times), "minutes");
-    return `from ${this.accessibleTimeLabel(start)} to ${this.accessibleTimeLabel(end)}`;
-  },
-
-  timeSlotIntervalLabel() {
-    const minutes = this.slotDurationMinutes(this.slotTimes());
-    return minutes === 30 ? "half-hour time slots" : `${minutes}-minute time slots`;
+      .add(minutes, "minutes");
+    const range = {start: this.accessibleTimeLabel(start), end: this.accessibleTimeLabel(end)};
+    return minutes === 30
+      ? I18n.t("calendars.grid.half_hour_slots", range)
+      : I18n.t("calendars.grid.minute_slots", Object.assign({minutes}, range));
   },
 
   accessibleTimeLabel(time) {
@@ -564,10 +558,10 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
     const today = $.fullCalendar.moment();
     const label = date.format("dddd, MMMM D, YYYY");
     if (date.format("YYYY-MM-DD") === today.format("YYYY-MM-DD")) {
-      return `Today, ${label}`;
+      return I18n.t("calendars.grid.today_date", {date: label});
     }
     if (opts.includeWeekContext && date.isSame(today, "week")) {
-      return `This week, ${label}`;
+      return I18n.t("calendars.grid.this_week_date", {date: label});
     }
     return label;
   },
@@ -857,7 +851,7 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
     ) {
       $focused.attr(
         "aria-label",
-        `All Day, ${this.gridDateLabel(date, {includeWeekContext: true})}`
+        `${this.allDayText}, ${this.gridDateLabel(date, {includeWeekContext: true})}`
       );
       return $focused;
     }
@@ -1397,13 +1391,7 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
   },
 
   eventCountLabel(eventCount) {
-    if (eventCount === 0) {
-      return "No events";
-    } else if (eventCount === 1) {
-      return "1 event";
-    } else {
-      return `${eventCount} events`;
-    }
+    return I18n.t("calendars.grid.event_count", {count: eventCount});
   },
 
   trackRenderedEventCount(event, el) {

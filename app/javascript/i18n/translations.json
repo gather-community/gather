@@ -15,6 +15,11 @@
       "message_html": "<b>Reservations</b> is now called <b>Calendars</b>! Check it out!"
     },
     "calendars": {
+      "calendar_list": {
+        "all": "All",
+        "deselect_all": "Deselect All",
+        "select_all": "Select All"
+      },
       "drag": {
         "calendar": {
           "all": "Move on all",
@@ -34,6 +39,49 @@
           "series": "All occurrences",
           "title": "Move recurring event"
         }
+      },
+      "grid": {
+        "agenda_label": "%{view}. Use arrow keys to navigate",
+        "agenda_label_all_day": "%{view}. All Day row. Use arrow keys to navigate",
+        "agenda_label_all_day_slots": "%{view}. All Day row followed by %{slots}. Use arrow keys to navigate",
+        "agenda_label_slots": "%{view}. Grid of %{slots}. Use arrow keys to navigate",
+        "create_confirm": {
+          "range_html": "Create event from <b>%{start}</b> to <b>%{end}</b>?",
+          "same_day_html": "Create event on <b>%{date}</b>?",
+          "same_day_times_html": "Create event on <b>%{date}</b> from <b>%{start}</b> to <b>%{end}</b>?"
+        },
+        "day_calendar": "Day calendar",
+        "event_count": {
+          "one": "%{count} event",
+          "other": "%{count} events",
+          "zero": "No events"
+        },
+        "event_count_this_month": {
+          "one": "%{count} event this month",
+          "other": "%{count} events this month",
+          "zero": "No events this month"
+        },
+        "event_count_this_week": {
+          "one": "%{count} event this week",
+          "other": "%{count} events this week",
+          "zero": "No events this week"
+        },
+        "half_hour_slots": "half-hour time slots from %{start} to %{end}",
+        "header": {
+          "day_view": "Day view",
+          "month_view": "Month view",
+          "next": "Next",
+          "previous": "Previous",
+          "today": "Today",
+          "toolbar": "Calendar controls",
+          "week_view": "Week view"
+        },
+        "minute_slots": "%{minutes}-minute time slots from %{start} to %{end}",
+        "month_calendar": "Month calendar",
+        "now_showing": "Calendar now showing %{month}",
+        "this_week_date": "This week, %{date}",
+        "today_date": "Today, %{date}",
+        "week_calendar": "Week calendar"
       }
     },
     "common": {

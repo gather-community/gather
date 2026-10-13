@@ -28,7 +28,9 @@ Gather.Views.Calendars.CalendarListView = Backbone.View.extend({
   },
 
   updateSelectAllLink() {
-    this.$(".select-all-link").text(this.allSelected() ? "Deselect All" : "Select All");
+    this.$(".select-all-link").text(this.allSelected()
+      ? I18n.t("calendars.calendar_list.deselect_all")
+      : I18n.t("calendars.calendar_list.select_all"));
   },
 
   selectedIds() {

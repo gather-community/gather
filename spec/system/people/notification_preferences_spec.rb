@@ -29,6 +29,10 @@ describe "notification preferences", js: true do
     expect(page).to have_checked_field("Reminders for my jobs")
     expect(actor.reload.notification_prefs).to eq("meal_role_reminder" => {"email" => false})
 
+    # Reload so the first save's success alert is gone. Otherwise the alert check below could
+    # match it before the second save finishes.
+    visit(notification_preferences_path)
+    expect(page).not_to have_css(".alert-success")
     check("Reminders for my meal shifts")
     click_button("Save")
     expect(page).to have_success_alert("Your notification preferences have been saved.")

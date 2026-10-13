@@ -9,16 +9,17 @@ en:
         ends_at: "End Time"
         creator: "Creator"
         group: "Group"
-        all_day: "All-day event?"
+        all_day: "All-Day Event?"
         kind: "Type"
         note: "Note"
         guidelines: "Guidelines"
         repeat_frequency: "Repeats"
         repeat_interval: "Every"
+        repeat_weekdays: "On"
         repeat_monthly_by: "On"
         repeat_ends: "Ends"
-        repeat_ends_on: "End date"
-        repeat_count: "Number of times"
+        repeat_ends_on: "End Date"
+        repeat_count: "Number of Times"
         series_scope: "Change"
     errors:
       models:
@@ -33,6 +34,7 @@ en:
               no_series_choice: "This series can't be changed from this occurrence. Open an occurrence that hasn't happened yet to change the series from then on."
               occurrence_missing: "This occurrence no longer exists. Go back to the calendar and try again."
               longer_than_repeat: "The event is longer than the time between repeats, so its occurrences would overlap."
+              first_occurrence_off_weekdays: "Moving all occurrences by this much means the first one, on %{date}, would move to a %{weekday}, which isn't one of the days it repeats on. Tick %{weekday} as well, or choose “This and following.”"
               pattern_change_with_changes:
                 one: "1 occurrence in the part being changed has been moved or deleted, so the days it repeats on can't change. Undo that change first, or change the series from a later date."
                 other: "%{count} occurrences in the part being changed have been moved or deleted, so the days it repeats on can't change. Undo those changes first, or change the series from a later date."
@@ -51,6 +53,8 @@ en:
               stop_repeating: "can't be changed to Never. To stop the series, delete this and the following occurrences."
             repeat_ends_on:
               before_start: "must be on or after the start date"
+            repeat_monthly_by:
+              not_on_start_date: "isn't available for the start date. Choose again."
         # EventletForm (drag-and-drop) and EventletDeletionForm, which take Calendars::Eventlet's model name.
         calendars/eventlet:
           attributes:

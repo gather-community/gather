@@ -74,7 +74,7 @@ describe "event form", js: true do
         check("I agree to the above")
 
         expect(evaluate_script("$('.datetimepicker input').val()")).to include("8:00am")
-        check("All-day event")
+        check("All-Day Event")
         expect(evaluate_script("$('.datetimepicker input').val()")).not_to include("8:00am")
 
         click_on("Save")
@@ -94,7 +94,7 @@ describe "event form", js: true do
 
       scenario do
         visit(new_calendar_event_path(calendar))
-        expect(page).not_to have_content("All-day event")
+        expect(page).not_to have_content("All-Day Event")
       end
     end
   end
@@ -157,9 +157,9 @@ describe "event form", js: true do
 
     scenario "unticking all-day brings the time back" do
       visit(new_calendar_event_path(calendar, start: "2021-09-29 08:00", end: "2021-09-29 09:00"))
-      check("All-day event")
+      check("All-Day Event")
       expect(start_time_text).not_to include("8:00am")
-      uncheck("All-day event")
+      uncheck("All-Day Event")
       expect(start_time_text).to include("8:00am")
     end
 

@@ -9,7 +9,9 @@ Gather.Views.DirtyChecker = Backbone.View.extend({
   events: {
     "cocoon:after-insert": "rescan",
     "cocoon:after-remove": "rescan",
-    "gather:select2inserted": "rescan"
+    "gather:select2inserted": "rescan",
+    // From the form-refresh Stimulus controller, after it re-renders parts of the form.
+    "form-refresh:refreshed": "rescan"
   },
 
   rescan() {

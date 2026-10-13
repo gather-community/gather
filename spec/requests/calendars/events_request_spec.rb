@@ -163,3 +163,68 @@ describe "calendar event edit page for a repeating event" do
     end
   end
 end
+
+# The form-refresh controller posts the event form here as it changes. See EventsController#form_refresh.
+describe "calendar event form refresh" do
+  let(:community) { create(:community) }
+  let!(:user) { create(:user, community: community) }
+  let!(:calendar) { create(:calendar, community: community, allow_overlap: true) }
+  # The fourth Monday of February 2027, which is also the last. Mondays in March 2027 are the 1st, 8th,
+  # 15th, 22nd and 29th.
+  let(:fourth_monday) { Time.zone.local(2027, 2, 22, 18) }
+  let(:fifth_monday) { Time.zone.local(2027, 3, 29, 18) }
+
+  before do
+    use_user_subdomain(user)
+    sign_in(user)
+  end
+
+  def refresh(path, starts_at, **params)
+    post(path, headers: {"Accept" => "text/vnd.turbo-stream.html"}, params: {calendars_event: {
+      starts_at: starts_at.iso8601, ends_at: (starts_at + 1.hour).iso8601, repeat_frequency: "monthly",
+      repeat_monthly_by: "day_of_week", **params
+    }})
+  end
+
+  def monthly_choices
+    stream = Capybara.string(response.body)
+    expect(stream).to have_css("turbo-stream[action='replace'][method='morph']" \
+      "[target='calendars_event_repeat_monthly_by_field']", visible: :all)
+    template = Capybara.string(response.body[%r{<template>(.*)</template>}m, 1])
+    select = template.find("select#calendars_event_repeat_monthly_by", visible: :all)
+    [select.all("option", visible: :all).map(&:text), select.find("option[selected]", visible: :all).value]
+  end
+
+  it "words the monthly choices from a new event's start, offering both the 4th and the last" do
+    refresh(form_refresh_calendars_events_path, fourth_monday, calendar_id: calendar.id)
+    expect(response).to have_http_status(:ok)
+    expect(monthly_choices).to eq([["Day 22", "The fourth Monday", "The last Monday"], "day_of_week"])
+  end
+
+  it "switches to the last when the start moves to a fifth weekday" do
+    refresh(form_refresh_calendars_events_path, fifth_monday, calendar_id: calendar.id)
+    expect(monthly_choices).to eq([["Day 29", "The last Monday"], "last_day_of_week"])
+  end
+
+  it "words them from the form's times when editing a series from an occurrence" do
+    # On the 1st of each month, opened from March 1st and moved to the 29th.
+    first = Time.zone.local(2027, 1, 1, 18)
+    event = create(:event, calendar: calendar, creator: user, starts_at: first, ends_at: first + 1.hour,
+      recurrence_rule: IceCube::Rule.monthly.day_of_month(1).to_hash)
+    refresh(form_refresh_calendars_event_path(event), fifth_monday,
+      occurrence_start: Time.zone.local(2027, 3, 1, 18).to_i, repeat_monthly_by: "day_of_month")
+    expect(monthly_choices).to eq([["Day 29", "The last Monday"], "day_of_month"])
+    expect(event.reload.starts_at).to eq(first)
+  end
+
+  it "saves nothing" do
+    expect { refresh(form_refresh_calendars_events_path, fourth_monday, calendar_id: calendar.id, name: "X") }
+      .not_to change { ActsAsTenant.with_tenant(calendar.cluster) { Calendars::Event.count } }
+  end
+
+  it "is refused for someone who can't edit the event" do
+    event = create(:event, calendar: calendar, starts_at: fourth_monday, ends_at: fourth_monday + 1.hour)
+    expect { refresh(form_refresh_calendars_event_path(event), fourth_monday) }
+      .to raise_error(Pundit::NotAuthorizedError)
+  end
+end

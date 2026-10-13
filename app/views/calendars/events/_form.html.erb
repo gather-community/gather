@@ -1,5 +1,9 @@
-<%= gather_form_for(@form, url: @form.url, html: {data: {controller: "calendars--event-form",
-  "calendars--event-form-community-id-value": event.community_id}}) do |f| %>
+<%# form-refresh re-renders the parts that depend on other fields (see EventsController#form_refresh). %>
+<%= gather_form_for(@form, url: @form.url, html: {data: {controller: "calendars--event-form form-refresh",
+  "calendars--event-form-community-id-value": event.community_id,
+  "form-refresh-url-value": @form.refresh_url,
+  action: "calendars--event-form:startChanged->form-refresh#refresh " \
+    "form-refresh:refreshed->calendars--event-form#repeatChanged"}}) do |f| %>
 
   <%= f.hidden_field :calendar_id %>
   <%= f.hidden_field :origin_page %>

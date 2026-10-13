@@ -1,6 +1,7 @@
 <%# Repeat settings for the event form, and for a repeating event, which occurrences a change applies
-    to. See Calendars::EventForm and Calendars::RecurrencePattern. The calendars--event-form controller
-    shows only the fields that apply: each detail field's data-repeat-show names when it's shown. %>
+    to. See Calendars::EventForm and Calendars::RecurrencePattern. Each detail field's data-repeat-show
+    names when it applies (EventForm#repeat_detail_applies?), and the calendars--event-form controller
+    shows only those as the settings change. %>
 <% unless event.meal? %>
   <%# Notes go in form rows (f.input with a block) so they line up with the fields. %>
   <% if @form.series_edit? %>
@@ -23,7 +24,7 @@
           description: Calendars::EventletDecorator.new(@form.primary_eventlet).recurrence_description) %>
       </p>
     <% end %>
-  <% elsif @form.series_edit? || @form.recurrence_offered? %>
+  <% elsif @form.repeat_settings_editable? %>
     <% frequencies = Calendars::RecurrencePattern::FREQUENCIES.map(&:to_sym) %>
     <% frequencies = [:none] + frequencies unless @form.series_edit? %>
     <% units = Calendars::RecurrencePattern::FREQUENCIES.index_with do |freq|
@@ -31,25 +32,41 @@
        end %>
     <% target = "calendars--event-form-target" %>
     <% action = "calendars--event-form#repeatChanged" %>
+    <% detail = ->(show) { {style: (@form.repeat_detail_applies?(show) ? nil : "display: none"),
+                            data: {target => "repeatDetail", repeat_show: show}} } %>
     <%= f.input :repeat_frequency, collection: frequencies, include_blank: false,
       selected: (@form.repeat_frequency.presence || :none).to_sym,
       input_html: {data: {target => "repeatFrequency", action: action}} %>
     <%= f.input :repeat_interval, as: :integer,
       input_html: {min: 1, max: Calendars::RecurrencePattern::MAX_INTERVAL,
         data: {target => "repeatInterval", action: "input->#{action}", units: units.to_json}},
-      wrapper_html: {data: {target => "repeatDetail", repeat_show: "repeats"}},
+      wrapper_html: detail.call("repeats"),
       hint: (@form.repeat_frequency.present? ? t(".repeat_units.#{@form.repeat_frequency}", count: @form.repeat_interval) : "") %>
-    <%= f.input :repeat_monthly_by, collection: Calendars::RecurrencePattern::MONTHLY_BY.map(&:to_sym),
-      include_blank: false, selected: @form.repeat_monthly_by&.to_sym,
-      wrapper_html: {data: {target => "repeatDetail", repeat_show: "monthly"}} %>
+    <%# The start's weekday is ticked and can't be unticked; the controller moves it with the start.
+        A disabled box isn't sent, so the server always adds the start's day (EventForm#normalize). %>
+    <%= f.input :repeat_weekdays,
+      wrapper_html: detail.call("weekly").deep_merge(data: {locked_title: t(".start_weekday")}) do %>
+      <%= hidden_field_tag("calendars_event[repeat_weekdays][]", "") %>
+      <% start_wday = @form.starts_at&.wday %>
+      <% (0..6).each do |wday| %>
+        <% locked = wday == start_wday %>
+        <%# Bootstrap greys out a .disabled label. %>
+        <%= tag.label(class: ["checkbox-inline", ("disabled" if locked)], title: (t(".start_weekday") if locked)) do %>
+          <%= check_box_tag("calendars_event[repeat_weekdays][]", wday, @form.repeat_weekdays_shown.include?(wday),
+            id: "calendars_event_repeat_weekdays_#{wday}", disabled: locked,
+            data: {target => "repeatWeekday"}) %>
+          <%= t("date.abbr_day_names")[wday] %>
+        <% end %>
+      <% end %>
+    <% end %>
+    <%= render("repeat_monthly_by", f: f) %>
     <%= f.input :repeat_ends, collection: Calendars::RecurrencePattern::ENDS.map(&:to_sym),
       include_blank: false, selected: @form.repeat_ends&.to_sym,
       input_html: {data: {target => "repeatEnds", action: action}},
-      wrapper_html: {data: {target => "repeatDetail", repeat_show: "repeats"}} %>
-    <%= f.input :repeat_ends_on, as: :date_picker,
-      wrapper_html: {data: {target => "repeatDetail", repeat_show: "on_date"}} %>
+      wrapper_html: detail.call("repeats") %>
+    <%= f.input :repeat_ends_on, as: :date_picker, wrapper_html: detail.call("on_date") %>
     <%= f.input :repeat_count, as: :integer, input_html: {min: 2, max: Calendars::RecurrencePattern::MAX_COUNT},
-      wrapper_html: {data: {target => "repeatDetail", repeat_show: "after_count"}} %>
+      wrapper_html: detail.call("after_count") %>
   <% elsif @form.recurrence_blockers.any? %>
     <%= f.input :repeat_frequency do %>
       <p class="hint">

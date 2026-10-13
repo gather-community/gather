@@ -77,6 +77,7 @@ ignore_unused:
   - "calendars.drag.{confirm,confirm_occurrence}"  # calendar_view.js#confirmMove, by series scope
   - "calendars.drag.series.{occurrence,following,series}"  # calendar_view.js#promptForSeriesScope
   - "calendars.events.repeat_fields.{repeat_units,recurrence_blockers}.*"  # events/_repeat_fields.html.erb, by frequency and blocker
+  - "calendars.events.repeat_fields.monthly_by.day_of_week.*"  # events/_repeat_monthly_by.html.erb, by which week
   - "common.time_with_preposition.*"
   - "gdrive.item_kinds.*"
   - "meals.form.summaries.*"

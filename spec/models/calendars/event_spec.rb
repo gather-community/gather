@@ -191,20 +191,26 @@ describe Calendars::Event do
       end
 
       context "with a rule having an until date" do
+        # Before the until date, so the series has occurrences.
+        let(:until_start) { Time.zone.local(2026, 6, 1, 18) }
+
         it "stores the until date" do
-          event = create(:event, recurrence_rule: weekly_until_rule)
+          event = create(:event, recurrence_rule: weekly_until_rule, starts_at: until_start,
+            ends_at: until_start + 1.hour)
           expect(event.recurrence_end_date).to eq(Date.new(2026, 6, 30))
         end
 
         it "updates when rule is replaced" do
-          event = create(:event, recurrence_rule: weekly_rule)
+          event = create(:event, recurrence_rule: weekly_rule, starts_at: until_start,
+            ends_at: until_start + 1.hour)
           expect(event.recurrence_end_date).to be_nil
           event.update!(recurrence_rule: weekly_until_rule)
           expect(event.recurrence_end_date).to eq(Date.new(2026, 6, 30))
         end
 
         it "recomputes correctly after a DB round-trip (JSONB returns string keys)" do
-          event = create(:event, recurrence_rule: weekly_until_rule)
+          event = create(:event, recurrence_rule: weekly_until_rule, starts_at: until_start,
+            ends_at: until_start + 1.hour)
           event.reload
           event.update!(name: "Updated")
           expect(event.recurrence_end_date).to eq(Date.new(2026, 6, 30))
@@ -253,6 +259,31 @@ describe Calendars::Event do
         event = create(:event, calendar: create(:calendar, allow_overlap: true), recurrence_rule: weekly_rule)
         # Not possible through the app while the series is still to come; stands in for one that ended.
         event.calendar.update_columns(allow_overlap: false)
+        expect { event.update!(name: "Renamed") }.not_to raise_error
+      end
+    end
+
+    describe "a start the rule doesn't include" do
+      let(:monday) { Time.zone.now.next_week(:monday).change(hour: 18) }
+      let(:tuesdays) { IceCube::Rule.weekly.day(:tuesday).to_hash }
+
+      it "raises when saving a new series" do
+        expect { create(:event, starts_at: monday, ends_at: monday + 1.hour, recurrence_rule: tuesdays) }
+          .to raise_error(/which its rule doesn't include/)
+      end
+
+      it "raises when the start moves off the rule" do
+        event = create(:event, starts_at: monday + 1.day, ends_at: monday + 1.day + 1.hour,
+          recurrence_rule: tuesdays)
+        expect { event.update!(starts_at: monday, ends_at: monday + 1.hour) }
+          .to raise_error(/which its rule doesn't include/)
+      end
+
+      it "doesn't check saves that leave the start and rule alone" do
+        event = create(:event, starts_at: monday + 1.day, ends_at: monday + 1.day + 1.hour,
+          recurrence_rule: tuesdays)
+        # Stands in for a series saved before this check.
+        event.update_columns(starts_at: monday, ends_at: monday + 1.hour)
         expect { event.update!(name: "Renamed") }.not_to raise_error
       end
     end

@@ -460,12 +460,59 @@ describe Calendars::EventForm do
         expect(first_starts(form.event, 3)).to eq([start, start + 3.days, start + 6.days])
       end
 
-      it "saves a monthly series on the start's nth weekday" do
-        form = create_form(repeat_frequency: "monthly", repeat_monthly_by: "day_of_week")
+      it "saves a weekly series on several days, with the start's" do
+        # Monday's box is disabled, so it isn't sent.
+        form = create_form(repeat_weekdays: ["", "3"])
         expect(form.save).to be(true)
-        nth = ((start.day - 1) / 7) + 1
-        expect(first_starts(form.event, 3).map { |t| [t.wday, [((t.day - 1) / 7) + 1, nth].min] })
-          .to all(eq([start.wday, [nth, 4].min]))
+        expect(first_starts(form.event)).to eq([wk(0), wk(0) + 2.days, wk(1), wk(1) + 2.days])
+      end
+
+      it "adds the start's weekday when the page hadn't caught up with a new start" do
+        # The page still had Monday locked, so sent only Wednesday, but the start moved to Tuesday.
+        form = create_form(starts_at: start + 1.day, ends_at: start + 1.day + 1.hour,
+          repeat_weekdays: ["", "3"])
+        expect(form.save).to be(true)
+        expect(first_starts(form.event, 3)).to eq([wk(0) + 1.day, wk(0) + 2.days, wk(1) + 1.day])
+      end
+
+      describe "monthly on a weekday" do
+        # February 22, 2027 is the fourth and last Monday. March has Mondays on the 1st, 8th, 15th, 22nd
+        # and 29th.
+        let(:fourth_monday) { Time.zone.local(2027, 2, 22, 18) }
+        let(:fifth_monday) { Time.zone.local(2027, 3, 29, 18) }
+
+        def save_monthly(starts_at, monthly_by)
+          form = create_form(starts_at: starts_at, ends_at: starts_at + 1.hour, repeat_frequency: "monthly",
+            repeat_monthly_by: monthly_by)
+          [form, form.save]
+        end
+
+        it "saves the nth weekday" do
+          form, saved = save_monthly(fourth_monday, "day_of_week")
+          expect(saved).to be(true)
+          expect(first_starts(form.event, 3).map(&:to_date))
+            .to eq([Date.new(2027, 2, 22), Date.new(2027, 3, 22), Date.new(2027, 4, 26)])
+        end
+
+        it "saves the last weekday" do
+          form, saved = save_monthly(fourth_monday, "last_day_of_week")
+          expect(saved).to be(true)
+          expect(first_starts(form.event, 3).map(&:to_date))
+            .to eq([Date.new(2027, 2, 22), Date.new(2027, 3, 29), Date.new(2027, 4, 26)])
+        end
+
+        it "refuses the nth weekday for a fifth one, which most months lack" do
+          form, saved = save_monthly(fifth_monday, "day_of_week")
+          expect(saved).to be(false)
+          expect(form.errors[:repeat_monthly_by])
+            .to include("isn't available for the start date. Choose again.")
+        end
+
+        it "shows the closest choice the start date allows" do
+          form, = save_monthly(fifth_monday, "day_of_week")
+          expect(form.repeat_monthly_by_options).to eq(%w[day_of_month last_day_of_week])
+          expect(form.repeat_monthly_by_shown).to eq("last_day_of_week")
+        end
       end
 
       it "saves a yearly series" do
@@ -528,6 +575,12 @@ describe Calendars::EventForm do
 
         it "refuses an event longer than the time between repeats" do
           form = create_form(repeat_frequency: "daily", ends_at: start + 25.hours)
+          expect(form.save).to be(false)
+          expect(form.errors[:base].join).to match(/longer than the time between repeats/)
+        end
+
+        it "refuses an event longer than the gap between two of its weekdays" do
+          form = create_form(repeat_weekdays: ["", "2"], ends_at: start + 25.hours)
           expect(form.save).to be(false)
           expect(form.errors[:base].join).to match(/longer than the time between repeats/)
         end
@@ -686,6 +739,51 @@ describe Calendars::EventForm do
           expect(form.save).to be(false)
           expect(form.errors[:base].join).to match(/days it repeats on/)
         end
+
+        it "adds a weekday" do
+          form = edit_form(occurrence: wk(1), scope: "series", **repeat_defaults, repeat_weekdays: ["", "3"])
+          expect(form.save).to be(true)
+          expect(first_starts(event, 3)).to eq([wk(0), wk(0) + 2.days, wk(1)])
+        end
+
+        it "counts adding a weekday as a change of days" do
+          create(:event_override, event: event, occurrence_start: wk(3), deleted: true)
+          form = edit_form(occurrence: wk(1), scope: "series", **repeat_defaults, repeat_weekdays: ["", "3"])
+          expect(form.save).to be(false)
+          expect(form.errors[:base].join).to match(/days it repeats on/)
+        end
+      end
+
+      describe "a series on several weekdays" do
+        # Mondays and Thursdays.
+        before { event.update!(recurrence_rule: IceCube::Rule.weekly.day(1, 4).to_hash) }
+
+        let(:thursday) { wk(1) + 3.days }
+
+        it "moves the opened Thursday's time, keeping the days" do
+          form = edit_form(occurrence: thursday, scope: "series",
+            starts_at: (thursday + 1.hour).iso8601, ends_at: (thursday + 2.hours).iso8601)
+          expect(form.save).to be(true)
+          expect(first_starts(event, 3)).to eq([wk(0) + 1.hour, wk(0) + 3.days + 1.hour, wk(1) + 1.hour])
+        end
+
+        it "refuses moving all occurrences a day when the first would land on an unticked day" do
+          # Moving Thursday to Friday moves the first Monday to a Tuesday, which isn't ticked. The page
+          # moves the locked box from Thursday to Friday, and sends Monday.
+          form = edit_form(occurrence: thursday, scope: "series", **repeat_defaults,
+            repeat_weekdays: ["", "1"],
+            starts_at: (thursday + 1.day).iso8601, ends_at: (thursday + 1.day + 1.hour).iso8601)
+          expect(form.save).to be(false)
+          expect(form.errors[:base].join).to match(/would move to a Tuesday/)
+        end
+
+        it "moves this and following a day, onto the days ticked" do
+          form = edit_form(occurrence: thursday, scope: "following", **repeat_defaults,
+            repeat_weekdays: ["", "1"],
+            starts_at: (thursday + 1.day).iso8601, ends_at: (thursday + 1.day + 1.hour).iso8601)
+          expect(form.save).to be(true)
+          expect(first_starts(split_off, 3)).to eq([thursday + 1.day, wk(2), wk(2) + 4.days])
+        end
       end
 
       describe "changing the end" do
@@ -755,7 +853,10 @@ describe Calendars::EventForm do
       end
 
       context "with a pattern the form can't show" do
-        before { event.update!(recurrence_rule: IceCube::Rule.weekly.day(:monday, :thursday).to_hash) }
+        before do
+          event.update!(recurrence_rule: IceCube::Rule.monthly.day_of_month(start.day,
+            (start.day % 28) + 1).to_hash)
+        end
 
         it "keeps the pattern while changing other things" do
           rule = event.reload.recurrence_rule

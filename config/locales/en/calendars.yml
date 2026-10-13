@@ -152,6 +152,16 @@ en:
           yearly:
             one: "year"
             other: "years"
+        # The monthly "On" choices, worked out from the start date (RecurrencePattern.monthly_by_options).
+        monthly_by:
+          day_of_month: "Day %{day}"
+          day_of_week:
+            first: "The first %{weekday}"
+            second: "The second %{weekday}"
+            third: "The third %{weekday}"
+            fourth: "The fourth %{weekday}"
+          last_day_of_week: "The last %{weekday}"
+        start_weekday: "The start date's day is always included"
         series_note: "Opened from the occurrence on %{date}. Changes start from this occurrence."
         pattern_fixed: "This event repeats in a way this form can't show (%{description}), so its repeat settings can't be changed here."
         recurrence_unavailable: "Repeating events aren't available on this calendar because %{reasons}."

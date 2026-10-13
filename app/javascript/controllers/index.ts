@@ -27,6 +27,9 @@ application.register("communities--signup-action", Communities__SignupActionCont
 import RecordDeleteController from "./record_delete_controller";
 application.register("record-delete", RecordDeleteController);
 
+import FormRefreshController from "./form_refresh_controller";
+application.register("form-refresh", FormRefreshController);
+
 import ModalController from "./modal_controller";
 application.register("modal", ModalController);
 

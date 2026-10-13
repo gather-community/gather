@@ -1,0 +1,20 @@
+<%# The monthly "On" choices, worded from the start date, e.g. "Day 27" or "The last Tuesday". Rendered
+    again by EventsController#form_refresh when the start changes, so its wrapper keeps a fixed id. %>
+<% starts_at = @form.starts_at %>
+<% labels = Calendars::RecurrencePattern::MONTHLY_BY.index_with do |by|
+     next "" unless starts_at
+     weekday = t("date.day_names")[starts_at.wday]
+     case by
+     when "day_of_month"
+       t("calendars.events.repeat_fields.monthly_by.day_of_month", day: starts_at.day)
+     when "day_of_week"
+       nth = %w[first second third fourth][Calendars::RecurrencePattern.nth_weekday(starts_at) - 1]
+       nth ? t("calendars.events.repeat_fields.monthly_by.day_of_week.#{nth}", weekday: weekday) : ""
+     when "last_day_of_week"
+       t("calendars.events.repeat_fields.monthly_by.last_day_of_week", weekday: weekday)
+     end
+   end %>
+<%= f.input :repeat_monthly_by, collection: @form.repeat_monthly_by_options.map { |by| [labels[by], by] },
+  include_blank: false, selected: @form.repeat_monthly_by_shown,
+  wrapper_html: {id: "calendars_event_repeat_monthly_by_field", style: (@form.repeat_detail_applies?("monthly") ? nil : "display: none"),
+    data: {"calendars--event-form-target": "repeatDetail", repeat_show: "monthly"}} %>

@@ -147,6 +147,24 @@ module Calendars
       redirect_to_form_in_context(@form)
     end
 
+    # Re-renders the parts of the event form that depend on its other fields, for the values it has now,
+    # such as the monthly repeat choices, which are worded from the start date. Called by the
+    # form-refresh Stimulus controller as the form changes. Saves nothing.
+    def form_refresh
+      event_params = params.require(:calendars_event)
+      persisted = params[:id].present?
+      if !persisted && event_params[:calendar_id].blank?
+        skip_authorization
+        return head(:unprocessable_entity)
+      end
+
+      @form = EventForm.new(action: persisted ? :update : :create, current_user: current_user,
+        id: params[:id], params: event_params)
+      @event = @form.event
+      authorize(@event, persisted ? :edit? : :new?)
+      render(formats: :turbo_stream)
+    end
+
     protected
 
     # See def'n in ApplicationController for documentation.

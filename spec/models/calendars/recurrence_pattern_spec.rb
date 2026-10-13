@@ -32,6 +32,12 @@ describe Calendars::RecurrencePattern do
       expect(occurrences(rule)).to eq([start, start + 2.weeks, start + 4.weeks, start + 6.weeks])
     end
 
+    it "repeats weekly on the chosen weekdays, always including the start's" do
+      # Thursday and Saturday chosen; the start, a Tuesday, is added.
+      rule = pattern(frequency: "weekly", weekdays: %w[4 6]).to_rule_hash(start, all_day: false)
+      expect(occurrences(rule)).to eq([start, start + 2.days, start + 4.days, start + 1.week])
+    end
+
     it "repeats monthly on the start's date" do
       rule = pattern(frequency: "monthly").to_rule_hash(start, all_day: false)
       expect(occurrences(rule).map(&:to_date).map(&:day)).to all(eq(20))
@@ -42,9 +48,9 @@ describe Calendars::RecurrencePattern do
       expect(occurrences(rule).map { |t| [t.wday, ((t.day - 1) / 7) + 1] }).to all(eq([2, 3]))
     end
 
-    it "treats a fifth weekday as the last one, which every month has" do
+    it "repeats monthly on the last of the start's weekday, which every month has" do
       fifth_thursday = Time.zone.parse("2026-10-29 19:00")
-      rule = pattern(frequency: "monthly", monthly_by: "day_of_week")
+      rule = pattern(frequency: "monthly", monthly_by: "last_day_of_week")
         .to_rule_hash(fifth_thursday, all_day: false)
       dates = occurrences(rule, from: fifth_thursday).map(&:to_date)
       expect(dates).to eq([Date.new(2026, 10, 29), Date.new(2026, 11, 26), Date.new(2026, 12, 31),
@@ -86,8 +92,10 @@ describe Calendars::RecurrencePattern do
       [
         pattern(frequency: "daily", interval: 3),
         pattern(frequency: "weekly", ends: "after_count", count: 5),
+        pattern(frequency: "weekly", weekdays: %w[0 2 5], interval: 2),
         pattern(frequency: "monthly", monthly_by: "day_of_week", ends: "on_date",
           ends_on: Date.new(2027, 3, 1)),
+        pattern(frequency: "monthly", monthly_by: "last_day_of_week"),
         pattern(frequency: "monthly", interval: 2),
         pattern(frequency: "yearly")
       ].each do |original|
@@ -98,11 +106,21 @@ describe Calendars::RecurrencePattern do
 
     it "reads a bare weekly rule as weekly on the start's weekday" do
       read = described_class.from_rule(IceCube::Rule.weekly.to_hash)
-      expect(read.days_key(start)).to eq(["weekly", 1, nil, 2])
+      expect(read.days_key(start)).to eq(["weekly", 1, nil, [2]])
     end
 
-    it "can't show a weekly rule on several days" do
-      expect(described_class.from_rule(IceCube::Rule.weekly.day(:monday, :thursday).to_hash)).to be_nil
+    it "reads a weekly rule on several days" do
+      read = described_class.from_rule(IceCube::Rule.weekly.day(:monday, :thursday).to_hash)
+      expect(read.weekdays).to eq([1, 4])
+    end
+
+    it "reads a monthly rule on a fifth weekday, which only older series have, as the last" do
+      read = described_class.from_rule(IceCube::Rule.monthly.day_of_week(thursday: [-1]).to_hash)
+      expect(read.monthly_by).to eq("last_day_of_week")
+    end
+
+    it "can't show a monthly rule on several dates" do
+      expect(described_class.from_rule(IceCube::Rule.monthly.day_of_month(1, 15).to_hash)).to be_nil
     end
 
     it "reads no rule as not repeating" do
@@ -116,6 +134,55 @@ describe Calendars::RecurrencePattern do
       expect(weekly.days_key(start + 1.hour)).to eq(weekly.days_key(start))
       expect(weekly.days_key(start + 1.day)).not_to eq(weekly.days_key(start))
     end
+
+    it "tells the 4th weekday from the last" do
+      fourth_and_last = Time.zone.parse("2026-10-27 19:00")
+      expect(pattern(frequency: "monthly", monthly_by: "day_of_week").days_key(fourth_and_last))
+        .not_to eq(pattern(frequency: "monthly", monthly_by: "last_day_of_week").days_key(fourth_and_last))
+    end
+  end
+
+  describe ".monthly_by_options" do
+    it "offers the date and the nth weekday early in the month" do
+      expect(described_class.monthly_by_options(Date.new(2026, 10, 20))).to eq(%w[day_of_month day_of_week])
+    end
+
+    it "offers both the 4th and the last weekday in the last week, when it's the 4th" do
+      expect(described_class.monthly_by_options(Date.new(2026, 10, 27)))
+        .to eq(%w[day_of_month day_of_week last_day_of_week])
+    end
+
+    it "offers only the last for a fifth weekday, which most months lack" do
+      expect(described_class.monthly_by_options(Date.new(2026, 10,
+        29))).to eq(%w[day_of_month last_day_of_week])
+    end
+  end
+
+  describe ".closest_monthly_by" do
+    it "keeps a choice the date allows" do
+      expect(described_class.closest_monthly_by("day_of_week", Date.new(2026, 10, 27))).to eq("day_of_week")
+    end
+
+    it "switches between the 4th and the last when only the other is allowed" do
+      expect(described_class.closest_monthly_by("day_of_week",
+        Date.new(2026, 10, 29))).to eq("last_day_of_week")
+      expect(described_class.closest_monthly_by("last_day_of_week",
+        Date.new(2026, 10, 20))).to eq("day_of_week")
+    end
+  end
+
+  describe "#min_gap" do
+    it "is the interval's length for a single weekday" do
+      expect(pattern(frequency: "weekly", interval: 2).min_gap(start)).to eq(14.days)
+    end
+
+    it "is the closest two days for several, counting the wrap into the next week" do
+      # Tuesday and Thursday: 2 days apart. Sunday and Saturday every other week: 6 days apart in the
+      # same week, then 8 from Saturday to the Sunday after the skipped week.
+      expect(pattern(frequency: "weekly", weekdays: %w[4]).min_gap(start)).to eq(2.days)
+      saturday = start + 4.days
+      expect(pattern(frequency: "weekly", weekdays: %w[0], interval: 2).min_gap(saturday)).to eq(6.days)
+    end
   end
 
   describe "validation" do
@@ -126,6 +193,10 @@ describe Calendars::RecurrencePattern do
     it "requires at least two occurrences when ending after a count" do
       expect(pattern(frequency: "weekly", ends: "after_count", count: 1)).not_to be_valid
       expect(pattern(frequency: "weekly", ends: "after_count", count: 2)).to be_valid
+    end
+
+    it "requires real weekdays" do
+      expect(pattern(frequency: "weekly", weekdays: %w[7])).not_to be_valid
     end
 
     it "requires an interval of at least one" do

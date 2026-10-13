@@ -42,15 +42,78 @@ describe "repeating events in the event form", js: true do
     expect(visible?("On")).to be(true)
     select("Weekly", from: "Repeats")
 
-    expect(visible?("Number of times")).to be(false)
+    expect(visible?("Number of Times")).to be(false)
     select("After a number of times", from: "Ends")
-    expect(visible?("Number of times")).to be(true)
-    fill_in("Number of times", with: "3")
+    expect(visible?("Number of Times")).to be(true)
+    fill_in("Number of Times", with: "3")
     click_on("Save")
 
     expect_success
     event = Calendars::Event.find_by!(name: "Book club")
     expect(event.schedule.first(10).map(&:to_time)).to eq([wk(0), wk(2), wk(4)])
+  end
+
+  describe "choices that follow the start date" do
+    # The fourth Monday of February 2027, which is also the last.
+    let(:start) { Time.zone.local(2027, 2, 22, 18) }
+
+    # The form doesn't move the end along with the start, so both are set. The end goes first so the
+    # start's change is the last.
+    def move_start_to(time)
+      set_picker("ends_at", time + 1.hour)
+      set_picker("starts_at", time)
+    end
+
+    def set_picker(field, time)
+      page.execute_script("$('.calendars_event_#{field} .datetimepicker').data('DateTimePicker')" \
+        ".date(moment('#{time.strftime("%Y-%m-%dT%H:%M")}'))")
+    end
+
+    def weekday_box(wday)
+      find("#calendars_event_repeat_weekdays_#{wday}")
+    end
+
+    def monthly_options
+      all("#calendars_event_repeat_monthly_by option").map(&:text)
+    end
+
+    before do
+      visit(new_calendar_event_path(calendar, start: start.strftime("%Y-%m-%d %H:%M"),
+        end: (start + 1.hour).strftime("%Y-%m-%d %H:%M")))
+      fill_in("Event Name", with: "Book club")
+    end
+
+    scenario "weekly: the start's weekday is locked, and moves with the start" do
+      select("Weekly", from: "Repeats")
+      expect(weekday_box(1)).to be_checked.and(be_disabled)
+      weekday_box(3).check
+
+      move_start_to(start + 1.day)
+      expect(weekday_box(2)).to be_checked.and(be_disabled)
+      expect(weekday_box(1)).not_to be_checked
+      expect(weekday_box(1)).not_to be_disabled
+      expect(weekday_box(3)).to be_checked
+      click_on("Save")
+
+      expect_success
+      event = Calendars::Event.find_by!(name: "Book club")
+      expect(event.schedule.first(3).map(&:to_time)).to eq([start + 1.day, start + 2.days, start + 8.days])
+    end
+
+    scenario "monthly: the choices are worded from the start, and follow it" do
+      select("Monthly", from: "Repeats")
+      expect(monthly_options).to eq(["Day 22", "The fourth Monday", "The last Monday"])
+
+      # A fifth Tuesday, which can only be the last.
+      move_start_to(Time.zone.local(2027, 3, 30, 18))
+      expect(page).to have_select("On", options: ["Day 30", "The last Tuesday"])
+      select("The last Tuesday", from: "On")
+      click_on("Save")
+
+      expect_success
+      event = Calendars::Event.find_by!(name: "Book club")
+      expect(event.schedule.first(2).map(&:to_date)).to eq([Date.new(2027, 3, 30), Date.new(2027, 4, 27)])
+    end
   end
 
   context "on a calendar that doesn't allow repeating events" do

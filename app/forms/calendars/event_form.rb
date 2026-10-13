@@ -10,8 +10,8 @@ module Calendars
   # same as dragging it, so the series' start is never re-anchored on the opened occurrence.
   class EventForm
     NAME_MAX_LENGTH = 24
-    REPEAT_FIELDS = %i[repeat_frequency repeat_interval repeat_monthly_by repeat_ends repeat_ends_on
-      repeat_count].freeze
+    REPEAT_FIELDS = %i[repeat_frequency repeat_interval repeat_weekdays repeat_monthly_by repeat_ends
+      repeat_ends_on repeat_count].freeze
 
     # Attributes a "This and following" edit gives the new series, rather than the original.
     SPLIT_ATTRIBUTES = %w[name note kind sponsor_id creator_id group_id all_day].freeze
@@ -35,8 +35,8 @@ module Calendars
     attr_reader :event, :pattern, :occurrence_start, :series_scope
 
     delegate :creator, to: :event
-    delegate :frequency, :interval, :monthly_by, :ends, :ends_on, :count, to: :pattern, prefix: :repeat,
-      allow_nil: true
+    delegate :frequency, :interval, :weekdays, :monthly_by, :ends, :ends_on, :count, to: :pattern,
+      prefix: :repeat, allow_nil: true
 
     normalize_attributes :kind, :note
 
@@ -134,6 +134,11 @@ module Calendars
       end
     end
 
+    # Where the form-refresh controller sends the form to re-render the parts that depend on it.
+    def refresh_url
+      persisted? ? form_refresh_calendars_event_path(@event) : form_refresh_calendars_events_path
+    end
+
     def series_edit?
       @series_edit
     end
@@ -166,6 +171,23 @@ module Calendars
       !pattern.nil?
     end
 
+    # Whether the form shows repeat fields to fill in, rather than a note in their place.
+    def repeat_settings_editable?
+      return false if event.meal?
+      series_edit? ? pattern_editable? : recurrence_offered?
+    end
+
+    # Whether a repeat detail field applies to the current settings, as named in its data-repeat-show.
+    # The calendars--event-form controller makes the same decision as the settings change.
+    def repeat_detail_applies?(show)
+      repeats = repeat_frequency.present?
+      case show
+      when "repeats" then repeats
+      when "weekly", "monthly" then repeat_frequency == show
+      when "on_date", "after_count" then repeats && repeat_ends == show
+      end
+    end
+
     # The opened occurrence on the event's own calendar, with any change to it applied. Nil if it
     # doesn't exist, e.g. it was deleted in another tab.
     def opened_occurrence
@@ -181,6 +203,23 @@ module Calendars
     # The multi-occurrence choices allowed for this series edit, from this occurrence.
     def series_scope_options
       series_choices.allowed_scopes
+    end
+
+    # The weekdays shown ticked: those chosen, and always the start's, which can't be unticked.
+    def repeat_weekdays_shown
+      return [] unless starts_at
+      pattern ? pattern.weekdays_for(starts_at) : [starts_at.wday]
+    end
+
+    # The monthly choices the start date allows (RecurrencePattern.monthly_by_options), and the one shown
+    # chosen: the closest to the current choice, which may not suit a start date that just changed.
+    def repeat_monthly_by_options
+      starts_at ? RecurrencePattern.monthly_by_options(starts_at) : RecurrencePattern::MONTHLY_BY.take(1)
+    end
+
+    def repeat_monthly_by_shown
+      return repeat_monthly_by unless starts_at
+      RecurrencePattern.closest_monthly_by(repeat_monthly_by || "day_of_month", starts_at)
     end
 
     private
@@ -216,21 +255,32 @@ module Calendars
     # attributes, so they're taken out before the rest are assigned.
     def extract_series_params(params)
       params ||= {}
-      @original_pattern = RecurrencePattern.from_rule(@event.recurrence_rule)
-      repeat_params = REPEAT_FIELDS.index_with { |field| params.delete(field) }
-      @pattern =
-        if repeat_params.values.any?(&:present?) && !@event.meal?
-          RecurrencePattern.new(**repeat_params.transform_keys { |k| k.to_s.delete_prefix("repeat_").to_sym })
-        else
-          @original_pattern
-        end
+      sent = extract_pattern(params)
       return unless series_edit?
 
       occurrence_param = params.delete(:occurrence_start)
       @occurrence_start = occurrence_param.present? ? Time.zone.at(occurrence_param.to_i) : @event.starts_at
+      # Settings that weren't sent are unchanged, as the form would send them: without the opened
+      # occurrence's weekday, whose checkbox follows the start (see #normalize).
+      @pattern.weekdays = @pattern.weekdays - [@occurrence_start.wday] if !sent && @pattern
       options = series_scope_options
       @series_scope = params.delete(:series_scope).presence ||
         (options.include?("series") ? "series" : options.first)
+    end
+
+    # The repeat settings sent, or the event's own if none were. Returns whether any were sent.
+    def extract_pattern(params)
+      @original_pattern = RecurrencePattern.from_rule(@event.recurrence_rule)
+      repeat_params = REPEAT_FIELDS.index_with { |field| params.delete(field) }
+      sent = repeat_params.values.any?(&:present?) && !@event.meal?
+      # A copy, as #normalize changes it and the original is compared against (#days_changed?).
+      @pattern =
+        if sent
+          RecurrencePattern.new(**repeat_params.transform_keys { |k| k.to_s.delete_prefix("repeat_").to_sym })
+        else
+          @original_pattern&.dup
+        end
+      sent
     end
 
     def parse_starts_and_ends_at(params)
@@ -273,8 +323,13 @@ module Calendars
 
     def normalize
       @event.all_day = false if rule_set.timed_events_only?
-      return unless all_day? && starts_at && ends_at
-      assign_times(starts_at.midnight, ends_at.midnight + 1.day - 1.second)
+      if all_day? && starts_at && ends_at
+        assign_times(starts_at.midnight,
+          ends_at.midnight + 1.day - 1.second)
+      end
+      # The start's weekday checkbox is disabled, so it isn't sent. It's always included, even if the
+      # page hadn't caught up with a change to the start.
+      pattern.weekdays = pattern.weekdays_for(starts_at) if pattern&.frequency == "weekly" && starts_at
     end
 
     def assign_times(starts, ends)
@@ -296,6 +351,12 @@ module Calendars
 
     def effective_series_scope
       series_choices.effective_scope(series_scope)
+    end
+
+    # Where the series' first occurrence will be after an "All occurrences" edit: moved as the opened
+    # occurrence was.
+    def new_series_start
+      start_shift.apply(event.starts_at)
     end
 
     def series_duration
@@ -438,12 +499,38 @@ module Calendars
         pattern.errors.each { |e| errors.add(:"repeat_#{e.attribute}", e.message) }
         return
       end
-      return if starts_at.blank? || ends_at.blank?
+      repeat_settings_fit_times unless starts_at.blank? || ends_at.blank?
+    end
+
+    def repeat_settings_fit_times
       if pattern.ends == "on_date" && pattern.ends_on < starts_at.to_date
         errors.add(:repeat_ends_on, :before_start)
-      elsif ends_at - starts_at > pattern.min_gap
+      elsif ends_at - starts_at > pattern.min_gap(starts_at)
         errors.add(:base, :longer_than_repeat)
+      elsif pattern.frequency == "monthly" && monthly_by_unavailable?
+        errors.add(:repeat_monthly_by, :not_on_start_date)
+      elsif first_occurrence_off_weekdays?
+        errors.add(:base, :first_occurrence_off_weekdays,
+          date: I18n.l(new_series_start.to_date, format: :long),
+          weekday: I18n.t("date.day_names")[new_series_start.wday])
       end
+    end
+
+    # E.g. "the 4th Tuesday" after the start moved to a fifth Tuesday. The page offers only what the
+    # start allows, but may not have caught up with a change to it. An "All occurrences" edit builds the
+    # rule from the series' first occurrence, so that has to allow it too.
+    def monthly_by_unavailable?
+      dates = [starts_at]
+      dates << new_series_start if series_edit? && effective_series_scope == "series"
+      dates.any? { |d| RecurrencePattern.monthly_by_options(d).exclude?(pattern.monthly_by) }
+    end
+
+    # Weekly on several days, moving an occurrence to another day moves the first occurrence by as
+    # many days, which may not be one of the days ticked: e.g. moving the Thursday meeting of a Monday
+    # and Thursday series to Friday, without ticking Tuesday, would start it on a Tuesday.
+    def first_occurrence_off_weekdays?
+      return false unless series_edit? && effective_series_scope == "series" && pattern.frequency == "weekly"
+      pattern.weekdays_for(starts_at).exclude?(new_series_start.wday)
     end
 
     def series_edit_allowed

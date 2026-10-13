@@ -25,7 +25,7 @@ module RuboCop
         CLASS_NAME = /\A[[:upper:]]\w*(::[[:upper:]]\w*)+\z/
         # The start of a class name built by interpolation, e.g. "Calendars::Rules::".
         NAMESPACE_PREFIX = /\A[[:upper:]]\w*(::[[:upper:]]\w*)*::\z/
-        KEY_METHODS = %i[[] dig key? header == != eql?].freeze
+        KEY_METHODS = %i[[] dig key? header == != eql? include? start_with? end_with?].freeze
 
         def on_str(node)
           return if node.parent&.dstr_type? # Checked as a whole by on_dstr.

@@ -95,8 +95,6 @@ Gather/HardCodedString:
   Include:
     - app/**/*.rb
   Exclude:
-    # Not converted yet.
-    - app/**/gdrive/**/*.rb
     # Starter content for new communities, translated in the release phase of the i18n plan.
     - app/models/utils/generators/**/*.rb
     # Mail that only goes to Gather staff (exempt per CLAUDE.md).

@@ -1,12 +1,11 @@
 ---
 # Flags hard-coded user-facing strings in views (see "User-Facing Strings" in CLAUDE.md).
-# Every view is linted. Exceptions: mail that only goes to Gather staff (CLAUDE.md exempts it), the
-# uptime-check text, and GDrive, whose strings haven't been moved yet.
+# Every view is linted. Exceptions: mail that only goes to Gather staff (CLAUDE.md exempts it) and the
+# uptime-check text.
 # spec/lint/hard_coded_strings_spec.rb runs this in CI.
 EnableDefaultLinters: false
 glob: "app/views/**/*.erb"
 exclude:
-  - "app/views/gdrive/**/*"
   - "app/views/admin_mailer/*"
   - "app/views/system_mailer/*"
   - "app/views/test_mailer/*"

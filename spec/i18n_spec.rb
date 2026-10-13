@@ -43,4 +43,11 @@ describe "i18n" do
       end
     end
   end
+
+  it "has up-to-date static error pages in public/" do
+    Gather::ErrorPages.files.each do |path, html|
+      expect(Rails.public_path.join(path).read).to eq(html),
+        "public/#{path} is out of date. Regenerate it with `bundle exec rake error_pages:generate`"
+    end
+  end
 end

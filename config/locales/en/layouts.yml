@@ -36,3 +36,101 @@ en:
   calendar_nav_popover:
     message_html: "<b>Reservations</b> is now called <b>Calendars</b>! Check it out!"
     dismiss: "Dismiss"
+  landing:
+    invite_welcome: "Welcome to Gather! Please choose a sign in option below."
+    index:
+      blurb: "Life is better together."
+      logo_alt: "Gather logo"
+      sign_in_google: "Sign in with Google"
+      sign_in_password: "Sign in with Password"
+      learn_more: "Learn more"
+      try_it_out: "Try it out"
+    signed_out:
+      title: "Gather - Signed Out"
+      signed_out: "You are now signed out of Gather."
+      public_computer_html: "If this is a <strong>public computer</strong>, you may also want to<br/>%{link}."
+      google_sign_out: "sign out of your Google account"
+      return_home: "Return to Home"
+    privacy_policy:
+      title: "Privacy Policy"
+    markdown:
+      title: "Markdown Formatting Guide"
+      intro_html: "<strong>Markdown</strong> is a simple way of creating clean and rich text content without needing to learn a special language."
+      if_you_type: "If you type ..."
+      displayed_like: "It will be displayed like this:"
+      outro: "Now have fun creating lots of useful and beautiful content!"
+      # Each example is shown as typed and then as rendered, so it must be valid Markdown.
+      examples:
+        formatting: "You can easily do simple formatting like **bold**, _italics_, and ~~strikethrough~~."
+        lists: |-
+          You can also make
+
+          * bulleted
+          * lists
+              * with
+              * indented
+              * sub-lists
+
+          and
+
+          1. numbered
+          2. lists
+        headers: |-
+          # Headers
+          ## Are
+          ### Easy
+
+          as well!
+        tables: |-
+          | You  | Can    |
+          |------|--------|
+          | even make pretty | tables |
+          | Wow! | That's super cool! |
+        links: |-
+          Links to other pages look [like this](http://example.com).
+
+          Plain link text will be automatically recognized: https://gather.coop
+        images: |-
+          You can display images like this:
+
+          ![Kitty](https://gather.coop/sample-image.png)
+        rule: |-
+          You might use a horizontal rule to divide your content:
+
+          ---
+
+          nice!
+        html: |-
+          If you are an advanced user and want to use raw HTML, try it out!
+
+          For instance, <blockquote>you might want to use block quotes</blockquote>.
+  # Static error pages, generated into public/ by `rake error_pages:generate` (see Gather::ErrorPages).
+  error_pages:
+    "400":
+      title: "The server cannot process the request due to a client error (400 Bad Request)"
+      heading: "The server cannot process the request due to a client error."
+      body: "Please check the request and try again. If you're the application owner check the logs for more information."
+    "403":
+      title: "You are not permitted to view that page (403)"
+      heading: "You are not permitted to view that page."
+      body: "If you think this is a mistake, please contact your administrator."
+    "404":
+      title: "The page you were looking for doesn't exist (404 Not found)"
+      heading: "The page you were looking for doesn't exist."
+      body: "You may have mistyped the address or the page may have moved. If you're the application owner check the logs for more information."
+    "406-unsupported-browser":
+      title: "Your browser is not supported (406 Not Acceptable)"
+      heading: "Your browser is not supported."
+      body: "Please upgrade your browser to continue."
+    "422":
+      title: "The change you wanted was rejected (422 Unprocessable Entity)"
+      heading: "The change you wanted was rejected."
+      body: "Maybe you tried to change something you didn't have access to. If you're the application owner check the logs for more information."
+    "500":
+      title: "We're sorry, but something went wrong (500 Internal Server Error)"
+      heading: "We're sorry, but something went wrong."
+      body: "If you're the application owner check the logs for more information."
+    offline:
+      title: "You are not connected to the Internet"
+      heading: "There was a problem contacting the server."
+      body: "You may have lost your internet connection. Try reloading the page."

@@ -167,7 +167,7 @@ describe "jobs", js: true do
     scenario "view meal job" do
       visit(work_period_jobs_path(periods[0]))
       click_on("Cook")
-      expect(page).to have_content("This is job was synchronized from the meals system and can't")
+      expect(page).to have_content("This job was synchronized from the meals system and can't")
       expect(page).not_to have_field("Title")
     end
 

@@ -38,3 +38,6 @@ application.register("messaging-topup", MessagingTopupController);
 
 import Calendars__EventletDeleteController from "./calendars/eventlet_delete_controller";
 application.register("calendars--eventlet-delete", Calendars__EventletDeleteController);
+
+import Calendars__EventFormController from "./calendars/event_form_controller";
+application.register("calendars--event-form", Calendars__EventFormController);

@@ -107,4 +107,78 @@ describe "event form", js: true do
       expect(page).to have_content("May be bed bugs!")
     end
   end
+
+  # The form's own behavior in the browser, pinned so it survives the move to Stimulus
+  # (calendars--event-form).
+  describe "behavior in the browser" do
+    def form_dirty?
+      evaluate_script("$('.calendars--event-form').dirtyForms('isDirty')")
+    end
+
+    def start_time_text
+      evaluate_script("$('.calendars_event_starts_at .datetimepicker input').val()")
+    end
+
+    context "with pre-notices limited to some kinds" do
+      # The Type field only appears when a protocol requires one.
+      let!(:general) do
+        create(:calendar_protocol, calendars: [calendar], pre_notice: "Mind the stairs", requires_kind: true)
+      end
+      let!(:personal) do
+        create(:calendar_protocol, calendars: [calendar], kinds: ["Personal"], pre_notice: "Personal notice")
+      end
+      let!(:official) do
+        create(:calendar_protocol, calendars: [calendar], kinds: ["Official"], pre_notice: "Official notice")
+      end
+
+      scenario "shows only the notices for the chosen kind, and always the general one" do
+        visit(new_calendar_event_path(calendar))
+        expect(page).to have_content("Mind the stairs")
+        expect(page).not_to have_content("Personal notice")
+        expect(page).not_to have_content("Official notice")
+
+        select("Personal", from: "Type")
+        expect(page).to have_content("Personal notice")
+        expect(page).not_to have_content("Official notice")
+
+        select("Official", from: "Type")
+        expect(page).to have_content("Official notice")
+        expect(page).not_to have_content("Personal notice")
+        expect(page).to have_content("Mind the stairs")
+      end
+
+      scenario "shows the notice for an existing event's kind when editing" do
+        event = create(:event, calendar: calendar, creator: user, kind: "Official")
+        visit(edit_calendars_event_path(event))
+        expect(page).to have_content("Official notice")
+        expect(page).not_to have_content("Personal notice")
+      end
+    end
+
+    scenario "unticking all-day brings the time back" do
+      visit(new_calendar_event_path(calendar, start: "2021-09-29 08:00", end: "2021-09-29 09:00"))
+      check("All-day event")
+      expect(start_time_text).not_to include("8:00am")
+      uncheck("All-day event")
+      expect(start_time_text).to include("8:00am")
+    end
+
+    scenario "notices unsaved changes" do
+      visit(new_calendar_event_path(calendar))
+      expect(form_dirty?).to be(false)
+      fill_in("Event Name", with: "Stuff")
+      # DirtyForms notices on change, which fires when the field loses focus.
+      find("#calendars_event_name").send_keys(:tab)
+      expect(form_dirty?).to be(true)
+    end
+
+    context "as an admin" do
+      let(:user) { create(:admin, community: community) }
+
+      scenario "chooses the creator with a searchable picker" do
+        visit(new_calendar_event_path(calendar))
+        expect(page).to have_css(".calendars_event_creator_id .select2-container")
+      end
+    end
+  end
 end

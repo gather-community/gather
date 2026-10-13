@@ -72,8 +72,7 @@ class ApplicationMailer < ActionMailer::Base
 
     params[:to] = recipient_emails(recipients)
     with_community_subdomain(community) do
-      # The layout's footer links here. Internal mail doesn't go to members, so it has no settings to link to.
-      @notification_preferences_url = notification_preferences_url unless kind.type == :internal
+      @notification_preferences_url = notification_preferences_url if settings_footer?(recipients, kind)
       add_unsubscribe(recipients.first, kind) if kind.configurable? && recipients.first.is_a?(User)
       super
     end
@@ -99,6 +98,13 @@ class ApplicationMailer < ActionMailer::Base
         "several recipients. Send it with deliver_per_recipient so each gets their own unsubscribe link."
     end
     recipients
+  end
+
+  # Whether the layout should add the footer linking to the notification settings page.
+  # Internal mail doesn't go to members, and users without full access can't sign in to reach the page.
+  # (They can still unsubscribe from configurable mail with their mail client's one-click button.)
+  def settings_footer?(recipients, kind)
+    kind.type != :internal && recipients.any? { |r| r.is_a?(User) && r.full_access? }
   end
 
   # Called inside with_community_subdomain so URLs point at the right community.

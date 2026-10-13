@@ -51,7 +51,9 @@ class AuthMailer < Devise::Mailer
   private
 
   # Auth links point at the apex domain, but the settings page lives on the user's community subdomain.
+  # Users without full access can't sign in to reach it, so they get no footer.
   def set_notification_preferences_url(user)
+    return unless user.full_access?
     with_community_subdomain(user.community) { @notification_preferences_url = notification_preferences_url }
   end
 end

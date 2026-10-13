@@ -170,6 +170,21 @@ describe "user form", js: true, perform_jobs: true do
           expect(page).to have_css(%(a.household[href$="/households/#{household2.id}"]))
         end
 
+        context "with meal restrictions feature enabled" do
+          let!(:feature_flag) { create(:feature_flag, name: "restrictions", status: true) }
+          let!(:restriction) { create(:restriction, contains: "Gluten", absence: "Gluten-free",
+                                                    community: user.community) }
+
+          scenario "selecting a meal restriction and verifying it appears on show page" do
+            visit(edit_path)
+            check("Gluten")
+            click_button("Save")
+
+            expect_success
+            expect(page).to have_content("Gluten-free")
+          end
+        end
+
         context "with unconfirmed user" do
           let(:user) { create(:user, :unconfirmed) }
 

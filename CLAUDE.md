@@ -83,9 +83,12 @@ The dev server must be running first (`bin/dev` won't stay up in the background 
 
 ```bash
 yarn build                          # One-off JS build (no watch)
-bundle exec thin start --ssl --ssl-key-file config/ssl/gatherdev.org.key \
-  --ssl-cert-file config/ssl/gatherdev.org.crt &   # Rails on https://foo.gatherdev.org:3000
+PORT="$(yq -r '.url.port // 3000' config/settings.local.yml)"
+bundle exec thin start -p "$PORT" --ssl --ssl-key-file config/ssl/gatherdev.org.key \
+  --ssl-cert-file config/ssl/gatherdev.org.crt &   # Rails on https://foo.gatherdev.org:$PORT
 ```
+
+The port is `url.port` in `config/settings.local.yml` (3000 if unset). Each dev env on the machine has its own, and the app builds its URLs from it, so always use that port — never assume 3000.
 
 Screenshots use the Selenium container (`gather-selenium`) via a Ruby script with `selenium-webdriver`. The container shares `vibrant_borg`'s network namespace; reach it from this container at `172.18.0.3:4444`. The app is at `172.18.0.2`. Use `--host-resolver-rules` to make Chrome resolve both apex and wildcard subdomains to `172.18.0.2`.
 
@@ -95,8 +98,9 @@ require 'selenium-webdriver'
 
 SELENIUM_URL  = 'http://172.18.0.3:4444'
 APP_IP        = '172.18.0.2'
-APEX_URL      = 'https://gatherdev.org:3000'
-COMMUNITY_URL = 'https://foo.gatherdev.org:3000'  # adjust community slug
+PORT          = 3000                               # url.port from config/settings.local.yml
+APEX_URL      = "https://gatherdev.org:#{PORT}"
+COMMUNITY_URL = "https://foo.gatherdev.org:#{PORT}" # adjust community slug
 EMAIL         = 'user@example.com'                 # set a known password first (see below)
 PASSWORD      = 'testtest1'
 
@@ -585,7 +589,7 @@ Active Record Encryption keys follow the same pattern — set them as `SETTINGS_
 - Delayed Job for background processing
 - esbuild for JS bundling, Stimulus for frontend interactivity
 - Bootstrap 3 + Tailwind for CSS
-- Thin with SSL in development (https://gatherdev.org:3000)
+- Thin with SSL in development (https://gatherdev.org:3000, or the `url.port` in `config/settings.local.yml`)
 
 ## Test Organization
 

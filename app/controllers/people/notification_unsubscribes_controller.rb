@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 module People
-  # Handles the unsubscribe link in notification email footers.
-  # GET shows a confirmation page, so that link scanners and previews fetching the link don't
-  # unsubscribe anyone. POST turns the notification off. Mail clients' one-click unsubscribe button
-  # (RFC 8058) POSTs here directly.
+  # Handles the List-Unsubscribe URL in configurable notification emails.
+  # Mail clients' one-click unsubscribe button (RFC 8058) POSTs here, which turns the notification off.
+  # Clients without one-click support open the URL in a browser instead. GET shows a confirmation page
+  # rather than unsubscribing, so that link scanners and previews fetching the URL don't unsubscribe anyone.
   class NotificationUnsubscribesController < ApplicationController
     # These are public pages. Authentication comes from the signed token in the URL.
     skip_before_action :authenticate_user!

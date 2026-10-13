@@ -48,7 +48,8 @@ class ApplicationMailer < ActionMailer::Base
   # Also filters out unconfirmed email addresses for security purposes (note that confirmation/password/
   # invite emails are sent with the AuthMailer which doesn't inherit from this class).
   #
-  # Configurable notifications get an unsubscribe footer and RFC 8058 List-Unsubscribe headers.
+  # Mail to community members gets a footer linking to the notification settings page (see the mailer
+  # layout). Configurable notifications also get RFC 8058 List-Unsubscribe headers for one-click unsubscribe.
   # The link turns the notification off for one person, so these messages must go to exactly one
   # recipient. Use `deliver_per_recipient`, which sends each recipient their own copy.
   #
@@ -71,6 +72,8 @@ class ApplicationMailer < ActionMailer::Base
 
     params[:to] = recipient_emails(recipients)
     with_community_subdomain(community) do
+      # The layout's footer links here. Internal mail doesn't go to members, so it has no settings to link to.
+      @notification_preferences_url = notification_preferences_url unless kind.type == :internal
       add_unsubscribe(recipients.first, kind) if kind.configurable? && recipients.first.is_a?(User)
       super
     end
@@ -101,9 +104,7 @@ class ApplicationMailer < ActionMailer::Base
   # Called inside with_community_subdomain so URLs point at the right community.
   def add_unsubscribe(user, kind)
     token = People::NotificationUnsubscribe.token_for(user, kind)
-    @unsubscribe_url = notification_unsubscribe_url(token: token)
-    @notification_preferences_url = notification_preferences_url
-    headers["List-Unsubscribe"] = "<#{@unsubscribe_url}>"
+    headers["List-Unsubscribe"] = "<#{notification_unsubscribe_url(token: token)}>"
     headers["List-Unsubscribe-Post"] = "List-Unsubscribe=One-Click"
   end
 

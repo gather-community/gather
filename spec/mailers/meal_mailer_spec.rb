@@ -31,10 +31,10 @@ describe MealMailer do
       expect(mails.map(&:to)).to match_array(users.map { |u| [u.email] })
     end
 
-    it "adds the unsubscribe footer" do
-      expect(mail.body.encoded)
-        .to match(%r{Stop getting emails like this: https?://\S+/notifications/unsubscribe/\S+})
-      expect(mail.body.encoded).to match(%r{Choose which emails you get: https?://\S+/notifications\r?$})
+    it "adds the notification settings footer, with unsubscribe only in the headers" do
+      expect(mail.body.encoded).to match(%r{Gather notification settings: https?://\S+/notifications\r?$})
+      expect(mail.body.encoded).not_to include("/notifications/unsubscribe/")
+      expect(mail["List-Unsubscribe"].value).to match(%r{/notifications/unsubscribe/})
     end
 
     it "renders the subject" do

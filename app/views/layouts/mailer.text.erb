@@ -1,7 +1,6 @@
 <%= yield.rstrip %>
-<% if @unsubscribe_url -%>
+<% if @notification_preferences_url -%>
 
 -- 
-<%= t("layouts.mailer.unsubscribe", url: @unsubscribe_url) %>
-<%= t("layouts.mailer.manage", url: @notification_preferences_url) %>
+<%= t("layouts.mailer.notification_settings", url: @notification_preferences_url) %>
 <% end -%>

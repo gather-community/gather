@@ -4,39 +4,55 @@
 
 <%= gather_form_for(@form, url: notification_preferences_path, method: :patch,
                            width: :narrow, layout: :vertical) do |f| %>
-  <% @form.configurable_kinds_by_section.each do |section, kinds| %>
-    <h2><%= t("people.notification_preferences.sections.#{section}") %></h2>
-    <% kinds.each do |kind| %>
-      <%= f.input(People::NotificationPreferencesForm.field_name(kind, :email), as: :boolean,
-                  label: t("people.notification_preferences.kinds.#{kind.key}")) %>
-    <% end %>
-  <% end %>
-  <%= form_actions do %>
-    <%= f.button(:primary) %>
-  <% end %>
-<% end %>
-
-<h2><%= t(".always_sent") %></h2>
-<p class="hint"><%= t(".always_sent_hint") %></p>
-<ul>
-  <% @form.required_kinds.each do |kind| %>
-    <li><%= t("people.notification_preferences.kinds.#{kind.key}") %></li>
-  <% end %>
-</ul>
-
-<h2><%= t(".email_lists") %></h2>
-<% if @groups_with_lists.any? %>
-  <p class="hint"><%= t(".email_lists_hint") %></p>
-  <table class="index part-width">
+  <table class="index notification-preferences">
     <tbody>
-      <% @groups_with_lists.each do |group| %>
+      <% @form.kinds_by_section.each do |section, kinds| %>
+        <tr class="heading">
+          <th colspan="2"><h3><%= t("people.notification_preferences.sections.#{section}") %></h3></th>
+        </tr>
+        <% kinds.each do |kind| %>
+          <tr>
+            <% if kind.configurable? %>
+              <% field = People::NotificationPreferencesForm.field_name(kind, :email) %>
+              <td><%= f.label(field, t("people.notification_preferences.kinds.#{kind.key}")) %></td>
+              <td class="index-checkbox text-center"><%= f.input_field(field, as: :boolean) %></td>
+            <% else %>
+              <% id = "notification_preferences_#{kind.key}_email" %>
+              <td><%= label_tag(id, t("people.notification_preferences.kinds.#{kind.key}")) %></td>
+              <td class="index-checkbox text-center">
+                <%= check_box_tag(id, "1", true, disabled: true, title: t(".essential")) %>
+              </td>
+            <% end %>
+          </tr>
+        <% end %>
+      <% end %>
+
+      <tr class="heading">
+        <th colspan="2">
+          <h3><%= t(".email_lists") %></h3>
+          <% if @groups_with_lists.any? %>
+            <div class="hint"><%= t(".email_lists_hint") %></div>
+          <% end %>
+        </th>
+      </tr>
+      <% if @groups_with_lists.any? %>
+        <% @groups_with_lists.each do |group| %>
+          <tr>
+            <td><%= group.name %></td>
+            <td class="index-checkbox text-center">
+              <%= link_to(t(".view"), groups_group_path(group), target: "_blank", rel: "noopener") %>
+            </td>
+          </tr>
+        <% end %>
+      <% else %>
         <tr>
-          <td><%= link_to(group.name, groups_group_path(group)) %></td>
-          <td><%= group.mailman_list.fqdn_listname %></td>
+          <td colspan="2"><%= t(".no_email_lists") %></td>
         </tr>
       <% end %>
     </tbody>
   </table>
-<% else %>
-  <p><%= t(".no_email_lists") %></p>
+
+  <%= form_actions do %>
+    <%= f.button(:primary) %>
+  <% end %>
 <% end %>

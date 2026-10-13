@@ -1,0 +1,9 @@
+table.notification-preferences {
+  margin-bottom: 20px;
+
+  // Bootstrap makes labels bold, but here they're row labels, like the email list names.
+  label {
+    font-weight: normal;
+    margin-bottom: 0;
+  }
+}

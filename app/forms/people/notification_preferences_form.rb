@@ -38,18 +38,15 @@ module People
       true
     end
 
-    # Configurable kinds this user can see, grouped by section, in catalog order.
-    def configurable_kinds_by_section
-      NotificationCatalog.configurable.select { |k| k.visible_to?(user) }.group_by(&:section)
-    end
-
-    def required_kinds
-      NotificationCatalog.required.select { |k| k.visible_to?(user) }
+    # Kinds this user can see, configurable and required, grouped by section in section order.
+    def kinds_by_section
+      kinds = NotificationCatalog.listed.select { |k| k.visible_to?(user) }.group_by(&:section)
+      NotificationCatalog::SECTIONS.filter_map { |section| [section, kinds[section]] if kinds[section] }.to_h
     end
 
     def update(params)
       params = params.permit(@policy.permitted_notification_pref_attributes)
-      configurable_kinds_by_section.values.flatten.each do |kind|
+      kinds_by_section.values.flatten.select(&:configurable?).each do |kind|
         NotificationCatalog::CHANNELS.each do |channel|
           field = self.class.field_name(kind, channel).to_s
           next unless params.key?(field)

@@ -19,8 +19,8 @@ describe "notification preferences", js: true do
 
     expect(page).to have_checked_field("Reminders for my meal shifts")
     expect(page).to have_checked_field("Reminders when a payment is due")
-    expect(page).to have_content("Messages from a meal team, and meal cancellations")
-    expect(page).not_to have_content("Warnings that your community may be deleted")
+    expect(page).to have_checked_field("Messages and cancellation notices from a meal team", disabled: true)
+    expect(page).not_to have_content("Warnings that my community may be deleted")
 
     uncheck("Reminders for my meal shifts")
     click_button("Save")
@@ -37,17 +37,19 @@ describe "notification preferences", js: true do
 
   scenario "email lists" do
     visit(notification_preferences_path)
-    expect(page).to have_link("Garden", href: groups_group_path(garden))
-    expect(page).to have_content("garden@#{garden_list.domain.name}")
+    row = find("tr", text: "Garden")
+    expect(row).to have_link("View", href: groups_group_path(garden))
+    expect(row.find_link("View")[:target]).to eq("_blank")
     expect(page).not_to have_content("Other")
   end
 
   context "as admin" do
     let(:actor) { create(:admin) }
 
-    scenario "shows the inactivity warning under always sent" do
+    scenario "shows the inactivity warning as essential" do
       visit(notification_preferences_path)
-      expect(page).to have_content("Warnings that your community may be deleted for inactivity")
+      expect(page).to have_checked_field("Warnings that my community may be deleted for inactivity",
+        disabled: true)
     end
   end
 end

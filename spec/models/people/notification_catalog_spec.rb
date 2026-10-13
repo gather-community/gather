@@ -27,8 +27,8 @@ describe People::NotificationCatalog do
     expect(stale).to be_empty, "These catalog entries don't match a mailer action: #{stale.join(", ")}"
   end
 
-  it "gives every configurable kind a section" do
-    described_class.configurable.each do |kind|
+  it "gives every listed kind a section" do
+    described_class.listed.each do |kind|
       expect(described_class::SECTIONS).to include(kind.section)
     end
   end

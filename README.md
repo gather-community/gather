@@ -93,7 +93,7 @@ We recommend using [mise](https://mise.jdx.dev/) for managing tool versions and 
 | Tool        | Purpose                                                           |
 | ----------- | ----------------------------------------------------------------- |
 | Docker      | Only required if using the repo's `compose.yml` for data services |
-| Mailcatcher | Email testing (`gem install mailcatcher`)                         |
+| Mailcatcher | Email testing. Runs as a Docker service, and dev mail goes there by default. If you run it locally instead (`gem install mailcatcher`), set `smtp.address: localhost` in `config/settings.local.yml`. |
 | Mailman 3   | Mailing list integration (see below)                              |
 
 ## Setup Stages

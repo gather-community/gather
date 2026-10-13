@@ -152,11 +152,14 @@ describe "meal create, show, update, delete", js: true do
         expect_modal(text: /If you change meal workers/)
         click_modal_button
 
+        # The change notice is configurable, so each recipient gets their own message.
         expect do
           click_button("Save")
           expect_success
-        end.to change { ActionMailer::Base.deliveries.size }.by(1)
-        expect(ActionMailer::Base.deliveries.last.subject).to eq("Meal Job Assignment Change Notice")
+        end.to change { ActionMailer::Base.deliveries.size }.by(2)
+        notices = ActionMailer::Base.deliveries.last(2)
+        expect(notices.map(&:subject).uniq).to eq(["Meal Job Assignment Change Notice"])
+        expect(notices.map(&:to)).to contain_exactly([actor.email], [meals[4].head_cook.email])
 
         # Show
         find("tr", text: meals[4].head_cook.name).find("a", text: meals[4].title || "[No Menu]").click

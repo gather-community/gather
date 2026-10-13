@@ -4,25 +4,27 @@ require "rails_helper"
 
 describe ApplicationMailer do
   # Sample mailers for testing only.
+  # Sample mailers for testing only. They default to a required kind, which can go to several
+  # recipients in one message. Pass a configurable kind to test opt-outs and unsubscribe links.
   class SampleMailer < ApplicationMailer
-    def sample(recipients)
+    def sample(recipients, notification: :meal_message)
       @community = recipients.first.community
-      mail(to: recipients, subject: "Test", body: "Test", notification: :meal_reminder)
+      mail(to: recipients, subject: "Test", body: "Test", notification: notification)
     end
   end
 
   class SampleInactiveIfNoActiveMailer < ApplicationMailer
-    def sample(recipients)
+    def sample(recipients, notification: :meal_message)
       @community = recipients.first.community
-      mail(to: recipients, subject: "Test", body: "Test", notification: :meal_reminder,
+      mail(to: recipients, subject: "Test", body: "Test", notification: notification,
         include_inactive: :if_no_active)
     end
   end
 
   class SampleInactiveAlwaysMailer < ApplicationMailer
-    def sample(recipients)
+    def sample(recipients, notification: :meal_message)
       @community = recipients.first.community
-      mail(to: recipients, subject: "Test", body: "Test", notification: :meal_reminder,
+      mail(to: recipients, subject: "Test", body: "Test", notification: notification,
         include_inactive: :always)
     end
   end
@@ -132,24 +134,25 @@ describe ApplicationMailer do
 
     context "with notification preferences" do
       let(:opted_out_prefs) { {"meal_reminder" => {"email" => false}} }
+      let(:recipients) { mails.flat_map(&:to) }
 
       context "with a household where one member opted out" do
         let(:adult1) { create(:user, notification_prefs: opted_out_prefs) }
         let(:adult2) { create(:user) }
         let(:household) { create(:household, users: [adult1, adult2]) }
-        let(:mail) { SampleMailer.sample([household]).deliver_now }
+        let(:mails) { SampleMailer.deliver_per_recipient(:sample, [household], notification: :meal_reminder) }
 
         it "sends only to the member who didn't opt out" do
-          expect(mail.to).to eq([adult2.email])
+          expect(recipients).to eq([adult2.email])
         end
       end
 
       context "with everyone opted out" do
         let(:adult1) { create(:user, notification_prefs: opted_out_prefs) }
-        let(:mail) { SampleMailer.sample([adult1]).deliver_now }
+        let(:mails) { SampleMailer.deliver_per_recipient(:sample, [adult1], notification: :meal_reminder) }
 
         it "doesn't send" do
-          expect(mail).to be_nil
+          expect(mails).to be_empty
         end
       end
 
@@ -157,10 +160,10 @@ describe ApplicationMailer do
         let(:adult1) { create(:user, notification_prefs: opted_out_prefs) }
         let(:adult2) { create(:user) }
         let(:child) { create(:user, :child, email: nil, guardians: [adult1, adult2]) }
-        let(:mail) { SampleMailer.sample([child]).deliver_now }
+        let(:mails) { SampleMailer.deliver_per_recipient(:sample, [child], notification: :meal_reminder) }
 
         it "uses the guardians' preferences" do
-          expect(mail.to).to eq([adult2.email])
+          expect(recipients).to eq([adult2.email])
         end
       end
 
@@ -168,14 +171,58 @@ describe ApplicationMailer do
         let(:adult1) { create(:user, notification_prefs: opted_out_prefs) }
         let(:adult2) { create(:user, :inactive) }
         let(:household) { create(:household, users: [adult1, adult2]) }
-        let(:mail) { SampleInactiveIfNoActiveMailer.sample([household]).deliver_now }
+        let(:mails) do
+          SampleInactiveIfNoActiveMailer.deliver_per_recipient(:sample, [household],
+            notification: :meal_reminder)
+        end
 
         before { household.reload }
 
         it "doesn't fall back to the inactive member" do
-          expect(mail).to be_nil
+          expect(mails).to be_empty
         end
       end
+
+      context "with a required kind" do
+        let(:adult1) { create(:user, notification_prefs: {"meal_message" => {"email" => false}}) }
+        let(:mail) { SampleMailer.sample([adult1]).deliver_now }
+
+        it "ignores stored prefs" do
+          expect(mail.to).to eq([adult1.email])
+        end
+      end
+    end
+  end
+
+  describe "configurable notifications" do
+    let(:adult1) { create(:user) }
+    let(:adult2) { create(:user) }
+    let(:household) { create(:household, users: [adult1, adult2]) }
+
+    it "raises if one message would go to several people" do
+      expect { SampleMailer.sample([household], notification: :meal_reminder).deliver_now }
+        .to raise_error(ArgumentError, /deliver_per_recipient/)
+    end
+
+    describe "deliver_per_recipient" do
+      let(:mails) { SampleMailer.deliver_per_recipient(:sample, [household], notification: :meal_reminder) }
+
+      it "sends each recipient their own message with their own unsubscribe link" do
+        expect(mails.map(&:to)).to contain_exactly([adult1.email], [adult2.email])
+        mails.each do |mail|
+          user = User.find_by(email: mail.to.first)
+          token = mail["List-Unsubscribe"].value[%r{/notifications/unsubscribe/([^>]+)>}, 1]
+          unsubscribe = People::NotificationUnsubscribe.from_token(token)
+          expect(unsubscribe.user).to eq(user)
+          expect(unsubscribe.kind.key).to eq(:meal_reminder)
+          expect(mail["List-Unsubscribe-Post"].value).to eq("List-Unsubscribe=One-Click")
+        end
+      end
+    end
+
+    it "doesn't add unsubscribe headers to required notifications" do
+      mail = SampleMailer.sample([adult1]).deliver_now
+      expect(mail["List-Unsubscribe"]).to be_nil
     end
   end
 end

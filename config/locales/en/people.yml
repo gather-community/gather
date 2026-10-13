@@ -1,5 +1,19 @@
 en:
   people:
+    notification_unsubscribes:
+      manage_html: "You can choose which emails you get on your %{link} page. You'll need to sign in."
+      manage_link: "Notifications"
+      show:
+        title: "Unsubscribe"
+        confirm: "Stop sending “%{kind}” emails to %{email}?"
+        already_off: "“%{kind}” emails to %{email} are already turned off."
+        turn_off: "Unsubscribe"
+      create:
+        title: "Unsubscribed"
+        done: "We won't send “%{kind}” emails to %{email} any more."
+      invalid:
+        title: "Unsubscribe"
+        explanation: "This unsubscribe link isn't valid. It may be from an old email, or it was copied incompletely."
     notification_preferences:
       updated: "Your notification preferences have been saved."
       sections:

@@ -5,6 +5,27 @@ class ApplicationMailer < ActionMailer::Base
   include SubdomainSettable
   include RecipientLocale
   default from: Settings.email.from, reply_to: Settings.email.from
+  layout "mailer"
+
+  # Sends each recipient their own message. Configurable notifications must be sent this way, because
+  # each carries an unsubscribe link that works for one person only (see `mail`).
+  # Pass the mailer action and its arguments, e.g. `MealMailer.deliver_per_recipient(:meal_reminder, signup)`.
+  # Returns the delivered messages.
+  #
+  # If a delivery fails, the remaining recipients still get theirs, and then the first error is
+  # re-raised so the caller can report it as usual.
+  def self.deliver_per_recipient(action, ...)
+    emails = with(listing_recipients: true).public_send(action, ...).message.to
+    errors = []
+    messages = Array.wrap(emails).filter_map do |email|
+      with(recipient_email: email).public_send(action, ...).deliver_now
+    rescue => e
+      errors << e
+      nil
+    end
+    raise errors.first if errors.any?
+    messages
+  end
 
   protected
 
@@ -27,19 +48,64 @@ class ApplicationMailer < ActionMailer::Base
   # Also filters out unconfirmed email addresses for security purposes (note that confirmation/password/
   # invite emails are sent with the AuthMailer which doesn't inherit from this class).
   #
+  # Configurable notifications get an unsubscribe footer and RFC 8058 List-Unsubscribe headers.
+  # The link turns the notification off for one person, so these messages must go to exactly one
+  # recipient. Use `deliver_per_recipient`, which sends each recipient their own copy.
+  #
   # If self.community returns a non-nil value, sets the appropriate subdomain.
   def mail(params)
     include_inactive = params.delete(:include_inactive)
     kind = notification_kind(params.delete(:notification))
-    params[:to] = resolve_recipients(params[:to], include_inactive: include_inactive, kind: kind)
-    return if params[:to].empty?
+    recipients = resolve_recipients(params[:to], include_inactive: include_inactive, kind: kind)
+    return if recipients.empty?
     raise "@community must be set or community method overridden to send mail" unless community
+
+    if kind.configurable?
+      # Just report who would get it, without rendering. deliver_per_recipient reads this back.
+      if mailer_params[:listing_recipients]
+        return super(to: recipient_emails(recipients), subject: "", body: "")
+      end
+      recipients = select_single_recipient(recipients)
+      return if recipients.empty?
+    end
+
+    params[:to] = recipient_emails(recipients)
     with_community_subdomain(community) do
+      add_unsubscribe(recipients.first, kind) if kind.configurable? && recipients.first.is_a?(User)
       super
     end
   end
 
   private
+
+  # The mailer's `params`, set by `with`. Named differently because `mail` takes an argument called params.
+  def mailer_params
+    params || {}
+  end
+
+  def recipient_emails(recipients)
+    recipients.map { |r| r.is_a?(User) ? r.email : r }.uniq
+  end
+
+  def select_single_recipient(recipients)
+    if (email = mailer_params[:recipient_email])
+      recipients = recipients.select { |r| (r.is_a?(User) ? r.email : r) == email }.first(1)
+    end
+    if recipient_emails(recipients).size > 1
+      raise ArgumentError, "#{self.class.name}##{action_name} is a configurable notification with " \
+        "several recipients. Send it with deliver_per_recipient so each gets their own unsubscribe link."
+    end
+    recipients
+  end
+
+  # Called inside with_community_subdomain so URLs point at the right community.
+  def add_unsubscribe(user, kind)
+    token = People::NotificationUnsubscribe.token_for(user, kind)
+    @unsubscribe_url = notification_unsubscribe_url(token: token)
+    @notification_preferences_url = notification_preferences_url
+    headers["List-Unsubscribe"] = "<#{@unsubscribe_url}>"
+    headers["List-Unsubscribe-Post"] = "List-Unsubscribe=One-Click"
+  end
 
   def notification_kind(key)
     return People::NotificationCatalog.find(key) if key
@@ -79,9 +145,7 @@ class ApplicationMailer < ActionMailer::Base
 
     # This comes after the inactive logic so that an active user opting out doesn't cause
     # mail to go to inactive users instead.
-    users_or_strings = users_or_strings.reject { |us| us.is_a?(User) && !us.notification_enabled?(kind.key) }
-
-    users_or_strings.map { |us| us.is_a?(User) ? us.email : us }
+    users_or_strings.reject { |us| us.is_a?(User) && !us.notification_enabled?(kind.key) }
   end
 
   def resolve_user(user, via_household: false)

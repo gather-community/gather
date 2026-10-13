@@ -17,7 +17,7 @@ module Meals
       added = (current - orig).map(&:assignment)
       removed = (orig - current).map(&:assignment)
       return unless added.any? || removed.any?
-      MealMailer.worker_change_notice(initiator, meal, added, removed).deliver_now
+      MealMailer.deliver_per_recipient(:worker_change_notice, initiator, meal, added, removed)
     end
 
     private

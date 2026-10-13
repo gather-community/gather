@@ -13,7 +13,7 @@ describe Meals::WorkerChangeNotifier do
   context "with no change" do
     it "doesn't call mailer" do
       notifier
-      expect(MealMailer).not_to receive(:worker_change_notice)
+      expect(MealMailer).not_to receive(:deliver_per_recipient)
       notifier.check_and_send!
     end
   end
@@ -31,8 +31,8 @@ describe Meals::WorkerChangeNotifier do
 
     context "with unprivileged actor" do
       it "calls mailer with correct args" do
-        expect(MealMailer).to receive(:worker_change_notice)
-          .with(actor, meal, [new_assign], old_assigns[0..1]).and_return(double(deliver_now: nil))
+        expect(MealMailer).to receive(:deliver_per_recipient)
+          .with(:worker_change_notice, actor, meal, [new_assign], old_assigns[0..1])
         notifier.check_and_send!
       end
     end
@@ -43,7 +43,7 @@ describe Meals::WorkerChangeNotifier do
       end
 
       it "doesn't call mailer" do
-        expect(MealMailer).not_to receive(:worker_change_notice)
+        expect(MealMailer).not_to receive(:deliver_per_recipient)
       end
     end
   end

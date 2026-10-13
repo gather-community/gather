@@ -16,7 +16,7 @@ describe AccountMailer do
   shared_examples_for "statement email" do
     context "with active users" do
       it "sets the right recipients" do
-        expect(mail.to).to match_array(users.map(&:email))
+        expect(recipients).to match_array(users.map(&:email))
       end
 
       it "sets the right reply to" do
@@ -37,13 +37,14 @@ describe AccountMailer do
       end
 
       it "sends to same recipients anyway unlike most emails" do
-        expect(mail.to).to match_array(users.map(&:email))
+        expect(recipients).to match_array(users.map(&:email))
       end
     end
   end
 
   describe "statement_notice" do
     let(:mail) { described_class.statement_notice(statement).deliver_now }
+    let(:recipients) { mail.to }
 
     context "with billers" do
       it_behaves_like "statement email"
@@ -63,7 +64,10 @@ describe AccountMailer do
   end
 
   describe "statement_reminder" do
-    let(:mail) { described_class.statement_reminder(statement).deliver_now }
+    # Configurable, so each household member gets their own message.
+    let(:mails) { described_class.deliver_per_recipient(:statement_reminder, statement) }
+    let(:mail) { mails.first }
+    let(:recipients) { mails.flat_map(&:to) }
 
     it_behaves_like "statement email"
 

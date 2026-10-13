@@ -28,7 +28,7 @@ module Work
     protected
 
     def send_mail(assignment)
-      WorkMailer.job_reminder(assignment, reminder).deliver_now
+      WorkMailer.deliver_per_recipient(:job_reminder, assignment, reminder)
     end
   end
 end

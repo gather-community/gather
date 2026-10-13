@@ -16,7 +16,7 @@ module Meals
         # Send emails
         signups.each do |signup|
           with_mail_delivery_resilience(data: {signup_id: signup.id}) do
-            MealMailer.meal_reminder(signup).deliver_now
+            MealMailer.deliver_per_recipient(:meal_reminder, signup)
             signup.update_attribute(:notified, true)
           end
         end

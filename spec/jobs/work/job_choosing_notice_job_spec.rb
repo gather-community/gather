@@ -25,7 +25,8 @@ describe Work::JobChoosingNoticeJob do
   subject(:job) { described_class.new(period.id) }
 
   it "sends emails to those with nonzero periods" do
-    expect(WorkMailer).to receive(:job_choosing_notice).exactly(2).times.and_return(mlrdbl)
+    expect(WorkMailer).to receive(:deliver_per_recipient)
+      .with(:job_choosing_notice, any_args).exactly(2).times
     perform_job
   end
 end

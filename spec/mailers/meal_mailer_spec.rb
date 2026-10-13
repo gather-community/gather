@@ -24,10 +24,17 @@ describe MealMailer do
     let(:signup) do
       create(:meal_signup, household: household, meal: meal, comments: "Foo\nBar", diner_counts: [2, 1])
     end
-    let(:mail) { described_class.meal_reminder(signup).deliver_now }
+    let(:mails) { described_class.deliver_per_recipient(:meal_reminder, signup) }
+    let(:mail) { mails.first }
 
-    it "sets the right recipient" do
-      expect(mail.to).to match_array(users.map(&:email))
+    it "sends each household member their own message" do
+      expect(mails.map(&:to)).to match_array(users.map { |u| [u.email] })
+    end
+
+    it "adds the unsubscribe footer" do
+      expect(mail.body.encoded)
+        .to match(%r{Stop getting emails like this: https?://\S+/notifications/unsubscribe/\S+})
+      expect(mail.body.encoded).to match(%r{Choose which emails you get: https?://\S+/notifications\r?$})
     end
 
     it "renders the subject" do
@@ -103,13 +110,17 @@ describe MealMailer do
     let(:initiator) { create(:user) }
     let(:added) { create_list(:meal_assignment, 2, meal: meal, role: asst_cook_role) }
     let(:removed) { build_list(:meal_assignment, 2, meal: meal, role: asst_cook_role) }
-    let(:mail) { described_class.worker_change_notice(initiator, meal, added, removed).deliver_now }
+    let(:mails) do
+      described_class.deliver_per_recipient(:worker_change_notice, initiator, meal, added, removed)
+    end
+    let(:mail) { mails.first }
     let!(:meal_coords) { create_list(:meals_coordinator, 2) }
     let!(:decoy_user) { create(:user) }
 
-    it "sets the right recipients" do
+    it "sends each recipient their own message" do
       recips = (added + removed).map(&:user).push(initiator, meal.head_cook, *meal_coords).map(&:email)
-      expect(mail.to).to contain_exactly(*recips)
+      expect(mails.flat_map(&:to)).to contain_exactly(*recips)
+      expect(mails.map { |m| m.to.size }.uniq).to eq([1])
     end
 
     it "renders the subject" do

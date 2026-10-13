@@ -19,14 +19,14 @@ describe Meals::MealReminderJob do
   let(:strlen) { "Meal Reminder: Meal X".size }
 
   it "sends the right number of emails" do
-    expect(MealMailer).to receive(:meal_reminder).exactly(3).times.and_return(mlrdbl)
+    expect(MealMailer).to receive(:deliver_per_recipient).with(:meal_reminder, any_args).exactly(3).times
     perform_job
   end
 
   it "sends correct emails" do
-    expect(MealMailer).to receive(:meal_reminder).with(signup1).and_return(mlrdbl)
-    expect(MealMailer).to receive(:meal_reminder).with(signup2).and_return(mlrdbl)
-    expect(MealMailer).to receive(:meal_reminder).with(signup3).and_return(mlrdbl)
+    expect(MealMailer).to receive(:deliver_per_recipient).with(:meal_reminder, signup1)
+    expect(MealMailer).to receive(:deliver_per_recipient).with(:meal_reminder, signup2)
+    expect(MealMailer).to receive(:deliver_per_recipient).with(:meal_reminder, signup3)
     perform_job
   end
 

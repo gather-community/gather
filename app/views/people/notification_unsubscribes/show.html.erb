@@ -1,0 +1,12 @@
+<% content_for(:title, t(".title")) %>
+
+<% label = t("people.notification_preferences.kinds.#{@unsubscribe.kind.key}") %>
+<% if @unsubscribe.already_off? %>
+  <p><%= t(".already_off", kind: label, email: @unsubscribe.user.email) %></p>
+<% else %>
+  <p><%= t(".confirm", kind: label, email: @unsubscribe.user.email) %></p>
+  <%= button_to(t(".turn_off"), notification_unsubscribe_path(token: params[:token]),
+                class: "btn btn-primary", form_class: "unsubscribe-confirm") %>
+<% end %>
+
+<p><%= t("people.notification_unsubscribes.manage_html", link: link_to(t("people.notification_unsubscribes.manage_link"), notification_preferences_path)) %></p>

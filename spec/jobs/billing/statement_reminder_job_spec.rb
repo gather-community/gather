@@ -7,7 +7,7 @@ describe Billing::StatementReminderJob do
   include_context "reminder jobs"
 
   it "should send no emails if no statements" do
-    expect(AccountMailer).not_to receive(:statement_reminder)
+    expect(AccountMailer).not_to receive(:deliver_per_recipient)
     perform_job
   end
 
@@ -30,15 +30,16 @@ describe Billing::StatementReminderJob do
     let!(:s8) { create(:statement, account: s7.account, due_on: "2017-01-08") }
 
     it "should send two reminders the first time, then none the second time" do
-      expect(AccountMailer).to receive(:statement_reminder).exactly(2).times.and_return(mlrdbl)
+      expect(AccountMailer).to receive(:deliver_per_recipient)
+        .with(:statement_reminder, any_args).exactly(2).times
       perform_job
-      expect(AccountMailer).not_to receive(:statement_reminder)
+      expect(AccountMailer).not_to receive(:deliver_per_recipient)
       perform_job
     end
 
     it "should send the right statements" do
-      expect(AccountMailer).to receive(:statement_reminder).with(s1).and_return(mlrdbl)
-      expect(AccountMailer).to receive(:statement_reminder).with(s2).and_return(mlrdbl)
+      expect(AccountMailer).to receive(:deliver_per_recipient).with(:statement_reminder, s1)
+      expect(AccountMailer).to receive(:deliver_per_recipient).with(:statement_reminder, s2)
       perform_job
     end
   end

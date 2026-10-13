@@ -37,7 +37,7 @@ module Meals
     end
 
     def send_mail(assignment)
-      MealMailer.role_reminder(assignment, reminder).deliver_now
+      MealMailer.deliver_per_recipient(:role_reminder, assignment, reminder)
     end
   end
 end

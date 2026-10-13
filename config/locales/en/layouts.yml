@@ -1,6 +1,9 @@
 # Strings for the page layout, shared partials and other app-wide views.
 en:
   layouts:
+    mailer:
+      unsubscribe: "Stop getting emails like this: %{url}"
+      manage: "Choose which emails you get: %{url}"
     application:
       impersonation_notice: "You are impersonating %{name}. Any actions you take will appear to have been taken by them."
       stop_impersonating: "Stop Impersonating"

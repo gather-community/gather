@@ -29,9 +29,10 @@ describe "general mailer" do
 
     context "with no email address" do
       let(:teen) { create(:user, :child, guardians: guardians, email: nil) }
+      let(:mails) { MealMailer.deliver_per_recipient(:cook_menu_reminder, meal.assignments[0]) }
 
-      it "sends to guardians" do
-        expect(mail.to).to match_array(guardians.map(&:email))
+      it "sends each guardian their own message" do
+        expect(mails.map(&:to)).to match_array(guardians.map { |g| [g.email] })
       end
     end
   end

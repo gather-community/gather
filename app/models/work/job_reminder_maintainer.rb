@@ -35,7 +35,7 @@ module Work
     end
 
     def delivery_type
-      "Work::JobReminderDelivery" # rubocop:disable Gather/HardCodedString -- class name
+      "Work::JobReminderDelivery"
     end
 
     def eager_loads

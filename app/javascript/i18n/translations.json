@@ -204,6 +204,9 @@
     "timepicker": {
       "dformat": "%l:%M%P",
       "pformat": "h:mma"
+    },
+    "wiki": {
+      "help": "Wiki Help"
     }
   }
 }

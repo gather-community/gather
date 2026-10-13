@@ -145,3 +145,20 @@ Gather/HardCodedString:
     - app/controllers/transactions_controller.rb
     - app/helpers/accounts_helper.rb
     - app/mailers/account_mailer.rb
+    - app/controllers/groups/**/*.rb
+    - app/decorators/groups/**/*.rb
+    - app/models/groups/**/*.rb
+    - app/jobs/groups/**/*.rb
+    - app/policies/groups/**/*.rb
+    - app/lenses/groups/**/*.rb
+    - app/controllers/wiki/**/*.rb
+    - app/decorators/wiki/**/*.rb
+    - app/models/wiki/**/*.rb
+    - app/jobs/wiki/**/*.rb
+    - app/policies/wiki/**/*.rb
+    - app/lenses/wiki/**/*.rb
+    - app/controllers/roles_controller.rb
+
+  Exclude:
+    # A client for Mailman's REST API: its strings are HTTP headers and protocol, not user-facing text.
+    - app/models/groups/mailman/api.rb

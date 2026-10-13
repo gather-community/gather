@@ -496,6 +496,20 @@ en:
     wikiist: "Wikiist"
     work_coordinator: "Work Coordinator"
     new_community_approver: "New Community Approver"
+    index:
+      title: "Roles"
+      people: "People"
+      legend: "Legend"
+      # Each line is "<role name> - <description>".
+      legend_item_html: "<strong>%{role}</strong> - %{description}"
+      descriptions:
+        admin: "All of the other roles combined"
+        biller: "Manages billing transactions, templates, statements, formulas and finalizes meals"
+        photographer: "Can edit anyone's directory photo"
+        calendar_coordinator: "Manages calendars and anyone's calendar events"
+        meals_coordinator: "Manages meals, meal roles, billing formulas, and meal types"
+        wikiist: "Manages specifically protected wiki pages"
+        work_coordinator: "Manages jobs, shifts and work periods"
 
   phone_types:
     abbreviations:

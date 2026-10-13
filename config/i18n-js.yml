@@ -21,3 +21,4 @@ translations:
       - "*.calendars.drag.*"
       - "*.calendars.grid.*"
       - "*.calendars.calendar_list.*"
+      - "*.wiki.help"

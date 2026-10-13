@@ -1,7 +1,7 @@
-<% content_for(:title, "Wiki Compare: #{page.title}") %>
+<% content_for(:title, t(".title", title: page.title)) %>
 
-<h2>Differences Between Versions <%= @old_version.number %> and <%= @new_version.number %></h2>
+<h2><%= t(".differences", old: @old_version.number, new: @new_version.number) %></h2>
 <%= page.diff(@old_version, @new_version) %>
 
-<h2>Versions Between <%= @old_version.number %> and <%= @new_version.number %></h2>
+<h2><%= t(".versions_between", old: @old_version.number, new: @new_version.number) %></h2>
 <%= page.history(versions) %>

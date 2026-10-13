@@ -6,7 +6,8 @@ module RuboCop
       # Flags string literals that look like user-facing text, which belongs in a locale file instead.
       # See "User-Facing Strings" in CLAUDE.md. "Looks like text" means starting with a capitalized word
       # ("Close", "Privacy policy", "Generated: #{time}"), which CSS classes, keys and format strings don't.
-      # Exception messages, log lines and association class names are developer-facing, so they're ignored.
+      # Exception messages, log lines, regexps and class names ("Meals::Meal") are developer-facing, so
+      # they're ignored.
       #
       # @example
       #   # bad
@@ -19,6 +20,8 @@ module RuboCop
       class HardCodedString < Base
         MSG = "Hard-coded user-facing text. Move it to a locale file and use `t`."
         TEXT = /\A\s*[[:upper:]][[:lower:]]+/
+        # A namespaced constant name, e.g. "Work::JobReminderDelivery".
+        CLASS_NAME = /\A[[:upper:]]\w*(::[[:upper:]]\w*)+\z/
 
         def on_str(node)
           return if node.parent&.dstr_type? # Checked as a whole by on_dstr.
@@ -34,6 +37,7 @@ module RuboCop
 
         def check(node, text)
           return unless text.is_a?(String) && TEXT.match?(text)
+          return if CLASS_NAME.match?(text) || node.each_ancestor(:regexp).any?
           return if developer_facing?(node) || class_name_option?(node)
           add_offense(node)
         end

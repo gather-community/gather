@@ -81,7 +81,7 @@ module Billing
     end
 
     def meal_id
-      (statementable_type == "Meals::Meal") ? statementable_id : nil # rubocop:disable Gather/HardCodedString -- class name
+      (statementable_type == "Meals::Meal") ? statementable_id : nil
     end
 
     def statement?

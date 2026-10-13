@@ -1,5 +1,6 @@
 import { Controller } from "@hotwired/stimulus";
 import EasyMDE from "easymde";
+import i18n from "../../utils/i18n";
 
 export default class extends Controller<HTMLTextAreaElement> {
   private editor: EasyMDE;
@@ -20,7 +21,7 @@ export default class extends Controller<HTMLTextAreaElement> {
         "quote", "unordered-list", "ordered-list", "|",
         "link", "image", "|",
         "preview", "side-by-side", "fullscreen", "|",
-        { name: "guide", action: helpUrl, className: "fa fa-question-circle", noDisable: true, title: "Wiki Help" },
+        { name: "guide", action: helpUrl, className: "fa fa-question-circle", noDisable: true, title: i18n.t("wiki.help") },
       ],
       ...(pageId && {
         autosave: {

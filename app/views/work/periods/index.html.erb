@@ -1,7 +1,7 @@
-<% content_for(:title, "Work Periods") %>
+<% content_for(:title, t(".title")) %>
 <% content_for(:action_links) do %>
   <% if policy(sample_period).create? %>
-    <%= link_to(icon_tag("plus") << " Create Period",
+    <%= link_to(icon_tag("plus") << " " << t(".create"),
       new_work_period_path, class: "btn btn-primary") %>
   <% end %>
 <% end %>
@@ -12,10 +12,10 @@
   <table class="index part-width">
     <thead>
       <tr>
-        <th>Name</th>
-        <th>Start</th>
-        <th>End</th>
-        <th>Phase</th>
+        <th><%= t(".name") %></th>
+        <th><%= t(".start") %></th>
+        <th><%= t(".end") %></th>
+        <th><%= t(".phase") %></th>
       </tr>
     </thead>
     <tbody>

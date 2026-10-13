@@ -3,7 +3,7 @@
 <% content_for(:action_links, job.action_links) %>
 
 <% content_for(:mobile_back_link) do %>
-  <%= render partial: "shared/mobile_back_link", locals: {label: "Jobs", path: work_period_jobs_path(job.period) } %>
+  <%= render partial: "shared/mobile_back_link", locals: {label: t(".jobs"), path: work_period_jobs_path(job.period) } %>
 <% end %>
 
 <table class="key-value">
@@ -14,8 +14,7 @@
   <tr>
     <td><%= Work::Job.human_attribute_name(:hours) %></td>
     <td>
-      <%= job.hours_formatted %> hours
-      <% "(#{job.hours_per_shift} per shift)" if job.hours_per_shift %>
+      <%= t(".hours", hours: job.hours_formatted) %>
     </td>
   </tr>
   <tr>

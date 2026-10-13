@@ -473,6 +473,7 @@ en:
       unsignup: "Remove Signup"
     work/period:
       review_notices: "Send Notices"
+      send_notices: "Send Notices"
 
   dropzone:
     prompts:
@@ -534,12 +535,6 @@ en:
       home: "h"
       work: "w"
       mobile: "m"
-
-  work_mailer:
-    job_reminder:
-      subject: "Job Reminder: %{title}%{note}%{times}"
-    job_choosing_notice:
-      subject: "Job Choosing is Coming Up!"
 
   date_range_lens:
     past_12: "Past 12 Months"

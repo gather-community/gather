@@ -124,3 +124,12 @@ Gather/HardCodedString:
     - app/policies/calendars/**/*.rb
     - app/serializers/calendars/**/*.rb
     - app/services/calendars/**/*.rb
+    - app/controllers/work/**/*.rb
+    - app/decorators/work/**/*.rb
+    - app/models/work/**/*.rb
+    - app/forms/work/**/*.rb
+    - app/jobs/work/**/*.rb
+    - app/policies/work/**/*.rb
+    - app/lenses/work/**/*.rb
+    - app/serializers/work/**/*.rb
+    - app/mailers/work_mailer.rb

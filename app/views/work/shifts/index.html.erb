@@ -1,4 +1,4 @@
-<% content_for(:title, @period&.name || "Job Signups") %>
+<% content_for(:title, @period&.name || t(".title")) %>
 <% content_for(:action_links) do %>
   <%= Calendars::ExportDecorator.new(current_community, current_user).legacy_export_link %>
 <% end %>

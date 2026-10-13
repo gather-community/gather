@@ -93,72 +93,14 @@ Rails:
 Gather/HardCodedString:
   Enabled: true
   Include:
-    - app/helpers/application_helper.rb
-    - app/decorators/nav/**/*.rb
-    - app/models/utils/nav/**/*.rb
-    - app/controllers/people/**/*.rb
-    - app/controllers/users_controller.rb
-    - app/controllers/households_controller.rb
-    - app/decorators/user_decorator.rb
-    - app/decorators/household_decorator.rb
-    - app/decorators/people/**/*.rb
-    - app/models/user.rb
-    - app/models/household.rb
-    - app/models/people/**/*.rb
-    - app/controllers/meals/**/*.rb
-    - app/decorators/meals/**/*.rb
-    - app/models/meals/**/*.rb
-    - app/forms/meals/**/*.rb
-    - app/lenses/meals/**/*.rb
-    - app/jobs/meals/**/*.rb
-    - app/policies/meals/**/*.rb
-    - app/helpers/meals_helper.rb
-    - app/mailers/meal_mailer.rb
-    - app/mailers/auth_mailer.rb
-    - app/controllers/calendars/**/*.rb
-    - app/decorators/calendars/**/*.rb
-    - app/models/calendars/**/*.rb
-    - app/forms/calendars/**/*.rb
-    - app/lenses/calendars/**/*.rb
-    - app/jobs/calendars/**/*.rb
-    - app/policies/calendars/**/*.rb
-    - app/serializers/calendars/**/*.rb
-    - app/services/calendars/**/*.rb
-    - app/controllers/work/**/*.rb
-    - app/decorators/work/**/*.rb
-    - app/models/work/**/*.rb
-    - app/forms/work/**/*.rb
-    - app/jobs/work/**/*.rb
-    - app/policies/work/**/*.rb
-    - app/lenses/work/**/*.rb
-    - app/serializers/work/**/*.rb
-    - app/mailers/work_mailer.rb
-    - app/controllers/billing/**/*.rb
-    - app/decorators/billing/**/*.rb
-    - app/models/billing/**/*.rb
-    - app/forms/billing/**/*.rb
-    - app/jobs/billing/**/*.rb
-    - app/policies/billing/**/*.rb
-    - app/serializers/billing/**/*.rb
-    - app/controllers/accounts_controller.rb
-    - app/controllers/statements_controller.rb
-    - app/controllers/transactions_controller.rb
-    - app/helpers/accounts_helper.rb
-    - app/mailers/account_mailer.rb
-    - app/controllers/groups/**/*.rb
-    - app/decorators/groups/**/*.rb
-    - app/models/groups/**/*.rb
-    - app/jobs/groups/**/*.rb
-    - app/policies/groups/**/*.rb
-    - app/lenses/groups/**/*.rb
-    - app/controllers/wiki/**/*.rb
-    - app/decorators/wiki/**/*.rb
-    - app/models/wiki/**/*.rb
-    - app/jobs/wiki/**/*.rb
-    - app/policies/wiki/**/*.rb
-    - app/lenses/wiki/**/*.rb
-    - app/controllers/roles_controller.rb
-
+    - app/**/*.rb
   Exclude:
+    # Not converted yet.
+    - app/**/gdrive/**/*.rb
+    # Starter content for new communities, translated in the release phase of the i18n plan.
+    - app/models/utils/generators/**/*.rb
+    # Mail that only goes to Gather staff (exempt per CLAUDE.md).
+    - app/mailers/system_mailer.rb
+    - app/mailers/test_mailer.rb
     # A client for Mailman's REST API: its strings are HTTP headers and protocol, not user-facing text.
     - app/models/groups/mailman/api.rb

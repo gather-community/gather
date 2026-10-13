@@ -61,17 +61,32 @@ describe RuboCop::Cop::Gather::HardCodedString do
   end
 
   it "ignores namespaced class names and regexps" do
-    expect_no_offenses(<<~RUBY)
+    expect_no_offenses(<<~'RUBY')
       MembershipSyncJob.perform_later("Groups::Mailman::List", list.id)
       statementable_type == "Meals::Meal"
       /Member already subscribed/.match?(body)
+      klass = "CustomFields::Fields::#{type.classify}Field"
+      (name.to_s.classify << "Lens").constantize
     RUBY
   end
 
-  it "still flags text that merely contains a colon pair" do
+  it "ignores lookup keys, comparison operands, hash keys and audit log lines" do
+    expect_no_offenses(<<~RUBY)
+      response.headers["Cache-Control"] = "no-cache"
+      json.dig("Results", "series")
+      class_name == "User"
+      PERMITTED = {"User" => "photo"}.freeze
+      EventLog.emit(event_name: "topup_set", description: "Set monthly messaging topup")
+      log(event_name: "topup_unmatched", description: "Topup invoice with no matching local record")
+    RUBY
+  end
+
+  it "still flags text assigned through [] or given as a fetch default" do
     expect_offense(<<~RUBY)
       flash[:notice] = "Note: see below"
                        ^^^^^^^^^^^^^^^^^ Hard-coded user-facing text. Move it to a locale file and use `t`.
+      opts.fetch(:label, "Default label")
+                         ^^^^^^^^^^^^^^^ Hard-coded user-facing text. Move it to a locale file and use `t`.
     RUBY
   end
 end

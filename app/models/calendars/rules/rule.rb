@@ -11,7 +11,7 @@ module Calendars
                  other_communities requires_kind pre_notice].freeze
 
       def self.class_for(rule_name)
-        "Calendars::Rules::#{rule_name.to_s.camelize}Rule".constantize # rubocop:disable Gather/HardCodedString -- class name
+        "Calendars::Rules::#{rule_name.to_s.camelize}Rule".constantize
       end
 
       def initialize(value: nil, calendars: nil, community: nil, kinds: nil)

@@ -80,6 +80,7 @@ ignore_unused:
   - "gdrive.item_kinds.*"
   - "meals.form.summaries.*"
   - "work.synopsis.*"
+  - "people.notification_preferences.{kinds,sections}.*"  # notification_preferences/show, from NotificationCatalog
   - "work/job_reminder.relative.*"
   - "{meal_mailer,work_mailer}.*.subject" # default_i18n_subject
   # Baseline from when the unused check was turned on. These may be dead; resolve them as each

@@ -390,6 +390,12 @@ module Nav
             permitted: UserPolicy.new(user, user).update?,
             icon: "asterisk"
           }, {
+            name: :notifications,
+            parents: [:personal],
+            path: h.notification_preferences_path,
+            permitted: UserPolicy.new(user, user).update_notification_prefs?,
+            icon: "bell"
+          }, {
             name: :sign_out,
             parents: [:personal],
             path: h.destroy_user_session_path,

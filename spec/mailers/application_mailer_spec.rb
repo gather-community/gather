@@ -7,21 +7,37 @@ describe ApplicationMailer do
   class SampleMailer < ApplicationMailer
     def sample(recipients)
       @community = recipients.first.community
-      mail(to: recipients, subject: "Test", body: "Test")
+      mail(to: recipients, subject: "Test", body: "Test", notification: :meal_reminder)
     end
   end
 
   class SampleInactiveIfNoActiveMailer < ApplicationMailer
     def sample(recipients)
       @community = recipients.first.community
-      mail(to: recipients, subject: "Test", body: "Test", include_inactive: :if_no_active)
+      mail(to: recipients, subject: "Test", body: "Test", notification: :meal_reminder,
+        include_inactive: :if_no_active)
     end
   end
 
   class SampleInactiveAlwaysMailer < ApplicationMailer
     def sample(recipients)
       @community = recipients.first.community
-      mail(to: recipients, subject: "Test", body: "Test", include_inactive: :always)
+      mail(to: recipients, subject: "Test", body: "Test", notification: :meal_reminder,
+        include_inactive: :always)
+    end
+  end
+
+  class SampleUnlistedMailer < ApplicationMailer
+    def sample(recipients)
+      @community = recipients.first.community
+      mail(to: recipients, subject: "Test", body: "Test")
+    end
+  end
+
+  describe "notification kind" do
+    it "raises for a mailer action that isn't in the notification catalog" do
+      expect { SampleUnlistedMailer.sample([create(:user)]).deliver_now }
+        .to raise_error(/SampleUnlistedMailer#sample must be listed in People::NotificationCatalog/)
     end
   end
 
@@ -110,6 +126,54 @@ describe ApplicationMailer do
         it "does not include inactive users for :if_no_active but does for :always" do
           expect(mail1.to).to match_array([adult1].map(&:email))
           expect(mail2.to).to match_array([adult1, adult2].map(&:email))
+        end
+      end
+    end
+
+    context "with notification preferences" do
+      let(:opted_out_prefs) { {"meal_reminder" => {"email" => false}} }
+
+      context "with a household where one member opted out" do
+        let(:adult1) { create(:user, notification_prefs: opted_out_prefs) }
+        let(:adult2) { create(:user) }
+        let(:household) { create(:household, users: [adult1, adult2]) }
+        let(:mail) { SampleMailer.sample([household]).deliver_now }
+
+        it "sends only to the member who didn't opt out" do
+          expect(mail.to).to eq([adult2.email])
+        end
+      end
+
+      context "with everyone opted out" do
+        let(:adult1) { create(:user, notification_prefs: opted_out_prefs) }
+        let(:mail) { SampleMailer.sample([adult1]).deliver_now }
+
+        it "doesn't send" do
+          expect(mail).to be_nil
+        end
+      end
+
+      context "with a child without email whose guardian opted out" do
+        let(:adult1) { create(:user, notification_prefs: opted_out_prefs) }
+        let(:adult2) { create(:user) }
+        let(:child) { create(:user, :child, email: nil, guardians: [adult1, adult2]) }
+        let(:mail) { SampleMailer.sample([child]).deliver_now }
+
+        it "uses the guardians' preferences" do
+          expect(mail.to).to eq([adult2.email])
+        end
+      end
+
+      context "with an active member opted out and an inactive member" do
+        let(:adult1) { create(:user, notification_prefs: opted_out_prefs) }
+        let(:adult2) { create(:user, :inactive) }
+        let(:household) { create(:household, users: [adult1, adult2]) }
+        let(:mail) { SampleInactiveIfNoActiveMailer.sample([household]).deliver_now }
+
+        before { household.reload }
+
+        it "doesn't fall back to the inactive member" do
+          expect(mail).to be_nil
         end
       end
     end

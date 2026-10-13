@@ -36,6 +36,7 @@
 #  last_sign_in_ip        :inet
 #  medical                :text
 #  mobile_phone           :string
+#  notification_prefs     :jsonb            not null
 #  paypal_email           :string(255)
 #  preferred_contact      :string
 #  privacy_settings       :jsonb            not null
@@ -334,6 +335,28 @@ class User < ApplicationRecord
     settings = {} if settings.blank?
     settings.each { |k, v| settings[k] = ["1", "true", true].include?(v) }
     self[:privacy_settings] = settings
+  end
+
+  # Whether this user wants the given kind of notification over the given channel.
+  # Required and internal kinds are always on. notification_prefs only stores overrides of the default (on).
+  def notification_enabled?(kind_key, channel: :email)
+    kind = People::NotificationCatalog.find(kind_key)
+    return true unless kind.configurable?
+    notification_prefs.dig(kind.key.to_s, channel.to_s) != false
+  end
+
+  # Sets prefs for the given kind and channel, storing only values that differ from the default.
+  def set_notification_pref(kind_key, enabled, channel: :email)
+    kind = People::NotificationCatalog.find(kind_key)
+    raise ArgumentError, "#{kind.key} is not configurable" unless kind.configurable?
+    prefs = notification_prefs.deep_dup
+    if enabled
+      prefs[kind.key.to_s]&.delete(channel.to_s)
+      prefs.delete(kind.key.to_s) if prefs[kind.key.to_s].blank?
+    else
+      (prefs[kind.key.to_s] ||= {})[channel.to_s] = false
+    end
+    self.notification_prefs = prefs
   end
 
   def activate

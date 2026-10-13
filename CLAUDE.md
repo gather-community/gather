@@ -362,6 +362,7 @@ Gather uses several locale files under `config/locales/en/`. Each type of string
 ## Email
 
 - **Text-only mailers** — Gather uses plain text email templates only. Do not create `.html.erb` mailer views.
+- **Every email must be accounted for on the notification preferences page.** When you add a new email, or change who receives an existing one or why, decide where it belongs on that page: a configurable notification (with a sensible default), a required one that is listed but can't be turned off, or neither (mail that never goes to community members, such as `SystemMailer` or the community signup emails). Record it in [People::NotificationCatalog](app/models/people/notification_catalog.rb), and mention the decision in the PR description. `ApplicationMailer#mail` raises for a mailer action missing from the catalog, and [notification_catalog_spec.rb](spec/models/people/notification_catalog_spec.rb) checks every action. Also consider whether the notification should be offered over SMS once the community has SMS turned on. Mailman list traffic is separate: people control it from the groups page.
 
 ## Starting New Work
 

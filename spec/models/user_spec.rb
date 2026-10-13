@@ -581,6 +581,38 @@ describe User do
   # - For fake users and households, destruction may happen when associations are present that would
   #   normally forbid it, but the deletion script can be ordered in such a way as to avoid problems by
   #   deleting dependent objects first, and then users and households.
+  describe "notification preferences" do
+    let(:user) { build(:user) }
+
+    it "defaults configurable kinds to on" do
+      expect(user.notification_enabled?(:meal_reminder)).to be(true)
+    end
+
+    it "stores only the overrides" do
+      user.set_notification_pref(:meal_reminder, false)
+      expect(user.notification_prefs).to eq("meal_reminder" => {"email" => false})
+      expect(user.notification_enabled?(:meal_reminder)).to be(false)
+      expect(user.notification_enabled?(:job_reminder)).to be(true)
+
+      user.set_notification_pref(:meal_reminder, true)
+      expect(user.notification_prefs).to eq({})
+      expect(user.notification_enabled?(:meal_reminder)).to be(true)
+    end
+
+    it "treats required kinds as always on, even if something is stored" do
+      user.notification_prefs = {"meal_message" => {"email" => false}}
+      expect(user.notification_enabled?(:meal_message)).to be(true)
+    end
+
+    it "refuses to turn off a required kind" do
+      expect { user.set_notification_pref(:meal_message, false) }.to raise_error(ArgumentError)
+    end
+
+    it "raises for an unknown kind" do
+      expect { user.notification_enabled?(:nope) }.to raise_error(ArgumentError)
+    end
+  end
+
   describe "destruction" do
     let!(:user) { create(:user) }
 

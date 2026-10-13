@@ -473,6 +473,7 @@ en:
       unsignup: "Remove Signup"
     work/period:
       review_notices: "Send Notices"
+      send_notices: "Send Notices"
 
   dropzone:
     prompts:
@@ -483,39 +484,6 @@ en:
 
   titles:
     meals/messages: "Send Meal Message"
-
-  transaction_codes:
-    meal: "Meal"
-    dues: "Membership Dues"
-    payment: "Payment"
-    reimb: "Reimbursement"
-    othcrd: "Other Credit"
-    othchg: "Other Charge"
-    late: "Late Fee"
-    initbal: "Opening Balance"
-
-  accounts:
-    index:
-      summary:
-        one: "There is 1 active account."
-        other: "There are %{count} active accounts."
-      active_account_definition: "An active account is one having current activity or a non-zero current balance."
-      last_statement_run: "Statements were last sent out on %{date}."
-      statements_never_run: "Statements have never been sent out."
-      no_users:
-        one: "There is 1 account with no associated users. A statement will not be generated for that account."
-        other: "There are %{count} accounts with no associated users. Statements will not be generated for those accounts."
-      recent_statements:
-        one: "There is 1 account with a statement in the last 24 hours. A new statement will not be generated for that account."
-        other: "There are %{count} accounts with statements in the last 24 hours. Statements will not be generated for those accounts."
-    others:
-      one_html: "You have another Gather account with %{cmty}."
-      multiple_html: "You also have Gather accounts with %{cmtys}."
-    payment_badge_alt:
-      paypal: "PayPal payment badge"
-      online_bill_pay: "Online bill pay payment badge"
-      check: "Check payment badge"
-      cash: "Cash payment badge"
 
   roles:
     admin: "Admin"
@@ -528,18 +496,26 @@ en:
     wikiist: "Wikiist"
     work_coordinator: "Work Coordinator"
     new_community_approver: "New Community Approver"
+    index:
+      title: "Roles"
+      people: "People"
+      legend: "Legend"
+      # Each line is "<role name> - <description>".
+      legend_item_html: "<strong>%{role}</strong> - %{description}"
+      descriptions:
+        admin: "All of the other roles combined"
+        biller: "Manages billing transactions, templates, statements, formulas and finalizes meals"
+        photographer: "Can edit anyone's directory photo"
+        calendar_coordinator: "Manages calendars and anyone's calendar events"
+        meals_coordinator: "Manages meals, meal roles, billing formulas, and meal types"
+        wikiist: "Manages specifically protected wiki pages"
+        work_coordinator: "Manages jobs, shifts and work periods"
 
   phone_types:
     abbreviations:
       home: "h"
       work: "w"
       mobile: "m"
-
-  work_mailer:
-    job_reminder:
-      subject: "Job Reminder: %{title}%{note}%{times}"
-    job_choosing_notice:
-      subject: "Job Choosing is Coming Up!"
 
   date_range_lens:
     past_12: "Past 12 Months"

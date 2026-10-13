@@ -1,0 +1,226 @@
+en:
+  transaction_codes:
+    meal: "Meal"
+    dues: "Membership Dues"
+    payment: "Payment"
+    reimb: "Reimbursement"
+    othcrd: "Other Credit"
+    othchg: "Other Charge"
+    late: "Late Fee"
+    initbal: "Opening Balance"
+
+  accounts:
+    updated: "Account updated successfully."
+    late_fees_applied: "Late fees applied."
+    # An amount that is a credit, e.g. "$5.00 CR".
+    credit_amount_html: "%{amount} CR"
+    # Shown in its own column next to credit amounts on statements.
+    credit_abbr: "CR"
+    not_applicable: "N/A"
+    no_credit_limit: "None"
+    no_users_warning: "Account household has no associated users"
+    late_fee_confirm: "Are you sure? Fees will be charged to %{count} households."
+    late_fee_confirm_with_days: "Are you sure? Fees will be charged to %{count} households. Fees were last applied %{days} days ago."
+    statement_confirm: "Are you sure? Statements will be sent out to %{count} households."
+    paypal_friend_confirm_html: "Please <strong>do not</strong> select 'Paying for goods or a service?' if prompted to avoid being charged a fee."
+    details:
+      no_activity: "There is no activity on this account."
+    other_accounts:
+      looking: "Looking for another account?"
+      each_community: "Each community manages its own accounts."
+    payment_instructions:
+      how_to_pay: "How To Pay"
+      paypal: "PayPal"
+      click_logo: "Click the logo above to pay with PayPal."
+      send_paypal_html: "Send PayPal payments to %{email}."
+      choose_friend_html: "Be sure to choose %{friend} to avoid being charged a fee."
+      sending_to_friend: "sending to a friend"
+      online_bill_pay: "Online Bill Pay"
+      bill_pay_intro: "Most banks offer online bill pay, which you can use to easily send a check online. Add a new bill payee and enter the following:"
+      payee_name_html: "Payee name: %{payee}"
+      account_number_html: "Account number: %{number}"
+      address: "Address:"
+      check: "Check"
+      payable_to_html: "Make checks payable to %{payee}"
+      memo_line_html: "Write your account number %{number} on the memo line."
+      mail_to: "Mail checks to:"
+      cash: "Cash"
+      none_provided: "No payment instructions have been provided."
+      go_to_settings_html: "Please go to the %{link} to enter some."
+      settings_page: "settings page"
+      contact_html: "Please contact %{email} with any billing inquiries."
+    statement_list:
+      statements: "Statements"
+      date: "Date"
+      activity: "Activity"
+      total_due: "Total Due"
+    summary:
+      summary: "Summary"
+      account_number: "Account Number"
+      last_statement_date: "Last Statement Date"
+      last_statement_balance: "Last Statement Balance"
+      new_credits: "New Payments/Credits"
+      balance_due: "Balance Due"
+      due_date: "Due Date"
+      new_charges: "New Charges"
+      current_balance: "Current Balance"
+      credit_limit: "Credit Limit"
+      balance_due_footnote: "This is the amount you currently owe. It is the amount due on your last statement minus any payments received since then. If you have already sent payment but it is not reflected here, please disregard."
+      current_balance_footnote: "This balance includes charges and credits since your last statement. If it exceeds your credit limit, you will not be able to sign up for meals."
+    synopsis:
+      pay_by: "Please pay %{amount} by %{date}. Thanks!"
+      pay: "Please pay %{amount}. Thanks!"
+      zero: "Your balance due is zero. Nice job!"
+      credit: "Your account has a credit of %{amount}. No payment necessary!"
+    transaction_export_form:
+      download: "Download Transactions as CSV"
+      incurred: "Incurred within ..."
+      recorded: "Recorded within ..."
+      select_dates: "Select Dates"
+    edit:
+      title: "Edit Account: %{household}"
+      no_users: "This account has no users associated with it and cannot recieve statements."
+      cancel: "Cancel"
+    show:
+      title: "Account: %{household}"
+    yours:
+      title: "Your Account"
+      title_with_community: "Your %{community} Account"
+      no_charges: "There are not yet any charges associated with your household."
+    index:
+      title: "Accounts"
+      apply_late_fees: "Apply Late Fees"
+      send_statements: "Send Statements"
+      no_accounts: "No accounts found."
+      num: "Num"
+      household: "Household"
+      last_statement_date: "Last Stmt. Date"
+      due_last_statement: "Due Last Stmt."
+      new_credits: "New Credits"
+      balance_due: "Balance Due"
+      new_charges: "New Charges"
+      current_balance: "Current Balance"
+      credit_limit: "Credit Limit"
+      add_transaction: "Add Transaction"
+      totals: "Totals"
+      download_accounts: "Download Accounts as CSV"
+      summary:
+        one: "There is 1 active account."
+        other: "There are %{count} active accounts."
+      active_account_definition: "An active account is one having current activity or a non-zero current balance."
+      last_statement_run: "Statements were last sent out on %{date}."
+      statements_never_run: "Statements have never been sent out."
+      no_users:
+        one: "There is 1 account with no associated users. A statement will not be generated for that account."
+        other: "There are %{count} accounts with no associated users. Statements will not be generated for those accounts."
+      recent_statements:
+        one: "There is 1 account with a statement in the last 24 hours. A new statement will not be generated for that account."
+        other: "There are %{count} accounts with statements in the last 24 hours. Statements will not be generated for those accounts."
+    others:
+      one_html: "You have another Gather account with %{cmty}."
+      multiple_html: "You also have Gather accounts with %{cmtys}."
+    payment_badge_alt:
+      paypal: "PayPal payment badge"
+      online_bill_pay: "Online bill pay payment badge"
+      check: "Check payment badge"
+      cash: "Cash payment badge"
+
+  statements:
+    generation_started: "Statement generation started. Please try refreshing the page in a moment to see updated account statuses."
+    no_users_not_generated: "The following households have no associated users and thus statements were not generated for them: %{households}. Try sending statements again once the households have associated users."
+    account_info:
+      account_community: "Account Community"
+      account_number: "Account Number"
+      household: "Household"
+    link_to_accounts_page:
+      notice_html: "For the most current account information, %{link}."
+      link: "visit your accounts page"
+    statement_rows:
+      load_more: "Load More..."
+      loading: "Loading..."
+    show:
+      title: "Statement #%{number}"
+      statement_date: "Statement Date"
+      due_date: "Due Date"
+      activity: "Activity"
+      previous_balance: "Previous balance"
+      statement_balance: "Statement balance"
+
+  transactions:
+    added: "Transaction added successfully."
+    not_added: "The transaction was not added. You can edit it below and try again, or click 'Cancel' below to return to the accounts page."
+    form:
+      cancel: "Cancel"
+    txn_rows:
+      no_activity: "There was no activity for this period"
+    txn_table:
+      date: "Date"
+      type: "Type"
+      description: "Description"
+      quantity: "Quantity"
+      unit_price: "Unit Price"
+      amount: "Amount"
+    confirm:
+      title: "Confirm Transaction"
+      intro: "Below is how the new transaction will appear on the household's statement. Transactions cannot be edited once they are created. Please verify the information below is correct."
+    index:
+      title: "Recent Activity"
+      title_with_household: "Recent Activity: %{household}"
+      account_community: "Account Community"
+      account_number: "Account Number"
+      household: "Household"
+      activity: "Activity"
+      no_activity: "There is no activity on this account."
+      last_statement_balance: "Last statement balance"
+      current_balance: "Current balance"
+    new:
+      title: "New Transaction"
+
+  billing:
+    # Description of the transaction LateFeeApplier creates.
+    late_fee_description: "Late payment fee"
+    templates:
+      created: "Template created successfully."
+      updated: "Template updated successfully."
+      select_one: "Please select at least one template."
+      applied: "Transactions created successfully."
+      edit:
+        title: "Edit Billing Template: %{description}"
+      new:
+        title: "New Transaction Template"
+      index:
+        title: "Transaction Templates"
+        apply: "Apply Templates"
+        create: "Create Template"
+        intro: "Transaction templates make it easy to create batches of transactions at once."
+        none_found: "No templates found."
+        description: "Description"
+        type: "Type"
+        member_types: "Member Type(s)"
+        amount: "Amount"
+      review:
+        title: "Apply Templates"
+        intro: "You about to create the following transactions for the following households:"
+        description: "Description"
+        type: "Type"
+        amount: "Amount"
+        households: "Households"
+        outdated_warning: "The above list of households may become outdated if changes are made to household member types between when this confirmation page was loaded and when 'Apply' is clicked below."
+        cancel: "Cancel"
+        apply: "Apply"
+
+  account_mailer:
+    statement_notice:
+      subject: "New Account Statement for %{community}"
+      created: "A new statement has been created in Gather for your %{community} account."
+      amount_due: "The amount due is %{amount}."
+      credit: "You have a %{amount} credit balance. No payment is required."
+      see_details: "Please visit the link below to see the details:"
+      thanks: "Thanks for your prompt payment!"
+    statement_reminder:
+      subject: "Payment Reminder for %{community} Account"
+      due_on: "This is a reminder that payment for a Gather statement for your %{community} account is due on %{date}."
+      due_soon: "This is a reminder that payment for a Gather statement for your %{community} account is due soon."
+      amount_due: "The amount due is %{amount}. Please visit the link below to see the details:"
+      disregard: "If you have already sent payment, please disregard this notice."
+      thanks: "Thanks for your prompt payment!"

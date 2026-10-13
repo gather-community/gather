@@ -59,4 +59,19 @@ describe RuboCop::Cop::Gather::HardCodedString do
       has_many :pets, class_name: "People::Pet", dependent: :destroy
     RUBY
   end
+
+  it "ignores namespaced class names and regexps" do
+    expect_no_offenses(<<~RUBY)
+      MembershipSyncJob.perform_later("Groups::Mailman::List", list.id)
+      statementable_type == "Meals::Meal"
+      /Member already subscribed/.match?(body)
+    RUBY
+  end
+
+  it "still flags text that merely contains a colon pair" do
+    expect_offense(<<~RUBY)
+      flash[:notice] = "Note: see below"
+                       ^^^^^^^^^^^^^^^^^ Hard-coded user-facing text. Move it to a locale file and use `t`.
+    RUBY
+  end
 end

@@ -26,8 +26,7 @@ module Work
       @reminders = job.meal_role? ? job.meal_role.reminders : job.reminders
       authorize(@job)
       if policy(sample_job).edit? && job.meal_role?
-        flash.now[:notice] = "This is job was synchronized from the meals system and can't be edited " \
-          "directly. It will be automatically updated to reflect newly added or changed meals."
+        flash.now[:notice] = t("work.job_synced_from_meals")
       end
     end
 
@@ -51,7 +50,7 @@ module Work
       @job.assign_attributes(job_params)
       authorize(@job)
       if @job.save
-        flash[:success] = "Job created successfully."
+        flash[:success] = t("work.job_created")
         QuotaCalculator.new(@job.period).recalculate_and_save
         redirect_to(work_period_jobs_path(@job.period))
       else
@@ -65,7 +64,7 @@ module Work
       authorize(@job)
       if @job.update(job_params)
         QuotaCalculator.new(@job.period).recalculate_and_save
-        flash[:success] = "Job updated successfully."
+        flash[:success] = t("work.job_updated")
         redirect_to(work_period_jobs_path(@job.period))
       else
         prep_form_vars

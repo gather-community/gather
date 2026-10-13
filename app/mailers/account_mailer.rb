@@ -4,12 +4,12 @@
 class AccountMailer < ApplicationMailer
   def statement_notice(statement)
     load_statement_vars(statement)
-    statement_mail(subject: "New Account Statement for #{community.name}")
+    statement_mail(subject: default_i18n_subject(community: community.name))
   end
 
   def statement_reminder(statement)
     load_statement_vars(statement)
-    statement_mail(subject: "Payment Reminder for #{community.name} Account")
+    statement_mail(subject: default_i18n_subject(community: community.name))
   end
 
   private

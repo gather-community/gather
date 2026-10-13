@@ -56,7 +56,7 @@ module Calendars
     disallow_semicolons :name
 
     scope :meal_hostable, -> { where(meal_hostable: true) }
-    scope :non_system, -> { where(type: "Calendars::Calendar") } # rubocop:disable Gather/HardCodedString -- STI type
+    scope :non_system, -> { where(type: "Calendars::Calendar") }
 
     delegate :name, to: :community, prefix: true
 

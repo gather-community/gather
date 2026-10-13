@@ -10,9 +10,11 @@ class WorkMailer < ApplicationMailer
     @community = @shift.community
 
     # We don't display the time in the subject if there is a note.
-    times_str = @reminder.note? ? "" : ", #{@shift.times}"
-    note_str = @reminder.note? ? ": #{@reminder.note}" : ""
-    subject = default_i18n_subject(title: @shift.job_title, times: times_str, note: note_str)
+    subject = if @reminder.note?
+      t("work_mailer.job_reminder.subject_with_note", title: @shift.job_title, note: @reminder.note)
+    else
+      default_i18n_subject(title: @shift.job_title, times: @shift.times)
+    end
 
     mail(to: @user, subject: subject)
   end

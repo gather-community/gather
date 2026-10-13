@@ -69,8 +69,7 @@ module Billing
       return unless type == :paypal
       if pay_with_paypal_me? && paypal_friend?
         {data: {controller: "confirm", action: "confirm#check",
-                confirm_message_value: "Please <strong>do not</strong> select 'Paying for goods or " \
-                  "a service?' if prompted to avoid being charged a fee."}}
+                confirm_message_value: t("accounts.paypal_friend_confirm_html")}}
       else
         {}
       end

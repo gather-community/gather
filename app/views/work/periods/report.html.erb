@@ -1,4 +1,4 @@
-<% content_for(:title, +"Work Report" << (@period ? ": #{@period.name}" : "")) %>
+<% content_for(:title, @period ? t(".title_with_period", period: @period.name) : t(".title")) %>
 
 <% if @period.nil? %>
   <% if @periods.present? %>
@@ -14,7 +14,7 @@
   <div class="report">
     <div class="overview row">
       <div class="set col-sm-6 col-sm-offset-3">
-        <div class="title">Overview</div>
+        <div class="title"><%= t(".overview") %></div>
         <table class="numbers">
           <tr class="numbers">
             <td><%= work_report.fixed_slot_hours_rounded %></td>
@@ -25,11 +25,11 @@
             <% end %>
           </tr>
           <tr class="captions">
-            <td>Total Hours</td>
-            <td>Jobs</td>
-            <td>People</td>
+            <td><%= t(".total_hours") %></td>
+            <td><%= t(".jobs") %></td>
+            <td><%= t(".people") %></td>
             <% unless period.quota_none? %>
-              <td>Quota</td>
+              <td><%= t(".quota") %></td>
             <% end %>
           </tr>
         </table>
@@ -37,19 +37,19 @@
     </div>
     <div class="row">
       <div class="stats-table-wrapper col-sm-6">
-        <h2><%= icon_tag("user") %> By Person</h2>
+        <h2><%= icon_tag("user") %> <%= t(".by_person") %></h2>
         <table class="stats">
           <thead>
             <tr class="surheader">
               <th></th>
-              <th colspan="2">Regular</th>
+              <th colspan="2"><%= t(".regular") %></th>
               <% work_report.full_community_jobs.each do |fcjob| %>
                 <th colspan="2"><%= fcjob.title %></th>
               <% end %>
               <th><%= icon_tag("thumb-tack") %></th>
             </tr>
             <tr class="header">
-              <th>Name</th>
+              <th><%= t(".name") %></th>
               <% (work_report.full_community_jobs.size + 1).times do %>
                 <th><%= icon_tag("clock") %></th>
                 <th>%</th>
@@ -75,19 +75,19 @@
       </div>
       <% if work_report.quota_by_household? %>
         <div class="stats-table-wrapper col-sm-6">
-          <h2><%= icon_tag("home") %> By Household</h2>
+          <h2><%= icon_tag("home") %> <%= t(".by_household") %></h2>
           <table class="stats">
             <thead>
               <tr class="surheader">
                 <th></th>
-                <th colspan="2">Regular</th>
+                <th colspan="2"><%= t(".regular") %></th>
                 <% work_report.full_community_jobs.each do |fcjob| %>
                   <th colspan="2"><%= fcjob.title %></th>
                 <% end %>
                 <th><%= icon_tag("thumb-tack") %></th>
               </tr>
               <tr class="header">
-                <th>Name</th>
+                <th><%= t(".name") %></th>
                 <% (work_report.full_community_jobs.size + 1).times do %>
                   <th><%= icon_tag("clock") %></th>
                   <th>%</th>

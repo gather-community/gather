@@ -1,10 +1,10 @@
-<% content_for(:title, "Job Choosing Notices: #{period.name}") %>
+<% content_for(:title, t(".title", name: period.name)) %>
 <% content_for(:action_links, period.action_links(:notices)) %>
 
 <% if @error %>
   <%= @error %>
 <% else %>
-  <p>The following notices will be sent:</p>
+  <p><%= t(".intro") %></p>
   <% @notices.each do |notice| %>
     <hr/>
     <%= simple_format(notice) %>

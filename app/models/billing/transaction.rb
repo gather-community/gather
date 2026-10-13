@@ -81,7 +81,7 @@ module Billing
     end
 
     def meal_id
-      (statementable_type == "Meals::Meal") ? statementable_id : nil
+      (statementable_type == "Meals::Meal") ? statementable_id : nil # rubocop:disable Gather/HardCodedString -- class name
     end
 
     def statement?
@@ -92,9 +92,9 @@ module Billing
 
     def quantity_and_unit_price
       if quantity.present? && unit_price.blank?
-        errors.add(:unit_price, "can't be blank if quantity is present")
+        errors.add(:unit_price, :blank_with_quantity)
       elsif quantity.blank? && unit_price.present?
-        errors.add(:quantity, "can't be blank if unit price is present")
+        errors.add(:quantity, :blank_with_unit_price)
       end
     end
   end

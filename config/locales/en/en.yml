@@ -485,39 +485,6 @@ en:
   titles:
     meals/messages: "Send Meal Message"
 
-  transaction_codes:
-    meal: "Meal"
-    dues: "Membership Dues"
-    payment: "Payment"
-    reimb: "Reimbursement"
-    othcrd: "Other Credit"
-    othchg: "Other Charge"
-    late: "Late Fee"
-    initbal: "Opening Balance"
-
-  accounts:
-    index:
-      summary:
-        one: "There is 1 active account."
-        other: "There are %{count} active accounts."
-      active_account_definition: "An active account is one having current activity or a non-zero current balance."
-      last_statement_run: "Statements were last sent out on %{date}."
-      statements_never_run: "Statements have never been sent out."
-      no_users:
-        one: "There is 1 account with no associated users. A statement will not be generated for that account."
-        other: "There are %{count} accounts with no associated users. Statements will not be generated for those accounts."
-      recent_statements:
-        one: "There is 1 account with a statement in the last 24 hours. A new statement will not be generated for that account."
-        other: "There are %{count} accounts with statements in the last 24 hours. Statements will not be generated for those accounts."
-    others:
-      one_html: "You have another Gather account with %{cmty}."
-      multiple_html: "You also have Gather accounts with %{cmtys}."
-    payment_badge_alt:
-      paypal: "PayPal payment badge"
-      online_bill_pay: "Online bill pay payment badge"
-      check: "Check payment badge"
-      cash: "Cash payment badge"
-
   roles:
     admin: "Admin"
     calendar_coordinator: "Calendar Coordinator"

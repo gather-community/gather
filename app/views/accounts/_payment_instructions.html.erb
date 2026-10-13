@@ -1,46 +1,45 @@
 <% methods = Billing::PaymentMethodsDecorator.new(account) %>
 <div class="payment-instructions">
-  <h2>How To Pay</h2>
+  <h2><%= t(".how_to_pay") %></h2>
   <%= methods.payment_badge(:paypal) %>
   <%= methods.payment_badge(:online_bill_pay) %>
   <%= methods.payment_badge(:check) %>
   <%= methods.payment_badge(:cash) %>
 
   <% if methods.pay_with_paypal_me? %>
-    <h3>PayPal</h3>
-    Click the logo above to pay with PayPal.
+    <h3><%= t(".paypal") %></h3>
+    <%= t(".click_logo") %>
   <% elsif methods.pay_with_paypal_email? %>
-    <h3>PayPal</h3>
+    <h3><%= t(".paypal") %></h3>
     <% if methods.paypal_friend? %>
       <ul>
-        <li>Send PayPal payments to <strong><%= methods.paypal_email %></strong>.</li>
-        <li>Be sure to choose <strong>sending to a friend</strong> to avoid being charged a fee.</li>
+        <li><%= t(".send_paypal_html", email: tag.strong(methods.paypal_email)) %></li>
+        <li><%= t(".choose_friend_html", friend: tag.strong(t(".sending_to_friend"))) %></li>
       </ul>
     <% else %>
-      Send PayPal payments to <strong><%= methods.paypal_email %></strong>.
+      <%= t(".send_paypal_html", email: tag.strong(methods.paypal_email)) %>
     <% end %>
   <% end %>
 
   <% if methods.pay_with_online_bill_pay? %>
-    <h3>Online Bill Pay</h3>
-    Most banks offer online bill pay, which you can use to easily send a check online.
-    Add a new bill payee and enter the following:
+    <h3><%= t(".online_bill_pay") %></h3>
+    <%= t(".bill_pay_intro") %>
     <ul>
-      <li>Payee name: <strong><%= methods.check_payee %></strong></li>
-      <li>Account number: <strong><%= methods.number_padded %></strong></li>
-      <li>Address:<div class="check-address"><%= simple_format(methods.check_address) %></div></li>
+      <li><%= t(".payee_name_html", payee: tag.strong(methods.check_payee)) %></li>
+      <li><%= t(".account_number_html", number: tag.strong(methods.number_padded)) %></li>
+      <li><%= t(".address") %><div class="check-address"><%= simple_format(methods.check_address) %></div></li>
     </ul>
   <% end %>
 
   <% if methods.pay_with_check? %>
-    <h3>Check</h3>
+    <h3><%= t(".check") %></h3>
     <ul>
       <% if methods.check_payee %>
-        <li>Make checks payable to <strong><%= methods.check_payee %></strong></li>
+        <li><%= t(".payable_to_html", payee: tag.strong(methods.check_payee)) %></li>
       <% end %>
-      <li>Write your account number <strong><%= methods.number_padded %></strong> on the memo line.</li>
+      <li><%= t(".memo_line_html", number: tag.strong(methods.number_padded)) %></li>
       <% if methods.check_address %>
-        <li>Mail checks to:<div class="check-address"><%= simple_format(methods.check_address) %></div></li>
+        <li><%= t(".mail_to") %><div class="check-address"><%= simple_format(methods.check_address) %></div></li>
       <% end %>
       <% if methods.check_dropoff %>
         <li><%= methods.check_dropoff %></li>
@@ -49,7 +48,7 @@
   <% end %>
 
   <% if methods.pay_with_cash? %>
-    <h3>Cash</h3>
+    <h3><%= t(".cash") %></h3>
     <%= methods.cash_dropoff %>
   <% end %>
 
@@ -58,17 +57,17 @@
   <% end %>
 
   <% if methods.no_payment_instructions? %>
-    No payment instructions have been provided.
+    <%= t(".none_provided") %>
     <% if policy(methods.community).edit? %>
-      Please go to the <%= link_to("settings page", admin_settings_path(type: "community")) %> to enter some.
+      <%= t(".go_to_settings_html",
+            link: link_to(t(".settings_page"), admin_settings_path(type: "community"))) %>
     <% end %>
   <% end %>
 
   <% if methods.show_billing_contact && methods.billing_contact %>
     <p>
-      Please contact
-      <%= link_to(methods.billing_contact, "mailto:#{methods.billing_contact}") %>
-      with any billing inquiries.
+      <%= t(".contact_html",
+            email: link_to(methods.billing_contact, "mailto:#{methods.billing_contact}")) %>
     </p>
   <% end %>
 </div>

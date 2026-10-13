@@ -1,17 +1,17 @@
 <%= @household.greeting %>
 
-A new statement has been created in Gather for your <%= @community.name %> account.
+<%= t(".created", community: @community.name) %>
 
 <% if @statement.total_due >= 0 -%>
-The amount due is <%= number_to_currency(@statement.total_due) %>.
+<%= t(".amount_due", amount: number_to_currency(@statement.total_due)) %>
 <% else -%>
-You have a <%= number_to_currency(-@statement.total_due) %> credit balance. No payment is required.
+<%= t(".credit", amount: number_to_currency(-@statement.total_due)) %>
 <% end -%>
 
-Please visit the link below to see the details:
+<%= t(".see_details") %>
 
 <%= statement_url(@statement) %>
 
 <% if @statement.total_due > 0 -%>
-Thanks for your prompt payment!
+<%= t(".thanks") %>
 <% end -%>

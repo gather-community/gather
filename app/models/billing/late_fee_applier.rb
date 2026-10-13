@@ -25,7 +25,7 @@ module Billing
         account.transactions.create!(
           incurred_on: Time.zone.today,
           code: "late",
-          description: "Late payment fee",
+          description: I18n.t("billing.late_fee_description"),
           value: amount_for(account.balance_due)
         )
       end

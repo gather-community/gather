@@ -133,3 +133,15 @@ Gather/HardCodedString:
     - app/lenses/work/**/*.rb
     - app/serializers/work/**/*.rb
     - app/mailers/work_mailer.rb
+    - app/controllers/billing/**/*.rb
+    - app/decorators/billing/**/*.rb
+    - app/models/billing/**/*.rb
+    - app/forms/billing/**/*.rb
+    - app/jobs/billing/**/*.rb
+    - app/policies/billing/**/*.rb
+    - app/serializers/billing/**/*.rb
+    - app/controllers/accounts_controller.rb
+    - app/controllers/statements_controller.rb
+    - app/controllers/transactions_controller.rb
+    - app/helpers/accounts_helper.rb
+    - app/mailers/account_mailer.rb

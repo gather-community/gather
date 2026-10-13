@@ -1,6 +1,6 @@
 <% if accounts.size > 1 %>
   <div class="center-notice">
-    <%= icon_tag("question-circle") %> Looking for another account?
+    <%= icon_tag("question-circle") %> <%= t(".looking") %>
     <% others = accounts.map(&:community) - [@community] %>
     <% others.map! { |c| link_to(c.name, yours_accounts_path(community: c.id)) } %>
     <% if others.size == 1 %>
@@ -8,6 +8,6 @@
     <% else %>
       <%= t("accounts.others.multiple_html", cmtys: safe_join(others, ", ")) %>
     <% end %>
-    <br/>Each community manages its own accounts.
+    <br/><%= t(".each_community") %>
   </div>
 <% end %>

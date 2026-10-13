@@ -54,7 +54,7 @@ class AccountsController < ApplicationController
     @account = Billing::Account.find(params[:id])
     authorize(@account)
     if @account.update(account_params)
-      flash[:success] = "Account updated successfully."
+      flash[:success] = t("accounts.updated")
       redirect_to(accounts_path)
     else
       render(:edit)
@@ -64,7 +64,7 @@ class AccountsController < ApplicationController
   def apply_late_fees
     authorize(sample_account)
     late_fee_applier.apply!
-    flash[:success] = "Late fees applied."
+    flash[:success] = t("accounts.late_fees_applied")
     redirect_to(accounts_path)
   end
 

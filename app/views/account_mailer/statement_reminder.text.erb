@@ -6,7 +6,7 @@
 <%= t(".due_soon", community: @community.name) %>
 <% end -%>
 
-<%= t(".amount_due", amount: number_to_currency(@statement.total_due)) %>
+<%= t(".amount_due", amount: format_money(@statement.total_due)) %>
 
 <%= statement_url(@statement) %>
 

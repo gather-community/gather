@@ -29,6 +29,8 @@ class Community < ApplicationRecord
   # Maps an ISO 3166-1 alpha-2 country code (uppercase) to its default ISO 4217 currency
   # (lowercase, to match Stripe and the money gem). Covers Stripe-supported countries;
   # extend as Stripe adds markets. Source: https://stripe.com/global
+  DEFAULT_CURRENCY = "usd"
+
   COUNTRY_CURRENCIES = {
     "AE" => "aed", "AT" => "eur", "AU" => "aud", "BE" => "eur", "BG" => "bgn",
     "BR" => "brl", "CA" => "cad", "CH" => "chf", "CY" => "eur", "CZ" => "czk",
@@ -211,6 +213,12 @@ class Community < ApplicationRecord
   # The default currency for the community's country, or nil if unsupported.
   def default_currency
     COUNTRY_CURRENCIES[country_code]
+  end
+
+  # The currency the community's money is shown in. Communities in countries Stripe doesn't support use
+  # US dollars, which is what every community was shown before currencies were per-community.
+  def currency
+    default_currency || DEFAULT_CURRENCY
   end
 
   # The community's single messaging wallet, or nil if it has never been funded. There is at most

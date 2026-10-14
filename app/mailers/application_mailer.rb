@@ -5,6 +5,12 @@ class ApplicationMailer < ActionMailer::Base
   include SubdomainSettable
   include RecipientLocale
   default from: Settings.email.from, reply_to: Settings.email.from
+  helper :money
+
+  # Lets views and helpers shared with the web app, e.g. format_money, find the community.
+  helper_method def current_community
+    community
+  end
 
   protected
 

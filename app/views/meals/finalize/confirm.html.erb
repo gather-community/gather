@@ -15,7 +15,7 @@
     <tr class="cost">
       <td><strong><%= t(".calculated_cost") %></strong></td>
       <% meal.types.each do |type| %>
-        <td><%= number_to_currency(@calculator.price_for(type)) %></td>
+        <td><%= format_money(@calculator.price_for(type)) %></td>
       <% end %>
     </tr>
     <% signups.reject(&:marked_for_destruction?).each do |signup| %>
@@ -32,11 +32,11 @@
   <table class="key-value key-value-narrow">
     <tr>
       <td><%= t("activerecord.attributes.meals/cost.ingredient_cost") %></td>
-      <td><strong><%= number_to_currency(cost.ingredient_cost) %></strong></td>
+      <td><strong><%= format_money(cost.ingredient_cost) %></strong></td>
     </tr>
     <tr>
       <td><%= t("activerecord.attributes.meals/cost.pantry_cost") %></td>
-      <td><strong><%= number_to_currency(cost.pantry_cost) %></strong></td>
+      <td><strong><%= format_money(cost.pantry_cost) %></strong></td>
     </tr>
     <tr>
       <td><%= t("activerecord.attributes.meals/cost.reimbursee_id") %></td>

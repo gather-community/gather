@@ -16,7 +16,7 @@
       <tr>
         <td class="description"><%= template.description %></td>
         <td class="type"><%= t("transaction_codes.#{template.code}") %></td>
-        <td class="amount"><%= number_to_currency(template.value) %></td>
+        <td class="amount"><%= format_money(template.value) %></td>
         <td class="amount">
           <%= template.households.map(&:name).join(", ") %>
         </td>

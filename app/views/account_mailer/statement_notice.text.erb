@@ -3,9 +3,9 @@
 <%= t(".created", community: @community.name) %>
 
 <% if @statement.total_due >= 0 -%>
-<%= t(".amount_due", amount: number_to_currency(@statement.total_due)) %>
+<%= t(".amount_due", amount: format_money(@statement.total_due)) %>
 <% else -%>
-<%= t(".credit", amount: number_to_currency(-@statement.total_due)) %>
+<%= t(".credit", amount: format_money(-@statement.total_due)) %>
 <% end -%>
 
 <%= t(".see_details") %>

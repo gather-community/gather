@@ -8,13 +8,16 @@ class ApplicationMailer < ActionMailer::Base
   helper :money
 
   # Lets views and helpers shared with the web app, e.g. format_money, find the community.
-  helper_method def current_community
-    community
-  end
+  helper_method :current_community
 
   protected
 
   attr_reader :community
+
+  # Protected so it isn't taken for a mailer action.
+  def current_community
+    community
+  end
 
   # Overrides default mail method.
   #

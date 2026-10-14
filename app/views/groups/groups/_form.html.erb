@@ -25,20 +25,18 @@
   <% end %>
 
   <% if policy(group.mailman_list).edit? %>
-    <h2>Email List</h2>
+    <h2><%= t(".email_list") %></h2>
 
     <% if @domain_options.empty? %>
-      You can't create an email list because there are no domains associated with this community.
-      <a href="mailto:info@gather.coop">Contact Gather staff</a> to rectify this.
+      <%= t(".no_domains_html", link: link_to(t(".contact_staff"), "mailto:info@gather.coop")) %>
     <% else %>
       <%= f.simple_fields_for(:mailman_list) do |list_form| %>
         <p>
-          Email lists are provided through the Mailman mailing list software.
+          <%= t(".mailman_intro") %>
           <% if list_form.object.new_record? %>
-            Leave these fields blank if you don't need an email list for this group.
+            <%= t(".leave_blank") %>
           <% else %>
-            List name and domain can't be edited once the list is created. If you need to change them,
-            delete and recreate the list or contact Gather staff.
+            <%= t(".name_locked") %>
           <% end %>
         </p>
 
@@ -55,56 +53,27 @@
                 hint: mailman_list.all_cmty_members_can_send_hint) %>
           <%= list_form.input(:managers_can_administer) %>
           <%= list_form.input(:managers_can_moderate) %>
+          <% panel_link = link_to(t(".admin_panel"), mailman_list.panel_url) %>
           <%= list_form.input(:members) do %>
-            List members are synchronized with Gather as follows:
+            <%= t(".sync_intro") %>
             <ul>
+              <li><%= t(".members_html", link: panel_link) %></li>
+              <li><%= t(".moderators_html", link: panel_link) %></li>
+              <li><%= t(".owners_html", link: panel_link) %></li>
               <li>
-                <strong>Members</strong>: All members of this group are automatically sync'd to the list.
-                You can manually add additional members via the
-                <%= link_to("Mailman admin panel", mailman_list.panel_url) %>.
-              </li>
-              <li>
-                <strong>Moderators</strong>: List moderators are sync'd according to the 'Managers can moderate
-                list?' and 'Can moderate all email lists?' settings above. You can manually add additional
-                moderators via the <%= link_to("Mailman admin panel", mailman_list.panel_url) %>.
-              </li>
-              <li>
-                <strong>Owners</strong>: List owners are sync'd according to the 'Managers can administer list?'
-                and 'Can administer all email lists?' settings above. You can manually add additional owners
-                via the <%= link_to("Mailman admin panel", mailman_list.panel_url) %>.
-              </li>
-              <li>
-                <strong>Non-members</strong>: The Mailman 'non-member' feature can be used 1) to
-                allow additional addresses to send email to the list without receiving from it and 2) to
-                ban people from sending to the list. Non-members do not receive email from the list.
-                Non-members are not sync'd from Gather, but can be added manually via the
-                <%= link_to("Mailman admin panel", mailman_list.panel_url) %>.
-                See the <%= link_to("Mailman documentation",
-                  "https://mailman.readthedocs.io/en/latest/src/mailman/rules/docs/moderation.html") %>
-                for more information.
+                <%= t(".non_members_html", link: panel_link, docs_link: link_to(t(".mailman_docs"),
+                      "https://mailman.readthedocs.io/en/latest/src/mailman/rules/docs/moderation.html")) %>
               </li>
             </ul>
-            <strong>Only addresses not associated with Gather users should be
-            adjusted via the Mailman admin panel.</strong>
-            Any manual changes to memberships for Gather users will be overwritten during sync.
+            <strong><%= t(".only_non_users") %></strong>
+            <%= t(".overwritten") %>
           <% end %>
           <%= list_form.input(:settings) do %>
-            List settings can be adjusted via the
-            <%= link_to("Mailman admin panel", mailman_list.panel_url) %>.
-            The following settings will be forcibly reset by Gather:
+            <%= t(".settings_intro_html", link: panel_link) %>
             <ul>
-              <li>
-                <strong>Show list on index page</strong>: Lists will never be advertised
-                since this is a private mailing list system only.
-              </li>
-              <li>
-                <strong>Maximum message size</strong>: Messages are limited to 5 MiB.
-              </li>
-              <li>
-                <strong>Subscription policy</strong>: Moderators will have to authorize any new
-                subscriptions manually. The primary route for subscribing should be via Gather.
-                Subscriptions via the Mailman site or via email should be rare.
-              </li>
+              <li><%= t(".index_page_html") %></li>
+              <li><%= t(".max_size_html") %></li>
+              <li><%= t(".subscription_policy_html") %></li>
             </ul>
           <% end %>
           <%= list_form.input(:_destroy, as: :boolean) if list_form.object.persisted? %>

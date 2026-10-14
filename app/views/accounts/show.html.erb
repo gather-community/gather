@@ -1,4 +1,4 @@
-<% content_for(:title, "Account: #{account.household_name}") %>
+<% content_for(:title, t(".title", household: account.household_name)) %>
 <% content_for(:action_links, account.action_links) %>
 <%= render("details", footnotes: false) %>
 

@@ -1,5 +1,98 @@
 en:
   work:
+    job_created: "Job created successfully."
+    job_updated: "Job updated successfully."
+    job_synced_from_meals: "This job was synchronized from the meals system and can't be edited directly. It will be automatically updated to reflect newly added or changed meals."
+    period_created: "Period created successfully."
+    period_updated: "Period updated successfully."
+    period_copied: "Some data have been copied from the period '%{name}'. Please review and adjust below. Jobs will be copied when you save the period."
+    notices_wrong_phase: "Notices can't be sent because the period is not in the 'ready' or 'open' phase."
+    notices_no_quota: "Notices can't be sent because this period doesn't have a quota."
+    notices_sent: "Notices are on the way!"
+    signed_up: "You signed up successfully. Hooray!"
+    signup_removed: "Your signup was removed successfully."
+    # Compact hours, e.g. "3h" on the signup cards.
+    hours_abbr: "%{hours}h"
+    jobs:
+      form:
+        reminders_on_role_html: "Reminders for this job should be set on its %{link}."
+        reminders_on_role: "Reminders for this job should be set on its meal role page."
+        meal_role_page: "meal role page"
+        shifts: "Shifts"
+      edit:
+        title: "Edit Job: %{title}"
+      new:
+        title: "Create Job"
+      index:
+        title: "Jobs"
+        title_with_period: "Jobs: %{period}"
+        create: "Create Job"
+      show:
+        jobs: "Jobs"
+        hours: "%{hours} hours"
+    periods:
+      form:
+        do_not_copy: "Do not copy jobs"
+        meal_formula: "Meal Formula"
+        meal_roles_to_sync: "Meal Roles To Sync"
+        sync_hint: "Meal jobs will be sync'd whenever the period changes or meals are added/changed/removed. Signups will be sync'd whether user signs up via meal or work system. Changes to meal roles will only cause sync if period is in draft mode."
+        shares: "Shares"
+      edit:
+        title: "Edit Period: %{name}"
+      new:
+        title: "Create Period"
+      index:
+        title: "Work Periods"
+        create: "Create Period"
+        name: "Name"
+        start: "Start"
+        end: "End"
+        phase: "Phase"
+        links: "Links"
+        signups: "Signups"
+        report: "Report"
+        jobs: "Jobs"
+      review_notices:
+        title: "Job Choosing Notices: %{name}"
+        intro: "The following notices will be sent:"
+      show:
+        title: "Period: %{name}"
+        periods: "Periods"
+        date: "Date"
+        max_rounds_per_worker:
+          one: "%{count} max. round per worker"
+          other: "%{count} max. rounds per worker"
+        workers_per_round:
+          one: "%{count} worker per round"
+          other: "%{count} workers per round"
+        minutes_per_round:
+          one: "%{count} minute per round"
+          other: "%{count} minutes per round"
+        shares: "Shares"
+      report:
+        title: "Work Report"
+        title_with_period: "Work Report: %{period}"
+        overview: "Overview"
+        total_hours: "Total Hours"
+        jobs: "Jobs"
+        people: "People"
+        quota: "Quota"
+        by_person: "By Person"
+        by_household: "By Household"
+        regular: "Regular"
+        name: "Name"
+    settings:
+      edit:
+        title: "Work Settings"
+    shifts:
+      shift:
+        sign_up: "Sign Up!"
+      shifts:
+        list_label: "List of signups"
+      index:
+        title: "Job Signups"
+      show:
+        signups: "Signups"
     no_periods_html: "There are no accessible periods. Please see the %{link}."
     periods_page: "periods page"
     not_setup: "It looks like your community hasn't set up Gather's work share system.\nTalk to your Gather Admin for more info."
@@ -19,8 +112,9 @@ en:
     synopsis:
       done: "You're all set!"
       regular: "regular"
-      for_user: "You have signed up for"
-      for_household: "Your household has"
+      # %{chunks} is a list like "3/10 regular hours, 2/4 Pitch-In hours and 1/2 Mowing hours".
+      for_user_html: "You have signed up for %{chunks}."
+      for_household_html: "Your household has %{chunks}."
       chunk:
         single_html: "%{fraction} hours"
         multiple_html: "%{fraction} %{title} hours"
@@ -78,3 +172,27 @@ en:
       hours_after:
         one: "%{count} hour after"
         other: "%{count} hours after"
+  work_mailer:
+    job_reminder:
+      subject: "Job Reminder: %{title}, %{times}"
+      # The time is left out of the subject when the reminder has a note.
+      subject_with_note: "Job Reminder: %{title}: %{note}"
+      scheduled: "This is a reminder that you are scheduled as '%{job}' for %{times}."
+      note_intro: "This reminder includes the following note:"
+      see_description: "See the job description here: %{url}."
+      thanks: "Thanks for your service to the community!"
+    job_choosing_notice:
+      subject: "Job Choosing is Coming Up!"
+      coming_up_on: "Job choosing is coming up on %{date}!"
+      coming_up_soon: "Job choosing is coming up soon!"
+      quota: "You have %{got} pre-assigned hours and your quota is %{quota}, so you need to choose %{need} regular hours."
+      also_choose: "You are also expected to choose %{hours}."
+      full_community_hours: "%{hours} %{title} hours"
+      begin_at: "You can begin choosing at %{time}."
+      schedule_intro: "Your round schedule is as follows:"
+      round_with_limit: "* At %{time} you can choose up to %{limit} hours."
+      round_finish: "* At %{time} you can finish choosing."
+      go_to: "Go to %{url} at the time(s) above to choose your jobs. You can also stop by earlier to see what jobs are available and plan your picks. But you won't be able to sign up until the times listed above."
+      choosing_begins: "Choosing begins at %{time}."
+      visit: "Visit %{url} for more information."
+      thanks: "Thanks for your participation!"

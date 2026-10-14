@@ -77,7 +77,7 @@ module Work
         if @error
           flash[:error] = @error
         else
-          flash[:success] = "You signed up successfully. Hooray!"
+          flash[:success] = t("work.signed_up")
         end
         redirect_to(work_period_shifts_path(@period))
       end
@@ -98,7 +98,7 @@ module Work
       else
         begin
           @shift.unsignup_user(@choosee)
-          flash[:success] = "Your signup was removed successfully."
+          flash[:success] = t("work.signup_removed")
         rescue NotSignedUpError
           flash[:error] = t("work/shift.not_signed_up")
         end

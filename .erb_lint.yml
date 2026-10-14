@@ -1,9 +1,19 @@
 ---
 # Flags hard-coded user-facing strings in views (see "User-Facing Strings" in CLAUDE.md).
-# Only views whose strings have been moved to locale files are linted: add their directories to `glob` as
-# modules are converted. spec/lint/hard_coded_strings_spec.rb runs this in CI.
+# Every view is linted. Exceptions: mail that only goes to Gather staff (CLAUDE.md exempts it) and the
+# uptime-check text.
+# spec/lint/hard_coded_strings_spec.rb runs this in CI.
 EnableDefaultLinters: false
-glob: "app/views/{layouts,shared,home,devise,auth_mailer,people,users,households,meals,meal_mailer,calendars}/**/*.erb"
+glob: "app/views/**/*.erb"
+exclude:
+  - "app/views/admin_mailer/*"
+  - "app/views/system_mailer/*"
+  - "app/views/test_mailer/*"
+  - "app/views/exception_notifier/*"
+  - "app/views/communities/signup_mailer/notify_approvers.text.erb"
+  - "app/views/communities/signup_mailer/approval_created.text.erb"
+  - "app/views/communities/signup_mailer/approval_failed.text.erb"
+  - "app/views/landing/ping.text.erb"
 linters:
   # Literal text between tags, ignoring text with no letters (.erb_linters/hard_coded_text.rb).
   # Contents of <script> tags are skipped.

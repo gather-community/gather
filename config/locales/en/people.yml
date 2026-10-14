@@ -14,6 +14,11 @@ en:
       invalid:
         title: "Unsubscribe"
         explanation: "This unsubscribe link isn't valid. It may be from an old email, or it was copied incompletely."
+    # The placeholder household and user that a deleted member's records are reassigned to.
+    deleted_placeholder:
+      household: "Deleted Members"
+      first_name: "Deleted"
+      last_name: "Member"
     notification_preferences:
       updated: "Your notification preferences have been saved."
       sections:

@@ -15,7 +15,7 @@ module GDrive
         mail(
           to: recipients,
           reply_to: @operation.contact_email,
-          subject: "[Action Required] Help #{@community.name} reorganize its Google Drive files!",
+          subject: t("gdrive.migration.request_subject", community: @community.name),
           include_inactive: :always
         )
       end

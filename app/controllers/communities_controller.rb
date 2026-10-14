@@ -24,7 +24,7 @@ class CommunitiesController < ApplicationController
   def resync_all
     authorize(sample_community, :index?)
     Subscription::SyncAllJob.perform_later
-    redirect_to(communities_path, notice: "Subscription resync started. Refresh in a minute to see updates.")
+    redirect_to(communities_path, notice: t("communities.resync_started"))
   end
 
   def activate
@@ -38,11 +38,11 @@ class CommunitiesController < ApplicationController
     load_community
     authorize(@community)
     if params[:confirmation] != @community.slug
-      redirect_to(admin_community_path(@community), alert: "Incorrect slug. Community was not deleted.")
+      redirect_to(admin_community_path(@community), alert: t("communities.incorrect_slug"))
       return
     end
     CommunityDeletionJob.perform_later(@community.id, current_user.id)
-    redirect_to(communities_path, notice: "#{@community.name} is being deleted.")
+    redirect_to(communities_path, notice: t("communities.being_deleted", name: @community.name))
   end
 
   protected

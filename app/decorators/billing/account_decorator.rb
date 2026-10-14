@@ -17,7 +17,7 @@ module Billing
         num = h.number_to_currency(credit_limit)
         credit_exceeded? ? h.content_tag(:span, num, class: "exceeded") : num
       else
-        "None"
+        t("accounts.no_credit_limit")
       end
     end
 

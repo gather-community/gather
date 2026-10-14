@@ -74,6 +74,8 @@ ignore_unused:
   - "{community_lens,date_range_lens}.*"  # Lens i18n_key + option names
   - "calendars.{all,community,your}_*"    # system calendar names
   - "calendars/protocol.durations.*"
+  - "roles.index.descriptions.*"  # roles/index.html.erb, by role
+  - "subscription.messaging_transactions.*"  # Stripe::TopupProcessor, by direction
   - "calendars.drag.{confirm,confirm_occurrence}"  # calendar_view.js#confirmMove, by series scope
   - "calendars.drag.series.{occurrence,following,series}"  # calendar_view.js#promptForSeriesScope
   - "common.time_with_preposition.*"

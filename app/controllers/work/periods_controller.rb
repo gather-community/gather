@@ -30,8 +30,7 @@ module Work
         old_period = Period.find(params[:clone_from])
         cloner = PeriodCloner.new(old_period: old_period, new_period: @period)
         cloner.copy_attributes_and_shares
-        flash.now[:notice] = "Some data have been copied from the period '#{old_period.name}'. " \
-          "Please review and adjust below. Jobs will be copied when you save the period."
+        flash.now[:notice] = t("work.period_copied", name: old_period.name)
       end
       authorize(@period)
       @periods = Period.in_community(current_community).newest_first
@@ -65,7 +64,7 @@ module Work
       authorize(@period)
       if @period.update(period_params)
         QuotaCalculator.new(@period).recalculate_and_save
-        flash[:success] = "Period updated successfully."
+        flash[:success] = t("work.period_updated")
         redirect_to(work_periods_path)
       else
         prep_form_vars
@@ -98,9 +97,9 @@ module Work
     def review_notices
       authorize(@period)
       if !(@period.ready? || @period.open?)
-        @error = "Notices can't be sent because the period is not in the 'ready' or 'open' phase."
+        @error = t("work.notices_wrong_phase")
       elsif @period.quota_none?
-        @error = "Notices can't be sent because this period doesn't have a quota."
+        @error = t("work.notices_no_quota")
       else
         @notices = Work::Share.for_period(period).nonzero.by_user_name.map do |share|
           # .body was sometimes returning an empty String object.
@@ -113,7 +112,7 @@ module Work
     def send_notices
       authorize(@period)
       JobChoosingNoticeJob.perform_later(@period.id)
-      flash[:success] = "Notices are on the way!"
+      flash[:success] = t("work.notices_sent")
       redirect_to(work_period_path(@period))
     end
 
@@ -147,7 +146,7 @@ module Work
 
     def calculate_quota_and_redirect
       QuotaCalculator.new(@period).recalculate_and_save
-      flash[:success] = "Period created successfully."
+      flash[:success] = t("work.period_created")
       redirect_to(work_periods_path)
     end
 

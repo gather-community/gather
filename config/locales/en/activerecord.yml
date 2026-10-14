@@ -298,6 +298,12 @@ en:
         too_big: "File is too big (maximum %{max} MiB)"
         attached: "File is missing"
       models:
+        billing/transaction:
+          attributes:
+            unit_price:
+              blank_with_quantity: "can't be blank if quantity is present"
+            quantity:
+              blank_with_unit_price: "can't be blank if unit price is present"
         domain:
           attributes:
             base:

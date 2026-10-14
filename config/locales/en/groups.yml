@@ -1,5 +1,84 @@
 en:
   groups:
+    created: "Group created successfully."
+    updated: "Group updated successfully."
+    joined: "You have successfully joined the group \"%{name}\"."
+    left: "You have successfully left the group \"%{name}\"."
+    list_sync_started: "List sync started. Please wait a few moments for it to complete and refresh the page."
+    # E.g. "Knitting Club (Inactive, Hidden)".
+    name_with_suffixes: "%{name} (%{suffixes})"
+    show_more: "Show %{count} more"
+    hide: "Hide"
+    groups:
+      form:
+        email_list: "Email List"
+        no_domains_html: "You can't create an email list because there are no domains associated with this community. %{link} to rectify this."
+        contact_staff: "Contact Gather staff"
+        mailman_intro: "Email lists are provided through the Mailman mailing list software."
+        leave_blank: "Leave these fields blank if you don't need an email list for this group."
+        name_locked: "List name and domain can't be edited once the list is created. If you need to change them, delete and recreate the list or contact Gather staff."
+        admin_panel: "Mailman admin panel"
+        sync_intro: "List members are synchronized with Gather as follows:"
+        members_html: "<strong>Members</strong>: All members of this group are automatically sync'd to the list. You can manually add additional members via the %{link}."
+        moderators_html: "<strong>Moderators</strong>: List moderators are sync'd according to the 'Managers can moderate list?' and 'Can moderate all email lists?' settings above. You can manually add additional moderators via the %{link}."
+        owners_html: "<strong>Owners</strong>: List owners are sync'd according to the 'Managers can administer list?' and 'Can administer all email lists?' settings above. You can manually add additional owners via the %{link}."
+        non_members_html: "<strong>Non-members</strong>: The Mailman 'non-member' feature can be used 1) to allow additional addresses to send email to the list without receiving from it and 2) to ban people from sending to the list. Non-members do not receive email from the list. Non-members are not sync'd from Gather, but can be added manually via the %{link}. See the %{docs_link} for more information."
+        mailman_docs: "Mailman documentation"
+        only_non_users: "Only addresses not associated with Gather users should be adjusted via the Mailman admin panel."
+        overwritten: "Any manual changes to memberships for Gather users will be overwritten during sync."
+        settings_intro_html: "List settings can be adjusted via the %{link}. The following settings will be forcibly reset by Gather:"
+        index_page_html: "<strong>Show list on index page</strong>: Lists will never be advertised since this is a private mailing list system only."
+        max_size_html: "<strong>Maximum message size</strong>: Messages are limited to 5 MiB."
+        subscription_policy_html: "<strong>Subscription policy</strong>: Moderators will have to authorize any new subscriptions manually. The primary route for subscribing should be via Gather. Subscriptions via the Mailman site or via email should be rare."
+      edit:
+        title: "Edit Group: %{name}"
+      new:
+        title: "Create Group"
+      index:
+        title: "Groups"
+        create: "Create Group"
+        none_found: "No groups found."
+        name: "Name"
+        type: "Type"
+        description: "Description"
+        members: "Members"
+      show:
+        groups: "Groups"
+        email_list: "Email List"
+        links: "Links"
+        archives: "List Archives"
+        panel: "List Panel"
+        all_can_send: "All Community Can Send?"
+        additional_members_note: "All group members above are automatically members of the list. These addresses are also members."
+        additional_senders_note: "These additional senders can send to the list but don't receive mail from it."
+        last_sync_time: "Last Sync Time"
+        sync_note: "Changes in Gather automatically sync to the mailing list system, but changes made in the mailing list panel do not sync automatically."
+        sync_note_additional: "This includes the list of additional members/senders above."
+        sync_now_html: "%{link} to get the freshest information."
+        sync_now: "Sync Now"
+        no_list: "This group has no attached email list."
+    # Templates that Mailman fetches for list emails. $listname and similar are Mailman placeholders,
+    # which must be kept as is.
+    mailman:
+      templates:
+        footer:
+          list_name: "$listname, a Gather Group Email List"
+          unsubscribe: "To unsubscribe, visit the Group page and leave or opt-out."
+        list_admin_action_post:
+          body: |-
+            As list administrator, your authorization is requested for the
+            following mailing list posting:
+
+                List:    $listname
+                From:    $sender_email
+                Subject: $subject
+
+            The message is being held because:
+
+            $reasons
+
+            At your convenience, visit your dashboard to approve or deny the
+            request.
     availability_hints:
       single_community:
         open: "Anybody in the community can see and join this group."
@@ -11,3 +90,24 @@ en:
         closed: "Anybody in the above communities can see this group but only admins and the group's managers can add people to it."
         hidden: "Only the group's managers and admins for the above communities and can see and add people to this group."
         everybody: "Everybody in the above communities can see this group, and is a member by default. People can chose to opt out if they wish."
+  domains:
+    created: "Domain created successfully."
+    index:
+      title: "Domains"
+      add: "Add Domain"
+      intro_html: "These are the domains on which you can create email lists. For instructions on adding a domain, click %{link}."
+      none_found: "No domains found."
+    new:
+      title: "Add Domain"
+      intro: "To add a domain to Gather:"
+      consider: "Consider whether there are mailboxes, forwarding addresses, or mailing lists defined for this domain."
+      mailboxes_html: "<strong>Mailboxes:</strong> If there are mailboxes defined for this domain, they will stop working if you direct the domain to Gather. To avoid this, you can use a subdomain, e.g. lists.yourdomain.com instead of yourdomain.com."
+      forwarding_html: "<strong>Forwarding addresses:</strong> If there are forwarding addresses defined for this domain, you can migrate them to Gather. Please contact %{email}."
+      lists_html: "<strong>Mailing lists:</strong> If there are mailing lists defined for this domain, you can migrate them to Gather. Please contact %{email}."
+      create: "Create the domain below by entering the full domain name, e.g. \"yourdomain.com\" and clicking \"Save\"."
+      migrating: "If you are migrating forwarding addresses or mailing lists, ensure these are set up on Gather and ready to receive email when you update the domain to point to Gather."
+      dns: "Finally, update the domain to point to Gather. Set the following three DNS records:"
+    show:
+      domain: "Domain"
+      communities: "Communities"
+      lists: "Mailman Lists"

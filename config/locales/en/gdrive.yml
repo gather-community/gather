@@ -1,5 +1,129 @@
 en:
   gdrive:
+    config_updated: "Config updated successfully."
+    group_added: "Group added successfully."
+    item_created: "Item created successfully."
+    old_migration: "Your migration was created more than 30 days ago. Please consider concluding and deleting your migration."
+    auth_cancelled: "It looks like you cancelled the Google authentication flow."
+    wrong_account: "You signed into Google with %{signed_in}. Please sign in with %{expected} instead."
+    authenticated: "Authenticated successfully with Google."
+    connection_problem: "There is a problem with your Google Drive connection. Please contact Gather support. (%{code})"
+    view_in_drive: "View in Google Drive"
+    browse:
+      index:
+        title: "Google Drive"
+        settings: "Settings"
+        migration: "Migration"
+        reconnect: "Your community needs to be reconnected to Google Drive."
+        authenticate_as_html: "Please authenticate with Google as %{user}."
+        reconnect_notify_admin: "Your community needs to be reconnected to Google Drive. Please notify a Gather Admin."
+        not_connected: "Your community is not yet connected to Google Drive."
+        not_connected_get_started_html: "Your community is not yet connected to Google Drive. Please go to the %{link} to get started."
+        settings_page: "settings page"
+        no_drives_html: "Your community does not have any linked Shared Drives. Please go to the %{link} to link a drive."
+        not_connected_talk_to_admin: "Your community is not yet connected to Google Drive. Please talk to a Gather Admin."
+        no_files: "No files found."
+        migrating_html: "Looking for something? Files are currently being migrated to this new community-owned drive. If you can't find something, try the %{link}."
+        old_location: "old location"
+        file_icon: "File icon"
+        no_files_in_folder: "No files found in this folder."
+        folder_icon: "Folder icon"
+      auth_button:
+        authenticate: "Authenticate With Google"
+    items:
+      new:
+        title: "Add Google Drive Item"
+    item_groups:
+      new:
+        title: "Add Group to Google Drive Item"
+    config:
+      index:
+        title: "Google Drive Settings"
+        migration: "Migration"
+        migrate_files: "Migrate Files"
+        link_item: "Link Item"
+        credentials: "Google Workspace Credentials"
+        add_credentials_html: "Your community is not yet connected to Google Drive. Add your Google Workspace credentials to connect. See the %{link} for how to get started."
+        config_guide: "config guide"
+        authentication: "Authentication"
+        update_credentials: "If you need to update your Google Workspace credentials, you can do so here."
+        introduction: "Introduction"
+        system_user_html: "<strong>System User:</strong> %{user}"
+        intro_html: "Add items below to link them to Gather and sync permissions. Shared drives listed below are shown on the Gather %{link} for users that have permission. Folders and files will not be accessible via the browse page unless their parent shared drive is accessible."
+        browse_page: "Google Drive browse page"
+        name: "Name"
+        status: "Status"
+        groups_permissions: "Groups & Permissions"
+        # e.g. "Viewer (View files)"
+        access_level: "%{level} (%{hint})"
+        add_group: "Add Group"
+        none_linked:
+          drive: "No shared drives linked to Gather."
+          folder: "No folders linked to Gather."
+          file: "No files linked to Gather."
+        revoke_html: "If you need to disconnect from Google or update your Google Workspace credentials you can %{link}."
+        revoke: "revoke authorization"
+        revoke_confirm: "Are you sure you want to revoke authorization? Nobody will be able to use Google Drive features for this community until authorization is re-established."
+      guide:
+        title: "Google Drive Config Guide"
+        # Markdown, rendered with Gather's Markdown renderer. Google's menu and button names are in quotes
+        # or bold so they can be matched to Google's own (translated) interface.
+        body: |-
+          This guide will walk you through the process of obtaining the credentials needed to connect your community's Google Workspace to Gather.
+
+          ## Prerequisites
+
+          * The community must have signed up for **Google Workspace**.
+              * The Business Starter plan is sufficient.
+              * Only one user account is needed.
+              * Choose a community name for the account (e.g. workspace.admin@yourdomain.com) instead of a personal name (e.g. johndoe@yourdomain.com).
+          * Whoever is following these instructions must be logged in to Google as a user in the community's Google Workspace with **Super Admin** privileges. If you only have one account, that account will have Super Admin privileges.
+
+          ## Main Config
+
+          ### Creating a Project
+
+          1. Go to https://console.cloud.google.com
+          2. Ensure you are logged in to Google as the user with Super Admin privileges.
+          3. Accept the terms and conditions. Wait a few minutes for your organization resource to be provisioned.
+          4. Go to https://console.cloud.google.com/projectcreate to create a project.
+          5. Name it **Gather Main**.
+          6. Select the organization for your domain.
+          7. Use the default value for location.
+
+          ### Enabled APIs
+
+          1. With the new project selected, go to https://console.cloud.google.com/ → Hamburger menu → APIs & Services → Enabled APIs & Services
+          2. Click **Enable APIs and Services**.
+          3. Enable the **Google Drive API**.
+
+          ### OAuth Client ID
+
+          1. With the new project selected, go to https://console.cloud.google.com/ → Hamburger menu → APIs & Services → Enabled APIs & Services → Credentials.
+          2. Click **Create Credentials** → **OAuth Client ID**
+          3. Select **Web Application**.
+          4. Name: **Drive OAuth Client ID**.
+          5. Under **Authorized JavaScript origins** add https://gather.coop.
+          6. Under **Authorized redirect URIs** add https://gather.coop/gdrive/setup/auth/callback.
+          7. Copy the Client ID and secret somewhere safe and save for later.
+              1. Client ID should look like `302773344240-7g2n5abcdef8es2cvpc0roj7t.apps.googleusercontent.com`
+              2. Client secret should look like `AIza73uyhc63ehd763ehesysqyhw-hei2asda_2rs`
+
+          ### OAuth Consent Screen
+
+          1. With the new project selected, go to https://console.cloud.google.com/ → Hamburger menu → APIs & Services → OAuth Consent Screen.
+          2. Pick **Internal**.
+          3. App Name: **Gather**.
+          4. User support email: the email address of the user with Super Admin privileges.
+          5. No logo.
+          6. App home page: https://gather.coop
+          7. Privacy policy: https://gather.coop/privacy-policy
+          8. Authorized domains:
+              1. gather.coop
+          9. Developer contact email: support@gather.coop
+          10. Scopes
+              1. auth/userinfo.email
+              2. auth/drive
     item_kinds:
       drive:
         one: "Shared Drive"
@@ -29,5 +153,206 @@ en:
       opted_out: "Opted out"
 
     migration:
+      requests_sending: "Requests will be sent momentarily. If owner has an existing request, a new one won't be sent."
+      created: "Migration created successfully. File scan will begin momentarily."
+      scan_started: "Scan initialized and will begin momentarily."
+      updated: "Migration updated successfully."
+      deleted: "Operation deleted successfully. No longer monitoring for changes."
+      # Name of the shared drive created for each person to drop their files into.
+      file_drop_drive_name: "Gather File Drop %{id}"
+      request_subject: "[Action Required] Help %{community} reorganize its Google Drive files!"
+      request:
+        # Shared by the request pages.
+        title: "%{community} File Reorganization"
+        previous: "< Previous"
+        next: "Next >"
+        troubleshooting: "Troubleshooting"
+        intro:
+          introduction: "Introduction"
+          ready: "Yes, I am ready to help!"
+        what_is_this:
+          using_gather_html: "%{community} is using <a href=\"https://gather.coop\">Gather</a> to reorganize its Google Drive files."
+          problem: "Currently, the community's files are owned by whoever created them. This can lead to accidental deletion of files when someone leaves the community."
+          solution: "To prevent this, the community is moving all its files into a shared drive owned by the community."
+          own_many_html: "You own about %{count} files in the %{link} for %{community}. We need your permission to move them into the new drive."
+          own_one_html: "You own at least one file in the %{link} for %{community}. We need your permission to move it into the new drive."
+          old_folder: "old Google Drive folder"
+          retain_access: "You will still retain access to the files if you are a member of the community."
+          questions_html: "If you have questions or concerns, you can reach out to %{contact}, who is coordinating the reorganization process."
+          opt_out_html: "If you'd rather not help with this effort, you can %{link}."
+          opt_out: "opt out"
+        step1:
+          heading: "Step 1: Files You Own"
+          view_files: "Click below to view the files you own in %{community}'s Google Drive folder. This will open a new browser tab."
+          view_files_button: "View Files I Own"
+          see_something_like: "You should see something like this:"
+          no_files: "I don't see any matching files"
+          no_files_help_html: "If you don't see any matching files, make sure you are signed into Google with the account %{email}."
+        step2:
+          heading: "Step 2: Select Files"
+          select: "Select the files you want to transfer."
+          easiest: "The easiest way to do this is to:"
+          click_first: "Click the first file in the list."
+          go_to_end: "Go to the end of the list."
+          shift_click_html: "<strong>Hold the SHIFT key</strong> and click the last file in the list."
+          see_something_like: "You should then see something like this:"
+          one_at_a_time: "I can only select one file at a time"
+          holding_html: "Make sure you follow the three steps above are <strong>holding</strong> the SHIFT key when clicking on the second file."
+          shift_explained: "Holding the SHIFT key when clicking indicates that you want to select ALL files in the list between the currently selected file and the file you are clicking."
+        step3:
+          heading: "Step 3: Organize > Move"
+          click_sequence: "Click the following in sequence:"
+          dots: "'3 dots' icon"
+          organize: "Organize"
+          move: "Move"
+        step4:
+          heading: "Step 4: Select File Drop Drive"
+          all_locations: "Click 'All locations'"
+          shared_drives: "Click 'Shared drives'"
+          next_to_html: "Next to %{drive}, click 'Move'"
+          move_button: "Click the 'Move' button"
+          no_shared_drives: "I don't see 'Shared drives' under the 'All locations' list"
+          signed_in_html: "Make sure you are signed into Google with the account %{email}. If you still don't see 'Shared drives', try opening %{link} in a new tab, and then try this step again."
+          this_link: "this link"
+          still_trouble_html: "If you are still having trouble, contact %{contact} for help."
+          unselected: "I accidentally un-selected some of the files"
+          go_back_html: "No problem! Go back to %{link}."
+          step2: "Step 2"
+          ownership: "I don't want to change ownership"
+          ownership_explained: "All files in %{community}'s new Shared Drive are owned by the community, not any individual. This ensures that files don't take up any space in your personal Google Drive quota, and can't be accidentally deleted."
+          still_access: "You will still have access to the files if you are a current member of the community."
+        step5:
+          heading: "Step 5: Ensure All Files Moved"
+          empty_list: "You should now see an empty list of files, something like this:"
+          done: "If so, you are done!"
+          finish: "Finish"
+          not_empty: "The list of files is not empty"
+          head_back_html: "No problem! Head back to %{link}."
+          step2: "Step 2"
+          some_files: "There are some files I don't want to transfer"
+          use_opt_out_html: "Please use the %{link} to notify the coordinator."
+          opt_out_form: "opt-out form"
+        finish:
+          heading: "All Done!"
+          thanks: "Thank you so much for helping reorganize %{community}'s files!"
+          great_day: "Have a great day!"
+        opt_out:
+          heading: "File Selection Opt Out"
+          not_active: "It looks like your migration request is not active, so you can't opt out."
+          why: "Please let us know why you're choosing to opt out."
+          still_own: "Our records indicate that you still own the files below. If you don't want to help transfer these files to community ownership, please let us know why you're choosing to opt out."
+          went_wrong: "If you tried to transfer files but something went wrong, please share what happened."
+          didnt_mean_html: "If you didn't mean to opt out, you can %{link}."
+          go_back_link: "go back"
+          go_back: "Go Back"
+          not_transferred: "Files Not Transferred"
+          name: "Name"
+          modified: "Modified"
+          file_icon: "File icon"
+        opted_out:
+          heading: "Opted Out"
+          opted_out: "You have opted out of %{community}'s effort to reorganize its Google Drive files."
+          opt_back_in_html: "If you'd like to opt back in, you can do so by %{link}."
+          clicking_here: "clicking here"
+        mobile_warning:
+          thanks: "Thanks for your interest in helping %{community} reorganize its Google Drive files!"
+          mobile: "Mobile Device?"
+          looks_like_mobile: "It looks like you're using a mobile device."
+          works_better: "This process works much better on a laptop or desktop with a full keyboard and pointing device."
+          proceed_html: "%{link}, but if you have a lot of files in the old Google Drive folder, the process may be tedious."
+          welcome_to_proceed: "You are welcome to proceed"
+          switch_html: "If you want to switch to a laptop/desktop, you can use the same %{link} in your email that brought you here."
+          link: "link"
+          thanks_again: "Either way, thanks again!"
+          what_is_this: "What Is This?"
+      mailer:
+        migration_request:
+          dear: "Dear %{name},"
+          using_gather: "%{community} is using Gather to reorganize its Google Drive files."
+          problem: "Currently, the community's files are owned by whoever created them. This can lead to accidental deletion of files when someone leaves the community!"
+          solution: "To prevent this, the community is moving all its files into a shared drive owned by the community."
+          own_many: "Your Google Account %{email} owns about %{count} files in the old Google Drive folder for %{community}. We need your permission to move them into the new drive."
+          own_one: "Your Google Account %{email} owns at least one file in the old Google Drive folder for %{community}. We need your permission to move it into the new drive."
+          go_here: "Please go here to help out: %{url}"
+          retain_access: "You will still retain access to the files if you are a member of the community. If you have questions or concerns, you can reach out to %{contact} at %{email}, who is coordinating the reorganization process. If you'd rather not help with this effort, you can also opt out at the URL above."
+          thanks: "Thank you for your time and consideration!"
+      dashboard:
+        # Shared by the dashboard pages.
+        title: "Google Drive Migration"
+        synopsis:
+          not_begun_contact: "File scan has not begun. Please contact Gather Support."
+          not_begun_wait: "File scan has not begun. Please wait a moment, then refresh the page."
+          in_progress: "File scan in progress. %{count} files scanned so far."
+          complete: "File scan is complete. Monitoring for changes."
+          auth_error_html: "File scan cancelled due to authorization error. Please ensure %{user} has <strong>edit</strong> access to your %{folder_link}. Try clicking \"Revoke Authorization\" and signing in again on the %{home_link}. Then try running the scan again."
+          source_folder: "source folder"
+          main_page: "main Google Drive page"
+          too_many_errors: "File scan cancelled due to too many errors. Please see errors below. Correct errors and then try running the scan again."
+          cancelled_unknown: "File scan cancelled for unknown reason."
+          unknown_state: "File scan in unknown state."
+        status:
+          show:
+            system_user: "System User"
+            contact: "Contact"
+            contact_value: "%{name} <%{email}>"
+            source_folder: "Source Folder"
+            destination_folder: "Destination Folder"
+            total_files: "Total Files"
+            files_by_status:
+              pending: "Files Pending"
+              declined: "Files Declined"
+              errored: "Files Errored"
+              transferred: "Files Transferred"
+              copied: "Files Copied"
+              ignored: "Files Ignored"
+              disappeared: "Files Disappeared"
+        logs:
+          index:
+            logs: "Logs"
+            none: "No logs yet."
+            time: "Time"
+            message: "Message"
+        files:
+          index:
+            files: "Files"
+            name: "Name"
+            owner: "Owner"
+            modified: "Modified"
+            status: "Status"
+            error: "Error"
+            file_icon: "File icon"
+        owners:
+          index:
+            owners: "Owners"
+            files: "Files"
+            request: "Request"
+            owner: "Owner"
+            total: "Total"
+            date_sent: "Date Sent"
+            status: "Status"
+          show:
+            files: "Files"
+            total_files: "Total Files"
+            request: "Request"
+            date_sent: "Date Sent"
+            status: "Status"
+            intro_page: "Request Intro Page"
+            link: "Link"
+            opened_note: "Note that clicking this link will change the request to \"opened\" status."
+            file_drop_drive: "File Drop Drive"
+            opt_out_reason: "Opt Out Reason"
+      operations:
+        form:
+          intro: "Enter the information below to set up your migration. A file scan will be initiated and you will be redirected to the migration dashboard."
+        new:
+          title: "Create Migration"
+        edit:
+          title: "Edit Migration"
+      # Labels for GDrive::Migration::File#error_type. Keep in sync with the error_type_enum DB constraint.
       errors:
-        cant_edit: "No edit permission"
+        forbidden: "No permission"
+        not_found: "Not found"
+        ancestor_inaccessible: "Parent folder inaccessible"
+        client_error_ensuring_tree: "Error creating destination folders"
+        client_error_moving_to_temp_drive: "Error moving to temporary drive"
+        client_error_moving_to_destination: "Error moving to destination"

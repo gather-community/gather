@@ -52,7 +52,7 @@ module GDrive
       @config = Config.find_by(community: current_community) || Config.new(community: current_community)
       @config.assign_attributes(config_params)
       if @config.save
-        flash[:success] = "Config updated successfully."
+        flash[:success] = t("gdrive.config_updated")
         redirect_to(gdrive_config_path)
       else
         set_auth_required if @config.new_record?

@@ -19,6 +19,8 @@ module ApplicationControllable::Locale
     # user they're impersonating.
     locale = Gather::Locales.for_request(request.headers["Accept-Language"], user: real_current_user)
     I18n.with_locale(locale, &action)
+    # rubocop:disable Gather/HardCodedString -- an HTTP header name
     response.headers["Vary"] = [response.headers["Vary"].presence, "Accept-Language"].compact.join(", ")
+    # rubocop:enable Gather/HardCodedString
   end
 end

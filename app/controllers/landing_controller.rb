@@ -13,7 +13,7 @@ class LandingController < ApplicationController
 
   def index
     if (@invite_token = params[:token])
-      flash.now[:notice] = "Welcome to Gather! Please choose a sign in option below."
+      flash.now[:notice] = t("landing.invite_welcome")
     end
     # Force HTML so requests with a JSON Accept header (usually bots) don't raise MissingTemplate.
     render(layout: false, formats: :html)

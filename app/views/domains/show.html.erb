@@ -3,24 +3,24 @@
 
 <table class="key-value key-value-narrow">
   <tr>
-    <td>Domain</td>
+    <td><%= t(".domain") %></td>
     <td><%= domain.name %></td>
   </tr>
   <% if multi_community? %>
     <tr>
-      <td>Communities</td>
+      <td><%= t(".communities") %></td>
       <td><%= domain.communities.map(&:name).join(", ") %></td>
     </tr>
   <% end %>
   <tr>
-    <td>Mailman Lists</td>
+    <td><%= t(".lists") %></td>
     <td>
       <% if domain.group_mailman_lists.any? %>
         <% domain.group_mailman_lists.each do |list| %>
           <%= link_to(list.name, groups_group_path(list.group)) %><br/>
         <% end %>
       <% else %>
-        None
+        <%= t("common.none") %>
       <% end %>
     </td>
   </tr>

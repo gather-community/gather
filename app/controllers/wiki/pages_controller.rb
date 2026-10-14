@@ -52,7 +52,7 @@ module Wiki
     def destroy
       authorize(@page)
       @page.destroy
-      flash[:success] = "Page deleted successfully."
+      flash[:success] = t("wiki.page_deleted")
       redirect_to(home_path)
     end
 

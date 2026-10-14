@@ -1,4 +1,5 @@
 import {Controller} from "@hotwired/stimulus";
+import i18n from "../utils/i18n";
 import {jsonFetch} from "../utils/json_fetch";
 
 /*
@@ -47,16 +48,10 @@ export default class extends Controller {
     this.saveTarget.disabled = false;
 
     if (selected === "none") {
-      this.showNotice(
-        "Your monthly topup will be canceled at the end of the current billing month. "
-        + "No further charges, and your existing balance stays."
-      );
+      this.showNotice(i18n.t("subscription.topup_notices.cancel"));
     } else if (!this.hasTopupValue) {
       const label = input.dataset.messagingTopupLabel;
-      this.showNotice(
-        `Your payment method on file will be charged ${label} today for a full month, `
-        + `then ${label} on this day each month.`
-      );
+      this.showNotice(i18n.t("subscription.topup_notices.first_charge", {amount: label}));
     } else {
       await this.showChangeNotice(selected, input.dataset.messagingTopupLabel || "");
     }
@@ -64,16 +59,16 @@ export default class extends Controller {
 
   // Fetches the exact prorated amount for changing an existing topup and renders it.
   private async showChangeNotice(cents: string, label: string): Promise<void> {
-    this.showNotice("Calculating…");
+    this.showNotice(i18n.t("subscription.topup_notices.calculating"));
     const result = await jsonFetch(this.previewUrlValue, {method: "POST", body: {cents}});
     if (!result || !result.immediate_charge) {
-      this.showNotice(`Starting next billing month you'll be charged ${label} per month.`);
+      this.showNotice(i18n.t("subscription.topup_notices.next_month", {amount: label}));
       return;
     }
-    const when = result.is_credit
-      ? `you'll receive a credit of ${result.immediate_charge} toward your next invoice`
-      : `your payment method on file will be charged about ${result.immediate_charge} today (prorated)`;
-    this.showNotice(`Now ${when}, then ${label} per month from ${result.next_bill_date}.`);
+    const params = {amount: label, date: result.next_bill_date};
+    this.showNotice(result.is_credit
+      ? i18n.t("subscription.topup_notices.prorated_credit", {...params, credit: result.immediate_charge})
+      : i18n.t("subscription.topup_notices.prorated_charge", {...params, charge: result.immediate_charge}));
   }
 
   // Submits the change over AJAX behind the global loader. The server credits the wallet
@@ -134,12 +129,12 @@ export default class extends Controller {
   // result is the JSON body ({error, reference}) on a handled failure, or null when the request
   // never completed. attemptedAt is the local time the user clicked Save, for operator debugging.
   private showError(result: {[key: string]: any} | null, attemptedAt: string): void {
-    const reason = (result && result.error) || "Something went wrong and your topup was not changed.";
-    const reference = result && result.reference ? ` Reference: ${result.reference}.` : "";
-    this.showNotice(
-      `${reason}${reference} (Attempted ${attemptedAt}.) `
-      + "If this keeps happening, please contact Gather support with that reference and time."
-    );
+    const reason = (result && result.error) || i18n.t("subscription.topup_notices.error_default");
+    this.showNotice(result && result.reference
+      ? i18n.t("subscription.topup_notices.error_with_reference", {
+        reason, reference: result.reference, time: attemptedAt,
+      })
+      : i18n.t("subscription.topup_notices.error", {reason, time: attemptedAt}));
     this.noticeTarget.classList.add("messaging-topup-notice--error");
   }
 

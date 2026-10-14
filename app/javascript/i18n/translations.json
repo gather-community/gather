@@ -111,8 +111,12 @@
       "none": "None",
       "none_bracketed": "[None]",
       "num_in_total": "%{count} in total",
+      "open_date_picker": "Open date picker",
       "print": "Print",
       "save": "Save",
+      "select_user": "Select User ...",
+      "settings": "Settings",
+      "settings_updated": "Settings updated successfully.",
       "this_month": "This Month",
       "this_quarter": "This Quarter",
       "this_year": "This Year",
@@ -126,6 +130,11 @@
       "unlimited": "Unlimited",
       "with_inactive": "%{name} (Inactive)",
       "yes": "Yes"
+    },
+    "communities": {
+      "signup_action": {
+        "approval_template": "Dear %{name},\n\nGreat news! Your application to join Gather for the community \"%{community}\" has been approved.\n\n#######################################\nENTER A PERSONALIZED NOTE HERE, MENTION\nSOMETHING SPECIFIC ABOUT THE COMMUNITY\n#######################################\n\nYour community is now ready to go!\n\nYou should receive a separate email with instructions to sign in for the first time.\n\nWelcome aboard!\n\n%{approver} for the Gather Team"
+      }
     },
     "datepicker": {
       "dformat": "%b %d %Y",
@@ -201,9 +210,25 @@
     "payment": {
       "accountholder_required": "Please specify the accountholder name."
     },
+    "subscription": {
+      "topup_notices": {
+        "calculating": "Calculating…",
+        "cancel": "Your monthly topup will be canceled at the end of the current billing month. No further charges, and your existing balance stays.",
+        "error": "%{reason} (Attempted %{time}.) If this keeps happening, please contact Gather support with that reference and time.",
+        "error_default": "Something went wrong and your topup was not changed.",
+        "error_with_reference": "%{reason} Reference: %{reference}. (Attempted %{time}.) If this keeps happening, please contact Gather support with that reference and time.",
+        "first_charge": "Your payment method on file will be charged %{amount} today for a full month, then %{amount} on this day each month.",
+        "next_month": "Starting next billing month you'll be charged %{amount} per month.",
+        "prorated_charge": "Now your payment method on file will be charged about %{charge} today (prorated), then %{amount} per month from %{date}.",
+        "prorated_credit": "Now you'll receive a credit of %{credit} toward your next invoice, then %{amount} per month from %{date}."
+      }
+    },
     "timepicker": {
       "dformat": "%l:%M%P",
       "pformat": "h:mma"
+    },
+    "wiki": {
+      "help": "Wiki Help"
     }
   }
 }

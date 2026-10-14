@@ -1,9 +1,8 @@
-<% content_for(:title, "Application Submitted") %>
+<% content_for(:title, t(".title")) %>
 
 <div class="center-notice">
-  <p>Thanks for applying to Gather!</p>
+  <p><%= t(".thanks") %></p>
   <p>
-    We typically review submissions within 48 hours.
-    Watch your inbox at <strong><%= flash[:contact_email] %></strong> for an update.
+    <%= t(".review_time_html", email: tag.strong(flash[:contact_email])) %>
   </p>
 </div>

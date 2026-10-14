@@ -33,14 +33,20 @@ describe "repeating events in the event form", js: true do
     select("Weekly", from: "Repeats")
     expect(visible?("Every")).to be(true)
     expect(visible?("On")).to be(false)
-    expect(page).to have_css(".calendars_event_repeat_interval .hint", text: "week")
+    expect(page).to have_css(".repeat-interval", text: "week")
 
     fill_in("Every", with: "2")
-    expect(page).to have_css(".calendars_event_repeat_interval .hint", text: "weeks")
+    expect(page).to have_css(".repeat-interval", text: "weeks")
 
     select("Monthly", from: "Repeats")
     expect(visible?("On")).to be(true)
     select("Weekly", from: "Repeats")
+
+    # The end date picker is a date only, unlike the start and end time pickers.
+    select("On a date", from: "Ends")
+    format = page.evaluate_script("$('.calendars_event_repeat_ends_on .datetimepicker')" \
+      ".data('DateTimePicker').format()")
+    expect(format).not_to match(/h:/i)
 
     expect(visible?("Number of Times")).to be(false)
     select("After a number of times", from: "Ends")
@@ -57,15 +63,9 @@ describe "repeating events in the event form", js: true do
     # The fourth Monday of February 2027, which is also the last.
     let(:start) { Time.zone.local(2027, 2, 22, 18) }
 
-    # The form doesn't move the end along with the start, so both are set. The end goes first so the
-    # start's change is the last.
+    # The end follows the start (calendars--event-form#moveEnd).
     def move_start_to(time)
-      set_picker("ends_at", time + 1.hour)
-      set_picker("starts_at", time)
-    end
-
-    def set_picker(field, time)
-      page.execute_script("$('.calendars_event_#{field} .datetimepicker').data('DateTimePicker')" \
+      page.execute_script("$('.calendars_event_starts_at .datetimepicker').data('DateTimePicker')" \
         ".date(moment('#{time.strftime("%Y-%m-%dT%H:%M")}'))")
     end
 
@@ -98,6 +98,20 @@ describe "repeating events in the event form", js: true do
       expect_success
       event = Calendars::Event.find_by!(name: "Book club")
       expect(event.schedule.first(3).map(&:to_time)).to eq([start + 1.day, start + 2.days, start + 8.days])
+    end
+
+    scenario "an empty end date opens on a month after the start, and a chosen one is kept" do
+      select("Weekly", from: "Repeats")
+      select("On a date", from: "Ends")
+      # Monday March 1st, so it opens on April 1st.
+      move_start_to(start + 1.week)
+      find(".calendars_event_repeat_ends_on .input-group-btn button").click
+      expect(find_field("End Date").value).to match(/Apr 0?1 2027/)
+
+      find("body").click
+      move_start_to(start + 2.weeks)
+      find(".calendars_event_repeat_ends_on .input-group-btn button").click
+      expect(find_field("End Date").value).to match(/Apr 0?1 2027/)
     end
 
     scenario "monthly: the choices are worded from the start, and follow it" do

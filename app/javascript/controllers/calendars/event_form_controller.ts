@@ -7,6 +7,12 @@ import {Controller} from "@hotwired/stimulus";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 declare const $: any;
 declare const Gather: any;
+
+// The dp.change event from bootstrap-datetimepicker, with moment.js dates (null when empty).
+interface PickerChange {
+  date: any;
+  oldDate: any;
+}
 /* eslint-enable @typescript-eslint/no-explicit-any */
 
 /*
@@ -15,8 +21,10 @@ declare const Gather: any;
  * - drops the time from the date pickers while "All-Day Event?" is ticked;
  * - shows only the repeat fields that apply (see _repeat_fields.html.erb), and keeps the unit after the
  *   interval ("weeks") in step with the frequency and number;
+ * - moves the end time along with the start time, keeping the event's length;
  * - keeps the start date's weekday ticked and locked among the weekly repeat days, moving it when the
  *   start date changes;
+ * - opens an empty repeat end date picker on one month after the start, rather than on today;
  * - sends startChanged when the start date changes, which the form-refresh controller answers by
  *   re-rendering what depends on it, such as the monthly repeat choices;
  * - starts the shared Backbone helpers the form uses: the searchable pickers for the creator and
@@ -25,7 +33,7 @@ declare const Gather: any;
  */
 export default class extends Controller<HTMLFormElement> {
   static targets = ["kind", "allDay", "kindNotice", "repeatFrequency", "repeatInterval", "repeatEnds",
-    "repeatDetail", "repeatWeekday"];
+    "repeatDetail", "repeatWeekday", "repeatUnit"];
   static values = {communityId: Number};
 
   declare readonly hasKindTarget: boolean;
@@ -39,6 +47,7 @@ export default class extends Controller<HTMLFormElement> {
   declare readonly repeatEndsTarget: HTMLSelectElement;
   declare readonly repeatDetailTargets: HTMLElement[];
   declare readonly repeatWeekdayTargets: HTMLInputElement[];
+  declare readonly repeatUnitTarget: HTMLElement;
   declare readonly communityIdValue: number;
 
   private dateFormat: string | null = null;
@@ -47,13 +56,17 @@ export default class extends Controller<HTMLFormElement> {
   connect() {
     // The date pickers are set up by legacy code when the page is ready, which may come after this.
     $(() => {
-      this.dateFormat = $(this.element).find(".datetimepicker input").data("dateOptions").format;
+      this.dateFormat = $(this.element).find(".calendars_event_starts_at .datetimepicker input")
+        .data("dateOptions").format;
       this.kindChanged();
       this.allDayChanged();
       this.repeatChanged();
       this.startDate = this.startDateString();
       $(this.element).find(".calendars_event_starts_at .datetimepicker")
-        .on("dp.change", () => this.startChanged());
+        .on("dp.change", (e: PickerChange) => this.startPickerChanged(e));
+      const repeatEndsOn = $(this.element).find(".calendars_event_repeat_ends_on .datetimepicker");
+      repeatEndsOn.data("DateTimePicker")?.useCurrent(false);
+      repeatEndsOn.on("dp.show", () => this.defaultRepeatEndsOn());
 
       new Gather.Views.AjaxSelect2({
         el: ".calendars_event_sponsor_id",
@@ -77,16 +90,46 @@ export default class extends Controller<HTMLFormElement> {
     });
   }
 
-  // Removes the time part of the date pickers' format (everything from " h:") while all-day is ticked.
+  /*
+   * Removes the time part of the start and end pickers' format (everything from " h:") while all-day is
+   * ticked. Other pickers, such as the repeat end date's, are dates only and keep their own format.
+   */
   allDayChanged() {
     if (this.dateFormat === null) {
       return;
     }
     const allDay = this.hasAllDayTarget && this.allDayTarget.checked;
     const format = allDay ? this.dateFormat.replace(/ h:.*$/i, "") : this.dateFormat;
-    $(this.element).find(".datetimepicker").each((_: number, el: HTMLElement) => {
-      $(el).data("DateTimePicker").format(format);
-    });
+    $(this.element).find(".calendars_event_starts_at, .calendars_event_ends_at").find(".datetimepicker")
+      .each((_: number, el: HTMLElement) => {
+        $(el).data("DateTimePicker").format(format);
+      });
+  }
+
+  private startPickerChanged(event: PickerChange) {
+    this.moveEnd(event);
+    this.startChanged();
+  }
+
+  /*
+   * Moves the end by as much as the start moved, as calendar apps do, so changing the start doesn't
+   * leave an event that ends before it begins. Nothing moves if either time is empty.
+   */
+  private moveEnd(event: PickerChange) {
+    const end = this.picker("ends_at");
+    if (!event.date || !event.oldDate || !end?.date()) {
+      return;
+    }
+    end.date(end.date().clone().add(event.date.diff(event.oldDate)));
+  }
+
+  // An empty repeat end date opens on one month after the start. A date already chosen is kept.
+  private defaultRepeatEndsOn() {
+    const endsOn = this.picker("repeat_ends_on");
+    const start = this.startMoment();
+    if (endsOn && !endsOn.date() && start) {
+      endsOn.date(start.clone().add(1, "month"));
+    }
   }
 
   // Only a change of date matters, not of time, so the time pickers' own changes are ignored.
@@ -127,8 +170,12 @@ export default class extends Controller<HTMLFormElement> {
 
   // A moment.js date from the start picker, or null if it's empty.
   private startMoment() {
-    const picker = $(this.element).find(".calendars_event_starts_at .datetimepicker").data("DateTimePicker");
-    return picker ? picker.date() : null;
+    return this.picker("starts_at")?.date() ?? null;
+  }
+
+  // The bootstrap-datetimepicker for a field, e.g. "starts_at", if the form has one.
+  private picker(field: string) {
+    return $(this.element).find(`.calendars_event_${field} .datetimepicker`).data("DateTimePicker");
   }
 
   private startDateString(): string | null {
@@ -160,10 +207,9 @@ export default class extends Controller<HTMLFormElement> {
 
     // The units are translated on the server: {"weekly": {"one": "week", "other": "weeks"}, ...}.
     const units = JSON.parse(this.repeatIntervalTarget.dataset.units || "{}");
-    const hint = this.repeatIntervalTarget.closest(".form-group")?.querySelector(".hint");
-    if (repeats && units[frequency] && hint) {
+    if (repeats && units[frequency]) {
       const count = parseInt(this.repeatIntervalTarget.value, 10);
-      hint.textContent = count === 1 ? units[frequency].one : units[frequency].other;
+      this.repeatUnitTarget.textContent = count === 1 ? units[frequency].one : units[frequency].other;
     }
   }
 }

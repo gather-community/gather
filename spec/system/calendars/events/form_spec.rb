@@ -163,6 +163,14 @@ describe "event form", js: true do
       expect(start_time_text).to include("8:00am")
     end
 
+    scenario "moving the start moves the end by as much" do
+      visit(new_calendar_event_path(calendar, start: "2030-09-29 08:00", end: "2030-09-29 09:30"))
+      execute_script("$('.calendars_event_starts_at .datetimepicker').data('DateTimePicker')" \
+        ".date(moment('2030-10-01T10:15'))")
+      expect(evaluate_script("$('.calendars_event_ends_at .datetimepicker input').val()"))
+        .to include("Oct 1 2030 11:45am")
+    end
+
     scenario "notices unsaved changes" do
       visit(new_calendar_event_path(calendar))
       expect(form_dirty?).to be(false)

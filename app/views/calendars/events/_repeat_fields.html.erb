@@ -37,11 +37,16 @@
     <%= f.input :repeat_frequency, collection: frequencies, include_blank: false,
       selected: (@form.repeat_frequency.presence || :none).to_sym,
       input_html: {data: {target => "repeatFrequency", action: action}} %>
-    <%= f.input :repeat_interval, as: :integer,
-      input_html: {min: 1, max: Calendars::RecurrencePattern::MAX_INTERVAL,
-        data: {target => "repeatInterval", action: "input->#{action}", units: units.to_json}},
-      wrapper_html: detail.call("repeats"),
-      hint: (@form.repeat_frequency.present? ? t(".repeat_units.#{@form.repeat_frequency}", count: @form.repeat_interval) : "") %>
+    <%= f.input :repeat_interval, wrapper_html: detail.call("repeats") do %>
+      <div class="repeat-interval">
+        <%= f.input_field :repeat_interval, as: :integer, class: "form-control",
+          min: 1, max: Calendars::RecurrencePattern::MAX_INTERVAL,
+          data: {target => "repeatInterval", action: "input->#{action}", units: units.to_json} %>
+        <span data-<%= target %>="repeatUnit">
+          <%= t(".repeat_units.#{@form.repeat_frequency}", count: @form.repeat_interval) if @form.repeat_frequency.present? %>
+        </span>
+      </div>
+    <% end %>
     <%# The start's weekday is ticked and can't be unticked; the controller moves it with the start.
         A disabled box isn't sent, so the server always adds the start's day (EventForm#normalize). %>
     <%= f.input :repeat_weekdays,

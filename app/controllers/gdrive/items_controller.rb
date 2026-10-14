@@ -24,7 +24,7 @@ module GDrive
       @item.name = ""
 
       if @item.save
-        flash[:success] = "Item created successfully."
+        flash[:success] = t("gdrive.item_created")
         redirect_to(gdrive_config_path)
       else
         render(:new)

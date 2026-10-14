@@ -83,7 +83,7 @@ module GDrive
         # it's unrecoverable.
         if src_folder.parents.blank?
           operation.log(:error, "Source folder parent inaccessible", src_folder_id: src_folder_id)
-          message = "Parent of folder #{src_folder_id} is inaccessible"
+          message = "Parent of folder #{src_folder_id} is inaccessible" # rubocop:disable Gather/HardCodedString
           raise ParentFolderInaccessible.new(message, folder_id: src_folder_id)
         else
           src_parent_id = src_folder.parents[0]

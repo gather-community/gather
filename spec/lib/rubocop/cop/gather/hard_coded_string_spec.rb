@@ -75,6 +75,7 @@ describe RuboCop::Cop::Gather::HardCodedString do
       response.headers["Cache-Control"] = "no-cache"
       json.dig("Results", "series")
       class_name == "User"
+      error.message.include?("File not found")
       PERMITTED = {"User" => "photo"}.freeze
       EventLog.emit(event_name: "topup_set", description: "Set monthly messaging topup")
       log(event_name: "topup_unmatched", description: "Topup invoice with no matching local record")

@@ -79,7 +79,8 @@ describe Calendars::EventletDecorator do
     end
 
     it "leaves the 'last day of the month' wording intact" do
-      expect(description_for(starts_at: "2026-06-15 14:00",
+      # On the last day of the month, as a series' start is always one of its occurrences.
+      expect(description_for(starts_at: "2026-06-30 14:00",
         rule: IceCube::Rule.monthly.day_of_month(-1)))
         .to eq("Monthly on the last day of the month at 2:00pm")
     end

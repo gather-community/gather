@@ -2,7 +2,7 @@
 <%= gather_form_for(@form, url: @form.url, html: {data: {controller: "calendars--event-form form-refresh",
   "calendars--event-form-community-id-value": event.community_id,
   "form-refresh-url-value": @form.refresh_url,
-  action: "calendars--event-form:startChanged->form-refresh#refresh " \
+  action: "change->form-refresh#refresh calendars--event-form:timesChanged->form-refresh#refresh " \
     "form-refresh:refreshed->calendars--event-form#repeatChanged"}}) do |f| %>
 
   <%= f.hidden_field :calendar_id %>
@@ -24,8 +24,8 @@
   <% end %>
 
   <% unless @rule_set.timed_events_only? %>
-    <%= f.input :all_day, as: :boolean, input_html: {data: {"calendars--event-form-target": "allDay",
-      action: "calendars--event-form#allDayChanged"}} %>
+    <%= f.input :all_day, as: :boolean, disabled: !@form.schedule_editable?,
+      input_html: {data: {"calendars--event-form-target": "allDay", action: "calendars--event-form#allDayChanged"}} %>
   <% end %>
 
   <% unless event.meal? %>
@@ -40,11 +40,13 @@
     <%= f.input :group_id, collection: @groups %>
   <% end %>
 
-  <%= f.input :starts_at, as: :datetime_picker, include_day_of_week: true,
+  <%# Times that can't change are disabled, so they aren't sent and stay as they are. %>
+  <%= f.input :starts_at, as: :datetime_picker, include_day_of_week: true, disabled: !@form.start_editable?,
     wrapper_html: { class: event.fixed_start_time? ? "no-time-picker" : "" } %>
 
-  <%= f.input :ends_at, as: :datetime_picker, include_day_of_week: true,
-    wrapper_html: { class: event.fixed_end_time? ? "no-time-picker" : "" } %>
+  <%= f.input :ends_at, as: :datetime_picker, include_day_of_week: true, disabled: !@form.schedule_editable?,
+    wrapper_html: { class: event.fixed_end_time? ? "no-time-picker" : "" },
+    hint: (t(".schedule_locked") unless @form.schedule_editable?) %>
 
   <%= render("repeat_fields", f: f) %>
 
@@ -72,6 +74,10 @@
         <strong><%= t(".agree_to_guidelines") %></strong>
       </label>
     <% end %>
+  <% end %>
+
+  <% if @form.series_edit? %>
+    <%= render("series_notice") %>
   <% end %>
 
   <%= form_actions do %>

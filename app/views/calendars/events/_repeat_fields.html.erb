@@ -1,22 +1,8 @@
-<%# Repeat settings for the event form, and for a repeating event, which occurrences a change applies
-    to. See Calendars::EventForm and Calendars::RecurrencePattern. Each detail field's data-repeat-show
-    names when it applies (EventForm#repeat_detail_applies?), and the calendars--event-form controller
-    shows only those as the settings change. %>
+<%# Repeat settings for the event form. See Calendars::EventForm and Calendars::RecurrencePattern. Each
+    detail field's data-repeat-show names when it applies (EventForm#repeat_detail_applies?), and the
+    calendars--event-form controller shows only those as the settings change. %>
 <% unless event.meal? %>
   <%# Notes go in form rows (f.input with a block) so they line up with the fields. %>
-  <% if @form.series_edit? %>
-    <% series_note = t(".series_note", date: l(@form.occurrence_start.to_date, format: :long)) %>
-    <% if @form.series_scope_options.any? %>
-      <%= f.input :series_scope, as: :radio_buttons, collection: @form.series_scope_options.map(&:to_sym),
-        checked: @form.series_scope&.to_sym, hint: series_note %>
-    <% else %>
-      <%= f.input :series_scope do %>
-        <div class="alert alert-warning"><%= t("activemodel.errors.models.calendars/event.attributes.base.no_series_choice") %></div>
-        <p class="hint"><%= series_note %></p>
-      <% end %>
-    <% end %>
-  <% end %>
-
   <% if @form.series_edit? && !@form.pattern_editable? %>
     <%= f.input :repeat_frequency do %>
       <p class="hint">
@@ -25,6 +11,9 @@
       </p>
     <% end %>
   <% elsif @form.repeat_settings_editable? %>
+    <%# Disabled fields aren't sent, so the server keeps the settings as they are. Bootstrap greys out a
+        disabled fieldset's fields. %>
+    <fieldset <%= "disabled" unless @form.schedule_editable? %>>
     <% frequencies = Calendars::RecurrencePattern::FREQUENCIES.map(&:to_sym) %>
     <% frequencies = [:none] + frequencies unless @form.series_edit? %>
     <% units = Calendars::RecurrencePattern::FREQUENCIES.index_with do |freq|
@@ -72,6 +61,7 @@
     <%= f.input :repeat_ends_on, as: :date_picker, wrapper_html: detail.call("on_date") %>
     <%= f.input :repeat_count, as: :integer, input_html: {min: 2, max: Calendars::RecurrencePattern::MAX_COUNT},
       wrapper_html: detail.call("after_count") %>
+    </fieldset>
   <% elsif @form.recurrence_blockers.any? %>
     <%= f.input :repeat_frequency do %>
       <p class="hint">

@@ -1,0 +1,13 @@
+<%# When an edit to a repeating event changes when it happens from a later occurrence, a note that the
+    upcoming occurrences before it stay as they are (EventForm#earlier_upcoming_occurrence). Rendered
+    again by EventsController#form_refresh as the form changes, so the wrapper is always there. %>
+<div id="calendars_event_series_notice">
+  <% if (earlier = @form.earlier_upcoming_occurrence) %>
+    <div class="alert alert-info">
+      <%= t("calendars.events.series_notice.following_only_html",
+        date: l(@form.occurrence_start.to_date, format: :long),
+        link: link_to(t("calendars.events.series_notice.edit_from", date: l(earlier.to_date, format: :long)),
+          edit_calendars_event_path(event, occurrence: earlier.to_i, origin_page: @form.origin_page))) %>
+    </div>
+  <% end %>
+</div>

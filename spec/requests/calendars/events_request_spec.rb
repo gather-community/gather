@@ -130,7 +130,7 @@ describe "calendar event edit page for a repeating event" do
     expect(response.body).to include(edit_path.gsub("&", "&amp;"))
   end
 
-  it "shows the occurrence's times and the choice of which occurrences to change" do
+  it "shows the occurrence's times, with no note until something is rescheduled" do
     get(edit_calendars_event_path(event, occurrence: occurrence.to_i))
 
     expect(response).to have_http_status(:ok)
@@ -138,9 +138,25 @@ describe "calendar event edit page for a repeating event" do
     # The opened occurrence's date, not the series' first. (The picker pads the hour with a space.)
     expect(page.find_field("calendars_event[starts_at]").value.squish)
       .to eq(I18n.l(occurrence, format: "%a %b %d %Y %l:%M%P").squish)
-    expect(page).to have_field("calendars_event[series_scope]", with: "series")
-    expect(page).to have_field("calendars_event[series_scope]", with: "following")
     expect(page).to have_field("calendars_event[occurrence_start]", type: :hidden, with: occurrence.to_i.to_s)
+    expect(page).to have_css("#calendars_event_series_notice", visible: :all)
+    expect(page).to have_no_css("#calendars_event_series_notice .alert")
+  end
+
+  context "from a past occurrence" do
+    before { Timecop.freeze(start + 1.day) }
+    after { Timecop.return }
+
+    it "disables the times, all-day and repeat settings, but not the name" do
+      get(edit_calendars_event_path(event, occurrence: start.to_i))
+      page = Capybara.string(response.body)
+      expect(page).to have_field("calendars_event[starts_at]", disabled: true)
+      expect(page).to have_field("calendars_event[ends_at]", disabled: true)
+      expect(page).to have_field("calendars_event[all_day]", type: :checkbox, disabled: true)
+      expect(page).to have_css("fieldset[disabled] #calendars_event_repeat_frequency")
+      expect(page).to have_field("calendars_event[name]", disabled: false)
+      expect(page).to have_content("This occurrence has already begun")
+    end
   end
 
   it "deletes the way the occurrence page does, asking which occurrences" do
@@ -150,16 +166,38 @@ describe "calendar event edit page for a repeating event" do
     expect(page).to have_no_css("a[href='#{calendars_event_path(event)}'][data-method='delete']")
   end
 
-  it "saves this and following as a new series" do
+  it "reschedules from a later occurrence as a new series, renaming both parts" do
     patch(calendars_event_path(event), params: {calendars_event: {
-      occurrence_start: occurrence.to_i, series_scope: "following", name: "Reading group",
-      starts_at: occurrence.iso8601, ends_at: (occurrence + 1.hour).iso8601
+      occurrence_start: occurrence.to_i, name: "Reading group",
+      starts_at: (occurrence + 1.hour).iso8601, ends_at: (occurrence + 2.hours).iso8601
     }})
 
     expect(response).to have_http_status(:redirect)
-    expect(event.reload.name).to eq("Book club")
+    expect(event.reload.name).to eq("Reading group")
     ActsAsTenant.with_tenant(event.cluster) do
-      expect(Calendars::Event.where.not(id: event.id).sole.name).to eq("Reading group")
+      split_off = Calendars::Event.where.not(id: event.id).sole
+      expect([split_off.name, split_off.starts_at]).to eq(["Reading group", occurrence + 1.hour])
+    end
+  end
+
+  describe "the note about earlier occurrences, from a refresh" do
+    def notice_after_refresh(starts_at)
+      post(form_refresh_calendars_event_path(event), headers: {"Accept" => "text/vnd.turbo-stream.html"},
+        params: {calendars_event: {occurrence_start: occurrence.to_i, starts_at: starts_at.iso8601,
+                                   ends_at: (starts_at + 1.hour).iso8601}})
+      notice = %r{target="calendars_event_series_notice"><template>(.*?)</template>}m
+      Capybara.string(response.body[notice, 1])
+    end
+
+    it "appears once the time changes, linking to the first upcoming occurrence" do
+      notice = notice_after_refresh(occurrence + 1.hour)
+      expect(notice).to have_content("apply from #{I18n.l(occurrence.to_date, format: :long)} on")
+      expect(notice).to have_link("Edit from #{I18n.l(start.to_date, format: :long)} instead",
+        href: edit_calendars_event_path(event, occurrence: start.to_i))
+    end
+
+    it "isn't there while the time is unchanged" do
+      expect(notice_after_refresh(occurrence)).to have_no_css(".alert")
     end
   end
 end

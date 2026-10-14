@@ -25,8 +25,10 @@ interface PickerChange {
  * - keeps the start date's weekday ticked and locked among the weekly repeat days, moving it when the
  *   start date changes;
  * - opens an empty repeat end date picker on one month after the start, rather than on today;
- * - sends startChanged when the start date changes, which the form-refresh controller answers by
- *   re-rendering what depends on it, such as the monthly repeat choices;
+ * - sends timesChanged when the start or end changes, which the form-refresh controller answers by
+ *   re-rendering what depends on them, such as the monthly repeat choices. The pickers' changes don't
+ *   fire the browser change event that other fields' do;
+ * - keeps disabled pickers from opening (EventForm#schedule_editable?);
  * - starts the shared Backbone helpers the form uses: the searchable pickers for the creator and
  *   sponsor, and the unsaved-changes check. Those are used across many forms, so they're started
  *   from here rather than converted with this form.
@@ -64,6 +66,13 @@ export default class extends Controller<HTMLFormElement> {
       this.startDate = this.startDateString();
       $(this.element).find(".calendars_event_starts_at .datetimepicker")
         .on("dp.change", (e: PickerChange) => this.startPickerChanged(e));
+      $(this.element).find(".calendars_event_ends_at .datetimepicker")
+        .on("dp.change", () => this.dispatch("timesChanged"));
+      $(this.element).find(".datetimepicker").each((_: number, el: HTMLElement) => {
+        if ($(el).find("input").prop("disabled")) {
+          $(el).data("DateTimePicker")?.disable();
+        }
+      });
       const repeatEndsOn = $(this.element).find(".calendars_event_repeat_ends_on .datetimepicker");
       repeatEndsOn.data("DateTimePicker")?.useCurrent(false);
       repeatEndsOn.on("dp.show", () => this.defaultRepeatEndsOn());
@@ -108,7 +117,8 @@ export default class extends Controller<HTMLFormElement> {
 
   private startPickerChanged(event: PickerChange) {
     this.moveEnd(event);
-    this.startChanged();
+    this.startDateChanged();
+    this.dispatch("timesChanged");
   }
 
   /*
@@ -132,15 +142,14 @@ export default class extends Controller<HTMLFormElement> {
     }
   }
 
-  // Only a change of date matters, not of time, so the time pickers' own changes are ignored.
-  startChanged() {
+  // Only a change of date moves the weekday lock, not a change of time.
+  private startDateChanged() {
     const date = this.startDateString();
     if (date === null || date === this.startDate) {
       return;
     }
     this.startDate = date;
     this.lockStartWeekday();
-    this.dispatch("startChanged");
   }
 
   /*

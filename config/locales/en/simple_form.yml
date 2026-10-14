@@ -208,9 +208,6 @@ en:
           never: "Never"
           on_date: "On a date"
           after_count: "After a number of times"
-        series_scope:
-          series: "All occurrences"
-          following: "This and following occurrences"
       billing_account:
         active:
           active_only: "Show Active Only"

@@ -20,21 +20,17 @@ en:
         repeat_ends: "Ends"
         repeat_ends_on: "End Date"
         repeat_count: "Number of Times"
-        series_scope: "Change"
     errors:
       models:
-        # EventForm, which takes Calendars::Event's model name. The series messages match EventletForm's
-        # below, as both use SeriesChoices.
+        # EventForm, which takes Calendars::Event's model name.
         calendars/event:
           attributes:
             base:
               overlap: "This event overlaps an existing one"
-              series_started: "This series has already started, so changing all occurrences would change past ones. Choose “This and following” to change it from this date on."
-              following_from_past: "This occurrence has already begun, so it and the ones after it can't be changed together. Open a later occurrence to change the series from then on."
-              no_series_choice: "This series can't be changed from this occurrence. Open an occurrence that hasn't happened yet to change the series from then on."
+              reschedule_from_started: "This occurrence has already begun, so the times and repeat settings can't be changed from it. Open a later occurrence to change them from then on."
+              moved_before_kept: "This occurrence can't move to or before %{date}, the occurrence before it, or the series would overlap itself. To change the earlier occurrences too, edit from the first one you want to change."
               occurrence_missing: "This occurrence no longer exists. Go back to the calendar and try again."
               longer_than_repeat: "The event is longer than the time between repeats, so its occurrences would overlap."
-              first_occurrence_off_weekdays: "Moving all occurrences by this much means the first one, on %{date}, would move to a %{weekday}, which isn't one of the days it repeats on. Tick %{weekday} as well, or choose “This and following.”"
               pattern_change_with_changes:
                 one: "1 occurrence in the part being changed has been moved or deleted, so the days it repeats on can't change. Undo that change first, or change the series from a later date."
                 other: "%{count} occurrences in the part being changed have been moved or deleted, so the days it repeats on can't change. Undo those changes first, or change the series from a later date."
@@ -67,6 +63,7 @@ en:
               offsets_too_far_apart: "An event's times on its different calendars can't be more than %{hours} hours apart. To move it further, choose “Move on all calendars.”"
               series_started: "This series has already started. Choose “This and following” to change it from this date on."
               following_from_past: "Occurrences that have already begun can't be moved with “This and following.”"
+              moved_before_kept: "“This and following” can't move this occurrence to or before %{date}, the last occurrence before it, or the two parts of the series would overlap. Choose “This only” to move just this one."
               fixed_pattern: "This series repeats in a fixed pattern that doesn't include the new time, so its occurrences can't be moved there. Choose “This only” to move one occurrence."
               overlap: "This event overlaps an existing one"
             occurrence_start:

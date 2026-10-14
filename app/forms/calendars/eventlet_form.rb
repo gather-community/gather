@@ -49,6 +49,7 @@ module Calendars
     validate :restrict_series_moves_after_start
     validate :restrict_following_from_past
     validate :series_pattern_allows_move
+    validate :following_lands_after_kept
     validate :no_overlap
     validate :apply_rules
 
@@ -384,8 +385,10 @@ module Calendars
       errors.add(:starts_at, :changed_after_start) if occurrence.starts_at.past?
     end
 
+    # Unlike changing an event that has begun, which its creator may do for an hour to fix a mistake,
+    # moving one into the past is for admins only.
     def restrict_drop_in_past
-      return if past_change_exempt?
+      return if occurrence.nil? || eventlet.meal? || eventlet_policy.privileged_change?
       errors.add(:ends_at, :in_past) if ends_at&.past?
     end
 
@@ -418,6 +421,14 @@ module Calendars
       rule = IceCube::Rule.from_hash(event.recurrence_rule).until(nil)
       return if IceCube::Schedule.new(new_start) { |s| s.add_recurrence_rule(rule) }.occurs_at?(new_start)
       errors.add(:base, :fixed_pattern)
+    end
+
+    # "This and following" has to land after the occurrences it leaves behind, or the two parts of the
+    # series would overlap. See SeriesChoices#following_move_refusal.
+    def following_lands_after_kept
+      return if errors.any? || calendar_scope != "all" || effective_series_scope != "following"
+      key, details = series_choices.following_move_refusal(start_shift.apply(occurrence_start))
+      errors.add(:base, key, **details) if key
     end
 
     # Overlap is checked at the eventlet level rather than the event level, since two eventlets on

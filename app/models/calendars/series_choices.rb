@@ -11,6 +11,8 @@ module Calendars
   # - "following" (This and following) changes this occurrence and later ones, so this occurrence must
   #   not have begun, judged by where it was before the change, not where it's moved to.
   # - "following" from the series' first occurrence leaves nothing behind, so it means "series".
+  # - "following" can't move this occurrence to or before the last one it leaves behind, or the two
+  #   parts of the series would overlap (#following_move_refusal).
   class SeriesChoices
     SCOPES = %w[following series].freeze
 
@@ -35,6 +37,15 @@ module Calendars
       when "series" then :series_started if event.recurring? && started? && !event.recently_created?
       when "following" then :following_from_past if occurrence_starts_at&.past?
       end
+    end
+
+    # The error key and message details refusing a "following" move of this occurrence to new_start,
+    # or nil if it's allowed. The original series is cut so its last scheduled occurrence is the one
+    # before this, so the moved part has to start after that.
+    def following_move_refusal(new_start)
+      kept = event.schedule.previous_occurrence(occurrence_start)&.to_time
+      return nil if kept.nil? || new_start > kept
+      [:moved_before_kept, {date: I18n.l(kept.to_date, format: :long)}]
     end
 
     # The multi-occurrence scopes that are allowed, leaving out "following" where it means "series".

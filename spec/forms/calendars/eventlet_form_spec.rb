@@ -527,6 +527,36 @@ describe Calendars::EventletForm do
 
         it_behaves_like "a drag that leaves the series untouched"
       end
+
+      # The original series ends with the occurrence before this one, so the moved part has to start
+      # after it, or the two parts would overlap.
+      context "moved back to the occurrence before it" do
+        let(:dragged_occurrence) { nil }
+        let(:params) do
+          {calendar_scope: "all", series_scope: "following", occurrence_start: occurrence.to_i,
+           starts_at: (occurrence - 1.week).iso8601, ends_at: (occurrence - 1.week + 1.hour).iso8601}
+        end
+
+        it "is refused" do
+          expect(form.save).to be(false)
+          expect(form.errors[:base].join).to match(/can't move this occurrence to or before/)
+        end
+
+        it_behaves_like "a drag that leaves the series untouched"
+      end
+
+      context "moved back, but after the occurrence before it" do
+        let(:dragged_occurrence) { nil }
+        let(:params) do
+          {calendar_scope: "all", series_scope: "following", occurrence_start: occurrence.to_i,
+           starts_at: (occurrence - 6.days).iso8601, ends_at: (occurrence - 6.days + 1.hour).iso8601}
+        end
+
+        it "is allowed" do
+          expect(form.save).to be(true), form.errors.full_messages.to_sentence
+          expect(starts_of(continuation).first).to eq(occurrence - 6.days)
+        end
+      end
     end
 
     describe "this calendar + this and following" do
@@ -1405,7 +1435,10 @@ describe Calendars::EventletForm do
       "a future occurrence of a series that has started" => {occurrence: 2, now: 1.day},
       "an occurrence in progress" => {occurrence: 1, now: 1.week + 30.minutes},
       "a past occurrence" => {occurrence: 1, now: 1.week + 1.day},
-      "a started series created within the hour" => {occurrence: 2, now: 1.day, recent: true},
+      # Created just before its first occurrence, which has begun: the case the hour's grace is for.
+      # (Moving one created with its first occurrence a day ago would leave that in the past, which
+      # only admins can do, so the drop below would break another rule.)
+      "a started series created within the hour" => {occurrence: 2, now: 30.minutes, recent: true},
       "a deleted occurrence" => {occurrence: 2, deleted: true},
       "an event whose other calendar is read-only to the creator" => {occurrence: 2, read_only_other: true}
     }
@@ -1606,6 +1639,13 @@ describe Calendars::EventletForm do
         expect(form.save).to be(false)
         expect(form.errors[:ends_at]).to include("can't be changed to a time in the past")
         expect(event.reload.starts_at).to eq(base_start)
+      end
+
+      # The hour after creating it is for fixing a mistake, not for moving it into the past.
+      it "is refused for the creator just after creating it too" do
+        form = described_class.new(eventlet: eventlet, current_user: event.creator, params: params)
+        expect(form.save).to be(false)
+        expect(form.errors[:ends_at]).to include("can't be changed to a time in the past")
       end
 
       it "is allowed for an admin" do

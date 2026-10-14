@@ -137,6 +137,10 @@ en:
         title: "Edit Event: %{name}"
       form:
         agree_to_guidelines: "I agree to the above guidelines"
+        schedule_locked: "This occurrence has already begun, so its times and repeat settings can't be changed here. Open a later occurrence to change them from then on."
+      series_notice:
+        following_only_html: "Note: These changes to the time or repeat settings apply from %{date} on. Earlier upcoming occurrences stay as they are. %{link}"
+        edit_from: "Edit from %{date} instead"
       # Repeat settings in the event form.
       repeat_fields:
         repeat_units:
@@ -162,7 +166,6 @@ en:
             fourth: "The fourth %{weekday}"
           last_day_of_week: "The last %{weekday}"
         start_weekday: "The start date's day is always included"
-        series_note: "Opened from the occurrence on %{date}. Changes start from this occurrence."
         pattern_fixed: "This event repeats in a way this form can't show (%{description}), so its repeat settings can't be changed here."
         recurrence_unavailable: "Repeating events aren't available on this calendar because %{reasons}."
         recurrence_blockers:

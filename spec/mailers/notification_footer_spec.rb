@@ -29,7 +29,7 @@ describe "notification settings footer" do
 
     it "isn't on their configurable mail, which still has one-click unsubscribe" do
       meal = create(:meal, head_cook: child)
-      mail = MealMailer.deliver_per_recipient(:cook_menu_reminder, meal.assignments[0]).first
+      mail = MealMailer.with(recipient: child).cook_menu_reminder(meal.assignments[0]).deliver_now
       expect(mail.to).to eq(["kid@example.com"])
       expect(mail.body.encoded).not_to include("Gather notification settings")
       expect(mail["List-Unsubscribe"]).not_to be_nil

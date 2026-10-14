@@ -1,0 +1,5 @@
+<% content_for(:title, t(".title")) %>
+
+<p><%= t(".done", kind: t("notifications.preferences.kinds.#{@unsubscribe.kind.key}"),
+                  email: @unsubscribe.user.email) %></p>
+<p><%= t("notifications.unsubscribes.manage_html", link: link_to(t("notifications.unsubscribes.manage_link"), notification_preferences_path)) %></p>

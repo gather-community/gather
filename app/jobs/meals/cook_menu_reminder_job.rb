@@ -7,10 +7,11 @@ module Meals
     def perform
       each_community_at_correct_hour do |community|
         remindable_assignments(community).each do |assignment|
-          with_mail_delivery_resilience(data: {assignment_id: assignment.id}) do
-            MealMailer.deliver_per_recipient(:cook_menu_reminder, assignment)
-            assignment.increment!(:cook_menu_reminder_count)
+          data = {assignment_id: assignment.id}
+          each_notification_recipient(assignment.user, kind: :cook_menu_reminder, data: data) do |user|
+            MealMailer.with(recipient: user).cook_menu_reminder(assignment).deliver_now
           end
+          assignment.increment!(:cook_menu_reminder_count)
         end
       end
     end

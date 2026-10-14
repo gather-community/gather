@@ -6,8 +6,8 @@ require "rails_helper"
 # and no CSRF token. This isn't a browser flow, so it's tested here rather than in a system spec.
 describe "one-click notification unsubscribe" do
   let(:user) { create(:user) }
-  let(:kind) { People::NotificationCatalog.find(:meal_reminder) }
-  let(:token) { People::NotificationUnsubscribe.token_for(user, kind) }
+  let(:kind) { Notifications::Catalog.find(:meal_reminder) }
+  let(:token) { Notifications::Unsubscribe.token_for(user, kind) }
 
   around do |example|
     # Forgery protection is off in tests by default. Turn it on to show the endpoint works without a token.

@@ -11,10 +11,9 @@ describe Meals::WorkerChangeNotifier do
   let(:notifier) { described_class.new(actor, meal) }
 
   context "with no change" do
-    it "doesn't call mailer" do
+    it "doesn't queue a notice" do
       notifier
-      expect(MealMailer).not_to receive(:deliver_per_recipient)
-      notifier.check_and_send!
+      expect { notifier.check_and_send! }.not_to have_enqueued_job(Meals::WorkerChangeNoticeJob)
     end
   end
 
@@ -30,20 +29,20 @@ describe Meals::WorkerChangeNotifier do
     end
 
     context "with unprivileged actor" do
-      it "calls mailer with correct args" do
-        expect(MealMailer).to receive(:deliver_per_recipient)
-          .with(:worker_change_notice, actor, meal, [new_assign], old_assigns[0..1])
-        notifier.check_and_send!
+      it "queues a notice with what changed" do
+        removed = old_assigns[0..1].map { |a| [a.user_id, a.role_id] }
+        expect { notifier.check_and_send! }.to have_enqueued_job(Meals::WorkerChangeNoticeJob)
+          .with(meal_id: meal.id, initiator_id: actor.id, added_ids: [new_assign.id], removed: removed)
       end
     end
 
     context "with privileged actor" do
       before do
-        allow(notifier).to receive(:policy).and_return(double(change_workers_without_notification: true))
+        allow(notifier).to receive(:policy).and_return(double(change_workers_without_notification?: true))
       end
 
-      it "doesn't call mailer" do
-        expect(MealMailer).not_to receive(:deliver_per_recipient)
+      it "doesn't queue a notice" do
+        expect { notifier.check_and_send! }.not_to have_enqueued_job(Meals::WorkerChangeNoticeJob)
       end
     end
   end

@@ -1,0 +1,4 @@
+<% content_for(:title, t(".title")) %>
+
+<p><%= t(".explanation") %></p>
+<p><%= t("notifications.unsubscribes.manage_html", link: link_to(t("notifications.unsubscribes.manage_link"), notification_preferences_path)) %></p>

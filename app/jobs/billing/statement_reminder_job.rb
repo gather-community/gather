@@ -7,10 +7,11 @@ module Billing
     def perform
       each_community_at_correct_hour do |community|
         remindable_statements(community).each do |statement|
-          with_mail_delivery_resilience(data: {statement_id: statement.id}) do
-            AccountMailer.deliver_per_recipient(:statement_reminder, statement)
-            statement.update!(reminder_sent: true)
+          data = {statement_id: statement.id}
+          each_notification_recipient(statement.household, kind: :statement_reminder, data: data) do |user|
+            AccountMailer.with(recipient: user).statement_reminder(statement).deliver_now
           end
+          statement.update!(reminder_sent: true)
         end
       end
     end

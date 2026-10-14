@@ -8,7 +8,9 @@ describe WorkMailer do
     let(:user) { create(:user) }
     let(:assignment) { create(:work_assignment, shift: job.shifts.first) }
     let(:reminder) { create(:work_job_reminder, job: job, note: note) }
-    let(:mail) { described_class.job_reminder(assignment, reminder).deliver_now }
+    let(:mail) do
+      described_class.with(recipient: assignment.user).job_reminder(assignment, reminder).deliver_now
+    end
 
     context "with no note" do
       let(:note) { nil }
@@ -56,7 +58,7 @@ describe WorkMailer do
              user_full_community_hours: {fc_job => 4}, rounds: rounds)
     end
     let(:share) { double(user: user, period: period) }
-    let(:mail) { described_class.job_choosing_notice(share).deliver_now }
+    let(:mail) { described_class.with(recipient: user).job_choosing_notice(share).deliver_now }
 
     before do
       allow(Work::Synopsis).to receive(:new).and_return(nil)

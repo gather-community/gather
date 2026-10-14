@@ -65,7 +65,10 @@ describe AccountMailer do
 
   describe "statement_reminder" do
     # Configurable, so each household member gets their own message.
-    let(:mails) { described_class.deliver_per_recipient(:statement_reminder, statement) }
+    let(:mails) do
+      Notifications::Recipients.resolve(household, kind: :statement_reminder)
+        .map { |user| described_class.with(recipient: user).statement_reminder(statement).deliver_now }
+    end
     let(:mail) { mails.first }
     let(:recipients) { mails.flat_map(&:to) }
 

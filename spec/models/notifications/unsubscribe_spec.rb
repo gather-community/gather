@@ -2,9 +2,9 @@
 
 require "rails_helper"
 
-describe People::NotificationUnsubscribe do
+describe Notifications::Unsubscribe do
   let(:user) { create(:user) }
-  let(:kind) { People::NotificationCatalog.find(:meal_role_reminder) }
+  let(:kind) { Notifications::Catalog.find(:meal_role_reminder) }
   let(:token) { described_class.token_for(user, kind) }
 
   it "round-trips a token" do

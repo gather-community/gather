@@ -15,8 +15,7 @@ module GDrive
         mail(
           to: recipients,
           reply_to: @operation.contact_email,
-          subject: t("gdrive.migration.request_subject", community: @community.name),
-          include_inactive: :always
+          subject: t("gdrive.migration.request_subject", community: @community.name)
         )
       end
     end

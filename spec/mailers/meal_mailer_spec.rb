@@ -24,7 +24,11 @@ describe MealMailer do
     let(:signup) do
       create(:meal_signup, household: household, meal: meal, comments: "Foo\nBar", diner_counts: [2, 1])
     end
-    let(:mails) { described_class.deliver_per_recipient(:meal_reminder, signup) }
+    # Configurable, so callers send each household member their own message, like Meals::MealReminderJob.
+    let(:mails) do
+      Notifications::Recipients.resolve(household, kind: :meal_reminder)
+        .map { |user| described_class.with(recipient: user).meal_reminder(signup).deliver_now }
+    end
     let(:mail) { mails.first }
 
     it "sends each household member their own message" do
@@ -50,7 +54,9 @@ describe MealMailer do
 
   describe "role_reminder" do
     let(:reminder) { double(note?: false) }
-    let(:mail) { described_class.role_reminder(assignment, reminder).deliver_now }
+    let(:mail) do
+      described_class.with(recipient: assignment.user).role_reminder(assignment, reminder).deliver_now
+    end
 
     context "for role with date_time" do
       let(:assignment) { create(:meal_assignment, meal: meal, role: asst_cook_role) }
@@ -110,17 +116,14 @@ describe MealMailer do
     let(:initiator) { create(:user) }
     let(:added) { create_list(:meal_assignment, 2, meal: meal, role: asst_cook_role) }
     let(:removed) { build_list(:meal_assignment, 2, meal: meal, role: asst_cook_role) }
-    let(:mails) do
-      described_class.deliver_per_recipient(:worker_change_notice, initiator, meal, added, removed)
+    # Who gets it is decided by Meals::WorkerChangeNoticeJob; see its spec.
+    let(:mail) do
+      described_class.with(recipient: initiator)
+        .worker_change_notice(initiator, meal, added, removed).deliver_now
     end
-    let(:mail) { mails.first }
-    let!(:meal_coords) { create_list(:meals_coordinator, 2) }
-    let!(:decoy_user) { create(:user) }
 
-    it "sends each recipient their own message" do
-      recips = (added + removed).map(&:user).push(initiator, meal.head_cook, *meal_coords).map(&:email)
-      expect(mails.flat_map(&:to)).to contain_exactly(*recips)
-      expect(mails.map { |m| m.to.size }.uniq).to eq([1])
+    it "goes to the recipient" do
+      expect(mail.to).to eq([initiator.email])
     end
 
     it "renders the subject" do
@@ -133,7 +136,10 @@ describe MealMailer do
   end
 
   describe "cook_menu_reminder" do
-    let(:mail) { described_class.cook_menu_reminder(meal.assignments[0]).deliver_now }
+    let(:mail) do
+      assignment = meal.assignments[0]
+      described_class.with(recipient: assignment.user).cook_menu_reminder(assignment).deliver_now
+    end
 
     it "sets the right recipient" do
       expect(mail.to).to eq([meal.head_cook.email])

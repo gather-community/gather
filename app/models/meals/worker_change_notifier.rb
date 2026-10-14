@@ -17,7 +17,12 @@ module Meals
       added = (current - orig).map(&:assignment)
       removed = (orig - current).map(&:assignment)
       return unless added.any? || removed.any?
-      MealMailer.deliver_per_recipient(:worker_change_notice, initiator, meal, added, removed)
+      WorkerChangeNoticeJob.perform_later(
+        meal_id: meal.id,
+        initiator_id: initiator.id,
+        added_ids: added.map(&:id),
+        removed: removed.map { |a| [a.user_id, a.role_id] }
+      )
     end
 
     private

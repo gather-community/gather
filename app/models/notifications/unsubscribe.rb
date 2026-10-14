@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-module People
+module Notifications
   # Turns off one kind of notification for one user, from a signed token in an email's unsubscribe link.
   #
   # The token needs no sign-in, since mail clients' one-click unsubscribe (RFC 8058) POSTs it without a
   # session. It can only turn off the one notification it names, so a leaked token can't do much harm.
   # It doesn't expire, because people unsubscribe from old mail.
-  class NotificationUnsubscribe
+  class Unsubscribe
     PURPOSE = "notification_unsubscribe"
 
     attr_reader :user, :kind, :channel
@@ -21,9 +21,9 @@ module People
     def self.from_token(token)
       data = verifier.verified(token.to_s, purpose: PURPOSE)
       return nil unless data.is_a?(Hash) && data["c"] == ActsAsTenant.current_tenant&.id
-      kind = NotificationCatalog::BY_KEY[data["k"].to_s.to_sym]
+      kind = Catalog::BY_KEY[data["k"].to_s.to_sym]
       channel = data["ch"].to_s.to_sym
-      return nil unless kind&.configurable? && NotificationCatalog::CHANNELS.include?(channel)
+      return nil unless kind&.configurable? && Catalog::CHANNELS.include?(channel)
       user = User.find_by(id: data["u"])
       return nil if user.nil?
       new(user: user, kind: kind, channel: channel)

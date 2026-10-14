@@ -36,8 +36,12 @@ module Meals
       super + (role.shift_start&.minutes || 0)
     end
 
-    def send_mail(assignment)
-      MealMailer.deliver_per_recipient(:role_reminder, assignment, reminder)
+    def notification_kind
+      :meal_role_reminder
+    end
+
+    def send_mail(assignment, user)
+      MealMailer.with(recipient: user).role_reminder(assignment, reminder).deliver_now
     end
   end
 end

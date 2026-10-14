@@ -4,8 +4,8 @@ require "rails_helper"
 
 describe "notification unsubscribe link", js: true do
   let(:user) { create(:user) }
-  let(:kind) { People::NotificationCatalog.find(:meal_role_reminder) }
-  let(:token) { People::NotificationUnsubscribe.token_for(user, kind) }
+  let(:kind) { Notifications::Catalog.find(:meal_role_reminder) }
+  let(:token) { Notifications::Unsubscribe.token_for(user, kind) }
 
   before { use_user_subdomain(user) }
 

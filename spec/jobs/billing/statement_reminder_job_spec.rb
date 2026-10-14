@@ -6,9 +6,11 @@ describe Billing::StatementReminderJob do
   include_context "jobs"
   include_context "reminder jobs"
 
+  before { ActionMailer::Base.deliveries.clear }
+
   it "should send no emails if no statements" do
-    expect(AccountMailer).not_to receive(:deliver_per_recipient)
     perform_job
+    expect(ActionMailer::Base.deliveries).to be_empty
   end
 
   context "some matching statements" do
@@ -29,18 +31,13 @@ describe Billing::StatementReminderJob do
     end
     let!(:s8) { create(:statement, account: s7.account, due_on: "2017-01-08") }
 
-    it "should send two reminders the first time, then none the second time" do
-      expect(AccountMailer).to receive(:deliver_per_recipient)
-        .with(:statement_reminder, any_args).exactly(2).times
-      perform_job
-      expect(AccountMailer).not_to receive(:deliver_per_recipient)
-      perform_job
-    end
+    let(:expected_recipients) { [s1, s2].flat_map { |s| s.household.users.map { |u| [u.email] } } }
 
-    it "should send the right statements" do
-      expect(AccountMailer).to receive(:deliver_per_recipient).with(:statement_reminder, s1)
-      expect(AccountMailer).to receive(:deliver_per_recipient).with(:statement_reminder, s2)
+    it "should send reminders for the right statements the first time, then none the second time" do
       perform_job
+      expect(expected_recipients.size).to be >= 2
+      expect(ActionMailer::Base.deliveries.map(&:to)).to match_array(expected_recipients)
+      expect { perform_job }.not_to(change { ActionMailer::Base.deliveries.size })
     end
   end
 end

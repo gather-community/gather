@@ -39,6 +39,14 @@ describe "periods", js: true do
     expect(page).to have_title("Work Periods")
     expect(page).to have_css("table.index tr", count: 4) # Header plus two rows
     expect(page).to have_css("table.index tr td.name", text: "Foo")
+
+    within(find("table.index tr", text: "Foo")) do
+      expect(page).to have_link("Signups", href: work_period_shifts_path(period1))
+      expect(page).to have_link("Report", href: work_period_report_path(period1))
+      expect(page).to have_link("Jobs", href: work_period_jobs_path(period1))
+      click_on("Report")
+    end
+    expect(page).to have_title("Work Report: Foo")
   end
 
   scenario "create, show, update" do

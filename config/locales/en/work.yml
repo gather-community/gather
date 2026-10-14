@@ -48,6 +48,10 @@ en:
         start: "Start"
         end: "End"
         phase: "Phase"
+        links: "Links"
+        signups: "Signups"
+        report: "Report"
+        jobs: "Jobs"
       review_notices:
         title: "Job Choosing Notices: %{name}"
         intro: "The following notices will be sent:"

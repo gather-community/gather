@@ -73,7 +73,7 @@ describe "calendar events JSON endpoint" do
     end
   end
 
-  context "with a work shift on the Your Jobs system calendar" do
+  context "with a work shift on the My Jobs system calendar" do
     # Shift show pages are period-scoped, so the feed can't build their URLs polymorphically.
     let!(:calendar) { create(:your_jobs_calendar, community: community) }
     let(:period) do

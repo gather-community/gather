@@ -7,12 +7,12 @@ en:
           end: "%{base} (End)"
     all_day: "All Day"
     # Names of the built-in system calendars and legacy export feeds.
-    your_meals: "Meals You're Attending"
+    my_meals: "My Meals"
     all_meals: "All Meals"
     community_meals: "%{community} Meals"
     community_events: "%{community} Events"
-    your_events: "Your Events"
-    your_jobs: "Your Jobs"
+    my_events: "My Events"
+    my_jobs: "My Jobs"
     # Names of calendar export feeds, shown in the subscriber's calendar app.
     feed_names:
       all: "All %{community} Calendars"

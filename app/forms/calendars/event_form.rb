@@ -570,7 +570,7 @@ module Calendars
       return errors.add(:base, :changed_from_started) unless editable?
       if series_scope == "following"
         refusal = series_choices.following_move_refusal(starts_at)
-        return errors.add(:base, refusal) if refusal
+        return errors.add(:base, refusal, time: I18n.l(starts_at).squish) if refusal
       end
       return if changed_occurrences.empty?
       if days_changed?

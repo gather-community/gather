@@ -28,7 +28,7 @@ en:
             base:
               overlap: "This event overlaps an existing one"
               changed_from_started: "This occurrence has already begun, so it can't be changed. Open a later occurrence to change the series from then on."
-              moved_before_kept: "You can't move this occurrence here because it would make two parts of the series overlap."
+              moved_before_kept: "You can't move this occurrence to %{time} because it would make two parts of the series overlap."
               occurrence_missing: "This occurrence no longer exists. Go back to the calendar and try again."
               longer_than_repeat: "The event is longer than the time between repeats, so its occurrences would overlap."
               pattern_change_with_changes:

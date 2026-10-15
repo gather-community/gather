@@ -162,38 +162,27 @@ describe "repeating events in the event form", js: true do
         ".date(moment('#{time.strftime("%Y-%m-%dT%H:%M")}'))")
     end
 
-    scenario "renaming from a later occurrence renames the whole series, with no note" do
+    scenario "changing from a later occurrence, with a note that it applies from there" do
       open_edit_from(wk(2))
       expect(page).not_to have_field("Change")
+      expect(page).to have_content("Any changes made below apply only from #{I18n.l(wk(2).to_date)} onward.")
+      expect(page).to have_link(I18n.l(wk(0).to_date))
       fill_in("Event Name", with: "Reading group")
-      find("#calendars_event_name").send_keys(:tab)
-      expect(page).to have_no_css("#calendars_event_series_notice .alert")
+      move_start_by(1.hour)
       click_on("Save")
 
       expect_success
-      expect(event.reload.name).to eq("Reading group")
-      expect(Calendars::Event.count).to eq(1)
+      expect(event.reload.name).to eq("Book club")
+      expect(event.schedule.first(10).map(&:to_time)).to eq([wk(0), wk(1)])
+      split_off = Calendars::Event.where.not(id: event.id).sole
+      expect([split_off.name, split_off.starts_at]).to eq(["Reading group", wk(2) + 1.hour])
     end
 
-    scenario "rescheduling from a later occurrence notes that earlier ones stay, and splits there" do
+    scenario "the note's link opens the first upcoming occurrence" do
       open_edit_from(wk(2))
-      move_start_by(1.hour)
-      within("#calendars_event_series_notice") do
-        expect(page).to have_content("apply from #{I18n.l(wk(2).to_date, format: :long)} on")
-        expect(page).to have_link("Edit from #{I18n.l(wk(0).to_date, format: :long)} instead")
-      end
-
-      # Moving it back hides the note again.
-      move_start_by(0)
-      expect(page).to have_no_css("#calendars_event_series_notice .alert")
-
-      move_start_by(1.hour)
-      expect(page).to have_css("#calendars_event_series_notice .alert")
-      click_on("Save")
-
-      expect_success
-      expect(event.reload.schedule.first(10).map(&:to_time)).to eq([wk(0), wk(1)])
-      expect(Calendars::Event.where.not(id: event.id).sole.starts_at).to eq(wk(2) + 1.hour)
+      click_on(I18n.l(wk(0).to_date))
+      expect(page).to have_field("Start Time", with: /#{wk(0).strftime("%b")}/)
+      expect(page).not_to have_content("Any changes made below")
     end
 
     scenario "refusing a change to the days it repeats on when an occurrence was deleted" do
@@ -226,18 +215,14 @@ describe "repeating events in the event form", js: true do
         expect(page).to have_field("Start Time", disabled: false)
       end
 
-      scenario "disables the times and repeat settings from a past occurrence, but not the name" do
+      scenario "disables the whole form from a past occurrence" do
         open_edit_from(wk(0))
+        expect(page).to have_field("Event Name", disabled: true)
         expect(page).to have_field("Start Time", disabled: true)
-        expect(page).to have_field("End Time", disabled: true)
         expect(page).to have_field("Repeats", disabled: true)
-        expect(page).to have_content("This occurrence has already begun")
-
-        fill_in("Event Name", with: "Reading group")
-        click_on("Save")
-        expect_success
-        expect(event.reload.name).to eq("Reading group")
-        expect(event.schedule.first(2).map(&:to_time)).to eq([wk(0), wk(1)])
+        expect(page).to have_no_button("Save")
+        expect(page).to have_content("This occurrence has already begun, so it can't be changed.")
+        expect(page).to have_link(I18n.l(wk(1).to_date))
       end
     end
   end

@@ -162,8 +162,6 @@ module Calendars
         id: params[:id], params: event_params)
       @event = @form.event
       authorize(@event, persisted ? :edit? : :new?)
-      # As saving would, so e.g. an all-day event's times don't read as changed.
-      @form.normalize
       render(formats: :turbo_stream)
     end
 

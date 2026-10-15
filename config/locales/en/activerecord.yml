@@ -27,8 +27,8 @@ en:
           attributes:
             base:
               overlap: "This event overlaps an existing one"
-              reschedule_from_started: "This occurrence has already begun, so the times and repeat settings can't be changed from it. Open a later occurrence to change them from then on."
-              moved_before_kept: "This occurrence can't move to or before %{date}, the occurrence before it, or the series would overlap itself. To change the earlier occurrences too, edit from the first one you want to change."
+              changed_from_started: "This occurrence has already begun, so it can't be changed. Open a later occurrence to change the series from then on."
+              moved_before_kept: "You can't move this occurrence here because it would make two parts of the series overlap."
               occurrence_missing: "This occurrence no longer exists. Go back to the calendar and try again."
               longer_than_repeat: "The event is longer than the time between repeats, so its occurrences would overlap."
               pattern_change_with_changes:
@@ -63,8 +63,8 @@ en:
               offsets_too_far_apart: "An event's times on its different calendars can't be more than %{hours} hours apart. To move it further, choose “Move on all calendars.”"
               series_started: "This series has already started. Choose “This and following” to change it from this date on."
               following_from_past: "Occurrences that have already begun can't be moved with “This and following.”"
-              moved_before_kept: "“This and following” can't move this occurrence to or before %{date}, the last occurrence before it, or the two parts of the series would overlap. Choose “This only” to move just this one."
-              fixed_pattern: "This series repeats in a fixed pattern that doesn't include the new time, so its occurrences can't be moved there. Choose “This only” to move one occurrence."
+              moved_before_kept: "You can't move “this and following” here because it would make two parts of the series overlap."
+              fixed_pattern: "You can't move “%{choice}” here because this series repeats in a fixed pattern that doesn't include the new time."
               overlap: "This event overlaps an existing one"
             occurrence_start:
               required_for_single: "is required to change a single occurrence"

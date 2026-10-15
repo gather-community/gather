@@ -168,7 +168,16 @@ describe "event form", js: true do
       execute_script("$('.calendars_event_starts_at .datetimepicker').data('DateTimePicker')" \
         ".date(moment('2030-10-01T10:15'))")
       expect(evaluate_script("$('.calendars_event_ends_at .datetimepicker input').val()"))
-        .to include("Oct 1 2030 11:45am")
+        .to match(/Oct 0?1 2030 11:45am/)
+    end
+
+    # Its pickers show only dates, while it ends at 11:59pm, which once read as a change.
+    scenario "doesn't see an untouched all-day event as changed" do
+      event = create(:event, calendar: calendar, creator: user, all_day: true,
+        starts_at: Time.zone.parse("2030-09-29 00:00"), ends_at: Time.zone.parse("2030-09-29 23:59:59"))
+      visit(edit_calendars_event_path(event))
+      expect(page).to have_field("Start Time", with: /Sep 29 2030/)
+      expect(form_dirty?).to be(false)
     end
 
     scenario "notices unsaved changes" do

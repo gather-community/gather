@@ -6,8 +6,3 @@
     <% end %>
   <% end %>
 <% end %>
-<% if @form.series_edit? %>
-  <%= turbo_stream.replace("calendars_event_series_notice", method: :morph) do %>
-    <%= render("series_notice") %>
-  <% end %>
-<% end %>

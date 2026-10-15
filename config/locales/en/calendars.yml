@@ -37,13 +37,17 @@ en:
     residents_only: "Only %{community} residents may reserve this calendar."
     # Appended to IceCube's own (localized) description of a recurrence rule, e.g.
     # "Weekly" + "on Mondays" + "at 6:00pm" + "until Aug 31 2026".
+    timespan:
+      all_day: "%{date} (all day)"
+      all_day_range: "%{first} - %{last} (all day)"
     recurrence:
       # Indexed by weekday, Sunday first.
       on_weekdays: ["on Sundays", "on Mondays", "on Tuesdays", "on Wednesdays", "on Thursdays", "on Fridays", "on Saturdays"]
       on_day_of_month: "on the %{ordinal}"
       on_date: "on %{date}"
       at_time: "at %{time}"
-      until_date: "until %{date}"
+      from_date: "from %{date}"
+      between_dates: "between %{first}–%{last}"
     rules:
       max_lead_days: "Can be at most %{count} days in the future"
       max_length: "Can be at most %{length} after start time"
@@ -137,10 +141,11 @@ en:
         title: "Edit Event: %{name}"
       form:
         agree_to_guidelines: "I agree to the above guidelines"
-        schedule_locked: "This occurrence has already begun, so its times and repeat settings can't be changed here. Open a later occurrence to change them from then on."
       series_notice:
-        following_only_html: "Note: These changes to the time or repeat settings apply from %{date} on. Earlier upcoming occurrences stay as they are. %{link}"
-        edit_from: "Edit from %{date} instead"
+        applies_from: "Any changes made below apply only from %{date} onward."
+        edit_earlier_html: "To affect all future occurrences, edit the %{link} occurrence."
+        started: "This occurrence has already begun, so it can't be changed."
+        edit_later_html: "To change the series from then on, edit the %{link} occurrence."
       # Repeat settings in the event form.
       repeat_fields:
         repeat_units:

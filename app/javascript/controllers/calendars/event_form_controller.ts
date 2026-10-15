@@ -28,7 +28,7 @@ interface PickerChange {
  * - sends timesChanged when the start or end changes, which the form-refresh controller answers by
  *   re-rendering what depends on them, such as the monthly repeat choices. The pickers' changes don't
  *   fire the browser change event that other fields' do;
- * - keeps disabled pickers from opening (EventForm#schedule_editable?);
+ * - keeps disabled pickers from opening (EventForm#start_editable?);
  * - starts the shared Backbone helpers the form uses: the searchable pickers for the creator and
  *   sponsor, and the unsaved-changes check. Those are used across many forms, so they're started
  *   from here rather than converted with this form.

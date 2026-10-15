@@ -11,9 +11,6 @@
       </p>
     <% end %>
   <% elsif @form.repeat_settings_editable? %>
-    <%# Disabled fields aren't sent, so the server keeps the settings as they are. Bootstrap greys out a
-        disabled fieldset's fields. %>
-    <fieldset <%= "disabled" unless @form.schedule_editable? %>>
     <% frequencies = Calendars::RecurrencePattern::FREQUENCIES.map(&:to_sym) %>
     <% frequencies = [:none] + frequencies unless @form.series_edit? %>
     <% units = Calendars::RecurrencePattern::FREQUENCIES.index_with do |freq|
@@ -61,7 +58,6 @@
     <%= f.input :repeat_ends_on, as: :date_picker, wrapper_html: detail.call("on_date") %>
     <%= f.input :repeat_count, as: :integer, input_html: {min: 2, max: Calendars::RecurrencePattern::MAX_COUNT},
       wrapper_html: detail.call("after_count") %>
-    </fieldset>
   <% elsif @form.recurrence_blockers.any? %>
     <%= f.input :repeat_frequency do %>
       <p class="hint">

@@ -420,15 +420,16 @@ module Calendars
       # The UNTIL moves along with the start, so only the pattern itself is checked.
       rule = IceCube::Rule.from_hash(event.recurrence_rule).until(nil)
       return if IceCube::Schedule.new(new_start) { |s| s.add_recurrence_rule(rule) }.occurs_at?(new_start)
-      errors.add(:base, :fixed_pattern)
+      # Named as the drag modal names the choice.
+      errors.add(:base, :fixed_pattern, choice: I18n.t("calendars.drag.series.#{effective_series_scope}"))
     end
 
     # "This and following" has to land after the occurrences it leaves behind, or the two parts of the
     # series would overlap. See SeriesChoices#following_move_refusal.
     def following_lands_after_kept
       return if errors.any? || calendar_scope != "all" || effective_series_scope != "following"
-      key, details = series_choices.following_move_refusal(start_shift.apply(occurrence_start))
-      errors.add(:base, key, **details) if key
+      refusal = series_choices.following_move_refusal(start_shift.apply(occurrence_start))
+      errors.add(:base, refusal) if refusal
     end
 
     # Overlap is checked at the eventlet level rather than the event level, since two eventlets on

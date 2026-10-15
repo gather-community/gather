@@ -39,13 +39,12 @@ module Calendars
       end
     end
 
-    # The error key and message details refusing a "following" move of this occurrence to new_start,
-    # or nil if it's allowed. The original series is cut so its last scheduled occurrence is the one
+    # The error key refusing a "following" move of this occurrence to new_start, or nil if it's
+    # allowed. The original series is cut so its last scheduled occurrence is the one
     # before this, so the moved part has to start after that.
     def following_move_refusal(new_start)
       kept = event.schedule.previous_occurrence(occurrence_start)&.to_time
-      return nil if kept.nil? || new_start > kept
-      [:moved_before_kept, {date: I18n.l(kept.to_date, format: :long)}]
+      :moved_before_kept unless kept.nil? || new_start > kept
     end
 
     # The multi-occurrence scopes that are allowed, leaving out "following" where it means "series".

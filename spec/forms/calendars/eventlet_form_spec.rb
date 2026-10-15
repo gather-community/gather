@@ -379,9 +379,9 @@ describe Calendars::EventletForm do
              starts_at: (occurrence + 1.day).iso8601, ends_at: (occurrence + 1.day + 1.hour).iso8601}
           end
 
-          it "is refused" do
+          it "is refused, naming the choice" do
             expect(form.save).to be(false)
-            expect(form.errors[:base].join).to match(/fixed pattern/)
+            expect(form.errors[:base].join).to match(/You can't move “All occurrences” here .* fixed pattern/)
           end
 
           it_behaves_like "a drag that leaves the series untouched"
@@ -520,9 +520,10 @@ describe Calendars::EventletForm do
           event.update!(recurrence_rule: IceCube::Rule.weekly.day(weekday).to_hash)
         end
 
-        it "is refused" do
+        it "is refused, naming the choice" do
           expect(form.save).to be(false)
-          expect(form.errors[:base].join).to match(/fixed pattern/)
+          expect(form.errors[:base].join)
+            .to match(/You can't move “This and following” here .* fixed pattern/)
         end
 
         it_behaves_like "a drag that leaves the series untouched"
@@ -539,7 +540,8 @@ describe Calendars::EventletForm do
 
         it "is refused" do
           expect(form.save).to be(false)
-          expect(form.errors[:base].join).to match(/can't move this occurrence to or before/)
+          expect(form.errors[:base].join)
+            .to match(/You can.t move “this and following” here because it would make two parts/)
         end
 
         it_behaves_like "a drag that leaves the series untouched"

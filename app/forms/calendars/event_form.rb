@@ -4,13 +4,12 @@ module Calendars
   # Creates and edits events, including repeating ones.
   #
   # Editing a repeating event (a "series edit") works from one of its occurrences, the one the user
-  # opened. The form shows that occurrence's times and the series' repeat settings. What a save does
-  # depends on what changed:
-  # - Fields stored once for the series (name, note, type and so on) apply to every occurrence, past
-  #   ones included, as they can't differ from one occurrence to the next.
-  # - A change to when it happens (times, all-day, repeat settings) is a "reschedule". It applies from
-  #   the opened occurrence on: the series is split there (SeriesSplitter), unless the opened one is the
-  #   first, when the whole series changes. Occurrences before it never move, as some may be past.
+  # opened. The form shows that occurrence's times and the series' repeat settings, and any change
+  # applies from that occurrence on: the series is split there (SeriesSplitter), unless the opened one
+  # is the first, when the whole series changes. Occurrences before it never change, as some may be
+  # past, so nothing can be changed from an occurrence that has begun. A save that changes nothing
+  # leaves the series as it is.
+  #
   # A change of time is the move from the opened occurrence to the new times, the same as dragging it,
   # so the series' start is never re-anchored on the opened occurrence.
   class EventForm
@@ -115,20 +114,6 @@ module Calendars
       super(*args)
     end
 
-    # Brings the times and repeat settings into the shape they're saved in: an all-day event's times
-    # cover whole days, and a weekly series always includes the start's weekday. Called before
-    # validating, and by EventsController#form_refresh before reading what the edit would change.
-    def normalize
-      @event.all_day = false if rule_set.timed_events_only?
-      if all_day? && starts_at && ends_at
-        assign_times(starts_at.midnight,
-          ends_at.midnight + 1.day - 1.second)
-      end
-      # The start's weekday checkbox is disabled, so it isn't sent. It's always included, even if the
-      # page hadn't caught up with a change to the start.
-      pattern.weekdays = pattern.weekdays_for(starts_at) if pattern&.frequency == "weekly" && starts_at
-    end
-
     def save
       return false unless valid?
       return save_series_edit if series_edit?
@@ -216,17 +201,15 @@ module Calendars
       event.eventlets.detect { |e| e.calendar_id == event.calendar_id } || event.eventlets.first
     end
 
-    # Whether this series edit changes when occurrences happen: their times, all-day, or how the series
-    # repeats. Such a change applies from the opened occurrence on (see the class comment); any other
-    # change applies to the whole series.
-    def reschedule?
+    # Whether this series edit changes anything: the times, the repeat settings, or the event's fields.
+    def series_changed?
       return false unless series_edit?
-      times_changed? || event.will_save_change_to_all_day? || days_changed? || ends_changed?
+      times_changed? || days_changed? || ends_changed? || field_changes.any?
     end
 
-    # Whether the times, all-day and repeat settings can be changed. In a series edit, not from an
-    # occurrence that has begun, since a change to it and the ones after would move it.
-    def schedule_editable?
+    # Whether the form can change anything. In a series edit, not from an occurrence that has begun,
+    # since the change would apply to it.
+    def editable?
       return true unless series_edit?
       opened_occurrence.present? && series_choices.refusal(series_scope).nil?
     end
@@ -234,16 +217,22 @@ module Calendars
     # Whether the start can be changed. Besides the above, an event that has begun keeps its start,
     # except for an admin, or its creator within the hour to fix a mistake.
     def start_editable?
-      schedule_editable? && !start_locked?
+      editable? && !start_locked?
     end
 
-    # The first upcoming occurrence before the opened one, which a reschedule leaves as it is, for the
-    # note saying so. Nil if there's none, or the edit doesn't reschedule from a later occurrence.
-    def earlier_upcoming_occurrence
-      return nil unless reschedule? && series_scope == "following" && schedule_editable?
+    # Whether changes apply only from the opened occurrence on, leaving earlier ones as they are,
+    # rather than to the whole series from its first occurrence.
+    def applies_from_opened?
+      series_edit? && series_scope == "following"
+    end
+
+    # The series' first occurrence that hasn't begun and wasn't deleted, which the note at the top of
+    # the form suggests editing from. Nil if there's none.
+    def first_upcoming_occurrence
+      return @first_upcoming_occurrence if defined?(@first_upcoming_occurrence)
       deleted = event.event_overrides.select(&:deleted?).map(&:occurrence_start)
-      event.schedule.occurrences_between(Time.current, occurrence_start - 1.second)
-        .map(&:to_time).find { |t| deleted.exclude?(t) && t.future? }
+      @first_upcoming_occurrence = event.schedule.next_occurrences(deleted.size + 1, Time.current)
+        .map(&:to_time).find { |t| deleted.exclude?(t) }
     end
 
     # The weekdays shown ticked: those chosen, and always the start's, which can't be unticked.
@@ -359,6 +348,20 @@ module Calendars
       end
     end
 
+    # Brings the times and repeat settings into the shape they're saved in: an all-day event's times
+    # cover whole days, and a weekly series always includes the start's weekday. Called before
+    # validating.
+    def normalize
+      @event.all_day = false if rule_set.timed_events_only?
+      if all_day? && starts_at && ends_at
+        assign_times(starts_at.midnight,
+          ends_at.midnight + 1.day - 1.second)
+      end
+      # The start's weekday checkbox is disabled, so it isn't sent. It's always included, even if the
+      # page hadn't caught up with a change to the start.
+      pattern.weekdays = pattern.weekdays_for(starts_at) if pattern&.frequency == "weekly" && starts_at
+    end
+
     def assign_times(starts, ends)
       if series_edit?
         @form_starts_at = starts
@@ -422,10 +425,9 @@ module Calendars
     end
 
     def save_series_edit
+      return true unless series_changed?
       ActiveRecord::Base.transaction do
-        if !reschedule?
-          event.save!
-        elsif series_scope == "following"
+        if series_scope == "following"
           save_following
         else
           save_whole_series
@@ -447,21 +449,25 @@ module Calendars
       event.save!
     end
 
-    # The original keeps its schedule up to the opened occurrence; the new series starting there gets
-    # the new one. Fields stored once for the series (name and so on) change on both, so the edit
-    # reads the same from any occurrence. The rule only changes if the repeat settings did, since
-    # otherwise the original's, picked up from the cut (SeriesSplitter#continuation_rule), is right.
+    # The original keeps everything up to the opened occurrence; the new series starting there gets
+    # the changes. Its rule only changes if the repeat settings did, since otherwise the original's,
+    # picked up from the cut (SeriesSplitter#continuation_rule), is already right.
     def save_following
-      all_day = event.all_day
-      changing_all_day = event.will_save_change_to_all_day?
-      event.restore_attributes(%w[all_day]) if changing_all_day
-      rule = pattern.to_rule_hash(starts_at, all_day: all_day) if pattern && (days_changed? || ends_changed?)
+      changes = field_changes
+      event.restore_attributes
+      rule = pattern.to_rule_hash(starts_at, all_day: changes.fetch("all_day", all_day?)) if pattern &&
+        (days_changed? || ends_changed?)
       split_off = SeriesSplitter.new(event).split_at(occurrence_start, start_shift: start_shift,
         end_shift: end_shift, rule: rule)
-      return unless changing_all_day
-      split_off.all_day = all_day
-      clear_offsets(split_off.eventlets)
+      split_off.assign_attributes(changes)
+      clear_offsets(split_off.eventlets) if changes.key?("all_day")
       split_off.save!
+    end
+
+    # The event's fields the form changed, as {attribute => new value}. A blank field sent for one
+    # that's empty (e.g. "" for no note) isn't a change.
+    def field_changes
+      event.changes.reject { |_attr, (was, now)| was.blank? && now.blank? }.transform_values(&:last)
     end
 
     # Shortening the end leaves changes to occurrences that no longer exist. They're removed, the same
@@ -559,12 +565,12 @@ module Calendars
       return unless series_edit?
       return errors.add(:base, :occurrence_missing) unless opened_occurrence
       return errors.add(:repeat_frequency, :stop_repeating) if pattern && !pattern.recurring?
-      return unless reschedule?
-      # The page disables these fields then, but may not have caught up with the time passing.
-      return errors.add(:base, :reschedule_from_started) unless schedule_editable?
+      return unless series_changed?
+      # The page disables the form then, but may not have caught up with the time passing.
+      return errors.add(:base, :changed_from_started) unless editable?
       if series_scope == "following"
-        key, details = series_choices.following_move_refusal(starts_at)
-        return errors.add(:base, key, **details) if key
+        refusal = series_choices.following_move_refusal(starts_at)
+        return errors.add(:base, refusal) if refusal
       end
       return if changed_occurrences.empty?
       if days_changed?

@@ -16,7 +16,7 @@ class WorkMailer < ApplicationMailer
       default_i18n_subject(title: @shift.job_title, times: @shift.times)
     end
 
-    mail(to: @user, subject: subject)
+    mail(to: recipient, subject: subject)
   end
 
   def job_choosing_notice(share)
@@ -25,6 +25,6 @@ class WorkMailer < ApplicationMailer
     @community = @period.community
     raise "quota required" if @period.quota_none?
     @synopsis = Work::SynopsisDecorator.new(Work::Synopsis.new(period: @period, user: @user))
-    mail(to: @user)
+    mail(to: recipient)
   end
 end

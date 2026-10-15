@@ -340,14 +340,14 @@ class User < ApplicationRecord
   # Whether this user wants the given kind of notification over the given channel.
   # Required and internal kinds are always on. notification_prefs only stores overrides of the default (on).
   def notification_enabled?(kind_key, channel: :email)
-    kind = People::NotificationCatalog.find(kind_key)
+    kind = Notifications::Catalog.find(kind_key)
     return true unless kind.configurable?
     notification_prefs.dig(kind.key.to_s, channel.to_s) != false
   end
 
   # Sets prefs for the given kind and channel, storing only values that differ from the default.
   def set_notification_pref(kind_key, enabled, channel: :email)
-    kind = People::NotificationCatalog.find(kind_key)
+    kind = Notifications::Catalog.find(kind_key)
     raise ArgumentError, "#{kind.key} is not configurable" unless kind.configurable?
     prefs = notification_prefs.deep_dup
     if enabled

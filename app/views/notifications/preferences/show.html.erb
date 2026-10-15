@@ -8,17 +8,17 @@
     <tbody>
       <% @form.kinds_by_section.each do |section, kinds| %>
         <tr class="heading">
-          <th colspan="2"><h3><%= t("people.notification_preferences.sections.#{section}") %></h3></th>
+          <th colspan="2"><h3><%= t("notifications.preferences.sections.#{section}") %></h3></th>
         </tr>
         <% kinds.each do |kind| %>
           <tr>
             <% if kind.configurable? %>
-              <% field = People::NotificationPreferencesForm.field_name(kind, :email) %>
-              <td><%= f.label(field, t("people.notification_preferences.kinds.#{kind.key}")) %></td>
+              <% field = Notifications::PreferencesForm.field_name(kind, :email) %>
+              <td><%= f.label(field, t("notifications.preferences.kinds.#{kind.key}")) %></td>
               <td class="index-checkbox text-center"><%= f.input_field(field, as: :boolean) %></td>
             <% else %>
               <% id = "notification_preferences_#{kind.key}_email" %>
-              <td><%= label_tag(id, t("people.notification_preferences.kinds.#{kind.key}")) %></td>
+              <td><%= label_tag(id, t("notifications.preferences.kinds.#{kind.key}")) %></td>
               <td class="index-checkbox text-center">
                 <%= check_box_tag(id, "1", true, disabled: true, title: t(".essential")) %>
               </td>

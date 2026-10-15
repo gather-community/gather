@@ -92,7 +92,7 @@ class UserPolicy < ApplicationPolicy
   end
 
   def permitted_notification_pref_attributes
-    People::NotificationPreferencesForm.field_names
+    Notifications::PreferencesForm.field_names
   end
 
   # Only needed for folks who otherwise couldn't edit this user (i.e. not self, guardians, or admins).

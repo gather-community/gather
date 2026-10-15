@@ -1,0 +1,6 @@
+<%= yield.rstrip %>
+<% if @notification_preferences_url -%>
+
+-- 
+<%= t("layouts.mailer.notification_settings", url: @notification_preferences_url) %>
+<% end -%>

@@ -10,6 +10,7 @@
 #  cluster_id     :integer          not null
 #  country_code   :string(2)        default("US"), not null
 #  created_at     :datetime         not null
+#  currency       :string(3)        not null
 #  name           :string(20)       not null
 #  settings       :jsonb
 #  slug           :string           not null
@@ -29,8 +30,6 @@ class Community < ApplicationRecord
   # Maps an ISO 3166-1 alpha-2 country code (uppercase) to its default ISO 4217 currency
   # (lowercase, to match Stripe and the money gem). Covers Stripe-supported countries;
   # extend as Stripe adds markets. Source: https://stripe.com/global
-  DEFAULT_CURRENCY = "usd"
-
   COUNTRY_CURRENCIES = {
     "AE" => "aed", "AT" => "eur", "AU" => "aud", "BE" => "eur", "BG" => "bgn",
     "BR" => "brl", "CA" => "cad", "CH" => "chf", "CY" => "eur", "CZ" => "czk",
@@ -101,6 +100,7 @@ class Community < ApplicationRecord
   # Country codes are ISO 3166-1 alpha-2 and must be stored uppercase so lookups
   # (e.g. Messaging::Account currency selection) are reliable.
   before_validation { self.country_code = country_code&.upcase }
+  before_validation { self.currency ||= ISO3166::Country.new(country_code)&.currency_code&.downcase }
 
   before_create :generate_calendar_token
   before_create :generate_sso_secret
@@ -210,15 +210,11 @@ class Community < ApplicationRecord
     abbrv.downcase
   end
 
-  # The default currency for the community's country, or nil if unsupported.
+  # The currency Gather bills the community in through Stripe, or nil if Stripe doesn't support the
+  # community's country. Not to be confused with `currency`, the currency the community's own money
+  # (meal costs, billing accounts) is shown in, which is set from the country for every country.
   def default_currency
     COUNTRY_CURRENCIES[country_code]
-  end
-
-  # The currency the community's money is shown in. Communities in countries Stripe doesn't support use
-  # US dollars, which is what every community was shown before currencies were per-community.
-  def currency
-    default_currency || DEFAULT_CURRENCY
   end
 
   # The community's single messaging wallet, or nil if it has never been funded. There is at most

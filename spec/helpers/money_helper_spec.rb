@@ -41,16 +41,22 @@ describe MoneyHelper do
       end
     end
 
-    context "with a community in a country without a currency mapping" do
-      let(:country_code) { "ZZ" }
+    context "with a community whose country Stripe doesn't support" do
+      let(:country_code) { "NG" }
 
-      it "falls back to US dollars" do
-        expect(format(12.5, :en)).to eq("$12.50")
+      it "still uses the country's currency" do
+        expect(format(12.5, :en)).to eq("₦12.50")
       end
     end
 
     it "takes an explicit currency" do
       expect(format(12.5, :en, currency: "gbp")).to eq("£12.50")
+    end
+
+    it "raises with no current community and no explicit currency" do
+      helper.define_singleton_method(:current_community) { nil }
+      expect { format(12.5, :en) }.to raise_error(ArgumentError)
+      expect(format(12.5, :en, currency: "usd")).to eq("$12.50")
     end
 
     it "returns nil for nil and an HTML-safe string otherwise" do

@@ -204,6 +204,9 @@ module Groups
     def normalize
       memberships.delete(memberships.to_a.select(&:joiner?)) if everybody?
       memberships.delete(memberships.to_a.select(&:opt_out?)) unless everybody?
+      # Browsers submit textarea line breaks as \r\n but count them as one character for maxlength,
+      # so normalize them to keep the length the user saw in line with the length we validate.
+      self.description = description.gsub("\r\n", "\n") if description.present?
     end
 
     def name_unique_in_all_communities

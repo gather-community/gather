@@ -55,6 +55,15 @@ describe Groups::Group do
         end
       end
     end
+
+    describe "description line breaks" do
+      let(:group) { build(:group, description: "Line one\r\nLine two\r\n") }
+
+      it "converts browser \\r\\n line breaks to \\n" do
+        group.validate
+        expect(group.description).to eq("Line one\nLine two\n")
+      end
+    end
   end
 
   describe "validation" do
@@ -125,6 +134,14 @@ describe Groups::Group do
 
       context "with description at max length" do
         subject(:group) { build(:group, description: "a" * described_class::DESCRIPTION_MAX_LENGTH) }
+        it { is_expected.to be_valid }
+      end
+
+      context "with description at max length once browser line breaks are normalized" do
+        # Browsers submit textarea line breaks as \r\n but count them as one character for maxlength.
+        subject(:group) do
+          build(:group, description: "a" * (described_class::DESCRIPTION_MAX_LENGTH - 5) + "\r\n" * 5)
+        end
         it { is_expected.to be_valid }
       end
 

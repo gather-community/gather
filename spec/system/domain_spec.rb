@@ -46,7 +46,7 @@ describe "domains", js: true do
         fill_in("Name", with: "nerp")
 
         click_button("Save")
-        expect(page).to have_alert(/problems below/)
+        expect(page).to have_alert(/errors? on the form below/)
         fill_in("Name", with: "nerp.com")
         click_button("Save")
         expect(page).to have_alert(/created successfully/)

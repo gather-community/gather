@@ -38,7 +38,9 @@
   <% end %>
 
   <% if policy(event).choose_creator? %>
-    <%= f.input :creator_id, as: :user_select, context: event.creator_select2_context %>
+    <%# The searchable picker draws its own box, which the disabled fieldset doesn't grey out. %>
+    <%= f.input :creator_id, as: :user_select, context: event.creator_select2_context,
+      disabled: !@form.editable? %>
   <% end %>
 
   <% unless event.meal? %>
@@ -61,7 +63,8 @@
     <% end %>
 
     <% if event.access_level(current_user.community) == "sponsor" %>
-      <%= f.input :sponsor_id, as: :user_select, context: "current_community_full_access", required: true %>
+      <%= f.input :sponsor_id, as: :user_select, context: "current_community_full_access", required: true,
+        disabled: !@form.editable? %>
     <% end %>
   <% end %>
 

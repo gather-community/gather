@@ -23,7 +23,7 @@ describe Work::JobReminderDelivery do
   describe "deliver!" do
     let(:reminder) { create_work_job_reminder(create(:work_job), "2018-01-01 09:15") }
     let(:delivery) { reminder.deliveries[0] }
-    let(:assignments) { [double, double] }
+    let(:assignments) { [double(user: create(:user)), double(user: create(:user))] }
 
     before do
       allow(delivery).to receive(:assignments).and_return(assignments)

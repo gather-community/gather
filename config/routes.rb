@@ -56,8 +56,11 @@ Rails.application.routes.draw do
     end
   end
 
-  scope module: :people do
-    resource :notification_preferences, path: "notifications", only: %i[show update]
+  scope module: :notifications do
+    resource :preferences, path: "notifications", only: %i[show update], as: :notification_preferences
+    # Public, signed List-Unsubscribe URL from notification emails. POST is RFC 8058 one-click unsubscribe.
+    get "notifications/unsubscribe/:token", to: "unsubscribes#show", as: :notification_unsubscribe
+    post "notifications/unsubscribe/:token", to: "unsubscribes#create"
   end
 
   resources :users do

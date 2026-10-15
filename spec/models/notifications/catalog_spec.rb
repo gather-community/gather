@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe People::NotificationCatalog do
+describe Notifications::Catalog do
   # Every email must be accounted for on the notification preferences page.
   # See the Email section of CLAUDE.md.
   it "lists every mailer action exactly once" do
@@ -19,7 +19,7 @@ describe People::NotificationCatalog do
     expect(actions).to include("MealMailer#meal_reminder", "AuthMailer#reset_password_instructions")
 
     missing = actions.reject { |action| described_class::BY_MAILER_ACTION.key?(action) }
-    expect(missing).to be_empty, "Add these to People::NotificationCatalog: #{missing.join(", ")}"
+    expect(missing).to be_empty, "Add these to Notifications::Catalog: #{missing.join(", ")}"
 
     listed = described_class.all.flat_map(&:mailer_actions)
     expect(listed).to match_array(listed.uniq)

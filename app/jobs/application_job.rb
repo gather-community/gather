@@ -80,6 +80,15 @@ class ApplicationJob < ActiveJob::Base
     Gather::ErrorReporter.instance.report(e, data: data)
   end
 
+  # Works out who should get a notification (see Notifications::Recipients) and yields each recipient, so
+  # the caller can send them their own message. A delivery error for one recipient is reported and doesn't
+  # stop the others.
+  def each_notification_recipient(targets, kind:, channel: :email, data: {})
+    Notifications::Recipients.resolve(targets, kind: kind, channel: channel).each do |user|
+      with_mail_delivery_resilience(data: data.merge(user_id: user.id)) { yield(user) }
+    end
+  end
+
   def each_community
     Cluster.all.each do |cluster|
       with_cluster(cluster) do

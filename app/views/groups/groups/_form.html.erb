@@ -1,5 +1,5 @@
 <%= gather_form_for(group, url: group.new_record? ? groups_groups_path : groups_group_path(group)) do |f| %>
-  <%= f.input(:name, maxlength: Groups::Group.columns_hash["name"].limit) %>
+  <%= f.input(:name, maxlength: Groups::Group::NAME_MAX_LENGTH) %>
   <% if @community_options %>
     <%= f.input(:communities) do %>
       <% @community_options.each do |community| %>
@@ -13,7 +13,7 @@
       <% end %>
     <% end %>
   <% end %>
-  <%= f.input(:description, as: :text, maxlength: Groups::Group.columns_hash["description"].limit) %>
+  <%= f.input(:description, as: :text, maxlength: Groups::Group::DESCRIPTION_MAX_LENGTH) %>
   <%= f.input(:kind, collection: Groups::Group::KINDS, include_blank: false) %>
   <%= f.input(:availability, collection: Groups::Group::AVAILABILITIES, include_blank: false) %>
   <%= nested_field_set(f, :memberships, single_row: true, inner_labels: false) %>

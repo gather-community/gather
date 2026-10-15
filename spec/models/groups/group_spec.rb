@@ -105,6 +105,35 @@ describe Groups::Group do
       end
     end
 
+    describe "length" do
+      # Migrations use literal limits, so this catches a column change that forgets the constant.
+      it "keeps the max length constants in sync with the database columns" do
+        columns = described_class.columns_hash
+        expect(described_class::NAME_MAX_LENGTH).to eq(columns["name"].limit)
+        expect(described_class::DESCRIPTION_MAX_LENGTH).to eq(columns["description"].limit)
+      end
+
+      context "with name at max length" do
+        subject(:group) { build(:group, name: "a" * described_class::NAME_MAX_LENGTH) }
+        it { is_expected.to be_valid }
+      end
+
+      context "with name over max length" do
+        subject(:group) { build(:group, name: "a" * (described_class::NAME_MAX_LENGTH + 1)) }
+        it { is_expected.to have_errors(name: /is too long \(maximum is 64 characters\)/) }
+      end
+
+      context "with description at max length" do
+        subject(:group) { build(:group, description: "a" * described_class::DESCRIPTION_MAX_LENGTH) }
+        it { is_expected.to be_valid }
+      end
+
+      context "with description over max length" do
+        subject(:group) { build(:group, description: "a" * (described_class::DESCRIPTION_MAX_LENGTH + 1)) }
+        it { is_expected.to have_errors(description: /is too long \(maximum is 255 characters\)/) }
+      end
+    end
+
     describe "no members from non-affiliated communities" do
       let(:community1) { create(:community) }
       let(:community2) { create(:community) }

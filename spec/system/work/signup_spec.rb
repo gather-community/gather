@@ -72,10 +72,10 @@ describe "signups", js: true do
         select_lens(:shift, "Open Jobs")
         expect_jobs(*jobs[1..3])
 
-        select_lens(:shift, "Your Jobs")
+        select_lens(:shift, "My Jobs")
         expect_jobs(*jobs[1..2])
 
-        select_lens(:shift, "Your Household")
+        select_lens(:shift, "My Household")
         expect_jobs(*jobs[0..2])
 
         select_lens(:shift, "Not Preassigned")

@@ -84,8 +84,8 @@ en:
     show:
       title: "Account: %{household}"
     yours:
-      title: "Your Account"
-      title_with_community: "Your %{community} Account"
+      title: "My Account"
+      title_with_community: "My %{community} Account"
       no_charges: "There are not yet any charges associated with your household."
     index:
       title: "Accounts"

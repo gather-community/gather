@@ -14,7 +14,7 @@ FactoryBot.define do
     end
 
     factory :your_meals_calendar, class: "Calendars::System::YourMealsCalendar" do
-      sequence(:name) { |n| "Your Meals #{n}" }
+      sequence(:name) { |n| "My Meals #{n}" }
     end
 
     factory :birthdays_calendar, class: "Calendars::System::BirthdaysCalendar" do
@@ -26,7 +26,7 @@ FactoryBot.define do
     end
 
     factory :your_jobs_calendar, class: "Calendars::System::YourJobsCalendar" do
-      sequence(:name) { |n| "Your Jobs #{n}" }
+      sequence(:name) { |n| "My Jobs #{n}" }
     end
   end
 end

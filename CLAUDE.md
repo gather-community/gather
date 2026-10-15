@@ -315,6 +315,16 @@ The dispositions map is a **declaration**, not an assertion — it does not read
 - **Views:** use lazy lookup (`t(".title")`). The key resolves from the template path (`app/views/meals/meals/show.html.erb` → `meals.meals.show.title`) and lives in that module's YAML file (`meals.yml`). Strings shared across modules go under `common.*`. Decorators use `h.t(...)` with a full key.
 - **Never build a sentence by concatenating fragments**, because word order differs between languages. Use one key with interpolation (`%{name}`). When the sentence contains a link or markup, use an `_html` key and pass the link in as a variable: `t(".notice_html", link: link_to(...))`.
 - **Pluralize with `count:`** and `one`/`other` sub-keys, never `String#pluralize` or `"#{n} things"` on display text.
+- **"My" vs. "your" vs. no pronoun** (from [Your vs. My](https://smart-interface-design-patterns.com/articles/your-vs-my/)):
+  ask who is speaking.
+  - **No pronoun** when the label is clear without one ("Profile", "Calendars", items in the personal menu).
+  - **"My"** when the user is speaking: a label naming something they own, where it has to be told apart
+    from others' or everyone's ("My Jobs" beside "All Jobs"; the "My Meals" calendar; "My Order"), and
+    checkbox/button text the user "says" ("My events only", "Delete My Account").
+  - **"Your"** when Gather is speaking to the user: flash messages, emails, hints, instructions
+    ("Your password has been changed").
+  - Never call the same thing "My X" in one place and "your X" in another. When a sentence refers to a
+    labeled thing, quote the label ("export 'My events only'").
 - **Model and form errors use symbol keys** (`errors.add(:base, :too_many)`) with the message in `activerecord.errors…`/`activemodel.errors…`, not literal strings.
 - **Dates and times** go through `I18n.l` with a named format (see the controller conventions).
 - **JS strings:** use `i18n.t("...")` from `app/javascript/utils/i18n.ts` (or `I18n.t` in the legacy Backbone bundle). Add the key's namespace to `config/i18n-js.yml` if it isn't exported yet, then regenerate the bundle: `bundle exec i18n export -c config/i18n-js.yml -r config/environment.rb`.

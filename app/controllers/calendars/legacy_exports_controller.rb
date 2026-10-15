@@ -92,7 +92,7 @@ module Calendars
 
     def find_your_meals_events_and_send
       calendars = [System::YourMealsCalendar.find_by(community: current_community)]
-      generate_ical_data_and_send(t("calendars.your_meals"), calendars, false)
+      generate_ical_data_and_send(t("calendars.my_meals"), calendars, false)
     end
 
     def find_community_events_and_send
@@ -102,12 +102,12 @@ module Calendars
 
     def find_your_events_and_send
       calendars = Calendar.active.in_community(current_community).non_system.to_a
-      generate_ical_data_and_send(t("calendars.your_events"), calendars, true)
+      generate_ical_data_and_send(t("calendars.my_events"), calendars, true)
     end
 
     def find_your_jobs_events_and_send
       calendars = [System::YourJobsCalendar.find_by(community: current_community)]
-      generate_ical_data_and_send(t("calendars.your_jobs"), calendars, false)
+      generate_ical_data_and_send(t("calendars.my_jobs"), calendars, false)
     end
 
     def generate_ical_data_and_send(calendar_name, calendars, self_created_events_only)

@@ -28,7 +28,7 @@ en:
         message: "Message"
       calendars_export:
         dont_personalize: "Don't personalize events"
-        own_only: "Include only your events"
+        own_only: "My events only"
       payment:
         accountholder_name: "Accountholder Name"
         payment_method: "Payment Method"
@@ -131,7 +131,7 @@ en:
           _destroy: "Check this box to shut down the email list."
       calendars_event:
         all_day: "Check this box if your event doesn't have specific times. It will show at the top of the calendar. Should not be used for booking resources."
-        group_id: "Events with a group can be edited by other members of the group and won't show up in your 'Your events' calendar feed."
+        group_id: "Events with a group can be edited by other members of the group and won't be included when you export 'My events only'."
       calendars_protocol:
         kinds: "Which event types does this protocol apply to? Leave blank to apply to all."
         calendar_ids: "Which calendars does this protocol apply to? Leave blank to apply to all."
@@ -372,8 +372,8 @@ en:
         lens:
           all: "All Jobs"
           open: "Open Jobs"
-          you: "Your Jobs"
-          yourhh: "Your Household"
+          you: "My Jobs"
+          yourhh: "My Household"
           notpre: "Not Preassigned"
         date_range:
           all: "Past & Future"

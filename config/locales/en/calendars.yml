@@ -37,13 +37,17 @@ en:
     residents_only: "Only %{community} residents may reserve this calendar."
     # Appended to IceCube's own (localized) description of a recurrence rule, e.g.
     # "Weekly" + "on Mondays" + "at 6:00pm" + "until Aug 31 2026".
+    timespan:
+      all_day: "%{date} (all day)"
+      all_day_range: "%{first} - %{last} (all day)"
     recurrence:
       # Indexed by weekday, Sunday first.
       on_weekdays: ["on Sundays", "on Mondays", "on Tuesdays", "on Wednesdays", "on Thursdays", "on Fridays", "on Saturdays"]
       on_day_of_month: "on the %{ordinal}"
       on_date: "on %{date}"
       at_time: "at %{time}"
-      until_date: "until %{date}"
+      from_date: "from %{date}"
+      between_dates: "between %{first}–%{last}"
     rules:
       max_lead_days: "Can be at most %{count} days in the future"
       max_length: "Can be at most %{length} after start time"
@@ -137,6 +141,46 @@ en:
         title: "Edit Event: %{name}"
       form:
         agree_to_guidelines: "I agree to the above guidelines"
+      series_notice:
+        applies_from: "Any changes made below apply only from %{date} onward."
+        edit_earlier_html: "To affect all future occurrences, edit the %{link} occurrence."
+        started: "This occurrence has already begun, so it can't be changed."
+        edit_later_html: "To change the series from then on, edit the %{link} occurrence."
+      # Repeat settings in the event form.
+      repeat_fields:
+        repeat_units:
+          daily:
+            one: "day"
+            other: "days"
+          weekly:
+            one: "week"
+            other: "weeks"
+          monthly:
+            one: "month"
+            other: "months"
+          yearly:
+            one: "year"
+            other: "years"
+        # The monthly "On" choices, worked out from the start date (RecurrencePattern.monthly_by_options).
+        monthly_by:
+          day_of_month: "Day %{day}"
+          day_of_week:
+            first: "The first %{weekday}"
+            second: "The second %{weekday}"
+            third: "The third %{weekday}"
+            fourth: "The fourth %{weekday}"
+          last_day_of_week: "The last %{weekday}"
+          last_day_of_month: "The last day of the month"
+        start_weekday: "The start date's day is always included"
+        pattern_fixed: "This event repeats in a way this form can't show (%{description}), so its repeat settings can't be changed here."
+        recurrence_unavailable: "Repeating events aren't available on this calendar because %{reasons}."
+        recurrence_blockers:
+          overlap_not_allowed: "events on it can't overlap"
+          fixed_start_time: "it has a fixed start time"
+          fixed_end_time: "it has a fixed end time"
+          max_lead_days: "it limits how far ahead events can be booked"
+          max_days_per_year: "it limits the days booked per year"
+          max_minutes_per_year: "it limits the time booked per year"
     eventlets:
       show:
         title: "Event: %{name}"

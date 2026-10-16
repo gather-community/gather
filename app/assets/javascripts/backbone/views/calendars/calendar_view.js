@@ -76,6 +76,8 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
       minTime: this.minTime(),
       allDaySlot: !this.timedEventsOnly,
       allDayText: this.allDayText,
+      // Some locale packs (e.g. fr-CA) set allDayHtml, which would win over our own allDayText.
+      allDayHtml: _.escape(this.allDayText),
       selectOverlap: this.selectOverlap.bind(this),
       eventOverlap: this.eventOverlap.bind(this),
       eventAllow: this.eventAllow.bind(this),
@@ -189,10 +191,10 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
       end = end.subtract(1, "seconds");
     }
     if (start.format("YYYYMMDD") === end.format("YYYYMMDD")) {
-      const date = start.format(Gather.TIME_FORMATS.regDate);
+      const date = start.format(I18n.t("moment_formats.wday_date"));
       if (start.hasTime()) {
-        startTime = start.format(Gather.TIME_FORMATS.regTime);
-        endTime = end.format(Gather.TIME_FORMATS.regTime);
+        startTime = start.format(I18n.t("moment_formats.time"));
+        endTime = end.format(I18n.t("moment_formats.time"));
         body.html(I18n.t("calendars.grid.create_confirm.same_day_times_html", {
           date,
           start: startTime,
@@ -203,11 +205,11 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
       }
     } else {
       if (start.hasTime()) {
-        startTime = start.format(Gather.TIME_FORMATS.fullDatetime);
-        endTime = end.format(Gather.TIME_FORMATS.fullDatetime);
+        startTime = start.format(I18n.t("moment_formats.wday_date_time"));
+        endTime = end.format(I18n.t("moment_formats.wday_date_time"));
       } else {
-        startTime = start.format(Gather.TIME_FORMATS.regDate);
-        endTime = end.format(Gather.TIME_FORMATS.regDate);
+        startTime = start.format(I18n.t("moment_formats.wday_date"));
+        endTime = end.format(I18n.t("moment_formats.wday_date"));
       }
       body.html(I18n.t("calendars.grid.create_confirm.range_html", {start: startTime, end: endTime}));
     }
@@ -275,7 +277,7 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
   calendarLiveRegionMessage(view, options) {
     const messageParts = [];
     if (view.name === "month") {
-      const month = view.intervalStart.format("MMMM YYYY");
+      const month = view.intervalStart.format(I18n.t("moment_formats.month_year"));
       messageParts.push(I18n.t("calendars.grid.now_showing", {month}));
     }
 
@@ -451,7 +453,10 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
   },
 
   accessibleTimeLabel(time) {
-    return time.minutes() === 0 ? time.format("h A") : time.format("h mm A");
+    const format = time.minutes() === 0
+      ? I18n.t("moment_formats.hour")
+      : I18n.t("moment_formats.hour_minute");
+    return time.format(format);
   },
 
   slotDurationMinutes(times) {
@@ -556,7 +561,7 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
   gridDateLabel(date, options) {
     const opts = options || {};
     const today = $.fullCalendar.moment();
-    const label = date.format("dddd, MMMM D, YYYY");
+    const label = date.format(I18n.t("moment_formats.full_date"));
     if (date.format("YYYY-MM-DD") === today.format("YYYY-MM-DD")) {
       return I18n.t("calendars.grid.today_date", {date: label});
     }

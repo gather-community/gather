@@ -1,4 +1,73 @@
 {
+  "de": {
+    "date": {
+      "abbr_day_names": [
+        "So",
+        "Mo",
+        "Di",
+        "Mi",
+        "Do",
+        "Fr",
+        "Sa"
+      ],
+      "abbr_month_names": [
+        null,
+        "Jan",
+        "Feb",
+        "Mär",
+        "Apr",
+        "Mai",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Okt",
+        "Nov",
+        "Dez"
+      ],
+      "day_names": [
+        "Sonntag",
+        "Montag",
+        "Dienstag",
+        "Mittwoch",
+        "Donnerstag",
+        "Freitag",
+        "Samstag"
+      ],
+      "month_names": [
+        null,
+        "Januar",
+        "Februar",
+        "März",
+        "April",
+        "Mai",
+        "Juni",
+        "Juli",
+        "August",
+        "September",
+        "Oktober",
+        "November",
+        "Dezember"
+      ]
+    },
+    "datepicker": {
+      "dformat": "%-d. %b %Y",
+      "pformat": "D. MMM YYYY"
+    },
+    "moment_formats": {
+      "full_date": "dddd, D. MMMM YYYY",
+      "hour": "HH:mm",
+      "hour_minute": "HH:mm",
+      "month_year": "MMMM YYYY",
+      "time": "HH:mm",
+      "wday_date": "ddd, D. MMM YYYY",
+      "wday_date_time": "ddd, D. MMM YYYY, HH:mm"
+    },
+    "timepicker": {
+      "dformat": "%H:%M",
+      "pformat": "HH:mm"
+    }
+  },
   "en": {
     "batchable_tables": {
       "confirmations": {
@@ -136,6 +205,56 @@
         "approval_template": "Dear %{name},\n\nGreat news! Your application to join Gather for the community \"%{community}\" has been approved.\n\n#######################################\nENTER A PERSONALIZED NOTE HERE, MENTION\nSOMETHING SPECIFIC ABOUT THE COMMUNITY\n#######################################\n\nYour community is now ready to go!\n\nYou should receive a separate email with instructions to sign in for the first time.\n\nWelcome aboard!\n\n%{approver} for the Gather Team"
       }
     },
+    "date": {
+      "abbr_day_names": [
+        "Sun",
+        "Mon",
+        "Tue",
+        "Wed",
+        "Thu",
+        "Fri",
+        "Sat"
+      ],
+      "abbr_month_names": [
+        null,
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec"
+      ],
+      "day_names": [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday"
+      ],
+      "month_names": [
+        null,
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December"
+      ]
+    },
     "datepicker": {
       "dformat": "%b %d %Y",
       "pformat": "MMM DD YYYY"
@@ -200,6 +319,15 @@
       "confirm_title": "Confirm",
       "ok": "OK"
     },
+    "moment_formats": {
+      "full_date": "dddd, MMMM D, YYYY",
+      "hour": "h A",
+      "hour_minute": "h mm A",
+      "month_year": "MMMM YYYY",
+      "time": "h:mm a",
+      "wday_date": "ddd MMM DD YYYY",
+      "wday_date_time": "ddd MMM D YYYY h:mm a"
+    },
     "password": {
       "strength": {
         "excellent": "Excellent (Score: %{bits})",
@@ -228,7 +356,581 @@
       "pformat": "h:mma"
     },
     "wiki": {
+      "editor": {
+        "autosaved": "Autosaved: ",
+        "bold": "Bold",
+        "fullscreen": "Toggle Fullscreen",
+        "heading": "Heading",
+        "image": "Insert Image",
+        "italic": "Italic",
+        "lines": {
+          "one": "lines: %{count}",
+          "other": "lines: %{count}"
+        },
+        "link": "Create Link",
+        "ordered_list": "Numbered List",
+        "preview": "Toggle Preview",
+        "quote": "Quote",
+        "side_by_side": "Toggle Side by Side",
+        "unordered_list": "Generic List",
+        "words": {
+          "one": "words: %{count}",
+          "other": "words: %{count}"
+        }
+      },
       "help": "Wiki Help"
+    }
+  },
+  "es": {
+    "date": {
+      "abbr_day_names": [
+        "dom",
+        "lun",
+        "mar",
+        "mié",
+        "jue",
+        "vie",
+        "sáb"
+      ],
+      "abbr_month_names": [
+        null,
+        "ene",
+        "feb",
+        "mar",
+        "abr",
+        "may",
+        "jun",
+        "jul",
+        "ago",
+        "sep",
+        "oct",
+        "nov",
+        "dic"
+      ],
+      "day_names": [
+        "domingo",
+        "lunes",
+        "martes",
+        "miércoles",
+        "jueves",
+        "viernes",
+        "sábado"
+      ],
+      "month_names": [
+        null,
+        "enero",
+        "febrero",
+        "marzo",
+        "abril",
+        "mayo",
+        "junio",
+        "julio",
+        "agosto",
+        "septiembre",
+        "octubre",
+        "noviembre",
+        "diciembre"
+      ]
+    },
+    "datepicker": {
+      "dformat": "%-d %b %Y",
+      "pformat": "D MMM YYYY"
+    },
+    "moment_formats": {
+      "full_date": "dddd, D [de] MMMM [de] YYYY",
+      "hour": "H:mm",
+      "hour_minute": "H:mm",
+      "month_year": "MMMM YYYY",
+      "time": "H:mm",
+      "wday_date": "ddd, D MMM YYYY",
+      "wday_date_time": "ddd, D MMM YYYY, H:mm"
+    },
+    "timepicker": {
+      "dformat": "%-H:%M",
+      "pformat": "H:mm"
+    }
+  },
+  "fi": {
+    "date": {
+      "abbr_day_names": [
+        "su",
+        "ma",
+        "ti",
+        "ke",
+        "to",
+        "pe",
+        "la"
+      ],
+      "abbr_month_names": [
+        null,
+        "tammi",
+        "helmi",
+        "maalis",
+        "huhti",
+        "touko",
+        "kesä",
+        "heinä",
+        "elo",
+        "syys",
+        "loka",
+        "marras",
+        "joulu"
+      ],
+      "day_names": [
+        "sunnuntai",
+        "maanantai",
+        "tiistai",
+        "keskiviikko",
+        "torstai",
+        "perjantai",
+        "lauantai"
+      ],
+      "month_names": [
+        null,
+        "tammikuu",
+        "helmikuu",
+        "maaliskuu",
+        "huhtikuu",
+        "toukokuu",
+        "kesäkuu",
+        "heinäkuu",
+        "elokuu",
+        "syyskuu",
+        "lokakuu",
+        "marraskuu",
+        "joulukuu"
+      ]
+    },
+    "datepicker": {
+      "dformat": "%-d.%-m.%Y",
+      "pformat": "D.M.YYYY"
+    },
+    "moment_formats": {
+      "full_date": "dddd D. MMMM[ta] YYYY",
+      "hour": "H.mm",
+      "hour_minute": "H.mm",
+      "month_year": "MMMM YYYY",
+      "time": "H.mm",
+      "wday_date": "ddd D.M.YYYY",
+      "wday_date_time": "ddd D.M.YYYY [klo] H.mm"
+    },
+    "timepicker": {
+      "dformat": "%-H.%M",
+      "pformat": "H.mm"
+    }
+  },
+  "fr": {
+    "date": {
+      "abbr_day_names": [
+        "dim",
+        "lun",
+        "mar",
+        "mer",
+        "jeu",
+        "ven",
+        "sam"
+      ],
+      "abbr_month_names": [
+        null,
+        "jan.",
+        "fév.",
+        "mars",
+        "avr.",
+        "mai",
+        "juin",
+        "juil.",
+        "août",
+        "sept.",
+        "oct.",
+        "nov.",
+        "déc."
+      ],
+      "day_names": [
+        "dimanche",
+        "lundi",
+        "mardi",
+        "mercredi",
+        "jeudi",
+        "vendredi",
+        "samedi"
+      ],
+      "month_names": [
+        null,
+        "janvier",
+        "février",
+        "mars",
+        "avril",
+        "mai",
+        "juin",
+        "juillet",
+        "août",
+        "septembre",
+        "octobre",
+        "novembre",
+        "décembre"
+      ]
+    },
+    "datepicker": {
+      "dformat": "%-d %b %Y",
+      "pformat": "D MMM YYYY"
+    },
+    "moment_formats": {
+      "full_date": "dddd D MMMM YYYY",
+      "hour": "HH:mm",
+      "hour_minute": "HH:mm",
+      "month_year": "MMMM YYYY",
+      "time": "HH:mm",
+      "wday_date": "ddd D MMM YYYY",
+      "wday_date_time": "ddd D MMM YYYY HH:mm"
+    },
+    "timepicker": {
+      "dformat": "%H:%M",
+      "pformat": "HH:mm"
+    }
+  },
+  "fr-CA": {
+    "date": {
+      "abbr_day_names": [
+        "dim",
+        "lun",
+        "mar",
+        "mer",
+        "jeu",
+        "ven",
+        "sam"
+      ],
+      "abbr_month_names": [
+        null,
+        "jan.",
+        "fév.",
+        "mars",
+        "avr.",
+        "mai",
+        "juin",
+        "juil.",
+        "août",
+        "sept.",
+        "oct.",
+        "nov.",
+        "déc."
+      ],
+      "day_names": [
+        "dimanche",
+        "lundi",
+        "mardi",
+        "mercredi",
+        "jeudi",
+        "vendredi",
+        "samedi"
+      ],
+      "month_names": [
+        null,
+        "janvier",
+        "février",
+        "mars",
+        "avril",
+        "mai",
+        "juin",
+        "juillet",
+        "août",
+        "septembre",
+        "octobre",
+        "novembre",
+        "décembre"
+      ]
+    },
+    "datepicker": {
+      "dformat": "%-d %b %Y",
+      "pformat": "D MMM YYYY"
+    },
+    "moment_formats": {
+      "full_date": "dddd D MMMM YYYY",
+      "hour": "HH [h] mm",
+      "hour_minute": "HH [h] mm",
+      "month_year": "MMMM YYYY",
+      "time": "HH [h] mm",
+      "wday_date": "ddd D MMM YYYY",
+      "wday_date_time": "ddd D MMM YYYY HH [h] mm"
+    },
+    "timepicker": {
+      "dformat": "%H h %M",
+      "pformat": "HH [h] mm"
+    }
+  },
+  "it": {
+    "date": {
+      "abbr_day_names": [
+        "dom",
+        "lun",
+        "mar",
+        "mer",
+        "gio",
+        "ven",
+        "sab"
+      ],
+      "abbr_month_names": [
+        null,
+        "gen",
+        "feb",
+        "mar",
+        "apr",
+        "mag",
+        "giu",
+        "lug",
+        "ago",
+        "set",
+        "ott",
+        "nov",
+        "dic"
+      ],
+      "day_names": [
+        "domenica",
+        "lunedì",
+        "martedì",
+        "mercoledì",
+        "giovedì",
+        "venerdì",
+        "sabato"
+      ],
+      "month_names": [
+        null,
+        "gennaio",
+        "febbraio",
+        "marzo",
+        "aprile",
+        "maggio",
+        "giugno",
+        "luglio",
+        "agosto",
+        "settembre",
+        "ottobre",
+        "novembre",
+        "dicembre"
+      ]
+    },
+    "datepicker": {
+      "dformat": "%-d %b %Y",
+      "pformat": "D MMM YYYY"
+    },
+    "moment_formats": {
+      "full_date": "dddd D MMMM YYYY",
+      "hour": "HH:mm",
+      "hour_minute": "HH:mm",
+      "month_year": "MMMM YYYY",
+      "time": "HH:mm",
+      "wday_date": "ddd D MMM YYYY",
+      "wday_date_time": "ddd D MMM YYYY, HH:mm"
+    },
+    "timepicker": {
+      "dformat": "%H:%M",
+      "pformat": "HH:mm"
+    }
+  },
+  "nb": {
+    "date": {
+      "abbr_day_names": [
+        "søn",
+        "man",
+        "tir",
+        "ons",
+        "tor",
+        "fre",
+        "lør"
+      ],
+      "abbr_month_names": [
+        null,
+        "jan",
+        "feb",
+        "mar",
+        "apr",
+        "mai",
+        "jun",
+        "jul",
+        "aug",
+        "sep",
+        "okt",
+        "nov",
+        "des"
+      ],
+      "day_names": [
+        "søndag",
+        "mandag",
+        "tirsdag",
+        "onsdag",
+        "torsdag",
+        "fredag",
+        "lørdag"
+      ],
+      "month_names": [
+        null,
+        "januar",
+        "februar",
+        "mars",
+        "april",
+        "mai",
+        "juni",
+        "juli",
+        "august",
+        "september",
+        "oktober",
+        "november",
+        "desember"
+      ]
+    },
+    "datepicker": {
+      "dformat": "%-d. %b %Y",
+      "pformat": "D. MMM YYYY"
+    },
+    "moment_formats": {
+      "full_date": "dddd D. MMMM YYYY",
+      "hour": "HH:mm",
+      "hour_minute": "HH:mm",
+      "month_year": "MMMM YYYY",
+      "time": "HH:mm",
+      "wday_date": "ddd D. MMM YYYY",
+      "wday_date_time": "ddd D. MMM YYYY, HH:mm"
+    },
+    "timepicker": {
+      "dformat": "%H:%M",
+      "pformat": "HH:mm"
+    }
+  },
+  "nl": {
+    "date": {
+      "abbr_day_names": [
+        "zo",
+        "ma",
+        "di",
+        "wo",
+        "do",
+        "vr",
+        "za"
+      ],
+      "abbr_month_names": [
+        null,
+        "jan",
+        "feb",
+        "mrt",
+        "apr",
+        "mei",
+        "jun",
+        "jul",
+        "aug",
+        "sep",
+        "okt",
+        "nov",
+        "dec"
+      ],
+      "day_names": [
+        "zondag",
+        "maandag",
+        "dinsdag",
+        "woensdag",
+        "donderdag",
+        "vrijdag",
+        "zaterdag"
+      ],
+      "month_names": [
+        null,
+        "januari",
+        "februari",
+        "maart",
+        "april",
+        "mei",
+        "juni",
+        "juli",
+        "augustus",
+        "september",
+        "oktober",
+        "november",
+        "december"
+      ]
+    },
+    "datepicker": {
+      "dformat": "%-d %b %Y",
+      "pformat": "D MMM YYYY"
+    },
+    "moment_formats": {
+      "full_date": "dddd D MMMM YYYY",
+      "hour": "HH:mm",
+      "hour_minute": "HH:mm",
+      "month_year": "MMMM YYYY",
+      "time": "HH:mm",
+      "wday_date": "ddd D MMM YYYY",
+      "wday_date_time": "ddd D MMM YYYY HH:mm"
+    },
+    "timepicker": {
+      "dformat": "%H:%M",
+      "pformat": "HH:mm"
+    }
+  },
+  "sv": {
+    "date": {
+      "abbr_day_names": [
+        "sön",
+        "mån",
+        "tis",
+        "ons",
+        "tor",
+        "fre",
+        "lör"
+      ],
+      "abbr_month_names": [
+        null,
+        "jan",
+        "feb",
+        "mar",
+        "apr",
+        "maj",
+        "jun",
+        "jul",
+        "aug",
+        "sep",
+        "okt",
+        "nov",
+        "dec"
+      ],
+      "day_names": [
+        "söndag",
+        "måndag",
+        "tisdag",
+        "onsdag",
+        "torsdag",
+        "fredag",
+        "lördag"
+      ],
+      "month_names": [
+        null,
+        "januari",
+        "februari",
+        "mars",
+        "april",
+        "maj",
+        "juni",
+        "juli",
+        "augusti",
+        "september",
+        "oktober",
+        "november",
+        "december"
+      ]
+    },
+    "datepicker": {
+      "dformat": "%-d %b %Y",
+      "pformat": "D MMM YYYY"
+    },
+    "moment_formats": {
+      "full_date": "dddd D MMMM YYYY",
+      "hour": "HH:mm",
+      "hour_minute": "HH:mm",
+      "month_year": "MMMM YYYY",
+      "time": "HH:mm",
+      "wday_date": "ddd D MMM YYYY",
+      "wday_date_time": "ddd D MMM YYYY HH:mm"
+    },
+    "timepicker": {
+      "dformat": "%H:%M",
+      "pformat": "HH:mm"
     }
   }
 }

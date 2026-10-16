@@ -84,6 +84,7 @@ ignore_unused:
   - "work.synopsis.*"
   - "notifications.preferences.{kinds,sections}.*"  # notifications/preferences/show, from Notifications::Catalog
   - "work/job_reminder.relative.*"
+  - "wiki.editor.*"  # markdown_editor_controller.ts, by toolbar button and status bar count
   - "{meal_mailer,work_mailer}.*.subject" # default_i18n_subject
   # Baseline from when the unused check was turned on. These may be dead; resolve them as each
   # module is converted rather than adding to this list.

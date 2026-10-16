@@ -57,6 +57,15 @@ describe Calendars::RecurrencePattern do
         Date.new(2027, 1, 28)])
     end
 
+    it "repeats monthly on the last day of the month, which every month has" do
+      halloween = Time.zone.parse("2026-10-31 19:00")
+      rule = pattern(frequency: "monthly", monthly_by: "last_day_of_month")
+        .to_rule_hash(halloween, all_day: false)
+      expect(occurrences(rule, from: halloween).map(&:to_date))
+        .to eq([Date.new(2026, 10, 31), Date.new(2026, 11, 30), Date.new(2026, 12, 31),
+          Date.new(2027, 1, 31)])
+    end
+
     it "repeats yearly on the start's date" do
       rule = pattern(frequency: "yearly").to_rule_hash(start, all_day: false)
       expect(occurrences(rule, count: 2)).to eq([start, start + 1.year])
@@ -96,6 +105,7 @@ describe Calendars::RecurrencePattern do
         pattern(frequency: "monthly", monthly_by: "day_of_week", ends: "on_date",
           ends_on: Date.new(2027, 3, 1)),
         pattern(frequency: "monthly", monthly_by: "last_day_of_week"),
+        pattern(frequency: "monthly", monthly_by: "last_day_of_month"),
         pattern(frequency: "monthly", interval: 2),
         pattern(frequency: "yearly")
       ].each do |original|
@@ -153,8 +163,15 @@ describe Calendars::RecurrencePattern do
     end
 
     it "offers only the last for a fifth weekday, which most months lack" do
-      expect(described_class.monthly_by_options(Date.new(2026, 10,
-        29))).to eq(%w[day_of_month last_day_of_week])
+      expect(described_class.monthly_by_options(Date.new(2026, 10, 29)))
+        .to eq(%w[day_of_month last_day_of_week])
+    end
+
+    it "offers the last day of the month on the last day" do
+      expect(described_class.monthly_by_options(Date.new(2026, 10, 31)))
+        .to eq(%w[day_of_month last_day_of_month last_day_of_week])
+      expect(described_class.monthly_by_options(Date.new(2027, 2, 28))).to include("last_day_of_month")
+      expect(described_class.monthly_by_options(Date.new(2026, 10, 30))).not_to include("last_day_of_month")
     end
   end
 
@@ -197,6 +214,13 @@ describe Calendars::RecurrencePattern do
 
     it "requires real weekdays" do
       expect(pattern(frequency: "weekly", weekdays: %w[7])).not_to be_valid
+    end
+
+    it "requires whole numbers as submitted, rather than rounding them" do
+      expect(pattern(frequency: "daily", interval: "1.5")).not_to be_valid
+      expect(pattern(frequency: "daily", interval: "abc")).not_to be_valid
+      expect(pattern(frequency: "daily", ends: "after_count", count: "2.5")).not_to be_valid
+      expect(pattern(frequency: "daily", interval: "2", ends: "after_count", count: "3")).to be_valid
     end
 
     it "requires an interval of at least one" do

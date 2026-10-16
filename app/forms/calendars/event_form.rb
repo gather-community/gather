@@ -293,6 +293,17 @@ module Calendars
       # Settings that weren't sent are unchanged, as the form would send them: without the opened
       # occurrence's weekday, whose checkbox follows the start (see #normalize).
       @pattern.weekdays = @pattern.weekdays - [@occurrence_start.wday] if !sent && @pattern
+      count_from_opened_occurrence(sent)
+    end
+
+    # A series that ends after a number of occurrences shows how many are left from the opened one, as
+    # changes apply from there, and a count sent is read the same way: "5" means five from here. The
+    # original pattern is given the same number, so an unchanged count doesn't read as a change.
+    def count_from_opened_occurrence(sent)
+      return unless @original_pattern&.ends == "after_count" && @original_pattern.count
+      remaining = @event.schedule.first(@original_pattern.count).count { |t| t >= @occurrence_start }
+      @original_pattern.count = remaining
+      @pattern.count = remaining if !sent && @pattern
     end
 
     # The repeat settings sent, or the event's own if none were. Returns whether any were sent.

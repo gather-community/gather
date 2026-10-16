@@ -1,6 +1,10 @@
 en:
   activemodel:
     attributes:
+      # EventletForm (drag-and-drop), for its error messages.
+      calendars/eventlet:
+        starts_at: "Start Time"
+        ends_at: "End Time"
       calendars/event:
         calendar: "Calendar"
         pre_notice: "Notice"

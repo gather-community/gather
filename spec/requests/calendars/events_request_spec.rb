@@ -168,6 +168,17 @@ describe "calendar event edit page for a repeating event" do
     end
   end
 
+  # As the occurrence page does.
+  it "404s for an occurrence that isn't in the series" do
+    expect { get(edit_calendars_event_path(event, occurrence: (start + 1.day).to_i)) }
+      .to raise_error(ActiveRecord::RecordNotFound)
+  end
+
+  it "404s for an occurrence param that isn't a time" do
+    expect { get(edit_calendars_event_path(event, occurrence: "garbage")) }
+      .to raise_error(ActiveRecord::RecordNotFound)
+  end
+
   it "deletes the way the occurrence page does, asking which occurrences" do
     get(edit_calendars_event_path(event, occurrence: occurrence.to_i))
     page = Capybara.string(response.body)
@@ -232,6 +243,14 @@ describe "calendar event form refresh" do
     expect(monthly_choices).to eq([["Day 29", "The last Monday"], "last_day_of_week"])
   end
 
+  it "offers the last day of the month on the last day" do
+    # Saturday Oct 31 2026: a fifth Saturday, and the last day of October.
+    refresh(form_refresh_calendars_events_path, Time.zone.local(2026, 10, 31, 18), calendar_id: calendar.id,
+      repeat_monthly_by: "day_of_month")
+    expect(monthly_choices)
+      .to eq([["Day 31", "The last day of the month", "The last Saturday"], "day_of_month"])
+  end
+
   it "words them from the form's times when editing a series from an occurrence" do
     # On the 1st of each month, opened from March 1st and moved to the 29th.
     first = Time.zone.local(2027, 1, 1, 18)
@@ -241,6 +260,15 @@ describe "calendar event form refresh" do
       occurrence_start: Time.zone.local(2027, 3, 1, 18).to_i, repeat_monthly_by: "day_of_month")
     expect(monthly_choices).to eq([["Day 29", "The last Monday"], "day_of_month"])
     expect(event.reload.starts_at).to eq(first)
+  end
+
+  it "shows an error for a frequency it doesn't know, rather than failing" do
+    post(calendars_events_path, params: {calendars_event: {
+      calendar_id: calendar.id, name: "Probe", starts_at: fourth_monday.iso8601,
+      ends_at: (fourth_monday + 1.hour).iso8601, repeat_frequency: "hourly"
+    }})
+    expect(response).to have_http_status(:ok)
+    expect(response.body).to include("is not included in the list")
   end
 
   it "saves nothing" do

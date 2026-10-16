@@ -686,8 +686,9 @@ describe Calendars::EventletForm do
           context "when the series was created moments ago" do
             before { event.update_columns(created_at: 10.minutes.ago) }
 
-            it "allows it" do
-              expect(form.save).to be(true)
+            it "refuses it too" do
+              expect(form.save).to be(false)
+              expect(form.errors[:base].join).to match(/already started/)
             end
           end
         end
@@ -1406,9 +1407,9 @@ describe Calendars::EventletForm do
           expect(refusal.errors[:starts_at]).to include("can't be changed after event begins")
         end
 
-        it "still offers all occurrences on a series created moments ago" do
+        it "doesn't offer all occurrences on a series created moments ago either" do
           event.update_columns(created_at: 10.minutes.ago)
-          expect(choices["all"]).to include("series")
+          expect(choices["all"]).not_to include("series")
         end
       end
     end
@@ -1437,10 +1438,7 @@ describe Calendars::EventletForm do
       "a future occurrence of a series that has started" => {occurrence: 2, now: 1.day},
       "an occurrence in progress" => {occurrence: 1, now: 1.week + 30.minutes},
       "a past occurrence" => {occurrence: 1, now: 1.week + 1.day},
-      # Created just before its first occurrence, which has begun: the case the hour's grace is for.
-      # (Moving one created with its first occurrence a day ago would leave that in the past, which
-      # only admins can do, so the drop below would break another rule.)
-      "a started series created within the hour" => {occurrence: 2, now: 30.minutes, recent: true},
+      "a started series created within the hour" => {occurrence: 2, now: 1.day, recent: true},
       "a deleted occurrence" => {occurrence: 2, deleted: true},
       "an event whose other calendar is read-only to the creator" => {occurrence: 2, read_only_other: true}
     }

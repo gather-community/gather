@@ -29,7 +29,10 @@
           min: 1, max: Calendars::RecurrencePattern::MAX_INTERVAL,
           data: {target => "repeatInterval", action: "input->#{action}", units: units.to_json} %>
         <span data-<%= target %>="repeatUnit">
-          <%= t(".repeat_units.#{@form.repeat_frequency}", count: @form.repeat_interval) if @form.repeat_frequency.present? %>
+          <%# Only a known frequency, as a submitted one may be anything. %>
+          <% if Calendars::RecurrencePattern::FREQUENCIES.include?(@form.repeat_frequency) %>
+            <%= t(".repeat_units.#{@form.repeat_frequency}", count: @form.repeat_interval) %>
+          <% end %>
         </span>
       </div>
     <% end %>

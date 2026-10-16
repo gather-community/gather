@@ -5,8 +5,9 @@ module Calendars
   # and editing (EventForm), so the two can't drift apart.
   #
   # - "series" (All occurrences) would change past occurrences too once the series has started, so it's
-  #   only allowed before then, or while the series was created within the hour. That holds for
-  #   everyone, admins included: past occurrences never change as a side effect. "Started" goes by the
+  #   only allowed before then. That holds for everyone, admins included, and in the hour after creating
+  #   the series too, as moving its past occurrences would leave them in the past or move them out of
+  #   it: past occurrences never change as a side effect. "Started" goes by the
   #   schedule's first slot, so a series whose first occurrence was deleted or moved later still counts.
   # - "following" (This and following) changes this occurrence and later ones, so this occurrence must
   #   not have begun, judged by where it was before the change, not where it's moved to.
@@ -34,7 +35,7 @@ module Calendars
     # The error key refusing the scope, or nil if it's allowed.
     def refusal(scope)
       case effective_scope(scope)
-      when "series" then :series_started if event.recurring? && started? && !event.recently_created?
+      when "series" then :series_started if event.recurring? && started?
       when "following" then :following_from_past if occurrence_starts_at&.past?
       end
     end

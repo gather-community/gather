@@ -849,6 +849,36 @@ describe Calendars::EventForm do
         end
       end
 
+      describe "a series ending after a number of times" do
+        # Five meetings, opened from the third.
+        before { event.update!(recurrence_rule: IceCube::Rule.weekly.day(start.wday).count(5).to_hash) }
+
+        def after_count(count)
+          repeat_defaults.merge(repeat_ends: "after_count", repeat_count: count.to_s)
+        end
+
+        it "shows how many are left from the opened occurrence" do
+          expect(edit_form(occurrence: wk(2)).repeat_count).to eq(3)
+          expect(edit_form(occurrence: wk(0)).repeat_count).to eq(5)
+        end
+
+        it "doesn't count the number shown as a change" do
+          form = edit_form(occurrence: wk(2), **after_count(3))
+          expect(form.series_changed?).to be(false)
+        end
+
+        it "reads a new number as that many from the opened occurrence" do
+          expect(edit_form(occurrence: wk(2), **after_count(5)).save).to be(true)
+          expect(first_starts(event, 10)).to eq([wk(0), wk(1)])
+          expect(first_starts(split_off, 10)).to eq([wk(2), wk(3), wk(4), wk(5), wk(6)])
+        end
+
+        it "keeps the rest of the series with an unchanged number and another change" do
+          expect(edit_form(occurrence: wk(2), **after_count(3), name: "Reading group").save).to be(true)
+          expect(first_starts(split_off, 10)).to eq([wk(2), wk(3), wk(4)])
+        end
+      end
+
       describe "switching to all-day" do
         it "is refused with changed occurrences" do
           create(:event_override, event: event, occurrence_start: wk(3), deleted: true)

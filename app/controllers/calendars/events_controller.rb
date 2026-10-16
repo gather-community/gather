@@ -72,6 +72,8 @@ module Calendars
       )
       @event = @form.event
       authorize(@event)
+      # As the occurrence page does, for an occurrence that isn't in the series or was deleted.
+      raise ActiveRecord::RecordNotFound if @form.series_edit? && !@form.opened_occurrence
 
       prep_form_vars
     end

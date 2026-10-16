@@ -170,6 +170,7 @@ en:
             third: "The third %{weekday}"
             fourth: "The fourth %{weekday}"
           last_day_of_week: "The last %{weekday}"
+          last_day_of_month: "The last day of the month"
         start_weekday: "The start date's day is always included"
         pattern_fixed: "This event repeats in a way this form can't show (%{description}), so its repeat settings can't be changed here."
         recurrence_unavailable: "Repeating events aren't available on this calendar because %{reasons}."

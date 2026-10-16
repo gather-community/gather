@@ -12,6 +12,8 @@
        nth ? t("calendars.events.repeat_fields.monthly_by.day_of_week.#{nth}", weekday: weekday) : ""
      when "last_day_of_week"
        t("calendars.events.repeat_fields.monthly_by.last_day_of_week", weekday: weekday)
+     when "last_day_of_month"
+       t("calendars.events.repeat_fields.monthly_by.last_day_of_month")
      end
    end %>
 <%= f.input :repeat_monthly_by, collection: @form.repeat_monthly_by_options.map { |by| [labels[by], by] },

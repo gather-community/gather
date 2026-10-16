@@ -13,9 +13,10 @@ module Calendars
     include ActiveModel::Model
 
     FREQUENCIES = %w[daily weekly monthly yearly].freeze
-    # "The 4th Tuesday" or "the last Tuesday". A date in the last week of its month can be both, but a
-    # fifth Tuesday is only ever the last, as most months don't have one. See .monthly_by_options.
-    MONTHLY_BY = %w[day_of_month day_of_week last_day_of_week].freeze
+    # "Day 31" or "the last day of the month"; "the 4th Tuesday" or "the last Tuesday". A date in the
+    # last week of its month can be both of the latter, but a fifth Tuesday is only ever the last, as
+    # most months don't have one. See .monthly_by_options.
+    MONTHLY_BY = %w[day_of_month last_day_of_month day_of_week last_day_of_week].freeze
     ENDS = %w[never on_date after_count].freeze
     MAX_INTERVAL = 99
     MAX_COUNT = 999
@@ -68,13 +69,16 @@ module Calendars
         ends_on: rule.until_time&.to_date, count: hash[:count])
     end
 
-    # The ways a monthly series starting on this date can repeat: always on its date; on its weekday in
-    # the month (e.g. the 4th Tuesday) unless it's the fifth, which most months lack; and on the last
-    # such weekday if it's in the last week of the month.
+    # The ways a monthly series starting on this date can repeat: always on its date (which skips
+    # months too short to have it, e.g. the 31st); on the last day of the month if it's that; on its
+    # weekday in the month (e.g. the 4th Tuesday) unless it's the fifth, which most months lack; and on
+    # the last such weekday if it's in the last week of the month. The last day is only offered on the
+    # last day, as the start has to be one of the series' occurrences.
     def self.monthly_by_options(date)
       MONTHLY_BY.select do |by|
         case by
         when "day_of_month" then true
+        when "last_day_of_month" then date.to_date == date.to_date.end_of_month
         when "day_of_week" then nth_weekday(date) <= 4
         when "last_day_of_week" then date.day + 7 > date.end_of_month.day
         end
@@ -96,6 +100,7 @@ module Calendars
     end
 
     def self.monthly_by_for(validations)
+      return "last_day_of_month" if validations[:day_of_month] == [-1]
       nths = validations[:day_of_week]&.values&.first
       return "day_of_month" if nths.nil?
       (nths == [-1]) ? "last_day_of_week" : "day_of_week"
@@ -136,6 +141,13 @@ module Calendars
 
     def count
       @count.presence&.to_i
+    end
+
+    # The numericality validations check the values as submitted, so "1.5" is refused rather than read
+    # as 1. Rails looks for these methods to find the submitted value.
+    %i[interval count].each do |attr|
+      define_method(:"#{attr}_came_from_user?") { instance_variable_get(:"@#{attr}").present? }
+      define_method(:"#{attr}_before_type_cast") { instance_variable_get(:"@#{attr}") }
     end
 
     def weekdays
@@ -211,6 +223,7 @@ module Calendars
       case monthly_by
       when "day_of_week" then [starts_at.wday, self.class.nth_weekday(starts_at)]
       when "last_day_of_week" then [starts_at.wday, -1]
+      when "last_day_of_month" then -1
       else starts_at.day
       end
     end

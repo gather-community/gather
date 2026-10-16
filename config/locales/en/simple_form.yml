@@ -10,6 +10,10 @@ en:
       # html: '<abbr title="required">*</abbr>'
     error_notification:
       default_message: "Please review the problems below:"
+      # FormHelper#error_summary, under the errors that belong to no field.
+      field_errors:
+        one: "There is 1 error on the form below."
+        other: "There are %{count} errors on the form below."
     labels:
       # These labels are here instead of activerecord b/c these are for things that
       # aren't ActiveRecord models.

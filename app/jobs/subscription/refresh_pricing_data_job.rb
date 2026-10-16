@@ -10,7 +10,7 @@ module Subscription
       fetcher = PricingDataFetcher.new
       report { fetcher.fetch_inflation!(PriceCalculator::BASE_YEAR) }
       report { fetcher.fetch_latest_inflation! }
-      (PriceCalculator.currencies_in_use - ["usd"]).each do |currency|
+      (PriceCalculator.currencies_to_refresh - ["usd"]).each do |currency|
         report { fetcher.fetch_exchange_rate!(currency) }
       end
     end

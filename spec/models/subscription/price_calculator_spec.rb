@@ -90,13 +90,12 @@ describe Subscription::PriceCalculator do
     end
   end
 
-  describe ".currencies_in_use" do
-    it "lists each community's currency once, across clusters" do
-      create(:community, country_code: "US")
+  describe ".currencies_to_refresh" do
+    it "lists the supported currencies plus any other currency a community uses, each once" do
       create(:community, country_code: "CA")
-      create(:community, country_code: "CA")
-      with_tenant(create(:cluster)) { create(:community, country_code: "FR") }
-      expect(described_class.currencies_in_use).to contain_exactly("usd", "cad", "eur")
+      with_tenant(create(:cluster)) { create(:community, country_code: "NG") }
+      expect(described_class.currencies_to_refresh)
+        .to match_array(described_class::SUPPORTED_CURRENCIES + ["ngn"])
     end
   end
 end

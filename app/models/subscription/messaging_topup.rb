@@ -20,8 +20,9 @@ module Subscription
   # community/cluster so webhooks can resolve the tenant; live details are read via #populate.
   class MessagingTopup < ApplicationRecord
     # Round monthly topup tiers per currency, in *major* currency units. USD is the reference
-    # ([2, 5, 10, 20]); the others are approximate round equivalents — adjust as FX shifts. A
-    # community whose currency isn't listed gets no topup options. Amounts are converted to minor units with
+    # ([2, 5, 10, 20]); the others are approximate round equivalents — adjust as FX shifts. Covers
+    # every currency in PriceCalculator::SUPPORTED_CURRENCIES; a community in any other currency gets no
+    # topup options. Amounts are converted to minor units with
     # Money.from_amount, which handles zero-decimal currencies (e.g. jpy: from_amount(300).cents ==
     # 300) and Stripe's HUF "whole-number" quirk (whole major units always yield cents ending in 00).
     AMOUNTS_BY_CURRENCY = {

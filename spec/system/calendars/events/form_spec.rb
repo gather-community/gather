@@ -155,6 +155,13 @@ describe "event form", js: true do
       end
     end
 
+    # The picker redraws the field once the page loads. It should still read as Gather's dates do, with
+    # the day padded. (Rails' own version has two spaces before the hour, so this is the picker's.)
+    scenario "shows dates in Gather's format once the picker has loaded" do
+      visit(new_calendar_event_path(calendar, start: "2030-10-01 08:00", end: "2030-10-01 09:00"))
+      expect(page).to have_field("Start Time", with: "Tue Oct 01 2030 8:00am")
+    end
+
     scenario "unticking all-day brings the time back" do
       visit(new_calendar_event_path(calendar, start: "2021-09-29 08:00", end: "2021-09-29 09:00"))
       check("All-day event")

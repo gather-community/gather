@@ -26,9 +26,12 @@ en:
       day_mo_yr_no_time: "%b %d %Y"
       time_only: "%l:%M%P"
       stamp: "%Y-%m-%d %H:%M:%S"
+  # A date picker's field is filled in by Rails with dformat, then shown and read by the picker
+  # (moment.js) with pformat. They must give the same text, or the date changes form once the page
+  # loads. DD pads the day like %d does.
   datepicker:
     dformat: '%b %d %Y'
-    pformat: 'MMM D YYYY'
+    pformat: 'MMM DD YYYY'
   timepicker:
     dformat: '%l:%M%P'
     pformat: 'h:mma'

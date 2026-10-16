@@ -138,7 +138,7 @@
     },
     "datepicker": {
       "dformat": "%b %d %Y",
-      "pformat": "MMM D YYYY"
+      "pformat": "MMM DD YYYY"
     },
     "dropzone": {
       "dictFileSizeUnits": {

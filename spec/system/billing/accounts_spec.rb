@@ -150,7 +150,7 @@ describe "accounts", js: true do
     scenario "page view and load more statements" do
       visit(root_path)
       click_on_personal_nav("Accounts")
-      expect(page).to have_content("Your #{community1.name} Account")
+      expect(page).to have_content("My #{community1.name} Account")
 
       expect(page).to have_statement_rows(5, more: true)
       click_link("Load More...")
@@ -158,16 +158,16 @@ describe "accounts", js: true do
     end
 
     scenario "lens" do
-      visit(yours_accounts_path)
+      visit(mine_accounts_path)
       expect(lens_selected_option(:community).text).to eq(community1.name)
       select_lens(:community, community2.name)
-      expect(page).to have_content("Your #{community2.name} Account")
+      expect(page).to have_content("My #{community2.name} Account")
       expect(lens_selected_option(:community).text).to eq(community2.name)
       expect(page).not_to have_lens_clear_link
 
       # Revisiting without QS resets to default (no session persistence).
-      visit(yours_accounts_path)
-      expect(page).to have_content("Your #{community1.name} Account")
+      visit(mine_accounts_path)
+      expect(page).to have_content("My #{community1.name} Account")
     end
   end
 

@@ -66,13 +66,14 @@ module Calendars
     private
 
     def find_events_and_send(type)
+      # The "your-*" types appear in URLs people subscribed to long ago, so they must keep working.
       case type
       when "all-meals" then find_all_meals_events_and_send
       when "community-meals" then find_community_meals_events_and_send
-      when "your-meals", "meals" then find_your_meals_events_and_send
+      when "your-meals", "meals" then find_my_meals_events_and_send
       when "community-events", "reservations" then find_community_events_and_send
-      when "your-events", "your-reservations" then find_your_events_and_send
-      when "your-jobs", "shifts" then find_your_jobs_events_and_send
+      when "your-events", "your-reservations" then find_my_events_and_send
+      when "your-jobs", "shifts" then find_my_jobs_events_and_send
       else raise ArgumentError, "unknown calendar type"
       end
     end
@@ -90,8 +91,8 @@ module Calendars
       generate_ical_data_and_send("#{current_community.name} Meals", calendars, false)
     end
 
-    def find_your_meals_events_and_send
-      calendars = [System::YourMealsCalendar.find_by(community: current_community)]
+    def find_my_meals_events_and_send
+      calendars = [System::MyMealsCalendar.find_by(community: current_community)]
       generate_ical_data_and_send(t("calendars.my_meals"), calendars, false)
     end
 
@@ -100,13 +101,13 @@ module Calendars
       generate_ical_data_and_send("#{current_community.name} Events", calendars, false)
     end
 
-    def find_your_events_and_send
+    def find_my_events_and_send
       calendars = Calendar.active.in_community(current_community).non_system.to_a
       generate_ical_data_and_send(t("calendars.my_events"), calendars, true)
     end
 
-    def find_your_jobs_events_and_send
-      calendars = [System::YourJobsCalendar.find_by(community: current_community)]
+    def find_my_jobs_events_and_send
+      calendars = [System::MyJobsCalendar.find_by(community: current_community)]
       generate_ical_data_and_send(t("calendars.my_jobs"), calendars, false)
     end
 

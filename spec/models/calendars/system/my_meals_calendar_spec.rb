@@ -24,11 +24,11 @@
 #
 require "rails_helper"
 
-describe Calendars::System::YourMealsCalendar do
+describe Calendars::System::MyMealsCalendar do
   include_context "system calendars"
   include_context "meals system calendars"
 
-  let(:calendar) { create(:your_meals_calendar) }
+  let(:calendar) { create(:my_meals_calendar) }
 
   it "includes only meals signed up for" do
     attribs = [

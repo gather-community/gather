@@ -88,7 +88,7 @@ describe "event calendar", js: true do
     end
 
     context "with a work shift on the My Jobs calendar" do
-      let!(:jobs_calendar) { create(:your_jobs_calendar, name: "My Jobs") }
+      let!(:jobs_calendar) { create(:my_jobs_calendar, name: "My Jobs") }
       let(:period) do
         create(:work_period, phase: "open", starts_on: Time.current.to_date - 30.days,
           ends_on: Time.current.to_date + 30.days)

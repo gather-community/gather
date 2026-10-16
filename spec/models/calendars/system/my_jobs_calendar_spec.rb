@@ -24,11 +24,11 @@
 #
 require "rails_helper"
 
-describe Calendars::System::YourJobsCalendar do
+describe Calendars::System::MyJobsCalendar do
   include_context "system calendars"
 
   let(:actor) { create(:user) }
-  let(:calendar) { create(:your_jobs_calendar) }
+  let(:calendar) { create(:my_jobs_calendar) }
   let(:full_range) { Date.new(2021, 1, 1)..Date.new(2021, 12, 31) }
   let(:head_cook_role) { create(:meal_role, :head_cook, description: "Cook something tasty") }
   let(:asst_cook_role) do

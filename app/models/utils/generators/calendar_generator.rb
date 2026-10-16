@@ -44,10 +44,10 @@ module Utils
         group = create(:calendar_group, community: community, name: "Meals")
         create(:community_meals_calendar, name: "All Meals", community: community, group: group,
                                           color: next_color, selected_by_default: true)
-        create(:your_meals_calendar, name: "My Meals", community: community, group: group,
+        create(:my_meals_calendar, name: "My Meals", community: community, group: group,
                                      color: next_color)
         group = create(:calendar_group, community: community, name: "Work")
-        create(:your_jobs_calendar, name: "My Jobs", community: community, group: group,
+        create(:my_jobs_calendar, name: "My Jobs", community: community, group: group,
                                     color: next_color)
         create(:birthdays_calendar, name: "Birthdays", community: community, color: next_color)
         create(:join_dates_calendar, name: "Join Dates", community: community, color: next_color)

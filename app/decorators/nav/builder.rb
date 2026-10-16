@@ -373,8 +373,8 @@ module Nav
           }, {
             name: :accounts,
             parents: [:personal],
-            path: h.yours_accounts_path,
-            permitted: h.policy(Billing::Account.new).yours?,
+            path: h.mine_accounts_path,
+            permitted: h.policy(Billing::Account.new).mine?,
             icon: "coins",
             i18n_key: multi_community? ? :accounts : :account
           }, {

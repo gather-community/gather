@@ -1,5 +1,5 @@
 <div class="center-notice">
   <%= icon_tag("info-circle") %>
   <%= t(".notice_html", link: link_to(t(".link"),
-        yours_accounts_path(multi_community? ? {community: statement.community_id} : {}))) %>
+        mine_accounts_path(multi_community? ? {community: statement.community_id} : {}))) %>
 </div>

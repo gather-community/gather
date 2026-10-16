@@ -25,7 +25,7 @@
 module Calendars
   module System
     # System-populated calendar for all meals in cluser that user has signed up for
-    class YourMealsCalendar < MealsCalendar
+    class MyMealsCalendar < MealsCalendar
       protected
 
       def slug

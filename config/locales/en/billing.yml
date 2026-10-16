@@ -83,7 +83,7 @@ en:
       cancel: "Cancel"
     show:
       title: "Account: %{household}"
-    yours:
+    mine:
       title: "My Account"
       title_with_community: "My %{community} Account"
       no_charges: "There are not yet any charges associated with your household."

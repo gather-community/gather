@@ -142,8 +142,9 @@ module Calendars
         # because then they would overwrite the values we may set in set_default_starts_and_ends_at.
         starts_at_param = params.delete(:starts_at)
         ends_at_param = params.delete(:ends_at)
-        @event.starts_at = Time.zone.parse(starts_at_param) if starts_at_param.present?
-        @event.ends_at = Time.zone.parse(ends_at_param) if ends_at_param.present?
+        # Assigned as strings so the attributes read them in the locale's format (see LocalizedDateCasting).
+        @event.starts_at = starts_at_param if starts_at_param.present?
+        @event.ends_at = ends_at_param if ends_at_param.present?
       end
     end
 

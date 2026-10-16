@@ -33,6 +33,18 @@ describe Calendars::EventForm do
       end
     end
 
+    context "when they're in the locale's date picker format" do
+      # Attributes are cast when first read, so this reads them in the locale too, as a request would.
+      it "reads them" do
+        I18n.with_locale(:de) do
+          event_form = build_event_form(calendar: calendar,
+            starts_at: "Do 29. Okt 2026 18:30", ends_at: "Do 29. Okt 2026 20:00")
+          expect(event_form.starts_at).to eq(Time.zone.local(2026, 10, 29, 18, 30))
+          expect(event_form.ends_at).to eq(Time.zone.local(2026, 10, 29, 20, 0))
+        end
+      end
+    end
+
     context "when ends_at is before starts_at" do
       let(:event_form) { build_event_form(action: :new, calendar: calendar, starts_at: "2016-04-07 14:30", ends_at: "2016-04-07 13:45") }
 

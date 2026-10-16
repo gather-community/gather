@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_12_000001) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_15_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -251,6 +251,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_12_000001) do
     t.integer "cluster_id", null: false
     t.string "country_code", limit: 2, default: "US", null: false
     t.datetime "created_at", precision: nil, null: false
+    t.string "currency", limit: 3, null: false
     t.datetime "deactivated_at"
     t.integer "inactivity_warning_count", default: 0, null: false
     t.datetime "inactivity_warning_sent_at"
@@ -264,6 +265,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_12_000001) do
     t.index ["inactivity_warning_count"], name: "index_communities_on_inactivity_warning_count"
     t.index ["inactivity_warning_sent_at"], name: "index_communities_on_inactivity_warning_sent_at"
     t.index ["name"], name: "index_communities_on_name", unique: true
+    t.check_constraint "currency::text ~ '^[a-z]{3}$'::text", name: "currency_format"
   end
 
   create_table "community_signups", force: :cascade do |t|

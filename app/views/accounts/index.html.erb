@@ -76,7 +76,7 @@
             <strong><%= currency_with_cr(account.current_balance) %></strong>
           </td>
           <td class="amount">
-            <%= number_to_currency(account.credit_limit) %>
+            <%= format_money(account.credit_limit) %>
           </td>
           <td>
             <%= link_to(icon_tag("plus"), new_account_transaction_path(account), title: t(".add_transaction")) %>
@@ -93,13 +93,13 @@
           <%= currency_with_cr(@totals[:due_last_statement]) %>
         </td>
         <td class="amount">
-          <%= number_to_currency(@totals[:total_new_credits]) %>
+          <%= format_money(@totals[:total_new_credits]) %>
         </td>
         <td class="amount">
           <%= currency_with_cr(@totals[:balance_due]) %>
         </td>
         <td class="amount">
-          <%= number_to_currency(@totals[:total_new_charges]) %>
+          <%= format_money(@totals[:total_new_charges]) %>
         </td>
         <td class="amount">
           <%= currency_with_cr(@totals[:current_balance]) %>

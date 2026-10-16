@@ -13,7 +13,7 @@
           <tr class="numbers">
             <td><%= number_with_delimiter(meals_report.overview[@community.id]["ttl_meals"]) %></td>
             <td><%= number_with_delimiter(meals_report.overview[@community.id]["ttl_servings"]) %></td>
-            <td><%= number_to_currency(meals_report.overview[@community.id]["ttl_cost"]) %></td>
+            <td><%= format_money(meals_report.overview[@community.id]["ttl_cost"]) %></td>
           </tr>
           <tr class="captions">
             <td><%= t(".meals") %></td>
@@ -29,7 +29,7 @@
             <tr class="numbers">
               <td><%= number_with_delimiter(meals_report.overview[:all]["ttl_meals"]) %></td>
               <td><%= number_with_delimiter(meals_report.overview[:all]["ttl_servings"]) %></td>
-              <td><%= number_to_currency(meals_report.overview[:all]["ttl_cost"]) %></td>
+              <td><%= format_money(meals_report.overview[:all]["ttl_cost"]) %></td>
             </tr>
             <tr class="captions">
               <td><%= t(".meals") %></td>
@@ -109,6 +109,7 @@
       el: "#charts",
       data: meals_report.chart_data,
       cmty: @community.abbrv,
+      currency: @community.currency,
       multiCommunity: multi_community?
       )%>); });
   </script>

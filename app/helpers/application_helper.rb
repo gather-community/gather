@@ -11,6 +11,7 @@ module ApplicationHelper
   # `l` without the `I18n.` should be used everywhere possible including decorators, views, controllers.
   # Models, inputs, serializers, and specs can use the I18n version but should be careful that they
   # are not assuming nil checking.
+
   def l(date_or_time, **args)
     return nil if date_or_time.nil?
     I18n.l(date_or_time, **args).gsub("  ", " ").strip

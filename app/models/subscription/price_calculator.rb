@@ -31,9 +31,10 @@ module Subscription
     YEARLY_DISCOUNT = BigDecimal("0.90")
     HALF_UP = BigDecimal::ROUND_HALF_UP
 
-    # Every currency Gather can bill in, derived from the country->currency map. Includes "usd".
-    def self.supported_currencies
-      Community::COUNTRY_CURRENCIES.values.uniq
+    # Every currency a community uses, in any cluster. These are the exchange rates worth keeping fresh.
+    # A rate for any other currency is fetched the first time it's needed (see PricingData).
+    def self.currencies_in_use
+      ActsAsTenant.without_tenant { Community.distinct.pluck(:currency) }
     end
 
     def initialize(tier:, currency:, months_per_period:, data: PricingData.new)

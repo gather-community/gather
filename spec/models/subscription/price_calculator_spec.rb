@@ -90,10 +90,13 @@ describe Subscription::PriceCalculator do
     end
   end
 
-  describe ".supported_currencies" do
-    it "is derived from the country->currency map and includes usd" do
-      expect(described_class.supported_currencies).to include("usd", "eur", "cad")
-      expect(described_class.supported_currencies).to eq(described_class.supported_currencies.uniq)
+  describe ".currencies_in_use" do
+    it "lists each community's currency once, across clusters" do
+      create(:community, country_code: "US")
+      create(:community, country_code: "CA")
+      create(:community, country_code: "CA")
+      with_tenant(create(:cluster)) { create(:community, country_code: "FR") }
+      expect(described_class.currencies_in_use).to contain_exactly("usd", "cad", "eur")
     end
   end
 end

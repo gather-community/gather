@@ -52,7 +52,7 @@ module Subscription
     # wallet synchronously — the invoice is finalized during this call even for ACH (only settlement
     # is delayed), so the balance is usable immediately.
     def set_amount!(cents)
-      price = find_or_create_price(cents, required_currency)
+      price = find_or_create_price(cents, community.currency)
       invoice =
         if existing_item
           # Revive first if a cancellation is pending, else the price swap lands on a subscription
@@ -84,7 +84,7 @@ module Subscription
     # no proration — the caller shows the full-month copy instead.
     def preview(cents)
       return nil if existing_item.nil?
-      price = find_or_create_price(cents, required_currency)
+      price = find_or_create_price(cents, community.currency)
       # Basil renamed Invoice.upcoming to create_preview and nested the subscription_* params
       # under subscription_details.
       invoice = Stripe::Invoice.create_preview(
@@ -98,7 +98,7 @@ module Subscription
       {
         immediate_charge_cents: invoice.lines.data.select { |l| proration_line?(l) }.sum(&:amount),
         next_bill_date: topup.next_bill_date,
-        currency: required_currency
+        currency: community.currency
       }
     end
 
@@ -120,12 +120,6 @@ module Subscription
     def proration_line?(line)
       details = line.parent&.subscription_item_details || line.parent&.invoice_item_details
       details&.proration == true
-    end
-
-    def required_currency
-      currency = community.default_currency
-      raise "No currency mapping for country_code=#{community.country_code}" if currency.blank?
-      currency
     end
 
     def customer

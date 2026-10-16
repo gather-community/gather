@@ -105,16 +105,6 @@ describe Community do
     end
   end
 
-  describe "#default_currency" do
-    it "maps a supported country code to its currency" do
-      expect(build(:community, country_code: "CA").default_currency).to eq("cad")
-    end
-
-    it "is nil for an unsupported country code" do
-      expect(build(:community, country_code: "ZZ").default_currency).to be_nil
-    end
-  end
-
   describe "#messaging_supported?" do
     it "is true where we can send SMS" do
       expect(build(:community, country_code: "US").messaging_supported?).to be(true)

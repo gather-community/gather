@@ -22,11 +22,6 @@ describe Subscription::MessagingTopup do
     it "returns [] for an unmapped currency (topup UI is then hidden)" do
       expect(described_class.options_for("xyz")).to eq([])
     end
-
-    it "covers every currency in Community::COUNTRY_CURRENCIES" do
-      missing = Community::COUNTRY_CURRENCIES.values.uniq - described_class::AMOUNTS_BY_CURRENCY.keys
-      expect(missing).to be_empty
-    end
   end
 
   describe "live Stripe helpers" do

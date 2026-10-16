@@ -5,7 +5,12 @@ require "rails_helper"
 describe Subscription::RefreshPricingDataJob do
   let(:fetcher) { instance_double(Subscription::PricingDataFetcher) }
 
-  before { allow(Subscription::PricingDataFetcher).to receive(:new).and_return(fetcher) }
+  before do
+    allow(Subscription::PricingDataFetcher).to receive(:new).and_return(fetcher)
+    create(:community, country_code: "US")
+    create(:community, country_code: "CA")
+    create(:community, country_code: "FR")
+  end
 
   it "refreshes base + latest CPI and every non-USD currency" do
     allow(fetcher).to receive(:fetch_inflation!)

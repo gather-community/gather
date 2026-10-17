@@ -391,6 +391,69 @@ describe Meals::Import do
         end
       end
 
+      context "with update row that leaves worker roles out" do
+        let!(:two_role_formula) { create(:meal_formula, :with_two_roles, name: "Duo") }
+        let!(:head_cook) { create(:user, first_name: "Pol", last_name: "Pum") }
+        let!(:new_head_cook) { create(:user, first_name: "Bil", last_name: "Bip") }
+        let!(:asst_cooks) { create_list(:user, 2) }
+        let!(:meal) do
+          create(:meal, served_at: "2019-02-01 12:00", calendars: [calendars[0]],
+            formula: two_role_formula, head_cook: head_cook, asst_cooks: asst_cooks)
+        end
+
+        context "with only a head cook column" do
+          let(:csv) { "Date/Time,Locations,Head Cook,Action\n2019-02-01 12:00,Foo,Bil Bip,update\n" }
+
+          it "replaces the head cook and keeps the assistant cooks" do
+            expect(import).to be_successful
+            meal.reload
+            expect(meal.head_cook).to eq(new_head_cook)
+            expect(meal.assignments.map(&:user)).to match_array([new_head_cook, *asst_cooks])
+          end
+        end
+
+        context "with the current head cook" do
+          let(:csv) { "Date/Time,Locations,Head Cook,Action\n2019-02-01 12:00,Foo,Pol Pum,update\n" }
+
+          it "keeps the existing assignments rather than recreating them" do
+            ids = meal.assignments.map(&:id)
+            expect(import).to be_successful
+            expect(meal.reload.assignments.map(&:id)).to match_array(ids)
+          end
+        end
+
+        context "with blank head cook cell" do
+          let(:csv) { "Date/Time,Locations,Head Cook,Action\n2019-02-01 12:00,Foo,,update\n" }
+
+          it "clears the head cook and keeps the assistant cooks" do
+            expect(import).to be_successful
+            meal.reload
+            expect(meal.head_cook).to be_nil
+            expect(meal.assignments.map(&:user)).to match_array(asst_cooks)
+          end
+        end
+
+        context "with no role columns" do
+          let(:csv) { "Date/Time,Locations,Action\n2019-02-01 12:00,Foo,update\n" }
+
+          it "keeps all assignments" do
+            expect(import).to be_successful
+            expect(meal.reload.assignments.map(&:user)).to match_array([head_cook, *asst_cooks])
+          end
+        end
+
+        context "with a formula change to one lacking a kept role" do
+          let(:csv) { "Date/Time,Locations,Formula,Action\n2019-02-01 12:00,Foo,Pizza,update\n" }
+
+          it "changes the formula and keeps the assignments for the dropped role" do
+            expect(import).to be_successful
+            meal.reload
+            expect(meal.formula).to eq(formula2)
+            expect(meal.assignments.map(&:user)).to match_array([head_cook, *asst_cooks])
+          end
+        end
+      end
+
       context "with optional ID column" do
         let!(:meal1) { create(:meal, served_at: "2019-01-31 12:00", calendars: [calendars[0]]) }
 

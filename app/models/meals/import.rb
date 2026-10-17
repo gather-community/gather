@@ -144,9 +144,18 @@ module Meals
     end
 
     def copy_assignments_to_target_meal
-      target_meal.assignments = new_meal.assignments.map do |assignment|
-        Meals::Assignment.new(meal: target_meal, role: assignment.role, user: assignment.user)
+      imported = new_meal.assignments.map { |assignment| [assignment.role, assignment.user] }.uniq
+      kept = target_meal.assignments.select do |assignment|
+        imported_roles.exclude?(assignment.role) || imported.include?([assignment.role, assignment.user])
       end
+      added = (imported - kept.map { |assignment| [assignment.role, assignment.user] }).map do |role, user|
+        Meals::Assignment.new(meal: target_meal, role: role, user: user)
+      end
+      target_meal.assignments = kept + added
+    end
+
+    def imported_roles
+      header_map.values.grep(Meals::Role)
     end
 
     def destroy_target_meal

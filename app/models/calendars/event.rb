@@ -82,6 +82,7 @@ module Calendars
     before_save :shift_series_dependents
     before_save :compute_recurrence_end_date
     before_save :assert_calendars_allow_recurrence
+    before_save :assert_starts_on_schedule
 
     before_save lambda { |r| meal&.event_handler&.sync_resourcings(r) }
 
@@ -222,6 +223,17 @@ module Calendars
       return if blocked.empty?
       raise "Repeating event #{id || "(new)"} can't be on calendar(s) #{blocked.map(&:id).join(", ")}, " \
         "which don't allow repeating events"
+    end
+
+    # A series' start is its first occurrence: overrides, splits and drags all count occurrences from
+    # it. A rule that skips the start, such as weekly on Tuesdays from a Monday, would silently drop
+    # that first occurrence. The forms prevent this (RecurrencePattern always includes the start's day,
+    # and drags check EventletForm#series_pattern_allows_move); this catches any other writer.
+    def assert_starts_on_schedule
+      return unless recurring?
+      return unless will_save_change_to_starts_at? || will_save_change_to_recurrence_rule?
+      return if schedule.occurs_at?(starts_at)
+      raise "Repeating event #{id || "(new)"} starts at #{starts_at}, which its rule doesn't include"
     end
 
     def compute_recurrence_end_date

@@ -1,6 +1,10 @@
 en:
   activemodel:
     attributes:
+      # EventletForm (drag-and-drop), for its error messages.
+      calendars/eventlet:
+        starts_at: "Start Time"
+        ends_at: "End Time"
       calendars/event:
         calendar: "Calendar"
         pre_notice: "Notice"
@@ -9,10 +13,17 @@ en:
         ends_at: "End Time"
         creator: "Creator"
         group: "Group"
-        all_day: "All-day event?"
+        all_day: "All-Day Event?"
         kind: "Type"
         note: "Note"
         guidelines: "Guidelines"
+        repeat_frequency: "Repeats"
+        repeat_interval: "Every"
+        repeat_weekdays: "On"
+        repeat_monthly_by: "On"
+        repeat_ends: "Ends"
+        repeat_ends_on: "End Date"
+        repeat_count: "Number of Times"
     errors:
       models:
         # EventForm, which takes Calendars::Event's model name.
@@ -20,6 +31,16 @@ en:
           attributes:
             base:
               overlap: "This event overlaps an existing one"
+              changed_from_started: "This occurrence has already begun, so it can't be changed. Open a later occurrence to change the series from then on."
+              moved_before_kept: "You can't move this occurrence to %{time} because it would make two parts of the series overlap."
+              occurrence_missing: "This occurrence no longer exists. Go back to the calendar and try again."
+              longer_than_repeat: "The event is longer than the time between repeats, so its occurrences would overlap."
+              pattern_change_with_changes:
+                one: "1 occurrence in the part being changed has been moved or deleted, so the days it repeats on can't change. Undo that change first, or change the series from a later date."
+                other: "%{count} occurrences in the part being changed have been moved or deleted, so the days it repeats on can't change. Undo those changes first, or change the series from a later date."
+              all_day_change_with_changes:
+                one: "1 occurrence in the part being changed has been moved or deleted, so it can't switch between all-day and timed. Undo that change first, or change the series from a later date."
+                other: "%{count} occurrences in the part being changed have been moved or deleted, so it can't switch between all-day and timed. Undo those changes first, or change the series from a later date."
             guidelines:
               not_accepted: "You must agree to the guidelines"
             starts_at:
@@ -27,6 +48,13 @@ en:
             ends_at:
               before_start: "must be after start time"
               in_past: "can't be changed to a time in the past"
+            repeat_frequency:
+              not_offered: "isn't available on this calendar"
+              stop_repeating: "can't be changed to Never. To stop the series, delete this and the following occurrences."
+            repeat_ends_on:
+              before_start: "must be on or after the start date"
+            repeat_monthly_by:
+              not_on_start_date: "isn't available for the start date. Choose again."
         # EventletForm (drag-and-drop) and EventletDeletionForm, which take Calendars::Eventlet's model name.
         calendars/eventlet:
           attributes:
@@ -39,7 +67,8 @@ en:
               offsets_too_far_apart: "An event's times on its different calendars can't be more than %{hours} hours apart. To move it further, choose “Move on all calendars.”"
               series_started: "This series has already started. Choose “This and following” to change it from this date on."
               following_from_past: "Occurrences that have already begun can't be moved with “This and following.”"
-              fixed_pattern: "This series repeats in a fixed pattern that doesn't include the new time, so its occurrences can't be moved there. Choose “This only” to move one occurrence."
+              moved_before_kept: "You can't move “this and following” here because it would make two parts of the series overlap."
+              fixed_pattern: "You can't move “%{choice}” here because this series repeats in a fixed pattern that doesn't include the new time."
               overlap: "This event overlaps an existing one"
             occurrence_start:
               required_for_single: "is required to change a single occurrence"

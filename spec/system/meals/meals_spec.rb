@@ -109,6 +109,13 @@ describe "meal create, show, update, delete", js: true do
       expect(page).not_to have_content("Delete Meal")
       fill_in_menu
 
+      # A stray payment method choice with no costs is ignored
+      click_link("Southern Beans")
+      click_link("Edit")
+      choose("Balance Credit")
+      click_button("Save")
+      expect_success
+
       # Update to add expenses
       click_link("Southern Beans")
       click_link("Edit")

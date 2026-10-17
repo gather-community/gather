@@ -115,7 +115,7 @@ module Meals
         return add_error(I18n.t("csv.errors.meals/meal.action_not_permitted", action: row_action))
       end
       return destroy_target_meal if row_action == :destroy
-      assign_defaults_to_new_meal
+      assign_defaults_to_new_meal if row_action == :create
       copy_attribs_to_target_meal if row_action == :update
       unless target_meal.save
         target_meal.errors.each do |error|
@@ -135,12 +135,19 @@ module Meals
     end
 
     def copy_attribs_to_target_meal
+      new_meal.formula ||= Formula.default_for(community)
       attribs = []
       attribs.concat(%i[served_at calendars]) if row_policy.change_date_loc?
-      attribs.concat(%i[communities]) if row_policy.change_invites?
+      attribs << :communities if row_policy.change_invites? && new_meal.communities.any?
       attribs << :formula if row_policy.change_formula?
-      attribs << :assignments if row_policy.change_workers?
       attribs.each { |attrib| target_meal.send("#{attrib}=", new_meal.send(attrib)) }
+      copy_assignments_to_target_meal if row_policy.change_workers?
+    end
+
+    def copy_assignments_to_target_meal
+      target_meal.assignments = new_meal.assignments.map do |assignment|
+        Meals::Assignment.new(meal: target_meal, role: assignment.role, user: assignment.user)
+      end
     end
 
     def destroy_target_meal

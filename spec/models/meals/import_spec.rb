@@ -344,6 +344,35 @@ describe Meals::Import do
         end
       end
 
+      context "with update row that leaves attributes out" do
+        let!(:user1) { create(:user, first_name: "Pol", last_name: "Pum") }
+        let!(:user2) { create(:user, first_name: "Bil", last_name: "Bip") }
+        let!(:meal) do
+          create(:meal, served_at: "2019-02-01 12:00", calendars: [calendars[0]],
+            formula: formula2, head_cook: user1, communities: [community])
+        end
+
+        context "with no communities column" do
+          let(:csv) { "Date/Time,Locations,Head Cook,Action\n2019-02-01 12:00,Foo,Bil Bip,update\n" }
+
+          it "keeps the meal's communities" do
+            expect(import).to be_successful
+            meal.reload
+            expect(meal.head_cook).to eq(user2)
+            expect(meal.communities).to contain_exactly(community)
+          end
+        end
+
+        context "with blank communities cell" do
+          let(:csv) { "Date/Time,Locations,Communities,Action\n2019-02-01 12:00,Foo,,update\n" }
+
+          it "keeps the meal's communities" do
+            expect(import).to be_successful
+            expect(meal.reload.communities).to contain_exactly(community)
+          end
+        end
+      end
+
       context "with optional ID column" do
         let!(:meal1) { create(:meal, served_at: "2019-01-31 12:00", calendars: [calendars[0]]) }
 

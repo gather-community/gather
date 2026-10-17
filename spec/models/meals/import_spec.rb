@@ -371,6 +371,24 @@ describe Meals::Import do
             expect(meal.reload.communities).to contain_exactly(community)
           end
         end
+
+        context "with no formula column" do
+          let(:csv) { "Date/Time,Locations,Head Cook,Action\n2019-02-01 12:00,Foo,Bil Bip,update\n" }
+
+          it "keeps the meal's formula" do
+            expect(import).to be_successful
+            expect(meal.reload.formula).to eq(formula2)
+          end
+        end
+
+        context "with blank formula cell" do
+          let(:csv) { "Date/Time,Locations,Formula,Action\n2019-02-01 12:00,Foo,,update\n" }
+
+          it "keeps the meal's formula" do
+            expect(import).to be_successful
+            expect(meal.reload.formula).to eq(formula2)
+          end
+        end
       end
 
       context "with optional ID column" do

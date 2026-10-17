@@ -135,11 +135,10 @@ module Meals
     end
 
     def copy_attribs_to_target_meal
-      new_meal.formula ||= Formula.default_for(community)
       attribs = []
       attribs.concat(%i[served_at calendars]) if row_policy.change_date_loc?
       attribs << :communities if row_policy.change_invites? && new_meal.communities.any?
-      attribs << :formula if row_policy.change_formula?
+      attribs << :formula if row_policy.change_formula? && new_meal.formula.present?
       attribs.each { |attrib| target_meal.send("#{attrib}=", new_meal.send(attrib)) }
       copy_assignments_to_target_meal if row_policy.change_workers?
     end

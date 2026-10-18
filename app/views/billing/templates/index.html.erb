@@ -38,7 +38,7 @@
             </td>
             <td class="type"><%= t("transaction_codes.#{template.code}") %></td>
             <td class="member-types"><%= template.member_type_names %></td>
-            <td class="amount"><%= number_to_currency(template.value) %></td>
+            <td class="amount"><%= format_money(template.value) %></td>
           </tr>
         <% end %>
       </tbody>

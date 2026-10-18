@@ -1,0 +1,38 @@
+# Written by hand from CLDR's conventions for this locale, e.g. "5.10.2026 klo 18.30". Don't machine-translate
+# these: they are strftime and moment.js patterns, not text. See config/locales/en/time_formats.yml for
+# what each format is for.
+fi:
+  date:
+    formats:
+      default: "%-d.%-m.%Y"
+      full_month_year: "%B %Y"
+      month: "%b"
+      month_year: "%b %Y"
+      month_day: "%-d.%-m."
+      wday: "%a"
+      wday_no_year: "%a %-d.%-m."
+      full_wday_only: "%A"
+  time:
+    formats:
+      default: "%a %-d.%-m.%Y klo %-H.%M"
+      no_wday: "%-d.%-m.%Y klo %-H.%M"
+      wday_no_year: "%a %-d.%-m. klo %-H.%M"
+      wday_no_year_no_time: "%a %-d.%-m."
+      day_mo_yr_no_time: "%-d.%-m.%Y"
+      time_only: "%-H.%M"
+      stamp: "%Y-%m-%d %H:%M:%S"
+  datepicker:
+    dformat: "%-d.%-m.%Y"
+    pformat: "D.M.YYYY"
+  timepicker:
+    dformat: "%-H.%M"
+    pformat: "H.mm"
+  dayViewHeaderFormat: "MMMM YYYY"
+  moment_formats:
+    full_date: "dddd D. MMMM[ta] YYYY"
+    hour: "H.mm"
+    hour_minute: "H.mm"
+    month_year: "MMMM YYYY"
+    time: "H.mm"
+    wday_date: "ddd D.M.YYYY"
+    wday_date_time: "ddd D.M.YYYY [klo] H.mm"

@@ -70,7 +70,7 @@ describe "groups", js: true do
       end
 
       click_button("Save")
-      expect(page).to have_alert(/problems below/)
+      expect(page).to have_alert(/errors? on the form below/)
       fill_in("Name", with: "Newgroup")
       click_button("Save")
       expect(page).to have_alert(/created successfully/)

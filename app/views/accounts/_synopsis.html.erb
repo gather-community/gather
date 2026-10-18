@@ -3,13 +3,13 @@
     <% statement = account.last_statement %>
     <%= icon_tag("warning") %>
     <% if statement.due_on.present? %>
-      <%= t(".pay_by", amount: number_to_currency(account.balance_due), date: l(statement.due_on)) %>
+      <%= t(".pay_by", amount: format_money(account.balance_due), date: l(statement.due_on)) %>
     <% else %>
-      <%= t(".pay", amount: number_to_currency(account.balance_due)) %>
+      <%= t(".pay", amount: format_money(account.balance_due)) %>
     <% end %>
   <% elsif account.balance_due.zero? %>
     <%= icon_tag("info-circle") %> <%= t(".zero") %>
   <% else %>
-    <%= icon_tag("info-circle") %> <%= t(".credit", amount: number_to_currency(-account.balance_due)) %>
+    <%= icon_tag("info-circle") %> <%= t(".credit", amount: format_money(-account.balance_due)) %>
   <% end %>
 </div>

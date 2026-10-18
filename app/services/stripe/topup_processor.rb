@@ -120,15 +120,10 @@ module Stripe
       InvoiceFields.payment_intent(invoice)&.status
     end
 
-    # Resolves the account currency, or nil (after logging) if it can't be determined or the Stripe
-    # charge currency doesn't match — a mismatch means something is misconfigured.
+    # The community's currency, or nil (after logging) if the Stripe charge currency doesn't match —
+    # a mismatch means something is misconfigured.
     def account_currency(community, line)
-      currency = community.default_currency
-      if currency.blank?
-        log(event_name: "topup_currency_missing", community_id: community.id,
-          description: "No currency mapping for country_code=#{community.country_code}")
-        return nil
-      end
+      currency = community.currency
       if line.currency.present? && line.currency != currency
         log(event_name: "topup_currency_mismatch", community_id: community.id,
           description: "Line #{line.currency} != account #{currency}")

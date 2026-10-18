@@ -63,7 +63,7 @@
     <h2><%= t(".grocery_calculator") %></h2>
     <% if @cost_calculator.type == :fixed %>
       <%= t(".fixed_cost_html",
-            amount: content_tag(:strong, number_to_currency(@cost_calculator.max_ingredient_cost))) %>
+            amount: content_tag(:strong, format_money(@cost_calculator.max_ingredient_cost))) %>
     <% else %>
       <%= t(".proportional_cost") %>
       <table id="cost-table" class="compact">
@@ -77,8 +77,8 @@
         <% [3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 8, 9, 10, 11].each_slice(2).to_a.each do |costs| %>
           <tr>
             <% 2.times do |i| %>
-              <td><%= number_to_currency(costs[i]) %></td>
-              <td><%= number_to_currency(@cost_calculator.max_ingredient_cost_for_full_price_of(costs[i])) %></td>
+              <td><%= format_money(costs[i]) %></td>
+              <td><%= format_money(@cost_calculator.max_ingredient_cost_for_full_price_of(costs[i])) %></td>
               <td>&nbsp;&nbsp;&nbsp;</td>
             <% end %>
           </tr>

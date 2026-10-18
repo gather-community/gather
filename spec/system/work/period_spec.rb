@@ -198,7 +198,7 @@ describe "periods", js: true do
       check("Honcho")
       click_on("Save")
 
-      expect(page).to have_alert("Please review the problems below")
+      expect(page).to have_alert(/errors? on the form below/)
       expect(page).to have_checked_field("Honcho")
       expect(page).to have_unchecked_field("Flunkie")
 

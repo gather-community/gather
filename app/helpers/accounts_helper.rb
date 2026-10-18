@@ -8,21 +8,21 @@ module AccountsHelper
 
   def currency_with_cr(amount)
     return "" if amount.blank?
-    return number_to_currency(amount) unless amount.negative?
-    t("accounts.credit_amount_html", amount: number_to_currency(-amount))
+    return format_money(amount) unless amount.negative?
+    t("accounts.credit_amount_html", amount: format_money(-amount))
   end
 
   def currency_with_cr_span(amount)
     return "" if amount.blank?
-    number_to_currency(amount.abs) <<
+    format_money(amount.abs) <<
       content_tag(:span, amount.negative? ? t("accounts.credit_abbr") : "", class: "cr")
   end
 
   def link_to_currency_if_nonzero(amt, target)
     if amt.abs > 0.01
-      link_to(number_to_currency(amt), target)
+      link_to(format_money(amt), target)
     else
-      number_to_currency(amt)
+      format_money(amt)
     end
   end
 

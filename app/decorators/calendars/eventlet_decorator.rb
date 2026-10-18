@@ -25,27 +25,34 @@ module Calendars
 
     def show_action_link_set
       ActionLinkSet.new(
+        # The occurrence goes along so the event form edits the series from this occurrence on.
         ActionLink.new(series_event, :edit, icon: "pencil",
-          path: h.edit_calendars_event_path(series_event, url_params)),
+          path: h.edit_calendars_event_path(series_event,
+            url_params.merge(occurrence: object.occurrence_start&.to_i))),
         delete_action_link
       )
     end
 
-    # Human-readable recurrence pattern, e.g. "Weekly on Mondays at 6:00pm until Aug 31 2026".
+    # On the event form for a repeating event: deleting asks which occurrences, as on this page.
+    def edit_action_link_set
+      ActionLinkSet.new(delete_action_link)
+    end
+
+    # Human-readable recurrence pattern, e.g. "Weekly on Mondays at 6:00pm between Jun 08–Aug 31".
     # Nil when not recurring.
     #
     # We start from IceCube's `to_s` (which handles interval, explicit weekdays, nth-weekday, and
     # day-of-month) but rebuild two things ourselves: (1) the frequency/day part is enriched with the
     # weekday/day-of-month/month-day implied by the anchor for "bare" rules (a plain weekly rule just
     # says "Weekly"), and (2) the trailing "until <date>"/"N times" clause is stripped and replaced
-    # with our own I18n.l-formatted end date, so both until-rules and count rules read consistently in
-    # Gather's date format. The time is included because for a rescheduled occurrence the Date/Time row
-    # shows the moved time, not the series time.
+    # with the series' dates (#dates_clause), so until-rules and count rules read the same. The time is
+    # included because for a rescheduled occurrence the Date/Time row shows the moved time, not the
+    # series time.
     def recurrence_description
       return nil unless series_event.recurring?
       rule = series_event.schedule.rrules.first
       base = shorten_day_of_month(without_end(rule).to_s)
-      [base, anchor_day_phrase(rule), time_phrase, end_clause].reject(&:blank?).join(" ")
+      [base, anchor_day_phrase(rule), time_phrase, dates_clause].reject(&:blank?).join(" ")
     end
 
     private
@@ -132,16 +139,26 @@ module Calendars
     end
 
     # The rule without its until/count, since IceCube's description of those ("until <date>" /
-    # "<N> times") is replaced by #end_clause.
+    # "<N> times") is replaced by #dates_clause.
     def without_end(rule)
       IceCube::Rule.from_hash(rule.to_hash.except(:until, :count))
     end
 
-    # "until Aug 31 2026" for both explicit-until and count-limited rules, from the precomputed
-    # recurrence_end_date (the until date, or the date of the last occurrence for count rules).
-    def end_clause
-      return "" unless series_event.recurrence_end_date
-      t("calendars.recurrence.until_date", date: I18n.l(series_event.recurrence_end_date, format: :default))
+    # When the series runs: "from Oct 26", or "between Oct 26–Dec 14" if it ends, from the precomputed
+    # recurrence_end_date (the until date, or the date of the last occurrence for count rules). Like the
+    # work period cards' ranges, but the years are left out when both dates are in the year of the
+    # occurrence shown, and otherwise given for both.
+    def dates_clause
+      first = series_event.starts_at.to_date
+      last = series_event.recurrence_end_date
+      same_year = [first, last].compact.all? { |d| d.year == object.starts_at.year }
+      format = same_year ? :month_day : :default
+      if last
+        t("calendars.recurrence.between_dates", first: I18n.l(first, format: format),
+          last: I18n.l(last, format: format))
+      else
+        t("calendars.recurrence.from_date", date: I18n.l(first, format: format))
+      end
     end
 
     # The weekday (weekly) or day-of-month (monthly) implied by the anchor, but only when the rule

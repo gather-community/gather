@@ -52,7 +52,7 @@ module Subscription
 
     def current_balance
       account = current_community.reload.messaging_account
-      account ? account.balance : Money.new(0, current_community.default_currency || "usd")
+      account ? account.balance : Money.new(0, current_community.currency)
     end
 
     # A clear failure reason plus an operator handle (Stripe request id). The JS adds the local time
@@ -91,7 +91,7 @@ module Subscription
     # Ensures the posted amount is one of the offered per-currency tiers — never trust the client.
     def validated_cents
       cents = params.require(:cents).to_i
-      valid = MessagingTopup.options_for(current_community.default_currency).pluck(:cents)
+      valid = MessagingTopup.options_for(current_community.currency).pluck(:cents)
       raise Pundit::NotAuthorizedError, "Invalid topup amount" unless valid.include?(cents)
       cents
     end

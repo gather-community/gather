@@ -146,6 +146,27 @@ describe "signups", js: true do
       end
     end
 
+    describe "autorefresh with more than one page of shifts" do
+      # The page shows 48 shifts at a time, so 49 gives it a second page.
+      let!(:big_job) { create(:work_job, period: periods[0], title: "Weeder", shift_count: 49) }
+
+      before { periods[0].update!(phase: "open") }
+
+      scenario "keeps a single set of page links" do
+        visit(page_path)
+        expect(page).to have_css(".pagination-wrapper", count: 1)
+
+        # Autorefresh fires every second in test mode, so this lets a few refreshes land.
+        sleep(3.5)
+        stop_all_timers
+        wait_for_ajax
+
+        expect(page).to have_css(".pagination-wrapper", count: 1)
+        expect(page).to have_css(".page-entries-info", count: 1)
+        expect(page).to have_css("ul.pagination", count: 1)
+      end
+    end
+
     describe "refresh overlapping a signup", clean_with_transaction: false do
       let(:shift) { jobs[0].shifts[0] }
       let(:card) { ".shift-card[data-id='#{shift.id}']" }

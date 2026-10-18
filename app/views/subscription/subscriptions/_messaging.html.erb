@@ -1,8 +1,8 @@
 <%# The Messaging section: the wallet balance plus the monthly topup (its own Stripe subscription).
     topup is a decorated Subscription::MessagingTopup or nil; account is a Messaging::Account or nil. %>
-<% options = Subscription::MessagingTopup.options_for(current_community.default_currency) %>
+<% options = Subscription::MessagingTopup.options_for(current_community.currency) %>
 <% editable = subscription.messaging_topup_editable? && (options.any? || topup) %>
-<% balance = account&.balance || Money.new(0, current_community.default_currency || "usd") %>
+<% balance = account&.balance || Money.new(0, current_community.currency) %>
 <%# The effectively-chosen amount, nil once a cancellation is pending — see
     MessagingTopupDecorator#selected_cents. Everything the user sees keys off this, not off whether a
     Stripe subscription happens to still exist, so the page never advertises money that won't move. %>

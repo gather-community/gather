@@ -31,9 +31,18 @@ module Subscription
     YEARLY_DISCOUNT = BigDecimal("0.90")
     HALF_UP = BigDecimal::ROUND_HALF_UP
 
-    # Every currency Gather can bill in, derived from the country->currency map. Includes "usd".
-    def self.supported_currencies
-      Community::COUNTRY_CURRENCIES.values.uniq
+    # Currencies we expect to bill in: those of the countries Stripe supports (https://stripe.com/global).
+    # Their exchange rates are kept fresh even before a community uses them, so a new community's
+    # prices don't depend on a live fetch. Lowercase, to match Stripe and the money gem.
+    SUPPORTED_CURRENCIES = %w[
+      aed aud bgn brl cad chf czk dkk eur gbp hkd huf idr inr jpy mxn myr nok nzd pln ron sek sgd thb usd
+    ].freeze
+
+    # The supported currencies plus any other currency a community uses, in any cluster. These are the
+    # exchange rates the nightly job refreshes. A rate for any other currency is fetched the first time
+    # it's needed (see PricingData).
+    def self.currencies_to_refresh
+      (SUPPORTED_CURRENCIES + ActsAsTenant.without_tenant { Community.distinct.pluck(:currency) }).uniq
     end
 
     def initialize(tier:, currency:, months_per_period:, data: PricingData.new)

@@ -1,11 +1,28 @@
-<%= gather_form_for(@form, url: @form.url, html: {data: {controller: "calendars--event-form",
-  "calendars--event-form-community-id-value": event.community_id}}) do |f| %>
+<%# Before the form, so it's above any errors, which gather_form_for puts first inside it. Wrapped like
+    a normal-width form (forms.scss) so it lines up. %>
+<% if @form.series_edit? %>
+  <div class="row"><div class="col-sm-9"><%= render("series_notice") %></div></div>
+<% end %>
+
+<%# form-refresh re-renders the parts that depend on other fields (see EventsController#form_refresh). %>
+<%= gather_form_for(@form, url: @form.url, html: {data: {controller: "calendars--event-form form-refresh",
+  "calendars--event-form-community-id-value": event.community_id,
+  "form-refresh-url-value": @form.refresh_url,
+  action: "calendars--event-form:timesChanged->form-refresh#refresh " \
+    "form-refresh:refreshed->calendars--event-form#repeatChanged"}}) do |f| %>
 
   <%= f.hidden_field :calendar_id %>
   <%= f.hidden_field :origin_page %>
+  <% if @form.series_edit? %>
+    <%= f.hidden_field :occurrence_start, value: @form.occurrence_start.to_i %>
+  <% end %>
+
+  <%# Nothing can be changed from an occurrence that has begun (EventForm#editable?). Bootstrap greys out
+      a disabled fieldset's fields, and they aren't sent. %>
+  <fieldset <%= "disabled" unless @form.editable? %>>
+  <%# Just the name, without the photo, so it can become a list of several calendars. %>
   <%= f.input :calendar do %>
-    <%= image_tag(calendar.photo_variant(:thumb), alt: calendar.name) %><br/>
-    <%= calendar.name %>
+    <p class="form-control-static"><%= calendar.name %></p>
   <% end %>
 
   <% event.rules(rule_name: :pre_notice, kind: :any).each do |rule| %>
@@ -17,8 +34,8 @@
   <% end %>
 
   <% unless @rule_set.timed_events_only? %>
-    <%= f.input :all_day, as: :boolean, input_html: {data: {"calendars--event-form-target": "allDay",
-      action: "calendars--event-form#allDayChanged"}} %>
+    <%= f.input :all_day, as: :boolean,
+      input_html: {data: {"calendars--event-form-target": "allDay", action: "calendars--event-form#allDayChanged"}} %>
   <% end %>
 
   <% unless event.meal? %>
@@ -26,18 +43,23 @@
   <% end %>
 
   <% if policy(event).choose_creator? %>
-    <%= f.input :creator_id, as: :user_select, context: event.creator_select2_context %>
+    <%# The searchable picker draws its own box, which the disabled fieldset doesn't grey out. %>
+    <%= f.input :creator_id, as: :user_select, context: event.creator_select2_context,
+      disabled: !@form.editable? %>
   <% end %>
 
   <% unless event.meal? %>
     <%= f.input :group_id, collection: @groups %>
   <% end %>
 
-  <%= f.input :starts_at, as: :datetime_picker, include_day_of_week: true,
+  <%# Times that can't change are disabled, so they aren't sent and stay as they are. %>
+  <%= f.input :starts_at, as: :datetime_picker, include_day_of_week: true, disabled: !@form.start_editable?,
     wrapper_html: { class: event.fixed_start_time? ? "no-time-picker" : "" } %>
 
   <%= f.input :ends_at, as: :datetime_picker, include_day_of_week: true,
     wrapper_html: { class: event.fixed_end_time? ? "no-time-picker" : "" } %>
+
+  <%= render("repeat_fields", f: f) %>
 
   <% unless event.meal? %>
     <% if @kinds.present? && event.requires_kind? %>
@@ -46,7 +68,8 @@
     <% end %>
 
     <% if event.access_level(current_user.community) == "sponsor" %>
-      <%= f.input :sponsor_id, as: :user_select, context: "current_community_full_access", required: true %>
+      <%= f.input :sponsor_id, as: :user_select, context: "current_community_full_access", required: true,
+        disabled: !@form.editable? %>
     <% end %>
   <% end %>
 
@@ -65,7 +88,11 @@
     <% end %>
   <% end %>
 
-  <%= form_actions do %>
-    <%= f.button :primary %>
+  </fieldset>
+
+  <% if @form.editable? %>
+    <%= form_actions do %>
+      <%= f.button :primary %>
+    <% end %>
   <% end %>
 <% end %>

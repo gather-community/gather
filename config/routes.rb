@@ -171,7 +171,12 @@ Rails.application.routes.draw do
   end
 
   namespace :calendars do
-    resources :events
+    resources :events do
+      # Re-renders the parts of the event form that depend on its other fields. See
+      # EventsController#form_refresh.
+      post :form_refresh, on: :collection
+      post :form_refresh, on: :member
+    end
     resources :eventlets, only: %i[show update destroy] do
       # Which scope choices a drag of this eventlet may offer. See EventletsController#move_choices.
       get :move_choices, on: :member

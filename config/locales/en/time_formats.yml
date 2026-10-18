@@ -26,10 +26,27 @@ en:
       day_mo_yr_no_time: "%b %d %Y"
       time_only: "%l:%M%P"
       stamp: "%Y-%m-%d %H:%M:%S"
+  # A date picker's field is filled in by Rails with dformat, then shown and read by the picker
+  # (moment.js) with pformat. They must give the same text, or the date changes form once the page
+  # loads. DD pads the day like %d does.
   datepicker:
     dformat: '%b %d %Y'
-    pformat: 'MMM D YYYY'
+    pformat: 'MMM DD YYYY'
   timepicker:
     dformat: '%l:%M%P'
     pformat: 'h:mma'
   dayViewHeaderFormat: 'MMMM YYYY'
+  # moment.js formats used by the calendar's JS.
+  moment_formats:
+    # A day for screen readers, e.g. "Monday, October 5, 2026".
+    full_date: "dddd, MMMM D, YYYY"
+    # Times for screen readers. `hour` is used on the hour ("6 PM"), `hour_minute` otherwise ("6 30 PM").
+    hour: "h A"
+    hour_minute: "h mm A"
+    # The month a calendar is showing, e.g. "October 2026".
+    month_year: "MMMM YYYY"
+    # Times and dates in the calendar's "create this event?" confirmation, e.g. "6:30 pm",
+    # "Mon Oct 05 2026" and "Mon Oct 5 2026 6:30 pm".
+    time: "h:mm a"
+    wday_date: "ddd MMM DD YYYY"
+    wday_date_time: "ddd MMM D YYYY h:mm a"

@@ -10,6 +10,10 @@ en:
       # html: '<abbr title="required">*</abbr>'
     error_notification:
       default_message: "Please review the problems below:"
+      # FormHelper#error_summary, under the errors that belong to no field.
+      field_errors:
+        one: "There is 1 error on the form below."
+        other: "There are %{count} errors on the form below."
     labels:
       # These labels are here instead of activerecord b/c these are for things that
       # aren't ActiveRecord models.
@@ -130,6 +134,7 @@ en:
           managers_can_moderate: "Whether managers of this group should serve as moderators for this email list."
           _destroy: "Check this box to shut down the email list."
       calendars_event:
+        repeat_ends_on: "The last occurrence is on or before this date."
         all_day: "Check this box if your event doesn't have specific times. It will show at the top of the calendar. Should not be used for booking resources."
         group_id: "Events with a group can be edited by other members of the group and won't be included when you export 'My events only'."
       calendars_protocol:
@@ -196,6 +201,17 @@ en:
         round_duration: "How long should each round be? There should be just enough time for an average person to choose comfortably."
         job_copy_source_id: "Choose a period from which to copy jobs upon period creation, if desired. Meal jobs will not be copied and should be sync'd instead (see below)."
     options:
+      calendars_event:
+        repeat_frequency:
+          none: "Never"
+          daily: "Daily"
+          weekly: "Weekly"
+          monthly: "Monthly"
+          yearly: "Yearly"
+        repeat_ends:
+          never: "Never"
+          on_date: "On a date"
+          after_count: "After a number of times"
       billing_account:
         active:
           active_only: "Show Active Only"

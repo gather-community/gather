@@ -120,4 +120,21 @@ describe People::Birthday do
       end
     end
   end
+
+  describe "in other locales" do
+    let(:user) { build(:user) }
+
+    # The form shows the birthday in the locale's format, so saving it unchanged has to work.
+    it "reads back the formats it shows" do
+      %i[de fi fr].each do |locale|
+        I18n.with_locale(locale) do
+          user.birthday_str = I18n.l(Date.new(1990, 10, 5))
+          expect(user.birthdate).to eq(Date.new(1990, 10, 5)), "#{locale}: #{user.birthday_str}"
+          user.birthday_str = I18n.l(Date.new(1990, 3, 5), format: :month_day)
+          expect([user.birthdate.month, user.birthdate.day, user.birth_year]).to eq([3, 5, nil]),
+            "#{locale}: #{user.birthday_str}"
+        end
+      end
+    end
+  end
 end

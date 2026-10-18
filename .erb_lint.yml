@@ -2,7 +2,7 @@
 # Flags hard-coded user-facing strings in views (see "User-Facing Strings" in CLAUDE.md).
 # Every view is linted. Exceptions: mail that only goes to Gather staff (CLAUDE.md exempts it) and the
 # uptime-check text.
-# spec/lint/hard_coded_strings_spec.rb runs this in CI.
+# spec/lint/i18n_linters_spec.rb runs this in CI.
 EnableDefaultLinters: false
 glob: "app/views/**/*.erb"
 exclude:
@@ -28,6 +28,8 @@ linters:
     enabled: true
     only:
       - Gather/HardCodedString
+      - Gather/NumberToCurrency
     rubocop_config:
       require:
         - ./lib/rubocop/cop/gather/hard_coded_string.rb
+        - ./lib/rubocop/cop/gather/number_to_currency.rb

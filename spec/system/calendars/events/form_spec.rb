@@ -74,7 +74,7 @@ describe "event form", js: true do
         check("I agree to the above")
 
         expect(evaluate_script("$('.datetimepicker input').val()")).to include("8:00am")
-        check("All-day event")
+        check("All-Day Event")
         expect(evaluate_script("$('.datetimepicker input').val()")).not_to include("8:00am")
 
         click_on("Save")
@@ -94,7 +94,7 @@ describe "event form", js: true do
 
       scenario do
         visit(new_calendar_event_path(calendar))
-        expect(page).not_to have_content("All-day event")
+        expect(page).not_to have_content("All-Day Event")
       end
     end
   end
@@ -155,12 +155,36 @@ describe "event form", js: true do
       end
     end
 
+    # The picker redraws the field once the page loads. It should still read as Gather's dates do, with
+    # the day padded. (Rails' own version has two spaces before the hour, so this is the picker's.)
+    scenario "shows dates in Gather's format once the picker has loaded" do
+      visit(new_calendar_event_path(calendar, start: "2030-10-01 08:00", end: "2030-10-01 09:00"))
+      expect(page).to have_field("Start Time", with: "Tue Oct 01 2030 8:00am")
+    end
+
     scenario "unticking all-day brings the time back" do
       visit(new_calendar_event_path(calendar, start: "2021-09-29 08:00", end: "2021-09-29 09:00"))
-      check("All-day event")
+      check("All-Day Event")
       expect(start_time_text).not_to include("8:00am")
-      uncheck("All-day event")
+      uncheck("All-Day Event")
       expect(start_time_text).to include("8:00am")
+    end
+
+    scenario "moving the start moves the end by as much" do
+      visit(new_calendar_event_path(calendar, start: "2030-09-29 08:00", end: "2030-09-29 09:30"))
+      execute_script("$('.calendars_event_starts_at .datetimepicker').data('DateTimePicker')" \
+        ".date(moment('2030-10-01T10:15'))")
+      expect(evaluate_script("$('.calendars_event_ends_at .datetimepicker input').val()"))
+        .to match(/Oct 0?1 2030 11:45am/)
+    end
+
+    # Its pickers show only dates, while it ends at 11:59pm, which once read as a change.
+    scenario "doesn't see an untouched all-day event as changed" do
+      event = create(:event, calendar: calendar, creator: user, all_day: true,
+        starts_at: Time.zone.parse("2030-09-29 00:00"), ends_at: Time.zone.parse("2030-09-29 23:59:59"))
+      visit(edit_calendars_event_path(event))
+      expect(page).to have_field("Start Time", with: /Sep 29 2030/)
+      expect(form_dirty?).to be(false)
     end
 
     scenario "notices unsaved changes" do

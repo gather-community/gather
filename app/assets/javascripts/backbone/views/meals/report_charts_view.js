@@ -4,6 +4,22 @@ Gather.Views.Meals.ReportChartsView = Backbone.View.extend({
     this.data = options.data;
     this.cmty = options.multiCommunity ? options.cmty : null;
 
+    /*
+     * Numbers follow the page's language and money the community's currency, e.g. "12,50 $" for a
+     * Canadian community viewed in French.
+     */
+    const locale = document.documentElement.lang || "en";
+    const money = new window.Intl.NumberFormat(locale, {
+      style: "currency", currency: options.currency.toUpperCase(), currencyDisplay: "narrowSymbol"
+    });
+    const oneDecimal = new window.Intl.NumberFormat(locale, {
+      minimumFractionDigits: 1, maximumFractionDigits: 1
+    });
+    const whole = new window.Intl.NumberFormat(locale, {maximumFractionDigits: 0});
+    this.formatMoney = d => money.format(d);
+    this.formatOneDecimal = d => oneDecimal.format(d);
+    this.formatWhole = d => whole.format(d);
+
     this.addServingsByMonth(1);
     this.addCostByMonth(2);
     this.addMealsByMonth(3);
@@ -20,7 +36,8 @@ Gather.Views.Meals.ReportChartsView = Backbone.View.extend({
     const data = [{key: I18n.t("meals.report_charts.avg_servings"), values: this.data.servings_by_month[0]}];
     const chart = this.lineChart().forceY([0, 40]);
     this.setMonthXAxis(chart, data);
-    chart.yAxis.axisLabel(I18n.t("meals.report_charts.avg_servings_per_meal")).tickFormat(d3.format(",.1f"));
+    chart.yAxis.axisLabel(I18n.t("meals.report_charts.avg_servings_per_meal"))
+      .tickFormat(this.formatOneDecimal);
     this.addChart(num, chart, data, this.title("servings_by_month"));
   },
 
@@ -28,7 +45,7 @@ Gather.Views.Meals.ReportChartsView = Backbone.View.extend({
     const data = [{key: I18n.t("meals.report_charts.avg_cost"), values: this.data.cost_by_month[0]}];
     const chart = this.lineChart().forceY([0, 8]);
     this.setMonthXAxis(chart, data);
-    chart.yAxis.axisLabel(I18n.t("meals.report_charts.avg_full_meal_price")).tickFormat(d3.format("$.2f"));
+    chart.yAxis.axisLabel(I18n.t("meals.report_charts.avg_full_meal_price")).tickFormat(this.formatMoney);
     this.addChart(num, chart, data, this.title("cost_by_month"));
   },
 
@@ -36,7 +53,7 @@ Gather.Views.Meals.ReportChartsView = Backbone.View.extend({
     const data = [{key: I18n.t("meals.report_charts.meals"), values: this.data.meals_by_month[0]}];
     const chart = this.lineChart().forceY([0, 30]);
     this.setMonthXAxis(chart, data);
-    chart.yAxis.axisLabel(I18n.t("meals.report_charts.number_of_meals")).tickFormat(d3.format(",f"));
+    chart.yAxis.axisLabel(I18n.t("meals.report_charts.number_of_meals")).tickFormat(this.formatWhole);
     this.addChart(num, chart, data, this.title("meals_by_month"));
   },
 
@@ -45,7 +62,7 @@ Gather.Views.Meals.ReportChartsView = Backbone.View.extend({
     const chart = this.barChart().forceY([0, 40]);
     chart.xAxis.axisLabel(I18n.t("meals.report_charts.weekday")).tickFormat(d => this.tickFormat(data, d));
     chart.yAxis.axisLabel(I18n.t("meals.report_charts.avg_servings_per_meal"))
-      .tickValues([10, 20, 30, 40]).tickFormat(d3.format(",.1f"));
+      .tickValues([10, 20, 30, 40]).tickFormat(this.formatOneDecimal);
     this.addChart(num, chart, data, this.title("servings_by_weekday"));
   },
 
@@ -54,7 +71,7 @@ Gather.Views.Meals.ReportChartsView = Backbone.View.extend({
     const chart = this.barChart().forceY([0, 8]);
     chart.xAxis.axisLabel(I18n.t("meals.report_charts.weekday")).tickFormat(d => this.tickFormat(data, d));
     chart.yAxis.axisLabel(I18n.t("meals.report_charts.avg_full_meal_price"))
-      .tickValues([2, 4, 6, 8]).tickFormat(d3.format("$,.2f"));
+      .tickValues([2, 4, 6, 8]).tickFormat(this.formatMoney);
     this.addChart(num, chart, data, this.title("cost_by_weekday"));
   },
 
@@ -106,7 +123,7 @@ Gather.Views.Meals.ReportChartsView = Backbone.View.extend({
       .labelsOutside(true)
       .x(d => d.key)
       .y(d => d.y)
-      .valueFormat(d3.format(",.1f"));
+      .valueFormat(this.formatOneDecimal);
   },
 
   setMonthXAxis(chart, data) {

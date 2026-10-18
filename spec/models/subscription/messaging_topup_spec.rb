@@ -23,8 +23,9 @@ describe Subscription::MessagingTopup do
       expect(described_class.options_for("xyz")).to eq([])
     end
 
-    it "covers every currency in Community::COUNTRY_CURRENCIES" do
-      missing = Community::COUNTRY_CURRENCIES.values.uniq - described_class::AMOUNTS_BY_CURRENCY.keys
+    it "covers every supported currency" do
+      supported = Subscription::PriceCalculator::SUPPORTED_CURRENCIES
+      missing = supported - described_class::AMOUNTS_BY_CURRENCY.keys
       expect(missing).to be_empty
     end
   end

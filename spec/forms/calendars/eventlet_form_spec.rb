@@ -379,9 +379,9 @@ describe Calendars::EventletForm do
              starts_at: (occurrence + 1.day).iso8601, ends_at: (occurrence + 1.day + 1.hour).iso8601}
           end
 
-          it "is refused" do
+          it "is refused, naming the choice" do
             expect(form.save).to be(false)
-            expect(form.errors[:base].join).to match(/fixed pattern/)
+            expect(form.errors[:base].join).to match(/You can't move “All occurrences” here .* fixed pattern/)
           end
 
           it_behaves_like "a drag that leaves the series untouched"
@@ -520,12 +520,44 @@ describe Calendars::EventletForm do
           event.update!(recurrence_rule: IceCube::Rule.weekly.day(weekday).to_hash)
         end
 
-        it "is refused" do
+        it "is refused, naming the choice" do
           expect(form.save).to be(false)
-          expect(form.errors[:base].join).to match(/fixed pattern/)
+          expect(form.errors[:base].join)
+            .to match(/You can't move “This and following” here .* fixed pattern/)
         end
 
         it_behaves_like "a drag that leaves the series untouched"
+      end
+
+      # The original series ends with the occurrence before this one, so the moved part has to start
+      # after it, or the two parts would overlap.
+      context "moved back to the occurrence before it" do
+        let(:dragged_occurrence) { nil }
+        let(:params) do
+          {calendar_scope: "all", series_scope: "following", occurrence_start: occurrence.to_i,
+           starts_at: (occurrence - 1.week).iso8601, ends_at: (occurrence - 1.week + 1.hour).iso8601}
+        end
+
+        it "is refused" do
+          expect(form.save).to be(false)
+          expect(form.errors[:base].join)
+            .to match(/You can.t move “this and following” here because it would make two parts/)
+        end
+
+        it_behaves_like "a drag that leaves the series untouched"
+      end
+
+      context "moved back, but after the occurrence before it" do
+        let(:dragged_occurrence) { nil }
+        let(:params) do
+          {calendar_scope: "all", series_scope: "following", occurrence_start: occurrence.to_i,
+           starts_at: (occurrence - 6.days).iso8601, ends_at: (occurrence - 6.days + 1.hour).iso8601}
+        end
+
+        it "is allowed" do
+          expect(form.save).to be(true), form.errors.full_messages.to_sentence
+          expect(starts_of(continuation).first).to eq(occurrence - 6.days)
+        end
       end
     end
 
@@ -654,8 +686,9 @@ describe Calendars::EventletForm do
           context "when the series was created moments ago" do
             before { event.update_columns(created_at: 10.minutes.ago) }
 
-            it "allows it" do
-              expect(form.save).to be(true)
+            it "refuses it too" do
+              expect(form.save).to be(false)
+              expect(form.errors[:base].join).to match(/already started/)
             end
           end
         end
@@ -1374,9 +1407,9 @@ describe Calendars::EventletForm do
           expect(refusal.errors[:starts_at]).to include("can't be changed after event begins")
         end
 
-        it "still offers all occurrences on a series created moments ago" do
+        it "doesn't offer all occurrences on a series created moments ago either" do
           event.update_columns(created_at: 10.minutes.ago)
-          expect(choices["all"]).to include("series")
+          expect(choices["all"]).not_to include("series")
         end
       end
     end
@@ -1606,6 +1639,13 @@ describe Calendars::EventletForm do
         expect(form.save).to be(false)
         expect(form.errors[:ends_at]).to include("can't be changed to a time in the past")
         expect(event.reload.starts_at).to eq(base_start)
+      end
+
+      # The hour after creating it is for fixing a mistake, not for moving it into the past.
+      it "is refused for the creator just after creating it too" do
+        form = described_class.new(eventlet: eventlet, current_user: event.creator, params: params)
+        expect(form.save).to be(false)
+        expect(form.errors[:ends_at]).to include("can't be changed to a time in the past")
       end
 
       it "is allowed for an admin" do

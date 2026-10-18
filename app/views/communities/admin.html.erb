@@ -72,7 +72,7 @@
       </tr>
       <tr>
         <td><%= t(".price") %></td>
-        <td><%= t(".price_value_html", price: number_to_currency(sub.price_per_user_cents / 100.0),
+        <td><%= t(".price_value_html", price: format_money(sub.price_per_user_cents / 100.0, currency: sub.currency),
                   months: sub.months_per_period, currency: sub.currency&.upcase) %></td>
       </tr>
       <% if sub.discount_percent %>
@@ -113,7 +113,7 @@
     </tr>
     <tr>
       <td><%= t(".price") %></td>
-      <td><%= t(".price_value_html", price: number_to_currency(intent.price_per_user_cents / 100.0),
+      <td><%= t(".price_value_html", price: format_money(intent.price_per_user_cents / 100.0, currency: intent.currency),
                   months: intent.months_per_period, currency: intent.currency&.upcase) %></td>
     </tr>
     <% if intent.start_date %>

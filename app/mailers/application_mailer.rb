@@ -6,6 +6,10 @@ class ApplicationMailer < ActionMailer::Base
   include RecipientLocale
   default from: Settings.email.from, reply_to: Settings.email.from
   layout "mailer"
+  helper :money
+
+  # Lets views and helpers shared with the web app, e.g. format_money, find the community.
+  helper_method :current_community
 
   # RFC 8058 header value, not user-facing text.
   ONE_CLICK_UNSUBSCRIBE = "List-Unsubscribe=One-Click" # rubocop:disable Gather/HardCodedString
@@ -13,6 +17,11 @@ class ApplicationMailer < ActionMailer::Base
   protected
 
   attr_reader :community
+
+  # Protected so it isn't taken for a mailer action.
+  def current_community
+    community
+  end
 
   # The person a configurable notification is for, passed as `SomeMailer.with(recipient: user)`.
   # Callers work out recipients with Notifications::Recipients and send each their own message.

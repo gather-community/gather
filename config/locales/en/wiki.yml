@@ -4,6 +4,26 @@ en:
     page_listing: "Wiki Page Listing"
     new_page: "New Wiki Page"
     help: "Wiki Help"
+    # The markdown editor's toolbar buttons and status bar.
+    editor:
+      autosaved: "Autosaved: "
+      bold: "Bold"
+      fullscreen: "Toggle Fullscreen"
+      heading: "Heading"
+      image: "Insert Image"
+      italic: "Italic"
+      lines:
+        one: "lines: %{count}"
+        other: "lines: %{count}"
+      link: "Create Link"
+      ordered_list: "Numbered List"
+      preview: "Toggle Preview"
+      quote: "Quote"
+      side_by_side: "Toggle Side by Side"
+      unordered_list: "Generic List"
+      words:
+        one: "words: %{count}"
+        other: "words: %{count}"
     pages:
       history_table:
         version: "Version"

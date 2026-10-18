@@ -161,7 +161,8 @@ module Calendars
 
     def ends_on
       return @ends_on if @ends_on.nil? || @ends_on.is_a?(Date)
-      Date.parse(@ends_on.to_s)
+      # The date picker's text is in the locale's format, which Date.parse can't read.
+      Date.parse(Gather::LocalizedDate.normalize(@ends_on.to_s))
     rescue Date::Error
       nil
     end

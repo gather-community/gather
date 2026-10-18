@@ -328,8 +328,8 @@ module Calendars
         # because then they would overwrite the values we may set in set_default_starts_and_ends_at.
         starts_at_param = params.delete(:starts_at)
         ends_at_param = params.delete(:ends_at)
-        starts = Time.zone.parse(starts_at_param) if starts_at_param.present?
-        ends = Time.zone.parse(ends_at_param) if ends_at_param.present?
+        starts = parse_time(starts_at_param)
+        ends = parse_time(ends_at_param)
         if series_edit?
           @form_starts_at = starts
           @form_ends_at = ends
@@ -338,6 +338,12 @@ module Calendars
           @event.ends_at = ends if ends
         end
       end
+    end
+
+    # Casts the way the starts_at attribute would, so a time in the locale's date picker format is read
+    # (see LocalizedDateCasting). Time.zone.parse only knows English.
+    def parse_time(value)
+      Event.type_for_attribute(:starts_at).cast(value) if value.present?
     end
 
     def set_default_starts_and_ends_at(params)

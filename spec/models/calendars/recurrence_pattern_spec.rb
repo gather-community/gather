@@ -96,6 +96,15 @@ describe Calendars::RecurrencePattern do
     end
   end
 
+  describe "#ends_on" do
+    it "reads the date picker's text in the locale's format" do
+      I18n.with_locale(:de) do
+        expect(pattern(ends: "on_date", ends_on: "Di 3. Mär 2026").ends_on).to eq(Date.new(2026, 3, 3))
+      end
+      expect(pattern(ends: "on_date", ends_on: "Nov 03 2026").ends_on).to eq(Date.new(2026, 11, 3))
+    end
+  end
+
   describe ".from_rule" do
     it "reads back each pattern the form makes" do
       [

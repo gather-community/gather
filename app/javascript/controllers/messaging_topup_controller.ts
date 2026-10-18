@@ -80,7 +80,7 @@ export default class extends Controller {
     if (selected === null || !this.changed(selected)) {
       return;
     }
-    const attemptedAt = new Date().toLocaleString();
+    const attemptedAt = new Date().toLocaleString(i18n.locale);
     this.saveTarget.disabled = true;
     this.showLoader();
     try {

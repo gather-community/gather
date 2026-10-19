@@ -24,16 +24,16 @@
 #
 require "rails_helper"
 
-describe Calendars::System::YourMealsCalendar do
+describe Calendars::System::MyMealsCalendar do
   include_context "system calendars"
   include_context "meals system calendars"
 
-  let(:calendar) { create(:your_meals_calendar) }
+  let(:calendar) { create(:my_meals_calendar) }
 
   it "includes only meals signed up for" do
     attribs = [
-      {name: "[No Menu] ✓", uid: "your_meals_#{meal1.id}"},
-      {name: "Other Cmty Meal ✓", uid: "your_meals_#{meal3.id}"}
+      {name: "[No Menu] ✓", uid: "my_meals_#{meal1.id}"},
+      {name: "Other Cmty Meal ✓", uid: "my_meals_#{meal3.id}"}
     ]
     events = calendar.events_between((Time.current - 2.days)..(Time.current + 5.days), actor: actor)
     expect_events(events, *attribs)
@@ -47,8 +47,8 @@ describe Calendars::System::YourMealsCalendar do
   describe "eventlets" do
     it "includes only meals signed up for" do
       attribs = [
-        {event: {name: "[No Menu] ✓"}, uid: "your_meals_#{meal1.id}"},
-        {event: {name: "Other Cmty Meal ✓"}, uid: "your_meals_#{meal3.id}"}
+        {event: {name: "[No Menu] ✓"}, uid: "my_meals_#{meal1.id}"},
+        {event: {name: "Other Cmty Meal ✓"}, uid: "my_meals_#{meal3.id}"}
       ]
       eventlets = calendar.eventlets_between((Time.current - 2.days)..(Time.current + 5.days), actor: actor)
       expect_eventlets(eventlets, *attribs)

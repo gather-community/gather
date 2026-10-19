@@ -206,6 +206,7 @@ Rails.application.routes.draw do
 
     # This is the personalized show action, allowing paths to include the user's calendar token,
     # e.g. /calendars/exports/meals/D7sbPv7YCUhxMs4Pyx9D.
+    # The "your-*" types predate the "My" naming. Existing subscriptions use them, so they stay.
     # The calendar's type gets captured as the :id param, so this is equivalent to
     # /calendars/exports/:type/:token
     get "exports/:type/:token",
@@ -266,7 +267,8 @@ Rails.application.routes.draw do
 
   resources :accounts, only: %i[index show edit update] do
     collection do
-      get :yours
+      get :mine
+      get :yours, to: redirect(path: "/accounts/mine") # Legacy path, linked from old statement emails
       put :apply_late_fees
     end
     resources :transactions, only: %i[index new create]

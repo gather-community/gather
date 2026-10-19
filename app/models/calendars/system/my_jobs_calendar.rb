@@ -25,7 +25,7 @@
 module Calendars
   module System
     # Returns people's work shifts.
-    class YourJobsCalendar < SystemCalendar
+    class MyJobsCalendar < SystemCalendar
       def events_between(range, actor:)
         # actor can always be nil, but for this calendar, that doesn't make sense so we just return empty.
         return [] if actor.nil?

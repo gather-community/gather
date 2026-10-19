@@ -1,6 +1,6 @@
 <% if account.present? && account.credit_exceeded? && signup.new_record? %>
   <%= t("meals.over_limit_notice_html", community: meal.community.name,
-        account_link: link_to(t(".account"), yours_accounts_path(community: meal.community_id)),
+        account_link: link_to(t(".account"), mine_accounts_path(community: meal.community_id)),
         limit: format_money(account.credit_limit)) %>
 <% elsif meal.closed? || meal.finalized? %>
   <% if signup.new_record? %>

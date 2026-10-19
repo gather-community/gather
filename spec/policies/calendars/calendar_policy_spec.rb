@@ -25,7 +25,7 @@ describe Calendars::CalendarPolicy do
       end
 
       context "with system calendar" do
-        let(:calendar) { create(:your_meals_calendar) }
+        let(:calendar) { create(:my_meals_calendar) }
 
         it "denies" do
           expect(subject).not_to permit(admin, calendar)
@@ -91,7 +91,7 @@ describe Calendars::CalendarPolicy do
 
     context "with system calendar" do
       subject do
-        Calendars::CalendarPolicy.new(User.new, Calendars::System::YourMealsCalendar.new).permitted_attributes
+        Calendars::CalendarPolicy.new(User.new, Calendars::System::MyMealsCalendar.new).permitted_attributes
       end
 
       it "should allow fewer attribs" do

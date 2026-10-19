@@ -28,7 +28,7 @@ class AccountsController < ApplicationController
     end
   end
 
-  def yours
+  def mine
     authorize(sample_account)
     @household = current_user.household
     @accounts = policy_scope(@household.accounts).includes(:community).to_a

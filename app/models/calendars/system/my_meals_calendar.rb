@@ -25,13 +25,13 @@
 module Calendars
   module System
     # System-populated calendar for all meals in cluser that user has signed up for
-    class YourMealsCalendar < MealsCalendar
+    class MyMealsCalendar < MealsCalendar
       protected
 
       def slug
         # Does not match legacy meal calendar exports
         # This may lead to some duplicates temporarily but there isn't a good alternative.
-        "your_meals"
+        "my_meals"
       end
 
       private

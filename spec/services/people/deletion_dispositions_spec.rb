@@ -55,8 +55,8 @@ describe "deletion dispositions", :without_tenant do
     "Calendars::System::MealsCalendar" => :none,
     "Calendars::System::OtherCommunitiesMealsCalendar" => :none,
     "Calendars::System::UserAnniversariesCalendar" => :none,
-    "Calendars::System::YourJobsCalendar" => :none,
-    "Calendars::System::YourMealsCalendar" => :none,
+    "Calendars::System::MyJobsCalendar" => :none,
+    "Calendars::System::MyMealsCalendar" => :none,
     "Calendars::SystemCalendar" => :none,
     "Cluster" => :none,
     # Apex-level (not tenant-scoped) back-reference; nullified so the destroy isn't FK-blocked.

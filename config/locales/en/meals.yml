@@ -147,7 +147,7 @@ en:
         meals: "Meals"
         previous_meal: "Previous Meal"
         next_meal: "Next Meal"
-        your_order: "Your Order"
+        my_order: "My Order"
         helping_out: "Helping Out"
       new:
         title: "Create Meal"

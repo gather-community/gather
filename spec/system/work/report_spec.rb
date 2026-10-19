@@ -49,6 +49,16 @@ describe "report", js: true do
       end
     end
 
+    context "with no quota" do
+      scenario "index" do
+        visit(page_path)
+        expect(page).to have_content("32 16 0\nTotal Hours Jobs People")
+        expect(page).to have_content("Donnell Corkery 4.0 0.0")
+        expect(page).to have_content("Jane Picard 2.0 2.0")
+        expect(page).not_to have_css("table.stats th", text: "%")
+      end
+    end
+
     context "in draft phase" do
       before { periods[0].update!(phase: "draft") }
 

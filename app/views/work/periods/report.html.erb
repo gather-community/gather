@@ -42,9 +42,9 @@
           <thead>
             <tr class="surheader">
               <th></th>
-              <th colspan="2"><%= t(".regular") %></th>
+              <%= tag.th(t(".regular"), colspan: (2 unless period.quota_none?)) %>
               <% work_report.full_community_jobs.each do |fcjob| %>
-                <th colspan="2"><%= fcjob.title %></th>
+                <%= tag.th(fcjob.title, colspan: (2 unless period.quota_none?)) %>
               <% end %>
               <th><%= icon_tag("thumb-tack") %></th>
             </tr>
@@ -52,7 +52,9 @@
               <th><%= t(".name") %></th>
               <% (work_report.full_community_jobs.size + 1).times do %>
                 <th><%= icon_tag("clock") %></th>
-                <th>%</th>
+                <% unless period.quota_none? %>
+                  <th>%</th>
+                <% end %>
               <% end %>
               <th></th>
             </tr>
@@ -62,10 +64,14 @@
               <tr class="<%= user == current_user ? "highlight" : "" %>">
                 <td><%= user.name %></td>
                 <td><%= work_report.regular_hours_for(user) %></td>
-                <td><%= work_report.regular_pct_for(user) %></td>
+                <% unless period.quota_none? %>
+                  <td><%= work_report.regular_pct_for(user) %></td>
+                <% end %>
                 <% work_report.full_community_jobs.each_with_index do |fcjob, i| %>
                   <td><%= work_report.fc_job_hours_for(fcjob, user) %></td>
-                  <td><%= work_report.fc_job_pct_for(fcjob, user) %></td>
+                  <% unless period.quota_none? %>
+                    <td><%= work_report.fc_job_pct_for(fcjob, user) %></td>
+                  <% end %>
                 <% end %>
                 <td><%= work_report.preassigned_hours_for(user) %></td>
               </tr>

@@ -7,16 +7,20 @@ class ApplicationRecord < ActiveRecord::Base
   # Transient attribute used by factories to signal that we don't want a listener to do something.
   attr_accessor :skip_listener_action
 
+  # Sorts text columns the way people expect in the current locale, rather than by the bytes of their
+  # characters (which puts "Émile" after "Zoe"). See Gather::Collation.
+  #
   # Takes one or more symbols or hashes (e.g. `alpha_order(:name, :title, communities: :name)`)
-  # and converts to an `order` call with LOWER wrapping each column
-  # (e.g. order("LOWER(name), LOWER(title), LOWER(communities.name)")).
+  # and converts to an `order` call that collates each column
+  # (e.g. order('name COLLATE "sv-x-icu", title COLLATE "sv-x-icu", communities.name COLLATE "sv-x-icu"')).
   # If the value in a hash element is `:desc`, sorts descending.
   def self.alpha_order(*args)
+    collate = "COLLATE #{Gather::Collation.quoted_name}"
     cols = args.flat_map do |arg|
       if arg.is_a?(Hash)
-        arg.map { |k, v| v == :desc ? "LOWER(#{k}) DESC" : "LOWER(#{k}.#{v})" }
+        arg.map { |k, v| (v == :desc) ? "#{k} #{collate} DESC" : "#{k}.#{v} #{collate}" }
       else
-        "LOWER(#{arg})"
+        "#{arg} #{collate}"
       end
     end
     order(Arel.sql(cols.join(", ")))

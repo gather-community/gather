@@ -168,7 +168,7 @@ class User < ApplicationRecord
   scope :by_name_adults_first, -> { order(arel_table[:child].eq(true)).by_name }
   scope :inactive_last, -> { order(arel_table[:deactivated_at].not_eq(nil)) }
   scope :including_communities, -> { includes(household: :community) }
-  scope :by_community_and_name, -> { including_communities.order("communities.name").by_name }
+  scope :by_community_and_name, -> { including_communities.alpha_order(communities: :name).by_name }
   scope :by_birthday, lambda {
     order(Arel.sql(%i[month day year].map { |d| "EXTRACT(#{d} FROM birthdate)" }.join(", ")))
   }

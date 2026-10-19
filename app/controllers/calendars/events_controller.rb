@@ -245,7 +245,7 @@ module Calendars
       @groups = Calendars::EventPolicy::GroupScope.new(current_user, Groups::Group)
         .resolve
         .in_community(current_community)
-        .order(:name)
+        .by_name
     end
 
     def render_choose_calendar_page

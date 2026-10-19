@@ -90,7 +90,7 @@ module Meals
     end
 
     def allergen_options
-      (community.settings.meals.allergens.split(/\s*,\s*/) + allergens).uniq.sort
+      Gather::Collation.sort((community.settings.meals.allergens.split(/\s*,\s*/) + allergens).uniq)
     end
 
     def worker_links_for_role(role)

@@ -115,7 +115,7 @@ module Meals
         return add_error(I18n.t("csv.errors.meals/meal.action_not_permitted", action: row_action))
       end
       return destroy_target_meal if row_action == :destroy
-      assign_defaults_to_new_meal
+      assign_defaults_to_new_meal if row_action == :create
       copy_attribs_to_target_meal if row_action == :update
       unless target_meal.save
         target_meal.errors.each do |error|
@@ -137,10 +137,25 @@ module Meals
     def copy_attribs_to_target_meal
       attribs = []
       attribs.concat(%i[served_at calendars]) if row_policy.change_date_loc?
-      attribs.concat(%i[communities]) if row_policy.change_invites?
-      attribs << :formula if row_policy.change_formula?
-      attribs << :assignments if row_policy.change_workers?
+      attribs << :communities if row_policy.change_invites? && new_meal.communities.any?
+      attribs << :formula if row_policy.change_formula? && new_meal.formula.present?
       attribs.each { |attrib| target_meal.send("#{attrib}=", new_meal.send(attrib)) }
+      copy_assignments_to_target_meal if row_policy.change_workers?
+    end
+
+    def copy_assignments_to_target_meal
+      imported = new_meal.assignments.map { |assignment| [assignment.role, assignment.user] }.uniq
+      kept = target_meal.assignments.select do |assignment|
+        imported_roles.exclude?(assignment.role) || imported.include?([assignment.role, assignment.user])
+      end
+      added = (imported - kept.map { |assignment| [assignment.role, assignment.user] }).map do |role, user|
+        Meals::Assignment.new(meal: target_meal, role: role, user: user)
+      end
+      target_meal.assignments = kept + added
+    end
+
+    def imported_roles
+      header_map.values.grep(Meals::Role)
     end
 
     def destroy_target_meal

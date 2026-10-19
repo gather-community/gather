@@ -34,6 +34,12 @@ describe Billing::Account do
       expect(account.current_balance).to eq(17.81)
     end
 
+    it "counts a payout as a charge" do
+      create(:transaction, code: "payout", account: account, value: 6)
+      expect(account.reload.total_new_credits).to eq(4)
+      expect(account.total_new_charges).to eq(13)
+    end
+
     it "should work for new credit" do
       create(:transaction, code: "othcrd", account: account, value: 6)
       expect(account.reload.total_new_credits).to eq(10)

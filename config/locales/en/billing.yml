@@ -148,6 +148,10 @@ en:
       statement_balance: "Statement balance"
 
   transactions:
+    core_fields:
+      # Headings over the two columns of transaction types on the transaction and template forms.
+      charges: "Charges"
+      credits: "Credits"
     added: "Transaction added successfully."
     not_added: "The transaction was not added. You can edit it below and try again, or click 'Cancel' below to return to the accounts page."
     form:

@@ -96,8 +96,7 @@ module Meals
     accepts_nested_attributes_for :signups, allow_destroy: true, reject_if: lambda { |a|
       a["id"].blank? && a["parts_attributes"].values.all? { |v| v["count"] == "0" }
     }
-    accepts_nested_attributes_for :cost,
-      reject_if: ->(a) { a.all? { |k, v| k == "reimbursee_id" || v.blank? } }
+    accepts_nested_attributes_for :cost, reject_if: :new_cost_without_amounts?
     accepts_nested_attributes_for :assignments, reject_if: ->(h) { h["user_id"].blank? }, allow_destroy: true
 
     delegate :cluster, to: :community
@@ -279,6 +278,12 @@ module Meals
 
     def main_form_or_import?
       %w[main import].include?(source_form)
+    end
+
+    def new_cost_without_amounts?(attributes)
+      new_cost = attributes["id"].blank?
+      no_amounts = attributes["ingredient_cost"].blank? && attributes["pantry_cost"].blank?
+      new_cost && no_amounts
     end
   end
 end

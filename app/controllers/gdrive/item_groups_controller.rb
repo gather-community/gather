@@ -13,7 +13,7 @@ module GDrive
 
       # We don't exclude hidden groups because they are useful here and only
       # admins can see this page.
-      @groups = Groups::Group.in_communities([current_community]).order(:name)
+      @groups = Groups::Group.in_communities([current_community]).by_name
 
       authorize(@item_group)
     end

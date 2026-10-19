@@ -99,7 +99,7 @@ module Calendars
       return unless blocks_recurrence? && community
       names = applicable_calendars.select(&:upcoming_recurring_events?).map(&:name)
       return if names.empty?
-      errors.add(:base, :repeating_events, calendars: names.sort.to_sentence)
+      errors.add(:base, :repeating_events, calendars: Gather::Collation.sort(names).to_sentence)
     end
 
     def normalize

@@ -36,7 +36,7 @@ module Calendars
     validates :name, presence: true, uniqueness: {scope: :community_id}
 
     scope :in_community, ->(c) { where(community: c) }
-    scope :by_cmty_and_name, -> { joins(:community).order("communities.abbrv, name") }
+    scope :by_cmty_and_name, -> { joins(:community).alpha_order(communities: :abbrv, calendar_nodes: :name) }
     scope :by_name, -> { alpha_order(:name) }
     scope :by_rank, -> { order(:rank) }
     scope :first_level, -> { where(group_id: nil) }

@@ -46,7 +46,7 @@ module Work
       # Exclude users with no share AND no hours
       @users ||=
         if period.quota_none?
-          assignments.map(&:user).uniq.sort_by { |u| u.name.downcase }
+          Gather::Collation.sort_by(assignments.map(&:user).uniq, &:name)
         else
           shares.by_user_name.reject { |s| s.zero? && (by_user.dig(s.user_id, :total) || 0).zero? }.map(&:user)
         end
@@ -54,7 +54,7 @@ module Work
 
     def households
       # Exclude users with no share AND no hours
-      @households ||= users.map(&:household).uniq.sort_by { |h| h.name.downcase }
+      @households ||= Gather::Collation.sort_by(users.map(&:household).uniq, &:name)
     end
 
     def total_portions

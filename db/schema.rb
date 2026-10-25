@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_18_000001) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_25_180000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -630,6 +630,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_18_000001) do
     t.index ["deactivated_at"], name: "index_households_on_deactivated_at"
     t.index ["member_type_id"], name: "index_households_on_member_type_id"
     t.index ["name"], name: "index_households_on_name"
+  end
+
+  create_table "mail_migration_domain_checks", force: :cascade do |t|
+    t.datetime "checked_at", null: false
+    t.bigint "cluster_id", null: false
+    t.datetime "created_at", null: false
+    t.jsonb "data", default: {}, null: false
+    t.bigint "domain_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cluster_id"], name: "index_mail_migration_domain_checks_on_cluster_id"
+    t.index ["domain_id"], name: "index_mail_migration_domain_checks_on_domain_id", unique: true
   end
 
   create_table "mail_test_runs", force: :cascade do |t|
@@ -1459,6 +1470,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_18_000001) do
   add_foreign_key "households", "clusters"
   add_foreign_key "households", "communities"
   add_foreign_key "households", "people_member_types", column: "member_type_id"
+  add_foreign_key "mail_migration_domain_checks", "clusters"
+  add_foreign_key "mail_migration_domain_checks", "domains"
   add_foreign_key "meal_assignments", "clusters"
   add_foreign_key "meal_assignments", "meal_roles", column: "role_id"
   add_foreign_key "meal_assignments", "meals"

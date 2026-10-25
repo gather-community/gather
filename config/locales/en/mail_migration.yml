@@ -1,23 +1,28 @@
 en:
   mail_migration:
+    refresh_started:
+      one: >-
+        Checking 1 domain in the background. This should take about %{seconds} seconds.
+        Reload this page to see the results.
+      other: >-
+        Checking %{count} domains in the background. This should take about %{seconds} seconds.
+        Reload this page to see the results.
     index:
       title: "Mail Domain Migration"
       intro: >-
         This page tracks the migration of custom mail domains to the new SMTP host. For each
         domain it shows whether the MX and SPF records have been updated to the new values,
         whether SMTP2GO has validated the domain for sending, and whether the SMTP2GO validation
-        DNS records are in place. DNS and SMTP2GO are checked live on each page load.
+        DNS records are in place. Results are from the most recent check; use the refresh buttons
+        to re-check.
       none_found: "No custom domains found."
       summary:
         one: "%{migrated} of 1 domain fully migrated."
         other: "%{migrated} of %{count} domains fully migrated."
-      smtp2go_errors:
-        not_configured: >-
-          The SMTP2GO API key is not configured, so sending status and validation can't be shown.
-          Set smtp2go.api_key in the settings.
-        request_failed: >-
-          The SMTP2GO API request failed, so sending status and validation can't be shown.
-          The error has been reported.
+      never_checked_prompt: "No checks have run yet — use 'Refresh All' below to run the first one."
+      not_configured: >-
+        The SMTP2GO API key is not configured, so sending status and validation can't be checked.
+        Set smtp2go.api_key in the settings.
       headers:
         domain: "Domain"
         communities: "Communities"
@@ -26,9 +31,12 @@ en:
         spf: "SPF Record"
         smtp2go: "SMTP2GO Validation"
         validation_records: "Validation DNS Records"
+        last_checked: "Last Checked"
       updated: "Updated"
       not_updated: "Not Updated"
-      no_validation_records: "—"
+      never_checked: "Never checked"
+      none: "—"
+      refresh_row: "Re-check this domain"
       record_points_to: "%{host} → %{target}"
       sending_via:
         smtp2go: "SMTP2GO"

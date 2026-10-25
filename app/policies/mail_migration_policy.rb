@@ -5,4 +5,8 @@ class MailMigrationPolicy < ApplicationPolicy
   def index?
     active_super_admin?
   end
+
+  def refresh?
+    active_super_admin?
+  end
 end

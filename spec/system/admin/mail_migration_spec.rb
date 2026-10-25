@@ -5,7 +5,8 @@ require "rails_helper"
 describe "mail migration page" do
   let!(:actor) { create(:super_admin) }
   let!(:migrated_domain) { create(:domain, name: "done.example.org") }
-  let!(:unmigrated_domain) { create(:domain, name: "notyet.example.org") }
+  let!(:pending_domain) { create(:domain, name: "notyet.example.org") }
+  let!(:unchecked_domain) { create(:domain, name: "fresh.example.org") }
   let!(:gather_domain) { create(:domain, name: "#{Defaults.community.slug}.gather.coop") }
   let!(:other_cluster) { create(:cluster, name: "Other Cluster") }
   let!(:other_cluster_domain) do
@@ -15,45 +16,39 @@ describe "mail migration page" do
     end
   end
 
-  let(:good_mx) { MailMigration::DomainStatus::EXPECTED_MX }
-  let(:client) { instance_double(Smtp2go::Client, configured?: true) }
-  let(:dns_checker) { instance_double(MailMigration::DnsChecker) }
-
-  before do
-    use_user_subdomain(actor)
-    login_as(actor, scope: :user)
-    allow(Smtp2go::Client).to receive(:new).and_return(client)
-    allow(MailMigration::DnsChecker).to receive(:new).and_return(dns_checker)
+  let!(:migrated_check) { create(:mail_migration_domain_check, domain: migrated_domain) }
+  let!(:pending_check) do
+    create(:mail_migration_domain_check, domain: pending_domain, data: {
+      "mx" => [[10, "mail.oldhost.example"]],
+      "spf" => nil,
+      "smtp2go_status" => "pending",
+      "validation_records" => [
+        {"kind" => "dkim", "host" => "s2._domainkey.notyet.example.org",
+         "target" => "dkim.smtp2go.net", "verified" => false, "in_dns" => false},
+        {"kind" => "return_path", "host" => "em2.notyet.example.org",
+         "target" => "return.smtp2go.net", "verified" => false, "in_dns" => true}
+      ]
+    })
+  end
+  let!(:other_cluster_check) do
+    with_tenant(other_cluster) do
+      create(:mail_migration_domain_check, domain: other_cluster_domain,
+        data: {"mx" => [], "spf" => nil, "smtp2go_status" => "not_added",
+               "validation_records" => []})
+    end
   end
 
-  def sender_domain(name, verified:)
-    Smtp2go::SenderDomain.new(name: name, records: [
-      Smtp2go::SenderDomain::DnsRecord.new(kind: :dkim, host: "s1._domainkey.#{name}",
-        target: "dkim.smtp2go.net", verified: verified),
-      Smtp2go::SenderDomain::DnsRecord.new(kind: :return_path, host: "em1.#{name}",
-        target: "return.smtp2go.net", verified: verified)
-    ])
+  before do
+    ActiveJob::Base.queue_adapter.enqueued_jobs.clear
+    use_user_subdomain(actor)
+    login_as(actor, scope: :user)
   end
 
   scenario "happy path" do
-    allow(client).to receive(:sender_domains).and_return([
-      sender_domain("done.example.org", verified: true),
-      sender_domain("notyet.example.org", verified: false)
-    ])
-    allow(dns_checker).to receive(:mx_records) do |name|
-      (name == "done.example.org") ? good_mx : [[10, "mail.oldhost.example"]]
-    end
-    allow(dns_checker).to receive(:spf_record) do |name|
-      (name == "done.example.org") ? "v=spf1 include:_spf.gather.coop ~all" : nil
-    end
-    allow(dns_checker).to receive(:cname_target) do |host|
-      host.start_with?("s1._domainkey.") ? "dkim.smtp2go.net" : nil
-    end
-
     visit(mail_migration_path)
 
     expect(page).to have_content("Mail Domain Migration")
-    expect(page).to have_content("1 of 3 domains fully migrated.")
+    expect(page).to have_content("1 of 4 domains fully migrated.")
 
     # Gather-managed domains are not part of the migration.
     expect(page).not_to have_content(gather_domain.name)
@@ -70,20 +65,42 @@ describe "mail migration page" do
     expect(pending_row).to have_content("DKIM")
     expect(pending_row).to have_content("Return Path")
 
+    # A domain with no stored check yet.
+    fresh_row = find("tr", text: "fresh.example.org")
+    expect(fresh_row).to have_content("Never checked")
+
     # Domains from other clusters are included.
     other_row = find("tr", text: "othercluster.example.org")
     expect(other_row).to have_content("Other Community")
     expect(other_row).to have_content("Not Added")
   end
 
+  scenario "refresh all" do
+    visit(mail_migration_path)
+    click_button("Refresh All")
+
+    expect(page).to have_content("Checking 4 domains in the background. " \
+      "This should take about 9 seconds.")
+    jobs = ActiveJob::Base.queue_adapter.enqueued_jobs
+    expect(jobs.size).to eq(1)
+    expect(jobs[0]["job_class"]).to eq("MailMigration::RefreshJob")
+  end
+
+  scenario "refresh one row" do
+    visit(mail_migration_path)
+    find("tr", text: "fresh.example.org").find("button[title='Re-check this domain']").click
+
+    expect(page).to have_content("Checking 1 domain in the background. " \
+      "This should take about 6 seconds.")
+    expect(ActiveJob::Base.queue_adapter.enqueued_jobs.size).to eq(1)
+  end
+
   scenario "SMTP2GO API key not configured" do
-    allow(client).to receive(:configured?).and_return(false)
-    allow(dns_checker).to receive_messages(mx_records: [], spf_record: nil, cname_target: nil)
+    allow(Settings).to receive(:smtp2go).and_return(double(api_key: nil))
 
     visit(mail_migration_path)
 
     expect(page).to have_content("The SMTP2GO API key is not configured")
     expect(page).to have_content("done.example.org")
-    expect(page).to have_content("Unknown")
   end
 end

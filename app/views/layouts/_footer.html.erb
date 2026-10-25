@@ -27,6 +27,11 @@
         <%= button_to(t(".resync_subscriptions"), resync_all_communities_path,
               class: "btn btn-link", form: {style: "display:inline"}) %>
       <% end %>
+      <% if controller_name == "mail_migration" %>
+        &nbsp;
+        <%= button_to(t(".refresh_all"), mail_migration_refresh_path,
+              class: "btn btn-link", form: {style: "display:inline"}) %>
+      <% end %>
     <% end %>
 
     <%# For test purposes only. Security risk otherwise. %>

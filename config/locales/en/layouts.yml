@@ -20,6 +20,7 @@ en:
       billing: "Billing"
       communities: "Communities"
       resync_subscriptions: "Resync subscriptions"
+      refresh_all: "Refresh All"
     head:
       # The browser tab title. The page title is already HTML-escaped, hence _html.
       title_html: "Gather: %{title}"

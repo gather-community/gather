@@ -90,6 +90,7 @@ describe "deletion dispositions", :without_tenant do
     "Groups::Mailman::User" => :destroy,
     "Groups::Membership" => :destroy,
     "Household" => :none,
+    "MailMigration::DomainCheck" => :none,
     "MailTestRun" => :none,
     "Meals::Assignment" => :destroy,
     "Meals::Cost" => {reimbursee_id: :nullify},

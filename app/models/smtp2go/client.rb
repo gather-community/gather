@@ -13,10 +13,13 @@ module Smtp2go
       api_key.present?
     end
 
-    # Returns a SenderDomain for every sender domain on the SMTP2GO account.
-    # The domain/view endpoint is not paginated; it returns the full list in one response.
-    def sender_domains
-      entries = post("domain/view").dig("data", "domains")
+    # Returns a SenderDomain for every sender domain on the SMTP2GO account, or just the named
+    # one when `domain` is given. The domain/view endpoint is not paginated; it returns the full
+    # list in one response, so refreshing all domains costs a single API call.
+    def sender_domains(domain: nil)
+      params = {}
+      params[:domain] = domain if domain
+      entries = post("domain/view", **params).dig("data", "domains")
       raise RequestError, "malformed SMTP2GO domain/view response" unless entries.is_a?(Array)
       entries.map { |entry| SenderDomain.from_api(entry) }
     end

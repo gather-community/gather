@@ -4,9 +4,9 @@
   <%= t(".intro") %>
 </p>
 
-<% if @report.smtp2go_error %>
+<% unless @smtp2go_configured %>
   <div class="alert alert-warning">
-    <%= t(".smtp2go_errors.#{@report.smtp2go_error}") %>
+    <%= t(".not_configured") %>
   </div>
 <% end %>
 
@@ -17,6 +17,9 @@
 <% else %>
   <p>
     <%= t(".summary", count: @report.statuses.size, migrated: @report.migrated_count) %>
+    <% unless @report.any_checked? %>
+      <%= t(".never_checked_prompt") %>
+    <% end %>
   </p>
   <table class="index">
     <thead>
@@ -28,6 +31,7 @@
         <th><%= t(".headers.spf") %></th>
         <th><%= t(".headers.smtp2go") %></th>
         <th><%= t(".headers.validation_records") %></th>
+        <th><%= t(".headers.last_checked") %></th>
       </tr>
     </thead>
     <tbody>
@@ -35,28 +39,44 @@
         <tr class="<%= status.migrated? ? "success" : "" %>">
           <td><%= status.domain.name %></td>
           <td><%= status.communities.map(&:name).join(", ") %></td>
-          <td><%= t(".sending_via.#{status.sending_via}") %></td>
-          <td class="<%= status.mx_ok? ? "text-success" : "text-danger" %>"
-              title="<%= status.mx.map { |pref, host| "#{pref} #{host}" }.join(", ") %>">
-            <%= icon_tag(status.mx_ok? ? "check" : "times") %>
-            <%= status.mx_ok? ? t(".updated") : t(".not_updated") %>
-          </td>
-          <td class="<%= status.spf_ok? ? "text-success" : "text-danger" %>" title="<%= status.spf %>">
-            <%= icon_tag(status.spf_ok? ? "check" : "times") %>
-            <%= status.spf_ok? ? t(".updated") : t(".not_updated") %>
-          </td>
-          <td><%= t(".smtp2go_statuses.#{status.smtp2go_status}") %></td>
-          <td>
-            <% if status.validation_records.empty? %>
-              <%= t(".no_validation_records") %>
-            <% else %>
-              <% status.validation_records.each do |record| %>
-                <div class="<%= record.in_dns ? "text-success" : "text-danger" %>"
-                     title="<%= t(".record_points_to", host: record.host, target: record.target) %>">
-                  <%= icon_tag(record.in_dns ? "check" : "times") %>
-                  <%= t(".record_kinds.#{record.kind}") %>
-                </div>
+          <% if status.checked? %>
+            <td><%= t(".sending_via.#{status.sending_via}") %></td>
+            <td class="<%= status.mx_ok? ? "text-success" : "text-danger" %>"
+                title="<%= status.mx.map { |pref, host| "#{pref} #{host}" }.join(", ") %>">
+              <%= icon_tag(status.mx_ok? ? "check" : "times") %>
+              <%= status.mx_ok? ? t(".updated") : t(".not_updated") %>
+            </td>
+            <td class="<%= status.spf_ok? ? "text-success" : "text-danger" %>" title="<%= status.spf %>">
+              <%= icon_tag(status.spf_ok? ? "check" : "times") %>
+              <%= status.spf_ok? ? t(".updated") : t(".not_updated") %>
+            </td>
+            <td><%= t(".smtp2go_statuses.#{status.smtp2go_status}") %></td>
+            <td>
+              <% if status.validation_records.empty? %>
+                <%= t(".none") %>
+              <% else %>
+                <% status.validation_records.each do |record| %>
+                  <div class="<%= record.in_dns ? "text-success" : "text-danger" %>"
+                       title="<%= t(".record_points_to", host: record.host, target: record.target) %>">
+                    <%= icon_tag(record.in_dns ? "check" : "times") %>
+                    <%= t(".record_kinds.#{record.kind}") %>
+                  </div>
+                <% end %>
               <% end %>
+            </td>
+          <% else %>
+            <td colspan="5" class="text-muted"><%= t(".never_checked") %></td>
+          <% end %>
+          <td>
+            <% if status.checked? %>
+              <%= l(status.checked_at, format: :short) %>
+            <% else %>
+              <%= t(".none") %>
+            <% end %>
+            <%= button_to(mail_migration_refresh_path(domain_id: status.domain.id),
+                  class: "btn btn-link", form: {style: "display:inline"},
+                  title: t(".refresh_row")) do %>
+              <%= icon_tag("refresh") %>
             <% end %>
           </td>
         </tr>

@@ -1,0 +1,10 @@
+fr:
+  pagination:
+    page_entries_info:
+      gdrive/migration/file: "Fichiers %{first} à %{last} sur %{total}" # Machine translated, remove this comment when verified
+      gdrive/migration/log: "Journaux %{first} à %{last} sur %{total}" # Machine translated, remove this comment when verified
+      meals/meal: "Repas %{first} à %{last} sur %{total}" # Machine translated, remove this comment when verified
+      household: "Foyers %{first} à %{last} sur %{total}" # Machine translated, remove this comment when verified
+      user: "Personnes %{first} à %{last} sur %{total}" # Machine translated, remove this comment when verified
+      work/period: "Périodes %{first} à %{last} sur %{total}" # Machine translated, remove this comment when verified
+      work/shift: "Créneaux %{first} à %{last} sur %{total}" # Machine translated, remove this comment when verified

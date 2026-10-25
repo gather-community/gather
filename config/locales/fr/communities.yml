@@ -1,0 +1,137 @@
+fr:
+  communities:
+    community:
+      statuses:
+        all: "Tous les états" # Machine translated, remove this comment when verified
+        trial: "Essai" # Machine translated, remove this comment when verified
+        subscribed: "Abonnée" # Machine translated, remove this comment when verified
+        problem: "Problème" # Machine translated, remove this comment when verified
+        warning: "Avertissement" # Machine translated, remove this comment when verified
+        deactivated: "Désactivée" # Machine translated, remove this comment when verified
+    resync_started: "Resynchronisation des abonnements lancée. Actualisez dans une minute pour voir les mises à jour." # Machine translated, remove this comment when verified
+    incorrect_slug: "Identifiant incorrect. La communauté n'a pas été supprimée." # Machine translated, remove this comment when verified
+    being_deleted: "%{name} est en cours de suppression." # Machine translated, remove this comment when verified
+    admin:
+      id: "ID" # Machine translated, remove this comment when verified
+      name: "Nom" # Machine translated, remove this comment when verified
+      slug: "Identifiant" # Machine translated, remove this comment when verified
+      abbreviation: "Abréviation" # Machine translated, remove this comment when verified
+      country: "Pays" # Machine translated, remove this comment when verified
+      time_zone: "Fuseau horaire" # Machine translated, remove this comment when verified
+      cluster: "Grappe" # Machine translated, remove this comment when verified
+      cluster_value: "%{name} (ID %{id})" # Machine translated, remove this comment when verified
+      created: "Créée" # Machine translated, remove this comment when verified
+      status: "État" # Machine translated, remove this comment when verified
+      subscription: "Abonnement" # Machine translated, remove this comment when verified
+      stripe_id: "ID Stripe" # Machine translated, remove this comment when verified
+      not_in_stripe: "Abonnement introuvable dans Stripe" # Machine translated, remove this comment when verified
+      detailed_status: "État détaillé" # Machine translated, remove this comment when verified
+      last_synced: "Dernière synchronisation" # Machine translated, remove this comment when verified
+      users: "Utilisateurs" # Machine translated, remove this comment when verified
+      price: "Prix" # Machine translated, remove this comment when verified
+      price_value_html: "%{price}/utilisateur/mois &times; %{months} mois (%{currency})" # Machine translated, remove this comment when verified
+      discount: "Remise" # Machine translated, remove this comment when verified
+      next_payment: "Prochain paiement" # Machine translated, remove this comment when verified
+      contact: "Contact" # Machine translated, remove this comment when verified
+      address: "Adresse" # Machine translated, remove this comment when verified
+      subscription_intent: "Intention d'abonnement" # Machine translated, remove this comment when verified
+      tier: "Formule" # Machine translated, remove this comment when verified
+      start_date: "Date de début" # Machine translated, remove this comment when verified
+    index:
+      title: "Communautés" # Machine translated, remove this comment when verified
+      view_signups: "Voir les demandes" # Machine translated, remove this comment when verified
+      id: "ID" # Machine translated, remove this comment when verified
+      name: "Nom" # Machine translated, remove this comment when verified
+      created: "Créée" # Machine translated, remove this comment when verified
+      last_login: "Dernière connexion" # Machine translated, remove this comment when verified
+      status: "État" # Machine translated, remove this comment when verified
+      users: "Utilisateurs" # Machine translated, remove this comment when verified
+      meals: "Repas" # Machine translated, remove this comment when verified
+      reservations: "Événements" # Machine translated, remove this comment when verified
+      jobs: "Tâches" # Machine translated, remove this comment when verified
+      transactions: "Transactions" # Machine translated, remove this comment when verified
+      subscription: "Abonnement" # Machine translated, remove this comment when verified
+      cluster: "Grappe" # Machine translated, remove this comment when verified
+      never: "Jamais" # Machine translated, remove this comment when verified
+      intent: "Intention : %{tier}" # Machine translated, remove this comment when verified
+    signups:
+      captcha_failed: "La vérification captcha a échoué. Veuillez réessayer." # Machine translated, remove this comment when verified
+      approved: "Demande approuvée. La configuration de la communauté est en cours." # Machine translated, remove this comment when verified
+      denied: "Demande refusée." # Machine translated, remove this comment when verified
+      index:
+        title: "Demandes d'inscription de communautés" # Machine translated, remove this comment when verified
+        none_found: "Aucune demande trouvée." # Machine translated, remove this comment when verified
+        community_name: "Nom de la communauté" # Machine translated, remove this comment when verified
+        contact: "Contact" # Machine translated, remove this comment when verified
+        submitted: "Envoyée" # Machine translated, remove this comment when verified
+        status: "État" # Machine translated, remove this comment when verified
+      new:
+        title: "Rejoindre Gather !" # Machine translated, remove this comment when verified
+        intro: "Gather est une plateforme de gestion de communauté pour l'habitat participatif et d'autres communautés de vie collaborative. Pour demander une nouvelle communauté, remplissez le formulaire ci-dessous. Nous examinerons votre demande et vous répondrons par e-mail. Nous nous réservons le droit de refuser les communautés dont l'activité ne correspond pas à notre mission." # Machine translated, remove this comment when verified
+        contact_person: "Personne de contact" # Machine translated, remove this comment when verified
+        contact_hint: "Cette personne deviendra le premier administrateur de la communauté." # Machine translated, remove this comment when verified
+        community_details: "Détails de la communauté" # Machine translated, remove this comment when verified
+        settings: "Paramètres" # Machine translated, remove this comment when verified
+        final_steps: "Dernières étapes" # Machine translated, remove this comment when verified
+        verification: "Vérification" # Machine translated, remove this comment when verified
+        submit: "Envoyer la demande" # Machine translated, remove this comment when verified
+      review:
+        title: "Examiner la demande : %{name}" # Machine translated, remove this comment when verified
+        status: "État" # Machine translated, remove this comment when verified
+        reviewed: "le %{date} par %{name}" # Machine translated, remove this comment when verified
+        contact_name: "Nom du contact" # Machine translated, remove this comment when verified
+        contact_email: "E-mail du contact" # Machine translated, remove this comment when verified
+        submitted: "Envoyée" # Machine translated, remove this comment when verified
+        community_name: "Nom de la communauté" # Machine translated, remove this comment when verified
+        slug: "Identifiant d'URL" # Machine translated, remove this comment when verified
+        country: "Pays" # Machine translated, remove this comment when verified
+        time_zone: "Fuseau horaire" # Machine translated, remove this comment when verified
+        sample_data: "Données d'exemple" # Machine translated, remove this comment when verified
+        about: "À propos" # Machine translated, remove this comment when verified
+        approval_message: "Message d'approbation" # Machine translated, remove this comment when verified
+        internal_notes: "Notes internes" # Machine translated, remove this comment when verified
+        denial_reason: "Motif du refus (non envoyé à l'utilisateur)" # Machine translated, remove this comment when verified
+        submit: "Envoyer" # Machine translated, remove this comment when verified
+      submitted:
+        title: "Demande envoyée" # Machine translated, remove this comment when verified
+        thanks: "Merci d'avoir demandé à rejoindre Gather !" # Machine translated, remove this comment when verified
+        review_time_html: "Nous examinons généralement les demandes sous 48 heures. Surveillez votre boîte de réception à l'adresse %{email} pour une réponse." # Machine translated, remove this comment when verified
+    signup_action:
+      approval_template: |- # Machine translated, remove this comment when verified
+        Bonjour %{name},
+
+        Bonne nouvelle ! Votre demande pour rejoindre Gather avec la communauté « %{community} » a été approuvée.
+
+        #######################################
+        SAISISSEZ ICI UNE NOTE PERSONNALISÉE ET
+        MENTIONNEZ UN DÉTAIL SUR LA COMMUNAUTÉ
+        #######################################
+
+        Votre communauté est maintenant prête !
+
+        Vous devriez recevoir un e-mail distinct avec les instructions pour vous connecter la première fois.
+
+        Bienvenue à bord !
+
+        %{approver}, pour l'équipe de Gather
+    signup_mailer:
+      application_approved:
+        subject: "Votre communauté Gather a été approuvée ! (Avec un mot de %{approver})" # Machine translated, remove this comment when verified
+      application_denied:
+        subject: "Au sujet de votre demande de communauté Gather" # Machine translated, remove this comment when verified
+        dear: "Bonjour %{name}," # Machine translated, remove this comment when verified
+        body: "Merci de l'intérêt que vous portez à Gather. Après examen de votre demande pour « %{community} », nous ne sommes pas en mesure d'y donner suite pour le moment." # Machine translated, remove this comment when verified
+        sign_off: "Cordialement," # Machine translated, remove this comment when verified
+        team: "L'équipe de Gather" # Machine translated, remove this comment when verified
+    inactivity_mailer:
+      warning:
+        subject: "Avertissement d'inactivité pour %{community}" # Machine translated, remove this comment when verified
+        subject_final: "[Dernier avertissement avant suppression] %{community}" # Machine translated, remove this comment when verified
+        intro: "Ceci est l'avertissement d'inactivité %{count} sur %{max} pour la communauté Gather « %{community} »." # Machine translated, remove this comment when verified
+        last_login: "Dernière connexion : %{date}" # Machine translated, remove this comment when verified
+        never: "Jamais" # Machine translated, remove this comment when verified
+        final: "Personne de votre communauté ne s'est connecté à Gather depuis plus de 90 jours. Ceci est le dernier avertissement avant la suppression définitive des données de votre communauté." # Machine translated, remove this comment when verified
+        final_days: "Votre communauté sera supprimée dans environ 7 jours, à moins que quelqu'un ne se connecte." # Machine translated, remove this comment when verified
+        not_final: "Personne de votre communauté ne s'est connecté à Gather depuis plus de 90 jours. Si personne ne se connecte, un autre avertissement sera envoyé dans 7 jours. Après 3 avertissements, les données de votre communauté seront définitivement supprimées." # Machine translated, remove this comment when verified
+        prevent: "Pour empêcher la suppression, il suffit de vous connecter à votre communauté à l'adresse :" # Machine translated, remove this comment when verified
+        contact: "Si vous pensez que cet avertissement est une erreur ou si vous avez besoin d'aide, écrivez-nous à support@gather.coop." # Machine translated, remove this comment when verified

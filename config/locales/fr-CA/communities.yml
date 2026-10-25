@@ -1,0 +1,9 @@
+fr-CA:
+  communities:
+    signups:
+      new:
+        intro: "Gather est une plateforme de gestion de communauté pour l'habitat participatif et d'autres communautés de vie collaborative. Pour demander une nouvelle communauté, remplissez le formulaire ci-dessous. Nous examinerons votre demande et vous répondrons par courriel. Nous nous réservons le droit de refuser les communautés dont l'activité ne correspond pas à notre mission." # Machine translated, remove this comment when verified
+      review:
+        contact_email: "Courriel du contact" # Machine translated, remove this comment when verified
+    signup_action:
+      approval_template: "Bonjour %{name},\n\nBonne nouvelle ! Votre demande pour rejoindre Gather avec la communauté « %{community} » a été approuvée.\n\n#######################################\nSAISISSEZ ICI UNE NOTE PERSONNALISÉE ET\nMENTIONNEZ UN DÉTAIL SUR LA COMMUNAUTÉ\n#######################################\n\nVotre communauté est maintenant prête !\n\nVous devriez recevoir un courriel distinct avec les instructions pour vous connecter la première fois.\n\nBienvenue à bord !\n\n%{approver}, pour l'équipe de Gather" # Machine translated, remove this comment when verified

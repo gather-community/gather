@@ -1,0 +1,10 @@
+fr-CA:
+  work:
+    jobs:
+      form:
+        shifts: "Quarts" # Machine translated, remove this comment when verified
+  "work/jobs":
+    shifts: "Quarts" # Machine translated, remove this comment when verified
+  "work/shift":
+    already_signed_up: "Vous êtes déjà inscrit à ce quart." # Machine translated, remove this comment when verified
+    not_signed_up: "Vous n'êtes pas inscrit à ce quart." # Machine translated, remove this comment when verified

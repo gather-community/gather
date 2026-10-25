@@ -1,0 +1,31 @@
+fr-CA:
+  devise:
+    confirmations:
+      confirmed: "Votre adresse courriel a bien été confirmée." # Machine translated, remove this comment when verified
+      send_instructions: "Vous allez recevoir dans quelques minutes un courriel expliquant comment confirmer votre adresse courriel." # Machine translated, remove this comment when verified
+      send_paranoid_instructions: "Si votre adresse courriel figure dans notre base de données, vous allez recevoir dans quelques minutes un courriel expliquant comment la confirmer." # Machine translated, remove this comment when verified
+    authentication_keys:
+      email: "Adresse courriel" # Machine translated, remove this comment when verified
+    mailer:
+      confirmation_instructions:
+        subject: "Veuillez confirmer votre adresse courriel" # Machine translated, remove this comment when verified
+    passwords:
+      new:
+        instructions: "Saisissez votre adresse courriel pour recevoir des instructions par courriel. Suivez-les pour réinitialiser votre mot de passe. Le courriel peut mettre quelques instants à arriver." # Machine translated, remove this comment when verified
+      no_token: "Vous ne pouvez accéder à cette page qu'à partir d'un courriel de réinitialisation du mot de passe. Si c'est bien le cas, vérifiez que vous avez utilisé l'URL complète fournie." # Machine translated, remove this comment when verified
+      send_instructions: "Vous allez recevoir dans quelques minutes un courriel expliquant comment réinitialiser votre mot de passe." # Machine translated, remove this comment when verified
+      send_paranoid_instructions: "Si votre adresse courriel figure dans notre base de données, vous allez recevoir dans quelques minutes un lien de récupération du mot de passe." # Machine translated, remove this comment when verified
+    registrations:
+      signed_up_but_unconfirmed: "Un message contenant un lien de confirmation a été envoyé à votre adresse courriel. Veuillez suivre ce lien pour activer votre compte." # Machine translated, remove this comment when verified
+      update_needs_confirmation: "Votre compte a bien été mis à jour, mais nous devons vérifier votre nouvelle adresse courriel. Consultez vos courriels et suivez le lien de confirmation." # Machine translated, remove this comment when verified
+    unlocks:
+      send_instructions: "Vous allez recevoir dans quelques minutes un courriel expliquant comment déverrouiller votre compte." # Machine translated, remove this comment when verified
+      send_paranoid_instructions: "Si votre compte existe, vous allez recevoir dans quelques minutes un courriel expliquant comment le déverrouiller." # Machine translated, remove this comment when verified
+  auth_mailer:
+    confirmation_instructions:
+      use_link: "Veuillez confirmer votre nouvelle adresse courriel à l'aide de ce lien :" # Machine translated, remove this comment when verified
+    reset_password_instructions:
+      ignore: "Si vous n'êtes pas à l'origine de cette demande, ignorez simplement ce courriel et votre mot de passe restera inchangé." # Machine translated, remove this comment when verified
+  errors:
+    messages:
+      not_found: "Adresse courriel introuvable" # Machine translated, remove this comment when verified

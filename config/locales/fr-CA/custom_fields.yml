@@ -1,0 +1,18 @@
+fr-CA:
+  custom_fields:
+    labels:
+      community:
+        settings:
+          billing:
+            payment_methods:
+              paypal_email: "PayPal par courriel" # Machine translated, remove this comment when verified
+              show_billing_contact: "Afficher le courriel du contact de facturation avec les informations supplémentaires" # Machine translated, remove this comment when verified
+    hints:
+      community:
+        settings:
+          billing:
+            contact: "Courriel pour les questions de facturation. Il sera indiqué avec les instructions de paiement." # Machine translated, remove this comment when verified
+            payment_methods:
+              paypal_email: "Si vous voulez accepter PayPal sans utiliser PayPal.me, saisissez l'adresse courriel à laquelle les membres doivent envoyer leurs paiements." # Machine translated, remove this comment when verified
+              paypal_friend: "S'applique à PayPal.me et à PayPal par courriel. Cochez si, selon les conditions d'utilisation de PayPal, ces paiements peuvent être considérés comme faits entre proches. Cela évite les frais." # Machine translated, remove this comment when verified
+              show_billing_contact: "Ajouter ou non le courriel du contact de facturation ci-dessus (s'il est indiqué) en bas des instructions de paiement. Décochez et ajoutez-le vous-même dans « Informations supplémentaires » si vous voulez personnaliser sa présentation." # Machine translated, remove this comment when verified

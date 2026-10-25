@@ -1,0 +1,16 @@
+fr-CA:
+  people:
+    users:
+      confirmations:
+        expired_signed_out: "Le délai de confirmation a expiré. Connectez-vous avec votre ancienne adresse courriel et réessayez." # Machine translated, remove this comment when verified
+      omniauth_failure_reasons:
+        no_email: "Google n'a pas fourni d'adresse courriel. Veuillez prévenir un administrateur" # Machine translated, remove this comment when verified
+  users:
+    email_change_canceled: "Changement d'adresse courriel annulé." # Machine translated, remove this comment when verified
+    confirm_new_email_self: "Vous devez confirmer votre nouvelle adresse courriel. Consultez vos courriels à l'adresse %{email}." # Machine translated, remove this comment when verified
+    confirm_new_email_other: "Cette personne doit confirmer sa nouvelle adresse courriel (%{email})." # Machine translated, remove this comment when verified
+    index:
+      email: "Courriel" # Machine translated, remove this comment when verified
+      mobile_phone: "Cellulaire" # Machine translated, remove this comment when verified
+    show:
+      email: "Courriel" # Machine translated, remove this comment when verified

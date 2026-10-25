@@ -23,6 +23,7 @@ module Calendars
           indexes :kind, type: :keyword
           indexes :community_id, type: :integer
           indexes :calendar_id, type: :integer
+          indexes :meal_id, type: :integer
           indexes :name, analyzer: "english_stemmed"
           indexes :note, analyzer: "english_stemmed"
           indexes :location, analyzer: "english_stemmed"

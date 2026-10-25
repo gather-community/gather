@@ -3,7 +3,7 @@
 module Calendars
   # Serializes Events for Elasticsearch.
   class EventSearchSerializer < ApplicationSerializer
-    attributes :id, :kind, :community_id, :calendar_id, :name, :note, :location, :starts_at
+    attributes :id, :kind, :community_id, :calendar_id, :meal_id, :name, :note, :location, :starts_at
 
     def kind = "event"
     def community_id = object.calendar.community_id

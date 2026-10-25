@@ -1,22 +1,8 @@
 # frozen_string_literal: true
 
 module SearchHelper
-  KIND_LABELS = {
-    "wiki_page" => "Wiki",
-    "event" => "Event",
-    "calendar" => "Calendar",
-    "group" => "Group",
-    "user" => "Person",
-    "household" => "Household",
-    "meal" => "Meal",
-    "memorial" => "Memorial",
-    "emergency_contact" => "Emergency Contact",
-    "pet" => "Pet",
-    "vehicle" => "Vehicle",
-    "transaction" => "Transaction"
-  }.freeze
-
-  # Font Awesome 4 icon specs for each kind. String = regular icon; Hash = {name:, style:}.
+  # Font Awesome 4 icon specs for each result kind; the keys double as the list of kinds.
+  # String = regular icon; Hash = {name:, style:}.
   KIND_ICONS = {
     "wiki_page" => "info-circle",
     "event" => "ticket",
@@ -32,8 +18,9 @@ module SearchHelper
     "transaction" => "dollar"
   }.freeze
 
+  # Labels live under search.kinds.* in config/locales/en/search.yml.
   def search_result_kind_label(kind)
-    KIND_LABELS[kind]
+    t("search.kinds.#{kind}") if KIND_ICONS.key?(kind)
   end
 
   def search_result_kind_icon(kind)
@@ -44,23 +31,34 @@ module SearchHelper
     icon_tag(name, style: style, class: "result-kind-icon")
   end
 
+  # Returns the hit's highlight fragments, or nil if none of the highlighted fields matched
+  # (e.g. a person found by first name only, since names aren't highlighted).
+  def search_result_highlight(result)
+    result.highlight if result.highlight?
+  end
+
+  # Returns the highlighted body fragment to show under the title, if any. Transactions use their
+  # description as the title, so it isn't repeated as the snippet.
+  def search_result_snippet(kind, highlight)
+    return nil if highlight.nil?
+    fields = %i[content description note notes body]
+    fields -= %i[description] if kind == "transaction"
+    fields.lazy.filter_map { |f| highlight[f]&.first }.first
+  end
+
   # Returns the display title for a search result given its kind and Elasticsearch _source.
   def search_result_title(kind, src, highlight)
     case kind
     when "user"
-      hl = [highlight&.first_name&.first, highlight&.last_name&.first].compact
-      hl.any? ? safe_join(hl, " ") : "#{src.first_name} #{src.last_name}".strip
+      "#{src.first_name} #{src.last_name}".strip
+    when "transaction"
+      highlighted(highlight&.description&.first) || src.description
     when "vehicle"
       parts = [src.make, src.model, src.color, src.plate].select(&:present?)
       parts.join(" ")
     else
-      # rubocop:disable Rails/OutputSafety
-      raw(highlight&.title&.first ||
-          highlight&.name&.first ||
-          src.title.presence ||
-          src.name.presence ||
-          "(untitled)")
-      # rubocop:enable Rails/OutputSafety
+      highlighted(highlight&.title&.first || highlight&.name&.first) ||
+        src.title.presence || src.name.presence || t("search.untitled")
     end
   end
 
@@ -96,4 +94,12 @@ module SearchHelper
     nil
   end
   # rubocop:enable Metrics/MethodLength
+
+  private
+
+  # Marks a highlight fragment as safe. Elasticsearch has already HTML-escaped it (the query sets
+  # `encoder: "html"`) and only added <mark> tags.
+  def highlighted(fragment)
+    fragment&.html_safe # rubocop:disable Rails/OutputSafety
+  end
 end

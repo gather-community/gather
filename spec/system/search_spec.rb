@@ -7,6 +7,7 @@ describe "search", js: true do
   let(:community) { Defaults.community }
 
   before do
+    create(:feature_flag, name: "search", status: true)
     use_user_subdomain(actor)
     login_as(actor, scope: :user)
   end

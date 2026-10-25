@@ -1,5 +1,5 @@
 <% if results.empty? %>
-  <div class="center-notice">No Drive files found.</div>
+  <div class="center-notice"><%= t(".no_results") %></div>
 <% else %>
   <ul class="search-result-list">
     <% results.each do |file| %>

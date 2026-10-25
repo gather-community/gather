@@ -3,60 +3,60 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="close" data-dismiss="modal" aria-label="<%= t("common.close") %>">
           <span aria-hidden="true">&times;</span>
         </button>
-        <h2 class="modal-title" id="search-tips-modal-label">Search Tips</h2>
+        <h2 class="modal-title" id="search-tips-modal-label"><%= t(".title") %></h2>
       </div>
       <div class="modal-body">
-        <p>Enter words to search across Gather (wiki pages, events, people, meals, and more) and Google Drive.</p>
+        <p><%= t(".intro") %></p>
 
-        <h4>Basic search</h4>
+        <%# The <code> examples are literal query syntax, so they aren't translated (hence the lint disables). %>
+        <h4><%= t(".basic_search") %></h4>
         <table class="key-value">
           <tr>
-            <td><code>compost bins</code></td>
-            <td>Items containing both words</td>
+            <td><code>compost bins</code></td> <%# erb_lint:disable HardCodedText %>
+            <td><%= t(".both_words") %></td>
           </tr>
           <tr>
-            <td><code>"compost bins"</code></td>
-            <td>The exact phrase &ldquo;compost bins&rdquo;</td>
+            <td><code>"compost bins"</code></td> <%# erb_lint:disable HardCodedText %>
+            <td><%= t(".exact_phrase", phrase: "compost bins") %></td>
           </tr>
         </table>
 
-        <h4>Special syntax</h4>
+        <h4><%= t(".special_syntax") %></h4>
         <table class="key-value">
           <tr>
-            <td><code>title:compost</code></td>
-            <td>Search only in the title or name field</td>
+            <td><code>title:compost</code></td> <%# erb_lint:disable HardCodedText %>
+            <td><%= t(".title_only") %></td>
           </tr>
           <tr>
-            <td><code>type:doc</code></td>
+            <td><code>type:doc</code></td> <%# erb_lint:disable HardCodedText %>
             <td>
-              Filter Drive results by file type.
-              Options: <code>doc</code>, <code>sheet</code>, <code>slide</code>,
-              <code>pdf</code>, <code>folder</code>
+              <%= t(".drive_type_html",
+                    options: safe_join(%w[doc sheet slide pdf folder].map { |o| tag.code(o) }, ", ")) %>
             </td>
           </tr>
         </table>
 
-        <h4>Combining</h4>
+        <h4><%= t(".combining") %></h4>
         <table class="key-value">
           <tr>
-            <td><code>title:minutes 2024</code></td>
-            <td>Items named &ldquo;minutes&rdquo; containing &ldquo;2024&rdquo;</td>
+            <td><code>title:minutes 2024</code></td> <%# erb_lint:disable HardCodedText %>
+            <td><%= t(".title_and_word", title: "minutes", word: "2024") %></td>
           </tr>
           <tr>
-            <td><code>"budget report" type:sheet</code></td>
-            <td>Google Sheets matching the phrase &ldquo;budget report&rdquo;</td>
+            <td><code>"budget report" type:sheet</code></td> <%# erb_lint:disable HardCodedText %>
+            <td><%= t(".sheet_and_phrase", phrase: "budget report") %></td>
           </tr>
         </table>
 
         <p class="text-muted" style="margin-top: 15px;">
-          Use the checkboxes on the right to filter by content type.
+          <%= t(".checkbox_hint") %>
         </p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal"><%= t("common.close") %></button>
       </div>
     </div>
   </div>

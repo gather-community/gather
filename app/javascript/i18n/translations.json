@@ -338,6 +338,9 @@
     "payment": {
       "accountholder_required": "Please specify the accountholder name."
     },
+    "search": {
+      "load_error": "Error loading results. Please try again."
+    },
     "subscription": {
       "topup_notices": {
         "calculating": "Calculating…",

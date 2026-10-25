@@ -30,8 +30,10 @@
                 <%= t(".skip_to_content") %>
               </a>
               <% if user_signed_in? && current_community %>
-                <%= link_to(icon_tag("search"), search_path, class: "search-nav-link",
-                            title: t(".search"), aria: {label: t(".search")}) %>
+                <% if FeatureFlag.lookup("search").on?(current_user) %>
+                  <%= link_to(icon_tag("search"), search_path, class: "search-nav-link",
+                              title: t(".search"), aria: {label: t(".search")}) %>
+                <% end %>
                 <ul class="nav">
                   <%= render("layouts/personal_dropdown") %>
                 </ul>
@@ -76,7 +78,7 @@
             <span class="icon-bar"></span>
           </button>
           <%= link_to(image_tag("logo-white.png"), logo_link_url, class: "logo", alt: t(".home")) %>
-          <% if user_signed_in? && current_community %>
+          <% if user_signed_in? && current_community && FeatureFlag.lookup("search").on?(current_user) %>
             <%= link_to(icon_tag("search"), search_path, class: "search-nav-link mobile-search-link",
                         title: t(".search"), aria: {label: t(".search")}) %>
           <% end %>

@@ -242,7 +242,7 @@ FeatureFlag.lookup("messaging").on?(current_user)
 - Don't gate inbound webhooks/background reconciliation: turning a flag off shouldn't strand data that already exists.
 - Specs that exercise a flagged feature must turn it on: `create(:feature_flag, name: "messaging", status: true)`.
 
-Existing flags: `messaging`, `gdrive`, `restrictions`, `i18n` (lets chosen users see unreleased locales; see below).
+Existing flags: `messaging`, `gdrive`, `restrictions`, `search` (global search page), `i18n` (lets chosen users see unreleased locales; see below).
 
 ### Controller Conventions
 

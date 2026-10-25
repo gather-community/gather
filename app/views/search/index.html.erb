@@ -1,4 +1,4 @@
-<% content_for(:title, "Search") %>
+<% content_for(:title, t(".title")) %>
 <%
   show_gather = @types.any? { |t| t != "drive" }
   show_drive  = @types.include?("drive")
@@ -13,16 +13,16 @@
 
   <div class="search-input-group">
     <form action="<%= search_path %>" method="get" class="search-body-form"
-          role="search" aria-label="Search">
+          role="search" aria-label="<%= t(".form_label") %>">
       <% if @types != SearchController::ALL_TYPES_WITH_DRIVE %>
         <input type="hidden" name="types" value="<%= @types.join("+") %>">
       <% end %>
       <div class="input-group">
-        <label for="search-body-input" class="sr-only">Search Gather</label>
+        <label for="search-body-input" class="sr-only"><%= t(".input_label") %></label>
         <input type="text" id="search-body-input" name="search" value="<%= @query %>"
-               class="form-control" placeholder="Search Gather and Google Drive…" autofocus>
+               class="form-control" placeholder="<%= t(".placeholder") %>" autofocus>
         <span class="input-group-btn">
-          <button class="btn btn-default" type="submit" aria-label="Search">
+          <button class="btn btn-default" type="submit" aria-label="<%= t(".submit") %>">
             <%= icon_tag("search") %>
           </button>
         </span>
@@ -30,7 +30,7 @@
     </form>
     <a href="#" data-toggle="modal" data-target="#search-tips-modal" class="search-tips-link"
        aria-haspopup="dialog">
-      <%= icon_tag("question-circle") %> Search tips
+      <%= icon_tag("question-circle") %> <%= t(".search_tips") %>
     </a>
   </div>
 
@@ -42,14 +42,14 @@
         <% if show_gather %>
           <li role="presentation" class="active">
             <a href="#gather-pane" role="tab" data-toggle="tab">
-              <%= icon_tag("search") %> Gather<span data-search-target="gatherCount"></span>
+              <%= icon_tag("search") %> <%= t(".gather") %><span data-search-target="gatherCount"></span>
             </a>
           </li>
         <% end %>
         <% if show_drive %>
           <li role="presentation" class="<%= "active" unless show_gather %>">
             <a href="#drive-pane" role="tab" data-toggle="tab">
-              <%= icon_tag("google", style: :brands) %> Google Drive<span data-search-target="driveCount"></span>
+              <%= icon_tag("google", style: :brands) %> <%= t(".google_drive") %><span data-search-target="driveCount"></span>
             </a>
           </li>
         <% end %>
@@ -58,19 +58,20 @@
 
     <div class="search-layout <%= "search-layout-columns" if show_both %>">
 
-      <div class="search-results-area">
+      <%# tab-content makes Bootstrap hide the inactive pane on mobile; the md+ styles show both. %>
+      <div class="search-results-area <%= "tab-content" if show_both %>">
         <% if show_gather %>
           <div id="gather-pane" class="tab-pane active search-section">
             <% if show_both %>
               <h3 class="search-section-heading hidden-xs hidden-sm">
-                <%= icon_tag("search") %> Gather<span data-search-target="gatherCount"></span>
+                <%= icon_tag("search") %> <%= t(".gather") %><span data-search-target="gatherCount"></span>
                 <span data-search-target="gatherSpinner" class="inline-spinner hidden">
                   <%= icon_tag("circle-o-notch", class: "fa-spin") %>
                 </span>
               </h3>
             <% end %>
             <div data-search-target="gatherResults" class="search-results-body">
-              <%= icon_tag("circle-o-notch", class: "fa-spin") %> Loading&hellip;
+              <%= icon_tag("circle-o-notch", class: "fa-spin") %> <%= t(".loading") %>
             </div>
           </div>
         <% end %>
@@ -79,18 +80,18 @@
           <div id="drive-pane" class="tab-pane <%= "active" unless show_gather %> search-section">
             <% if show_both %>
               <h3 class="search-section-heading hidden-xs hidden-sm">
-                <%= icon_tag("google", style: :brands) %> Google Drive<span data-search-target="driveCount"></span>
+                <%= icon_tag("google", style: :brands) %> <%= t(".google_drive") %><span data-search-target="driveCount"></span>
                 <span data-search-target="driveSpinner" class="inline-spinner hidden">
                   <%= icon_tag("circle-o-notch", class: "fa-spin") %>
                 </span>
               </h3>
             <% end %>
             <div data-search-target="driveResults" class="search-results-body">
-              <%= icon_tag("circle-o-notch", class: "fa-spin") %> Loading&hellip;
+              <%= icon_tag("circle-o-notch", class: "fa-spin") %> <%= t(".loading") %>
             </div>
             <div data-search-target="loadMoreDrive" class="load-more hidden">
               <a href="#" data-action="click->search#loadMoreDrive">
-                Load more Drive results
+                <%= t(".load_more_drive") %>
               </a>
             </div>
           </div>
@@ -98,7 +99,7 @@
       </div>
 
       <aside class="search-sidebar">
-        <h4 class="search-sidebar-heading">Filter</h4>
+        <h4 class="search-sidebar-heading"><%= t(".filter") %></h4>
         <%= render "type_filters" %>
       </aside>
 
@@ -107,10 +108,10 @@
   <% else %>
     <div class="search-layout <%= "search-layout-columns" if show_drive %>">
       <div class="search-results-area">
-        <div class="center-notice">Enter a search term above to search Gather and Google Drive.</div>
+        <div class="center-notice"><%= t(".empty_query") %></div>
       </div>
       <aside class="search-sidebar">
-        <h4 class="search-sidebar-heading">Filter</h4>
+        <h4 class="search-sidebar-heading"><%= t(".filter") %></h4>
         <%= render "type_filters" %>
       </aside>
     </div>

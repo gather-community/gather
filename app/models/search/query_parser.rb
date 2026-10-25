@@ -64,6 +64,8 @@ module Search
           }
         },
         highlight: {
+          # HTML-escape the source text in fragments, since the views render them as raw HTML.
+          encoder: "html",
           pre_tags: ["<mark>"],
           post_tags: ["</mark>"],
           fields: {
@@ -78,10 +80,11 @@ module Search
 
     # Multi-index Gather search across all indexed models.
     # community_id is the integer ID of the current community.
+    # extra_filters are additional bool filter clauses, e.g. from Search::Visibility.
     # Includes results where community_id matches (single-community models) OR
     # community_ids contains the ID (multi-community models like Groups::Group).
     # rubocop:disable Metrics/MethodLength
-    def to_gather_query(community_id:, kinds: nil)
+    def to_gather_query(community_id:, kinds: nil, extra_filters: [])
       must = []
       if full_text_terms.any?
         must << {
@@ -106,17 +109,21 @@ module Search
         }
       }
 
-      filter = [community_filter]
+      filter = [community_filter, *extra_filters]
       filter << {terms: {kind: kinds}} if kinds.present?
 
       {
         query: {
           bool: {
             filter: filter,
-            must: must.presence || [{match_all: {}}]
+            must: must.presence || [{match_all: {}}],
+            # A meal's calendar events duplicate the meal itself, which has its own result.
+            must_not: [{exists: {field: "meal_id"}}]
           }
         },
         highlight: {
+          # HTML-escape the source text in fragments, since the views render them as raw HTML.
+          encoder: "html",
           pre_tags: ["<mark>"],
           post_tags: ["</mark>"],
           fields: {

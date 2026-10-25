@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
+import i18n from "../utils/i18n";
 
 export default class extends Controller {
   static targets = [
@@ -32,7 +33,7 @@ export default class extends Controller {
       // Empty typesValue means all types (including drive) are selected
       const allTypes = !this.typesValue;
       const types = allTypes ? [] : this.typesValue.split(" ");
-      const showGather = allTypes || types.some(t => t !== "drive");
+      const showGather = allTypes || types.some(type => type !== "drive");
       const showDrive  = allTypes || types.includes("drive");
       if (showGather) this.fetchSection("gather");
       if (showDrive)  this.fetchSection("drive");
@@ -82,7 +83,10 @@ export default class extends Controller {
       });
       data = await resp.json();
     } catch {
-      resultsEl.innerHTML = '<div class="center-notice">Error loading results. Please try again.</div>';
+      const notice = document.createElement("div");
+      notice.className = "center-notice";
+      notice.textContent = i18n.t("search.load_error");
+      resultsEl.replaceChildren(notice);
       spinnerEl?.classList.add("hidden");
       return;
     }

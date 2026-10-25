@@ -30,6 +30,7 @@ class SearchController < ApplicationController
   # rubocop:disable Metrics/MethodLength
   def index
     authorize(:search)
+    raise Pundit::NotAuthorizedError unless FeatureFlag.lookup("search").on?(current_user)
     skip_policy_scope
 
     @query = params[:search].to_s.strip
@@ -78,11 +79,13 @@ class SearchController < ApplicationController
   def fetch_gather_results
     return [] if @parser.nil? || @parser.blank? || gather_kinds.empty?
 
+    visibility = Search::Visibility.new(user: current_user, community: current_community)
     query = @parser.to_gather_query(
       community_id: current_community.id,
-      kinds: (gather_kinds.length == ALL_TYPES.length) ? nil : gather_kinds
+      kinds: (gather_kinds.length == ALL_TYPES.length) ? nil : gather_kinds,
+      extra_filters: visibility.es_filters
     )
-    Elasticsearch::Model.search(query, GATHER_MODELS).results
+    visibility.filter(Elasticsearch::Model.search(query, GATHER_MODELS).results)
   end
 
   def fetch_drive_results
@@ -103,7 +106,8 @@ class SearchController < ApplicationController
       drive_ids: drive_ids, parser: @parser)
     searcher.search(page_token: params[:page_token].presence)
   rescue Google::Apis::AuthorizationError, Signet::AuthorizationError => e
-    Rails.logger.error("GDrive authorization error during search: #{e.message}")
+    # The community's Drive connection needs an admin to reauthorize. Users see a notice saying so.
+    Gather::ErrorReporter.instance.report(e, data: {community_id: current_community.id})
     {files: [], next_page_token: nil, error: :auth}
   end
 end

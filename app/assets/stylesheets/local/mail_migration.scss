@@ -1,0 +1,7 @@
+.mail-migration {
+  // Highlight fully migrated rows. Bootstrap's tr.success styling only applies to .table,
+  // not our table.index.
+  table.index tr.success td {
+    background-color: #dff0d8; // Bootstrap 3 $state-success-bg
+  }
+}

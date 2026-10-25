@@ -19,7 +19,7 @@ en:
       summary:
         one: "%{migrated} of 1 domain fully migrated."
         other: "%{migrated} of %{count} domains fully migrated."
-      never_checked_prompt: "No checks have run yet — use 'Refresh All' below to run the first one."
+      never_checked_prompt: "No checks have run yet — use 'Refresh All' to run the first one."
       not_configured: >-
         The SMTP2GO API key is not configured, so sending status and validation can't be checked.
         Set smtp2go.api_key in the settings.
@@ -35,6 +35,7 @@ en:
       updated: "Updated"
       not_updated: "Not Updated"
       never_checked: "Never checked"
+      refresh_all: "Refresh All"
       none: "—"
       refresh_row: "Re-check this domain"
       record_points_to: "%{host} → %{target}"

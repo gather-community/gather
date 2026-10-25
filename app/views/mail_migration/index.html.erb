@@ -1,5 +1,14 @@
 <% content_for(:title, t(".title")) %>
 
+<% content_for(:action_links) do %>
+  <% if policy(:mail_migration).refresh? %>
+    <%= button_to(mail_migration_refresh_path, class: "btn btn-primary",
+          form: {style: "display:inline-block"}) do %>
+      <%= icon_tag("refresh") %> <%= t(".refresh_all") %>
+    <% end %>
+  <% end %>
+<% end %>
+
 <p>
   <%= t(".intro") %>
 </p>

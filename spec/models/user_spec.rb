@@ -581,6 +581,38 @@ describe User do
   # - For fake users and households, destruction may happen when associations are present that would
   #   normally forbid it, but the deletion script can be ordered in such a way as to avoid problems by
   #   deleting dependent objects first, and then users and households.
+  describe "notification preferences" do
+    let(:user) { build(:user) }
+
+    it "defaults configurable kinds to on" do
+      expect(user.notification_enabled?(:meal_reminder)).to be(true)
+    end
+
+    it "stores only the overrides" do
+      user.set_notification_pref(:meal_reminder, false)
+      expect(user.notification_prefs).to eq("meal_reminder" => {"email" => false})
+      expect(user.notification_enabled?(:meal_reminder)).to be(false)
+      expect(user.notification_enabled?(:job_reminder)).to be(true)
+
+      user.set_notification_pref(:meal_reminder, true)
+      expect(user.notification_prefs).to eq({})
+      expect(user.notification_enabled?(:meal_reminder)).to be(true)
+    end
+
+    it "treats required kinds as always on, even if something is stored" do
+      user.notification_prefs = {"meal_message" => {"email" => false}}
+      expect(user.notification_enabled?(:meal_message)).to be(true)
+    end
+
+    it "refuses to turn off a required kind" do
+      expect { user.set_notification_pref(:meal_message, false) }.to raise_error(ArgumentError)
+    end
+
+    it "raises for an unknown kind" do
+      expect { user.notification_enabled?(:nope) }.to raise_error(ArgumentError)
+    end
+  end
+
   describe "destruction" do
     let!(:user) { create(:user) }
 
@@ -688,14 +720,23 @@ describe User do
 
     context "with memorial" do
       let!(:memorial) { create(:memorial, user: user) }
-      it "deletes cleanly" do
+
+      # A memorial outlives the account and carries its own copy of the name/community/photo,
+      # so the link is simply nullified. See People::Memorial.
+      it "keeps the memorial and nullifies the link" do
+        name = memorial.name
         user.destroy
-        expect { memorial.reload }.to raise_error(ActiveRecord::RecordNotFound)
+        expect(memorial.reload.user_id).to be_nil
+        expect(memorial.name).to eq(name)
       end
     end
 
     context "with memorial message" do
       let!(:memorial_message) { create(:memorial_message, author: user) }
+
+      # A raw destroy still cascades, which is what keeps community teardown working.
+      # People::UserDeletion reassigns the messages first, so they survive that path —
+      # see the anonymization spec in people/user_deletion_spec.rb.
       it "deletes cleanly" do
         user.destroy
         expect { memorial_message.reload }.to raise_error(ActiveRecord::RecordNotFound)

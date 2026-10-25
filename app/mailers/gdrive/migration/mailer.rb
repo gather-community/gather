@@ -3,8 +3,6 @@
 module GDrive
   module Migration
     class Mailer < ApplicationMailer
-      attr_reader :community
-
       def migration_request(migration_request)
         @migration_request = migration_request
         @operation = @migration_request.operation
@@ -17,8 +15,7 @@ module GDrive
         mail(
           to: recipients,
           reply_to: @operation.contact_email,
-          subject: "[Action Required] Help #{@community.name} reorganize its Google Drive files!",
-          include_inactive: :always
+          subject: t("gdrive.migration.request_subject", community: @community.name)
         )
       end
     end

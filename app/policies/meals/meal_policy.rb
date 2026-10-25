@@ -52,6 +52,19 @@ module Meals
       active_admin_or?(:meals_coordinator)
     end
 
+    # The meals export exists to round trip with import, so it uses the same gate.
+    def export?
+      active_admin_or?(:meals_coordinator)
+    end
+
+    # Deliberately a separate predicate from export?. The signups export aggregates per-household
+    # diner counts and free-text comments across many meals at once, which is a bigger disclosure
+    # than the per-meal views (gated on show?/summary?) where that data appears today. Keeping it
+    # separate means it can be loosened or tightened without affecting the meals export.
+    def export_signups?
+      export?
+    end
+
     def update?
       change_date_loc? || change_invites? || change_formula? || change_menu? || change_workers?
     end
@@ -145,6 +158,25 @@ module Meals
       permitted.concat(capacity_close_time_attribs) if change_capacity_close_time?
       permitted << :source_form if permitted.any?
       permitted
+    end
+
+    # The :roles, :diner_counts and :type_prices entries are sentinels that Meals::MealCsvExporter
+    # expands into one column per active meal role/type. They're listed here rather than computed
+    # in the exporter so that the permission decision stays in the policy.
+    #
+    # This is called on a sample meal (no signups, not finalized), so record-specific predicates
+    # like show_reimbursement_details? and change_expenses? would be meaningless here. We check
+    # roles directly instead.
+    def exportable_attributes
+      attribs = %i[served_at calendars formula]
+      attribs << :communities if multi_community?
+      attribs.concat(%i[action id roles title entrees side kids dessert notes allergens capacity
+        status signup_count spots_left diner_counts])
+      if active_admin_or?(:meals_coordinator, :biller)
+        attribs.concat(%i[ingredient_cost pantry_cost total_cost payment_method reimbursee
+          type_prices])
+      end
+      attribs
     end
 
     private

@@ -5,7 +5,7 @@ module Nav
   class Builder < ApplicationDecorator
     delegate_all
 
-    attr_accessor :context
+    attr_accessor :context, :current_period
 
     def initialize
       self.context = {}
@@ -132,7 +132,7 @@ module Nav
           sample_household = Household.new(community: community)
           sample_user = User.new(household: sample_household)
           sample_vehicle = People::Vehicle.new(household: Household.new(community: community))
-          sample_memorial = People::Memorial.new(user: sample_user)
+          sample_memorial = People::Memorial.new(community: community)
           [
             {
               name: :directory,
@@ -224,23 +224,26 @@ module Nav
           sample_period = Work::Period.new(community: community)
           sample_job = Work::Job.new(period: sample_period)
           sample_shift = Work::Shift.new(job: sample_job)
+          # Stay within the current period (if any) when switching between work sub-pages.
+          # Set by Work::WorkController#load_period.
+          period = current_period
           [
             {
               name: :signups,
               parents: :work,
-              path: h.work_shifts_path,
+              path: period ? h.work_period_shifts_path(period) : h.work_shifts_path,
               permitted: h.policy(sample_shift).index_wrapper?,
               icon: "check"
             }, {
               name: :report,
               parents: :work,
-              path: h.work_report_path,
+              path: period ? h.work_period_report_path(period) : h.work_report_path,
               permitted: h.policy(sample_period).report_wrapper?,
               icon: "line-chart"
             }, {
               name: :jobs,
               parents: :work,
-              path: h.work_jobs_path,
+              path: period ? h.work_period_jobs_path(period) : h.work_jobs_path,
               permitted: h.policy(sample_job).index?,
               icon: "wrench"
             }, {
@@ -370,8 +373,8 @@ module Nav
           }, {
             name: :accounts,
             parents: [:personal],
-            path: h.yours_accounts_path,
-            permitted: h.policy(Billing::Account.new).yours?,
+            path: h.mine_accounts_path,
+            permitted: h.policy(Billing::Account.new).mine?,
             icon: "coins",
             i18n_key: multi_community? ? :accounts : :account
           }, {
@@ -387,6 +390,12 @@ module Nav
             permitted: UserPolicy.new(user, user).update?,
             icon: "asterisk"
           }, {
+            name: :notifications,
+            parents: [:personal],
+            path: h.notification_preferences_path,
+            permitted: UserPolicy.new(user, user).update_notification_prefs?,
+            icon: "bell"
+          }, {
             name: :sign_out,
             parents: [:personal],
             path: h.destroy_user_session_path,
@@ -398,16 +407,17 @@ module Nav
       filter_and_set_active_items(items)
     end
 
+    def label(item)
+      return item[:name] if item[:name].is_a?(String)
+      i18n_key_parts = ["nav_links"]
+      i18n_key_parts.concat(Array.wrap(item[:parents]))
+      i18n_key_parts << (item[:i18n_key] || item[:name])
+      i18n_key = i18n_key_parts.join(".")
+      t("#{i18n_key}._self", default: :"#{i18n_key}")
+    end
+
     def link(item, tab: false, icon: true)
-      name = if item[:name].is_a?(String)
-        item[:name]
-      else
-        i18n_key_parts = ["nav_links"]
-        i18n_key_parts.concat(Array.wrap(item[:parents]))
-        i18n_key_parts << (item[:i18n_key] || item[:name])
-        i18n_key = i18n_key_parts.join(".")
-        name = t("#{i18n_key}._self", default: t(i18n_key))
-      end
+      name = label(item)
       params = {}
       params[:method] = item[:method]
       params[:role] = "tab" if tab

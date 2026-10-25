@@ -156,4 +156,99 @@ describe Calendars::Calendar do
       end
     end
   end
+
+  describe "repeating events" do
+    let(:calendar) { create(:calendar, allow_overlap: true) }
+
+    def series_on(cal, ending: nil)
+      rule = IceCube::Rule.weekly
+      rule = rule.until(ending) if ending
+      start = (ending ? ending - 3.weeks : 1.day.from_now).change(hour: 18)
+      create(:event, calendar: cal, recurrence_rule: rule.to_hash, starts_at: start, ends_at: start + 1.hour)
+    end
+
+    def protocol_with(calendars: [calendar], community: calendar.community, **rules)
+      create(:calendar_protocol, calendars: calendars, community: community, **rules)
+    end
+
+    describe "#allows_recurring_events?" do
+      it "is true when overlaps are allowed and no protocol blocks them" do
+        expect(calendar.allows_recurring_events?).to be(true)
+      end
+
+      it "is false when overlaps aren't allowed" do
+        expect(create(:calendar, allow_overlap: false).allows_recurring_events?).to be(false)
+      end
+
+      {fixed_start_time: "14:00", fixed_end_time: "16:00", max_lead_days: 30, max_days_per_year: 10,
+       max_minutes_per_year: 600}.each do |rule, value|
+        it "is false with a #{rule} rule" do
+          protocol_with(**{rule => value})
+          expect(calendar.allows_recurring_events?).to be(false)
+        end
+      end
+
+      it "is false with a blocking rule limited to some kinds" do
+        protocol_with(max_lead_days: 30, kinds: ["Party"])
+        expect(calendar.allows_recurring_events?).to be(false)
+      end
+
+      it "is false with a blocking rule in a protocol that applies to every calendar" do
+        protocol_with(calendars: [], max_lead_days: 30)
+        expect(calendar.allows_recurring_events?).to be(false)
+      end
+
+      it "ignores protocols that apply only to other calendars or other communities" do
+        protocol_with(calendars: [create(:calendar)], max_lead_days: 30)
+        protocol_with(calendars: [], community: create(:community), max_lead_days: 30)
+        expect(calendar.allows_recurring_events?).to be(true)
+      end
+
+      it "is true with rules that every occurrence keeps the same way" do
+        protocol_with(max_length_minutes: 120, pre_notice: "Be nice", requires_kind: true)
+        expect(calendar.allows_recurring_events?).to be(true)
+      end
+    end
+
+    describe "#upcoming_recurring_events?" do
+      it "is true with a series that doesn't end" do
+        series_on(calendar)
+        expect(calendar.upcoming_recurring_events?).to be(true)
+      end
+
+      it "is true when the series is on this calendar as one of several" do
+        series_on(create(:calendar, allow_overlap: true)).eventlets.create!(calendar: calendar)
+        expect(calendar.upcoming_recurring_events?).to be(true)
+      end
+
+      it "is false once the series has ended" do
+        series_on(calendar, ending: 1.week.ago)
+        expect(calendar.upcoming_recurring_events?).to be(false)
+      end
+
+      it "is false with only non-repeating events" do
+        create(:event, calendar: calendar)
+        expect(calendar.upcoming_recurring_events?).to be(false)
+      end
+    end
+
+    describe "turning off overlaps" do
+      it "is refused while a series is still to come" do
+        series_on(calendar)
+
+        expect(calendar.update(allow_overlap: false)).to be(false)
+        expect(calendar.errors[:allow_overlap])
+          .to include("must stay on while this calendar has repeating events")
+      end
+
+      it "is allowed once every series has ended" do
+        series_on(calendar, ending: 1.week.ago)
+        expect(calendar.update(allow_overlap: false)).to be(true)
+      end
+
+      it "is allowed with no series" do
+        expect(calendar.update(allow_overlap: false)).to be(true)
+      end
+    end
+  end
 end

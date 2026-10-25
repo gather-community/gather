@@ -1,5 +1,9 @@
 en:
   common:
+    settings: "Settings"
+    settings_updated: "Settings updated successfully."
+    open_date_picker: "Open date picker"
+    select_user: "Select User ..."
     adults: "Adults"
     all: "All"
     cancel: "Cancel"
@@ -7,12 +11,18 @@ en:
     children: "Children"
     clearing_the_filter: "clearing the filters"
     create_new: "Create New"
+    # Placeholder for an empty value in a details table.
+    none_bracketed: "[None]"
+    # A person or household name marked as inactive.
+    with_inactive: "%{name} (Inactive)"
+    close: "Close"
+    print: "Print"
+    loading_indicator: "Loading indicator"
+    # Timestamp on printed pages.
+    generated_at: "Generated: %{time}"
     community_count:
       one: "%{count} Community"
       other: "%{count} Communities"
-    day:
-      one: "day"
-      other: "days"
     default: "Default"
     edit: "Edit"
     "false": "False"
@@ -26,10 +36,8 @@ en:
     "true": "True"
     unknown: "Unknown"
     unlimited: "Unlimited"
-    worker:
-      one: "worker"
-      other: "workers"
     "yes": "Yes"
+    "no": "No"
     time_with_preposition:
       "on": "on %{t}"
       "at": "at %{t}"
@@ -62,7 +70,19 @@ en:
 
   errors:
     messages:
+      invalid_yaml: "Invalid YAML"
+      invalid_custom_field_spec: "This specification is invalid. Please contact Gather support for assistance."
       no_semicolons: "Semicolons not allowed"
+
+  # App modal button labels + default titles (exported to JS via config/i18n-js.yml).
+  modal:
+    ok: "OK"
+    cancel: "Cancel"
+    confirm_title: "Confirm"
+    alert_title: "Notice"
+
+  payment:
+    accountholder_required: "Please specify the accountholder name."
 
   confirmations:
     billing/template:
@@ -97,6 +117,7 @@ en:
       deactivate: "Are you sure you want to deactivate the calendar '%{name}'?"
     calendars/event:
       destroy: "Are you sure you want to delete the event '%{name}'? This action cannot be undone."
+      destroy_series: "Are you sure you want to delete every occurrence of the recurring event '%{name}', past and future? This action cannot be undone."
     calendars/group:
       destroy: "Are you sure you want to delete this calendar group? This action cannot be undone."
     gdrive/item:
@@ -124,6 +145,10 @@ en:
       unsignup: "Are you sure you want to remove your name from this job?"
 
   activatables:
+    community:
+      one_html: "This community was deactivated at %{time}."
+      two_html: "You can %{link}."
+      three: "reactivate it"
     user:
       one_html: "This user was marked inactive at %{time}."
       two_html: "You can %{link}."
@@ -154,17 +179,22 @@ en:
       three: "reactivate it"
 
   deactivatable:
+    community:
+      success:
+        activate: "Community reactivated successfully."
     household:
       success:
         activate: "Household activated successfully."
         deactivate: "Household deactivated successfully."
         destroy: "Household deleted successfully."
+        hard_destroy: "Household and all its members were permanently deleted."
     user:
       success:
         activate: "User activated successfully."
         activate_unconfirmed: "User activated successfully, but they will need an invitation to sign in. Click 'Invite' below to invite them."
         deactivate: "User deactivated successfully."
         destroy: "User deleted successfully."
+        hard_destroy: "User was permanently deleted."
       error:
         activate: "Error during activation: %{message}"
         deactivate: "Error during deactivation: %{message}"
@@ -338,6 +368,46 @@ en:
         formula: "Formula"
         communities: "Communities"
         role: "Role"
+        # `action` and `id` are duplicated from `common` below so that the exporter, which does a
+        # plain lookup with no fallback, produces headers byte-identical to those Meals::Import
+        # expects (it checks the `meals/meal` scope first and falls back to `common`).
+        action: "Action"
+        id: "ID"
+        title: "Title"
+        entrees: "Entrees"
+        side: "Side"
+        kids: "Kids"
+        dessert: "Dessert"
+        notes: "Notes"
+        allergens: "Allergens"
+        capacity: "Capacity"
+        status: "Status"
+        signup_count: "Total Diners"
+        spots_left: "Spots Left"
+        ingredient_cost: "Ingredient Cost"
+        pantry_cost: "Pantry Cost"
+        total_cost: "Total Cost"
+        payment_method: "Payment Method"
+        reimbursee: "Reimbursee"
+        # The "Diners: "/"Price: " prefixes keep these from colliding with meal role titles,
+        # which Meals::Import matches by exact string.
+        diner_count: "Diners: %{type}"
+        type_price: "Price: %{type}"
+      meals/signup:
+        meal_id: "Meal ID"
+        served_at: "Meal Date/Time"
+        meal_title: "Meal Title"
+        calendars: "Meal Locations"
+        formula: "Formula"
+        community_id: "Community ID"
+        community_name: "Community"
+        household_id: "Household ID"
+        household_name: "Household"
+        diner_count: "Diners: %{type}"
+        total: "Total Diners"
+        takeout: "Takeout"
+        comments: "Comments"
+        created_at: "Signup Time"
       common:
         id: "ID"
         action: "Action"
@@ -352,6 +422,17 @@ en:
         community:
           bad_id: "Could not find a community with ID %{str}"
           bad_name: "Could not find a community named '%{str}'"
+        file_empty: "File is empty"
+        invalid_headers: "Invalid column headers: %{headers}"
+        missing_columns: "Missing columns: %{columns}"
+        invalid_action: "Invalid action: %{action}"
+        action_not_permitted: "Action not permitted (%{action})"
+        served_at_required: "Date/time is required"
+        invalid_served_at: "'%{str}' is not a valid date/time"
+        calendars_required: "Calendar(s) are required"
+        meal_id_not_found: "Could not find meal with ID '%{id}'"
+        meal_not_found: "Could not find meal served at %{time} at locations: %{locations}"
+        delete_failed: "Error deleting meal %{id}: '%{error}'"
         user:
           bad_id: "Could not find a user with ID %{str}"
           bad_name: "Could not find a user named '%{str}'"
@@ -372,6 +453,7 @@ en:
       rescan: "Rescan"
       summary: "Summary"
       finalize: "Finalize"
+      unfinalize: "Unfinalize"
       cancel: "Cancel"
       send_message: "Message"
     community:
@@ -383,6 +465,10 @@ en:
       update_photo: "Edit Photo"
       invite: "Invite"
       impersonate: "Impersonate"
+      destroy: "Delete Permanently"
+      delete_self: "Delete My Account"
+    household:
+      destroy: "Delete Permanently"
     wiki/page:
       history: "History"
     work/job:
@@ -393,6 +479,7 @@ en:
       unsignup: "Remove Signup"
     work/period:
       review_notices: "Send Notices"
+      send_notices: "Send Notices"
 
   dropzone:
     prompts:
@@ -401,52 +488,8 @@ en:
         user: "Click or Drag Photo Here"
         calendars/calendar: "Click or Drag Photo Here"
 
-  calendars:
-    your_meals: "Meals You're Attending"
-    all_meals: "All Meals"
-    community_meals: "%{community} Meals"
-    community_events: "%{community} Events"
-    your_events: "Your Events"
-    your_jobs: "Your Jobs"
-
   titles:
     meals/messages: "Send Meal Message"
-
-  transaction_codes:
-    meal: "Meal"
-    dues: "Membership Dues"
-    payment: "Payment"
-    reimb: "Reimbursement"
-    othcrd: "Other Credit"
-    othchg: "Other Charge"
-    late: "Late Fee"
-    initbal: "Opening Balance"
-
-  accounts:
-    index:
-      summary:
-        one: "There is 1 active account."
-        other: "There are %{count} active accounts."
-      active_account_definition: "An active account is one having current activity or a non-zero current balance."
-      last_statement_run: "Statements were last sent out on %{date}."
-      statements_never_run: "Statements have never been sent out."
-      no_users:
-        one: "There is 1 account with no associated users. A statement will not be generated for that account."
-        other: "There are %{count} accounts with no associated users. Statements will not be generated for those accounts."
-      recent_statements:
-        one: "There is 1 account with a statement in the last 24 hours. A new statement will not be generated for that account."
-        other: "There are %{count} accounts with statements in the last 24 hours. Statements will not be generated for those accounts."
-    others:
-      one_html: "You have another Gather account with %{cmty}."
-      multiple_html: "You also have Gather accounts with %{cmtys}."
-    payment_badge_alt:
-      paypal: "PayPal payment badge"
-      online_bill_pay: "Online bill pay payment badge"
-      check: "Check payment badge"
-      cash: "Cash payment badge"
-
-  households:
-    greeting: "Dear %{name} Household,"
 
   roles:
     admin: "Admin"
@@ -459,6 +502,20 @@ en:
     wikiist: "Wikiist"
     work_coordinator: "Work Coordinator"
     new_community_approver: "New Community Approver"
+    index:
+      title: "Roles"
+      people: "People"
+      legend: "Legend"
+      # Each line is "<role name> - <description>".
+      legend_item_html: "<strong>%{role}</strong> - %{description}"
+      descriptions:
+        admin: "All of the other roles combined"
+        biller: "Manages billing transactions, templates, statements, formulas and finalizes meals"
+        photographer: "Can edit anyone's directory photo"
+        calendar_coordinator: "Manages calendars and anyone's calendar events"
+        meals_coordinator: "Manages meals, meal roles, billing formulas, and meal types"
+        wikiist: "Manages specifically protected wiki pages"
+        work_coordinator: "Manages jobs, shifts and work periods"
 
   phone_types:
     abbreviations:
@@ -466,51 +523,15 @@ en:
       work: "w"
       mobile: "m"
 
-  auth_mailer:
-    sign_in_invitation:
-      subject: "Instructions for Signing in to Gather"
-
-  meal_mailer:
-    meal_reminder:
-      subject: "Meal Reminder: %{datetime} - %{title} at %{location}"
-      body:
-        diner_count:
-          one: "There is %{count} diner signed up from your household."
-          other: "There are %{count} diners signed up from your household."
-    role_reminder:
-      subject: "Job Reminder: %{role} on %{datetime} at %{location}%{note}"
-    worker_change_notice:
-      subject: "Meal Job Assignment Change Notice"
-    cook_menu_reminder:
-      subject: "Menu Reminder: Please Post Menu for %{date}"
-    normal_message:
-      subject: "Message about Meal on %{datetime}"
-    cancellation_message:
-      subject: "Meal on %{datetime} CANCELLED"
-
-  work_mailer:
-    job_reminder:
-      subject: "Job Reminder: %{title}%{note}%{times}"
-    job_choosing_notice:
-      subject: "Job Choosing is Coming Up!"
-
-  users:
-    greeting: "Dear %{name},"
-    preferred_contact_tooltip: "Prefers to be contacted via: %{method}"
-    all_users: "All Users"
-
   date_range_lens:
     past_12: "Past 12 Months"
 
   community_lens:
     all: "All Communities"
 
+  lens_bar:
+    clear_filter: "Clear Filter"
+
   search_lens:
     prompt: "Search..."
 
-  calendar_exports:
-    meals:
-      diner_count:
-        one: "%{count} diner from your household"
-        other: "%{count} diners from your household"
-      signup_comments: "Signup comments:\n%{comments}"

@@ -1,5 +1,51 @@
 en:
   wiki:
+    page_deleted: "Page deleted successfully."
+    page_listing: "Wiki Page Listing"
+    new_page: "New Wiki Page"
+    help: "Wiki Help"
+    # The markdown editor's toolbar buttons and status bar.
+    editor:
+      autosaved: "Autosaved: "
+      bold: "Bold"
+      fullscreen: "Toggle Fullscreen"
+      heading: "Heading"
+      image: "Insert Image"
+      italic: "Italic"
+      lines:
+        one: "lines: %{count}"
+        other: "lines: %{count}"
+      link: "Create Link"
+      ordered_list: "Numbered List"
+      preview: "Toggle Preview"
+      quote: "Quote"
+      side_by_side: "Toggle Side by Side"
+      unordered_list: "Generic List"
+      words:
+        one: "words: %{count}"
+        other: "words: %{count}"
+    pages:
+      history_table:
+        version: "Version"
+        date: "Date"
+        author: "Author"
+        comment: "Comment"
+        compare: "Compare Selected"
+        return: "Return to Page"
+      all:
+        title: "Wiki Page List"
+      compare:
+        title: "Wiki Compare: %{title}"
+        differences: "Differences Between Versions %{old} and %{new}"
+        versions_between: "Versions Between %{old} and %{new}"
+      edit:
+        title: "Edit Wiki Page: %{title}"
+      history:
+        title: "Wiki History: %{title}"
+      new:
+        title: "New Wiki Page"
+      show:
+        wiki_home: "Wiki Home"
     not_found_create: "There is no wiki page named '%{title}'. You can create it below!"
     preview_notice: "This is a preview. To save or further edit the page, use the form below."
     revision_info: "Page revised on %{time} by %{user}"

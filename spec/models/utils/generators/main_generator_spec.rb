@@ -32,9 +32,15 @@ describe Utils::Generators::MainGenerator, :without_tenant, :perform_jobs do
     MailTestRun
     Meals::Import
     Meals::Message
+    Messaging::Account
+    Messaging::Transaction
     People::MemberType
     Subscription::Subscription
     Subscription::Intent
+    Subscription::MessagingTopup
+    Subscription::ExchangeRate
+    Subscription::InflationReading
+    Stripe::WebhookEvent
     Wiki::Page
     Wiki::PageVersion
     Work::JobReminderDelivery

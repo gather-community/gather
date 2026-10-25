@@ -31,7 +31,7 @@ module Utils
         # Can't create the cluster inside the transaction (see above). So we need to clean up in here instead
         # in case of error.
         ActsAsTenant.with_tenant(cluster) do
-          cluster.destroy
+          cluster&.destroy
         end
         raise ex
       end

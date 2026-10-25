@@ -100,14 +100,14 @@ module Calendars
         title << " (#{age})" if age <= 18
         Eventlet.new(
           calendar: self,
-          starts_at: date.in_time_zone,
-          ends_at: date.in_time_zone + 1.day - 1.second,
-          linkable: user,
-          uid: "#{slug}_#{user.id}",
-          all_day: true,
           event: Event.new(
-            name: title
-          )
+            name: title,
+            all_day: true,
+            starts_at: date.in_time_zone,
+            ends_at: date.in_time_zone + 1.day - 1.second
+          ),
+          linkable: user,
+          uid: "#{slug}_#{user.id}"
         )
       end
     end

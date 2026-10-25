@@ -1,4 +1,4 @@
-3# frozen_string_literal: true
+# frozen_string_literal: true
 
 require "rails_helper"
 
@@ -48,6 +48,23 @@ describe "calendars", js: true do
       expect(page).to have_content(/Cal1.+Group.+  Cal3.+  Cal2.+Cal5.+Cal4/m)
     end
 
+    context "as calendar coordinator" do
+      let(:actor) { create(:calendar_coordinator) }
+
+      scenario "index without admin-only controls" do
+        visit(calendars_path)
+        expect(page).to have_title("Calendars")
+        expect(page).to have_content(/Group.+  Cal2.+  Cal3.+Cal1.+Cal4.+Cal5/m)
+        expect(page).to have_link("Create Calendar")
+        expect(page).not_to have_link("Create Group")
+        within("table.index") do
+          expect(page).to have_link("Cal1")
+          expect(page).not_to have_link("Group")
+          expect(page).not_to have_css(".move-links")
+        end
+      end
+    end
+
     scenario "create and update calendar" do
       visit(calendars_path)
       click_link("Create Calendar")
@@ -81,16 +98,34 @@ describe "calendars", js: true do
       expect(page).to have_css("table tr td", text: "Baz Qux")
     end
 
+    scenario "overlaps can't be turned off while the calendar has repeating events" do
+      calendar = calendars.first
+      calendar.update!(allow_overlap: true)
+      start = 1.day.from_now.change(hour: 18)
+      create(:event, calendar: calendar, starts_at: start, ends_at: start + 1.hour,
+        recurrence_rule: IceCube::Rule.weekly.to_hash)
+
+      visit(edit_calendar_path(calendar))
+      uncheck("Events can overlap each other?")
+      click_button("Save")
+
+      expect_validation_error
+      expect(page).to have_content("must stay on while this calendar has repeating events")
+      expect(calendar.reload.allow_overlap).to be(true)
+    end
+
     scenario "deactivate/activate/delete calendar" do
       visit(edit_calendar_path(calendars.first))
-      accept_confirm { click_on("Deactivate") }
+      click_on("Deactivate")
+      click_modal_button
       expect_success
       click_on("#{calendars.first.name} (Inactive)")
       click_on("reactivate it")
       expect_success
       expect(page).not_to have_content("#{calendars.first.name} (Inactive)")
       click_on(calendars.first.name)
-      accept_confirm { click_on("Delete") }
+      click_on("Delete")
+      click_modal_button
       expect_success
       expect(page).not_to have_content(calendars.first.name)
     end
@@ -113,8 +148,8 @@ describe "calendars", js: true do
       expect(page).to have_content("Group2.1")
 
       click_on("Group")
-      puts "--------------------------------------------------"
-      accept_confirm { click_on("Delete") }
+      click_on("Delete")
+      click_modal_button
       expect_success
       # Cal1 and Cal3 have the same rank (2) after group is deleted. Cal1 comes first
       # because it is first alphabetically.
@@ -135,8 +170,9 @@ describe "calendars", js: true do
         click_on("Cmty Mealz")
         expect_image_upload(state: :existing, path: /chomsky/)
 
-        message = accept_confirm { click_on("Deactivate") }
-        expect(message).to match(/Are you sure you want to/) # Not missing translation
+        click_on("Deactivate")
+        expect_modal(text: /Are you sure you want to/) # Not missing translation
+        click_modal_button
         expect_success
         expect(page).to have_content("Cmty Mealz (Inactive)")
       end

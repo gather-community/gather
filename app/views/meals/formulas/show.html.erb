@@ -1,14 +1,14 @@
-<% content_for(:title, "Meal Formula: #{formula.name_with_suffix}") %>
+<% content_for(:title, t(".title", name: formula.name_with_suffix)) %>
 <% content_for(:action_links, formula.action_links) %>
 
 <% content_for(:mobile_back_link) do %>
-  <%= render partial: "shared/mobile_back_link", locals: {label: "Formulas", path: meals_formulas_path } %>
+  <%= render partial: "shared/mobile_back_link", locals: {label: t(".formulas"), path: meals_formulas_path } %>
 <% end %>
 
 <table class="key-value key-value-narrow">
   <tr>
     <td><%= Meals::Formula.human_attribute_name(:pantry_reimbursement) %></td>
-    <td><%= formula.pantry_reimbursement? ? "Yes" : "No" %></td>
+    <td><%= formula.pantry_reimbursement? ? t("common.yes") : t("common.no") %></td>
   </tr>
   <tr>
     <td><%= Meals::Formula.human_attribute_name(:role_ids) %></td>
@@ -16,11 +16,11 @@
   </tr>
   <tr>
     <td><%= Meals::Formula.human_attribute_name(:takeout) %></td>
-    <td><%= formula.takeout? ? "Yes" : "No" %></td>
+    <td><%= formula.takeout? ? t("common.yes") : t("common.no") %></td>
   </tr>
 </table>
 
-<h2>Meal Calculations</h2>
+<h2><%= t(".meal_calculations") %></h2>
 
 <table class="key-value">
   <tr>
@@ -48,7 +48,7 @@
   </tr>
 </table>
 
-<h2>Pantry Calculations</h2>
+<h2><%= t(".pantry_calculations") %></h2>
 
 <table class="key-value key-value-narrow">
   <tr>

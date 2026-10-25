@@ -26,7 +26,7 @@ describe "community signups", js: true do
       fill_in("Last Name", with: "Smith")
       fill_in("Email Address", with: "alice@example.com")
       fill_in("Community Name", with: "Sunrise Cohousing")
-      fill_in("URL Slug", with: "sunrise-coho")
+      fill_in("Community URL", with: "sunrise-coho")
       select("United States", from: "Country")
       select("Eastern Time (US & Canada)", from: "Time Zone")
       fill_in("About Your Community", with: "We are a cohousing community. https://sunrise.example.com")
@@ -53,7 +53,7 @@ describe "community signups", js: true do
       fill_in("Last Name", with: "Smith")
       fill_in("Email Address", with: "alice@example.com")
       fill_in("Community Name", with: "Test")
-      fill_in("URL Slug", with: "INVALID SLUG!")
+      fill_in("Community URL", with: "INVALID SLUG!")
       select("United States", from: "Country")
       select("Eastern Time (US & Canada)", from: "Time Zone")
       fill_in("About Your Community", with: "Test community https://example.com")
@@ -68,7 +68,7 @@ describe "community signups", js: true do
       fill_in("Last Name", with: "Smith")
       fill_in("Email Address", with: "alice@example.com")
       fill_in("Community Name", with: "Sunrise Cohousing")
-      fill_in("URL Slug", with: existing.slug)
+      fill_in("Community URL", with: existing.slug)
       select("United States", from: "Country")
       select("Eastern Time (US & Canada)", from: "Time Zone")
       fill_in("About Your Community", with: "We are a cohousing community. https://example.com")
@@ -88,7 +88,7 @@ describe "community signups", js: true do
       fill_in("Last Name", with: "Smith")
       fill_in("Email Address", with: "alice@example.com")
       fill_in("Community Name", with: "Test")
-      fill_in("URL Slug", with: "test-slug")
+      fill_in("Community URL", with: "test-slug")
       select("United States", from: "Country")
       select("Eastern Time (US & Canada)", from: "Time Zone")
       fill_in("About Your Community", with: "Test https://example.com")
@@ -115,8 +115,12 @@ describe "community signups", js: true do
       expect(page).not_to have_content(approved_signup.community_name)
     end
 
-    scenario "can switch to show all applications" do
+    scenario "status lens filters applications" do
       visit(communities_signups_path)
+      select_lens(:status, "Approved")
+      expect(page).not_to have_content(pending_signup.community_name)
+      expect(page).to have_content(approved_signup.community_name)
+
       select_lens(:status, "All")
       expect(page).to have_content(pending_signup.community_name)
       expect(page).to have_content(approved_signup.community_name)

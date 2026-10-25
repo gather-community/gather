@@ -289,6 +289,33 @@ describe Work::MealJobSynchronizer do
     end
   end
 
+  context "with two meals on the same day for a date-only role" do
+    let!(:role1) { create(:meal_role, :head_cook) }
+    let!(:formula1) { create(:meal_formula, roles: [role1]) }
+    let!(:lunch) { create(:meal, served_at: "2020-01-01 12:00", formula: formula1) }
+    let!(:period) do
+      create(:work_period, starts_on: "2020-01-01", ends_on: "2020-01-31", meal_job_sync: true,
+                           meal_job_sync_settings_attributes: {
+                             "0" => {formula_id: formula1.id, role_id: role1.id}
+                           })
+    end
+
+    it "gives each meal its own shift, even though their times are identical" do
+      dinner = create(:meal, served_at: "2020-01-01 18:00", formula: formula1)
+      job = Work::Job.sole
+      expect(job.shifts.map(&:meal_id)).to contain_exactly(lunch.id, dinner.id)
+      expect(job.shifts.map { |s| [s.starts_at, s.ends_at] }.uniq).to eq(
+        [[Time.zone.parse("2020-01-01 00:00"), Time.zone.parse("2020-01-01 23:59")]]
+      )
+
+      # Later syncs re-save the job with both same-day shifts in place.
+      other = create(:meal, served_at: "2020-01-02 18:00", formula: formula1)
+      expect(job.reload.shifts.map(&:meal_id)).to contain_exactly(lunch.id, dinner.id, other.id)
+      other.destroy
+      expect(job.reload.shifts.map(&:meal_id)).to contain_exactly(lunch.id, dinner.id)
+    end
+  end
+
   context "on served_at change within period" do
     let!(:role1) { create(:meal_role, :head_cook) }
     let!(:meal1) { create(:meal, served_at: "2020-01-01 18:00", formula: formula1) }

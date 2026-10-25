@@ -1,0 +1,50 @@
+<%# The Messaging section: the wallet balance plus the monthly topup (its own Stripe subscription).
+    topup is a decorated Subscription::MessagingTopup or nil; account is a Messaging::Account or nil. %>
+<% options = Subscription::MessagingTopup.options_for(current_community.currency) %>
+<% editable = subscription.messaging_topup_editable? && (options.any? || topup) %>
+<% balance = account&.balance || Money.new(0, current_community.currency) %>
+<%# The effectively-chosen amount, nil once a cancellation is pending — see
+    MessagingTopupDecorator#selected_cents. Everything the user sees keys off this, not off whether a
+    Stripe subscription happens to still exist, so the page never advertises money that won't move. %>
+<% selected_cents = topup&.selected_cents %>
+<div data-controller="messaging-topup"
+     data-messaging-topup-preview-url-value="<%= subscription_messaging_topup_preview_path %>"
+     data-messaging-topup-update-url-value="<%= subscription_messaging_topup_path %>"
+     data-messaging-topup-current-cents-value="<%= selected_cents || 0 %>"
+     data-messaging-topup-has-topup-value="<%= topup.present? %>">
+  <h2><%= t(".title") %></h2>
+  <p>
+    <table class="key-value">
+      <tr>
+        <td><%= t(".current_balance") %></td>
+        <td><%= balance.format %></td>
+      </tr>
+      <tr>
+        <td><%= t(".monthly_topup") %></td>
+        <td>
+          <%= selected_cents ? topup.amount_display : t(".none") %>
+          <% if editable %>
+            <%= link_to(selected_cents ? t(".edit") : t(".add"), "#", class: "messaging-topup-edit",
+                  data: {action: "messaging-topup#open"}) %>
+          <% end %>
+        </td>
+      </tr>
+      <% if topup&.show_next_payment_date? %>
+        <tr>
+          <td><%= t(".next_payment_date") %></td>
+          <td><%= I18n.l(topup.next_bill_date) %></td>
+        </tr>
+      <% end %>
+      <% if topup && (status = topup.status_display) %>
+        <tr>
+          <td><%= t(".status") %></td>
+          <td><%= status %></td>
+        </tr>
+      <% end %>
+    </table>
+  </p>
+
+  <% if editable %>
+    <%= render("messaging_topup_modal", topup: topup, options: options) %>
+  <% end %>
+</div>

@@ -47,7 +47,7 @@ describe Calendars::IcalGenerator do
         UID:91a772a5ae4a_#{eventlets[0].id}
         DTSTART;TZID=Etc/UTC:20210101T120000
         DTEND;TZID=Etc/UTC:20220101T130000
-        DESCRIPTION:This is a description\\nhttps://foo.com/calendars/events/#{eventlets[0].event_id}
+        DESCRIPTION:This is a description\\nhttps://foo.com/calendars/eventlets/#{eventlets[0].id}
         LOCATION:A nice place
         SUMMARY:Some Event
         END:VEVENT
@@ -92,12 +92,12 @@ describe Calendars::IcalGenerator do
     let(:eventlets) { [create(:eventlet, note: description)] }
 
     it "splits line properly" do
-      # Per the RFC, the string should actually include the literal string \n for line breaks, which is why
-      # we are checking for `\\n`.
-      expect(ical).to include_line(
-        "DESCRIPTION:fishy fishy fishy fishy fishy fishy fishy fishy fishy fishy fis\r\n" \
-        " hy fishy fishy fishy fishy fishy fishy fishy fishy fishy fishy fishy fishy\r\n" \
-        "  fishy \\nstuff\\nother stuff\\nhttps://foo.com/calendars/events/#{eventlets[0].event_id}"
+      # Per the RFC, real newlines become the literal string \n (hence `\\n`) and long lines are folded
+      # with CRLF + space. We unfold before asserting so the URL length doesn't shift the fold points.
+      unfolded = ical.gsub("\r\n ", "")
+      expect(unfolded).to include(
+        "DESCRIPTION:#{"fishy " * 24}\\nstuff\\nother stuff\\n" \
+        "https://foo.com/calendars/eventlets/#{eventlets[0].id}"
       )
     end
   end
@@ -118,7 +118,7 @@ describe Calendars::IcalGenerator do
 
     it "includes an appropriate url" do
       expect(ical).to include_line(
-        "DESCRIPTION:Stuff\\nhttps://foo.com/calendars/events/#{eventlets[0].event_id}"
+        "DESCRIPTION:Stuff\\nhttps://foo.com/calendars/eventlets/#{eventlets[0].id}"
       )
     end
   end
@@ -128,6 +128,321 @@ describe Calendars::IcalGenerator do
 
     it "includes an appropriate url" do
       expect { ical }.to raise_error(ArgumentError)
+    end
+  end
+
+  context "with a recurring series that has an end date" do
+    let(:all_day) { false }
+    let(:start) { Time.zone.parse("2021-01-04 12:00") }
+    let(:event) do
+      create(:event, all_day: all_day, starts_at: start, ends_at: start + 1.hour,
+        recurrence_rule: IceCube::Rule.weekly.until(start + 2.weeks).to_hash)
+    end
+    let(:base_eventlet) { event.eventlets.first }
+    let(:eventlets) do
+      [Calendars::Eventlet.build_occurrence(base_eventlet: base_eventlet, occurrence_start: event.starts_at,
+        starts_at: event.starts_at, ends_at: event.ends_at, start_offset: 0, end_offset: 0)]
+    end
+
+    it "writes UNTIL as a UTC timestamp for a timed series" do
+      expect(ical).to include_line("RRULE:FREQ=WEEKLY;UNTIL=20210118T120000Z")
+    end
+
+    context "when the series is all-day" do
+      let(:all_day) { true }
+
+      it "writes UNTIL as a date, matching the date-only DTSTART" do
+        expect(ical).to include_line("DTSTART;VALUE=DATE:20210104")
+        expect(ical).to include_line("RRULE:FREQ=WEEKLY;UNTIL=20210118")
+      end
+    end
+  end
+
+  context "with a series split in two by a drag" do
+    # Mondays at noon; a "This and following" drag moved the third Monday onward to 1pm.
+    let(:start) { Time.zone.parse("2021-01-04 12:00") }
+    let(:event) do
+      create(:event, starts_at: start, ends_at: start + 1.hour, recurrence_rule: IceCube::Rule.weekly.to_hash)
+    end
+    let!(:split_off) do
+      cut = start + 2.weeks
+      shift = Calendars::WallClockShift.new(cut, cut + 1.hour)
+      Calendars::SeriesSplitter.new(event).split_at(cut, start_shift: shift, end_shift: shift)
+    end
+    let(:eventlets) do
+      range = start..(start + 5.weeks)
+      Calendars::EventFinder.new(range: range, calendars: [event.calendar], user: create(:admin)).eventlets
+    end
+
+    it "exports each series once, the original ending where the new one begins" do
+      expect(ical.scan("BEGIN:VEVENT").size).to eq(2)
+      expect(ical).to include_line("DTSTART;TZID=Etc/UTC:20210104T120000")
+      expect(ical).to include_line("RRULE:FREQ=WEEKLY;UNTIL=20210111T120000Z")
+      expect(ical).to include_line("DTSTART;TZID=Etc/UTC:20210118T130000")
+      expect(ical).to include_line("RRULE:FREQ=WEEKLY")
+    end
+  end
+
+  context "with a recurring event" do
+    # First occurrence: Monday 2021-01-04. The eventlets represent the second and third Mondays,
+    # built the same way EventFinder builds them (non-persisted, linkable = base eventlet).
+    let(:event) do
+      create(:event,
+        starts_at: Time.zone.parse("2021-01-04 12:00"),
+        ends_at: Time.zone.parse("2021-01-04 13:00"),
+        recurrence_rule: IceCube::Rule.weekly.to_hash)
+    end
+
+    def occurrence_eventlet(base, occ_starts_at, occ_ends_at, start_offset: 0, end_offset: 0)
+      Calendars::Eventlet.build_occurrence(base_eventlet: base, occurrence_start: occ_starts_at,
+        starts_at: occ_starts_at, ends_at: occ_ends_at,
+        start_offset: start_offset, end_offset: end_offset)
+    end
+
+    let(:second_occ) do
+      occurrence_eventlet(base_eventlet,
+        Time.zone.parse("2021-01-11 12:00"), Time.zone.parse("2021-01-11 13:00"))
+    end
+    let(:third_occ) do
+      occurrence_eventlet(base_eventlet,
+        Time.zone.parse("2021-01-18 12:00"), Time.zone.parse("2021-01-18 13:00"))
+    end
+
+    context "with a single occurrence eventlet" do
+      let(:eventlets) { [second_occ] }
+
+      it "emits one VEVENT" do
+        expect(ical.scan("BEGIN:VEVENT").size).to eq(1)
+      end
+
+      it "uses the event starts_at (first occurrence) as DTSTART, not the occurrence time" do
+        expect(ical).to include_line("DTSTART;TZID=Etc/UTC:20210104T120000")
+      end
+
+      it "uses the event ends_at (first occurrence) as DTEND" do
+        expect(ical).to include_line("DTEND;TZID=Etc/UTC:20210104T130000")
+      end
+
+      it "includes a weekly RRULE" do
+        expect(ical).to include_line("RRULE:FREQ=WEEKLY")
+      end
+
+      it "uses the event id and calendar id in the UID" do
+        expect(ical).to include_line("UID:91a772a5ae4a_#{event.id}_#{event.calendar.id}")
+      end
+
+      it "includes the calendar name as location" do
+        expect(ical).to include_line("LOCATION:#{event.calendar.name}")
+      end
+
+      it "includes the event name as summary" do
+        expect(ical).to include_line("SUMMARY:#{event.name}")
+      end
+
+      it "includes the eventlet URL in the description" do
+        expect(ical).to include("https://foo.com/calendars/eventlets/#{base_eventlet.id}")
+      end
+
+      context "when the event has a note" do
+        let(:event) do
+          create(:event,
+            starts_at: Time.zone.parse("2021-01-04 12:00"),
+            ends_at: Time.zone.parse("2021-01-04 13:00"),
+            note: "Bring your A-game",
+            recurrence_rule: IceCube::Rule.weekly.to_hash)
+        end
+
+        it "includes the note before the URL in the description" do
+          expect(ical).to include_line(
+            "DESCRIPTION:Bring your A-game\\nhttps://foo.com/calendars/eventlets/#{base_eventlet.id}"
+          )
+        end
+      end
+    end
+
+    context "with multiple occurrence eventlets from the same event on the same calendar" do
+      let(:eventlets) { [second_occ, third_occ] }
+
+      it "emits only one VEVENT for the series" do
+        expect(ical.scan("BEGIN:VEVENT").size).to eq(1)
+      end
+    end
+
+    context "with occurrence eventlets from the same event on different calendars" do
+      let(:other_calendar) { create(:calendar, allow_overlap: true) }
+      let(:other_eventlet) { create(:eventlet, event: event, calendar: other_calendar) }
+      let(:second_occ_other_cal) do
+        occurrence_eventlet(other_eventlet,
+          Time.zone.parse("2021-01-11 11:45"), Time.zone.parse("2021-01-11 12:45"),
+          start_offset: -900, end_offset: 0)
+      end
+      let(:eventlets) { [second_occ, second_occ_other_cal] }
+
+      it "emits one VEVENT per calendar" do
+        expect(ical.scan("BEGIN:VEVENT").size).to eq(2)
+      end
+
+      it "uses different UIDs for each calendar's VEVENT" do
+        expect(ical).to include_line("UID:91a772a5ae4a_#{event.id}_#{event.calendar.id}")
+        expect(ical).to include_line("UID:91a772a5ae4a_#{event.id}_#{other_calendar.id}")
+      end
+
+      it "applies the offset to DTSTART for the calendar with an offset" do
+        # second_occ has offset 0 → 12:00; second_occ_other_cal has offset -900s → 11:45
+        expect(ical).to include_line("DTSTART;TZID=Etc/UTC:20210104T120000")
+        expect(ical).to include_line("DTSTART;TZID=Etc/UTC:20210104T114500")
+      end
+    end
+
+    context "mixed with a regular non-recurring eventlet" do
+      let(:plain_eventlet) { create(:eventlet, starts_at: "2021-01-05 10:00", ends_at: "2021-01-05 11:00") }
+      let(:eventlets) { [second_occ, plain_eventlet] }
+
+      it "emits separate VEVENTs for recurring and non-recurring events" do
+        expect(ical.scan("BEGIN:VEVENT").size).to eq(2)
+        expect(ical).to include_line("RRULE:FREQ=WEEKLY")
+      end
+    end
+
+    # Shared helpers for override specs — all reference the second Monday (2021-01-11 12:00).
+    let(:occ_time) { Time.zone.parse("2021-01-11 12:00") }
+    let(:base_eventlet) { event.eventlets.first }
+
+    def event_override_for(**attrs)
+      create(:event_override, event: event, occurrence_start: occ_time, **attrs)
+    end
+
+    def eventlet_override_for(event_override, **attrs)
+      create(:eventlet_override, event_override: event_override, eventlet: base_eventlet, **attrs)
+    end
+
+    # (A) EventOverride deleted — EXDATE only, no replacement VEVENT
+    context "(A) EventOverride deleted" do
+      let(:eventlets) { [second_occ] }
+      before { event_override_for(deleted: true) }
+
+      it "emits one VEVENT (the series)" do
+        expect(ical.scan("BEGIN:VEVENT").size).to eq(1)
+      end
+
+      it "includes an EXDATE for the deleted occurrence" do
+        expect(ical).to include_line("EXDATE;TZID=Etc/UTC:20210111T120000")
+      end
+    end
+
+    # (B) EventOverride moves the occurrence — EXDATE + RECURRENCE-ID VEVENT
+    context "(B) EventOverride moves the occurrence" do
+      let(:eventlets) { [second_occ] }
+      before do
+        event_override_for(starts_at: Time.zone.parse("2021-01-12 09:00"),
+          ends_at: Time.zone.parse("2021-01-12 10:00"))
+      end
+
+      it "emits two VEVENTs: the series and the replacement" do
+        expect(ical.scan("BEGIN:VEVENT").size).to eq(2)
+      end
+
+      it "includes EXDATE for the original time" do
+        expect(ical).to include_line("EXDATE;TZID=Etc/UTC:20210111T120000")
+      end
+
+      it "includes RECURRENCE-ID pointing to the original time" do
+        expect(ical).to include_line("RECURRENCE-ID;TZID=Etc/UTC:20210111T120000")
+      end
+
+      it "uses the new times in the replacement VEVENT" do
+        expect(ical).to include_line("DTSTART;TZID=Etc/UTC:20210112T090000")
+        expect(ical).to include_line("DTEND;TZID=Etc/UTC:20210112T100000")
+      end
+
+      it "shares the UID between the series and the replacement VEVENT" do
+        expect(ical.scan(/UID:.*/).map(&:strip).uniq.size).to eq(1)
+      end
+    end
+
+    # (C) EventletOverride deleted (stub EventOverride) — EXDATE for this calendar, no replacement
+    context "(C) EventletOverride deleted (calendar-only deletion)" do
+      let(:eventlets) { [second_occ] }
+      before { eventlet_override_for(event_override_for, deleted: true) }
+
+      it "emits one VEVENT (the series)" do
+        expect(ical.scan("BEGIN:VEVENT").size).to eq(1)
+      end
+
+      it "includes an EXDATE for the deleted occurrence" do
+        expect(ical).to include_line("EXDATE;TZID=Etc/UTC:20210111T120000")
+      end
+    end
+
+    # (C2) EventletOverride on one calendar must not suppress the occurrence on the other calendar
+    context "(C2) EventletOverride deletes an occurrence on one calendar but not another" do
+      let(:other_calendar) { create(:calendar, allow_overlap: true) }
+      let(:other_eventlet) { create(:eventlet, event: event, calendar: other_calendar) }
+      let(:second_occ_other_cal) do
+        occurrence_eventlet(other_eventlet,
+          Time.zone.parse("2021-01-11 12:00"), Time.zone.parse("2021-01-11 13:00"))
+      end
+      let(:eventlets) { [second_occ, second_occ_other_cal] }
+
+      before do
+        eo = event_override_for
+        create(:eventlet_override, event_override: eo, eventlet: other_eventlet, deleted: true)
+      end
+
+      it "emits two VEVENTs (one series per calendar)" do
+        expect(ical.scan("BEGIN:VEVENT").size).to eq(2)
+      end
+
+      it "includes an EXDATE on the deleted calendar's VEVENT" do
+        expect(ical).to include_line("EXDATE;TZID=Etc/UTC:20210111T120000")
+      end
+
+      it "does not include an EXDATE on the unaffected calendar's VEVENT" do
+        # The EXDATE should appear exactly once — only for the deleted calendar, not the other.
+        expect(ical.scan("EXDATE").size).to eq(1)
+      end
+    end
+
+    # (D) EventletOverride changes offsets (stub EventOverride) — EXDATE + RECURRENCE-ID with shifted time
+    context "(D) EventletOverride shifts the display time" do
+      let(:eventlets) { [second_occ] }
+      before { eventlet_override_for(event_override_for, start_offset: -3600, end_offset: -3600) }
+
+      it "emits two VEVENTs: the series and the replacement" do
+        expect(ical.scan("BEGIN:VEVENT").size).to eq(2)
+      end
+
+      it "includes EXDATE for the original iCal occurrence time" do
+        expect(ical).to include_line("EXDATE;TZID=Etc/UTC:20210111T120000")
+      end
+
+      it "includes RECURRENCE-ID at the original time" do
+        expect(ical).to include_line("RECURRENCE-ID;TZID=Etc/UTC:20210111T120000")
+      end
+
+      it "uses the offset-adjusted time in the replacement VEVENT" do
+        # occurrence_start 12:00 + start_offset -3600s = 11:00
+        expect(ical).to include_line("DTSTART;TZID=Etc/UTC:20210111T110000")
+      end
+    end
+
+    # (E) EventOverride moves + EventletOverride shifts — combined times
+    context "(E) EventOverride moves and EventletOverride shifts offset" do
+      let(:eventlets) { [second_occ] }
+      before do
+        eo = event_override_for(starts_at: Time.zone.parse("2021-01-12 09:00"),
+          ends_at: Time.zone.parse("2021-01-12 10:00"))
+        eventlet_override_for(eo, start_offset: -1800, end_offset: -1800)
+      end
+
+      it "emits two VEVENTs" do
+        expect(ical.scan("BEGIN:VEVENT").size).to eq(2)
+      end
+
+      it "uses the combined times: new base + offset" do
+        # 09:00 + (-1800s = -30min) = 08:30
+        expect(ical).to include_line("DTSTART;TZID=Etc/UTC:20210112T083000")
+      end
     end
   end
 
@@ -155,10 +470,11 @@ describe Calendars::IcalGenerator do
     end
 
     it "groups first two eventlets" do
-      expect(ical.scan(/BEGIN:VEVENT/).size).to eq(2)
+      expect(ical.scan("BEGIN:VEVENT").size).to eq(2)
       expect(ical).to include_line("LOCATION:A nice place + Other place")
-      expect(ical).to include_line("DESCRIPTION:This is a description\\nOther description\\n" \
-        "https://foo.com/calen\r\n dars/events/#{eventlets[0].event_id}")
+      # Unfold before asserting so the longer eventlet URL doesn't shift the fold points.
+      expect(ical.gsub("\r\n ", "")).to include("DESCRIPTION:This is a description\\nOther description\\n" \
+        "https://foo.com/calendars/eventlets/#{eventlets[0].id}")
     end
   end
 

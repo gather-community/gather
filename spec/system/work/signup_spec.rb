@@ -27,6 +27,19 @@ describe "signups", js: true do
   context "with jobs" do
     include_context "with jobs"
 
+    # With multiple periods the bare signups path shows the picker, so target the period directly.
+    let(:page_path) { work_period_shifts_path(periods[0]) }
+
+    scenario "period picker with multiple selectable periods" do
+      visit(work_shifts_path)
+      within(".period-picker") do
+        expect(page).to have_link(periods[0].name, href: %r{/work/#{periods[0].slug}/signups})
+        expect(page).to have_content(periods[0].decorate.date_range)
+      end
+      click_on(periods[1].name)
+      expect(page).to have_title(periods[1].name)
+    end
+
     context "in draft phase" do
       before { periods[0].update!(phase: "draft") }
 
@@ -59,10 +72,10 @@ describe "signups", js: true do
         select_lens(:shift, "Open Jobs")
         expect_jobs(*jobs[1..3])
 
-        select_lens(:shift, "Your Jobs")
+        select_lens(:shift, "My Jobs")
         expect_jobs(*jobs[1..2])
 
-        select_lens(:shift, "Your Household")
+        select_lens(:shift, "My Household")
         expect_jobs(*jobs[0..2])
 
         select_lens(:shift, "Not Preassigned")
@@ -110,7 +123,8 @@ describe "signups", js: true do
         # Unsignup via #show page
         click_on("Cook")
         expect(page).to have_content(jobs[0].description)
-        accept_confirm { click_on("Remove Signup") }
+        click_on("Remove Signup")
+        click_modal_button
 
         within(".shift-card[data-id='#{jobs[0].shifts[0].id}']") do
           expect(page).not_to have_content(actor.name)
@@ -118,7 +132,8 @@ describe "signups", js: true do
           expect(page).to have_content(actor.name)
 
           # Unsignup via 'x' link
-          accept_confirm { find(".cancel-link a").click }
+          find(".cancel-link a").click
+          click_modal_button
           expect(page).not_to have_content(actor.name)
         end
 
@@ -127,6 +142,100 @@ describe "signups", js: true do
           expect(page).not_to have_content(users[0].name)
           jobs[2].shifts[0].signup_user(users[0])
           expect(page).to have_content(users[0].name)
+        end
+      end
+    end
+
+    describe "autorefresh with more than one page of shifts" do
+      # The page shows 48 shifts at a time, so 49 gives it a second page.
+      let!(:big_job) { create(:work_job, period: periods[0], title: "Weeder", shift_count: 49) }
+
+      before { periods[0].update!(phase: "open") }
+
+      scenario "keeps a single set of page links" do
+        visit(page_path)
+        expect(page).to have_css(".pagination-wrapper", count: 1)
+
+        # Autorefresh fires every second in test mode, so this lets a few refreshes land.
+        sleep(3.5)
+        stop_all_timers
+        wait_for_ajax
+
+        expect(page).to have_css(".pagination-wrapper", count: 1)
+        expect(page).to have_css(".page-entries-info", count: 1)
+        expect(page).to have_css("ul.pagination", count: 1)
+      end
+    end
+
+    describe "refresh overlapping a signup", clean_with_transaction: false do
+      let(:shift) { jobs[0].shifts[0] }
+      let(:card) { ".shift-card[data-id='#{shift.id}']" }
+
+      before { periods[0].update!(phase: "open") }
+
+      # A refresh response is rendered when the request reaches the server but can arrive at the
+      # browser well after that. If a signup happens in between, the response carries markup from
+      # before the signup, and applying it used to wipe the signup off the card until the next
+      # refresh came around. STUB_SHIFTS_RESPONSE_DELAY holds the rendered response back so we can
+      # land it after the signup on purpose.
+      scenario "stale refresh response doesn't undo the signup" do
+        with_env("STUB_SHIFTS_RESPONSE_DELAY" => "3") do
+          visit(page_path)
+          expect(page).to have_css(card)
+
+          # Autorefresh fires every second in test mode. Give it time to send one request, then stop
+          # the timer so that delayed response is the last thing that can touch the shift list.
+          sleep(1.5)
+          stop_all_timers
+
+          within(card) do
+            click_on("Sign Up!")
+            expect(page).to have_content(actor.name)
+          end
+
+          # A successful signup restarts the refresh timer, so stop it again before waiting.
+          stop_all_timers
+          wait_for_ajax
+
+          expect(page).to have_css("#{card}.mine")
+          within(card) do
+            expect(page).to have_content(actor.name)
+            expect(page).not_to have_link("Sign Up!")
+          end
+        end
+      end
+    end
+
+    describe "signing up from a card that is out of date", clean_with_transaction: false do
+      let(:shift) { jobs[0].shifts[0] }
+      let(:card) { ".shift-card[data-id='#{shift.id}']" }
+
+      before { periods[0].update!(phase: "open") }
+
+      # The signup link can still be on screen when the signup it offers is no longer possible: the
+      # user's own signup landed in another request, or someone else took the last slot. Clicking it
+      # has to come back as a message on the card, not as an authorization failure.
+      scenario "when the user is already signed up" do
+        visit(page_path)
+        expect(page).to have_css(card)
+        stop_all_timers
+        shift.signup_user(actor)
+
+        within(card) do
+          click_on("Sign Up!")
+          expect(page).to have_content("You've already signed up for this shift.")
+        end
+      end
+
+      scenario "when someone else took the last slot" do
+        visit(page_path)
+        expect(page).to have_css(card)
+        stop_all_timers
+        shift.signup_user(users[2])
+
+        within(card) do
+          click_on("Sign Up!")
+          expect(page).to have_content("Sorry, looks like someone beat you to it!")
         end
       end
     end
@@ -151,15 +260,45 @@ describe "signups", js: true do
       scenario do
         visit(page_path)
         time = I18n.l(open_time, format: :wday_no_year)
-        expect(page).to have_content("You have signed up for 0/32 hours. "\
+        expect(page).to have_content("You have signed up for 0/32 hours. " \
           "You can start choosing jobs on #{time}")
         Timecop.freeze(open_time + 2.minutes) do
           visit(page_path)
           time = I18n.l(open_time + 5.minutes, format: :time_only)
-          expect(page).to have_content("You have signed up for 0/32 hours. "\
+          expect(page).to have_content("You have signed up for 0/32 hours. " \
             "Your round limit is 11 hours and will rise to 22 at #{time}")
         end
         expect(periods[0].reload.phase).to eq("open")
+      end
+
+      describe "round limit enforcement" do
+        # The round limit two minutes in is 11 hours, so this one can't be taken yet.
+        let!(:big_job) do
+          create(:work_job, period: periods[0], title: "Marathon", hours: 20, shift_count: 1)
+        end
+
+        scenario "hides signup for a shift over the limit, on both index and show" do
+          Timecop.freeze(open_time + 2.minutes) do
+            # Visiting the index flips the period from ready to open.
+            visit(page_path)
+
+            within(".shift-card[data-id='#{jobs[1].shifts[0].id}']") do
+              expect(page).to have_link("Sign Up!")
+            end
+            within(".shift-card[data-id='#{big_job.shifts[0].id}']") do
+              expect(page).not_to have_link("Sign Up!")
+            end
+
+            # The show page builds its button from a plain policy lookup with no synopsis handed
+            # in, so it has to reach the same answer on its own.
+            visit(work_period_shift_path(periods[0], big_job.shifts[0]))
+            expect(page).to have_content("Marathon")
+            expect(page).not_to have_link("Sign Up")
+
+            visit(work_period_shift_path(periods[0], jobs[1].shifts[0]))
+            expect(page).to have_link("Sign Up")
+          end
+        end
       end
     end
   end
@@ -167,22 +306,22 @@ describe "signups", js: true do
   context "with past, present, and future jobs" do
     let!(:period) do
       create(:work_period, starts_on: Time.zone.today - 83.days, ends_on: Time.zone.today + 7.days,
-                           phase: "open")
+        phase: "open")
     end
     let!(:jobs) do
       [
         create(:work_job, period: period, title: "Moldy Oldy", time_type: "date_only",
-                          shift_slots: 1,
-                          shift_starts: [Time.current - 2.days],
-                          shift_ends: [Time.current - 2.days]),
+          shift_slots: 1,
+          shift_starts: [2.days.ago],
+          shift_ends: [2.days.ago]),
         create(:work_job, period: period, title: "Current Durrant", time_type: "date_only",
-                          shift_slots: 1,
-                          shift_starts: [Time.current - 1.day],
-                          shift_ends: [Time.current + 1.day]),
+          shift_slots: 1,
+          shift_starts: [1.day.ago],
+          shift_ends: [1.day.from_now]),
         create(:work_job, period: period, title: "Future Scoocher", time_type: "date_only",
-                          shift_slots: 1,
-                          shift_starts: [Time.current + 2.days],
-                          shift_ends: [Time.current + 2.days])
+          shift_slots: 1,
+          shift_starts: [2.days.from_now],
+          shift_ends: [2.days.from_now])
       ]
     end
 
@@ -233,6 +372,21 @@ describe "signups", js: true do
         expect(page).to have_select_lens(:dates, selected: "Current & Future")
         expect(page).to have_lens_clear_link
       end
+    end
+  end
+
+  # Clears every timer the page has going, including the autorefresh one. Backbone keeps the shifts
+  # view private, so there is no handle to clear it by; timer ids are small sequential integers.
+  def stop_all_timers
+    page.execute_script("for (var i = 1; i < 1000; i++) { clearInterval(i); }")
+  end
+
+  # Waits for in-flight jQuery requests to land, for cases where nothing on the page will change
+  # when they do.
+  def wait_for_ajax
+    40.times do
+      break if page.evaluate_script("jQuery.active").zero?
+      sleep(0.25)
     end
   end
 end

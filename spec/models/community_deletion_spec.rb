@@ -73,10 +73,16 @@ describe Community, :without_tenant do
       create(:community_meals_calendar)
       create(:join_dates_calendar)
       create(:other_communities_meals_calendar)
-      create(:your_jobs_calendar)
-      create(:your_meals_calendar)
+      create(:my_jobs_calendar)
+      create(:my_meals_calendar)
       create(:event)
       create(:eventlet)
+      recurring_event = create(:event, recurrence_rule: IceCube::Rule.weekly.to_hash)
+      occ_start = recurring_event.occurrences_between(Time.current..1.year.from_now).first.first
+      event_override = create(:event_override, event: recurring_event, occurrence_start: occ_start,
+        deleted: true)
+      create(:eventlet_override, event_override: event_override,
+        eventlet: recurring_event.eventlets.first, deleted: true)
       create(:calendar_protocol)
       create(:calendar_protocoling)
 
@@ -101,6 +107,9 @@ describe Community, :without_tenant do
       create(:group_mailman_list)
       create(:group_mailman_user)
       create(:group_membership)
+
+      # ── Messaging ─────────────────────────────────────────────────────────
+      create(:messaging_transaction) # also creates a Messaging::Account
 
       # ── People ────────────────────────────────────────────────────────────
       create(:user)
@@ -129,6 +138,7 @@ describe Community, :without_tenant do
       # ── Subscription ──────────────────────────────────────────────────────
       create(:subscription_intent, community: Defaults.community)
       create(:subscription, community: Defaults.community)
+      create(:messaging_topup, community: Defaults.community)
 
       # ── Wiki ──────────────────────────────────────────────────────────────
       create(:wiki_page)

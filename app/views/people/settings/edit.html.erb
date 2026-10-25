@@ -1,4 +1,4 @@
-<% content_for(:title, "People Settings") %>
+<% content_for(:title, t(".title")) %>
 
 <%= gather_form_for(@community, url: people_settings_path) do |f| %>
   <%= f.fields_for(:settings) do |ff| %>
@@ -8,9 +8,9 @@
     <%= f.button :primary %>
   <% end %>
 
-  <%= javascript_tag do %>
+  <script>
     $(function() {
       new Gather.Views.DirtyChecker({el: '.community-form'});
     });
-  <% end %>
+  </script>
 <% end %>

@@ -243,34 +243,34 @@ module Meals
 
     def enough_capacity_for_current_signups
       return unless persisted? && !finalized? && capacity && capacity < signup_count
-      errors.add(:capacity, "must be at least #{signup_count} due to current signups")
+      errors.add(:capacity, :below_signups, count: signup_count)
     end
 
     def title_and_entree_if_other_menu_items
       %w[title entrees].each do |attrib|
         next unless self[attrib].blank? && menu_posted?
-        errors.add(attrib, "can't be blank if other menu items entered")
+        errors.add(attrib, :blank_with_menu)
       end
     end
 
     def at_least_one_community
       return unless invitations.reject(&:blank?).empty?
-      errors.add(:invitations, "you must invite at least one community")
+      errors.add(:invitations, :none)
     end
 
     def auto_close_between_now_and_meal_time
       return unless open?
       return if auto_close_time.blank? || served_at.blank?
       return if auto_close_time > Time.current && auto_close_time < served_at
-      errors.add(:auto_close_time, "must be between now and the meal time")
+      errors.add(:auto_close_time, :not_before_meal)
     end
 
     def allergens_specified_appropriately
       return unless menu_posted?
       if !allergens? && !no_allergens?
-        errors.add(:allergens, "at least one box must be checked if menu entered")
+        errors.add(:allergens, :none_checked)
       elsif allergens? && no_allergens?
-        errors.add(:allergens, "'None' can't be selected if other allergens present")
+        errors.add(:allergens, :none_with_others)
       end
     end
 

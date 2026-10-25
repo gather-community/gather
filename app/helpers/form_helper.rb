@@ -14,8 +14,8 @@ module FormHelper
   #   - Layouts are achieved using CSS in the global/forms/bootstrap.scss file.
   #
   # Other options:
-  # - top_error_notification: Whether or not to include the f.error_notification at the top of the form.
-  #     Defaults to true.
+  # - top_error_notification: Whether or not to count the field errors in the box at the top of the
+  #     form (see #error_summary). Defaults to true. Errors that belong to no field are shown either way.
   def gather_form_for(objs, options = {})
     obj = Array.wrap(objs).last # objs may be an array or a single object
     width = options.delete(:width) || :normal
@@ -38,19 +38,27 @@ module FormHelper
     # We need to wrap form in a row because it has a col-sm-x class.
     content_tag(:div, class: "row") do
       simple_form_for(objs, options) do |form|
-        top_errors = []
-        unless obj.is_a?(Symbol)
-          if options[:top_error_notification] != false
-            # We include the full error messages for debugging purposes in case the attribute on which
-            # they are set is not included in the form. This shouldn't happen but does occasionally
-            # and is hard to debug when it does.
-            top_errors << form.error_notification(title: obj.errors.full_messages.join(", "))
-          end
-          top_errors << form.error(:base) if obj.errors[:base].present?
-        end
-        safe_join(top_errors.push(capture { yield(form) }))
+        count_fields = options[:top_error_notification] != false
+        summary = obj.is_a?(Symbol) ? nil : error_summary(obj, count_fields: count_fields)
+        safe_join([summary, capture { yield(form) }].compact)
       end
     end
+  end
+
+  # One box at the top of a form for its errors: a line for each error that belongs to no field (a
+  # "base" error), then one saying how many fields have errors, which are shown under the fields
+  # themselves. Several lines are a list. Nil if there are none.
+  def error_summary(obj, count_fields: true)
+    lines = obj.errors[:base].dup
+    field_errors = obj.errors.count { |e| e.attribute != :base }
+    if count_fields && field_errors.positive?
+      lines << t("simple_form.error_notification.field_errors", count: field_errors)
+    end
+    return nil if lines.empty?
+    body = (lines.size == 1) ? lines.first : content_tag(:ul, safe_join(lines.map { |l| tag.li(l) }))
+    # The full messages are in the title for debugging, in case an error is on an attribute the form
+    # doesn't show. This shouldn't happen but does occasionally and is hard to debug when it does.
+    tag.div(body, class: "alert alert-danger error-summary", title: obj.errors.full_messages.join(", "))
   end
 
   def form_actions(align: :right, classes: "")
@@ -180,7 +188,7 @@ module FormHelper
   def link_to_add(wrapper_tag, args)
     f = args[:f]
     link_text = I18n.t("cocoon.add_links.#{f.object.class.model_name.i18n_key}.#{args[:assoc]}",
-                        default: I18n.t("cocoon.add_links.#{args[:assoc]}"))
+                        default: :"cocoon.add_links.#{args[:assoc]}")
     content_tag(wrapper_tag, class: "add-link-wrapper") do
       options = {}
       options[:partial] = args[:wrapper_partial]

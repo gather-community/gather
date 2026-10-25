@@ -78,6 +78,29 @@ describe GDrive::RefreshSyncedPermissionsJob do
     end
   end
 
+  context "with roles Gather doesn't manage" do
+    # Cassette returns:
+    # - user1 (existing SyncedPermission): inherited "organizer" (shared drive Manager) + direct "writer"
+    # - user2 (no SyncedPermission): direct "organizer" only (Manager of the shared drive itself)
+    # - user3 (no SyncedPermission): "owner" with no permissionDetails (My Drive item)
+    it "stores them and treats them as a floor" do
+      VCR.use_cassette("gdrive/refresh_synced_permissions_job/unmanaged_roles") do
+        perform_job
+      end
+
+      synced_permissions = GDrive::SyncedPermission.where(item_id: item.id).index_by(&:user_id)
+      expect(synced_permissions[user1.id]).to have_attributes(
+        access_level: "writer", inherited_access_level: "organizer"
+      )
+      expect(synced_permissions[user2.id]).to have_attributes(
+        access_level: "organizer", inherited_access_level: "organizer"
+      )
+      expect(synced_permissions[user3.id]).to have_attributes(
+        access_level: "owner", inherited_access_level: "owner"
+      )
+    end
+  end
+
   context "without item_id" do
     let!(:item_b) { create(:gdrive_item, gdrive_config: config, external_id: "REFRESHitemB0001") }
     let!(:item_c) { create(:gdrive_item, gdrive_config: config, external_id: "REFRESHitemC0001") }
@@ -114,6 +137,24 @@ describe GDrive::RefreshSyncedPermissionsJob do
         inherited_access_level: nil,
         external_id: "permC1111111111"
       )
+    end
+
+    context "when an item is not found on Google" do
+      let!(:item_inaccessible) do
+        create(:gdrive_item, gdrive_config: config, external_id: "REFRESHitemD0001",
+          error_type: "inaccessible")
+      end
+
+      # Cassette returns 404 for item_b and permissions for item_c. item_inaccessible and the
+      # item from the outer context have no interactions, so they must be skipped.
+      it "marks the item inaccessible and continues with the others" do
+        item.update!(error_type: "inaccessible")
+        VCR.use_cassette("gdrive/refresh_synced_permissions_job/item_not_found") do
+          perform_job
+        end
+        expect(item_b.reload.error_type).to eq("inaccessible")
+        expect(perm_c.reload.external_id).to eq("permC1111111111")
+      end
     end
   end
 end

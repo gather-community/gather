@@ -7,13 +7,30 @@ Gather.Views.Calendars.CalendarListView = Backbone.View.extend({
   },
 
   events: {
-    "change input[type=checkbox]": "checkboxChanged"
+    "change input[type=checkbox]": "checkboxChanged",
+    "click .select-all-link": "selectAllClicked"
   },
 
   checkboxChanged(e) {
     e.stopPropagation();
     this.$el.trigger("calendarSelectionChanged");
     this.saveSelection();
+    this.updateSelectAllLink();
+  },
+
+  selectAllClicked(e) {
+    e.preventDefault();
+    const checked = !this.allSelected();
+    this.$("input[type=checkbox]").prop("checked", checked);
+    this.$el.trigger("calendarSelectionChanged");
+    this.saveSelection();
+    this.updateSelectAllLink();
+  },
+
+  updateSelectAllLink() {
+    this.$(".select-all-link").text(this.allSelected()
+      ? I18n.t("calendars.calendar_list.deselect_all")
+      : I18n.t("calendars.calendar_list.select_all"));
   },
 
   selectedIds() {
@@ -49,5 +66,6 @@ Gather.Views.Calendars.CalendarListView = Backbone.View.extend({
       let checked = this.selection[id];
       this.$(`input[type=checkbox][value=${id}]`).prop("checked", checked);
     }
+    this.updateSelectAllLink();
   }
 });

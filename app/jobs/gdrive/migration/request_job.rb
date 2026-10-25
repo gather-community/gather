@@ -42,7 +42,7 @@ module GDrive
 
       def create_file_drop_drive(request)
         random_id = self.class.random_drive_id
-        drive_name = "Gather File Drop #{random_id}"
+        drive_name = I18n.t("gdrive.migration.file_drop_drive_name", id: random_id)
         file_drop_drive = Google::Apis::DriveV3::Drive.new(name: drive_name)
         operation.log(:info, "Creating file drop drive", name: file_drop_drive.name)
 

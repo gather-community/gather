@@ -1,19 +1,19 @@
-Dear <%= @name %>,
+<%= t(".dear", name: @name) %>
 
-<%= @community.name %> is using Gather to reorganize its Google Drive files.
+<%= t(".using_gather", community: @community.name) %>
 
-Currently, the community's files are owned by whoever created them. This can lead to accidental deletion of files when someone leaves the community!
+<%= t(".problem") %>
 
-To prevent this, the community is moving all its files into a shared drive owned by the community.
+<%= t(".solution") %>
 
 <% if @migration_request.file_count >= 2 %>
-Your Google Account <%= @migration_request.google_email %> owns about <%= @migration_request.file_count %> files in the old Google Drive folder for <%= @community.name %>. We need your permission to move them into the new drive.
+<%= t(".own_many", email: @migration_request.google_email, count: @migration_request.file_count, community: @community.name) %>
 <% else %>
-Your Google Account <%= @migration_request.google_email %> owns at least one file in the old Google Drive folder for <%= @community.name %>. We need your permission to move it into the new drive.
+<%= t(".own_one", email: @migration_request.google_email, community: @community.name) %>
 <% end %>
 
-Please go here to help out: <%= gdrive_migration_request_url(token: @migration_request.token) %>
+<%= t(".go_here", url: gdrive_migration_request_url(token: @migration_request.token)) %>
 
-You will still retain access to the files if you are a member of the community. If you have questions or concerns, you can reach out to <%= @operation.contact_name %> at <%= @operation.contact_email %>, who is coordinating the reorganization process. If you'd rather not help with this effort, you can also opt out at the URL above.
+<%= t(".retain_access", contact: @operation.contact_name, email: @operation.contact_email) %>
 
-Thank you for your time and consideration!
+<%= t(".thanks") %>

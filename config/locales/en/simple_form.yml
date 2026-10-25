@@ -10,6 +10,10 @@ en:
       # html: '<abbr title="required">*</abbr>'
     error_notification:
       default_message: "Please review the problems below:"
+      # FormHelper#error_summary, under the errors that belong to no field.
+      field_errors:
+        one: "There is 1 error on the form below."
+        other: "There are %{count} errors on the form below."
     labels:
       # These labels are here instead of activerecord b/c these are for things that
       # aren't ActiveRecord models.
@@ -18,7 +22,7 @@ en:
         contact_last_name: "Last Name"
         contact_email: "Email Address"
         community_name: "Community Name"
-        slug: "URL Slug"
+        slug: "Community URL"
         introduction: "About Your Community"
         country_code: "Country"
         time_zone: "Time Zone"
@@ -28,7 +32,7 @@ en:
         message: "Message"
       calendars_export:
         dont_personalize: "Don't personalize events"
-        own_only: "Include only your events"
+        own_only: "My events only"
       payment:
         accountholder_name: "Accountholder Name"
         payment_method: "Payment Method"
@@ -76,7 +80,7 @@ en:
       markdown_suffix_html: "You can use <a href='/about/markdown' target='_new'>rich formatting</a>."
       communities_signup:
         community_name: "Up to 20 characters."
-        slug_html: "The first portion of your community's web address, e.g. https://<strong>yourslug</strong>.gather.coop. Lowercase letters, numbers, and hyphens; must start with a letter. Up to 20 characters."
+        slug: "Lowercase letters, numbers, and hyphens; must start with a letter. Up to 20 characters."
         introduction: "Tell us a bit about your community and why you think Gather is a good fit. Please include one or more links to publicly accessible webpages (e.g. your community website, social media pages) that establish your community's identity."
       communities_signup_action:
         message_approve: "The full approval email is shown above. Add a personalized note to the approval email by replacing the placeholder text."
@@ -130,8 +134,9 @@ en:
           managers_can_moderate: "Whether managers of this group should serve as moderators for this email list."
           _destroy: "Check this box to shut down the email list."
       calendars_event:
+        repeat_ends_on: "The last occurrence is on or before this date."
         all_day: "Check this box if your event doesn't have specific times. It will show at the top of the calendar. Should not be used for booking resources."
-        group_id: "Events with a group can be edited by other members of the group and won't show up in your 'Your events' calendar feed."
+        group_id: "Events with a group can be edited by other members of the group and won't be included when you export 'My events only'."
       calendars_protocol:
         kinds: "Which event types does this protocol apply to? Leave blank to apply to all."
         calendar_ids: "Which calendars does this protocol apply to? Leave blank to apply to all."
@@ -196,6 +201,17 @@ en:
         round_duration: "How long should each round be? There should be just enough time for an average person to choose comfortably."
         job_copy_source_id: "Choose a period from which to copy jobs upon period creation, if desired. Meal jobs will not be copied and should be sync'd instead (see below)."
     options:
+      calendars_event:
+        repeat_frequency:
+          none: "Never"
+          daily: "Daily"
+          weekly: "Weekly"
+          monthly: "Monthly"
+          yearly: "Yearly"
+        repeat_ends:
+          never: "Never"
+          on_date: "On a date"
+          after_count: "After a number of times"
       billing_account:
         active:
           active_only: "Show Active Only"
@@ -372,8 +388,8 @@ en:
         lens:
           all: "All Jobs"
           open: "Open Jobs"
-          you: "Your Jobs"
-          yourhh: "Your Household"
+          mine: "My Jobs"
+          myhh: "My Household"
           notpre: "Not Preassigned"
         date_range:
           all: "Past & Future"

@@ -1,6 +1,8 @@
 # Configures what translations get sent to JS.
 # Only those needed should be included to keep download size small.
-# Run `rails i18n:export` to regenerate app/javascript/i18n/translations.json after changing locales.
+# After changing locales, regenerate app/javascript/i18n/translations.json with:
+#   bundle exec i18n export -c config/i18n-js.yml -r config/environment.rb
+# CI fails if the committed file is out of date (spec/i18n_spec.rb).
 translations:
   - file: "app/javascript/i18n/translations.json"
     patterns:
@@ -8,7 +10,23 @@ translations:
       - "*.meals/assignments.*"
       - "*.datepicker.*"
       - "*.timepicker.*"
+      - "*.moment_formats.*"
+      - "*.date.month_names"
+      - "*.date.abbr_month_names"
+      - "*.date.day_names"
+      - "*.date.abbr_day_names"
       - "*.password.strength.*"
       - "*.errors.messages.doesnt_match"
       - "*.dropzone.*"
       - "*.batchable_tables.confirmations.*"
+      - "*.modal.*"
+      - "*.payment.*"
+      - "*.calendar_nav_popover.*"
+      - "*.meals.report_charts.*"
+      - "*.calendars.drag.*"
+      - "*.calendars.grid.*"
+      - "*.calendars.calendar_list.*"
+      - "*.wiki.help"
+      - "*.wiki.editor.*"
+      - "*.subscription.topup_notices.*"
+      - "*.communities.signup_action.*"

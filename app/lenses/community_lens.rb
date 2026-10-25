@@ -11,6 +11,10 @@ class CommunityLens < Lens::SelectLens
     self.communities = context.current_cluster.communities.by_name
   end
 
+  def active?
+    !all?
+  end
+
   def render
     context.multi_community? ? select_tag : nil
   end

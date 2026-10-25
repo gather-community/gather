@@ -1,49 +1,56 @@
-<% content_for(:title, "Subscription") %>
+<% content_for(:title, t(".title")) %>
 <% content_for(:local_javascript, javascript_include_tag("https://js.stripe.com/v3/")) %>
 <% content_for(:local_viewport, "minimum-scale=1") %>
 
 <% if subscription.incomplete_expired? && intent %>
-  <div class="topline">Your subscription has expired before payment was completed. Please try again.</div>
+  <div class="topline"><%= t(".expired") %></div>
   <%= render("pre_payment", subscription: intent) %>
 <% elsif subscription.payment_requires_microdeposits? %>
   <div class="topline">
-    Your bank account requires verification. Please check your email for instructions and check back
-    here once verification is complete.
+    <%= t(".verify_required") %>
+    <% if subscription.microdeposit_verification_url %>
+      <%= t(".microdeposit_html", link: link_to(t(".microdeposit"), Subscription::Subscription::MICRODEPOSIT_HELP_URL,
+            target: "_blank", rel: "noopener")) %>
+    <% else %>
+      <%= t(".check_email") %>
+    <% end %>
   </div>
+  <% if subscription.microdeposit_verification_url %>
+    <p>
+      <%= link_to(t(".verify_button"), subscription.microdeposit_verification_url,
+            class: "btn btn-primary", target: "_blank", rel: "noopener") %>
+    </p>
+  <% end %>
   <%= render("post_payment", subscription: subscription) %>
-  <p>
-    You can visit our
-    <%= link_to("billing portal", Settings.stripe.billing_portal_url) %> for more information.
-  </p>
+  <%= render("billing_portal_link") %>
 <% # Incomplete can happen if the person clicks "I'm ready to pay" but never "Pay". %>
 <% # But it also happens while microdeposits are pending, so the microdeposits section above should come first. %>
 <% elsif intent || subscription.incomplete? %>
-  <div class="topline">Your subscription is ready for payment.</div>
+  <div class="topline"><%= t(".ready_for_payment") %></div>
   <%= render("pre_payment", subscription: intent || subscription) %>
 <% elsif subscription.new_record? %>
-  <div class="topline">Your subscription is not setup yet.</div>
-  <p>Please contact Gather staff to subscribe.</p>
+  <div class="topline"><%= t(".not_setup") %></div>
+  <p><%= t(".contact_staff") %></p>
 <% elsif subscription.needs_payment_method? %>
   <div class="topline">
-    Your subscription is active but we still need to collect your payment information.
+    <%= t(".needs_payment_method") %>
   </div>
   <%= render("pre_payment", subscription: subscription) %>
-<% elsif subscription.payment_processing? %>
+<% elsif subscription.detailed_status == :payment_processing %>
   <div class="topline">
-    Your subscription payment is processing. This can take a few days depending on the
-    payment method. In the meantime, you are welcome to use Gather!
+    <%= t(".processing") %>
   </div>
   <%= render("post_payment", subscription: subscription) %>
   <%= render("billing_portal_link") %>
 <% elsif subscription.active? %>
   <div class="topline">
-    Your subscription is active. Thanks for being a part of Gather!
+    <%= t(".active") %>
   </div>
   <%= render("post_payment", subscription: subscription) %>
   <%= render("billing_portal_link") %>
 <% else %>
   <div class="topline">
-    There is a problem with your subscription.
+    <%= t(".problem") %>
   </div>
   <%= render("billing_portal_link") %>
 <% end %>

@@ -25,6 +25,105 @@ describe Community do
     expect(community.calendar_token).to match(/\A[0-9a-zA-Z_-]{20}\z/)
   end
 
+  it "upcases country_code on save" do
+    community = create(:community, country_code: "gb")
+    expect(community.country_code).to eq("GB")
+  end
+
+  describe "#status" do
+    # Sets a subscription with the given cached detailed_status signals.
+    def subscribe(stripe_status:, **signals)
+      create(:subscription, community: community, stripe_status: stripe_status,
+        synced_at: Time.current, **signals)
+    end
+
+    it "is :trial with no subscription" do
+      expect(community.status).to eq(:trial)
+    end
+
+    it "is :subscribed with a healthy subscription" do
+      subscribe(stripe_status: "active", payment_intent_status: "succeeded")
+      expect(community.reload.status).to eq(:subscribed)
+    end
+
+    it "is :subscribed while a signup is in progress (incomplete)" do
+      subscribe(stripe_status: "incomplete", payment_intent_status: "requires_payment_method")
+      expect(community.reload.status).to eq(:subscribed)
+    end
+
+    it "is :problem when the subscription is past_due/canceled/unpaid/expired" do
+      subscribe(stripe_status: "canceled")
+      expect(community.reload.status).to eq(:problem)
+    end
+
+    it "is :trial when the subscription has never synced" do
+      create(:subscription, community: community) # synced_at nil => :unknown
+      expect(community.reload.status).to eq(:trial)
+    end
+
+    it "prefers :warning over :problem" do
+      subscribe(stripe_status: "canceled")
+      community.update!(inactivity_warning_count: 1)
+      expect(community.reload.status).to eq(:warning)
+    end
+
+    it "prefers :deactivated over everything" do
+      subscribe(stripe_status: "active", payment_intent_status: "succeeded")
+      community.update!(deactivated_at: Time.current, inactivity_warning_count: 1)
+      expect(community.reload.status).to eq(:deactivated)
+    end
+  end
+
+  describe "#activate" do
+    let(:community) do
+      create(:community, deactivated_at: 1.day.ago, inactivity_warning_count: 3,
+        inactivity_warning_sent_at: 1.day.ago)
+    end
+
+    it "reactivates and clears inactivity warning state" do
+      community.activate
+      community.reload
+      expect(community).to be_active
+      expect(community.inactivity_warning_count).to eq(0)
+      expect(community.inactivity_warning_sent_at).to be_nil
+      expect(community.status).to eq(:trial)
+    end
+  end
+
+  describe "#currency" do
+    it "is set from the country on save" do
+      expect(create(:community, country_code: "ca").currency).to eq("cad")
+      expect(create(:community, country_code: "NG").currency).to eq("ngn")
+    end
+
+    it "keeps an explicit currency" do
+      expect(create(:community, country_code: "CA", currency: "usd").currency).to eq("usd")
+    end
+
+    it "fails loudly for a country with no currency" do
+      expect { create(:community, country_code: "ZZ") }.to raise_error(ActiveRecord::NotNullViolation)
+    end
+  end
+
+  describe "#messaging_supported?" do
+    it "is true where we can send SMS" do
+      expect(build(:community, country_code: "US").messaging_supported?).to be(true)
+    end
+
+    it "is false where we can't, so the top-up flow can be gated" do
+      expect(build(:community, country_code: "FR").messaging_supported?).to be(false)
+    end
+  end
+
+  describe "messaging accounts" do
+    let!(:account) { create(:messaging_account, community: community) }
+
+    it "are destroyed with the community" do
+      community.destroy
+      expect { account.reload }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
+
   describe "destruction" do
     context "with dependent models" do
       let!(:meal_type) { create(:meal_type, community: community) }

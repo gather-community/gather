@@ -1,16 +1,20 @@
-<%= @initiator.name %> just made the following change(s) to the meal '<%= @meal.title_or_no_title %>' on <%= @meal.served_at_wday_no_year %><%= @meal.location_name_with_at %>.
+<% if @meal.location_name -%>
+<%= t(".intro_at_location", name: @initiator.name, title: @meal.title_or_no_title, date: @meal.served_at_wday_no_year, location: @meal.location_name) %>
+<% else -%>
+<%= t(".intro", name: @initiator.name, title: @meal.title_or_no_title, date: @meal.served_at_wday_no_year) %>
+<% end -%>
 
 <% if @added.any? -%>
 <% @added.each do |a| -%>
-- <%= a.user.name %> was added as <%= a.role_title %>
+<%= t(".added", name: a.user.name, role: a.role_title) %>
 <% end -%>
 <% end -%>
 <% if @removed.any? -%>
 <% @removed.each do |a| -%>
-- <%= a.user.name %> was removed as <%= a.role_title %>
+<%= t(".removed", name: a.user.name, role: a.role_title) %>
 <% end -%>
 <% end -%>
 
 <%= render("meal_link") %>
 
-Thanks and enjoy!
+<%= t(".thanks") %>

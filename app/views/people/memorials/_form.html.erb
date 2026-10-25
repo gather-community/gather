@@ -10,7 +10,7 @@
   <% end %>
 <% end %>
 
-<%= javascript_tag do %>
+<script>
   $(function() {
     new Gather.Views.People.MemorialFormView({
       el: '.people--memorial-form',
@@ -19,4 +19,4 @@
     new Gather.Views.DirtyChecker({el: '.people--memorial-form'});
     new Gather.Views.AjaxSelect2({el: '.people--memorial-form'});
   });
-<% end %>
+</script>

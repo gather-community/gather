@@ -1,5 +1,7 @@
-import { Controller } from "@hotwired/stimulus";
-import { loadStripe, Stripe, StripeElements } from "@stripe/stripe-js";
+import {Controller} from "@hotwired/stimulus";
+import {loadStripe, Stripe, StripeElements} from "@stripe/stripe-js";
+import i18n from "../utils/i18n";
+import {alertModal} from "../utils/modal";
 
 export default class extends Controller<HTMLFormElement> {
   static values = {
@@ -28,7 +30,7 @@ export default class extends Controller<HTMLFormElement> {
       console.error("Stripe failed to initialize");
       return;
     }
-    console.log(this.acssDebitModeValue)
+    console.log(this.acssDebitModeValue);
 
     if (this.acssDebitModeValue) {
       this.showSubmitButton();
@@ -38,15 +40,19 @@ export default class extends Controller<HTMLFormElement> {
   }
 
   initPaymentElement(): void {
-    if (!this.stripe) return;
+    if (!this.stripe) {
+      return;
+    }
 
-    const options = { clientSecret: this.clientSecretValue };
+    const options = {clientSecret: this.clientSecretValue};
     this.elements = this.stripe.elements(options);
 
     const paymentElement = this.elements.create("payment", {
-      fields: { billingDetails: { email: "never" } },
-      // This is mainly to show us_bank_account first
-      // Also card is likely to be more useful for communities than wallets, so we put that first.
+      fields: {billingDetails: {email: "never"}},
+      /*
+       * This is mainly to show us_bank_account first
+       * Also card is likely to be more useful for communities than wallets, so we put that first.
+       */
       paymentMethodOrder: ["us_bank_account", "card"],
     });
 
@@ -68,17 +74,17 @@ export default class extends Controller<HTMLFormElement> {
   }
 
   async handleAcssDebitSubmit(): Promise<void> {
-    const accountHolder = this.formTarget['payment[accountholder_name]'].value.trim();
+    const accountHolder = this.formTarget["payment[accountholder_name]"].value.trim();
 
-    if (accountHolder === '') {
-      alert('Please specify the accountholder name.');
+    if (accountHolder === "") {
+      await alertModal(i18n.t("payment.accountholder_required"));
       return;
     }
 
-    document.getElementById('glb-load-ind')?.classList.remove('hiding');
+    document.getElementById("glb-load-ind")?.classList.remove("hiding");
     const confirmFunction = this.clientSecretValue.startsWith("pi_") ?
       this.stripe.confirmAcssDebitPayment : this.stripe.confirmAcssDebitSetup;
-      
+
     const result = await confirmFunction(
       this.clientSecretValue,
       {
@@ -92,7 +98,7 @@ export default class extends Controller<HTMLFormElement> {
     );
 
     if (result.error) {
-      document.getElementById('glb-load-ind')?.classList.add('hiding');
+      document.getElementById("glb-load-ind")?.classList.add("hiding");
       console.log(result.error.message);
     } else if ("paymentIntent" in result) {
       // It's a PaymentIntentResult
@@ -103,7 +109,9 @@ export default class extends Controller<HTMLFormElement> {
   }
 
   async handlePaymentElementSubmit(): Promise<void> {
-    if (!this.stripe || !this.elements) return;
+    if (!this.stripe || !this.elements) {
+      return;
+    }
 
     const confirmFunction = this.clientSecretValue.startsWith("pi_")
       ? this.stripe.confirmPayment
@@ -114,7 +122,7 @@ export default class extends Controller<HTMLFormElement> {
         elements: this.elements,
         confirmParams: {
           return_url: this.returnUrlValue,
-          payment_method_data: { billing_details: { email: this.contactEmailValue } },
+          payment_method_data: {billing_details: {email: this.contactEmailValue}},
         },
       });
 

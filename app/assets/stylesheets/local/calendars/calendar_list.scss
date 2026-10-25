@@ -4,6 +4,13 @@
       font-size: 13px;
     }
   }
+
+  .select-all-link {
+    background: none;
+    border: 0;
+    color: $link-color;
+    padding: 0;
+  }
 }
 
 .calendar-list {
@@ -12,6 +19,8 @@
   .group {
     font-weight: bold;
     font-size: 1.3rem;
+    line-height: inherit;
+    margin: 0;
   }
 
   .calendar, .calendar label {

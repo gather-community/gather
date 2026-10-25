@@ -11,17 +11,22 @@ Gather.Views.Meals.HouseholdWorkerFormView = Backbone.View.extend({
 
   destroyAssign(event) {
     event.preventDefault();
+    const url = event.currentTarget.href;
 
     if (!this.alertShown && this.options.notifyOnWorkerChange) {
       this.alertShown = true;
-      if (!confirm(I18n.t("meals/assignments.change_warning"))) {
-        return;
-      }
+      window.Modal.confirmModal(I18n.t("meals/assignments.change_warning")).then(ok => {
+        if (ok) this.performDestroyAssign(url);
+      });
+    } else {
+      this.performDestroyAssign(url);
     }
+  },
 
+  performDestroyAssign(url) {
     Gather.loadingIndicator.show();
     $.ajax({
-      url: event.currentTarget.href,
+      url: url,
       method: "DELETE",
       success: data => {
         this.$el.replaceWith($(data).find("form"));

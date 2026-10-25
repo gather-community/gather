@@ -9,7 +9,7 @@
       <%= f.hidden_field :photo_destroy %>
       <%= f.input :name, maxlength: 24 %>
       <%= f.input :abbrv, maxlength: 6 %>
-      <%= f.input :group_id, collection: @group_options, include_blank: "[None]" %>
+      <%= f.input :group_id, collection: @group_options, include_blank: t("common.none_bracketed") %>
       <%= f.input :color, required: true do %>
         <%= f.input_field(:color, class: "form-control") %>
         <div class="swatches">

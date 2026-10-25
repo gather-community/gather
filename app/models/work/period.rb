@@ -33,16 +33,22 @@ module Work
     PICK_TYPE_OPTIONS = %i[free_for_all staggered].freeze
     MEAL_JOB_SYNC_OPTIONS = %i[false true].freeze
 
+    # Slugs appear as a URL path segment alongside these sibling segments, so they can't be used.
+    RESERVED_SLUGS = Set.new(%w[new edit periods signups jobs report settings]).freeze
+
+    # A period is auto-archived once it has been over for this long.
+    AUTO_ARCHIVE_AGE = 30.days
+
     acts_as_tenant :cluster
 
     attr_accessor :job_copy_source_id
     attr_accessor :previous_meal_job_sync_setting_ids
     attr_accessor :copy_preassignments
-    alias copy_preassignments? copy_preassignments
+    alias_method :copy_preassignments?, :copy_preassignments
 
     belongs_to :community, inverse_of: :work_periods
     belongs_to :meal_job_requester, class_name: "Groups::Group",
-                                    inverse_of: :work_periods_as_meal_job_requester
+      inverse_of: :work_periods_as_meal_job_requester
     has_many :shares, inverse_of: :period, dependent: :destroy
 
     # Deleting period shouldn't be possible for user if there are jobs within, but we still want to cascade
@@ -50,20 +56,26 @@ module Work
     has_many :jobs, inverse_of: :period, dependent: :destroy
 
     has_many :meal_job_sync_settings, -> { includes(:formula, :role) },
-             inverse_of: :period, dependent: :destroy
+      inverse_of: :period, dependent: :destroy
 
     scope :in_community, ->(c) { where(community: c) }
     scope :with_phase, ->(p) { where(phase: p) }
     scope :active, -> { where.not(phase: "archived") }
+    # Periods a user can pick from a selector: set up (not draft) and not archived.
+    scope :selectable, -> { where.not(phase: %w[draft archived]) }
+    scope :auto_archivable, -> { active.where(ends_on: ...(Time.zone.today - AUTO_ARCHIVE_AGE)) }
     scope :newest_first, -> { order(starts_on: :desc, ends_on: :desc, name: :asc) }
     scope :oldest_first, -> { order(:starts_on, :ends_on, :name) }
     scope :containing_date, ->(d) { where("starts_on <= ?", d).where("ends_on >= ?", d) }
 
     before_validation :normalize
+    before_validation :set_slug
     before_update :save_meal_job_sync_setting_ids
 
     validates :name, :starts_on, :ends_on, presence: true
     validates :name, uniqueness: {scope: :community_id}
+    validates :slug, presence: true, uniqueness: {scope: :community_id}
+    validate :slug_not_reserved
     validates :auto_open_time, presence: true, if: :staggered?
     validates :round_duration, presence: true, numericality: {greater_than: 0}, if: :staggered?
     validates :max_rounds_per_worker, presence: true, numericality: {greater_than: 0}, if: :staggered?
@@ -72,6 +84,11 @@ module Work
 
     accepts_nested_attributes_for :meal_job_sync_settings, allow_destroy: true
     accepts_nested_attributes_for :shares, reject_if: ->(s) { s[:portion].blank? }
+
+    def self.name_to_slug(name)
+      # Uses babosa gem
+      name.to_slug.normalize.to_s
+    end
 
     def self.new_with_defaults(community)
       new(
@@ -126,7 +143,46 @@ module Work
       update!(phase: "open") if should_auto_open?
     end
 
+    def archive_if_appropriate
+      update!(phase: "archived") if should_auto_archive?
+    end
+
+    def to_param
+      slug
+    end
+
     private
+
+    # Sets the slug on creation only; it is stable thereafter even if the name changes.
+    def set_slug
+      self.slug = name_to_slug_without_dupes if slug.blank?
+    end
+
+    # Gets the period's slug and avoids using one already taken in the community.
+    def name_to_slug_without_dupes
+      base = self.class.name_to_slug(name.to_s)
+      base = "period" if base.blank?
+      candidate = base
+      suffix = 1
+      while other_period_exists_with_slug?(candidate)
+        suffix += 1
+        candidate = "#{base}-#{suffix}"
+      end
+      candidate
+    end
+
+    def other_period_exists_with_slug?(other_slug)
+      self.class.in_community(community).where(slug: other_slug).where.not(id: id).exists?
+    end
+
+    def slug_not_reserved
+      naive_slug = self.class.name_to_slug(name.to_s)
+      errors.add(:name, :reserved_slug) if RESERVED_SLUGS.include?(naive_slug)
+    end
+
+    def should_auto_archive?
+      !archived? && ends_on < Time.zone.today - AUTO_ARCHIVE_AGE
+    end
 
     def normalize
       shares.destroy_all if quota_none?

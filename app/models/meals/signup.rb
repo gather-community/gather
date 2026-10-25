@@ -31,7 +31,7 @@ module Meals
     scope :by_one_cmty_first, lambda { |c|
       joins(household: :community).order(Community.arel_table[:id].not_eq(c.id))
     }
-    scope :sorted, -> { joins(household: :community).order("communities.abbrv, households.name") }
+    scope :sorted, -> { joins(household: :community).alpha_order(communities: :abbrv, households: :name) }
 
     normalize_attributes :comments
 
@@ -104,13 +104,13 @@ module Meals
     end
 
     def nonzero_signups_if_new
-      errors.add(:base, "You must sign up at least one person") if new_record? && all_zero?
+      errors.add(:base, :nobody_signed_up) if new_record? && all_zero?
     end
 
     def no_dupe_types
       type_ids = non_zero_non_destroyed_parts.map(&:type_id)
       return if type_ids.uniq.size == type_ids.size
-      errors.add(:base, "Please sign up each type only once")
+      errors.add(:base, :duplicate_types)
     end
 
     def destroy_if_all_zero

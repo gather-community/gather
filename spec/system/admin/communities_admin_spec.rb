@@ -17,16 +17,30 @@ describe "community admin page", js: true do
     expect(page).to have_content("testy-coho")
   end
 
+  scenario "reactivating a deactivated community" do
+    target_community.deactivate
+    visit(admin_community_path(target_community))
+    expect(page).to have_content("Deactivated")
+    click_link("reactivate it")
+    expect(page).to have_content("Community reactivated successfully.")
+    expect(page).not_to have_content("reactivate it")
+    expect(target_community.reload).to be_active
+  end
+
   scenario "delete is blocked when wrong slug entered" do
     visit(admin_community_path(target_community))
-    accept_prompt(with: "wrong-slug") { click_on("Delete") }
+    click_on("Delete")
+    fill_in_modal("wrong-slug")
+    click_modal_button
     expect(page).to have_current_path(admin_community_path(target_community))
     expect(Community.exists?(target_community.id)).to be(true)
   end
 
   scenario "delete proceeds when correct slug entered" do
     visit(admin_community_path(target_community))
-    accept_prompt(with: target_community.slug) { click_on("Delete") }
+    click_on("Delete")
+    fill_in_modal(target_community.slug)
+    click_modal_button
     expect(page).to have_current_path(communities_path)
     expect(page).to have_content("is being deleted")
   end

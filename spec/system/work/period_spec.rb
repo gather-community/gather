@@ -16,7 +16,7 @@ describe "periods", js: true do
       name: "Bar",
       starts_on: "2017-05-01",
       ends_on: "2017-08-31",
-      phase: "active")
+      phase: "open")
   end
   let!(:period3) do
     create(:work_period,
@@ -39,6 +39,14 @@ describe "periods", js: true do
     expect(page).to have_title("Work Periods")
     expect(page).to have_css("table.index tr", count: 4) # Header plus two rows
     expect(page).to have_css("table.index tr td.name", text: "Foo")
+
+    within(find("table.index tr", text: "Foo")) do
+      expect(page).to have_link("Signups", href: work_period_shifts_path(period1))
+      expect(page).to have_link("Report", href: work_period_report_path(period1))
+      expect(page).to have_link("Jobs", href: work_period_jobs_path(period1))
+      click_on("Report")
+    end
+    expect(page).to have_title("Work Report: Foo")
   end
 
   scenario "create, show, update" do
@@ -77,6 +85,11 @@ describe "periods", js: true do
     expect(page).to have_content("Churl Rox")
     expect(page).to have_content("½ Share")
 
+    # Sub-nav links stay within this period even on the periods CRUD pages.
+    expect(page).to have_link("Signups", href: %r{/work/qux/signups})
+    expect(page).to have_link("Jobs", href: %r{/work/qux/jobs})
+    expect(page).to have_link("Report", href: %r{/work/qux/report})
+
     click_on("Edit")
     expect(page).to have_select("Churl Rox", selected: "½ Share")
     expect(page).to have_select("Blep Cruller", selected: "")
@@ -103,8 +116,7 @@ describe "periods", js: true do
     click_button("Save")
     click_on("Qux")
     click_on("Edit")
-    expect(all(".priority-icon")[0]).to have_content("★")
-    expect(all(".priority-icon")[1]).to have_content("☆")
+    expect(page).to have_css(".priority-icon", text: "★", count: 1)
 
     # Test dirty check - Testing dirty check is not working currently.
     # The confirmation dialog does not seem to show.
@@ -120,7 +132,8 @@ describe "periods", js: true do
     visit(work_periods_path)
     click_on("Baz")
     click_on("Edit")
-    accept_confirm { click_on("Delete") }
+    click_on("Delete")
+    click_modal_button
     expect(page).to have_content("deleted successfully")
   end
 
@@ -149,8 +162,7 @@ describe "periods", js: true do
       click_on("Save")
       expect(page).to have_success_alert
 
-      click_on("Jobs")
-      select_lens(:period, "Delta")
+      visit(work_period_jobs_path(Work::Period.find_by!(name: "Delta")))
       expect(page).to have_content("Frungler")
     end
 
@@ -169,8 +181,7 @@ describe "periods", js: true do
       click_on("Save")
       expect(page).to have_success_alert
 
-      click_on("Jobs")
-      select_lens(:period, "Delta")
+      visit(work_period_jobs_path(Work::Period.find_by!(name: "Delta")))
       expect(page).not_to have_content("Frungler")
     end
   end
@@ -187,7 +198,7 @@ describe "periods", js: true do
       check("Honcho")
       click_on("Save")
 
-      expect(page).to have_alert("Please review the problems below")
+      expect(page).to have_alert(/errors? on the form below/)
       expect(page).to have_checked_field("Honcho")
       expect(page).to have_unchecked_field("Flunkie")
 

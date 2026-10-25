@@ -10,6 +10,7 @@
 #  cluster_id     :integer          not null
 #  country_code   :string(2)        default("US"), not null
 #  created_at     :datetime         not null
+#  currency       :string(3)        not null
 #  name           :string(20)       not null
 #  settings       :jsonb
 #  slug           :string           not null
@@ -24,7 +25,7 @@ class Community < ApplicationRecord
 
   SLUG_REGEX = /[a-z][a-z-]*/
   SLUG_MAX_LENGTH = 63
-  STATUSES = %i[trial subscribed warning deactivated].freeze
+  STATUSES = %i[trial subscribed problem warning deactivated].freeze
 
   acts_as_tenant :cluster
   resourcify
@@ -35,6 +36,7 @@ class Community < ApplicationRecord
   # The order of these matters for destruction. See comments below.
   belongs_to :cluster, inverse_of: :communities
   has_many :billing_templates, class_name: "Billing::Template", inverse_of: :community, dependent: :destroy
+  has_many :messaging_accounts, class_name: "Messaging::Account", inverse_of: :community, dependent: :destroy
   has_many :group_affiliations, class_name: "Groups::Affiliation", inverse_of: :community, dependent: :destroy
   has_many :domain_ownerships, class_name: "DomainOwnership", inverse_of: :community, dependent: :destroy
   has_many :meals, class_name: "Meals::Meal", inverse_of: :community, dependent: :destroy
@@ -53,8 +55,13 @@ class Community < ApplicationRecord
   # Households must be destroyed before member_types because households.member_type_id has a FK constraint.
   has_many :households, inverse_of: :community, dependent: :destroy
   has_many :member_types, class_name: "People::MemberType", inverse_of: :community, dependent: :destroy
+  # Memorials outlive their users, so they no longer cascade via households → users and need
+  # their own link to the community.
+  has_many :memorials, class_name: "People::Memorial", inverse_of: :community, dependent: :destroy
   has_one :subscription, inverse_of: :community, class_name: "Subscription::Subscription", dependent: :destroy
   has_one :subscription_intent, inverse_of: :community, class_name: "Subscription::Intent",
+    dependent: :destroy
+  has_one :messaging_topup, inverse_of: :community, class_name: "Subscription::MessagingTopup",
     dependent: :destroy
   has_many :work_periods, class_name: "Work::Period", inverse_of: :community, dependent: :destroy
   has_one :gdrive_config, class_name: "GDrive::Config", inverse_of: :community, dependent: :destroy
@@ -62,7 +69,7 @@ class Community < ApplicationRecord
     dependent: :destroy
   has_many :restrictions, class_name: "Meals::Restriction", inverse_of: :community, dependent: :destroy
 
-  scope :by_name, -> { order(:name) }
+  scope :by_name, -> { alpha_order(:name) }
   scope :by_one_cmty_first, ->(c) { order(arel_table[:id].not_eq(c.id)) }
   scope :by_name_with_first, ->(c) { by_one_cmty_first(c).by_name }
 
@@ -73,6 +80,11 @@ class Community < ApplicationRecord
   disallow_semicolons :name
 
   delegate :name, to: :cluster, prefix: true
+
+  # Country codes are ISO 3166-1 alpha-2 and must be stored uppercase so lookups
+  # (e.g. Messaging::Account currency selection) are reliable.
+  before_validation { self.country_code = country_code&.upcase }
+  before_validation { self.currency ||= ISO3166::Country.new(country_code)&.currency_code&.downcase }
 
   before_create :generate_calendar_token
   before_create :generate_sso_secret
@@ -95,7 +107,10 @@ class Community < ApplicationRecord
       ]},
       {key: :meals, type: :group, fields: [
         {key: :reimb_instructions, type: :markdown},
+        # A starter-content default, translated with the other starter content (see the i18n plan).
+        # rubocop:disable Gather/HardCodedString
         {key: :allergens, type: :text, required: true, default: "Dairy, Shellfish, Soy, Nuts"},
+        # rubocop:enable Gather/HardCodedString
         {key: :default_capacity, type: :integer, required: true, default: 50},
         {key: :show_reimb_form, type: :boolean, default: false},
         {key: :cooks_can_finalize, type: :boolean, default: false},
@@ -162,6 +177,15 @@ class Community < ApplicationRecord
     (households - Array.wrap(hholds_to_save)).each(&:destroy)
   end
 
+  # The per-community "Deleted Member" placeholder user. Records authored by a deleted member
+  # (meals, wiki pages, calendar events) are reassigned to this user so community history
+  # survives anonymized. Created lazily on first deletion — never seeded — so a fresh community
+  # has no placeholder (keeps the "no sample data" generator invariants intact). It lives in its
+  # own deactivated placeholder household and is excluded from directories, selects, etc.
+  def deleted_member
+    households.find_by(deleted_placeholder: true)&.users&.first || create_deleted_member
+  end
+
   def subdomain
     slug
   end
@@ -170,19 +194,94 @@ class Community < ApplicationRecord
     abbrv.downcase
   end
 
+  # The community's single messaging wallet, or nil if it has never been funded. There is at most
+  # one (unique index on messaging_accounts.community_id).
+  def messaging_account
+    messaging_accounts.first
+  end
+
+  # Whether we can send SMS to this community's country, and therefore whether it may buy
+  # messaging bundles. Gate the top-up flow on this — see Messaging::Rates.
+  def messaging_supported?
+    Messaging::Rates.supported?(country_code)
+  end
+
+  # Also clears the inactivity warning state. Otherwise InactivityWarningJob would see the maxed-out
+  # warning count and stale sent_at and immediately deactivate the community again.
+  def activate
+    update!(deactivated_at: nil, inactivity_warning_count: 0, inactivity_warning_sent_at: nil)
+  end
+
   def status
     if inactive?
       :deactivated
     elsif inactivity_warning_count > 0
       :warning
-    elsif subscription_stripe_id
+    elsif subscription_problem?
+      :problem
+    elsif subscription_subscribed?
       :subscribed
     else
       :trial
     end
   end
 
+  # The subscription's detailed_status, computed from either the CommunitySummarizer's virtual
+  # attributes (index context, no N+1) or the loaded subscription association. Returns :unknown
+  # when there is no subscription.
+  def subscription_detailed_status
+    Subscription::Subscription.derive_detailed_status(
+      stripe_status: subscription_signal(:stripe_status),
+      payment_intent_status: subscription_signal(:payment_intent_status),
+      payment_intent_next_action_type: subscription_signal(:payment_intent_next_action_type),
+      setup_intent_status: subscription_signal(:setup_intent_status),
+      setup_intent_next_action_type: subscription_signal(:setup_intent_next_action_type),
+      synced_at: subscription_signal(:synced_at)
+    )
+  end
+
+  def subscription_present?
+    if has_attribute?("subscription_stripe_id")
+      self["subscription_stripe_id"].present?
+    else
+      subscription.present?
+    end
+  end
+
+  def subscription_subscribed?
+    subscription_present? &&
+      Subscription::Subscription::GOOD_STANDING_STATUSES.include?(subscription_detailed_status)
+  end
+
+  def subscription_problem?
+    subscription_present? &&
+      Subscription::Subscription::PROBLEM_STATUSES.include?(subscription_detailed_status)
+  end
+
   private
+
+  # Deactivated ⇒ email is not required and it's excluded from active-scoped lists for free.
+  # Rescues a unique-index race (two concurrent deletions) by re-reading the winner's row.
+  def create_deleted_member
+    household = households.create!(deleted_placeholder: true,
+      name: I18n.t("people.deleted_placeholder.household"))
+    household.users.create!(deleted_placeholder: true, child: false, deactivated_at: Time.current,
+      first_name: I18n.t("people.deleted_placeholder.first_name"),
+      last_name: I18n.t("people.deleted_placeholder.last_name"))
+  rescue ActiveRecord::RecordNotUnique
+    households.find_by(deleted_placeholder: true).users.first
+  end
+
+  # Reads a subscription signal from the summarizer's virtual attribute (aliased as
+  # subscription_<name>) when present, else from the loaded subscription association.
+  def subscription_signal(name)
+    key = "subscription_#{name}"
+    if has_attribute?(key)
+      self[key]
+    else
+      subscription&.public_send(name)
+    end
+  end
 
   def generate_calendar_token
     self.calendar_token ||= UniqueTokenGenerator.generate(self.class, :calendar_token)

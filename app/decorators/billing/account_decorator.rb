@@ -14,10 +14,10 @@ module Billing
 
     def credit_limit_or_none
       if credit_limit?
-        num = h.number_to_currency(credit_limit)
+        num = h.format_money(credit_limit)
         credit_exceeded? ? h.content_tag(:span, num, class: "exceeded") : num
       else
-        "None"
+        t("accounts.no_credit_limit")
       end
     end
 

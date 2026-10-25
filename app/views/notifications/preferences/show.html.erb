@@ -1,0 +1,58 @@
+<% content_for(:title, t(".title")) %>
+
+<p><%= t(".intro") %></p>
+
+<%= gather_form_for(@form, url: notification_preferences_path, method: :patch,
+                           width: :narrow, layout: :vertical) do |f| %>
+  <table class="index notification-preferences">
+    <tbody>
+      <% @form.kinds_by_section.each do |section, kinds| %>
+        <tr class="heading">
+          <th colspan="2"><h3><%= t("notifications.preferences.sections.#{section}") %></h3></th>
+        </tr>
+        <% kinds.each do |kind| %>
+          <tr>
+            <% if kind.configurable? %>
+              <% field = Notifications::PreferencesForm.field_name(kind, :email) %>
+              <td><%= f.label(field, t("notifications.preferences.kinds.#{kind.key}")) %></td>
+              <td class="index-checkbox text-center"><%= f.input_field(field, as: :boolean) %></td>
+            <% else %>
+              <% id = "notification_preferences_#{kind.key}_email" %>
+              <td><%= label_tag(id, t("notifications.preferences.kinds.#{kind.key}")) %></td>
+              <td class="index-checkbox text-center">
+                <%= check_box_tag(id, "1", true, disabled: true, title: t(".essential")) %>
+              </td>
+            <% end %>
+          </tr>
+        <% end %>
+      <% end %>
+
+      <tr class="heading">
+        <th colspan="2">
+          <h3><%= t(".email_lists") %></h3>
+          <% if @groups_with_lists.any? %>
+            <small><%= t(".email_lists_hint") %></small>
+          <% end %>
+        </th>
+      </tr>
+      <% if @groups_with_lists.any? %>
+        <% @groups_with_lists.each do |group| %>
+          <tr>
+            <td><%= group.name %></td>
+            <td class="index-checkbox text-center">
+              <%= link_to(t(".view"), groups_group_path(group), target: "_blank", rel: "noopener") %>
+            </td>
+          </tr>
+        <% end %>
+      <% else %>
+        <tr>
+          <td colspan="2"><%= t(".no_email_lists") %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <%= form_actions do %>
+    <%= f.button(:primary) %>
+  <% end %>
+<% end %>

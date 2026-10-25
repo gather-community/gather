@@ -5,6 +5,16 @@ module People
     # Handles reconfirming email, but not initial confirmation, as that is handled through the sign-in
     # invitation process.
     class ConfirmationsController < Devise::ConfirmationsController
+      # Devise's "resend confirmation instructions" form isn't offered (it never rendered: the stock view had
+      # no page title). Confirmation emails are re-sent from the user's profile instead.
+      def new
+        raise ActionController::RoutingError, "Not Found"
+      end
+
+      def create
+        raise ActionController::RoutingError, "Not Found"
+      end
+
       # GET /resource/confirmation?confirmation_token=abcdef
       def show
         self.resource = resource_class.confirm_by_token(params[:confirmation_token])
@@ -29,7 +39,7 @@ module People
             redirect_to(user_path(resource))
           else
             # In this case we want to add a bit more context.
-            flash[:notice] << " Please sign in to use Gather."
+            flash[:notice] << " #{t("people.users.confirmations.sign_in_to_use_gather")}"
             redirect_to(root_path)
           end
         end
@@ -38,12 +48,10 @@ module People
       def handle_expiry
         respond_with_navigational(resource.errors, status: :unprocessable_entity) do
           if signed_in?(resource_name)
-            flash[:alert] = "The confirmation period has expired. " \
-              "Please use the 'Resend confirmation instructions' link below to try again."
+            flash[:alert] = t("people.users.confirmations.expired_signed_in")
             redirect_to(user_path(resource))
           else
-            flash[:alert] = "The confirmation period has expired. " \
-              "Please sign in using your old email address and try again."
+            flash[:alert] = t("people.users.confirmations.expired_signed_out")
             redirect_to(root_path)
           end
         end

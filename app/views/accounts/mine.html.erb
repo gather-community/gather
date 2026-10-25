@@ -1,0 +1,8 @@
+<% content_for(:title, multi_community? ? t(".title_with_community", community: @community.name) : t(".title")) %>
+
+<% if accounts.empty? %>
+  <%= t(".no_charges") %>
+<% else %>
+  <%= render("synopsis") if @has_activity %>
+  <%= render("details", footnotes: true) %>
+<% end %>

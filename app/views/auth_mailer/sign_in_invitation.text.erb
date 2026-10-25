@@ -1,13 +1,13 @@
 <%= @user.greeting %>
 
-You have been invited to sign in to Gather, <%= @user.community_name %>'s community management system!
+<%= t(".invited", community: @user.community_name) %>
 
-Please click the link below to begin.
+<%= t(".click_link") %>
 
 <%= root_url(token: @token) %>
 
-From there you can choose to sign in with Google or a password. If you haven't set a password yet you will be able to.
+<%= t(".choose_method") %>
 
-This link will expire in <%= @expiry_days %> <%= t("common.day", count: @expiry_days) %>.
+<%= t(".expiry", count: @expiry_days) %>
 
-Hope to see you soon!
+<%= t(".see_you") %>

@@ -30,7 +30,10 @@ describe People::Birthday do
         expect(user.birthdate.year).to eq(4)
         expect(user.birthdate.month).to eq(2)
         expect(user.birthdate.day).to eq(day)
-        expect(user.birthdate).to eq(Date.new(4, 2, day))
+        # Compare as ISO strings: Date#== compares Julian day numbers, and year 4 falls before the
+        # Gregorian reform, so the same Y/M/D differs depending on which calendar the DB driver
+        # decodes into (pg 1.7 decodes proleptic Gregorian; Date.new defaults to Julian here).
+        expect(user.birthdate.iso8601).to eq(Date.new(4, 2, day).iso8601)
         str = "Feb #{day.to_s.rjust(2, '0')}"
         expect(user.birthday_str).to eq(str)
         expect(user.reload.birthday_str).to eq(str)
@@ -113,6 +116,23 @@ describe People::Birthday do
       it "calculates age correctly in non-leap year" do
         Timecop.freeze(Time.zone.parse("2017-2-28")) do
           expect(user.age).to eq(21)
+        end
+      end
+    end
+  end
+
+  describe "in other locales" do
+    let(:user) { build(:user) }
+
+    # The form shows the birthday in the locale's format, so saving it unchanged has to work.
+    it "reads back the formats it shows" do
+      %i[de fi fr].each do |locale|
+        I18n.with_locale(locale) do
+          user.birthday_str = I18n.l(Date.new(1990, 10, 5))
+          expect(user.birthdate).to eq(Date.new(1990, 10, 5)), "#{locale}: #{user.birthday_str}"
+          user.birthday_str = I18n.l(Date.new(1990, 3, 5), format: :month_day)
+          expect([user.birthdate.month, user.birthdate.day, user.birth_year]).to eq([3, 5, nil]),
+            "#{locale}: #{user.birthday_str}"
         end
       end
     end

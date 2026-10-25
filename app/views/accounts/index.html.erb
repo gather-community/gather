@@ -1,20 +1,21 @@
-<% content_for(:title, "Accounts") %>
+<% content_for(:title, t(".title")) %>
 
 <% content_for(:action_links) do %>
   <% if @active_accounts > 0 && @late_fee_count > 0 %>
-    <%- concat(link_to(icon_tag("thumbs-down") << " Apply Late Fees", apply_late_fees_accounts_path,
+    <%- concat(link_to(icon_tag("thumbs-down") << " " << t(".apply_late_fees"), apply_late_fees_accounts_path,
       method: :put, class: "btn btn-default",
-      data: {confirm: late_fee_confirm})) -%>
+      data: {controller: "confirm", action: "confirm#check", confirm_message_value: late_fee_confirm})) -%>
   <%- end -%>
   <%- if @statement_accounts -%>
-    <%- concat(link_to(icon_tag("paper-plane") << " Send Statements", generate_statements_path,
-      method: :post, class: "btn btn-primary", data: {confirm: statement_confirm_msg})) -%>
+    <%- concat(link_to(icon_tag("paper-plane") << " " << t(".send_statements"), generate_statements_path,
+      method: :post, class: "btn btn-primary",
+      data: {controller: "confirm", action: "confirm#check", confirm_message_value: statement_confirm_msg})) -%>
   <%- end %>
 <% end %>
 
 <% if accounts.empty? %>
   <div class="center-notice">
-    No accounts found. <%= lenses.no_result_clear_filter_link %>
+    <%= t(".no_accounts") %> <%= lenses.no_result_clear_filter_link %>
   </div>
 <% else %>
   <p class="subtitle">
@@ -34,15 +35,15 @@
   <table class="index">
     <thead>
       <tr>
-        <th>Num</th>
-        <th>Household</th>
-        <th class="amount">Last Stmt. Date</th>
-        <th class="amount">Due Last Stmt.</th>
-        <th class="amount">New Credits</th>
-        <th class="amount">Balance Due</th>
-        <th class="amount">New Charges</th>
-        <th class="amount">Current Balance</th>
-        <th class="amount">Credit Limit</th>
+        <th><%= t(".num") %></th>
+        <th><%= t(".household") %></th>
+        <th class="amount"><%= t(".last_statement_date") %></th>
+        <th class="amount"><%= t(".due_last_statement") %></th>
+        <th class="amount"><%= t(".new_credits") %></th>
+        <th class="amount"><%= t(".balance_due") %></th>
+        <th class="amount"><%= t(".new_charges") %></th>
+        <th class="amount"><%= t(".current_balance") %></th>
+        <th class="amount"><%= t(".credit_limit") %></th>
         <th></th>
       </tr>
     </thead>
@@ -57,7 +58,7 @@
               account_path(account)) %>
           </td>
           <td class="amount">
-            <%= l(account.last_statement_on) || "N/A" %>
+            <%= l(account.last_statement_on) || t("accounts.not_applicable") %>
           </td>
           <td class="amount">
             <%= statement_amount(account.last_statement) %>
@@ -75,10 +76,10 @@
             <strong><%= currency_with_cr(account.current_balance) %></strong>
           </td>
           <td class="amount">
-            <%= number_to_currency(account.credit_limit) %>
+            <%= format_money(account.credit_limit) %>
           </td>
           <td>
-            <%= link_to(icon_tag("plus"), new_account_transaction_path(account), title: 'Add Transaction') %>
+            <%= link_to(icon_tag("plus"), new_account_transaction_path(account), title: t(".add_transaction")) %>
           </td>
         </tr>
       <% end %>
@@ -86,19 +87,19 @@
     <tfoot>
       <tr>
         <td></td>
-        <td>Totals</td>
+        <td><%= t(".totals") %></td>
         <td></td>
         <td class="amount">
           <%= currency_with_cr(@totals[:due_last_statement]) %>
         </td>
         <td class="amount">
-          <%= number_to_currency(@totals[:total_new_credits]) %>
+          <%= format_money(@totals[:total_new_credits]) %>
         </td>
         <td class="amount">
           <%= currency_with_cr(@totals[:balance_due]) %>
         </td>
         <td class="amount">
-          <%= number_to_currency(@totals[:total_new_charges]) %>
+          <%= format_money(@totals[:total_new_charges]) %>
         </td>
         <td class="amount">
           <%= currency_with_cr(@totals[:current_balance]) %>
@@ -110,7 +111,7 @@
   </table>
 
   <footer id="local-footer" class="footer-links">
-    <%= icon_tag("download") %> <%= link_to("Download Accounts as CSV", accounts_path(format: :csv)) %>
+    <%= icon_tag("download") %> <%= link_to(t(".download_accounts"), accounts_path(format: :csv)) %>
     &nbsp;&nbsp;
     <%= render("transaction_export_form", path: transactions_path(format: :csv)) %>
   </footer>

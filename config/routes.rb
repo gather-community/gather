@@ -12,8 +12,12 @@ Rails.application.routes.draw do
   get "people/users/signed-out", to: "landing#signed_out", as: :user_signed_out
 
   resources :communities, only: %i[index destroy] do
+    collection do
+      post :resync_all
+    end
     member do
       get :admin
+      put :activate
     end
   end
 
@@ -27,6 +31,12 @@ Rails.application.routes.draw do
         post :act
       end
     end
+  end
+
+  # Stripe webhook endpoint. Lives on the apex domain (Stripe posts to a fixed URL) and is
+  # authenticated by signature verification, not by session. See Stripe::WebhooksController.
+  namespace :stripe do
+    post "webhooks", to: "webhooks#create"
   end
 
   resources :domains, only: %i[index show new create destroy]
@@ -44,6 +54,13 @@ Rails.application.routes.draw do
       patch :check
       post :strength
     end
+  end
+
+  scope module: :notifications do
+    resource :preferences, path: "notifications", only: %i[show update], as: :notification_preferences
+    # Public, signed List-Unsubscribe URL from notification emails. POST is RFC 8058 one-click unsubscribe.
+    get "notifications/unsubscribe/:token", to: "unsubscribes#show", as: :notification_unsubscribe
+    post "notifications/unsubscribe/:token", to: "unsubscribes#create"
   end
 
   resources :users do
@@ -95,6 +112,7 @@ Rails.application.routes.draw do
     collection do
       get :jobs
       get :report
+      get :export_signups, path: "signups"
       get :worker_form, path: "worker-form"
       get :reimbursee_paypal_email, path: "reimbursee-paypal-email"
     end
@@ -153,7 +171,16 @@ Rails.application.routes.draw do
   end
 
   namespace :calendars do
-    resources :events
+    resources :events do
+      # Re-renders the parts of the event form that depend on its other fields. See
+      # EventsController#form_refresh.
+      post :form_refresh, on: :collection
+      post :form_refresh, on: :member
+    end
+    resources :eventlets, only: %i[show update destroy] do
+      # Which scope choices a drag of this eventlet may offer. See EventletsController#move_choices.
+      get :move_choices, on: :member
+    end
     resources :protocols
     resources :groups, only: %i[new edit create update destroy]
 
@@ -179,6 +206,7 @@ Rails.application.routes.draw do
 
     # This is the personalized show action, allowing paths to include the user's calendar token,
     # e.g. /calendars/exports/meals/D7sbPv7YCUhxMs4Pyx9D.
+    # The "your-*" types predate the "My" naming. Existing subscriptions use them, so they stay.
     # The calendar's type gets captured as the :id param, so this is equivalent to
     # /calendars/exports/:type/:token
     get "exports/:type/:token",
@@ -239,7 +267,8 @@ Rails.application.routes.draw do
 
   resources :accounts, only: %i[index show edit update] do
     collection do
-      get :yours
+      get :mine
+      get :yours, to: redirect(path: "/accounts/mine") # Legacy path, linked from old statement emails
       put :apply_late_fees
     end
     resources :transactions, only: %i[index new create]
@@ -331,13 +360,7 @@ Rails.application.routes.draw do
   end
 
   namespace :work do
-    resources :shifts, path: :signups, only: %i[index show] do
-      member do
-        post :signup
-        delete :unsignup
-      end
-    end
-    resources :jobs
+    # Period management (not period-scoped). Period slugs are the :id.
     resources :periods do
       member do
         get :review_notices
@@ -345,7 +368,24 @@ Rails.application.routes.draw do
       end
     end
     resource :settings, only: %i[edit update]
+
+    # Landing pages (no period selected) — show a period picker or redirect to the sole period.
+    get "signups", to: "shifts#index", as: :shifts
+    get "jobs", to: "jobs#index", as: :jobs
     get "report", to: "periods#report", as: :report
+
+    # Period-scoped content pages. The :period_id segment is a period slug.
+    scope ":period_id", as: :period do
+      resources :shifts, path: :signups, only: %i[index show] do
+        member do
+          post :signup
+          delete :unsignup
+        end
+      end
+      resources :jobs
+      get "report", to: "periods#report", as: :report
+    end
+
     get "/", to: redirect("/work/signups")
   end
 
@@ -361,6 +401,9 @@ Rails.application.routes.draw do
     post "/start-payment", to: "subscriptions#start_payment", as: :start_payment
     get "/payment", to: "subscriptions#payment", as: :payment
     get "/success", to: "subscriptions#success", as: :success
+    post "/messaging-topup/preview", to: "messaging_topups#preview", as: :messaging_topup_preview
+    patch "/messaging-topup", to: "messaging_topups#update", as: :messaging_topup
+    delete "/messaging-topup", to: "messaging_topups#destroy"
   end
 
   get "sso", to: "single_sign_on#sign_on"

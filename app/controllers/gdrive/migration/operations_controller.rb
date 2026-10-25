@@ -27,7 +27,7 @@ module GDrive
           scan = @operation.scans.create!(scope: "full")
           scan_task = scan.scan_tasks.create!(folder_id: @operation.src_folder_id)
           FullScanJob.perform_later(cluster_id: ActsAsTenant.current_tenant.id, scan_task_id: scan_task.id)
-          flash[:success] = "Migration created successfully. File scan will begin momentarily."
+          flash[:success] = t("gdrive.migration.created")
           redirect_to(gdrive_migration_dashboard_home_path)
         else
           render(:new)
@@ -40,7 +40,7 @@ module GDrive
         scan = @operation.scans.create!(scope: "full")
         scan_task = scan.scan_tasks.create!(folder_id: @operation.src_folder_id)
         FullScanJob.perform_later(cluster_id: ActsAsTenant.current_tenant.id, scan_task_id: scan_task.id)
-        flash[:success] = "Scan initialized and will begin momentarily."
+        flash[:success] = t("gdrive.migration.scan_started")
         redirect_to(gdrive_migration_dashboard_home_path)
       end
 
@@ -48,7 +48,7 @@ module GDrive
         @operation = Operation.find(params[:id])
         authorize(@operation)
         if @operation.update(operation_params(:update))
-          flash[:success] = "Migration updated successfully."
+          flash[:success] = t("gdrive.migration.updated")
           redirect_to(gdrive_migration_dashboard_home_path)
         else
           render(:edit)
@@ -62,7 +62,7 @@ module GDrive
         wrapper = Wrapper.new(config: config, google_user_id: config.org_user_id)
         WebhookRegistrar.stop(operation, wrapper)
         operation.destroy
-        flash[:success] = "Operation deleted successfully. No longer monitoring for changes."
+        flash[:success] = t("gdrive.migration.deleted")
         redirect_to(gdrive_home_path)
       end
 

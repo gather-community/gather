@@ -20,8 +20,26 @@ describe "user show" do
       visit(user_path(user))
       expect(page).to have_title(user.decorate.full_name)
       expect(page).to have_content(user.email)
-      expect(page).to have_content("Past Head Cook Meals")
+      expect(page).to have_content("Recent Head Cook Meals")
       expect(page).to have_content("Foodz")
+    end
+  end
+
+  context "with group memberships" do
+    let(:user) { create(:user) }
+    let(:visible_group) { create(:group, name: "Knitters", availability: "open") }
+    let(:hidden_group) { create(:group, name: "Secret Society", availability: "hidden") }
+
+    before do
+      visible_group.memberships.create!(user: user, kind: "joiner")
+      hidden_group.memberships.create!(user: user, kind: "joiner")
+    end
+
+    scenario "links only groups the viewer can see" do
+      visit(user_path(user))
+      expect(page).to have_link("Knitters")
+      expect(page).to have_content("Secret Society")
+      expect(page).not_to have_link("Secret Society")
     end
   end
 

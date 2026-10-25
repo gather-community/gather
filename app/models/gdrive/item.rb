@@ -19,7 +19,7 @@ module GDrive
     acts_as_tenant :cluster
 
     belongs_to :gdrive_config, class_name: "GDrive::Config"
-    has_many :item_groups, -> { includes(:group).order("groups.name") },
+    has_many :item_groups, -> { includes(:group).alpha_order(groups: :name) },
       class_name: "GDrive::ItemGroup", inverse_of: :item, dependent: :destroy
     has_many :groups, through: :item_groups
 
@@ -30,6 +30,7 @@ module GDrive
 
     scope :in_community, ->(c) { joins(:gdrive_config).where(gdrive_configs: {community_id: c.id}) }
     scope :drives_only, -> { where(kind: "drive") }
+    scope :accessible, -> { where(error_type: nil).or(where.not(error_type: "inaccessible")) }
 
     delegate :community, to: :gdrive_config
 

@@ -8,7 +8,6 @@ Gather.Views.ApplicationView = Backbone.View.extend({
 
   initialize() {
     Gather.loadingIndicator = this.$("#glb-load-ind");
-    Gather.errorModal = this.$("#glb-error-modal");
 
     // We prefer to instantiate these ourselves.
     Dropzone.autoDiscover = false;

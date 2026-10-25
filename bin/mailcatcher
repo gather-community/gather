@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+# Binds Mailcatcher's ports to the Mac host so you can access the web UI and SMTP.
+# Usage: bin/mailcatcher [stop]
+set -euo pipefail
+
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$ROOT_DIR"
+
+COMPOSE_FILES="docker-compose.yml"
+[[ -f docker-compose.override.yml ]] && COMPOSE_FILES="$COMPOSE_FILES:docker-compose.override.yml"
+
+port_owner() {
+  local port="$1"
+  docker ps --format "{{.Names}}\t{{.Ports}}" 2>/dev/null \
+    | awk -F'\t' -v p=":${port}->" '$2 ~ p {print $1; exit}'
+}
+
+case "${1:-}" in
+  stop)
+    docker compose up -d --force-recreate mailcatcher
+    echo "mailcatcher host port bindings removed."
+    ;;
+  "")
+    for port in 1025 1080; do
+      owner=$(port_owner "$port")
+      if [[ -n "$owner" ]]; then
+        echo "Error: port $port is already in use."
+        echo "In use by: $owner"
+        echo "To free it: docker stop $owner"
+        exit 1
+      fi
+    done
+
+    local_output=""
+    if ! local_output=$(COMPOSE_FILE="$COMPOSE_FILES:docker-compose.expose.yml" \
+        docker compose up -d --force-recreate mailcatcher 2>&1); then
+      echo "$local_output"
+      exit 1
+    fi
+
+    echo "mailcatcher exposed at http://localhost:1080 (SMTP: localhost:1025)"
+    echo "To remove: bin/mailcatcher stop"
+    ;;
+  *)
+    echo "Usage: bin/mailcatcher [stop]"
+    exit 1
+    ;;
+esac

@@ -1,0 +1,103 @@
+en:
+  subscription:
+    messaging_topup:
+      updated: "Your monthly messaging topup is set. Your messaging balance is now %{balance}."
+      canceled: "Your monthly messaging topup will be canceled at the end of the current billing month."
+    detailed_statuses:
+      active: "Active"
+      scheduled: "Scheduled"
+      needs_payment_method: "Needs payment"
+      awaiting_microdeposits: "Needs bank verify"
+      payment_processing: "Processing"
+      incomplete: "Awaiting payment"
+      incomplete_expired: "Expired"
+      past_due: "Past due"
+      unpaid: "Unpaid"
+      canceled: "Canceled"
+      other: "Unknown"
+      unknown: "Unknown"
+    # Descriptions of the messaging balance transactions a topup creates.
+    messaging_transactions:
+      credit: "Monthly messaging topup"
+      reversal: "Reversal of uncollected messaging topup"
+    # e.g. "$5.00/month"
+    per_month: "%{amount}/month"
+    every_months:
+      one: "%{amount} every %{count} month"
+      other: "%{amount} every %{count} months"
+    pay_starting: "Pay %{amount} starting %{date}"
+    pay_now_and_then: "Pay %{now} now and then %{recurring} from now"
+    # Messaging topup row statuses, shown only when the topup isn't cleanly active.
+    topup_statuses:
+      canceling: "Canceling on %{date}"
+      past_due: "Past due"
+      payment_processing: "Payment processing"
+    # Text built by the messaging-topup Stimulus controller.
+    topup_notices:
+      cancel: "Your monthly topup will be canceled at the end of the current billing month. No further charges, and your existing balance stays."
+      first_charge: "Your payment method on file will be charged %{amount} today for a full month, then %{amount} on this day each month."
+      calculating: "Calculating…"
+      next_month: "Starting next billing month you'll be charged %{amount} per month."
+      prorated_credit: "Now you'll receive a credit of %{credit} toward your next invoice, then %{amount} per month from %{date}."
+      prorated_charge: "Now your payment method on file will be charged about %{charge} today (prorated), then %{amount} per month from %{date}."
+      error_default: "Something went wrong and your topup was not changed."
+      error_with_reference: "%{reason} Reference: %{reference}. (Attempted %{time}.) If this keeps happening, please contact Gather support with that reference and time."
+      error: "%{reason} (Attempted %{time}.) If this keeps happening, please contact Gather support with that reference and time."
+    subscriptions:
+      show:
+        title: "Subscription"
+        expired: "Your subscription has expired before payment was completed. Please try again."
+        verify_required: "Your bank account requires verification."
+        microdeposit_html: "A %{link} will land in your account in a day or two. Use the button below to complete verification."
+        microdeposit: "microdeposit"
+        check_email: "Please check your email for instructions and check back here once verification is complete."
+        verify_button: "Verify your bank account"
+        ready_for_payment: "Your subscription is ready for payment."
+        not_setup: "Your subscription is not setup yet."
+        contact_staff: "Please contact Gather staff to subscribe."
+        needs_payment_method: "Your subscription is active but we still need to collect your payment information."
+        processing: "Your subscription payment is processing. This can take a few days depending on the payment method. In the meantime, you are welcome to use Gather!"
+        active: "Your subscription is active. Thanks for being a part of Gather!"
+        problem: "There is a problem with your subscription."
+      billing_portal_link:
+        visit_html: "You can visit our %{link} for more information."
+        billing_portal: "billing portal"
+      base_rows:
+        num_users: "Number of Users"
+        tier: "Tier"
+        tier_value: "%{tier} (%{price}/month/user)"
+        discount: "Discount"
+        months_per_cycle: "Months Per Bill Cycle"
+        total_payment: "Total Payment"
+        not_charged_until: "* You will enter your payment details now but you won't be charged until %{date}."
+        prorated: "* Your first payment will be prorated to cover the days elapsed since %{date}."
+      email_row:
+        billing_email: "Billing Email"
+      messaging:
+        title: "Messaging"
+        current_balance: "Current Balance"
+        monthly_topup: "Monthly Topup"
+        none: "None"
+        edit: "Edit"
+        add: "Add"
+        next_payment_date: "Next Payment Date"
+        status: "Status"
+      messaging_topup_modal:
+        title: "Monthly Messaging Topup"
+        intro: "Choose how much messaging credit to add to your balance each month. Your payment method on file is charged automatically."
+        none: "None"
+        cancel: "Cancel"
+        save: "Save"
+      post_payment:
+        title: "App Subscription"
+        next_payment_date: "Next Payment Date"
+      pre_payment:
+        title: "App Subscription"
+        start_date: "Start Date"
+        update_info_html: "If any of this information needs to be updated, please contact %{email}."
+        ready_enter_payment: "Looks good, I'm ready to enter my payment info"
+        ready_to_pay: "Looks good, I'm ready to pay"
+      payment:
+        title: "Payment"
+        canadian_debit: "Canadian pre-authorized debit"
+        popup_note: "A pop-up window will collect your bank info after you click 'Pay' below."

@@ -2,49 +2,50 @@
 
 module AccountsHelper
   def statement_amount(statement)
-    statement.nil? ? "N/A" : link_to(currency_with_cr(statement.total_due), statement_path(statement))
+    return t("accounts.not_applicable") if statement.nil?
+    link_to(currency_with_cr(statement.total_due), statement_path(statement))
   end
 
   def currency_with_cr(amount)
     return "" if amount.blank?
-    number_to_currency(amount.abs) << (amount < 0 ? " CR" : "")
+    return format_money(amount) unless amount.negative?
+    t("accounts.credit_amount_html", amount: format_money(-amount))
   end
 
   def currency_with_cr_span(amount)
     return "" if amount.blank?
-    number_to_currency(amount.abs) <<
-      content_tag(:span, amount < 0 ? "CR" : "", class: "cr")
+    format_money(amount.abs) <<
+      content_tag(:span, amount.negative? ? t("accounts.credit_abbr") : "", class: "cr")
   end
 
   def link_to_currency_if_nonzero(amt, target)
     if amt.abs > 0.01
-      link_to(number_to_currency(amt), target)
+      link_to(format_money(amt), target)
     else
-      number_to_currency(amt)
+      format_money(amt)
     end
   end
 
   def late_fee_confirm
-    +"Are you sure? Fees will be charged to #{@late_fee_count} households. " <<
-      if @late_fee_days_ago.nil?
-        ""
-      else
-        "Fees were last applied #{@late_fee_days_ago} days ago."
-      end
+    if @late_fee_days_ago.nil?
+      t("accounts.late_fee_confirm", count: @late_fee_count)
+    else
+      t("accounts.late_fee_confirm_with_days", count: @late_fee_count, days: @late_fee_days_ago)
+    end
   end
 
   def no_user_warning(account)
     if account.household_no_users?
-      " ".html_safe << icon_tag("warning", title: "Account household has no associated users")
+      " ".html_safe << icon_tag("warning", title: t("accounts.no_users_warning"))
     else
       ""
     end
   end
 
   def statement_confirm_msg
-    msg = +"Are you sure? Statements will be sent out to #{@statement_accounts} households."
-    msg << "\n\n" << t(".no_users", count: @no_user_accounts) if @no_user_accounts > 0
-    msg << "\n\n" << t(".recent_statements", count: @recent_stmt_accounts) if @recent_stmt_accounts > 0
+    msg = +t("accounts.statement_confirm", count: @statement_accounts)
+    msg << "\n\n" << t("accounts.index.no_users", count: @no_user_accounts) if @no_user_accounts > 0
+    msg << "\n\n" << t("accounts.index.recent_statements", count: @recent_stmt_accounts) if @recent_stmt_accounts > 0
     msg
   end
 end

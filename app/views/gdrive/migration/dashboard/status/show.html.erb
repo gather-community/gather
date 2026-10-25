@@ -1,4 +1,4 @@
-<% content_for(:title) { "Google Drive Migration" } %>
+<% content_for(:title) { t("gdrive.migration.dashboard.title") } %>
 <%= content_for(:action_links, operation.action_links) %>
 
 <div class="synopsis gdrive-migration-synopsis">
@@ -6,16 +6,16 @@
 </div>
 
 <table>
-  <tr><td>System User</td><td><%= @config.org_user_id %></td></tr>
-  <tr><td>Contact</td><td><%= @operation.contact_name %> &lt;<%= @operation.contact_email %>&gt;</td></tr>
-  <tr><td>Source Folder</td><td><%= link_to(@operation.src_folder_id, "https://drive.google.com/drive/u/0/folders/#{@operation.src_folder_id}") %></td></tr>
-  <tr><td>Destination Folder</td><td><%= link_to(@operation.dest_folder_id, "https://drive.google.com/drive/u/0/folders/#{@operation.dest_folder_id}") %></td></tr>
-  <tr><td>Total Files</td><td><%= number_with_delimiter(@stats.total) %></td></tr>
-  <tr><td>Files Pending</td><td><%= number_with_delimiter(@stats.by_status["pending"]) %></td></tr>
-  <tr><td>Files Declined</td><td><%= number_with_delimiter(@stats.by_status["declined"]) %></td></tr>
-  <tr><td>Files Errored</td><td><%= number_with_delimiter(@stats.by_status["errored"]) %></td></tr>
-  <tr><td>Files Transferred</td><td><%= number_with_delimiter(@stats.by_status["transferred"]) %></td></tr>
-  <tr><td>Files Copied</td><td><%= number_with_delimiter(@stats.by_status["copied"]) %></td></tr>
-  <tr><td>Files Ignored</td><td><%= number_with_delimiter(@stats.by_status["ignored"]) %></td></tr>
-  <tr><td>Files Disappeared</td><td><%= number_with_delimiter(@stats.by_status["disappeared"]) %></td></tr>
+  <tr><td><%= t(".system_user") %></td><td><%= @config.org_user_id %></td></tr>
+  <tr><td><%= t(".contact") %></td><td><%= t(".contact_value", name: @operation.contact_name, email: @operation.contact_email) %></td></tr>
+  <tr><td><%= t(".source_folder") %></td><td><%= link_to(@operation.src_folder_id, "https://drive.google.com/drive/u/0/folders/#{@operation.src_folder_id}") %></td></tr>
+  <tr><td><%= t(".destination_folder") %></td><td><%= link_to(@operation.dest_folder_id, "https://drive.google.com/drive/u/0/folders/#{@operation.dest_folder_id}") %></td></tr>
+  <tr><td><%= t(".total_files") %></td><td><%= number_with_delimiter(@stats.total) %></td></tr>
+  <tr><td><%= t(".files_by_status.pending") %></td><td><%= number_with_delimiter(@stats.by_status["pending"]) %></td></tr>
+  <tr><td><%= t(".files_by_status.declined") %></td><td><%= number_with_delimiter(@stats.by_status["declined"]) %></td></tr>
+  <tr><td><%= t(".files_by_status.errored") %></td><td><%= number_with_delimiter(@stats.by_status["errored"]) %></td></tr>
+  <tr><td><%= t(".files_by_status.transferred") %></td><td><%= number_with_delimiter(@stats.by_status["transferred"]) %></td></tr>
+  <tr><td><%= t(".files_by_status.copied") %></td><td><%= number_with_delimiter(@stats.by_status["copied"]) %></td></tr>
+  <tr><td><%= t(".files_by_status.ignored") %></td><td><%= number_with_delimiter(@stats.by_status["ignored"]) %></td></tr>
+  <tr><td><%= t(".files_by_status.disappeared") %></td><td><%= number_with_delimiter(@stats.by_status["disappeared"]) %></td></tr>
 </table>

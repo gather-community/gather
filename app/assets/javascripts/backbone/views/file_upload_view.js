@@ -18,6 +18,9 @@ Gather.Views.FileUploadView = Backbone.View.extend({
       maxFiles: 1,
       maxFilesize: this.maxSize ? this.maxSize / 1024 / 1024 : undefined,
       filesizeBase: 1024,
+      transformFile(file, done) {
+        view.copyIntoMemory(file, done, this);
+      },
       init() {
         const dz = this;
         dz.on("addedfile", file => view.fileAdded.apply(view, [file, dz]));
@@ -44,6 +47,30 @@ Gather.Views.FileUploadView = Backbone.View.extend({
 
   fileUploaded(file, response, dz) {
     this.setSignedId(response.blob_id);
+  },
+
+  /*
+   * WebKit bug 319985 (Safari/iOS 26.5+, so every iOS browser) can send a disk-backed File with an
+   * empty body (Content-Length: 0), which Rails rejects as "Bad Request". The service worker no longer
+   * re-issues POSTs, which is the main trigger, but per the bug report it can happen without one too.
+   * Reading the bytes into an in-memory Blob first gives the request a real body.
+   * Dropzone takes the filename from the original file, so the Blob doesn't need one.
+   */
+  copyIntoMemory(file, done, dz) {
+    file.arrayBuffer()
+      .then((buffer) => {
+        if (buffer.byteLength !== file.size) {
+          throw new Error(`Read ${buffer.byteLength} of ${file.size} bytes`);
+        }
+        done(new window.Blob([buffer], {type: file.type}));
+      })
+      .catch(() => {
+        /*
+         * Dropzone's internal failure path (marks the file as errored and shows the message).
+         * There's no public equivalent for a failure before the request is sent.
+         */
+        dz._errorProcessing([file], I18n.t("dropzone.dictFileUnreadable"));
+      });
   },
 
   delete(e) {

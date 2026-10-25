@@ -28,8 +28,9 @@ describe CustomReminderJob do
 
   shared_examples_for "sends correct number of emails" do |num|
     it do
-      expect(WorkMailer).to receive(:job_reminder).exactly(num).times.and_return(mlrdbl)
+      calls = record_notifications(WorkMailer, :job_reminder)
       perform_job
+      expect(calls.size).to eq(num)
     end
   end
 
@@ -60,7 +61,7 @@ describe CustomReminderJob do
         let(:time_offset) { -2.minutes }
 
         it "should send nothing but delete old delivery" do
-          expect(WorkMailer).not_to receive(:job_reminder)
+          expect(WorkMailer).not_to receive(:with)
           perform_job
           expect { old_stray_delivery.reload }.to raise_error(ActiveRecord::RecordNotFound)
         end
@@ -77,6 +78,24 @@ describe CustomReminderJob do
             [assignB2, reminderB2]
           )
         end
+      end
+    end
+
+    context "when delivery to one recipient fails" do
+      let(:work_job) do
+        create(:work_job, period: periodA, shift_starts: ["2018-01-01 11:30"], shift_slots: 2)
+      end
+      let!(:assign1) { work_job.shifts[0].assignments.create!(user: userA1) }
+      let!(:assign2) { work_job.shifts[0].assignments.create!(user: userA2) }
+      let!(:reminder) { create_work_job_reminder(work_job, "2018-01-01 6:00") }
+
+      it "reports the error, still sends to the others, and doesn't redeliver" do
+        failing = double.tap { |d| allow(d).to receive(:deliver_now).and_raise(Net::ReadTimeout) }
+        expect(WorkMailer).to receive(:with).twice
+          .and_return(double(job_reminder: failing), double(job_reminder: mlrdbl))
+        expect(Gather::ErrorReporter.instance).to receive(:report).once
+        perform_job
+        expect(ReminderDelivery.count).to eq(0)
       end
     end
 
@@ -127,20 +146,20 @@ describe CustomReminderJob do
     let!(:role_reminder) { create_meal_role_reminder(role, 2, "days_before") }
 
     it "calls appropriate mailers" do
-      expect(WorkMailer).to receive(:job_reminder).with(shift_assignment, job_reminder).and_return(mlrdbl)
-      expect(MealMailer).to receive(:role_reminder).with(meal_assignment, role_reminder).and_return(mlrdbl)
+      work_calls = record_notifications(WorkMailer, :job_reminder)
+      meal_calls = record_notifications(MealMailer, :role_reminder)
       perform_job
+      expect(work_calls).to eq([[userB1, shift_assignment, job_reminder]])
+      expect(meal_calls).to eq([[userA1, meal_assignment, role_reminder]])
     end
   end
 
   def expect_delivery_to_pairs(*pairs)
-    pairs.each do |pair|
-      expect(WorkMailer).to receive(:job_reminder).with(*pair).and_return(mlrdbl)
-    end
+    calls = record_notifications(WorkMailer, :job_reminder)
     perform_job
+    expect(calls).to match_array(pairs.map { |assignment, reminder| [assignment.user, assignment, reminder] })
 
     # Run job a second time, ensure nothing goes out.
-    expect(WorkMailer).not_to receive(:job_reminder)
-    perform_job
+    expect { perform_job }.not_to(change { calls.size })
   end
 end

@@ -3,6 +3,18 @@
 require "rails_helper"
 
 describe "custom field declaration" do
+  # FakeCustomFieldModel's comment field declares a custom :foo validation message, which gets translated
+  # whenever validations run, so it needs a translation to exist.
+  before do
+    I18n.backend.store_translations(:en, custom_fields: {errors: {fake_custom_field_model: {
+      settings: {info: {comment: {foo: "is too long"}}}
+    }}})
+  end
+
+  after do
+    I18n.reload!
+  end
+
   describe "getters and setters" do
     let(:fake) { FakeCustomFieldModel.new }
 

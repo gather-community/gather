@@ -29,12 +29,18 @@ class HouseholdsController < ApplicationController
     prepare_household_form
   end
 
+  def edit
+    @household = Household.find(params[:id])
+    authorize(@household)
+    prepare_household_form
+  end
+
   def create
     @household = Household.new(community: current_community)
     @household.assign_attributes(household_attributes)
     authorize(@household)
     if @household.save
-      flash[:success] = "Household created successfully."
+      flash[:success] = t("households.created")
       redirect_to(households_path)
     else
       prepare_household_form
@@ -42,22 +48,35 @@ class HouseholdsController < ApplicationController
     end
   end
 
-  def edit
-    @household = Household.find(params[:id])
-    authorize(@household)
-    prepare_household_form
-  end
-
   def update
     @household = Household.find(params[:id])
     authorize(@household)
     if @household.update(household_attributes)
-      flash[:success] = "Household updated successfully."
+      flash[:success] = t("households.updated")
       redirect_to(households_path)
     else
       prepare_household_form
       render(:edit)
     end
+  end
+
+  # Overrides Destructible#destroy: hard-deletes the household and all its members, anonymizing
+  # their shared records. Admin-only; blockers (balance, external ward, last admin) refuse with
+  # a flash. A typed confirmation (household name) is re-validated server-side.
+  def destroy
+    @household = Household.find(params[:id])
+    authorize(@household)
+    reasons = People::HouseholdDeletion.blockers(@household)
+    if reasons.any?
+      return redirect_to(edit_household_path(@household), alert: deletion_blocked_message(reasons))
+    end
+    unless deletion_confirmation_matches?(@household.name)
+      return redirect_to(edit_household_path(@household),
+        alert: I18n.t("people.deletion.confirmation_mismatch"))
+    end
+    People::HouseholdDeletion.new(household: @household, actor: current_user).perform!
+    flash[:success] = I18n.t("deactivatable.household.success.hard_destroy")
+    redirect_to(households_path)
   end
 
   protected

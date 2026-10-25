@@ -1,26 +1,26 @@
-<% content_for(:title, "Communities") %>
+<% content_for(:title, t(".title")) %>
 
 <% content_for(:action_links) do %>
   <%- if policy(Communities::Signup.new).index? -%>
-    <%- concat(link_to(icon_tag("inbox") << " View Signups", communities_signups_path, class: "btn btn-default")) -%>
+    <%- concat(link_to(icon_tag("inbox") << " " << t(".view_signups"), communities_signups_path, class: "btn btn-default")) -%>
   <%- end -%>
 <% end %>
 
 <table>
   <thead>
     <tr>
-      <td>ID</td>
-      <td>Name</td>
-      <td>Created</td>
-      <td>Last Login</td>
-      <td>Status</td>
-      <td>Users</td>
-      <td>Meals</td>
-      <td>Rsrvs</td>
-      <td>Jobs</td>
-      <td>Txns</td>
-      <td>Subscription</td>
-      <td colspan="2">Cluster</td>
+      <td><%= t(".id") %></td>
+      <td><%= t(".name") %></td>
+      <td><%= t(".created") %></td>
+      <td><%= t(".last_login") %></td>
+      <td><%= t(".status") %></td>
+      <td><%= t(".users") %></td>
+      <td><%= t(".meals") %></td>
+      <td><%= t(".reservations") %></td>
+      <td><%= t(".jobs") %></td>
+      <td><%= t(".transactions") %></td>
+      <td><%= t(".subscription") %></td>
+      <td colspan="2"><%= t(".cluster") %></td>
     </tr>
   </thead>
   <tbody>
@@ -33,7 +33,7 @@
         <td class="<%= days_since_login.nil? || days_since_login >= 90 ? "text-danger" : "" %>"
             title="<%= community.last_login_at %>">
           <% if community.last_login_at.nil? %>
-            Never
+            <%= t(".never") %>
           <% elsif days_since_login < 14 %>
             <%= icon_tag("check") %> <%= l(community.last_login_at.to_date) %>
           <% else %>
@@ -80,9 +80,9 @@
         </td>
         <td>
           <% if community.subscription_stripe_id %>
-            Subscribed
+            <%= t("subscription.detailed_statuses.#{community.subscription_detailed_status}") %>
           <% elsif community.subscription_intent_tier %>
-            Intent: <%= community.subscription_intent_tier %>
+            <%= t(".intent", tier: community.subscription_intent_tier) %>
           <% end %>
         </td>
         <td><%= community.cluster_id %></td>

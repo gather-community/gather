@@ -9,10 +9,11 @@ ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 # -----------------------------------------------------------------------------
 # The devcontainer should use the same network as the application so we can reach services by name.
 # This should match the network in the compose file and runArgs in devcontainer.json
-echo "==> Setting up Docker network..."
-docker network create gather-network \
+WORKSPACE_BASENAME="$(basename "$ROOT_DIR")"
+echo "==> Setting up Docker network (${WORKSPACE_BASENAME}-network)..."
+docker network create "${WORKSPACE_BASENAME}-network" \
   --label "com.docker.compose.network=gather" \
-  --label "com.docker.compose.project=gather" 2>/dev/null || true
+  --label "com.docker.compose.project=${WORKSPACE_BASENAME}" 2>/dev/null || true
 
 # -----------------------------------------------------------------------------
 # SSL Certificate setup

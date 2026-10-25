@@ -1,17 +1,19 @@
-<% content_for(:title, "Calendars") %>
+<% content_for(:title, t(".title")) %>
 
 <% content_for(:action_links) do %>
-  <%- if policy(sample_calendar).create? -%>
-    <%- concat(link_to(icon_tag("plus") << " Create Group",
+  <%- if policy(Calendars::Group.new(community: current_community)).create? -%>
+    <%- concat(link_to(icon_tag("plus") << " " << t(".create_group"),
       new_calendars_group_path, class: "btn btn-default")) -%>
-    <%- concat(link_to(icon_tag("plus") << " Create Calendar",
+  <%- end -%>
+  <%- if policy(sample_calendar).create? -%>
+    <%- concat(link_to(icon_tag("plus") << " " << t(".create_calendar"),
       new_calendar_path, class: "btn btn-primary")) -%>
   <%- end -%>
 <% end %>
 
 <% if @calendar_nodes.empty? %>
   <div class="center-notice">
-    No calendars found.
+    <%= t(".no_calendars") %>
   </div>
 <% else %>
   <%= render("table") %>

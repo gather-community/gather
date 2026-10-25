@@ -20,8 +20,11 @@
 	//       wouldn't detect (e.g. the curl'd script changed but the RUN line didn't)
 	//
 	//   Gems (in the named volume) and node_modules (in the workspace bind mount)
-	//   are NOT part of the image — they survive both types of rebuild. Only wipe
-	//   gems manually when needed: docker volume rm gather2-bundle
+	//   are NOT part of the image — they survive both types of rebuild. That is
+	//   usually what you want, but gems with native extensions are built against a
+	//   specific Ruby/OS, so a base-image change can strand them. post-create.sh
+	//   fingerprints the toolchain and rebuilds the volume by itself when it
+	//   changes, so a rebuild is all you need — no manual volume wiping.
 	//
 	//
 	// GEMS — named Docker volume
@@ -35,7 +38,8 @@
 	//
 	//   The volume name uses ${localWorkspaceFolderBasename} so each clone of the
 	//   repo (gather1, gather2, etc.) gets its own isolated volume.
-	//   To nuke gems: docker volume rm gather2-bundle
+	//   To nuke gems by hand (rarely needed — see the toolchain stamp in
+	//   post-create.sh): docker volume rm gather2-bundle
 	//
 	// containerEnv vs remoteEnv
 	//   containerEnv: set at Docker creation time — available to ALL processes
@@ -78,7 +82,6 @@
 	//     ~/.claude/.gather-devcontainer.credentials.json  →  Claude API credentials
 	//       specific to this devcontainer. Stored outside the repo and outside the
 	//       main ~/.claude/credentials so it doesn't conflict with host Claude usage.
-	//   ANTHROPIC_API_KEY is forwarded via remoteEnv from the host shell.
 	//   postStartCommand chowns ~/.claude on every start because the bind mount
 	//   can come in owned by root depending on Docker's uid mapping.
 	//
@@ -101,7 +104,7 @@
 	"updateRemoteUserUID": true,
 	"runArgs": [
 		"--add-host=host.docker.internal:host-gateway",
-		"--network=gather-network",
+		"--network=${localWorkspaceFolderBasename}-network",
 		"--userns=host",
 		"--group-add=docker",
 		"--privileged"
@@ -246,7 +249,8 @@
 						"source.fixAll.eslint": "explicit"
 					}
 				},
-				"prettier.tabWidth": 2
+				"prettier.tabWidth": 2,
+			"remote.autoForwardPortsSource": "process"
 			}
 		}
 	},
@@ -262,13 +266,22 @@
 	// Forwards credentials from the host shell into the container.
 	// Set these in your host ~/.zshrc — do not commit values.
 	"remoteEnv": {
-		"ANTHROPIC_API_KEY": "${localEnv:ANTHROPIC_API_KEY}",
 		"DISCOURSE_BASE_URL": "${localEnv:DISCOURSE_BASE_URL}",
 		"DISCOURSE_BOT_API_KEY": "${localEnv:DISCOURSE_BOT_API_KEY}",
 		"DISCOURSE_BOT_USERNAME": "${localEnv:DISCOURSE_BOT_USERNAME}",
 		"DISCOURSE_ANNOUNCEMENTS_CATEGORY_ID": "${localEnv:DISCOURSE_ANNOUNCEMENTS_CATEGORY_ID}"
 	},
-	// Use 'postCreateCommand' to run commands after the container is created.
+	// Thin (Rails) listens on url.port from config/settings.local.yml — 3000 by default, and a
+	// different port for each extra dev env (see README). VS Code auto-detects it and shows an
+	// "Open in Browser" notification, but the URL it generates (http://localhost:PORT) is wrong —
+	// the app uses SSL and a custom hostname (https://gatherdev.org:PORT). Suppress the popup so
+	// it doesn't mislead; bin/dev prints the correct URL in the terminal banner instead.
+	"portsAttributes": {
+		"3000-3009": {
+			"label": "Rails (use https://gatherdev.org:PORT)",
+			"onAutoForward": "silent"
+		}
+	},
 	"initializeCommand": "bash ${localWorkspaceFolder}/.devcontainer/setup.sh && exit 0",
 	"waitFor": "postCreateCommand",
 	"postCreateCommand": "bash .devcontainer/post-create.sh",

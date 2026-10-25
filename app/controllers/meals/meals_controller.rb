@@ -15,11 +15,18 @@ module Meals
     before_action -> { nav_context(:meals, :meals) }, except: %i[jobs report]
 
     def index
-      prepare_lenses(:search, :"meals/time", :community)
+      respond_to do |format|
+        format.html { index_html }
+        format.csv { index_csv }
+      end
+    end
 
-      authorize(sample_meal)
-      load_meals(:index)
-      load_communities_in_cluster
+    def export_signups
+      authorize(sample_meal, :export_signups?)
+      filename = csv_filename(:community, "meal-signups", *csv_date_params)
+      csv = SignupCsvExporter.new(csv_signups, policy: policy(sample_signup),
+        community: current_community).to_csv
+      send_data(csv, filename: filename, type: :csv)
     end
 
     def jobs
@@ -78,7 +85,7 @@ module Meals
       @meal.build_events
       authorize(@meal)
       if @meal.save
-        flash[:success] = "Meal created successfully."
+        flash[:success] = t("meals.created")
         redirect_to(meals_path)
       else
         prep_form_vars
@@ -93,7 +100,7 @@ module Meals
       @meal.assign_attributes(meal_params)
       @meal.build_events
       if @meal.save
-        flash[:success] = "Meal updated successfully."
+        flash[:success] = t("meals.updated")
         @worker_change_notifier.check_and_send!
         redirect_to(meals_path)
       else
@@ -106,7 +113,7 @@ module Meals
       @meal = Meal.find(params[:id])
       authorize(@meal)
       @meal.close!
-      flash[:success] = "Meal closed successfully."
+      flash[:success] = t("meals.closed")
       redirect_to(meals_path)
     end
 
@@ -114,12 +121,11 @@ module Meals
       @meal = Meal.find(params[:id])
       authorize(@meal)
       if @meal.auto_close_time_in_past?
-        flash[:error] = "You can't reopen this meal because its auto-close time is in the past. " \
-          "Please change or remove the auto-close time before proceeding."
+        flash[:error] = t("meals.cant_reopen_past_close")
         redirect_to(meal_path(@meal))
       else
         @meal.reopen!
-        flash[:success] = "Meal reopened successfully."
+        flash[:success] = t("meals.reopened")
         redirect_to(meals_path)
       end
     end
@@ -128,7 +134,7 @@ module Meals
       @meal = Meal.find(params[:id])
       authorize(@meal)
       Finalizer.new(@meal).unfinalize!
-      flash[:success] = "Meal unfinalized successfully."
+      flash[:success] = t("meals.unfinalized")
       redirect_to(meal_path(@meal))
     end
 
@@ -140,8 +146,7 @@ module Meals
       load_signups
       @cost_calculator = CostCalculator.build(@meal)
       return unless @meal.open? && current_user == @meal.head_cook
-      flash.now[:alert] = "Note: This meal is not yet closed and people can still sign up for it. " \
-        "You should close the meal before printing this summary."
+      flash.now[:alert] = t("meals.not_closed_before_summary")
     end
 
     # Renders just the workers section of the form. Accepts a formula_id, and sets the
@@ -179,12 +184,73 @@ module Meals
       case params[:action]
       when "show", "summary"
         Meal.find_by(id: params[:id]).try(:community)
-      when "index", "jobs", "report", "reports"
+      when "index", "jobs", "report", "reports", "export_signups"
         current_user.community
       end
     end
 
     private
+
+    def index_html
+      prepare_lenses(:search, :"meals/time", :community)
+      authorize(sample_meal)
+      load_meals(:index)
+      load_communities_in_cluster
+      @meal_ranges = meal_date_ranges if policy(sample_meal).export?
+    end
+
+    def index_csv
+      authorize(sample_meal, :export?)
+      filename = csv_filename(:community, "meals", *csv_date_params)
+      csv = MealCsvExporter.new(csv_meals, policy: policy(sample_meal),
+        community: current_community).to_csv
+      send_data(csv, filename: filename, type: :csv)
+    end
+
+    # The CSV exports deliberately ignore the index lenses; they're scoped by the date range
+    # chosen in the export form instead.
+    def csv_meals
+      policy_scope(Meal).hosted_by(current_community).in_time_range(csv_date_range).oldest_first
+    end
+
+    # Signups are scoped via the already-authorized meal scope. A Meals::SignupPolicy::Scope would
+    # be a second, otherwise-unused definition of which signups a user can see; don't add one.
+    def csv_signups
+      Signup.where(meal: csv_meals).joins(:meal).joins(household: :community)
+        .includes(:household, {parts: :type}, {meal: %i[formula calendars]})
+        .order("meals.served_at").alpha_order(communities: :abbrv, households: :name)
+    end
+
+    def csv_date_params
+      @csv_date_params ||= begin
+        parts = params[:dates].to_s.split("-")
+        raise ActionController::BadRequest, "Invalid dates param" unless parts.size == 2
+        parts
+      end
+    end
+
+    def csv_date_range
+      first, last = csv_date_params.map { |str| Date.strptime(str, "%Y%m%d") }
+      first.in_time_zone..last.in_time_zone.end_of_day
+    rescue Date::Error
+      raise ActionController::BadRequest, "Invalid dates param"
+    end
+
+    def meal_date_ranges
+      scope = policy_scope(Meal).hosted_by(current_community)
+      first, last = scope.minimum(:served_at), scope.maximum(:served_at)
+      builder = DateRangeBuilder.new(max_range: first && [first.to_date, last.to_date],
+        trim_ranges: false)
+      builder.add_months(4)
+      builder.add_quarters(4)
+      builder.add_years
+      builder.add_all_time
+      builder.pairs
+    end
+
+    def sample_signup
+      Signup.new(meal: sample_meal)
+    end
 
     # Pundit built-in helper doesn't work due to namespacing
     def meal_params

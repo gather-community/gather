@@ -116,7 +116,8 @@ describe "event page flow", js: true do
 
     def show_and_destroy
       find("div.fc-title", text: "Fun Event").click
-      accept_confirm { click_on("Delete") }
+      click_on("Delete")
+      click_modal_button
       expect_success
     end
   end

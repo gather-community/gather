@@ -14,7 +14,7 @@ module Meals
 
     def pantry_fee_formatted
       if fixed_pantry?
-        h.number_to_currency(pantry_fee)
+        h.format_money(pantry_fee)
       else
         decimal_to_percentage(pantry_fee)
       end

@@ -13,7 +13,6 @@ describe Communities::InactivityWarningJob do
   before do
     allow(Communities::InactivityMailer).to receive(:warning).and_return(mail_dbl)
     allow(SystemMailer).to receive(:inactivity_warning_summary).and_return(mail_dbl)
-    allow(SystemMailer).to receive(:deletion_ready_notice).and_return(mail_dbl)
     # Default: no subscription
     allow(community).to receive(:subscription).and_return(nil)
   end
@@ -94,12 +93,7 @@ describe Communities::InactivityWarningJob do
         expect(community.reload.deactivated_at).to be_within(5.seconds).of(Time.current)
       end
 
-      it "sends a deletion ready notice to support" do
-        perform_job
-        expect(SystemMailer).to have_received(:deletion_ready_notice).with([community])
-      end
-
-      it "updates inactivity_warning_sent_at so the notice repeats weekly" do
+      it "updates inactivity_warning_sent_at" do
         perform_job
         expect(community.reload.inactivity_warning_sent_at).to be_within(5.seconds).of(Time.current)
       end
@@ -130,28 +124,16 @@ describe Communities::InactivityWarningJob do
         inactivity_warning_sent_at: 8.days.ago)
     end
 
-    it "sends another deletion ready notice" do
-      perform_job
-      expect(SystemMailer).to have_received(:deletion_ready_notice).with([community])
-    end
-
-    it "bumps inactivity_warning_sent_at" do
-      perform_job
-      expect(community.reload.inactivity_warning_sent_at).to be_within(5.seconds).of(Time.current)
-    end
-
     it "does not send a warning email" do
       perform_job
       expect(Communities::InactivityMailer).not_to have_received(:warning)
     end
 
-    context "when the re-notification interval has not elapsed" do
-      before { community.update!(inactivity_warning_sent_at: 3.days.ago) }
-
-      it "does not send a notice" do
-        perform_job
-        expect(SystemMailer).not_to have_received(:deletion_ready_notice)
-      end
+    it "leaves the warning state untouched" do
+      perform_job
+      community.reload
+      expect(community.inactivity_warning_count).to eq(3)
+      expect(community.inactivity_warning_sent_at).to be_within(5.seconds).of(8.days.ago)
     end
   end
 
@@ -199,12 +181,13 @@ describe Communities::InactivityWarningJob do
     end
   end
 
-  context "when the community has an active Stripe subscription" do
+  context "when the community has a subscription in good standing" do
     before do
       make_inactive
-      create(:subscription, community: community)
-      allow_any_instance_of(Subscription::Subscription).to receive(:populate)
-      allow_any_instance_of(Subscription::Subscription).to receive(:active?).and_return(true)
+      # sync! (live fetch) is stubbed to a no-op; the cached columns drive good-standing.
+      create(:subscription, community: community, stripe_status: "active",
+        payment_intent_status: "succeeded", synced_at: Time.current)
+      allow_any_instance_of(Subscription::Subscription).to receive(:sync!)
     end
 
     it "does not send a warning" do
@@ -213,23 +196,23 @@ describe Communities::InactivityWarningJob do
     end
   end
 
-  context "when the Stripe API call fails" do
+  context "when the Stripe sync fails" do
     let(:error_reporter) { instance_double(Gather::ErrorReporter, report: nil) }
 
     before do
       make_inactive
       create(:subscription, community: community)
+      # populate is called inside sync!; raising there exercises sync!'s own rescue.
       allow_any_instance_of(Subscription::Subscription).to receive(:populate)
         .and_raise(Stripe::StripeError.new("connection error"))
       allow(Gather::ErrorReporter).to receive(:instance).and_return(error_reporter)
     end
 
-    it "skips the community and reports to Sentry" do
+    it "skips the community (fail-safe) and reports to Sentry" do
       perform_job
       expect(Communities::InactivityMailer).not_to have_received(:warning)
       expect(error_reporter).to have_received(:report)
-        .with(instance_of(Stripe::StripeError), data: {community_id: community.id,
-                                                        community_name: community.name})
+        .with(instance_of(Stripe::StripeError), data: hash_including(community_id: community.id))
     end
   end
 

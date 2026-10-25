@@ -38,15 +38,24 @@ Gather.Views.Groups.GroupFormView = Backbone.View.extend({
   },
 
   handleSubmit(event) {
-    if (this.$("#groups_group_mailman_list_attributes__destroy").is(":checked")) {
-      if (confirm("Are you sure you want to delete the email list?")) {
-        return true;
-      } else {
-        this.$el.data("submitted", false);
-        return false;
-      }
-    } else {
+    const deletingList = this.$("#groups_group_mailman_list_attributes__destroy").is(":checked");
+
+    // Allow the submit if there's no list to delete, or if we've already confirmed and re-fired.
+    if (!deletingList || this.listDeletionConfirmed) {
+      this.listDeletionConfirmed = false;
       return true;
     }
+
+    // The modal is async, so block this submit and re-fire it once confirmed.
+    event.preventDefault();
+    this.$el.data("submitted", false);
+    window.Modal.confirmModal("Are you sure you want to delete the email list?").then(ok => {
+      if (!ok) {
+        return;
+      }
+      this.listDeletionConfirmed = true;
+      this.$el.submit();
+    });
+    return false;
   }
 });

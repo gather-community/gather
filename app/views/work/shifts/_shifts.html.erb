@@ -1,6 +1,6 @@
 <% cache(cache_key) do %>
   <%# We need to call this from inside the cached block b/c it triggers DB queries. %>
-  <section class="shifts-main" aria-label="List of signups">
+  <section class="shifts-main" aria-label="<%= t(".list_label") %>">
     <% if !policy(sample_shift).index? && @period.draft? %>
       <div class="center-notice">
         <%= t("work.phase_notices.shifts.draft") %>

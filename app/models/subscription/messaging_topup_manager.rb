@@ -1,0 +1,176 @@
+# frozen_string_literal: true
+
+module Subscription
+  # Orchestrates the Stripe side of a community's monthly messaging topup: creating/finding the
+  # monthly price under the messaging product, creating/updating/canceling the dedicated topup
+  # subscription, and previewing the immediate charge for a change. Mirrors Registrar's style.
+  #
+  # The topup is its own monthly Stripe subscription (never an item on the base plan) so it always
+  # bills monthly regardless of the base plan's cadence. The messaging wallet is credited by
+  # Stripe::TopupProcessor when each invoice finalizes.
+  #
+  # Proration cases (all monthly-scale — no case ever produces an annual lump):
+  #   * First activation (None -> $Y): a brand-new monthly subscription anchored now, so a full
+  #     month is invoiced and charged immediately. The wallet is usable today. No proration.
+  #   * Increase ($Y -> $Z): the item price is swapped with proration_behavior "always_invoice", so
+  #     Stripe invoices the prorated difference for the remainder of this month immediately; the full
+  #     $Z bills each month after.
+  #   * Decrease ($Y -> $Z): same swap, but the proration is a credit toward the next invoice.
+  #   * Remove (-> None): cancel_at_period_end so they keep the month already paid for; no charge and
+  #     the wallet balance is untouched.
+  class MessagingTopupManager
+    include ActiveModel::Model
+
+    attr_accessor :community, :subscription
+
+    # subscription is the community's populated base Subscription::Subscription (its Stripe customer
+    # and default payment method fund the topup).
+    def initialize(community:, subscription:)
+      @community = community
+      @subscription = subscription
+    end
+
+    # The community's local topup row, or nil. A row whose Stripe subscription has already ended is
+    # reaped and treated as nil: its item and price stay readable after cancellation, so without this
+    # set_amount! would try to reprice a dead subscription instead of creating a fresh one. Also the
+    # self-healing fallback for a missed customer.subscription.deleted — the unique index on
+    # community_id means a stale row would otherwise block a new topup entirely.
+    def topup
+      @topup ||= begin
+        record = community.messaging_topup
+        if record&.reap_if_canceled!
+          community.reload_messaging_topup
+          record = nil
+        end
+        record
+      end
+    end
+
+    # Points the monthly topup at `cents` per month. Creates the topup subscription on first use
+    # (full month billed now), else swaps the item price and invoices the proration immediately.
+    # Returns the finalized Stripe invoice this produced (or nil), so the caller can credit the
+    # wallet synchronously — the invoice is finalized during this call even for ACH (only settlement
+    # is delayed), so the balance is usable immediately.
+    def set_amount!(cents)
+      price = find_or_create_price(cents, community.currency)
+      invoice =
+        if existing_item
+          # Revive first if a cancellation is pending, else the price swap lands on a subscription
+          # that is still ending and the user believes they re-subscribed when they haven't. Doing it
+          # before the swap means a failure here leaves the topup untouched rather than repriced but
+          # still dying.
+          resume! if topup.canceling?
+          Stripe::SubscriptionItem.update(existing_item.id, price: price.id,
+            proration_behavior: "always_invoice")
+          latest_invoice
+        else
+          create_subscription(price)
+        end
+      EventLog.emit(event_name: "topup_set", community_id: community.id,
+        description: "Set monthly messaging topup", amount_cents: cents, invoice_id: invoice&.id)
+      invoice
+    end
+
+    # Schedules removal at the end of the current paid month. Idempotent-ish: a no-op if none exists.
+    def cancel!
+      return if topup.nil?
+      Stripe::Subscription.update(topup.stripe_id, cancel_at_period_end: true)
+      EventLog.emit(event_name: "topup_canceled", community_id: community.id,
+        description: "Scheduled monthly messaging topup cancellation")
+    end
+
+    # Previews the immediate proration for changing an existing topup to `cents`. Returns
+    # {immediate_charge_cents:, next_bill_date:, currency:}. First activation (no existing sub) has
+    # no proration — the caller shows the full-month copy instead.
+    def preview(cents)
+      return nil if existing_item.nil?
+      price = find_or_create_price(cents, community.currency)
+      # Basil renamed Invoice.upcoming to create_preview and nested the subscription_* params
+      # under subscription_details.
+      invoice = Stripe::Invoice.create_preview(
+        customer: customer.id,
+        subscription: topup.stripe_id,
+        subscription_details: {
+          items: [{id: existing_item.id, price: price.id}],
+          proration_behavior: "create_prorations"
+        }
+      )
+      {
+        immediate_charge_cents: invoice.lines.data.select { |l| proration_line?(l) }.sum(&:amount),
+        next_bill_date: topup.next_bill_date,
+        currency: community.currency
+      }
+    end
+
+    private
+
+    # Clears a scheduled cancellation so the topup keeps running. The amount itself is handled by the
+    # caller's item swap, so a revive prorates exactly as a change on a live topup does: back to the
+    # same amount reuses the same Stripe price and therefore costs nothing, while a different amount
+    # charges or credits the prorated difference for the remainder of the month.
+    def resume!
+      Stripe::Subscription.update(topup.stripe_id, cancel_at_period_end: false)
+      EventLog.emit(event_name: "topup_resumed", community_id: community.id,
+        description: "Cleared scheduled monthly messaging topup cancellation")
+    end
+
+    # Basil moved a line's proration flag under parent.<type>_details. A preview of a subscription
+    # item swap produces subscription_item lines; invoice_item lines are checked too so an
+    # invoice-item proration isn't silently dropped from the total.
+    def proration_line?(line)
+      details = line.parent&.subscription_item_details || line.parent&.invoice_item_details
+      details&.proration == true
+    end
+
+    def customer
+      subscription.stripe_sub.customer
+    end
+
+    def find_or_create_price(cents, currency)
+      product_id = Messaging::Account::PRODUCT_ID
+      match = Stripe::Price.list(product: product_id, active: true).data.detect do |price|
+        price.unit_amount == cents && price.currency == currency &&
+          price.recurring&.interval == "month" && price.recurring&.interval_count == 1
+      end
+      match || Stripe::Price.create(
+        unit_amount: cents,
+        currency: currency,
+        recurring: {interval: "month", interval_count: 1},
+        product: product_id
+      )
+    end
+
+    def create_subscription(price)
+      stripe_sub = Stripe::Subscription.create(
+        customer: customer.id,
+        items: [{price: price.id}],
+        default_payment_method: subscription.default_payment_method_id,
+        # error_if_incomplete makes a card decline raise synchronously (a clear failure at save,
+        # with nothing credited) rather than leaving an unpaid invoice we'd credit then reverse.
+        # ACH is unaffected: its payment goes to `processing` and the subscription is `active`, which
+        # is not "incomplete", so it still credits on finalize and only reverses on a later bounce.
+        payment_behavior: "error_if_incomplete",
+        payment_settings: {save_default_payment_method: "on_subscription"},
+        # Expand the invoice's payments so the synchronous credit can resolve the PaymentIntent
+        # (the intent itself is past Stripe's 4-level expansion limit; InvoiceFields fetches it).
+        expand: ["latest_invoice.payments"]
+      )
+      community.create_messaging_topup!(stripe_id: stripe_sub.id)
+      stripe_sub.latest_invoice
+    end
+
+    # The topup subscription's most recent invoice (finalized after an item change with
+    # always_invoice), with its payment_intent expanded for synchronous crediting.
+    def latest_invoice
+      Stripe::Subscription.retrieve(id: topup.stripe_id,
+        expand: ["latest_invoice.payments"]).latest_invoice
+    end
+
+    # The current topup subscription's single item, or nil when there's no topup yet.
+    def existing_item
+      return nil if topup.nil?
+      topup.populate if topup.stripe_sub.nil?
+      topup.item
+    end
+  end
+end

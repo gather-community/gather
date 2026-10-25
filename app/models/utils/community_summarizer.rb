@@ -8,6 +8,12 @@ module Utils
         scope
           .select("communities.*, user_stats.*, meal_stats.*, rsrv_stats.*, job_stats.*, txn_stats.*,
                    sub.stripe_id AS subscription_stripe_id,
+                   sub.stripe_status AS subscription_stripe_status,
+                   sub.payment_intent_status AS subscription_payment_intent_status,
+                   sub.payment_intent_next_action_type AS subscription_payment_intent_next_action_type,
+                   sub.setup_intent_status AS subscription_setup_intent_status,
+                   sub.setup_intent_next_action_type AS subscription_setup_intent_next_action_type,
+                   sub.synced_at AS subscription_synced_at,
                    si.tier AS subscription_intent_tier")
           .joins(user_join, meal_join, rsrv_join, job_join, txn_join, subscription_join)
           .by_name.to_a

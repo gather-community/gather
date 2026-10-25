@@ -52,6 +52,7 @@ module Calendars
                       file_size: {max: Settings.photos.max_size_mb.megabytes}
     validates :abbrv, presence: true, if: :meal_hostable?
     validates :color, presence: true, format: {with: /\A#[0-9a-f]{6}\z/}
+    validate :overlap_allowed_while_repeating_events
 
     disallow_semicolons :name
 
@@ -101,6 +102,30 @@ module Calendars
       true
     end
 
+    # Repeating events are only allowed where no occurrence can clash with anything: on a calendar that
+    # allows overlaps, with none of the protocol rules a series can't keep to
+    # (Protocol::RECURRENCE_BLOCKING_RULES).
+    def allows_recurring_events?
+      recurrence_blockers.empty?
+    end
+
+    # Why repeating events aren't allowed here, as symbols: :overlap_not_allowed and/or the names of
+    # the protocol rules that block them. Empty if they're allowed.
+    def recurrence_blockers
+      blockers = allow_overlap? ? [] : [:overlap_not_allowed]
+      rules = Protocol.matching(self, :any).flat_map do |protocol|
+        Protocol::RECURRENCE_BLOCKING_RULES.select { |rule| protocol[rule].present? }
+      end
+      blockers + rules.uniq
+    end
+
+    # Whether a repeating event on this calendar has an occurrence today or later. Series that have
+    # ended don't hold the calendar to the rules above.
+    def upcoming_recurring_events?
+      persisted? && Event.recurring_through(Time.zone.today)
+        .exists?(id: Eventlet.where(calendar_id: id).select(:event_id))
+    end
+
     def in_group?
       group.present?
     end
@@ -114,6 +139,13 @@ module Calendars
       shared = shared_guidelines.map(&:body)
       all = ([own] + shared).compact.map(&:strip)
       @all_guidelines = all.join("\n\n---\n\n")
+    end
+
+    private
+
+    def overlap_allowed_while_repeating_events
+      return if allow_overlap? || !will_save_change_to_allow_overlap?
+      errors.add(:allow_overlap, :repeating_events) if upcoming_recurring_events?
     end
   end
 end

@@ -7,7 +7,8 @@ describe Calendars::EventFinder do
   let(:t0) { Time.current.midnight }
   let(:range) { (t0 + 2.5.hours)..(t0 + 4.5.hours) }
   let(:group) { create(:group) }
-  let!(:cal1) { create(:calendar) }
+  # Allows overlaps so it can hold repeating events (Calendar#allows_recurring_events?).
+  let!(:cal1) { create(:calendar, allow_overlap: true) }
   let!(:cal2) { create(:community_meals_calendar) }
   let!(:cal3) { create(:calendar) }
   let!(:cal4) { create(:other_communities_meals_calendar) }
@@ -122,7 +123,7 @@ describe Calendars::EventFinder do
 
         it "respects policy scope for non-system calendars" do
           null_scope = double(resolve: Calendars::Eventlet.none)
-          expect(Calendars::EventletPolicy::Scope).to receive(:new).and_return(null_scope)
+          expect(Calendars::EventletPolicy::Scope).to receive(:new).at_least(:once).and_return(null_scope)
           is_expected.to contain_exactly(eventlet2_1, eventlet4_1)
         end
       end
@@ -138,6 +139,257 @@ describe Calendars::EventFinder do
       context "with no user" do
         it "still returns eventlets" do
           is_expected.to contain_exactly(eventlet1_2, eventlet1_3, eventlet1_4, eventlet2_1, eventlet4_1)
+        end
+      end
+    end
+  end
+
+  describe "recurring occurrences" do
+    # Range: t0+2.5h .. t0+4.5h (2-hour window)
+    # A daily event anchored 20 hours before t0 has occurrences at t0-20h, t0+4h, t0+28h, etc.
+    # t0+4h is inside the range, so we expect one RecurringOccurrence.
+    let(:daily_rule) { IceCube::Rule.daily.to_hash }
+    let(:anchor) { t0 - 20.hours }
+
+    let!(:recurring_event) do
+      create(:event, calendar: cal1, creator: user,
+        starts_at: anchor, ends_at: anchor + 1.hour, recurrence_rule: daily_rule)
+    end
+
+    # Non-recurring sibling on cal1 to confirm normal eventlets still work alongside recurring ones.
+    let!(:plain_event) do
+      create(:event, calendar: cal1, starts_at: t0 + 3.hours, ends_at: t0 + 4.hours)
+    end
+
+    subject(:eventlets) do
+      described_class.new(range: range, calendars: [cal1], user: user, own_only: false).eventlets
+    end
+
+    it "returns a non-persisted occurrence eventlet for the in-range occurrence" do
+      recurring = eventlets.select { |e| !e.persisted? && e.linkable.is_a?(Calendars::Eventlet) }
+      expect(recurring.size).to eq(1)
+      expect(recurring.first.linkable).to eq(recurring_event.eventlets.first)
+      expect(recurring.first.linkable.event).to eq(recurring_event)
+      expect(recurring.first.starts_at).to be_within(1.second).of(anchor + 1.day)
+      expect(recurring.first.ends_at).to be_within(1.second).of(anchor + 1.day + 1.hour)
+    end
+
+    it "applies the eventlet start/end offsets to each occurrence" do
+      eventlet = recurring_event.eventlets.first
+      eventlet.update_columns(start_offset: -900, end_offset: 300)
+      occ = eventlets.select { |e| !e.persisted? && e.linkable.is_a?(Calendars::Eventlet) }
+        .find { |o| o.linkable.event == recurring_event }
+      expect(occ.starts_at).to be_within(1.second).of(anchor + 1.day - 900.seconds)
+      expect(occ.ends_at).to be_within(1.second).of(anchor + 1.day + 1.hour + 300.seconds)
+    end
+
+    it "does not return the real eventlet for a recurring event" do
+      real_eventlet = recurring_event.eventlets.first
+      expect(eventlets).not_to include(real_eventlet)
+    end
+
+    it "still returns normal eventlets for non-recurring events" do
+      plain_eventlet = plain_event.eventlets.first
+      expect(eventlets).to include(plain_eventlet)
+    end
+
+    context "when the recurring event has no occurrence in the range" do
+      # A weekly event anchored 3 days ago has no occurrence in a 2-hour window today.
+      let!(:recurring_event) do
+        create(:event, calendar: cal1, creator: user,
+          starts_at: t0 - 3.days, ends_at: t0 - 3.days + 1.hour,
+          recurrence_rule: IceCube::Rule.weekly.to_hash)
+      end
+
+      it "returns no occurrence eventlets for that event" do
+        recurring = eventlets.select { |e| !e.persisted? && e.linkable.is_a?(Calendars::Eventlet) }
+        expect(recurring).to be_empty
+      end
+    end
+
+    context "when the recurring series ended before the range" do
+      # Rule has an explicit until date in the past, so compute_recurrence_end_date stores yesterday.
+      let!(:recurring_event) do
+        create(:event, calendar: cal1, creator: user,
+          starts_at: t0 - 5.days, ends_at: t0 - 5.days + 1.hour,
+          recurrence_rule: IceCube::Rule.daily.until(t0 - 1.day).to_hash)
+      end
+
+      it "is excluded from results" do
+        recurring = eventlets.select { |e| !e.persisted? && e.linkable.is_a?(Calendars::Eventlet) }
+        expect(recurring).to be_empty
+      end
+    end
+
+    context "with own_only true" do
+      subject(:eventlets) do
+        described_class.new(range: range, calendars: [cal1], user: user, own_only: true).eventlets
+      end
+
+      def recurring
+        eventlets.select { |e| !e.persisted? && e.linkable.is_a?(Calendars::Eventlet) }
+      end
+
+      it "includes the user's own recurring occurrences" do
+        expect(recurring.map(&:linkable)).to eq([recurring_event.eventlets.first])
+      end
+
+      it "excludes recurring occurrences created by someone else" do
+        recurring_event.update!(creator: create(:user))
+        expect(recurring).to be_empty
+      end
+
+      it "excludes the user's group's recurring occurrences" do
+        recurring_event.update!(group: create(:group))
+        expect(recurring).to be_empty
+      end
+    end
+
+    context "when the policy scope excludes the calendar" do
+      it "excludes recurring occurrences from filtered-out calendars" do
+        null_scope = double(resolve: Calendars::Eventlet.none)
+        allow(Calendars::EventletPolicy::Scope).to receive(:new).and_return(null_scope)
+        recurring = eventlets.select { |e| !e.persisted? && e.linkable.is_a?(Calendars::Eventlet) }
+        expect(recurring).to be_empty
+      end
+    end
+
+    context "with overrides" do
+      # The in-range occurrence is at anchor + 1.day (= t0 + 4h).
+      let(:in_range_occ) { anchor + 1.day }
+      let(:base_eventlet) { recurring_event.eventlets.first }
+
+      def recurring_occurrences
+        eventlets.select { |e| !e.persisted? && e.linkable.is_a?(Calendars::Eventlet) }
+      end
+
+      def make_event_override(**attrs)
+        create(:event_override, event: recurring_event, occurrence_start: in_range_occ, **attrs)
+      end
+
+      def make_eventlet_override(event_override, **attrs)
+        create(:eventlet_override, event_override: event_override, eventlet: base_eventlet, **attrs)
+      end
+
+      # (A) EventOverride deleted — drops the occurrence from all calendars
+      context "when EventOverride is deleted" do
+        before { make_event_override(deleted: true) }
+        it "excludes the occurrence" do
+          expect(recurring_occurrences).to be_empty
+        end
+      end
+
+      # (B) EventOverride moves the event time
+      context "when EventOverride moves the event time" do
+        let(:new_start) { t0 + 3.hours }
+        let(:new_end) { t0 + 3.5.hours }
+        before { make_event_override(starts_at: new_start, ends_at: new_end) }
+
+        it "shows the occurrence at the new base time" do
+          expect(recurring_occurrences.size).to eq(1)
+          expect(recurring_occurrences.first.starts_at).to be_within(1.second).of(new_start)
+        end
+
+        it "preserves the original occurrence_start in the uid" do
+          expect(recurring_occurrences.first.uid).to eq("#{recurring_event.id}_#{in_range_occ.to_i}")
+        end
+      end
+
+      # EventOverride moves occurrence outside the range — should not appear
+      context "when EventOverride moves the event outside the range" do
+        before { make_event_override(starts_at: t0 + 6.hours, ends_at: t0 + 7.hours) }
+        it "excludes the occurrence" do
+          expect(recurring_occurrences).to be_empty
+        end
+      end
+
+      # (C) EventletOverride deleted — drops from this calendar only (event-level stub required)
+      context "when EventletOverride is deleted (stub EventOverride)" do
+        before { make_eventlet_override(make_event_override, deleted: true) }
+        it "excludes the occurrence for this calendar" do
+          expect(recurring_occurrences).to be_empty
+        end
+      end
+
+      # (D) EventletOverride changes offsets — applies correctly within the range
+      context "when EventletOverride shifts the display time within the range" do
+        # Occurrence at t0+4h shifted back 1h → t0+3h (still inside range t0+2.5h..t0+4.5h).
+        before { make_eventlet_override(make_event_override, start_offset: -3600, end_offset: -3600) }
+        it "shows the occurrence at the offset-adjusted time" do
+          expect(recurring_occurrences.size).to eq(1)
+          expect(recurring_occurrences.first.starts_at).to be_within(1.second).of(in_range_occ - 1.hour)
+        end
+      end
+
+      # (D) EventletOverride offset shifts occurrence OUT of the range — should not appear
+      context "when EventletOverride shifts the occurrence outside the range" do
+        # Shift the t0+4h occurrence forward by 2h → t0+6h, outside range t0+2.5h..t0+4.5h.
+        before { make_eventlet_override(make_event_override, start_offset: 7200, end_offset: 7200) }
+        it "excludes the occurrence" do
+          expect(recurring_occurrences).to be_empty
+        end
+      end
+
+      # (E) EventOverride moves + EventletOverride shifts offsets — combined
+      context "when EventOverride moves the event and EventletOverride adjusts the offset" do
+        let(:new_start) { t0 + 3.hours }
+        let(:new_end) { t0 + 3.5.hours }
+        before do
+          eo = make_event_override(starts_at: new_start, ends_at: new_end)
+          make_eventlet_override(eo, start_offset: -1800, end_offset: -1800)
+        end
+        it "combines the new base time with the offset" do
+          expect(recurring_occurrences.size).to eq(1)
+          expect(recurring_occurrences.first.starts_at).to be_within(1.second).of(new_start - 1800.seconds)
+        end
+      end
+
+      # EventOverride moved-into-window (no MAX_OFFSET_SECONDS bound)
+      context "when an occurrence originally outside the range is moved into it via EventOverride" do
+        let(:outside_occ) { anchor + 2.days } # t0+28h, well outside range
+        let(:new_start) { t0 + 3.hours }
+        let(:new_end) { t0 + 3.5.hours }
+        before do
+          create(:event_override, event: recurring_event, occurrence_start: outside_occ,
+            starts_at: new_start, ends_at: new_end)
+        end
+
+        it "includes the moved-in occurrence" do
+          moved_in = recurring_occurrences.find { |e| e.occurrence_start.to_i == outside_occ.to_i }
+          expect(moved_in).to be_present
+          expect(moved_in.starts_at).to be_within(1.second).of(new_start)
+        end
+
+        it "returns the regular in-range occurrence alongside it" do
+          expect(recurring_occurrences.size).to eq(2)
+        end
+      end
+
+      # Overrides are keyed by scheduled start, so moving the series must carry them along. Before
+      # Event re-keyed them, a deleted occurrence came back and a moved one showed twice.
+      context "after the series moves" do
+        # Half an hour earlier keeps the in-range occurrence (now t0 + 3.5h) inside the range.
+        def move_series
+          recurring_event.update!(starts_at: anchor - 30.minutes, ends_at: anchor + 30.minutes)
+        end
+
+        it "keeps a deleted occurrence deleted" do
+          make_event_override(deleted: true)
+          move_series
+          expect(recurring_occurrences).to be_empty
+        end
+
+        it "shows a moved occurrence once, at its moved time" do
+          make_event_override(starts_at: t0 + 3.hours, ends_at: t0 + 3.25.hours)
+          move_series
+          expect(recurring_occurrences.map(&:starts_at)).to eq([t0 + 3.hours])
+        end
+
+        it "keeps a calendar-only change with its occurrence" do
+          make_eventlet_override(make_event_override, start_offset: 15.minutes.to_i,
+            end_offset: 15.minutes.to_i)
+          move_series
+          expect(recurring_occurrences.map(&:starts_at)).to eq([t0 + 3.75.hours])
         end
       end
     end

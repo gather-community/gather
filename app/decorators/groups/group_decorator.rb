@@ -8,12 +8,12 @@ module Groups
       suffixes = []
       suffixes << t("common.inactive") if inactive?
       suffixes << t("common.hidden") if hidden?
-      suffixes = suffixes.empty? ? "" : " (#{suffixes.join(', ')})"
-      "#{name}#{suffixes}"
+      return name if suffixes.empty?
+      t("groups.name_with_suffixes", name: name, suffixes: suffixes.join(", "))
     end
 
     def name_with_inactive
-      "#{name}#{active? ? '' : ' (Inactive)'}"
+      active? ? name : t("common.with_inactive", name: name)
     end
 
     def tr_classes

@@ -4,21 +4,23 @@
 #
 # Table name: calendar_events
 #
-#  id          :integer          not null, primary key
-#  all_day     :boolean          default(FALSE), not null
-#  calendar_id :integer          not null
-#  cluster_id  :integer          not null
-#  created_at  :datetime         not null
-#  creator_id  :integer
-#  ends_at     :datetime         not null
-#  group_id    :bigint
-#  kind        :string
-#  meal_id     :integer
-#  name        :string(24)       not null
-#  note        :text
-#  sponsor_id  :integer
-#  starts_at   :datetime         not null
-#  updated_at  :datetime         not null
+#  id                  :integer          not null, primary key
+#  all_day             :boolean          default(FALSE), not null
+#  calendar_id         :integer          not null
+#  cluster_id          :integer          not null
+#  created_at          :datetime         not null
+#  creator_id          :integer
+#  ends_at             :datetime         not null
+#  group_id            :bigint
+#  kind                :string
+#  meal_id             :integer
+#  name                :string(24)       not null
+#  note                :text
+#  recurrence_end_date :date
+#  recurrence_rule     :jsonb
+#  sponsor_id          :integer
+#  starts_at           :datetime         not null
+#  updated_at          :datetime         not null
 #
 module Calendars
   class Event < ApplicationRecord
@@ -45,6 +47,8 @@ module Calendars
     attr_writer :uid
 
     has_many :eventlets, inverse_of: :event, dependent: :destroy, autosave: true
+    has_many :event_overrides, class_name: "Calendars::EventOverride", inverse_of: :event,
+      dependent: :destroy
     belongs_to :creator, class_name: "User"
     belongs_to :sponsor, class_name: "User"
     belongs_to :calendar, inverse_of: :events
@@ -53,6 +57,11 @@ module Calendars
 
     scope :between, ->(range) { where("starts_at < ? AND ends_at > ?", range.last, range.first) }
     scope :related_to, ->(user) { where(creator: user).or(where(sponsor: user)) }
+    scope :recurring, -> { where.not(recurrence_rule: nil) }
+    # Series with an occurrence on or after the date. One with no end date always has one.
+    scope :recurring_through, lambda { |date|
+      recurring.where("recurrence_end_date IS NULL OR recurrence_end_date >= ?", date)
+    }
 
     # Satisfies ducktype expected by policies. Prefer more explicit variants creator_community
     # and sponsor_community for other uses.
@@ -67,8 +76,15 @@ module Calendars
     delegate :name, :community, to: :creator, prefix: true
     delegate :community, to: :sponsor, prefix: true, allow_nil: true
 
+    before_validation :normalize_all_day_times
+
     # Temporary method to dual write Eventlet model
     before_save :sync_eventlet
+    # Must run before compute_recurrence_end_date so the end date is worked out from the shifted UNTIL.
+    before_save :shift_series_dependents
+    before_save :compute_recurrence_end_date
+    before_save :assert_calendars_allow_recurrence
+    before_save :assert_starts_on_schedule
 
     before_save lambda { |r| meal&.event_handler&.sync_resourcings(r) }
 
@@ -134,19 +150,128 @@ module Calendars
       calendar.allow_overlap?
     end
 
+    def recurring?
+      recurrence_rule.present?
+    end
+
+    # Returns an IceCube::Schedule anchored at starts_at with the stored recurrence rule.
+    def schedule
+      return nil unless recurring?
+      IceCube::Schedule.new(starts_at).tap do |s|
+        s.add_recurrence_rule(IceCube::Rule.from_hash(recurrence_rule))
+      end
+    end
+
+    # Returns an array of [occ_starts_at, occ_ends_at] pairs for each occurrence in the given range.
+    def occurrences_between(range)
+      return [] unless recurring?
+      duration = ends_at - starts_at
+      schedule.occurrences_between(range.first, range.last).map { |t| [t, t + duration] }
+    end
+
     private
+
+    def normalize_all_day_times
+      return unless all_day?
+      self.starts_at = starts_at.midnight
+      self.ends_at = ends_at.midnight + 1.day - 1.second
+    end
+
+    # Overrides are keyed by the occurrence's scheduled start, and an UNTIL is a time, so both have to
+    # follow when the series' start moves or they'd stop lining up with the schedule: a deleted
+    # occurrence would come back, a moved one would show twice, and a later-moved series would lose its
+    # last occurrence to the old UNTIL. Applies to every writer, which is why it's here and not on a form.
+    #
+    # An override keeps its own starts_at/ends_at: an occurrence someone moved stays where they put it.
+    # Calendar-only overrides need nothing, since their offsets are relative to the occurrence.
+    def shift_series_dependents
+      return unless persisted? && recurring? && will_save_change_to_starts_at?
+      shift = WallClockShift.new(starts_at_was, starts_at)
+      return if shift.zero?
+      # A caller that sets the rule in the same save has decided on its UNTIL itself.
+      shift_recurrence_until(shift) unless will_save_change_to_recurrence_rule?
+      rekey_event_overrides(shift)
+    end
+
+    def shift_recurrence_until(shift)
+      rule = IceCube::Rule.from_hash(recurrence_rule)
+      return unless rule.until_time
+      rule.until(shift.apply(rule.until_time))
+      self.recurrence_rule = rule.to_hash
+    end
+
+    # Rows are rewritten in the shift's direction (latest first when moving later) so no intermediate
+    # key collides with the unique index on [event_id, occurrence_start]. update_columns skips the
+    # override's own in-series validation, so the result is checked against the new schedule after.
+    # Works on the association's records so any already loaded by a caller are updated in place.
+    def rekey_event_overrides(shift)
+      overrides = event_overrides.sort_by(&:occurrence_start)
+      overrides.reverse! if starts_at > starts_at_was
+      overrides.each { |o| o.update_columns(occurrence_start: shift.apply(o.occurrence_start)) }
+
+      new_schedule = schedule
+      stranded = overrides.map(&:occurrence_start).reject { |t| new_schedule.occurs_at?(t) }
+      return if stranded.empty?
+      raise "Moving event #{id} would leave overrides off its schedule at #{stranded.join(", ")}"
+    end
+
+    # Repeating events are only allowed on calendars that allow them (Calendar#allows_recurring_events?).
+    # The forms explain this to the user before saving. This catches any other writer, since a series
+    # on such a calendar would break its overlap or protocol rules on occurrences nothing checks.
+    # Eventlet#assert_calendar_allows_recurrence covers adding a calendar to an existing series.
+    def assert_calendars_allow_recurrence
+      return unless recurring? && will_save_change_to_recurrence_rule?
+      blocked = eventlets.map(&:calendar).compact.reject(&:allows_recurring_events?)
+      return if blocked.empty?
+      raise "Repeating event #{id || "(new)"} can't be on calendar(s) #{blocked.map(&:id).join(", ")}, " \
+        "which don't allow repeating events"
+    end
+
+    # A series' start is its first occurrence: overrides, splits and drags all count occurrences from
+    # it. A rule that skips the start, such as weekly on Tuesdays from a Monday, would silently drop
+    # that first occurrence. The forms prevent this (RecurrencePattern always includes the start's day,
+    # and drags check EventletForm#series_pattern_allows_move); this catches any other writer.
+    def assert_starts_on_schedule
+      return unless recurring?
+      return unless will_save_change_to_starts_at? || will_save_change_to_recurrence_rule?
+      return if schedule.occurs_at?(starts_at)
+      raise "Repeating event #{id || "(new)"} starts at #{starts_at}, which its rule doesn't include"
+    end
+
+    def compute_recurrence_end_date
+      return self.recurrence_end_date = nil unless recurring?
+      # Rebuild via ice_cube so we get consistent symbol-keyed hashes regardless of whether
+      # recurrence_rule came from in-memory assignment (symbol keys) or a JSONB read (string keys).
+      rule = schedule.rrules.first
+      rule_hash = rule.to_hash
+      self.recurrence_end_date = if rule.until_time
+        # until_time is re-zoned to the stored zone, so an evening UNTIL gives its local date rather
+        # than the next day's UTC date. (The serialized hash holds the UTC time.)
+        rule.until_time.to_date
+      elsif rule_hash[:count]
+        schedule.last&.to_date
+      end
+    end
 
     def sync_eventlet
       return if dont_sync_eventlet
 
-      # Ensure only one
-      (eventlets[1..-1] || []).each(&:destroy)
-      eventlet = eventlets[0] || eventlets.build
+      # Only ensures the invariant that every event has at least one eventlet. It deliberately does
+      # not touch existing eventlets: an event may legitimately have several, each on its own
+      # calendar with its own offsets, and this callback fires on every save (event form, meal
+      # autosave, sample data), so mutating them here would clobber that.
+      #
+      # In particular we don't reassign an existing eventlet's calendar_id. Nothing changes an
+      # event's calendar after creation (calendar_id is excluded from EventPolicy#permitted_attributes,
+      # and Meals::EventHandler matches events by calendar rather than reassigning), and since
+      # `eventlets` is unordered, doing so would pick an arbitrary eventlet and could collide with
+      # the unique index on [event_id, calendar_id].
+      # `load` rather than `empty?` so the association is populated and cached afterward. The previous
+      # implementation loaded it as a side effect of `eventlets[0]`, and callers rely on
+      # event.eventlets being readable after a save without issuing a fresh (tenant-scoped) query.
+      return unless eventlets.load.empty?
 
-      eventlet.event_id = id
-      eventlet.calendar_id = calendar_id
-      eventlet.starts_at = starts_at
-      eventlet.ends_at = ends_at
+      eventlets.build(calendar_id: calendar_id)
     end
   end
 end

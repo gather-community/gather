@@ -4,24 +4,30 @@
 #
 # Table name: calendar_eventlets
 #
-#  id          :bigint           not null, primary key
-#  cluster_id  :bigint           not null
-#  event_id    :bigint           not null
-#  calendar_id :bigint           not null
-#  all_day     :boolean          default(FALSE), not null
-#  starts_at   :datetime         not null
-#  ends_at     :datetime         not null
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
+#  id           :bigint           not null, primary key
+#  cluster_id   :bigint           not null
+#  event_id     :bigint           not null
+#  calendar_id  :bigint           not null
+#  start_offset :integer          not null, default: 0
+#  end_offset   :integer          not null, default: 0
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
 #
 module Calendars
   class Eventlet < ApplicationRecord
     acts_as_tenant :cluster
 
+    MAX_OFFSET_SECONDS = 12.hours.to_i
+
     attr_accessor :guidelines_ok
 
     # For system calendar event exports. See the reader method below.
     attr_writer :uid
+
+    # Set on transient recurring-occurrence eventlets by EventFinder to identify which occurrence
+    # this represents (the original, pre-override start time). Used by EventletSerializer to
+    # include the occurrence in the show-page URL so the controller knows which one was clicked.
+    attr_accessor :occurrence_start
 
     # For system calendars event exports. See the reader method below.
     attr_writer :location
@@ -34,8 +40,19 @@ module Calendars
 
     belongs_to :event, class_name: "Calendars::Event", inverse_of: :eventlets
     belongs_to :calendar, class_name: "Calendars::Calendar", inverse_of: :eventlets
+    has_many :eventlet_overrides, class_name: "Calendars::EventletOverride", inverse_of: :eventlet,
+      dependent: :destroy
+
+    # An offset beyond MAX_OFFSET_SECONDS falls outside the window the `between` scope and EventFinder
+    # pre-filter on, which would make the eventlet silently vanish from the grid. That bound is a data
+    # invariant enforced for every writer by a DB check constraint (see the migration that adds
+    # eventlet_start/end_offset_within_bounds); EventletForm#offsets_within_range gives the friendly
+    # message on the drag path before the constraint is ever reached.
+    before_save :assert_start_before_end
+    before_save :assert_calendar_allows_recurrence
 
     delegate :name, :kind, :meal?, :meal_id, :creator, :creator_id, :group, :note, to: :event
+    delegate :all_day, :all_day?, to: :event
 
     # Satisfies ducktype expected by policies. Prefer more explicit variants creator_community
     # and sponsor_community on Event for other uses.
@@ -45,10 +62,51 @@ module Calendars
     delegate :name, to: :calendar, prefix: true
     delegate :access_level, :fixed_start_time?, :fixed_end_time?, :requires_kind?, to: :rule_set
 
-    # Specifying the table name here is temporarily required for some queries because calendar_events also has these columns.
-    scope :between, ->(range) { where("calendar_eventlets.starts_at < ? AND calendar_eventlets.ends_at > ?", range.last, range.first) }
+    # Loose pre-filter expands the window by MAX_OFFSET_SECONDS so the conditions are sargable
+    # (uses indexes on calendar_events.starts_at and .ends_at). Tight filters then eliminate
+    # false positives introduced by the expansion.
+    scope :between, ->(range) {
+      joins(:event)
+        .where("calendar_events.starts_at < ? AND calendar_events.ends_at > ?",
+          range.last + MAX_OFFSET_SECONDS,
+          range.first - MAX_OFFSET_SECONDS)
+        .where(
+          "calendar_events.starts_at + (calendar_eventlets.start_offset * interval '1 second') < ?",
+          range.last
+        )
+        .where(
+          "calendar_events.ends_at + (calendar_eventlets.end_offset * interval '1 second') > ?",
+          range.first
+        )
+    }
 
-    before_validation :normalize
+    # Builds a transient (non-persisted) eventlet representing a single occurrence of a recurring
+    # series, anchored to a persisted base eventlet. Shared by EventFinder (bulk expansion) and
+    # OccurrenceResolver (single-occurrence lookup) so the two paths can't diverge.
+    #
+    # occurrence_start is the original, pre-override start time (stable identity). starts_at/ends_at
+    # are the resolved event times for this occurrence (after any EventOverride move); the offsets are
+    # applied on top to get the displayed times.
+    def self.build_occurrence(base_eventlet:, occurrence_start:, starts_at:, ends_at:,
+      start_offset:, end_offset:)
+      parent = base_eventlet.event
+      transient_event = Event.new(
+        name: parent.name, kind: parent.kind, note: parent.note, all_day: parent.all_day,
+        creator: parent.creator, group: parent.group, meal_id: parent.meal_id,
+        calendar: base_eventlet.calendar, starts_at: starts_at, ends_at: ends_at
+      ).tap { |e| e.uid = "#{parent.id}_#{starts_at.to_i}" }
+
+      new(event: transient_event, calendar: base_eventlet.calendar,
+        start_offset: start_offset, end_offset: end_offset).tap do |occ|
+        # UID is based on the original occurrence time so it stays stable even when moved.
+        occ.uid = "#{parent.id}_#{occurrence_start.to_i}"
+        occ.occurrence_start = occurrence_start
+        # linkable points at the persisted base eventlet; the real series Event is reached via
+        # linkable.event. This makes serializer/ical URLs naturally eventlet-centric.
+        occ.linkable = base_eventlet
+        occ.location = base_eventlet.location
+      end
+    end
 
     def uid
       # System calendars that make unpersisted events should set
@@ -62,6 +120,14 @@ module Calendars
     def location
       # Explicit location will always be returned if it's set.
       @location || (persisted? ? calendar_name : nil)
+    end
+
+    def starts_at
+      event.starts_at + start_offset.seconds
+    end
+
+    def ends_at
+      event.ends_at + end_offset.seconds
     end
 
     def seconds
@@ -80,8 +146,11 @@ module Calendars
       starts_at.try(:future?)
     end
 
+    # A transient recurring occurrence has no created_at of its own, so it asks its base eventlet:
+    # "recently created" means the series was just made.
     def recently_created?
-      Time.current - created_at < 1.hour
+      base = linkable.is_a?(Eventlet) ? linkable : self
+      base.created_at.present? && Time.current - base.created_at < 1.hour
     end
 
     def guidelines_ok?
@@ -109,11 +178,26 @@ module Calendars
 
     private
 
-    def normalize
-      self.all_day = false if rule_set.timed_events_only?
-      return unless all_day?
-      self.starts_at = starts_at.midnight
-      self.ends_at = ends_at.midnight + 1.day - 1.second
+    # Adding a calendar to a repeating event needs that calendar to allow them. See
+    # Event#assert_calendars_allow_recurrence for why this raises.
+    def assert_calendar_allows_recurrence
+      return unless event&.recurring?
+      return unless new_record? || will_save_change_to_calendar_id?
+      return if calendar.allows_recurring_events?
+      raise "Calendar #{calendar_id} doesn't allow repeating events, so it can't be added to " \
+        "event #{event_id}"
+    end
+
+    # The offsets are applied to the event's times independently, so a large start_offset paired with
+    # a small end_offset can invert the eventlet even when the parent event's range is valid. This is
+    # a data invariant no correct caller should reach (EventletForm rejects it with a user-facing
+    # message first), so assert it loudly rather than add a validation error that could fail silently
+    # if never surfaced — see CLAUDE.md "Invariants vs. validations".
+    def assert_start_before_end
+      return if event&.starts_at.blank? || event&.ends_at.blank?
+      return if start_offset.blank? || end_offset.blank?
+      return if ends_at > starts_at
+      raise "Eventlet offsets would invert it: ends_at (#{ends_at}) is not after starts_at (#{starts_at})"
     end
   end
 end

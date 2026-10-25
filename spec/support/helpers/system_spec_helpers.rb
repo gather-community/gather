@@ -161,9 +161,10 @@ module SystemSpecHelpers
 
   def expect_validation_error(text = nil)
     if text
-      expect(page).to have_css("form .error, .form-group .error, .form-group .success", text: text)
+      expect(page).to have_css("form .error, .form-group .error, .form-group .success, .error-summary",
+        text: text)
     else
-      expect(page).to have_css("div.alert-danger", text: /Please review/)
+      expect(page).to have_css("div.alert-danger.error-summary")
     end
   end
   alias_method :expect_validation_message, :expect_validation_error
@@ -424,5 +425,62 @@ module SystemSpecHelpers
 
   def click_print_button
     first(:css, ".btn-print").click
+  end
+
+  # Helpers for the app modal (layouts/_modal.html.erb + modal_controller.ts). The modal element
+  # is always present in the DOM and toggled visible by removing the `hiding` class. It lives at
+  # document.body, so the helpers reset to the top-level scope (like the select2 helpers) so they
+  # work even when called from inside a `within` block.
+  def modal_selector
+    ".gather-modal:not(.hiding)"
+  end
+
+  def expect_modal(title: nil, text: nil)
+    with_top_level_scope do
+      expect(page).to have_css(modal_selector, wait: Capybara.default_max_wait_time)
+      expect(page).to have_css("#{modal_selector} .modal-title", text: title) if title
+      expect(page).to have_css("#{modal_selector} .modal-body", text: text) if text
+    end
+  end
+
+  def expect_no_modal
+    with_top_level_scope { expect(page).to have_no_css(modal_selector) }
+  end
+
+  # Clicks one of the modal's footer buttons by its label (defaults to the confirm "OK" button).
+  def click_modal_button(label = I18n.t("modal.ok"))
+    with_top_level_scope { within("#{modal_selector} .modal-footer") { click_on(label) } }
+  end
+
+  # Types into the modal's text input (used by promptModal).
+  def fill_in_modal(value)
+    with_top_level_scope { find("#{modal_selector} .gather-modal-input").set(value) }
+  end
+
+  # Dismisses the modal without choosing a button. `via` is :x, :escape, or :overlay.
+  def dismiss_modal(via: :escape)
+    with_top_level_scope do
+      case via
+      when :x then find("#{modal_selector} .modal-header .close").click
+      when :escape then find("body").send_keys(:escape)
+      when :overlay then find("#{modal_selector} .gather-modal-overlay").click(x: 5, y: 5)
+      else raise ArgumentError, "unknown dismiss method: #{via}"
+      end
+    end
+  end
+
+  # Forces the eventlet id sequence well ahead of the event id sequence so an event and its eventlet
+  # can't share an id. In prod they never do (eventlets were backfilled), but in the test DB they can
+  # coincide, which would let a drag handler that posts the event id to the eventlet endpoint slip
+  # through. This is done explicitly rather than with decoy records because Postgres sequences aren't
+  # rolled back between examples, so an earlier spec's records shift the gap unpredictably. GREATEST
+  # keeps the sequence from ever moving backward onto an existing id.
+  def diverge_eventlet_ids!
+    conn = ActiveRecord::Base.connection
+    event_seq = conn.select_value("SELECT pg_get_serial_sequence('calendar_events', 'id')")
+    eventlet_seq = conn.select_value("SELECT pg_get_serial_sequence('calendar_eventlets', 'id')")
+    event_last = conn.select_value("SELECT last_value FROM #{event_seq}").to_i
+    eventlet_last = conn.select_value("SELECT last_value FROM #{eventlet_seq}").to_i
+    conn.execute("SELECT setval('#{eventlet_seq}', #{[eventlet_last, event_last + 1000].max})")
   end
 end

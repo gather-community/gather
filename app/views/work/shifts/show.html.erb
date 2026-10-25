@@ -3,13 +3,13 @@
 <% content_for(:action_links, shift.action_links) %>
 
 <% content_for(:mobile_back_link) do %>
-  <%= render partial: "shared/mobile_back_link", locals: {label: "Signups", path: work_shifts_path } %>
+  <%= render partial: "shared/mobile_back_link", locals: {label: t(".signups"), path: work_period_shifts_path(shift.job.period) } %>
 <% end %>
 
 <h2><%= shift.times %></h2>
 
 <dl class="shift-info icon-list bigger">
-  <dt><%= icon_tag("clock") %></dt><dd><%= shift.hours_formatted %>h</dd><br/>
+  <dt><%= icon_tag("clock") %></dt><dd><%= t("work.hours_abbr", hours: shift.hours_formatted) %></dd><br/>
   <dt><%= icon_tag("folder-open") %></dt><dd><%= shift.period_name %></dd><br/>
   <% if shift.requester_name %>
     <dt><%= icon_tag("home") %></dt><dd><%= shift.requester_name %></dd><br/>

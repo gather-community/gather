@@ -1,0 +1,10 @@
+# Exposes mail UIs on standard host ports. Used by `bin/mailcatcher` and `bin/mailman-web`.
+# Not loaded automatically — only active when passed explicitly.
+services:
+  mailcatcher:
+    ports:
+      - "1025:1025"
+      - "1080:1080"
+  mailman-web:
+    ports:
+      - "8000:8000"

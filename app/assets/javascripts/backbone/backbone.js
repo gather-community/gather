@@ -8,6 +8,11 @@
 /* eslint-enable */
 
 window.Gather = {
+  // Machine-readable formats. Formats people see are under moment_formats in the locale files.
+  TIME_FORMATS: {
+    machineDatetime: "YYYY-MM-DD HH:mm",
+    compactDate: "YYYY-MM-DD"
+  },
   Models: {},
   Collections: {},
   Routers: {},

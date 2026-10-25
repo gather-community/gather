@@ -13,7 +13,7 @@ module GDrive
 
       # We don't exclude hidden groups because they are useful here and only
       # admins can see this page.
-      @groups = Groups::Group.in_communities([current_community]).order(:name)
+      @groups = Groups::Group.in_communities([current_community]).by_name
 
       authorize(@item_group)
     end
@@ -27,7 +27,7 @@ module GDrive
       @item_group.assign_attributes(item_group_params)
 
       if @item_group.save
-        flash[:success] = "Group added successfully."
+        flash[:success] = t("gdrive.group_added")
         redirect_to(gdrive_config_path)
       else
         render(:new)

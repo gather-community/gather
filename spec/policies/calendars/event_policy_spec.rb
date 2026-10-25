@@ -95,9 +95,11 @@ describe Calendars::EventPolicy do
         end
 
         context "when some eventlets are not editable" do
-          let!(:calendar) { create(:calendar, community: communityB) }
-          let!(:protocol) { create(:calendar_protocol, calendars: [calendar], other_communities: "forbidden") }
-          let!(:eventlet) { create(:eventlet, event: event, calendar: calendar) }
+          let!(:forbidden_calendar) { create(:calendar, community: communityB) }
+          let!(:protocol) do
+            create(:calendar_protocol, calendars: [forbidden_calendar], other_communities: "forbidden")
+          end
+          let!(:eventlet) { create(:eventlet, event: event, calendar: forbidden_calendar) }
 
           it { is_expected.not_to permit(admin, event) }
         end
@@ -116,9 +118,11 @@ describe Calendars::EventPolicy do
         end
 
         context "when some eventlets are not destroyable" do
-          let!(:calendar) { create(:calendar, community: communityB) }
-          let!(:protocol) { create(:calendar_protocol, calendars: [calendar], other_communities: "forbidden") }
-          let!(:eventlet) { create(:eventlet, event: event, calendar: calendar) }
+          let!(:forbidden_calendar) { create(:calendar, community: communityB) }
+          let!(:protocol) do
+            create(:calendar_protocol, calendars: [forbidden_calendar], other_communities: "forbidden")
+          end
+          let!(:eventlet) { create(:eventlet, event: event, calendar: forbidden_calendar) }
 
           it { is_expected.not_to permit(admin, event) }
         end

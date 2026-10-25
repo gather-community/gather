@@ -63,16 +63,18 @@ describe "accounts", js: true do
       click_button("Confirm")
       expect_success("Transaction added successfully.")
 
-      message = accept_confirm { click_link("Apply Late Fees") }
-      expect(message).to include("Are you sure? Fees will be charged to 1 households")
+      click_link("Apply Late Fees")
+      expect_modal(text: "Are you sure? Fees will be charged to 1 households")
+      click_modal_button
       expect_success("Late fees applied")
       click_link(account2.household.name)
       find(:xpath, "//tr[td[contains(text(), 'New Charges')]]//a").click
       expect(page).to have_content("Late payment fee $2.51")
       click_link("Billing")
 
-      message = accept_confirm { click_link("Send Statements") }
-      expect(message).to include("Are you sure? Statements will be sent out to 2 households.")
+      click_link("Send Statements")
+      expect_modal(text: "Are you sure? Statements will be sent out to 2 households.")
+      click_modal_button
       expect_success("Statement generation started.")
 
       click_link(account1.household.name)
@@ -148,7 +150,7 @@ describe "accounts", js: true do
     scenario "page view and load more statements" do
       visit(root_path)
       click_on_personal_nav("Accounts")
-      expect(page).to have_content("Your #{community1.name} Account")
+      expect(page).to have_content("My #{community1.name} Account")
 
       expect(page).to have_statement_rows(5, more: true)
       click_link("Load More...")
@@ -156,16 +158,16 @@ describe "accounts", js: true do
     end
 
     scenario "lens" do
-      visit(yours_accounts_path)
+      visit(mine_accounts_path)
       expect(lens_selected_option(:community).text).to eq(community1.name)
       select_lens(:community, community2.name)
-      expect(page).to have_content("Your #{community2.name} Account")
+      expect(page).to have_content("My #{community2.name} Account")
       expect(lens_selected_option(:community).text).to eq(community2.name)
       expect(page).not_to have_lens_clear_link
 
-      # Should remember selected community.
-      visit(yours_accounts_path)
-      expect(page).to have_content("Your #{community2.name} Account")
+      # Revisiting without QS resets to default (no session persistence).
+      visit(mine_accounts_path)
+      expect(page).to have_content("My #{community1.name} Account")
     end
   end
 

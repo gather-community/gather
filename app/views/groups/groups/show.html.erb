@@ -2,7 +2,7 @@
 <% content_for(:action_links, group.action_links) %>
 
 <% content_for(:mobile_back_link) do %>
-  <%= render partial: "shared/mobile_back_link", locals: {label: "Groups", path: groups_groups_path } %>
+  <%= render partial: "shared/mobile_back_link", locals: {label: t(".groups"), path: groups_groups_path } %>
 <% end %>
 
 <%= simple_format(group.description) %>
@@ -40,7 +40,7 @@
   </tr>
 </table>
 
-<h2>Email List</h2>
+<h2><%= t(".email_list") %></h2>
 <% if mailman_list %>
   <table class="key-value key-value-full">
     <tr>
@@ -48,15 +48,15 @@
       <td><%= link_to(mailman_list.fqdn_listname, "mailto:#{mailman_list.fqdn_listname}") %></td>
     </tr>
     <tr>
-      <td>Links</td>
+      <td><%= t(".links") %></td>
       <td>
-        <%= link_to("List Archives", mailman_list.archives_url) %> &bull;
-        <%= link_to("List Panel", mailman_list.panel_url) %>
+        <%= link_to(t(".archives"), mailman_list.archives_url) %> &bull;
+        <%= link_to(t(".panel"), mailman_list.panel_url) %>
       </td>
     </tr>
     <tr>
-      <td>All Community Can Send?</td>
-      <td><%= mailman_list.all_cmty_members_can_send? ? "Yes" : "No" %></td>
+      <td><%= t(".all_can_send") %></td>
+      <td><%= mailman_list.all_cmty_members_can_send? ? t("common.yes") : t("common.no") %></td>
     </tr>
     <% if mailman_list.additional_members.present? %>
       <tr>
@@ -66,8 +66,7 @@
             <%= mailman_list.additional_members_ul %>
           </div>
           <p><small>
-            All group members above are automatically members of the list.
-            These addresses are also members.
+            <%= t(".additional_members_note") %>
           </small></p>
         </td>
       </tr>
@@ -80,27 +79,26 @@
             <%= mailman_list.additional_senders_ul %>
           </div>
           <p><small>
-            These additional senders can send to the list but don't receive mail from it.
+            <%= t(".additional_senders_note") %>
           </small></p>
         </td>
       </tr>
     <% end %>
     <tr>
-      <td>Last Sync Time</td>
+      <td><%= t(".last_sync_time") %></td>
       <td>
         <%= l(group.mailman_list.last_synced_at) %>
         <p><small>
-          Changes in Gather automatically sync to the mailing list system, but changes made in the mailing list
-          panel do not sync automatically.
+          <%= t(".sync_note") %>
           <% if mailman_list.additional_members.present? || mailman_list.additional_senders.present? %>
-            This includes the list of additional members/senders above.
+            <%= t(".sync_note_additional") %>
           <% end %>
-          <%= link_to("Sync Now", sync_groups_mailman_list_path(group.mailman_list), method: :post) %>
-          to get the freshest information.
+          <%= t(".sync_now_html",
+                link: link_to(t(".sync_now"), sync_groups_mailman_list_path(group.mailman_list), method: :post)) %>
         </small></p>
       </td>
     </tr>
   </table>
 <% else %>
-  This group has no attached email list.
+  <%= t(".no_list") %>
 <% end %>

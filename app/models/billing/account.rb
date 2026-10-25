@@ -36,10 +36,10 @@ module Billing
     scope :in_community, ->(c) { where(community_id: c.id) }
     scope :for_household, ->(h) { where(household_id: h.id) }
     scope :for_community_or_household,
-          ->(c, h) { where("accounts.community_id = ? OR accounts.household_id = ?", c.id, h.id) }
+      ->(c, h) { where("accounts.community_id = ? OR accounts.household_id = ?", c.id, h.id) }
     scope :with_balance_owing, -> { where("accounts.balance_due > 0") }
     scope :by_cmty_and_household_name, lambda {
-      joins(household: :community).order("communities.name, households.name")
+      joins(household: :community).alpha_order(communities: :name, households: :name)
     }
     scope :active, lambda { # Active means having new activity.
       where("total_new_credits >= 0.01 OR total_new_charges >= 0.01 OR ABS(current_balance) >= 0.01")
@@ -59,6 +59,14 @@ module Billing
     before_save do
       self.balance_due = (due_last_statement || 0) - total_new_credits
       self.current_balance = balance_due + total_new_charges
+    end
+
+    # True if the household has any account carrying a non-zero running balance, in EITHER
+    # direction — a credit the community owes the household counts just as much as money owed to
+    # the community, since deleting the household would strand it. Uses the same 0.01 epsilon as
+    # the `active` scope so a settled account reading e.g. 0.00 does not count.
+    def self.unsettled_balance?(household)
+      for_household(household).where("ABS(current_balance) >= 0.01").exists?
     end
 
     def self.with_activity_and_users_and_no_recent_statement

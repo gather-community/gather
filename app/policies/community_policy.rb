@@ -13,6 +13,10 @@ class CommunityPolicy < ApplicationPolicy
     active_super_admin?
   end
 
+  def activate?
+    active_super_admin?
+  end
+
   def destroy?
     active_super_admin?
   end

@@ -29,6 +29,17 @@ module Destructible
     flash[:success] = I18n.t("deactivatable.#{object.model_name.i18n_key}.success.deactivate")
   end
 
+  # Case-insensitive match of the typed deletion confirmation against any of the allowed tokens
+  # (e.g. a record's name, email, or slug). The client-side modal is UX only; this is the real gate.
+  def deletion_confirmation_matches?(*allowed)
+    typed = params[:confirmation].to_s.strip.downcase
+    typed.present? && allowed.compact.map { |token| token.strip.downcase }.include?(typed)
+  end
+
+  def deletion_blocked_message(reasons)
+    "#{I18n.t("people.deletion.blocked_intro")} #{reasons.join(" ")}"
+  end
+
   private
 
   def simple_action(action, redirect: nil)
@@ -46,7 +57,7 @@ module Destructible
   end
 
   def redirect_appropriately(action, object)
-    redirect_to(action == :destroy || !respond_to?(:show) ? collection_path(object) : member_path(object))
+    redirect_to((action == :destroy || !respond_to?(:show)) ? collection_path(object) : member_path(object))
   end
 
   def collection_path(object)

@@ -199,6 +199,29 @@ describe Work::MealAssignmentSynchronizer do
         expect(job.shifts.count).to eq(0)
       end
     end
+
+    # Signing up for a meal role is deliberately outside the work round limit system: the sync
+    # writes the work assignment directly rather than going through Shift#signup_user. This is a
+    # decision, not an oversight, so it's pinned here. If it ever needs to change, the sync has to
+    # gain a way to report the refusal back to the meal form.
+    context "when the user is over their work round limit" do
+      let!(:period) do
+        create(:work_period, phase: "open", quota_type: "by_person", quota: 20,
+                             pick_type: "staggered", auto_open_time: Time.current - 1.hour,
+                             round_duration: 5, max_rounds_per_worker: 3, workers_per_round: 10)
+      end
+
+      before do
+        period.shares.create!(user: user4, portion: 1)
+        allow(Work::RoundCalculator).to receive(:new)
+          .and_return(double(prev_limit: 0, next_limit: nil, next_starts_at: nil))
+      end
+
+      it "still creates the work assignment" do
+        create(:meal_assignment, meal: meal, role: role2, user: user4)
+        expect(job_assignments).to include(user4.id)
+      end
+    end
   end
 
   def meal_assignments_for_role(role)

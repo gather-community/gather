@@ -41,7 +41,8 @@ describe "billing templates", js: true do
       expect(page).to have_content("$12.35")
 
       click_link("Automatic payment")
-      accept_confirm { click_link("Delete") }
+      click_link("Delete")
+      click_modal_button
 
       expect_success
       expect(page).to have_content("No templates found")

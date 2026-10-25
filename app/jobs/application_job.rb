@@ -21,7 +21,7 @@ class ApplicationJob < ActiveJob::Base
   # if observability of all errors is desired, they must be caught and reported manually.
   #
   # For retries, our standard best practice is to use:
-  #     retry_on(ArgumentError, wait: :exponentially_longer) # default is 5 attempts
+  #     retry_on(ArgumentError, wait: :polynomially_longer) # default is 5 attempts
   #
   # Logging for the retry behavior can be seen in log/<environment>.log. The Delayed Job log
   # at log/delayed_job.log will always say "failed after 1 attempt" because the error only
@@ -30,6 +30,13 @@ class ApplicationJob < ActiveJob::Base
   #
   # The retry behavior described above has been tested manually and works.
   rescue_from StandardError, with: :rescue_from_exception
+
+  # ActiveJob runs each job in the locale that was active when it was enqueued, which for a job enqueued
+  # during a web request is the requester's browser language. Jobs act on behalf of the whole community,
+  # not that one person, so they run in the default locale instead.
+  around_perform do |_job, block|
+    I18n.with_locale(I18n.default_locale, &block)
+  end
 
   protected
 
@@ -71,6 +78,15 @@ class ApplicationJob < ActiveJob::Base
     yield
   rescue *MAIL_DELIVERY_ERRORS => e
     Gather::ErrorReporter.instance.report(e, data: data)
+  end
+
+  # Works out who should get a notification (see Notifications::Recipients) and yields each recipient, so
+  # the caller can send them their own message. A delivery error for one recipient is reported and doesn't
+  # stop the others.
+  def each_notification_recipient(targets, kind:, channel: :email, data: {})
+    Notifications::Recipients.resolve(targets, kind: kind, channel: channel).each do |user|
+      with_mail_delivery_resilience(data: data.merge(user_id: user.id)) { yield(user) }
+    end
   end
 
   def each_community

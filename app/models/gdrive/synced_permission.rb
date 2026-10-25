@@ -37,6 +37,13 @@ module GDrive
   # going to build out the re-sync code for now since it might not even
   # become an issue.
   class SyncedPermission < ApplicationRecord
+    # All Google roles we may observe, lowest to highest. Gather only grants ItemGroup::ACCESS_LEVELS,
+    # but a user may already hold a higher role on Google Drive (e.g. a shared drive Manager).
+    ACCESS_LEVELS = (ItemGroup::ACCESS_LEVELS + %i[organizer owner]).freeze
+
+    # Roles Gather never grants, changes, or removes. See ItemGroup::ACCESS_LEVELS.
+    UNMANAGED_ACCESS_LEVELS = %w[organizer owner].freeze
+
     acts_as_tenant :cluster
 
     belongs_to :user, inverse_of: :gdrive_synced_permissions
@@ -47,6 +54,14 @@ module GDrive
       self.item_external_id ||= item.external_id
       self.google_email ||= user.google_email
       self.gdrive_config_id ||= item.gdrive_config_id
+    end
+
+    def self.level_index(level)
+      ACCESS_LEVELS.index(level&.to_sym) || -1
+    end
+
+    def unmanaged?
+      UNMANAGED_ACCESS_LEVELS.include?(access_level)
     end
 
     def clone_without_external_id

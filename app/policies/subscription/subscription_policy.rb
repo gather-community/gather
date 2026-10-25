@@ -19,5 +19,9 @@ module Subscription
     def success?
       active_admin_or?(:biller)
     end
+
+    def update_messaging_topup?
+      active_admin_or?(:biller)
+    end
   end
 end

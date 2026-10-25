@@ -10,6 +10,7 @@
 #  cluster_id     :integer          not null
 #  country_code   :string(2)        default("US"), not null
 #  created_at     :datetime         not null
+#  currency       :string(3)        not null
 #  name           :string(20)       not null
 #  settings       :jsonb
 #  slug           :string           not null

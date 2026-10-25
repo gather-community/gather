@@ -4,21 +4,23 @@
 #
 # Table name: calendar_events
 #
-#  id          :integer          not null, primary key
-#  all_day     :boolean          default(FALSE), not null
-#  calendar_id :integer          not null
-#  cluster_id  :integer          not null
-#  created_at  :datetime         not null
-#  creator_id  :integer
-#  ends_at     :datetime         not null
-#  group_id    :bigint
-#  kind        :string
-#  meal_id     :integer
-#  name        :string(24)       not null
-#  note        :text
-#  sponsor_id  :integer
-#  starts_at   :datetime         not null
-#  updated_at  :datetime         not null
+#  id                  :integer          not null, primary key
+#  all_day             :boolean          default(FALSE), not null
+#  calendar_id         :integer          not null
+#  cluster_id          :integer          not null
+#  created_at          :datetime         not null
+#  creator_id          :integer
+#  ends_at             :datetime         not null
+#  group_id            :bigint
+#  kind                :string
+#  meal_id             :integer
+#  name                :string(24)       not null
+#  note                :text
+#  recurrence_end_date :date
+#  recurrence_rule     :jsonb
+#  sponsor_id          :integer
+#  starts_at           :datetime         not null
+#  updated_at          :datetime         not null
 #
 require "rails_helper"
 
@@ -42,19 +44,60 @@ describe Calendars::Event do
       expect(eventlet.event_id).to eq(event.id)
       expect(eventlet.calendar_id).to eq(event.calendar_id)
       expect(eventlet.cluster_id).to eq(event.cluster_id)
-      expect(eventlet.starts_at).to eq("2016-04-07 12:00")
-      expect(eventlet.ends_at).to eq("2016-04-07 13:00")
+      expect(eventlet.start_offset).to eq(0)
+      expect(eventlet.end_offset).to eq(0)
 
       event.update!(starts_at: "2016-04-07 13:00", ends_at: "2016-04-07 14:00")
-      expect(eventlet.starts_at).to eq("2016-04-07 13:00")
-      expect(eventlet.ends_at).to eq("2016-04-07 14:00")
-
       expect(event.eventlets.size).to eq(1)
 
-      # Ensure that references still intact
+      # Times are computed from the event; reload both to confirm DB state.
       eventlet = event.eventlets.first.reload
       expect(eventlet.starts_at).to eq("2016-04-07 13:00")
       expect(eventlet.ends_at).to eq("2016-04-07 14:00")
+    end
+
+    it "leaves extra eventlets on other calendars alone when the event is saved" do
+      event = create(:event, calendar: calendar)
+      extra = Calendars::Eventlet.create!(event_id: event.id, calendar: calendar2,
+        start_offset: -1.hour.to_i)
+
+      # Must re-find rather than reload: dont_sync_eventlet is a plain attr_accessor, so a reloaded
+      # instance would keep the factory's bypass set and the callback would never run.
+      described_class.find(event.id).update!(starts_at: "2016-04-07 13:00", ends_at: "2016-04-07 14:00")
+
+      expect(Calendars::Eventlet.where(event_id: event.id).pluck(:id)).to contain_exactly(
+        event.eventlets.first.id, extra.id
+      )
+      expect(extra.reload.calendar_id).to eq(calendar2.id)
+      expect(extra.start_offset).to eq(-1.hour.to_i)
+    end
+  end
+
+  describe "normalization" do
+    describe "all_day events" do
+      context "with all_day false" do
+        let(:event) do
+          build(:event, all_day: false, starts_at: "2016-04-07 12:00", ends_at: "2016-04-07 13:00")
+        end
+
+        it "does not alter times" do
+          event.validate
+          expect(event.starts_at.to_fs(:default)).to eq("2016-04-07T12:00:00")
+          expect(event.ends_at.to_fs(:default)).to eq("2016-04-07T13:00:00")
+        end
+      end
+
+      context "with all_day true" do
+        let(:event) do
+          build(:event, all_day: true, starts_at: "2016-04-07 12:00", ends_at: "2016-04-07 13:00")
+        end
+
+        it "normalizes to midnight boundaries" do
+          event.validate
+          expect(event.starts_at.to_fs(:default)).to eq("2016-04-07T00:00:00")
+          expect(event.ends_at.to_fs(:default)).to eq("2016-04-07T23:59:59")
+        end
+      end
     end
   end
 
@@ -71,6 +114,301 @@ describe Calendars::Event do
       expect(meal.event_handler).to receive(:validate_event).with(event)
       expect(meal.event_handler).to receive(:sync_resourcings).with(event)
       meal.save!
+    end
+  end
+
+  describe "recurrence" do
+    let(:weekly_rule) { IceCube::Rule.weekly.to_hash }
+    let(:weekly_until_rule) { IceCube::Rule.weekly.until(Date.new(2026, 6, 30)).to_hash }
+    let(:weekly_count_rule) { IceCube::Rule.weekly.count(3).to_hash }
+
+    describe "#recurring?" do
+      it "is false with no rule" do
+        expect(build(:event)).not_to be_recurring
+      end
+
+      it "is true with a rule" do
+        expect(build(:event, recurrence_rule: weekly_rule)).to be_recurring
+      end
+    end
+
+    describe "#schedule" do
+      it "is nil with no rule" do
+        expect(build(:event).schedule).to be_nil
+      end
+
+      it "returns an IceCube::Schedule with the stored rule" do
+        event = build(:event, recurrence_rule: weekly_rule)
+        expect(event.schedule).to be_a(IceCube::Schedule)
+        expect(event.schedule.rrules.size).to eq(1)
+      end
+    end
+
+    describe "#occurrences_between" do
+      let(:range) { Time.zone.parse("2026-06-01")..Time.zone.parse("2026-06-30 23:59:59") }
+      # Mondays in June 2026: 1, 8, 15, 22, 29
+      let(:event) do
+        build(:event,
+          starts_at: Time.zone.parse("2026-06-01 10:00"),
+          ends_at: Time.zone.parse("2026-06-01 11:00"),
+          recurrence_rule: weekly_rule)
+      end
+
+      it "returns empty array with no rule" do
+        expect(build(:event).occurrences_between(range)).to eq([])
+      end
+
+      it "returns [starts_at, ends_at] pairs for each occurrence in range" do
+        result = event.occurrences_between(range)
+        expect(result.size).to eq(5)
+        expect(result.first).to eq([Time.zone.parse("2026-06-01 10:00"), Time.zone.parse("2026-06-01 11:00")])
+        expect(result.last).to eq([Time.zone.parse("2026-06-29 10:00"), Time.zone.parse("2026-06-29 11:00")])
+      end
+
+      it "preserves the event duration for each occurrence" do
+        event_with_2h = build(:event,
+          starts_at: Time.zone.parse("2026-06-01 10:00"),
+          ends_at: Time.zone.parse("2026-06-01 12:00"),
+          recurrence_rule: weekly_rule)
+        result = event_with_2h.occurrences_between(range)
+        result.each do |starts, ends|
+          expect(ends - starts).to eq(2.hours)
+        end
+      end
+    end
+
+    describe "recurrence_end_date" do
+      context "with no rule" do
+        it "is nil" do
+          expect(create(:event).recurrence_end_date).to be_nil
+        end
+      end
+
+      context "with an infinite rule" do
+        it "is nil" do
+          expect(create(:event, recurrence_rule: weekly_rule).recurrence_end_date).to be_nil
+        end
+      end
+
+      context "with a rule having an until date" do
+        # Before the until date, so the series has occurrences.
+        let(:until_start) { Time.zone.local(2026, 6, 1, 18) }
+
+        it "stores the until date" do
+          event = create(:event, recurrence_rule: weekly_until_rule, starts_at: until_start,
+            ends_at: until_start + 1.hour)
+          expect(event.recurrence_end_date).to eq(Date.new(2026, 6, 30))
+        end
+
+        it "updates when rule is replaced" do
+          event = create(:event, recurrence_rule: weekly_rule, starts_at: until_start,
+            ends_at: until_start + 1.hour)
+          expect(event.recurrence_end_date).to be_nil
+          event.update!(recurrence_rule: weekly_until_rule)
+          expect(event.recurrence_end_date).to eq(Date.new(2026, 6, 30))
+        end
+
+        it "recomputes correctly after a DB round-trip (JSONB returns string keys)" do
+          event = create(:event, recurrence_rule: weekly_until_rule, starts_at: until_start,
+            ends_at: until_start + 1.hour)
+          event.reload
+          event.update!(name: "Updated")
+          expect(event.recurrence_end_date).to eq(Date.new(2026, 6, 30))
+        end
+      end
+
+      context "with a zoned until time in the evening, west of UTC" do
+        around { |example| Time.use_zone("America/Toronto") { example.run } }
+
+        it "stores the local date, not the next day's UTC date" do
+          start = Time.zone.parse("2026-10-01 21:00")
+          rule = IceCube::Rule.weekly.until(Time.zone.parse("2026-10-15 21:00"))
+          event = create(:event, starts_at: start, ends_at: start + 1.hour, recurrence_rule: rule.to_hash)
+          event.reload.update!(name: "Updated")
+          expect(event.recurrence_end_date).to eq(Date.new(2026, 10, 15))
+        end
+      end
+
+      context "with a rule having a count" do
+        it "stores the date of the last occurrence" do
+          # 3 weekly occurrences starting 2026-06-01: Jun 1, 8, 15
+          event = create(:event,
+            starts_at: Time.zone.parse("2026-06-01 10:00"),
+            ends_at: Time.zone.parse("2026-06-01 11:00"),
+            recurrence_rule: weekly_count_rule)
+          expect(event.recurrence_end_date).to eq(Date.new(2026, 6, 15))
+        end
+      end
+    end
+
+    describe "on a calendar that doesn't allow repeating events" do
+      let(:blocked) { create(:calendar, allow_overlap: false) }
+
+      it "raises when saving a new series" do
+        expect { create(:event, calendar: blocked, recurrence_rule: weekly_rule) }
+          .to raise_error(/can't be on calendar\(s\) #{blocked.id}/)
+      end
+
+      it "raises when an event starts repeating" do
+        event = create(:event, calendar: blocked)
+        expect { event.update!(recurrence_rule: weekly_rule) }.to raise_error(/doesn't allow|don't allow/)
+        expect(event.reload).not_to be_recurring
+      end
+
+      it "doesn't check saves that leave the repeat rule alone" do
+        event = create(:event, calendar: create(:calendar, allow_overlap: true), recurrence_rule: weekly_rule)
+        # Not possible through the app while the series is still to come; stands in for one that ended.
+        event.calendar.update_columns(allow_overlap: false)
+        expect { event.update!(name: "Renamed") }.not_to raise_error
+      end
+    end
+
+    describe "a start the rule doesn't include" do
+      let(:monday) { Time.zone.now.next_week(:monday).change(hour: 18) }
+      let(:tuesdays) { IceCube::Rule.weekly.day(:tuesday).to_hash }
+
+      it "raises when saving a new series" do
+        expect { create(:event, starts_at: monday, ends_at: monday + 1.hour, recurrence_rule: tuesdays) }
+          .to raise_error(/which its rule doesn't include/)
+      end
+
+      it "raises when the start moves off the rule" do
+        event = create(:event, starts_at: monday + 1.day, ends_at: monday + 1.day + 1.hour,
+          recurrence_rule: tuesdays)
+        expect { event.update!(starts_at: monday, ends_at: monday + 1.hour) }
+          .to raise_error(/which its rule doesn't include/)
+      end
+
+      it "doesn't check saves that leave the start and rule alone" do
+        event = create(:event, starts_at: monday + 1.day, ends_at: monday + 1.day + 1.hour,
+          recurrence_rule: tuesdays)
+        # Stands in for a series saved before this check.
+        event.update_columns(starts_at: monday, ends_at: monday + 1.hour)
+        expect { event.update!(name: "Renamed") }.not_to raise_error
+      end
+    end
+
+    describe "shifting a series' start" do
+      around { |example| Time.use_zone("America/Toronto") { example.run } }
+
+      # Repeating events need a calendar that allows overlaps (Calendar#allows_recurring_events?).
+      let(:allow_overlap) { true }
+
+      # Tuesdays at 7pm. Toronto falls back on 2026-11-01, so later occurrences cross a DST change.
+      let(:series_start) { Time.zone.parse("2026-10-13 19:00") }
+      let(:rule) { weekly_rule }
+      let!(:event) do
+        create(:event, calendar: calendar, starts_at: series_start, ends_at: series_start + 1.hour,
+          recurrence_rule: rule)
+      end
+      let(:eventlet) { event.eventlets.first }
+
+      def override_at(occurrence_start, **attrs)
+        create(:event_override, event: event, occurrence_start: occurrence_start, **attrs)
+      end
+
+      def move_series(by)
+        event.update!(starts_at: event.starts_at + by, ends_at: event.ends_at + by)
+      end
+
+      it "re-keys an occurrence moved on all calendars but keeps its absolute time" do
+        moved = override_at(series_start + 3.weeks, starts_at: Time.zone.parse("2026-11-05 10:00"),
+          ends_at: Time.zone.parse("2026-11-05 11:00"))
+
+        move_series(1.hour)
+
+        moved.reload
+        # Across the DST change the key keeps its local time: 8pm, not 7pm.
+        expect(moved.occurrence_start).to eq(Time.zone.parse("2026-11-03 20:00"))
+        expect(moved.starts_at).to eq(Time.zone.parse("2026-11-05 10:00"))
+        expect(moved.ends_at).to eq(Time.zone.parse("2026-11-05 11:00"))
+      end
+
+      it "keeps a deleted occurrence deleted" do
+        deleted = override_at(series_start + 1.week, deleted: true)
+
+        move_series(1.hour)
+
+        expect(deleted.reload.occurrence_start).to eq(Time.zone.parse("2026-10-20 20:00"))
+        expect(event.reload.schedule.occurs_at?(deleted.occurrence_start)).to be(true)
+      end
+
+      it "carries a calendar-only change along with the series" do
+        anchor = override_at(series_start + 1.week)
+        shifted = create(:eventlet_override, event_override: anchor, eventlet: eventlet,
+          start_offset: 30.minutes.to_i, end_offset: 30.minutes.to_i)
+
+        move_series(1.hour)
+
+        expect(anchor.reload.occurrence_start).to eq(Time.zone.parse("2026-10-20 20:00"))
+        expect(anchor.starts_at).to be_nil
+        expect(shifted.reload.start_offset).to eq(30.minutes.to_i)
+      end
+
+      it "re-keys without unique-index collisions when moving a week later or earlier" do
+        keys = [1, 2, 3].map { |n| series_start + n.weeks }
+        overrides = keys.map { |k| override_at(k, deleted: true) }
+
+        move_series(1.week)
+        expect(overrides.map { |o| o.reload.occurrence_start }).to eq(keys.map { |k| k + 1.week })
+
+        move_series(-1.week)
+        expect(overrides.map { |o| o.reload.occurrence_start }).to eq(keys)
+      end
+
+      it "updates override records the caller already has loaded" do
+        override_at(series_start + 1.week, deleted: true)
+        loaded = event.event_overrides.to_a.sole
+
+        move_series(1.hour)
+
+        expect(loaded.occurrence_start).to eq(Time.zone.parse("2026-10-20 20:00"))
+      end
+
+      context "with a series ending at an UNTIL" do
+        let(:rule) { IceCube::Rule.weekly.until(Time.zone.parse("2026-11-10 19:00")).to_hash }
+
+        it "shifts the UNTIL so the last occurrence survives a later move" do
+          move_series(1.hour)
+
+          event.reload
+          expect(event.schedule.last).to eq(Time.zone.parse("2026-11-10 20:00"))
+          expect(event.recurrence_end_date).to eq(Date.new(2026, 11, 10))
+        end
+
+        it "moves the end date along with a move to another day" do
+          move_series(1.day)
+
+          expect(event.reload.schedule.last).to eq(Time.zone.parse("2026-11-11 19:00"))
+          expect(event.recurrence_end_date).to eq(Date.new(2026, 11, 11))
+        end
+
+        it "leaves an UNTIL set in the same save alone" do
+          new_rule = IceCube::Rule.weekly.until(Time.zone.parse("2026-10-27 20:00")).to_hash
+          event.update!(starts_at: series_start + 1.hour, ends_at: series_start + 2.hours,
+            recurrence_rule: new_rule)
+
+          expect(event.reload.schedule.last).to eq(Time.zone.parse("2026-10-27 20:00"))
+        end
+      end
+
+      it "raises rather than leave an override off the new schedule" do
+        override_at(series_start + 1.week, deleted: true)
+        # Not something any writer does today (no rule editor yet); stands in for a future change
+        # that moves the start onto a schedule the existing keys don't fit.
+        event.update_columns(recurrence_rule: IceCube::Rule.weekly(2).to_hash)
+
+        expect { move_series(1.hour) }.to raise_error(/off its schedule/)
+        expect(event.reload.starts_at).to eq(series_start)
+      end
+
+      it "doesn't touch overrides on a save that leaves the start alone" do
+        override = override_at(series_start + 1.week, deleted: true)
+
+        event.update!(ends_at: event.ends_at + 30.minutes, name: "Renamed")
+
+        expect(override.reload.occurrence_start).to eq(series_start + 1.week)
+      end
     end
   end
 

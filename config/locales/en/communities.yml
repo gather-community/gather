@@ -5,5 +5,135 @@ en:
         all: "All Statuses"
         trial: "Trial"
         subscribed: "Subscribed"
+        problem: "Problem"
         warning: "Warning"
         deactivated: "Deactivated"
+    resync_started: "Subscription resync started. Refresh in a minute to see updates."
+    incorrect_slug: "Incorrect slug. Community was not deleted."
+    being_deleted: "%{name} is being deleted."
+    admin:
+      id: "ID"
+      name: "Name"
+      slug: "Slug"
+      abbreviation: "Abbreviation"
+      country: "Country"
+      time_zone: "Time Zone"
+      cluster: "Cluster"
+      cluster_value: "%{name} (ID %{id})"
+      created: "Created"
+      status: "Status"
+      subscription: "Subscription"
+      stripe_id: "Stripe ID"
+      not_in_stripe: "Subscription not found in Stripe"
+      detailed_status: "Detailed Status"
+      last_synced: "Last Synced"
+      users: "Users"
+      price: "Price"
+      # E.g. "$5.00/user/month × 12 months (USD)"
+      price_value_html: "%{price}/user/month &times; %{months} months (%{currency})"
+      discount: "Discount"
+      next_payment: "Next Payment"
+      contact: "Contact"
+      address: "Address"
+      subscription_intent: "Subscription Intent"
+      tier: "Tier"
+      start_date: "Start Date"
+    index:
+      title: "Communities"
+      view_signups: "View Signups"
+      id: "ID"
+      name: "Name"
+      created: "Created"
+      last_login: "Last Login"
+      status: "Status"
+      users: "Users"
+      meals: "Meals"
+      reservations: "Rsrvs"
+      jobs: "Jobs"
+      transactions: "Txns"
+      subscription: "Subscription"
+      cluster: "Cluster"
+      never: "Never"
+      intent: "Intent: %{tier}"
+    signups:
+      captcha_failed: "Captcha verification failed. Please try again."
+      approved: "Application approved. Community setup is underway."
+      denied: "Application denied."
+      index:
+        title: "Community Signup Applications"
+        none_found: "No signups found."
+        community_name: "Community Name"
+        contact: "Contact"
+        submitted: "Submitted"
+        status: "Status"
+      new:
+        title: "Joining Gather!"
+        intro: "Gather is a community management platform for cohousing and other collaborative living communities. To request a new community, fill out the form below. We'll review your application and follow up via email. We reserve the right to decline new signups for communities that don't align with our mission."
+        contact_person: "Contact Person"
+        contact_hint: "This person will become the community's first Admin user."
+        community_details: "Community Details"
+        settings: "Settings"
+        final_steps: "Final Steps"
+        verification: "Verification"
+        submit: "Submit Application"
+      review:
+        title: "Review Application: %{name}"
+        status: "Status"
+        reviewed: "on %{date} by %{name}"
+        contact_name: "Contact Name"
+        contact_email: "Contact Email"
+        submitted: "Submitted"
+        community_name: "Community Name"
+        slug: "URL Slug"
+        country: "Country"
+        time_zone: "Time Zone"
+        sample_data: "Sample Data"
+        about: "About"
+        approval_message: "Approval Message"
+        internal_notes: "Internal Notes"
+        denial_reason: "Denial Reason (not sent to user)"
+        submit: "Submit"
+      submitted:
+        title: "Application Submitted"
+        thanks: "Thanks for applying to Gather!"
+        review_time_html: "We typically review submissions within 48 hours. Watch your inbox at %{email} for an update."
+    # The approval email the signup review page pre-fills for the approver to personalize.
+    signup_action:
+      approval_template: |-
+        Dear %{name},
+
+        Great news! Your application to join Gather for the community "%{community}" has been approved.
+
+        #######################################
+        ENTER A PERSONALIZED NOTE HERE, MENTION
+        SOMETHING SPECIFIC ABOUT THE COMMUNITY
+        #######################################
+
+        Your community is now ready to go!
+
+        You should receive a separate email with instructions to sign in for the first time.
+
+        Welcome aboard!
+
+        %{approver} for the Gather Team
+    signup_mailer:
+      application_approved:
+        subject: "Your Gather community has been approved! (With a note from %{approver})"
+      application_denied:
+        subject: "Regarding your Gather community application"
+        dear: "Dear %{name},"
+        body: "Thank you for your interest in Gather. After reviewing your application for \"%{community}\", we're unable to move forward with your request at this time."
+        sign_off: "Best regards,"
+        team: "The Gather Team"
+    inactivity_mailer:
+      warning:
+        subject: "Inactivity warning for %{community}"
+        subject_final: "[Final Deletion Warning] %{community}"
+        intro: "This is inactivity warning %{count} of %{max} for the Gather community \"%{community}\"."
+        last_login: "Last login: %{date}"
+        never: "Never"
+        final: "No one in your community has logged into Gather in over 90 days. This is the final warning before your community data is permanently deleted."
+        final_days: "Your community will be deleted in approximately 7 days unless someone logs in."
+        not_final: "No one in your community has logged into Gather in over 90 days. If no one logs in, another warning will be sent in 7 days. After 3 warnings, your community data will be permanently deleted."
+        prevent: "To prevent deletion, simply log into your community at:"
+        contact: "If you believe this warning is in error or need help, please contact us at support@gather.coop."

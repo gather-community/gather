@@ -14,7 +14,7 @@ module People
       authorize(current_user)
       if current_user.update(password_change_params)
         bypass_sign_in(current_user, scope: :user)
-        flash[:success] = "Password changed successfully."
+        flash[:success] = t("people.password_changes.success")
         redirect_to(user_path(current_user))
       else
         render(:show)

@@ -6,9 +6,9 @@
     <%= f.button :primary %>
   <% end %>
 
-  <%= javascript_tag do %>
+  <script>
     $(function() {
       new Gather.Views.DirtyChecker({el: '.household-form'});
     });
-  <% end %>
+  </script>
 <% end %>

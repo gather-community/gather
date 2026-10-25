@@ -6,6 +6,289 @@ en:
           start: "%{base} (Start)"
           end: "%{base} (End)"
     all_day: "All Day"
+    # Names of the built-in system calendars and legacy export feeds.
+    my_meals: "My Meals"
+    all_meals: "All Meals"
+    community_meals: "%{community} Meals"
+    community_events: "%{community} Events"
+    my_events: "My Events"
+    my_jobs: "My Jobs"
+    # Names of calendar export feeds, shown in the subscriber's calendar app.
+    feed_names:
+      all: "All %{community} Calendars"
+      single: "%{community} %{calendar}"
+      multiple:
+        one: "%{count} %{community} Calendar"
+        other: "%{count} %{community} Calendars"
+    meal_by_cook: "By %{cook}"
+    # The first and last days of a multi-day job shift.
+    job_start: "%{name} (Start)"
+    job_end: "%{name} (End)"
+    created: "Calendar created successfully."
+    updated: "Calendar updated successfully."
+    group_created: "Group created successfully."
+    group_updated: "Group updated successfully."
+    protocol_created: "Protocol created successfully."
+    protocol_updated: "Protocol updated successfully."
+    event_created: "Event created successfully."
+    event_updated: "Event updated successfully."
+    event_deleted: "Event deleted successfully."
+    token_reset: "Token reset successfully."
+    residents_only: "Only %{community} residents may reserve this calendar."
+    # Appended to IceCube's own (localized) description of a recurrence rule, e.g.
+    # "Weekly" + "on Mondays" + "at 6:00pm" + "until Aug 31 2026".
+    timespan:
+      all_day: "%{date} (all day)"
+      all_day_range: "%{first} - %{last} (all day)"
+    recurrence:
+      # Indexed by weekday, Sunday first.
+      on_weekdays: ["on Sundays", "on Mondays", "on Tuesdays", "on Wednesdays", "on Thursdays", "on Fridays", "on Saturdays"]
+      on_day_of_month: "on the %{ordinal}"
+      on_date: "on %{date}"
+      at_time: "at %{time}"
+      from_date: "from %{date}"
+      between_dates: "between %{first}–%{last}"
+    rules:
+      max_lead_days: "Can be at most %{count} days in the future"
+      max_length: "Can be at most %{length} after start time"
+      other_communities_forbidden: "Residents from other communities may not make events"
+      sponsor_required: "You must have a sponsor from %{community}"
+      fixed_time: "Must be %{time}"
+    calendars:
+      index:
+        title: "Calendars"
+        create_group: "Create Group"
+        create_calendar: "Create Calendar"
+        no_calendars: "No calendars found."
+      table:
+        name: "Name"
+        events: "Events"
+      new:
+        title: "Create Calendar"
+      edit:
+        title: "Edit Calendar: %{name}"
+    groups:
+      new:
+        title: "Create Calendar Group"
+      edit:
+        title: "Edit Calendar Group: %{name}"
+    calendar_list:
+      all: "All"
+      select_all: "Select All"
+      deselect_all: "Deselect All"
+    # Text built by the calendar grid's JavaScript (calendar_view.js), mostly for screen readers.
+    grid:
+      create_confirm:
+        same_day_html: "Create event on <b>%{date}</b>?"
+        same_day_times_html: "Create event on <b>%{date}</b> from <b>%{start}</b> to <b>%{end}</b>?"
+        range_html: "Create event from <b>%{start}</b> to <b>%{end}</b>?"
+      now_showing: "Calendar now showing %{month}"
+      event_count:
+        zero: "No events"
+        one: "%{count} event"
+        other: "%{count} events"
+      event_count_this_week:
+        zero: "No events this week"
+        one: "%{count} event this week"
+        other: "%{count} events this week"
+      event_count_this_month:
+        zero: "No events this month"
+        one: "%{count} event this month"
+        other: "%{count} events this month"
+      month_calendar: "Month calendar"
+      day_calendar: "Day calendar"
+      week_calendar: "Week calendar"
+      # %{view} is day_calendar or week_calendar; %{slots} is half_hour_slots or minute_slots.
+      agenda_label: "%{view}. Use arrow keys to navigate"
+      agenda_label_all_day: "%{view}. All Day row. Use arrow keys to navigate"
+      agenda_label_slots: "%{view}. Grid of %{slots}. Use arrow keys to navigate"
+      agenda_label_all_day_slots: "%{view}. All Day row followed by %{slots}. Use arrow keys to navigate"
+      half_hour_slots: "half-hour time slots from %{start} to %{end}"
+      minute_slots: "%{minutes}-minute time slots from %{start} to %{end}"
+      today_date: "Today, %{date}"
+      this_week_date: "This week, %{date}"
+      header:
+        toolbar: "Calendar controls"
+        previous: "Previous"
+        next: "Next"
+        today: "Today"
+        day_view: "Day view"
+        week_view: "Week view"
+        month_view: "Month view"
+    events:
+      index:
+        title: "Events & Reservations"
+        edit_calendar: "Edit Calendar"
+        export: "Export"
+        create_event: "Create Event"
+        permalink: "Permalink"
+        show_early: "Show Early Morning"
+        hide_early: "Hide Early Morning"
+        create_confirm_title: "Create Event?"
+        cancel: "Cancel"
+        ok: "OK"
+      single_calendar_sidebar:
+        calendars: "Calendars"
+      all_events_sidebar:
+        calendars: "Calendars"
+      new:
+        title: "%{calendar}: Create Event"
+        no_calendars_title: "No Calendars"
+        no_calendars: "Your community does not have any calendars on which you can create an event."
+        create_one: "You can create one."
+        select_calendar: "Select Calendar"
+      edit:
+        title: "Edit Event: %{name}"
+      form:
+        agree_to_guidelines: "I agree to the above guidelines"
+      series_notice:
+        applies_from: "Any changes made below apply only from %{date} onward."
+        edit_earlier_html: "To affect all future occurrences, edit the %{link} occurrence."
+        started: "This occurrence has already begun, so it can't be changed."
+        edit_later_html: "To change the series from then on, edit the %{link} occurrence."
+      # Repeat settings in the event form.
+      repeat_fields:
+        repeat_units:
+          daily:
+            one: "day"
+            other: "days"
+          weekly:
+            one: "week"
+            other: "weeks"
+          monthly:
+            one: "month"
+            other: "months"
+          yearly:
+            one: "year"
+            other: "years"
+        # The monthly "On" choices, worked out from the start date (RecurrencePattern.monthly_by_options).
+        monthly_by:
+          day_of_month: "Day %{day}"
+          day_of_week:
+            first: "The first %{weekday}"
+            second: "The second %{weekday}"
+            third: "The third %{weekday}"
+            fourth: "The fourth %{weekday}"
+          last_day_of_week: "The last %{weekday}"
+          last_day_of_month: "The last day of the month"
+        start_weekday: "The start date's day is always included"
+        pattern_fixed: "This event repeats in a way this form can't show (%{description}), so its repeat settings can't be changed here."
+        recurrence_unavailable: "Repeating events aren't available on this calendar because %{reasons}."
+        recurrence_blockers:
+          overlap_not_allowed: "events on it can't overlap"
+          fixed_start_time: "it has a fixed start time"
+          fixed_end_time: "it has a fixed end time"
+          max_lead_days: "it limits how far ahead events can be booked"
+          max_days_per_year: "it limits the days booked per year"
+          max_minutes_per_year: "it limits the time booked per year"
+    eventlets:
+      show:
+        title: "Event: %{name}"
+        calendars: "Calendars"
+        calendar: "Calendar"
+        date_time: "Date/Time"
+        repeats: "Repeats"
+        meal: "Meal"
+        group: "Group"
+        reserved_by: "Reserved By"
+        sponsor: "Sponsor"
+        type: "Type"
+        note: "Note"
+    protocols:
+      index:
+        title: "Protocols"
+        create: "Create Protocol"
+        no_protocols: "No protocols found."
+        name: "Name"
+        calendars: "Calendars"
+        types: "Types"
+        rules: "Rules"
+      new:
+        title: "Create Protocol"
+      edit:
+        title: "Edit Protocol: %{name}"
+    exports:
+      index:
+        title: "Calendar Export"
+        select_calendars: "Select Calendars"
+        export_link: "Export Link"
+        copy_link: "Copy Link"
+        visit_link: "Visit Link in Browser"
+        personalized: "This is your personalized export link for the selected calendars."
+        selection_changes_link: "If you change the calendar selection (by checking the boxes), the link will change accordingly. Changing the options below will also change the link."
+        options: "Options"
+        import_instructions: "Import Instructions"
+        google_calendar: "Google Calendar"
+        apple_calendar: "Apple Calendar"
+        method_1: "Method 1"
+        method_2: "Method 2"
+        google_method_1: "If you are signed in to your Google account, try simply clicking 'Visit Link in Browser' above. Google Calendar should open on its own and ask you to import."
+        google_steps:
+          - "Click 'Copy Link' above to copy the calendar URL to the clipboard."
+          - "On the left of the Google Calendar screen, click the '+' next to 'Add a friend's calendar'."
+          - "Click 'From URL'."
+          - "Paste the URL you copied above."
+          - "Click 'Add Calendar'."
+          - "The events should appear on your calendar after a few seconds."
+        apple_method_1: "Try simply clicking 'Visit Link in Browser' above. If your browser is set to handle webcal links with Apple Calendar, it may just work!"
+        apple_steps:
+          - "Click 'Copy Link' above to copy the calendar URL to the clipboard."
+          - "Open Apple Calendar."
+          - "Click the 'File' menu."
+          - "Click 'Subscribe' or 'New Calendar Subscription'."
+          - "Paste the URL you copied above."
+          - "Click OK/Subscribe."
+          - "Set subscription options if prompted. Recommended auto-refresh interval is 'every hour'."
+          - "The events should now appear on your calendar."
+        reset_token_html: "If you accidentally share your personalized calendar links and want to make them private again, %{link}. Note: This will make the old links inoperative, so you will need to update your calendar app."
+        reset_token_link: "click here to reset your secret token"
+    legacy_exports:
+      index:
+        title: "Calendar Export"
+        old_page: "You have reached the old calendar export page. This page has been replaced with a newer, more powerful export system."
+        new_page: "The new page can be accessed by clicking the 'Export' button on the Calendars main page."
+        links_removed: "Once you click the button below to proceed to the new calendar export page, the links that point to this old page will be removed. If you need to export calendars in the future, just go to the Calendars main page and click 'Export'."
+        proceed: "Got it! Take me to the new calendar export page and remove the old links!"
+    # The drag-and-drop move modal in the calendar grid (calendar_view.js).
+    drag:
+      confirm: "Are you sure you want to move the event '%{name}'?"
+      confirm_occurrence: "Are you sure you want to move this occurrence of '%{name}'?"
+      error_title: "Error"
+      load_error: "We couldn't check how this event can be moved. Please try again."
+      calendar:
+        title: "Move multi-calendar event"
+        content: "'%{name}' appears on more than one calendar:"
+        selected: "(selected)"
+        this: "Move only on %{calendar}"
+        all: "Move on all"
+      series:
+        title: "Move recurring event"
+        content: "'%{name}' repeats. Which occurrences should be moved?"
+        occurrence: "This only"
+        following: "This and following"
+        series: "All occurrences"
+    eventlet_deletion:
+      success:
+        event: "Event deleted successfully."
+        series: "All occurrences of the event were deleted."
+        following: "This and all following occurrences of the event were deleted."
+        occurrence: "The occurrence was deleted."
+        calendar_series: "The event was removed from %{calendar}."
+        calendar_occurrence: "The occurrence was removed from %{calendar}."
+      prompts:
+        calendar:
+          title: "Delete multi-calendar event"
+          selected_html: "%{name} (selected)"
+          content: "'%{name}' appears on more than one calendar:"
+          this: "Delete from %{calendar}"
+          all: "Delete from all calendars"
+        series:
+          title: "Delete recurring event"
+          content_all: "'%{name}' repeats. Which occurrences should be deleted?"
+          content_this: "'%{name}' repeats. Which occurrences should be deleted from %{calendar}?"
+          occurrence: "This only"
+          following: "This and following"
+          series: "All occurrences"
   calendars/protocol:
     applicability: "Applicability"
     no_kinds_html: "This community has no event types defined. See the <a href='%{url}'>settings page</a>."
@@ -18,3 +301,9 @@ en:
         one: "1 day"
         other: "%{formatted} days"
     exceeded_time: "You can book at most %{max} of %{kind_calendar} events per year and you have already booked %{booked}"
+  calendar_exports:
+    meals:
+      diner_count:
+        one: "%{count} diner from your household"
+        other: "%{count} diners from your household"
+      signup_comments: "Signup comments:\n%{comments}"

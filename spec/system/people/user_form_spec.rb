@@ -285,7 +285,8 @@ describe "user form", js: true, perform_jobs: true do
 
     scenario "deactivate/activate/delete with email" do
       visit(edit_path)
-      accept_confirm { click_on("Deactivate") }
+      click_on("Deactivate")
+      click_modal_button
       expect_success
 
       visit(edit_path)
@@ -294,15 +295,18 @@ describe "user form", js: true, perform_jobs: true do
 
       visit(edit_path)
       expect(page).not_to have_content("reactivate")
-      accept_confirm { click_on("Delete") }
-      expect_success
+      click_on("Delete Permanently")
+      fill_in_modal("#{user.first_name} #{user.last_name}")
+      click_modal_button
+      expect_success(/permanently deleted/)
 
       expect { user.reload }.to raise_error(ActiveRecord::RecordNotFound)
     end
 
     scenario "deactivate, remove email, add email, reactivate" do
       visit(edit_path)
-      accept_confirm { click_on("Deactivate") }
+      click_on("Deactivate")
+      click_modal_button
       expect_success
 
       visit(edit_path)

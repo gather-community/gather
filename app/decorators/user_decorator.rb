@@ -18,8 +18,8 @@ class UserDecorator < ApplicationDecorator
   end
 
   def full_name(show_inactive: false)
-    suffix = (active? || !show_inactive) ? "" : " (Inactive)"
-    "#{first_name} #{last_name}#{suffix}"
+    name = "#{first_name} #{last_name}"
+    (active? || !show_inactive) ? name : I18n.t("common.with_inactive", name: name)
   end
 
   def name_with_inactive
@@ -27,7 +27,7 @@ class UserDecorator < ApplicationDecorator
   end
 
   def first_name_with_inactive
-    "#{first_name}#{active? ? "" : " (Inactive)"}"
+    active? ? first_name : I18n.t("common.with_inactive", name: first_name)
   end
 
   def birthday_formatted
@@ -93,15 +93,12 @@ class UserDecorator < ApplicationDecorator
 
     unless user.persisted?
       chunks << safe_str
-      chunks[-1] << "Choose an existing household for this user. If one doesn't exist you must "
-      chunks[-1] << h.link_to("create it first", h.new_household_path) << "."
+      chunks[-1] << h.t("users.household_hint.choose_html",
+        link: h.link_to(h.t("users.household_hint.create_link"), h.new_household_path))
     end
 
     if user.child?
-      chunks << "Due to a system limitation, all Gather users must belong to a single household, " \
-        "but children may have parents or guardians from multiple households. " \
-        "All system functions involving children treat all parents/guardians and " \
-        "all households associated with the child equally."
+      chunks << h.t("users.household_hint.child_note")
     end
 
     h.safe_join(chunks, " ")
@@ -121,7 +118,7 @@ class UserDecorator < ApplicationDecorator
 
   def photo_if_permitted(format)
     image = photo_variant(format, suppress: !h.policy(object).show_photo?)
-    h.image_tag(image, class: "photo", alt: "Photo of #{full_name}")
+    h.image_tag(image, class: "photo", alt: h.t("users.photo_of", name: full_name))
   end
 
   def photo_variant(format, suppress: false)
@@ -152,8 +149,15 @@ class UserDecorator < ApplicationDecorator
     ActionLinkSet.new(
       ActionLink.new(object, :deactivate, icon: "times-circle", path: h.deactivate_user_path(object),
         method: :put, confirm: {name: name}),
-      ActionLink.new(object, :destroy, icon: "trash", path: h.user_path(object), method: :delete,
-        confirm: {name: name})
+      ActionLink.new(object, :destroy, icon: "trash", path: "#",
+        label_symbol: ((object == h.current_user) ? :delete_self : :destroy),
+        data: {
+          controller: "record-delete",
+          "record-delete-url-value": h.user_path(object),
+          "record-delete-confirm-token-value": "#{object.first_name} #{object.last_name}",
+          "record-delete-kind-value": "user",
+          action: "record-delete#confirm"
+        })
     )
   end
 end

@@ -34,6 +34,15 @@ module Calendars
   class Protocol < ApplicationRecord
     acts_as_tenant :cluster
 
+    # Rules a repeating event can't keep to, so a calendar with any of them can't have one (see
+    # Calendar#allows_recurring_events?). These block recurrence whatever kinds the protocol covers.
+    # - Fixed start/end times: a series can't follow a snap to a fixed time.
+    # - Max lead days: a series that never ends always reaches past it.
+    # - Yearly quotas: MaxTimePerYearRule counts one row per event, so a whole series would count as a
+    #   single event, and only in the year it starts.
+    RECURRENCE_BLOCKING_RULES = %i[fixed_start_time fixed_end_time max_lead_days max_days_per_year
+      max_minutes_per_year].freeze
+
     has_many :protocolings, class_name: "Calendars::Protocoling", inverse_of: :protocol,
                             foreign_key: "protocol_id", dependent: :destroy
     has_many :calendars, -> { by_name }, class_name: "Calendars::Calendar", through: :protocolings
@@ -51,6 +60,7 @@ module Calendars
     validates :name, presence: true, length: {maximum: 64}
     validates :max_lead_days, :max_length_minutes, :max_days_per_year, :max_minutes_per_year,
               numericality: {greater_than: 0}, allow_nil: true
+    validate :no_repeating_events_on_blocked_calendars
 
     # Finds all matching protocols for the given calendar and kind.
     # If kind is given, matches protocols with given kind or with nil kind.
@@ -70,7 +80,27 @@ module Calendars
       calendars.none?
     end
 
+    # The calendars this protocol applies to: its own, or every calendar in its community if it has
+    # none (see .matching).
+    def applicable_calendars
+      general? ? Calendar.non_system.in_community(community) : calendars
+    end
+
+    def blocks_recurrence?
+      RECURRENCE_BLOCKING_RULES.any? { |rule| self[rule].present? }
+    end
+
     private
+
+    # A rule that blocks recurrence can't apply to a calendar that has a repeating event still to come.
+    # Covers each way a protocol can newly reach such a calendar: gaining the rule, gaining the
+    # calendar, or losing its last calendar, which makes it apply to every calendar in the community.
+    def no_repeating_events_on_blocked_calendars
+      return unless blocks_recurrence? && community
+      names = applicable_calendars.select(&:upcoming_recurring_events?).map(&:name)
+      return if names.empty?
+      errors.add(:base, :repeating_events, calendars: Gather::Collation.sort(names).to_sentence)
+    end
 
     def normalize
       # Can only be true if set to true and no kinds. nil otherwise. Should never be false.

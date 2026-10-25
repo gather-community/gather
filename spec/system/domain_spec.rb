@@ -46,7 +46,7 @@ describe "domains", js: true do
         fill_in("Name", with: "nerp")
 
         click_button("Save")
-        expect(page).to have_alert(/problems below/)
+        expect(page).to have_alert(/errors? on the form below/)
         fill_in("Name", with: "nerp.com")
         click_button("Save")
         expect(page).to have_alert(/created successfully/)
@@ -54,7 +54,8 @@ describe "domains", js: true do
 
       scenario "delete" do
         visit(domain_path(domain4))
-        accept_confirm { click_on("Delete") }
+        click_on("Delete")
+        click_modal_button
         expect_success
 
         expect(page).not_to have_content(domain4.name)

@@ -1,4 +1,4 @@
-<% content_for(:title, "Finalize Meal: #{@meal.title || "Untitled"}") %>
+<% content_for(:title, t("meals.finalize.title", title: @meal.title || t("meals.finalize.untitled"))) %>
 
 <%= render("meals/meals/time_cook") %>
 
@@ -7,15 +7,15 @@
 
   <table class="index confirm">
     <tr>
-      <th>Household</th>
+      <th><%= t(".household") %></th>
       <% meal.types.each do |type| %>
         <th><%= type.name %></th>
       <% end %>
     </tr>
     <tr class="cost">
-      <td><strong>Calculated Cost</strong></td>
+      <td><strong><%= t(".calculated_cost") %></strong></td>
       <% meal.types.each do |type| %>
-        <td><%= number_to_currency(@calculator.price_for(type)) %></td>
+        <td><%= format_money(@calculator.price_for(type)) %></td>
       <% end %>
     </tr>
     <% signups.reject(&:marked_for_destruction?).each do |signup| %>
@@ -28,15 +28,15 @@
     <% end %>
   </table>
 
-  <h2>Cook Reimbursement Request</h2>
+  <h2><%= t(".cook_reimbursement_request") %></h2>
   <table class="key-value key-value-narrow">
     <tr>
       <td><%= t("activerecord.attributes.meals/cost.ingredient_cost") %></td>
-      <td><strong><%= number_to_currency(cost.ingredient_cost) %></strong></td>
+      <td><strong><%= format_money(cost.ingredient_cost) %></strong></td>
     </tr>
     <tr>
       <td><%= t("activerecord.attributes.meals/cost.pantry_cost") %></td>
-      <td><strong><%= number_to_currency(cost.pantry_cost) %></strong></td>
+      <td><strong><%= format_money(cost.pantry_cost) %></strong></td>
     </tr>
     <tr>
       <td><%= t("activerecord.attributes.meals/cost.reimbursee_id") %></td>

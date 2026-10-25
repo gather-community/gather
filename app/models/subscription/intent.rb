@@ -15,7 +15,6 @@
 #  community_id         :bigint           not null
 #  contact_email        :string           not null
 #  created_at           :datetime         not null
-#  currency             :string           not null
 #  discount_percent     :decimal(6, 2)
 #  months_per_period    :integer          not null
 #  payment_method_types :jsonb            not null
@@ -33,6 +32,10 @@ module Subscription
     belongs_to :community, inverse_of: :subscription_intent
 
     delegate :name, to: :community, prefix: true
+
+    # The community's currency. Kept as `currency` so that SubscriptionDecorator can treat Intent and
+    # Subscription polymorphically.
+    delegate :currency, to: :community
 
     def registered?
       false

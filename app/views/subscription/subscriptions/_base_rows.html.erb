@@ -1,23 +1,23 @@
 <tr>
-  <td>Number of Users</td>
+  <td><%= t(".num_users") %></td>
   <td><%= subscription.quantity %></td>
 </tr>
 <tr>
-  <td>Tier</td>
-  <td><%= subscription.tier.capitalize %> (<%= subscription.price_per_user %>/month)</td>
+  <td><%= t(".tier") %></td>
+  <td><%= t(".tier_value", tier: subscription.tier.capitalize, price: subscription.price_per_user) %></td>
 </tr>
 <% if subscription.discount_percent.present? %>
   <tr>
-    <td>Discount</td>
+    <td><%= t(".discount") %></td>
     <td><%= subscription.discount_percent %>%</td>
   </tr>
 <% end %>
 <tr>
-  <td>Months Per Bill Cycle</td>
+  <td><%= t(".months_per_cycle") %></td>
   <td><%= subscription.months_per_period %></td>
 </tr>
 <tr class="emphasis">
-  <td>Total Payment</td>
+  <td><%= t(".total_payment") %></td>
   <td>
     <%= subscription.currency.upcase %>
     <%= subscription.total_payment_with_months %>
@@ -25,12 +25,12 @@
       <% if subscription.future? %>
         *
         <p>
-          * You will enter your payment details now but you won't be charged until <%= I18n.l(subscription.start_date) %>.
+          <%= t(".not_charged_until", date: I18n.l(subscription.start_date)) %>
         </p>
       <% elsif subscription.backdated? %>
         *
         <p>
-          * Your first payment will be prorated to cover the days elapsed since <%= I18n.l(subscription.start_date) %>.
+          <%= t(".prorated", date: I18n.l(subscription.start_date)) %>
         </p>
       <% end %>
     <% end %>

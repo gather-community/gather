@@ -1,0 +1,35 @@
+---
+# Flags hard-coded user-facing strings in views (see "User-Facing Strings" in CLAUDE.md).
+# Every view is linted. Exceptions: mail that only goes to Gather staff (CLAUDE.md exempts it) and the
+# uptime-check text.
+# spec/lint/i18n_linters_spec.rb runs this in CI.
+EnableDefaultLinters: false
+glob: "app/views/**/*.erb"
+exclude:
+  - "app/views/admin_mailer/*"
+  - "app/views/system_mailer/*"
+  - "app/views/test_mailer/*"
+  - "app/views/exception_notifier/*"
+  - "app/views/communities/signup_mailer/notify_approvers.text.erb"
+  - "app/views/communities/signup_mailer/approval_created.text.erb"
+  - "app/views/communities/signup_mailer/approval_failed.text.erb"
+  - "app/views/landing/ping.text.erb"
+linters:
+  # Literal text between tags, ignoring text with no letters (.erb_linters/hard_coded_text.rb).
+  # Contents of <script> tags are skipped.
+  HardCodedText:
+    enabled: true
+  # Literal aria-label, alt, title and placeholder values, and submit button values
+  # (.erb_linters/hard_coded_attribute.rb).
+  HardCodedAttribute:
+    enabled: true
+  # String literals inside ERB tags, e.g. link_to("Privacy Policy", ...) or alt: "Home".
+  Rubocop:
+    enabled: true
+    only:
+      - Gather/HardCodedString
+      - Gather/NumberToCurrency
+    rubocop_config:
+      require:
+        - ./lib/rubocop/cop/gather/hard_coded_string.rb
+        - ./lib/rubocop/cop/gather/number_to_currency.rb

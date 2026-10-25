@@ -129,10 +129,18 @@ module Work
     # Ensures max slots are not exceeded by competing writes.
     # Raises a Work::SlotsExceededError if no slots left.
     # Raises a Work::AlreadySignedUpError if no that user already signed up for this shift.
+    # Raises a Work::RoundLimitExceededError if the user is out of hours for the current round.
+    #
+    # The round limit is checked here as well as in ShiftPolicy so that it holds for any caller,
+    # and so that a second request can't slip through against state the first one has already
+    # changed. Note this is as strong a guarantee as the slots check above and no stronger: under
+    # REPEATABLE READ two genuinely concurrent inserts don't conflict, so this catches the common
+    # case (a double click, a retried request) rather than every possible interleaving.
     def signup_user(user)
       repeatable_read_transaction_with_retries do
         raise Work::SlotsExceededError if current_assignments_count >= slots
         raise Work::AlreadySignedUpError if !job.double_signups_allowed? && user_signed_up?(user)
+        raise Work::RoundLimitExceededError if RoundLimitChecker.new(shift: self, user: user).exceeded?
         assignments.create!(user_id: user.id)
       end
     end

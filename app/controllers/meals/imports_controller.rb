@@ -43,10 +43,10 @@ module Meals
       @locations = Meal.hosted_by(current_community).newest_first.first&.calendars
       @locations ||= Calendars::Calendar.in_community(current_community).meal_hostable[0...2].presence
       @locations ||= [
-        Calendars::Calendar.new(id: 1234, name: "Dining Room"),
-        Calendars::Calendar.new(id: 5678, name: "Kitchen")
+        Calendars::Calendar.new(id: 1234, name: t("meals.imports.sample_calendar_1")),
+        Calendars::Calendar.new(id: 5678, name: t("meals.imports.sample_calendar_2"))
       ]
-      @formula = Formula.default_for(current_community) || Formula.new(id: 439, name: "Main Formula")
+      @formula = Formula.default_for(current_community) || Formula.new(id: 439, name: t("meals.imports.sample_formula"))
     end
 
     def authorize_import

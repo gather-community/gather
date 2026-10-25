@@ -26,6 +26,8 @@ module Groups
 
     KINDS = %i[committee subcommittee team task_force club crew circle squad group].freeze
     AVAILABILITIES = %i[open closed everybody hidden].freeze
+    NAME_MAX_LENGTH = 64
+    DESCRIPTION_MAX_LENGTH = 255
 
     self.table_name = "groups"
 
@@ -100,7 +102,8 @@ module Groups
     before_validation :normalize
     before_validation :clear_mailman_list_if_empty_name
 
-    validates :name, presence: true
+    validates :name, presence: true, length: {maximum: NAME_MAX_LENGTH}
+    validates :description, length: {maximum: DESCRIPTION_MAX_LENGTH}
     validate :name_unique_in_all_communities
     validate :at_least_one_affiliation
 
@@ -202,6 +205,9 @@ module Groups
     def normalize
       memberships.delete(memberships.to_a.select(&:joiner?)) if everybody?
       memberships.delete(memberships.to_a.select(&:opt_out?)) unless everybody?
+      # Browsers submit textarea line breaks as \r\n but count them as one character for maxlength,
+      # so normalize them to keep the length the user saw in line with the length we validate.
+      self.description = description.gsub("\r\n", "\n") if description.present?
     end
 
     def name_unique_in_all_communities

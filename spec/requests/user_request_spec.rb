@@ -12,6 +12,17 @@ describe "user request" do
     sign_in(actor)
   end
 
+  describe "show" do
+    let(:actor) { create(:user, preferred_contact: "phone") }
+
+    # Regression: the view translated the already-translated value from the decorator.
+    it "shows the preferred contact method" do
+      get(user_path(actor))
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to match(%r{<td>Phone</td>})
+    end
+  end
+
   describe "create" do
     let(:actor) { create(:admin) }
     let(:basic_params) do

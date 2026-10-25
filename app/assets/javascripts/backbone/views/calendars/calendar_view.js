@@ -15,6 +15,8 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
     this.viewParams = options.viewParams;
     this.defaultViewType = options.defaultViewType || "week";
     this.calendar = this.$("#calendar");
+    this.liveRegion = this.$("#calendar-live-region");
+    this.gridFocusLiveRegion = this.$("#calendar-grid-focus-live-region");
     this.ruleSet = options.ruleSet;
     this.canCreate = options.canCreate;
     this.calendarId = options.calendarId;
@@ -22,7 +24,16 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
     this.allDayText = options.allDayText;
     this._fcHeaderLastFocusKey = null;
     this._fcGridFocusDate = null;
+    this._fcGridFocusTime = null;
     this._fcGridShouldFocus = false;
+    this._fcGridHideSlotsTimer = null;
+    this._fcPreservedGridCell = null;
+    this._fcPreservedGridCellFinalLabel = null;
+    this._fcPreservedGridCellLiveAnnouncement = null;
+    this._fcGridFocusAnnouncementTimer = null;
+    this._calendarLiveRegionText = null;
+    this._renderedEventDateKeys = {};
+    this._renderedEventRangesByKey = {};
     this.showAppropriateEarlyLink();
     this.initCalendar();
   },
@@ -37,17 +48,17 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
     return {
       "click .modal .btn-primary": "create",
       "click .early": "showHideEarly",
-      "click .fc-day[data-date]": "onGridCellClick",
-      "focusin .fc-day[data-date]": "onGridCellFocusIn",
+      "click .fc-day[data-date], .fc-gather-time-slot": "onGridCellClick",
+      "focusin .fc-day[data-date], .fc-gather-time-slot": "onGridCellFocusIn",
+      "focusout .fc-day[data-date], .fc-gather-time-slot": "onGridCellFocusOut",
       "focusin .fc-event": "onGridEventFocusIn",
-      "keydown .fc-day[data-date]": "onGridCellKeydown",
+      "keydown .fc-day[data-date], .fc-gather-time-slot": "onGridCellKeydown",
       "keydown .fc-event": "onGridEventKeydown",
 
       /*
        * Capture header interactions before FullCalendar handles them, so we can restore focus
        * after the header re-renders (navigation/view changes).
        */
-      [`focusin ${headerControlSelector}`]: "captureHeaderControlActivation",
       [`mousedown ${headerControlSelector}`]: "captureHeaderControlActivation",
       [`keydown ${headerControlSelector}`]:
         "captureHeaderControlActivationOnKeydown",
@@ -65,8 +76,11 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
       minTime: this.minTime(),
       allDaySlot: !this.timedEventsOnly,
       allDayText: this.allDayText,
+      // Some locale packs (e.g. fr-CA) set allDayHtml, which would win over our own allDayText.
+      allDayHtml: _.escape(this.allDayText),
       selectOverlap: this.selectOverlap.bind(this),
       eventOverlap: this.eventOverlap.bind(this),
+      eventAllow: this.eventAllow.bind(this),
       selectable: this.canCreate,
       selectHelper: true,
       longPressDelay: 500,
@@ -79,6 +93,11 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
       loading: this.onLoading.bind(this),
       eventDrop: this.onEventChange.bind(this),
       eventResize: this.onEventChange.bind(this),
+      viewRender: () => {
+        this.resetRenderedEventCounts();
+        this.updateCalendarLiveRegion({includeEmptyState: false});
+      },
+      eventAfterRender: this.trackRenderedEventCount.bind(this),
       eventAfterAllRender: this.onViewRender.bind(this),
     });
   },
@@ -108,6 +127,28 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
       stillEvent.calendarId !== movingEvent.calendarId ||
       stillEvent.calendarAllowsOverlap
     );
+  },
+
+  /*
+   * A drag can't move an event between the all-day row and the time grid. The server keeps an
+   * event's all-day setting as it is, so a timed event dropped in the all-day row would be saved as
+   * a 24-hour timed event, and an all-day event dropped in the grid would be refused. Changing it is
+   * done in the event form instead. FullCalendar snaps a disallowed drop back without sending it.
+   *
+   * FullCalendar passes the event as it would be after the drop, so its allDay always matches the
+   * drop location; the stored event still has the original. Month view has no time grid: every drop
+   * there lands on a whole day, and a timed event keeps its own times, so nothing is blocked there.
+   */
+  eventAllow(dropLocation, draggedEvent) {
+    if (this.calendar.fullCalendar("getView").name === "month") {
+      return true;
+    }
+    /*
+     * Matched on FullCalendar's own _id. A string argument would match our id, which every
+     * occurrence of a series shares.
+     */
+    const [original] = this.calendar.fullCalendar("clientEvents", e => e._id === draggedEvent._id);
+    return dropLocation.start.hasTime() === !original.allDay;
   },
 
   onSelect(start, end, _, view) {
@@ -150,33 +191,107 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
       end = end.subtract(1, "seconds");
     }
     if (start.format("YYYYMMDD") === end.format("YYYYMMDD")) {
-      const date = start.format(Gather.TIME_FORMATS.regDate);
+      const date = start.format(I18n.t("moment_formats.wday_date"));
       if (start.hasTime()) {
-        startTime = start.format(Gather.TIME_FORMATS.regTime);
-        endTime = end.format(Gather.TIME_FORMATS.regTime);
-        body.html(`Create event on <b>${date}</b> from <b>${startTime}</b> to <b>${endTime}</b>?`);
+        startTime = start.format(I18n.t("moment_formats.time"));
+        endTime = end.format(I18n.t("moment_formats.time"));
+        body.html(I18n.t("calendars.grid.create_confirm.same_day_times_html", {
+          date,
+          start: startTime,
+          end: endTime,
+        }));
       } else {
-        body.html(`Create event on <b>${date}</b>?`);
+        body.html(I18n.t("calendars.grid.create_confirm.same_day_html", {date}));
       }
     } else {
       if (start.hasTime()) {
-        startTime = start.format(Gather.TIME_FORMATS.fullDatetime);
-        endTime = end.format(Gather.TIME_FORMATS.fullDatetime);
+        startTime = start.format(I18n.t("moment_formats.wday_date_time"));
+        endTime = end.format(I18n.t("moment_formats.wday_date_time"));
       } else {
-        startTime = start.format(Gather.TIME_FORMATS.regDate);
-        endTime = end.format(Gather.TIME_FORMATS.regDate);
+        startTime = start.format(I18n.t("moment_formats.wday_date"));
+        endTime = end.format(I18n.t("moment_formats.wday_date"));
       }
-      body.html(`Create event from <b>${startTime}</b> to <b>${endTime}</b>?`);
+      body.html(I18n.t("calendars.grid.create_confirm.range_html", {start: startTime, end: endTime}));
     }
 
-    modal.modal("show");
+    this.showCreateConfirmModal(modal);
+  },
+
+  showCreateConfirmModal(modal) {
+    const returnFocusTo = document.activeElement;
+    const focusCancel = () => modal.find(".btn-default").first().focus();
+    const closeOnEscape = (e) => {
+      if ((e.which || e.keyCode) === 27) {
+        modal.modal("hide");
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    };
+
+    modal.off(".calendarCreateFocus");
+    $(document).off("keydown.calendarCreateFocus");
+    modal.on("shown.bs.modal.calendarCreateFocus", () => {
+      focusCancel();
+      setTimeout(focusCancel, 50);
+      setTimeout(focusCancel, 150);
+    });
+    modal.on("keydown.calendarCreateFocus", closeOnEscape);
+    $(document).on("keydown.calendarCreateFocus", closeOnEscape);
+    modal.on("hidden.bs.modal.calendarCreateFocus", () => {
+      modal.off(".calendarCreateFocus");
+      $(document).off("keydown.calendarCreateFocus");
+      this.calendar.fullCalendar("unselect");
+      if (returnFocusTo && document.contains(returnFocusTo)) {
+        setTimeout(() => returnFocusTo.focus(), 0);
+      }
+    });
+    modal.modal({keyboard: true, show: true});
   },
 
   onViewRender() {
     this.applyFullCalendarHeaderA11y();
     this.applyFullCalendarGridA11y();
+    this.updateCalendarLiveRegion();
     this.$el.trigger("viewRender"); // Notify other views
-    this.saveViewParams();
+  },
+
+  updateCalendarLiveRegion(options) {
+    const view = this.calendar.fullCalendar("getView");
+    if (!this.liveRegion.length) {
+      return;
+    }
+
+    if (!view) {
+      this.liveRegion.text("");
+      this._calendarLiveRegionText = null;
+      return;
+    }
+
+    const message = this.calendarLiveRegionMessage(view, options || {});
+    if (message !== this._calendarLiveRegionText) {
+      this.liveRegion.text(message);
+      this._calendarLiveRegionText = message;
+    }
+  },
+
+  calendarLiveRegionMessage(view, options) {
+    const messageParts = [];
+    if (view.name === "month") {
+      const month = view.intervalStart.format(I18n.t("moment_formats.month_year"));
+      messageParts.push(I18n.t("calendars.grid.now_showing", {month}));
+    }
+
+    if (
+      options.includeEmptyState !== false &&
+      (view.name === "agendaWeek" || view.name === "month")
+    ) {
+      const eventCount = this.renderedEventCountInInterval(view.intervalStart, view.intervalEnd);
+      messageParts.push(view.name === "agendaWeek"
+        ? I18n.t("calendars.grid.event_count_this_week", {count: eventCount})
+        : I18n.t("calendars.grid.event_count_this_month", {count: eventCount}));
+    }
+
+    return messageParts.join(". ");
   },
 
   captureHeaderControlActivation(e) {
@@ -197,7 +312,28 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
     if (!isActivationKey) {
       return;
     }
+    const helper = Gather.Utils && Gather.Utils.FullCalendarHeaderA11y;
+    const key = helper && helper.focusKeyFromElement && helper.focusKeyFromElement(e.currentTarget);
+    if (this.isViewControlKey(key)) {
+      this._fcHeaderLastFocusKey = null;
+      this._fcGridFocusDate = null;
+      this._fcGridFocusTime = null;
+      this._fcGridShouldFocus = true;
+      setTimeout(() => this.focusGridAfterViewControlActivation(), 0);
+      return;
+    }
     this.captureHeaderControlActivation(e);
+  },
+
+  isViewControlKey(key) {
+    return Object.keys(this.URL_PARAMS_TO_VIEW_TYPES)
+      .some((viewType) => this.URL_PARAMS_TO_VIEW_TYPES[viewType] === key);
+  },
+
+  focusGridAfterViewControlActivation() {
+    if (this._fcGridShouldFocus) {
+      this.applyFullCalendarGridKeyboard();
+    }
   },
 
   applyFullCalendarHeaderA11y() {
@@ -207,10 +343,7 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
     }
 
     const focusKeyToRestore = this._fcHeaderLastFocusKey;
-    helper.enhance(this.calendar, {
-      toolbarLabel: "Calendar controls",
-      focusKeyToRestore,
-    });
+    helper.enhance(this.calendar, {focusKeyToRestore});
 
     // Always clear after attempting restore to avoid stealing focus on later renders.
     if (focusKeyToRestore) {
@@ -229,13 +362,17 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
      * so screen readers announce the grid model instead of table boundaries.
      */
     this.calendar.find(".fc-view > table").attr("role", "presentation");
+    this.applyFullCalendarGridDateLabels();
 
     if (view.name === "month") {
       const $grid = this.calendar.find(".fc-month-view").first();
       if (!$grid.length) {
         return;
       }
-      $grid.attr("role", "grid");
+      $grid.attr({
+        role: "grid",
+        "aria-label": I18n.t("calendars.grid.month_calendar"),
+      });
       $grid.find(".fc-row").attr("role", "row");
       $grid.find(".fc-day").attr("role", "gridcell");
       $grid.find(".fc-row table").attr("role", "presentation");
@@ -244,9 +381,24 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
     }
 
     if (view.name === "agendaDay" || view.name === "agendaWeek") {
+      /*
+       * One named grid for all-day + timed slots. Separate nested role="grid"
+       * regions (especially an unlabeled time grid) become empty "browse mode"
+       * stops when Tab leaves the all-day row.
+       */
+      const $agenda = this.calendar.find(".fc-agenda-view").first();
+      if ($agenda.length) {
+        $agenda.attr({
+          role: "grid",
+          "aria-label": this.agendaGridLabel(view),
+        });
+        // FullCalendar's visual divider is decorative and otherwise announced as "separator".
+        $agenda.find(".fc-divider").attr("aria-hidden", "true");
+      }
+
       const $allDayGrid = this.calendar.find(".fc-agenda-view .fc-day-grid").first();
       if ($allDayGrid.length) {
-        $allDayGrid.attr("role", "grid");
+        $allDayGrid.attr("role", "presentation");
         $allDayGrid.find(".fc-row").attr("role", "row");
         $allDayGrid.find(".fc-day").attr("role", "gridcell");
         $allDayGrid.find(".fc-row table").attr("role", "presentation");
@@ -254,14 +406,169 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
 
       const $timeGrid = this.calendar.find(".fc-time-grid").first();
       if ($timeGrid.length) {
-        $timeGrid.attr("role", "grid");
-        $timeGrid.find(".fc-slats tr").attr("role", "row");
-        $timeGrid.find(".fc-slats td").attr("role", "gridcell");
+        $timeGrid.attr("role", "presentation");
         $timeGrid.find("table").attr("role", "presentation");
+        // Slats are shared across days; use injected per-(day,time) cells instead.
+        $timeGrid.find(".fc-slats tr, .fc-slats td").removeAttr("role");
+        // Hide the visual time axis from the accessibility tree; the grid label
+        // announces the overall range, and focused slots announce a specific time.
+        $timeGrid.find(".fc-slats").attr("aria-hidden", "true");
+        this.injectAgendaTimeSlotCells();
       }
 
       this.applyFullCalendarGridKeyboard();
     }
+  },
+
+  agendaGridLabel(view) {
+    const viewName = view.name === "agendaDay"
+      ? I18n.t("calendars.grid.day_calendar")
+      : I18n.t("calendars.grid.week_calendar");
+    const slots = this.timedSlotsLabel();
+    if (this.timedEventsOnly) {
+      return slots
+        ? I18n.t("calendars.grid.agenda_label_slots", {view: viewName, slots})
+        : I18n.t("calendars.grid.agenda_label", {view: viewName});
+    }
+    return slots
+      ? I18n.t("calendars.grid.agenda_label_all_day_slots", {view: viewName, slots})
+      : I18n.t("calendars.grid.agenda_label_all_day", {view: viewName});
+  },
+
+  // E.g. "half-hour time slots from 6 AM to 12 AM". Null if no slots are showing.
+  timedSlotsLabel() {
+    const times = this.slotTimes();
+    if (!times.length) {
+      return null;
+    }
+    const minutes = this.slotDurationMinutes(times);
+    const start = $.fullCalendar.moment(times[0], "HH:mm:ss");
+    const end = $.fullCalendar
+      .moment(times[times.length - 1], "HH:mm:ss")
+      .add(minutes, "minutes");
+    const range = {start: this.accessibleTimeLabel(start), end: this.accessibleTimeLabel(end)};
+    return minutes === 30
+      ? I18n.t("calendars.grid.half_hour_slots", range)
+      : I18n.t("calendars.grid.minute_slots", Object.assign({minutes}, range));
+  },
+
+  accessibleTimeLabel(time) {
+    const format = time.minutes() === 0
+      ? I18n.t("moment_formats.hour")
+      : I18n.t("moment_formats.hour_minute");
+    return time.format(format);
+  },
+
+  slotDurationMinutes(times) {
+    if (times.length < 2) {
+      return 30;
+    }
+    const first = $.fullCalendar.moment(times[0], "HH:mm:ss");
+    const second = $.fullCalendar.moment(times[1], "HH:mm:ss");
+    const minutes = second.diff(first, "minutes");
+    if (minutes <= 0) {
+      return 30;
+    }
+    return minutes;
+  },
+
+  injectAgendaTimeSlotCells() {
+    const $timeGrid = this.calendar.find(".fc-time-grid").first();
+    const $dayCols = $timeGrid.find(".fc-bg .fc-day[data-date]");
+    const $contentCols = $timeGrid.find(".fc-content-col");
+    const $slats = $timeGrid.find(".fc-slats tr[data-time]");
+
+    if (!$dayCols.length || !$contentCols.length || !$slats.length) {
+      return;
+    }
+
+    $contentCols.each((colIndex, colEl) => {
+      const $col = $(colEl);
+      const dateString = $dayCols.eq(colIndex).attr("data-date");
+      if (!dateString) {
+        return;
+      }
+
+      let $container = $col.children(".fc-gather-time-slots");
+      if (!$container.length) {
+        $container = $('<div class="fc-gather-time-slots"></div>');
+        $col.prepend($container);
+      } else {
+        $container.empty();
+      }
+
+      const date = $.fullCalendar.moment(dateString, "YYYY-MM-DD");
+      const colTop = $col.offset().top;
+
+      $slats.each((_, slatEl) => {
+        const $slat = $(slatEl);
+        const timeString = $slat.attr("data-time");
+        if (!timeString) {
+          return;
+        }
+
+        const timeMoment = $.fullCalendar.moment(timeString, "HH:mm:ss");
+        const label =
+          `${this.gridDateLabel(date, {includeWeekContext: true})}, ` +
+          this.accessibleTimeLabel(timeMoment);
+        const top = $slat.offset().top - colTop;
+        const height = $slat.outerHeight();
+
+        const $slot = $(
+          '<div class="fc-gather-time-slot" tabindex="-1" aria-hidden="true"></div>'
+        );
+        $slot.attr({
+          "data-date": dateString,
+          "data-time": timeString,
+          "aria-label": label,
+        });
+        $slot.css({
+          top: `${top}px`,
+          height: `${height}px`,
+        });
+        $container.append($slot);
+      });
+    });
+  },
+
+  applyFullCalendarGridDateLabels() {
+    const view = this.calendar.fullCalendar("getView");
+    const isAgenda = view && (view.name === "agendaDay" || view.name === "agendaWeek");
+
+    // Time-grid background columns are layout-only; labeling them creates empty browse targets.
+    this.calendar.find(".fc-time-grid .fc-bg .fc-day[data-date]").removeAttr("aria-label");
+
+    const $labelCells = isAgenda
+      ? this.calendar.find(".fc-day-grid .fc-bg .fc-day[data-date]:visible")
+      : this.calendar.find(".fc-month-view .fc-bg .fc-day[data-date]:visible");
+
+    $labelCells.each((_, cell) => {
+      const $cell = $(cell);
+      const dateString = $cell.attr("data-date");
+      const date = $.fullCalendar.moment(dateString, "YYYY-MM-DD");
+
+      if (date.isValid()) {
+        let label = this.gridDateLabel(date, {includeWeekContext: isAgenda});
+        if (isAgenda && this.allDayText) {
+          label = `${this.allDayText}, ${label}`;
+        }
+        label += `, ${this.eventCountLabel(this.renderedEventCountOnDay(date))}`;
+        $cell.attr("aria-label", label);
+      }
+    });
+  },
+
+  gridDateLabel(date, options) {
+    const opts = options || {};
+    const today = $.fullCalendar.moment();
+    const label = date.format(I18n.t("moment_formats.full_date"));
+    if (date.format("YYYY-MM-DD") === today.format("YYYY-MM-DD")) {
+      return I18n.t("calendars.grid.today_date", {date: label});
+    }
+    if (opts.includeWeekContext && date.isSame(today, "week")) {
+      return I18n.t("calendars.grid.this_week_date", {date: label});
+    }
+    return label;
   },
 
   applyFullCalendarGridKeyboard() {
@@ -270,43 +577,83 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
       return;
     }
 
-    // Keep grid entry/exit on date cells only so Shift+Tab can leave naturally.
-    this.calendar.find(".fc-view").removeAttr("tabindex");
-    const today = $.fullCalendar.moment();
+    // Keep grid entry/exit on date/slot cells only so Shift+Tab can leave naturally.
+    this.calendar
+      .find(".fc-view, .fc-scroller, .fc-agenda-view, .fc-day-grid, .fc-time-grid")
+      .removeAttr("tabindex");
     let focusDate = this._fcGridFocusDate;
+    let focusTime = this._fcGridFocusTime;
 
-    if (!focusDate) {
-      if (this.getGridDayCell(today).length) {
-        focusDate = today.format("YYYY-MM-DD");
+    if (!this.getGridFocusTarget(focusDate, focusTime).length) {
+      if (focusDate && this.getGridFocusTarget(focusDate, null).length) {
+        focusTime = null;
+      } else if (focusDate && this.getGridFocusTarget(focusDate, this.firstSlotTime()).length) {
+        focusTime = this.firstSlotTime();
       } else {
-        focusDate = view.intervalStart.format("YYYY-MM-DD");
+        const today = $.fullCalendar.moment().format("YYYY-MM-DD");
+        if (this.getGridFocusTarget(today, null).length) {
+          focusDate = today;
+          focusTime = null;
+        } else if (this.getGridFocusTarget(today, this.firstSlotTime()).length) {
+          focusDate = today;
+          focusTime = this.firstSlotTime();
+        } else {
+          focusDate = view.intervalStart.format("YYYY-MM-DD");
+          focusTime = this.getGridFocusTarget(focusDate, null).length ? null : this.firstSlotTime();
+        }
       }
     }
 
-    this.setGridFocus(focusDate, {focus: this._fcGridShouldFocus});
+    this.setGridFocus(focusDate, {time: focusTime, focus: this._fcGridShouldFocus});
     this._fcGridShouldFocus = false;
   },
 
   onGridCellClick(e) {
-    const date = this.gridDateFromCell($(e.currentTarget));
+    const $cell = $(e.currentTarget);
+    const date = this.gridDateFromCell($cell);
     if (!date) {
       return;
     }
-    this.setGridFocus(date, {focus: false});
+    this.setGridFocus(date, {time: this.gridTimeFromCell($cell), focus: false});
   },
 
   onGridCellFocusIn(e) {
-    const date = this.gridDateFromCell($(e.currentTarget));
+    this.finalizePreservedGridCellLabel();
+    const $cell = $(e.currentTarget);
+    const date = this.gridDateFromCell($cell);
     if (!date) {
       return;
     }
-    this.setGridFocus(date, {focus: false});
+    const dateString = date.format("YYYY-MM-DD");
+    const time = this.gridTimeFromCell($cell);
+    if (
+      $cell.hasClass("fc-gather-grid-active") &&
+      this._fcGridFocusDate === dateString &&
+      (this._fcGridFocusTime || null) === (time || null)
+    ) {
+      return;
+    }
+    this.setGridFocus(date, {time, focus: false});
+  },
+
+  onGridCellFocusOut() {
+    setTimeout(() => this.finalizePreservedGridCellLabel(), 0);
   },
 
   onGridCellKeydown(e) {
     const keyCode = e.which || e.keyCode;
-    const date = this.gridDateFromCell($(e.currentTarget));
+    const $cell = $(e.currentTarget);
+    const date = this.gridDateFromCell($cell);
     if (!date) {
+      return;
+    }
+
+    const view = this.calendar.fullCalendar("getView");
+    const isAgenda = view && (view.name === "agendaDay" || view.name === "agendaWeek");
+    const time = this.gridTimeFromCell($cell);
+
+    if (isAgenda) {
+      this.onAgendaGridCellKeydown(e, date, time);
       return;
     }
 
@@ -339,12 +686,73 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
     e.preventDefault();
   },
 
+  onAgendaGridCellKeydown(e, date, time) {
+    const keyCode = e.which || e.keyCode;
+
+    if (keyCode === 13 || keyCode === 32) {
+      if (time) {
+        this.selectTimeFromGrid(date, time);
+      } else {
+        this.selectDateFromGrid(date);
+      }
+      e.preventDefault();
+      return;
+    }
+
+    let nextDate = date.clone();
+    let nextTime = time;
+
+    if (keyCode === 37) {
+      nextDate = date.clone().add(-1, "day");
+    } else if (keyCode === 39) {
+      nextDate = date.clone().add(1, "day");
+    } else if (keyCode === 36) {
+      nextDate = date.clone().startOf("week");
+    } else if (keyCode === 35) {
+      nextDate = date.clone().endOf("week").startOf("day");
+    } else if (keyCode === 33) {
+      nextDate = date.clone().add(-1, "week");
+    } else if (keyCode === 34) {
+      nextDate = date.clone().add(1, "week");
+    } else if (keyCode === 38) {
+      if (time) {
+        const prevTime = this.adjacentSlotTime(time, -1);
+        if (prevTime === undefined) {
+          return;
+        }
+        nextTime = prevTime;
+      } else {
+        nextDate = date.clone().add(-1, "week");
+      }
+    } else if (keyCode === 40) {
+      if (time) {
+        const nextSlot = this.adjacentSlotTime(time, 1);
+        if (nextSlot === undefined) {
+          return;
+        }
+        nextTime = nextSlot;
+      } else {
+        const firstTime = this.firstSlotTime();
+        if (!firstTime) {
+          nextDate = date.clone().add(1, "week");
+        } else {
+          nextTime = firstTime;
+        }
+      }
+    } else {
+      return;
+    }
+
+    this.moveGridFocus(nextDate, nextTime);
+    e.preventDefault();
+  },
+
   onGridEventFocusIn(e) {
     const date = this.resolveGridDateFromElement($(e.currentTarget));
     if (!date) {
       return;
     }
-    this.setGridFocus(date, {focus: false});
+    this.setGridFocus(date, {time: null, focus: false});
   },
 
   onGridEventKeydown(e) {
@@ -402,50 +810,220 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
     this.calendar.fullCalendar("select", start, end);
   },
 
+  selectTimeFromGrid(date, timeString) {
+    if (!this.canCreate) {
+      return;
+    }
+    const dateString = date.format("YYYY-MM-DD");
+    const start = $.fullCalendar.moment(`${dateString}T${timeString}`);
+    const end = start.clone().add(this.slotDurationMinutes(this.slotTimes()), "minutes");
+    this.calendar.fullCalendar("select", start, end);
+  },
+
   moveGridFocusToDate(date) {
+    this.moveGridFocus(date, null);
+  },
+
+  moveGridFocus(date, time) {
     const dateString = date.format("YYYY-MM-DD");
     this._fcGridFocusDate = dateString;
+    this._fcGridFocusTime = time || null;
 
-    if (this.getGridDayCell(date).length) {
-      this.setGridFocus(dateString, {focus: true});
+    if (this.getGridFocusTarget(dateString, time).length) {
+      this.setGridFocus(dateString, {time, focus: true});
       return;
     }
 
     this._fcGridShouldFocus = true;
+    this.prepareFocusedGridCellForRender(date, time);
+    this.preserveFocusedGridCellDuringRender();
     this.calendar.fullCalendar("gotoDate", date);
   },
 
+  prepareFocusedGridCellForRender(date, time) {
+    const $focused = $(document.activeElement);
+    if (time && $focused.hasClass("fc-gather-time-slot")) {
+      const timeMoment = $.fullCalendar.moment(time, "HH:mm:ss");
+      $focused.attr(
+        "aria-label",
+        `${this.gridDateLabel(date, {includeWeekContext: true})}, ` +
+          this.accessibleTimeLabel(timeMoment)
+      );
+      return $focused;
+    } else if (
+      $focused.is(".fc-day[data-date]") &&
+      $focused.closest(".fc-agenda-view .fc-day-grid").length
+    ) {
+      $focused.attr(
+        "aria-label",
+        `${this.allDayText}, ${this.gridDateLabel(date, {includeWeekContext: true})}`
+      );
+      return $focused;
+    }
+    return $();
+  },
+
+  preserveFocusedGridCellDuringRender() {
+    const $focused = $(document.activeElement);
+    const isTimeSlot = $focused.hasClass("fc-gather-time-slot");
+    const isAllDayCell =
+      $focused.is(".fc-day[data-date]") &&
+      $focused.closest(".fc-agenda-view .fc-day-grid").length > 0;
+    if ((!isTimeSlot && !isAllDayCell) || !this.calendar[0].contains($focused[0])) {
+      return;
+    }
+
+    /*
+     * FullCalendar replaces the complete view when keyboard navigation crosses a week
+     * boundary. Keep the focused time slot or All Day cell connected to the document
+     * during that replacement so VoiceOver does not reset to the start of the page and
+     * re-announce every ancestor.
+     */
+    this._fcPreservedGridCell = $focused;
+    this.$el.append($focused);
+  },
+
+  restorePreservedGridCell($target) {
+    const $preserved = this._fcPreservedGridCell;
+    if (!$preserved || !$preserved.length) {
+      return $target;
+    }
+
+    const preservedIsTimeSlot = $preserved.hasClass("fc-gather-time-slot");
+    const targetIsTimeSlot = $target.hasClass("fc-gather-time-slot");
+    if (preservedIsTimeSlot !== targetIsTimeSlot) {
+      return $target;
+    }
+
+    Array.from($preserved[0].attributes).forEach((attribute) => {
+      if (!$target[0].hasAttribute(attribute.name)) {
+        $preserved.removeAttr(attribute.name);
+      }
+    });
+    Array.from($target[0].attributes).forEach((attribute) => {
+      if (attribute.name !== "aria-label") {
+        $preserved.attr(attribute.name, attribute.value);
+      }
+    });
+    $preserved.removeAttr("aria-hidden");
+    this._fcPreservedGridCellFinalLabel = {
+      element: $preserved,
+      label: $target.attr("aria-label"),
+    };
+    this._fcPreservedGridCellLiveAnnouncement = $preserved.attr("aria-label");
+    $target.replaceWith($preserved);
+    this._fcPreservedGridCell = null;
+    return $preserved;
+  },
+
   setGridFocus(date, options) {
+    const opts = options || {};
     const dateString = typeof date === "string" ? date : date.format("YYYY-MM-DD");
-    const $cells = this.getNavigableGridCells();
-    const $target = this.getGridDayCell(dateString);
+    const time = Object.prototype.hasOwnProperty.call(opts, "time")
+      ? opts.time
+      : this._fcGridFocusTime;
+    let $target = this.getGridFocusTarget(dateString, time);
     if (!$target.length) {
       return false;
     }
+    $target = this.restorePreservedGridCell($target);
+    const $cells = this.getNavigableGridCells();
 
     $cells.attr("tabindex", "-1");
     $cells.removeClass("fc-gather-grid-active");
     $target.attr("tabindex", "0");
     $target.addClass("fc-gather-grid-active");
-    this.updateGridCellAriaStates(dateString);
-    if (options && options.focus) {
+    if ($target.hasClass("fc-gather-time-slot")) {
+      $target.attr({
+        role: "button",
+      });
+      $target.removeAttr("aria-hidden");
+    }
+    this.updateGridCellAriaStates(dateString, time);
+    this._fcGridFocusDate = dateString;
+    this._fcGridFocusTime = time || null;
+    if (opts.focus && document.activeElement !== $target[0]) {
       $target.focus();
     }
-    this._fcGridFocusDate = dateString;
+    this.announcePreservedGridCell();
+
+    /*
+     * Give screen readers time to process the new focus before removing the prior slot
+     * from the accessibility tree. A synchronous removal makes VoiceOver fall back to an
+     * unrelated event link elsewhere in the calendar.
+     */
+    clearTimeout(this._fcGridHideSlotsTimer);
+    this._fcGridHideSlotsTimer = setTimeout(() => this.hideInactiveTimeSlots(), 250);
+
     return true;
   },
 
-  updateGridCellAriaStates(selectedDateString) {
+  announcePreservedGridCell() {
+    const message = this._fcPreservedGridCellLiveAnnouncement;
+    this._fcPreservedGridCellLiveAnnouncement = null;
+    if (!message || !this.gridFocusLiveRegion.length) {
+      return;
+    }
+
+    clearTimeout(this._fcGridFocusAnnouncementTimer);
+    this.gridFocusLiveRegion.text("");
+    this._fcGridFocusAnnouncementTimer = setTimeout(() => {
+      this.gridFocusLiveRegion.text(message);
+    }, 50);
+  },
+
+  finalizePreservedGridCellLabel() {
+    const finalLabel = this._fcPreservedGridCellFinalLabel;
+    if (!finalLabel || !finalLabel.label || document.activeElement === finalLabel.element[0]) {
+      return;
+    }
+
+    finalLabel.element.attr("aria-label", finalLabel.label);
+    this._fcPreservedGridCellFinalLabel = null;
+  },
+
+  hideInactiveTimeSlots() {
+    this.calendar
+      .find(".fc-gather-time-slot")
+      .not(".fc-gather-grid-active")
+      .each((_, el) => {
+        const $slot = $(el);
+        $slot.attr({
+          "aria-hidden": "true",
+          tabindex: "-1",
+        });
+        $slot.removeAttr("role");
+        $slot.removeAttr("aria-selected");
+      });
+  },
+
+  updateGridCellAriaStates(selectedDateString, selectedTime) {
     const todayString = $.fullCalendar.moment().format("YYYY-MM-DD");
     const $cells = this.getNavigableGridCells();
+    const focusTime = selectedTime || null;
 
     $cells.each((_, cell) => {
       const $cell = $(cell);
       const dateString = $cell.attr("data-date");
-      const isSelected = dateString === selectedDateString;
-      const isToday = dateString === todayString;
+      const cellTime = this.gridTimeFromCell($cell);
+      const isSelected =
+        dateString === selectedDateString &&
+        (cellTime || null) === focusTime;
+      const isDayCell = !$cell.hasClass("fc-gather-time-slot");
+      const isToday = isDayCell && dateString === todayString;
 
-      $cell.attr("aria-selected", isSelected ? "true" : "false");
+      if (!isDayCell) {
+        $cell.removeAttr("aria-selected");
+        $cell.removeAttr("aria-current");
+        return;
+      }
+
+      // Only expose aria-selected when true; "false" is announced as "not selected".
+      if (isSelected) {
+        $cell.attr("aria-selected", "true");
+      } else {
+        $cell.removeAttr("aria-selected");
+      }
       if (isToday) {
         $cell.attr("aria-current", "date");
       } else {
@@ -455,36 +1033,121 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
   },
 
   getGridDayCell(date) {
+    return this.getGridFocusTarget(date, null);
+  },
+
+  getGridFocusTarget(date, time) {
+    if (!date) {
+      return $();
+    }
     const dateString = typeof date === "string" ? date : date.format("YYYY-MM-DD");
-    return this.getNavigableGridCells()
+    if (time) {
+      return this.calendar
+        .find(`.fc-gather-time-slot[data-date="${dateString}"][data-time="${time}"]`)
+        .first();
+    }
+
+    return this.getNavigableDayCells()
       .filter((_, el) => $(el).attr("data-date") === dateString)
       .first();
   },
 
-  getNavigableGridCells() {
+  getNavigableDayCells() {
     const view = this.calendar.fullCalendar("getView");
     if (!view) {
       return this.calendar.find(".fc-day[data-date]");
     }
 
     if (view.name === "month") {
-      return this.calendar.find(".fc-month-view .fc-day[data-date]:visible");
+      return this.calendar.find(".fc-month-view .fc-bg .fc-day[data-date]:visible");
     }
 
-    const $allDayCells = this.calendar.find(".fc-agenda-view .fc-day-grid .fc-day[data-date]:visible");
+    const $allDayCells = this.calendar.find(
+      ".fc-agenda-view .fc-day-grid .fc-bg .fc-day[data-date]:visible"
+    );
     if ($allDayCells.length) {
       return $allDayCells;
+    }
+
+    return $();
+  },
+
+  getNavigableGridCells() {
+    const view = this.calendar.fullCalendar("getView");
+    if (!view) {
+      return this.calendar.find(".fc-day[data-date], .fc-gather-time-slot");
+    }
+
+    if (view.name === "month") {
+      return this.getNavigableDayCells();
+    }
+
+    const $dayCells = this.getNavigableDayCells();
+    const $slots = this.calendar.find(".fc-gather-time-slot");
+    if ($dayCells.length && $slots.length) {
+      return $dayCells.add($slots);
+    }
+    if ($slots.length) {
+      return $slots;
+    }
+    if ($dayCells.length) {
+      return $dayCells;
     }
 
     return this.calendar.find(".fc-time-grid .fc-bg .fc-day[data-date]:visible");
   },
 
   gridDateFromCell($cell) {
-    const dateString = $cell.data("date") || $cell.attr("data-date");
+    const dateString = $cell.attr("data-date") || $cell.data("date");
     if (!dateString) {
       return null;
     }
     return $.fullCalendar.moment(dateString, "YYYY-MM-DD");
+  },
+
+  gridTimeFromCell($cell) {
+    if (!$cell.hasClass("fc-gather-time-slot")) {
+      return null;
+    }
+    return $cell.attr("data-time") || null;
+  },
+
+  slotTimes() {
+    return this.calendar
+      .find(".fc-slats tr[data-time]")
+      .map((_, el) => $(el).attr("data-time"))
+      .get();
+  },
+
+  firstSlotTime() {
+    const times = this.slotTimes();
+    return times.length ? times[0] : null;
+  },
+
+  /*
+   * Returns the adjacent slot time string, null for all-day (when moving up from the first
+   * slot and an all-day row exists), or undefined when there is no valid move.
+   */
+  adjacentSlotTime(time, delta) {
+    const times = this.slotTimes();
+    const index = times.indexOf(time);
+    if (index < 0) {
+      return undefined;
+    }
+
+    const nextIndex = index + delta;
+    if (nextIndex >= 0 && nextIndex < times.length) {
+      return times[nextIndex];
+    }
+
+    if (nextIndex < 0) {
+      if (this.getNavigableDayCells().length) {
+        return null;
+      }
+      return undefined;
+    }
+
+    return undefined;
   },
 
   resolveGridDateFromElement($element) {
@@ -511,28 +1174,178 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
   },
 
   onEventChange(event, _, revertFunc) {
-    if (!confirm(`Are you sure you want to move the event '${event.title}?'`)) {
-      revertFunc();
-    } else {
-      $.ajax({
-        url: `/calendars/events/${event.id}`,
-        method: "POST",
-        data: {
-          _method: "PATCH",
-          calendars_event: {
-            starts_at: event.start.format(),
-            ends_at: event.end.format(),
-          },
-        },
-        error(xhr) {
-          revertFunc();
-          Gather.errorModal
-            .modal("show")
-            .find(".modal-body")
-            .html(xhr.responseText);
-        },
-      });
+    const times = this.dragTimes(event);
+    this.promptForDragScope(event).then(scope => {
+      if (!scope) {
+        revertFunc();
+        return;
+      }
+      this.submitDrag(event, times, scope, revertFunc);
+    });
+  },
+
+  /*
+   * The start/end a drag should be saved with. For a timed event on a single-calendar page the
+   * calendar's fixed start/end time rules are applied, the same as when selecting a new event, so a
+   * drag onto a non-permitted time snaps into place instead of being bounced back by a server error
+   * modal. The rule set is only present on a single-calendar page and is built with a nil kind, so
+   * kind-specific rules still fall to server-side validation. All-day events have no time-of-day to
+   * snap (and their exclusive end is reconciled server-side), so they pass through unchanged.
+   */
+  dragTimes(event) {
+    const start = event.start.clone();
+    const end = this.eventEnd(event).clone();
+
+    if (event.allDay || !this.ruleSet) {
+      return {start, end};
     }
+
+    const [fixedStart, fixedEnd] = this.applyFixedTimes(start, end);
+    return {start: fixedStart, end: fixedEnd};
+  },
+
+  /*
+   * Asks which scope the drag applies to. The server says which choices this user may make for this
+   * eventlet right now (see EventletForm.allowed_choices), so a grid that has been open for hours
+   * never offers a stale one. Up to two modals follow, one after the other: the calendar question
+   * when both calendar choices are allowed, then the series question when the event recurs and more
+   * than one series choice is allowed. When no question is needed there's still a plain
+   * confirmation, so a drag is never silently saved. Resolves null if the move is cancelled or not
+   * allowed.
+   */
+  promptForDragScope(event) {
+    return this.fetchMoveChoices(event).then(result => {
+      if (!result) {
+        return null;
+      }
+
+      const calendarScopes = ["this", "all"].filter(scope => result.choices[scope].length > 0);
+      if (calendarScopes.length === 0) {
+        // Something changed since the grid loaded (e.g. the occurrence has begun), so refresh it once
+        // the alert is closed, by which time the caller has reverted the drag.
+        window.Modal.alertModal(result.refusal_html, this.errorModalOptions())
+          .then(() => this.calendar.fullCalendar("refetchEvents"));
+        return null;
+      }
+
+      return this.promptForCalendarScope(event, calendarScopes).then(calendarScope => {
+        if (!calendarScope) {
+          return null;
+        }
+
+        const seriesScopes = result.choices[calendarScope];
+        const asked = calendarScopes.length > 1 || (event.recurring && seriesScopes.length > 1);
+        return this.promptForSeriesScope(event, seriesScopes).then(seriesScope => {
+          if (!seriesScope) {
+            return null;
+          }
+          const scope = {calendarScope, seriesScope};
+          return asked ? scope : this.confirmMove(event, seriesScope).then(ok => (ok ? scope : null));
+        });
+      });
+    });
+  },
+
+  // Resolves {choices, refusal_html} from the server, or null (after telling the user) on failure.
+  fetchMoveChoices(event) {
+    Gather.loadingIndicator.toggle(true);
+    return new Promise(resolve => {
+      $.ajax({
+        url: `/calendars/eventlets/${event.eventletId}/move_choices`,
+        data: {"occurrence_start": event.occurrenceStart},
+        success: resolve,
+        error: () => {
+          window.Modal.alertModal(I18n.t("calendars.drag.load_error"), this.errorModalOptions());
+          resolve(null);
+        },
+        complete: () => Gather.loadingIndicator.toggle(false),
+      });
+    });
+  },
+
+  confirmMove(event, seriesScope) {
+    const key = seriesScope === "occurrence" ? "confirm_occurrence" : "confirm";
+    return window.Modal.confirmModal(I18n.t(`calendars.drag.${key}`, {name: this.escapeHtml(event.title)}));
+  },
+
+  promptForCalendarScope(event, calendarScopes) {
+    if (calendarScopes.length === 1) {
+      return Promise.resolve(calendarScopes[0]);
+    }
+
+    // The dragged calendar leads the list, marked so it's obvious which one "move only on" means.
+    const selected = I18n.t("calendars.drag.calendar.selected");
+    const dragged = `<li><strong>${this.escapeHtml(event.calendarName)}</strong> ${selected}</li>`;
+    const others = (event.otherCalendarNames || []).map(name => `<li>${this.escapeHtml(name)}</li>`);
+    const content = I18n.t("calendars.drag.calendar.content", {name: this.escapeHtml(event.title)});
+
+    return window.Modal.choiceModal(
+      `<p>${content}</p><ul>${dragged}${others.join("")}</ul>`,
+      [
+        {label: I18n.t("calendars.drag.calendar.this", {calendar: event.calendarName}), value: "this"},
+        {label: I18n.t("calendars.drag.calendar.all"), value: "all", variant: "primary"},
+      ],
+      {title: I18n.t("calendars.drag.calendar.title")}
+    );
+  },
+
+  // Asks only when there's a real choice. The last (broadest) option is the primary one.
+  promptForSeriesScope(event, seriesScopes) {
+    if (!event.recurring || seriesScopes.length === 1) {
+      return Promise.resolve(seriesScopes[0]);
+    }
+
+    const content = I18n.t("calendars.drag.series.content", {name: this.escapeHtml(event.title)});
+    return window.Modal.choiceModal(
+      `<p>${content}</p>`,
+      seriesScopes.map((scope, i) => ({
+        label: I18n.t(`calendars.drag.series.${scope}`),
+        value: scope,
+        variant: i === seriesScopes.length - 1 ? "primary" : "default",
+      })),
+      {title: I18n.t("calendars.drag.series.title")}
+    );
+  },
+
+  errorModalOptions() {
+    return {title: I18n.t("calendars.drag.error_title"), label: I18n.t("common.close")};
+  },
+
+  // Modal content is interpolated as HTML, so event and calendar names have to be escaped.
+  escapeHtml(text) {
+    return $("<div>").text(text).html();
+  },
+
+  submitDrag(event, times, scope, revertFunc) {
+    $.ajax({
+      // eventletId rather than id: a recurring occurrence's row is transient and has no id of its
+      // own, so it carries the id of the persisted base eventlet it was built from. The offsets are
+      // worked out server-side from these absolute times.
+      url: `/calendars/eventlets/${event.eventletId}`,
+      method: "POST",
+      data: {
+        _method: "PATCH",
+        calendars_eventlet: {
+          starts_at: times.start.format(),
+          ends_at: times.end.format(),
+          occurrence_start: event.occurrenceStart,
+          calendar_scope: scope.calendarScope,
+          series_scope: scope.seriesScope,
+        },
+      },
+      success: () => {
+        // An occurrence override can move an event out of, or into, the current view, so refetch
+        // rather than trusting the optimistic position FullCalendar already rendered.
+        this.calendar.fullCalendar("refetchEvents");
+      },
+      error: (xhr) => {
+        revertFunc();
+        // The server may have refused because the event changed since the grid loaded (e.g. the
+        // series started, or the occurrence was deleted elsewhere), so start the next try from fresh data.
+        this.calendar.fullCalendar("refetchEvents");
+        window.Modal.alertModal(xhr.responseText, this.errorModalOptions());
+      },
+    });
   },
 
   create() {
@@ -567,12 +1380,93 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
       .intervalStart.format(Gather.TIME_FORMATS.compactDate);
   },
 
-  hasEventInInterval(start, end) {
-    const matches = this.calendar.fullCalendar(
-      "clientEvents",
-      (event) => event.start.isBefore(end) && event.end.isAfter(start)
-    );
-    return matches.length > 0;
+  // Navigate to the given URL-style view param and date string, falling back to the
+  // current view/initial date if either is absent (e.g. when restoring a history entry
+  // that pre-dates any URL params being set).
+  navigateTo(urlViewParam, dateParam) {
+    const viewType = this.URL_PARAMS_TO_VIEW_TYPES[urlViewParam] ||
+      this.calendar.fullCalendar("getView").name;
+    const date = dateParam || this.viewParams.date;
+    this.calendar.fullCalendar("changeView", viewType, date);
+  },
+
+  resetRenderedEventCounts() {
+    this._renderedEventDateKeys = {};
+    this._renderedEventRangesByKey = {};
+  },
+
+  eventCountLabel(eventCount) {
+    return I18n.t("calendars.grid.event_count", {count: eventCount});
+  },
+
+  trackRenderedEventCount(event, el) {
+    const $el = $(el);
+    if ($el.hasClass("fc-bg-event")) {
+      return;
+    }
+
+    const eventKey = this.eventCountKey(event);
+    const start = event.start.clone();
+    const end = this.eventEnd(event);
+    const visibleRange = this.visibleDateRange();
+    if (!visibleRange) {
+      return;
+    }
+
+    this._renderedEventRangesByKey[eventKey] = {start, end};
+
+    let date = (start.isAfter(visibleRange.start) ? start : visibleRange.start)
+      .clone()
+      .startOf("day");
+    const lastDate = (end.isBefore(visibleRange.end) ? end : visibleRange.end)
+      .clone()
+      .subtract(1, "second")
+      .startOf("day");
+    while (!date.isAfter(lastDate, "day")) {
+      const dateString = date.format("YYYY-MM-DD");
+      this._renderedEventDateKeys[dateString] = this._renderedEventDateKeys[dateString] || {};
+      this._renderedEventDateKeys[dateString][eventKey] = true;
+      date.add(1, "day");
+    }
+  },
+
+  eventCountKey(event) {
+    const id = event.id || event.eventId || event._id || event.title;
+    return `${id}-${event.start.format()}-${this.eventEnd(event).format()}`;
+  },
+
+  visibleDateRange() {
+    const view = this.calendar.fullCalendar("getView");
+    const start = view && (view.start || view.intervalStart);
+    const end = view && (view.end || view.intervalEnd);
+
+    if (!start || !end) {
+      return null;
+    }
+
+    return {
+      start: start.clone(),
+      end: end.clone(),
+    };
+  },
+
+  eventEnd(event) {
+    if (event.end) {
+      return event.end;
+    }
+
+    return event.start.clone().add(1, event.allDay ? "day" : "second");
+  },
+
+  renderedEventCountInInterval(start, end) {
+    return Object.values(this._renderedEventRangesByKey)
+      .filter((range) => range.start.isBefore(end) && range.end.isAfter(start))
+      .length;
+  },
+
+  renderedEventCountOnDay(date) {
+    const dateString = date.format("YYYY-MM-DD");
+    return Object.keys(this._renderedEventDateKeys[dateString] || {}).length;
   },
 
   applyFixedTimes(start, end) {
@@ -628,7 +1522,11 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
     this.viewParams.earlyMorning = !this.viewParams.earlyMorning;
     this.showAppropriateEarlyLink();
     this.calendar.fullCalendar("option", "minTime", this.minTime());
-    this.saveViewParams();
+    // Explicitly rebuild a11y slots and notify the link manager; minTime changes don't
+    // always re-fire eventAfterAllRender since FullCalendar may skip that pipeline.
+    this.applyFullCalendarGridA11y();
+    setTimeout(() => this.applyFullCalendarGridA11y(), 0);
+    this.$el.trigger("viewRender");
   },
 
   showAppropriateEarlyLink() {
@@ -640,27 +1538,5 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
     });
   },
 
-  expireCurrentDateSettingAfterOneHour(settings) {
-    if (settings.savedAt) {
-      const settingsAge = moment
-        .duration(moment().diff(moment(settings.savedAt)))
-        .asSeconds();
-      if (settingsAge > 3600) {
-        delete settings.date;
-      }
-    }
-  },
-
-  saveViewParams() {
-    $.ajax({
-      url: "/calendars/events/",
-      method: "GET",
-      data: {
-        update_lenses: 1,
-        view: this.viewType(),
-        date: this.date(),
-        early: this.viewParams.earlyMorning,
-      },
-    });
-  },
 });
+

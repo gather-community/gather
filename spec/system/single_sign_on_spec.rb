@@ -116,6 +116,10 @@ describe "single sign on", js: true do
         before do
           visit("/users/1235")
           click_link("Impersonate")
+          # Wait for the impersonation redirect chain to fully settle before proceeding.
+          # Without this, the Turbo POST navigation may still be in flight when visit()
+          # is called below, causing the browser to end up at /users instead of the SSO redirect URL.
+          expect(page).to have_content("You are impersonating")
         end
 
         it_behaves_like "redirects appropriately"

@@ -90,6 +90,8 @@ bundle exec thin start -p "$PORT" --ssl --ssl-key-file config/ssl/gatherdev.org.
 
 The port is `url.port` in `config/settings.local.yml` (3000 if unset). Each dev env on the machine has its own, and the app builds its URLs from it, so always use that port — never assume 3000.
 
+**Run only one dev server per dev env.** Before starting one, check whether a server is already running on that port (`pgrep -af thin`). If one is, use it. Don't start a second server on another port, and don't start one from a git worktree. A worktree has no `storage/` directory, because `storage/` is gitignored. It shares the database, though, so pages render normally while every photo and attachment fails with `ActiveStorage::FileNotFoundError`. That looks like broken images, and it confuses whoever is browsing the app. If you need to see a branch in the browser, check it out in the main checkout and use the existing server.
+
 Screenshots use the Selenium container (`gather-selenium`) via a Ruby script with `selenium-webdriver`. The container shares `vibrant_borg`'s network namespace; reach it from this container at `172.18.0.3:4444`. The app is at `172.18.0.2`. Use `--host-resolver-rules` to make Chrome resolve both apex and wildcard subdomains to `172.18.0.2`.
 
 ```ruby

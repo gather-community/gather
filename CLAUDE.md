@@ -95,14 +95,17 @@ Screenshots use the Selenium container (`gather-selenium`) via a Ruby script wit
 ```ruby
 # tmp/screenshot.rb — adapt as needed
 require 'selenium-webdriver'
+require 'yaml'
 
 SELENIUM_URL  = 'http://172.18.0.3:4444'
 APP_IP        = '172.18.0.2'
 PORT          = 3000                               # url.port from config/settings.local.yml
 APEX_URL      = "https://gatherdev.org:#{PORT}"
 COMMUNITY_URL = "https://foo.gatherdev.org:#{PORT}" # adjust community slug
-EMAIL         = 'user@example.com'                 # set a known password first (see below)
-PASSWORD      = 'testtest1'
+# Sign in as the user's own dev account (see "Sign-in credentials" below).
+DEV_USER      = YAML.safe_load(File.read('config/settings.local.yml')).fetch('dev_user')
+EMAIL         = DEV_USER.fetch('email')
+PASSWORD      = DEV_USER.fetch('password')
 
 options = Selenium::WebDriver::Chrome::Options.new
 options.add_argument('--ignore-certificate-errors')
@@ -136,7 +139,24 @@ ensure
 end
 ```
 
-To set a known password for any user before running the script:
+#### Sign-in credentials for scripts
+
+Scripts that drive the app sign in with the credentials stored in `config/settings.local.yml`
+under `dev_user` (documented in `config/templates/settings.local.yml`):
+
+```yaml
+dev_user:
+  email: someone@example.com
+  password: "..."
+```
+
+This is the user's own dev account, usually a super admin. **Never overwrite this account's
+password** — that locks the user out of their own dev environment. If `dev_user` is missing from
+the local config, ask the user for their credentials and add the entry; don't reset their
+password to work around it.
+
+When a screenshot needs a different role (a regular member, a biller, etc.), pick a
+**sample-data user** — never the `dev_user` account — and set a known password on it:
 
 ```ruby
 # bundle exec rails runner this snippet

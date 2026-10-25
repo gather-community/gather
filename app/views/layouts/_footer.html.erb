@@ -29,6 +29,17 @@
       <% end %>
     <% end %>
 
+    <% if Gather::Locales::MACHINE_TRANSLATED.include?(I18n.locale) %>
+      <p class="machine-translation-notice">
+        <% if Settings.translation_help_url.present? %>
+          <%= t(".machine_translated_with_link_html",
+                link: link_to(t(".help_translate"), Settings.translation_help_url)) %>
+        <% else %>
+          <%= t(".machine_translated") %>
+        <% end %>
+      </p>
+    <% end %>
+
     <%# For test purposes only. Security risk otherwise. %>
     <% if Rails.env.test? %>
       <div id="url"><%= request.url %></div>

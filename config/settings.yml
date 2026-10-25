@@ -98,3 +98,6 @@ telnyx:
 logtail:
   source_token:
   ingesting_host:
+# Where the "translated automatically" notice sends people who want to help improve a translation.
+# Blank shows the notice without a link.
+translation_help_url: ""

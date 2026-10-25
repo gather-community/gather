@@ -57,7 +57,6 @@ en:
         org_user_id: "e.g. yourname@yourdomain.com"
       user:
         birthday_str: "e.g. Feb 29 1981 (year optional)"
-      people_memorial:
       people_memorial_message:
         body: "Add your message"
       household:

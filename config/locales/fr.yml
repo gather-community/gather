@@ -1,9 +1,0 @@
-fr:
-  csv:
-    headers:
-      user:
-        id: "ID"
-        first_name: "Prénom"
-      meals/meal:
-        served_at: "Date/Heure"
-        calendars: "Ressources"

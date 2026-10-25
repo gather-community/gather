@@ -122,7 +122,7 @@ fr:
         formula: "Formule" # Machine translated, remove this comment when verified
         capacity: "Capacité" # Machine translated, remove this comment when verified
         title: "Titre" # Machine translated, remove this comment when verified
-        entrees: "Plats" # Machine translated, remove this comment when verified
+        entrees: "Plats principaux" # Machine translated, remove this comment when verified
         side: "Accompagnement" # Machine translated, remove this comment when verified
         kids: "Enfants" # Machine translated, remove this comment when verified
         dessert: "Dessert" # Machine translated, remove this comment when verified

@@ -39,7 +39,12 @@
       letter-spacing: 2px;
       background-color: #fff;
       margin: -28px auto 10px auto;
-      width: 90px;
+      // Sized to the word, so longer labels in other languages still sit in a gap in the line.
+      width: fit-content;
+      max-width: 75%;
+      // letter-spacing also adds space after the last letter, so the left side gets that much more to
+      // keep the word centered.
+      padding: 0 12px 0 14px;
       text-transform: uppercase;
       color: $text-muted;
       font-family: $font-family-sans-serif;
@@ -49,6 +54,12 @@
 
     .smaller {
       font-size: 80%;
+    }
+
+    // The section labels sit on the rule above them. Smaller text needs to sit higher for the rule to
+    // run through the middle of the letters.
+    .menu-label.smaller {
+      margin-top: -32px;
     }
 
     hr {
@@ -65,7 +76,7 @@
       border: none;
       padding: 0;
 
-      .menu-label {
+      .menu-label, .menu-label.smaller {
         margin-top: 10px;
       }
 

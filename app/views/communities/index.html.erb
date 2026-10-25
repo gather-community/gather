@@ -4,6 +4,9 @@
   <%- if policy(Communities::Signup.new).index? -%>
     <%- concat(link_to(icon_tag("inbox") << " " << t(".view_signups"), communities_signups_path, class: "btn btn-default")) -%>
   <%- end -%>
+  <%- if policy(:mail_migration).index? -%>
+    <%- concat(link_to(icon_tag("envelope") << " " << t(".mail_migration"), mail_migration_path, class: "btn btn-default")) -%>
+  <%- end -%>
 <% end %>
 
 <table>

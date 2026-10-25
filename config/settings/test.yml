@@ -18,3 +18,7 @@ active_record_encryption:
 email:
   from: Gather <noreply@gatherdev.org>
   webmaster: someone@example.com
+
+# Fake key so specs exercise the configured path; HTTP is stubbed with WebMock.
+smtp2go:
+  api_key: api-testkey00000000000000000000000

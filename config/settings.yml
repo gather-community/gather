@@ -91,6 +91,15 @@ messaging:
 telnyx:
   api_key:
 
+# SMTP2GO API key, for the mail domain migration page (reads sender domain verification status
+# from the SMTP2GO API). Deliberately blank here; set per environment (config/settings.local.yml
+# in dev, SETTINGS__SMTP2GO__API_KEY in production). A fake value is set in settings/test.yml so
+# specs exercise the configured path (HTTP is stubbed with WebMock).
+smtp2go:
+  # No trailing slash. Includes the API version. Overridable so dev can point at a local stub.
+  base_url: https://api.smtp2go.com/v3
+  api_key:
+
 # Better Stack (Logtail) source token and ingesting host for shipping production logs. Both are
 # shown on the source's page in Better Stack. Deliberately blank here; set
 # SETTINGS__LOGTAIL__SOURCE_TOKEN and SETTINGS__LOGTAIL__INGESTING_HOST in production. When the

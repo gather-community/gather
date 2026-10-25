@@ -29,6 +29,9 @@ class Domain < ApplicationRecord
   # Matches groups that are in AT LEAST ALL the same communities as the passed array.
   scope :in_communities, ->(cmtys) { cmtys.inject(all) { |rel, c| rel.in_community(c) } }
   scope :by_name, -> { alpha_order(:name) }
+  # Domains communities own themselves, as opposed to Gather-managed <slug>.gather.coop domains
+  # (whose DNS lives in Gather's own zone).
+  scope :custom, -> { where.not("name LIKE ?", "%.gather.coop") }
 
   validates :name, presence: true, format: {with: DOMAIN_REGEX}
   validate :name_unique_in_system

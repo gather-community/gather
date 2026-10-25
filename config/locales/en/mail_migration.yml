@@ -1,0 +1,45 @@
+en:
+  mail_migration:
+    index:
+      title: "Mail Domain Migration"
+      intro: >-
+        This page tracks the migration of custom mail domains to the new SMTP host. For each
+        domain it shows whether the MX and SPF records have been updated to the new values,
+        whether SMTP2GO has validated the domain for sending, and whether the SMTP2GO validation
+        DNS records are in place. DNS and SMTP2GO are checked live on each page load.
+      none_found: "No custom domains found."
+      summary:
+        one: "%{migrated} of 1 domain fully migrated."
+        other: "%{migrated} of %{count} domains fully migrated."
+      smtp2go_errors:
+        not_configured: >-
+          The SMTP2GO API key is not configured, so sending status and validation can't be shown.
+          Set smtp2go.api_key in the settings.
+        request_failed: >-
+          The SMTP2GO API request failed, so sending status and validation can't be shown.
+          The error has been reported.
+      headers:
+        domain: "Domain"
+        communities: "Communities"
+        sending_via: "Sending Via"
+        mx: "MX Records"
+        spf: "SPF Record"
+        smtp2go: "SMTP2GO Validation"
+        validation_records: "Validation DNS Records"
+      updated: "Updated"
+      not_updated: "Not Updated"
+      no_validation_records: "—"
+      record_points_to: "%{host} → %{target}"
+      sending_via:
+        smtp2go: "SMTP2GO"
+        legacy: "Previous Host"
+        unknown: "Unknown"
+      smtp2go_statuses:
+        verified: "Verified"
+        pending: "Pending"
+        not_added: "Not Added"
+        unknown: "Unknown"
+      record_kinds:
+        dkim: "DKIM"
+        return_path: "Return Path"
+        tracking: "Tracking"

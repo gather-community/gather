@@ -66,7 +66,7 @@ class TransactionsController < ApplicationController
                    else
                      transactions.in_community(current_community)
                    end
-    transactions.order(:incurred_on, "households.name", :code, :description)
+    transactions.order(:incurred_on).alpha_order(households: :name).order(:code).alpha_order(:description)
   end
 
   def handle_confirmation_flow

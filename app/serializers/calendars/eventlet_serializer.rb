@@ -76,8 +76,9 @@ module Calendars
     # user can see exactly what else they're about to move.
     def other_calendar_names
       return [] unless series_event&.persisted?
-      series_event.eventlets.reject { |e| e.calendar_id == object.calendar_id }
-        .map(&:calendar_name).sort
+      # Usually one name or none, which Collation sorts without a query.
+      Gather::Collation.sort(series_event.eventlets.reject { |e| e.calendar_id == object.calendar_id }
+        .map(&:calendar_name))
     end
 
     def class_name

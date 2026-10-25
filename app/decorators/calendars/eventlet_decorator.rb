@@ -99,7 +99,8 @@ module Calendars
     # Every choice is styled as a delete, even when a series question follows, since each is labeled
     # "Delete…".
     def calendar_delete_prompt(calendar_scopes)
-      others = series_event.eventlets.reject { |e| e.calendar_id == calendar.id }.map(&:calendar_name).sort
+      others = series_event.eventlets.reject { |e| e.calendar_id == calendar.id }.map(&:calendar_name)
+      others = Gather::Collation.sort(others)
       items = [h.content_tag(:li, t("calendars.eventlet_deletion.prompts.calendar.selected_html",
         name: h.content_tag(:strong, calendar.name)))] +
         others.map { |name| h.content_tag(:li, name) }

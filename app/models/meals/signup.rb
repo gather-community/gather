@@ -31,7 +31,7 @@ module Meals
     scope :by_one_cmty_first, lambda { |c|
       joins(household: :community).order(Community.arel_table[:id].not_eq(c.id))
     }
-    scope :sorted, -> { joins(household: :community).order("communities.abbrv, households.name") }
+    scope :sorted, -> { joins(household: :community).alpha_order(communities: :abbrv, households: :name) }
 
     normalize_attributes :comments
 

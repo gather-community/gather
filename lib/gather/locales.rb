@@ -55,6 +55,14 @@ module Gather
       entries.sort_by { |_, quality, index| [-quality, index] }.map(&:first)
     end
 
+    # The Postgres ICU collation that sorts text as people expect in `locale`. The rules really differ:
+    # Swedish, Finnish and Norwegian put å, ä and ö after z, while German sorts ä with a. English uses the
+    # root collation, which sorts accented letters with their base letters ("Émile" with the Es).
+    # See Gather::Collation.
+    def self.collation(locale = I18n.locale)
+      (locale.to_sym == :en) ? "und-x-icu" : "#{locale}-x-icu"
+    end
+
     def self.preview?(user)
       user.present? && FeatureFlag.lookup(FEATURE_FLAG).on?(user)
     end

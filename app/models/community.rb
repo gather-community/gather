@@ -69,7 +69,7 @@ class Community < ApplicationRecord
     dependent: :destroy
   has_many :restrictions, class_name: "Meals::Restriction", inverse_of: :community, dependent: :destroy
 
-  scope :by_name, -> { order(:name) }
+  scope :by_name, -> { alpha_order(:name) }
   scope :by_one_cmty_first, ->(c) { order(arel_table[:id].not_eq(c.id)) }
   scope :by_name_with_first, ->(c) { by_one_cmty_first(c).by_name }
 

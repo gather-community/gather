@@ -32,7 +32,7 @@ module GDrive
         @items_by_kind[:drive] = []
         @items_by_kind[:folder] = []
         @items_by_kind[:file] = []
-        @config.items.includes(:item_groups).order(:name).each do |item|
+        @config.items.includes(:item_groups).alpha_order(gdrive_items: :name).each do |item|
           @items_by_kind[item.kind.to_sym] << item
         end
       else

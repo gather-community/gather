@@ -26,12 +26,10 @@ en:
       headers:
         domain: "Domain"
         communities: "Communities"
-        sending_via: "Sending Via"
         mx: "MX Records"
         spf: "SPF Record"
         smtp2go: "SMTP2GO Validation"
         validation_records: "Validation DNS Records"
-        last_checked: "Last Checked"
       updated: "Updated"
       not_updated: "Not Updated"
       never_checked: "Never checked"
@@ -39,10 +37,6 @@ en:
       none: "—"
       refresh_row: "Re-check this domain"
       record_points_to: "%{host} → %{target}"
-      sending_via:
-        smtp2go: "SMTP2GO"
-        legacy: "Previous Host"
-        unknown: "Unknown"
       smtp2go_statuses:
         verified: "Verified"
         pending: "Pending"

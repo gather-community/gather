@@ -35,12 +35,11 @@
       <tr>
         <th><%= t(".headers.domain") %></th>
         <th><%= t(".headers.communities") %></th>
-        <th><%= t(".headers.sending_via") %></th>
         <th><%= t(".headers.mx") %></th>
         <th><%= t(".headers.spf") %></th>
         <th><%= t(".headers.smtp2go") %></th>
         <th><%= t(".headers.validation_records") %></th>
-        <th><%= t(".headers.last_checked") %></th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
@@ -49,7 +48,6 @@
           <td><%= status.domain.name %></td>
           <td><%= status.communities.map(&:name).join(", ") %></td>
           <% if status.checked? %>
-            <td><%= t(".sending_via.#{status.sending_via}") %></td>
             <td class="<%= status.mx_ok? ? "text-success" : "text-danger" %>"
                 title="<%= status.mx.map { |pref, host| "#{pref} #{host}" }.join(", ") %>">
               <%= icon_tag(status.mx_ok? ? "check" : "times") %>
@@ -74,14 +72,9 @@
               <% end %>
             </td>
           <% else %>
-            <td colspan="5" class="text-muted"><%= t(".never_checked") %></td>
+            <td colspan="4" class="text-muted"><%= t(".never_checked") %></td>
           <% end %>
           <td>
-            <% if status.checked? %>
-              <%= l(status.checked_at, format: :short) %>
-            <% else %>
-              <%= t(".none") %>
-            <% end %>
             <%= button_to(mail_migration_refresh_path(domain_id: status.domain.id),
                   class: "btn btn-link", form: {style: "display:inline"},
                   title: t(".refresh_row")) do %>

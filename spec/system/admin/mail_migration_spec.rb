@@ -54,12 +54,10 @@ describe "mail migration page" do
     expect(page).not_to have_content(gather_domain.name)
 
     migrated_row = find("tr", text: "done.example.org")
-    expect(migrated_row).to have_content("SMTP2GO")
     expect(migrated_row).to have_content("Updated", count: 2)
     expect(migrated_row).to have_content("Verified")
 
     pending_row = find("tr", text: "notyet.example.org")
-    expect(pending_row).to have_content("Previous Host")
     expect(pending_row).to have_content("Not Updated", count: 2)
     expect(pending_row).to have_content("Pending")
     expect(pending_row).to have_content("DKIM")

@@ -73,7 +73,7 @@ ignore_unused:
   - "cocoon.add_links.*"                  # FormHelper#link_to_add, keyed by association
   - "{community_lens,date_range_lens}.*"  # Lens i18n_key + option names
   # Built from DomainStatus/Report state values in app/views/mail_migration/index.html.erb
-  - "mail_migration.index.{sending_via,smtp2go_statuses,record_kinds}.*"
+  - "mail_migration.index.{smtp2go_statuses,record_kinds}.*"
   - "calendars.{all,community,my}_*"      # system calendar names
   - "calendars/protocol.durations.*"
   - "roles.index.descriptions.*"  # roles/index.html.erb, by role

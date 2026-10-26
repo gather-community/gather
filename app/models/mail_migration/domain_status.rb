@@ -57,17 +57,6 @@ module MailMigration
       checked? ? check.data["smtp2go_status"].to_sym : :unchecked
     end
 
-    # Which SMTP host the domain's outbound mail goes through. Full SMTP2GO validation is treated
-    # as the switchover point: once a domain is verified there, its mail is relayed via SMTP2GO.
-    def sending_via
-      case smtp2go_status
-      when :verified then :smtp2go
-      when :unknown then :unknown
-      when :unchecked then :unchecked
-      else :legacy
-      end
-    end
-
     def migrated?
       mx_ok? && spf_ok? && smtp2go_status == :verified
     end

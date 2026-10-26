@@ -69,28 +69,9 @@ describe MailMigration::DomainStatus do
     end
   end
 
-  describe "#smtp2go_status and #sending_via" do
-    context "when verified" do
-      it "sends via smtp2go" do
-        expect(status.smtp2go_status).to eq(:verified)
-        expect(status.sending_via).to eq(:smtp2go)
-      end
-    end
-
-    context "when pending" do
-      let(:smtp2go_status) { "pending" }
-
-      it "sends via legacy" do
-        expect(status.sending_via).to eq(:legacy)
-      end
-    end
-
-    context "when not added" do
-      let(:smtp2go_status) { "not_added" }
-
-      it "sends via legacy" do
-        expect(status.sending_via).to eq(:legacy)
-      end
+  describe "#smtp2go_status" do
+    it "reads the stored status as a symbol" do
+      expect(status.smtp2go_status).to eq(:verified)
     end
 
     context "when the SMTP2GO API couldn't be queried at check time" do
@@ -98,7 +79,6 @@ describe MailMigration::DomainStatus do
 
       it "is unknown" do
         expect(status.smtp2go_status).to eq(:unknown)
-        expect(status.sending_via).to eq(:unknown)
       end
     end
   end
@@ -153,7 +133,6 @@ describe MailMigration::DomainStatus do
       expect(status).not_to be_mx_ok
       expect(status).not_to be_migrated
       expect(status.smtp2go_status).to eq(:unchecked)
-      expect(status.sending_via).to eq(:unchecked)
       expect(status.validation_records).to eq([])
     end
   end

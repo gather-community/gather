@@ -19,8 +19,9 @@ module DomainMail
   #   spf                — the domain's SPF record string, or nil
   #   smtp2go_status     — "verified" / "pending" / "not_added", or "unknown" when the SMTP2GO
   #                        API couldn't be queried at check time
-  #   validation_records — [{kind:, host:, target:, verified:, in_dns:}, ...] for the CNAMEs
-  #                        SMTP2GO requires (empty unless the domain is on the SMTP2GO account)
+  #   validation_records — [{kind:, host:, target:, actual:, verified:, in_dns:}, ...] for the
+  #                        CNAMEs SMTP2GO requires (empty unless the domain is on the SMTP2GO
+  #                        account); actual is the CNAME value we found in DNS, if any
   class Check < ApplicationRecord
     acts_as_tenant :cluster
 

@@ -38,14 +38,20 @@
         <th><%= t(".headers.mx") %></th>
         <th><%= t(".headers.spf") %></th>
         <th><%= t(".headers.smtp2go") %></th>
+        <th><%= t(".headers.lists") %></th>
         <th></th>
       </tr>
     </thead>
     <tbody>
       <% @report.statuses.each do |status| %>
         <tr class="<%= status.all_correct? ? "success" : "" %>">
-          <td><%= status.domain.name %></td>
-          <td><%= status.communities.map(&:name).join(", ") %></td>
+          <td><%= link_to(status.domain.name, admin_domain_path(status.domain)) %></td>
+          <td title="<%= status.communities.map(&:name).join(", ") %>">
+            <%= status.communities.first&.name %>
+            <% if status.communities.size > 1 %>
+              <span class="text-muted">+<%= status.communities.size - 1 %></span>
+            <% end %>
+          </td>
           <% if status.checked? %>
             <td class="<%= status.mx_ok? ? "text-success" : "text-danger" %>"
                 title="<%= status.mx.map { |pref, host| "#{pref} #{host}" }.join(", ") %>">
@@ -74,6 +80,13 @@
           <% else %>
             <td colspan="3" class="text-muted"><%= t(".never_checked") %></td>
           <% end %>
+          <td>
+            <% if status.domain.group_mailman_lists.any? %>
+              <%= status.domain.group_mailman_lists.size %>
+            <% else %>
+              <span class="text-muted"><%= t(".no_lists") %></span>
+            <% end %>
+          </td>
           <td>
             <%= button_to(refresh_admin_domain_path(status.domain),
                   class: "btn btn-link", form: {style: "display:inline"},

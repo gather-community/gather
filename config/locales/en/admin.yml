@@ -12,6 +12,30 @@ en:
       refresh_one_failed: >-
         Re-checked %{domain}, but the SMTP2GO API request failed, so validation status may be
         stale. The error has been reported.
+      lenses:
+        lists:
+          all: "All Domains"
+          with_lists: "With Mailing Lists"
+          without_lists: "Without Mailing Lists"
+      show:
+        recheck: "Re-check Now"
+        cluster: "Cluster"
+        communities: "Communities"
+        mailman_lists: "Mailing Lists"
+        no_mailman_lists: "None"
+        created_at: "Created"
+        last_checked: "Last Checked"
+        mx_heading: "MX Records"
+        spf_heading: "SPF Record"
+        smtp2go_heading: "SMTP2GO Validation"
+        expected: "Expected"
+        required: "Required"
+        found: "Found"
+        no_records_found: "None found"
+        record: "Record"
+        host: "Host"
+        smtp2go_verified: "Verified by SMTP2GO?"
+        never_checked_notice: "This domain has not been checked yet. Use 'Re-check Now' to run the first check."
       index:
         title: "Domains"
         intro: >-
@@ -32,9 +56,11 @@ en:
           mx: "MX Records"
           spf: "SPF Record"
           smtp2go: "SMTP2GO Validation"
+          lists: "Mailing Lists"
         correct: "Correct"
         incorrect: "Incorrect"
         never_checked: "Never checked"
+        no_lists: "—"
         refresh_all: "Refresh All"
         refresh_row: "Re-check this domain"
         record_titles:

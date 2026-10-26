@@ -12,8 +12,26 @@ module Admin
 
     def index
       authorize(%i[admin domain])
-      domains = policy_scope([:admin, Domain]).custom.by_name.includes(:communities, :mail_check)
+      prepare_lenses(:"admin/lists")
+      domains = policy_scope([:admin, Domain]).custom.by_name
+        .includes(:communities, :mail_check, :group_mailman_lists)
+      if lenses[:lists].active?
+        with_list_ids = Groups::Mailman::List.select(:domain_id)
+        domains = if lenses[:lists].with_lists?
+          domains.where(id: with_list_ids)
+        else
+          domains.where.not(id: with_list_ids)
+        end
+      end
       @report = DomainMail::Report.new(domains: domains)
+      @smtp2go_configured = Smtp2go::Client.new.configured?
+    end
+
+    def show
+      authorize(%i[admin domain])
+      @domain = policy_scope([:admin, Domain]).custom
+        .includes(:communities, :group_mailman_lists).find(params[:id])
+      @status = DomainMail::Status.new(domain: @domain)
       @smtp2go_configured = Smtp2go::Client.new.configured?
     end
 
@@ -26,7 +44,7 @@ module Admin
       else
         refresh_all
       end
-      redirect_to(admin_domains_path)
+      redirect_back(fallback_location: admin_domains_path)
     end
 
     private

@@ -86,13 +86,14 @@ describe DomainMail::Status do
   describe "#validation_records" do
     let(:validation_records) do
       [{"kind" => "dkim", "host" => "s1._domainkey.example.com", "target" => "dkim.smtp2go.net",
-        "verified" => true, "in_dns" => false}]
+        "actual" => "something-else.example.net", "verified" => true, "in_dns" => false}]
     end
 
     it "builds structs with symbol kinds" do
       record = status.validation_records[0]
       expect(record.kind).to eq(:dkim)
       expect(record.host).to eq("s1._domainkey.example.com")
+      expect(record.actual).to eq("something-else.example.net")
       expect(record.verified).to be(true)
       expect(record.in_dns).to be(false)
     end

@@ -393,7 +393,7 @@ Rails.application.routes.draw do
     patch "settings/:type", to: "settings#update"
 
     # Operator dashboard for domains (apex domain; spans all clusters).
-    resources :domains, only: :index do
+    resources :domains, only: %i[index show] do
       post :refresh, on: :collection
       post :refresh, on: :member
     end

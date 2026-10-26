@@ -34,7 +34,7 @@ describe DomainMail::Checker do
       expect(check.data["smtp2go_status"]).to eq("verified")
       expect(check.data["validation_records"]).to eq([{
         "kind" => "dkim", "host" => "s1._domainkey.example.com", "target" => "dkim.smtp2go.net",
-        "verified" => true, "in_dns" => false
+        "actual" => nil, "verified" => true, "in_dns" => false
       }])
     end
 
@@ -49,7 +49,9 @@ describe DomainMail::Checker do
       allow(dns_checker).to receive(:cname_target)
         .with("s1._domainkey.example.com").and_return("dkim.smtp2go.net")
       checker.run
-      expect(domain.reload.mail_check.data["validation_records"][0]["in_dns"]).to be(true)
+      record = domain.reload.mail_check.data["validation_records"][0]
+      expect(record["in_dns"]).to be(true)
+      expect(record["actual"]).to eq("dkim.smtp2go.net")
     end
 
     context "with several domains" do

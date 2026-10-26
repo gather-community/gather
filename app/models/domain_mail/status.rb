@@ -15,7 +15,8 @@ module DomainMail
     REQUIRED_SPF_INCLUDE = "include:_spf.gather.coop"
 
     # One SMTP2GO validation record plus whether we could see it in DNS at check time.
-    ValidationRecord = Struct.new(:kind, :host, :target, :verified, :in_dns, keyword_init: true) do
+    ValidationRecord = Struct.new(:kind, :host, :target, :actual, :verified, :in_dns,
+      keyword_init: true) do
       # :verified — SMTP2GO has verified the record.
       # :in_dns — we found it in DNS, but SMTP2GO's periodic verification hasn't caught up yet.
       # :missing — not in DNS.
@@ -78,7 +79,8 @@ module DomainMail
       return [] unless checked?
       check.data["validation_records"].map do |record|
         ValidationRecord.new(kind: record["kind"].to_sym, host: record["host"],
-          target: record["target"], verified: record["verified"], in_dns: record["in_dns"])
+          target: record["target"], actual: record["actual"], verified: record["verified"],
+          in_dns: record["in_dns"])
       end
     end
   end

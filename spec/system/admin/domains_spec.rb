@@ -4,7 +4,10 @@ require "rails_helper"
 
 describe "admin domains dashboard" do
   let!(:actor) { create(:super_admin) }
-  let!(:migrated_domain) { create(:domain, name: "done.example.org") }
+  let!(:communityB) { create(:community, name: "Community B") }
+  let!(:migrated_domain) do
+    create(:domain, name: "done.example.org", communities: [Defaults.community, communityB])
+  end
   let!(:pending_domain) { create(:domain, name: "notyet.example.org") }
   let!(:unchecked_domain) { create(:domain, name: "fresh.example.org") }
   let!(:gather_domain) { create(:domain, name: "#{Defaults.community.slug}.gather.coop") }
@@ -56,6 +59,9 @@ describe "admin domains dashboard" do
     migrated_row = find("tr", text: "done.example.org")
     expect(migrated_row).to have_content("Correct", count: 2)
     expect(migrated_row).to have_content("DKIM")
+    # Only the first community shows, with a +N for the rest.
+    expect(migrated_row).to have_content("+1")
+    expect(migrated_row).not_to have_content("Community B")
 
     pending_row = find("tr", text: "notyet.example.org")
     expect(pending_row).to have_content("Incorrect", count: 2)
@@ -73,6 +79,45 @@ describe "admin domains dashboard" do
     other_row = find("tr", text: "othercluster.example.org")
     expect(other_row).to have_content("Other Community")
     expect(other_row).to have_content("Not Added")
+  end
+
+  let(:mailman_list) { create(:group_mailman_list, domain: migrated_domain) }
+
+  scenario "show page" do
+    list = mailman_list
+
+    visit(admin_domains_path)
+    click_link("done.example.org")
+
+    expect(page).to have_content("Community B")
+    expect(page).to have_content(list.fqdn_listname)
+    expect(page).to have_content("10 mail.gather.coop")
+    expect(page).to have_content("v=spf1 include:_spf.gather.coop ~all")
+    expect(page).to have_content("s1._domainkey.done.example.org")
+    expect(page).to have_content("dkim.smtp2go.net")
+
+    # Re-checking from the show page returns to it.
+    checker = instance_double(DomainMail::Checker, run: nil, smtp2go_error: nil)
+    allow(DomainMail::Checker).to receive(:new).and_return(checker)
+    click_button("Re-check Now")
+    expect(page).to have_content("Re-checked done.example.org.")
+    expect(page).to have_content("MX Records")
+  end
+
+  scenario "mailing lists column and lens", js: true do
+    mailman_list
+
+    visit(admin_domains_path)
+    expect(find("tr", text: "done.example.org")).to have_content("1")
+    expect(page).to have_content("notyet.example.org")
+
+    select_lens(:lists, "With Mailing Lists")
+    expect(page).to have_content("done.example.org")
+    expect(page).not_to have_content("notyet.example.org")
+
+    select_lens(:lists, "Without Mailing Lists")
+    expect(page).not_to have_content("done.example.org")
+    expect(page).to have_content("notyet.example.org")
   end
 
   scenario "refresh all" do

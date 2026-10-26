@@ -53,12 +53,14 @@ module DomainMail
     def validation_records(smtp2go_domain)
       return [] if smtp2go_domain.nil?
       smtp2go_domain.records.map do |record|
+        actual = @dns_checker.cname_target(record.host)
         {
           "kind" => record.kind.to_s,
           "host" => record.host,
           "target" => record.target,
+          "actual" => actual,
           "verified" => record.verified,
-          "in_dns" => @dns_checker.cname_target(record.host) == record.target&.downcase
+          "in_dns" => actual == record.target&.downcase
         }
       end
     end

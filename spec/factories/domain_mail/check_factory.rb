@@ -23,7 +23,8 @@ FactoryBot.define do
         "smtp2go_status" => "verified",
         "validation_records" => [
           {"kind" => "dkim", "host" => "s1._domainkey.#{domain.name}",
-           "target" => "dkim.smtp2go.net", "verified" => true, "in_dns" => true}
+           "target" => "dkim.smtp2go.net", "actual" => "dkim.smtp2go.net",
+           "verified" => true, "in_dns" => true}
         ]
       }
     end

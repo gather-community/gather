@@ -13,6 +13,10 @@ module Admin
       active_super_admin?
     end
 
+    def show?
+      active_super_admin?
+    end
+
     def refresh?
       active_super_admin?
     end

@@ -27,7 +27,10 @@ en:
         last_checked: "Last Checked"
         mx_heading: "MX Records"
         smtp2go_heading: "SMTP2GO Records"
-        spf_heading: "Apex SPF Record"
+        spf_heading: "SPF Record"
+        spf_rule: >-
+          Correct when the domain's SPF record (its TXT record starting with v=spf1) contains the
+          required include shown below. Other mechanisms may also be present.
         expected: "Expected"
         required: "Required"
         found: "Found"
@@ -39,8 +42,8 @@ en:
       index:
         title: "Domains"
         intro: >-
-          This page shows the status of each custom domain's mail setup: whether the MX and apex
-          SPF records are correct and whether the SMTP2GO validation records are in place.
+          This page shows the status of each custom domain's mail setup: whether the MX and SPF
+          records are correct and whether the SMTP2GO validation records are in place.
           Results are from the most recent check; use the refresh buttons to re-check.
         none_found: "No custom domains found."
         summary:
@@ -54,7 +57,7 @@ en:
           domain: "Domain"
           communities: "Communities"
           mx: "MX Records"
-          spf: "Apex SPF Record"
+          spf: "SPF Record"
           smtp2go: "SMTP2GO Records"
           lists: "Mailing Lists?"
         never_checked: "Never checked"
@@ -73,5 +76,5 @@ en:
           mx: "MX"
           spf: "SPF"
           dkim: "DKIM"
-          return_path: "Return/SPF"
+          return_path: "Return"
           tracking: "Tracking"

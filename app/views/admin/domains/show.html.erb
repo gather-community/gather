@@ -90,6 +90,7 @@
     <%= icon_tag(@status.spf_ok? ? "check" : "times",
           class: @status.spf_ok? ? "text-success" : "text-danger") %>
   </h2>
+  <p class="hint"><%= t(".spf_rule") %></p>
   <table class="key-value key-value-wide">
     <tr>
       <td><%= t(".required") %></td>

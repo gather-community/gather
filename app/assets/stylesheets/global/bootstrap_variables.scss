@@ -867,6 +867,10 @@ $breadcrumb-active-color:       $text-muted;
 
 // $code-color:                  #c7254e
 // $code-bg:                     #f9f2f4
+// Inline code reads better as plain monospace: Bootstrap's crimson-on-pink pill treatment makes
+// data (DNS records, settings keys) look like error text.
+$code-color: inherit;
+$code-bg: transparent;
 
 // $kbd-color:                   #fff
 // $kbd-bg:                      #333

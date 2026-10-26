@@ -1,18 +1,12 @@
 .admin--domains {
-  // Bootstrap 3 renders <code> crimson-on-pink, which reads as an error state on a status page,
-  // and its vertical padding stacks once the boxes are inline-block (needed so a long record,
-  // e.g. an SPF string, wraps inside one continuous box instead of fragmenting per line).
-  code {
-    display: inline-block;
-    word-break: break-word;
-    padding: 0 4px;
-    color: inherit;
-    background-color: #f0f0f0;
-  }
-
   ul.spf-lookups {
-    margin: 4px 0 0;
+    margin: 2px 0 0;
     padding-left: 18px;
+
+    ul {
+      margin: 0;
+      padding-left: 18px;
+    }
   }
 
   td.validation .validation-record {

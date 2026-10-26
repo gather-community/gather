@@ -38,7 +38,6 @@
         <th><%= t(".headers.mx") %></th>
         <th><%= t(".headers.spf") %></th>
         <th><%= t(".headers.smtp2go") %></th>
-        <th><%= t(".headers.validation_records") %></th>
         <th></th>
       </tr>
     </thead>
@@ -57,22 +56,23 @@
               <%= icon_tag(status.spf_ok? ? "check" : "times") %>
               <%= status.spf_ok? ? t(".updated") : t(".not_updated") %>
             </td>
-            <td><%= t(".smtp2go_statuses.#{status.smtp2go_status}") %></td>
-            <td>
+            <td class="validation">
               <% if status.validation_records.empty? %>
-                <%= t(".none") %>
+                <%= t(".smtp2go_statuses.#{status.smtp2go_status}") %>
               <% else %>
                 <% status.validation_records.each do |record| %>
-                  <div class="<%= record.in_dns ? "text-success" : "text-danger" %>"
-                       title="<%= t(".record_points_to", host: record.host, target: record.target) %>">
-                    <%= icon_tag(record.in_dns ? "check" : "times") %>
+                  <% icon = {verified: "check", in_dns: "clock-o", missing: "times"}[record.state] %>
+                  <% color = {verified: "text-success", in_dns: "text-warning", missing: "text-danger"}[record.state] %>
+                  <span class="validation-record <%= color %>"
+                        title="<%= t(".record_titles.#{record.state}", host: record.host, target: record.target) %>">
+                    <%= icon_tag(icon) %>
                     <%= t(".record_kinds.#{record.kind}") %>
-                  </div>
+                  </span>
                 <% end %>
               <% end %>
             </td>
           <% else %>
-            <td colspan="4" class="text-muted"><%= t(".never_checked") %></td>
+            <td colspan="3" class="text-muted"><%= t(".never_checked") %></td>
           <% end %>
           <td>
             <%= button_to(mail_migration_refresh_path(domain_id: status.domain.id),

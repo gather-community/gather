@@ -16,7 +16,20 @@ module MailMigration
     REQUIRED_SPF_INCLUDE = "include:_spf.gather.coop"
 
     # One SMTP2GO validation record plus whether we could see it in DNS at check time.
-    ValidationRecord = Struct.new(:kind, :host, :target, :verified, :in_dns, keyword_init: true)
+    ValidationRecord = Struct.new(:kind, :host, :target, :verified, :in_dns, keyword_init: true) do
+      # :verified — SMTP2GO has verified the record.
+      # :in_dns — we found it in DNS, but SMTP2GO's periodic verification hasn't caught up yet.
+      # :missing — not in DNS.
+      def state
+        if verified
+          :verified
+        elsif in_dns
+          :in_dns
+        else
+          :missing
+        end
+      end
+    end
 
     attr_reader :domain, :check
 

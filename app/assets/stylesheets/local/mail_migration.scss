@@ -1,4 +1,9 @@
 .mail-migration {
+  td.validation .validation-record {
+    margin-right: 12px;
+    white-space: nowrap;
+  }
+
   // Highlight fully migrated rows. Bootstrap's tr.success styling only applies to .table,
   // not our table.index.
   table.index tr.success td {

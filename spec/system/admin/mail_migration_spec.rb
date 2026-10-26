@@ -55,13 +55,15 @@ describe "mail migration page" do
 
     migrated_row = find("tr", text: "done.example.org")
     expect(migrated_row).to have_content("Updated", count: 2)
-    expect(migrated_row).to have_content("Verified")
+    expect(migrated_row).to have_content("DKIM")
 
     pending_row = find("tr", text: "notyet.example.org")
     expect(pending_row).to have_content("Not Updated", count: 2)
-    expect(pending_row).to have_content("Pending")
     expect(pending_row).to have_content("DKIM")
-    expect(pending_row).to have_content("Return Path")
+    expect(pending_row).to have_content("Return")
+    # The return path record is in DNS but unverified, so it shows the waiting state.
+    expect(pending_row).to have_css(".validation-record.text-warning", text: "Return")
+    expect(pending_row).to have_css(".validation-record.text-danger", text: "DKIM")
 
     # A domain with no stored check yet.
     fresh_row = find("tr", text: "fresh.example.org")

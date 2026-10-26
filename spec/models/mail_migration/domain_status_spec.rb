@@ -96,6 +96,17 @@ describe MailMigration::DomainStatus do
       expect(record.verified).to be(true)
       expect(record.in_dns).to be(false)
     end
+
+    it "derives the display state from the verified and in_dns flags" do
+      build = lambda do |verified, in_dns|
+        described_class::ValidationRecord.new(kind: :dkim, host: "h", target: "t",
+          verified: verified, in_dns: in_dns)
+      end
+      expect(build.call(true, true).state).to eq(:verified)
+      expect(build.call(true, false).state).to eq(:verified)
+      expect(build.call(false, true).state).to eq(:in_dns)
+      expect(build.call(false, false).state).to eq(:missing)
+    end
   end
 
   describe "#migrated?" do

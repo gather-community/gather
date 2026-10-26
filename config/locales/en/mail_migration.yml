@@ -29,14 +29,15 @@ en:
         mx: "MX Records"
         spf: "SPF Record"
         smtp2go: "SMTP2GO Validation"
-        validation_records: "Validation DNS Records"
       updated: "Updated"
       not_updated: "Not Updated"
       never_checked: "Never checked"
       refresh_all: "Refresh All"
-      none: "—"
       refresh_row: "Re-check this domain"
-      record_points_to: "%{host} → %{target}"
+      record_titles:
+        verified: "%{host} → %{target} — verified by SMTP2GO"
+        in_dns: "%{host} → %{target} — found in DNS, awaiting SMTP2GO verification"
+        missing: "%{host} → %{target} — not found in DNS"
       smtp2go_statuses:
         verified: "Verified"
         pending: "Pending"
@@ -44,5 +45,5 @@ en:
         unknown: "Unknown"
       record_kinds:
         dkim: "DKIM"
-        return_path: "Return Path"
+        return_path: "Return"
         tracking: "Tracking"

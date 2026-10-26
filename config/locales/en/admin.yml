@@ -30,7 +30,11 @@ en:
         spf_heading: "SPF Record"
         spf_rule: >-
           Correct when the domain's SPF record (its TXT record starting with v=spf1) contains the
-          required include shown below. Other mechanisms may also be present.
+          required include shown below and uses at most 10 DNS lookups (the RFC 7208 limit,
+          counted recursively through includes). Other mechanisms may also be present.
+        spf_lookups: "DNS Lookups"
+        spf_lookups_count: "%{count} of %{limit} allowed"
+        spf_lookup_via: "(via %{domain})"
         expected: "Expected"
         required: "Required"
         found: "Found"

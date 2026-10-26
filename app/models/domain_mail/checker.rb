@@ -28,12 +28,18 @@ module DomainMail
 
     def check_data(domain, smtp2go_domains)
       smtp2go_domain = smtp2go_domains&.[](domain.name.downcase)
+      spf = @dns_checker.spf_record(domain.name)
       {
         "mx" => @dns_checker.mx_records(domain.name),
-        "spf" => @dns_checker.spf_record(domain.name),
+        "spf" => spf,
+        "spf_lookup_terms" => spf ? spf_lookup_counter.count_terms(spf) : [],
         "smtp2go_status" => smtp2go_status(smtp2go_domain, available: !smtp2go_domains.nil?),
         "validation_records" => validation_records(smtp2go_domain)
       }
+    end
+
+    def spf_lookup_counter
+      @spf_lookup_counter ||= SpfLookupCounter.new(dns_checker: @dns_checker)
     end
 
     def smtp2go_status(smtp2go_domain, available:)

@@ -10,10 +10,11 @@ describe DomainMail::Status do
   let(:spf) { "v=spf1 include:_spf.gather.coop ~all" }
   let(:smtp2go_status) { "verified" }
   let(:validation_records) { [] }
+  let(:spf_lookup_terms) { [{"term" => "include:_spf.gather.coop", "via" => nil}] }
   let(:check) do
     DomainMail::Check.new(checked_at: Time.current, data: {
-      "mx" => mx, "spf" => spf, "smtp2go_status" => smtp2go_status,
-      "validation_records" => validation_records
+      "mx" => mx, "spf" => spf, "spf_lookup_terms" => spf_lookup_terms,
+      "smtp2go_status" => smtp2go_status, "validation_records" => validation_records
     })
   end
 
@@ -65,6 +66,25 @@ describe DomainMail::Status do
 
       it "is false" do
         expect(status).not_to be_spf_ok
+      end
+    end
+
+    context "with more than the allowed DNS lookups" do
+      let(:spf_lookup_terms) { Array.new(11) { {"term" => "a", "via" => nil} } }
+
+      it "is false even though the include is present" do
+        expect(status.spf_lookups).to eq(11)
+        expect(status).not_to be_spf_lookups_ok
+        expect(status).not_to be_spf_ok
+      end
+    end
+
+    context "with a stored check that predates lookup counting" do
+      let(:spf_lookup_terms) { nil }
+
+      it "treats lookups as ok" do
+        expect(status.spf_lookups).to eq(0)
+        expect(status).to be_spf_ok
       end
     end
   end

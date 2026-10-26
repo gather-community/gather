@@ -17,6 +17,8 @@ module DomainMail
   # by the admin domains dashboard. `data` holds:
   #   mx                 — [[preference, exchange], ...] as found in DNS
   #   spf                — the domain's SPF record string, or nil
+  #   spf_lookup_terms   — the DNS-querying terms the SPF record uses, recursively (see
+  #                        SpfLookupCounter); more than 10 breaks SPF per RFC 7208
   #   smtp2go_status     — "verified" / "pending" / "not_added", or "unknown" when the SMTP2GO
   #                        API couldn't be queried at check time
   #   validation_records — [{kind:, host:, target:, actual:, verified:, in_dns:}, ...] for the

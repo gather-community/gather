@@ -11,7 +11,7 @@ describe DomainMail::Checker do
   let(:domains) { [domain] }
   let(:dns_checker) do
     instance_double(DomainMail::DnsChecker,
-      mx_records: [[10, "mail.gather.coop"]], spf_record: "v=spf1 ~all", cname_target: nil)
+      mx_records: [[10, "mail.gather.coop"]], spf_record: "v=spf1 mx ~all", cname_target: nil)
   end
 
   context "when the client is configured" do
@@ -30,7 +30,8 @@ describe DomainMail::Checker do
       check = domain.reload.mail_check
       expect(check.checked_at).to be_within(1.minute).of(Time.current)
       expect(check.data["mx"]).to eq([[10, "mail.gather.coop"]])
-      expect(check.data["spf"]).to eq("v=spf1 ~all")
+      expect(check.data["spf"]).to eq("v=spf1 mx ~all")
+      expect(check.data["spf_lookup_terms"]).to eq([{"term" => "mx", "via" => nil}])
       expect(check.data["smtp2go_status"]).to eq("verified")
       expect(check.data["validation_records"]).to eq([{
         "kind" => "dkim", "host" => "s1._domainkey.example.com", "target" => "dkim.smtp2go.net",

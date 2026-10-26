@@ -14,6 +14,10 @@ module DomainMail
     # mechanisms (e.g. the community's own mail provider), so only the include is required.
     REQUIRED_SPF_INCLUDE = "include:_spf.gather.coop"
 
+    # RFC 7208 permits at most this many DNS-querying terms per SPF evaluation; receivers
+    # treat a record that exceeds it as a permanent error, so SPF effectively stops working.
+    SPF_LOOKUP_LIMIT = 10
+
     # One SMTP2GO validation record plus whether we could see it in DNS at check time.
     ValidationRecord = Struct.new(:kind, :host, :target, :actual, :verified, :in_dns,
       keyword_init: true) do
@@ -61,7 +65,19 @@ module DomainMail
     end
 
     def spf_ok?
-      spf.present? && spf.include?(REQUIRED_SPF_INCLUDE)
+      spf.present? && spf.include?(REQUIRED_SPF_INCLUDE) && spf_lookups_ok?
+    end
+
+    def spf_lookup_terms
+      checked? ? (check.data["spf_lookup_terms"] || []) : []
+    end
+
+    def spf_lookups
+      spf_lookup_terms.size
+    end
+
+    def spf_lookups_ok?
+      spf_lookups <= SPF_LOOKUP_LIMIT
     end
 
     # :verified / :pending / :not_added, :unknown when the SMTP2GO API couldn't be queried at

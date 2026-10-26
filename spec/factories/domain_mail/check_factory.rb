@@ -2,7 +2,7 @@
 
 # == Schema Information
 #
-# Table name: mail_migration_domain_checks
+# Table name: domain_mail_checks
 #
 #  id         :bigint           not null, primary key
 #  checked_at :datetime         not null
@@ -13,7 +13,7 @@
 #  updated_at :datetime         not null
 #
 FactoryBot.define do
-  factory :mail_migration_domain_check, class: "MailMigration::DomainCheck" do
+  factory :domain_mail_check, class: "DomainMail::Check" do
     domain
     checked_at { Time.current }
     data do

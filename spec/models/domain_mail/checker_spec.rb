@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe MailMigration::Checker do
+describe DomainMail::Checker do
   subject(:checker) do
     described_class.new(domains: domains, client: client, dns_checker: dns_checker)
   end
@@ -10,7 +10,7 @@ describe MailMigration::Checker do
   let!(:domain) { create(:domain, name: "Example.COM") }
   let(:domains) { [domain] }
   let(:dns_checker) do
-    instance_double(MailMigration::DnsChecker,
+    instance_double(DomainMail::DnsChecker,
       mx_records: [[10, "mail.gather.coop"]], spf_record: "v=spf1 ~all", cname_target: nil)
   end
 
@@ -27,7 +27,7 @@ describe MailMigration::Checker do
 
     it "stores a check row, matching SMTP2GO domains case-insensitively" do
       checker.run
-      check = domain.reload.mail_migration_check
+      check = domain.reload.mail_check
       expect(check.checked_at).to be_within(1.minute).of(Time.current)
       expect(check.data["mx"]).to eq([[10, "mail.gather.coop"]])
       expect(check.data["spf"]).to eq("v=spf1 ~all")
@@ -39,34 +39,29 @@ describe MailMigration::Checker do
     end
 
     it "updates the existing row on a re-check rather than creating another" do
-      create(:mail_migration_domain_check, domain: domain, checked_at: 1.day.ago)
+      create(:domain_mail_check, domain: domain, checked_at: 1.day.ago)
       checker.run
-      expect(MailMigration::DomainCheck.count).to eq(1)
-      expect(domain.reload.mail_migration_check.checked_at).to be_within(1.minute).of(Time.current)
-    end
-
-    it "filters the API call to the domain when checking a single domain" do
-      checker.run
-      expect(client).to have_received(:sender_domains).with(domain: "Example.COM")
+      expect(DomainMail::Check.count).to eq(1)
+      expect(domain.reload.mail_check.checked_at).to be_within(1.minute).of(Time.current)
     end
 
     it "marks in_dns true when our own CNAME lookup matches the expected target" do
       allow(dns_checker).to receive(:cname_target)
         .with("s1._domainkey.example.com").and_return("dkim.smtp2go.net")
       checker.run
-      expect(domain.reload.mail_migration_check.data["validation_records"][0]["in_dns"]).to be(true)
+      expect(domain.reload.mail_check.data["validation_records"][0]["in_dns"]).to be(true)
     end
 
     context "with several domains" do
       let!(:domain2) { create(:domain, name: "other.example.org") }
       let(:domains) { [domain, domain2] }
 
-      it "makes one unfiltered API call and marks absent domains not_added" do
+      it "makes one API call and marks absent domains not_added" do
         checker.run
-        expect(client).to have_received(:sender_domains).with(no_args)
-        expect(domain.reload.mail_migration_check.data["smtp2go_status"]).to eq("verified")
-        expect(domain2.reload.mail_migration_check.data["smtp2go_status"]).to eq("not_added")
-        expect(domain2.mail_migration_check.data["validation_records"]).to eq([])
+        expect(client).to have_received(:sender_domains).once
+        expect(domain.reload.mail_check.data["smtp2go_status"]).to eq("verified")
+        expect(domain2.reload.mail_check.data["smtp2go_status"]).to eq("not_added")
+        expect(domain2.mail_check.data["validation_records"]).to eq([])
       end
     end
   end
@@ -76,9 +71,10 @@ describe MailMigration::Checker do
 
     it "still stores the DNS results, with smtp2go_status unknown" do
       checker.run
-      check = domain.reload.mail_migration_check
+      check = domain.reload.mail_check
       expect(check.data["smtp2go_status"]).to eq("unknown")
       expect(check.data["mx"]).to eq([[10, "mail.gather.coop"]])
+      expect(checker.smtp2go_error).to eq(:not_configured)
     end
   end
 
@@ -91,9 +87,10 @@ describe MailMigration::Checker do
 
     it "reports to Sentry and stores DNS results with smtp2go_status unknown" do
       expect(Gather::ErrorReporter.instance).to receive(:report)
-        .with(instance_of(Smtp2go::Client::RequestError), data: {context: "mail_migration_checker"})
+        .with(instance_of(Smtp2go::Client::RequestError), data: {context: "domain_mail_checker"})
       checker.run
-      expect(domain.reload.mail_migration_check.data["smtp2go_status"]).to eq("unknown")
+      expect(domain.reload.mail_check.data["smtp2go_status"]).to eq("unknown")
+      expect(checker.smtp2go_error).to eq(:request_failed)
     end
   end
 end

@@ -2,8 +2,8 @@
 
 require "resolv"
 
-module MailMigration
-  # The DNS lookups the mail domain migration page needs. Lookup failures (NXDOMAIN, timeouts,
+module DomainMail
+  # The DNS lookups the admin domains dashboard needs. Lookup failures (NXDOMAIN, timeouts,
   # unreachable resolvers) are normal operation for a status page — the page reports what it can
   # see, and a transient failure just reads as "records not found" until the next load — so they
   # come back as empty results rather than raising.

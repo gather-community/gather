@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe MailMigration::DnsChecker do
+describe DomainMail::DnsChecker do
   subject(:checker) { described_class.new(resolver: resolver) }
 
   let(:resolver) { instance_double(Resolv::DNS) }

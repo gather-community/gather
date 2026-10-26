@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe MailMigration::DomainStatus do
+describe DomainMail::Status do
   subject(:status) { described_class.new(domain: domain, check: check) }
 
   let(:domain) { build(:domain, name: "example.com") }
@@ -11,7 +11,7 @@ describe MailMigration::DomainStatus do
   let(:smtp2go_status) { "verified" }
   let(:validation_records) { [] }
   let(:check) do
-    MailMigration::DomainCheck.new(checked_at: Time.current, data: {
+    DomainMail::Check.new(checked_at: Time.current, data: {
       "mx" => mx, "spf" => spf, "smtp2go_status" => smtp2go_status,
       "validation_records" => validation_records
     })
@@ -109,16 +109,16 @@ describe MailMigration::DomainStatus do
     end
   end
 
-  describe "#migrated?" do
+  describe "#all_correct?" do
     it "is true when MX, SPF, and SMTP2GO validation are all in place" do
-      expect(status).to be_migrated
+      expect(status).to be_all_correct
     end
 
     context "when SMTP2GO validation is pending" do
       let(:smtp2go_status) { "pending" }
 
       it "is false" do
-        expect(status).not_to be_migrated
+        expect(status).not_to be_all_correct
       end
     end
 
@@ -126,7 +126,7 @@ describe MailMigration::DomainStatus do
       let(:spf) { "v=spf1 include:_spf.oldhost.example ~all" }
 
       it "is false" do
-        expect(status).not_to be_migrated
+        expect(status).not_to be_all_correct
       end
     end
   end
@@ -134,7 +134,7 @@ describe MailMigration::DomainStatus do
   describe "with no check yet" do
     let(:check) { nil }
 
-    before { allow(domain).to receive(:mail_migration_check).and_return(nil) }
+    before { allow(domain).to receive(:mail_check).and_return(nil) }
 
     it "reads as unchecked throughout" do
       expect(status).not_to be_checked
@@ -142,7 +142,7 @@ describe MailMigration::DomainStatus do
       expect(status.mx).to eq([])
       expect(status.spf).to be_nil
       expect(status).not_to be_mx_ok
-      expect(status).not_to be_migrated
+      expect(status).not_to be_all_correct
       expect(status.smtp2go_status).to eq(:unchecked)
       expect(status.validation_records).to eq([])
     end

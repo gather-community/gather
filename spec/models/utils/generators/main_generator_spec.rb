@@ -13,6 +13,7 @@ describe Utils::Generators::MainGenerator, :without_tenant, :perform_jobs do
     Calendars::System::OtherCommunitiesMealsCalendar
     Domain
     DomainOwnership
+    DomainMail::Check
     FeatureFlag
     FeatureFlagUser
     GDrive::Config
@@ -29,7 +30,6 @@ describe Utils::Generators::MainGenerator, :without_tenant, :perform_jobs do
     GDrive::Migration::ScanTask
     Groups::Mailman::List
     Groups::Mailman::User
-    MailMigration::DomainCheck
     MailTestRun
     Meals::Import
     Meals::Message

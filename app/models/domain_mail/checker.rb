@@ -1,9 +1,12 @@
 # frozen_string_literal: true
 
-module MailMigration
-  # Runs the mail migration checks (DNS lookups plus one SMTP2GO API call) for the given domains
-  # and stores the results as DomainCheck rows. Run from RefreshJob, not during a web request.
+module DomainMail
+  # Runs the mail checks (DNS lookups plus one SMTP2GO API call) for the given domains and
+  # stores the results as Check rows. Exposes smtp2go_error (:not_configured / :request_failed)
+  # when the SMTP2GO API couldn't be queried; DNS results are still stored in that case.
   class Checker
+    attr_reader :smtp2go_error
+
     def initialize(domains:, client: Smtp2go::Client.new, dns_checker: DnsChecker.new)
       @domains = domains
       @client = client
@@ -15,7 +18,7 @@ module MailMigration
       @domains.each do |domain|
         data = check_data(domain, smtp2go_domains)
         ActsAsTenant.with_tenant(domain.cluster) do
-          check = DomainCheck.find_or_initialize_by(domain: domain)
+          check = Check.find_or_initialize_by(domain: domain)
           check.update!(data: data, checked_at: Time.current)
         end
       end
@@ -62,14 +65,16 @@ module MailMigration
 
     # Returns SenderDomains keyed by downcased name, or nil when the API can't be queried (no key
     # configured, or the request failed). A failed request is reported to Sentry since it may mean
-    # a revoked key or an API change; the not-configured case is expected in dev. When checking a
-    # single domain, the API call is filtered to it.
+    # a revoked key or an API change; the not-configured case is expected in dev.
     def fetch_smtp2go_domains
-      return nil unless @client.configured?
-      filter = @domains.one? ? {domain: @domains.first.name} : {}
-      @client.sender_domains(**filter).index_by { |domain| domain.name.downcase }
+      unless @client.configured?
+        @smtp2go_error = :not_configured
+        return nil
+      end
+      @client.sender_domains.index_by { |domain| domain.name.downcase }
     rescue Smtp2go::Client::RequestError => e
-      Gather::ErrorReporter.instance.report(e, data: {context: "mail_migration_checker"})
+      Gather::ErrorReporter.instance.report(e, data: {context: "domain_mail_checker"})
+      @smtp2go_error = :request_failed
       nil
     end
   end

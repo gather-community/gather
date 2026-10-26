@@ -41,7 +41,6 @@ en:
     index:
       title: "Communities"
       view_signups: "View Signups"
-      mail_migration: "Mail Migration"
       id: "ID"
       name: "Name"
       created: "Created"

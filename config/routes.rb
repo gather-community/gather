@@ -21,11 +21,6 @@ Rails.application.routes.draw do
     end
   end
 
-  # Operator page tracking the migration of custom mail domains to the new SMTP host. Lives on
-  # the apex domain like the communities index since it spans all clusters.
-  get "mail-migration", to: "mail_migration#index", as: :mail_migration
-  post "mail-migration/refresh", to: "mail_migration#refresh", as: :mail_migration_refresh
-
   namespace :communities do
     resources :signups, only: %i[index new create] do
       collection do
@@ -396,6 +391,12 @@ Rails.application.routes.draw do
   namespace :admin do
     get "settings/:type", to: "settings#edit", as: :settings
     patch "settings/:type", to: "settings#update"
+
+    # Operator dashboard for domains (apex domain; spans all clusters).
+    resources :domains, only: :index do
+      post :refresh, on: :collection
+      post :refresh, on: :member
+    end
   end
 
   namespace :subscription do

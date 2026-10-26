@@ -1,16 +1,15 @@
 # frozen_string_literal: true
 
-module MailMigration
-  # The migration status of one custom domain, read from its stored DomainCheck (written by
-  # RefreshJob): whether its MX and SPF records have been updated to the new values, and whether
-  # SMTP2GO has validated it as a sender domain — including whether the validation CNAME records
-  # were actually present in DNS at check time. A domain with no stored check yet reads as
-  # unchecked throughout.
-  class DomainStatus
-    # What the domain's MX records must be, exactly, for mail to arrive at the new host.
+module DomainMail
+  # The mail status of one custom domain, read from its stored Check: whether its MX and SPF
+  # records are correct, and whether SMTP2GO has validated it as a sender domain — including
+  # whether the validation CNAME records were actually present in DNS at check time. A domain
+  # with no stored check yet reads as unchecked throughout.
+  class Status
+    # What the domain's MX records must be, exactly, for mail to arrive at Gather's mail servers.
     EXPECTED_MX = [[10, "mail.gather.coop"], [20, "mail2.gather.coop"]].freeze
 
-    # What the domain's SPF record must contain to authorize the new host. The full recommended
+    # What the domain's SPF record must contain to authorize Gather's mail servers. The full recommended
     # record is "v=spf1 include:_spf.gather.coop ~all", but a domain may legitimately carry other
     # mechanisms (e.g. for the community's own mail provider), so only the include is required.
     REQUIRED_SPF_INCLUDE = "include:_spf.gather.coop"
@@ -35,7 +34,7 @@ module MailMigration
 
     def initialize(domain:, check: nil)
       @domain = domain
-      @check = check || domain.mail_migration_check
+      @check = check || domain.mail_check
     end
 
     delegate :communities, to: :domain
@@ -70,7 +69,8 @@ module MailMigration
       checked? ? check.data["smtp2go_status"].to_sym : :unchecked
     end
 
-    def migrated?
+    # Whether every record we track is correct: MX, SPF, and SMTP2GO validation.
+    def all_correct?
       mx_ok? && spf_ok? && smtp2go_status == :verified
     end
 

@@ -303,6 +303,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_25_180000) do
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
 
+  create_table "domain_mail_checks", force: :cascade do |t|
+    t.datetime "checked_at", null: false
+    t.bigint "cluster_id", null: false
+    t.datetime "created_at", null: false
+    t.jsonb "data", default: {}, null: false
+    t.bigint "domain_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cluster_id"], name: "index_domain_mail_checks_on_cluster_id"
+    t.index ["domain_id"], name: "index_domain_mail_checks_on_domain_id", unique: true
+  end
+
   create_table "domain_ownerships", force: :cascade do |t|
     t.bigint "cluster_id", null: false
     t.bigint "community_id", null: false
@@ -630,17 +641,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_25_180000) do
     t.index ["deactivated_at"], name: "index_households_on_deactivated_at"
     t.index ["member_type_id"], name: "index_households_on_member_type_id"
     t.index ["name"], name: "index_households_on_name"
-  end
-
-  create_table "mail_migration_domain_checks", force: :cascade do |t|
-    t.datetime "checked_at", null: false
-    t.bigint "cluster_id", null: false
-    t.datetime "created_at", null: false
-    t.jsonb "data", default: {}, null: false
-    t.bigint "domain_id", null: false
-    t.datetime "updated_at", null: false
-    t.index ["cluster_id"], name: "index_mail_migration_domain_checks_on_cluster_id"
-    t.index ["domain_id"], name: "index_mail_migration_domain_checks_on_domain_id", unique: true
   end
 
   create_table "mail_test_runs", force: :cascade do |t|
@@ -1426,6 +1426,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_25_180000) do
   add_foreign_key "calendar_shared_guidelines", "communities"
   add_foreign_key "communities", "clusters"
   add_foreign_key "community_signups", "users", column: "reviewed_by_id"
+  add_foreign_key "domain_mail_checks", "clusters"
+  add_foreign_key "domain_mail_checks", "domains"
   add_foreign_key "domain_ownerships", "clusters"
   add_foreign_key "domain_ownerships", "communities"
   add_foreign_key "domain_ownerships", "domains"
@@ -1470,8 +1472,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_25_180000) do
   add_foreign_key "households", "clusters"
   add_foreign_key "households", "communities"
   add_foreign_key "households", "people_member_types", column: "member_type_id"
-  add_foreign_key "mail_migration_domain_checks", "clusters"
-  add_foreign_key "mail_migration_domain_checks", "domains"
   add_foreign_key "meal_assignments", "clusters"
   add_foreign_key "meal_assignments", "meal_roles", column: "role_id"
   add_foreign_key "meal_assignments", "meals"

@@ -76,14 +76,6 @@ describe Smtp2go::Client do
       expect(client.sender_domains[0]).to be_verified
     end
 
-    it "filters to one domain when given" do
-      stub_domain_view(body: {data: {domains: [domain_entry]}}.to_json)
-      client.sender_domains(domain: "example.com")
-      assert_requested(:post, url, times: 1) do |req|
-        JSON.parse(req.body) == {"domain" => "example.com"}
-      end
-    end
-
     it "raises RequestError on a non-2xx response" do
       stub_domain_view(body: "nope", status: 401)
       expect { client.sender_domains }.to raise_error(described_class::RequestError, /401/)

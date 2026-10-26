@@ -20,8 +20,7 @@ class Domain < ApplicationRecord
   has_many :ownerships, class_name: "DomainOwnership", dependent: :destroy, inverse_of: :domain
   has_many :communities, through: :ownerships
   has_many :group_mailman_lists, class_name: "Groups::Mailman::List", dependent: :destroy
-  has_one :mail_migration_check, class_name: "MailMigration::DomainCheck", dependent: :destroy,
-    inverse_of: :domain
+  has_one :mail_check, class_name: "DomainMail::Check", dependent: :destroy, inverse_of: :domain
 
   # Matches domains that are in AT LEAST ALL the same communities as the passed array.
   scope :in_community, lambda { |c|

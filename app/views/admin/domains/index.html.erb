@@ -1,8 +1,8 @@
 <% content_for(:title, t(".title")) %>
 
 <% content_for(:action_links) do %>
-  <% if policy(:mail_migration).refresh? %>
-    <%= button_to(mail_migration_refresh_path, class: "btn btn-primary",
+  <% if policy(%i[admin domain]).refresh? %>
+    <%= button_to(refresh_admin_domains_path, class: "btn btn-primary",
           form: {style: "display:inline-block"}) do %>
       <%= icon_tag("refresh") %> <%= t(".refresh_all") %>
     <% end %>
@@ -25,7 +25,7 @@
   </div>
 <% else %>
   <p>
-    <%= t(".summary", count: @report.statuses.size, migrated: @report.migrated_count) %>
+    <%= t(".summary", count: @report.statuses.size, ok: @report.all_correct_count) %>
     <% unless @report.any_checked? %>
       <%= t(".never_checked_prompt") %>
     <% end %>
@@ -43,18 +43,18 @@
     </thead>
     <tbody>
       <% @report.statuses.each do |status| %>
-        <tr class="<%= status.migrated? ? "success" : "" %>">
+        <tr class="<%= status.all_correct? ? "success" : "" %>">
           <td><%= status.domain.name %></td>
           <td><%= status.communities.map(&:name).join(", ") %></td>
           <% if status.checked? %>
             <td class="<%= status.mx_ok? ? "text-success" : "text-danger" %>"
                 title="<%= status.mx.map { |pref, host| "#{pref} #{host}" }.join(", ") %>">
               <%= icon_tag(status.mx_ok? ? "check" : "times") %>
-              <%= status.mx_ok? ? t(".updated") : t(".not_updated") %>
+              <%= status.mx_ok? ? t(".correct") : t(".incorrect") %>
             </td>
             <td class="<%= status.spf_ok? ? "text-success" : "text-danger" %>" title="<%= status.spf %>">
               <%= icon_tag(status.spf_ok? ? "check" : "times") %>
-              <%= status.spf_ok? ? t(".updated") : t(".not_updated") %>
+              <%= status.spf_ok? ? t(".correct") : t(".incorrect") %>
             </td>
             <td class="validation">
               <% if status.validation_records.empty? %>
@@ -75,7 +75,7 @@
             <td colspan="3" class="text-muted"><%= t(".never_checked") %></td>
           <% end %>
           <td>
-            <%= button_to(mail_migration_refresh_path(domain_id: status.domain.id),
+            <%= button_to(refresh_admin_domain_path(status.domain),
                   class: "btn btn-link", form: {style: "display:inline"},
                   title: t(".refresh_row")) do %>
               <%= icon_tag("refresh") %>

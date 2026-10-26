@@ -2,11 +2,11 @@
 
 require "rails_helper"
 
-describe MailMigrationPolicy do
+describe Admin::DomainPolicy do
   describe "permissions" do
     include_context "policy permissions"
 
-    let(:record) { :mail_migration }
+    let(:record) { %i[admin domain] }
 
     permissions :index? do
       it "permits super admins only" do

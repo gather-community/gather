@@ -27,21 +27,23 @@ en:
         last_checked: "Last Checked"
         mx_heading: "MX Records"
         spf_heading: "SPF Record"
-        smtp2go_heading: "SMTP2GO Validation"
+        smtp2go_heading: "SMTP2GO Records"
         expected: "Expected"
-        required: "Required"
         found: "Found"
         no_records_found: "None found"
         record: "Record"
         host: "Host"
         smtp2go_verified: "Verified by SMTP2GO?"
+        spf_not_required: >-
+          An SPF record is not required for SMTP2GO-managed domains: SPF is handled by the
+          Return/SPF record above. Shown for reference only.
         never_checked_notice: "This domain has not been checked yet. Use 'Re-check Now' to run the first check."
       index:
         title: "Domains"
         intro: >-
-          This page shows the status of each custom domain's mail setup: whether the MX and SPF
-          records are correct, and whether SMTP2GO has validated the domain for sending. Results
-          are from the most recent check; use the refresh buttons to re-check.
+          This page shows the status of each custom domain's mail setup: whether the MX records
+          are correct and whether the SMTP2GO validation records are in place. Results are from
+          the most recent check; use the refresh buttons to re-check.
         none_found: "No custom domains found."
         summary:
           one: "%{ok} of 1 domain has all records correct."
@@ -54,13 +56,9 @@ en:
           domain: "Domain"
           communities: "Communities"
           mx: "MX Records"
-          spf: "SPF Record"
-          smtp2go: "SMTP2GO Validation"
-          lists: "Mailing Lists"
-        correct: "Correct"
-        incorrect: "Incorrect"
+          smtp2go: "SMTP2GO Records"
+          lists: "Mailing Lists?"
         never_checked: "Never checked"
-        no_lists: "—"
         refresh_all: "Refresh All"
         refresh_row: "Re-check this domain"
         record_titles:
@@ -73,6 +71,7 @@ en:
           not_added: "Not Added"
           unknown: "Unknown"
         record_kinds:
+          mx: "MX"
           dkim: "DKIM"
-          return_path: "Return"
+          return_path: "Return/SPF"
           tracking: "Tracking"

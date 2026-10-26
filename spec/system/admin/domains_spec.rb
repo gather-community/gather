@@ -57,14 +57,14 @@ describe "admin domains dashboard" do
     expect(page).not_to have_content(gather_domain.name)
 
     migrated_row = find("tr", text: "done.example.org")
-    expect(migrated_row).to have_content("Correct", count: 2)
+    expect(migrated_row).to have_css("td.text-success", text: "MX")
     expect(migrated_row).to have_content("DKIM")
     # Only the first community shows, with a +N for the rest.
     expect(migrated_row).to have_content("+1")
     expect(migrated_row).not_to have_content("Community B")
 
     pending_row = find("tr", text: "notyet.example.org")
-    expect(pending_row).to have_content("Incorrect", count: 2)
+    expect(pending_row).to have_css("td.text-danger", text: "MX")
     expect(pending_row).to have_content("DKIM")
     expect(pending_row).to have_content("Return")
     # The return path record is in DNS but unverified, so it shows the waiting state.
@@ -108,8 +108,8 @@ describe "admin domains dashboard" do
     mailman_list
 
     visit(admin_domains_path)
-    expect(find("tr", text: "done.example.org")).to have_content("1")
-    expect(page).to have_content("notyet.example.org")
+    expect(find("tr", text: "done.example.org")).to have_content("Yes")
+    expect(find("tr", text: "notyet.example.org")).to have_content("No")
 
     select_lens(:lists, "With Mailing Lists")
     expect(page).to have_content("done.example.org")

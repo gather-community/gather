@@ -38,6 +38,9 @@
     code {
       color: $gray-dark;
       background-color: $pre-bg;
+      // The global default strips Bootstrap's code padding; with the wiki's chip background
+      // kept, the padding is needed so the chip doesn't hug the text.
+      padding: 2px 4px;
     }
   }
 

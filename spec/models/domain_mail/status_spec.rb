@@ -10,7 +10,9 @@ describe DomainMail::Status do
   let(:spf) { "v=spf1 include:_spf.gather.coop ~all" }
   let(:smtp2go_status) { "verified" }
   let(:validation_records) { [] }
-  let(:spf_lookup_terms) { [{"term" => "include:_spf.gather.coop", "via" => nil}] }
+  let(:spf_lookup_terms) do
+    [{"term" => "include:_spf.gather.coop", "children" => [{"term" => "mx", "children" => []}]}]
+  end
   let(:check) do
     DomainMail::Check.new(checked_at: Time.current, data: {
       "mx" => mx, "spf" => spf, "spf_lookup_terms" => spf_lookup_terms,
@@ -70,12 +72,18 @@ describe DomainMail::Status do
     end
 
     context "with more than the allowed DNS lookups" do
-      let(:spf_lookup_terms) { Array.new(11) { {"term" => "a", "via" => nil} } }
+      let(:spf_lookup_terms) { Array.new(11) { {"term" => "a", "children" => []} } }
 
       it "is false even though the include is present" do
         expect(status.spf_lookups).to eq(11)
         expect(status).not_to be_spf_lookups_ok
         expect(status).not_to be_spf_ok
+      end
+    end
+
+    context "counting nested terms" do
+      it "counts children recursively" do
+        expect(status.spf_lookups).to eq(2)
       end
     end
 

@@ -31,7 +31,7 @@ describe DomainMail::Checker do
       expect(check.checked_at).to be_within(1.minute).of(Time.current)
       expect(check.data["mx"]).to eq([[10, "mail.gather.coop"]])
       expect(check.data["spf"]).to eq("v=spf1 mx ~all")
-      expect(check.data["spf_lookup_terms"]).to eq([{"term" => "mx", "via" => nil}])
+      expect(check.data["spf_lookup_terms"]).to eq([{"term" => "mx", "children" => []}])
       expect(check.data["smtp2go_status"]).to eq("verified")
       expect(check.data["validation_records"]).to eq([{
         "kind" => "dkim", "host" => "s1._domainkey.example.com", "target" => "dkim.smtp2go.net",

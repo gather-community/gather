@@ -20,7 +20,7 @@ FactoryBot.define do
       {
         "mx" => [[10, "mail.gather.coop"], [20, "mail2.gather.coop"]],
         "spf" => "v=spf1 include:_spf.gather.coop ~all",
-        "spf_lookup_terms" => [{"term" => "include:_spf.gather.coop", "via" => nil}],
+        "spf_lookup_terms" => [{"term" => "include:_spf.gather.coop", "children" => []}],
         "smtp2go_status" => "verified",
         "validation_records" => [
           {"kind" => "dkim", "host" => "s1._domainkey.#{domain.name}",

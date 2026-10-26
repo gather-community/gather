@@ -12,8 +12,12 @@ describe DomainMail::SpfLookupCounter do
     checker
   end
 
+  def flatten(terms)
+    terms.flat_map { |t| [t["term"]] + flatten(t["children"]) }
+  end
+
   def terms_for(record)
-    counter.count_terms(record).map { |t| [t["term"], t["via"]] }
+    flatten(counter.count_terms(record))
   end
 
   it "counts a, mx, ptr, and exists but not ip4, ip6, or all" do
@@ -33,13 +37,15 @@ describe DomainMail::SpfLookupCounter do
       }
     end
 
-    it "recurses, attributing nested terms to the record they came from" do
-      expect(terms_for("v=spf1 include:one.example ip4:1.2.3.4 ~all")).to eq([
-        ["include:one.example", nil],
-        ["mx", "one.example"],
-        ["include:two.example", "one.example"],
-        ["a", "two.example"],
-        ["a:x.two.example", "two.example"]
+    it "recurses, nesting each include's pulled-in terms as children" do
+      expect(counter.count_terms("v=spf1 include:one.example ip4:1.2.3.4 ~all")).to eq([
+        {"term" => "include:one.example", "children" => [
+          {"term" => "mx", "children" => []},
+          {"term" => "include:two.example", "children" => [
+            {"term" => "a", "children" => []},
+            {"term" => "a:x.two.example", "children" => []}
+          ]}
+        ]}
       ])
     end
   end
@@ -48,10 +54,7 @@ describe DomainMail::SpfLookupCounter do
     let(:nested_records) { {"other.example" => "v=spf1 mx ~all"} }
 
     it "counts the redirect and recurses" do
-      expect(terms_for("v=spf1 redirect=other.example")).to eq([
-        ["redirect=other.example", nil],
-        ["mx", "other.example"]
-      ])
+      expect(terms_for("v=spf1 redirect=other.example")).to eq(["redirect=other.example", "mx"])
     end
   end
 
@@ -64,11 +67,8 @@ describe DomainMail::SpfLookupCounter do
     end
 
     it "counts repeated includes but descends into each domain only once, so it terminates" do
-      expect(terms_for("v=spf1 include:one.example ~all")).to eq([
-        ["include:one.example", nil],
-        ["include:two.example", "one.example"],
-        ["include:one.example", "two.example"]
-      ])
+      expect(terms_for("v=spf1 include:one.example ~all"))
+        .to eq(["include:one.example", "include:two.example", "include:one.example"])
     end
   end
 

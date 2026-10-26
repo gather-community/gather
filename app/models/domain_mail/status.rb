@@ -73,7 +73,7 @@ module DomainMail
     end
 
     def spf_lookups
-      spf_lookup_terms.size
+      count_terms(spf_lookup_terms)
     end
 
     def spf_lookups_ok?
@@ -98,6 +98,12 @@ module DomainMail
           target: record["target"], actual: record["actual"], verified: record["verified"],
           in_dns: record["in_dns"])
       end
+    end
+
+    private
+
+    def count_terms(terms)
+      terms.sum { |term| 1 + count_terms(term["children"] || []) }
     end
   end
 end

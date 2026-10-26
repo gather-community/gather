@@ -34,7 +34,6 @@ en:
           counted recursively through includes). Other mechanisms may also be present.
         spf_lookups: "DNS Lookups"
         spf_lookups_count: "%{count} of %{limit} allowed"
-        spf_lookup_via: "(via %{domain})"
         expected: "Expected"
         required: "Required"
         found: "Found"

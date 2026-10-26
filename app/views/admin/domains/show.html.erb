@@ -112,14 +112,7 @@
         <td class="<%= @status.spf_lookups_ok? ? "" : "text-danger" %>">
           <%= t(".spf_lookups_count", count: @status.spf_lookups,
                 limit: DomainMail::Status::SPF_LOOKUP_LIMIT) %>
-          <% @status.spf_lookup_terms.each do |term| %>
-            <div>
-              <code><%= term["term"] %></code>
-              <% if term["via"] %>
-                <span class="text-muted"><%= t(".spf_lookup_via", domain: term["via"]) %></span>
-              <% end %>
-            </div>
-          <% end %>
+          <%= render("spf_lookup_terms", terms: @status.spf_lookup_terms) %>
         </td>
       </tr>
     <% end %>

@@ -58,6 +58,7 @@ describe "admin domains dashboard" do
 
     migrated_row = find("tr", text: "done.example.org")
     expect(migrated_row).to have_css("td.text-success", text: "MX")
+    expect(migrated_row).to have_css("td.text-success", text: "SPF")
     expect(migrated_row).to have_content("DKIM")
     # Only the first community shows, with a +N for the rest.
     expect(migrated_row).to have_content("+1")
@@ -65,6 +66,7 @@ describe "admin domains dashboard" do
 
     pending_row = find("tr", text: "notyet.example.org")
     expect(pending_row).to have_css("td.text-danger", text: "MX")
+    expect(pending_row).to have_css("td.text-danger", text: "SPF")
     expect(pending_row).to have_content("DKIM")
     expect(pending_row).to have_content("Return")
     # The return path record is in DNS but unverified, so it shows the waiting state.

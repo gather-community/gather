@@ -37,6 +37,7 @@
         <th><%= t(".headers.communities") %></th>
         <th><%= t(".headers.lists") %></th>
         <th><%= t(".headers.mx") %></th>
+        <th><%= t(".headers.spf") %></th>
         <th><%= t(".headers.smtp2go") %></th>
         <th></th>
       </tr>
@@ -58,6 +59,10 @@
               <%= icon_tag(status.mx_ok? ? "check" : "times") %>
               <%= t(".record_kinds.mx") %>
             </td>
+            <td class="<%= status.spf_ok? ? "text-success" : "text-danger" %>" title="<%= status.spf %>">
+              <%= icon_tag(status.spf_ok? ? "check" : "times") %>
+              <%= t(".record_kinds.spf") %>
+            </td>
             <td class="validation">
               <% if status.validation_records.empty? %>
                 <%= t(".smtp2go_statuses.#{status.smtp2go_status}") %>
@@ -74,7 +79,7 @@
               <% end %>
             </td>
           <% else %>
-            <td colspan="2" class="text-muted"><%= t(".never_checked") %></td>
+            <td colspan="3" class="text-muted"><%= t(".never_checked") %></td>
           <% end %>
           <td>
             <%= button_to(refresh_admin_domain_path(status.domain),

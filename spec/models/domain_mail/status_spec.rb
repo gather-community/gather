@@ -39,6 +39,36 @@ describe DomainMail::Status do
     end
   end
 
+  describe "#spf_ok?" do
+    it "is true when the SPF record contains the required include" do
+      expect(status).to be_spf_ok
+    end
+
+    context "with other mechanisms alongside the required include" do
+      let(:spf) { "v=spf1 include:_spf.google.com include:_spf.gather.coop ~all" }
+
+      it "is true" do
+        expect(status).to be_spf_ok
+      end
+    end
+
+    context "without the required include" do
+      let(:spf) { "v=spf1 include:_spf.oldhost.example ~all" }
+
+      it "is false" do
+        expect(status).not_to be_spf_ok
+      end
+    end
+
+    context "with no SPF record" do
+      let(:spf) { nil }
+
+      it "is false" do
+        expect(status).not_to be_spf_ok
+      end
+    end
+  end
+
   describe "#smtp2go_status" do
     it "reads the stored status as a symbol" do
       expect(status.smtp2go_status).to eq(:verified)
@@ -93,11 +123,11 @@ describe DomainMail::Status do
       end
     end
 
-    context "when the SPF record is absent (informational only)" do
-      let(:spf) { nil }
+    context "when the SPF record is outdated" do
+      let(:spf) { "v=spf1 include:_spf.oldhost.example ~all" }
 
-      it "is still true" do
-        expect(status).to be_all_correct
+      it "is false" do
+        expect(status).not_to be_all_correct
       end
     end
   end

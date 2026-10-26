@@ -86,6 +86,28 @@
   </table>
 
   <h2>
+    <%= t(".spf_heading") %>
+    <%= icon_tag(@status.spf_ok? ? "check" : "times",
+          class: @status.spf_ok? ? "text-success" : "text-danger") %>
+  </h2>
+  <table class="key-value key-value-wide">
+    <tr>
+      <td><%= t(".required") %></td>
+      <td><code><%= DomainMail::Status::REQUIRED_SPF_INCLUDE %></code></td>
+    </tr>
+    <tr>
+      <td><%= t(".found") %></td>
+      <td>
+        <% if @status.spf.blank? %>
+          <%= t(".no_records_found") %>
+        <% else %>
+          <code><%= @status.spf %></code>
+        <% end %>
+      </td>
+    </tr>
+  </table>
+
+  <h2>
     <%= t(".smtp2go_heading") %>
     <%= icon_tag(@status.smtp2go_status == :verified ? "check" : "times",
           class: @status.smtp2go_status == :verified ? "text-success" : "text-danger") %>
@@ -125,21 +147,6 @@
       </tbody>
     </table>
   <% end %>
-
-  <h2><%= t(".spf_heading") %></h2>
-  <p class="hint"><%= t(".spf_not_required") %></p>
-  <table class="key-value key-value-wide">
-    <tr>
-      <td><%= t(".found") %></td>
-      <td>
-        <% if @status.spf.blank? %>
-          <%= t(".no_records_found") %>
-        <% else %>
-          <code><%= @status.spf %></code>
-        <% end %>
-      </td>
-    </tr>
-  </table>
 <% else %>
   <div class="center-notice">
     <%= t(".never_checked_notice") %>

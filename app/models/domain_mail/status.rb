@@ -9,6 +9,11 @@ module DomainMail
     # What the domain's MX records must be, exactly, for mail to arrive at Gather's mail servers.
     EXPECTED_MX = [[10, "mail.gather.coop"], [20, "mail2.gather.coop"]].freeze
 
+    # What the domain's own (apex) SPF record must contain. The full recommended record is
+    # "v=spf1 include:_spf.gather.coop ~all", but a domain may legitimately carry other
+    # mechanisms (e.g. the community's own mail provider), so only the include is required.
+    REQUIRED_SPF_INCLUDE = "include:_spf.gather.coop"
+
     # One SMTP2GO validation record plus whether we could see it in DNS at check time.
     ValidationRecord = Struct.new(:kind, :host, :target, :actual, :verified, :in_dns,
       keyword_init: true) do
@@ -55,17 +60,19 @@ module DomainMail
       mx == EXPECTED_MX
     end
 
+    def spf_ok?
+      spf.present? && spf.include?(REQUIRED_SPF_INCLUDE)
+    end
+
     # :verified / :pending / :not_added, :unknown when the SMTP2GO API couldn't be queried at
     # check time, or :unchecked when no check has run yet.
     def smtp2go_status
       checked? ? check.data["smtp2go_status"].to_sym : :unchecked
     end
 
-    # Whether every required record is correct: MX and SMTP2GO validation. The domain's own SPF
-    # record is informational only — SMTP2GO handles SPF via the return-path (VERP) CNAME, so no
-    # SPF record is required for SMTP2GO-managed domains.
+    # Whether every required record is correct: MX, apex SPF, and SMTP2GO validation.
     def all_correct?
-      mx_ok? && smtp2go_status == :verified
+      mx_ok? && spf_ok? && smtp2go_status == :verified
     end
 
     def validation_records

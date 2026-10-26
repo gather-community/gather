@@ -1,9 +1,13 @@
 .admin--domains {
-  // A long record (e.g. an SPF string) should wrap inside one continuous code box rather than
-  // breaking into what looks like separate records on each wrapped line.
-  table.key-value code {
+  // Bootstrap 3 renders <code> crimson-on-pink, which reads as an error state on a status page,
+  // and its vertical padding stacks once the boxes are inline-block (needed so a long record,
+  // e.g. an SPF string, wraps inside one continuous box instead of fragmenting per line).
+  code {
     display: inline-block;
     word-break: break-word;
+    padding: 0 4px;
+    color: inherit;
+    background-color: #f0f0f0;
   }
 
   ul.spf-lookups {

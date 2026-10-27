@@ -345,8 +345,7 @@ The dispositions map is a **declaration**, not an assertion — it does not read
 
 **Translations.** Every key must exist in every locale, not just `en` ([spec/i18n_spec.rb](spec/i18n_spec.rb) checks the locales in `Gather::Locales::TRANSLATED`). When you add a key or change the meaning of its English text, write the other locales' values too, in the same commit:
 
-- **Mark every value you translate** with this comment at the end of its line, exactly:
-  `# Machine translated, remove this comment when verified`. For a multi-line value, put it after the `|` on the key's line. People reviewing a language search for the marker and remove it once they've checked the string. Count what's left with `grep -c "Machine translated" config/locales/fr/*.yml`.
+- **Mark every value you translate** with `# MT` at the end of its line. For a multi-line value, put it after the `|-` on the key's line. People reviewing a language remove the `# MT` once they've checked the string. Count what's left with `grep -c "# MT" config/locales/fr/*.yml`. Every file with `# MT` lines starts with a header comment explaining the marker for reviewers; copy it from an existing file (e.g. `config/locales/fr/nav.yml`) when you create a new locale file.
 - **Changing English text re-marks it.** If you change what a key's English says, rewrite its translations and mark them again, even if a person had verified them.
 - **Use the glossary** ([config/locales/GLOSSARY.md](config/locales/GLOSSARY.md)) for Gather's terms and each language's voice (`vous` in French, `du` in German, and so on), so the same thing has the same name everywhere.
 - **Keep the structure:** same `%{placeholders}`, same HTML in `_html` keys, and the plural sub-keys the locale needs (French, for example, uses `one` for 0 and 1).

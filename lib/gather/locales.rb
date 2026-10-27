@@ -13,7 +13,7 @@ module Gather
 
     # Locales with every key translated, which CI holds to that (spec/i18n_spec.rb) and smoke-tests
     # (spec/system/locale_smoke_spec.rb). A locale joins once its translation is finished.
-    TRANSLATED = %i[en fr fr-CA de].freeze
+    TRANSLATED = %i[en fr fr-CA es de].freeze
 
     # Language subtags browsers send that should map to one of our locales.
     # Norwegian arrives as "no" (generic) or "nn" (Nynorsk) as well as "nb" (Bokmål).

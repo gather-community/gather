@@ -1,0 +1,22 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+es:
+  pagination:
+    page_entries_info:
+      gdrive/migration/file: "Archivos %{first}–%{last} de %{total}" # MT
+      gdrive/migration/log: "Registros %{first}–%{last} de %{total}" # MT
+      meals/meal: "Comidas %{first}–%{last} de %{total}" # MT
+      household: "Hogares %{first}–%{last} de %{total}" # MT
+      user: "Personas %{first}–%{last} de %{total}" # MT
+      work/period: "Períodos %{first}–%{last} de %{total}" # MT
+      work/shift: "Turnos %{first}–%{last} de %{total}" # MT

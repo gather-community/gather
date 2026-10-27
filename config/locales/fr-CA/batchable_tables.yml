@@ -1,0 +1,7 @@
+fr-CA:
+  batchable_tables:
+    confirmations:
+      gdrive__migration__owners:
+        send_request:
+          one: "Voulez-vous vraiment envoyer un courriel de demande à %{count} personne ?" # Machine translated, remove this comment when verified
+          other: "Voulez-vous vraiment envoyer des courriels de demande à %{count} personnes ?" # Machine translated, remove this comment when verified

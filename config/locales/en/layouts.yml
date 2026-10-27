@@ -3,6 +3,7 @@ en:
   layouts:
     mailer:
       notification_settings: "Gather notification settings: %{url}"
+      machine_translated: "This email was translated automatically and may contain mistakes."
     application:
       impersonation_notice: "You are impersonating %{name}. Any actions you take will appear to have been taken by them."
       stop_impersonating: "Stop Impersonating"
@@ -21,6 +22,10 @@ en:
       communities: "Communities"
       resync_subscriptions: "Resync subscriptions"
       domains: "Domains"
+      # Shown on pages in machine-translated locales (Gather::Locales::MACHINE_TRANSLATED).
+      machine_translated: "This page was translated automatically and may contain mistakes."
+      machine_translated_with_link_html: "This page was translated automatically and may contain mistakes. %{link}"
+      help_translate: "Help improve the translation"
     head:
       # The browser tab title. The page title is already HTML-escaped, hence _html.
       title_html: "Gather: %{title}"
@@ -56,6 +61,7 @@ en:
       return_home: "Return to Home"
     privacy_policy:
       title: "Privacy Policy"
+      english_only: "The privacy policy is only available in English."
     markdown:
       title: "Markdown Formatting Guide"
       intro_html: "<strong>Markdown</strong> is a simple way of creating clean and rich text content without needing to learn a special language."

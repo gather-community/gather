@@ -15,6 +15,17 @@ describe "i18n" do
       "run `bundle exec i18n-tasks missing -l en` to show them"
   end
 
+  it "has every key in every finished locale" do
+    (Gather::Locales::TRANSLATED - [:en]).each do |locale|
+      missing = i18n.missing_keys(locales: [locale.to_s]).keys.map { |key, _node| key }
+      # Canadian French only holds keys that differ from French, and reads the rest from fr.
+      missing.reject! { |key| i18n.key_value?(key, "fr") } if locale == :"fr-CA"
+      expect(missing).to be_empty,
+        "#{locale} is missing #{missing.size} keys, e.g. #{missing.first(5).join(", ")}. " \
+        "Run `bundle exec i18n-tasks missing -l #{locale}` to show them"
+    end
+  end
+
   it "has no unused keys" do
     unused_keys = i18n.unused_keys(locales: [i18n.base_locale])
     expect(unused_keys).to be_empty,

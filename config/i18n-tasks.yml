@@ -55,6 +55,9 @@ ignore_missing:
   # default_i18n_subject runs in the protected meal_message helper, but action_name is the public
   # normal_message/cancellation_message action that called it, and those keys exist.
   - meal_mailer.meal_message.subject
+  # Sample names for generated demo data, read by Faker (config/initializers/faker.rb). Demo content is
+  # English until new communities get starter content in their own language.
+  - "random_data.*"
 
 # Keys looked up by frameworks or by dynamically built key strings, which the scanner can't see.
 ignore_unused:

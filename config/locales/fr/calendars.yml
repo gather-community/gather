@@ -1,0 +1,293 @@
+fr:
+  calendars:
+    exports:
+      index:
+        title: "Exportation de calendriers" # Machine translated, remove this comment when verified
+        select_calendars: "Choisir les calendriers" # Machine translated, remove this comment when verified
+        export_link: "Lien d'exportation" # Machine translated, remove this comment when verified
+        copy_link: "Copier le lien" # Machine translated, remove this comment when verified
+        visit_link: "Ouvrir le lien dans le navigateur" # Machine translated, remove this comment when verified
+        personalized: "Voici votre lien d'exportation personnalisé pour les calendriers sélectionnés." # Machine translated, remove this comment when verified
+        selection_changes_link: "Si vous changez la sélection de calendriers (en cochant les cases), le lien change en conséquence. Modifier les options ci-dessous change aussi le lien." # Machine translated, remove this comment when verified
+        options: "Options" # Machine translated, remove this comment when verified
+        import_instructions: "Instructions d'importation" # Machine translated, remove this comment when verified
+        google_calendar: "Google Agenda" # Machine translated, remove this comment when verified
+        apple_calendar: "Calendrier d'Apple" # Machine translated, remove this comment when verified
+        method_1: "Méthode 1" # Machine translated, remove this comment when verified
+        method_2: "Méthode 2" # Machine translated, remove this comment when verified
+        google_method_1: "Si vous êtes connecté à votre compte Google, essayez simplement de cliquer sur « Ouvrir le lien dans le navigateur » ci-dessus. Google Agenda devrait s'ouvrir et vous proposer l'importation." # Machine translated, remove this comment when verified
+        google_steps:
+          - "Cliquez sur « Copier le lien » ci-dessus pour copier l'URL du calendrier dans le presse-papiers." # Machine translated, remove this comment when verified
+          - "À gauche de l'écran de Google Agenda, cliquez sur le « + » à côté de « Autres agendas »." # Machine translated, remove this comment when verified
+          - "Cliquez sur « À partir de l'URL »." # Machine translated, remove this comment when verified
+          - "Collez l'URL copiée ci-dessus." # Machine translated, remove this comment when verified
+          - "Cliquez sur « Ajouter un agenda »." # Machine translated, remove this comment when verified
+          - "Les événements devraient apparaître dans votre agenda après quelques secondes." # Machine translated, remove this comment when verified
+        apple_method_1: "Essayez simplement de cliquer sur « Ouvrir le lien dans le navigateur » ci-dessus. Si votre navigateur ouvre les liens webcal avec le Calendrier d'Apple, cela devrait fonctionner !" # Machine translated, remove this comment when verified
+        apple_steps:
+          - "Cliquez sur « Copier le lien » ci-dessus pour copier l'URL du calendrier dans le presse-papiers." # Machine translated, remove this comment when verified
+          - "Ouvrez le Calendrier d'Apple." # Machine translated, remove this comment when verified
+          - "Cliquez sur le menu « Fichier »." # Machine translated, remove this comment when verified
+          - "Cliquez sur « S'abonner » ou « Nouvel abonnement à un calendrier »." # Machine translated, remove this comment when verified
+          - "Collez l'URL copiée ci-dessus." # Machine translated, remove this comment when verified
+          - "Cliquez sur OK/S'abonner." # Machine translated, remove this comment when verified
+          - "Réglez les options de l'abonnement si on vous le demande. L'intervalle d'actualisation automatique recommandé est « toutes les heures »." # Machine translated, remove this comment when verified
+          - "Les événements devraient maintenant apparaître dans votre calendrier." # Machine translated, remove this comment when verified
+        reset_token_html: "Si vous avez partagé vos liens de calendrier personnalisés par erreur et voulez les rendre de nouveau privés, %{link}. Attention : les anciens liens ne fonctionneront plus et vous devrez mettre à jour votre application de calendrier." # Machine translated, remove this comment when verified
+        reset_token_link: "cliquez ici pour réinitialiser votre jeton secret" # Machine translated, remove this comment when verified
+    all_day: "Toute la journée" # Machine translated, remove this comment when verified
+    my_meals: "Mes repas" # Machine translated, remove this comment when verified
+    all_meals: "Tous les repas" # Machine translated, remove this comment when verified
+    community_meals: "Repas de %{community}" # Machine translated, remove this comment when verified
+    community_events: "Événements de %{community}" # Machine translated, remove this comment when verified
+    my_events: "Mes événements" # Machine translated, remove this comment when verified
+    my_jobs: "Mes tâches" # Machine translated, remove this comment when verified
+    feed_names:
+      all: "Tous les calendriers de %{community}" # Machine translated, remove this comment when verified
+      single: "%{community} %{calendar}" # Machine translated, remove this comment when verified
+      multiple:
+        one: "%{count} calendrier de %{community}" # Machine translated, remove this comment when verified
+        other: "%{count} calendriers de %{community}" # Machine translated, remove this comment when verified
+    meal_by_cook: "Par %{cook}" # Machine translated, remove this comment when verified
+    job_start: "%{name} (début)" # Machine translated, remove this comment when verified
+    job_end: "%{name} (fin)" # Machine translated, remove this comment when verified
+    created: "Calendrier créé." # Machine translated, remove this comment when verified
+    updated: "Calendrier mis à jour." # Machine translated, remove this comment when verified
+    group_created: "Groupe créé." # Machine translated, remove this comment when verified
+    group_updated: "Groupe mis à jour." # Machine translated, remove this comment when verified
+    protocol_created: "Règlement créé." # Machine translated, remove this comment when verified
+    protocol_updated: "Règlement mis à jour." # Machine translated, remove this comment when verified
+    event_created: "Événement créé." # Machine translated, remove this comment when verified
+    event_updated: "Événement mis à jour." # Machine translated, remove this comment when verified
+    event_deleted: "Événement supprimé." # Machine translated, remove this comment when verified
+    token_reset: "Jeton réinitialisé." # Machine translated, remove this comment when verified
+    residents_only: "Seuls les résidents de %{community} peuvent réserver ce calendrier." # Machine translated, remove this comment when verified
+    timespan:
+      all_day: "%{date} (toute la journée)" # Machine translated, remove this comment when verified
+      all_day_range: "%{first} - %{last} (toute la journée)" # Machine translated, remove this comment when verified
+    recurrence:
+      on_weekdays: ["le dimanche", "le lundi", "le mardi", "le mercredi", "le jeudi", "le vendredi", "le samedi"] # Machine translated, remove this comment when verified
+      on_day_of_month: "le %{ordinal}" # Machine translated, remove this comment when verified
+      on_date: "le %{date}" # Machine translated, remove this comment when verified
+      at_time: "à %{time}" # Machine translated, remove this comment when verified
+      from_date: "à partir du %{date}" # Machine translated, remove this comment when verified
+      between_dates: "du %{first} au %{last}" # Machine translated, remove this comment when verified
+    rules:
+      max_lead_days: "Au plus %{count} jours à l'avance" # Machine translated, remove this comment when verified
+      max_length: "Au plus %{length} après l'heure de début" # Machine translated, remove this comment when verified
+      other_communities_forbidden: "Les résidents d'autres communautés ne peuvent pas créer d'événements" # Machine translated, remove this comment when verified
+      sponsor_required: "Vous devez avoir un parrain de %{community}" # Machine translated, remove this comment when verified
+      fixed_time: "Doit être à %{time}" # Machine translated, remove this comment when verified
+    calendars:
+      index:
+        title: "Calendriers" # Machine translated, remove this comment when verified
+        create_group: "Créer un groupe" # Machine translated, remove this comment when verified
+        create_calendar: "Créer un calendrier" # Machine translated, remove this comment when verified
+        no_calendars: "Aucun calendrier trouvé." # Machine translated, remove this comment when verified
+      table:
+        name: "Nom" # Machine translated, remove this comment when verified
+        events: "Événements" # Machine translated, remove this comment when verified
+      new:
+        title: "Créer un calendrier" # Machine translated, remove this comment when verified
+      edit:
+        title: "Modifier le calendrier : %{name}" # Machine translated, remove this comment when verified
+    groups:
+      new:
+        title: "Créer un groupe de calendriers" # Machine translated, remove this comment when verified
+      edit:
+        title: "Modifier le groupe de calendriers : %{name}" # Machine translated, remove this comment when verified
+    calendar_list:
+      all: "Tous" # Machine translated, remove this comment when verified
+      select_all: "Tout sélectionner" # Machine translated, remove this comment when verified
+      deselect_all: "Tout désélectionner" # Machine translated, remove this comment when verified
+    grid:
+      create_confirm:
+        same_day_html: "Créer un événement le <b>%{date}</b> ?" # Machine translated, remove this comment when verified
+        same_day_times_html: "Créer un événement le <b>%{date}</b> de <b>%{start}</b> à <b>%{end}</b> ?" # Machine translated, remove this comment when verified
+        range_html: "Créer un événement du <b>%{start}</b> au <b>%{end}</b> ?" # Machine translated, remove this comment when verified
+      now_showing: "Le calendrier affiche maintenant %{month}" # Machine translated, remove this comment when verified
+      event_count:
+        zero: "Aucun événement" # Machine translated, remove this comment when verified
+        one: "%{count} événement" # Machine translated, remove this comment when verified
+        other: "%{count} événements" # Machine translated, remove this comment when verified
+      event_count_this_week:
+        zero: "Aucun événement cette semaine" # Machine translated, remove this comment when verified
+        one: "%{count} événement cette semaine" # Machine translated, remove this comment when verified
+        other: "%{count} événements cette semaine" # Machine translated, remove this comment when verified
+      event_count_this_month:
+        zero: "Aucun événement ce mois-ci" # Machine translated, remove this comment when verified
+        one: "%{count} événement ce mois-ci" # Machine translated, remove this comment when verified
+        other: "%{count} événements ce mois-ci" # Machine translated, remove this comment when verified
+      month_calendar: "Calendrier mensuel" # Machine translated, remove this comment when verified
+      day_calendar: "Calendrier journalier" # Machine translated, remove this comment when verified
+      week_calendar: "Calendrier hebdomadaire" # Machine translated, remove this comment when verified
+      agenda_label: "%{view}. Utilisez les flèches pour naviguer" # Machine translated, remove this comment when verified
+      agenda_label_all_day: "%{view}. Ligne « Toute la journée ». Utilisez les flèches pour naviguer" # Machine translated, remove this comment when verified
+      agenda_label_slots: "%{view}. Grille de %{slots}. Utilisez les flèches pour naviguer" # Machine translated, remove this comment when verified
+      agenda_label_all_day_slots: "%{view}. Ligne « Toute la journée » suivie de %{slots}. Utilisez les flèches pour naviguer" # Machine translated, remove this comment when verified
+      half_hour_slots: "créneaux d'une demi-heure de %{start} à %{end}" # Machine translated, remove this comment when verified
+      minute_slots: "créneaux de %{minutes} minutes de %{start} à %{end}" # Machine translated, remove this comment when verified
+      today_date: "Aujourd'hui, %{date}" # Machine translated, remove this comment when verified
+      this_week_date: "Cette semaine, %{date}" # Machine translated, remove this comment when verified
+      header:
+        toolbar: "Commandes du calendrier" # Machine translated, remove this comment when verified
+        previous: "Précédent" # Machine translated, remove this comment when verified
+        next: "Suivant" # Machine translated, remove this comment when verified
+        today: "Aujourd'hui" # Machine translated, remove this comment when verified
+        day_view: "Vue par jour" # Machine translated, remove this comment when verified
+        week_view: "Vue par semaine" # Machine translated, remove this comment when verified
+        month_view: "Vue par mois" # Machine translated, remove this comment when verified
+    events:
+      index:
+        title: "Événements et réservations" # Machine translated, remove this comment when verified
+        edit_calendar: "Modifier le calendrier" # Machine translated, remove this comment when verified
+        export: "Exporter" # Machine translated, remove this comment when verified
+        create_event: "Créer un événement" # Machine translated, remove this comment when verified
+        permalink: "Lien permanent" # Machine translated, remove this comment when verified
+        show_early: "Afficher le petit matin" # Machine translated, remove this comment when verified
+        hide_early: "Masquer le petit matin" # Machine translated, remove this comment when verified
+        create_confirm_title: "Créer un événement ?" # Machine translated, remove this comment when verified
+        cancel: "Annuler" # Machine translated, remove this comment when verified
+        ok: "OK" # Machine translated, remove this comment when verified
+      single_calendar_sidebar:
+        calendars: "Calendriers" # Machine translated, remove this comment when verified
+      all_events_sidebar:
+        calendars: "Calendriers" # Machine translated, remove this comment when verified
+      new:
+        title: "%{calendar} : créer un événement" # Machine translated, remove this comment when verified
+        no_calendars_title: "Aucun calendrier" # Machine translated, remove this comment when verified
+        no_calendars: "Votre communauté n'a aucun calendrier sur lequel vous pouvez créer un événement." # Machine translated, remove this comment when verified
+        create_one: "Vous pouvez en créer un." # Machine translated, remove this comment when verified
+        select_calendar: "Choisir un calendrier" # Machine translated, remove this comment when verified
+      edit:
+        title: "Modifier l'événement : %{name}" # Machine translated, remove this comment when verified
+      form:
+        agree_to_guidelines: "J'accepte les consignes ci-dessus" # Machine translated, remove this comment when verified
+      series_notice:
+        applies_from: "Les modifications faites ci-dessous ne s'appliquent qu'à partir du %{date}." # Machine translated, remove this comment when verified
+        edit_earlier_html: "Pour modifier toutes les occurrences à venir, modifiez l'occurrence du %{link}." # Machine translated, remove this comment when verified
+        started: "Cette occurrence a déjà commencé et ne peut donc pas être modifiée." # Machine translated, remove this comment when verified
+        edit_later_html: "Pour modifier la série à partir de ce moment, modifiez l'occurrence du %{link}." # Machine translated, remove this comment when verified
+      repeat_fields:
+        repeat_units:
+          daily:
+            one: "jour" # Machine translated, remove this comment when verified
+            other: "jours" # Machine translated, remove this comment when verified
+          weekly:
+            one: "semaine" # Machine translated, remove this comment when verified
+            other: "semaines" # Machine translated, remove this comment when verified
+          monthly:
+            one: "mois" # Machine translated, remove this comment when verified
+            other: "mois" # Machine translated, remove this comment when verified
+          yearly:
+            one: "an" # Machine translated, remove this comment when verified
+            other: "ans" # Machine translated, remove this comment when verified
+        monthly_by:
+          day_of_month: "Le %{day}" # Machine translated, remove this comment when verified
+          day_of_week:
+            first: "Le premier %{weekday}" # Machine translated, remove this comment when verified
+            second: "Le deuxième %{weekday}" # Machine translated, remove this comment when verified
+            third: "Le troisième %{weekday}" # Machine translated, remove this comment when verified
+            fourth: "Le quatrième %{weekday}" # Machine translated, remove this comment when verified
+          last_day_of_week: "Le dernier %{weekday}" # Machine translated, remove this comment when verified
+          last_day_of_month: "Le dernier jour du mois" # Machine translated, remove this comment when verified
+        start_weekday: "Le jour de la date de début est toujours inclus" # Machine translated, remove this comment when verified
+        pattern_fixed: "Cet événement se répète d'une façon que ce formulaire ne peut pas afficher (%{description}), ses paramètres de répétition ne peuvent donc pas être modifiés ici." # Machine translated, remove this comment when verified
+        recurrence_unavailable: "Les événements récurrents ne sont pas disponibles sur ce calendrier, car %{reasons}." # Machine translated, remove this comment when verified
+        recurrence_blockers:
+          overlap_not_allowed: "ses événements ne peuvent pas se chevaucher" # Machine translated, remove this comment when verified
+          fixed_start_time: "il a une heure de début fixe" # Machine translated, remove this comment when verified
+          fixed_end_time: "il a une heure de fin fixe" # Machine translated, remove this comment when verified
+          max_lead_days: "il limite le délai de réservation à l'avance" # Machine translated, remove this comment when verified
+          max_days_per_year: "il limite le nombre de jours réservés par an" # Machine translated, remove this comment when verified
+          max_minutes_per_year: "il limite la durée réservée par an" # Machine translated, remove this comment when verified
+    eventlets:
+      show:
+        title: "Événement : %{name}" # Machine translated, remove this comment when verified
+        calendars: "Calendriers" # Machine translated, remove this comment when verified
+        calendar: "Calendrier" # Machine translated, remove this comment when verified
+        date_time: "Date/heure" # Machine translated, remove this comment when verified
+        repeats: "Répétition" # Machine translated, remove this comment when verified
+        meal: "Repas" # Machine translated, remove this comment when verified
+        group: "Groupe" # Machine translated, remove this comment when verified
+        reserved_by: "Réservé par" # Machine translated, remove this comment when verified
+        sponsor: "Parrain" # Machine translated, remove this comment when verified
+        type: "Type" # Machine translated, remove this comment when verified
+        note: "Note" # Machine translated, remove this comment when verified
+    protocols:
+      index:
+        title: "Règlements" # Machine translated, remove this comment when verified
+        create: "Créer un règlement" # Machine translated, remove this comment when verified
+        no_protocols: "Aucun règlement trouvé." # Machine translated, remove this comment when verified
+        name: "Nom" # Machine translated, remove this comment when verified
+        calendars: "Calendriers" # Machine translated, remove this comment when verified
+        types: "Types" # Machine translated, remove this comment when verified
+        rules: "Règles" # Machine translated, remove this comment when verified
+      new:
+        title: "Créer un règlement" # Machine translated, remove this comment when verified
+      edit:
+        title: "Modifier le règlement : %{name}" # Machine translated, remove this comment when verified
+    legacy_exports:
+      index:
+        title: "Exportation de calendriers" # Machine translated, remove this comment when verified
+        old_page: "Vous êtes sur l'ancienne page d'exportation des calendriers. Elle a été remplacée par un système d'exportation plus récent et plus puissant." # Machine translated, remove this comment when verified
+        new_page: "La nouvelle page est accessible avec le bouton « Exporter » de la page principale des calendriers." # Machine translated, remove this comment when verified
+        links_removed: "Une fois que vous aurez cliqué sur le bouton ci-dessous pour aller sur la nouvelle page d'exportation, les liens vers cette ancienne page seront supprimés. Pour exporter des calendriers à l'avenir, allez simplement sur la page principale des calendriers et cliquez sur « Exporter »." # Machine translated, remove this comment when verified
+        proceed: "Compris ! Emmenez-moi sur la nouvelle page d'exportation et supprimez les anciens liens !" # Machine translated, remove this comment when verified
+    drag:
+      confirm: "Voulez-vous vraiment déplacer l'événement « %{name} » ?" # Machine translated, remove this comment when verified
+      confirm_occurrence: "Voulez-vous vraiment déplacer cette occurrence de « %{name} » ?" # Machine translated, remove this comment when verified
+      error_title: "Erreur" # Machine translated, remove this comment when verified
+      load_error: "Impossible de vérifier comment cet événement peut être déplacé. Veuillez réessayer." # Machine translated, remove this comment when verified
+      calendar:
+        title: "Déplacer un événement sur plusieurs calendriers" # Machine translated, remove this comment when verified
+        content: "« %{name} » figure sur plusieurs calendriers :" # Machine translated, remove this comment when verified
+        selected: "(sélectionné)" # Machine translated, remove this comment when verified
+        this: "Déplacer uniquement sur %{calendar}" # Machine translated, remove this comment when verified
+        all: "Déplacer sur tous" # Machine translated, remove this comment when verified
+      series:
+        title: "Déplacer un événement récurrent" # Machine translated, remove this comment when verified
+        content: "« %{name} » se répète. Quelles occurrences faut-il déplacer ?" # Machine translated, remove this comment when verified
+        occurrence: "Celle-ci uniquement" # Machine translated, remove this comment when verified
+        following: "Celle-ci et les suivantes" # Machine translated, remove this comment when verified
+        series: "Toutes les occurrences" # Machine translated, remove this comment when verified
+    eventlet_deletion:
+      success:
+        event: "Événement supprimé." # Machine translated, remove this comment when verified
+        series: "Toutes les occurrences de l'événement ont été supprimées." # Machine translated, remove this comment when verified
+        following: "Cette occurrence et toutes les suivantes ont été supprimées." # Machine translated, remove this comment when verified
+        occurrence: "L'occurrence a été supprimée." # Machine translated, remove this comment when verified
+        calendar_series: "L'événement a été retiré de %{calendar}." # Machine translated, remove this comment when verified
+        calendar_occurrence: "L'occurrence a été retirée de %{calendar}." # Machine translated, remove this comment when verified
+      prompts:
+        calendar:
+          title: "Supprimer un événement sur plusieurs calendriers" # Machine translated, remove this comment when verified
+          selected_html: "%{name} (sélectionné)" # Machine translated, remove this comment when verified
+          content: "« %{name} » figure sur plusieurs calendriers :" # Machine translated, remove this comment when verified
+          this: "Supprimer de %{calendar}" # Machine translated, remove this comment when verified
+          all: "Supprimer de tous les calendriers" # Machine translated, remove this comment when verified
+        series:
+          title: "Supprimer un événement récurrent" # Machine translated, remove this comment when verified
+          content_all: "« %{name} » se répète. Quelles occurrences faut-il supprimer ?" # Machine translated, remove this comment when verified
+          content_this: "« %{name} » se répète. Quelles occurrences faut-il supprimer de %{calendar} ?" # Machine translated, remove this comment when verified
+          occurrence: "Celle-ci uniquement" # Machine translated, remove this comment when verified
+          following: "Celle-ci et les suivantes" # Machine translated, remove this comment when verified
+          series: "Toutes les occurrences" # Machine translated, remove this comment when verified
+  calendars/protocol:
+    applicability: "Champ d'application" # Machine translated, remove this comment when verified
+    no_kinds_html: "Cette communauté n'a défini aucun type d'événement. Voir la <a href='%{url}'>page des paramètres</a>." # Machine translated, remove this comment when verified
+    rules: "Règles" # Machine translated, remove this comment when verified
+    durations:
+      mins:
+        one: "1 minute" # Machine translated, remove this comment when verified
+        other: "%{formatted} minutes" # Machine translated, remove this comment when verified
+      days:
+        one: "1 jour" # Machine translated, remove this comment when verified
+        other: "%{formatted} jours" # Machine translated, remove this comment when verified
+    exceeded_time: "Vous pouvez réserver au plus %{max} d'événements %{kind_calendar} par an et vous en avez déjà réservé %{booked}" # Machine translated, remove this comment when verified
+  calendar_exports:
+    meals:
+      diner_count:
+        one: "%{count} convive de votre foyer" # Machine translated, remove this comment when verified
+        other: "%{count} convives de votre foyer" # Machine translated, remove this comment when verified
+      signup_comments: "Commentaires d'inscription :\n%{comments}" # Machine translated, remove this comment when verified

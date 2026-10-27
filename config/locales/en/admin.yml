@@ -3,7 +3,7 @@ en:
     domains:
       refresh_all_started:
         one: >-
-          Checking 1 domain in the background. This should take about %{seconds} seconds.
+          Checking %{count} domain in the background. This should take about %{seconds} seconds.
           Reload this page to see the results.
         other: >-
           Checking %{count} domains in the background. This should take about %{seconds} seconds.
@@ -50,7 +50,7 @@ en:
           Results are from the most recent check; use the refresh buttons to re-check.
         none_found: "No custom domains found."
         summary:
-          one: "%{ok} of 1 domain has all records correct."
+          one: "%{ok} of %{count} domain has all records correct."
           other: "%{ok} of %{count} domains have all records correct."
         never_checked_prompt: "No checks have run yet — use 'Refresh All' to run the first one."
         not_configured: >-

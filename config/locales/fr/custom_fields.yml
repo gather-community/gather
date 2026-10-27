@@ -1,0 +1,137 @@
+fr:
+  custom_fields:
+    boolean:
+      "true": "Oui" # Machine translated, remove this comment when verified
+      "false": "Non" # Machine translated, remove this comment when verified
+    labels:
+      community:
+        settings:
+          main_nav_customizations: "Personnalisation du menu principal" # Machine translated, remove this comment when verified
+          time_zone: "Fuseau horaire" # Machine translated, remove this comment when verified
+          default_landing_page: "Page d'accueil par défaut" # Machine translated, remove this comment when verified
+          people:
+            _self: "Personnes" # Machine translated, remove this comment when verified
+            default_directory_sort: "Tri par défaut de l'annuaire" # Machine translated, remove this comment when verified
+            plain_user_selects: "Listes déroulantes simples pour les personnes" # Machine translated, remove this comment when verified
+            user_custom_fields_spec: "Spécification des champs personnalisés des personnes" # Machine translated, remove this comment when verified
+          meals:
+            _self: "Repas" # Machine translated, remove this comment when verified
+            reimb_instructions: "Instructions de remboursement" # Machine translated, remove this comment when verified
+            allergens: "Allergènes" # Machine translated, remove this comment when verified
+            show_reimb_form: "Afficher le formulaire de remboursement imprimable" # Machine translated, remove this comment when verified
+            cooks_can_finalize: "Les cuisiniers peuvent finaliser les repas" # Machine translated, remove this comment when verified
+            cooks_can_change_invites: "Les cuisiniers peuvent changer les communautés invitées" # Machine translated, remove this comment when verified
+            default_invites: "Communautés invitées par défaut" # Machine translated, remove this comment when verified
+            allow_job_signup_on_meal_page: "Permettre l'inscription aux tâches sur la page du repas" # Machine translated, remove this comment when verified
+            default_capacity: "Capacité par défaut" # Machine translated, remove this comment when verified
+            reminder_lead_times:
+              _self: "Rappels : nombre de jours à l'avance" # Machine translated, remove this comment when verified
+              diner: "Rappel aux convives" # Machine translated, remove this comment when verified
+              early_menu: "Premier rappel du menu" # Machine translated, remove this comment when verified
+              late_menu: "Dernier rappel du menu" # Machine translated, remove this comment when verified
+          calendars:
+            _self: "Calendriers" # Machine translated, remove this comment when verified
+            kinds: "Types" # Machine translated, remove this comment when verified
+            meals:
+              _self: "Événements de repas" # Machine translated, remove this comment when verified
+              default_total_time: "Durée totale par défaut" # Machine translated, remove this comment when verified
+              default_prep_time: "Temps de préparation par défaut" # Machine translated, remove this comment when verified
+          work:
+            _self: "Travail" # Machine translated, remove this comment when verified
+            default_date_filter: "Filtre de dates par défaut des inscriptions" # Machine translated, remove this comment when verified
+          billing:
+            _self: "Facturation" # Machine translated, remove this comment when verified
+            contact: "Contact pour la facturation" # Machine translated, remove this comment when verified
+            payment_instructions: "Instructions de paiement" # Machine translated, remove this comment when verified
+            statement_terms: "Délai de paiement des relevés" # Machine translated, remove this comment when verified
+            statement_reminder_lead_time: "Rappel de relevé\nJours à l'avance" # Machine translated, remove this comment when verified
+            paypal_reimbursement: "Proposer le remboursement par PayPal" # Machine translated, remove this comment when verified
+            payment_methods:
+              _self: "Informations sur les moyens de paiement" # Machine translated, remove this comment when verified
+              paypal_me: "PayPal.me" # Machine translated, remove this comment when verified
+              paypal_email: "PayPal par e-mail" # Machine translated, remove this comment when verified
+              paypal_friend: "Demander aux membres d'envoyer les paiements PayPal en tant que « envoi à un proche »" # Machine translated, remove this comment when verified
+              check_payee: "Bénéficiaire des chèques" # Machine translated, remove this comment when verified
+              check_address: "Adresse postale pour les chèques" # Machine translated, remove this comment when verified
+              check_dropoff: "Instructions de dépôt des chèques" # Machine translated, remove this comment when verified
+              cash_dropoff: "Instructions de dépôt des espèces" # Machine translated, remove this comment when verified
+              additional_info: "Informations supplémentaires" # Machine translated, remove this comment when verified
+              show_billing_contact: "Afficher l'e-mail du contact de facturation avec les informations supplémentaires" # Machine translated, remove this comment when verified
+            late_fee_policy:
+              _self: "Politique de frais de retard" # Machine translated, remove this comment when verified
+              fee_type: "Type de frais" # Machine translated, remove this comment when verified
+              threshold: "Seuil" # Machine translated, remove this comment when verified
+              amount: "Montant" # Machine translated, remove this comment when verified
+    hints:
+      community:
+        settings:
+          main_nav_customizations: "Utilisez ce paramètre pour modifier les liens du menu principal. Saisissez les liens au format Markdown. Exemple : [Nom du lien](https://example.com). Si le nom du lien correspond à un lien existant, il remplacera l'URL par défaut. Une URL vide supprime complètement le lien. Tout autre texte ou balisage est ignoré." # Machine translated, remove this comment when verified
+          people:
+            plain_user_selects: "Utiliser des listes déroulantes simples plutôt que des champs avec recherche. Peut convenir aux petites communautés." # Machine translated, remove this comment when verified
+            user_custom_fields_spec: "Saisissez une spécification au format YAML des champs personnalisés qui apparaîtront lors de l'affichage ou de la modification des personnes de cette communauté. Contactez l'assistance Gather si vous avez besoin d'aide pour la rédiger." # Machine translated, remove this comment when verified
+          meals:
+            reimb_instructions: "Ce que les cuisiniers doivent faire de leurs reçus pour être remboursés. Par exemple, saisir les montants sur la page de modification du repas dans Gather, utiliser le formulaire de remboursement intégré ou suivre une autre procédure." # Machine translated, remove this comment when verified
+            allergens: "Liste d'allergènes séparés par des virgules, parmi lesquels les cuisiniers choisissent en publiant les menus." # Machine translated, remove this comment when verified
+            show_reimb_form: "Afficher ou non un formulaire de remboursement imprimable (avec les montants d'épicerie et de garde-manger et le mode de remboursement) sur la page de résumé du repas. Décochez si vous préférez un remboursement électronique." # Machine translated, remove this comment when verified
+            cooks_can_finalize: "Les chefs cuisiniers peuvent-ils finaliser les repas, en plus des responsables de la facturation, des coordinateurs des repas et des administrateurs ?" # Machine translated, remove this comment when verified
+            cooks_can_change_invites: "Les chefs cuisiniers peuvent-ils changer les communautés invitées à un repas ?" # Machine translated, remove this comment when verified
+            default_invites: "Les communautés invitées à un repas par défaut." # Machine translated, remove this comment when verified
+            allow_job_signup_on_meal_page: "Les convives peuvent-ils se porter volontaires pour aider à un repas en s'y inscrivant ?" # Machine translated, remove this comment when verified
+            default_capacity: "Le nombre de personnes qu'un repas peut accueillir par défaut." # Machine translated, remove this comment when verified
+            reminder_lead_times:
+              _self: "Le nombre de jours à l'avance où les différents rappels sont envoyés. Les rappels partent à 6 h, heure locale. « 0 » signifie que le rappel est envoyé le matin même du repas. Voir la page des rôles de repas pour d'autres paramètres de rappel." # Machine translated, remove this comment when verified
+              diner: "Le rappel envoyé à tous les convives." # Machine translated, remove this comment when verified
+              early_menu: "Le rappel envoyé au chef cuisinier pour qu'il saisisse un menu." # Machine translated, remove this comment when verified
+              late_menu: "Un second rappel, plus urgent, envoyé au chef cuisinier s'il n'a toujours pas saisi de menu. Doit être moins de jours à l'avance que le premier rappel du menu." # Machine translated, remove this comment when verified
+          calendars:
+            kinds: "Différents types d'événements, séparés par des virgules. Peuvent être utilisés dans les règlements. Si vide, le champ « type » n'apparaît pas dans le formulaire d'événement." # Machine translated, remove this comment when verified
+            meals:
+              default_total_time: "Durée totale par défaut des événements de repas, en minutes, préparation et rangement compris" # Machine translated, remove this comment when verified
+              default_prep_time: "Temps de préparation par défaut d'un repas, en minutes" # Machine translated, remove this comment when verified
+          billing:
+            contact: "E-mail pour les questions de facturation. Il sera indiqué avec les instructions de paiement." # Machine translated, remove this comment when verified
+            payment_instructions: "Comment régler un compte." # Machine translated, remove this comment when verified
+            statement_terms: "Nombre de jours après sa création avant l'échéance d'un relevé. Si zéro (0), les relevés n'ont pas d'échéance." # Machine translated, remove this comment when verified
+            statement_reminder_lead_time: "Le nombre de jours avant l'échéance où le rappel de paiement du relevé est envoyé. Aucun rappel n'est envoyé si les relevés n'ont pas d'échéance ou si le solde a été payé." # Machine translated, remove this comment when verified
+            paypal_reimbursement: "Permettre aux cuisiniers de demander à être remboursés de leurs repas par PayPal. Les paiements PayPal doivent être faits manuellement (ils ne sont pas automatisés)." # Machine translated, remove this comment when verified
+            payment_methods:
+              _self: "Instructions ou informations pour les différents moyens de paiement. Laissez vide si le moyen n'est pas accepté. Consultez votre <a href='/accounts/mine'>page de comptes</a> pour voir à quoi ressemblent les instructions." # Machine translated, remove this comment when verified
+              paypal_me: "Saisissez votre <a href='https://paypal.me'>lien PayPal.me</a>. C'est la façon la plus simple pour les membres de payer avec PayPal. Notez qu'il est impossible d'éviter les frais avec cette méthode si vous avez un compte PayPal professionnel." # Machine translated, remove this comment when verified
+              paypal_email: "Si vous voulez accepter PayPal sans utiliser PayPal.me, saisissez l'adresse e-mail à laquelle les membres doivent envoyer leurs paiements." # Machine translated, remove this comment when verified
+              paypal_friend: "S'applique à PayPal.me et à PayPal par e-mail. Cochez si, selon les conditions d'utilisation de PayPal, ces paiements peuvent être considérés comme faits entre proches. Cela évite les frais." # Machine translated, remove this comment when verified
+              check_payee: "Indiquez à l'ordre de qui les chèques doivent être faits. Laissez vide si les chèques ne sont pas acceptés." # Machine translated, remove this comment when verified
+              check_address: "Indiquez une adresse si vous acceptez les chèques par la poste. Les instructions de paiement en ligne des factures seront alors aussi affichées." # Machine translated, remove this comment when verified
+              check_dropoff: "Indiquez comment déposer un chèque en personne. Laissez vide si les chèques doivent être envoyés par la poste ou ne sont pas acceptés." # Machine translated, remove this comment when verified
+              cash_dropoff: "Indiquez comment déposer des espèces en personne. Laissez vide si les espèces ne sont pas acceptées." # Machine translated, remove this comment when verified
+              additional_info: "Saisissez toute autre information à inclure dans la zone des instructions de paiement." # Machine translated, remove this comment when verified
+              show_billing_contact: "Ajouter ou non l'e-mail du contact de facturation ci-dessus (s'il est indiqué) en bas des instructions de paiement. Décochez et ajoutez-le vous-même dans « Informations supplémentaires » si vous voulez personnaliser sa présentation." # Machine translated, remove this comment when verified
+            late_fee_policy:
+              fee_type: "Comment les frais sont calculés" # Machine translated, remove this comment when verified
+              threshold: "Solde impayé minimum pour que des frais s'appliquent" # Machine translated, remove this comment when verified
+              amount: "Montant ou pourcentage des frais (par ex. saisissez « 3 » pour 3 % ou 3,00, selon le type)" # Machine translated, remove this comment when verified
+    options:
+      community:
+        settings:
+          default_landing_page:
+            meals: "Repas" # Machine translated, remove this comment when verified
+            directory: "Annuaire" # Machine translated, remove this comment when verified
+            calendars: "Calendriers" # Machine translated, remove this comment when verified
+            wiki: "Wiki" # Machine translated, remove this comment when verified
+          people:
+            default_directory_sort:
+              name: "Par nom" # Machine translated, remove this comment when verified
+              unit: "Par logement" # Machine translated, remove this comment when verified
+          meals:
+            default_invites:
+              all: "Toutes les communautés" # Machine translated, remove this comment when verified
+              own: "Sa propre communauté seulement" # Machine translated, remove this comment when verified
+          work:
+            default_date_filter:
+              all: "Passé et à venir" # Machine translated, remove this comment when verified
+              curftr: "En cours et à venir" # Machine translated, remove this comment when verified
+          billing:
+            late_fee_policy:
+              fee_type:
+                none: "Pas de frais de retard" # Machine translated, remove this comment when verified
+                fixed: "Fixes" # Machine translated, remove this comment when verified
+                percent: "Pourcentage" # Machine translated, remove this comment when verified

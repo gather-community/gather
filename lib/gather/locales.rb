@@ -7,8 +7,13 @@ module Gather
     # Locales served to everyone. A locale is added once it is fully translated.
     RELEASED = %i[en].freeze
 
-    # Locales whose translations were machine-generated and haven't been reviewed by people.
+    # Locales whose translations were machine-generated and haven't been reviewed by people. Pages and
+    # emails in these locales say so.
     MACHINE_TRANSLATED = %i[fr fr-CA es de sv nb fi nl it].freeze
+
+    # Locales with every key translated, which CI holds to that (spec/i18n_spec.rb) and smoke-tests
+    # (spec/system/locale_smoke_spec.rb). A locale joins once its translation is finished.
+    TRANSLATED = %i[en fr fr-CA].freeze
 
     # Language subtags browsers send that should map to one of our locales.
     # Norwegian arrives as "no" (generic) or "nn" (Nynorsk) as well as "nb" (Bokmål).
@@ -53,6 +58,14 @@ module Gather
         [tag.downcase, quality, index]
       end
       entries.sort_by { |_, quality, index| [-quality, index] }.map(&:first)
+    end
+
+    # The Postgres ICU collation that sorts text as people expect in `locale`. The rules really differ:
+    # Swedish, Finnish and Norwegian put å, ä and ö after z, while German sorts ä with a. English uses the
+    # root collation, which sorts accented letters with their base letters ("Émile" with the Es).
+    # See Gather::Collation.
+    def self.collation(locale = I18n.locale)
+      (locale.to_sym == :en) ? "und-x-icu" : "#{locale}-x-icu"
     end
 
     def self.preview?(user)

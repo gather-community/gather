@@ -1,10 +1,5 @@
 en:
   calendars:
-    exports:
-      jobs:
-        summary_with_suffix:
-          start: "%{base} (Start)"
-          end: "%{base} (End)"
     all_day: "All Day"
     # Names of the built-in system calendars and legacy export feeds.
     my_meals: "My Meals"

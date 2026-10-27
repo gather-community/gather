@@ -1,0 +1,203 @@
+fr:
+  people:
+    deleted_placeholder:
+      household: "Membres supprimés" # Machine translated, remove this comment when verified
+      first_name: "Membre" # Machine translated, remove this comment when verified
+      last_name: "supprimé" # Machine translated, remove this comment when verified
+    sign_in_invitations:
+      sent:
+        one: "Invitation envoyée." # Machine translated, remove this comment when verified
+        other: "Invitations envoyées." # Machine translated, remove this comment when verified
+      none_selected: "Vous n'avez sélectionné aucune personne." # Machine translated, remove this comment when verified
+      new:
+        title: "Inviter des personnes à se connecter" # Machine translated, remove this comment when verified
+        no_users: "Aucune personne trouvée." # Machine translated, remove this comment when verified
+        instructions_html: "Cochez les personnes que vous voulez inviter. Celles qui ont %{icon} à côté de leur nom ne se sont jamais connectées." # Machine translated, remove this comment when verified
+        select_no_sign_ins: "Sélectionner celles qui ne se sont jamais connectées" # Machine translated, remove this comment when verified
+        select_all: "Tout sélectionner" # Machine translated, remove this comment when verified
+        send: "Envoyer les invitations" # Machine translated, remove this comment when verified
+    memorials:
+      created: "Hommage créé." # Machine translated, remove this comment when verified
+      updated: "Hommage mis à jour." # Machine translated, remove this comment when verified
+      index:
+        title: "Hommages" # Machine translated, remove this comment when verified
+        create: "Créer un hommage" # Machine translated, remove this comment when verified
+        no_memorials: "Aucun hommage trouvé." # Machine translated, remove this comment when verified
+        photo_of: "Photo de %{name}" # Machine translated, remove this comment when verified
+      show:
+        memorials: "Hommages" # Machine translated, remove this comment when verified
+        photo_of: "Photo de %{name}" # Machine translated, remove this comment when verified
+        obituary: "Nécrologie" # Machine translated, remove this comment when verified
+        community_memories: "Souvenirs de la communauté" # Machine translated, remove this comment when verified
+      new:
+        title: "Créer un hommage" # Machine translated, remove this comment when verified
+      edit:
+        title: "Modifier l'hommage : %{name}" # Machine translated, remove this comment when verified
+    memorial_messages:
+      created: "Merci pour votre message." # Machine translated, remove this comment when verified
+      updated: "Message mis à jour." # Machine translated, remove this comment when verified
+      edit:
+        title: "Modifier le message d'hommage" # Machine translated, remove this comment when verified
+    member_types:
+      created: "Type de membre créé." # Machine translated, remove this comment when verified
+      updated: "Type de membre mis à jour." # Machine translated, remove this comment when verified
+      index:
+        title: "Types de membre" # Machine translated, remove this comment when verified
+        create: "Créer un type de membre" # Machine translated, remove this comment when verified
+        explanation: "Les types de membre sont attribués aux foyers et permettent de personnaliser les frais facturés régulièrement." # Machine translated, remove this comment when verified
+        no_member_types: "Aucun type de membre trouvé." # Machine translated, remove this comment when verified
+        name: "Nom" # Machine translated, remove this comment when verified
+      new:
+        title: "Créer un type de membre" # Machine translated, remove this comment when verified
+      edit:
+        title: "Modifier le type de membre : %{name}" # Machine translated, remove this comment when verified
+    vehicles:
+      index:
+        title: "Véhicules" # Machine translated, remove this comment when verified
+        no_vehicles: "Aucun véhicule trouvé." # Machine translated, remove this comment when verified
+        vehicle: "Marque/Modèle/Couleur/Plaque" # Machine translated, remove this comment when verified
+        owner: "Propriétaire" # Machine translated, remove this comment when verified
+    settings:
+      edit:
+        title: "Paramètres des personnes" # Machine translated, remove this comment when verified
+    birthdays:
+      index:
+        title: "Anniversaires" # Machine translated, remove this comment when verified
+        no_users: "Aucune personne trouvée." # Machine translated, remove this comment when verified
+        unknown: "?"
+    password_changes:
+      success: "Mot de passe modifié." # Machine translated, remove this comment when verified
+      show:
+        title: "Changer le mot de passe" # Machine translated, remove this comment when verified
+      password_fields:
+        new_password: "Nouveau mot de passe" # Machine translated, remove this comment when verified
+        retype_new_password: "Confirmer le nouveau mot de passe" # Machine translated, remove this comment when verified
+        reveal: "Afficher les mots de passe" # Machine translated, remove this comment when verified
+        mask: "Masquer les mots de passe" # Machine translated, remove this comment when verified
+    users:
+      confirmations:
+        sign_in_to_use_gather: "Veuillez vous connecter pour utiliser Gather." # Machine translated, remove this comment when verified
+        expired_signed_in: "Le délai de confirmation a expiré. Utilisez le lien « Renvoyer les instructions de confirmation » ci-dessous pour réessayer." # Machine translated, remove this comment when verified
+        expired_signed_out: "Le délai de confirmation a expiré. Connectez-vous avec votre ancienne adresse e-mail et réessayez." # Machine translated, remove this comment when verified
+      omniauth_failure_reasons:
+        no_email: "Google n'a pas fourni d'adresse e-mail. Veuillez prévenir un administrateur" # Machine translated, remove this comment when verified
+        invitation_expired: "votre invitation a expiré" # Machine translated, remove this comment when verified
+        wrong_google_id: "vous devez vous connecter avec l'identifiant Google %{google_id}" # Machine translated, remove this comment when verified
+        google_id_taken: "votre identifiant Google %{google_id} est associé à une autre personne" # Machine translated, remove this comment when verified
+        invitation_required: "vous devez utiliser une invitation pour votre première connexion" # Machine translated, remove this comment when verified
+        google_id_not_found: "votre identifiant Google %{google_id} est introuvable dans le système" # Machine translated, remove this comment when verified
+        cancelled: "la connexion a été annulée" # Machine translated, remove this comment when verified
+        session_expired: "votre session de connexion a expiré. Veuillez réessayer" # Machine translated, remove this comment when verified
+        unexpected: "une erreur inconnue s'est produite. Les administrateurs ont été prévenus" # Machine translated, remove this comment when verified
+    deletion:
+      blocked_intro: "Ceci ne peut pas encore être supprimé définitivement :" # Machine translated, remove this comment when verified
+      confirmation_mismatch: "Le texte de confirmation ne correspondait pas, rien n'a donc été supprimé." # Machine translated, remove this comment when verified
+      self_success: "Votre compte a été définitivement supprimé." # Machine translated, remove this comment when verified
+      blockers:
+        balance: "Le foyer « %{name} » a un solde de compte non réglé qui doit d'abord être résolu." # Machine translated, remove this comment when verified
+        guardian: "Cette personne est tutrice de %{names} ; supprimez ou réattribuez d'abord ces membres." # Machine translated, remove this comment when verified
+        external_ward: "Des membres de ce foyer sont tuteurs de %{names} dans d'autres foyers ; supprimez ou réattribuez d'abord ces membres." # Machine translated, remove this comment when verified
+        last_admin: "Cette personne est la seule administratrice de la communauté ; donnez d'abord le rôle d'administrateur à un autre membre." # Machine translated, remove this comment when verified
+  users:
+    greeting: "Bonjour %{name}," # Machine translated, remove this comment when verified
+    photo_of: "Photo de %{name}" # Machine translated, remove this comment when verified
+    confirmation_resent: "Instructions envoyées." # Machine translated, remove this comment when verified
+    email_change_canceled: "Changement d'adresse e-mail annulé." # Machine translated, remove this comment when verified
+    created: "Personne créée." # Machine translated, remove this comment when verified
+    created_and_invited: "Personne créée et invitée." # Machine translated, remove this comment when verified
+    updated: "Personne mise à jour." # Machine translated, remove this comment when verified
+    profile_updated: "Profil mis à jour." # Machine translated, remove this comment when verified
+    confirm_new_email_self: "Vous devez confirmer votre nouvelle adresse e-mail. Consultez vos e-mails à l'adresse %{email}." # Machine translated, remove this comment when verified
+    confirm_new_email_other: "Cette personne doit confirmer sa nouvelle adresse e-mail (%{email})." # Machine translated, remove this comment when verified
+    invitation_invalidated: "Toutefois, ce changement a peut-être rendu une invitation à se connecter invalide. Vous voudrez peut-être en envoyer une nouvelle." # Machine translated, remove this comment when verified
+    household_hint:
+      choose_html: "Choisissez un foyer existant pour cette personne. S'il n'existe pas, vous devez %{link}." # Machine translated, remove this comment when verified
+      create_link: "le créer d'abord" # Machine translated, remove this comment when verified
+      child_note: "En raison d'une limite du système, chaque personne dans Gather doit appartenir à un seul foyer, mais un enfant peut avoir des parents ou tuteurs dans plusieurs foyers. Toutes les fonctions du système concernant les enfants traitent à égalité tous les parents ou tuteurs et tous les foyers associés à l'enfant." # Machine translated, remove this comment when verified
+    preferred_contact_tooltip: "Préfère être contacté par : %{method}" # Machine translated, remove this comment when verified
+    all_users: "Toutes les personnes" # Machine translated, remove this comment when verified
+    index:
+      title: "Annuaire" # Machine translated, remove this comment when verified
+      print_title: "Annuaire de %{community}" # Machine translated, remove this comment when verified
+      show_action_menu: "Afficher le menu d'actions de la personne" # Machine translated, remove this comment when verified
+      create_adult: "Créer un adulte" # Machine translated, remove this comment when verified
+      create_child: "Créer un enfant" # Machine translated, remove this comment when verified
+      invite_to_sign_in: "Inviter à se connecter" # Machine translated, remove this comment when verified
+      no_users: "Aucune personne trouvée." # Machine translated, remove this comment when verified
+      name: "Nom" # Machine translated, remove this comment when verified
+      unit: "Logement" # Machine translated, remove this comment when verified
+      email: "E-mail" # Machine translated, remove this comment when verified
+      mobile_phone: "Mobile" # Machine translated, remove this comment when verified
+      home_phone: "Domicile" # Machine translated, remove this comment when verified
+      work_phone: "Travail" # Machine translated, remove this comment when verified
+      preferred_contact: "Préf." # Machine translated, remove this comment when verified
+      download_csv: "Télécharger en CSV" # Machine translated, remove this comment when verified
+    show:
+      directory: "Annuaire" # Machine translated, remove this comment when verified
+      email: "E-mail" # Machine translated, remove this comment when verified
+      pending_confirmation: "En attente de confirmation : %{email}" # Machine translated, remove this comment when verified
+      resend_confirmation: "Renvoyer les instructions de confirmation" # Machine translated, remove this comment when verified
+      cancel_change: "Annuler le changement" # Machine translated, remove this comment when verified
+      unconfirmed: "* Cette adresse n'a pas encore été confirmée, utilisez-la avec prudence." # Machine translated, remove this comment when verified
+      phone: "Téléphone" # Machine translated, remove this comment when verified
+      preferred_contact: "Moyen de contact préféré" # Machine translated, remove this comment when verified
+      birthday: "Anniversaire" # Machine translated, remove this comment when verified
+      age: "Âge" # Machine translated, remove this comment when verified
+      joined_on: "Date d'arrivée" # Machine translated, remove this comment when verified
+      recent_head_cook_meals: "Repas récents comme chef cuisinier" # Machine translated, remove this comment when verified
+      date: "Date" # Machine translated, remove this comment when verified
+      meal_title: "Titre" # Machine translated, remove this comment when verified
+      signups: "Inscriptions" # Machine translated, remove this comment when verified
+    new:
+      title: "Créer une personne" # Machine translated, remove this comment when verified
+    edit:
+      profile: "Profil" # Machine translated, remove this comment when verified
+      edit_user: "Modifier la personne : %{name}" # Machine translated, remove this comment when verified
+      edit_photo: "Modifier la photo : %{name}" # Machine translated, remove this comment when verified
+    full_form:
+      hide_photo_from_cluster: "Ne pas montrer la photo aux personnes de %{communities}" # Machine translated, remove this comment when verified
+      privacy_hint_html: "Pour en savoir plus sur les paramètres de confidentialité, consultez la %{link}." # Machine translated, remove this comment when verified
+      privacy_policy: "politique de confidentialité" # Machine translated, remove this comment when verified
+      household_info: "Informations sur le foyer" # Machine translated, remove this comment when verified
+      household_note_named_html: "Les champs ci-dessous sont associés au foyer %{name}. Les modifier ici les modifiera pour <em>toutes les personnes du foyer</em>." # Machine translated, remove this comment when verified
+      household_note_unnamed_html: "Les champs ci-dessous sont associés au foyer de la personne. Les modifier ici les modifiera pour <em>toutes les personnes du foyer</em>." # Machine translated, remove this comment when verified
+      move_household_html: "Vous pouvez aussi %{link}." # Machine translated, remove this comment when verified
+      move_household_link: "la déplacer dans un autre foyer" # Machine translated, remove this comment when verified
+  households:
+    greeting: "Bonjour au foyer %{name}," # Machine translated, remove this comment when verified
+    created: "Foyer créé." # Machine translated, remove this comment when verified
+    updated: "Foyer mis à jour." # Machine translated, remove this comment when verified
+    emergency_contact: "%{name} (%{relationship})" # Machine translated, remove this comment when verified
+    pets:
+      summary: "%{name} (%{species}, %{color})" # Machine translated, remove this comment when verified
+      vet: "Vétérinaire" # Machine translated, remove this comment when verified
+      caregivers: "Personnes qui s'en occupent" # Machine translated, remove this comment when verified
+      health_issues: "Problèmes de santé" # Machine translated, remove this comment when verified
+    number: "n° %{number}" # Machine translated, remove this comment when verified
+    index:
+      title: "Foyers" # Machine translated, remove this comment when verified
+      create: "Créer un foyer" # Machine translated, remove this comment when verified
+      no_households: "Aucun foyer trouvé." # Machine translated, remove this comment when verified
+      name: "Nom" # Machine translated, remove this comment when verified
+      unit: "N° de logement" # Machine translated, remove this comment when verified
+      users: "Personnes" # Machine translated, remove this comment when verified
+    show:
+      title: "Foyer : %{name}" # Machine translated, remove this comment when verified
+      households: "Foyers" # Machine translated, remove this comment when verified
+      missing_photo: "Photo manquante" # Machine translated, remove this comment when verified
+    new:
+      title: "Créer un foyer" # Machine translated, remove this comment when verified
+    edit:
+      title: "Modifier le foyer : %{name}" # Machine translated, remove this comment when verified
+    attribs:
+      household: "Foyer" # Machine translated, remove this comment when verified
+      members: "Membres" # Machine translated, remove this comment when verified
+      vehicles: "Véhicules" # Machine translated, remove this comment when verified
+      garage: "Garage" # Machine translated, remove this comment when verified
+      member_type: "Type de membre" # Machine translated, remove this comment when verified
+      emergency_contacts: "Contacts d'urgence" # Machine translated, remove this comment when verified
+      pets: "Animaux" # Machine translated, remove this comment when verified
+      keyholders: "Autres détenteurs de clés du logement" # Machine translated, remove this comment when verified
+    unit_community:
+      unit: "Logement" # Machine translated, remove this comment when verified
+      community: "Communauté" # Machine translated, remove this comment when verified

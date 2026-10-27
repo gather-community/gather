@@ -1,0 +1,110 @@
+fr:
+  groups:
+    created: "Groupe créé." # Machine translated, remove this comment when verified
+    updated: "Groupe mis à jour." # Machine translated, remove this comment when verified
+    joined: "Vous avez rejoint le groupe « %{name} »." # Machine translated, remove this comment when verified
+    left: "Vous avez quitté le groupe « %{name} »." # Machine translated, remove this comment when verified
+    list_sync_started: "Synchronisation de la liste lancée. Patientez quelques instants, puis actualisez la page." # Machine translated, remove this comment when verified
+    name_with_suffixes: "%{name} (%{suffixes})" # Machine translated, remove this comment when verified
+    show_more: "Afficher %{count} de plus" # Machine translated, remove this comment when verified
+    hide: "Masquer" # Machine translated, remove this comment when verified
+    groups:
+      form:
+        email_list: "Liste de diffusion" # Machine translated, remove this comment when verified
+        no_domains_html: "Vous ne pouvez pas créer de liste de diffusion, car aucun domaine n'est associé à cette communauté. %{link} pour y remédier." # Machine translated, remove this comment when verified
+        contact_staff: "Contactez l'équipe de Gather" # Machine translated, remove this comment when verified
+        mailman_intro: "Les listes de diffusion sont fournies par le logiciel de listes Mailman." # Machine translated, remove this comment when verified
+        leave_blank: "Laissez ces champs vides si ce groupe n'a pas besoin de liste de diffusion." # Machine translated, remove this comment when verified
+        name_locked: "Le nom et le domaine de la liste ne peuvent plus être modifiés une fois la liste créée. Pour les changer, supprimez et recréez la liste, ou contactez l'équipe de Gather." # Machine translated, remove this comment when verified
+        admin_panel: "panneau d'administration de Mailman" # Machine translated, remove this comment when verified
+        sync_intro: "Les membres de la liste sont synchronisés avec Gather comme suit :" # Machine translated, remove this comment when verified
+        members_html: "<strong>Membres</strong> : tous les membres de ce groupe sont automatiquement synchronisés avec la liste. Vous pouvez ajouter d'autres membres manuellement via le %{link}." # Machine translated, remove this comment when verified
+        moderators_html: "<strong>Modérateurs</strong> : les modérateurs de la liste sont synchronisés selon les paramètres « Les responsables peuvent modérer la liste ? » et « Peut modérer toutes les listes de diffusion ? » ci-dessus. Vous pouvez ajouter d'autres modérateurs manuellement via le %{link}." # Machine translated, remove this comment when verified
+        owners_html: "<strong>Propriétaires</strong> : les propriétaires de la liste sont synchronisés selon les paramètres « Les responsables peuvent administrer la liste ? » et « Peut administrer toutes les listes de diffusion ? » ci-dessus. Vous pouvez ajouter d'autres propriétaires manuellement via le %{link}." # Machine translated, remove this comment when verified
+        non_members_html: "<strong>Non-membres</strong> : la fonction « non-membre » de Mailman permet 1) d'autoriser d'autres adresses à envoyer des e-mails à la liste sans en recevoir et 2) d'interdire à certaines personnes d'écrire à la liste. Les non-membres ne reçoivent pas les e-mails de la liste. Ils ne sont pas synchronisés depuis Gather, mais peuvent être ajoutés manuellement via le %{link}. Consultez la %{docs_link} pour en savoir plus." # Machine translated, remove this comment when verified
+        mailman_docs: "documentation de Mailman" # Machine translated, remove this comment when verified
+        only_non_users: "Seules les adresses qui ne sont pas associées à des utilisateurs de Gather doivent être modifiées via le panneau d'administration de Mailman." # Machine translated, remove this comment when verified
+        overwritten: "Toute modification manuelle des abonnements des utilisateurs de Gather sera écrasée lors de la synchronisation." # Machine translated, remove this comment when verified
+        settings_intro_html: "Les paramètres de la liste peuvent être modifiés via le %{link}. Les paramètres suivants seront réinitialisés de force par Gather :" # Machine translated, remove this comment when verified
+        index_page_html: "<strong>Afficher la liste sur la page d'index</strong> : les listes ne seront jamais affichées publiquement, car il s'agit uniquement d'un système de listes de diffusion privées." # Machine translated, remove this comment when verified
+        max_size_html: "<strong>Taille maximale des messages</strong> : les messages sont limités à 5 Mio." # Machine translated, remove this comment when verified
+        subscription_policy_html: "<strong>Politique d'abonnement</strong> : les modérateurs devront autoriser manuellement tout nouvel abonnement. L'abonnement doit passer principalement par Gather. Les abonnements via le site Mailman ou par e-mail devraient être rares." # Machine translated, remove this comment when verified
+      edit:
+        title: "Modifier le groupe : %{name}" # Machine translated, remove this comment when verified
+      new:
+        title: "Créer un groupe" # Machine translated, remove this comment when verified
+      index:
+        title: "Groupes" # Machine translated, remove this comment when verified
+        create: "Créer un groupe" # Machine translated, remove this comment when verified
+        none_found: "Aucun groupe trouvé." # Machine translated, remove this comment when verified
+        name: "Nom" # Machine translated, remove this comment when verified
+        type: "Type" # Machine translated, remove this comment when verified
+        description: "Description" # Machine translated, remove this comment when verified
+        members: "Membres" # Machine translated, remove this comment when verified
+      show:
+        groups: "Groupes" # Machine translated, remove this comment when verified
+        email_list: "Liste de diffusion" # Machine translated, remove this comment when verified
+        links: "Liens" # Machine translated, remove this comment when verified
+        archives: "Archives de la liste" # Machine translated, remove this comment when verified
+        panel: "Panneau de la liste" # Machine translated, remove this comment when verified
+        all_can_send: "Toute la communauté peut écrire ?" # Machine translated, remove this comment when verified
+        additional_members_note: "Tous les membres du groupe ci-dessus sont automatiquement membres de la liste. Ces adresses en sont également membres." # Machine translated, remove this comment when verified
+        additional_senders_note: "Ces expéditeurs supplémentaires peuvent écrire à la liste, mais n'en reçoivent pas les e-mails." # Machine translated, remove this comment when verified
+        last_sync_time: "Dernière synchronisation" # Machine translated, remove this comment when verified
+        sync_note: "Les changements faits dans Gather sont synchronisés automatiquement avec le système de listes de diffusion, mais ceux faits dans le panneau de la liste ne le sont pas." # Machine translated, remove this comment when verified
+        sync_note_additional: "Cela comprend la liste des membres et expéditeurs supplémentaires ci-dessus." # Machine translated, remove this comment when verified
+        sync_now_html: "%{link} pour obtenir les informations les plus récentes." # Machine translated, remove this comment when verified
+        sync_now: "Synchroniser maintenant" # Machine translated, remove this comment when verified
+        no_list: "Ce groupe n'a pas de liste de diffusion associée." # Machine translated, remove this comment when verified
+    mailman:
+      templates:
+        footer:
+          list_name: "$listname, une liste de diffusion de groupe Gather" # Machine translated, remove this comment when verified
+          unsubscribe: "Pour vous désabonner, rendez-vous sur la page du groupe et quittez-le ou désactivez la liste." # Machine translated, remove this comment when verified
+        list_admin_action_post:
+          body: |- # Machine translated, remove this comment when verified
+            En tant qu'administrateur de la liste, votre autorisation est demandée pour
+            le message suivant :
+
+                Liste :  $listname
+                De :     $sender_email
+                Objet :  $subject
+
+            Le message est retenu pour les raisons suivantes :
+
+            $reasons
+
+            Lorsque vous le pourrez, rendez-vous sur votre tableau de bord pour approuver ou refuser
+            la demande.
+    availability_hints:
+      single_community:
+        open: "Toute personne de la communauté peut voir ce groupe et le rejoindre." # Machine translated, remove this comment when verified
+        closed: "Toute personne de la communauté peut voir ce groupe, mais seuls les administrateurs de la communauté et les responsables du groupe peuvent y ajouter des personnes." # Machine translated, remove this comment when verified
+        hidden: "Seuls les administrateurs de la communauté et les responsables du groupe peuvent voir ce groupe et y ajouter des personnes." # Machine translated, remove this comment when verified
+        "everybody": "Toute la communauté peut voir ce groupe et en est membre par défaut. Chacun peut choisir de s'en retirer." # Machine translated, remove this comment when verified
+      multi_community:
+        open: "Toute personne des communautés ci-dessus peut voir ce groupe et le rejoindre." # Machine translated, remove this comment when verified
+        closed: "Toute personne des communautés ci-dessus peut voir ce groupe, mais seuls les administrateurs et les responsables du groupe peuvent y ajouter des personnes." # Machine translated, remove this comment when verified
+        hidden: "Seuls les responsables du groupe et les administrateurs des communautés ci-dessus peuvent voir ce groupe et y ajouter des personnes." # Machine translated, remove this comment when verified
+        everybody: "Toutes les personnes des communautés ci-dessus peuvent voir ce groupe et en sont membres par défaut. Chacun peut choisir de s'en retirer." # Machine translated, remove this comment when verified
+  domains:
+    created: "Domaine créé." # Machine translated, remove this comment when verified
+    index:
+      title: "Domaines" # Machine translated, remove this comment when verified
+      add: "Ajouter un domaine" # Machine translated, remove this comment when verified
+      intro_html: "Voici les domaines sur lesquels vous pouvez créer des listes de diffusion. Pour savoir comment ajouter un domaine, cliquez %{link}." # Machine translated, remove this comment when verified
+      none_found: "Aucun domaine trouvé." # Machine translated, remove this comment when verified
+    new:
+      title: "Ajouter un domaine" # Machine translated, remove this comment when verified
+      intro: "Pour ajouter un domaine à Gather :" # Machine translated, remove this comment when verified
+      consider: "Vérifiez si des boîtes aux lettres, des adresses de transfert ou des listes de diffusion sont définies pour ce domaine." # Machine translated, remove this comment when verified
+      mailboxes_html: "<strong>Boîtes aux lettres :</strong> si des boîtes aux lettres sont définies pour ce domaine, elles cesseront de fonctionner si vous redirigez le domaine vers Gather. Pour l'éviter, vous pouvez utiliser un sous-domaine, par ex. lists.votredomaine.com au lieu de votredomaine.com." # Machine translated, remove this comment when verified
+      forwarding_html: "<strong>Adresses de transfert :</strong> si des adresses de transfert sont définies pour ce domaine, vous pouvez les migrer vers Gather. Veuillez contacter %{email}." # Machine translated, remove this comment when verified
+      lists_html: "<strong>Listes de diffusion :</strong> si des listes de diffusion sont définies pour ce domaine, vous pouvez les migrer vers Gather. Veuillez contacter %{email}." # Machine translated, remove this comment when verified
+      create: "Créez le domaine ci-dessous en saisissant son nom complet, par ex. « votredomaine.com », puis cliquez sur « Enregistrer »." # Machine translated, remove this comment when verified
+      migrating: "Si vous migrez des adresses de transfert ou des listes de diffusion, assurez-vous qu'elles sont configurées dans Gather et prêtes à recevoir des e-mails lorsque vous ferez pointer le domaine vers Gather." # Machine translated, remove this comment when verified
+      dns: "Enfin, faites pointer le domaine vers Gather. Définissez les trois enregistrements DNS suivants :" # Machine translated, remove this comment when verified
+    show:
+      domain: "Domaine" # Machine translated, remove this comment when verified
+      communities: "Communautés" # Machine translated, remove this comment when verified
+      lists: "Listes Mailman" # Machine translated, remove this comment when verified

@@ -280,18 +280,10 @@ We use eslint, rubocop, and scss_lint. The CI system enforces these—PRs won't 
 
 ### Elasticsearch 403 Errors
 
-Reset the index:
+Reset and re-populate the index:
 
-```ruby
-rails console -e development
-Work::Shift.__elasticsearch__.create_index!(force: true)
-```
-
-To re-populate after resetting:
-
-```ruby
-ActsAsTenant.current_tenant = Cluster.find(...)
-Work::Shift.find_each { |s| s.__elasticsearch__.index_document }
+```bash
+bin/rails search:reindex
 ```
 
 ## Mailman 3 Setup

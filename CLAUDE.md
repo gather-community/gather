@@ -271,7 +271,7 @@ Existing flags: `messaging`, `gdrive`, `restrictions`, `i18n` (lets chosen users
 
 ### Model Conventions
 
-- `ApplicationRecord` provides `alpha_order(*args)` for case-insensitive sorting
+- `ApplicationRecord` provides `alpha_order(*args)` for sorting text the way people expect in the current locale (see Sorting under User-Facing Strings)
 - `skip_listener_action` transient attribute suppresses Wisper listener side effects (used in factories/tests)
 - Models use `in_community(community)` scopes for community filtering
 - `active` scopes filter deactivated records
@@ -330,6 +330,7 @@ The dispositions map is a **declaration**, not an assertion — it does not read
 - **Dates and times in JS** use moment.js formats from the `moment_formats` keys in those files (e.g. `date.format(I18n.t("moment_formats.full_date"))`), never a hard-coded pattern like `"MMMM D, YYYY"`. Machine-readable formats such as `"YYYY-MM-DD"` are fine. moment.js, the date pickers, FullCalendar and Select2 are put in the page's locale by `app/assets/javascripts/locale_setup.js`, which also gives moment.js the Rails month and day names so date pickers read back what Rails writes.
 - **Date input** in the locale's date picker formats ("5. Okt 2026, 18:30" in German) is handled for every date, datetime and time attribute by `config/initializers/localized_date_casting.rb` (rules in `Gather::LocalizedDate`). Ruby's own parser only knows English and gets some other formats wrong without an error, so don't call `Time.zone.parse` or `Date.parse` on user input.
 - **Money** goes through `format_money(amount)` (in `MoneyHelper`; `h.format_money` in decorators). It takes the currency from `current_community.currency` (a column set from the community's country when it's created) and the separators and symbol position from the locale. `number_to_currency` is forbidden (the `Gather/NumberToCurrency` cop) because it takes the currency from the locale, so a Canadian community viewed in French would see euros. Pass `currency:` for amounts that aren't in the community's currency, such as Stripe prices, and on apex-domain pages, where there's no community and `format_money` raises without it.
+- **Sorting** names, titles and other text people read goes through `alpha_order` in SQL, or `Gather::Collation.sort`/`sort_by` for text already in Ruby. Both use the current locale's ICU collation (`Gather::Locales.collation`), so "Émile" sorts with the Es and Swedish puts å, ä and ö after z. Plain `order(:name)` and Ruby's `sort` compare bytes, which puts accented names after z, because the production database's collation is `C.UTF-8`. Machine values (codes, abbreviations used as keys, dates) can sort normally.
 - **Decimal input** in the locale's style ("12,50" in French) is handled for every decimal attribute by `config/initializers/localized_decimal_casting.rb` (rules in `Gather::LocalizedNumber`), so don't parse numbers by hand with `to_f`/`to_d` on user input; use `Gather::LocalizedNumber.normalize` first if you must.
 - **JS strings:** use `i18n.t("...")` from `app/javascript/utils/i18n.ts` (or `I18n.t` in the legacy Backbone bundle). Add the key's namespace to `config/i18n-js.yml` if it isn't exported yet, then regenerate the bundle: `bundle exec i18n export -c config/i18n-js.yml -r config/environment.rb`.
 - **Fragment caches** must include `I18n.locale` in the cache key.
@@ -341,6 +342,16 @@ The dispositions map is a **declaration**, not an assertion — it does not read
   - For a genuine false positive, disable inline and say why: `# rubocop:disable Gather/HardCodedString` or `<%# erb_lint:disable HardCodedString %>` on the same line.
 - **Static error pages** (`public/404.html` etc.) are generated from `app/views/error_pages/` by `bundle exec rake error_pages:generate`, one copy per released locale. Edit the templates and regenerate rather than editing `public/` by hand.
 - **[spec/i18n_spec.rb](spec/i18n_spec.rb) runs in CI** (config in `config/i18n-tasks.yml`). It fails on keys used in code but missing from `en`, on unused keys, on interpolation variables that differ between locales, on a stale JS export, and on stale static error pages. Run `bundle exec i18n-tasks missing -l en` and `bundle exec i18n-tasks unused -l en` locally. When a key is built dynamically (`t("gdrive.item_kinds.#{kind}")`), add a pattern to `ignore_unused` with a comment saying where it's used. Delete keys that are really unused.
+
+**Translations.** Every key must exist in every locale, not just `en` ([spec/i18n_spec.rb](spec/i18n_spec.rb) checks the locales in `Gather::Locales::TRANSLATED`). When you add a key or change the meaning of its English text, write the other locales' values too, in the same commit:
+
+- **Mark every value you translate** with this comment at the end of its line, exactly:
+  `# Machine translated, remove this comment when verified`. For a multi-line value, put it after the `|` on the key's line. People reviewing a language search for the marker and remove it once they've checked the string. Count what's left with `grep -c "Machine translated" config/locales/fr/*.yml`.
+- **Changing English text re-marks it.** If you change what a key's English says, rewrite its translations and mark them again, even if a person had verified them.
+- **Use the glossary** ([config/locales/GLOSSARY.md](config/locales/GLOSSARY.md)) for Gather's terms and each language's voice (`vous` in French, `du` in German, and so on), so the same thing has the same name everywhere.
+- **Keep the structure:** same `%{placeholders}`, same HTML in `_html` keys, and the plural sub-keys the locale needs (French, for example, uses `one` for 0 and 1).
+- **Canadian French** (`config/locales/fr-CA/`) only holds keys where Québec usage differs from `fr`; everything else falls back to `fr`.
+- **Don't translate** date/time formats (written by hand per locale, see above) or the legal documents, which stay English.
 
 **How the locale is chosen** ([lib/gather/locales.rb](lib/gather/locales.rb)):
 

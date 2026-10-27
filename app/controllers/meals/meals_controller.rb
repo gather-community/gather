@@ -218,7 +218,7 @@ module Meals
     def csv_signups
       Signup.where(meal: csv_meals).joins(:meal).joins(household: :community)
         .includes(:household, {parts: :type}, {meal: %i[formula calendars]})
-        .order("meals.served_at", "communities.abbrv", "households.name")
+        .order("meals.served_at").alpha_order(communities: :abbrv, households: :name)
     end
 
     def csv_date_params

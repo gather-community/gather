@@ -39,7 +39,7 @@ module Billing
       ->(c, h) { where("accounts.community_id = ? OR accounts.household_id = ?", c.id, h.id) }
     scope :with_balance_owing, -> { where("accounts.balance_due > 0") }
     scope :by_cmty_and_household_name, lambda {
-      joins(household: :community).order("communities.name, households.name")
+      joins(household: :community).alpha_order(communities: :name, households: :name)
     }
     scope :active, lambda { # Active means having new activity.
       where("total_new_credits >= 0.01 OR total_new_charges >= 0.01 OR ABS(current_balance) >= 0.01")

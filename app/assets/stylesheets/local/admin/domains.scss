@@ -1,4 +1,11 @@
 .admin--domains {
+  // In these dense tables the chip's vertical padding stacks on every line, so keep chips
+  // text-height here; the global chip style stays as-is in prose contexts like the wiki.
+  code {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
   // A long record (e.g. an SPF string) wraps inside one continuous chip rather than breaking
   // into what looks like separate records on each wrapped line.
   table.key-value code {

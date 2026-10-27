@@ -1,487 +1,499 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
 fr:
   activemodel:
     attributes:
       calendars/eventlet:
-        starts_at: "Heure de début" # Machine translated, remove this comment when verified
-        ends_at: "Heure de fin" # Machine translated, remove this comment when verified
+        starts_at: "Heure de début" # MT
+        ends_at: "Heure de fin" # MT
       calendars/event:
-        calendar: "Calendrier" # Machine translated, remove this comment when verified
-        pre_notice: "Avis" # Machine translated, remove this comment when verified
-        name: "Nom de l'événement" # Machine translated, remove this comment when verified
-        starts_at: "Heure de début" # Machine translated, remove this comment when verified
-        ends_at: "Heure de fin" # Machine translated, remove this comment when verified
-        creator: "Créateur" # Machine translated, remove this comment when verified
-        group: "Groupe" # Machine translated, remove this comment when verified
-        all_day: "Toute la journée ?" # Machine translated, remove this comment when verified
-        kind: "Type" # Machine translated, remove this comment when verified
-        note: "Note" # Machine translated, remove this comment when verified
-        guidelines: "Consignes" # Machine translated, remove this comment when verified
-        repeat_frequency: "Répétition" # Machine translated, remove this comment when verified
-        repeat_interval: "Tous les" # Machine translated, remove this comment when verified
-        repeat_weekdays: "Le" # Machine translated, remove this comment when verified
-        repeat_monthly_by: "Le" # Machine translated, remove this comment when verified
-        repeat_ends: "Fin" # Machine translated, remove this comment when verified
-        repeat_ends_on: "Date de fin" # Machine translated, remove this comment when verified
-        repeat_count: "Nombre de fois" # Machine translated, remove this comment when verified
+        calendar: "Calendrier" # MT
+        pre_notice: "Avis" # MT
+        name: "Nom de l'événement" # MT
+        starts_at: "Heure de début" # MT
+        ends_at: "Heure de fin" # MT
+        creator: "Créateur" # MT
+        group: "Groupe" # MT
+        all_day: "Toute la journée ?" # MT
+        kind: "Type" # MT
+        note: "Note" # MT
+        guidelines: "Consignes" # MT
+        repeat_frequency: "Répétition" # MT
+        repeat_interval: "Tous les" # MT
+        repeat_weekdays: "Le" # MT
+        repeat_monthly_by: "Le" # MT
+        repeat_ends: "Fin" # MT
+        repeat_ends_on: "Date de fin" # MT
+        repeat_count: "Nombre de fois" # MT
     errors:
       models:
         calendars/event:
           attributes:
             base:
-              overlap: "Cet événement chevauche un événement existant" # Machine translated, remove this comment when verified
-              changed_from_started: "Cette occurrence a déjà commencé et ne peut donc pas être modifiée. Ouvrez une occurrence ultérieure pour modifier la série à partir de ce moment." # Machine translated, remove this comment when verified
-              moved_before_kept: "Vous ne pouvez pas déplacer cette occurrence à %{time}, car deux parties de la série se chevaucheraient." # Machine translated, remove this comment when verified
-              occurrence_missing: "Cette occurrence n'existe plus. Revenez au calendrier et réessayez." # Machine translated, remove this comment when verified
-              longer_than_repeat: "L'événement dure plus longtemps que l'intervalle entre les répétitions : ses occurrences se chevaucheraient." # Machine translated, remove this comment when verified
+              overlap: "Cet événement chevauche un événement existant" # MT
+              changed_from_started: "Cette occurrence a déjà commencé et ne peut donc pas être modifiée. Ouvrez une occurrence ultérieure pour modifier la série à partir de ce moment." # MT
+              moved_before_kept: "Vous ne pouvez pas déplacer cette occurrence à %{time}, car deux parties de la série se chevaucheraient." # MT
+              occurrence_missing: "Cette occurrence n'existe plus. Revenez au calendrier et réessayez." # MT
+              longer_than_repeat: "L'événement dure plus longtemps que l'intervalle entre les répétitions : ses occurrences se chevaucheraient." # MT
               pattern_change_with_changes:
-                one: "%{count} occurrence de la partie modifiée a été déplacée ou supprimée : les jours de répétition ne peuvent donc pas changer. Annulez d'abord ce changement, ou modifiez la série à partir d'une date ultérieure." # Machine translated, remove this comment when verified
-                other: "%{count} occurrences de la partie modifiée ont été déplacées ou supprimées : les jours de répétition ne peuvent donc pas changer. Annulez d'abord ces changements, ou modifiez la série à partir d'une date ultérieure." # Machine translated, remove this comment when verified
+                one: "%{count} occurrence de la partie modifiée a été déplacée ou supprimée : les jours de répétition ne peuvent donc pas changer. Annulez d'abord ce changement, ou modifiez la série à partir d'une date ultérieure." # MT
+                other: "%{count} occurrences de la partie modifiée ont été déplacées ou supprimées : les jours de répétition ne peuvent donc pas changer. Annulez d'abord ces changements, ou modifiez la série à partir d'une date ultérieure." # MT
               all_day_change_with_changes:
-                one: "%{count} occurrence de la partie modifiée a été déplacée ou supprimée : elle ne peut donc pas passer de toute la journée à un horaire, ou l'inverse. Annulez d'abord ce changement, ou modifiez la série à partir d'une date ultérieure." # Machine translated, remove this comment when verified
-                other: "%{count} occurrences de la partie modifiée ont été déplacées ou supprimées : elle ne peut donc pas passer de toute la journée à un horaire, ou l'inverse. Annulez d'abord ces changements, ou modifiez la série à partir d'une date ultérieure." # Machine translated, remove this comment when verified
+                one: "%{count} occurrence de la partie modifiée a été déplacée ou supprimée : elle ne peut donc pas passer de toute la journée à un horaire, ou l'inverse. Annulez d'abord ce changement, ou modifiez la série à partir d'une date ultérieure." # MT
+                other: "%{count} occurrences de la partie modifiée ont été déplacées ou supprimées : elle ne peut donc pas passer de toute la journée à un horaire, ou l'inverse. Annulez d'abord ces changements, ou modifiez la série à partir d'une date ultérieure." # MT
             guidelines:
-              not_accepted: "Vous devez accepter les consignes" # Machine translated, remove this comment when verified
+              not_accepted: "Vous devez accepter les consignes" # MT
             starts_at:
-              changed_after_start: "ne peut pas être modifiée après le début de l'événement" # Machine translated, remove this comment when verified
+              changed_after_start: "ne peut pas être modifiée après le début de l'événement" # MT
             ends_at:
-              before_start: "doit être après l'heure de début" # Machine translated, remove this comment when verified
-              in_past: "ne peut pas être changée pour un moment passé" # Machine translated, remove this comment when verified
+              before_start: "doit être après l'heure de début" # MT
+              in_past: "ne peut pas être changée pour un moment passé" # MT
             repeat_frequency:
-              not_offered: "n'est pas disponible sur ce calendrier" # Machine translated, remove this comment when verified
-              stop_repeating: "ne peut pas être changée en « Jamais ». Pour arrêter la série, supprimez cette occurrence et les suivantes." # Machine translated, remove this comment when verified
+              not_offered: "n'est pas disponible sur ce calendrier" # MT
+              stop_repeating: "ne peut pas être changée en « Jamais ». Pour arrêter la série, supprimez cette occurrence et les suivantes." # MT
             repeat_ends_on:
-              before_start: "doit être à la date de début ou après" # Machine translated, remove this comment when verified
+              before_start: "doit être à la date de début ou après" # MT
             repeat_monthly_by:
-              not_on_start_date: "n'est pas disponible pour la date de début. Choisissez à nouveau." # Machine translated, remove this comment when verified
+              not_on_start_date: "n'est pas disponible pour la date de début. Choisissez à nouveau." # MT
         calendars/eventlet:
           attributes:
             base:
-              not_recurring: "Cet événement ne fait pas partie d'une série" # Machine translated, remove this comment when verified
-              following_only_all_calendars: "« Celle-ci et les suivantes » ne peut être supprimé que de tous les calendriers" # Machine translated, remove this comment when verified
-              occurrence_missing: "Cette occurrence n'existe plus. Rechargez le calendrier et réessayez." # Machine translated, remove this comment when verified
-              one_calendar: "Cet événement ne figure que sur un calendrier." # Machine translated, remove this comment when verified
-              other_calendar_not_editable: "Vous ne pouvez pas modifier cet événement sur tous ses calendriers. Choisissez plutôt « Déplacer uniquement sur » ce calendrier." # Machine translated, remove this comment when verified
-              offsets_too_far_apart: "Les horaires d'un événement sur ses différents calendriers ne peuvent pas être espacés de plus de %{hours} heures. Pour le déplacer davantage, choisissez « Déplacer sur tous »." # Machine translated, remove this comment when verified
-              series_started: "Cette série a déjà commencé. Choisissez « Celle-ci et les suivantes » pour la modifier à partir de cette date." # Machine translated, remove this comment when verified
-              following_from_past: "Les occurrences déjà commencées ne peuvent pas être déplacées avec « Celle-ci et les suivantes »." # Machine translated, remove this comment when verified
-              moved_before_kept: "Vous ne pouvez pas déplacer « celle-ci et les suivantes » ici, car deux parties de la série se chevaucheraient." # Machine translated, remove this comment when verified
-              fixed_pattern: "Vous ne pouvez pas déplacer « %{choice} » ici, car cette série se répète selon un schéma fixe qui n'inclut pas le nouvel horaire." # Machine translated, remove this comment when verified
-              overlap: "Cet événement chevauche un événement existant" # Machine translated, remove this comment when verified
+              not_recurring: "Cet événement ne fait pas partie d'une série" # MT
+              following_only_all_calendars: "« Celle-ci et les suivantes » ne peut être supprimé que de tous les calendriers" # MT
+              occurrence_missing: "Cette occurrence n'existe plus. Rechargez le calendrier et réessayez." # MT
+              one_calendar: "Cet événement ne figure que sur un calendrier." # MT
+              other_calendar_not_editable: "Vous ne pouvez pas modifier cet événement sur tous ses calendriers. Choisissez plutôt « Déplacer uniquement sur » ce calendrier." # MT
+              offsets_too_far_apart: "Les horaires d'un événement sur ses différents calendriers ne peuvent pas être espacés de plus de %{hours} heures. Pour le déplacer davantage, choisissez « Déplacer sur tous »." # MT
+              series_started: "Cette série a déjà commencé. Choisissez « Celle-ci et les suivantes » pour la modifier à partir de cette date." # MT
+              following_from_past: "Les occurrences déjà commencées ne peuvent pas être déplacées avec « Celle-ci et les suivantes »." # MT
+              moved_before_kept: "Vous ne pouvez pas déplacer « celle-ci et les suivantes » ici, car deux parties de la série se chevaucheraient." # MT
+              fixed_pattern: "Vous ne pouvez pas déplacer « %{choice} » ici, car cette série se répète selon un schéma fixe qui n'inclut pas le nouvel horaire." # MT
+              overlap: "Cet événement chevauche un événement existant" # MT
             occurrence_start:
-              required_for_single: "est obligatoire pour modifier une seule occurrence" # Machine translated, remove this comment when verified
-              not_in_series: "n'est pas une occurrence valide de cette série" # Machine translated, remove this comment when verified
+              required_for_single: "est obligatoire pour modifier une seule occurrence" # MT
+              not_in_series: "n'est pas une occurrence valide de cette série" # MT
             starts_at:
-              changed_after_start: "ne peut pas être modifiée après le début de l'événement" # Machine translated, remove this comment when verified
+              changed_after_start: "ne peut pas être modifiée après le début de l'événement" # MT
             ends_at:
-              before_start: "doit être après l'heure de début" # Machine translated, remove this comment when verified
-              in_past: "ne peut pas être changée pour un moment passé" # Machine translated, remove this comment when verified
+              before_start: "doit être après l'heure de début" # MT
+              in_past: "ne peut pas être changée pour un moment passé" # MT
   activerecord:
     models:
-      meals/meal: "Repas" # Machine translated, remove this comment when verified
+      meals/meal: "Repas" # MT
     attributes:
       user:
-        first_name: "Prénom" # Machine translated, remove this comment when verified
-        last_name: "Nom" # Machine translated, remove this comment when verified
-        email: "Adresse e-mail" # Machine translated, remove this comment when verified
-        google_email: "Identifiant Google" # Machine translated, remove this comment when verified
-        phone: "Téléphone" # Machine translated, remove this comment when verified
-        mobile_phone: "Mobile" # Machine translated, remove this comment when verified
-        home_phone: "Domicile" # Machine translated, remove this comment when verified
-        work_phone: "Travail" # Machine translated, remove this comment when verified
-        birthday_str: "Anniversaire" # Machine translated, remove this comment when verified
-        preferred_contact: "Contact préféré" # Machine translated, remove this comment when verified
-        joined_on: "Date d'arrivée" # Machine translated, remove this comment when verified
-        job_choosing_proxy_id: "Mandataire pour le choix des tâches" # Machine translated, remove this comment when verified
-        up_guardianships: "Parents/tuteurs" # Machine translated, remove this comment when verified
-        privacy_settings: "Paramètres de confidentialité" # Machine translated, remove this comment when verified
-        paypal_email: "E-mail PayPal" # Machine translated, remove this comment when verified
-        school: "École" # Machine translated, remove this comment when verified
-        allergies: "Allergies" # Machine translated, remove this comment when verified
-        doctor: "Infos médecin" # Machine translated, remove this comment when verified
-        medical: "Infos médicales" # Machine translated, remove this comment when verified
-        remember_me: "Rester connecté après la fermeture du navigateur" # Machine translated, remove this comment when verified
-        child: "Cette personne est un enfant ?" # Machine translated, remove this comment when verified
-        full_access: "Cette personne doit avoir un accès complet au système ?" # Machine translated, remove this comment when verified
-        certify_13_or_older: "Je certifie que cette personne a 13 ans ou plus" # Machine translated, remove this comment when verified
-        pronouns: "Pronoms" # Machine translated, remove this comment when verified
+        first_name: "Prénom" # MT
+        last_name: "Nom" # MT
+        email: "Adresse e-mail" # MT
+        google_email: "Identifiant Google" # MT
+        phone: "Téléphone" # MT
+        mobile_phone: "Mobile" # MT
+        home_phone: "Domicile" # MT
+        work_phone: "Travail" # MT
+        birthday_str: "Anniversaire" # MT
+        preferred_contact: "Contact préféré" # MT
+        joined_on: "Date d'arrivée" # MT
+        job_choosing_proxy_id: "Mandataire pour le choix des tâches" # MT
+        up_guardianships: "Parents/tuteurs" # MT
+        privacy_settings: "Paramètres de confidentialité" # MT
+        paypal_email: "E-mail PayPal" # MT
+        school: "École" # MT
+        allergies: "Allergies" # MT
+        doctor: "Infos médecin" # MT
+        medical: "Infos médicales" # MT
+        remember_me: "Rester connecté après la fermeture du navigateur" # MT
+        child: "Cette personne est un enfant ?" # MT
+        full_access: "Cette personne doit avoir un accès complet au système ?" # MT
+        certify_13_or_older: "Je certifie que cette personne a 13 ans ou plus" # MT
+        pronouns: "Pronoms" # MT
       household:
-        name: "Nom du foyer" # Machine translated, remove this comment when verified
-        community_id: "Communauté" # Machine translated, remove this comment when verified
-        member_type_id: "Type de membre" # Machine translated, remove this comment when verified
-        unit_num_and_suffix: "Numéro de logement" # Machine translated, remove this comment when verified
-        vehicles: "Véhicules" # Machine translated, remove this comment when verified
-        keyholders: "Autres détenteurs de clés du logement" # Machine translated, remove this comment when verified
-        emergency_contacts: "Contacts d'urgence" # Machine translated, remove this comment when verified
-        garage_nums: "Numéro(s) de garage" # Machine translated, remove this comment when verified
+        name: "Nom du foyer" # MT
+        community_id: "Communauté" # MT
+        member_type_id: "Type de membre" # MT
+        unit_num_and_suffix: "Numéro de logement" # MT
+        vehicles: "Véhicules" # MT
+        keyholders: "Autres détenteurs de clés du logement" # MT
+        emergency_contacts: "Contacts d'urgence" # MT
+        garage_nums: "Numéro(s) de garage" # MT
       meals/meal:
-        no_allergens: "Aucun de ceux-ci" # Machine translated, remove this comment when verified
-        community_id: "Communauté hôte" # Machine translated, remove this comment when verified
-        served_at: "Date/heure" # Machine translated, remove this comment when verified
-        communities: "Communautés" # Machine translated, remove this comment when verified
-        calendar_ids: "Lieu(x) réservable(s)" # Machine translated, remove this comment when verified
-        formula: "Formule" # Machine translated, remove this comment when verified
-        capacity: "Capacité" # Machine translated, remove this comment when verified
-        title: "Titre" # Machine translated, remove this comment when verified
-        entrees: "Plats principaux" # Machine translated, remove this comment when verified
-        side: "Accompagnement" # Machine translated, remove this comment when verified
-        kids: "Enfants" # Machine translated, remove this comment when verified
-        dessert: "Dessert" # Machine translated, remove this comment when verified
-        notes: "Remarques" # Machine translated, remove this comment when verified
-        auto_close_time: "Heure de fermeture automatique" # Machine translated, remove this comment when verified
+        no_allergens: "Aucun de ceux-ci" # MT
+        community_id: "Communauté hôte" # MT
+        served_at: "Date/heure" # MT
+        communities: "Communautés" # MT
+        calendar_ids: "Lieu(x) réservable(s)" # MT
+        formula: "Formule" # MT
+        capacity: "Capacité" # MT
+        title: "Titre" # MT
+        entrees: "Plats principaux" # MT
+        side: "Accompagnement" # MT
+        kids: "Enfants" # MT
+        dessert: "Dessert" # MT
+        notes: "Remarques" # MT
+        auto_close_time: "Heure de fermeture automatique" # MT
       meals/message:
-        meal: "Repas" # Machine translated, remove this comment when verified
-        body: "Message" # Machine translated, remove this comment when verified
-        recipient_type: "Destinataires" # Machine translated, remove this comment when verified
+        meal: "Repas" # MT
+        body: "Message" # MT
+        recipient_type: "Destinataires" # MT
       meals/cost:
-        ingredient_cost: "Coût des ingrédients" # Machine translated, remove this comment when verified
-        pantry_cost: "Coût remboursable de garde-manger" # Machine translated, remove this comment when verified
-        payment_method: "Mode de remboursement" # Machine translated, remove this comment when verified
-        reimbursee_id: "Personne à rembourser" # Machine translated, remove this comment when verified
+        ingredient_cost: "Coût des ingrédients" # MT
+        pantry_cost: "Coût remboursable de garde-manger" # MT
+        payment_method: "Mode de remboursement" # MT
+        reimbursee_id: "Personne à rembourser" # MT
       meals/formula:
-        name: "Nom" # Machine translated, remove this comment when verified
-        meal_calc_type: "Type de calcul" # Machine translated, remove this comment when verified
-        pantry_calc_type: "Type de calcul" # Machine translated, remove this comment when verified
-        is_default: "Formule par défaut ?" # Machine translated, remove this comment when verified
-        parts: "Types de repas" # Machine translated, remove this comment when verified
-        pantry_fee: "Frais de garde-manger" # Machine translated, remove this comment when verified
-        pantry_fee_formatted: "Frais de garde-manger" # Machine translated, remove this comment when verified
-        pantry_reimbursement: "Autoriser le remboursement du garde-manger ?" # Machine translated, remove this comment when verified
-        takeout: "Autoriser les demandes à emporter ?" # Machine translated, remove this comment when verified
-        role_ids: "Rôles" # Machine translated, remove this comment when verified
+        name: "Nom" # MT
+        meal_calc_type: "Type de calcul" # MT
+        pantry_calc_type: "Type de calcul" # MT
+        is_default: "Formule par défaut ?" # MT
+        parts: "Types de repas" # MT
+        pantry_fee: "Frais de garde-manger" # MT
+        pantry_fee_formatted: "Frais de garde-manger" # MT
+        pantry_reimbursement: "Autoriser le remboursement du garde-manger ?" # MT
+        takeout: "Autoriser les demandes à emporter ?" # MT
+        role_ids: "Rôles" # MT
       meals/formula_part:
-        name: "Nom" # Machine translated, remove this comment when verified
-        type_id: "Type" # Machine translated, remove this comment when verified
-        share_formatted: "Prix/part" # Machine translated, remove this comment when verified
-        portion_size: "Taille de portion" # Machine translated, remove this comment when verified
+        name: "Nom" # MT
+        type_id: "Type" # MT
+        share_formatted: "Prix/part" # MT
+        portion_size: "Taille de portion" # MT
       meals/role:
-        title: "Intitulé de la tâche" # Machine translated, remove this comment when verified
-        time_type: "Horaires" # Machine translated, remove this comment when verified
-        shift_start: "Heure de début" # Machine translated, remove this comment when verified
-        shift_end: "Heure de fin" # Machine translated, remove this comment when verified
-        work_hours: "Heures de travail" # Machine translated, remove this comment when verified
-        work_job_title: "Intitulé de la tâche dans Travail" # Machine translated, remove this comment when verified
-        description: "Description de la tâche" # Machine translated, remove this comment when verified
-        double_signups_allowed: "La même personne peut s'inscrire plusieurs fois à ce rôle pour un même repas" # Machine translated, remove this comment when verified
-        count_per_meal: "Personnes par repas" # Machine translated, remove this comment when verified
-        reminders: "Rappels" # Machine translated, remove this comment when verified
+        title: "Intitulé de la tâche" # MT
+        time_type: "Horaires" # MT
+        shift_start: "Heure de début" # MT
+        shift_end: "Heure de fin" # MT
+        work_hours: "Heures de travail" # MT
+        work_job_title: "Intitulé de la tâche dans Travail" # MT
+        description: "Description de la tâche" # MT
+        double_signups_allowed: "La même personne peut s'inscrire plusieurs fois à ce rôle pour un même repas" # MT
+        count_per_meal: "Personnes par repas" # MT
+        reminders: "Rappels" # MT
       meals/role_reminder:
-        rel_magnitude: "Moment d'envoi" # Machine translated, remove this comment when verified
-        note: "Note (facultative)" # Machine translated, remove this comment when verified
+        rel_magnitude: "Moment d'envoi" # MT
+        note: "Note (facultative)" # MT
       meals/signup:
-        spots_left: "Places restantes" # Machine translated, remove this comment when verified
-        comments: "Commentaires pour le cuisinier" # Machine translated, remove this comment when verified
-        takeout: "Demander à emporter" # Machine translated, remove this comment when verified
+        spots_left: "Places restantes" # MT
+        comments: "Commentaires pour le cuisinier" # MT
+        takeout: "Demander à emporter" # MT
       billing/transaction:
-        incurred_on: "Date d'engagement" # Machine translated, remove this comment when verified
-        household_name: "Nom du foyer" # Machine translated, remove this comment when verified
-        code: "Type" # Machine translated, remove this comment when verified
-        description: "Description" # Machine translated, remove this comment when verified
-        value: "Montant" # Machine translated, remove this comment when verified
+        incurred_on: "Date d'engagement" # MT
+        household_name: "Nom du foyer" # MT
+        code: "Type" # MT
+        description: "Description" # MT
+        value: "Montant" # MT
       billing/account:
-        household_id: "Foyer" # Machine translated, remove this comment when verified
-        community_id: "Compte de la communauté" # Machine translated, remove this comment when verified
-        current_balance: "Solde actuel" # Machine translated, remove this comment when verified
-        credit_limit: "Limite de crédit" # Machine translated, remove this comment when verified
+        household_id: "Foyer" # MT
+        community_id: "Compte de la communauté" # MT
+        current_balance: "Solde actuel" # MT
+        credit_limit: "Limite de crédit" # MT
       billing/template:
-        code: "Type" # Machine translated, remove this comment when verified
-        description: "Description" # Machine translated, remove this comment when verified
-        value: "Montant" # Machine translated, remove this comment when verified
-        member_type_ids: "Types de membre" # Machine translated, remove this comment when verified
+        code: "Type" # MT
+        description: "Description" # MT
+        value: "Montant" # MT
+        member_type_ids: "Types de membre" # MT
       gdrive/config:
-        org_user_id: "ID utilisateur Google Workspace" # Machine translated, remove this comment when verified
-        client_id: "ID client de l'application" # Machine translated, remove this comment when verified
-        client_secret_to_write: "Code secret du client de l'application" # Machine translated, remove this comment when verified
+        org_user_id: "ID utilisateur Google Workspace" # MT
+        client_id: "ID client de l'application" # MT
+        client_secret_to_write: "Code secret du client de l'application" # MT
       gdrive/migration/operation:
-        contact_email: "E-mail du contact" # Machine translated, remove this comment when verified
-        contact_name: "Nom du contact" # Machine translated, remove this comment when verified
-        src_folder_id: "ID source" # Machine translated, remove this comment when verified
-        dest_folder_id: "ID de destination" # Machine translated, remove this comment when verified
+        contact_email: "E-mail du contact" # MT
+        contact_name: "Nom du contact" # MT
+        src_folder_id: "ID source" # MT
+        dest_folder_id: "ID de destination" # MT
       gdrive/migration/request:
-        opt_out_reason: "Motif du refus" # Machine translated, remove this comment when verified
+        opt_out_reason: "Motif du refus" # MT
       gdrive/item:
-        external_id: "ID" # Machine translated, remove this comment when verified
-        kind: "Type" # Machine translated, remove this comment when verified
+        external_id: "ID" # MT
+        kind: "Type" # MT
       gdrive/item_group:
-        access_level: "Niveau d'accès" # Machine translated, remove this comment when verified
-        group_id: "Groupe" # Machine translated, remove this comment when verified
-        item_id: "Élément" # Machine translated, remove this comment when verified
+        access_level: "Niveau d'accès" # MT
+        group_id: "Groupe" # MT
+        item_id: "Élément" # MT
       groups/group:
-        availability: "Disponibilité" # Machine translated, remove this comment when verified
-        can_request_jobs: "Peut demander des tâches ?" # Machine translated, remove this comment when verified
-        can_administer_email_lists: "Peut administrer toutes les listes de diffusion ?" # Machine translated, remove this comment when verified
-        can_moderate_email_lists: "Peut modérer toutes les listes de diffusion ?" # Machine translated, remove this comment when verified
-        description: "Description" # Machine translated, remove this comment when verified
-        kind: "Type" # Machine translated, remove this comment when verified
-        name: "Nom" # Machine translated, remove this comment when verified
-        communities: "Communautés" # Machine translated, remove this comment when verified
-        memberships: "Membres" # Machine translated, remove this comment when verified
+        availability: "Disponibilité" # MT
+        can_request_jobs: "Peut demander des tâches ?" # MT
+        can_administer_email_lists: "Peut administrer toutes les listes de diffusion ?" # MT
+        can_moderate_email_lists: "Peut modérer toutes les listes de diffusion ?" # MT
+        description: "Description" # MT
+        kind: "Type" # MT
+        name: "Nom" # MT
+        communities: "Communautés" # MT
+        memberships: "Membres" # MT
       groups/mailman/list:
-        domain_id: "Domaine" # Machine translated, remove this comment when verified
-        all_cmty_members_can_send: "Tous les membres de la communauté peuvent écrire à la liste ?" # Machine translated, remove this comment when verified
-        managers_can_administer: "Les responsables peuvent administrer la liste ?" # Machine translated, remove this comment when verified
-        managers_can_moderate: "Les responsables peuvent modérer la liste ?" # Machine translated, remove this comment when verified
-        members: "Membres de la liste" # Machine translated, remove this comment when verified
-        additional_members: "Membres supplémentaires" # Machine translated, remove this comment when verified
-        additional_senders: "Expéditeurs supplémentaires" # Machine translated, remove this comment when verified
-        settings: "Paramètres de la liste" # Machine translated, remove this comment when verified
-        address: "Adresse de la liste" # Machine translated, remove this comment when verified
-        _destroy: "Supprimer cette liste ?" # Machine translated, remove this comment when verified
+        domain_id: "Domaine" # MT
+        all_cmty_members_can_send: "Tous les membres de la communauté peuvent écrire à la liste ?" # MT
+        managers_can_administer: "Les responsables peuvent administrer la liste ?" # MT
+        managers_can_moderate: "Les responsables peuvent modérer la liste ?" # MT
+        members: "Membres de la liste" # MT
+        additional_members: "Membres supplémentaires" # MT
+        additional_senders: "Expéditeurs supplémentaires" # MT
+        settings: "Paramètres de la liste" # MT
+        address: "Adresse de la liste" # MT
+        _destroy: "Supprimer cette liste ?" # MT
       calendars/protocol:
-        fixed_end_time: "Heure de fin fixe" # Machine translated, remove this comment when verified
-        fixed_start_time: "Heure de début fixe" # Machine translated, remove this comment when verified
-        kinds: "Types d'événements" # Machine translated, remove this comment when verified
-        max_days_per_year: "Jours max./an" # Machine translated, remove this comment when verified
-        max_lead_days: "Délai de réservation max." # Machine translated, remove this comment when verified
-        max_length_minutes: "Durée max." # Machine translated, remove this comment when verified
-        max_minutes_per_year: "Minutes max./an" # Machine translated, remove this comment when verified
-        other_communities: "Autres communautés" # Machine translated, remove this comment when verified
-        pre_notice: "Avis préalable" # Machine translated, remove this comment when verified
-        requires_kind: "Type obligatoire" # Machine translated, remove this comment when verified
-        calendar_ids: "Calendriers" # Machine translated, remove this comment when verified
+        fixed_end_time: "Heure de fin fixe" # MT
+        fixed_start_time: "Heure de début fixe" # MT
+        kinds: "Types d'événements" # MT
+        max_days_per_year: "Jours max./an" # MT
+        max_lead_days: "Délai de réservation max." # MT
+        max_length_minutes: "Durée max." # MT
+        max_minutes_per_year: "Minutes max./an" # MT
+        other_communities: "Autres communautés" # MT
+        pre_notice: "Avis préalable" # MT
+        requires_kind: "Type obligatoire" # MT
+        calendar_ids: "Calendriers" # MT
       calendars/group:
-        name: "Nom du groupe" # Machine translated, remove this comment when verified
+        name: "Nom du groupe" # MT
       calendars/calendar:
-        name: "Nom" # Machine translated, remove this comment when verified
-        guidelines: "Consignes" # Machine translated, remove this comment when verified
-        hidden: "Masqué" # Machine translated, remove this comment when verified
-        abbrv: "Abréviation" # Machine translated, remove this comment when verified
-        group_id: "Groupe de calendriers" # Machine translated, remove this comment when verified
-        color: "Couleur" # Machine translated, remove this comment when verified
-        default_calendar_view: "Vue du calendrier" # Machine translated, remove this comment when verified
-        meal_hostable: "Peut accueillir des repas ?" # Machine translated, remove this comment when verified
-        allow_overlap: "Les événements peuvent se chevaucher ?" # Machine translated, remove this comment when verified
-        selected_by_default: "Sélectionné par défaut dans la liste des calendriers ?" # Machine translated, remove this comment when verified
+        name: "Nom" # MT
+        guidelines: "Consignes" # MT
+        hidden: "Masqué" # MT
+        abbrv: "Abréviation" # MT
+        group_id: "Groupe de calendriers" # MT
+        color: "Couleur" # MT
+        default_calendar_view: "Vue du calendrier" # MT
+        meal_hostable: "Peut accueillir des repas ?" # MT
+        allow_overlap: "Les événements peuvent se chevaucher ?" # MT
+        selected_by_default: "Sélectionné par défaut dans la liste des calendriers ?" # MT
       people/emergency_contact:
-        name: "Nom" # Machine translated, remove this comment when verified
-        relationship: "Lien avec le foyer" # Machine translated, remove this comment when verified
-        main_phone: "Téléphone principal" # Machine translated, remove this comment when verified
-        alt_phone: "Autre téléphone" # Machine translated, remove this comment when verified
-        email: "E-mail" # Machine translated, remove this comment when verified
-        location: "Lieu" # Machine translated, remove this comment when verified
-        country_code: "Pays" # Machine translated, remove this comment when verified
+        name: "Nom" # MT
+        relationship: "Lien avec le foyer" # MT
+        main_phone: "Téléphone principal" # MT
+        alt_phone: "Autre téléphone" # MT
+        email: "E-mail" # MT
+        location: "Lieu" # MT
+        country_code: "Pays" # MT
       people/vehicle:
-        make: "Marque" # Machine translated, remove this comment when verified
-        model: "Modèle" # Machine translated, remove this comment when verified
-        color: "Couleur" # Machine translated, remove this comment when verified
-        plate: "Plaque d'immatriculation" # Machine translated, remove this comment when verified
+        make: "Marque" # MT
+        model: "Modèle" # MT
+        color: "Couleur" # MT
+        plate: "Plaque d'immatriculation" # MT
       people/pet:
-        name: "Nom" # Machine translated, remove this comment when verified
-        species: "Espèce/race" # Machine translated, remove this comment when verified
-        color: "Couleur" # Machine translated, remove this comment when verified
-        vet: "Infos vétérinaire" # Machine translated, remove this comment when verified
-        caregivers: "Personnes qui s'en occupent" # Machine translated, remove this comment when verified
-        health_issues: "Problèmes de santé" # Machine translated, remove this comment when verified
+        name: "Nom" # MT
+        species: "Espèce/race" # MT
+        color: "Couleur" # MT
+        vet: "Infos vétérinaire" # MT
+        caregivers: "Personnes qui s'en occupent" # MT
+        health_issues: "Problèmes de santé" # MT
       people/memorial:
-        user_id: "Personne décédée" # Machine translated, remove this comment when verified
-        birth_year: "Année de naissance" # Machine translated, remove this comment when verified
-        death_year: "Année du décès" # Machine translated, remove this comment when verified
+        user_id: "Personne décédée" # MT
+        birth_year: "Année de naissance" # MT
+        death_year: "Année du décès" # MT
       work/job:
-        description: "Description" # Machine translated, remove this comment when verified
-        double_signups_allowed: "La même personne peut s'inscrire plusieurs fois à un créneau de cette tâche ?" # Machine translated, remove this comment when verified
-        hours: "Heures" # Machine translated, remove this comment when verified
-        hours_per_shift: "Heures par créneau" # Machine translated, remove this comment when verified
-        period_id: "Période" # Machine translated, remove this comment when verified
-        reminders: "Rappels" # Machine translated, remove this comment when verified
-        requester_id: "Demandeur" # Machine translated, remove this comment when verified
-        shifts: "Créneaux" # Machine translated, remove this comment when verified
-        slot_type: "Type de places" # Machine translated, remove this comment when verified
-        time_type: "Horaires" # Machine translated, remove this comment when verified
-        title: "Titre" # Machine translated, remove this comment when verified
+        description: "Description" # MT
+        double_signups_allowed: "La même personne peut s'inscrire plusieurs fois à un créneau de cette tâche ?" # MT
+        hours: "Heures" # MT
+        hours_per_shift: "Heures par créneau" # MT
+        period_id: "Période" # MT
+        reminders: "Rappels" # MT
+        requester_id: "Demandeur" # MT
+        shifts: "Créneaux" # MT
+        slot_type: "Type de places" # MT
+        time_type: "Horaires" # MT
+        title: "Titre" # MT
       work/period:
-        name: "Nom" # Machine translated, remove this comment when verified
-        phase: "Phase" # Machine translated, remove this comment when verified
-        starts_on: "Début" # Machine translated, remove this comment when verified
-        ends_on: "Fin" # Machine translated, remove this comment when verified
-        quota_type: "Quota" # Machine translated, remove this comment when verified
-        auto_open_time: "Heure d'ouverture automatique" # Machine translated, remove this comment when verified
-        pick_type: "Mode de choix" # Machine translated, remove this comment when verified
-        round_duration: "Durée des tours" # Machine translated, remove this comment when verified
-        workers_per_round: "Personnes par groupe" # Machine translated, remove this comment when verified
-        max_rounds_per_worker: "Tours max. par personne" # Machine translated, remove this comment when verified
-        job_copy_source_id: "Copie des tâches" # Machine translated, remove this comment when verified
-        copy_preassignments: "Copier les pré-attributions ?" # Machine translated, remove this comment when verified
-        meal_job_sync_settings: "Synchronisation des tâches de repas" # Machine translated, remove this comment when verified
+        name: "Nom" # MT
+        phase: "Phase" # MT
+        starts_on: "Début" # MT
+        ends_on: "Fin" # MT
+        quota_type: "Quota" # MT
+        auto_open_time: "Heure d'ouverture automatique" # MT
+        pick_type: "Mode de choix" # MT
+        round_duration: "Durée des tours" # MT
+        workers_per_round: "Personnes par groupe" # MT
+        max_rounds_per_worker: "Tours max. par personne" # MT
+        job_copy_source_id: "Copie des tâches" # MT
+        copy_preassignments: "Copier les pré-attributions ?" # MT
+        meal_job_sync_settings: "Synchronisation des tâches de repas" # MT
       work/job_reminder:
-        abs_rel: "Type" # Machine translated, remove this comment when verified
-        abs_time: "Moment d'envoi" # Machine translated, remove this comment when verified
-        rel_magnitude: "Moment d'envoi" # Machine translated, remove this comment when verified
-        note: "Note" # Machine translated, remove this comment when verified
+        abs_rel: "Type" # MT
+        abs_time: "Moment d'envoi" # MT
+        rel_magnitude: "Moment d'envoi" # MT
+        note: "Note" # MT
       work/shift:
-        start_time: "Heure de début" # Machine translated, remove this comment when verified
-        end_time: "Heure de fin" # Machine translated, remove this comment when verified
-        hours: "Heures" # Machine translated, remove this comment when verified
-        slots: "Nb de places" # Machine translated, remove this comment when verified
-        workers: "Personnes" # Machine translated, remove this comment when verified
+        start_time: "Heure de début" # MT
+        end_time: "Heure de fin" # MT
+        hours: "Heures" # MT
+        slots: "Nb de places" # MT
+        workers: "Personnes" # MT
       wiki/page:
-        title: "Titre" # Machine translated, remove this comment when verified
-        content: "Contenu" # Machine translated, remove this comment when verified
-        comment: "Commentaire" # Machine translated, remove this comment when verified
-        editable_by: "Modifiable par" # Machine translated, remove this comment when verified
-        data_source: "Source de données" # Machine translated, remove this comment when verified
+        title: "Titre" # MT
+        content: "Contenu" # MT
+        comment: "Commentaire" # MT
+        editable_by: "Modifiable par" # MT
+        data_source: "Source de données" # MT
     errors:
       messages:
-        invalid_content_type: "Le type de fichier est incorrect" # Machine translated, remove this comment when verified
-        too_big: "Le fichier est trop volumineux (%{max} Mio maximum)" # Machine translated, remove this comment when verified
-        attached: "Le fichier est manquant" # Machine translated, remove this comment when verified
+        invalid_content_type: "Le type de fichier est incorrect" # MT
+        too_big: "Le fichier est trop volumineux (%{max} Mio maximum)" # MT
+        attached: "Le fichier est manquant" # MT
       models:
         billing/transaction:
           attributes:
             unit_price:
-              blank_with_quantity: "doit être rempli si la quantité est indiquée" # Machine translated, remove this comment when verified
+              blank_with_quantity: "doit être rempli si la quantité est indiquée" # MT
             quantity:
-              blank_with_unit_price: "doit être remplie si le prix unitaire est indiqué" # Machine translated, remove this comment when verified
+              blank_with_unit_price: "doit être remplie si le prix unitaire est indiqué" # MT
         domain:
           attributes:
             base:
-              at_least_one_ownership: "Veuillez sélectionner au moins une communauté" # Machine translated, remove this comment when verified
+              at_least_one_ownership: "Veuillez sélectionner au moins une communauté" # MT
         gdrive/config:
           attributes:
             org_user_id:
-              invalid: "Doit être une adresse e-mail" # Machine translated, remove this comment when verified
+              invalid: "Doit être une adresse e-mail" # MT
             client_id:
-              invalid: "Doit se terminer par .apps.googleusercontent.com" # Machine translated, remove this comment when verified
+              invalid: "Doit se terminer par .apps.googleusercontent.com" # MT
             client_secret_to_write:
-              wrong_length: "Doit comporter exactement %{count} caractères" # Machine translated, remove this comment when verified
+              wrong_length: "Doit comporter exactement %{count} caractères" # MT
         gdrive/migration/operation:
           attributes:
             contact_email:
-              invalid: "Doit être une adresse e-mail" # Machine translated, remove this comment when verified
+              invalid: "Doit être une adresse e-mail" # MT
             dest_folder_id:
-              invalid: "Ne doit contenir que des lettres, des chiffres, _ ou -" # Machine translated, remove this comment when verified
+              invalid: "Ne doit contenir que des lettres, des chiffres, _ ou -" # MT
             src_folder_id:
-              invalid: "Ne doit contenir que des lettres, des chiffres, _ ou -" # Machine translated, remove this comment when verified
+              invalid: "Ne doit contenir que des lettres, des chiffres, _ ou -" # MT
         groups/group:
           attributes:
             base:
-              at_least_one_affiliation: "Veuillez sélectionner au moins une communauté" # Machine translated, remove this comment when verified
+              at_least_one_affiliation: "Veuillez sélectionner au moins une communauté" # MT
         groups/mailman/list:
           attributes:
             name:
-              invalid: "Contient des caractères non valides" # Machine translated, remove this comment when verified
-              taken: "Une autre liste de ce domaine utilise déjà ce nom" # Machine translated, remove this comment when verified
+              invalid: "Contient des caractères non valides" # MT
+              taken: "Une autre liste de ce domaine utilise déjà ce nom" # MT
         groups/membership:
           attributes:
             user_id:
-              unaffiliated: "N'appartient pas à une communauté affiliée" # Machine translated, remove this comment when verified
+              unaffiliated: "N'appartient pas à une communauté affiliée" # MT
         household:
           name:
-            taken: "Un foyer porte déjà ce nom dans cette communauté" # Machine translated, remove this comment when verified
+            taken: "Un foyer porte déjà ce nom dans cette communauté" # MT
         meals/formula_part:
-          negative: "Ne doit pas être négatif" # Machine translated, remove this comment when verified
+          negative: "Ne doit pas être négatif" # MT
         meals/signup:
           exceeded_spots:
-            one: "Vu le nombre de places restantes, vous ne pouvez inscrire qu'une personne." # Machine translated, remove this comment when verified
-            other: "Vu le nombre de places restantes, vous pouvez inscrire au maximum %{count} personnes." # Machine translated, remove this comment when verified
-          nobody_signed_up: "Vous devez inscrire au moins une personne" # Machine translated, remove this comment when verified
-          duplicate_types: "Inscrivez chaque type une seule fois" # Machine translated, remove this comment when verified
+            one: "Vu le nombre de places restantes, vous ne pouvez inscrire qu'une personne." # MT
+            other: "Vu le nombre de places restantes, vous pouvez inscrire au maximum %{count} personnes." # MT
+          nobody_signed_up: "Vous devez inscrire au moins une personne" # MT
+          duplicate_types: "Inscrivez chaque type une seule fois" # MT
         meals/meal:
           attributes:
             capacity:
-              below_signups: "doit être d'au moins %{count} vu les inscriptions actuelles" # Machine translated, remove this comment when verified
+              below_signups: "doit être d'au moins %{count} vu les inscriptions actuelles" # MT
             title:
-              blank_with_menu: "doit être rempli si d'autres éléments du menu sont saisis" # Machine translated, remove this comment when verified
+              blank_with_menu: "doit être rempli si d'autres éléments du menu sont saisis" # MT
             entrees:
-              blank_with_menu: "doivent être remplis si d'autres éléments du menu sont saisis" # Machine translated, remove this comment when verified
+              blank_with_menu: "doivent être remplis si d'autres éléments du menu sont saisis" # MT
             invitations:
-              none: "vous devez inviter au moins une communauté" # Machine translated, remove this comment when verified
+              none: "vous devez inviter au moins une communauté" # MT
             auto_close_time:
-              not_before_meal: "doit être entre maintenant et l'heure du repas" # Machine translated, remove this comment when verified
+              not_before_meal: "doit être entre maintenant et l'heure du repas" # MT
             allergens:
-              none_checked: "au moins une case doit être cochée si un menu est saisi" # Machine translated, remove this comment when verified
-              none_with_others: "« Aucun » ne peut pas être sélectionné avec d'autres allergènes" # Machine translated, remove this comment when verified
+              none_checked: "au moins une case doit être cochée si un menu est saisi" # MT
+              none_with_others: "« Aucun » ne peut pas être sélectionné avec d'autres allergènes" # MT
         meals/assignment:
           attributes:
             user_id:
-              role_not_in_formula: "Le rôle « %{role} » ne correspond pas à la formule sélectionnée" # Machine translated, remove this comment when verified
+              role_not_in_formula: "Le rôle « %{role} » ne correspond pas à la formule sélectionnée" # MT
         calendars/event:
           attributes:
             starts_at:
-              after_meal_time: "doit être à l'heure du repas ou avant (%{time})" # Machine translated, remove this comment when verified
+              after_meal_time: "doit être à l'heure du repas ou avant (%{time})" # MT
             ends_at:
-              before_meal_time: "doit être après l'heure du repas (%{time})" # Machine translated, remove this comment when verified
+              before_meal_time: "doit être après l'heure du repas (%{time})" # MT
         calendars/eventlet:
           attributes:
             base:
-              all_day_not_allowed: "Les événements sur toute la journée ne sont pas autorisés sur ce calendrier" # Machine translated, remove this comment when verified
+              all_day_not_allowed: "Les événements sur toute la journée ne sont pas autorisés sur ce calendrier" # MT
         calendars/event_override:
           attributes:
             occurrence_start:
-              not_in_series: "n'est pas une occurrence valide de cette série" # Machine translated, remove this comment when verified
+              not_in_series: "n'est pas une occurrence valide de cette série" # MT
             ends_at:
-              before_start: "doit être après l'heure de début" # Machine translated, remove this comment when verified
+              before_start: "doit être après l'heure de début" # MT
         calendars/eventlet_override:
           attributes:
             base:
-              no_change: "doit soit supprimer l'occurrence, soit indiquer des changements de décalage" # Machine translated, remove this comment when verified
+              no_change: "doit soit supprimer l'occurrence, soit indiquer des changements de décalage" # MT
             eventlet:
-              different_event: "doit appartenir au même événement que la modification" # Machine translated, remove this comment when verified
+              different_event: "doit appartenir au même événement que la modification" # MT
         user:
           password:
-            password_strength: "Votre mot de passe était trop faible. Essayez de l'allonger ou d'ajouter des caractères spéciaux." # Machine translated, remove this comment when verified
+            password_strength: "Votre mot de passe était trop faible. Essayez de l'allonger ou d'ajouter des caractères spéciaux." # MT
           attributes:
             certify_13_or_older:
-              accepted_full_access: "La certification d'âge est obligatoire pour les enfants avec accès complet" # Machine translated, remove this comment when verified
-              accepted_becoming_adult: "La certification d'âge est obligatoire pour passer un enfant en adulte" # Machine translated, remove this comment when verified
+              accepted_full_access: "La certification d'âge est obligatoire pour les enfants avec accès complet" # MT
+              accepted_becoming_adult: "La certification d'âge est obligatoire pour passer un enfant en adulte" # MT
             birthday_str:
-              too_young: "Les enfants doivent avoir 13 ans ou plus pour avoir un accès complet" # Machine translated, remove this comment when verified
+              too_young: "Les enfants doivent avoir 13 ans ou plus pour avoir un accès complet" # MT
         calendars/calendar:
           attributes:
             abbrv:
-              blank: "doit être remplie si le calendrier peut accueillir des repas" # Machine translated, remove this comment when verified
+              blank: "doit être remplie si le calendrier peut accueillir des repas" # MT
             color:
-              invalid: "Doit être au format hexadécimal (par ex. #112233)" # Machine translated, remove this comment when verified
+              invalid: "Doit être au format hexadécimal (par ex. #112233)" # MT
             allow_overlap:
-              repeating_events: "doit rester activé tant que ce calendrier a des événements récurrents" # Machine translated, remove this comment when verified
+              repeating_events: "doit rester activé tant que ce calendrier a des événements récurrents" # MT
         calendars/protocol:
           attributes:
             base:
-              repeating_events: "Les horaires fixes, délais de réservation et limites annuelles ne peuvent pas s'appliquer à %{calendars}, qui ont des événements récurrents. Les événements récurrents nécessitent des calendriers sans ces règles." # Machine translated, remove this comment when verified
+              repeating_events: "Les horaires fixes, délais de réservation et limites annuelles ne peuvent pas s'appliquer à %{calendars}, qui ont des événements récurrents. Les événements récurrents nécessitent des calendriers sans ces règles." # MT
         meals/formula:
-          at_least_one_type: "Vous devez inclure au moins un type de repas." # Machine translated, remove this comment when verified
-          at_least_one_nonzero_type: "Vous devez inclure au moins un type de repas non nul si le type de calcul est proportionnel." # Machine translated, remove this comment when verified
+          at_least_one_type: "Vous devez inclure au moins un type de repas." # MT
+          at_least_one_nonzero_type: "Vous devez inclure au moins un type de repas non nul si le type de calcul est proportionnel." # MT
           attributes:
             is_default:
-              cant_unset: "Vous ne pouvez pas retirer la formule par défaut. Définissez plutôt une autre formule par défaut." # Machine translated, remove this comment when verified
+              cant_unset: "Vous ne pouvez pas retirer la formule par défaut. Définissez plutôt une autre formule par défaut." # MT
             role_ids:
-              must_have_head_cook: "Doit inclure %{title}" # Machine translated, remove this comment when verified
+              must_have_head_cook: "Doit inclure %{title}" # MT
         meals/role:
           attributes:
             shift_end:
-              not_after_start: "Doit être après l'heure de début" # Machine translated, remove this comment when verified
+              not_after_start: "Doit être après l'heure de début" # MT
         wiki/page:
-          sample_not_editable: "La page d'exemple n'est pas modifiable afin de rester intacte comme référence pour les autres. Si vous voulez faire des essais, créez une nouvelle page avec le lien « Nouvelle page wiki » ci-dessous." # Machine translated, remove this comment when verified
+          sample_not_editable: "La page d'exemple n'est pas modifiable afin de rester intacte comme référence pour les autres. Si vous voulez faire des essais, créez une nouvelle page avec le lien « Nouvelle page wiki » ci-dessous." # MT
           data_fetch:
-            main: "Un problème est survenu en récupérant les données de cette page (%{error})" # Machine translated, remove this comment when verified
-            connection_error: "Impossible de se connecter à la source de données" # Machine translated, remove this comment when verified
-            invalid_protocol: "L'URL de la source de données doit utiliser HTTP ou HTTPS" # Machine translated, remove this comment when verified
-            invalid_json: "JSON non valide" # Machine translated, remove this comment when verified
-            template_error: "Erreur de modèle : %{details}" # Machine translated, remove this comment when verified
+            main: "Un problème est survenu en récupérant les données de cette page (%{error})" # MT
+            connection_error: "Impossible de se connecter à la source de données" # MT
+            invalid_protocol: "L'URL de la source de données doit utiliser HTTP ou HTTPS" # MT
+            invalid_json: "JSON non valide" # MT
+            template_error: "Erreur de modèle : %{details}" # MT
           attributes:
             title:
-              reserved_slug: "Ce titre est un mot ou une expression réservé. Veuillez en choisir un autre." # Machine translated, remove this comment when verified
+              reserved_slug: "Ce titre est un mot ou une expression réservé. Veuillez en choisir un autre." # MT
         work/job:
           attributes:
             hours_per_shift:
-              uneven_divisor: "Doit être égal à %{hours} heures ou en être un diviseur exact" # Machine translated, remove this comment when verified
+              uneven_divisor: "Doit être égal à %{hours} heures ou en être un diviseur exact" # MT
             shifts:
-              more_than_one_shift_for_full_single: "Vous ne pouvez ajouter qu'un créneau pour les tâches à créneau unique." # Machine translated, remove this comment when verified
-              more_than_one_shift_for_full_period: "Vous ne pouvez ajouter qu'un créneau pour les tâches couvrant toute la période." # Machine translated, remove this comment when verified
-              duplicate_start_end_times: "Plusieurs créneaux ne peuvent pas avoir les mêmes heures de début et de fin." # Machine translated, remove this comment when verified
-              different_length_shifts: "Tous les créneaux doivent avoir la même durée." # Machine translated, remove this comment when verified
+              more_than_one_shift_for_full_single: "Vous ne pouvez ajouter qu'un créneau pour les tâches à créneau unique." # MT
+              more_than_one_shift_for_full_period: "Vous ne pouvez ajouter qu'un créneau pour les tâches couvrant toute la période." # MT
+              duplicate_start_end_times: "Plusieurs créneaux ne peuvent pas avoir les mêmes heures de début et de fin." # MT
+              different_length_shifts: "Tous les créneaux doivent avoir la même durée." # MT
         work/period:
           attributes:
             name:
-              reserved_slug: "est un mot réservé, veuillez en choisir un autre" # Machine translated, remove this comment when verified
+              reserved_slug: "est un mot réservé, veuillez en choisir un autre" # MT
             ends_on:
-              not_after_start: "doit être après la date de début" # Machine translated, remove this comment when verified
+              not_after_start: "doit être après la date de début" # MT
             auto_open_time:
-              blank: "Doit être remplie si le mode de choix est « chacun son tour ». Si vous ne connaissez pas encore l'heure exacte, indiquez une heure approximative et mettez-la à jour plus tard." # Machine translated, remove this comment when verified
+              blank: "Doit être remplie si le mode de choix est « chacun son tour ». Si vous ne connaissez pas encore l'heure exacte, indiquez une heure approximative et mettez-la à jour plus tard." # MT
         work/shift:
           attributes:
             starts_at:
-              elapsed_doesnt_equal_job: "Le créneau doit durer %{hours} heures" # Machine translated, remove this comment when verified
-              elapsed_doesnt_evenly_divide_job: "La durée du créneau doit être égale à %{hours} heures ou en être un diviseur exact" # Machine translated, remove this comment when verified
+              elapsed_doesnt_equal_job: "Le créneau doit durer %{hours} heures" # MT
+              elapsed_doesnt_evenly_divide_job: "La durée du créneau doit être égale à %{hours} heures ou en être un diviseur exact" # MT
             ends_at:
-              not_after_start: "doit être après l'heure de début" # Machine translated, remove this comment when verified
+              not_after_start: "doit être après l'heure de début" # MT
             assignments:
-              no_double_assignments: "Les personnes affectées en double ne sont pas autorisées" # Machine translated, remove this comment when verified
+              no_double_assignments: "Les personnes affectées en double ne sont pas autorisées" # MT

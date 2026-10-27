@@ -1,99 +1,111 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
 fr:
   devise:
     confirmations:
-      confirmed: "Votre adresse e-mail a bien été confirmée." # Machine translated, remove this comment when verified
-      send_instructions: "Vous allez recevoir dans quelques minutes un e-mail expliquant comment confirmer votre adresse e-mail." # Machine translated, remove this comment when verified
-      send_paranoid_instructions: "Si votre adresse e-mail figure dans notre base de données, vous allez recevoir dans quelques minutes un e-mail expliquant comment la confirmer." # Machine translated, remove this comment when verified
+      confirmed: "Votre adresse e-mail a bien été confirmée." # MT
+      send_instructions: "Vous allez recevoir dans quelques minutes un e-mail expliquant comment confirmer votre adresse e-mail." # MT
+      send_paranoid_instructions: "Si votre adresse e-mail figure dans notre base de données, vous allez recevoir dans quelques minutes un e-mail expliquant comment la confirmer." # MT
     failure:
-      already_authenticated: "Vous êtes déjà connecté." # Machine translated, remove this comment when verified
-      inactive: "Votre compte n'est pas encore activé." # Machine translated, remove this comment when verified
-      invalid: "%{authentication_keys} ou mot de passe non valide." # Machine translated, remove this comment when verified
-      locked: "Votre compte est verrouillé." # Machine translated, remove this comment when verified
-      last_attempt: "Il vous reste une tentative avant que votre compte soit verrouillé." # Machine translated, remove this comment when verified
-      not_found_in_database: "%{authentication_keys} ou mot de passe non valide." # Machine translated, remove this comment when verified
-      timeout: "Votre session a expiré. Veuillez vous reconnecter pour continuer." # Machine translated, remove this comment when verified
-      unauthenticated: "Veuillez vous connecter pour voir cette page." # Machine translated, remove this comment when verified
-      unconfirmed: "Vous devez utiliser une invitation pour votre première connexion." # Machine translated, remove this comment when verified
+      already_authenticated: "Vous êtes déjà connecté." # MT
+      inactive: "Votre compte n'est pas encore activé." # MT
+      invalid: "%{authentication_keys} ou mot de passe non valide." # MT
+      locked: "Votre compte est verrouillé." # MT
+      last_attempt: "Il vous reste une tentative avant que votre compte soit verrouillé." # MT
+      not_found_in_database: "%{authentication_keys} ou mot de passe non valide." # MT
+      timeout: "Votre session a expiré. Veuillez vous reconnecter pour continuer." # MT
+      unauthenticated: "Veuillez vous connecter pour voir cette page." # MT
+      unconfirmed: "Vous devez utiliser une invitation pour votre première connexion." # MT
     authentication_keys:
-      email: "Adresse e-mail" # Machine translated, remove this comment when verified
+      email: "Adresse e-mail" # MT
     mailer:
       confirmation_instructions:
-        subject: "Veuillez confirmer votre adresse e-mail" # Machine translated, remove this comment when verified
+        subject: "Veuillez confirmer votre adresse e-mail" # MT
       reset_password_instructions:
-        subject: "Réinitialisation de votre mot de passe" # Machine translated, remove this comment when verified
+        subject: "Réinitialisation de votre mot de passe" # MT
       unlock_instructions:
-        subject: "Instructions de déverrouillage" # Machine translated, remove this comment when verified
+        subject: "Instructions de déverrouillage" # MT
     omniauth_callbacks:
-      failure: "Impossible de vous connecter avec %{kind} : %{reason}." # Machine translated, remove this comment when verified
-      success: "Connexion réussie avec votre compte %{kind}." # Machine translated, remove this comment when verified
+      failure: "Impossible de vous connecter avec %{kind} : %{reason}." # MT
+      success: "Connexion réussie avec votre compte %{kind}." # MT
     passwords:
       new:
-        title: "Mot de passe oublié" # Machine translated, remove this comment when verified
-        instructions: "Saisissez votre adresse e-mail pour recevoir des instructions par e-mail. Suivez-les pour réinitialiser votre mot de passe. L'e-mail peut mettre quelques instants à arriver." # Machine translated, remove this comment when verified
+        title: "Mot de passe oublié" # MT
+        instructions: "Saisissez votre adresse e-mail pour recevoir des instructions par e-mail. Suivez-les pour réinitialiser votre mot de passe. L'e-mail peut mettre quelques instants à arriver." # MT
       edit:
-        title: "Saisissez un nouveau mot de passe" # Machine translated, remove this comment when verified
-        instructions: "Saisissez un nouveau mot de passe ci-dessous et vous serez connecté à Gather." # Machine translated, remove this comment when verified
-      no_token: "Vous ne pouvez accéder à cette page qu'à partir d'un e-mail de réinitialisation du mot de passe. Si c'est bien le cas, vérifiez que vous avez utilisé l'URL complète fournie." # Machine translated, remove this comment when verified
-      send_instructions: "Vous allez recevoir dans quelques minutes un e-mail expliquant comment réinitialiser votre mot de passe." # Machine translated, remove this comment when verified
-      send_paranoid_instructions: "Si votre adresse e-mail figure dans notre base de données, vous allez recevoir dans quelques minutes un lien de récupération du mot de passe." # Machine translated, remove this comment when verified
-      updated: "Votre mot de passe a bien été modifié. Vous êtes maintenant connecté." # Machine translated, remove this comment when verified
-      updated_not_active: "Votre mot de passe a bien été modifié." # Machine translated, remove this comment when verified
+        title: "Saisissez un nouveau mot de passe" # MT
+        instructions: "Saisissez un nouveau mot de passe ci-dessous et vous serez connecté à Gather." # MT
+      no_token: "Vous ne pouvez accéder à cette page qu'à partir d'un e-mail de réinitialisation du mot de passe. Si c'est bien le cas, vérifiez que vous avez utilisé l'URL complète fournie." # MT
+      send_instructions: "Vous allez recevoir dans quelques minutes un e-mail expliquant comment réinitialiser votre mot de passe." # MT
+      send_paranoid_instructions: "Si votre adresse e-mail figure dans notre base de données, vous allez recevoir dans quelques minutes un lien de récupération du mot de passe." # MT
+      updated: "Votre mot de passe a bien été modifié. Vous êtes maintenant connecté." # MT
+      updated_not_active: "Votre mot de passe a bien été modifié." # MT
     registrations:
-      destroyed: "Au revoir ! Votre compte a bien été supprimé. Nous espérons vous revoir bientôt." # Machine translated, remove this comment when verified
-      signed_up: "Bienvenue ! Votre inscription a bien été enregistrée." # Machine translated, remove this comment when verified
-      signed_up_but_inactive: "Votre inscription a bien été enregistrée, mais nous n'avons pas pu vous connecter car votre compte n'est pas encore activé." # Machine translated, remove this comment when verified
-      signed_up_but_locked: "Votre inscription a bien été enregistrée, mais nous n'avons pas pu vous connecter car votre compte est verrouillé." # Machine translated, remove this comment when verified
-      signed_up_but_unconfirmed: "Un message contenant un lien de confirmation a été envoyé à votre adresse e-mail. Veuillez suivre ce lien pour activer votre compte." # Machine translated, remove this comment when verified
-      update_needs_confirmation: "Votre compte a bien été mis à jour, mais nous devons vérifier votre nouvelle adresse e-mail. Consultez vos e-mails et suivez le lien de confirmation." # Machine translated, remove this comment when verified
-      updated: "Votre compte a bien été mis à jour." # Machine translated, remove this comment when verified
+      destroyed: "Au revoir ! Votre compte a bien été supprimé. Nous espérons vous revoir bientôt." # MT
+      signed_up: "Bienvenue ! Votre inscription a bien été enregistrée." # MT
+      signed_up_but_inactive: "Votre inscription a bien été enregistrée, mais nous n'avons pas pu vous connecter car votre compte n'est pas encore activé." # MT
+      signed_up_but_locked: "Votre inscription a bien été enregistrée, mais nous n'avons pas pu vous connecter car votre compte est verrouillé." # MT
+      signed_up_but_unconfirmed: "Un message contenant un lien de confirmation a été envoyé à votre adresse e-mail. Veuillez suivre ce lien pour activer votre compte." # MT
+      update_needs_confirmation: "Votre compte a bien été mis à jour, mais nous devons vérifier votre nouvelle adresse e-mail. Consultez vos e-mails et suivez le lien de confirmation." # MT
+      updated: "Votre compte a bien été mis à jour." # MT
     sessions:
       new:
-        title: "Connexion" # Machine translated, remove this comment when verified
-      signed_in: "Connexion réussie." # Machine translated, remove this comment when verified
-      signed_out: "Déconnexion réussie." # Machine translated, remove this comment when verified
-      already_signed_out: "Déconnexion réussie." # Machine translated, remove this comment when verified
+        title: "Connexion" # MT
+      signed_in: "Connexion réussie." # MT
+      signed_out: "Déconnexion réussie." # MT
+      already_signed_out: "Déconnexion réussie." # MT
     unlocks:
-      send_instructions: "Vous allez recevoir dans quelques minutes un e-mail expliquant comment déverrouiller votre compte." # Machine translated, remove this comment when verified
-      send_paranoid_instructions: "Si votre compte existe, vous allez recevoir dans quelques minutes un e-mail expliquant comment le déverrouiller." # Machine translated, remove this comment when verified
-      unlocked: "Votre compte a bien été déverrouillé. Veuillez vous connecter pour continuer." # Machine translated, remove this comment when verified
+      send_instructions: "Vous allez recevoir dans quelques minutes un e-mail expliquant comment déverrouiller votre compte." # MT
+      send_paranoid_instructions: "Si votre compte existe, vous allez recevoir dans quelques minutes un e-mail expliquant comment le déverrouiller." # MT
+      unlocked: "Votre compte a bien été déverrouillé. Veuillez vous connecter pour continuer." # MT
     shared:
       links:
-        forgot_your_password: "Vous ne connaissez pas votre mot de passe ?" # Machine translated, remove this comment when verified
+        forgot_your_password: "Vous ne connaissez pas votre mot de passe ?" # MT
   auth_mailer:
     cant_reset_password:
-      request_received: "Nous avons reçu une demande de réinitialisation de votre mot de passe." # Machine translated, remove this comment when verified
-      no_full_access: "Malheureusement, votre profil n'a pas d'accès complet au système et vous ne pouvez donc pas vous connecter." # Machine translated, remove this comment when verified
-      contact_admin: "Veuillez contacter l'administrateur de Gather de votre communauté si vous pensez qu'il s'agit d'une erreur." # Machine translated, remove this comment when verified
+      request_received: "Nous avons reçu une demande de réinitialisation de votre mot de passe." # MT
+      no_full_access: "Malheureusement, votre profil n'a pas d'accès complet au système et vous ne pouvez donc pas vous connecter." # MT
+      contact_admin: "Veuillez contacter l'administrateur de Gather de votre communauté si vous pensez qu'il s'agit d'une erreur." # MT
     confirmation_instructions:
-      use_link: "Veuillez confirmer votre nouvelle adresse e-mail à l'aide de ce lien :" # Machine translated, remove this comment when verified
-      thanks: "Merci de votre collaboration à cette importante mesure de sécurité !" # Machine translated, remove this comment when verified
+      use_link: "Veuillez confirmer votre nouvelle adresse e-mail à l'aide de ce lien :" # MT
+      thanks: "Merci de votre collaboration à cette importante mesure de sécurité !" # MT
     reset_password_instructions:
-      use_link: "Nous avons reçu une demande de réinitialisation de votre mot de passe. Pour la faire, utilisez ce lien :" # Machine translated, remove this comment when verified
-      ignore: "Si vous n'êtes pas à l'origine de cette demande, ignorez simplement cet e-mail et votre mot de passe restera inchangé." # Machine translated, remove this comment when verified
+      use_link: "Nous avons reçu une demande de réinitialisation de votre mot de passe. Pour la faire, utilisez ce lien :" # MT
+      ignore: "Si vous n'êtes pas à l'origine de cette demande, ignorez simplement cet e-mail et votre mot de passe restera inchangé." # MT
     sign_in_invitation:
-      subject: "Instructions pour vous connecter à Gather" # Machine translated, remove this comment when verified
-      invited: "Vous êtes invité à vous connecter à Gather, le système de gestion de la communauté %{community} !" # Machine translated, remove this comment when verified
-      click_link: "Cliquez sur le lien ci-dessous pour commencer." # Machine translated, remove this comment when verified
-      choose_method: "Vous pourrez ensuite choisir de vous connecter avec Google ou avec un mot de passe. Si vous n'avez pas encore de mot de passe, vous pourrez en créer un." # Machine translated, remove this comment when verified
+      subject: "Instructions pour vous connecter à Gather" # MT
+      invited: "Vous êtes invité à vous connecter à Gather, le système de gestion de la communauté %{community} !" # MT
+      click_link: "Cliquez sur le lien ci-dessous pour commencer." # MT
+      choose_method: "Vous pourrez ensuite choisir de vous connecter avec Google ou avec un mot de passe. Si vous n'avez pas encore de mot de passe, vous pourrez en créer un." # MT
       expiry:
-        one: "Ce lien expirera dans %{count} jour." # Machine translated, remove this comment when verified
-        other: "Ce lien expirera dans %{count} jours." # Machine translated, remove this comment when verified
-      see_you: "À bientôt !" # Machine translated, remove this comment when verified
+        one: "Ce lien expirera dans %{count} jour." # MT
+        other: "Ce lien expirera dans %{count} jours." # MT
+      see_you: "À bientôt !" # MT
   errors:
     messages:
-      already_confirmed: "a déjà été confirmé, veuillez essayer de vous connecter" # Machine translated, remove this comment when verified
-      confirmation: "ne correspond pas au mot de passe" # Machine translated, remove this comment when verified
-      confirmation_period_expired: "doit être confirmé dans un délai de %{period}, veuillez en demander un nouveau" # Machine translated, remove this comment when verified
-      doesnt_match: "Ne correspond pas au mot de passe" # Machine translated, remove this comment when verified
-      expired: "a expiré, veuillez en demander un nouveau" # Machine translated, remove this comment when verified
-      not_found: "Adresse e-mail introuvable" # Machine translated, remove this comment when verified
-      not_locked: "n'était pas verrouillé" # Machine translated, remove this comment when verified
+      already_confirmed: "a déjà été confirmé, veuillez essayer de vous connecter" # MT
+      confirmation: "ne correspond pas au mot de passe" # MT
+      confirmation_period_expired: "doit être confirmé dans un délai de %{period}, veuillez en demander un nouveau" # MT
+      doesnt_match: "Ne correspond pas au mot de passe" # MT
+      expired: "a expiré, veuillez en demander un nouveau" # MT
+      not_found: "Adresse e-mail introuvable" # MT
+      not_locked: "n'était pas verrouillé" # MT
       not_saved:
-        one: "Une erreur a empêché l'enregistrement de ce %{calendar} :" # Machine translated, remove this comment when verified
-        other: "%{count} erreurs ont empêché l'enregistrement de ce %{calendar} :" # Machine translated, remove this comment when verified
+        one: "Une erreur a empêché l'enregistrement de ce %{calendar} :" # MT
+        other: "%{count} erreurs ont empêché l'enregistrement de ce %{calendar} :" # MT
   password:
     strength:
-      weak: "Trop faible (score : %{bits})" # Machine translated, remove this comment when verified
-      good: "Bon (score : %{bits})" # Machine translated, remove this comment when verified
-      excellent: "Excellent (score : %{bits})" # Machine translated, remove this comment when verified
-    strength_info: "Nous utilisons une vérification intelligente de la robustesse des mots de passe pour garantir que le vôtre est sûr et difficile à deviner.\n\nVous pouvez renforcer votre mot de passe :\n\n  - en l'allongeant\n  - en évitant les mots du dictionnaire\n  - en mélangeant lettres, chiffres et symboles" # Machine translated, remove this comment when verified
+      weak: "Trop faible (score : %{bits})" # MT
+      good: "Bon (score : %{bits})" # MT
+      excellent: "Excellent (score : %{bits})" # MT
+    strength_info: "Nous utilisons une vérification intelligente de la robustesse des mots de passe pour garantir que le vôtre est sûr et difficile à deviner.\n\nVous pouvez renforcer votre mot de passe :\n\n  - en l'allongeant\n  - en évitant les mots du dictionnaire\n  - en mélangeant lettres, chiffres et symboles" # MT

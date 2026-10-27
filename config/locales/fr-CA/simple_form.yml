@@ -1,33 +1,45 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
 fr-CA:
   simple_form:
     labels:
       communities_signup:
-        contact_email: "Adresse courriel" # Machine translated, remove this comment when verified
+        contact_email: "Adresse courriel" # MT
     hints:
       communities_signup_action:
-        message_approve: "Le courriel d'approbation complet est affiché ci-dessus. Ajoutez une note personnalisée en remplaçant le texte indicatif." # Machine translated, remove this comment when verified
+        message_approve: "Le courriel d'approbation complet est affiché ci-dessus. Ajoutez une note personnalisée en remplaçant le texte indicatif." # MT
       gdrive_migration_operation:
-        contact_email: "Adresse courriel de la personne de contact." # Machine translated, remove this comment when verified
+        contact_email: "Adresse courriel de la personne de contact." # MT
       groups_group:
         mailman_list:
           all_cmty_members_can_send:
-            single_community: "Tous les membres de la communauté peuvent-ils écrire à cette liste ? Si la case est décochée, seuls les membres du groupe le peuvent. N'affecte pas qui reçoit les courriels de la liste." # Machine translated, remove this comment when verified
-            multi_community: "Tous les membres des communautés du groupe peuvent-ils écrire à cette liste ? Si la case est décochée, seuls les membres du groupe le peuvent. N'affecte pas qui reçoit les courriels de la liste." # Machine translated, remove this comment when verified
+            single_community: "Tous les membres de la communauté peuvent-ils écrire à cette liste ? Si la case est décochée, seuls les membres du groupe le peuvent. N'affecte pas qui reçoit les courriels de la liste." # MT
+            multi_community: "Tous les membres des communautés du groupe peuvent-ils écrire à cette liste ? Si la case est décochée, seuls les membres du groupe le peuvent. N'affecte pas qui reçoit les courriels de la liste." # MT
       calendars_calendar:
-        abbrv: "Abréviation à utiliser dans les textes courts, par ex. objets de courriels (6 lettres max.)" # Machine translated, remove this comment when verified
+        abbrv: "Abréviation à utiliser dans les textes courts, par ex. objets de courriels (6 lettres max.)" # MT
       user:
-        email: "L'adresse courriel à laquelle vous préférez être contacté. Aussi utilisée pour la connexion avec mot de passe." # Machine translated, remove this comment when verified
-        google_email: "L'adresse courriel liée au compte Google utilisé pour la connexion. Elle n'est pas affichée dans l'annuaire. Demandez à un <a href='/roles'>administrateur</a> si vous devez la changer." # Machine translated, remove this comment when verified
-        paypal_email: "L'adresse courriel de votre compte PayPal. Utilisée pour les remboursements des cuisiniers. Laissez vide pour utiliser votre adresse courriel principale ci-dessus." # Machine translated, remove this comment when verified
+        email: "L'adresse courriel à laquelle vous préférez être contacté. Aussi utilisée pour la connexion avec mot de passe." # MT
+        google_email: "L'adresse courriel liée au compte Google utilisé pour la connexion. Elle n'est pas affichée dans l'annuaire. Demandez à un <a href='/roles'>administrateur</a> si vous devez la changer." # MT
+        paypal_email: "L'adresse courriel de votre compte PayPal. Utilisée pour les remboursements des cuisiniers. Laissez vide pour utiliser votre adresse courriel principale ci-dessus." # MT
       meals_formula:
-        takeout: "Si la case est cochée, les convives peuvent demander leur repas pour emporter. Le fonctionnement concret est à décider et à communiquer par la communauté." # Machine translated, remove this comment when verified
+        takeout: "Si la case est cochée, les convives peuvent demander leur repas pour emporter. Le fonctionnement concret est à décider et à communiquer par la communauté." # MT
       work_job:
-        hours_per_shift: "Le nombre d'heures créditées pour chaque quart." # Machine translated, remove this comment when verified
+        hours_per_shift: "Le nombre d'heures créditées pour chaque quart." # MT
     options:
       user:
         preferred_contact:
-          email: "Courriel" # Machine translated, remove this comment when verified
+          email: "Courriel" # MT
       work_job:
         slot_type:
-          full_single: "Tâche pour toute la communauté (un seul quart)" # Machine translated, remove this comment when verified
-          full_multiple: "Tâche pour toute la communauté (plusieurs quarts)" # Machine translated, remove this comment when verified
+          full_single: "Tâche pour toute la communauté (un seul quart)" # MT
+          full_multiple: "Tâche pour toute la communauté (plusieurs quarts)" # MT

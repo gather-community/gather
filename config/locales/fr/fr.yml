@@ -1,526 +1,538 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
 fr:
   common:
-    settings: "Paramètres" # Machine translated, remove this comment when verified
-    settings_updated: "Paramètres mis à jour." # Machine translated, remove this comment when verified
-    open_date_picker: "Ouvrir le sélecteur de date" # Machine translated, remove this comment when verified
-    select_user: "Choisir une personne…" # Machine translated, remove this comment when verified
-    adults: "Adultes" # Machine translated, remove this comment when verified
-    all: "Tous" # Machine translated, remove this comment when verified
-    cancel: "Annuler" # Machine translated, remove this comment when verified
-    cancelled: "Annulé" # Machine translated, remove this comment when verified
-    children: "Enfants" # Machine translated, remove this comment when verified
-    clearing_the_filter: "effacer les filtres" # Machine translated, remove this comment when verified
-    create_new: "Créer" # Machine translated, remove this comment when verified
-    none_bracketed: "[Aucun]" # Machine translated, remove this comment when verified
-    with_inactive: "%{name} (inactif)" # Machine translated, remove this comment when verified
-    close: "Fermer" # Machine translated, remove this comment when verified
-    print: "Imprimer" # Machine translated, remove this comment when verified
-    loading_indicator: "Indicateur de chargement" # Machine translated, remove this comment when verified
-    generated_at: "Généré le %{time}" # Machine translated, remove this comment when verified
+    settings: "Paramètres" # MT
+    settings_updated: "Paramètres mis à jour." # MT
+    open_date_picker: "Ouvrir le sélecteur de date" # MT
+    select_user: "Choisir une personne…" # MT
+    adults: "Adultes" # MT
+    all: "Tous" # MT
+    cancel: "Annuler" # MT
+    cancelled: "Annulé" # MT
+    children: "Enfants" # MT
+    clearing_the_filter: "effacer les filtres" # MT
+    create_new: "Créer" # MT
+    none_bracketed: "[Aucun]" # MT
+    with_inactive: "%{name} (inactif)" # MT
+    close: "Fermer" # MT
+    print: "Imprimer" # MT
+    loading_indicator: "Indicateur de chargement" # MT
+    generated_at: "Généré le %{time}" # MT
     community_count:
-      one: "%{count} communauté" # Machine translated, remove this comment when verified
-      other: "%{count} communautés" # Machine translated, remove this comment when verified
-    default: "Par défaut" # Machine translated, remove this comment when verified
-    edit: "Modifier" # Machine translated, remove this comment when verified
-    "false": "Faux" # Machine translated, remove this comment when verified
-    hidden: "Masqué" # Machine translated, remove this comment when verified
-    inactive: "Inactif" # Machine translated, remove this comment when verified
-    max: "Max." # Machine translated, remove this comment when verified
-    no_result_clear_filter_link_html: "Vous pouvez essayer d'%{link}." # Machine translated, remove this comment when verified
-    none: "Aucun" # Machine translated, remove this comment when verified
-    num_in_total: "%{count} au total" # Machine translated, remove this comment when verified
-    save: "Enregistrer" # Machine translated, remove this comment when verified
-    "true": "Vrai" # Machine translated, remove this comment when verified
-    unknown: "Inconnu" # Machine translated, remove this comment when verified
-    unlimited: "Illimité" # Machine translated, remove this comment when verified
-    "yes": "Oui" # Machine translated, remove this comment when verified
-    "no": "Non" # Machine translated, remove this comment when verified
+      one: "%{count} communauté" # MT
+      other: "%{count} communautés" # MT
+    default: "Par défaut" # MT
+    edit: "Modifier" # MT
+    "false": "Faux" # MT
+    hidden: "Masqué" # MT
+    inactive: "Inactif" # MT
+    max: "Max." # MT
+    no_result_clear_filter_link_html: "Vous pouvez essayer d'%{link}." # MT
+    none: "Aucun" # MT
+    num_in_total: "%{count} au total" # MT
+    save: "Enregistrer" # MT
+    "true": "Vrai" # MT
+    unknown: "Inconnu" # MT
+    unlimited: "Illimité" # MT
+    "yes": "Oui" # MT
+    "no": "Non" # MT
     time_with_preposition:
-      "on": "le %{t}" # Machine translated, remove this comment when verified
-      "at": "à %{t}" # Machine translated, remove this comment when verified
-      "until": "jusqu'au %{t}" # Machine translated, remove this comment when verified
-    this_year: "Cette année" # Machine translated, remove this comment when verified
-    this_quarter: "Ce trimestre" # Machine translated, remove this comment when verified
-    this_month: "Ce mois-ci" # Machine translated, remove this comment when verified
-    all_time: "Depuis le début" # Machine translated, remove this comment when verified
+      "on": "le %{t}" # MT
+      "at": "à %{t}" # MT
+      "until": "jusqu'au %{t}" # MT
+    this_year: "Cette année" # MT
+    this_quarter: "Ce trimestre" # MT
+    this_month: "Ce mois-ci" # MT
+    all_time: "Depuis le début" # MT
 
   helpers:
     submit:
-      cancel: "Annuler" # Machine translated, remove this comment when verified
-      confirm: "Confirmer" # Machine translated, remove this comment when verified
-      continue: "Continuer" # Machine translated, remove this comment when verified
-      create: "Enregistrer" # Machine translated, remove this comment when verified
-      go_back: "Retour" # Machine translated, remove this comment when verified
-      import: "Importer" # Machine translated, remove this comment when verified
-      opt_out: "Se retirer" # Machine translated, remove this comment when verified
-      update: "Enregistrer" # Machine translated, remove this comment when verified
-      save_and_invite: "Enregistrer et inviter" # Machine translated, remove this comment when verified
-      sign_in: "Se connecter" # Machine translated, remove this comment when verified
-      send_reset_instructions: "Envoyer les instructions de réinitialisation" # Machine translated, remove this comment when verified
-      set_password: "Définir le mot de passe" # Machine translated, remove this comment when verified
+      cancel: "Annuler" # MT
+      confirm: "Confirmer" # MT
+      continue: "Continuer" # MT
+      create: "Enregistrer" # MT
+      go_back: "Retour" # MT
+      import: "Importer" # MT
+      opt_out: "Se retirer" # MT
+      update: "Enregistrer" # MT
+      save_and_invite: "Enregistrer et inviter" # MT
+      sign_in: "Se connecter" # MT
+      send_reset_instructions: "Envoyer les instructions de réinitialisation" # MT
+      set_password: "Définir le mot de passe" # MT
       meals_message:
-        create: "Envoyer le message" # Machine translated, remove this comment when verified
+        create: "Envoyer le message" # MT
       meals_signup:
-        save_and_next: "Enregistrer et passer au repas suivant" # Machine translated, remove this comment when verified
+        save_and_next: "Enregistrer et passer au repas suivant" # MT
       wiki_page:
-        preview: "Aperçu" # Machine translated, remove this comment when verified
+        preview: "Aperçu" # MT
 
   errors:
     messages:
-      invalid_yaml: "YAML non valide" # Machine translated, remove this comment when verified
-      invalid_custom_field_spec: "Cette spécification n'est pas valide. Veuillez contacter l'assistance Gather pour obtenir de l'aide." # Machine translated, remove this comment when verified
-      no_semicolons: "Les points-virgules ne sont pas autorisés" # Machine translated, remove this comment when verified
+      invalid_yaml: "YAML non valide" # MT
+      invalid_custom_field_spec: "Cette spécification n'est pas valide. Veuillez contacter l'assistance Gather pour obtenir de l'aide." # MT
+      no_semicolons: "Les points-virgules ne sont pas autorisés" # MT
 
   modal:
-    ok: "OK" # Machine translated, remove this comment when verified
-    cancel: "Annuler" # Machine translated, remove this comment when verified
-    confirm_title: "Confirmer" # Machine translated, remove this comment when verified
-    alert_title: "Avis" # Machine translated, remove this comment when verified
+    ok: "OK" # MT
+    cancel: "Annuler" # MT
+    confirm_title: "Confirmer" # MT
+    alert_title: "Avis" # MT
 
   payment:
-    accountholder_required: "Veuillez indiquer le nom du titulaire du compte." # Machine translated, remove this comment when verified
+    accountholder_required: "Veuillez indiquer le nom du titulaire du compte." # MT
 
   confirmations:
     billing/template:
-      destroy: "Voulez-vous vraiment supprimer le modèle « %{description} » pour %{member_types} ? Cette action est irréversible." # Machine translated, remove this comment when verified
+      destroy: "Voulez-vous vraiment supprimer le modèle « %{description} » pour %{member_types} ? Cette action est irréversible." # MT
     domain:
-      destroy: "Voulez-vous vraiment supprimer le domaine « %{name} » ? Cette action est irréversible." # Machine translated, remove this comment when verified
+      destroy: "Voulez-vous vraiment supprimer le domaine « %{name} » ? Cette action est irréversible." # MT
     groups/group:
-      destroy: "Voulez-vous vraiment supprimer le groupe « %{name} » ? Cette action est irréversible." # Machine translated, remove this comment when verified
-      deactivate: "Voulez-vous vraiment désactiver le groupe « %{name} » ?" # Machine translated, remove this comment when verified
+      destroy: "Voulez-vous vraiment supprimer le groupe « %{name} » ? Cette action est irréversible." # MT
+      deactivate: "Voulez-vous vraiment désactiver le groupe « %{name} » ?" # MT
     household:
-      destroy: "Voulez-vous vraiment supprimer le foyer « %{name} » ? Cette action est irréversible." # Machine translated, remove this comment when verified
-      deactivate: "Voulez-vous vraiment désactiver le foyer « %{name} » ? Toutes les personnes du foyer seront désactivées." # Machine translated, remove this comment when verified
+      destroy: "Voulez-vous vraiment supprimer le foyer « %{name} » ? Cette action est irréversible." # MT
+      deactivate: "Voulez-vous vraiment désactiver le foyer « %{name} » ? Toutes les personnes du foyer seront désactivées." # MT
     meals/meal:
-      close: "Voulez-vous vraiment fermer ce repas ? Plus aucune inscription ne sera possible." # Machine translated, remove this comment when verified
-      destroy: "Voulez-vous vraiment supprimer le repas « %{title} » ? Cette action est irréversible." # Machine translated, remove this comment when verified
-      reopen: "Voulez-vous vraiment rouvrir ce repas ? De nouvelles inscriptions seront possibles." # Machine translated, remove this comment when verified
-      unfinalize: "Voulez-vous vraiment annuler la finalisation de ce repas ?" # Machine translated, remove this comment when verified
+      close: "Voulez-vous vraiment fermer ce repas ? Plus aucune inscription ne sera possible." # MT
+      destroy: "Voulez-vous vraiment supprimer le repas « %{title} » ? Cette action est irréversible." # MT
+      reopen: "Voulez-vous vraiment rouvrir ce repas ? De nouvelles inscriptions seront possibles." # MT
+      unfinalize: "Voulez-vous vraiment annuler la finalisation de ce repas ?" # MT
     user:
-      destroy: "Voulez-vous vraiment supprimer « %{name} » ? Cette action est irréversible." # Machine translated, remove this comment when verified
-      deactivate: "Voulez-vous vraiment désactiver « %{name} » ? La personne sera retirée de tous ses groupes." # Machine translated, remove this comment when verified
-      invite: "Un e-mail sera envoyé à « %{name} » avec les instructions pour se connecter. Continuer ?" # Machine translated, remove this comment when verified
+      destroy: "Voulez-vous vraiment supprimer « %{name} » ? Cette action est irréversible." # MT
+      deactivate: "Voulez-vous vraiment désactiver « %{name} » ? La personne sera retirée de tous ses groupes." # MT
+      invite: "Un e-mail sera envoyé à « %{name} » avec les instructions pour se connecter. Continuer ?" # MT
     people/member_type:
-      destroy: "Voulez-vous vraiment supprimer le type de membre « %{name} » ? Les foyers de ce type n'auront plus de type de membre. Cette action est irréversible." # Machine translated, remove this comment when verified
+      destroy: "Voulez-vous vraiment supprimer le type de membre « %{name} » ? Les foyers de ce type n'auront plus de type de membre. Cette action est irréversible." # MT
     people/memorial:
-      destroy: "Voulez-vous vraiment supprimer l'hommage à « %{name} » ? Cette action est irréversible." # Machine translated, remove this comment when verified
+      destroy: "Voulez-vous vraiment supprimer l'hommage à « %{name} » ? Cette action est irréversible." # MT
     people/memorial_message:
-      destroy: "Voulez-vous vraiment supprimer ce message d'hommage ? Cette action est irréversible." # Machine translated, remove this comment when verified
+      destroy: "Voulez-vous vraiment supprimer ce message d'hommage ? Cette action est irréversible." # MT
     calendars/protocol:
-      destroy: "Voulez-vous vraiment supprimer le règlement « %{name} » ? Cette action est irréversible." # Machine translated, remove this comment when verified
+      destroy: "Voulez-vous vraiment supprimer le règlement « %{name} » ? Cette action est irréversible." # MT
     calendars/calendar:
-      destroy: "Voulez-vous vraiment supprimer le calendrier « %{name} » ? Cette action est irréversible." # Machine translated, remove this comment when verified
-      deactivate: "Voulez-vous vraiment désactiver le calendrier « %{name} » ?" # Machine translated, remove this comment when verified
+      destroy: "Voulez-vous vraiment supprimer le calendrier « %{name} » ? Cette action est irréversible." # MT
+      deactivate: "Voulez-vous vraiment désactiver le calendrier « %{name} » ?" # MT
     calendars/event:
-      destroy: "Voulez-vous vraiment supprimer l'événement « %{name} » ? Cette action est irréversible." # Machine translated, remove this comment when verified
-      destroy_series: "Voulez-vous vraiment supprimer toutes les occurrences, passées et futures, de l'événement récurrent « %{name} » ? Cette action est irréversible." # Machine translated, remove this comment when verified
+      destroy: "Voulez-vous vraiment supprimer l'événement « %{name} » ? Cette action est irréversible." # MT
+      destroy_series: "Voulez-vous vraiment supprimer toutes les occurrences, passées et futures, de l'événement récurrent « %{name} » ? Cette action est irréversible." # MT
     calendars/group:
-      destroy: "Voulez-vous vraiment supprimer ce groupe de calendriers ? Cette action est irréversible." # Machine translated, remove this comment when verified
+      destroy: "Voulez-vous vraiment supprimer ce groupe de calendriers ? Cette action est irréversible." # MT
     gdrive/item:
-      destroy: "Voulez-vous vraiment retirer cet élément ? Il ne sera pas supprimé de Google Drive, mais ne sera plus lié à Gather." # Machine translated, remove this comment when verified
+      destroy: "Voulez-vous vraiment retirer cet élément ? Il ne sera pas supprimé de Google Drive, mais ne sera plus lié à Gather." # MT
     gdrive/item_group:
-      destroy: "Voulez-vous vraiment retirer ce groupe ?" # Machine translated, remove this comment when verified
+      destroy: "Voulez-vous vraiment retirer ce groupe ?" # MT
     gdrive/migration/operation:
-      destroy: "Voulez-vous vraiment supprimer cette migration ? Toutes les informations de migration seront supprimées. Aucun fichier Google Drive ne sera touché." # Machine translated, remove this comment when verified
+      destroy: "Voulez-vous vraiment supprimer cette migration ? Toutes les informations de migration seront supprimées. Aucun fichier Google Drive ne sera touché." # MT
     meals/formula:
-      destroy: "Voulez-vous vraiment supprimer la formule « %{name} » ? Cette action est irréversible." # Machine translated, remove this comment when verified
-      deactivate: "Voulez-vous vraiment désactiver la formule « %{name} » ?" # Machine translated, remove this comment when verified
+      destroy: "Voulez-vous vraiment supprimer la formule « %{name} » ? Cette action est irréversible." # MT
+      deactivate: "Voulez-vous vraiment désactiver la formule « %{name} » ?" # MT
     meals/role:
-      destroy: "Voulez-vous vraiment supprimer le rôle « %{title} » ? Cette action est irréversible." # Machine translated, remove this comment when verified
-      deactivate: "Voulez-vous vraiment désactiver le rôle « %{title} » ?" # Machine translated, remove this comment when verified
+      destroy: "Voulez-vous vraiment supprimer le rôle « %{title} » ? Cette action est irréversible." # MT
+      deactivate: "Voulez-vous vraiment désactiver le rôle « %{title} » ?" # MT
     meals/type:
-      destroy: "Voulez-vous vraiment supprimer le type « %{name} » ? Cette action est irréversible." # Machine translated, remove this comment when verified
-      deactivate: "Voulez-vous vraiment désactiver le type « %{name} » ?" # Machine translated, remove this comment when verified
+      destroy: "Voulez-vous vraiment supprimer le type « %{name} » ? Cette action est irréversible." # MT
+      deactivate: "Voulez-vous vraiment désactiver le type « %{name} » ?" # MT
     wiki/page:
-      destroy: "Voulez-vous vraiment supprimer la page wiki « %{title} » ? Cette action est irréversible." # Machine translated, remove this comment when verified
+      destroy: "Voulez-vous vraiment supprimer la page wiki « %{title} » ? Cette action est irréversible." # MT
     work/job:
-      destroy: "Voulez-vous vraiment supprimer la tâche « %{title} » ? Cette action est irréversible." # Machine translated, remove this comment when verified
+      destroy: "Voulez-vous vraiment supprimer la tâche « %{title} » ? Cette action est irréversible." # MT
     work/period:
-      destroy: "Voulez-vous vraiment supprimer la période « %{name} » ? Cette action est irréversible." # Machine translated, remove this comment when verified
+      destroy: "Voulez-vous vraiment supprimer la période « %{name} » ? Cette action est irréversible." # MT
     work/shift:
-      unsignup: "Voulez-vous vraiment retirer votre nom de cette tâche ?" # Machine translated, remove this comment when verified
+      unsignup: "Voulez-vous vraiment retirer votre nom de cette tâche ?" # MT
 
   activatables:
     community:
-      one_html: "Cette communauté a été désactivée le %{time}." # Machine translated, remove this comment when verified
-      two_html: "Vous pouvez %{link}." # Machine translated, remove this comment when verified
-      three: "la réactiver" # Machine translated, remove this comment when verified
+      one_html: "Cette communauté a été désactivée le %{time}." # MT
+      two_html: "Vous pouvez %{link}." # MT
+      three: "la réactiver" # MT
     user:
-      one_html: "Cette personne a été marquée comme inactive le %{time}." # Machine translated, remove this comment when verified
-      two_html: "Vous pouvez %{link}." # Machine translated, remove this comment when verified
-      three: "la réactiver" # Machine translated, remove this comment when verified
+      one_html: "Cette personne a été marquée comme inactive le %{time}." # MT
+      two_html: "Vous pouvez %{link}." # MT
+      three: "la réactiver" # MT
     household:
-      one_html: "Ce foyer a été marqué comme inactif le %{time}." # Machine translated, remove this comment when verified
-      two_html: "Vous pouvez %{link}. <strong>Remarque :</strong> vous devrez réactiver séparément les personnes du foyer." # Machine translated, remove this comment when verified
-      three: "le réactiver" # Machine translated, remove this comment when verified
+      one_html: "Ce foyer a été marqué comme inactif le %{time}." # MT
+      two_html: "Vous pouvez %{link}. <strong>Remarque :</strong> vous devrez réactiver séparément les personnes du foyer." # MT
+      three: "le réactiver" # MT
     groups/group:
-      one_html: "Ce groupe a été marqué comme inactif le %{time}." # Machine translated, remove this comment when verified
-      two_html: "Vous pouvez %{link}." # Machine translated, remove this comment when verified
-      three: "le réactiver" # Machine translated, remove this comment when verified
+      one_html: "Ce groupe a été marqué comme inactif le %{time}." # MT
+      two_html: "Vous pouvez %{link}." # MT
+      three: "le réactiver" # MT
     calendars/calendar:
-      one_html: "Ce calendrier a été marqué comme inactif le %{time}." # Machine translated, remove this comment when verified
-      two_html: "Vous pouvez %{link}." # Machine translated, remove this comment when verified
-      three: "le réactiver" # Machine translated, remove this comment when verified
+      one_html: "Ce calendrier a été marqué comme inactif le %{time}." # MT
+      two_html: "Vous pouvez %{link}." # MT
+      three: "le réactiver" # MT
     meals/formula:
-      one_html: "Cette formule a été marquée comme inactive le %{time}." # Machine translated, remove this comment when verified
-      two_html: "Vous pouvez %{link}." # Machine translated, remove this comment when verified
-      three: "la réactiver" # Machine translated, remove this comment when verified
+      one_html: "Cette formule a été marquée comme inactive le %{time}." # MT
+      two_html: "Vous pouvez %{link}." # MT
+      three: "la réactiver" # MT
     meals/role:
-      one_html: "Ce rôle a été marqué comme inactif le %{time}." # Machine translated, remove this comment when verified
-      two_html: "Vous pouvez %{link}." # Machine translated, remove this comment when verified
-      three: "le réactiver" # Machine translated, remove this comment when verified
+      one_html: "Ce rôle a été marqué comme inactif le %{time}." # MT
+      two_html: "Vous pouvez %{link}." # MT
+      three: "le réactiver" # MT
     meals/type:
-      one_html: "Ce type a été marqué comme inactif le %{time}." # Machine translated, remove this comment when verified
-      two_html: "Vous pouvez %{link}." # Machine translated, remove this comment when verified
-      three: "le réactiver" # Machine translated, remove this comment when verified
+      one_html: "Ce type a été marqué comme inactif le %{time}." # MT
+      two_html: "Vous pouvez %{link}." # MT
+      three: "le réactiver" # MT
 
   deactivatable:
     community:
       success:
-        activate: "Communauté réactivée." # Machine translated, remove this comment when verified
+        activate: "Communauté réactivée." # MT
     household:
       success:
-        activate: "Foyer activé." # Machine translated, remove this comment when verified
-        deactivate: "Foyer désactivé." # Machine translated, remove this comment when verified
-        destroy: "Foyer supprimé." # Machine translated, remove this comment when verified
-        hard_destroy: "Le foyer et tous ses membres ont été définitivement supprimés." # Machine translated, remove this comment when verified
+        activate: "Foyer activé." # MT
+        deactivate: "Foyer désactivé." # MT
+        destroy: "Foyer supprimé." # MT
+        hard_destroy: "Le foyer et tous ses membres ont été définitivement supprimés." # MT
     user:
       success:
-        activate: "Personne activée." # Machine translated, remove this comment when verified
-        activate_unconfirmed: "Personne activée, mais elle aura besoin d'une invitation pour se connecter. Cliquez sur « Inviter » ci-dessous pour l'inviter." # Machine translated, remove this comment when verified
-        deactivate: "Personne désactivée." # Machine translated, remove this comment when verified
-        destroy: "Personne supprimée." # Machine translated, remove this comment when verified
-        hard_destroy: "La personne a été définitivement supprimée." # Machine translated, remove this comment when verified
+        activate: "Personne activée." # MT
+        activate_unconfirmed: "Personne activée, mais elle aura besoin d'une invitation pour se connecter. Cliquez sur « Inviter » ci-dessous pour l'inviter." # MT
+        deactivate: "Personne désactivée." # MT
+        destroy: "Personne supprimée." # MT
+        hard_destroy: "La personne a été définitivement supprimée." # MT
       error:
-        activate: "Erreur lors de l'activation : %{message}" # Machine translated, remove this comment when verified
-        deactivate: "Erreur lors de la désactivation : %{message}" # Machine translated, remove this comment when verified
+        activate: "Erreur lors de l'activation : %{message}" # MT
+        deactivate: "Erreur lors de la désactivation : %{message}" # MT
     billing/template:
       success:
-        destroy: "Modèle supprimé." # Machine translated, remove this comment when verified
+        destroy: "Modèle supprimé." # MT
     domain:
       success:
-        destroy: "Domaine supprimé." # Machine translated, remove this comment when verified
+        destroy: "Domaine supprimé." # MT
     gdrive/item:
       success:
-        destroy: "Élément retiré." # Machine translated, remove this comment when verified
+        destroy: "Élément retiré." # MT
     gdrive/item_group:
       success:
-        destroy: "Groupe retiré." # Machine translated, remove this comment when verified
+        destroy: "Groupe retiré." # MT
     gdrive/migration/operation:
       success:
-        destroy: "Opération supprimée." # Machine translated, remove this comment when verified
+        destroy: "Opération supprimée." # MT
     groups/group:
       success:
-        deactivate: "Groupe désactivé." # Machine translated, remove this comment when verified
-        activate: "Groupe activé." # Machine translated, remove this comment when verified
-        destroy: "Groupe supprimé." # Machine translated, remove this comment when verified
+        deactivate: "Groupe désactivé." # MT
+        activate: "Groupe activé." # MT
+        destroy: "Groupe supprimé." # MT
     calendars/protocol:
       success:
-        destroy: "Règlement supprimé." # Machine translated, remove this comment when verified
+        destroy: "Règlement supprimé." # MT
     calendars/group:
       success:
-        destroy: "Groupe supprimé." # Machine translated, remove this comment when verified
+        destroy: "Groupe supprimé." # MT
     calendars/calendar:
       success:
-        activate: "Calendrier activé." # Machine translated, remove this comment when verified
-        deactivate: "Calendrier désactivé." # Machine translated, remove this comment when verified
-        destroy: "Calendrier supprimé." # Machine translated, remove this comment when verified
+        activate: "Calendrier activé." # MT
+        deactivate: "Calendrier désactivé." # MT
+        destroy: "Calendrier supprimé." # MT
     meals/meal:
       success:
-        destroy: "Repas supprimé." # Machine translated, remove this comment when verified
+        destroy: "Repas supprimé." # MT
     meals/formula:
       success:
-        activate: "Formule activée." # Machine translated, remove this comment when verified
-        deactivate: "Formule désactivée." # Machine translated, remove this comment when verified
-        destroy: "Formule supprimée." # Machine translated, remove this comment when verified
+        activate: "Formule activée." # MT
+        deactivate: "Formule désactivée." # MT
+        destroy: "Formule supprimée." # MT
     meals/role:
       success:
-        activate: "Rôle activé." # Machine translated, remove this comment when verified
-        deactivate: "Rôle désactivé." # Machine translated, remove this comment when verified
-        destroy: "Rôle supprimé." # Machine translated, remove this comment when verified
+        activate: "Rôle activé." # MT
+        deactivate: "Rôle désactivé." # MT
+        destroy: "Rôle supprimé." # MT
     meals/type:
       success:
-        activate: "Type activé." # Machine translated, remove this comment when verified
-        deactivate: "Type désactivé." # Machine translated, remove this comment when verified
-        destroy: "Type supprimé." # Machine translated, remove this comment when verified
+        activate: "Type activé." # MT
+        deactivate: "Type désactivé." # MT
+        destroy: "Type supprimé." # MT
     people/member_type:
       success:
-        destroy: "Type de membre supprimé." # Machine translated, remove this comment when verified
+        destroy: "Type de membre supprimé." # MT
     people/memorial:
       success:
-        destroy: "Hommage supprimé." # Machine translated, remove this comment when verified
+        destroy: "Hommage supprimé." # MT
     people/memorial_message:
       success:
-        destroy: "Message supprimé." # Machine translated, remove this comment when verified
+        destroy: "Message supprimé." # MT
     work/job:
       success:
-        destroy: "Tâche supprimée." # Machine translated, remove this comment when verified
+        destroy: "Tâche supprimée." # MT
     work/period:
       success:
-        destroy: "Période supprimée." # Machine translated, remove this comment when verified
+        destroy: "Période supprimée." # MT
 
   cocoon:
     add_links:
-      vehicles: "Ajouter un véhicule" # Machine translated, remove this comment when verified
-      emergency_contacts: "Ajouter un contact d'urgence" # Machine translated, remove this comment when verified
-      up_guardianships: "Ajouter un parent ou tuteur" # Machine translated, remove this comment when verified
-      pets: "Ajouter un animal" # Machine translated, remove this comment when verified
-      shifts: "Ajouter un créneau" # Machine translated, remove this comment when verified
-      assignments: "Ajouter une personne" # Machine translated, remove this comment when verified
-      reminders: "Ajouter un rappel" # Machine translated, remove this comment when verified
-      restrictions: "Ajouter une restriction" # Machine translated, remove this comment when verified
-      signups: "Ajouter un foyer" # Machine translated, remove this comment when verified
+      vehicles: "Ajouter un véhicule" # MT
+      emergency_contacts: "Ajouter un contact d'urgence" # MT
+      up_guardianships: "Ajouter un parent ou tuteur" # MT
+      pets: "Ajouter un animal" # MT
+      shifts: "Ajouter un créneau" # MT
+      assignments: "Ajouter une personne" # MT
+      reminders: "Ajouter un rappel" # MT
+      restrictions: "Ajouter une restriction" # MT
+      signups: "Ajouter un foyer" # MT
       groups/group:
-        memberships: "Ajouter un membre" # Machine translated, remove this comment when verified
+        memberships: "Ajouter un membre" # MT
       meals/signup:
-        parts: "Ajouter un élément" # Machine translated, remove this comment when verified
+        parts: "Ajouter un élément" # MT
       meals/formula:
-        parts: "Ajouter un type de repas" # Machine translated, remove this comment when verified
+        parts: "Ajouter un type de repas" # MT
 
   select2:
     prompts:
-      creator: "Tapez quelques lettres du nom du créateur." # Machine translated, remove this comment when verified
-      sponsor: "Tapez quelques lettres du nom du parrain." # Machine translated, remove this comment when verified
-      household: "Tapez quelques lettres du nom du foyer." # Machine translated, remove this comment when verified
-      guardian: "Tapez quelques lettres du nom du tuteur." # Machine translated, remove this comment when verified
-      user: "Tapez quelques lettres du nom de la personne." # Machine translated, remove this comment when verified
-      job_choosing_proxy: "Tapez quelques lettres du nom de la personne." # Machine translated, remove this comment when verified
-      type: "Tapez quelques lettres du nom du type de repas, ou son nom complet pour en ajouter un nouveau." # Machine translated, remove this comment when verified
-      category: "Tapez quelques lettres de la catégorie, ou son nom complet pour en ajouter une nouvelle." # Machine translated, remove this comment when verified
-      reimbursee: "Tapez quelques lettres du nom de la personne à rembourser." # Machine translated, remove this comment when verified
+      creator: "Tapez quelques lettres du nom du créateur." # MT
+      sponsor: "Tapez quelques lettres du nom du parrain." # MT
+      household: "Tapez quelques lettres du nom du foyer." # MT
+      guardian: "Tapez quelques lettres du nom du tuteur." # MT
+      user: "Tapez quelques lettres du nom de la personne." # MT
+      job_choosing_proxy: "Tapez quelques lettres du nom de la personne." # MT
+      type: "Tapez quelques lettres du nom du type de repas, ou son nom complet pour en ajouter un nouveau." # MT
+      category: "Tapez quelques lettres de la catégorie, ou son nom complet pour en ajouter une nouvelle." # MT
+      reimbursee: "Tapez quelques lettres du nom de la personne à rembourser." # MT
     placeholders:
-      creator: "Choisir le créateur…" # Machine translated, remove this comment when verified
-      sponsor: "Choisir le parrain…" # Machine translated, remove this comment when verified
-      household: "Choisir le foyer…" # Machine translated, remove this comment when verified
-      guardian: "Choisir le tuteur…" # Machine translated, remove this comment when verified
-      user: "Choisir une personne…" # Machine translated, remove this comment when verified
-      job_choosing_proxy: "Choisir une personne…" # Machine translated, remove this comment when verified
-      type: "Choisir ou saisir un type…" # Machine translated, remove this comment when verified
-      category: "Choisir ou saisir une catégorie…" # Machine translated, remove this comment when verified
-      reimbursee: "Choisir la personne à rembourser…" # Machine translated, remove this comment when verified
+      creator: "Choisir le créateur…" # MT
+      sponsor: "Choisir le parrain…" # MT
+      household: "Choisir le foyer…" # MT
+      guardian: "Choisir le tuteur…" # MT
+      user: "Choisir une personne…" # MT
+      job_choosing_proxy: "Choisir une personne…" # MT
+      type: "Choisir ou saisir un type…" # MT
+      category: "Choisir ou saisir une catégorie…" # MT
+      reimbursee: "Choisir la personne à rembourser…" # MT
 
   csv:
     headers:
       user:
         id: "ID"
         first_name: "Prénom"
-        last_name: "Nom" # Machine translated, remove this comment when verified
-        unit_num: "N° de logement" # Machine translated, remove this comment when verified
-        unit_suffix: "Suffixe du logement" # Machine translated, remove this comment when verified
-        birthdate: "Anniversaire" # Machine translated, remove this comment when verified
-        pronouns: "Pronoms" # Machine translated, remove this comment when verified
-        email: "E-mail" # Machine translated, remove this comment when verified
-        google_email: "E-mail Google" # Machine translated, remove this comment when verified
-        paypal_email: "E-mail PayPal" # Machine translated, remove this comment when verified
-        child: "Enfant" # Machine translated, remove this comment when verified
-        full_access: "Accès complet" # Machine translated, remove this comment when verified
-        household_id: "ID du foyer" # Machine translated, remove this comment when verified
-        household_name: "Nom du foyer" # Machine translated, remove this comment when verified
-        mobile_phone: "Téléphone mobile" # Machine translated, remove this comment when verified
-        home_phone: "Téléphone du domicile" # Machine translated, remove this comment when verified
-        work_phone: "Téléphone du travail" # Machine translated, remove this comment when verified
-        joined_on: "Date d'arrivée" # Machine translated, remove this comment when verified
-        deactivated_at: "Date de départ" # Machine translated, remove this comment when verified
-        preferred_contact: "Contact préféré" # Machine translated, remove this comment when verified
-        garage_nums: "N° de garage" # Machine translated, remove this comment when verified
-        vehicles: "Véhicules" # Machine translated, remove this comment when verified
-        guardian_names: "Parents/tuteurs" # Machine translated, remove this comment when verified
-        keyholders: "Détenteurs de clés" # Machine translated, remove this comment when verified
-        emergency_contacts: "Contacts d'urgence" # Machine translated, remove this comment when verified
-        pets: "Animaux" # Machine translated, remove this comment when verified
+        last_name: "Nom" # MT
+        unit_num: "N° de logement" # MT
+        unit_suffix: "Suffixe du logement" # MT
+        birthdate: "Anniversaire" # MT
+        pronouns: "Pronoms" # MT
+        email: "E-mail" # MT
+        google_email: "E-mail Google" # MT
+        paypal_email: "E-mail PayPal" # MT
+        child: "Enfant" # MT
+        full_access: "Accès complet" # MT
+        household_id: "ID du foyer" # MT
+        household_name: "Nom du foyer" # MT
+        mobile_phone: "Téléphone mobile" # MT
+        home_phone: "Téléphone du domicile" # MT
+        work_phone: "Téléphone du travail" # MT
+        joined_on: "Date d'arrivée" # MT
+        deactivated_at: "Date de départ" # MT
+        preferred_contact: "Contact préféré" # MT
+        garage_nums: "N° de garage" # MT
+        vehicles: "Véhicules" # MT
+        guardian_names: "Parents/tuteurs" # MT
+        keyholders: "Détenteurs de clés" # MT
+        emergency_contacts: "Contacts d'urgence" # MT
+        pets: "Animaux" # MT
       billing/account:
-        number: "Numéro" # Machine translated, remove this comment when verified
-        community_id: "ID de la communauté" # Machine translated, remove this comment when verified
-        community_name: "Communauté" # Machine translated, remove this comment when verified
-        household_id: "ID du foyer" # Machine translated, remove this comment when verified
-        household_name: "Foyer" # Machine translated, remove this comment when verified
-        balance_due: "Solde dû" # Machine translated, remove this comment when verified
-        current_balance: "Solde actuel" # Machine translated, remove this comment when verified
-        credit_limit: "Limite de crédit" # Machine translated, remove this comment when verified
-        last_statement_id: "ID du dernier relevé" # Machine translated, remove this comment when verified
-        last_statement_on: "Date du dernier relevé" # Machine translated, remove this comment when verified
-        due_last_statement: "Dû au dernier relevé" # Machine translated, remove this comment when verified
-        total_new_charges: "Total des nouveaux frais" # Machine translated, remove this comment when verified
-        total_new_credits: "Total des nouveaux crédits" # Machine translated, remove this comment when verified
-        created_at: "Date de création" # Machine translated, remove this comment when verified
+        number: "Numéro" # MT
+        community_id: "ID de la communauté" # MT
+        community_name: "Communauté" # MT
+        household_id: "ID du foyer" # MT
+        household_name: "Foyer" # MT
+        balance_due: "Solde dû" # MT
+        current_balance: "Solde actuel" # MT
+        credit_limit: "Limite de crédit" # MT
+        last_statement_id: "ID du dernier relevé" # MT
+        last_statement_on: "Date du dernier relevé" # MT
+        due_last_statement: "Dû au dernier relevé" # MT
+        total_new_charges: "Total des nouveaux frais" # MT
+        total_new_credits: "Total des nouveaux crédits" # MT
+        created_at: "Date de création" # MT
       billing/transaction:
         id: "ID"
-        incurred_on: "Date d'engagement" # Machine translated, remove this comment when verified
-        code: "Code" # Machine translated, remove this comment when verified
-        chg_crd: "Type" # Machine translated, remove this comment when verified
-        description: "Description" # Machine translated, remove this comment when verified
-        household_id: "ID du foyer" # Machine translated, remove this comment when verified
-        household_name: "Foyer" # Machine translated, remove this comment when verified
-        quantity: "Quantité" # Machine translated, remove this comment when verified
-        unit_price: "Prix unitaire" # Machine translated, remove this comment when verified
-        amount: "Montant" # Machine translated, remove this comment when verified
-        created_at: "Date d'enregistrement" # Machine translated, remove this comment when verified
-        account_id: "ID du compte" # Machine translated, remove this comment when verified
-        statement_id: "ID du relevé" # Machine translated, remove this comment when verified
-        meal_id: "ID du repas" # Machine translated, remove this comment when verified
+        incurred_on: "Date d'engagement" # MT
+        code: "Code" # MT
+        chg_crd: "Type" # MT
+        description: "Description" # MT
+        household_id: "ID du foyer" # MT
+        household_name: "Foyer" # MT
+        quantity: "Quantité" # MT
+        unit_price: "Prix unitaire" # MT
+        amount: "Montant" # MT
+        created_at: "Date d'enregistrement" # MT
+        account_id: "ID du compte" # MT
+        statement_id: "ID du relevé" # MT
+        meal_id: "ID du repas" # MT
       meals/meal:
         served_at: "Date/Heure"
-        calendars: "Lieux" # Machine translated, remove this comment when verified
-        formula: "Formule" # Machine translated, remove this comment when verified
-        communities: "Communautés" # Machine translated, remove this comment when verified
-        role: "Rôle" # Machine translated, remove this comment when verified
-        action: "Action" # Machine translated, remove this comment when verified
+        calendars: "Lieux" # MT
+        formula: "Formule" # MT
+        communities: "Communautés" # MT
+        role: "Rôle" # MT
+        action: "Action" # MT
         id: "ID"
-        title: "Titre" # Machine translated, remove this comment when verified
-        entrees: "Plats principaux" # Machine translated, remove this comment when verified
-        side: "Accompagnement" # Machine translated, remove this comment when verified
-        kids: "Enfants" # Machine translated, remove this comment when verified
-        dessert: "Dessert" # Machine translated, remove this comment when verified
-        notes: "Remarques" # Machine translated, remove this comment when verified
-        allergens: "Allergènes" # Machine translated, remove this comment when verified
-        capacity: "Capacité" # Machine translated, remove this comment when verified
-        status: "État" # Machine translated, remove this comment when verified
-        signup_count: "Total des convives" # Machine translated, remove this comment when verified
-        spots_left: "Places restantes" # Machine translated, remove this comment when verified
-        ingredient_cost: "Coût des ingrédients" # Machine translated, remove this comment when verified
-        pantry_cost: "Coût du garde-manger" # Machine translated, remove this comment when verified
-        total_cost: "Coût total" # Machine translated, remove this comment when verified
-        payment_method: "Mode de paiement" # Machine translated, remove this comment when verified
-        reimbursee: "Personne à rembourser" # Machine translated, remove this comment when verified
-        diner_count: "Convives : %{type}" # Machine translated, remove this comment when verified
-        type_price: "Prix : %{type}" # Machine translated, remove this comment when verified
+        title: "Titre" # MT
+        entrees: "Plats principaux" # MT
+        side: "Accompagnement" # MT
+        kids: "Enfants" # MT
+        dessert: "Dessert" # MT
+        notes: "Remarques" # MT
+        allergens: "Allergènes" # MT
+        capacity: "Capacité" # MT
+        status: "État" # MT
+        signup_count: "Total des convives" # MT
+        spots_left: "Places restantes" # MT
+        ingredient_cost: "Coût des ingrédients" # MT
+        pantry_cost: "Coût du garde-manger" # MT
+        total_cost: "Coût total" # MT
+        payment_method: "Mode de paiement" # MT
+        reimbursee: "Personne à rembourser" # MT
+        diner_count: "Convives : %{type}" # MT
+        type_price: "Prix : %{type}" # MT
       meals/signup:
-        meal_id: "ID du repas" # Machine translated, remove this comment when verified
-        served_at: "Date/heure du repas" # Machine translated, remove this comment when verified
-        meal_title: "Titre du repas" # Machine translated, remove this comment when verified
-        calendars: "Lieux du repas" # Machine translated, remove this comment when verified
-        formula: "Formule" # Machine translated, remove this comment when verified
-        community_id: "ID de la communauté" # Machine translated, remove this comment when verified
-        community_name: "Communauté" # Machine translated, remove this comment when verified
-        household_id: "ID du foyer" # Machine translated, remove this comment when verified
-        household_name: "Foyer" # Machine translated, remove this comment when verified
-        diner_count: "Convives : %{type}" # Machine translated, remove this comment when verified
-        total: "Total des convives" # Machine translated, remove this comment when verified
-        takeout: "À emporter" # Machine translated, remove this comment when verified
-        comments: "Commentaires" # Machine translated, remove this comment when verified
-        created_at: "Heure d'inscription" # Machine translated, remove this comment when verified
+        meal_id: "ID du repas" # MT
+        served_at: "Date/heure du repas" # MT
+        meal_title: "Titre du repas" # MT
+        calendars: "Lieux du repas" # MT
+        formula: "Formule" # MT
+        community_id: "ID de la communauté" # MT
+        community_name: "Communauté" # MT
+        household_id: "ID du foyer" # MT
+        household_name: "Foyer" # MT
+        diner_count: "Convives : %{type}" # MT
+        total: "Total des convives" # MT
+        takeout: "À emporter" # MT
+        comments: "Commentaires" # MT
+        created_at: "Heure d'inscription" # MT
       common:
         id: "ID"
-        action: "Action" # Machine translated, remove this comment when verified
+        action: "Action" # MT
     errors:
       meals/meal:
         calendar:
-          bad_id: "Aucun calendrier trouvé avec l'ID %{str}" # Machine translated, remove this comment when verified
-          bad_name: "Aucun calendrier trouvé nommé « %{str} »" # Machine translated, remove this comment when verified
+          bad_id: "Aucun calendrier trouvé avec l'ID %{str}" # MT
+          bad_name: "Aucun calendrier trouvé nommé « %{str} »" # MT
         formula:
-          bad_id: "Aucune formule de repas trouvée avec l'ID %{str}" # Machine translated, remove this comment when verified
-          bad_name: "Aucune formule de repas trouvée nommée « %{str} »" # Machine translated, remove this comment when verified
+          bad_id: "Aucune formule de repas trouvée avec l'ID %{str}" # MT
+          bad_name: "Aucune formule de repas trouvée nommée « %{str} »" # MT
         community:
-          bad_id: "Aucune communauté trouvée avec l'ID %{str}" # Machine translated, remove this comment when verified
-          bad_name: "Aucune communauté trouvée nommée « %{str} »" # Machine translated, remove this comment when verified
-        file_empty: "Le fichier est vide" # Machine translated, remove this comment when verified
-        invalid_headers: "En-têtes de colonnes non valides : %{headers}" # Machine translated, remove this comment when verified
-        missing_columns: "Colonnes manquantes : %{columns}" # Machine translated, remove this comment when verified
-        invalid_action: "Action non valide : %{action}" # Machine translated, remove this comment when verified
-        action_not_permitted: "Action non autorisée (%{action})" # Machine translated, remove this comment when verified
-        served_at_required: "La date et l'heure sont obligatoires" # Machine translated, remove this comment when verified
-        invalid_served_at: "« %{str} » n'est pas une date et heure valide" # Machine translated, remove this comment when verified
-        calendars_required: "Le ou les calendriers sont obligatoires" # Machine translated, remove this comment when verified
-        meal_id_not_found: "Aucun repas trouvé avec l'ID « %{id} »" # Machine translated, remove this comment when verified
-        meal_not_found: "Aucun repas trouvé servi le %{time} aux lieux : %{locations}" # Machine translated, remove this comment when verified
-        delete_failed: "Erreur lors de la suppression du repas %{id} : « %{error} »" # Machine translated, remove this comment when verified
+          bad_id: "Aucune communauté trouvée avec l'ID %{str}" # MT
+          bad_name: "Aucune communauté trouvée nommée « %{str} »" # MT
+        file_empty: "Le fichier est vide" # MT
+        invalid_headers: "En-têtes de colonnes non valides : %{headers}" # MT
+        missing_columns: "Colonnes manquantes : %{columns}" # MT
+        invalid_action: "Action non valide : %{action}" # MT
+        action_not_permitted: "Action non autorisée (%{action})" # MT
+        served_at_required: "La date et l'heure sont obligatoires" # MT
+        invalid_served_at: "« %{str} » n'est pas une date et heure valide" # MT
+        calendars_required: "Le ou les calendriers sont obligatoires" # MT
+        meal_id_not_found: "Aucun repas trouvé avec l'ID « %{id} »" # MT
+        meal_not_found: "Aucun repas trouvé servi le %{time} aux lieux : %{locations}" # MT
+        delete_failed: "Erreur lors de la suppression du repas %{id} : « %{error} »" # MT
         user:
-          bad_id: "Aucune personne trouvée avec l'ID %{str}" # Machine translated, remove this comment when verified
-          bad_name: "Aucune personne trouvée nommée « %{str} »" # Machine translated, remove this comment when verified
+          bad_id: "Aucune personne trouvée avec l'ID %{str}" # MT
+          bad_name: "Aucune personne trouvée nommée « %{str} »" # MT
 
   action_labels:
     common:
-      new: "Ajouter" # Machine translated, remove this comment when verified
-      edit: "Modifier" # Machine translated, remove this comment when verified
-      deactivate: "Désactiver" # Machine translated, remove this comment when verified
-      destroy: "Supprimer" # Machine translated, remove this comment when verified
-      clone: "Dupliquer" # Machine translated, remove this comment when verified
-      close: "Fermer" # Machine translated, remove this comment when verified
-      join: "Rejoindre" # Machine translated, remove this comment when verified
-      leave: "Quitter" # Machine translated, remove this comment when verified
-      opt_out: "Se retirer" # Machine translated, remove this comment when verified
-      rejoin: "Revenir" # Machine translated, remove this comment when verified
-      reopen: "Rouvrir" # Machine translated, remove this comment when verified
-      rescan: "Réanalyser" # Machine translated, remove this comment when verified
-      summary: "Résumé" # Machine translated, remove this comment when verified
-      finalize: "Finaliser" # Machine translated, remove this comment when verified
-      unfinalize: "Annuler la finalisation" # Machine translated, remove this comment when verified
-      cancel: "Annuler" # Machine translated, remove this comment when verified
-      send_message: "Message" # Machine translated, remove this comment when verified
+      new: "Ajouter" # MT
+      edit: "Modifier" # MT
+      deactivate: "Désactiver" # MT
+      destroy: "Supprimer" # MT
+      clone: "Dupliquer" # MT
+      close: "Fermer" # MT
+      join: "Rejoindre" # MT
+      leave: "Quitter" # MT
+      opt_out: "Se retirer" # MT
+      rejoin: "Revenir" # MT
+      reopen: "Rouvrir" # MT
+      rescan: "Réanalyser" # MT
+      summary: "Résumé" # MT
+      finalize: "Finaliser" # MT
+      unfinalize: "Annuler la finalisation" # MT
+      cancel: "Annuler" # MT
+      send_message: "Message" # MT
     community:
-      visit: "Visiter" # Machine translated, remove this comment when verified
+      visit: "Visiter" # MT
     billing/account:
-      add_txn: "Ajouter une transaction" # Machine translated, remove this comment when verified
+      add_txn: "Ajouter une transaction" # MT
     user:
-      update_info: "Modifier le profil" # Machine translated, remove this comment when verified
-      update_photo: "Modifier la photo" # Machine translated, remove this comment when verified
-      invite: "Inviter" # Machine translated, remove this comment when verified
-      impersonate: "Agir en tant que" # Machine translated, remove this comment when verified
-      destroy: "Supprimer définitivement" # Machine translated, remove this comment when verified
-      delete_self: "Supprimer mon compte" # Machine translated, remove this comment when verified
+      update_info: "Modifier le profil" # MT
+      update_photo: "Modifier la photo" # MT
+      invite: "Inviter" # MT
+      impersonate: "Agir en tant que" # MT
+      destroy: "Supprimer définitivement" # MT
+      delete_self: "Supprimer mon compte" # MT
     household:
-      destroy: "Supprimer définitivement" # Machine translated, remove this comment when verified
+      destroy: "Supprimer définitivement" # MT
     wiki/page:
-      history: "Historique" # Machine translated, remove this comment when verified
+      history: "Historique" # MT
     work/job:
-      edit: "Modifier la tâche" # Machine translated, remove this comment when verified
+      edit: "Modifier la tâche" # MT
     work/shift:
-      edit_job: "Modifier la tâche" # Machine translated, remove this comment when verified
-      signup: "S'inscrire" # Machine translated, remove this comment when verified
-      unsignup: "Retirer l'inscription" # Machine translated, remove this comment when verified
+      edit_job: "Modifier la tâche" # MT
+      signup: "S'inscrire" # MT
+      unsignup: "Retirer l'inscription" # MT
     work/period:
-      review_notices: "Envoyer les avis" # Machine translated, remove this comment when verified
-      send_notices: "Envoyer les avis" # Machine translated, remove this comment when verified
+      review_notices: "Envoyer les avis" # MT
+      send_notices: "Envoyer les avis" # MT
 
   dropzone:
     prompts:
-      default: "Cliquez ou glissez un fichier ici" # Machine translated, remove this comment when verified
+      default: "Cliquez ou glissez un fichier ici" # MT
       models:
-        user: "Cliquez ou glissez une photo ici" # Machine translated, remove this comment when verified
-        calendars/calendar: "Cliquez ou glissez une photo ici" # Machine translated, remove this comment when verified
+        user: "Cliquez ou glissez une photo ici" # MT
+        calendars/calendar: "Cliquez ou glissez une photo ici" # MT
 
   titles:
-    meals/messages: "Envoyer un message sur le repas" # Machine translated, remove this comment when verified
+    meals/messages: "Envoyer un message sur le repas" # MT
 
   roles:
-    admin: "Administrateur" # Machine translated, remove this comment when verified
-    calendar_coordinator: "Coordinateur des calendriers" # Machine translated, remove this comment when verified
-    cluster_admin: "Administrateur de grappe" # Machine translated, remove this comment when verified
-    super_admin: "Super administrateur" # Machine translated, remove this comment when verified
-    biller: "Responsable de la facturation" # Machine translated, remove this comment when verified
-    photographer: "Photographe" # Machine translated, remove this comment when verified
-    meals_coordinator: "Coordinateur des repas" # Machine translated, remove this comment when verified
-    wikiist: "Wikiste" # Machine translated, remove this comment when verified
-    work_coordinator: "Coordinateur du travail" # Machine translated, remove this comment when verified
-    new_community_approver: "Approbateur des nouvelles communautés" # Machine translated, remove this comment when verified
+    admin: "Administrateur" # MT
+    calendar_coordinator: "Coordinateur des calendriers" # MT
+    cluster_admin: "Administrateur de grappe" # MT
+    super_admin: "Super administrateur" # MT
+    biller: "Responsable de la facturation" # MT
+    photographer: "Photographe" # MT
+    meals_coordinator: "Coordinateur des repas" # MT
+    wikiist: "Wikiste" # MT
+    work_coordinator: "Coordinateur du travail" # MT
+    new_community_approver: "Approbateur des nouvelles communautés" # MT
     index:
-      title: "Rôles" # Machine translated, remove this comment when verified
-      people: "Personnes" # Machine translated, remove this comment when verified
-      legend: "Légende" # Machine translated, remove this comment when verified
-      legend_item_html: "<strong>%{role}</strong> - %{description}" # Machine translated, remove this comment when verified
+      title: "Rôles" # MT
+      people: "Personnes" # MT
+      legend: "Légende" # MT
+      legend_item_html: "<strong>%{role}</strong> - %{description}" # MT
       descriptions:
-        admin: "Tous les autres rôles réunis" # Machine translated, remove this comment when verified
-        biller: "Gère les transactions, modèles, relevés et formules de facturation, et finalise les repas" # Machine translated, remove this comment when verified
-        photographer: "Peut modifier la photo d'annuaire de n'importe qui" # Machine translated, remove this comment when verified
-        calendar_coordinator: "Gère les calendriers et les événements de tous" # Machine translated, remove this comment when verified
-        meals_coordinator: "Gère les repas, les rôles de repas, les formules de facturation et les types de repas" # Machine translated, remove this comment when verified
-        wikiist: "Gère les pages wiki spécialement protégées" # Machine translated, remove this comment when verified
-        work_coordinator: "Gère les tâches, les créneaux et les périodes de travail" # Machine translated, remove this comment when verified
+        admin: "Tous les autres rôles réunis" # MT
+        biller: "Gère les transactions, modèles, relevés et formules de facturation, et finalise les repas" # MT
+        photographer: "Peut modifier la photo d'annuaire de n'importe qui" # MT
+        calendar_coordinator: "Gère les calendriers et les événements de tous" # MT
+        meals_coordinator: "Gère les repas, les rôles de repas, les formules de facturation et les types de repas" # MT
+        wikiist: "Gère les pages wiki spécialement protégées" # MT
+        work_coordinator: "Gère les tâches, les créneaux et les périodes de travail" # MT
 
   phone_types:
     abbreviations:
-      home: "d" # Machine translated, remove this comment when verified
-      work: "t" # Machine translated, remove this comment when verified
-      mobile: "m" # Machine translated, remove this comment when verified
+      home: "d" # MT
+      work: "t" # MT
+      mobile: "m" # MT
 
   date_range_lens:
-    past_12: "12 derniers mois" # Machine translated, remove this comment when verified
+    past_12: "12 derniers mois" # MT
 
   community_lens:
-    all: "Toutes les communautés" # Machine translated, remove this comment when verified
+    all: "Toutes les communautés" # MT
 
   lens_bar:
-    clear_filter: "Effacer le filtre" # Machine translated, remove this comment when verified
+    clear_filter: "Effacer le filtre" # MT
 
   search_lens:
-    prompt: "Rechercher…" # Machine translated, remove this comment when verified
+    prompt: "Rechercher…" # MT

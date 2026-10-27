@@ -1,18 +1,30 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
 fr-CA:
   notifications:
     preferences:
       kinds:
-        meal_role_reminder: "Rappels pour mes quarts de repas" # Machine translated, remove this comment when verified
-        account_access: "Réinitialisations de mot de passe, confirmations d'adresse courriel et invitations à se connecter" # Machine translated, remove this comment when verified
+        meal_role_reminder: "Rappels pour mes quarts de repas" # MT
+        account_access: "Réinitialisations de mot de passe, confirmations d'adresse courriel et invitations à se connecter" # MT
       show:
-        intro: "Choisissez les courriels que Gather vous envoie au sujet de ce qui vous concerne. Ceux qui sont grisés sont essentiels et ne peuvent pas être désactivés." # Machine translated, remove this comment when verified
-        email_lists_hint: "Vous êtes sur ces listes par l'intermédiaire de vos groupes. Pour ne plus recevoir les courriels d'une liste, désabonnez-vous ou quittez le groupe sur sa page." # Machine translated, remove this comment when verified
+        intro: "Choisissez les courriels que Gather vous envoie au sujet de ce qui vous concerne. Ceux qui sont grisés sont essentiels et ne peuvent pas être désactivés." # MT
+        email_lists_hint: "Vous êtes sur ces listes par l'intermédiaire de vos groupes. Pour ne plus recevoir les courriels d'une liste, désabonnez-vous ou quittez le groupe sur sa page." # MT
     unsubscribes:
-      manage_html: "Vous pouvez choisir les courriels que vous recevez sur votre page %{link}. Vous devrez vous connecter." # Machine translated, remove this comment when verified
+      manage_html: "Vous pouvez choisir les courriels que vous recevez sur votre page %{link}. Vous devrez vous connecter." # MT
       show:
-        confirm: "Ne plus envoyer de courriels « %{kind} » à %{email} ?" # Machine translated, remove this comment when verified
-        already_off: "Les courriels « %{kind} » à %{email} sont déjà désactivés." # Machine translated, remove this comment when verified
+        confirm: "Ne plus envoyer de courriels « %{kind} » à %{email} ?" # MT
+        already_off: "Les courriels « %{kind} » à %{email} sont déjà désactivés." # MT
       create:
-        done: "Nous n'enverrons plus de courriels « %{kind} » à %{email}." # Machine translated, remove this comment when verified
+        done: "Nous n'enverrons plus de courriels « %{kind} » à %{email}." # MT
       invalid:
-        explanation: "Ce lien de désabonnement n'est pas valide. Il provient peut-être d'un ancien courriel ou a été copié de façon incomplète." # Machine translated, remove this comment when verified
+        explanation: "Ce lien de désabonnement n'est pas valide. Il provient peut-être d'un ancien courriel ou a été copié de façon incomplète." # MT

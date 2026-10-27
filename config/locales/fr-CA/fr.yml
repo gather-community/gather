@@ -1,20 +1,32 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
 fr-CA:
   confirmations:
     user:
-      invite: "Un courriel sera envoyé à « %{name} » avec les instructions pour se connecter. Continuer ?" # Machine translated, remove this comment when verified
+      invite: "Un courriel sera envoyé à « %{name} » avec les instructions pour se connecter. Continuer ?" # MT
   cocoon:
     add_links:
-      shifts: "Ajouter un quart" # Machine translated, remove this comment when verified
+      shifts: "Ajouter un quart" # MT
   csv:
     headers:
       user:
-        email: "Courriel" # Machine translated, remove this comment when verified
-        google_email: "Courriel Google" # Machine translated, remove this comment when verified
-        paypal_email: "Courriel PayPal" # Machine translated, remove this comment when verified
-        mobile_phone: "Cellulaire" # Machine translated, remove this comment when verified
+        email: "Courriel" # MT
+        google_email: "Courriel Google" # MT
+        paypal_email: "Courriel PayPal" # MT
+        mobile_phone: "Cellulaire" # MT
       "meals/signup":
-        takeout: "Pour emporter" # Machine translated, remove this comment when verified
+        takeout: "Pour emporter" # MT
   roles:
     index:
       descriptions:
-        work_coordinator: "Gère les tâches, les quarts et les périodes de travail" # Machine translated, remove this comment when verified
+        work_coordinator: "Gère les tâches, les quarts et les périodes de travail" # MT

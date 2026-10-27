@@ -22,6 +22,8 @@ describe "every module in every locale" do
   # Whole words that would only appear in untranslated UI text. Test data is named so it doesn't use them.
   english_words = %w[the and your with Save Cancel Edit Delete Create Search Settings Upcoming Members
     Show None Name Entrees entrees Kids kids]
+  # Words from that list that are also correct in another language, e.g. German "Name".
+  same_in_locale = {de: %w[Name]}
 
   let(:admin) { create(:admin, first_name: "Kim", last_name: "Lee") }
   let(:meal) { create(:meal, :with_menu, title: "Ragout", entrees: "Ragout", kids: "Pasta", notes: "Merci") }
@@ -45,7 +47,7 @@ describe "every module in every locale" do
           expect(page).to have_css("html[lang='#{locale}']")
           expect(page).not_to have_css(".translation_missing")
           next if locale == :en
-          english = english_words.select { |word| page.text.match?(/\b#{word}\b/) }
+          english = (english_words - same_in_locale.fetch(locale, [])).select { |word| page.text.match?(/\b#{word}\b/) }
           expect(english).to be_empty, "#{name} in #{locale} has English words: #{english.join(", ")}"
         end
       end

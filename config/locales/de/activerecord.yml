@@ -1,0 +1,502 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+de:
+  activemodel:
+    attributes:
+      # EventletForm (drag-and-drop), for its error messages.
+      calendars/eventlet:
+        starts_at: "Startzeit" # MT
+        ends_at: "Endzeit" # MT
+      calendars/event:
+        calendar: "Kalender" # MT
+        pre_notice: "Hinweis" # MT
+        name: "Name des Termins" # MT
+        starts_at: "Startzeit" # MT
+        ends_at: "Endzeit" # MT
+        creator: "Erstellt von" # MT
+        group: "Gruppe" # MT
+        all_day: "Ganztägiger Termin?" # MT
+        kind: "Art" # MT
+        note: "Notiz" # MT
+        guidelines: "Richtlinien" # MT
+        repeat_frequency: "Wiederholung" # MT
+        repeat_interval: "Alle" # MT
+        repeat_weekdays: "Am" # MT
+        repeat_monthly_by: "Am" # MT
+        repeat_ends: "Endet" # MT
+        repeat_ends_on: "Enddatum" # MT
+        repeat_count: "Anzahl" # MT
+    errors:
+      models:
+        # EventForm, which takes Calendars::Event's model name.
+        calendars/event:
+          attributes:
+            base:
+              overlap: "Dieser Termin überschneidet sich mit einem bestehenden" # MT
+              changed_from_started: "Diese Wiederholung hat schon begonnen und kann nicht mehr geändert werden. Öffne eine spätere Wiederholung, um die Serie ab dann zu ändern." # MT
+              moved_before_kept: "Du kannst diese Wiederholung nicht auf %{time} verschieben, weil sich sonst zwei Teile der Serie überschneiden würden." # MT
+              occurrence_missing: "Diese Wiederholung gibt es nicht mehr. Geh zurück zum Kalender und versuche es noch einmal." # MT
+              longer_than_repeat: "Der Termin ist länger als der Abstand zwischen den Wiederholungen, deshalb würden sich die Wiederholungen überschneiden." # MT
+              pattern_change_with_changes:
+                one: "%{count} Wiederholung im geänderten Teil wurde verschoben oder gelöscht, deshalb können sich die Wiederholungstage nicht ändern. Mach diese Änderung zuerst rückgängig oder ändere die Serie ab einem späteren Datum." # MT
+                other: "%{count} Wiederholungen im geänderten Teil wurden verschoben oder gelöscht, deshalb können sich die Wiederholungstage nicht ändern. Mach diese Änderungen zuerst rückgängig oder ändere die Serie ab einem späteren Datum." # MT
+              all_day_change_with_changes:
+                one: "%{count} Wiederholung im geänderten Teil wurde verschoben oder gelöscht, deshalb kann der Termin nicht zwischen ganztägig und mit Uhrzeit wechseln. Mach diese Änderung zuerst rückgängig oder ändere die Serie ab einem späteren Datum." # MT
+                other: "%{count} Wiederholungen im geänderten Teil wurden verschoben oder gelöscht, deshalb kann der Termin nicht zwischen ganztägig und mit Uhrzeit wechseln. Mach diese Änderungen zuerst rückgängig oder ändere die Serie ab einem späteren Datum." # MT
+            guidelines:
+              not_accepted: "Du musst den Richtlinien zustimmen" # MT
+            starts_at:
+              changed_after_start: "kann nach Beginn des Termins nicht mehr geändert werden" # MT
+            ends_at:
+              before_start: "muss nach der Startzeit liegen" # MT
+              in_past: "kann nicht auf eine Zeit in der Vergangenheit geändert werden" # MT
+            repeat_frequency:
+              not_offered: "ist in diesem Kalender nicht verfügbar" # MT
+              stop_repeating: "kann nicht auf „Nie“ geändert werden. Um die Serie zu beenden, lösche diese und alle folgenden Wiederholungen." # MT
+            repeat_ends_on:
+              before_start: "muss am oder nach dem Startdatum liegen" # MT
+            repeat_monthly_by:
+              not_on_start_date: "passt nicht zum Startdatum. Bitte wähle neu." # MT
+        # EventletForm (drag-and-drop) and EventletDeletionForm, which take Calendars::Eventlet's model name.
+        calendars/eventlet:
+          attributes:
+            base:
+              not_recurring: "Dieser Termin gehört zu keiner Serie" # MT
+              following_only_all_calendars: "„Diese und alle folgenden“ können nur aus allen Kalendern gelöscht werden" # MT
+              occurrence_missing: "Diese Wiederholung gibt es nicht mehr. Lade den Kalender neu und versuche es noch einmal." # MT
+              one_calendar: "Dieser Termin steht nur in einem Kalender." # MT
+              other_calendar_not_editable: "Du kannst diesen Termin nicht in allen seinen Kalendern ändern. Wähle stattdessen „Nur in“ diesem Kalender „verschieben“." # MT
+              offsets_too_far_apart: "Die Zeiten eines Termins in seinen verschiedenen Kalendern dürfen höchstens %{hours} Stunden auseinanderliegen. Um ihn weiter zu verschieben, wähle „Überall verschieben“." # MT
+              series_started: "Diese Serie hat schon begonnen. Wähle „Diese und alle folgenden“, um sie ab diesem Datum zu ändern." # MT
+              following_from_past: "Wiederholungen, die schon begonnen haben, können nicht mit „Diese und alle folgenden“ verschoben werden." # MT
+              moved_before_kept: "Du kannst „Diese und alle folgenden“ nicht hierhin verschieben, weil sich sonst zwei Teile der Serie überschneiden würden." # MT
+              fixed_pattern: "Du kannst „%{choice}“ nicht hierhin verschieben, weil sich diese Serie in einem festen Muster wiederholt, das die neue Zeit nicht enthält." # MT
+              overlap: "Dieser Termin überschneidet sich mit einem bestehenden" # MT
+            occurrence_start:
+              required_for_single: "ist nötig, um eine einzelne Wiederholung zu ändern" # MT
+              not_in_series: "ist keine gültige Wiederholung dieser Serie" # MT
+            starts_at:
+              changed_after_start: "kann nach Beginn des Termins nicht mehr geändert werden" # MT
+            ends_at:
+              before_start: "muss nach der Startzeit liegen" # MT
+              in_past: "kann nicht auf eine Zeit in der Vergangenheit geändert werden" # MT
+  activerecord:
+    models:
+      meals/meal: "Mahlzeit" # MT
+    attributes:
+      user:
+        first_name: "Vorname" # MT
+        last_name: "Nachname" # MT
+        email: "E-Mail-Adresse" # MT
+        google_email: "Google-ID" # MT
+        phone: "Telefon" # MT
+        mobile_phone: "Mobil" # MT
+        home_phone: "Festnetz" # MT
+        work_phone: "Arbeit" # MT
+        birthday_str: "Geburtstag" # MT
+        preferred_contact: "Bevorzugte Kontaktart" # MT
+        joined_on: "Beitrittsdatum" # MT
+        job_choosing_proxy_id: "Vertretung bei der Aufgabenwahl" # MT
+        up_guardianships: "Eltern/Erziehungsberechtigte" # MT
+        privacy_settings: "Datenschutzeinstellungen" # MT
+        paypal_email: "PayPal-E-Mail" # MT
+        school: "Schule" # MT
+        allergies: "Allergien" # MT
+        doctor: "Arztpraxis" # MT
+        medical: "Medizinische Angaben" # MT
+        remember_me: "Angemeldet bleiben, wenn du den Browser schließt" # MT
+        child: "Ist die Person ein Kind?" # MT
+        full_access: "Soll die Person vollen Zugang zum System haben?" # MT
+        certify_13_or_older: "Ich bestätige, dass diese Person mindestens 13 Jahre alt ist" # MT
+        pronouns: "Pronomen" # MT
+      household:
+        name: "Name des Haushalts" # MT
+        community_id: "Gemeinschaft" # MT
+        member_type_id: "Mitgliedsart" # MT
+        unit_num_and_suffix: "Wohnungsnummer" # MT
+        vehicles: "Fahrzeuge" # MT
+        keyholders: "Weitere Schlüsselinhaber" # MT
+        emergency_contacts: "Notfallkontakte" # MT
+        garage_nums: "Garagennummer(n)" # MT
+      meals/meal:
+        no_allergens: "Keins davon" # MT
+        community_id: "Gastgebende Gemeinschaft" # MT
+        served_at: "Datum/Uhrzeit" # MT
+        communities: "Gemeinschaften" # MT
+        calendar_ids: "Buchbare Orte" # MT
+        formula: "Preisformel" # MT
+        capacity: "Kapazität" # MT
+        title: "Titel" # MT
+        entrees: "Hauptgericht" # MT
+        side: "Beilage" # MT
+        kids: "Kinder" # MT
+        dessert: "Nachtisch" # MT
+        notes: "Notizen" # MT
+        auto_close_time: "Automatische Schließzeit" # MT
+      meals/message:
+        meal: "Mahlzeit" # MT
+        body: "Nachricht" # MT
+        recipient_type: "Empfänger" # MT
+      meals/cost:
+        ingredient_cost: "Kosten für Zutaten" # MT
+        pantry_cost: "Erstattungsfähige Vorratskosten" # MT
+        payment_method: "Art der Rückerstattung" # MT
+        reimbursee_id: "Erstattungsberechtigte Person" # MT
+      meals/formula:
+        name: "Name" # MT
+        meal_calc_type: "Berechnungsart" # MT
+        pantry_calc_type: "Berechnungsart" # MT
+        is_default: "Standard-Preisformel?" # MT
+        parts: "Essensarten" # MT
+        pantry_fee: "Vorratsgebühr" # MT
+        pantry_fee_formatted: "Vorratsgebühr" # MT
+        pantry_reimbursement: "Rückerstattung für Vorräte erlauben?" # MT
+        takeout: "Bestellungen zum Mitnehmen erlauben?" # MT
+        role_ids: "Rollen" # MT
+      meals/formula_part:
+        name: "Name" # MT
+        type_id: "Art" # MT
+        share_formatted: "Preis/Anteil" # MT
+        portion_size: "Portionsgröße" # MT
+      meals/role:
+        title: "Bezeichnung der Aufgabe" # MT
+        time_type: "Zeiten" # MT
+        shift_start: "Startzeit" # MT
+        shift_end: "Endzeit" # MT
+        work_hours: "Arbeitsstunden" # MT
+        work_job_title: "Bezeichnung im Arbeitsmodul" # MT
+        description: "Aufgabenbeschreibung" # MT
+        double_signups_allowed: "Dieselbe Person kann sich bei einer Mahlzeit mehrmals für diese Rolle anmelden" # MT
+        count_per_meal: "Personen pro Mahlzeit" # MT
+        reminders: "Erinnerungen" # MT
+      meals/role_reminder:
+        rel_magnitude: "Sendezeit" # MT
+        note: "Notiz (optional)" # MT
+      meals/signup:
+        spots_left: "Freie Plätze" # MT
+        comments: "Kommentare für die Küchenleitung" # MT
+        takeout: "Zum Mitnehmen bestellen" # MT
+      billing/transaction:
+        incurred_on: "Angefallen am" # MT
+        household_name: "Name des Haushalts" # MT
+        code: "Art" # MT
+        description: "Beschreibung" # MT
+        value: "Betrag" # MT
+      billing/account:
+        household_id: "Haushalt" # MT
+        community_id: "Konto bei Gemeinschaft" # MT
+        current_balance: "Aktueller Saldo" # MT
+        credit_limit: "Kreditlimit" # MT
+      billing/template:
+        code: "Art" # MT
+        description: "Beschreibung" # MT
+        value: "Betrag" # MT
+        member_type_ids: "Mitgliedsarten" # MT
+      gdrive/config:
+        org_user_id: "Google-Workspace-Nutzer-ID" # MT
+        client_id: "Client-ID der App" # MT
+        client_secret_to_write: "Clientschlüssel der App" # MT
+      gdrive/migration/operation:
+        contact_email: "E-Mail der Kontaktperson" # MT
+        contact_name: "Name der Kontaktperson" # MT
+        src_folder_id: "Quell-ID" # MT
+        dest_folder_id: "Ziel-ID" # MT
+      gdrive/migration/request:
+        opt_out_reason: "Grund für die Ablehnung" # MT
+      gdrive/item:
+        external_id: "ID" # MT
+        kind: "Art" # MT
+      gdrive/item_group:
+        access_level: "Zugriffsebene" # MT
+        group_id: "Gruppe" # MT
+        item_id: "Element" # MT
+      groups/group:
+        availability: "Verfügbarkeit" # MT
+        can_request_jobs: "Darf Aufgaben anfordern?" # MT
+        can_administer_email_lists: "Darf alle E-Mail-Listen verwalten?" # MT
+        can_moderate_email_lists: "Darf alle E-Mail-Listen moderieren?" # MT
+        description: "Beschreibung" # MT
+        kind: "Art" # MT
+        name: "Name" # MT
+        communities: "Gemeinschaften" # MT
+        memberships: "Mitglieder" # MT
+      groups/mailman/list:
+        domain_id: "Domain" # MT
+        all_cmty_members_can_send: "Alle Mitglieder der Gemeinschaft dürfen an die Liste senden?" # MT
+        managers_can_administer: "Leitung darf Liste verwalten?" # MT
+        managers_can_moderate: "Leitung darf Liste moderieren?" # MT
+        members: "Listenmitglieder" # MT
+        additional_members: "Weitere Mitglieder" # MT
+        additional_senders: "Weitere Absender" # MT
+        settings: "Listeneinstellungen" # MT
+        address: "Adresse der Liste" # MT
+        _destroy: "Diese Liste löschen?" # MT
+      calendars/protocol:
+        fixed_end_time: "Feste Endzeit" # MT
+        fixed_start_time: "Feste Startzeit" # MT
+        kinds: "Terminarten" # MT
+        max_days_per_year: "Max. Tage/Jahr" # MT
+        max_lead_days: "Max. Vorlaufzeit" # MT
+        max_length_minutes: "Max. Dauer" # MT
+        max_minutes_per_year: "Max. Minuten/Jahr" # MT
+        other_communities: "Andere Gemeinschaften" # MT
+        pre_notice: "Vorab-Hinweis" # MT
+        requires_kind: "Art erforderlich" # MT
+        calendar_ids: "Kalender" # MT
+      calendars/group:
+        name: "Name der Gruppe" # MT
+      calendars/calendar:
+        name: "Name" # MT
+        guidelines: "Richtlinien" # MT
+        hidden: "Verborgen" # MT
+        abbrv: "Abkürzung" # MT
+        group_id: "Kalendergruppe" # MT
+        color: "Farbe" # MT
+        default_calendar_view: "Kalenderansicht" # MT
+        meal_hostable: "Für Mahlzeiten nutzbar?" # MT
+        allow_overlap: "Termine dürfen sich überschneiden?" # MT
+        selected_by_default: "In der Kalenderliste standardmäßig ausgewählt?" # MT
+      people/emergency_contact:
+        name: "Name" # MT
+        relationship: "Beziehung zum Haushalt" # MT
+        main_phone: "Haupttelefon" # MT
+        alt_phone: "Weiteres Telefon" # MT
+        email: "E-Mail" # MT
+        location: "Ort" # MT
+        country_code: "Land" # MT
+      people/vehicle:
+        make: "Marke" # MT
+        model: "Modell" # MT
+        color: "Farbe" # MT
+        plate: "Kennzeichen" # MT
+      people/pet:
+        name: "Name" # MT
+        species: "Tierart/Rasse" # MT
+        color: "Farbe" # MT
+        vet: "Tierarztpraxis" # MT
+        caregivers: "Betreuung" # MT
+        health_issues: "Gesundheitsprobleme" # MT
+      people/memorial:
+        user_id: "Verstorbene Person" # MT
+        birth_year: "Geburtsjahr" # MT
+        death_year: "Todesjahr" # MT
+      work/job:
+        description: "Beschreibung" # MT
+        double_signups_allowed: "Dieselbe Person kann sich mehrmals für eine Schicht dieser Aufgabe anmelden?" # MT
+        hours: "Stunden" # MT
+        hours_per_shift: "Stunden pro Schicht" # MT
+        period_id: "Zeitraum" # MT
+        reminders: "Erinnerungen" # MT
+        requester_id: "Auftraggeber" # MT
+        shifts: "Schichten" # MT
+        slot_type: "Art der Plätze" # MT
+        time_type: "Zeiten" # MT
+        title: "Titel" # MT
+      work/period:
+        name: "Name" # MT
+        phase: "Phase" # MT
+        starts_on: "Beginnt am" # MT
+        ends_on: "Endet am" # MT
+        quota_type: "Pensum" # MT
+        auto_open_time: "Automatische Öffnungszeit" # MT
+        pick_type: "Wahlart" # MT
+        round_duration: "Dauer einer Runde" # MT
+        workers_per_round: "Personen pro Gruppe" # MT
+        max_rounds_per_worker: "Max. Runden pro Person" # MT
+        job_copy_source_id: "Aufgaben kopieren" # MT
+        copy_preassignments: "Vorab-Zuweisungen kopieren?" # MT
+        meal_job_sync_settings: "Abgleich der Mahlzeit-Aufgaben" # MT
+      work/job_reminder:
+        abs_rel: "Art" # MT
+        abs_time: "Sendezeit" # MT
+        rel_magnitude: "Sendezeit" # MT
+        note: "Notiz" # MT
+      work/shift:
+        start_time: "Startzeit" # MT
+        end_time: "Endzeit" # MT
+        hours: "Stunden" # MT
+        slots: "Anzahl Plätze" # MT
+        workers: "Helfende" # MT
+      wiki/page:
+        title: "Titel" # MT
+        content: "Inhalt" # MT
+        comment: "Kommentar" # MT
+        editable_by: "Bearbeitbar von" # MT
+        data_source: "Datenquelle" # MT
+    errors:
+      messages:
+        invalid_content_type: "Die Datei hat das falsche Format" # MT
+        too_big: "Die Datei ist zu groß (maximal %{max} MiB)" # MT
+        attached: "Die Datei fehlt" # MT
+      models:
+        billing/transaction:
+          attributes:
+            unit_price:
+              blank_with_quantity: "darf nicht leer sein, wenn eine Menge angegeben ist" # MT
+            quantity:
+              blank_with_unit_price: "darf nicht leer sein, wenn ein Einzelpreis angegeben ist" # MT
+        domain:
+          attributes:
+            base:
+              at_least_one_ownership: "Bitte wähle mindestens eine Gemeinschaft aus" # MT
+        gdrive/config:
+          attributes:
+            org_user_id:
+              invalid: "Muss eine E-Mail-Adresse sein" # MT
+            client_id:
+              invalid: "Muss auf .apps.googleusercontent.com enden" # MT
+            client_secret_to_write:
+              wrong_length: "Muss genau %{count} Zeichen lang sein" # MT
+        gdrive/migration/operation:
+          attributes:
+            contact_email:
+              invalid: "Muss eine E-Mail-Adresse sein" # MT
+            dest_folder_id:
+              invalid: "Darf nur Buchstaben, Ziffern, _ und - enthalten" # MT
+            src_folder_id:
+              invalid: "Darf nur Buchstaben, Ziffern, _ und - enthalten" # MT
+        groups/group:
+          attributes:
+            base:
+              at_least_one_affiliation: "Bitte wähle mindestens eine Gemeinschaft aus" # MT
+        groups/mailman/list:
+          attributes:
+            name:
+              invalid: "Enthält ungültige Zeichen" # MT
+              taken: "Eine andere Liste auf dieser Domain verwendet diesen Namen schon" # MT
+        groups/membership:
+          attributes:
+            user_id:
+              unaffiliated: "Nicht aus einer zugehörigen Gemeinschaft" # MT
+        household:
+          name:
+            taken: "In dieser Gemeinschaft gibt es schon einen Haushalt mit diesem Namen" # MT
+        meals/formula_part:
+          negative: "Darf nicht negativ sein" # MT
+        meals/signup:
+          exceeded_spots:
+            one: "Bei den noch freien Plätzen kannst du nur eine Person anmelden." # MT
+            other: "Bei den noch freien Plätzen kannst du höchstens %{count} Personen anmelden." # MT
+          nobody_signed_up: "Du musst mindestens eine Person anmelden" # MT
+          duplicate_types: "Bitte melde jede Art nur einmal an" # MT
+        meals/meal:
+          attributes:
+            capacity:
+              below_signups: "muss wegen der bestehenden Anmeldungen mindestens %{count} sein" # MT
+            title:
+              blank_with_menu: "darf nicht leer sein, wenn andere Menüpunkte eingetragen sind" # MT
+            entrees:
+              blank_with_menu: "darf nicht leer sein, wenn andere Menüpunkte eingetragen sind" # MT
+            invitations:
+              none: "du musst mindestens eine Gemeinschaft einladen" # MT
+            auto_close_time:
+              not_before_meal: "muss zwischen jetzt und dem Zeitpunkt der Mahlzeit liegen" # MT
+            allergens:
+              none_checked: "mindestens ein Kästchen muss angehakt sein, wenn ein Menü eingetragen ist" # MT
+              none_with_others: "„Keins davon“ kann nicht gewählt werden, wenn andere Allergene angehakt sind" # MT
+        meals/assignment:
+          attributes:
+            user_id:
+              role_not_in_formula: "Die Rolle „%{role}“ passt nicht zur gewählten Preisformel" # MT
+        calendars/event:
+          attributes:
+            starts_at:
+              after_meal_time: "muss zum oder vor dem Zeitpunkt der Mahlzeit liegen (%{time})" # MT
+            ends_at:
+              before_meal_time: "muss nach dem Zeitpunkt der Mahlzeit liegen (%{time})" # MT
+        calendars/eventlet:
+          attributes:
+            base:
+              all_day_not_allowed: "Ganztägige Termine sind in diesem Kalender nicht erlaubt" # MT
+        calendars/event_override:
+          attributes:
+            occurrence_start:
+              not_in_series: "ist keine gültige Wiederholung dieser Serie" # MT
+            ends_at:
+              before_start: "muss nach der Startzeit liegen" # MT
+        calendars/eventlet_override:
+          attributes:
+            base:
+              no_change: "muss entweder die Wiederholung löschen oder Zeitverschiebungen angeben" # MT
+            eventlet:
+              different_event: "muss zum selben Termin gehören wie die Abweichung" # MT
+        user:
+          password:
+            password_strength: "Dein Passwort ist zu schwach. Mach es länger oder füge Sonderzeichen hinzu." # MT
+          attributes:
+            certify_13_or_older:
+              accepted_full_access: "Für Kinder mit vollem Zugang muss das Alter bestätigt werden" # MT
+              accepted_becoming_adult: "Um ein Kind zu einer erwachsenen Person zu ändern, muss das Alter bestätigt werden" # MT
+            birthday_str:
+              too_young: "Kinder müssen mindestens 13 Jahre alt sein, um vollen Zugang zu haben" # MT
+        calendars/calendar:
+          attributes:
+            abbrv:
+              blank: "darf nicht leer sein, wenn im Kalender Mahlzeiten stattfinden können" # MT
+            color:
+              invalid: "Muss im Hex-Format sein (z. B. #112233)" # MT
+            allow_overlap:
+              repeating_events: "muss eingeschaltet bleiben, solange dieser Kalender Serientermine hat" # MT
+        calendars/protocol:
+          attributes:
+            base:
+              repeating_events: "Feste Zeiten, Vorlaufzeiten und Jahresgrenzen können nicht für %{calendars} gelten, weil dort Serientermine sind. Serientermine brauchen Kalender ohne diese Regeln." # MT
+        meals/formula:
+          at_least_one_type: "Du musst mindestens eine Essensart angeben." # MT
+          at_least_one_nonzero_type: "Bei anteiliger Berechnung musst du mindestens eine Essensart mit einem Wert über null angeben." # MT
+          attributes:
+            is_default:
+              cant_unset: "Du kannst die Standardeinstellung nicht aufheben. Mach stattdessen eine andere Preisformel zum Standard." # MT
+            role_ids:
+              must_have_head_cook: "Muss %{title} enthalten" # MT
+        meals/role:
+          attributes:
+            shift_end:
+              not_after_start: "Muss nach der Startzeit liegen" # MT
+        wiki/page:
+          sample_not_editable: "Die Beispielseite kann nicht bearbeitet werden, damit sie für alle als Vorlage erhalten bleibt. Wenn du ausprobieren möchtest, lege über den Link „Neue Wiki-Seite“ unten eine neue Seite an." # MT
+          data_fetch:
+            main: "Beim Abrufen der Daten für diese Seite ist ein Problem aufgetreten (%{error})" # MT
+            connection_error: "Keine Verbindung zur Datenquelle" # MT
+            invalid_protocol: "Die URL der Datenquelle muss HTTP oder HTTPS verwenden" # MT
+            invalid_json: "Ungültiges JSON" # MT
+            template_error: "Vorlagenfehler: %{details}" # MT
+          attributes:
+            title:
+              reserved_slug: "Dieser Titel ist ein reserviertes Wort oder eine reservierte Wendung. Bitte wähle einen anderen." # MT
+        work/job:
+          attributes:
+            hours_per_shift:
+              uneven_divisor: "Muss %{hours} Stunden entsprechen oder sie glatt teilen" # MT
+            shifts:
+              more_than_one_shift_for_full_single: "Bei Aufgaben mit einer Schicht kannst du nur eine Schicht hinzufügen." # MT
+              more_than_one_shift_for_full_period: "Bei Aufgaben für den ganzen Zeitraum kannst du nur eine Schicht hinzufügen." # MT
+              duplicate_start_end_times: "Mehrere Schichten dürfen nicht dieselbe Start- und Endzeit haben." # MT
+              different_length_shifts: "Alle Schichten müssen gleich lang sein." # MT
+        work/period:
+          attributes:
+            name:
+              reserved_slug: "ist ein reserviertes Wort, bitte wähle ein anderes" # MT
+            ends_on:
+              not_after_start: "muss nach dem Startdatum liegen" # MT
+            auto_open_time:
+              blank: "Darf nicht leer sein, wenn die Wahlart „Abwechselnd“ ist. Wenn du die genaue Zeit noch nicht weißt, gib etwas Ungefähres ein und aktualisiere es später." # MT
+        work/shift:
+          attributes:
+            starts_at:
+              elapsed_doesnt_equal_job: "Die Schicht muss %{hours} Stunden dauern" # MT
+              elapsed_doesnt_evenly_divide_job: "Die Schichtlänge muss %{hours} Stunden entsprechen oder sie glatt teilen" # MT
+            ends_at:
+              not_after_start: "muss nach der Startzeit liegen" # MT
+            assignments:
+              no_double_assignments: "Doppelte Zuweisungen sind nicht erlaubt" # MT

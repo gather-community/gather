@@ -1,0 +1,219 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+de:
+  people:
+    # The placeholder household and user that a deleted member's records are reassigned to.
+    deleted_placeholder:
+      household: "Gelöschte Mitglieder" # MT
+      first_name: "Gelöschtes" # MT
+      last_name: "Mitglied" # MT
+    sign_in_invitations:
+      sent:
+        one: "Einladung verschickt." # MT
+        other: "Einladungen verschickt." # MT
+      none_selected: "Du hast keine Personen ausgewählt." # MT
+      new:
+        title: "Personen zur Anmeldung einladen" # MT
+        no_users: "Keine Personen gefunden." # MT
+        instructions_html: "Markiere die Personen, die du einladen möchtest. Personen mit %{icon} neben dem Namen haben sich noch nie angemeldet." # MT
+        select_no_sign_ins: "Alle ohne Anmeldung auswählen" # MT
+        select_all: "Alle auswählen" # MT
+        send: "Einladungen verschicken" # MT
+    memorials:
+      created: "Gedenkseite erstellt." # MT
+      updated: "Gedenkseite aktualisiert." # MT
+      index:
+        title: "Gedenkseiten" # MT
+        create: "Gedenkseite erstellen" # MT
+        no_memorials: "Keine Gedenkseiten gefunden." # MT
+        photo_of: "Foto von %{name}" # MT
+      show:
+        memorials: "Gedenkseiten" # MT
+        photo_of: "Foto von %{name}" # MT
+        obituary: "Nachruf" # MT
+        community_memories: "Erinnerungen aus der Gemeinschaft" # MT
+      new:
+        title: "Gedenkseite erstellen" # MT
+      edit:
+        title: "Gedenkseite bearbeiten: %{name}" # MT
+    memorial_messages:
+      created: "Danke für deine Nachricht." # MT
+      updated: "Nachricht aktualisiert." # MT
+      edit:
+        title: "Gedenknachricht bearbeiten" # MT
+    member_types:
+      created: "Mitgliedsart erstellt." # MT
+      updated: "Mitgliedsart aktualisiert." # MT
+      index:
+        title: "Mitgliedsarten" # MT
+        create: "Mitgliedsart erstellen" # MT
+        explanation: "Mitgliedsarten werden Haushalten zugeordnet und ermöglichen es, wiederkehrende Belastungen anzupassen." # MT
+        no_member_types: "Keine Mitgliedsarten gefunden." # MT
+        name: "Name" # MT
+      new:
+        title: "Mitgliedsart erstellen" # MT
+      edit:
+        title: "Mitgliedsart bearbeiten: %{name}" # MT
+    vehicles:
+      index:
+        title: "Fahrzeuge" # MT
+        no_vehicles: "Keine Fahrzeuge gefunden." # MT
+        vehicle: "Marke/Modell/Farbe/Kennzeichen" # MT
+        owner: "Halter" # MT
+    settings:
+      edit:
+        title: "Einstellungen für Personen" # MT
+    birthdays:
+      index:
+        title: "Geburtstage" # MT
+        no_users: "Keine Personen gefunden." # MT
+        # Shown when a user's birthday is unknown.
+        unknown: "?"
+    password_changes:
+      success: "Passwort geändert." # MT
+      show:
+        title: "Passwort ändern" # MT
+      password_fields:
+        new_password: "Neues Passwort" # MT
+        retype_new_password: "Neues Passwort wiederholen" # MT
+        reveal: "Passwörter anzeigen" # MT
+        mask: "Passwörter verbergen" # MT
+    users:
+      confirmations:
+        sign_in_to_use_gather: "Bitte melde dich an, um Gather zu nutzen." # MT
+        expired_signed_in: "Die Bestätigungsfrist ist abgelaufen. Bitte nutze unten den Link „Bestätigungsanleitung erneut senden“, um es noch einmal zu versuchen." # MT
+        expired_signed_out: "Die Bestätigungsfrist ist abgelaufen. Bitte melde dich mit deiner alten E-Mail-Adresse an und versuche es noch einmal." # MT
+      # Each completes Devise's "Could not sign you in from Google because %{reason}." (devise.omniauth_callbacks.failure).
+      omniauth_failure_reasons:
+        no_email: "Google keine E-Mail-Adresse übermittelt hat. Bitte gib einem Admin Bescheid" # MT
+        invitation_expired: "deine Einladung abgelaufen ist" # MT
+        wrong_google_id: "du dich mit der Google-ID %{google_id} anmelden musst" # MT
+        google_id_taken: "deine Google-ID %{google_id} mit einer anderen Person verknüpft ist" # MT
+        invitation_required: "du bei der ersten Anmeldung eine Einladung verwenden musst" # MT
+        google_id_not_found: "deine Google-ID %{google_id} nicht im System gefunden wurde" # MT
+        cancelled: "die Anmeldung abgebrochen wurde" # MT
+        session_expired: "deine Anmeldesitzung abgelaufen ist. Bitte versuche es noch einmal" # MT
+        unexpected: "ein unbekannter Fehler aufgetreten ist. Die Admins wurden benachrichtigt" # MT
+    deletion:
+      blocked_intro: "Das kann noch nicht endgültig gelöscht werden:" # MT
+      confirmation_mismatch: "Der Bestätigungstext stimmte nicht überein, deshalb wurde nichts gelöscht." # MT
+      self_success: "Dein Konto wurde endgültig gelöscht." # MT
+      blockers:
+        balance: "Der Haushalt „%{name}“ hat einen offenen Kontosaldo, der zuerst ausgeglichen werden muss." # MT
+        guardian: "Diese Person ist erziehungsberechtigt für %{names}. Lösche diese Mitglieder zuerst oder ordne sie neu zu." # MT
+        external_ward: "Mitglieder dieses Haushalts sind erziehungsberechtigt für %{names} in anderen Haushalten. Lösche diese Mitglieder zuerst oder ordne sie neu zu." # MT
+        last_admin: "Diese Person ist der einzige Admin der Gemeinschaft. Gib zuerst einem anderen Mitglied die Admin-Rolle." # MT
+  users:
+    greeting: "Hallo %{name}," # MT
+    photo_of: "Foto von %{name}" # MT
+    confirmation_resent: "Anleitung verschickt." # MT
+    email_change_canceled: "Änderung der E-Mail-Adresse abgebrochen." # MT
+    created: "Person erstellt." # MT
+    created_and_invited: "Person erstellt und eingeladen." # MT
+    updated: "Person aktualisiert." # MT
+    profile_updated: "Profil aktualisiert." # MT
+    confirm_new_email_self: "Du musst deine neue E-Mail-Adresse bestätigen. Bitte sieh in deinen E-Mails an %{email} nach." # MT
+    confirm_new_email_other: "Diese Person muss ihre neue E-Mail-Adresse bestätigen (%{email})." # MT
+    invitation_invalidated: "Diese Änderung hat aber möglicherweise eine Einladung zur Anmeldung ungültig gemacht. Vielleicht solltest du eine neue verschicken." # MT
+    household_hint:
+      choose_html: "Wähle einen vorhandenen Haushalt für diese Person. Wenn es keinen gibt, musst du ihn %{link}." # MT
+      create_link: "zuerst anlegen" # MT
+      child_note: "Wegen einer Einschränkung des Systems muss jede Person in Gather zu genau einem Haushalt gehören. Kinder können aber Eltern oder Erziehungsberechtigte aus mehreren Haushalten haben. Alle Funktionen, die Kinder betreffen, behandeln alle Eltern bzw. Erziehungsberechtigten und alle mit dem Kind verbundenen Haushalte gleich." # MT
+    preferred_contact_tooltip: "Möchte am liebsten so kontaktiert werden: %{method}" # MT
+    all_users: "Alle Personen" # MT
+    index:
+      title: "Verzeichnis" # MT
+      print_title: "Verzeichnis %{community}" # MT
+      show_action_menu: "Aktionsmenü für Person anzeigen" # MT
+      create_adult: "Erwachsene Person erstellen" # MT
+      create_child: "Kind erstellen" # MT
+      invite_to_sign_in: "Zur Anmeldung einladen" # MT
+      no_users: "Keine Personen gefunden." # MT
+      name: "Name" # MT
+      unit: "Wohnung" # MT
+      email: "E-Mail" # MT
+      mobile_phone: "Mobil" # MT
+      home_phone: "Festnetz" # MT
+      work_phone: "Arbeit" # MT
+      preferred_contact: "Bevorz." # MT
+      download_csv: "Als CSV herunterladen" # MT
+    show:
+      directory: "Verzeichnis" # MT
+      email: "E-Mail" # MT
+      pending_confirmation: "Bestätigung ausstehend: %{email}" # MT
+      resend_confirmation: "Bestätigungsanleitung erneut senden" # MT
+      cancel_change: "Änderung abbrechen" # MT
+      unconfirmed: "* Diese Adresse wurde noch nicht bestätigt, bitte mit Vorsicht verwenden." # MT
+      phone: "Telefon" # MT
+      preferred_contact: "Bevorzugte Kontaktart" # MT
+      birthday: "Geburtstag" # MT
+      age: "Alter" # MT
+      joined_on: "Beitrittsdatum" # MT
+      recent_head_cook_meals: "Letzte Mahlzeiten als Küchenleitung" # MT
+      date: "Datum" # MT
+      meal_title: "Titel" # MT
+      signups: "Anmeldungen" # MT
+    new:
+      title: "Person erstellen" # MT
+    edit:
+      profile: "Profil" # MT
+      edit_user: "Person bearbeiten: %{name}" # MT
+      edit_photo: "Foto bearbeiten: %{name}" # MT
+    full_form:
+      hide_photo_from_cluster: "Foto nicht für Personen in %{communities} anzeigen" # MT
+      privacy_hint_html: "Mehr zu den Datenschutzeinstellungen in der %{link}." # MT
+      privacy_policy: "Datenschutzerklärung" # MT
+      household_info: "Angaben zum Haushalt" # MT
+      household_note_named_html: "Die folgenden Felder gehören zum Haushalt %{name}. Wenn du sie hier änderst, ändern sie sich für <em>alle Personen im Haushalt</em>." # MT
+      household_note_unnamed_html: "Die folgenden Felder gehören zum Haushalt der Person. Wenn du sie hier änderst, ändern sie sich für <em>alle Personen im Haushalt</em>." # MT
+      move_household_html: "Du kannst die Person auch %{link}." # MT
+      move_household_link: "in einen anderen Haushalt verschieben" # MT
+  households:
+    greeting: "Hallo Haushalt %{name}," # MT
+    created: "Haushalt erstellt." # MT
+    updated: "Haushalt aktualisiert." # MT
+    emergency_contact: "%{name} (%{relationship})" # MT
+    pets:
+      summary: "%{name} (%{species}, %{color})" # MT
+      vet: "Tierarztpraxis" # MT
+      caregivers: "Betreuung" # MT
+      health_issues: "Gesundheitsprobleme" # MT
+    # Unit and garage numbers, e.g. "#12".
+    number: "Nr. %{number}" # MT
+    index:
+      title: "Haushalte" # MT
+      create: "Haushalt erstellen" # MT
+      no_households: "Keine Haushalte gefunden." # MT
+      name: "Name" # MT
+      unit: "Wohnung Nr." # MT
+      users: "Personen" # MT
+    show:
+      title: "Haushalt: %{name}" # MT
+      households: "Haushalte" # MT
+      missing_photo: "Foto der Person fehlt" # MT
+    new:
+      title: "Haushalt erstellen" # MT
+    edit:
+      title: "Haushalt bearbeiten: %{name}" # MT
+    attribs:
+      household: "Haushalt" # MT
+      members: "Mitglieder" # MT
+      vehicles: "Fahrzeuge" # MT
+      garage: "Garage" # MT
+      member_type: "Mitgliedsart" # MT
+      emergency_contacts: "Notfallkontakte" # MT
+      pets: "Haustiere" # MT
+      keyholders: "Weitere Schlüsselinhaber" # MT
+    unit_community:
+      unit: "Wohnung" # MT
+      community: "Gemeinschaft" # MT

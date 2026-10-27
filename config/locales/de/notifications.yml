@@ -1,0 +1,57 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+de:
+  notifications:
+    preferences:
+      updated: "Deine Benachrichtigungseinstellungen wurden gespeichert." # MT
+      sections:
+        account: "Konto" # MT
+        meals: "Mahlzeiten" # MT
+        work: "Arbeit" # MT
+        billing: "Abrechnung" # MT
+        community: "Gemeinschaft" # MT
+      kinds:
+        meal_reminder: "Erinnerungen an Mahlzeiten, für die mein Haushalt angemeldet ist" # MT
+        meal_role_reminder: "Erinnerungen an meine Schichten bei Mahlzeiten" # MT
+        cook_menu_reminder: "Erinnerungen für die Küchenleitung, das Menü einzutragen" # MT
+        meal_worker_change: "Änderungen in einem Mahlzeiten-Team, in dem ich bin" # MT
+        job_reminder: "Erinnerungen an meine Aufgaben" # MT
+        job_choosing_notice: "Hinweise, dass die Aufgabenwahl beginnt" # MT
+        statement_reminder: "Erinnerungen, wenn eine Zahlung fällig ist" # MT
+        account_access: "Passwort-Zurücksetzungen, E-Mail-Bestätigungen und Einladungen zur Anmeldung" # MT
+        meal_message: "Nachrichten und Absagen eines Mahlzeiten-Teams" # MT
+        statement_notice: "Kontoauszüge" # MT
+        gdrive_migration_request: "Bitten um Hilfe beim Verschieben der Google-Drive-Dateien meiner Gemeinschaft" # MT
+        community_inactivity: "Warnungen, dass meine Gemeinschaft wegen Inaktivität gelöscht werden könnte" # MT
+      show:
+        title: "Benachrichtigungen" # MT
+        intro: "Wähle, welche E-Mails Gather dir zu Dingen schickt, an denen du beteiligt bist. Ausgegraute sind unverzichtbar und können nicht abbestellt werden." # MT
+        essential: "Unverzichtbar, kann nicht abbestellt werden" # MT
+        email_lists: "E-Mail-Listen" # MT
+        email_lists_hint: "Du bist über deine Gruppen auf diesen Listen. Um keine E-Mails einer Liste mehr zu bekommen, melde dich auf der Seite der Gruppe davon ab oder verlasse die Gruppe." # MT
+        view: "Ansehen" # MT
+        no_email_lists: "Du bist auf keiner E-Mail-Liste." # MT
+    unsubscribes:
+      manage_html: "Auf deiner Seite %{link} kannst du wählen, welche E-Mails du bekommst. Dafür musst du dich anmelden." # MT
+      manage_link: "Benachrichtigungen" # MT
+      show:
+        title: "Abbestellen" # MT
+        confirm: "Keine E-Mails mehr zu „%{kind}“ an %{email} senden?" # MT
+        already_off: "E-Mails zu „%{kind}“ an %{email} sind bereits ausgeschaltet." # MT
+        turn_off: "Abbestellen" # MT
+      create:
+        title: "Abbestellt" # MT
+        done: "Wir senden keine E-Mails zu „%{kind}“ mehr an %{email}." # MT
+      invalid:
+        title: "Abbestellen" # MT
+        explanation: "Dieser Abbestell-Link ist ungültig. Vielleicht stammt er aus einer alten E-Mail oder wurde unvollständig kopiert." # MT

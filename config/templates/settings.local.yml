@@ -67,3 +67,8 @@ pricing:
 # Telnyx bearer API key: create in the Mission Control portal under Auth.
 telnyx:
   api_key:
+
+# SMTP2GO API key, for the mail domain migration page. Leave blank unless you're testing it
+# locally. Create in the SMTP2GO dashboard under Settings > API Keys.
+smtp2go:
+  api_key:

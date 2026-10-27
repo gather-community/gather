@@ -32,6 +32,7 @@ es:
       billing: "Facturación" # MT
       communities: "Comunidades" # MT
       resync_subscriptions: "Resincronizar suscripciones" # MT
+      domains: "Dominios" # MT
       machine_translated: "Esta página se tradujo automáticamente y puede contener errores." # MT
       machine_translated_with_link_html: "Esta página se tradujo automáticamente y puede contener errores. %{link}" # MT
       help_translate: "Ayuda a mejorar la traducción" # MT

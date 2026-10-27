@@ -1,0 +1,83 @@
+en:
+  admin:
+    domains:
+      refresh_all_started:
+        one: >-
+          Checking %{count} domain in the background. This should take about %{seconds} seconds.
+          Reload this page to see the results.
+        other: >-
+          Checking %{count} domains in the background. This should take about %{seconds} seconds.
+          Reload this page to see the results.
+      refresh_one_success: "Re-checked %{domain}."
+      refresh_one_failed: >-
+        Re-checked %{domain}, but the SMTP2GO API request failed, so validation status may be
+        stale. The error has been reported.
+      lenses:
+        lists:
+          all: "All Domains"
+          with_lists: "With Mailing Lists"
+          without_lists: "Without Mailing Lists"
+      show:
+        recheck: "Re-check Now"
+        cluster: "Cluster"
+        communities: "Communities"
+        mailman_lists: "Mailing Lists"
+        no_mailman_lists: "None"
+        created_at: "Created"
+        last_checked: "Last Checked"
+        mx_heading: "MX Records"
+        smtp2go_heading: "SMTP2GO Records"
+        spf_heading: "SPF Record"
+        spf_rule: >-
+          Correct when the domain's SPF record (its TXT record starting with v=spf1) contains the
+          required include shown below and uses at most 10 DNS lookups (the RFC 7208 limit,
+          counted recursively through includes). Other mechanisms may also be present.
+        spf_lookups: "DNS Lookups"
+        spf_lookups_count: "%{count} of %{limit} allowed"
+        expected: "Expected"
+        required: "Required"
+        found: "Found"
+        no_records_found: "None found"
+        record: "Record"
+        host: "Host"
+        smtp2go_verified: "Verified by SMTP2GO?"
+        never_checked_notice: "This domain has not been checked yet. Use 'Re-check Now' to run the first check."
+      index:
+        title: "Domains"
+        intro: >-
+          This page shows the status of each custom domain's mail setup: whether the MX and SPF
+          records are correct and whether the SMTP2GO validation records are in place.
+          Results are from the most recent check; use the refresh buttons to re-check.
+        none_found: "No custom domains found."
+        summary:
+          one: "%{ok} of %{count} domain has all records correct."
+          other: "%{ok} of %{count} domains have all records correct."
+        never_checked_prompt: "No checks have run yet — use 'Refresh All' to run the first one."
+        not_configured: >-
+          The SMTP2GO API key is not configured, so sending status and validation can't be checked.
+          Set smtp2go.api_key in the settings.
+        headers:
+          domain: "Domain"
+          communities: "Communities"
+          mx: "MX Records"
+          spf: "SPF Record"
+          smtp2go: "SMTP2GO Records"
+          lists: "Mailing Lists?"
+        never_checked: "Never checked"
+        refresh_all: "Refresh All"
+        refresh_row: "Re-check this domain"
+        record_titles:
+          verified: "%{host} → %{target} — verified by SMTP2GO"
+          in_dns: "%{host} → %{target} — found in DNS, awaiting SMTP2GO verification"
+          missing: "%{host} → %{target} — not found in DNS"
+        smtp2go_statuses:
+          verified: "Verified"
+          pending: "Pending"
+          not_added: "Not Added"
+          unknown: "Unknown"
+        record_kinds:
+          mx: "MX"
+          spf: "SPF"
+          dkim: "DKIM"
+          return_path: "Return"
+          tracking: "Tracking"

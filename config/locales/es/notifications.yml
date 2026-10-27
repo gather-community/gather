@@ -1,0 +1,45 @@
+es:
+  notifications:
+    preferences:
+      updated: "Se guardaron tus preferencias de notificación." # Machine translated, remove this comment when verified
+      sections:
+        account: "Cuenta" # Machine translated, remove this comment when verified
+        meals: "Comidas" # Machine translated, remove this comment when verified
+        work: "Trabajo" # Machine translated, remove this comment when verified
+        billing: "Facturación" # Machine translated, remove this comment when verified
+        community: "Comunidad" # Machine translated, remove this comment when verified
+      kinds:
+        meal_reminder: "Recordatorios de las comidas en las que se inscribió mi hogar" # Machine translated, remove this comment when verified
+        meal_role_reminder: "Recordatorios de mis turnos en comidas" # Machine translated, remove this comment when verified
+        cook_menu_reminder: "Recordatorios al jefe de cocina para publicar el menú" # Machine translated, remove this comment when verified
+        meal_worker_change: "Cambios en un equipo de comida del que formo parte" # Machine translated, remove this comment when verified
+        job_reminder: "Recordatorios de mis tareas" # Machine translated, remove this comment when verified
+        job_choosing_notice: "Avisos de que se abre la elección de tareas" # Machine translated, remove this comment when verified
+        statement_reminder: "Recordatorios cuando vence un pago" # Machine translated, remove this comment when verified
+        account_access: "Restablecimientos de contraseña, confirmaciones de correo e invitaciones para iniciar sesión" # Machine translated, remove this comment when verified
+        meal_message: "Mensajes y avisos de cancelación de un equipo de comida" # Machine translated, remove this comment when verified
+        statement_notice: "Estados de cuenta" # Machine translated, remove this comment when verified
+        gdrive_migration_request: "Solicitudes de ayuda para mover los archivos de Google Drive de mi comunidad" # Machine translated, remove this comment when verified
+        community_inactivity: "Avisos de que mi comunidad podría eliminarse por inactividad" # Machine translated, remove this comment when verified
+      show:
+        title: "Notificaciones" # Machine translated, remove this comment when verified
+        intro: "Elige qué correos te envía Gather sobre las cosas en las que participas. Los que aparecen en gris son esenciales y no se pueden desactivar." # Machine translated, remove this comment when verified
+        essential: "Esencial, no se puede desactivar" # Machine translated, remove this comment when verified
+        email_lists: "Listas de correo" # Machine translated, remove this comment when verified
+        email_lists_hint: "Estás en estas listas a través de tus grupos. Para dejar de recibir los correos de una lista, date de baja o sal del grupo en su página." # Machine translated, remove this comment when verified
+        view: "Ver" # Machine translated, remove this comment when verified
+        no_email_lists: "No estás en ninguna lista de correo." # Machine translated, remove this comment when verified
+    unsubscribes:
+      manage_html: "Puedes elegir qué correos recibes en tu página de %{link}. Tendrás que iniciar sesión." # Machine translated, remove this comment when verified
+      manage_link: "Notificaciones" # Machine translated, remove this comment when verified
+      show:
+        title: "Darse de baja" # Machine translated, remove this comment when verified
+        confirm: "¿Dejar de enviar correos de «%{kind}» a %{email}?" # Machine translated, remove this comment when verified
+        already_off: "Los correos de «%{kind}» a %{email} ya están desactivados." # Machine translated, remove this comment when verified
+        turn_off: "Darse de baja" # Machine translated, remove this comment when verified
+      create:
+        title: "Baja realizada" # Machine translated, remove this comment when verified
+        done: "Ya no enviaremos correos de «%{kind}» a %{email}." # Machine translated, remove this comment when verified
+      invalid:
+        title: "Darse de baja" # Machine translated, remove this comment when verified
+        explanation: "Este enlace para darse de baja no es válido. Puede que sea de un correo antiguo o que se haya copiado incompleto." # Machine translated, remove this comment when verified

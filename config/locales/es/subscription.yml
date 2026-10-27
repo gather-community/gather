@@ -1,0 +1,99 @@
+es:
+  subscription:
+    messaging_topup:
+      updated: "Tu recarga mensual de mensajería está configurada. Tu saldo de mensajería ahora es %{balance}." # Machine translated, remove this comment when verified
+      canceled: "Tu recarga mensual de mensajería se cancelará al final del mes de facturación actual." # Machine translated, remove this comment when verified
+    detailed_statuses:
+      active: "Activa" # Machine translated, remove this comment when verified
+      scheduled: "Programada" # Machine translated, remove this comment when verified
+      needs_payment_method: "Requiere pago" # Machine translated, remove this comment when verified
+      awaiting_microdeposits: "Requiere verificar el banco" # Machine translated, remove this comment when verified
+      payment_processing: "En proceso" # Machine translated, remove this comment when verified
+      incomplete: "Pendiente de pago" # Machine translated, remove this comment when verified
+      incomplete_expired: "Caducada" # Machine translated, remove this comment when verified
+      past_due: "Vencida" # Machine translated, remove this comment when verified
+      unpaid: "Impagada" # Machine translated, remove this comment when verified
+      canceled: "Cancelada" # Machine translated, remove this comment when verified
+      other: "Desconocido" # Machine translated, remove this comment when verified
+      unknown: "Desconocido" # Machine translated, remove this comment when verified
+    messaging_transactions:
+      credit: "Recarga mensual de mensajería" # Machine translated, remove this comment when verified
+      reversal: "Anulación de una recarga de mensajería no cobrada" # Machine translated, remove this comment when verified
+    per_month: "%{amount}/mes" # Machine translated, remove this comment when verified
+    every_months:
+      one: "%{amount} cada %{count} mes" # Machine translated, remove this comment when verified
+      other: "%{amount} cada %{count} meses" # Machine translated, remove this comment when verified
+    pay_starting: "Paga %{amount} a partir del %{date}" # Machine translated, remove this comment when verified
+    pay_now_and_then: "Paga %{now} ahora y después %{recurring}" # Machine translated, remove this comment when verified
+    topup_statuses:
+      canceling: "Se cancela el %{date}" # Machine translated, remove this comment when verified
+      past_due: "Vencida" # Machine translated, remove this comment when verified
+      payment_processing: "Pago en proceso" # Machine translated, remove this comment when verified
+    topup_notices:
+      cancel: "Tu recarga mensual se cancelará al final del mes de facturación actual. No habrá más cargos y conservarás tu saldo actual." # Machine translated, remove this comment when verified
+      first_charge: "Hoy se cargarán %{amount} a tu método de pago registrado por un mes completo, y luego %{amount} en este mismo día cada mes." # Machine translated, remove this comment when verified
+      calculating: "Calculando…" # Machine translated, remove this comment when verified
+      next_month: "A partir del próximo mes de facturación se te cobrarán %{amount} al mes." # Machine translated, remove this comment when verified
+      prorated_credit: "Ahora recibirás un abono de %{credit} en tu próxima factura, y luego %{amount} al mes a partir del %{date}." # Machine translated, remove this comment when verified
+      prorated_charge: "Hoy se cargarán unos %{charge} a tu método de pago registrado (prorrateado), y luego %{amount} al mes a partir del %{date}." # Machine translated, remove this comment when verified
+      error_default: "Algo salió mal y tu recarga no se modificó." # Machine translated, remove this comment when verified
+      error_with_reference: "%{reason} Referencia: %{reference}. (Intento a las %{time}). Si vuelve a ocurrir, contacta con el soporte de Gather indicando esa referencia y esa hora." # Machine translated, remove this comment when verified
+      error: "%{reason} (Intento a las %{time}). Si vuelve a ocurrir, contacta con el soporte de Gather indicando esa hora." # Machine translated, remove this comment when verified
+    subscriptions:
+      show:
+        title: "Suscripción" # Machine translated, remove this comment when verified
+        expired: "Tu suscripción caducó antes de completar el pago. Inténtalo de nuevo." # Machine translated, remove this comment when verified
+        verify_required: "Tu cuenta bancaria necesita verificación." # Machine translated, remove this comment when verified
+        microdeposit_html: "En uno o dos días llegará un %{link} a tu cuenta. Usa el botón de abajo para completar la verificación." # Machine translated, remove this comment when verified
+        microdeposit: "microdepósito" # Machine translated, remove this comment when verified
+        check_email: "Revisa tu correo para ver las instrucciones y vuelve aquí cuando hayas completado la verificación." # Machine translated, remove this comment when verified
+        verify_button: "Verificar tu cuenta bancaria" # Machine translated, remove this comment when verified
+        ready_for_payment: "Tu suscripción está lista para el pago." # Machine translated, remove this comment when verified
+        not_setup: "Tu suscripción aún no está configurada." # Machine translated, remove this comment when verified
+        contact_staff: "Contacta con el equipo de Gather para suscribirte." # Machine translated, remove this comment when verified
+        needs_payment_method: "Tu suscripción está activa, pero aún necesitamos tus datos de pago." # Machine translated, remove this comment when verified
+        processing: "El pago de tu suscripción se está procesando. Puede tardar unos días según el método de pago. Mientras tanto, ¡puedes usar Gather!" # Machine translated, remove this comment when verified
+        active: "Tu suscripción está activa. ¡Gracias por formar parte de Gather!" # Machine translated, remove this comment when verified
+        problem: "Hay un problema con tu suscripción." # Machine translated, remove this comment when verified
+      billing_portal_link:
+        visit_html: "Puedes visitar nuestro %{link} para obtener más información." # Machine translated, remove this comment when verified
+        billing_portal: "portal de facturación" # Machine translated, remove this comment when verified
+      base_rows:
+        num_users: "Número de usuarios" # Machine translated, remove this comment when verified
+        tier: "Plan" # Machine translated, remove this comment when verified
+        tier_value: "%{tier} (%{price}/mes/usuario)" # Machine translated, remove this comment when verified
+        discount: "Descuento" # Machine translated, remove this comment when verified
+        months_per_cycle: "Meses por ciclo de facturación" # Machine translated, remove this comment when verified
+        total_payment: "Pago total" # Machine translated, remove this comment when verified
+        not_charged_until: "* Introducirás ahora tus datos de pago, pero no se te cobrará hasta el %{date}." # Machine translated, remove this comment when verified
+        prorated: "* Tu primer pago se prorrateará para cubrir los días transcurridos desde el %{date}." # Machine translated, remove this comment when verified
+      email_row:
+        billing_email: "Correo de facturación" # Machine translated, remove this comment when verified
+      messaging:
+        title: "Mensajería" # Machine translated, remove this comment when verified
+        current_balance: "Saldo actual" # Machine translated, remove this comment when verified
+        monthly_topup: "Recarga mensual" # Machine translated, remove this comment when verified
+        none: "Ninguna" # Machine translated, remove this comment when verified
+        edit: "Editar" # Machine translated, remove this comment when verified
+        add: "Añadir" # Machine translated, remove this comment when verified
+        next_payment_date: "Fecha del próximo pago" # Machine translated, remove this comment when verified
+        status: "Estado" # Machine translated, remove this comment when verified
+      messaging_topup_modal:
+        title: "Recarga mensual de mensajería" # Machine translated, remove this comment when verified
+        intro: "Elige cuánto crédito de mensajería añadir a tu saldo cada mes. Se cobra automáticamente a tu método de pago registrado." # Machine translated, remove this comment when verified
+        none: "Ninguna" # Machine translated, remove this comment when verified
+        cancel: "Cancelar" # Machine translated, remove this comment when verified
+        save: "Guardar" # Machine translated, remove this comment when verified
+      post_payment:
+        title: "Suscripción a la aplicación" # Machine translated, remove this comment when verified
+        next_payment_date: "Fecha del próximo pago" # Machine translated, remove this comment when verified
+      pre_payment:
+        title: "Suscripción a la aplicación" # Machine translated, remove this comment when verified
+        start_date: "Fecha de inicio" # Machine translated, remove this comment when verified
+        update_info_html: "Si hay que actualizar algún dato, contacta con %{email}." # Machine translated, remove this comment when verified
+        ready_enter_payment: "Todo está bien, quiero introducir mis datos de pago" # Machine translated, remove this comment when verified
+        ready_to_pay: "Todo está bien, quiero pagar" # Machine translated, remove this comment when verified
+      payment:
+        title: "Pago" # Machine translated, remove this comment when verified
+        canadian_debit: "Débito preautorizado canadiense" # Machine translated, remove this comment when verified
+        popup_note: "Una ventana emergente te pedirá tus datos bancarios cuando hagas clic en «Pagar» abajo." # Machine translated, remove this comment when verified

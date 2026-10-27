@@ -1,0 +1,10 @@
+es:
+  batchable_tables:
+    actions:
+      gdrive__migration__owners:
+        send_request: "Enviar solicitud" # Machine translated, remove this comment when verified
+    confirmations:
+      gdrive__migration__owners:
+        send_request:
+          one: "¿Seguro que quieres enviar un correo de solicitud a %{count} persona?" # Machine translated, remove this comment when verified
+          other: "¿Seguro que quieres enviar correos de solicitud a %{count} personas?" # Machine translated, remove this comment when verified

@@ -1,0 +1,80 @@
+es:
+  wiki:
+    page_deleted: "Página eliminada." # Machine translated, remove this comment when verified
+    page_listing: "Lista de páginas de la wiki" # Machine translated, remove this comment when verified
+    new_page: "Nueva página de la wiki" # Machine translated, remove this comment when verified
+    help: "Ayuda de la wiki" # Machine translated, remove this comment when verified
+    editor:
+      autosaved: "Guardado automáticamente: " # Machine translated, remove this comment when verified
+      bold: "Negrita" # Machine translated, remove this comment when verified
+      fullscreen: "Pantalla completa" # Machine translated, remove this comment when verified
+      heading: "Encabezado" # Machine translated, remove this comment when verified
+      image: "Insertar imagen" # Machine translated, remove this comment when verified
+      italic: "Cursiva" # Machine translated, remove this comment when verified
+      lines:
+        one: "líneas: %{count}" # Machine translated, remove this comment when verified
+        other: "líneas: %{count}" # Machine translated, remove this comment when verified
+      link: "Crear enlace" # Machine translated, remove this comment when verified
+      ordered_list: "Lista numerada" # Machine translated, remove this comment when verified
+      preview: "Vista previa" # Machine translated, remove this comment when verified
+      quote: "Cita" # Machine translated, remove this comment when verified
+      side_by_side: "Lado a lado" # Machine translated, remove this comment when verified
+      unordered_list: "Lista con viñetas" # Machine translated, remove this comment when verified
+      words:
+        one: "palabras: %{count}" # Machine translated, remove this comment when verified
+        other: "palabras: %{count}" # Machine translated, remove this comment when verified
+    pages:
+      history_table:
+        version: "Versión" # Machine translated, remove this comment when verified
+        date: "Fecha" # Machine translated, remove this comment when verified
+        author: "Autor" # Machine translated, remove this comment when verified
+        comment: "Comentario" # Machine translated, remove this comment when verified
+        compare: "Comparar selección" # Machine translated, remove this comment when verified
+        return: "Volver a la página" # Machine translated, remove this comment when verified
+      all:
+        title: "Lista de páginas de la wiki" # Machine translated, remove this comment when verified
+      compare:
+        title: "Comparación de la wiki: %{title}" # Machine translated, remove this comment when verified
+        differences: "Diferencias entre las versiones %{old} y %{new}" # Machine translated, remove this comment when verified
+        versions_between: "Versiones entre %{old} y %{new}" # Machine translated, remove this comment when verified
+      edit:
+        title: "Editar página de la wiki: %{title}" # Machine translated, remove this comment when verified
+      history:
+        title: "Historial de la wiki: %{title}" # Machine translated, remove this comment when verified
+      new:
+        title: "Nueva página de la wiki" # Machine translated, remove this comment when verified
+      show:
+        wiki_home: "Inicio de la wiki" # Machine translated, remove this comment when verified
+    not_found_create: "No hay ninguna página de la wiki llamada «%{title}». ¡Puedes crearla abajo!" # Machine translated, remove this comment when verified
+    preview_notice: "Esto es una vista previa. Para guardar o seguir editando la página, usa el formulario de abajo." # Machine translated, remove this comment when verified
+    revision_info: "Página revisada el %{time} por %{user}" # Machine translated, remove this comment when verified
+    revision_info_no_by: "Página revisada el %{time}" # Machine translated, remove this comment when verified
+    special_pages:
+      home:
+        title: "Wiki" # Machine translated, remove this comment when verified
+        content: |- # Machine translated, remove this comment when verified
+          ¡Esta es la **página de inicio de tu wiki**!
+
+          ¡Consulta la [[Página de ejemplo]] para ver consejos sobre cómo llenarla de información útil!
+      sample:
+        title: "Página de ejemplo" # Machine translated, remove this comment when verified
+        content: |- # Machine translated, remove this comment when verified
+          Esta es una página de ejemplo de la wiki.
+
+          ¡Haz clic en **Editar** arriba para ver cómo funciona esta página! Y no te preocupes, ¡no puedes romper nada!
+
+          ## Formato
+
+          Para editar una página de la wiki se usa **Markdown**, una forma sencilla de crear contenido limpio y atractivo sin tener que aprender un lenguaje especial. Para saber más sobre Markdown, consulta la [Guía de formato Markdown](/about/markdown).
+
+          ## Enlaces
+
+          ¡Los enlaces a otras páginas son muy importantes! Puedes enlazar a otras **páginas de la wiki** así: [[Página divertida]].
+
+          Fíjate en que el enlace de arriba (probablemente) es rojo. Eso es porque la página aún no existe. Si haces clic en el enlace, podrás crear la página. ¡Entonces el enlace se volverá azul!
+
+          Si quieres usar como texto del enlace algo distinto del título de la página, puedes [[Página divertida|hacer esto]].
+
+          Los enlaces a páginas externas se ven [así](http://example.com).
+
+          Una URL en texto plano se reconocerá y convertirá automáticamente en un enlace: https://gather.coop

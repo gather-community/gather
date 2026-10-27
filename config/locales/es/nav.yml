@@ -1,0 +1,69 @@
+es:
+  nav_links:
+    people:
+      _self: "Personas" # Machine translated, remove this comment when verified
+      households: "Hogares" # Machine translated, remove this comment when verified
+      directory: "Directorio" # Machine translated, remove this comment when verified
+      birthdays: "Cumpleaños" # Machine translated, remove this comment when verified
+      vehicles: "Vehículos" # Machine translated, remove this comment when verified
+      memorials: "Homenajes" # Machine translated, remove this comment when verified
+      settings:
+        _self: "Ajustes" # Machine translated, remove this comment when verified
+        general: "Ajustes generales" # Machine translated, remove this comment when verified
+        member_types: "Tipos de miembro" # Machine translated, remove this comment when verified
+    groups:
+      _self: "Grupos" # Machine translated, remove this comment when verified
+      groups: "Grupos" # Machine translated, remove this comment when verified
+      roles: "Roles" # Machine translated, remove this comment when verified
+      domains: "Dominios" # Machine translated, remove this comment when verified
+    meals:
+      _self: "Comidas" # Machine translated, remove this comment when verified
+      meals: "Comidas" # Machine translated, remove this comment when verified
+      jobs: "Tareas" # Machine translated, remove this comment when verified
+      report: "Informe" # Machine translated, remove this comment when verified
+      formulas: "Fórmulas" # Machine translated, remove this comment when verified
+      roles: "Roles" # Machine translated, remove this comment when verified
+      types: "Tipos" # Machine translated, remove this comment when verified
+      settings:
+        _self: "Ajustes" # Machine translated, remove this comment when verified
+        general: "Generales" # Machine translated, remove this comment when verified
+        restrictions: "Restricciones alimentarias" # Machine translated, remove this comment when verified
+        reminders: "Recordatorios" # Machine translated, remove this comment when verified
+    calendars:
+      _self: "Calendarios" # Machine translated, remove this comment when verified
+      events: "Eventos" # Machine translated, remove this comment when verified
+      calendars: "Calendarios" # Machine translated, remove this comment when verified
+      protocols: "Normas" # Machine translated, remove this comment when verified
+    wiki:
+      _self: "Wiki" # Machine translated, remove this comment when verified
+      wiki:
+        _self: "Wiki" # Machine translated, remove this comment when verified
+      gdrive:
+        _self: "Google Drive" # Machine translated, remove this comment when verified
+        migration:
+          dashboard:
+            status: "Estado" # Machine translated, remove this comment when verified
+            owners: "Propietarios" # Machine translated, remove this comment when verified
+            files: "Archivos" # Machine translated, remove this comment when verified
+            logs: "Registros" # Machine translated, remove this comment when verified
+    work:
+      _self: "Trabajo" # Machine translated, remove this comment when verified
+      signups: "Inscripciones" # Machine translated, remove this comment when verified
+      report: "Informe" # Machine translated, remove this comment when verified
+      jobs: "Tareas" # Machine translated, remove this comment when verified
+      periods: "Períodos" # Machine translated, remove this comment when verified
+      settings: "Ajustes" # Machine translated, remove this comment when verified
+    admin:
+      _self: "Administración" # Machine translated, remove this comment when verified
+    billing:
+      _self: "Facturación" # Machine translated, remove this comment when verified
+      accounts: "Cuentas" # Machine translated, remove this comment when verified
+      templates: "Plantillas" # Machine translated, remove this comment when verified
+    personal:
+      profile: "Perfil" # Machine translated, remove this comment when verified
+      accounts: "Cuentas" # Machine translated, remove this comment when verified
+      account: "Cuenta" # Machine translated, remove this comment when verified
+      calendars: "Calendarios" # Machine translated, remove this comment when verified
+      change_passwd: "Cambiar contraseña" # Machine translated, remove this comment when verified
+      notifications: "Notificaciones" # Machine translated, remove this comment when verified
+      sign_out: "Cerrar sesión" # Machine translated, remove this comment when verified

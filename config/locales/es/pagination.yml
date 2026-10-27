@@ -1,0 +1,10 @@
+es:
+  pagination:
+    page_entries_info:
+      gdrive/migration/file: "Archivos %{first}–%{last} de %{total}" # Machine translated, remove this comment when verified
+      gdrive/migration/log: "Registros %{first}–%{last} de %{total}" # Machine translated, remove this comment when verified
+      meals/meal: "Comidas %{first}–%{last} de %{total}" # Machine translated, remove this comment when verified
+      household: "Hogares %{first}–%{last} de %{total}" # Machine translated, remove this comment when verified
+      user: "Personas %{first}–%{last} de %{total}" # Machine translated, remove this comment when verified
+      work/period: "Períodos %{first}–%{last} de %{total}" # Machine translated, remove this comment when verified
+      work/shift: "Turnos %{first}–%{last} de %{total}" # Machine translated, remove this comment when verified

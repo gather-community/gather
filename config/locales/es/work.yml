@@ -1,0 +1,195 @@
+es:
+  work:
+    job_created: "Tarea creada." # Machine translated, remove this comment when verified
+    job_updated: "Tarea actualizada." # Machine translated, remove this comment when verified
+    job_synced_from_meals: "Esta tarea se sincronizó desde el sistema de comidas y no se puede editar directamente. Se actualizará automáticamente cuando se añadan o cambien comidas." # Machine translated, remove this comment when verified
+    period_created: "Período creado." # Machine translated, remove this comment when verified
+    period_updated: "Período actualizado." # Machine translated, remove this comment when verified
+    period_copied: "Se copiaron algunos datos del período «%{name}». Revísalos y ajústalos abajo. Las tareas se copiarán al guardar el período." # Machine translated, remove this comment when verified
+    notices_wrong_phase: "No se pueden enviar avisos porque el período no está en la fase «lista» ni «abierta»." # Machine translated, remove this comment when verified
+    notices_no_quota: "No se pueden enviar avisos porque este período no tiene cuota." # Machine translated, remove this comment when verified
+    notices_sent: "¡Los avisos están en camino!" # Machine translated, remove this comment when verified
+    signed_up: "Te inscribiste correctamente. ¡Bien!" # Machine translated, remove this comment when verified
+    signup_removed: "Se retiró tu inscripción." # Machine translated, remove this comment when verified
+    hours_abbr: "%{hours} h" # Machine translated, remove this comment when verified
+    jobs:
+      form:
+        reminders_on_role_html: "Los recordatorios de esta tarea se configuran en su %{link}." # Machine translated, remove this comment when verified
+        reminders_on_role: "Los recordatorios de esta tarea se configuran en la página de su rol de comida." # Machine translated, remove this comment when verified
+        meal_role_page: "página de rol de comida" # Machine translated, remove this comment when verified
+        shifts: "Turnos" # Machine translated, remove this comment when verified
+      edit:
+        title: "Editar tarea: %{title}" # Machine translated, remove this comment when verified
+      new:
+        title: "Crear tarea" # Machine translated, remove this comment when verified
+      index:
+        title: "Tareas" # Machine translated, remove this comment when verified
+        title_with_period: "Tareas: %{period}" # Machine translated, remove this comment when verified
+        create: "Crear tarea" # Machine translated, remove this comment when verified
+      show:
+        jobs: "Tareas" # Machine translated, remove this comment when verified
+        hours: "%{hours} horas" # Machine translated, remove this comment when verified
+    periods:
+      form:
+        do_not_copy: "No copiar tareas" # Machine translated, remove this comment when verified
+        meal_formula: "Fórmula de comida" # Machine translated, remove this comment when verified
+        meal_roles_to_sync: "Roles de comida que sincronizar" # Machine translated, remove this comment when verified
+        sync_hint: "Las tareas de comidas se sincronizan cada vez que cambia el período o se añaden, cambian o eliminan comidas. Las inscripciones se sincronizan tanto si la persona se inscribe desde las comidas como desde el trabajo. Los cambios en los roles de comida solo provocan sincronización si el período está en borrador." # Machine translated, remove this comment when verified
+        shares: "Partes" # Machine translated, remove this comment when verified
+      edit:
+        title: "Editar período: %{name}" # Machine translated, remove this comment when verified
+      new:
+        title: "Crear período" # Machine translated, remove this comment when verified
+      index:
+        title: "Períodos de trabajo" # Machine translated, remove this comment when verified
+        create: "Crear período" # Machine translated, remove this comment when verified
+        name: "Nombre" # Machine translated, remove this comment when verified
+        start: "Inicio" # Machine translated, remove this comment when verified
+        end: "Fin" # Machine translated, remove this comment when verified
+        phase: "Fase" # Machine translated, remove this comment when verified
+        links: "Enlaces" # Machine translated, remove this comment when verified
+        signups: "Inscripciones" # Machine translated, remove this comment when verified
+        report: "Informe" # Machine translated, remove this comment when verified
+        jobs: "Tareas" # Machine translated, remove this comment when verified
+      review_notices:
+        title: "Avisos de elección de tareas: %{name}" # Machine translated, remove this comment when verified
+        intro: "Se enviarán los siguientes avisos:" # Machine translated, remove this comment when verified
+      show:
+        title: "Período: %{name}" # Machine translated, remove this comment when verified
+        periods: "Períodos" # Machine translated, remove this comment when verified
+        date: "Fecha" # Machine translated, remove this comment when verified
+        max_rounds_per_worker:
+          one: "%{count} ronda máx. por persona" # Machine translated, remove this comment when verified
+          other: "%{count} rondas máx. por persona" # Machine translated, remove this comment when verified
+        workers_per_round:
+          one: "%{count} persona por ronda" # Machine translated, remove this comment when verified
+          other: "%{count} personas por ronda" # Machine translated, remove this comment when verified
+        minutes_per_round:
+          one: "%{count} minuto por ronda" # Machine translated, remove this comment when verified
+          other: "%{count} minutos por ronda" # Machine translated, remove this comment when verified
+        shares: "Partes" # Machine translated, remove this comment when verified
+      report:
+        title: "Informe de trabajo" # Machine translated, remove this comment when verified
+        title_with_period: "Informe de trabajo: %{period}" # Machine translated, remove this comment when verified
+        overview: "Resumen" # Machine translated, remove this comment when verified
+        total_hours: "Total de horas" # Machine translated, remove this comment when verified
+        jobs: "Tareas" # Machine translated, remove this comment when verified
+        people: "Personas" # Machine translated, remove this comment when verified
+        quota: "Cuota" # Machine translated, remove this comment when verified
+        by_person: "Por persona" # Machine translated, remove this comment when verified
+        by_household: "Por hogar" # Machine translated, remove this comment when verified
+        regular: "Normales" # Machine translated, remove this comment when verified
+        name: "Nombre" # Machine translated, remove this comment when verified
+    settings:
+      edit:
+        title: "Ajustes de trabajo" # Machine translated, remove this comment when verified
+    shifts:
+      shift:
+        sign_up: "¡Inscribirme!" # Machine translated, remove this comment when verified
+      shifts:
+        list_label: "Lista de inscripciones" # Machine translated, remove this comment when verified
+      index:
+        title: "Inscripción en tareas" # Machine translated, remove this comment when verified
+      show:
+        signups: "Inscripciones" # Machine translated, remove this comment when verified
+    no_periods_html: "No hay períodos accesibles. Consulta la %{link}." # Machine translated, remove this comment when verified
+    periods_page: "página de períodos" # Machine translated, remove this comment when verified
+    not_setup: "Parece que tu comunidad no ha configurado el sistema de reparto del trabajo de Gather.\nHabla con tu administrador de Gather para más información." # Machine translated, remove this comment when verified
+    choosing_as: "Estás eligiendo por %{name}. Las tareas en las que te inscribas se le asignarán a esa persona." # Machine translated, remove this comment when verified
+    no_signups: "Sin inscripciones" # Machine translated, remove this comment when verified
+    phase_notices:
+      shifts:
+        draft: "Este período está en borrador, así que aún no es posible inscribirse en tareas." # Machine translated, remove this comment when verified
+        archived: "Este período está archivado, así que no se permiten inscripciones." # Machine translated, remove this comment when verified
+      jobs:
+        archived: "Este período está archivado." # Machine translated, remove this comment when verified
+      report:
+        draft: "Este período está en borrador, así que el informe aún no es visible." # Machine translated, remove this comment when verified
+        archived: "Este período está archivado." # Machine translated, remove this comment when verified
+    num_hours: "%{num} horas" # Machine translated, remove this comment when verified
+    preassigned: "Esta plaza estaba preasignada." # Machine translated, remove this comment when verified
+    synopsis:
+      done: "¡Todo listo!" # Machine translated, remove this comment when verified
+      regular: "normales" # Machine translated, remove this comment when verified
+      for_user_html: "Te has inscrito en %{chunks}." # Machine translated, remove this comment when verified
+      for_household_html: "Tu hogar tiene %{chunks}." # Machine translated, remove this comment when verified
+      chunk:
+        single_html: "%{fraction} horas" # Machine translated, remove this comment when verified
+        multiple_html: "%{fraction} horas de %{title}" # Machine translated, remove this comment when verified
+      start_choosing: "Puedes empezar a elegir tareas %{at_or_on_time}." # Machine translated, remove this comment when verified
+      round_limit_with_next: "Tu límite por ronda es de %{prev} horas y subirá a %{next} %{at_or_on_time}." # Machine translated, remove this comment when verified
+      round_limit_until: "Tu límite por ronda es de %{prev} horas %{until_time}." # Machine translated, remove this comment when verified
+  work/jobs:
+    shifts: "Turnos" # Machine translated, remove this comment when verified
+    unlimited: "Ilimitado" # Machine translated, remove this comment when verified
+    full_community: "Es una tarea para toda la comunidad" # Machine translated, remove this comment when verified
+    preassignments: "Esta tarea tiene preasignaciones" # Machine translated, remove this comment when verified
+    meal_related: "Esta tarea está relacionada con comidas" # Machine translated, remove this comment when verified
+    none_found: "No se encontraron tareas." # Machine translated, remove this comment when verified
+  work/period:
+    phase_names:
+      archived: "Archivado" # Machine translated, remove this comment when verified
+      draft: "Borrador" # Machine translated, remove this comment when verified
+      open: "Abierto" # Machine translated, remove this comment when verified
+      published: "Publicado" # Machine translated, remove this comment when verified
+      ready: "Listo" # Machine translated, remove this comment when verified
+    num_minutes:
+      one: "%{count} minuto" # Machine translated, remove this comment when verified
+      other: "%{count} minutos" # Machine translated, remove this comment when verified
+  work/shares:
+    portion_options:
+      none: "Sin parte" # Machine translated, remove this comment when verified
+      one_qtr: "¼ de parte" # Machine translated, remove this comment when verified
+      half: "½ parte" # Machine translated, remove this comment when verified
+      three_qtr: "¾ de parte" # Machine translated, remove this comment when verified
+      full: "Parte completa" # Machine translated, remove this comment when verified
+    intro: "¿Cómo debe repartirse el trabajo de la comunidad? La mayoría de las personas deberían tener una parte completa, pero a veces hacen falta excepciones. Media parte significa que la persona hará la mitad de horas que alguien con una parte completa, etc." # Machine translated, remove this comment when verified
+    priority_hint_html: "El sistema calcula automáticamente quién elige primero según el número de horas necesarias. Las personas con <i class='fa fa-star'></i> van antes que las demás." # Machine translated, remove this comment when verified
+    change_warning: "Este período está activo. Cambiar las partes o el tipo de cuota afectará al cálculo de las cuotas. ¡Hazlo con cuidado!" # Machine translated, remove this comment when verified
+  work/shift:
+    choosing_as: "Eligiendo por %{name}" # Machine translated, remove this comment when verified
+    slots_exceeded: "¡Vaya, parece que alguien se te adelantó!" # Machine translated, remove this comment when verified
+    already_signed_up: "Ya te inscribiste en este turno." # Machine translated, remove this comment when verified
+    not_signed_up: "No te has inscrito en este turno." # Machine translated, remove this comment when verified
+    round_limit_exceeded: "Superaste tu límite por ronda." # Machine translated, remove this comment when verified
+    slots_open:
+      one: "%{count} plaza libre" # Machine translated, remove this comment when verified
+      other: "%{count} plazas libres" # Machine translated, remove this comment when verified
+  work/job_reminder:
+    absolute: "A las %{time}" # Machine translated, remove this comment when verified
+    relative:
+      days_before:
+        one: "%{count} día antes" # Machine translated, remove this comment when verified
+        other: "%{count} días antes" # Machine translated, remove this comment when verified
+      days_after:
+        one: "%{count} día después" # Machine translated, remove this comment when verified
+        other: "%{count} días después" # Machine translated, remove this comment when verified
+      hours_before:
+        one: "%{count} hora antes" # Machine translated, remove this comment when verified
+        other: "%{count} horas antes" # Machine translated, remove this comment when verified
+      hours_after:
+        one: "%{count} hora después" # Machine translated, remove this comment when verified
+        other: "%{count} horas después" # Machine translated, remove this comment when verified
+  work_mailer:
+    job_reminder:
+      subject: "Recordatorio de tarea: %{title}, %{times}" # Machine translated, remove this comment when verified
+      subject_with_note: "Recordatorio de tarea: %{title}: %{note}" # Machine translated, remove this comment when verified
+      scheduled: "Te recordamos que estás programado como «%{job}» para %{times}." # Machine translated, remove this comment when verified
+      note_intro: "Este recordatorio incluye la siguiente nota:" # Machine translated, remove this comment when verified
+      see_description: "Consulta la descripción de la tarea aquí: %{url}." # Machine translated, remove this comment when verified
+      thanks: "¡Gracias por tu servicio a la comunidad!" # Machine translated, remove this comment when verified
+    job_choosing_notice:
+      subject: "¡Se acerca la elección de tareas!" # Machine translated, remove this comment when verified
+      coming_up_on: "¡La elección de tareas será el %{date}!" # Machine translated, remove this comment when verified
+      coming_up_soon: "¡La elección de tareas será pronto!" # Machine translated, remove this comment when verified
+      quota: "Tienes %{got} horas preasignadas y tu cuota es de %{quota}, así que debes elegir %{need} horas normales." # Machine translated, remove this comment when verified
+      also_choose: "También tienes que elegir %{hours}." # Machine translated, remove this comment when verified
+      full_community_hours: "%{hours} horas de %{title}" # Machine translated, remove this comment when verified
+      begin_at: "Puedes empezar a elegir a las %{time}." # Machine translated, remove this comment when verified
+      schedule_intro: "Tu calendario de rondas es el siguiente:" # Machine translated, remove this comment when verified
+      round_with_limit: "* A las %{time} podrás elegir hasta %{limit} horas." # Machine translated, remove this comment when verified
+      round_finish: "* A las %{time} podrás terminar de elegir." # Machine translated, remove this comment when verified
+      go_to: "Entra en %{url} a las horas indicadas para elegir tus tareas. También puedes entrar antes para ver qué tareas hay y planificar tus elecciones, pero no podrás inscribirte hasta las horas indicadas." # Machine translated, remove this comment when verified
+      choosing_begins: "La elección empieza a las %{time}." # Machine translated, remove this comment when verified
+      visit: "Visita %{url} para más información." # Machine translated, remove this comment when verified
+      thanks: "¡Gracias por tu participación!" # Machine translated, remove this comment when verified

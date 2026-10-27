@@ -1,0 +1,351 @@
+es:
+  gdrive:
+    config_updated: "Configuración actualizada." # Machine translated, remove this comment when verified
+    group_added: "Grupo añadido." # Machine translated, remove this comment when verified
+    item_created: "Elemento creado." # Machine translated, remove this comment when verified
+    old_migration: "Tu migración se creó hace más de 30 días. Plantéate concluirla y eliminarla." # Machine translated, remove this comment when verified
+    auth_cancelled: "Parece que cancelaste la autenticación con Google." # Machine translated, remove this comment when verified
+    wrong_account: "Iniciaste sesión en Google con %{signed_in}. Inicia sesión con %{expected}." # Machine translated, remove this comment when verified
+    authenticated: "Autenticación con Google correcta." # Machine translated, remove this comment when verified
+    connection_problem: "Hay un problema con tu conexión a Google Drive. Contacta con el soporte de Gather. (%{code})" # Machine translated, remove this comment when verified
+    view_in_drive: "Ver en Google Drive" # Machine translated, remove this comment when verified
+    browse:
+      index:
+        title: "Google Drive" # Machine translated, remove this comment when verified
+        settings: "Ajustes" # Machine translated, remove this comment when verified
+        migration: "Migración" # Machine translated, remove this comment when verified
+        reconnect: "Tu comunidad tiene que volver a conectarse a Google Drive." # Machine translated, remove this comment when verified
+        authenticate_as_html: "Autentícate con Google como %{user}." # Machine translated, remove this comment when verified
+        reconnect_notify_admin: "Tu comunidad tiene que volver a conectarse a Google Drive. Avisa a un administrador de Gather." # Machine translated, remove this comment when verified
+        not_connected: "Tu comunidad aún no está conectada a Google Drive." # Machine translated, remove this comment when verified
+        not_connected_get_started_html: "Tu comunidad aún no está conectada a Google Drive. Ve a la %{link} para empezar." # Machine translated, remove this comment when verified
+        settings_page: "página de ajustes" # Machine translated, remove this comment when verified
+        no_drives_html: "Tu comunidad no tiene ninguna unidad compartida vinculada. Ve a la %{link} para vincular una." # Machine translated, remove this comment when verified
+        not_connected_talk_to_admin: "Tu comunidad aún no está conectada a Google Drive. Habla con un administrador de Gather." # Machine translated, remove this comment when verified
+        no_files: "No se encontraron archivos." # Machine translated, remove this comment when verified
+        migrating_html: "¿Buscas algo? Los archivos se están migrando a esta nueva unidad propiedad de la comunidad. Si no encuentras algo, prueba en la %{link}." # Machine translated, remove this comment when verified
+        old_location: "ubicación anterior" # Machine translated, remove this comment when verified
+        file_icon: "Icono de archivo" # Machine translated, remove this comment when verified
+        no_files_in_folder: "No se encontraron archivos en esta carpeta." # Machine translated, remove this comment when verified
+        folder_icon: "Icono de carpeta" # Machine translated, remove this comment when verified
+      auth_button:
+        authenticate: "Autenticar con Google" # Machine translated, remove this comment when verified
+    items:
+      new:
+        title: "Añadir elemento de Google Drive" # Machine translated, remove this comment when verified
+    item_groups:
+      new:
+        title: "Añadir grupo al elemento de Google Drive" # Machine translated, remove this comment when verified
+    config:
+      index:
+        title: "Ajustes de Google Drive" # Machine translated, remove this comment when verified
+        migration: "Migración" # Machine translated, remove this comment when verified
+        migrate_files: "Migrar archivos" # Machine translated, remove this comment when verified
+        link_item: "Vincular elemento" # Machine translated, remove this comment when verified
+        credentials: "Credenciales de Google Workspace" # Machine translated, remove this comment when verified
+        add_credentials_html: "Tu comunidad aún no está conectada a Google Drive. Añade tus credenciales de Google Workspace para conectarla. Consulta la %{link} para empezar." # Machine translated, remove this comment when verified
+        config_guide: "guía de configuración" # Machine translated, remove this comment when verified
+        authentication: "Autenticación" # Machine translated, remove this comment when verified
+        update_credentials: "Si necesitas actualizar tus credenciales de Google Workspace, puedes hacerlo aquí." # Machine translated, remove this comment when verified
+        introduction: "Introducción" # Machine translated, remove this comment when verified
+        system_user_html: "<strong>Usuario del sistema:</strong> %{user}" # Machine translated, remove this comment when verified
+        intro_html: "Añade elementos abajo para vincularlos a Gather y sincronizar los permisos. Las unidades compartidas de la lista se muestran en la %{link} de Gather a las personas con permiso. Las carpetas y archivos solo son accesibles desde la página de exploración si su unidad compartida lo es." # Machine translated, remove this comment when verified
+        browse_page: "página de exploración de Google Drive" # Machine translated, remove this comment when verified
+        name: "Nombre" # Machine translated, remove this comment when verified
+        status: "Estado" # Machine translated, remove this comment when verified
+        groups_permissions: "Grupos y permisos" # Machine translated, remove this comment when verified
+        access_level: "%{level} (%{hint})" # Machine translated, remove this comment when verified
+        add_group: "Añadir grupo" # Machine translated, remove this comment when verified
+        none_linked:
+          drive: "No hay unidades compartidas vinculadas a Gather." # Machine translated, remove this comment when verified
+          folder: "No hay carpetas vinculadas a Gather." # Machine translated, remove this comment when verified
+          file: "No hay archivos vinculados a Gather." # Machine translated, remove this comment when verified
+        revoke_html: "Si necesitas desconectarte de Google o actualizar tus credenciales de Google Workspace, puedes %{link}." # Machine translated, remove this comment when verified
+        revoke: "revocar la autorización" # Machine translated, remove this comment when verified
+        revoke_confirm: "¿Seguro que quieres revocar la autorización? Nadie podrá usar las funciones de Google Drive en esta comunidad hasta que se restablezca." # Machine translated, remove this comment when verified
+      guide:
+        title: "Guía de configuración de Google Drive" # Machine translated, remove this comment when verified
+        body: |- # Machine translated, remove this comment when verified
+          Esta guía te acompaña para obtener las credenciales necesarias para conectar el Google Workspace de tu comunidad a Gather.
+
+          ## Requisitos
+
+          * La comunidad debe haberse registrado en **Google Workspace**.
+              * El plan Business Starter es suficiente.
+              * Solo hace falta una cuenta de usuario.
+              * Elige un nombre de comunidad para la cuenta (p. ej. workspace.admin@tudominio.com) en vez de un nombre personal (p. ej. juan.perez@tudominio.com).
+          * Quien siga estas instrucciones debe haber iniciado sesión en Google con una cuenta del Google Workspace de la comunidad con privilegios de **superadministrador**. Si solo tienes una cuenta, esa cuenta los tiene.
+
+          ## Configuración principal
+
+          ### Crear un proyecto
+
+          1. Ve a https://console.cloud.google.com
+          2. Comprueba que has iniciado sesión en Google con la cuenta de superadministrador.
+          3. Acepta los términos y condiciones. Espera unos minutos a que se aprovisione el recurso de tu organización.
+          4. Ve a https://console.cloud.google.com/projectcreate para crear un proyecto.
+          5. Llámalo **Gather Main**.
+          6. Selecciona la organización de tu dominio.
+          7. Usa el valor predeterminado para la ubicación.
+
+          ### API habilitadas
+
+          1. Con el nuevo proyecto seleccionado, ve a https://console.cloud.google.com/ → menú principal → API y servicios → API y servicios habilitados
+          2. Haz clic en **Habilitar API y servicios**.
+          3. Habilita la **API de Google Drive**.
+
+          ### ID de cliente de OAuth
+
+          1. Con el nuevo proyecto seleccionado, ve a https://console.cloud.google.com/ → menú principal → API y servicios → API y servicios habilitados → Credenciales.
+          2. Haz clic en **Crear credenciales** → **ID de cliente de OAuth**
+          3. Selecciona **Aplicación web**.
+          4. Nombre: **Drive OAuth Client ID**.
+          5. En **Orígenes autorizados de JavaScript**, añade https://gather.coop.
+          6. En **URI de redireccionamiento autorizados**, añade https://gather.coop/gdrive/setup/auth/callback.
+          7. Copia el ID de cliente y el secreto en un lugar seguro y guárdalos para más adelante.
+              1. El ID de cliente debería parecerse a `302773344240-7g2n5abcdef8es2cvpc0roj7t.apps.googleusercontent.com`
+              2. El secreto del cliente debería parecerse a `AIza73uyhc63ehd763ehesysqyhw-hei2asda_2rs`
+
+          ### Pantalla de consentimiento de OAuth
+
+          1. Con el nuevo proyecto seleccionado, ve a https://console.cloud.google.com/ → menú principal → API y servicios → Pantalla de consentimiento de OAuth.
+          2. Elige **Interno**.
+          3. Nombre de la aplicación: **Gather**.
+          4. Correo de asistencia al usuario: la dirección de correo de la cuenta de superadministrador.
+          5. Sin logotipo.
+          6. Página principal de la aplicación: https://gather.coop
+          7. Política de privacidad: https://gather.coop/privacy-policy
+          8. Dominios autorizados:
+              1. gather.coop
+          9. Correo del desarrollador: support@gather.coop
+          10. Ámbitos
+              1. auth/userinfo.email
+              2. auth/drive
+    item_kinds:
+      drive:
+        one: "Unidad compartida" # Machine translated, remove this comment when verified
+        other: "Unidades compartidas" # Machine translated, remove this comment when verified
+      folder:
+        one: "Carpeta" # Machine translated, remove this comment when verified
+        other: "Carpetas" # Machine translated, remove this comment when verified
+      file:
+        one: "Archivo" # Machine translated, remove this comment when verified
+        other: "Archivos" # Machine translated, remove this comment when verified
+    access_levels:
+      reader: "Lector" # Machine translated, remove this comment when verified
+      commenter: "Comentador" # Machine translated, remove this comment when verified
+      writer: "Colaborador" # Machine translated, remove this comment when verified
+      fileOrganizer: "Administrador de contenido" # Machine translated, remove this comment when verified
+    access_level_hints:
+      reader: "Ver archivos" # Machine translated, remove this comment when verified
+      commenter: "Ver y comentar archivos" # Machine translated, remove this comment when verified
+      writer: "Ver, añadir y editar archivos" # Machine translated, remove this comment when verified
+      fileOrganizer: "Ver, añadir, editar, mover, eliminar y compartir archivos" # Machine translated, remove this comment when verified
+    item_error_types:
+      inaccessible: "Inaccesible" # Machine translated, remove this comment when verified
+      not_shareable: "No se puede compartir" # Machine translated, remove this comment when verified
+    request_statuses:
+      new: "Nueva" # Machine translated, remove this comment when verified
+      opened: "Abierta" # Machine translated, remove this comment when verified
+      opted_out: "Rechazada" # Machine translated, remove this comment when verified
+
+    migration:
+      requests_sending: "Las solicitudes se enviarán en un momento. Si un propietario ya tiene una solicitud, no se enviará otra." # Machine translated, remove this comment when verified
+      created: "Migración creada. El análisis de archivos empezará en un momento." # Machine translated, remove this comment when verified
+      scan_started: "Análisis iniciado; empezará en un momento." # Machine translated, remove this comment when verified
+      updated: "Migración actualizada." # Machine translated, remove this comment when verified
+      deleted: "Operación eliminada. Ya no se vigilan los cambios." # Machine translated, remove this comment when verified
+      file_drop_drive_name: "Buzón de archivos de Gather %{id}" # Machine translated, remove this comment when verified
+      request_subject: "[Acción necesaria] ¡Ayuda a %{community} a reorganizar sus archivos de Google Drive!" # Machine translated, remove this comment when verified
+      request:
+        title: "Reorganización de archivos de %{community}" # Machine translated, remove this comment when verified
+        previous: "< Anterior" # Machine translated, remove this comment when verified
+        next: "Siguiente >" # Machine translated, remove this comment when verified
+        troubleshooting: "Solución de problemas" # Machine translated, remove this comment when verified
+        intro:
+          introduction: "Introducción" # Machine translated, remove this comment when verified
+          ready: "¡Sí, quiero ayudar!" # Machine translated, remove this comment when verified
+        what_is_this:
+          using_gather_html: "%{community} está usando <a href=\"https://gather.coop\">Gather</a> para reorganizar sus archivos de Google Drive." # Machine translated, remove this comment when verified
+          problem: "Ahora mismo, los archivos de la comunidad pertenecen a quien los creó. Eso puede hacer que se eliminen por accidente cuando alguien deja la comunidad." # Machine translated, remove this comment when verified
+          solution: "Para evitarlo, la comunidad está moviendo todos sus archivos a una unidad compartida propiedad de la comunidad." # Machine translated, remove this comment when verified
+          own_many_html: "Eres propietario de unos %{count} archivos en la %{link} de %{community}. Necesitamos tu permiso para moverlos a la nueva unidad." # Machine translated, remove this comment when verified
+          own_one_html: "Eres propietario de al menos un archivo en la %{link} de %{community}. Necesitamos tu permiso para moverlo a la nueva unidad." # Machine translated, remove this comment when verified
+          old_folder: "carpeta antigua de Google Drive" # Machine translated, remove this comment when verified
+          retain_access: "Seguirás teniendo acceso a los archivos si eres miembro de la comunidad." # Machine translated, remove this comment when verified
+          questions_html: "Si tienes preguntas o dudas, puedes contactar con %{contact}, que coordina la reorganización." # Machine translated, remove this comment when verified
+          opt_out_html: "Si prefieres no participar, puedes %{link}." # Machine translated, remove this comment when verified
+          opt_out: "renunciar" # Machine translated, remove this comment when verified
+        step1:
+          heading: "Paso 1: tus archivos" # Machine translated, remove this comment when verified
+          view_files: "Haz clic abajo para ver los archivos que tienes en la carpeta de Google Drive de %{community}. Se abrirá una pestaña nueva." # Machine translated, remove this comment when verified
+          view_files_button: "Ver mis archivos" # Machine translated, remove this comment when verified
+          see_something_like: "Deberías ver algo así:" # Machine translated, remove this comment when verified
+          no_files: "No veo ningún archivo" # Machine translated, remove this comment when verified
+          no_files_help_html: "Si no ves ningún archivo, comprueba que has iniciado sesión en Google con la cuenta %{email}." # Machine translated, remove this comment when verified
+        step2:
+          heading: "Paso 2: seleccionar archivos" # Machine translated, remove this comment when verified
+          select: "Selecciona los archivos que quieres transferir." # Machine translated, remove this comment when verified
+          easiest: "La forma más fácil es:" # Machine translated, remove this comment when verified
+          click_first: "Haz clic en el primer archivo de la lista." # Machine translated, remove this comment when verified
+          go_to_end: "Ve al final de la lista." # Machine translated, remove this comment when verified
+          shift_click_html: "<strong>Mantén pulsada la tecla MAYÚS</strong> y haz clic en el último archivo de la lista." # Machine translated, remove this comment when verified
+          see_something_like: "Entonces deberías ver algo así:" # Machine translated, remove this comment when verified
+          one_at_a_time: "Solo puedo seleccionar un archivo a la vez" # Machine translated, remove this comment when verified
+          holding_html: "Sigue los tres pasos de arriba <strong>manteniendo pulsada</strong> la tecla MAYÚS al hacer clic en el segundo archivo." # Machine translated, remove this comment when verified
+          shift_explained: "Mantener pulsada la tecla MAYÚS al hacer clic indica que quieres seleccionar TODOS los archivos de la lista entre el archivo ya seleccionado y el que estás pulsando." # Machine translated, remove this comment when verified
+        step3:
+          heading: "Paso 3: Organizar > Mover" # Machine translated, remove this comment when verified
+          click_sequence: "Haz clic en este orden:" # Machine translated, remove this comment when verified
+          dots: "Icono de «3 puntos»" # Machine translated, remove this comment when verified
+          organize: "Organizar" # Machine translated, remove this comment when verified
+          move: "Mover" # Machine translated, remove this comment when verified
+        step4:
+          heading: "Paso 4: elegir la unidad de entrega" # Machine translated, remove this comment when verified
+          all_locations: "Haz clic en «Todas las ubicaciones»" # Machine translated, remove this comment when verified
+          shared_drives: "Haz clic en «Unidades compartidas»" # Machine translated, remove this comment when verified
+          next_to_html: "Junto a %{drive}, haz clic en «Mover»" # Machine translated, remove this comment when verified
+          move_button: "Haz clic en el botón «Mover»" # Machine translated, remove this comment when verified
+          no_shared_drives: "No veo «Unidades compartidas» en la lista «Todas las ubicaciones»" # Machine translated, remove this comment when verified
+          signed_in_html: "Comprueba que has iniciado sesión en Google con la cuenta %{email}. Si sigues sin ver «Unidades compartidas», prueba a abrir %{link} en una pestaña nueva y vuelve a hacer este paso." # Machine translated, remove this comment when verified
+          this_link: "este enlace" # Machine translated, remove this comment when verified
+          still_trouble_html: "Si sigues teniendo problemas, pide ayuda a %{contact}." # Machine translated, remove this comment when verified
+          unselected: "Deseleccioné algunos archivos sin querer" # Machine translated, remove this comment when verified
+          go_back_html: "¡No pasa nada! Vuelve al %{link}." # Machine translated, remove this comment when verified
+          step2: "paso 2" # Machine translated, remove this comment when verified
+          ownership: "No quiero cambiar la propiedad" # Machine translated, remove this comment when verified
+          ownership_explained: "Todos los archivos de la nueva unidad compartida de %{community} pertenecen a la comunidad, no a ninguna persona. Así no ocupan espacio de tu cuota personal de Google Drive y no se pueden eliminar por accidente." # Machine translated, remove this comment when verified
+          still_access: "Seguirás teniendo acceso a los archivos si eres miembro actual de la comunidad." # Machine translated, remove this comment when verified
+        step5:
+          heading: "Paso 5: comprobar que se movieron todos los archivos" # Machine translated, remove this comment when verified
+          empty_list: "Ahora deberías ver una lista de archivos vacía, algo así:" # Machine translated, remove this comment when verified
+          done: "Si es así, ¡ya has terminado!" # Machine translated, remove this comment when verified
+          finish: "Terminar" # Machine translated, remove this comment when verified
+          not_empty: "La lista de archivos no está vacía" # Machine translated, remove this comment when verified
+          head_back_html: "¡No pasa nada! Vuelve al %{link}." # Machine translated, remove this comment when verified
+          step2: "paso 2" # Machine translated, remove this comment when verified
+          some_files: "Hay archivos que no quiero transferir" # Machine translated, remove this comment when verified
+          use_opt_out_html: "Usa el %{link} para avisar a quien coordina." # Machine translated, remove this comment when verified
+          opt_out_form: "formulario de renuncia" # Machine translated, remove this comment when verified
+        finish:
+          heading: "¡Todo listo!" # Machine translated, remove this comment when verified
+          thanks: "¡Muchas gracias por ayudar a reorganizar los archivos de %{community}!" # Machine translated, remove this comment when verified
+          great_day: "¡Que tengas un buen día!" # Machine translated, remove this comment when verified
+        opt_out:
+          heading: "Renunciar a la selección de archivos" # Machine translated, remove this comment when verified
+          not_active: "Parece que tu solicitud de migración no está activa, así que no puedes renunciar." # Machine translated, remove this comment when verified
+          why: "Cuéntanos por qué decides renunciar." # Machine translated, remove this comment when verified
+          still_own: "Según nuestros datos, sigues siendo propietario de los archivos de abajo. Si no quieres ayudar a transferirlos a la comunidad, cuéntanos por qué decides renunciar." # Machine translated, remove this comment when verified
+          went_wrong: "Si intentaste transferir archivos pero algo salió mal, cuéntanos qué pasó." # Machine translated, remove this comment when verified
+          didnt_mean_html: "Si no querías renunciar, puedes %{link}." # Machine translated, remove this comment when verified
+          go_back_link: "volver atrás" # Machine translated, remove this comment when verified
+          go_back: "Volver" # Machine translated, remove this comment when verified
+          not_transferred: "Archivos no transferidos" # Machine translated, remove this comment when verified
+          name: "Nombre" # Machine translated, remove this comment when verified
+          modified: "Modificado" # Machine translated, remove this comment when verified
+          file_icon: "Icono de archivo" # Machine translated, remove this comment when verified
+        opted_out:
+          heading: "Renuncia registrada" # Machine translated, remove this comment when verified
+          opted_out: "Renunciaste a participar en la reorganización de los archivos de Google Drive de %{community}." # Machine translated, remove this comment when verified
+          opt_back_in_html: "Si quieres volver a participar, puedes hacerlo %{link}." # Machine translated, remove this comment when verified
+          clicking_here: "haciendo clic aquí" # Machine translated, remove this comment when verified
+        mobile_warning:
+          thanks: "¡Gracias por tu interés en ayudar a %{community} a reorganizar sus archivos de Google Drive!" # Machine translated, remove this comment when verified
+          mobile: "¿Dispositivo móvil?" # Machine translated, remove this comment when verified
+          looks_like_mobile: "Parece que estás usando un dispositivo móvil." # Machine translated, remove this comment when verified
+          works_better: "Este proceso funciona mucho mejor en un ordenador portátil o de escritorio con teclado completo y ratón o panel táctil." # Machine translated, remove this comment when verified
+          proceed_html: "%{link}, pero si tienes muchos archivos en la carpeta antigua de Google Drive, el proceso puede ser pesado." # Machine translated, remove this comment when verified
+          welcome_to_proceed: "Puedes continuar" # Machine translated, remove this comment when verified
+          switch_html: "Si quieres cambiar a un ordenador, puedes usar el mismo %{link} del correo que te trajo aquí." # Machine translated, remove this comment when verified
+          link: "enlace" # Machine translated, remove this comment when verified
+          thanks_again: "En cualquier caso, ¡gracias de nuevo!" # Machine translated, remove this comment when verified
+          what_is_this: "¿Qué es esto?" # Machine translated, remove this comment when verified
+      mailer:
+        migration_request:
+          dear: "Hola, %{name}:" # Machine translated, remove this comment when verified
+          using_gather: "%{community} está usando Gather para reorganizar sus archivos de Google Drive." # Machine translated, remove this comment when verified
+          problem: "Ahora mismo, los archivos de la comunidad pertenecen a quien los creó. ¡Eso puede hacer que se eliminen por accidente cuando alguien deja la comunidad!" # Machine translated, remove this comment when verified
+          solution: "Para evitarlo, la comunidad está moviendo todos sus archivos a una unidad compartida propiedad de la comunidad." # Machine translated, remove this comment when verified
+          own_many: "Tu cuenta de Google %{email} es propietaria de unos %{count} archivos en la carpeta antigua de Google Drive de %{community}. Necesitamos tu permiso para moverlos a la nueva unidad." # Machine translated, remove this comment when verified
+          own_one: "Tu cuenta de Google %{email} es propietaria de al menos un archivo en la carpeta antigua de Google Drive de %{community}. Necesitamos tu permiso para moverlo a la nueva unidad." # Machine translated, remove this comment when verified
+          go_here: "Entra aquí para ayudar: %{url}" # Machine translated, remove this comment when verified
+          retain_access: "Seguirás teniendo acceso a los archivos si eres miembro de la comunidad. Si tienes preguntas o dudas, puedes contactar con %{contact} en %{email}, que coordina la reorganización. Si prefieres no participar, también puedes renunciar en la URL de arriba." # Machine translated, remove this comment when verified
+          thanks: "¡Gracias por tu tiempo y atención!" # Machine translated, remove this comment when verified
+      dashboard:
+        title: "Migración de Google Drive" # Machine translated, remove this comment when verified
+        synopsis:
+          not_begun_contact: "El análisis de archivos no ha empezado. Contacta con el soporte de Gather." # Machine translated, remove this comment when verified
+          not_begun_wait: "El análisis de archivos no ha empezado. Espera un momento y actualiza la página." # Machine translated, remove this comment when verified
+          in_progress: "Análisis de archivos en curso. %{count} archivos analizados hasta ahora." # Machine translated, remove this comment when verified
+          complete: "El análisis de archivos terminó. Se vigilan los cambios." # Machine translated, remove this comment when verified
+          auth_error_html: "El análisis de archivos se canceló por un error de autorización. Comprueba que %{user} tiene permiso de <strong>edición</strong> en tu %{folder_link}. Prueba a hacer clic en «Revocar la autorización» y a iniciar sesión de nuevo en la %{home_link}. Después vuelve a lanzar el análisis." # Machine translated, remove this comment when verified
+          source_folder: "carpeta de origen" # Machine translated, remove this comment when verified
+          main_page: "página principal de Google Drive" # Machine translated, remove this comment when verified
+          too_many_errors: "El análisis de archivos se canceló por demasiados errores. Consulta los errores de abajo, corrígelos y vuelve a lanzar el análisis." # Machine translated, remove this comment when verified
+          cancelled_unknown: "El análisis de archivos se canceló por un motivo desconocido." # Machine translated, remove this comment when verified
+          unknown_state: "El análisis de archivos está en un estado desconocido." # Machine translated, remove this comment when verified
+        status:
+          show:
+            system_user: "Usuario del sistema" # Machine translated, remove this comment when verified
+            contact: "Contacto" # Machine translated, remove this comment when verified
+            contact_value: "%{name} <%{email}>" # Machine translated, remove this comment when verified
+            source_folder: "Carpeta de origen" # Machine translated, remove this comment when verified
+            destination_folder: "Carpeta de destino" # Machine translated, remove this comment when verified
+            total_files: "Total de archivos" # Machine translated, remove this comment when verified
+            files_by_status:
+              pending: "Archivos pendientes" # Machine translated, remove this comment when verified
+              declined: "Archivos rechazados" # Machine translated, remove this comment when verified
+              errored: "Archivos con error" # Machine translated, remove this comment when verified
+              transferred: "Archivos transferidos" # Machine translated, remove this comment when verified
+              copied: "Archivos copiados" # Machine translated, remove this comment when verified
+              ignored: "Archivos ignorados" # Machine translated, remove this comment when verified
+              disappeared: "Archivos desaparecidos" # Machine translated, remove this comment when verified
+        logs:
+          index:
+            logs: "Registros" # Machine translated, remove this comment when verified
+            none: "Aún no hay registros." # Machine translated, remove this comment when verified
+            time: "Hora" # Machine translated, remove this comment when verified
+            message: "Mensaje" # Machine translated, remove this comment when verified
+        files:
+          index:
+            files: "Archivos" # Machine translated, remove this comment when verified
+            name: "Nombre" # Machine translated, remove this comment when verified
+            owner: "Propietario" # Machine translated, remove this comment when verified
+            modified: "Modificado" # Machine translated, remove this comment when verified
+            status: "Estado" # Machine translated, remove this comment when verified
+            error: "Error" # Machine translated, remove this comment when verified
+            file_icon: "Icono de archivo" # Machine translated, remove this comment when verified
+        owners:
+          index:
+            owners: "Propietarios" # Machine translated, remove this comment when verified
+            files: "Archivos" # Machine translated, remove this comment when verified
+            request: "Solicitud" # Machine translated, remove this comment when verified
+            owner: "Propietario" # Machine translated, remove this comment when verified
+            total: "Total" # Machine translated, remove this comment when verified
+            date_sent: "Fecha de envío" # Machine translated, remove this comment when verified
+            status: "Estado" # Machine translated, remove this comment when verified
+          show:
+            files: "Archivos" # Machine translated, remove this comment when verified
+            total_files: "Total de archivos" # Machine translated, remove this comment when verified
+            request: "Solicitud" # Machine translated, remove this comment when verified
+            date_sent: "Fecha de envío" # Machine translated, remove this comment when verified
+            status: "Estado" # Machine translated, remove this comment when verified
+            intro_page: "Página de introducción de la solicitud" # Machine translated, remove this comment when verified
+            link: "Enlace" # Machine translated, remove this comment when verified
+            opened_note: "Ten en cuenta que hacer clic en este enlace cambiará la solicitud al estado «abierta»." # Machine translated, remove this comment when verified
+            file_drop_drive: "Unidad de entrega de archivos" # Machine translated, remove this comment when verified
+            opt_out_reason: "Motivo de la renuncia" # Machine translated, remove this comment when verified
+      operations:
+        form:
+          intro: "Introduce los datos de abajo para configurar tu migración. Se iniciará un análisis de archivos y se te redirigirá al panel de la migración." # Machine translated, remove this comment when verified
+        new:
+          title: "Crear migración" # Machine translated, remove this comment when verified
+        edit:
+          title: "Editar migración" # Machine translated, remove this comment when verified
+      errors:
+        forbidden: "Sin permiso" # Machine translated, remove this comment when verified
+        not_found: "No encontrado" # Machine translated, remove this comment when verified
+        ancestor_inaccessible: "Carpeta superior inaccesible" # Machine translated, remove this comment when verified
+        client_error_ensuring_tree: "Error al crear las carpetas de destino" # Machine translated, remove this comment when verified
+        client_error_moving_to_temp_drive: "Error al mover a la unidad temporal" # Machine translated, remove this comment when verified
+        client_error_moving_to_destination: "Error al mover al destino" # Machine translated, remove this comment when verified

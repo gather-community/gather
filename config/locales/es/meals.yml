@@ -1,0 +1,460 @@
+es:
+  meals:
+    over_limit_notice_html: "Tu hogar ha superado su límite de crédito de %{limit} en %{community} (ver %{account_link}), así que no puedes inscribirte en comidas organizadas por %{community}. Si tienes dudas, contacta con el comité o la persona responsable de comidas de %{community}." # Machine translated, remove this comment when verified
+    cancelled_notice: "Esta comida se canceló." # Machine translated, remove this comment when verified
+    persion_is_helping:
+      one: "%{count} persona de tu hogar ayuda en esta comida" # Machine translated, remove this comment when verified
+      other: "%{count} personas de tu hogar ayudan en esta comida" # Machine translated, remove this comment when verified
+    menu_posted_at: "Menú publicado el %{time}." # Machine translated, remove this comment when verified
+    type: "Tipo" # Machine translated, remove this comment when verified
+    category: "Categoría" # Machine translated, remove this comment when verified
+    spots_left:
+      one: "Queda %{count} plaza" # Machine translated, remove this comment when verified
+      other: "Quedan %{count} plazas" # Machine translated, remove this comment when verified
+    form:
+      sections:
+        label:
+          general: "General" # Machine translated, remove this comment when verified
+          workers: "Equipo" # Machine translated, remove this comment when verified
+          menu: "Menú" # Machine translated, remove this comment when verified
+          signups: "Inscripciones" # Machine translated, remove this comment when verified
+          expenses: "Gastos" # Machine translated, remove this comment when verified
+        edit:
+          general: "Editar datos generales" # Machine translated, remove this comment when verified
+          workers: "Editar equipo" # Machine translated, remove this comment when verified
+          menu: "Editar menú" # Machine translated, remove this comment when verified
+          signups: "Editar inscripciones" # Machine translated, remove this comment when verified
+          expenses: "Editar gastos" # Machine translated, remove this comment when verified
+      summaries:
+        allows: "admite %{people}" # Machine translated, remove this comment when verified
+        allows_with_cmtys:
+          one: "admite %{people} de %{count} comunidad" # Machine translated, remove this comment when verified
+          other: "admite %{people} de %{count} comunidades" # Machine translated, remove this comment when verified
+        no_workers: "No hay nadie en el equipo" # Machine translated, remove this comment when verified
+        no_menu: "No se ha publicado el menú" # Machine translated, remove this comment when verified
+        no_signups: "No se ha inscrito ningún hogar" # Machine translated, remove this comment when verified
+        with_items: "con %{items}" # Machine translated, remove this comment when verified
+        and_allergen_count:
+          one: "y %{count} alérgeno" # Machine translated, remove this comment when verified
+          other: "y %{count} alérgenos" # Machine translated, remove this comment when verified
+        expenses:
+          ingredients: "%{cost} en ingredientes" # Machine translated, remove this comment when verified
+          pantry: "%{cost} en despensa" # Machine translated, remove this comment when verified
+          payment: "pago por %{method}" # Machine translated, remove this comment when verified
+          none: "No se han introducido gastos" # Machine translated, remove this comment when verified
+        signups:
+          diners:
+            one: "%{count} comensal" # Machine translated, remove this comment when verified
+            other: "%{count} comensales" # Machine translated, remove this comment when verified
+          from_households:
+            one: "de %{count} hogar" # Machine translated, remove this comment when verified
+            other: "de %{count} hogares" # Machine translated, remove this comment when verified
+    finalizing:
+      duplicates: "Hay inscripciones duplicadas. Corrígelas indicando cantidades para cada tipo de comensal." # Machine translated, remove this comment when verified
+      cancelled: "La comida no se finalizó. Puedes editarla abajo e intentarlo de nuevo, o hacer clic en «Cancelar» para volver a la página de comidas." # Machine translated, remove this comment when verified
+      success: "Comida finalizada" # Machine translated, remove this comment when verified
+      review_and_confirm_html: "<strong>Nota:</strong> esta comida aún no está finalizada. Revisa y confirma tus datos abajo. Esta información no se puede cambiar una vez enviados los estados de cuenta, así que ten cuidado." # Machine translated, remove this comment when verified
+    sign_up: "Inscribirme" # Machine translated, remove this comment when verified
+    closes_soon: "¡Cierra pronto!" # Machine translated, remove this comment when verified
+    no_menu_title: "[Sin menú]" # Machine translated, remove this comment when verified
+    takeout: "Para llevar" # Machine translated, remove this comment when verified
+    created: "Comida creada." # Machine translated, remove this comment when verified
+    updated: "Comida actualizada." # Machine translated, remove this comment when verified
+    closed: "Comida cerrada." # Machine translated, remove this comment when verified
+    reopened: "Comida reabierta." # Machine translated, remove this comment when verified
+    unfinalized: "Se deshizo la finalización de la comida." # Machine translated, remove this comment when verified
+    cant_reopen_past_close: "No puedes reabrir esta comida porque su hora de cierre automático ya pasó. Cambia o quita esa hora antes de continuar." # Machine translated, remove this comment when verified
+    not_closed_before_summary: "Nota: esta comida aún no está cerrada y todavía se pueden inscribir personas. Deberías cerrarla antes de imprimir este resumen." # Machine translated, remove this comment when verified
+    formula_created: "Fórmula creada." # Machine translated, remove this comment when verified
+    formula_updated: "Fórmula actualizada." # Machine translated, remove this comment when verified
+    type_created: "Tipo creado." # Machine translated, remove this comment when verified
+    type_updated: "Tipo actualizado." # Machine translated, remove this comment when verified
+    role_created: "Rol creado." # Machine translated, remove this comment when verified
+    role_updated: "Rol actualizado." # Machine translated, remove this comment when verified
+    restrictions_updated: "Actualizado." # Machine translated, remove this comment when verified
+    event_name: "Comida: %{title}" # Machine translated, remove this comment when verified
+    event_errors: "Se produjeron los siguientes errores al crear un evento de %{calendar} para esta comida: %{errors}." # Machine translated, remove this comment when verified
+    event_error: "%{attribute}: %{message}" # Machine translated, remove this comment when verified
+    signup_not_recorded: "No se pudo registrar tu inscripción porque la comida está llena o ya no está abierta." # Machine translated, remove this comment when verified
+    report:
+      subhead_community: "%{range}, solo comidas de %{community}" # Machine translated, remove this comment when verified
+    report_charts:
+      avg_servings: "Raciones medias" # Machine translated, remove this comment when verified
+      avg_servings_per_meal: "Raciones medias por comida" # Machine translated, remove this comment when verified
+      avg_cost: "Coste medio" # Machine translated, remove this comment when verified
+      avg_full_meal_price: "Precio medio de una comida completa" # Machine translated, remove this comment when verified
+      meals: "Comidas" # Machine translated, remove this comment when verified
+      number_of_meals: "Número de comidas" # Machine translated, remove this comment when verified
+      weekday: "Día de la semana" # Machine translated, remove this comment when verified
+      month: "Mes" # Machine translated, remove this comment when verified
+      titles:
+        servings_by_month: "Raciones medias por comida, por mes" # Machine translated, remove this comment when verified
+        servings_by_month_community: "Raciones medias por comida de %{community}, por mes" # Machine translated, remove this comment when verified
+        cost_by_month: "Precio medio de una comida completa, por mes" # Machine translated, remove this comment when verified
+        cost_by_month_community: "Precio medio de una comida completa de %{community}, por mes" # Machine translated, remove this comment when verified
+        meals_by_month: "Número de comidas por mes" # Machine translated, remove this comment when verified
+        meals_by_month_community: "Número de comidas de %{community} por mes" # Machine translated, remove this comment when verified
+        servings_by_weekday: "Raciones medias por comida, por día de la semana" # Machine translated, remove this comment when verified
+        servings_by_weekday_community: "Raciones medias por comida de %{community}, por día de la semana" # Machine translated, remove this comment when verified
+        cost_by_weekday: "Precio medio de una comida completa, por día de la semana" # Machine translated, remove this comment when verified
+        cost_by_weekday_community: "Precio medio de una comida completa de %{community}, por día de la semana" # Machine translated, remove this comment when verified
+        community_rep: "Representación media de las comunidades en las comidas" # Machine translated, remove this comment when verified
+        community_rep_community: "Representación media de las comunidades en las comidas de %{community}" # Machine translated, remove this comment when verified
+        meal_types: "Tipos de comida medios en las comidas" # Machine translated, remove this comment when verified
+        meal_types_community: "Tipos de comida medios en las comidas de %{community}" # Machine translated, remove this comment when verified
+    portion_counts:
+      diners:
+        one: "%{count} comensal" # Machine translated, remove this comment when verified
+        other: "%{count} comensales" # Machine translated, remove this comment when verified
+      portions_html:
+        one: "<strong>%{count}</strong> porción" # Machine translated, remove this comment when verified
+        other: "<strong>%{count}</strong> porciones" # Machine translated, remove this comment when verified
+      category_portions_html:
+        one: "<strong>%{count} %{category}</strong> porción" # Machine translated, remove this comment when verified
+        other: "<strong>%{count} %{category}</strong> porciones" # Machine translated, remove this comment when verified
+      other_category: "otra" # Machine translated, remove this comment when verified
+      summary_html: "Esta comida tiene %{diners} y necesitará aproximadamente %{portions}.*" # Machine translated, remove this comment when verified
+      summary_list_html: "Esta comida tiene %{diners} y necesitará aproximadamente: %{portions}.*" # Machine translated, remove this comment when verified
+    meals:
+      index:
+        title: "Comidas" # Machine translated, remove this comment when verified
+        show_action_menu: "Mostrar el menú de acciones de la comida" # Machine translated, remove this comment when verified
+        create: "Crear comida" # Machine translated, remove this comment when verified
+        import: "Importar comidas" # Machine translated, remove this comment when verified
+        no_meals: "No se encontraron comidas." # Machine translated, remove this comment when verified
+        date_time: "Fecha/hora" # Machine translated, remove this comment when verified
+        location: "Lugar" # Machine translated, remove this comment when verified
+        cook: "Cocinero" # Machine translated, remove this comment when verified
+        meal_title: "Título" # Machine translated, remove this comment when verified
+        going: "¿Vas?" # Machine translated, remove this comment when verified
+        signups: "Inscripciones" # Machine translated, remove this comment when verified
+        full: "[Llena]" # Machine translated, remove this comment when verified
+        not_going: "No" # Machine translated, remove this comment when verified
+        meal_by_cook_html: "%{meal} por %{cook}" # Machine translated, remove this comment when verified
+        time_at_location: "%{time} en %{location}" # Machine translated, remove this comment when verified
+        signed_up_html: "%{signups} inscritos" # Machine translated, remove this comment when verified
+        household_signed_up_html: "%{diners} inscritos de tu hogar" # Machine translated, remove this comment when verified
+        edit_signup: "(Editar)" # Machine translated, remove this comment when verified
+        download_meals_csv: "Descargar comidas como CSV" # Machine translated, remove this comment when verified
+        download_signups_csv: "Descargar inscripciones como CSV" # Machine translated, remove this comment when verified
+      show:
+        untitled: "Comida sin título" # Machine translated, remove this comment when verified
+        meals: "Comidas" # Machine translated, remove this comment when verified
+        previous_meal: "Comida anterior" # Machine translated, remove this comment when verified
+        next_meal: "Comida siguiente" # Machine translated, remove this comment when verified
+        my_order: "Mi pedido" # Machine translated, remove this comment when verified
+        helping_out: "Ayudar" # Machine translated, remove this comment when verified
+      new:
+        title: "Crear comida" # Machine translated, remove this comment when verified
+        missing_prereqs_html: "Antes de crear una comida, debe haber %{items}." # Machine translated, remove this comment when verified
+        formula: "una fórmula de coste aplicable" # Machine translated, remove this comment when verified
+        calendar: "al menos un calendario que pueda acoger comidas" # Machine translated, remove this comment when verified
+      edit:
+        title: "Editar comida" # Machine translated, remove this comment when verified
+        title_with_meal: "Editar comida: %{title}" # Machine translated, remove this comment when verified
+      signup_form:
+        account: "cuenta" # Machine translated, remove this comment when verified
+        closed_not_signed_up: "No te has inscrito en esta comida y ya está cerrada." # Machine translated, remove this comment when verified
+        full_not_signed_up: "No te has inscrito en esta comida y ya está llena. Puedes volver más tarde por si se libera una plaza." # Machine translated, remove this comment when verified
+        not_signed_up: "No te has inscrito en esta comida." # Machine translated, remove this comment when verified
+        saved: "Inscripción guardada" # Machine translated, remove this comment when verified
+        closes_at: "Cierra el %{date} a las %{time}" # Machine translated, remove this comment when verified
+        sign_up: "Inscribirme" # Machine translated, remove this comment when verified
+      household_worker_form:
+        worker_role: "%{name} - %{role}" # Machine translated, remove this comment when verified
+        no_more_workers: "Esta comida no necesita a nadie más." # Machine translated, remove this comment when verified
+        still_needs_html:
+          one: "Esta comida aún necesita <b>%{count} persona</b>." # Machine translated, remove this comment when verified
+          other: "Esta comida aún necesita <b>%{count} personas</b>." # Machine translated, remove this comment when verified
+        help_out: "Ayudar" # Machine translated, remove this comment when verified
+      summary:
+        untitled: "Comida sin título" # Machine translated, remove this comment when verified
+        signups: "Inscripciones" # Machine translated, remove this comment when verified
+        total: "Total" # Machine translated, remove this comment when verified
+        late_signups: "Inscripciones tardías" # Machine translated, remove this comment when verified
+        portion_footnote_html: "* Total de porciones calculado con los tamaños de porción de la %{link}." # Machine translated, remove this comment when verified
+        meal_formula: "fórmula de la comida" # Machine translated, remove this comment when verified
+        grocery_calculator: "Calculadora de compra" # Machine translated, remove this comment when verified
+        fixed_cost_html: "Según el coste fijo de esta comida, los ingredientes no deberían costar más de %{amount}, sin contar los productos básicos de despensa (consulta las pautas de comidas de tu comunidad para ver qué productos cuentan)." # Machine translated, remove this comment when verified
+        proportional_cost: "Según la fórmula de reparto de costes de esta comida, la tabla de abajo muestra cuánto se puede gastar en ingredientes según el precio de comida deseado. Los límites de gasto no incluyen los productos básicos de despensa (consulta las pautas de comidas de tu comunidad para ver qué productos cuentan)." # Machine translated, remove this comment when verified
+        meal_price: "Precio de la comida" # Machine translated, remove this comment when verified
+        max_ingredient_cost: "Coste máx. de ingredientes" # Machine translated, remove this comment when verified
+        cook_reimbursement: "Reembolso al cocinero" # Machine translated, remove this comment when verified
+      summary_signups_header:
+        community: "Com." # Machine translated, remove this comment when verified
+        household: "Hogar" # Machine translated, remove this comment when verified
+        takeout: "Para llevar" # Machine translated, remove this comment when verified
+        comments: "Comentarios" # Machine translated, remove this comment when verified
+      menu:
+        menu: "menú" # Machine translated, remove this comment when verified
+        at_location: "En %{location}" # Machine translated, remove this comment when verified
+        for_communities: "para %{communities}" # Machine translated, remove this comment when verified
+        allergens: "alérgenos" # Machine translated, remove this comment when verified
+        no_menu: "Aún no se ha publicado el menú." # Machine translated, remove this comment when verified
+      jobs:
+        title: "Tareas de comidas" # Machine translated, remove this comment when verified
+        title_for_user: "Tareas de comidas: %{name}" # Machine translated, remove this comment when verified
+        no_jobs: "No se encontraron tareas." # Machine translated, remove this comment when verified
+        meal_at_location_html: "%{meal} en %{location}" # Machine translated, remove this comment when verified
+        role_workers_html: "%{role}: %{workers}" # Machine translated, remove this comment when verified
+      cost_info:
+        cost: "Coste" # Machine translated, remove this comment when verified
+        unknown: "?"
+        included: "%{label} (incluido)" # Machine translated, remove this comment when verified
+        proportional: "Esta comida usa una fórmula proporcional, así que el coste se calculará cuando la comida haya tenido lugar y se haya finalizado." # Machine translated, remove this comment when verified
+      who_is_going:
+        title: "¿Quién va?" # Machine translated, remove this comment when verified
+        nobody: "¡Nadie, de momento!" # Machine translated, remove this comment when verified
+        household_count: "%{household} (%{count})" # Machine translated, remove this comment when verified
+      time_cook:
+        chefs_hat: "Gorro de cocinero" # Machine translated, remove this comment when verified
+      signup_read_only:
+        part: "%{count} %{type}" # Machine translated, remove this comment when verified
+        takeout_requested: "Pedido para llevar" # Machine translated, remove this comment when verified
+        quoted_comments: "«%{comments}»" # Machine translated, remove this comment when verified
+      report:
+        title: "Informe de comidas" # Machine translated, remove this comment when verified
+        no_data: "No se encontraron datos de comidas para %{range}. El informe solo incluye comidas finalizadas." # Machine translated, remove this comment when verified
+        all_time: "Desde siempre" # Machine translated, remove this comment when verified
+        community_all_time: "%{community} desde siempre" # Machine translated, remove this comment when verified
+        overall_all_time: "Total desde siempre" # Machine translated, remove this comment when verified
+        meals: "Comidas" # Machine translated, remove this comment when verified
+        servings: "Raciones" # Machine translated, remove this comment when verified
+        cost: "Coste" # Machine translated, remove this comment when verified
+        by_month: "Por mes" # Machine translated, remove this comment when verified
+        by_weekday: "Por día de la semana" # Machine translated, remove this comment when verified
+        by_community: "Por comunidad" # Machine translated, remove this comment when verified
+        by_type: "Por tipo" # Machine translated, remove this comment when verified
+        by_category: "Por categoría" # Machine translated, remove this comment when verified
+        footnote:
+          one: "Las estadísticas de arriba solo incluyen comidas finalizadas y no canceladas. En este período se canceló %{count} comida." # Machine translated, remove this comment when verified
+          other: "Las estadísticas de arriba solo incluyen comidas finalizadas y no canceladas. En este período se cancelaron %{count} comidas." # Machine translated, remove this comment when verified
+        footnote_community:
+          one: "Las estadísticas de arriba solo incluyen comidas finalizadas y no canceladas. En este período se canceló %{count} comida en %{community}." # Machine translated, remove this comment when verified
+          other: "Las estadísticas de arriba solo incluyen comidas finalizadas y no canceladas. En este período se cancelaron %{count} comidas en %{community}." # Machine translated, remove this comment when verified
+      report_main_table:
+        totals: "Totales" # Machine translated, remove this comment when verified
+        general_averages: "Medias generales" # Machine translated, remove this comment when verified
+        community_representation: "Representación media de las comunidades" # Machine translated, remove this comment when verified
+        meals: "Comidas" # Machine translated, remove this comment when verified
+        servings: "Raciones" # Machine translated, remove this comment when verified
+        cost: "Coste" # Machine translated, remove this comment when verified
+        full_meal_price: "Precio de una comida completa" # Machine translated, remove this comment when verified
+        total: "Total" # Machine translated, remove this comment when verified
+      report_type_table:
+        avg_servings: "Raciones medias" # Machine translated, remove this comment when verified
+        percent: "Porcentaje" # Machine translated, remove this comment when verified
+      export_form:
+        select_dates: "Elegir fechas" # Machine translated, remove this comment when verified
+      reimb_form:
+        meal: "Comida:" # Machine translated, remove this comment when verified
+        by_cook: "Por %{cook}" # Machine translated, remove this comment when verified
+        time_at_location: "%{time} en %{location}" # Machine translated, remove this comment when verified
+        ingredients: "Importe gastado en ingredientes:" # Machine translated, remove this comment when verified
+        pantry: "Importe gastado en productos básicos de despensa:" # Machine translated, remove this comment when verified
+        total: "Importe total a reembolsar:" # Machine translated, remove this comment when verified
+        amount_blank: "$"
+        method: "Método de reembolso:" # Machine translated, remove this comment when verified
+        account_credit: "Abono en la cuenta" # Machine translated, remove this comment when verified
+        check_payable: "Cheque a nombre de:" # Machine translated, remove this comment when verified
+        paypal: "PayPal a la dirección de correo:" # Machine translated, remove this comment when verified
+      form:
+        general:
+          communities: "Comunidades" # Machine translated, remove this comment when verified
+        expenses:
+          check_hint: "La persona reembolsada recibirá un cheque por el coste de los ingredientes." # Machine translated, remove this comment when verified
+          credit_hint: "La persona reembolsada recibirá un abono en su cuenta de Gather por el coste de los ingredientes." # Machine translated, remove this comment when verified
+          paypal_hint: "La persona reembolsada recibirá un pago de PayPal por el coste de los ingredientes. Cada persona puede cambiar su correo de PayPal editando su perfil." # Machine translated, remove this comment when verified
+        workers:
+          formula_changed: "Se cambió la fórmula de esta comida, lo que puede hacer que haya otros roles disponibles abajo. Para ver los nuevos roles, guarda la comida y vuelve a esta página. Las asignaciones existentes no se eliminarán aunque sus roles no estén en la nueva fórmula." # Machine translated, remove this comment when verified
+        menu:
+          allergens: "Alérgenos" # Machine translated, remove this comment when verified
+    formulas:
+      index:
+        title: "Fórmulas de comida" # Machine translated, remove this comment when verified
+        create: "Crear fórmula" # Machine translated, remove this comment when verified
+        explanation: "Las fórmulas de comida permiten personalizar cómo se calculan los costes y las porciones." # Machine translated, remove this comment when verified
+        no_formulas: "No se encontraron fórmulas." # Machine translated, remove this comment when verified
+        name: "Nombre" # Machine translated, remove this comment when verified
+        meals: "Comidas" # Machine translated, remove this comment when verified
+        created_on: "Creada el" # Machine translated, remove this comment when verified
+      show:
+        title: "Fórmula de comida: %{name}" # Machine translated, remove this comment when verified
+        formulas: "Fórmulas" # Machine translated, remove this comment when verified
+        meal_calculations: "Cálculos de la comida" # Machine translated, remove this comment when verified
+        pantry_calculations: "Cálculos de la despensa" # Machine translated, remove this comment when verified
+      new:
+        title: "Nueva fórmula de comida" # Machine translated, remove this comment when verified
+      edit:
+        title: "Editar fórmula de comida: %{name}" # Machine translated, remove this comment when verified
+      form:
+        meal_calculations: "Cálculos de la comida" # Machine translated, remove this comment when verified
+        pantry_calculations: "Cálculos de la despensa" # Machine translated, remove this comment when verified
+    types:
+      index:
+        title: "Tipos de comida" # Machine translated, remove this comment when verified
+        create: "Crear tipo" # Machine translated, remove this comment when verified
+        explanation: "Los tipos de comida dan a los comensales distintas opciones al inscribirse y pueden tener costes y tamaños de porción distintos en las fórmulas." # Machine translated, remove this comment when verified
+        no_types: "No se encontraron tipos." # Machine translated, remove this comment when verified
+      new:
+        title: "Crear tipo de comida" # Machine translated, remove this comment when verified
+      edit:
+        title: "Editar tipo de comida: %{name}" # Machine translated, remove this comment when verified
+    roles:
+      index:
+        title: "Roles de comida" # Machine translated, remove this comment when verified
+        create: "Crear rol" # Machine translated, remove this comment when verified
+        explanation: "Los roles de comida representan las distintas tareas necesarias para preparar una comida." # Machine translated, remove this comment when verified
+        no_roles: "No se encontraron roles." # Machine translated, remove this comment when verified
+      new:
+        title: "Crear rol de comida" # Machine translated, remove this comment when verified
+      edit:
+        title: "Editar rol de comida: %{title}" # Machine translated, remove this comment when verified
+    restrictions:
+      edit:
+        title: "Ajustes de comidas: restricciones alimentarias" # Machine translated, remove this comment when verified
+        restriction: "Restricción" # Machine translated, remove this comment when verified
+        opposite: "Opuesto" # Machine translated, remove this comment when verified
+        deactivated: "¿Desactivada?" # Machine translated, remove this comment when verified
+      restriction_fields:
+        restriction_placeholder: "p. ej. Gluten" # Machine translated, remove this comment when verified
+        opposite_placeholder: "p. ej. Sin gluten" # Machine translated, remove this comment when verified
+        restriction: "Restricción" # Machine translated, remove this comment when verified
+        opposite: "Opuesto" # Machine translated, remove this comment when verified
+    imports:
+      sample_calendar_1: "Comedor" # Machine translated, remove this comment when verified
+      sample_calendar_2: "Cocina" # Machine translated, remove this comment when verified
+      sample_formula: "Fórmula principal" # Machine translated, remove this comment when verified
+      new:
+        title: "Importar comidas" # Machine translated, remove this comment when verified
+        intro: "Puedes importar comidas en formato CSV. Las hojas de cálculo como Excel o Google Sheets pueden exportar a CSV, que luego puedes importar en Gather." # Machine translated, remove this comment when verified
+      show:
+        title: "Importar comidas" # Machine translated, remove this comment when verified
+      form:
+        upload_file: "Subir archivo" # Machine translated, remove this comment when verified
+      results:
+        succeeded: "¡La importación se completó correctamente!" # Machine translated, remove this comment when verified
+        check_meals_html: "Consulta la %{link} para ver las comidas importadas." # Machine translated, remove this comment when verified
+        meals_page: "página de comidas" # Machine translated, remove this comment when verified
+        crashed: "Se produjo un error inesperado durante la importación." # Machine translated, remove this comment when verified
+        crashed_try_again_html: "Vuelve a %{link} y contacta con tu administrador si el error persiste." # Machine translated, remove this comment when verified
+        try_again_below: "intentarlo abajo" # Machine translated, remove this comment when verified
+        issues: "Hay uno o más problemas con tus datos de comidas." # Machine translated, remove this comment when verified
+        resolve_html: "Resuelve los problemas de abajo e %{link}." # Machine translated, remove this comment when verified
+        try_again: "inténtalo de nuevo" # Machine translated, remove this comment when verified
+        row: "Fila %{number}" # Machine translated, remove this comment when verified
+      instructions:
+        data_format: "Formato de los datos" # Machine translated, remove this comment when verified
+        use_columns: "Prepara tu archivo de importación con las siguientes columnas:" # Machine translated, remove this comment when verified
+        served_at: "Obligatorio. La fecha y la hora de la comida. Usa un formato sin ambigüedad como AAAA-MM-DD HH:MM" # Machine translated, remove this comment when verified
+        calendars_html: "Obligatorio. El lugar o lugares de la comida. Usa los nombres exactos o los ID numéricos de los calendarios del %{link}." # Machine translated, remove this comment when verified
+        calendar_system: "sistema de calendarios" # Machine translated, remove this comment when verified
+        formula_html: "Opcional. La %{link} de la comida. Usa el nombre exacto o el ID numérico de la fórmula. Si no se indica, se usa la fórmula predeterminada." # Machine translated, remove this comment when verified
+        formula: "fórmula" # Machine translated, remove this comment when verified
+        communities: "Opcional. Qué comunidades están invitadas a la comida. Usa nombres exactos, abreviaturas o ID numéricos, separados por punto y coma. Si no se indica, se invita a todas las comunidades." # Machine translated, remove this comment when verified
+        role_column_html: "&lt;<em>Nombre del rol</em>&gt; o %{role}&lt;<em>ID del rol</em>&gt;" # Machine translated, remove this comment when verified
+        roles_html: "Opcional. Indica el equipo de la comida añadiendo una columna por cada %{link}. Usa nombres exactos o ID numéricos de las personas, separados por punto y coma." # Machine translated, remove this comment when verified
+        meal_role: "rol de comida" # Machine translated, remove this comment when verified
+        action: "Opcional. Indica «create», «update» o «destroy». Si no se indica, se usa «create». Con «update» o «destroy», la comida se busca por su ID si se indica, o si no por su fecha, hora y lugares." # Machine translated, remove this comment when verified
+        id: "Opcional. El ID de la comida que modificar o eliminar. Se ignora si la acción es «create»." # Machine translated, remove this comment when verified
+        example_data: "Datos de ejemplo" # Machine translated, remove this comment when verified
+        sample_worker_1: "Lucía Martín" # Machine translated, remove this comment when verified
+        sample_workers_2: "Mohammed Iris; Sundar Premji" # Machine translated, remove this comment when verified
+        sample_worker_3: "Li Yun" # Machine translated, remove this comment when verified
+        sample_workers_4: "Carmen Ruiz; Silvia Rodríguez" # Machine translated, remove this comment when verified
+    messages:
+      sent: "Mensaje enviado." # Machine translated, remove this comment when verified
+      new:
+        cancel_title: "Cancelar comida" # Machine translated, remove this comment when verified
+        dont_cancel: "No cancelar la comida" # Machine translated, remove this comment when verified
+        send_and_cancel: "Enviar mensaje y cancelar la comida" # Machine translated, remove this comment when verified
+    finalize:
+      title: "Finalizar comida: %{title}" # Machine translated, remove this comment when verified
+      untitled: "Sin título" # Machine translated, remove this comment when verified
+      confirm:
+        household: "Hogar" # Machine translated, remove this comment when verified
+        calculated_cost: "Coste calculado" # Machine translated, remove this comment when verified
+        cook_reimbursement_request: "Solicitud de reembolso del cocinero" # Machine translated, remove this comment when verified
+      complete:
+        success: "¡Comida finalizada!" # Machine translated, remove this comment when verified
+        check: "Envía ahora un cheque de %{amount} a %{name}." # Machine translated, remove this comment when verified
+        credit: "Se abonaron %{amount} en la cuenta de Gather de %{name}." # Machine translated, remove this comment when verified
+        paypal: "Envía ahora %{amount} a %{email} por PayPal." # Machine translated, remove this comment when verified
+    settings:
+      edit:
+        title: "Ajustes de comidas: general" # Machine translated, remove this comment when verified
+  meals/assignments:
+    change_warning: "Nota: si cambias el equipo de la comida, se enviará un aviso por correo al comité o la persona responsable de comidas y a todas las personas asignadas actuales y nuevas." # Machine translated, remove this comment when verified
+  meals/formulas:
+    pantry: "Despensa" # Machine translated, remove this comment when verified
+    calc_types:
+      fixed: "Fijo" # Machine translated, remove this comment when verified
+      share: "Proporcional" # Machine translated, remove this comment when verified
+      percent: "Porcentaje" # Machine translated, remove this comment when verified
+    hints:
+      meal: "El coste de las comidas puede ser fijo o proporcional al coste de los ingredientes." # Machine translated, remove this comment when verified
+      pantry: "La cuota de despensa es un cargo a cada comensal para cubrir la compra de productos básicos para la cocina. Puede ser un importe fijo o un porcentaje del coste de la comida del comensal." # Machine translated, remove this comment when verified
+      meal_type:
+        fixed: "Añade cada tipo de comida, su precio y su tamaño de porción relativo. Los tamaños de porción ayudan a los cocineros a hacer la compra." # Machine translated, remove this comment when verified
+        share: "Añade cada tipo de comida, su parte porcentual y su tamaño de porción relativo.\n\nLas partes porcentuales sirven para calcular el coste. Por ejemplo, si un tipo de comida debe tener un descuento de un cuarto, escribe 75 %. Un 100 % representa una parte completa e igual del coste de los ingredientes, y un 0 % significa que no se cobra.\n\nLos tamaños de porción ayudan a los cocineros a hacer la compra." # Machine translated, remove this comment when verified
+    cant_edit_notice: "Esta fórmula está vinculada a comidas existentes, así que no puedes editar los cálculos." # Machine translated, remove this comment when verified
+  meals/formula_parts:
+    portion_options:
+      one_qtr: "¼ de porción" # Machine translated, remove this comment when verified
+      half: "½ porción" # Machine translated, remove this comment when verified
+      three_qtr: "¾ de porción" # Machine translated, remove this comment when verified
+      full: "Porción completa" # Machine translated, remove this comment when verified
+    portion_short_names:
+      one_qtr: "¼"
+      half: "½"
+      three_qtr: "¾"
+      full: "Completa" # Machine translated, remove this comment when verified
+  meals/messages:
+    cancel_notice_html: "Cancelar una comida no se puede deshacer. Envía un mensaje explicando por qué se cancela. La comida no se cancelará hasta que se envíe el mensaje." # Machine translated, remove this comment when verified
+  meal_mailer:
+    meal_link:
+      see_more: "Más información sobre la comida aquí: %{url}" # Machine translated, remove this comment when verified
+    meal_reminder:
+      subject: "Recordatorio de comida: %{datetime} - %{title} en %{location}" # Machine translated, remove this comment when verified
+      reminder: "Te recordamos que estás inscrito en la comida «%{title}» del %{date}." # Machine translated, remove this comment when verified
+      reminder_at_location: "Te recordamos que estás inscrito en la comida «%{title}» del %{date} en %{location}." # Machine translated, remove this comment when verified
+      comments_intro: "Tu inscripción incluía estos comentarios:" # Machine translated, remove this comment when verified
+      staff: "El equipo de la comida es:" # Machine translated, remove this comment when verified
+      staff_member: "- %{role}: %{name}" # Machine translated, remove this comment when verified
+      bon_appetit: "¡Buen provecho!" # Machine translated, remove this comment when verified
+      body:
+        diner_count:
+          one: "Hay %{count} comensal de tu hogar inscrito." # Machine translated, remove this comment when verified
+          other: "Hay %{count} comensales de tu hogar inscritos." # Machine translated, remove this comment when verified
+    role_reminder:
+      subject: "Recordatorio de tarea: %{role} el %{datetime} en %{location}%{note}" # Machine translated, remove this comment when verified
+      scheduled: "Te recordamos que estás programado como %{role} en la comida «%{title}» del %{date}." # Machine translated, remove this comment when verified
+      shift: "Tu turno es %{times}. Está previsto servir la comida a las %{time}." # Machine translated, remove this comment when verified
+      shift_at_location: "Tu turno es %{times} en %{location}. Está previsto servir la comida a las %{time}." # Machine translated, remove this comment when verified
+      note_intro: "Este recordatorio incluye la siguiente nota:" # Machine translated, remove this comment when verified
+      crucial: "¡Tu ayuda es fundamental! ¡Llega puntual a tu turno!" # Machine translated, remove this comment when verified
+      contacts_intro: "Estos son los datos de contacto de otras personas del equipo de la comida:" # Machine translated, remove this comment when verified
+      contact: "%{role}: %{name}, %{email}, %{phones}" # Machine translated, remove this comment when verified
+    worker_change_notice:
+      subject: "Aviso de cambio en las asignaciones de una comida" # Machine translated, remove this comment when verified
+      intro: "%{name} acaba de hacer los siguientes cambios en la comida «%{title}» del %{date}." # Machine translated, remove this comment when verified
+      intro_at_location: "%{name} acaba de hacer los siguientes cambios en la comida «%{title}» del %{date} en %{location}." # Machine translated, remove this comment when verified
+      added: "- Se añadió a %{name} como %{role}" # Machine translated, remove this comment when verified
+      removed: "- Se quitó a %{name} como %{role}" # Machine translated, remove this comment when verified
+      thanks: "¡Gracias y que aproveche!" # Machine translated, remove this comment when verified
+    cook_menu_reminder:
+      subject: "Recordatorio de menú: publica el menú del %{date}" # Machine translated, remove this comment when verified
+      second_reminder: "** Segundo recordatorio **" # Machine translated, remove this comment when verified
+      reminder: "Te recordamos que publiques el menú de tu comida del %{date}." # Machine translated, remove this comment when verified
+      asap: "¡Publica un menú lo antes posible para que los residentes puedan organizarse y para asegurar una buena asistencia!" # Machine translated, remove this comment when verified
+      post_here: "Puedes publicar el menú aquí:" # Machine translated, remove this comment when verified
+      thanks: "¡Gracias!" # Machine translated, remove this comment when verified
+    normal_message:
+      subject: "Mensaje sobre la comida del %{datetime}" # Machine translated, remove this comment when verified
+      intro: "%{sender} envió el siguiente mensaje sobre la comida «%{title}» del %{date}." # Machine translated, remove this comment when verified
+      intro_at_location: "%{sender} envió el siguiente mensaje sobre la comida «%{title}» del %{date} en %{location}." # Machine translated, remove this comment when verified
+    cancellation_message:
+      subject: "Comida del %{datetime} CANCELADA" # Machine translated, remove this comment when verified
+      regret: "Lamentamos informarte de que la comida «%{title}» del %{date} se ha CANCELADO." # Machine translated, remove this comment when verified
+      regret_at_location: "Lamentamos informarte de que la comida «%{title}» del %{date} en %{location} se ha CANCELADO." # Machine translated, remove this comment when verified
+      sender_wrote: "%{sender} envió el siguiente mensaje sobre la cancelación:" # Machine translated, remove this comment when verified

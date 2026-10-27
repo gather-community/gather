@@ -1,0 +1,10 @@
+es:
+  dropzone:
+    dictFileTooBig: "El archivo es demasiado grande ({{filesize}} MiB). El tamaño máximo es {{maxFilesize}} MiB." # Machine translated, remove this comment when verified
+    dictFileUnreadable: "No se pudo leer este archivo. Inténtalo de nuevo o elige otro." # Machine translated, remove this comment when verified
+    dictFileSizeUnits:
+      tb: "TiB" # Machine translated, remove this comment when verified
+      gb: "GiB" # Machine translated, remove this comment when verified
+      mb: "MiB" # Machine translated, remove this comment when verified
+      kb: "KiB" # Machine translated, remove this comment when verified
+      b: "B" # Machine translated, remove this comment when verified

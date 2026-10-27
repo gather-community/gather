@@ -1,0 +1,17 @@
+es:
+  views:
+    pagination:
+      first: "&laquo;"
+      last: "&raquo;"
+      previous: "&lsaquo;"
+      next: "&rsaquo;"
+      truncate: "&hellip;"
+  helpers:
+    page_entries_info:
+      one_page:
+        display_entries:
+          zero: "No se encontró ningún elemento (%{entry_name})" # Machine translated, remove this comment when verified
+          one: "Mostrando <b>1</b> %{entry_name}" # Machine translated, remove this comment when verified
+          other: "Mostrando <b>los %{count}</b> %{entry_name}" # Machine translated, remove this comment when verified
+      more_pages:
+        display_entries: "Mostrando %{entry_name} <b>%{first}&nbsp;-&nbsp;%{last}</b> de <b>%{total}</b> en total" # Machine translated, remove this comment when verified

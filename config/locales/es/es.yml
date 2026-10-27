@@ -1,0 +1,526 @@
+es:
+  common:
+    settings: "Ajustes" # Machine translated, remove this comment when verified
+    settings_updated: "Ajustes actualizados." # Machine translated, remove this comment when verified
+    open_date_picker: "Abrir el selector de fecha" # Machine translated, remove this comment when verified
+    select_user: "Elegir persona…" # Machine translated, remove this comment when verified
+    adults: "Adultos" # Machine translated, remove this comment when verified
+    all: "Todos" # Machine translated, remove this comment when verified
+    cancel: "Cancelar" # Machine translated, remove this comment when verified
+    cancelled: "Cancelado" # Machine translated, remove this comment when verified
+    children: "Niños" # Machine translated, remove this comment when verified
+    clearing_the_filter: "quitar los filtros" # Machine translated, remove this comment when verified
+    create_new: "Crear" # Machine translated, remove this comment when verified
+    none_bracketed: "[Ninguno]" # Machine translated, remove this comment when verified
+    with_inactive: "%{name} (inactivo)" # Machine translated, remove this comment when verified
+    close: "Cerrar" # Machine translated, remove this comment when verified
+    print: "Imprimir" # Machine translated, remove this comment when verified
+    loading_indicator: "Indicador de carga" # Machine translated, remove this comment when verified
+    generated_at: "Generado: %{time}" # Machine translated, remove this comment when verified
+    community_count:
+      one: "%{count} comunidad" # Machine translated, remove this comment when verified
+      other: "%{count} comunidades" # Machine translated, remove this comment when verified
+    default: "Predeterminado" # Machine translated, remove this comment when verified
+    edit: "Editar" # Machine translated, remove this comment when verified
+    "false": "Falso" # Machine translated, remove this comment when verified
+    hidden: "Oculto" # Machine translated, remove this comment when verified
+    inactive: "Inactivo" # Machine translated, remove this comment when verified
+    max: "Máx." # Machine translated, remove this comment when verified
+    no_result_clear_filter_link_html: "Puedes probar a %{link}." # Machine translated, remove this comment when verified
+    none: "Ninguno" # Machine translated, remove this comment when verified
+    num_in_total: "%{count} en total" # Machine translated, remove this comment when verified
+    save: "Guardar" # Machine translated, remove this comment when verified
+    "true": "Verdadero" # Machine translated, remove this comment when verified
+    unknown: "Desconocido" # Machine translated, remove this comment when verified
+    unlimited: "Ilimitado" # Machine translated, remove this comment when verified
+    "yes": "Sí" # Machine translated, remove this comment when verified
+    "no": "No" # Machine translated, remove this comment when verified
+    time_with_preposition:
+      "on": "el %{t}" # Machine translated, remove this comment when verified
+      "at": "a las %{t}" # Machine translated, remove this comment when verified
+      "until": "hasta el %{t}" # Machine translated, remove this comment when verified
+    this_year: "Este año" # Machine translated, remove this comment when verified
+    this_quarter: "Este trimestre" # Machine translated, remove this comment when verified
+    this_month: "Este mes" # Machine translated, remove this comment when verified
+    all_time: "Desde siempre" # Machine translated, remove this comment when verified
+
+  helpers:
+    submit:
+      cancel: "Cancelar" # Machine translated, remove this comment when verified
+      confirm: "Confirmar" # Machine translated, remove this comment when verified
+      continue: "Continuar" # Machine translated, remove this comment when verified
+      create: "Guardar" # Machine translated, remove this comment when verified
+      go_back: "Volver" # Machine translated, remove this comment when verified
+      import: "Importar" # Machine translated, remove this comment when verified
+      opt_out: "Darse de baja" # Machine translated, remove this comment when verified
+      update: "Guardar" # Machine translated, remove this comment when verified
+      save_and_invite: "Guardar e invitar" # Machine translated, remove this comment when verified
+      sign_in: "Iniciar sesión" # Machine translated, remove this comment when verified
+      send_reset_instructions: "Enviar instrucciones de restablecimiento" # Machine translated, remove this comment when verified
+      set_password: "Establecer contraseña" # Machine translated, remove this comment when verified
+      meals_message:
+        create: "Enviar mensaje" # Machine translated, remove this comment when verified
+      meals_signup:
+        save_and_next: "Guardar e ir a la comida siguiente" # Machine translated, remove this comment when verified
+      wiki_page:
+        preview: "Vista previa" # Machine translated, remove this comment when verified
+
+  errors:
+    messages:
+      invalid_yaml: "YAML no válido" # Machine translated, remove this comment when verified
+      invalid_custom_field_spec: "Esta especificación no es válida. Contacta con el soporte de Gather para obtener ayuda." # Machine translated, remove this comment when verified
+      no_semicolons: "No se permiten puntos y coma" # Machine translated, remove this comment when verified
+
+  modal:
+    ok: "Aceptar" # Machine translated, remove this comment when verified
+    cancel: "Cancelar" # Machine translated, remove this comment when verified
+    confirm_title: "Confirmar" # Machine translated, remove this comment when verified
+    alert_title: "Aviso" # Machine translated, remove this comment when verified
+
+  payment:
+    accountholder_required: "Indica el nombre del titular de la cuenta." # Machine translated, remove this comment when verified
+
+  confirmations:
+    billing/template:
+      destroy: "¿Seguro que quieres eliminar la plantilla «%{description}» de %{member_types}? Esta acción no se puede deshacer." # Machine translated, remove this comment when verified
+    domain:
+      destroy: "¿Seguro que quieres eliminar el dominio «%{name}»? Esta acción no se puede deshacer." # Machine translated, remove this comment when verified
+    groups/group:
+      destroy: "¿Seguro que quieres eliminar el grupo «%{name}»? Esta acción no se puede deshacer." # Machine translated, remove this comment when verified
+      deactivate: "¿Seguro que quieres desactivar el grupo «%{name}»?" # Machine translated, remove this comment when verified
+    household:
+      destroy: "¿Seguro que quieres eliminar el hogar «%{name}»? Esta acción no se puede deshacer." # Machine translated, remove this comment when verified
+      deactivate: "¿Seguro que quieres desactivar el hogar «%{name}»? Se desactivarán todas las personas del hogar." # Machine translated, remove this comment when verified
+    meals/meal:
+      close: "¿Seguro que quieres cerrar esta comida? No se permitirán más inscripciones." # Machine translated, remove this comment when verified
+      destroy: "¿Seguro que quieres eliminar la comida «%{title}»? Esta acción no se puede deshacer." # Machine translated, remove this comment when verified
+      reopen: "¿Seguro que quieres reabrir esta comida? Se permitirán nuevas inscripciones." # Machine translated, remove this comment when verified
+      unfinalize: "¿Seguro que quieres deshacer la finalización de esta comida?" # Machine translated, remove this comment when verified
+    user:
+      destroy: "¿Seguro que quieres eliminar a «%{name}»? Esta acción no se puede deshacer." # Machine translated, remove this comment when verified
+      deactivate: "¿Seguro que quieres desactivar a «%{name}»? Se le quitará de todos sus grupos." # Machine translated, remove this comment when verified
+      invite: "Se enviará un correo a «%{name}» con instrucciones para iniciar sesión. ¿Continuar?" # Machine translated, remove this comment when verified
+    people/member_type:
+      destroy: "¿Seguro que quieres eliminar el tipo de miembro «%{name}»? Los hogares de este tipo se quedarán sin tipo de miembro. Esta acción no se puede deshacer." # Machine translated, remove this comment when verified
+    people/memorial:
+      destroy: "¿Seguro que quieres eliminar el homenaje a «%{name}»? Esta acción no se puede deshacer." # Machine translated, remove this comment when verified
+    people/memorial_message:
+      destroy: "¿Seguro que quieres eliminar este mensaje del homenaje? Esta acción no se puede deshacer." # Machine translated, remove this comment when verified
+    calendars/protocol:
+      destroy: "¿Seguro que quieres eliminar las normas «%{name}»? Esta acción no se puede deshacer." # Machine translated, remove this comment when verified
+    calendars/calendar:
+      destroy: "¿Seguro que quieres eliminar el calendario «%{name}»? Esta acción no se puede deshacer." # Machine translated, remove this comment when verified
+      deactivate: "¿Seguro que quieres desactivar el calendario «%{name}»?" # Machine translated, remove this comment when verified
+    calendars/event:
+      destroy: "¿Seguro que quieres eliminar el evento «%{name}»? Esta acción no se puede deshacer." # Machine translated, remove this comment when verified
+      destroy_series: "¿Seguro que quieres eliminar todas las repeticiones, pasadas y futuras, del evento periódico «%{name}»? Esta acción no se puede deshacer." # Machine translated, remove this comment when verified
+    calendars/group:
+      destroy: "¿Seguro que quieres eliminar este grupo de calendarios? Esta acción no se puede deshacer." # Machine translated, remove this comment when verified
+    gdrive/item:
+      destroy: "¿Seguro que quieres quitar este elemento? No se eliminará de Google Drive, pero dejará de estar vinculado a Gather." # Machine translated, remove this comment when verified
+    gdrive/item_group:
+      destroy: "¿Seguro que quieres quitar este grupo?" # Machine translated, remove this comment when verified
+    gdrive/migration/operation:
+      destroy: "¿Seguro que quieres eliminar esta migración? Se eliminará toda la información de la migración. No se tocará ningún archivo de Google Drive." # Machine translated, remove this comment when verified
+    meals/formula:
+      destroy: "¿Seguro que quieres eliminar la fórmula «%{name}»? Esta acción no se puede deshacer." # Machine translated, remove this comment when verified
+      deactivate: "¿Seguro que quieres desactivar la fórmula «%{name}»?" # Machine translated, remove this comment when verified
+    meals/role:
+      destroy: "¿Seguro que quieres eliminar el rol «%{title}»? Esta acción no se puede deshacer." # Machine translated, remove this comment when verified
+      deactivate: "¿Seguro que quieres desactivar el rol «%{title}»?" # Machine translated, remove this comment when verified
+    meals/type:
+      destroy: "¿Seguro que quieres eliminar el tipo «%{name}»? Esta acción no se puede deshacer." # Machine translated, remove this comment when verified
+      deactivate: "¿Seguro que quieres desactivar el tipo «%{name}»?" # Machine translated, remove this comment when verified
+    wiki/page:
+      destroy: "¿Seguro que quieres eliminar la página de la wiki «%{title}»? Esta acción no se puede deshacer." # Machine translated, remove this comment when verified
+    work/job:
+      destroy: "¿Seguro que quieres eliminar la tarea «%{title}»? Esta acción no se puede deshacer." # Machine translated, remove this comment when verified
+    work/period:
+      destroy: "¿Seguro que quieres eliminar el período «%{name}»? Esta acción no se puede deshacer." # Machine translated, remove this comment when verified
+    work/shift:
+      unsignup: "¿Seguro que quieres quitar tu nombre de esta tarea?" # Machine translated, remove this comment when verified
+
+  activatables:
+    community:
+      one_html: "Esta comunidad se desactivó el %{time}." # Machine translated, remove this comment when verified
+      two_html: "Puedes %{link}." # Machine translated, remove this comment when verified
+      three: "reactivarla" # Machine translated, remove this comment when verified
+    user:
+      one_html: "Esta persona se marcó como inactiva el %{time}." # Machine translated, remove this comment when verified
+      two_html: "Puedes %{link}." # Machine translated, remove this comment when verified
+      three: "reactivarla" # Machine translated, remove this comment when verified
+    household:
+      one_html: "Este hogar se marcó como inactivo el %{time}." # Machine translated, remove this comment when verified
+      two_html: "Puedes %{link}. <strong>Nota:</strong> tendrás que reactivar por separado a las personas del hogar." # Machine translated, remove this comment when verified
+      three: "reactivarlo" # Machine translated, remove this comment when verified
+    groups/group:
+      one_html: "Este grupo se marcó como inactivo el %{time}." # Machine translated, remove this comment when verified
+      two_html: "Puedes %{link}." # Machine translated, remove this comment when verified
+      three: "reactivarlo" # Machine translated, remove this comment when verified
+    calendars/calendar:
+      one_html: "Este calendario se marcó como inactivo el %{time}." # Machine translated, remove this comment when verified
+      two_html: "Puedes %{link}." # Machine translated, remove this comment when verified
+      three: "reactivarlo" # Machine translated, remove this comment when verified
+    meals/formula:
+      one_html: "Esta fórmula se marcó como inactiva el %{time}." # Machine translated, remove this comment when verified
+      two_html: "Puedes %{link}." # Machine translated, remove this comment when verified
+      three: "reactivarla" # Machine translated, remove this comment when verified
+    meals/role:
+      one_html: "Este rol se marcó como inactivo el %{time}." # Machine translated, remove this comment when verified
+      two_html: "Puedes %{link}." # Machine translated, remove this comment when verified
+      three: "reactivarlo" # Machine translated, remove this comment when verified
+    meals/type:
+      one_html: "Este tipo se marcó como inactivo el %{time}." # Machine translated, remove this comment when verified
+      two_html: "Puedes %{link}." # Machine translated, remove this comment when verified
+      three: "reactivarlo" # Machine translated, remove this comment when verified
+
+  deactivatable:
+    community:
+      success:
+        activate: "Comunidad reactivada." # Machine translated, remove this comment when verified
+    household:
+      success:
+        activate: "Hogar activado." # Machine translated, remove this comment when verified
+        deactivate: "Hogar desactivado." # Machine translated, remove this comment when verified
+        destroy: "Hogar eliminado." # Machine translated, remove this comment when verified
+        hard_destroy: "El hogar y todos sus miembros se eliminaron definitivamente." # Machine translated, remove this comment when verified
+    user:
+      success:
+        activate: "Persona activada." # Machine translated, remove this comment when verified
+        activate_unconfirmed: "Persona activada, pero necesitará una invitación para iniciar sesión. Haz clic en «Invitar» abajo para invitarla." # Machine translated, remove this comment when verified
+        deactivate: "Persona desactivada." # Machine translated, remove this comment when verified
+        destroy: "Persona eliminada." # Machine translated, remove this comment when verified
+        hard_destroy: "La persona se eliminó definitivamente." # Machine translated, remove this comment when verified
+      error:
+        activate: "Error al activar: %{message}" # Machine translated, remove this comment when verified
+        deactivate: "Error al desactivar: %{message}" # Machine translated, remove this comment when verified
+    billing/template:
+      success:
+        destroy: "Plantilla eliminada." # Machine translated, remove this comment when verified
+    domain:
+      success:
+        destroy: "Dominio eliminado." # Machine translated, remove this comment when verified
+    gdrive/item:
+      success:
+        destroy: "Elemento quitado." # Machine translated, remove this comment when verified
+    gdrive/item_group:
+      success:
+        destroy: "Grupo quitado." # Machine translated, remove this comment when verified
+    gdrive/migration/operation:
+      success:
+        destroy: "Operación eliminada." # Machine translated, remove this comment when verified
+    groups/group:
+      success:
+        deactivate: "Grupo desactivado." # Machine translated, remove this comment when verified
+        activate: "Grupo activado." # Machine translated, remove this comment when verified
+        destroy: "Grupo eliminado." # Machine translated, remove this comment when verified
+    calendars/protocol:
+      success:
+        destroy: "Normas eliminadas." # Machine translated, remove this comment when verified
+    calendars/group:
+      success:
+        destroy: "Grupo eliminado." # Machine translated, remove this comment when verified
+    calendars/calendar:
+      success:
+        activate: "Calendario activado." # Machine translated, remove this comment when verified
+        deactivate: "Calendario desactivado." # Machine translated, remove this comment when verified
+        destroy: "Calendario eliminado." # Machine translated, remove this comment when verified
+    meals/meal:
+      success:
+        destroy: "Comida eliminada." # Machine translated, remove this comment when verified
+    meals/formula:
+      success:
+        activate: "Fórmula activada." # Machine translated, remove this comment when verified
+        deactivate: "Fórmula desactivada." # Machine translated, remove this comment when verified
+        destroy: "Fórmula eliminada." # Machine translated, remove this comment when verified
+    meals/role:
+      success:
+        activate: "Rol activado." # Machine translated, remove this comment when verified
+        deactivate: "Rol desactivado." # Machine translated, remove this comment when verified
+        destroy: "Rol eliminado." # Machine translated, remove this comment when verified
+    meals/type:
+      success:
+        activate: "Tipo activado." # Machine translated, remove this comment when verified
+        deactivate: "Tipo desactivado." # Machine translated, remove this comment when verified
+        destroy: "Tipo eliminado." # Machine translated, remove this comment when verified
+    people/member_type:
+      success:
+        destroy: "Tipo de miembro eliminado." # Machine translated, remove this comment when verified
+    people/memorial:
+      success:
+        destroy: "Homenaje eliminado." # Machine translated, remove this comment when verified
+    people/memorial_message:
+      success:
+        destroy: "Mensaje eliminado." # Machine translated, remove this comment when verified
+    work/job:
+      success:
+        destroy: "Tarea eliminada." # Machine translated, remove this comment when verified
+    work/period:
+      success:
+        destroy: "Período eliminado." # Machine translated, remove this comment when verified
+
+  cocoon:
+    add_links:
+      vehicles: "Añadir vehículo" # Machine translated, remove this comment when verified
+      emergency_contacts: "Añadir contacto de emergencia" # Machine translated, remove this comment when verified
+      up_guardianships: "Añadir padre, madre o tutor" # Machine translated, remove this comment when verified
+      pets: "Añadir mascota" # Machine translated, remove this comment when verified
+      shifts: "Añadir turno" # Machine translated, remove this comment when verified
+      assignments: "Añadir persona" # Machine translated, remove this comment when verified
+      reminders: "Añadir recordatorio" # Machine translated, remove this comment when verified
+      restrictions: "Añadir restricción" # Machine translated, remove this comment when verified
+      signups: "Añadir hogar" # Machine translated, remove this comment when verified
+      groups/group:
+        memberships: "Añadir miembro" # Machine translated, remove this comment when verified
+      meals/signup:
+        parts: "Añadir elemento" # Machine translated, remove this comment when verified
+      meals/formula:
+        parts: "Añadir tipo de comida" # Machine translated, remove this comment when verified
+
+  select2:
+    prompts:
+      creator: "Escribe unas letras del nombre del creador." # Machine translated, remove this comment when verified
+      sponsor: "Escribe unas letras del nombre del patrocinador." # Machine translated, remove this comment when verified
+      household: "Escribe unas letras del nombre del hogar." # Machine translated, remove this comment when verified
+      guardian: "Escribe unas letras del nombre del tutor." # Machine translated, remove this comment when verified
+      user: "Escribe unas letras del nombre de la persona." # Machine translated, remove this comment when verified
+      job_choosing_proxy: "Escribe unas letras del nombre de la persona." # Machine translated, remove this comment when verified
+      type: "Escribe unas letras del nombre del tipo de comida, o el nombre completo para añadir uno nuevo." # Machine translated, remove this comment when verified
+      category: "Escribe unas letras de la categoría, o el nombre completo para añadir una nueva." # Machine translated, remove this comment when verified
+      reimbursee: "Escribe unas letras del nombre de la persona reembolsada." # Machine translated, remove this comment when verified
+    placeholders:
+      creator: "Elegir creador…" # Machine translated, remove this comment when verified
+      sponsor: "Elegir patrocinador…" # Machine translated, remove this comment when verified
+      household: "Elegir hogar…" # Machine translated, remove this comment when verified
+      guardian: "Elegir tutor…" # Machine translated, remove this comment when verified
+      user: "Elegir persona…" # Machine translated, remove this comment when verified
+      job_choosing_proxy: "Elegir persona…" # Machine translated, remove this comment when verified
+      type: "Elegir o escribir tipo…" # Machine translated, remove this comment when verified
+      category: "Elegir o escribir categoría…" # Machine translated, remove this comment when verified
+      reimbursee: "Elegir persona reembolsada…" # Machine translated, remove this comment when verified
+
+  csv:
+    headers:
+      user:
+        id: "ID"
+        first_name: "Nombre" # Machine translated, remove this comment when verified
+        last_name: "Apellidos" # Machine translated, remove this comment when verified
+        unit_num: "N.º de vivienda" # Machine translated, remove this comment when verified
+        unit_suffix: "Sufijo de vivienda" # Machine translated, remove this comment when verified
+        birthdate: "Cumpleaños" # Machine translated, remove this comment when verified
+        pronouns: "Pronombres" # Machine translated, remove this comment when verified
+        email: "Correo" # Machine translated, remove this comment when verified
+        google_email: "Correo de Google" # Machine translated, remove this comment when verified
+        paypal_email: "Correo de PayPal" # Machine translated, remove this comment when verified
+        child: "Es niño" # Machine translated, remove this comment when verified
+        full_access: "Acceso completo" # Machine translated, remove this comment when verified
+        household_id: "ID del hogar" # Machine translated, remove this comment when verified
+        household_name: "Nombre del hogar" # Machine translated, remove this comment when verified
+        mobile_phone: "Teléfono móvil" # Machine translated, remove this comment when verified
+        home_phone: "Teléfono de casa" # Machine translated, remove this comment when verified
+        work_phone: "Teléfono del trabajo" # Machine translated, remove this comment when verified
+        joined_on: "Fecha de llegada" # Machine translated, remove this comment when verified
+        deactivated_at: "Fecha de salida" # Machine translated, remove this comment when verified
+        preferred_contact: "Contacto preferido" # Machine translated, remove this comment when verified
+        garage_nums: "N.º de garaje" # Machine translated, remove this comment when verified
+        vehicles: "Vehículos" # Machine translated, remove this comment when verified
+        guardian_names: "Padres/tutores" # Machine translated, remove this comment when verified
+        keyholders: "Personas con llave" # Machine translated, remove this comment when verified
+        emergency_contacts: "Contactos de emergencia" # Machine translated, remove this comment when verified
+        pets: "Mascotas" # Machine translated, remove this comment when verified
+      billing/account:
+        number: "Número" # Machine translated, remove this comment when verified
+        community_id: "ID de la comunidad" # Machine translated, remove this comment when verified
+        community_name: "Comunidad" # Machine translated, remove this comment when verified
+        household_id: "ID del hogar" # Machine translated, remove this comment when verified
+        household_name: "Hogar" # Machine translated, remove this comment when verified
+        balance_due: "Saldo a pagar" # Machine translated, remove this comment when verified
+        current_balance: "Saldo actual" # Machine translated, remove this comment when verified
+        credit_limit: "Límite de crédito" # Machine translated, remove this comment when verified
+        last_statement_id: "ID del último estado de cuenta" # Machine translated, remove this comment when verified
+        last_statement_on: "Fecha del último estado de cuenta" # Machine translated, remove this comment when verified
+        due_last_statement: "A pagar en el último estado de cuenta" # Machine translated, remove this comment when verified
+        total_new_charges: "Total de nuevos cargos" # Machine translated, remove this comment when verified
+        total_new_credits: "Total de nuevos abonos" # Machine translated, remove this comment when verified
+        created_at: "Fecha de creación" # Machine translated, remove this comment when verified
+      billing/transaction:
+        id: "ID"
+        incurred_on: "Fecha en que se produjo" # Machine translated, remove this comment when verified
+        code: "Código" # Machine translated, remove this comment when verified
+        chg_crd: "Tipo" # Machine translated, remove this comment when verified
+        description: "Descripción" # Machine translated, remove this comment when verified
+        household_id: "ID del hogar" # Machine translated, remove this comment when verified
+        household_name: "Hogar" # Machine translated, remove this comment when verified
+        quantity: "Cantidad" # Machine translated, remove this comment when verified
+        unit_price: "Precio unitario" # Machine translated, remove this comment when verified
+        amount: "Importe" # Machine translated, remove this comment when verified
+        created_at: "Fecha de registro" # Machine translated, remove this comment when verified
+        account_id: "ID de la cuenta" # Machine translated, remove this comment when verified
+        statement_id: "ID del estado de cuenta" # Machine translated, remove this comment when verified
+        meal_id: "ID de la comida" # Machine translated, remove this comment when verified
+      meals/meal:
+        served_at: "Fecha/hora" # Machine translated, remove this comment when verified
+        calendars: "Lugares" # Machine translated, remove this comment when verified
+        formula: "Fórmula" # Machine translated, remove this comment when verified
+        communities: "Comunidades" # Machine translated, remove this comment when verified
+        role: "Rol" # Machine translated, remove this comment when verified
+        action: "Acción" # Machine translated, remove this comment when verified
+        id: "ID"
+        title: "Título" # Machine translated, remove this comment when verified
+        entrees: "Plato principal" # Machine translated, remove this comment when verified
+        side: "Acompañamiento" # Machine translated, remove this comment when verified
+        kids: "Niños" # Machine translated, remove this comment when verified
+        dessert: "Postre" # Machine translated, remove this comment when verified
+        notes: "Notas" # Machine translated, remove this comment when verified
+        allergens: "Alérgenos" # Machine translated, remove this comment when verified
+        capacity: "Capacidad" # Machine translated, remove this comment when verified
+        status: "Estado" # Machine translated, remove this comment when verified
+        signup_count: "Total de comensales" # Machine translated, remove this comment when verified
+        spots_left: "Plazas libres" # Machine translated, remove this comment when verified
+        ingredient_cost: "Coste de los ingredientes" # Machine translated, remove this comment when verified
+        pantry_cost: "Coste de despensa" # Machine translated, remove this comment when verified
+        total_cost: "Coste total" # Machine translated, remove this comment when verified
+        payment_method: "Método de pago" # Machine translated, remove this comment when verified
+        reimbursee: "Persona reembolsada" # Machine translated, remove this comment when verified
+        diner_count: "Comensales: %{type}" # Machine translated, remove this comment when verified
+        type_price: "Precio: %{type}" # Machine translated, remove this comment when verified
+      meals/signup:
+        meal_id: "ID de la comida" # Machine translated, remove this comment when verified
+        served_at: "Fecha/hora de la comida" # Machine translated, remove this comment when verified
+        meal_title: "Título de la comida" # Machine translated, remove this comment when verified
+        calendars: "Lugares de la comida" # Machine translated, remove this comment when verified
+        formula: "Fórmula" # Machine translated, remove this comment when verified
+        community_id: "ID de la comunidad" # Machine translated, remove this comment when verified
+        community_name: "Comunidad" # Machine translated, remove this comment when verified
+        household_id: "ID del hogar" # Machine translated, remove this comment when verified
+        household_name: "Hogar" # Machine translated, remove this comment when verified
+        diner_count: "Comensales: %{type}" # Machine translated, remove this comment when verified
+        total: "Total de comensales" # Machine translated, remove this comment when verified
+        takeout: "Para llevar" # Machine translated, remove this comment when verified
+        comments: "Comentarios" # Machine translated, remove this comment when verified
+        created_at: "Hora de inscripción" # Machine translated, remove this comment when verified
+      common:
+        id: "ID"
+        action: "Acción" # Machine translated, remove this comment when verified
+    errors:
+      meals/meal:
+        calendar:
+          bad_id: "No se encontró ningún calendario con el ID %{str}" # Machine translated, remove this comment when verified
+          bad_name: "No se encontró ningún calendario llamado «%{str}»" # Machine translated, remove this comment when verified
+        formula:
+          bad_id: "No se encontró ninguna fórmula de comida con el ID %{str}" # Machine translated, remove this comment when verified
+          bad_name: "No se encontró ninguna fórmula de comida llamada «%{str}»" # Machine translated, remove this comment when verified
+        community:
+          bad_id: "No se encontró ninguna comunidad con el ID %{str}" # Machine translated, remove this comment when verified
+          bad_name: "No se encontró ninguna comunidad llamada «%{str}»" # Machine translated, remove this comment when verified
+        file_empty: "El archivo está vacío" # Machine translated, remove this comment when verified
+        invalid_headers: "Encabezados de columna no válidos: %{headers}" # Machine translated, remove this comment when verified
+        missing_columns: "Faltan columnas: %{columns}" # Machine translated, remove this comment when verified
+        invalid_action: "Acción no válida: %{action}" # Machine translated, remove this comment when verified
+        action_not_permitted: "Acción no permitida (%{action})" # Machine translated, remove this comment when verified
+        served_at_required: "La fecha y la hora son obligatorias" # Machine translated, remove this comment when verified
+        invalid_served_at: "«%{str}» no es una fecha y hora válida" # Machine translated, remove this comment when verified
+        calendars_required: "Los calendarios son obligatorios" # Machine translated, remove this comment when verified
+        meal_id_not_found: "No se encontró ninguna comida con el ID «%{id}»" # Machine translated, remove this comment when verified
+        meal_not_found: "No se encontró ninguna comida servida el %{time} en los lugares: %{locations}" # Machine translated, remove this comment when verified
+        delete_failed: "Error al eliminar la comida %{id}: «%{error}»" # Machine translated, remove this comment when verified
+        user:
+          bad_id: "No se encontró ninguna persona con el ID %{str}" # Machine translated, remove this comment when verified
+          bad_name: "No se encontró ninguna persona llamada «%{str}»" # Machine translated, remove this comment when verified
+
+  action_labels:
+    common:
+      new: "Añadir" # Machine translated, remove this comment when verified
+      edit: "Editar" # Machine translated, remove this comment when verified
+      deactivate: "Desactivar" # Machine translated, remove this comment when verified
+      destroy: "Eliminar" # Machine translated, remove this comment when verified
+      clone: "Duplicar" # Machine translated, remove this comment when verified
+      close: "Cerrar" # Machine translated, remove this comment when verified
+      join: "Unirme" # Machine translated, remove this comment when verified
+      leave: "Salir" # Machine translated, remove this comment when verified
+      opt_out: "Darme de baja" # Machine translated, remove this comment when verified
+      rejoin: "Volver a unirme" # Machine translated, remove this comment when verified
+      reopen: "Reabrir" # Machine translated, remove this comment when verified
+      rescan: "Volver a analizar" # Machine translated, remove this comment when verified
+      summary: "Resumen" # Machine translated, remove this comment when verified
+      finalize: "Finalizar" # Machine translated, remove this comment when verified
+      unfinalize: "Deshacer finalización" # Machine translated, remove this comment when verified
+      cancel: "Cancelar" # Machine translated, remove this comment when verified
+      send_message: "Mensaje" # Machine translated, remove this comment when verified
+    community:
+      visit: "Visitar" # Machine translated, remove this comment when verified
+    billing/account:
+      add_txn: "Añadir movimiento" # Machine translated, remove this comment when verified
+    user:
+      update_info: "Editar perfil" # Machine translated, remove this comment when verified
+      update_photo: "Editar foto" # Machine translated, remove this comment when verified
+      invite: "Invitar" # Machine translated, remove this comment when verified
+      impersonate: "Actuar como" # Machine translated, remove this comment when verified
+      destroy: "Eliminar definitivamente" # Machine translated, remove this comment when verified
+      delete_self: "Eliminar mi cuenta" # Machine translated, remove this comment when verified
+    household:
+      destroy: "Eliminar definitivamente" # Machine translated, remove this comment when verified
+    wiki/page:
+      history: "Historial" # Machine translated, remove this comment when verified
+    work/job:
+      edit: "Editar tarea" # Machine translated, remove this comment when verified
+    work/shift:
+      edit_job: "Editar tarea" # Machine translated, remove this comment when verified
+      signup: "Inscribirme" # Machine translated, remove this comment when verified
+      unsignup: "Quitar inscripción" # Machine translated, remove this comment when verified
+    work/period:
+      review_notices: "Enviar avisos" # Machine translated, remove this comment when verified
+      send_notices: "Enviar avisos" # Machine translated, remove this comment when verified
+
+  dropzone:
+    prompts:
+      default: "Haz clic o arrastra un archivo aquí" # Machine translated, remove this comment when verified
+      models:
+        user: "Haz clic o arrastra una foto aquí" # Machine translated, remove this comment when verified
+        calendars/calendar: "Haz clic o arrastra una foto aquí" # Machine translated, remove this comment when verified
+
+  titles:
+    meals/messages: "Enviar mensaje sobre la comida" # Machine translated, remove this comment when verified
+
+  roles:
+    admin: "Administrador" # Machine translated, remove this comment when verified
+    calendar_coordinator: "Coordinador de calendarios" # Machine translated, remove this comment when verified
+    cluster_admin: "Administrador de agrupación" # Machine translated, remove this comment when verified
+    super_admin: "Superadministrador" # Machine translated, remove this comment when verified
+    biller: "Responsable de facturación" # Machine translated, remove this comment when verified
+    photographer: "Fotógrafo" # Machine translated, remove this comment when verified
+    meals_coordinator: "Coordinador de comidas" # Machine translated, remove this comment when verified
+    wikiist: "Wikista" # Machine translated, remove this comment when verified
+    work_coordinator: "Coordinador de trabajo" # Machine translated, remove this comment when verified
+    new_community_approver: "Aprobador de comunidades nuevas" # Machine translated, remove this comment when verified
+    index:
+      title: "Roles" # Machine translated, remove this comment when verified
+      people: "Personas" # Machine translated, remove this comment when verified
+      legend: "Leyenda" # Machine translated, remove this comment when verified
+      legend_item_html: "<strong>%{role}</strong> - %{description}" # Machine translated, remove this comment when verified
+      descriptions:
+        admin: "Todos los demás roles juntos" # Machine translated, remove this comment when verified
+        biller: "Gestiona movimientos, plantillas, estados de cuenta y fórmulas de facturación, y finaliza comidas" # Machine translated, remove this comment when verified
+        photographer: "Puede editar la foto de directorio de cualquiera" # Machine translated, remove this comment when verified
+        calendar_coordinator: "Gestiona los calendarios y los eventos de cualquiera" # Machine translated, remove this comment when verified
+        meals_coordinator: "Gestiona comidas, roles de comida, fórmulas de facturación y tipos de comida" # Machine translated, remove this comment when verified
+        wikiist: "Gestiona las páginas de la wiki especialmente protegidas" # Machine translated, remove this comment when verified
+        work_coordinator: "Gestiona tareas, turnos y períodos de trabajo" # Machine translated, remove this comment when verified
+
+  phone_types:
+    abbreviations:
+      home: "c" # Machine translated, remove this comment when verified
+      work: "t" # Machine translated, remove this comment when verified
+      mobile: "m" # Machine translated, remove this comment when verified
+
+  date_range_lens:
+    past_12: "Últimos 12 meses" # Machine translated, remove this comment when verified
+
+  community_lens:
+    all: "Todas las comunidades" # Machine translated, remove this comment when verified
+
+  lens_bar:
+    clear_filter: "Quitar filtro" # Machine translated, remove this comment when verified
+
+  search_lens:
+    prompt: "Buscar…" # Machine translated, remove this comment when verified

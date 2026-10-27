@@ -1,0 +1,138 @@
+es:
+  layouts:
+    mailer:
+      notification_settings: "Ajustes de notificaciones de Gather: %{url}" # Machine translated, remove this comment when verified
+      machine_translated: "Este correo se tradujo automáticamente y puede contener errores." # Machine translated, remove this comment when verified
+    application:
+      impersonation_notice: "Estás actuando como %{name}. Todo lo que hagas parecerá hecho por esa persona." # Machine translated, remove this comment when verified
+      stop_impersonating: "Dejar de actuar como esta persona" # Machine translated, remove this comment when verified
+      home: "Inicio" # Machine translated, remove this comment when verified
+      skip_to_content: "Ir al contenido" # Machine translated, remove this comment when verified
+      show_menu: "Mostrar menú" # Machine translated, remove this comment when verified
+      toggle_navigation: "Mostrar u ocultar la navegación" # Machine translated, remove this comment when verified
+      loading: "Cargando" # Machine translated, remove this comment when verified
+      add_to_home_screen: "Añadir Gather a la pantalla de inicio" # Machine translated, remove this comment when verified
+    footer:
+      privacy_policy: "Política de privacidad" # Machine translated, remove this comment when verified
+      credits: "Créditos" # Machine translated, remove this comment when verified
+      settings: "Ajustes" # Machine translated, remove this comment when verified
+      subscription: "Suscripción" # Machine translated, remove this comment when verified
+      billing: "Facturación" # Machine translated, remove this comment when verified
+      communities: "Comunidades" # Machine translated, remove this comment when verified
+      resync_subscriptions: "Resincronizar suscripciones" # Machine translated, remove this comment when verified
+      machine_translated: "Esta página se tradujo automáticamente y puede contener errores." # Machine translated, remove this comment when verified
+      machine_translated_with_link_html: "Esta página se tradujo automáticamente y puede contener errores. %{link}" # Machine translated, remove this comment when verified
+      help_translate: "Ayuda a mejorar la traducción" # Machine translated, remove this comment when verified
+    head:
+      title_html: "Gather: %{title}" # Machine translated, remove this comment when verified
+    personal_dropdown:
+      show_menu: "Mostrar menú personal" # Machine translated, remove this comment when verified
+  shared:
+    dropzone:
+      image_attachment: "Imagen adjunta" # Machine translated, remove this comment when verified
+    mobile_back_link:
+      back_to_html: "Volver a %{label}" # Machine translated, remove this comment when verified
+  home:
+    inactive:
+      title: "Cuenta inactiva" # Machine translated, remove this comment when verified
+      body: "Tu cuenta no está activa. Aún puedes ver tus cuentas y editar tu perfil. Consulta el menú en la parte superior derecha de la pantalla." # Machine translated, remove this comment when verified
+  calendar_nav_popover:
+    message_html: "¡<b>Reservas</b> ahora se llama <b>Calendarios</b>! ¡Échale un vistazo!" # Machine translated, remove this comment when verified
+    dismiss: "Cerrar" # Machine translated, remove this comment when verified
+  landing:
+    invite_welcome: "¡Te damos la bienvenida a Gather! Elige abajo cómo iniciar sesión." # Machine translated, remove this comment when verified
+    index:
+      blurb: "La vida es mejor juntos." # Machine translated, remove this comment when verified
+      logo_alt: "Logotipo de Gather" # Machine translated, remove this comment when verified
+      sign_in_google: "Iniciar sesión con Google" # Machine translated, remove this comment when verified
+      sign_in_password: "Iniciar sesión con contraseña" # Machine translated, remove this comment when verified
+      learn_more: "Más información" # Machine translated, remove this comment when verified
+      try_it_out: "Pruébalo" # Machine translated, remove this comment when verified
+    signed_out:
+      title: "Gather - Sesión cerrada" # Machine translated, remove this comment when verified
+      signed_out: "Cerraste sesión en Gather." # Machine translated, remove this comment when verified
+      public_computer_html: "Si este es un <strong>ordenador público</strong>, quizá también quieras<br/>%{link}." # Machine translated, remove this comment when verified
+      google_sign_out: "cerrar sesión en tu cuenta de Google" # Machine translated, remove this comment when verified
+      return_home: "Volver al inicio" # Machine translated, remove this comment when verified
+    privacy_policy:
+      title: "Política de privacidad" # Machine translated, remove this comment when verified
+      english_only: "La política de privacidad solo está disponible en inglés." # Machine translated, remove this comment when verified
+    markdown:
+      title: "Guía de formato Markdown" # Machine translated, remove this comment when verified
+      intro_html: "<strong>Markdown</strong> es una forma sencilla de crear contenido de texto limpio y rico sin tener que aprender un lenguaje especial." # Machine translated, remove this comment when verified
+      if_you_type: "Si escribes…" # Machine translated, remove this comment when verified
+      displayed_like: "Se mostrará así:" # Machine translated, remove this comment when verified
+      outro: "¡Ahora diviértete creando mucho contenido útil y bonito!" # Machine translated, remove this comment when verified
+      examples:
+        formatting: "Puedes aplicar fácilmente formatos sencillos como **negrita**, _cursiva_ y ~~tachado~~." # Machine translated, remove this comment when verified
+        lists: |- # Machine translated, remove this comment when verified
+          También puedes hacer
+
+          * listas
+          * con viñetas
+              * con
+              * sublistas
+              * con sangría
+
+          y
+
+          1. listas
+          2. numeradas
+        headers: |- # Machine translated, remove this comment when verified
+          # Los encabezados
+          ## Son
+          ### Fáciles
+
+          ¡también!
+        tables: |- # Machine translated, remove this comment when verified
+          | Puedes  | Hacer |
+          |------|--------|
+          | incluso bonitas | tablas |
+          | ¡Vaya! | ¡Qué genial! |
+        links: |- # Machine translated, remove this comment when verified
+          Los enlaces a otras páginas se ven [así](http://example.com).
+
+          El texto de un enlace sin formato se reconocerá automáticamente: https://gather.coop
+        images: |- # Machine translated, remove this comment when verified
+          Puedes mostrar imágenes así:
+
+          ![Gatito](https://gather.coop/sample-image.png)
+        rule: |- # Machine translated, remove this comment when verified
+          Puedes usar una línea horizontal para dividir tu contenido:
+
+          ---
+
+          ¡genial!
+        raw_markup: |- # Machine translated, remove this comment when verified
+          Si eres un usuario avanzado y quieres usar HTML sin procesar, ¡pruébalo!
+
+          Por ejemplo, <blockquote>quizá quieras usar citas en bloque</blockquote>.
+  error_pages:
+    "400":
+      title: "El servidor no puede procesar la solicitud por un error del cliente (400 Bad Request)" # Machine translated, remove this comment when verified
+      heading: "El servidor no puede procesar la solicitud por un error del cliente." # Machine translated, remove this comment when verified
+      body: "Revisa la solicitud e inténtalo de nuevo. Si eres responsable de la aplicación, consulta los registros para más información." # Machine translated, remove this comment when verified
+    "403":
+      title: "No tienes permiso para ver esa página (403)" # Machine translated, remove this comment when verified
+      heading: "No tienes permiso para ver esa página." # Machine translated, remove this comment when verified
+      body: "Si crees que es un error, contacta con tu administrador." # Machine translated, remove this comment when verified
+    "404":
+      title: "La página que buscas no existe (404 Not Found)" # Machine translated, remove this comment when verified
+      heading: "La página que buscas no existe." # Machine translated, remove this comment when verified
+      body: "Puede que hayas escrito mal la dirección o que la página se haya movido. Si eres responsable de la aplicación, consulta los registros para más información." # Machine translated, remove this comment when verified
+    "406-unsupported-browser":
+      title: "Tu navegador no es compatible (406 Not Acceptable)" # Machine translated, remove this comment when verified
+      heading: "Tu navegador no es compatible." # Machine translated, remove this comment when verified
+      body: "Actualiza tu navegador para continuar." # Machine translated, remove this comment when verified
+    "422":
+      title: "Se rechazó el cambio que querías hacer (422 Unprocessable Entity)" # Machine translated, remove this comment when verified
+      heading: "Se rechazó el cambio que querías hacer." # Machine translated, remove this comment when verified
+      body: "Quizá intentaste cambiar algo a lo que no tienes acceso. Si eres responsable de la aplicación, consulta los registros para más información." # Machine translated, remove this comment when verified
+    "500":
+      title: "Lo sentimos, algo salió mal (500 Internal Server Error)" # Machine translated, remove this comment when verified
+      heading: "Lo sentimos, algo salió mal." # Machine translated, remove this comment when verified
+      body: "Si eres responsable de la aplicación, consulta los registros para más información." # Machine translated, remove this comment when verified
+    offline:
+      title: "No estás conectado a Internet" # Machine translated, remove this comment when verified
+      heading: "Hubo un problema al contactar con el servidor." # Machine translated, remove this comment when verified
+      body: "Puede que hayas perdido la conexión a Internet. Intenta recargar la página." # Machine translated, remove this comment when verified

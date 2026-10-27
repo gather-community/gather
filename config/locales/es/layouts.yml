@@ -1,0 +1,150 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+es:
+  layouts:
+    mailer:
+      notification_settings: "Ajustes de notificaciones de Gather: %{url}" # MT
+      machine_translated: "Este correo se tradujo automáticamente y puede contener errores." # MT
+    application:
+      impersonation_notice: "Estás actuando como %{name}. Todo lo que hagas parecerá hecho por esa persona." # MT
+      stop_impersonating: "Dejar de actuar como esta persona" # MT
+      home: "Inicio" # MT
+      skip_to_content: "Ir al contenido" # MT
+      show_menu: "Mostrar menú" # MT
+      toggle_navigation: "Mostrar u ocultar la navegación" # MT
+      loading: "Cargando" # MT
+      add_to_home_screen: "Añadir Gather a la pantalla de inicio" # MT
+    footer:
+      privacy_policy: "Política de privacidad" # MT
+      credits: "Créditos" # MT
+      settings: "Ajustes" # MT
+      subscription: "Suscripción" # MT
+      billing: "Facturación" # MT
+      communities: "Comunidades" # MT
+      resync_subscriptions: "Resincronizar suscripciones" # MT
+      machine_translated: "Esta página se tradujo automáticamente y puede contener errores." # MT
+      machine_translated_with_link_html: "Esta página se tradujo automáticamente y puede contener errores. %{link}" # MT
+      help_translate: "Ayuda a mejorar la traducción" # MT
+    head:
+      title_html: "Gather: %{title}" # MT
+    personal_dropdown:
+      show_menu: "Mostrar menú personal" # MT
+  shared:
+    dropzone:
+      image_attachment: "Imagen adjunta" # MT
+    mobile_back_link:
+      back_to_html: "Volver a %{label}" # MT
+  home:
+    inactive:
+      title: "Cuenta inactiva" # MT
+      body: "Tu cuenta no está activa. Aún puedes ver tus cuentas y editar tu perfil. Consulta el menú en la parte superior derecha de la pantalla." # MT
+  calendar_nav_popover:
+    message_html: "¡<b>Reservas</b> ahora se llama <b>Calendarios</b>! ¡Échale un vistazo!" # MT
+    dismiss: "Cerrar" # MT
+  landing:
+    invite_welcome: "¡Te damos la bienvenida a Gather! Elige abajo cómo iniciar sesión." # MT
+    index:
+      blurb: "La vida es mejor juntos." # MT
+      logo_alt: "Logotipo de Gather" # MT
+      sign_in_google: "Iniciar sesión con Google" # MT
+      sign_in_password: "Iniciar sesión con contraseña" # MT
+      learn_more: "Más información" # MT
+      try_it_out: "Pruébalo" # MT
+    signed_out:
+      title: "Gather - Sesión cerrada" # MT
+      signed_out: "Cerraste sesión en Gather." # MT
+      public_computer_html: "Si este es un <strong>ordenador público</strong>, quizá también quieras<br/>%{link}." # MT
+      google_sign_out: "cerrar sesión en tu cuenta de Google" # MT
+      return_home: "Volver al inicio" # MT
+    privacy_policy:
+      title: "Política de privacidad" # MT
+      english_only: "La política de privacidad solo está disponible en inglés." # MT
+    markdown:
+      title: "Guía de formato Markdown" # MT
+      intro_html: "<strong>Markdown</strong> es una forma sencilla de crear contenido de texto limpio y rico sin tener que aprender un lenguaje especial." # MT
+      if_you_type: "Si escribes…" # MT
+      displayed_like: "Se mostrará así:" # MT
+      outro: "¡Ahora diviértete creando mucho contenido útil y bonito!" # MT
+      examples:
+        formatting: "Puedes aplicar fácilmente formatos sencillos como **negrita**, _cursiva_ y ~~tachado~~." # MT
+        lists: |- # MT
+          También puedes hacer
+
+          * listas
+          * con viñetas
+              * con
+              * sublistas
+              * con sangría
+
+          y
+
+          1. listas
+          2. numeradas
+        headers: |- # MT
+          # Los encabezados
+          ## Son
+          ### Fáciles
+
+          ¡también!
+        tables: |- # MT
+          | Puedes  | Hacer |
+          |------|--------|
+          | incluso bonitas | tablas |
+          | ¡Vaya! | ¡Qué genial! |
+        links: |- # MT
+          Los enlaces a otras páginas se ven [así](http://example.com).
+
+          El texto de un enlace sin formato se reconocerá automáticamente: https://gather.coop
+        images: |- # MT
+          Puedes mostrar imágenes así:
+
+          ![Gatito](https://gather.coop/sample-image.png)
+        rule: |- # MT
+          Puedes usar una línea horizontal para dividir tu contenido:
+
+          ---
+
+          ¡genial!
+        raw_markup: |- # MT
+          Si eres un usuario avanzado y quieres usar HTML sin procesar, ¡pruébalo!
+
+          Por ejemplo, <blockquote>quizá quieras usar citas en bloque</blockquote>.
+  error_pages:
+    "400":
+      title: "El servidor no puede procesar la solicitud por un error del cliente (400 Bad Request)" # MT
+      heading: "El servidor no puede procesar la solicitud por un error del cliente." # MT
+      body: "Revisa la solicitud e inténtalo de nuevo. Si eres responsable de la aplicación, consulta los registros para más información." # MT
+    "403":
+      title: "No tienes permiso para ver esa página (403)" # MT
+      heading: "No tienes permiso para ver esa página." # MT
+      body: "Si crees que es un error, contacta con tu administrador." # MT
+    "404":
+      title: "La página que buscas no existe (404 Not Found)" # MT
+      heading: "La página que buscas no existe." # MT
+      body: "Puede que hayas escrito mal la dirección o que la página se haya movido. Si eres responsable de la aplicación, consulta los registros para más información." # MT
+    "406-unsupported-browser":
+      title: "Tu navegador no es compatible (406 Not Acceptable)" # MT
+      heading: "Tu navegador no es compatible." # MT
+      body: "Actualiza tu navegador para continuar." # MT
+    "422":
+      title: "Se rechazó el cambio que querías hacer (422 Unprocessable Entity)" # MT
+      heading: "Se rechazó el cambio que querías hacer." # MT
+      body: "Quizá intentaste cambiar algo a lo que no tienes acceso. Si eres responsable de la aplicación, consulta los registros para más información." # MT
+    "500":
+      title: "Lo sentimos, algo salió mal (500 Internal Server Error)" # MT
+      heading: "Lo sentimos, algo salió mal." # MT
+      body: "Si eres responsable de la aplicación, consulta los registros para más información." # MT
+    offline:
+      title: "No estás conectado a Internet" # MT
+      heading: "Hubo un problema al contactar con el servidor." # MT
+      body: "Puede que hayas perdido la conexión a Internet. Intenta recargar la página." # MT

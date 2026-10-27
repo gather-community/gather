@@ -382,6 +382,142 @@
     }
   },
   "es": {
+    "batchable_tables": {
+      "confirmations": {
+        "gdrive__migration__owners": {
+          "send_request": {
+            "one": "¿Seguro que quieres enviar un correo de solicitud a %{count} persona?",
+            "other": "¿Seguro que quieres enviar correos de solicitud a %{count} personas?"
+          }
+        }
+      }
+    },
+    "calendar_nav_popover": {
+      "dismiss": "Cerrar",
+      "message_html": "¡<b>Reservas</b> ahora se llama <b>Calendarios</b>! ¡Échale un vistazo!"
+    },
+    "calendars": {
+      "calendar_list": {
+        "all": "Todos",
+        "deselect_all": "Deseleccionar todos",
+        "select_all": "Seleccionar todos"
+      },
+      "drag": {
+        "calendar": {
+          "all": "Mover en todos",
+          "content": "«%{name}» aparece en más de un calendario:",
+          "selected": "(seleccionado)",
+          "this": "Mover solo en %{calendar}",
+          "title": "Mover un evento de varios calendarios"
+        },
+        "confirm": "¿Seguro que quieres mover el evento «%{name}»?",
+        "confirm_occurrence": "¿Seguro que quieres mover esta repetición de «%{name}»?",
+        "error_title": "Error",
+        "load_error": "No pudimos comprobar cómo se puede mover este evento. Inténtalo de nuevo.",
+        "series": {
+          "content": "«%{name}» se repite. ¿Qué repeticiones quieres mover?",
+          "following": "Esta y las siguientes",
+          "occurrence": "Solo esta",
+          "series": "Todas las repeticiones",
+          "title": "Mover un evento periódico"
+        }
+      },
+      "grid": {
+        "agenda_label": "%{view}. Usa las flechas para moverte",
+        "agenda_label_all_day": "%{view}. Fila de todo el día. Usa las flechas para moverte",
+        "agenda_label_all_day_slots": "%{view}. Fila de todo el día seguida de %{slots}. Usa las flechas para moverte",
+        "agenda_label_slots": "%{view}. Cuadrícula de %{slots}. Usa las flechas para moverte",
+        "create_confirm": {
+          "range_html": "¿Crear un evento del <b>%{start}</b> al <b>%{end}</b>?",
+          "same_day_html": "¿Crear un evento el <b>%{date}</b>?",
+          "same_day_times_html": "¿Crear un evento el <b>%{date}</b> de <b>%{start}</b> a <b>%{end}</b>?"
+        },
+        "day_calendar": "Calendario diario",
+        "event_count": {
+          "one": "%{count} evento",
+          "other": "%{count} eventos",
+          "zero": "Sin eventos"
+        },
+        "event_count_this_month": {
+          "one": "%{count} evento este mes",
+          "other": "%{count} eventos este mes",
+          "zero": "Sin eventos este mes"
+        },
+        "event_count_this_week": {
+          "one": "%{count} evento esta semana",
+          "other": "%{count} eventos esta semana",
+          "zero": "Sin eventos esta semana"
+        },
+        "half_hour_slots": "franjas de media hora de %{start} a %{end}",
+        "header": {
+          "day_view": "Vista de día",
+          "month_view": "Vista de mes",
+          "next": "Siguiente",
+          "previous": "Anterior",
+          "today": "Hoy",
+          "toolbar": "Controles del calendario",
+          "week_view": "Vista de semana"
+        },
+        "minute_slots": "franjas de %{minutes} minutos de %{start} a %{end}",
+        "month_calendar": "Calendario mensual",
+        "now_showing": "El calendario muestra ahora %{month}",
+        "this_week_date": "Esta semana, %{date}",
+        "today_date": "Hoy, %{date}",
+        "week_calendar": "Calendario semanal"
+      }
+    },
+    "common": {
+      "adults": "Adultos",
+      "all": "Todos",
+      "all_time": "Desde siempre",
+      "cancel": "Cancelar",
+      "cancelled": "Cancelado",
+      "children": "Niños",
+      "clearing_the_filter": "quitar los filtros",
+      "close": "Cerrar",
+      "community_count": {
+        "one": "%{count} comunidad",
+        "other": "%{count} comunidades"
+      },
+      "create_new": "Crear",
+      "default": "Predeterminado",
+      "edit": "Editar",
+      "false": "Falso",
+      "generated_at": "Generado: %{time}",
+      "hidden": "Oculto",
+      "inactive": "Inactivo",
+      "loading_indicator": "Indicador de carga",
+      "max": "Máx.",
+      "no": "No",
+      "no_result_clear_filter_link_html": "Puedes probar a %{link}.",
+      "none": "Ninguno",
+      "none_bracketed": "[Ninguno]",
+      "num_in_total": "%{count} en total",
+      "open_date_picker": "Abrir el selector de fecha",
+      "print": "Imprimir",
+      "save": "Guardar",
+      "select_user": "Elegir persona…",
+      "settings": "Ajustes",
+      "settings_updated": "Ajustes actualizados.",
+      "this_month": "Este mes",
+      "this_quarter": "Este trimestre",
+      "this_year": "Este año",
+      "time_with_preposition": {
+        "at": "a las %{t}",
+        "on": "el %{t}",
+        "until": "hasta el %{t}"
+      },
+      "true": "Verdadero",
+      "unknown": "Desconocido",
+      "unlimited": "Ilimitado",
+      "with_inactive": "%{name} (inactivo)",
+      "yes": "Sí"
+    },
+    "communities": {
+      "signup_action": {
+        "approval_template": "Hola, %{name}:\n\n¡Buenas noticias! Se aprobó tu solicitud para unirte a Gather con la comunidad «%{community}».\n\n#######################################\nESCRIBE AQUÍ UNA NOTA PERSONALIZADA Y\nMENCIONA ALGO CONCRETO DE LA COMUNIDAD\n#######################################\n\n¡Tu comunidad ya está lista!\n\nRecibirás un correo aparte con instrucciones para iniciar sesión por primera vez.\n\n¡Bienvenidos a bordo!\n\n%{approver}, del equipo de Gather"
+      }
+    },
     "date": {
       "abbr_day_names": [
         "dom",
@@ -436,6 +572,66 @@
       "dformat": "%-d %b %Y",
       "pformat": "D MMM YYYY"
     },
+    "dropzone": {
+      "dictFileSizeUnits": {
+        "b": "B",
+        "gb": "GiB",
+        "kb": "KiB",
+        "mb": "MiB",
+        "tb": "TiB"
+      },
+      "dictFileTooBig": "El archivo es demasiado grande ({{filesize}} MiB). El tamaño máximo es {{maxFilesize}} MiB.",
+      "dictFileUnreadable": "No se pudo leer este archivo. Inténtalo de nuevo o elige otro.",
+      "prompts": {
+        "default": "Haz clic o arrastra un archivo aquí",
+        "models": {
+          "calendars/calendar": "Haz clic o arrastra una foto aquí",
+          "user": "Haz clic o arrastra una foto aquí"
+        }
+      }
+    },
+    "errors": {
+      "messages": {
+        "doesnt_match": "No coincide con la contraseña"
+      }
+    },
+    "meals": {
+      "report_charts": {
+        "avg_cost": "Coste medio",
+        "avg_full_meal_price": "Precio medio de una comida completa",
+        "avg_servings": "Raciones medias",
+        "avg_servings_per_meal": "Raciones medias por comida",
+        "meals": "Comidas",
+        "month": "Mes",
+        "number_of_meals": "Número de comidas",
+        "titles": {
+          "community_rep": "Representación media de las comunidades en las comidas",
+          "community_rep_community": "Representación media de las comunidades en las comidas de %{community}",
+          "cost_by_month": "Precio medio de una comida completa, por mes",
+          "cost_by_month_community": "Precio medio de una comida completa de %{community}, por mes",
+          "cost_by_weekday": "Precio medio de una comida completa, por día de la semana",
+          "cost_by_weekday_community": "Precio medio de una comida completa de %{community}, por día de la semana",
+          "meal_types": "Tipos de comida medios en las comidas",
+          "meal_types_community": "Tipos de comida medios en las comidas de %{community}",
+          "meals_by_month": "Número de comidas por mes",
+          "meals_by_month_community": "Número de comidas de %{community} por mes",
+          "servings_by_month": "Raciones medias por comida, por mes",
+          "servings_by_month_community": "Raciones medias por comida de %{community}, por mes",
+          "servings_by_weekday": "Raciones medias por comida, por día de la semana",
+          "servings_by_weekday_community": "Raciones medias por comida de %{community}, por día de la semana"
+        },
+        "weekday": "Día de la semana"
+      }
+    },
+    "meals/assignments": {
+      "change_warning": "Nota: si cambias el equipo de la comida, se enviará un aviso por correo al comité o la persona responsable de comidas y a todas las personas asignadas actuales y nuevas."
+    },
+    "modal": {
+      "alert_title": "Aviso",
+      "cancel": "Cancelar",
+      "confirm_title": "Confirmar",
+      "ok": "Aceptar"
+    },
     "moment_formats": {
       "full_date": "dddd, D [de] MMMM [de] YYYY",
       "hour": "H:mm",
@@ -445,9 +641,57 @@
       "wday_date": "ddd, D MMM YYYY",
       "wday_date_time": "ddd, D MMM YYYY, H:mm"
     },
+    "password": {
+      "strength": {
+        "excellent": "Excelente (puntuación: %{bits})",
+        "good": "Buena (puntuación: %{bits})",
+        "weak": "Demasiado débil (puntuación: %{bits})"
+      }
+    },
+    "payment": {
+      "accountholder_required": "Indica el nombre del titular de la cuenta."
+    },
+    "subscription": {
+      "topup_notices": {
+        "calculating": "Calculando…",
+        "cancel": "Tu recarga mensual se cancelará al final del mes de facturación actual. No habrá más cargos y conservarás tu saldo actual.",
+        "error": "%{reason} (Intento a las %{time}). Si vuelve a ocurrir, contacta con el soporte de Gather indicando esa hora.",
+        "error_default": "Algo salió mal y tu recarga no se modificó.",
+        "error_with_reference": "%{reason} Referencia: %{reference}. (Intento a las %{time}). Si vuelve a ocurrir, contacta con el soporte de Gather indicando esa referencia y esa hora.",
+        "first_charge": "Hoy se cargarán %{amount} a tu método de pago registrado por un mes completo, y luego %{amount} en este mismo día cada mes.",
+        "next_month": "A partir del próximo mes de facturación se te cobrarán %{amount} al mes.",
+        "prorated_charge": "Hoy se cargarán unos %{charge} a tu método de pago registrado (prorrateado), y luego %{amount} al mes a partir del %{date}.",
+        "prorated_credit": "Ahora recibirás un abono de %{credit} en tu próxima factura, y luego %{amount} al mes a partir del %{date}."
+      }
+    },
     "timepicker": {
       "dformat": "%-H:%M",
       "pformat": "H:mm"
+    },
+    "wiki": {
+      "editor": {
+        "autosaved": "Guardado automáticamente: ",
+        "bold": "Negrita",
+        "fullscreen": "Pantalla completa",
+        "heading": "Encabezado",
+        "image": "Insertar imagen",
+        "italic": "Cursiva",
+        "lines": {
+          "one": "líneas: %{count}",
+          "other": "líneas: %{count}"
+        },
+        "link": "Crear enlace",
+        "ordered_list": "Lista numerada",
+        "preview": "Vista previa",
+        "quote": "Cita",
+        "side_by_side": "Lado a lado",
+        "unordered_list": "Lista con viñetas",
+        "words": {
+          "one": "palabras: %{count}",
+          "other": "palabras: %{count}"
+        }
+      },
+      "help": "Ayuda de la wiki"
     }
   },
   "fi": {

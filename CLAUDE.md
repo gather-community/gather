@@ -343,6 +343,16 @@ The dispositions map is a **declaration**, not an assertion — it does not read
 - **Static error pages** (`public/404.html` etc.) are generated from `app/views/error_pages/` by `bundle exec rake error_pages:generate`, one copy per released locale. Edit the templates and regenerate rather than editing `public/` by hand.
 - **[spec/i18n_spec.rb](spec/i18n_spec.rb) runs in CI** (config in `config/i18n-tasks.yml`). It fails on keys used in code but missing from `en`, on unused keys, on interpolation variables that differ between locales, on a stale JS export, and on stale static error pages. Run `bundle exec i18n-tasks missing -l en` and `bundle exec i18n-tasks unused -l en` locally. When a key is built dynamically (`t("gdrive.item_kinds.#{kind}")`), add a pattern to `ignore_unused` with a comment saying where it's used. Delete keys that are really unused.
 
+**Translations.** Every key must exist in every locale, not just `en` ([spec/i18n_spec.rb](spec/i18n_spec.rb) checks the locales in `Gather::Locales::TRANSLATED`). When you add a key or change the meaning of its English text, write the other locales' values too, in the same commit:
+
+- **Mark every value you translate** with this comment at the end of its line, exactly:
+  `# Machine translated, remove this comment when verified`. For a multi-line value, put it after the `|` on the key's line. People reviewing a language search for the marker and remove it once they've checked the string. Count what's left with `grep -c "Machine translated" config/locales/fr/*.yml`.
+- **Changing English text re-marks it.** If you change what a key's English says, rewrite its translations and mark them again, even if a person had verified them.
+- **Use the glossary** ([config/locales/GLOSSARY.md](config/locales/GLOSSARY.md)) for Gather's terms and each language's voice (`vous` in French, `du` in German, and so on), so the same thing has the same name everywhere.
+- **Keep the structure:** same `%{placeholders}`, same HTML in `_html` keys, and the plural sub-keys the locale needs (French, for example, uses `one` for 0 and 1).
+- **Canadian French** (`config/locales/fr-CA/`) only holds keys where Québec usage differs from `fr`; everything else falls back to `fr`.
+- **Don't translate** date/time formats (written by hand per locale, see above) or the legal documents, which stay English.
+
 **How the locale is chosen** ([lib/gather/locales.rb](lib/gather/locales.rb)):
 
 - **Web requests** use the best match for the browser's `Accept-Language` header among `Gather::Locales::RELEASED` (currently only `en`), via the `ApplicationControllable::Locale` around_action. Users with the `i18n` feature flag (`"user"` interface) can also get unreleased locales; set your browser's language to preview one. Everything runs inside `I18n.with_locale`. Never assign `I18n.locale =`, because it leaks across requests.

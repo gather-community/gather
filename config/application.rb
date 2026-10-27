@@ -114,5 +114,9 @@ module Gather
     # rails-i18n and devise-i18n load data only for these locales.
     config.i18n.available_locales = %i[en fr fr-CA es de sv nb fi nl it]
     config.i18n.default_locale = :en
+    # Canadian French only overrides French where Québec usage differs, so it reads the rest from fr.
+    # Production also falls back to English (see production.rb); development and test don't, so that a
+    # missing translation raises.
+    config.i18n.fallbacks = {"fr-CA": :fr}
   end
 end

@@ -1,3 +1,8 @@
 <% content_for(:title, t(".title")) %>
 
+<%# The legal documents stay in English, so other languages get a note saying so. %>
+<% if I18n.locale != :en %>
+  <p class="alert alert-info"><%= t(".english_only") %></p>
+<% end %>
+
 <%= safe_render_markdown(File.read(Rails.root.join("config/locales/en/privacy_policy.md"))) %>

@@ -1,69 +1,81 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
 fr:
   admin:
     domains:
       refresh_all_started:
-        one: "Vérification de %{count} domaine en arrière-plan. Cela devrait prendre environ %{seconds} secondes. Rechargez cette page pour voir les résultats." # Machine translated, remove this comment when verified
-        other: "Vérification de %{count} domaines en arrière-plan. Cela devrait prendre environ %{seconds} secondes. Rechargez cette page pour voir les résultats." # Machine translated, remove this comment when verified
-      refresh_one_success: "%{domain} a été revérifié." # Machine translated, remove this comment when verified
-      refresh_one_failed: "%{domain} a été revérifié, mais la requête à l'API de SMTP2GO a échoué : l'état de la validation n'est peut-être plus à jour. L'erreur a été signalée." # Machine translated, remove this comment when verified
+        one: "Vérification de %{count} domaine en arrière-plan. Cela devrait prendre environ %{seconds} secondes. Rechargez cette page pour voir les résultats." # MT
+        other: "Vérification de %{count} domaines en arrière-plan. Cela devrait prendre environ %{seconds} secondes. Rechargez cette page pour voir les résultats." # MT
+      refresh_one_success: "%{domain} a été revérifié." # MT
+      refresh_one_failed: "%{domain} a été revérifié, mais la requête à l'API de SMTP2GO a échoué : l'état de la validation n'est peut-être plus à jour. L'erreur a été signalée." # MT
       lenses:
         lists:
-          all: "Tous les domaines" # Machine translated, remove this comment when verified
-          with_lists: "Avec listes de diffusion" # Machine translated, remove this comment when verified
-          without_lists: "Sans liste de diffusion" # Machine translated, remove this comment when verified
+          all: "Tous les domaines" # MT
+          with_lists: "Avec listes de diffusion" # MT
+          without_lists: "Sans liste de diffusion" # MT
       show:
-        recheck: "Revérifier maintenant" # Machine translated, remove this comment when verified
-        cluster: "Grappe" # Machine translated, remove this comment when verified
-        communities: "Communautés" # Machine translated, remove this comment when verified
-        mailman_lists: "Listes de diffusion" # Machine translated, remove this comment when verified
-        no_mailman_lists: "Aucune" # Machine translated, remove this comment when verified
-        created_at: "Créé" # Machine translated, remove this comment when verified
-        last_checked: "Dernière vérification" # Machine translated, remove this comment when verified
-        mx_heading: "Enregistrements MX" # Machine translated, remove this comment when verified
-        smtp2go_heading: "Enregistrements SMTP2GO" # Machine translated, remove this comment when verified
-        spf_heading: "Enregistrement SPF" # Machine translated, remove this comment when verified
-        spf_rule: "Correct lorsque l'enregistrement SPF du domaine (son enregistrement TXT commençant par v=spf1) contient l'inclusion requise indiquée ci-dessous et utilise au plus 10 requêtes DNS (la limite de la RFC 7208, comptée récursivement à travers les inclusions). D'autres mécanismes peuvent aussi être présents." # Machine translated, remove this comment when verified
-        spf_lookups: "Requêtes DNS" # Machine translated, remove this comment when verified
-        spf_lookups_count: "%{count} sur %{limit} autorisées" # Machine translated, remove this comment when verified
-        expected: "Attendu" # Machine translated, remove this comment when verified
-        required: "Requis" # Machine translated, remove this comment when verified
-        found: "Trouvé" # Machine translated, remove this comment when verified
-        no_records_found: "Aucun trouvé" # Machine translated, remove this comment when verified
-        record: "Enregistrement" # Machine translated, remove this comment when verified
-        host: "Hôte" # Machine translated, remove this comment when verified
-        smtp2go_verified: "Vérifié par SMTP2GO ?" # Machine translated, remove this comment when verified
-        never_checked_notice: "Ce domaine n'a pas encore été vérifié. Utilisez « Revérifier maintenant » pour lancer la première vérification." # Machine translated, remove this comment when verified
+        recheck: "Revérifier maintenant" # MT
+        cluster: "Grappe" # MT
+        communities: "Communautés" # MT
+        mailman_lists: "Listes de diffusion" # MT
+        no_mailman_lists: "Aucune" # MT
+        created_at: "Créé" # MT
+        last_checked: "Dernière vérification" # MT
+        mx_heading: "Enregistrements MX" # MT
+        smtp2go_heading: "Enregistrements SMTP2GO" # MT
+        spf_heading: "Enregistrement SPF" # MT
+        spf_rule: "Correct lorsque l'enregistrement SPF du domaine (son enregistrement TXT commençant par v=spf1) contient l'inclusion requise indiquée ci-dessous et utilise au plus 10 requêtes DNS (la limite de la RFC 7208, comptée récursivement à travers les inclusions). D'autres mécanismes peuvent aussi être présents." # MT
+        spf_lookups: "Requêtes DNS" # MT
+        spf_lookups_count: "%{count} sur %{limit} autorisées" # MT
+        expected: "Attendu" # MT
+        required: "Requis" # MT
+        found: "Trouvé" # MT
+        no_records_found: "Aucun trouvé" # MT
+        record: "Enregistrement" # MT
+        host: "Hôte" # MT
+        smtp2go_verified: "Vérifié par SMTP2GO ?" # MT
+        never_checked_notice: "Ce domaine n'a pas encore été vérifié. Utilisez « Revérifier maintenant » pour lancer la première vérification." # MT
       index:
-        title: "Domaines" # Machine translated, remove this comment when verified
-        intro: "Cette page présente l'état de la configuration de messagerie de chaque domaine personnalisé : si les enregistrements MX et SPF sont corrects et si les enregistrements de validation de SMTP2GO sont en place. Les résultats proviennent de la vérification la plus récente ; utilisez les boutons d'actualisation pour revérifier." # Machine translated, remove this comment when verified
-        none_found: "Aucun domaine personnalisé trouvé." # Machine translated, remove this comment when verified
+        title: "Domaines" # MT
+        intro: "Cette page présente l'état de la configuration de messagerie de chaque domaine personnalisé : si les enregistrements MX et SPF sont corrects et si les enregistrements de validation de SMTP2GO sont en place. Les résultats proviennent de la vérification la plus récente ; utilisez les boutons d'actualisation pour revérifier." # MT
+        none_found: "Aucun domaine personnalisé trouvé." # MT
         summary:
-          one: "%{ok} domaine sur %{count} a tous ses enregistrements corrects." # Machine translated, remove this comment when verified
-          other: "%{ok} domaines sur %{count} ont tous leurs enregistrements corrects." # Machine translated, remove this comment when verified
-        never_checked_prompt: "Aucune vérification n'a encore été effectuée : utilisez « Tout actualiser » pour lancer la première." # Machine translated, remove this comment when verified
-        not_configured: "La clé d'API de SMTP2GO n'est pas configurée : l'état d'envoi et la validation ne peuvent donc pas être vérifiés. Définissez smtp2go.api_key dans les paramètres." # Machine translated, remove this comment when verified
+          one: "%{ok} domaine sur %{count} a tous ses enregistrements corrects." # MT
+          other: "%{ok} domaines sur %{count} ont tous leurs enregistrements corrects." # MT
+        never_checked_prompt: "Aucune vérification n'a encore été effectuée : utilisez « Tout actualiser » pour lancer la première." # MT
+        not_configured: "La clé d'API de SMTP2GO n'est pas configurée : l'état d'envoi et la validation ne peuvent donc pas être vérifiés. Définissez smtp2go.api_key dans les paramètres." # MT
         headers:
-          domain: "Domaine" # Machine translated, remove this comment when verified
-          communities: "Communautés" # Machine translated, remove this comment when verified
-          mx: "Enregistrements MX" # Machine translated, remove this comment when verified
-          spf: "Enregistrement SPF" # Machine translated, remove this comment when verified
-          smtp2go: "Enregistrements SMTP2GO" # Machine translated, remove this comment when verified
-          lists: "Listes de diffusion ?" # Machine translated, remove this comment when verified
-        never_checked: "Jamais vérifié" # Machine translated, remove this comment when verified
-        refresh_all: "Tout actualiser" # Machine translated, remove this comment when verified
-        refresh_row: "Revérifier ce domaine" # Machine translated, remove this comment when verified
+          domain: "Domaine" # MT
+          communities: "Communautés" # MT
+          mx: "Enregistrements MX" # MT
+          spf: "Enregistrement SPF" # MT
+          smtp2go: "Enregistrements SMTP2GO" # MT
+          lists: "Listes de diffusion ?" # MT
+        never_checked: "Jamais vérifié" # MT
+        refresh_all: "Tout actualiser" # MT
+        refresh_row: "Revérifier ce domaine" # MT
         record_titles:
-          verified: "%{host} → %{target} — vérifié par SMTP2GO" # Machine translated, remove this comment when verified
-          in_dns: "%{host} → %{target} — trouvé dans le DNS, en attente de vérification par SMTP2GO" # Machine translated, remove this comment when verified
-          missing: "%{host} → %{target} — introuvable dans le DNS" # Machine translated, remove this comment when verified
+          verified: "%{host} → %{target} — vérifié par SMTP2GO" # MT
+          in_dns: "%{host} → %{target} — trouvé dans le DNS, en attente de vérification par SMTP2GO" # MT
+          missing: "%{host} → %{target} — introuvable dans le DNS" # MT
         smtp2go_statuses:
-          verified: "Vérifié" # Machine translated, remove this comment when verified
-          pending: "En attente" # Machine translated, remove this comment when verified
-          not_added: "Non ajouté" # Machine translated, remove this comment when verified
-          unknown: "Inconnu" # Machine translated, remove this comment when verified
+          verified: "Vérifié" # MT
+          pending: "En attente" # MT
+          not_added: "Non ajouté" # MT
+          unknown: "Inconnu" # MT
         record_kinds:
-          mx: "MX" # Machine translated, remove this comment when verified
-          spf: "SPF" # Machine translated, remove this comment when verified
-          dkim: "DKIM" # Machine translated, remove this comment when verified
-          return_path: "Retour" # Machine translated, remove this comment when verified
-          tracking: "Suivi" # Machine translated, remove this comment when verified
+          mx: "MX" # MT
+          spf: "SPF" # MT
+          dkim: "DKIM" # MT
+          return_path: "Retour" # MT
+          tracking: "Suivi" # MT

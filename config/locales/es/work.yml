@@ -1,0 +1,207 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+es:
+  work:
+    job_created: "Tarea creada." # MT
+    job_updated: "Tarea actualizada." # MT
+    job_synced_from_meals: "Esta tarea se sincronizó desde el sistema de comidas y no se puede editar directamente. Se actualizará automáticamente cuando se añadan o cambien comidas." # MT
+    period_created: "Período creado." # MT
+    period_updated: "Período actualizado." # MT
+    period_copied: "Se copiaron algunos datos del período «%{name}». Revísalos y ajústalos abajo. Las tareas se copiarán al guardar el período." # MT
+    notices_wrong_phase: "No se pueden enviar avisos porque el período no está en la fase «lista» ni «abierta»." # MT
+    notices_no_quota: "No se pueden enviar avisos porque este período no tiene cuota." # MT
+    notices_sent: "¡Los avisos están en camino!" # MT
+    signed_up: "Te inscribiste correctamente. ¡Bien!" # MT
+    signup_removed: "Se retiró tu inscripción." # MT
+    hours_abbr: "%{hours} h" # MT
+    jobs:
+      form:
+        reminders_on_role_html: "Los recordatorios de esta tarea se configuran en su %{link}." # MT
+        reminders_on_role: "Los recordatorios de esta tarea se configuran en la página de su rol de comida." # MT
+        meal_role_page: "página de rol de comida" # MT
+        shifts: "Turnos" # MT
+      edit:
+        title: "Editar tarea: %{title}" # MT
+      new:
+        title: "Crear tarea" # MT
+      index:
+        title: "Tareas" # MT
+        title_with_period: "Tareas: %{period}" # MT
+        create: "Crear tarea" # MT
+      show:
+        jobs: "Tareas" # MT
+        hours: "%{hours} horas" # MT
+    periods:
+      form:
+        do_not_copy: "No copiar tareas" # MT
+        meal_formula: "Fórmula de comida" # MT
+        meal_roles_to_sync: "Roles de comida que sincronizar" # MT
+        sync_hint: "Las tareas de comidas se sincronizan cada vez que cambia el período o se añaden, cambian o eliminan comidas. Las inscripciones se sincronizan tanto si la persona se inscribe desde las comidas como desde el trabajo. Los cambios en los roles de comida solo provocan sincronización si el período está en borrador." # MT
+        shares: "Partes" # MT
+      edit:
+        title: "Editar período: %{name}" # MT
+      new:
+        title: "Crear período" # MT
+      index:
+        title: "Períodos de trabajo" # MT
+        create: "Crear período" # MT
+        name: "Nombre" # MT
+        start: "Inicio" # MT
+        end: "Fin" # MT
+        phase: "Fase" # MT
+        links: "Enlaces" # MT
+        signups: "Inscripciones" # MT
+        report: "Informe" # MT
+        jobs: "Tareas" # MT
+      review_notices:
+        title: "Avisos de elección de tareas: %{name}" # MT
+        intro: "Se enviarán los siguientes avisos:" # MT
+      show:
+        title: "Período: %{name}" # MT
+        periods: "Períodos" # MT
+        date: "Fecha" # MT
+        max_rounds_per_worker:
+          one: "%{count} ronda máx. por persona" # MT
+          other: "%{count} rondas máx. por persona" # MT
+        workers_per_round:
+          one: "%{count} persona por ronda" # MT
+          other: "%{count} personas por ronda" # MT
+        minutes_per_round:
+          one: "%{count} minuto por ronda" # MT
+          other: "%{count} minutos por ronda" # MT
+        shares: "Partes" # MT
+      report:
+        title: "Informe de trabajo" # MT
+        title_with_period: "Informe de trabajo: %{period}" # MT
+        overview: "Resumen" # MT
+        total_hours: "Total de horas" # MT
+        jobs: "Tareas" # MT
+        people: "Personas" # MT
+        quota: "Cuota" # MT
+        by_person: "Por persona" # MT
+        by_household: "Por hogar" # MT
+        regular: "Normales" # MT
+        name: "Nombre" # MT
+    settings:
+      edit:
+        title: "Ajustes de trabajo" # MT
+    shifts:
+      shift:
+        sign_up: "¡Inscribirme!" # MT
+      shifts:
+        list_label: "Lista de inscripciones" # MT
+      index:
+        title: "Inscripción en tareas" # MT
+      show:
+        signups: "Inscripciones" # MT
+    no_periods_html: "No hay períodos accesibles. Consulta la %{link}." # MT
+    periods_page: "página de períodos" # MT
+    not_setup: "Parece que tu comunidad no ha configurado el sistema de reparto del trabajo de Gather.\nHabla con tu administrador de Gather para más información." # MT
+    choosing_as: "Estás eligiendo por %{name}. Las tareas en las que te inscribas se le asignarán a esa persona." # MT
+    no_signups: "Sin inscripciones" # MT
+    phase_notices:
+      shifts:
+        draft: "Este período está en borrador, así que aún no es posible inscribirse en tareas." # MT
+        archived: "Este período está archivado, así que no se permiten inscripciones." # MT
+      jobs:
+        archived: "Este período está archivado." # MT
+      report:
+        draft: "Este período está en borrador, así que el informe aún no es visible." # MT
+        archived: "Este período está archivado." # MT
+    num_hours: "%{num} horas" # MT
+    preassigned: "Esta plaza estaba preasignada." # MT
+    synopsis:
+      done: "¡Todo listo!" # MT
+      regular: "normales" # MT
+      for_user_html: "Te has inscrito en %{chunks}." # MT
+      for_household_html: "Tu hogar tiene %{chunks}." # MT
+      chunk:
+        single_html: "%{fraction} horas" # MT
+        multiple_html: "%{fraction} horas de %{title}" # MT
+      start_choosing: "Puedes empezar a elegir tareas %{at_or_on_time}." # MT
+      round_limit_with_next: "Tu límite por ronda es de %{prev} horas y subirá a %{next} %{at_or_on_time}." # MT
+      round_limit_until: "Tu límite por ronda es de %{prev} horas %{until_time}." # MT
+  work/jobs:
+    shifts: "Turnos" # MT
+    unlimited: "Ilimitado" # MT
+    full_community: "Es una tarea para toda la comunidad" # MT
+    preassignments: "Esta tarea tiene preasignaciones" # MT
+    meal_related: "Esta tarea está relacionada con comidas" # MT
+    none_found: "No se encontraron tareas." # MT
+  work/period:
+    phase_names:
+      archived: "Archivado" # MT
+      draft: "Borrador" # MT
+      open: "Abierto" # MT
+      published: "Publicado" # MT
+      ready: "Listo" # MT
+    num_minutes:
+      one: "%{count} minuto" # MT
+      other: "%{count} minutos" # MT
+  work/shares:
+    portion_options:
+      none: "Sin parte" # MT
+      one_qtr: "¼ de parte" # MT
+      half: "½ parte" # MT
+      three_qtr: "¾ de parte" # MT
+      full: "Parte completa" # MT
+    intro: "¿Cómo debe repartirse el trabajo de la comunidad? La mayoría de las personas deberían tener una parte completa, pero a veces hacen falta excepciones. Media parte significa que la persona hará la mitad de horas que alguien con una parte completa, etc." # MT
+    priority_hint_html: "El sistema calcula automáticamente quién elige primero según el número de horas necesarias. Las personas con <i class='fa fa-star'></i> van antes que las demás." # MT
+    change_warning: "Este período está activo. Cambiar las partes o el tipo de cuota afectará al cálculo de las cuotas. ¡Hazlo con cuidado!" # MT
+  work/shift:
+    choosing_as: "Eligiendo por %{name}" # MT
+    slots_exceeded: "¡Vaya, parece que alguien se te adelantó!" # MT
+    already_signed_up: "Ya te inscribiste en este turno." # MT
+    not_signed_up: "No te has inscrito en este turno." # MT
+    round_limit_exceeded: "Superaste tu límite por ronda." # MT
+    slots_open:
+      one: "%{count} plaza libre" # MT
+      other: "%{count} plazas libres" # MT
+  work/job_reminder:
+    absolute: "A las %{time}" # MT
+    relative:
+      days_before:
+        one: "%{count} día antes" # MT
+        other: "%{count} días antes" # MT
+      days_after:
+        one: "%{count} día después" # MT
+        other: "%{count} días después" # MT
+      hours_before:
+        one: "%{count} hora antes" # MT
+        other: "%{count} horas antes" # MT
+      hours_after:
+        one: "%{count} hora después" # MT
+        other: "%{count} horas después" # MT
+  work_mailer:
+    job_reminder:
+      subject: "Recordatorio de tarea: %{title}, %{times}" # MT
+      subject_with_note: "Recordatorio de tarea: %{title}: %{note}" # MT
+      scheduled: "Te recordamos que estás programado como «%{job}» para %{times}." # MT
+      note_intro: "Este recordatorio incluye la siguiente nota:" # MT
+      see_description: "Consulta la descripción de la tarea aquí: %{url}." # MT
+      thanks: "¡Gracias por tu servicio a la comunidad!" # MT
+    job_choosing_notice:
+      subject: "¡Se acerca la elección de tareas!" # MT
+      coming_up_on: "¡La elección de tareas será el %{date}!" # MT
+      coming_up_soon: "¡La elección de tareas será pronto!" # MT
+      quota: "Tienes %{got} horas preasignadas y tu cuota es de %{quota}, así que debes elegir %{need} horas normales." # MT
+      also_choose: "También tienes que elegir %{hours}." # MT
+      full_community_hours: "%{hours} horas de %{title}" # MT
+      begin_at: "Puedes empezar a elegir a las %{time}." # MT
+      schedule_intro: "Tu calendario de rondas es el siguiente:" # MT
+      round_with_limit: "* A las %{time} podrás elegir hasta %{limit} horas." # MT
+      round_finish: "* A las %{time} podrás terminar de elegir." # MT
+      go_to: "Entra en %{url} a las horas indicadas para elegir tus tareas. También puedes entrar antes para ver qué tareas hay y planificar tus elecciones, pero no podrás inscribirte hasta las horas indicadas." # MT
+      choosing_begins: "La elección empieza a las %{time}." # MT
+      visit: "Visita %{url} para más información." # MT
+      thanks: "¡Gracias por tu participación!" # MT

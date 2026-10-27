@@ -1,195 +1,207 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
 fr:
   work:
-    job_created: "Tâche créée." # Machine translated, remove this comment when verified
-    job_updated: "Tâche mise à jour." # Machine translated, remove this comment when verified
-    job_synced_from_meals: "Cette tâche a été synchronisée depuis le système des repas et ne peut pas être modifiée directement. Elle sera mise à jour automatiquement lorsque des repas seront ajoutés ou modifiés." # Machine translated, remove this comment when verified
-    period_created: "Période créée." # Machine translated, remove this comment when verified
-    period_updated: "Période mise à jour." # Machine translated, remove this comment when verified
-    period_copied: "Certaines données ont été copiées depuis la période « %{name} ». Vérifiez-les et ajustez-les ci-dessous. Les tâches seront copiées quand vous enregistrerez la période." # Machine translated, remove this comment when verified
-    notices_wrong_phase: "Les avis ne peuvent pas être envoyés, car la période n'est pas en phase « prête » ou « ouverte »." # Machine translated, remove this comment when verified
-    notices_no_quota: "Les avis ne peuvent pas être envoyés, car cette période n'a pas de quota." # Machine translated, remove this comment when verified
-    notices_sent: "Les avis sont en route !" # Machine translated, remove this comment when verified
-    signed_up: "Inscription réussie. Bravo !" # Machine translated, remove this comment when verified
-    signup_removed: "Votre inscription a été retirée." # Machine translated, remove this comment when verified
-    hours_abbr: "%{hours} h" # Machine translated, remove this comment when verified
+    job_created: "Tâche créée." # MT
+    job_updated: "Tâche mise à jour." # MT
+    job_synced_from_meals: "Cette tâche a été synchronisée depuis le système des repas et ne peut pas être modifiée directement. Elle sera mise à jour automatiquement lorsque des repas seront ajoutés ou modifiés." # MT
+    period_created: "Période créée." # MT
+    period_updated: "Période mise à jour." # MT
+    period_copied: "Certaines données ont été copiées depuis la période « %{name} ». Vérifiez-les et ajustez-les ci-dessous. Les tâches seront copiées quand vous enregistrerez la période." # MT
+    notices_wrong_phase: "Les avis ne peuvent pas être envoyés, car la période n'est pas en phase « prête » ou « ouverte »." # MT
+    notices_no_quota: "Les avis ne peuvent pas être envoyés, car cette période n'a pas de quota." # MT
+    notices_sent: "Les avis sont en route !" # MT
+    signed_up: "Inscription réussie. Bravo !" # MT
+    signup_removed: "Votre inscription a été retirée." # MT
+    hours_abbr: "%{hours} h" # MT
     jobs:
       form:
-        reminders_on_role_html: "Les rappels de cette tâche se règlent sur sa %{link}." # Machine translated, remove this comment when verified
-        reminders_on_role: "Les rappels de cette tâche se règlent sur la page de son rôle de repas." # Machine translated, remove this comment when verified
-        meal_role_page: "page de rôle de repas" # Machine translated, remove this comment when verified
-        shifts: "Créneaux" # Machine translated, remove this comment when verified
+        reminders_on_role_html: "Les rappels de cette tâche se règlent sur sa %{link}." # MT
+        reminders_on_role: "Les rappels de cette tâche se règlent sur la page de son rôle de repas." # MT
+        meal_role_page: "page de rôle de repas" # MT
+        shifts: "Créneaux" # MT
       edit:
-        title: "Modifier la tâche : %{title}" # Machine translated, remove this comment when verified
+        title: "Modifier la tâche : %{title}" # MT
       new:
-        title: "Créer une tâche" # Machine translated, remove this comment when verified
+        title: "Créer une tâche" # MT
       index:
-        title: "Tâches" # Machine translated, remove this comment when verified
-        title_with_period: "Tâches : %{period}" # Machine translated, remove this comment when verified
-        create: "Créer une tâche" # Machine translated, remove this comment when verified
+        title: "Tâches" # MT
+        title_with_period: "Tâches : %{period}" # MT
+        create: "Créer une tâche" # MT
       show:
-        jobs: "Tâches" # Machine translated, remove this comment when verified
-        hours: "%{hours} heures" # Machine translated, remove this comment when verified
+        jobs: "Tâches" # MT
+        hours: "%{hours} heures" # MT
     periods:
       form:
-        do_not_copy: "Ne pas copier les tâches" # Machine translated, remove this comment when verified
-        meal_formula: "Formule de repas" # Machine translated, remove this comment when verified
-        meal_roles_to_sync: "Rôles de repas à synchroniser" # Machine translated, remove this comment when verified
-        sync_hint: "Les tâches de repas sont synchronisées chaque fois que la période change ou que des repas sont ajoutés, modifiés ou supprimés. Les inscriptions sont synchronisées que la personne s'inscrive par les repas ou par le travail. Les changements de rôles de repas ne déclenchent une synchronisation que si la période est à l'état de brouillon." # Machine translated, remove this comment when verified
-        shares: "Parts" # Machine translated, remove this comment when verified
+        do_not_copy: "Ne pas copier les tâches" # MT
+        meal_formula: "Formule de repas" # MT
+        meal_roles_to_sync: "Rôles de repas à synchroniser" # MT
+        sync_hint: "Les tâches de repas sont synchronisées chaque fois que la période change ou que des repas sont ajoutés, modifiés ou supprimés. Les inscriptions sont synchronisées que la personne s'inscrive par les repas ou par le travail. Les changements de rôles de repas ne déclenchent une synchronisation que si la période est à l'état de brouillon." # MT
+        shares: "Parts" # MT
       edit:
-        title: "Modifier la période : %{name}" # Machine translated, remove this comment when verified
+        title: "Modifier la période : %{name}" # MT
       new:
-        title: "Créer une période" # Machine translated, remove this comment when verified
+        title: "Créer une période" # MT
       index:
-        title: "Périodes de travail" # Machine translated, remove this comment when verified
-        create: "Créer une période" # Machine translated, remove this comment when verified
-        name: "Nom" # Machine translated, remove this comment when verified
-        start: "Début" # Machine translated, remove this comment when verified
-        end: "Fin" # Machine translated, remove this comment when verified
-        phase: "Phase" # Machine translated, remove this comment when verified
-        links: "Liens" # Machine translated, remove this comment when verified
-        signups: "Inscriptions" # Machine translated, remove this comment when verified
-        report: "Rapport" # Machine translated, remove this comment when verified
-        jobs: "Tâches" # Machine translated, remove this comment when verified
+        title: "Périodes de travail" # MT
+        create: "Créer une période" # MT
+        name: "Nom" # MT
+        start: "Début" # MT
+        end: "Fin" # MT
+        phase: "Phase" # MT
+        links: "Liens" # MT
+        signups: "Inscriptions" # MT
+        report: "Rapport" # MT
+        jobs: "Tâches" # MT
       review_notices:
-        title: "Avis de choix des tâches : %{name}" # Machine translated, remove this comment when verified
-        intro: "Les avis suivants seront envoyés :" # Machine translated, remove this comment when verified
+        title: "Avis de choix des tâches : %{name}" # MT
+        intro: "Les avis suivants seront envoyés :" # MT
       show:
-        title: "Période : %{name}" # Machine translated, remove this comment when verified
-        periods: "Périodes" # Machine translated, remove this comment when verified
-        date: "Date" # Machine translated, remove this comment when verified
+        title: "Période : %{name}" # MT
+        periods: "Périodes" # MT
+        date: "Date" # MT
         max_rounds_per_worker:
-          one: "%{count} tour max. par personne" # Machine translated, remove this comment when verified
-          other: "%{count} tours max. par personne" # Machine translated, remove this comment when verified
+          one: "%{count} tour max. par personne" # MT
+          other: "%{count} tours max. par personne" # MT
         workers_per_round:
-          one: "%{count} personne par tour" # Machine translated, remove this comment when verified
-          other: "%{count} personnes par tour" # Machine translated, remove this comment when verified
+          one: "%{count} personne par tour" # MT
+          other: "%{count} personnes par tour" # MT
         minutes_per_round:
-          one: "%{count} minute par tour" # Machine translated, remove this comment when verified
-          other: "%{count} minutes par tour" # Machine translated, remove this comment when verified
-        shares: "Parts" # Machine translated, remove this comment when verified
+          one: "%{count} minute par tour" # MT
+          other: "%{count} minutes par tour" # MT
+        shares: "Parts" # MT
       report:
-        title: "Rapport de travail" # Machine translated, remove this comment when verified
-        title_with_period: "Rapport de travail : %{period}" # Machine translated, remove this comment when verified
-        overview: "Vue d'ensemble" # Machine translated, remove this comment when verified
-        total_hours: "Total des heures" # Machine translated, remove this comment when verified
-        jobs: "Tâches" # Machine translated, remove this comment when verified
-        people: "Personnes" # Machine translated, remove this comment when verified
-        quota: "Quota" # Machine translated, remove this comment when verified
-        by_person: "Par personne" # Machine translated, remove this comment when verified
-        by_household: "Par foyer" # Machine translated, remove this comment when verified
-        regular: "Ordinaires" # Machine translated, remove this comment when verified
-        name: "Nom" # Machine translated, remove this comment when verified
+        title: "Rapport de travail" # MT
+        title_with_period: "Rapport de travail : %{period}" # MT
+        overview: "Vue d'ensemble" # MT
+        total_hours: "Total des heures" # MT
+        jobs: "Tâches" # MT
+        people: "Personnes" # MT
+        quota: "Quota" # MT
+        by_person: "Par personne" # MT
+        by_household: "Par foyer" # MT
+        regular: "Ordinaires" # MT
+        name: "Nom" # MT
     settings:
       edit:
-        title: "Paramètres du travail" # Machine translated, remove this comment when verified
+        title: "Paramètres du travail" # MT
     shifts:
       shift:
-        sign_up: "S'inscrire !" # Machine translated, remove this comment when verified
+        sign_up: "S'inscrire !" # MT
       shifts:
-        list_label: "Liste des inscriptions" # Machine translated, remove this comment when verified
+        list_label: "Liste des inscriptions" # MT
       index:
-        title: "Inscriptions aux tâches" # Machine translated, remove this comment when verified
+        title: "Inscriptions aux tâches" # MT
       show:
-        signups: "Inscriptions" # Machine translated, remove this comment when verified
-    no_periods_html: "Aucune période n'est accessible. Consultez la %{link}." # Machine translated, remove this comment when verified
-    periods_page: "page des périodes" # Machine translated, remove this comment when verified
-    not_setup: "Il semble que votre communauté n'ait pas configuré le système de partage du travail de Gather.\nParlez-en à votre administrateur Gather pour en savoir plus." # Machine translated, remove this comment when verified
-    choosing_as: "Vous choisissez pour %{name}. Les tâches auxquelles vous vous inscrivez lui seront attribuées." # Machine translated, remove this comment when verified
-    no_signups: "Aucune inscription" # Machine translated, remove this comment when verified
+        signups: "Inscriptions" # MT
+    no_periods_html: "Aucune période n'est accessible. Consultez la %{link}." # MT
+    periods_page: "page des périodes" # MT
+    not_setup: "Il semble que votre communauté n'ait pas configuré le système de partage du travail de Gather.\nParlez-en à votre administrateur Gather pour en savoir plus." # MT
+    choosing_as: "Vous choisissez pour %{name}. Les tâches auxquelles vous vous inscrivez lui seront attribuées." # MT
+    no_signups: "Aucune inscription" # MT
     phase_notices:
       shifts:
-        draft: "Cette période est à l'état de brouillon : il n'est pas encore possible de s'inscrire aux tâches." # Machine translated, remove this comment when verified
-        archived: "Cette période est archivée : les inscriptions ne sont plus possibles." # Machine translated, remove this comment when verified
+        draft: "Cette période est à l'état de brouillon : il n'est pas encore possible de s'inscrire aux tâches." # MT
+        archived: "Cette période est archivée : les inscriptions ne sont plus possibles." # MT
       jobs:
-        archived: "Cette période est archivée." # Machine translated, remove this comment when verified
+        archived: "Cette période est archivée." # MT
       report:
-        draft: "Cette période est à l'état de brouillon : le rapport n'est pas encore visible." # Machine translated, remove this comment when verified
-        archived: "Cette période est archivée." # Machine translated, remove this comment when verified
-    num_hours: "%{num} heures" # Machine translated, remove this comment when verified
-    preassigned: "Cette place a été pré-attribuée." # Machine translated, remove this comment when verified
+        draft: "Cette période est à l'état de brouillon : le rapport n'est pas encore visible." # MT
+        archived: "Cette période est archivée." # MT
+    num_hours: "%{num} heures" # MT
+    preassigned: "Cette place a été pré-attribuée." # MT
     synopsis:
-      done: "Tout est en ordre !" # Machine translated, remove this comment when verified
-      regular: "ordinaires" # Machine translated, remove this comment when verified
-      for_user_html: "Vous êtes inscrit pour %{chunks}." # Machine translated, remove this comment when verified
-      for_household_html: "Votre foyer a %{chunks}." # Machine translated, remove this comment when verified
+      done: "Tout est en ordre !" # MT
+      regular: "ordinaires" # MT
+      for_user_html: "Vous êtes inscrit pour %{chunks}." # MT
+      for_household_html: "Votre foyer a %{chunks}." # MT
       chunk:
-        single_html: "%{fraction} heures" # Machine translated, remove this comment when verified
-        multiple_html: "%{fraction} heures %{title}" # Machine translated, remove this comment when verified
-      start_choosing: "Vous pouvez commencer à choisir vos tâches %{at_or_on_time}." # Machine translated, remove this comment when verified
-      round_limit_with_next: "Votre limite par tour est de %{prev} heures et passera à %{next} %{at_or_on_time}." # Machine translated, remove this comment when verified
-      round_limit_until: "Votre limite par tour est de %{prev} heures %{until_time}." # Machine translated, remove this comment when verified
+        single_html: "%{fraction} heures" # MT
+        multiple_html: "%{fraction} heures %{title}" # MT
+      start_choosing: "Vous pouvez commencer à choisir vos tâches %{at_or_on_time}." # MT
+      round_limit_with_next: "Votre limite par tour est de %{prev} heures et passera à %{next} %{at_or_on_time}." # MT
+      round_limit_until: "Votre limite par tour est de %{prev} heures %{until_time}." # MT
   work/jobs:
-    shifts: "Créneaux" # Machine translated, remove this comment when verified
-    unlimited: "Illimité" # Machine translated, remove this comment when verified
-    full_community: "Tâche pour toute la communauté" # Machine translated, remove this comment when verified
-    preassignments: "Cette tâche a des pré-attributions" # Machine translated, remove this comment when verified
-    meal_related: "Cette tâche est liée aux repas" # Machine translated, remove this comment when verified
-    none_found: "Aucune tâche trouvée." # Machine translated, remove this comment when verified
+    shifts: "Créneaux" # MT
+    unlimited: "Illimité" # MT
+    full_community: "Tâche pour toute la communauté" # MT
+    preassignments: "Cette tâche a des pré-attributions" # MT
+    meal_related: "Cette tâche est liée aux repas" # MT
+    none_found: "Aucune tâche trouvée." # MT
   work/period:
     phase_names:
-      archived: "Archivée" # Machine translated, remove this comment when verified
-      draft: "Brouillon" # Machine translated, remove this comment when verified
-      open: "Ouverte" # Machine translated, remove this comment when verified
-      published: "Publiée" # Machine translated, remove this comment when verified
-      ready: "Prête" # Machine translated, remove this comment when verified
+      archived: "Archivée" # MT
+      draft: "Brouillon" # MT
+      open: "Ouverte" # MT
+      published: "Publiée" # MT
+      ready: "Prête" # MT
     num_minutes:
-      one: "%{count} minute" # Machine translated, remove this comment when verified
-      other: "%{count} minutes" # Machine translated, remove this comment when verified
+      one: "%{count} minute" # MT
+      other: "%{count} minutes" # MT
   work/shares:
     portion_options:
-      none: "Aucune part" # Machine translated, remove this comment when verified
-      one_qtr: "¼ de part" # Machine translated, remove this comment when verified
-      half: "½ part" # Machine translated, remove this comment when verified
-      three_qtr: "¾ de part" # Machine translated, remove this comment when verified
-      full: "Part entière" # Machine translated, remove this comment when verified
-    intro: "Comment répartir le travail de la communauté ? La plupart des personnes devraient avoir une part entière, mais des exceptions sont parfois nécessaires. Une demi-part signifie que la personne fera moitié moins d'heures qu'une personne ayant une part entière, etc." # Machine translated, remove this comment when verified
-    priority_hint_html: "Le système calcule automatiquement qui choisit en premier selon le nombre d'heures nécessaires. Les personnes avec des <i class='fa fa-star'></i> passent avant les autres." # Machine translated, remove this comment when verified
-    change_warning: "Cette période est en cours. Modifier les parts ou le type de quota changera les calculs de quota. Procédez avec prudence !" # Machine translated, remove this comment when verified
+      none: "Aucune part" # MT
+      one_qtr: "¼ de part" # MT
+      half: "½ part" # MT
+      three_qtr: "¾ de part" # MT
+      full: "Part entière" # MT
+    intro: "Comment répartir le travail de la communauté ? La plupart des personnes devraient avoir une part entière, mais des exceptions sont parfois nécessaires. Une demi-part signifie que la personne fera moitié moins d'heures qu'une personne ayant une part entière, etc." # MT
+    priority_hint_html: "Le système calcule automatiquement qui choisit en premier selon le nombre d'heures nécessaires. Les personnes avec des <i class='fa fa-star'></i> passent avant les autres." # MT
+    change_warning: "Cette période est en cours. Modifier les parts ou le type de quota changera les calculs de quota. Procédez avec prudence !" # MT
   work/shift:
-    choosing_as: "Vous choisissez pour %{name}" # Machine translated, remove this comment when verified
-    slots_exceeded: "Désolé, quelqu'un a été plus rapide que vous !" # Machine translated, remove this comment when verified
-    already_signed_up: "Vous êtes déjà inscrit à ce créneau." # Machine translated, remove this comment when verified
-    not_signed_up: "Vous n'êtes pas inscrit à ce créneau." # Machine translated, remove this comment when verified
-    round_limit_exceeded: "Vous avez dépassé votre limite pour ce tour." # Machine translated, remove this comment when verified
+    choosing_as: "Vous choisissez pour %{name}" # MT
+    slots_exceeded: "Désolé, quelqu'un a été plus rapide que vous !" # MT
+    already_signed_up: "Vous êtes déjà inscrit à ce créneau." # MT
+    not_signed_up: "Vous n'êtes pas inscrit à ce créneau." # MT
+    round_limit_exceeded: "Vous avez dépassé votre limite pour ce tour." # MT
     slots_open:
-      one: "%{count} place libre" # Machine translated, remove this comment when verified
-      other: "%{count} places libres" # Machine translated, remove this comment when verified
+      one: "%{count} place libre" # MT
+      other: "%{count} places libres" # MT
   work/job_reminder:
-    absolute: "À %{time}" # Machine translated, remove this comment when verified
+    absolute: "À %{time}" # MT
     relative:
       days_before:
-        one: "%{count} jour avant" # Machine translated, remove this comment when verified
-        other: "%{count} jours avant" # Machine translated, remove this comment when verified
+        one: "%{count} jour avant" # MT
+        other: "%{count} jours avant" # MT
       days_after:
-        one: "%{count} jour après" # Machine translated, remove this comment when verified
-        other: "%{count} jours après" # Machine translated, remove this comment when verified
+        one: "%{count} jour après" # MT
+        other: "%{count} jours après" # MT
       hours_before:
-        one: "%{count} heure avant" # Machine translated, remove this comment when verified
-        other: "%{count} heures avant" # Machine translated, remove this comment when verified
+        one: "%{count} heure avant" # MT
+        other: "%{count} heures avant" # MT
       hours_after:
-        one: "%{count} heure après" # Machine translated, remove this comment when verified
-        other: "%{count} heures après" # Machine translated, remove this comment when verified
+        one: "%{count} heure après" # MT
+        other: "%{count} heures après" # MT
   work_mailer:
     job_reminder:
-      subject: "Rappel de tâche : %{title}, %{times}" # Machine translated, remove this comment when verified
-      subject_with_note: "Rappel de tâche : %{title} : %{note}" # Machine translated, remove this comment when verified
-      scheduled: "Ceci est un rappel : vous êtes prévu comme « %{job} » pour %{times}." # Machine translated, remove this comment when verified
-      note_intro: "Ce rappel comprend la note suivante :" # Machine translated, remove this comment when verified
-      see_description: "Voir la description de la tâche ici : %{url}." # Machine translated, remove this comment when verified
-      thanks: "Merci de votre contribution à la communauté !" # Machine translated, remove this comment when verified
+      subject: "Rappel de tâche : %{title}, %{times}" # MT
+      subject_with_note: "Rappel de tâche : %{title} : %{note}" # MT
+      scheduled: "Ceci est un rappel : vous êtes prévu comme « %{job} » pour %{times}." # MT
+      note_intro: "Ce rappel comprend la note suivante :" # MT
+      see_description: "Voir la description de la tâche ici : %{url}." # MT
+      thanks: "Merci de votre contribution à la communauté !" # MT
     job_choosing_notice:
-      subject: "Le choix des tâches approche !" # Machine translated, remove this comment when verified
-      coming_up_on: "Le choix des tâches aura lieu le %{date} !" # Machine translated, remove this comment when verified
-      coming_up_soon: "Le choix des tâches approche !" # Machine translated, remove this comment when verified
-      quota: "Vous avez %{got} heures pré-attribuées et votre quota est de %{quota} : vous devez donc choisir %{need} heures ordinaires." # Machine translated, remove this comment when verified
-      also_choose: "Vous devez aussi choisir %{hours}." # Machine translated, remove this comment when verified
-      full_community_hours: "%{hours} heures %{title}" # Machine translated, remove this comment when verified
-      begin_at: "Vous pourrez commencer à choisir à %{time}." # Machine translated, remove this comment when verified
-      schedule_intro: "Votre calendrier de tours est le suivant :" # Machine translated, remove this comment when verified
-      round_with_limit: "* À %{time}, vous pourrez choisir jusqu'à %{limit} heures." # Machine translated, remove this comment when verified
-      round_finish: "* À %{time}, vous pourrez terminer vos choix." # Machine translated, remove this comment when verified
-      go_to: "Rendez-vous sur %{url} aux heures ci-dessus pour choisir vos tâches. Vous pouvez aussi passer avant pour voir les tâches disponibles et préparer vos choix, mais vous ne pourrez pas vous inscrire avant les heures indiquées." # Machine translated, remove this comment when verified
-      choosing_begins: "Le choix commence à %{time}." # Machine translated, remove this comment when verified
-      visit: "Consultez %{url} pour en savoir plus." # Machine translated, remove this comment when verified
-      thanks: "Merci de votre participation !" # Machine translated, remove this comment when verified
+      subject: "Le choix des tâches approche !" # MT
+      coming_up_on: "Le choix des tâches aura lieu le %{date} !" # MT
+      coming_up_soon: "Le choix des tâches approche !" # MT
+      quota: "Vous avez %{got} heures pré-attribuées et votre quota est de %{quota} : vous devez donc choisir %{need} heures ordinaires." # MT
+      also_choose: "Vous devez aussi choisir %{hours}." # MT
+      full_community_hours: "%{hours} heures %{title}" # MT
+      begin_at: "Vous pourrez commencer à choisir à %{time}." # MT
+      schedule_intro: "Votre calendrier de tours est le suivant :" # MT
+      round_with_limit: "* À %{time}, vous pourrez choisir jusqu'à %{limit} heures." # MT
+      round_finish: "* À %{time}, vous pourrez terminer vos choix." # MT
+      go_to: "Rendez-vous sur %{url} aux heures ci-dessus pour choisir vos tâches. Vous pouvez aussi passer avant pour voir les tâches disponibles et préparer vos choix, mais vous ne pourrez pas vous inscrire avant les heures indiquées." # MT
+      choosing_begins: "Le choix commence à %{time}." # MT
+      visit: "Consultez %{url} pour en savoir plus." # MT
+      thanks: "Merci de votre participation !" # MT

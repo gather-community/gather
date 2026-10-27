@@ -1,99 +1,111 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
 fr:
   subscription:
     messaging_topup:
-      updated: "Votre recharge mensuelle de messagerie est configurée. Votre solde de messagerie est maintenant de %{balance}." # Machine translated, remove this comment when verified
-      canceled: "Votre recharge mensuelle de messagerie sera annulée à la fin du mois de facturation en cours." # Machine translated, remove this comment when verified
+      updated: "Votre recharge mensuelle de messagerie est configurée. Votre solde de messagerie est maintenant de %{balance}." # MT
+      canceled: "Votre recharge mensuelle de messagerie sera annulée à la fin du mois de facturation en cours." # MT
     detailed_statuses:
-      active: "Actif" # Machine translated, remove this comment when verified
-      scheduled: "Planifié" # Machine translated, remove this comment when verified
-      needs_payment_method: "Paiement requis" # Machine translated, remove this comment when verified
-      awaiting_microdeposits: "Vérification bancaire requise" # Machine translated, remove this comment when verified
-      payment_processing: "En traitement" # Machine translated, remove this comment when verified
-      incomplete: "En attente de paiement" # Machine translated, remove this comment when verified
-      incomplete_expired: "Expiré" # Machine translated, remove this comment when verified
-      past_due: "En retard" # Machine translated, remove this comment when verified
-      unpaid: "Impayé" # Machine translated, remove this comment when verified
-      canceled: "Annulé" # Machine translated, remove this comment when verified
-      other: "Inconnu" # Machine translated, remove this comment when verified
-      unknown: "Inconnu" # Machine translated, remove this comment when verified
+      active: "Actif" # MT
+      scheduled: "Planifié" # MT
+      needs_payment_method: "Paiement requis" # MT
+      awaiting_microdeposits: "Vérification bancaire requise" # MT
+      payment_processing: "En traitement" # MT
+      incomplete: "En attente de paiement" # MT
+      incomplete_expired: "Expiré" # MT
+      past_due: "En retard" # MT
+      unpaid: "Impayé" # MT
+      canceled: "Annulé" # MT
+      other: "Inconnu" # MT
+      unknown: "Inconnu" # MT
     messaging_transactions:
-      credit: "Recharge mensuelle de messagerie" # Machine translated, remove this comment when verified
-      reversal: "Annulation d'une recharge de messagerie non encaissée" # Machine translated, remove this comment when verified
-    per_month: "%{amount}/mois" # Machine translated, remove this comment when verified
+      credit: "Recharge mensuelle de messagerie" # MT
+      reversal: "Annulation d'une recharge de messagerie non encaissée" # MT
+    per_month: "%{amount}/mois" # MT
     every_months:
-      one: "%{amount} tous les %{count} mois" # Machine translated, remove this comment when verified
-      other: "%{amount} tous les %{count} mois" # Machine translated, remove this comment when verified
-    pay_starting: "Payer %{amount} à partir du %{date}" # Machine translated, remove this comment when verified
-    pay_now_and_then: "Payer %{now} maintenant, puis %{recurring} par la suite" # Machine translated, remove this comment when verified
+      one: "%{amount} tous les %{count} mois" # MT
+      other: "%{amount} tous les %{count} mois" # MT
+    pay_starting: "Payer %{amount} à partir du %{date}" # MT
+    pay_now_and_then: "Payer %{now} maintenant, puis %{recurring} par la suite" # MT
     topup_statuses:
-      canceling: "Annulation le %{date}" # Machine translated, remove this comment when verified
-      past_due: "En retard" # Machine translated, remove this comment when verified
-      payment_processing: "Paiement en traitement" # Machine translated, remove this comment when verified
+      canceling: "Annulation le %{date}" # MT
+      past_due: "En retard" # MT
+      payment_processing: "Paiement en traitement" # MT
     topup_notices:
-      cancel: "Votre recharge mensuelle sera annulée à la fin du mois de facturation en cours. Aucun autre prélèvement, et votre solde actuel est conservé." # Machine translated, remove this comment when verified
-      first_charge: "Votre moyen de paiement enregistré sera débité de %{amount} aujourd'hui pour un mois complet, puis de %{amount} à cette date chaque mois." # Machine translated, remove this comment when verified
-      calculating: "Calcul en cours…" # Machine translated, remove this comment when verified
-      next_month: "À partir du prochain mois de facturation, vous serez débité de %{amount} par mois." # Machine translated, remove this comment when verified
-      prorated_credit: "Vous recevrez maintenant un crédit de %{credit} sur votre prochaine facture, puis %{amount} par mois à partir du %{date}." # Machine translated, remove this comment when verified
-      prorated_charge: "Votre moyen de paiement enregistré sera débité d'environ %{charge} aujourd'hui (au prorata), puis de %{amount} par mois à partir du %{date}." # Machine translated, remove this comment when verified
-      error_default: "Un problème est survenu et votre recharge n'a pas été modifiée." # Machine translated, remove this comment when verified
-      error_with_reference: "%{reason} Référence : %{reference}. (Tentative à %{time}.) Si cela se reproduit, contactez l'assistance Gather en indiquant cette référence et cette heure." # Machine translated, remove this comment when verified
-      error: "%{reason} (Tentative à %{time}.) Si cela se reproduit, contactez l'assistance Gather en indiquant cette heure." # Machine translated, remove this comment when verified
+      cancel: "Votre recharge mensuelle sera annulée à la fin du mois de facturation en cours. Aucun autre prélèvement, et votre solde actuel est conservé." # MT
+      first_charge: "Votre moyen de paiement enregistré sera débité de %{amount} aujourd'hui pour un mois complet, puis de %{amount} à cette date chaque mois." # MT
+      calculating: "Calcul en cours…" # MT
+      next_month: "À partir du prochain mois de facturation, vous serez débité de %{amount} par mois." # MT
+      prorated_credit: "Vous recevrez maintenant un crédit de %{credit} sur votre prochaine facture, puis %{amount} par mois à partir du %{date}." # MT
+      prorated_charge: "Votre moyen de paiement enregistré sera débité d'environ %{charge} aujourd'hui (au prorata), puis de %{amount} par mois à partir du %{date}." # MT
+      error_default: "Un problème est survenu et votre recharge n'a pas été modifiée." # MT
+      error_with_reference: "%{reason} Référence : %{reference}. (Tentative à %{time}.) Si cela se reproduit, contactez l'assistance Gather en indiquant cette référence et cette heure." # MT
+      error: "%{reason} (Tentative à %{time}.) Si cela se reproduit, contactez l'assistance Gather en indiquant cette heure." # MT
     subscriptions:
       show:
-        title: "Abonnement" # Machine translated, remove this comment when verified
-        expired: "Votre abonnement a expiré avant la fin du paiement. Veuillez réessayer." # Machine translated, remove this comment when verified
-        verify_required: "Votre compte bancaire doit être vérifié." # Machine translated, remove this comment when verified
-        microdeposit_html: "Un %{link} arrivera sur votre compte d'ici un ou deux jours. Utilisez le bouton ci-dessous pour terminer la vérification." # Machine translated, remove this comment when verified
-        microdeposit: "microdépôt" # Machine translated, remove this comment when verified
-        check_email: "Consultez vos e-mails pour les instructions, puis revenez ici une fois la vérification terminée." # Machine translated, remove this comment when verified
-        verify_button: "Vérifier votre compte bancaire" # Machine translated, remove this comment when verified
-        ready_for_payment: "Votre abonnement est prêt pour le paiement." # Machine translated, remove this comment when verified
-        not_setup: "Votre abonnement n'est pas encore configuré." # Machine translated, remove this comment when verified
-        contact_staff: "Veuillez contacter l'équipe de Gather pour vous abonner." # Machine translated, remove this comment when verified
-        needs_payment_method: "Votre abonnement est actif, mais nous devons encore recueillir vos informations de paiement." # Machine translated, remove this comment when verified
-        processing: "Le paiement de votre abonnement est en cours de traitement. Cela peut prendre quelques jours selon le moyen de paiement. En attendant, vous pouvez utiliser Gather !" # Machine translated, remove this comment when verified
-        active: "Votre abonnement est actif. Merci de faire partie de Gather !" # Machine translated, remove this comment when verified
-        problem: "Il y a un problème avec votre abonnement." # Machine translated, remove this comment when verified
+        title: "Abonnement" # MT
+        expired: "Votre abonnement a expiré avant la fin du paiement. Veuillez réessayer." # MT
+        verify_required: "Votre compte bancaire doit être vérifié." # MT
+        microdeposit_html: "Un %{link} arrivera sur votre compte d'ici un ou deux jours. Utilisez le bouton ci-dessous pour terminer la vérification." # MT
+        microdeposit: "microdépôt" # MT
+        check_email: "Consultez vos e-mails pour les instructions, puis revenez ici une fois la vérification terminée." # MT
+        verify_button: "Vérifier votre compte bancaire" # MT
+        ready_for_payment: "Votre abonnement est prêt pour le paiement." # MT
+        not_setup: "Votre abonnement n'est pas encore configuré." # MT
+        contact_staff: "Veuillez contacter l'équipe de Gather pour vous abonner." # MT
+        needs_payment_method: "Votre abonnement est actif, mais nous devons encore recueillir vos informations de paiement." # MT
+        processing: "Le paiement de votre abonnement est en cours de traitement. Cela peut prendre quelques jours selon le moyen de paiement. En attendant, vous pouvez utiliser Gather !" # MT
+        active: "Votre abonnement est actif. Merci de faire partie de Gather !" # MT
+        problem: "Il y a un problème avec votre abonnement." # MT
       billing_portal_link:
-        visit_html: "Vous pouvez consulter notre %{link} pour en savoir plus." # Machine translated, remove this comment when verified
-        billing_portal: "portail de facturation" # Machine translated, remove this comment when verified
+        visit_html: "Vous pouvez consulter notre %{link} pour en savoir plus." # MT
+        billing_portal: "portail de facturation" # MT
       base_rows:
-        num_users: "Nombre d'utilisateurs" # Machine translated, remove this comment when verified
-        tier: "Formule" # Machine translated, remove this comment when verified
-        tier_value: "%{tier} (%{price}/mois/utilisateur)" # Machine translated, remove this comment when verified
-        discount: "Remise" # Machine translated, remove this comment when verified
-        months_per_cycle: "Mois par cycle de facturation" # Machine translated, remove this comment when verified
-        total_payment: "Paiement total" # Machine translated, remove this comment when verified
-        not_charged_until: "* Vous allez saisir vos informations de paiement maintenant, mais vous ne serez pas débité avant le %{date}." # Machine translated, remove this comment when verified
-        prorated: "* Votre premier paiement sera calculé au prorata pour couvrir les jours écoulés depuis le %{date}." # Machine translated, remove this comment when verified
+        num_users: "Nombre d'utilisateurs" # MT
+        tier: "Formule" # MT
+        tier_value: "%{tier} (%{price}/mois/utilisateur)" # MT
+        discount: "Remise" # MT
+        months_per_cycle: "Mois par cycle de facturation" # MT
+        total_payment: "Paiement total" # MT
+        not_charged_until: "* Vous allez saisir vos informations de paiement maintenant, mais vous ne serez pas débité avant le %{date}." # MT
+        prorated: "* Votre premier paiement sera calculé au prorata pour couvrir les jours écoulés depuis le %{date}." # MT
       email_row:
-        billing_email: "E-mail de facturation" # Machine translated, remove this comment when verified
+        billing_email: "E-mail de facturation" # MT
       messaging:
-        title: "Messagerie" # Machine translated, remove this comment when verified
-        current_balance: "Solde actuel" # Machine translated, remove this comment when verified
-        monthly_topup: "Recharge mensuelle" # Machine translated, remove this comment when verified
-        none: "Aucune" # Machine translated, remove this comment when verified
-        edit: "Modifier" # Machine translated, remove this comment when verified
-        add: "Ajouter" # Machine translated, remove this comment when verified
-        next_payment_date: "Date du prochain paiement" # Machine translated, remove this comment when verified
-        status: "État" # Machine translated, remove this comment when verified
+        title: "Messagerie" # MT
+        current_balance: "Solde actuel" # MT
+        monthly_topup: "Recharge mensuelle" # MT
+        none: "Aucune" # MT
+        edit: "Modifier" # MT
+        add: "Ajouter" # MT
+        next_payment_date: "Date du prochain paiement" # MT
+        status: "État" # MT
       messaging_topup_modal:
-        title: "Recharge mensuelle de messagerie" # Machine translated, remove this comment when verified
-        intro: "Choisissez le montant de crédit de messagerie à ajouter à votre solde chaque mois. Votre moyen de paiement enregistré est débité automatiquement." # Machine translated, remove this comment when verified
-        none: "Aucune" # Machine translated, remove this comment when verified
-        cancel: "Annuler" # Machine translated, remove this comment when verified
-        save: "Enregistrer" # Machine translated, remove this comment when verified
+        title: "Recharge mensuelle de messagerie" # MT
+        intro: "Choisissez le montant de crédit de messagerie à ajouter à votre solde chaque mois. Votre moyen de paiement enregistré est débité automatiquement." # MT
+        none: "Aucune" # MT
+        cancel: "Annuler" # MT
+        save: "Enregistrer" # MT
       post_payment:
-        title: "Abonnement à l'application" # Machine translated, remove this comment when verified
-        next_payment_date: "Date du prochain paiement" # Machine translated, remove this comment when verified
+        title: "Abonnement à l'application" # MT
+        next_payment_date: "Date du prochain paiement" # MT
       pre_payment:
-        title: "Abonnement à l'application" # Machine translated, remove this comment when verified
-        start_date: "Date de début" # Machine translated, remove this comment when verified
-        update_info_html: "Si certaines de ces informations doivent être modifiées, veuillez contacter %{email}." # Machine translated, remove this comment when verified
-        ready_enter_payment: "Tout est correct, je suis prêt à saisir mes informations de paiement" # Machine translated, remove this comment when verified
-        ready_to_pay: "Tout est correct, je suis prêt à payer" # Machine translated, remove this comment when verified
+        title: "Abonnement à l'application" # MT
+        start_date: "Date de début" # MT
+        update_info_html: "Si certaines de ces informations doivent être modifiées, veuillez contacter %{email}." # MT
+        ready_enter_payment: "Tout est correct, je suis prêt à saisir mes informations de paiement" # MT
+        ready_to_pay: "Tout est correct, je suis prêt à payer" # MT
       payment:
-        title: "Paiement" # Machine translated, remove this comment when verified
-        canadian_debit: "Prélèvement préautorisé canadien" # Machine translated, remove this comment when verified
-        popup_note: "Une fenêtre contextuelle recueillera vos informations bancaires après que vous aurez cliqué sur « Payer » ci-dessous." # Machine translated, remove this comment when verified
+        title: "Paiement" # MT
+        canadian_debit: "Prélèvement préautorisé canadien" # MT
+        popup_note: "Une fenêtre contextuelle recueillera vos informations bancaires après que vous aurez cliqué sur « Payer » ci-dessous." # MT

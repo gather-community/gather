@@ -1,11 +1,23 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
 fr-CA:
   groups:
     groups:
       form:
-        non_members_html: "<strong>Non-membres</strong> : la fonction « non-membre » de Mailman permet 1) d'autoriser d'autres adresses à envoyer des courriels à la liste sans en recevoir et 2) d'interdire à certaines personnes d'écrire à la liste. Les non-membres ne reçoivent pas les courriels de la liste. Ils ne sont pas synchronisés depuis Gather, mais peuvent être ajoutés manuellement via le %{link}. Consultez la %{docs_link} pour en savoir plus." # Machine translated, remove this comment when verified
-        subscription_policy_html: "<strong>Politique d'abonnement</strong> : les modérateurs devront autoriser manuellement tout nouvel abonnement. L'abonnement doit passer principalement par Gather. Les abonnements via le site Mailman ou par courriel devraient être rares." # Machine translated, remove this comment when verified
+        non_members_html: "<strong>Non-membres</strong> : la fonction « non-membre » de Mailman permet 1) d'autoriser d'autres adresses à envoyer des courriels à la liste sans en recevoir et 2) d'interdire à certaines personnes d'écrire à la liste. Les non-membres ne reçoivent pas les courriels de la liste. Ils ne sont pas synchronisés depuis Gather, mais peuvent être ajoutés manuellement via le %{link}. Consultez la %{docs_link} pour en savoir plus." # MT
+        subscription_policy_html: "<strong>Politique d'abonnement</strong> : les modérateurs devront autoriser manuellement tout nouvel abonnement. L'abonnement doit passer principalement par Gather. Les abonnements via le site Mailman ou par courriel devraient être rares." # MT
       show:
-        additional_senders_note: "Ces expéditeurs supplémentaires peuvent écrire à la liste, mais n'en reçoivent pas les courriels." # Machine translated, remove this comment when verified
+        additional_senders_note: "Ces expéditeurs supplémentaires peuvent écrire à la liste, mais n'en reçoivent pas les courriels." # MT
   domains:
     new:
-      migrating: "Si vous migrez des adresses de transfert ou des listes de diffusion, assurez-vous qu'elles sont configurées dans Gather et prêtes à recevoir des courriels lorsque vous ferez pointer le domaine vers Gather." # Machine translated, remove this comment when verified
+      migrating: "Si vous migrez des adresses de transfert ou des listes de diffusion, assurez-vous qu'elles sont configurées dans Gather et prêtes à recevoir des courriels lorsque vous ferez pointer le domaine vers Gather." # MT

@@ -1,72 +1,84 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
 fr:
   layouts:
     mailer:
-      notification_settings: "Paramètres de notification de Gather : %{url}" # Machine translated, remove this comment when verified
-      machine_translated: "Cet e-mail a été traduit automatiquement et peut contenir des erreurs." # Machine translated, remove this comment when verified
+      notification_settings: "Paramètres de notification de Gather : %{url}" # MT
+      machine_translated: "Cet e-mail a été traduit automatiquement et peut contenir des erreurs." # MT
     application:
-      impersonation_notice: "Vous agissez en tant que %{name}. Toutes vos actions sembleront avoir été faites par cette personne." # Machine translated, remove this comment when verified
-      stop_impersonating: "Arrêter" # Machine translated, remove this comment when verified
-      home: "Accueil" # Machine translated, remove this comment when verified
-      skip_to_content: "Aller au contenu" # Machine translated, remove this comment when verified
-      show_menu: "Afficher le menu" # Machine translated, remove this comment when verified
-      toggle_navigation: "Afficher ou masquer la navigation" # Machine translated, remove this comment when verified
-      loading: "Chargement" # Machine translated, remove this comment when verified
-      add_to_home_screen: "Ajouter Gather à votre écran d'accueil" # Machine translated, remove this comment when verified
+      impersonation_notice: "Vous agissez en tant que %{name}. Toutes vos actions sembleront avoir été faites par cette personne." # MT
+      stop_impersonating: "Arrêter" # MT
+      home: "Accueil" # MT
+      skip_to_content: "Aller au contenu" # MT
+      show_menu: "Afficher le menu" # MT
+      toggle_navigation: "Afficher ou masquer la navigation" # MT
+      loading: "Chargement" # MT
+      add_to_home_screen: "Ajouter Gather à votre écran d'accueil" # MT
     footer:
-      privacy_policy: "Politique de confidentialité" # Machine translated, remove this comment when verified
-      credits: "Crédits" # Machine translated, remove this comment when verified
-      settings: "Paramètres" # Machine translated, remove this comment when verified
-      subscription: "Abonnement" # Machine translated, remove this comment when verified
-      billing: "Facturation" # Machine translated, remove this comment when verified
-      communities: "Communautés" # Machine translated, remove this comment when verified
-      resync_subscriptions: "Resynchroniser les abonnements" # Machine translated, remove this comment when verified
-      domains: "Domaines" # Machine translated, remove this comment when verified
-      machine_translated: "Cette page a été traduite automatiquement et peut contenir des erreurs." # Machine translated, remove this comment when verified
-      machine_translated_with_link_html: "Cette page a été traduite automatiquement et peut contenir des erreurs. %{link}" # Machine translated, remove this comment when verified
-      help_translate: "Aidez à améliorer la traduction" # Machine translated, remove this comment when verified
+      privacy_policy: "Politique de confidentialité" # MT
+      credits: "Crédits" # MT
+      settings: "Paramètres" # MT
+      subscription: "Abonnement" # MT
+      billing: "Facturation" # MT
+      communities: "Communautés" # MT
+      resync_subscriptions: "Resynchroniser les abonnements" # MT
+      domains: "Domaines" # MT
+      machine_translated: "Cette page a été traduite automatiquement et peut contenir des erreurs." # MT
+      machine_translated_with_link_html: "Cette page a été traduite automatiquement et peut contenir des erreurs. %{link}" # MT
+      help_translate: "Aidez à améliorer la traduction" # MT
     head:
-      title_html: "Gather : %{title}" # Machine translated, remove this comment when verified
+      title_html: "Gather : %{title}" # MT
     personal_dropdown:
-      show_menu: "Afficher le menu personnel" # Machine translated, remove this comment when verified
+      show_menu: "Afficher le menu personnel" # MT
   shared:
     dropzone:
-      image_attachment: "Image jointe" # Machine translated, remove this comment when verified
+      image_attachment: "Image jointe" # MT
     mobile_back_link:
-      back_to_html: "Retour à %{label}" # Machine translated, remove this comment when verified
+      back_to_html: "Retour à %{label}" # MT
   home:
     inactive:
-      title: "Compte inactif" # Machine translated, remove this comment when verified
-      body: "Votre compte n'est pas actif. Vous pouvez toujours consulter vos comptes et modifier votre profil. Voir le menu en haut à droite de l'écran." # Machine translated, remove this comment when verified
+      title: "Compte inactif" # MT
+      body: "Votre compte n'est pas actif. Vous pouvez toujours consulter vos comptes et modifier votre profil. Voir le menu en haut à droite de l'écran." # MT
   calendar_nav_popover:
-    message_html: "<b>Réservations</b> s'appelle désormais <b>Calendriers</b> ! Allez voir !" # Machine translated, remove this comment when verified
-    dismiss: "Fermer" # Machine translated, remove this comment when verified
+    message_html: "<b>Réservations</b> s'appelle désormais <b>Calendriers</b> ! Allez voir !" # MT
+    dismiss: "Fermer" # MT
   landing:
-    invite_welcome: "Bienvenue sur Gather ! Choisissez un mode de connexion ci-dessous." # Machine translated, remove this comment when verified
+    invite_welcome: "Bienvenue sur Gather ! Choisissez un mode de connexion ci-dessous." # MT
     index:
-      blurb: "La vie est meilleure ensemble." # Machine translated, remove this comment when verified
-      logo_alt: "Logo de Gather" # Machine translated, remove this comment when verified
-      sign_in_google: "Se connecter avec Google" # Machine translated, remove this comment when verified
-      sign_in_password: "Se connecter avec un mot de passe" # Machine translated, remove this comment when verified
-      learn_more: "En savoir plus" # Machine translated, remove this comment when verified
-      try_it_out: "Essayer" # Machine translated, remove this comment when verified
+      blurb: "La vie est meilleure ensemble." # MT
+      logo_alt: "Logo de Gather" # MT
+      sign_in_google: "Se connecter avec Google" # MT
+      sign_in_password: "Se connecter avec un mot de passe" # MT
+      learn_more: "En savoir plus" # MT
+      try_it_out: "Essayer" # MT
     signed_out:
-      title: "Gather - Déconnecté" # Machine translated, remove this comment when verified
-      signed_out: "Vous êtes maintenant déconnecté de Gather." # Machine translated, remove this comment when verified
-      public_computer_html: "S'il s'agit d'un <strong>ordinateur public</strong>, vous voudrez peut-être aussi<br/>%{link}." # Machine translated, remove this comment when verified
-      google_sign_out: "vous déconnecter de votre compte Google" # Machine translated, remove this comment when verified
-      return_home: "Retour à l'accueil" # Machine translated, remove this comment when verified
+      title: "Gather - Déconnecté" # MT
+      signed_out: "Vous êtes maintenant déconnecté de Gather." # MT
+      public_computer_html: "S'il s'agit d'un <strong>ordinateur public</strong>, vous voudrez peut-être aussi<br/>%{link}." # MT
+      google_sign_out: "vous déconnecter de votre compte Google" # MT
+      return_home: "Retour à l'accueil" # MT
     privacy_policy:
-      title: "Politique de confidentialité" # Machine translated, remove this comment when verified
-      english_only: "La politique de confidentialité n'est disponible qu'en anglais." # Machine translated, remove this comment when verified
+      title: "Politique de confidentialité" # MT
+      english_only: "La politique de confidentialité n'est disponible qu'en anglais." # MT
     markdown:
-      title: "Guide de mise en forme Markdown" # Machine translated, remove this comment when verified
-      intro_html: "<strong>Markdown</strong> est une façon simple de créer un contenu texte propre et riche sans apprendre de langage particulier." # Machine translated, remove this comment when verified
-      if_you_type: "Si vous tapez…" # Machine translated, remove this comment when verified
-      displayed_like: "Cela s'affichera ainsi :" # Machine translated, remove this comment when verified
-      outro: "Amusez-vous maintenant à créer plein de contenus utiles et beaux !" # Machine translated, remove this comment when verified
+      title: "Guide de mise en forme Markdown" # MT
+      intro_html: "<strong>Markdown</strong> est une façon simple de créer un contenu texte propre et riche sans apprendre de langage particulier." # MT
+      if_you_type: "Si vous tapez…" # MT
+      displayed_like: "Cela s'affichera ainsi :" # MT
+      outro: "Amusez-vous maintenant à créer plein de contenus utiles et beaux !" # MT
       examples:
-        formatting: "Vous pouvez facilement faire une mise en forme simple, comme du **gras**, de l'_italique_ et du ~~barré~~." # Machine translated, remove this comment when verified
-        lists: |- # Machine translated, remove this comment when verified
+        formatting: "Vous pouvez facilement faire une mise en forme simple, comme du **gras**, de l'_italique_ et du ~~barré~~." # MT
+        lists: |- # MT
           Vous pouvez aussi faire des
 
           * listes
@@ -79,61 +91,61 @@ fr:
 
           1. listes
           2. numérotées
-        headers: |- # Machine translated, remove this comment when verified
+        headers: |- # MT
           # Les titres
           ## Sont
           ### Faciles
 
           aussi !
-        tables: |- # Machine translated, remove this comment when verified
+        tables: |- # MT
           | Vous  | Pouvez |
           |------|--------|
           | même faire de jolis | tableaux |
           | Waouh ! | C'est super ! |
-        links: |- # Machine translated, remove this comment when verified
+        links: |- # MT
           Les liens vers d'autres pages ressemblent [à ceci](http://example.com).
 
           Le texte d'un lien brut sera reconnu automatiquement : https://gather.coop
-        images: |- # Machine translated, remove this comment when verified
+        images: |- # MT
           Vous pouvez afficher des images comme ceci :
 
           ![Chaton](https://gather.coop/sample-image.png)
-        rule: |- # Machine translated, remove this comment when verified
+        rule: |- # MT
           Vous pouvez utiliser une ligne horizontale pour séparer votre contenu :
 
           ---
 
           bien !
-        raw_markup: |- # Machine translated, remove this comment when verified
+        raw_markup: |- # MT
           Si vous êtes un utilisateur avancé et voulez utiliser du HTML brut, essayez !
 
           Par exemple, <blockquote>vous voudrez peut-être utiliser des citations en bloc</blockquote>.
   error_pages:
     "400":
-      title: "Le serveur ne peut pas traiter la requête à cause d'une erreur du client (400 Bad Request)" # Machine translated, remove this comment when verified
-      heading: "Le serveur ne peut pas traiter la requête à cause d'une erreur du client." # Machine translated, remove this comment when verified
-      body: "Vérifiez la requête et réessayez. Si vous êtes responsable de l'application, consultez les journaux pour en savoir plus." # Machine translated, remove this comment when verified
+      title: "Le serveur ne peut pas traiter la requête à cause d'une erreur du client (400 Bad Request)" # MT
+      heading: "Le serveur ne peut pas traiter la requête à cause d'une erreur du client." # MT
+      body: "Vérifiez la requête et réessayez. Si vous êtes responsable de l'application, consultez les journaux pour en savoir plus." # MT
     "403":
-      title: "Vous n'êtes pas autorisé à voir cette page (403)" # Machine translated, remove this comment when verified
-      heading: "Vous n'êtes pas autorisé à voir cette page." # Machine translated, remove this comment when verified
-      body: "Si vous pensez qu'il s'agit d'une erreur, contactez votre administrateur." # Machine translated, remove this comment when verified
+      title: "Vous n'êtes pas autorisé à voir cette page (403)" # MT
+      heading: "Vous n'êtes pas autorisé à voir cette page." # MT
+      body: "Si vous pensez qu'il s'agit d'une erreur, contactez votre administrateur." # MT
     "404":
-      title: "La page que vous cherchez n'existe pas (404 Not Found)" # Machine translated, remove this comment when verified
-      heading: "La page que vous cherchez n'existe pas." # Machine translated, remove this comment when verified
-      body: "Vous avez peut-être mal tapé l'adresse, ou la page a été déplacée. Si vous êtes responsable de l'application, consultez les journaux pour en savoir plus." # Machine translated, remove this comment when verified
+      title: "La page que vous cherchez n'existe pas (404 Not Found)" # MT
+      heading: "La page que vous cherchez n'existe pas." # MT
+      body: "Vous avez peut-être mal tapé l'adresse, ou la page a été déplacée. Si vous êtes responsable de l'application, consultez les journaux pour en savoir plus." # MT
     "406-unsupported-browser":
-      title: "Votre navigateur n'est pas pris en charge (406 Not Acceptable)" # Machine translated, remove this comment when verified
-      heading: "Votre navigateur n'est pas pris en charge." # Machine translated, remove this comment when verified
-      body: "Veuillez mettre à jour votre navigateur pour continuer." # Machine translated, remove this comment when verified
+      title: "Votre navigateur n'est pas pris en charge (406 Not Acceptable)" # MT
+      heading: "Votre navigateur n'est pas pris en charge." # MT
+      body: "Veuillez mettre à jour votre navigateur pour continuer." # MT
     "422":
-      title: "La modification demandée a été refusée (422 Unprocessable Entity)" # Machine translated, remove this comment when verified
-      heading: "La modification demandée a été refusée." # Machine translated, remove this comment when verified
-      body: "Vous avez peut-être essayé de modifier quelque chose auquel vous n'avez pas accès. Si vous êtes responsable de l'application, consultez les journaux pour en savoir plus." # Machine translated, remove this comment when verified
+      title: "La modification demandée a été refusée (422 Unprocessable Entity)" # MT
+      heading: "La modification demandée a été refusée." # MT
+      body: "Vous avez peut-être essayé de modifier quelque chose auquel vous n'avez pas accès. Si vous êtes responsable de l'application, consultez les journaux pour en savoir plus." # MT
     "500":
-      title: "Nous sommes désolés, mais un problème est survenu (500 Internal Server Error)" # Machine translated, remove this comment when verified
-      heading: "Nous sommes désolés, mais un problème est survenu." # Machine translated, remove this comment when verified
-      body: "Si vous êtes responsable de l'application, consultez les journaux pour en savoir plus." # Machine translated, remove this comment when verified
+      title: "Nous sommes désolés, mais un problème est survenu (500 Internal Server Error)" # MT
+      heading: "Nous sommes désolés, mais un problème est survenu." # MT
+      body: "Si vous êtes responsable de l'application, consultez les journaux pour en savoir plus." # MT
     offline:
-      title: "Vous n'êtes pas connecté à Internet" # Machine translated, remove this comment when verified
-      heading: "Un problème est survenu en contactant le serveur." # Machine translated, remove this comment when verified
-      body: "Vous avez peut-être perdu votre connexion Internet. Essayez de recharger la page." # Machine translated, remove this comment when verified
+      title: "Vous n'êtes pas connecté à Internet" # MT
+      heading: "Un problème est survenu en contactant le serveur." # MT
+      body: "Vous avez peut-être perdu votre connexion Internet. Essayez de recharger la page." # MT

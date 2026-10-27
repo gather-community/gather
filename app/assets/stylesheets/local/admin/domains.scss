@@ -13,12 +13,6 @@
     word-break: break-word;
   }
 
-  // The app's 180% content line height suits prose but spreads out stacked record lines.
-  table.key-value td,
-  table.index td {
-    line-height: 1.5;
-  }
-
   ul.spf-lookups {
     margin: 2px 0 0;
     padding-left: 18px;

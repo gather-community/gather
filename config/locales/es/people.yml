@@ -1,203 +1,215 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
 es:
   people:
     deleted_placeholder:
-      household: "Miembros eliminados" # Machine translated, remove this comment when verified
-      first_name: "Miembro" # Machine translated, remove this comment when verified
-      last_name: "eliminado" # Machine translated, remove this comment when verified
+      household: "Miembros eliminados" # MT
+      first_name: "Miembro" # MT
+      last_name: "eliminado" # MT
     sign_in_invitations:
       sent:
-        one: "Invitación enviada." # Machine translated, remove this comment when verified
-        other: "Invitaciones enviadas." # Machine translated, remove this comment when verified
-      none_selected: "No seleccionaste a ninguna persona." # Machine translated, remove this comment when verified
+        one: "Invitación enviada." # MT
+        other: "Invitaciones enviadas." # MT
+      none_selected: "No seleccionaste a ninguna persona." # MT
       new:
-        title: "Invitar a personas a iniciar sesión" # Machine translated, remove this comment when verified
-        no_users: "No se encontraron personas." # Machine translated, remove this comment when verified
-        instructions_html: "Marca las personas a las que quieres invitar. Las que tienen %{icon} junto a su nombre nunca han iniciado sesión." # Machine translated, remove this comment when verified
-        select_no_sign_ins: "Seleccionar las que nunca han iniciado sesión" # Machine translated, remove this comment when verified
-        select_all: "Seleccionar todo" # Machine translated, remove this comment when verified
-        send: "Enviar invitaciones" # Machine translated, remove this comment when verified
+        title: "Invitar a personas a iniciar sesión" # MT
+        no_users: "No se encontraron personas." # MT
+        instructions_html: "Marca las personas a las que quieres invitar. Las que tienen %{icon} junto a su nombre nunca han iniciado sesión." # MT
+        select_no_sign_ins: "Seleccionar las que nunca han iniciado sesión" # MT
+        select_all: "Seleccionar todo" # MT
+        send: "Enviar invitaciones" # MT
     memorials:
-      created: "Homenaje creado." # Machine translated, remove this comment when verified
-      updated: "Homenaje actualizado." # Machine translated, remove this comment when verified
+      created: "Homenaje creado." # MT
+      updated: "Homenaje actualizado." # MT
       index:
-        title: "Homenajes" # Machine translated, remove this comment when verified
-        create: "Crear homenaje" # Machine translated, remove this comment when verified
-        no_memorials: "No se encontraron homenajes." # Machine translated, remove this comment when verified
-        photo_of: "Foto de %{name}" # Machine translated, remove this comment when verified
+        title: "Homenajes" # MT
+        create: "Crear homenaje" # MT
+        no_memorials: "No se encontraron homenajes." # MT
+        photo_of: "Foto de %{name}" # MT
       show:
-        memorials: "Homenajes" # Machine translated, remove this comment when verified
-        photo_of: "Foto de %{name}" # Machine translated, remove this comment when verified
-        obituary: "Obituario" # Machine translated, remove this comment when verified
-        community_memories: "Recuerdos de la comunidad" # Machine translated, remove this comment when verified
+        memorials: "Homenajes" # MT
+        photo_of: "Foto de %{name}" # MT
+        obituary: "Obituario" # MT
+        community_memories: "Recuerdos de la comunidad" # MT
       new:
-        title: "Crear homenaje" # Machine translated, remove this comment when verified
+        title: "Crear homenaje" # MT
       edit:
-        title: "Editar homenaje: %{name}" # Machine translated, remove this comment when verified
+        title: "Editar homenaje: %{name}" # MT
     memorial_messages:
-      created: "Gracias por tu mensaje." # Machine translated, remove this comment when verified
-      updated: "Mensaje actualizado." # Machine translated, remove this comment when verified
+      created: "Gracias por tu mensaje." # MT
+      updated: "Mensaje actualizado." # MT
       edit:
-        title: "Editar mensaje del homenaje" # Machine translated, remove this comment when verified
+        title: "Editar mensaje del homenaje" # MT
     member_types:
-      created: "Tipo de miembro creado." # Machine translated, remove this comment when verified
-      updated: "Tipo de miembro actualizado." # Machine translated, remove this comment when verified
+      created: "Tipo de miembro creado." # MT
+      updated: "Tipo de miembro actualizado." # MT
       index:
-        title: "Tipos de miembro" # Machine translated, remove this comment when verified
-        create: "Crear tipo de miembro" # Machine translated, remove this comment when verified
-        explanation: "Los tipos de miembro se asignan a los hogares y permiten personalizar los cargos periódicos de facturación." # Machine translated, remove this comment when verified
-        no_member_types: "No se encontraron tipos de miembro." # Machine translated, remove this comment when verified
-        name: "Nombre" # Machine translated, remove this comment when verified
+        title: "Tipos de miembro" # MT
+        create: "Crear tipo de miembro" # MT
+        explanation: "Los tipos de miembro se asignan a los hogares y permiten personalizar los cargos periódicos de facturación." # MT
+        no_member_types: "No se encontraron tipos de miembro." # MT
+        name: "Nombre" # MT
       new:
-        title: "Crear tipo de miembro" # Machine translated, remove this comment when verified
+        title: "Crear tipo de miembro" # MT
       edit:
-        title: "Editar tipo de miembro: %{name}" # Machine translated, remove this comment when verified
+        title: "Editar tipo de miembro: %{name}" # MT
     vehicles:
       index:
-        title: "Vehículos" # Machine translated, remove this comment when verified
-        no_vehicles: "No se encontraron vehículos." # Machine translated, remove this comment when verified
-        vehicle: "Marca/Modelo/Color/Matrícula" # Machine translated, remove this comment when verified
-        owner: "Propietario" # Machine translated, remove this comment when verified
+        title: "Vehículos" # MT
+        no_vehicles: "No se encontraron vehículos." # MT
+        vehicle: "Marca/Modelo/Color/Matrícula" # MT
+        owner: "Propietario" # MT
     settings:
       edit:
-        title: "Ajustes de personas" # Machine translated, remove this comment when verified
+        title: "Ajustes de personas" # MT
     birthdays:
       index:
-        title: "Cumpleaños" # Machine translated, remove this comment when verified
-        no_users: "No se encontraron personas." # Machine translated, remove this comment when verified
+        title: "Cumpleaños" # MT
+        no_users: "No se encontraron personas." # MT
         unknown: "?"
     password_changes:
-      success: "Contraseña cambiada." # Machine translated, remove this comment when verified
+      success: "Contraseña cambiada." # MT
       show:
-        title: "Cambiar contraseña" # Machine translated, remove this comment when verified
+        title: "Cambiar contraseña" # MT
       password_fields:
-        new_password: "Contraseña nueva" # Machine translated, remove this comment when verified
-        retype_new_password: "Repite la contraseña nueva" # Machine translated, remove this comment when verified
-        reveal: "Mostrar contraseñas" # Machine translated, remove this comment when verified
-        mask: "Ocultar contraseñas" # Machine translated, remove this comment when verified
+        new_password: "Contraseña nueva" # MT
+        retype_new_password: "Repite la contraseña nueva" # MT
+        reveal: "Mostrar contraseñas" # MT
+        mask: "Ocultar contraseñas" # MT
     users:
       confirmations:
-        sign_in_to_use_gather: "Inicia sesión para usar Gather." # Machine translated, remove this comment when verified
-        expired_signed_in: "El plazo de confirmación expiró. Usa el enlace «Reenviar instrucciones de confirmación» de abajo para intentarlo de nuevo." # Machine translated, remove this comment when verified
-        expired_signed_out: "El plazo de confirmación expiró. Inicia sesión con tu dirección de correo anterior e inténtalo de nuevo." # Machine translated, remove this comment when verified
+        sign_in_to_use_gather: "Inicia sesión para usar Gather." # MT
+        expired_signed_in: "El plazo de confirmación expiró. Usa el enlace «Reenviar instrucciones de confirmación» de abajo para intentarlo de nuevo." # MT
+        expired_signed_out: "El plazo de confirmación expiró. Inicia sesión con tu dirección de correo anterior e inténtalo de nuevo." # MT
       omniauth_failure_reasons:
-        no_email: "Google no proporcionó una dirección de correo. Avisa a un administrador" # Machine translated, remove this comment when verified
-        invitation_expired: "tu invitación caducó" # Machine translated, remove this comment when verified
-        wrong_google_id: "debes iniciar sesión con el ID de Google %{google_id}" # Machine translated, remove this comment when verified
-        google_id_taken: "tu ID de Google %{google_id} está asociado a otra persona" # Machine translated, remove this comment when verified
-        invitation_required: "la primera vez que inicies sesión debes usar una invitación" # Machine translated, remove this comment when verified
-        google_id_not_found: "tu ID de Google %{google_id} no se encontró en el sistema" # Machine translated, remove this comment when verified
-        cancelled: "se canceló el inicio de sesión" # Machine translated, remove this comment when verified
-        session_expired: "tu sesión de inicio de sesión caducó. Inténtalo de nuevo" # Machine translated, remove this comment when verified
-        unexpected: "se produjo un error desconocido. Ya se avisó a los administradores" # Machine translated, remove this comment when verified
+        no_email: "Google no proporcionó una dirección de correo. Avisa a un administrador" # MT
+        invitation_expired: "tu invitación caducó" # MT
+        wrong_google_id: "debes iniciar sesión con el ID de Google %{google_id}" # MT
+        google_id_taken: "tu ID de Google %{google_id} está asociado a otra persona" # MT
+        invitation_required: "la primera vez que inicies sesión debes usar una invitación" # MT
+        google_id_not_found: "tu ID de Google %{google_id} no se encontró en el sistema" # MT
+        cancelled: "se canceló el inicio de sesión" # MT
+        session_expired: "tu sesión de inicio de sesión caducó. Inténtalo de nuevo" # MT
+        unexpected: "se produjo un error desconocido. Ya se avisó a los administradores" # MT
     deletion:
-      blocked_intro: "Esto aún no se puede eliminar definitivamente:" # Machine translated, remove this comment when verified
-      confirmation_mismatch: "El texto de confirmación no coincidía, así que no se eliminó nada." # Machine translated, remove this comment when verified
-      self_success: "Tu cuenta se eliminó definitivamente." # Machine translated, remove this comment when verified
+      blocked_intro: "Esto aún no se puede eliminar definitivamente:" # MT
+      confirmation_mismatch: "El texto de confirmación no coincidía, así que no se eliminó nada." # MT
+      self_success: "Tu cuenta se eliminó definitivamente." # MT
       blockers:
-        balance: "El hogar «%{name}» tiene un saldo pendiente que debe resolverse primero." # Machine translated, remove this comment when verified
-        guardian: "Es tutor de %{names}; elimina o reasigna primero a esos miembros." # Machine translated, remove this comment when verified
-        external_ward: "Hay miembros de este hogar que son tutores de %{names} en otros hogares; elimina o reasigna primero a esos miembros." # Machine translated, remove this comment when verified
-        last_admin: "Es la única persona administradora de la comunidad; da primero el rol de administrador a otro miembro." # Machine translated, remove this comment when verified
+        balance: "El hogar «%{name}» tiene un saldo pendiente que debe resolverse primero." # MT
+        guardian: "Es tutor de %{names}; elimina o reasigna primero a esos miembros." # MT
+        external_ward: "Hay miembros de este hogar que son tutores de %{names} en otros hogares; elimina o reasigna primero a esos miembros." # MT
+        last_admin: "Es la única persona administradora de la comunidad; da primero el rol de administrador a otro miembro." # MT
   users:
-    greeting: "Hola, %{name}:" # Machine translated, remove this comment when verified
-    photo_of: "Foto de %{name}" # Machine translated, remove this comment when verified
-    confirmation_resent: "Instrucciones enviadas." # Machine translated, remove this comment when verified
-    email_change_canceled: "Cambio de correo cancelado." # Machine translated, remove this comment when verified
-    created: "Persona creada." # Machine translated, remove this comment when verified
-    created_and_invited: "Persona creada e invitada." # Machine translated, remove this comment when verified
-    updated: "Persona actualizada." # Machine translated, remove this comment when verified
-    profile_updated: "Perfil actualizado." # Machine translated, remove this comment when verified
-    confirm_new_email_self: "Tienes que confirmar tu nueva dirección de correo. Revisa tu correo en %{email}." # Machine translated, remove this comment when verified
-    confirm_new_email_other: "Esta persona tiene que confirmar su nueva dirección de correo (%{email})." # Machine translated, remove this comment when verified
-    invitation_invalidated: "Sin embargo, este cambio puede haber invalidado una invitación para iniciar sesión. Quizá quieras enviar una nueva." # Machine translated, remove this comment when verified
+    greeting: "Hola, %{name}:" # MT
+    photo_of: "Foto de %{name}" # MT
+    confirmation_resent: "Instrucciones enviadas." # MT
+    email_change_canceled: "Cambio de correo cancelado." # MT
+    created: "Persona creada." # MT
+    created_and_invited: "Persona creada e invitada." # MT
+    updated: "Persona actualizada." # MT
+    profile_updated: "Perfil actualizado." # MT
+    confirm_new_email_self: "Tienes que confirmar tu nueva dirección de correo. Revisa tu correo en %{email}." # MT
+    confirm_new_email_other: "Esta persona tiene que confirmar su nueva dirección de correo (%{email})." # MT
+    invitation_invalidated: "Sin embargo, este cambio puede haber invalidado una invitación para iniciar sesión. Quizá quieras enviar una nueva." # MT
     household_hint:
-      choose_html: "Elige un hogar existente para esta persona. Si no existe, debes %{link}." # Machine translated, remove this comment when verified
-      create_link: "crearlo primero" # Machine translated, remove this comment when verified
-      child_note: "Por una limitación del sistema, cada persona en Gather debe pertenecer a un único hogar, pero un niño puede tener padres o tutores de varios hogares. Todas las funciones del sistema relacionadas con niños tratan por igual a todos los padres o tutores y a todos los hogares asociados al niño." # Machine translated, remove this comment when verified
-    preferred_contact_tooltip: "Prefiere que lo contacten por: %{method}" # Machine translated, remove this comment when verified
-    all_users: "Todas las personas" # Machine translated, remove this comment when verified
+      choose_html: "Elige un hogar existente para esta persona. Si no existe, debes %{link}." # MT
+      create_link: "crearlo primero" # MT
+      child_note: "Por una limitación del sistema, cada persona en Gather debe pertenecer a un único hogar, pero un niño puede tener padres o tutores de varios hogares. Todas las funciones del sistema relacionadas con niños tratan por igual a todos los padres o tutores y a todos los hogares asociados al niño." # MT
+    preferred_contact_tooltip: "Prefiere que lo contacten por: %{method}" # MT
+    all_users: "Todas las personas" # MT
     index:
-      title: "Directorio" # Machine translated, remove this comment when verified
-      print_title: "Directorio de %{community}" # Machine translated, remove this comment when verified
-      show_action_menu: "Mostrar el menú de acciones de la persona" # Machine translated, remove this comment when verified
-      create_adult: "Crear adulto" # Machine translated, remove this comment when verified
-      create_child: "Crear niño" # Machine translated, remove this comment when verified
-      invite_to_sign_in: "Invitar a iniciar sesión" # Machine translated, remove this comment when verified
-      no_users: "No se encontraron personas." # Machine translated, remove this comment when verified
-      name: "Nombre" # Machine translated, remove this comment when verified
-      unit: "Vivienda" # Machine translated, remove this comment when verified
-      email: "Correo" # Machine translated, remove this comment when verified
-      mobile_phone: "Móvil" # Machine translated, remove this comment when verified
-      home_phone: "Casa" # Machine translated, remove this comment when verified
-      work_phone: "Trabajo" # Machine translated, remove this comment when verified
-      preferred_contact: "Pref." # Machine translated, remove this comment when verified
-      download_csv: "Descargar como CSV" # Machine translated, remove this comment when verified
+      title: "Directorio" # MT
+      print_title: "Directorio de %{community}" # MT
+      show_action_menu: "Mostrar el menú de acciones de la persona" # MT
+      create_adult: "Crear adulto" # MT
+      create_child: "Crear niño" # MT
+      invite_to_sign_in: "Invitar a iniciar sesión" # MT
+      no_users: "No se encontraron personas." # MT
+      name: "Nombre" # MT
+      unit: "Vivienda" # MT
+      email: "Correo" # MT
+      mobile_phone: "Móvil" # MT
+      home_phone: "Casa" # MT
+      work_phone: "Trabajo" # MT
+      preferred_contact: "Pref." # MT
+      download_csv: "Descargar como CSV" # MT
     show:
-      directory: "Directorio" # Machine translated, remove this comment when verified
-      email: "Correo" # Machine translated, remove this comment when verified
-      pending_confirmation: "Pendiente de confirmar: %{email}" # Machine translated, remove this comment when verified
-      resend_confirmation: "Reenviar instrucciones de confirmación" # Machine translated, remove this comment when verified
-      cancel_change: "Cancelar el cambio" # Machine translated, remove this comment when verified
-      unconfirmed: "* Esta dirección aún no está confirmada, úsala con precaución." # Machine translated, remove this comment when verified
-      phone: "Teléfono" # Machine translated, remove this comment when verified
-      preferred_contact: "Medio de contacto preferido" # Machine translated, remove this comment when verified
-      birthday: "Cumpleaños" # Machine translated, remove this comment when verified
-      age: "Edad" # Machine translated, remove this comment when verified
-      joined_on: "Fecha de llegada" # Machine translated, remove this comment when verified
-      recent_head_cook_meals: "Comidas recientes como jefe de cocina" # Machine translated, remove this comment when verified
-      date: "Fecha" # Machine translated, remove this comment when verified
-      meal_title: "Título" # Machine translated, remove this comment when verified
-      signups: "Inscripciones" # Machine translated, remove this comment when verified
+      directory: "Directorio" # MT
+      email: "Correo" # MT
+      pending_confirmation: "Pendiente de confirmar: %{email}" # MT
+      resend_confirmation: "Reenviar instrucciones de confirmación" # MT
+      cancel_change: "Cancelar el cambio" # MT
+      unconfirmed: "* Esta dirección aún no está confirmada, úsala con precaución." # MT
+      phone: "Teléfono" # MT
+      preferred_contact: "Medio de contacto preferido" # MT
+      birthday: "Cumpleaños" # MT
+      age: "Edad" # MT
+      joined_on: "Fecha de llegada" # MT
+      recent_head_cook_meals: "Comidas recientes como jefe de cocina" # MT
+      date: "Fecha" # MT
+      meal_title: "Título" # MT
+      signups: "Inscripciones" # MT
     new:
-      title: "Crear persona" # Machine translated, remove this comment when verified
+      title: "Crear persona" # MT
     edit:
-      profile: "Perfil" # Machine translated, remove this comment when verified
-      edit_user: "Editar persona: %{name}" # Machine translated, remove this comment when verified
-      edit_photo: "Editar foto: %{name}" # Machine translated, remove this comment when verified
+      profile: "Perfil" # MT
+      edit_user: "Editar persona: %{name}" # MT
+      edit_photo: "Editar foto: %{name}" # MT
     full_form:
-      hide_photo_from_cluster: "No mostrar la foto a las personas de %{communities}" # Machine translated, remove this comment when verified
-      privacy_hint_html: "Para más información sobre los ajustes de privacidad, consulta la %{link}." # Machine translated, remove this comment when verified
-      privacy_policy: "política de privacidad" # Machine translated, remove this comment when verified
-      household_info: "Datos del hogar" # Machine translated, remove this comment when verified
-      household_note_named_html: "Los campos de abajo pertenecen al hogar %{name}. Si los cambias aquí, cambiarán para <em>todas las personas del hogar</em>." # Machine translated, remove this comment when verified
-      household_note_unnamed_html: "Los campos de abajo pertenecen al hogar de la persona. Si los cambias aquí, cambiarán para <em>todas las personas del hogar</em>." # Machine translated, remove this comment when verified
-      move_household_html: "También puedes %{link}." # Machine translated, remove this comment when verified
-      move_household_link: "trasladarla a otro hogar" # Machine translated, remove this comment when verified
+      hide_photo_from_cluster: "No mostrar la foto a las personas de %{communities}" # MT
+      privacy_hint_html: "Para más información sobre los ajustes de privacidad, consulta la %{link}." # MT
+      privacy_policy: "política de privacidad" # MT
+      household_info: "Datos del hogar" # MT
+      household_note_named_html: "Los campos de abajo pertenecen al hogar %{name}. Si los cambias aquí, cambiarán para <em>todas las personas del hogar</em>." # MT
+      household_note_unnamed_html: "Los campos de abajo pertenecen al hogar de la persona. Si los cambias aquí, cambiarán para <em>todas las personas del hogar</em>." # MT
+      move_household_html: "También puedes %{link}." # MT
+      move_household_link: "trasladarla a otro hogar" # MT
   households:
-    greeting: "Hola, hogar %{name}:" # Machine translated, remove this comment when verified
-    created: "Hogar creado." # Machine translated, remove this comment when verified
-    updated: "Hogar actualizado." # Machine translated, remove this comment when verified
-    emergency_contact: "%{name} (%{relationship})" # Machine translated, remove this comment when verified
+    greeting: "Hola, hogar %{name}:" # MT
+    created: "Hogar creado." # MT
+    updated: "Hogar actualizado." # MT
+    emergency_contact: "%{name} (%{relationship})" # MT
     pets:
-      summary: "%{name} (%{species}, %{color})" # Machine translated, remove this comment when verified
-      vet: "Veterinario" # Machine translated, remove this comment when verified
-      caregivers: "Cuidadores" # Machine translated, remove this comment when verified
-      health_issues: "Problemas de salud" # Machine translated, remove this comment when verified
-    number: "n.º %{number}" # Machine translated, remove this comment when verified
+      summary: "%{name} (%{species}, %{color})" # MT
+      vet: "Veterinario" # MT
+      caregivers: "Cuidadores" # MT
+      health_issues: "Problemas de salud" # MT
+    number: "n.º %{number}" # MT
     index:
-      title: "Hogares" # Machine translated, remove this comment when verified
-      create: "Crear hogar" # Machine translated, remove this comment when verified
-      no_households: "No se encontraron hogares." # Machine translated, remove this comment when verified
-      name: "Nombre" # Machine translated, remove this comment when verified
-      unit: "N.º de vivienda" # Machine translated, remove this comment when verified
-      users: "Personas" # Machine translated, remove this comment when verified
+      title: "Hogares" # MT
+      create: "Crear hogar" # MT
+      no_households: "No se encontraron hogares." # MT
+      name: "Nombre" # MT
+      unit: "N.º de vivienda" # MT
+      users: "Personas" # MT
     show:
-      title: "Hogar: %{name}" # Machine translated, remove this comment when verified
-      households: "Hogares" # Machine translated, remove this comment when verified
-      missing_photo: "Falta la foto" # Machine translated, remove this comment when verified
+      title: "Hogar: %{name}" # MT
+      households: "Hogares" # MT
+      missing_photo: "Falta la foto" # MT
     new:
-      title: "Crear hogar" # Machine translated, remove this comment when verified
+      title: "Crear hogar" # MT
     edit:
-      title: "Editar hogar: %{name}" # Machine translated, remove this comment when verified
+      title: "Editar hogar: %{name}" # MT
     attribs:
-      household: "Hogar" # Machine translated, remove this comment when verified
-      members: "Miembros" # Machine translated, remove this comment when verified
-      vehicles: "Vehículos" # Machine translated, remove this comment when verified
-      garage: "Garaje" # Machine translated, remove this comment when verified
-      member_type: "Tipo de miembro" # Machine translated, remove this comment when verified
-      emergency_contacts: "Contactos de emergencia" # Machine translated, remove this comment when verified
-      pets: "Mascotas" # Machine translated, remove this comment when verified
-      keyholders: "Otras personas con llave de la vivienda" # Machine translated, remove this comment when verified
+      household: "Hogar" # MT
+      members: "Miembros" # MT
+      vehicles: "Vehículos" # MT
+      garage: "Garaje" # MT
+      member_type: "Tipo de miembro" # MT
+      emergency_contacts: "Contactos de emergencia" # MT
+      pets: "Mascotas" # MT
+      keyholders: "Otras personas con llave de la vivienda" # MT
     unit_community:
-      unit: "Vivienda" # Machine translated, remove this comment when verified
-      community: "Comunidad" # Machine translated, remove this comment when verified
+      unit: "Vivienda" # MT
+      community: "Comunidad" # MT

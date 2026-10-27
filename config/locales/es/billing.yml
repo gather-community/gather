@@ -1,223 +1,235 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
 es:
   transaction_codes:
-    meal: "Comida" # Machine translated, remove this comment when verified
-    dues: "Cuotas de socio" # Machine translated, remove this comment when verified
-    payment: "Pago" # Machine translated, remove this comment when verified
-    reimb: "Reembolso" # Machine translated, remove this comment when verified
-    othcrd: "Otro abono" # Machine translated, remove this comment when verified
-    othchg: "Otro cargo" # Machine translated, remove this comment when verified
-    late: "Recargo por demora" # Machine translated, remove this comment when verified
-    initbal: "Saldo inicial" # Machine translated, remove this comment when verified
+    meal: "Comida" # MT
+    dues: "Cuotas de socio" # MT
+    payment: "Pago" # MT
+    reimb: "Reembolso" # MT
+    othcrd: "Otro abono" # MT
+    othchg: "Otro cargo" # MT
+    late: "Recargo por demora" # MT
+    initbal: "Saldo inicial" # MT
 
   accounts:
-    updated: "Cuenta actualizada." # Machine translated, remove this comment when verified
-    late_fees_applied: "Recargos por demora aplicados." # Machine translated, remove this comment when verified
-    credit_amount_html: "%{amount} CR" # Machine translated, remove this comment when verified
-    credit_abbr: "CR" # Machine translated, remove this comment when verified
-    not_applicable: "N/A" # Machine translated, remove this comment when verified
-    no_credit_limit: "Ninguno" # Machine translated, remove this comment when verified
-    no_users_warning: "El hogar de esta cuenta no tiene personas asociadas" # Machine translated, remove this comment when verified
-    late_fee_confirm: "¿Seguro? Se cobrarán recargos a %{count} hogares." # Machine translated, remove this comment when verified
-    late_fee_confirm_with_days: "¿Seguro? Se cobrarán recargos a %{count} hogares. Los recargos se aplicaron por última vez hace %{days} días." # Machine translated, remove this comment when verified
-    statement_confirm: "¿Seguro? Se enviarán estados de cuenta a %{count} hogares." # Machine translated, remove this comment when verified
-    paypal_friend_confirm_html: "Si te lo pregunta, <strong>no</strong> elijas «¿Pagas por bienes o servicios?» para evitar comisiones." # Machine translated, remove this comment when verified
+    updated: "Cuenta actualizada." # MT
+    late_fees_applied: "Recargos por demora aplicados." # MT
+    credit_amount_html: "%{amount} CR" # MT
+    credit_abbr: "CR" # MT
+    not_applicable: "N/A" # MT
+    no_credit_limit: "Ninguno" # MT
+    no_users_warning: "El hogar de esta cuenta no tiene personas asociadas" # MT
+    late_fee_confirm: "¿Seguro? Se cobrarán recargos a %{count} hogares." # MT
+    late_fee_confirm_with_days: "¿Seguro? Se cobrarán recargos a %{count} hogares. Los recargos se aplicaron por última vez hace %{days} días." # MT
+    statement_confirm: "¿Seguro? Se enviarán estados de cuenta a %{count} hogares." # MT
+    paypal_friend_confirm_html: "Si te lo pregunta, <strong>no</strong> elijas «¿Pagas por bienes o servicios?» para evitar comisiones." # MT
     details:
-      no_activity: "Esta cuenta no tiene actividad." # Machine translated, remove this comment when verified
+      no_activity: "Esta cuenta no tiene actividad." # MT
     other_accounts:
-      looking: "¿Buscas otra cuenta?" # Machine translated, remove this comment when verified
-      each_community: "Cada comunidad gestiona sus propias cuentas." # Machine translated, remove this comment when verified
+      looking: "¿Buscas otra cuenta?" # MT
+      each_community: "Cada comunidad gestiona sus propias cuentas." # MT
     payment_instructions:
-      how_to_pay: "Cómo pagar" # Machine translated, remove this comment when verified
-      paypal: "PayPal" # Machine translated, remove this comment when verified
-      click_logo: "Haz clic en el logotipo de arriba para pagar con PayPal." # Machine translated, remove this comment when verified
-      send_paypal_html: "Envía los pagos de PayPal a %{email}." # Machine translated, remove this comment when verified
-      choose_friend_html: "Asegúrate de elegir %{friend} para evitar comisiones." # Machine translated, remove this comment when verified
-      sending_to_friend: "envío a un amigo" # Machine translated, remove this comment when verified
-      online_bill_pay: "Pago de facturas en línea" # Machine translated, remove this comment when verified
-      bill_pay_intro: "La mayoría de los bancos ofrecen pago de facturas en línea, con el que puedes enviar un cheque fácilmente. Añade un nuevo beneficiario e introduce lo siguiente:" # Machine translated, remove this comment when verified
-      payee_name_html: "Nombre del beneficiario: %{payee}" # Machine translated, remove this comment when verified
-      account_number_html: "Número de cuenta: %{number}" # Machine translated, remove this comment when verified
-      address: "Dirección:" # Machine translated, remove this comment when verified
-      check: "Cheque" # Machine translated, remove this comment when verified
-      payable_to_html: "Extiende los cheques a nombre de %{payee}" # Machine translated, remove this comment when verified
-      memo_line_html: "Escribe tu número de cuenta %{number} en el concepto." # Machine translated, remove this comment when verified
-      mail_to: "Envía los cheques a:" # Machine translated, remove this comment when verified
-      cash: "Efectivo" # Machine translated, remove this comment when verified
-      none_provided: "No se han proporcionado instrucciones de pago." # Machine translated, remove this comment when verified
-      go_to_settings_html: "Ve a la %{link} para añadirlas." # Machine translated, remove this comment when verified
-      settings_page: "página de ajustes" # Machine translated, remove this comment when verified
-      contact_html: "Para cualquier consulta de facturación, contacta con %{email}." # Machine translated, remove this comment when verified
+      how_to_pay: "Cómo pagar" # MT
+      paypal: "PayPal" # MT
+      click_logo: "Haz clic en el logotipo de arriba para pagar con PayPal." # MT
+      send_paypal_html: "Envía los pagos de PayPal a %{email}." # MT
+      choose_friend_html: "Asegúrate de elegir %{friend} para evitar comisiones." # MT
+      sending_to_friend: "envío a un amigo" # MT
+      online_bill_pay: "Pago de facturas en línea" # MT
+      bill_pay_intro: "La mayoría de los bancos ofrecen pago de facturas en línea, con el que puedes enviar un cheque fácilmente. Añade un nuevo beneficiario e introduce lo siguiente:" # MT
+      payee_name_html: "Nombre del beneficiario: %{payee}" # MT
+      account_number_html: "Número de cuenta: %{number}" # MT
+      address: "Dirección:" # MT
+      check: "Cheque" # MT
+      payable_to_html: "Extiende los cheques a nombre de %{payee}" # MT
+      memo_line_html: "Escribe tu número de cuenta %{number} en el concepto." # MT
+      mail_to: "Envía los cheques a:" # MT
+      cash: "Efectivo" # MT
+      none_provided: "No se han proporcionado instrucciones de pago." # MT
+      go_to_settings_html: "Ve a la %{link} para añadirlas." # MT
+      settings_page: "página de ajustes" # MT
+      contact_html: "Para cualquier consulta de facturación, contacta con %{email}." # MT
     statement_list:
-      statements: "Estados de cuenta" # Machine translated, remove this comment when verified
-      date: "Fecha" # Machine translated, remove this comment when verified
-      activity: "Actividad" # Machine translated, remove this comment when verified
-      total_due: "Total a pagar" # Machine translated, remove this comment when verified
+      statements: "Estados de cuenta" # MT
+      date: "Fecha" # MT
+      activity: "Actividad" # MT
+      total_due: "Total a pagar" # MT
     summary:
-      summary: "Resumen" # Machine translated, remove this comment when verified
-      account_number: "Número de cuenta" # Machine translated, remove this comment when verified
-      last_statement_date: "Fecha del último estado de cuenta" # Machine translated, remove this comment when verified
-      last_statement_balance: "Saldo del último estado de cuenta" # Machine translated, remove this comment when verified
-      new_credits: "Nuevos pagos y abonos" # Machine translated, remove this comment when verified
-      balance_due: "Saldo a pagar" # Machine translated, remove this comment when verified
-      due_date: "Vencimiento" # Machine translated, remove this comment when verified
-      new_charges: "Nuevos cargos" # Machine translated, remove this comment when verified
-      current_balance: "Saldo actual" # Machine translated, remove this comment when verified
-      credit_limit: "Límite de crédito" # Machine translated, remove this comment when verified
-      balance_due_footnote: "Es lo que debes ahora mismo: el importe a pagar de tu último estado de cuenta menos los pagos recibidos desde entonces. Si ya has pagado pero aún no aparece aquí, no tengas en cuenta este mensaje." # Machine translated, remove this comment when verified
-      current_balance_footnote: "Este saldo incluye los cargos y abonos desde tu último estado de cuenta. Si supera tu límite de crédito, no podrás inscribirte en comidas." # Machine translated, remove this comment when verified
+      summary: "Resumen" # MT
+      account_number: "Número de cuenta" # MT
+      last_statement_date: "Fecha del último estado de cuenta" # MT
+      last_statement_balance: "Saldo del último estado de cuenta" # MT
+      new_credits: "Nuevos pagos y abonos" # MT
+      balance_due: "Saldo a pagar" # MT
+      due_date: "Vencimiento" # MT
+      new_charges: "Nuevos cargos" # MT
+      current_balance: "Saldo actual" # MT
+      credit_limit: "Límite de crédito" # MT
+      balance_due_footnote: "Es lo que debes ahora mismo: el importe a pagar de tu último estado de cuenta menos los pagos recibidos desde entonces. Si ya has pagado pero aún no aparece aquí, no tengas en cuenta este mensaje." # MT
+      current_balance_footnote: "Este saldo incluye los cargos y abonos desde tu último estado de cuenta. Si supera tu límite de crédito, no podrás inscribirte en comidas." # MT
     synopsis:
-      pay_by: "Paga %{amount} antes del %{date}. ¡Gracias!" # Machine translated, remove this comment when verified
-      pay: "Paga %{amount}. ¡Gracias!" # Machine translated, remove this comment when verified
-      zero: "No tienes saldo pendiente. ¡Bien hecho!" # Machine translated, remove this comment when verified
-      credit: "Tu cuenta tiene un saldo a favor de %{amount}. ¡No hace falta pagar!" # Machine translated, remove this comment when verified
+      pay_by: "Paga %{amount} antes del %{date}. ¡Gracias!" # MT
+      pay: "Paga %{amount}. ¡Gracias!" # MT
+      zero: "No tienes saldo pendiente. ¡Bien hecho!" # MT
+      credit: "Tu cuenta tiene un saldo a favor de %{amount}. ¡No hace falta pagar!" # MT
     transaction_export_form:
-      download: "Descargar movimientos como CSV" # Machine translated, remove this comment when verified
-      incurred: "Producidos en…" # Machine translated, remove this comment when verified
-      recorded: "Registrados en…" # Machine translated, remove this comment when verified
-      select_dates: "Elegir fechas" # Machine translated, remove this comment when verified
+      download: "Descargar movimientos como CSV" # MT
+      incurred: "Producidos en…" # MT
+      recorded: "Registrados en…" # MT
+      select_dates: "Elegir fechas" # MT
     edit:
-      title: "Editar cuenta: %{household}" # Machine translated, remove this comment when verified
-      no_users: "Esta cuenta no tiene personas asociadas y no puede recibir estados de cuenta." # Machine translated, remove this comment when verified
-      cancel: "Cancelar" # Machine translated, remove this comment when verified
+      title: "Editar cuenta: %{household}" # MT
+      no_users: "Esta cuenta no tiene personas asociadas y no puede recibir estados de cuenta." # MT
+      cancel: "Cancelar" # MT
     show:
-      title: "Cuenta: %{household}" # Machine translated, remove this comment when verified
+      title: "Cuenta: %{household}" # MT
     mine:
-      title: "Mi cuenta" # Machine translated, remove this comment when verified
-      title_with_community: "Mi cuenta de %{community}" # Machine translated, remove this comment when verified
-      no_charges: "Todavía no hay cargos asociados a tu hogar." # Machine translated, remove this comment when verified
+      title: "Mi cuenta" # MT
+      title_with_community: "Mi cuenta de %{community}" # MT
+      no_charges: "Todavía no hay cargos asociados a tu hogar." # MT
     index:
-      title: "Cuentas" # Machine translated, remove this comment when verified
-      apply_late_fees: "Aplicar recargos por demora" # Machine translated, remove this comment when verified
-      send_statements: "Enviar estados de cuenta" # Machine translated, remove this comment when verified
-      no_accounts: "No se encontraron cuentas." # Machine translated, remove this comment when verified
-      num: "N.º" # Machine translated, remove this comment when verified
-      household: "Hogar" # Machine translated, remove this comment when verified
-      last_statement_date: "Último estado" # Machine translated, remove this comment when verified
-      due_last_statement: "A pagar (último estado)" # Machine translated, remove this comment when verified
-      new_credits: "Nuevos abonos" # Machine translated, remove this comment when verified
-      balance_due: "Saldo a pagar" # Machine translated, remove this comment when verified
-      new_charges: "Nuevos cargos" # Machine translated, remove this comment when verified
-      current_balance: "Saldo actual" # Machine translated, remove this comment when verified
-      credit_limit: "Límite de crédito" # Machine translated, remove this comment when verified
-      add_transaction: "Añadir movimiento" # Machine translated, remove this comment when verified
-      totals: "Totales" # Machine translated, remove this comment when verified
-      download_accounts: "Descargar cuentas como CSV" # Machine translated, remove this comment when verified
+      title: "Cuentas" # MT
+      apply_late_fees: "Aplicar recargos por demora" # MT
+      send_statements: "Enviar estados de cuenta" # MT
+      no_accounts: "No se encontraron cuentas." # MT
+      num: "N.º" # MT
+      household: "Hogar" # MT
+      last_statement_date: "Último estado" # MT
+      due_last_statement: "A pagar (último estado)" # MT
+      new_credits: "Nuevos abonos" # MT
+      balance_due: "Saldo a pagar" # MT
+      new_charges: "Nuevos cargos" # MT
+      current_balance: "Saldo actual" # MT
+      credit_limit: "Límite de crédito" # MT
+      add_transaction: "Añadir movimiento" # MT
+      totals: "Totales" # MT
+      download_accounts: "Descargar cuentas como CSV" # MT
       summary:
-        one: "Hay %{count} cuenta activa." # Machine translated, remove this comment when verified
-        other: "Hay %{count} cuentas activas." # Machine translated, remove this comment when verified
-      active_account_definition: "Una cuenta activa es la que tiene actividad reciente o un saldo actual distinto de cero." # Machine translated, remove this comment when verified
-      last_statement_run: "Los últimos estados de cuenta se enviaron el %{date}." # Machine translated, remove this comment when verified
-      statements_never_run: "Nunca se han enviado estados de cuenta." # Machine translated, remove this comment when verified
+        one: "Hay %{count} cuenta activa." # MT
+        other: "Hay %{count} cuentas activas." # MT
+      active_account_definition: "Una cuenta activa es la que tiene actividad reciente o un saldo actual distinto de cero." # MT
+      last_statement_run: "Los últimos estados de cuenta se enviaron el %{date}." # MT
+      statements_never_run: "Nunca se han enviado estados de cuenta." # MT
       no_users:
-        one: "Hay %{count} cuenta sin personas asociadas. No se generará estado de cuenta para ella." # Machine translated, remove this comment when verified
-        other: "Hay %{count} cuentas sin personas asociadas. No se generarán estados de cuenta para ellas." # Machine translated, remove this comment when verified
+        one: "Hay %{count} cuenta sin personas asociadas. No se generará estado de cuenta para ella." # MT
+        other: "Hay %{count} cuentas sin personas asociadas. No se generarán estados de cuenta para ellas." # MT
       recent_statements:
-        one: "Hay %{count} cuenta con un estado de cuenta en las últimas 24 horas. No se generará uno nuevo para ella." # Machine translated, remove this comment when verified
-        other: "Hay %{count} cuentas con estados de cuenta en las últimas 24 horas. No se generarán nuevos para ellas." # Machine translated, remove this comment when verified
+        one: "Hay %{count} cuenta con un estado de cuenta en las últimas 24 horas. No se generará uno nuevo para ella." # MT
+        other: "Hay %{count} cuentas con estados de cuenta en las últimas 24 horas. No se generarán nuevos para ellas." # MT
     others:
-      one_html: "Tienes otra cuenta de Gather en %{cmty}." # Machine translated, remove this comment when verified
-      multiple_html: "También tienes cuentas de Gather en %{cmtys}." # Machine translated, remove this comment when verified
+      one_html: "Tienes otra cuenta de Gather en %{cmty}." # MT
+      multiple_html: "También tienes cuentas de Gather en %{cmtys}." # MT
     payment_badge_alt:
-      paypal: "Distintivo de pago con PayPal" # Machine translated, remove this comment when verified
-      online_bill_pay: "Distintivo de pago de facturas en línea" # Machine translated, remove this comment when verified
-      check: "Distintivo de pago con cheque" # Machine translated, remove this comment when verified
-      cash: "Distintivo de pago en efectivo" # Machine translated, remove this comment when verified
+      paypal: "Distintivo de pago con PayPal" # MT
+      online_bill_pay: "Distintivo de pago de facturas en línea" # MT
+      check: "Distintivo de pago con cheque" # MT
+      cash: "Distintivo de pago en efectivo" # MT
 
   statements:
-    generation_started: "Se inició la generación de estados de cuenta. Actualiza la página en un momento para ver el estado de las cuentas." # Machine translated, remove this comment when verified
-    no_users_not_generated: "Los siguientes hogares no tienen personas asociadas, así que no se generaron estados de cuenta para ellos: %{households}. Vuelve a enviarlos cuando tengan personas asociadas." # Machine translated, remove this comment when verified
+    generation_started: "Se inició la generación de estados de cuenta. Actualiza la página en un momento para ver el estado de las cuentas." # MT
+    no_users_not_generated: "Los siguientes hogares no tienen personas asociadas, así que no se generaron estados de cuenta para ellos: %{households}. Vuelve a enviarlos cuando tengan personas asociadas." # MT
     account_info:
-      account_community: "Comunidad de la cuenta" # Machine translated, remove this comment when verified
-      account_number: "Número de cuenta" # Machine translated, remove this comment when verified
-      household: "Hogar" # Machine translated, remove this comment when verified
+      account_community: "Comunidad de la cuenta" # MT
+      account_number: "Número de cuenta" # MT
+      household: "Hogar" # MT
     link_to_accounts_page:
-      notice_html: "Para ver la información más actual de tu cuenta, %{link}." # Machine translated, remove this comment when verified
-      link: "visita tu página de cuentas" # Machine translated, remove this comment when verified
+      notice_html: "Para ver la información más actual de tu cuenta, %{link}." # MT
+      link: "visita tu página de cuentas" # MT
     statement_rows:
-      load_more: "Cargar más…" # Machine translated, remove this comment when verified
-      loading: "Cargando…" # Machine translated, remove this comment when verified
+      load_more: "Cargar más…" # MT
+      loading: "Cargando…" # MT
     show:
-      title: "Estado de cuenta n.º %{number}" # Machine translated, remove this comment when verified
-      statement_date: "Fecha del estado de cuenta" # Machine translated, remove this comment when verified
-      due_date: "Vencimiento" # Machine translated, remove this comment when verified
-      activity: "Actividad" # Machine translated, remove this comment when verified
-      previous_balance: "Saldo anterior" # Machine translated, remove this comment when verified
-      statement_balance: "Saldo del estado de cuenta" # Machine translated, remove this comment when verified
+      title: "Estado de cuenta n.º %{number}" # MT
+      statement_date: "Fecha del estado de cuenta" # MT
+      due_date: "Vencimiento" # MT
+      activity: "Actividad" # MT
+      previous_balance: "Saldo anterior" # MT
+      statement_balance: "Saldo del estado de cuenta" # MT
 
   transactions:
-    added: "Movimiento añadido." # Machine translated, remove this comment when verified
-    not_added: "No se añadió el movimiento. Puedes editarlo abajo e intentarlo de nuevo, o hacer clic en «Cancelar» para volver a la página de cuentas." # Machine translated, remove this comment when verified
+    added: "Movimiento añadido." # MT
+    not_added: "No se añadió el movimiento. Puedes editarlo abajo e intentarlo de nuevo, o hacer clic en «Cancelar» para volver a la página de cuentas." # MT
     form:
-      cancel: "Cancelar" # Machine translated, remove this comment when verified
+      cancel: "Cancelar" # MT
     txn_rows:
-      no_activity: "No hubo actividad en este período" # Machine translated, remove this comment when verified
+      no_activity: "No hubo actividad en este período" # MT
     txn_table:
-      date: "Fecha" # Machine translated, remove this comment when verified
-      type: "Tipo" # Machine translated, remove this comment when verified
-      description: "Descripción" # Machine translated, remove this comment when verified
-      quantity: "Cantidad" # Machine translated, remove this comment when verified
-      unit_price: "Precio unitario" # Machine translated, remove this comment when verified
-      amount: "Importe" # Machine translated, remove this comment when verified
+      date: "Fecha" # MT
+      type: "Tipo" # MT
+      description: "Descripción" # MT
+      quantity: "Cantidad" # MT
+      unit_price: "Precio unitario" # MT
+      amount: "Importe" # MT
     confirm:
-      title: "Confirmar movimiento" # Machine translated, remove this comment when verified
-      intro: "Así aparecerá el nuevo movimiento en el estado de cuenta del hogar. Los movimientos no se pueden editar una vez creados. Comprueba que los datos de abajo son correctos." # Machine translated, remove this comment when verified
+      title: "Confirmar movimiento" # MT
+      intro: "Así aparecerá el nuevo movimiento en el estado de cuenta del hogar. Los movimientos no se pueden editar una vez creados. Comprueba que los datos de abajo son correctos." # MT
     index:
-      title: "Actividad reciente" # Machine translated, remove this comment when verified
-      title_with_household: "Actividad reciente: %{household}" # Machine translated, remove this comment when verified
-      account_community: "Comunidad de la cuenta" # Machine translated, remove this comment when verified
-      account_number: "Número de cuenta" # Machine translated, remove this comment when verified
-      household: "Hogar" # Machine translated, remove this comment when verified
-      activity: "Actividad" # Machine translated, remove this comment when verified
-      no_activity: "Esta cuenta no tiene actividad." # Machine translated, remove this comment when verified
-      last_statement_balance: "Saldo del último estado de cuenta" # Machine translated, remove this comment when verified
-      current_balance: "Saldo actual" # Machine translated, remove this comment when verified
+      title: "Actividad reciente" # MT
+      title_with_household: "Actividad reciente: %{household}" # MT
+      account_community: "Comunidad de la cuenta" # MT
+      account_number: "Número de cuenta" # MT
+      household: "Hogar" # MT
+      activity: "Actividad" # MT
+      no_activity: "Esta cuenta no tiene actividad." # MT
+      last_statement_balance: "Saldo del último estado de cuenta" # MT
+      current_balance: "Saldo actual" # MT
     new:
-      title: "Nuevo movimiento" # Machine translated, remove this comment when verified
+      title: "Nuevo movimiento" # MT
 
   billing:
-    late_fee_description: "Recargo por pago tardío" # Machine translated, remove this comment when verified
+    late_fee_description: "Recargo por pago tardío" # MT
     templates:
-      created: "Plantilla creada." # Machine translated, remove this comment when verified
-      updated: "Plantilla actualizada." # Machine translated, remove this comment when verified
-      select_one: "Selecciona al menos una plantilla." # Machine translated, remove this comment when verified
-      applied: "Movimientos creados." # Machine translated, remove this comment when verified
+      created: "Plantilla creada." # MT
+      updated: "Plantilla actualizada." # MT
+      select_one: "Selecciona al menos una plantilla." # MT
+      applied: "Movimientos creados." # MT
       edit:
-        title: "Editar plantilla de facturación: %{description}" # Machine translated, remove this comment when verified
+        title: "Editar plantilla de facturación: %{description}" # MT
       new:
-        title: "Nueva plantilla de movimiento" # Machine translated, remove this comment when verified
+        title: "Nueva plantilla de movimiento" # MT
       index:
-        title: "Plantillas de movimientos" # Machine translated, remove this comment when verified
-        apply: "Aplicar plantillas" # Machine translated, remove this comment when verified
-        create: "Crear plantilla" # Machine translated, remove this comment when verified
-        intro: "Las plantillas de movimientos facilitan crear lotes de movimientos de una vez." # Machine translated, remove this comment when verified
-        none_found: "No se encontraron plantillas." # Machine translated, remove this comment when verified
-        description: "Descripción" # Machine translated, remove this comment when verified
-        type: "Tipo" # Machine translated, remove this comment when verified
-        member_types: "Tipo(s) de miembro" # Machine translated, remove this comment when verified
-        amount: "Importe" # Machine translated, remove this comment when verified
+        title: "Plantillas de movimientos" # MT
+        apply: "Aplicar plantillas" # MT
+        create: "Crear plantilla" # MT
+        intro: "Las plantillas de movimientos facilitan crear lotes de movimientos de una vez." # MT
+        none_found: "No se encontraron plantillas." # MT
+        description: "Descripción" # MT
+        type: "Tipo" # MT
+        member_types: "Tipo(s) de miembro" # MT
+        amount: "Importe" # MT
       review:
-        title: "Aplicar plantillas" # Machine translated, remove this comment when verified
-        intro: "Vas a crear los siguientes movimientos para los siguientes hogares:" # Machine translated, remove this comment when verified
-        description: "Descripción" # Machine translated, remove this comment when verified
-        type: "Tipo" # Machine translated, remove this comment when verified
-        amount: "Importe" # Machine translated, remove this comment when verified
-        households: "Hogares" # Machine translated, remove this comment when verified
-        outdated_warning: "La lista de hogares de arriba podría quedar desactualizada si cambian los tipos de miembro de los hogares entre que se cargó esta página de confirmación y que se pulse «Aplicar» abajo." # Machine translated, remove this comment when verified
-        cancel: "Cancelar" # Machine translated, remove this comment when verified
-        apply: "Aplicar" # Machine translated, remove this comment when verified
+        title: "Aplicar plantillas" # MT
+        intro: "Vas a crear los siguientes movimientos para los siguientes hogares:" # MT
+        description: "Descripción" # MT
+        type: "Tipo" # MT
+        amount: "Importe" # MT
+        households: "Hogares" # MT
+        outdated_warning: "La lista de hogares de arriba podría quedar desactualizada si cambian los tipos de miembro de los hogares entre que se cargó esta página de confirmación y que se pulse «Aplicar» abajo." # MT
+        cancel: "Cancelar" # MT
+        apply: "Aplicar" # MT
 
   account_mailer:
     statement_notice:
-      subject: "Nuevo estado de cuenta de %{community}" # Machine translated, remove this comment when verified
-      created: "Se creó en Gather un nuevo estado de cuenta para tu cuenta de %{community}." # Machine translated, remove this comment when verified
-      amount_due: "El importe a pagar es %{amount}." # Machine translated, remove this comment when verified
-      credit: "Tienes un saldo a favor de %{amount}. No hace falta pagar." # Machine translated, remove this comment when verified
-      see_details: "Visita el enlace de abajo para ver los detalles:" # Machine translated, remove this comment when verified
-      thanks: "¡Gracias por tu pago puntual!" # Machine translated, remove this comment when verified
+      subject: "Nuevo estado de cuenta de %{community}" # MT
+      created: "Se creó en Gather un nuevo estado de cuenta para tu cuenta de %{community}." # MT
+      amount_due: "El importe a pagar es %{amount}." # MT
+      credit: "Tienes un saldo a favor de %{amount}. No hace falta pagar." # MT
+      see_details: "Visita el enlace de abajo para ver los detalles:" # MT
+      thanks: "¡Gracias por tu pago puntual!" # MT
     statement_reminder:
-      subject: "Recordatorio de pago de la cuenta de %{community}" # Machine translated, remove this comment when verified
-      due_on: "Te recordamos que el pago de un estado de cuenta de Gather de tu cuenta de %{community} vence el %{date}." # Machine translated, remove this comment when verified
-      due_soon: "Te recordamos que el pago de un estado de cuenta de Gather de tu cuenta de %{community} vence pronto." # Machine translated, remove this comment when verified
-      amount_due: "El importe a pagar es %{amount}. Visita el enlace de abajo para ver los detalles:" # Machine translated, remove this comment when verified
-      disregard: "Si ya has pagado, no tengas en cuenta este aviso." # Machine translated, remove this comment when verified
-      thanks: "¡Gracias por tu pago puntual!" # Machine translated, remove this comment when verified
+      subject: "Recordatorio de pago de la cuenta de %{community}" # MT
+      due_on: "Te recordamos que el pago de un estado de cuenta de Gather de tu cuenta de %{community} vence el %{date}." # MT
+      due_soon: "Te recordamos que el pago de un estado de cuenta de Gather de tu cuenta de %{community} vence pronto." # MT
+      amount_due: "El importe a pagar es %{amount}. Visita el enlace de abajo para ver los detalles:" # MT
+      disregard: "Si ya has pagado, no tengas en cuenta este aviso." # MT
+      thanks: "¡Gracias por tu pago puntual!" # MT

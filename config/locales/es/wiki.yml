@@ -1,64 +1,76 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
 es:
   wiki:
-    page_deleted: "Página eliminada." # Machine translated, remove this comment when verified
-    page_listing: "Lista de páginas de la wiki" # Machine translated, remove this comment when verified
-    new_page: "Nueva página de la wiki" # Machine translated, remove this comment when verified
-    help: "Ayuda de la wiki" # Machine translated, remove this comment when verified
+    page_deleted: "Página eliminada." # MT
+    page_listing: "Lista de páginas de la wiki" # MT
+    new_page: "Nueva página de la wiki" # MT
+    help: "Ayuda de la wiki" # MT
     editor:
-      autosaved: "Guardado automáticamente: " # Machine translated, remove this comment when verified
-      bold: "Negrita" # Machine translated, remove this comment when verified
-      fullscreen: "Pantalla completa" # Machine translated, remove this comment when verified
-      heading: "Encabezado" # Machine translated, remove this comment when verified
-      image: "Insertar imagen" # Machine translated, remove this comment when verified
-      italic: "Cursiva" # Machine translated, remove this comment when verified
+      autosaved: "Guardado automáticamente: " # MT
+      bold: "Negrita" # MT
+      fullscreen: "Pantalla completa" # MT
+      heading: "Encabezado" # MT
+      image: "Insertar imagen" # MT
+      italic: "Cursiva" # MT
       lines:
-        one: "líneas: %{count}" # Machine translated, remove this comment when verified
-        other: "líneas: %{count}" # Machine translated, remove this comment when verified
-      link: "Crear enlace" # Machine translated, remove this comment when verified
-      ordered_list: "Lista numerada" # Machine translated, remove this comment when verified
-      preview: "Vista previa" # Machine translated, remove this comment when verified
-      quote: "Cita" # Machine translated, remove this comment when verified
-      side_by_side: "Lado a lado" # Machine translated, remove this comment when verified
-      unordered_list: "Lista con viñetas" # Machine translated, remove this comment when verified
+        one: "líneas: %{count}" # MT
+        other: "líneas: %{count}" # MT
+      link: "Crear enlace" # MT
+      ordered_list: "Lista numerada" # MT
+      preview: "Vista previa" # MT
+      quote: "Cita" # MT
+      side_by_side: "Lado a lado" # MT
+      unordered_list: "Lista con viñetas" # MT
       words:
-        one: "palabras: %{count}" # Machine translated, remove this comment when verified
-        other: "palabras: %{count}" # Machine translated, remove this comment when verified
+        one: "palabras: %{count}" # MT
+        other: "palabras: %{count}" # MT
     pages:
       history_table:
-        version: "Versión" # Machine translated, remove this comment when verified
-        date: "Fecha" # Machine translated, remove this comment when verified
-        author: "Autor" # Machine translated, remove this comment when verified
-        comment: "Comentario" # Machine translated, remove this comment when verified
-        compare: "Comparar selección" # Machine translated, remove this comment when verified
-        return: "Volver a la página" # Machine translated, remove this comment when verified
+        version: "Versión" # MT
+        date: "Fecha" # MT
+        author: "Autor" # MT
+        comment: "Comentario" # MT
+        compare: "Comparar selección" # MT
+        return: "Volver a la página" # MT
       all:
-        title: "Lista de páginas de la wiki" # Machine translated, remove this comment when verified
+        title: "Lista de páginas de la wiki" # MT
       compare:
-        title: "Comparación de la wiki: %{title}" # Machine translated, remove this comment when verified
-        differences: "Diferencias entre las versiones %{old} y %{new}" # Machine translated, remove this comment when verified
-        versions_between: "Versiones entre %{old} y %{new}" # Machine translated, remove this comment when verified
+        title: "Comparación de la wiki: %{title}" # MT
+        differences: "Diferencias entre las versiones %{old} y %{new}" # MT
+        versions_between: "Versiones entre %{old} y %{new}" # MT
       edit:
-        title: "Editar página de la wiki: %{title}" # Machine translated, remove this comment when verified
+        title: "Editar página de la wiki: %{title}" # MT
       history:
-        title: "Historial de la wiki: %{title}" # Machine translated, remove this comment when verified
+        title: "Historial de la wiki: %{title}" # MT
       new:
-        title: "Nueva página de la wiki" # Machine translated, remove this comment when verified
+        title: "Nueva página de la wiki" # MT
       show:
-        wiki_home: "Inicio de la wiki" # Machine translated, remove this comment when verified
-    not_found_create: "No hay ninguna página de la wiki llamada «%{title}». ¡Puedes crearla abajo!" # Machine translated, remove this comment when verified
-    preview_notice: "Esto es una vista previa. Para guardar o seguir editando la página, usa el formulario de abajo." # Machine translated, remove this comment when verified
-    revision_info: "Página revisada el %{time} por %{user}" # Machine translated, remove this comment when verified
-    revision_info_no_by: "Página revisada el %{time}" # Machine translated, remove this comment when verified
+        wiki_home: "Inicio de la wiki" # MT
+    not_found_create: "No hay ninguna página de la wiki llamada «%{title}». ¡Puedes crearla abajo!" # MT
+    preview_notice: "Esto es una vista previa. Para guardar o seguir editando la página, usa el formulario de abajo." # MT
+    revision_info: "Página revisada el %{time} por %{user}" # MT
+    revision_info_no_by: "Página revisada el %{time}" # MT
     special_pages:
       home:
-        title: "Wiki" # Machine translated, remove this comment when verified
-        content: |- # Machine translated, remove this comment when verified
+        title: "Wiki" # MT
+        content: |- # MT
           ¡Esta es la **página de inicio de tu wiki**!
 
           ¡Consulta la [[Página de ejemplo]] para ver consejos sobre cómo llenarla de información útil!
       sample:
-        title: "Página de ejemplo" # Machine translated, remove this comment when verified
-        content: |- # Machine translated, remove this comment when verified
+        title: "Página de ejemplo" # MT
+        content: |- # MT
           Esta es una página de ejemplo de la wiki.
 
           ¡Haz clic en **Editar** arriba para ver cómo funciona esta página! Y no te preocupes, ¡no puedes romper nada!

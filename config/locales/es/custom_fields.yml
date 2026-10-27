@@ -1,137 +1,149 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
 es:
   custom_fields:
     boolean:
-      "true": "Sí" # Machine translated, remove this comment when verified
-      "false": "No" # Machine translated, remove this comment when verified
+      "true": "Sí" # MT
+      "false": "No" # MT
     labels:
       community:
         settings:
-          main_nav_customizations: "Personalización del menú superior" # Machine translated, remove this comment when verified
-          time_zone: "Zona horaria" # Machine translated, remove this comment when verified
-          default_landing_page: "Página de inicio predeterminada" # Machine translated, remove this comment when verified
+          main_nav_customizations: "Personalización del menú superior" # MT
+          time_zone: "Zona horaria" # MT
+          default_landing_page: "Página de inicio predeterminada" # MT
           people:
-            _self: "Personas" # Machine translated, remove this comment when verified
-            default_directory_sort: "Orden predeterminado del directorio" # Machine translated, remove this comment when verified
-            plain_user_selects: "Listas desplegables simples de personas" # Machine translated, remove this comment when verified
-            user_custom_fields_spec: "Especificación de campos personalizados de personas" # Machine translated, remove this comment when verified
+            _self: "Personas" # MT
+            default_directory_sort: "Orden predeterminado del directorio" # MT
+            plain_user_selects: "Listas desplegables simples de personas" # MT
+            user_custom_fields_spec: "Especificación de campos personalizados de personas" # MT
           meals:
-            _self: "Comidas" # Machine translated, remove this comment when verified
-            reimb_instructions: "Instrucciones de reembolso" # Machine translated, remove this comment when verified
-            allergens: "Alérgenos" # Machine translated, remove this comment when verified
-            show_reimb_form: "Mostrar el formulario de reembolso imprimible" # Machine translated, remove this comment when verified
-            cooks_can_finalize: "Los cocineros pueden finalizar las comidas" # Machine translated, remove this comment when verified
-            cooks_can_change_invites: "Los cocineros pueden cambiar las comunidades invitadas" # Machine translated, remove this comment when verified
-            default_invites: "Comunidades invitadas por defecto" # Machine translated, remove this comment when verified
-            allow_job_signup_on_meal_page: "Permitir inscribirse en tareas desde la página de la comida" # Machine translated, remove this comment when verified
-            default_capacity: "Capacidad predeterminada" # Machine translated, remove this comment when verified
+            _self: "Comidas" # MT
+            reimb_instructions: "Instrucciones de reembolso" # MT
+            allergens: "Alérgenos" # MT
+            show_reimb_form: "Mostrar el formulario de reembolso imprimible" # MT
+            cooks_can_finalize: "Los cocineros pueden finalizar las comidas" # MT
+            cooks_can_change_invites: "Los cocineros pueden cambiar las comunidades invitadas" # MT
+            default_invites: "Comunidades invitadas por defecto" # MT
+            allow_job_signup_on_meal_page: "Permitir inscribirse en tareas desde la página de la comida" # MT
+            default_capacity: "Capacidad predeterminada" # MT
             reminder_lead_times:
-              _self: "Días de antelación de los recordatorios" # Machine translated, remove this comment when verified
-              diner: "Recordatorio a comensales" # Machine translated, remove this comment when verified
-              early_menu: "Primer recordatorio del menú" # Machine translated, remove this comment when verified
-              late_menu: "Último recordatorio del menú" # Machine translated, remove this comment when verified
+              _self: "Días de antelación de los recordatorios" # MT
+              diner: "Recordatorio a comensales" # MT
+              early_menu: "Primer recordatorio del menú" # MT
+              late_menu: "Último recordatorio del menú" # MT
           calendars:
-            _self: "Calendarios" # Machine translated, remove this comment when verified
-            kinds: "Tipos" # Machine translated, remove this comment when verified
+            _self: "Calendarios" # MT
+            kinds: "Tipos" # MT
             meals:
-              _self: "Eventos de comidas" # Machine translated, remove this comment when verified
-              default_total_time: "Duración total predeterminada" # Machine translated, remove this comment when verified
-              default_prep_time: "Tiempo de preparación predeterminado" # Machine translated, remove this comment when verified
+              _self: "Eventos de comidas" # MT
+              default_total_time: "Duración total predeterminada" # MT
+              default_prep_time: "Tiempo de preparación predeterminado" # MT
           work:
-            _self: "Trabajo" # Machine translated, remove this comment when verified
-            default_date_filter: "Filtro de fechas predeterminado de inscripciones" # Machine translated, remove this comment when verified
+            _self: "Trabajo" # MT
+            default_date_filter: "Filtro de fechas predeterminado de inscripciones" # MT
           billing:
-            _self: "Facturación" # Machine translated, remove this comment when verified
-            contact: "Contacto de facturación" # Machine translated, remove this comment when verified
-            payment_instructions: "Instrucciones de pago" # Machine translated, remove this comment when verified
-            statement_terms: "Plazo de pago de los estados de cuenta" # Machine translated, remove this comment when verified
-            statement_reminder_lead_time: "Recordatorio de estado de cuenta\nDías de antelación" # Machine translated, remove this comment when verified
-            paypal_reimbursement: "Ofrecer reembolso por PayPal" # Machine translated, remove this comment when verified
+            _self: "Facturación" # MT
+            contact: "Contacto de facturación" # MT
+            payment_instructions: "Instrucciones de pago" # MT
+            statement_terms: "Plazo de pago de los estados de cuenta" # MT
+            statement_reminder_lead_time: "Recordatorio de estado de cuenta\nDías de antelación" # MT
+            paypal_reimbursement: "Ofrecer reembolso por PayPal" # MT
             payment_methods:
-              _self: "Información sobre métodos de pago" # Machine translated, remove this comment when verified
-              paypal_me: "PayPal.me" # Machine translated, remove this comment when verified
-              paypal_email: "PayPal por correo" # Machine translated, remove this comment when verified
-              paypal_friend: "Pedir a los miembros que envíen el pago de PayPal como «envío a un amigo»" # Machine translated, remove this comment when verified
-              check_payee: "Beneficiario de los cheques" # Machine translated, remove this comment when verified
-              check_address: "Dirección postal para cheques" # Machine translated, remove this comment when verified
-              check_dropoff: "Instrucciones para entregar cheques" # Machine translated, remove this comment when verified
-              cash_dropoff: "Instrucciones para entregar efectivo" # Machine translated, remove this comment when verified
-              additional_info: "Información adicional" # Machine translated, remove this comment when verified
-              show_billing_contact: "Mostrar el correo de contacto de facturación con la información adicional" # Machine translated, remove this comment when verified
+              _self: "Información sobre métodos de pago" # MT
+              paypal_me: "PayPal.me" # MT
+              paypal_email: "PayPal por correo" # MT
+              paypal_friend: "Pedir a los miembros que envíen el pago de PayPal como «envío a un amigo»" # MT
+              check_payee: "Beneficiario de los cheques" # MT
+              check_address: "Dirección postal para cheques" # MT
+              check_dropoff: "Instrucciones para entregar cheques" # MT
+              cash_dropoff: "Instrucciones para entregar efectivo" # MT
+              additional_info: "Información adicional" # MT
+              show_billing_contact: "Mostrar el correo de contacto de facturación con la información adicional" # MT
             late_fee_policy:
-              _self: "Política de recargos por demora" # Machine translated, remove this comment when verified
-              fee_type: "Tipo de recargo" # Machine translated, remove this comment when verified
-              threshold: "Umbral" # Machine translated, remove this comment when verified
-              amount: "Importe" # Machine translated, remove this comment when verified
+              _self: "Política de recargos por demora" # MT
+              fee_type: "Tipo de recargo" # MT
+              threshold: "Umbral" # MT
+              amount: "Importe" # MT
     hints:
       community:
         settings:
-          main_nav_customizations: "Usa este ajuste para editar los enlaces del menú superior. Escribe los enlaces en formato Markdown. Ejemplo: [Nombre del enlace](https://example.com). Si el nombre del enlace coincide con uno existente, sustituirá la URL predeterminada. Una URL en blanco elimina el enlace por completo. Se ignora cualquier otro texto o marcado." # Machine translated, remove this comment when verified
+          main_nav_customizations: "Usa este ajuste para editar los enlaces del menú superior. Escribe los enlaces en formato Markdown. Ejemplo: [Nombre del enlace](https://example.com). Si el nombre del enlace coincide con uno existente, sustituirá la URL predeterminada. Una URL en blanco elimina el enlace por completo. Se ignora cualquier otro texto o marcado." # MT
           people:
-            plain_user_selects: "Usar listas desplegables simples en lugar de cuadros con búsqueda. Puede ser preferible en comunidades pequeñas." # Machine translated, remove this comment when verified
-            user_custom_fields_spec: "Escribe en formato YAML la especificación de los campos personalizados que aparecerán al ver o editar personas de esta comunidad. Contacta con el soporte de Gather si necesitas ayuda para escribirla." # Machine translated, remove this comment when verified
+            plain_user_selects: "Usar listas desplegables simples en lugar de cuadros con búsqueda. Puede ser preferible en comunidades pequeñas." # MT
+            user_custom_fields_spec: "Escribe en formato YAML la especificación de los campos personalizados que aparecerán al ver o editar personas de esta comunidad. Contacta con el soporte de Gather si necesitas ayuda para escribirla." # MT
           meals:
-            reimb_instructions: "Qué deben hacer los cocineros con sus recibos para que se les reembolse. Por ejemplo, pedirles que introduzcan los importes en la página de edición de la comida en Gather, usar el formulario de reembolso integrado u otro proceso." # Machine translated, remove this comment when verified
-            allergens: "Lista de alérgenos separados por comas entre los que eligen los cocineros al publicar menús." # Machine translated, remove this comment when verified
-            show_reimb_form: "Si se muestra un formulario de reembolso imprimible (con importes de compra y despensa y método de reembolso) en la página de resumen de la comida. Desmárcalo si prefieres un proceso de reembolso electrónico." # Machine translated, remove this comment when verified
-            cooks_can_finalize: "Si los jefes de cocina pueden finalizar comidas, además de los responsables de facturación, los coordinadores de comidas y los administradores." # Machine translated, remove this comment when verified
-            cooks_can_change_invites: "Si los jefes de cocina pueden cambiar qué comunidades están invitadas a una comida." # Machine translated, remove this comment when verified
-            default_invites: "Qué comunidades están invitadas a una comida por defecto." # Machine translated, remove this comment when verified
-            allow_job_signup_on_meal_page: "Si los comensales pueden ofrecerse a ayudar con una comida al inscribirse en ella." # Machine translated, remove this comment when verified
-            default_capacity: "El número predeterminado de personas que admite una comida." # Machine translated, remove this comment when verified
+            reimb_instructions: "Qué deben hacer los cocineros con sus recibos para que se les reembolse. Por ejemplo, pedirles que introduzcan los importes en la página de edición de la comida en Gather, usar el formulario de reembolso integrado u otro proceso." # MT
+            allergens: "Lista de alérgenos separados por comas entre los que eligen los cocineros al publicar menús." # MT
+            show_reimb_form: "Si se muestra un formulario de reembolso imprimible (con importes de compra y despensa y método de reembolso) en la página de resumen de la comida. Desmárcalo si prefieres un proceso de reembolso electrónico." # MT
+            cooks_can_finalize: "Si los jefes de cocina pueden finalizar comidas, además de los responsables de facturación, los coordinadores de comidas y los administradores." # MT
+            cooks_can_change_invites: "Si los jefes de cocina pueden cambiar qué comunidades están invitadas a una comida." # MT
+            default_invites: "Qué comunidades están invitadas a una comida por defecto." # MT
+            allow_job_signup_on_meal_page: "Si los comensales pueden ofrecerse a ayudar con una comida al inscribirse en ella." # MT
+            default_capacity: "El número predeterminado de personas que admite una comida." # MT
             reminder_lead_times:
-              _self: "Con cuántos días de antelación se envían los distintos recordatorios. Se envían a las 6 de la mañana, hora local. Un «0» significa que el recordatorio se enviará la mañana del mismo día de la comida. Consulta la página de roles de comidas para más ajustes de recordatorios." # Machine translated, remove this comment when verified
-              diner: "El recordatorio que se envía a todos los comensales." # Machine translated, remove this comment when verified
-              early_menu: "El recordatorio que se envía al jefe de cocina para que introduzca un menú." # Machine translated, remove this comment when verified
-              late_menu: "Un segundo recordatorio, más urgente, que se envía al jefe de cocina si aún no ha introducido el menú. Debe tener menos días de antelación que el primer recordatorio del menú." # Machine translated, remove this comment when verified
+              _self: "Con cuántos días de antelación se envían los distintos recordatorios. Se envían a las 6 de la mañana, hora local. Un «0» significa que el recordatorio se enviará la mañana del mismo día de la comida. Consulta la página de roles de comidas para más ajustes de recordatorios." # MT
+              diner: "El recordatorio que se envía a todos los comensales." # MT
+              early_menu: "El recordatorio que se envía al jefe de cocina para que introduzca un menú." # MT
+              late_menu: "Un segundo recordatorio, más urgente, que se envía al jefe de cocina si aún no ha introducido el menú. Debe tener menos días de antelación que el primer recordatorio del menú." # MT
           calendars:
-            kinds: "Distintos tipos de eventos separados por comas. Se pueden usar en las normas de eventos. Si se deja en blanco, el campo «tipo» no aparecerá en el formulario de eventos." # Machine translated, remove this comment when verified
+            kinds: "Distintos tipos de eventos separados por comas. Se pueden usar en las normas de eventos. Si se deja en blanco, el campo «tipo» no aparecerá en el formulario de eventos." # MT
             meals:
-              default_total_time: "Duración total predeterminada de los eventos de comidas en minutos, incluidos la preparación y la limpieza" # Machine translated, remove this comment when verified
-              default_prep_time: "Tiempo de preparación predeterminado de una comida en minutos" # Machine translated, remove this comment when verified
+              default_total_time: "Duración total predeterminada de los eventos de comidas en minutos, incluidos la preparación y la limpieza" # MT
+              default_prep_time: "Tiempo de preparación predeterminado de una comida en minutos" # MT
           billing:
-            contact: "Correo para consultas de facturación. Se incluirá con las instrucciones de pago." # Machine translated, remove this comment when verified
-            payment_instructions: "Cómo pagar una cuenta." # Machine translated, remove this comment when verified
-            statement_terms: "Número de días tras la fecha de creación en que vence un estado de cuenta. Si es cero (0), los estados de cuenta no tienen vencimiento." # Machine translated, remove this comment when verified
-            statement_reminder_lead_time: "Con cuántos días de antelación al vencimiento se envía el recordatorio de pago del estado de cuenta. No se envían recordatorios si los estados de cuenta no tienen vencimiento o si el saldo ya está pagado." # Machine translated, remove this comment when verified
-            paypal_reimbursement: "Permitir que los cocineros pidan el reembolso de las comidas por PayPal. Los pagos de PayPal deben hacerse manualmente (no son automáticos)." # Machine translated, remove this comment when verified
+            contact: "Correo para consultas de facturación. Se incluirá con las instrucciones de pago." # MT
+            payment_instructions: "Cómo pagar una cuenta." # MT
+            statement_terms: "Número de días tras la fecha de creación en que vence un estado de cuenta. Si es cero (0), los estados de cuenta no tienen vencimiento." # MT
+            statement_reminder_lead_time: "Con cuántos días de antelación al vencimiento se envía el recordatorio de pago del estado de cuenta. No se envían recordatorios si los estados de cuenta no tienen vencimiento o si el saldo ya está pagado." # MT
+            paypal_reimbursement: "Permitir que los cocineros pidan el reembolso de las comidas por PayPal. Los pagos de PayPal deben hacerse manualmente (no son automáticos)." # MT
             payment_methods:
-              _self: "Instrucciones o información de los distintos métodos de pago. Déjalo en blanco si no se acepta el método. Visita tu <a href='/accounts/mine'>página de cuentas</a> para ver cómo quedan las instrucciones." # Machine translated, remove this comment when verified
-              paypal_me: "Escribe tu <a href='https://paypal.me'>enlace de PayPal.me</a>. Es la forma más fácil de que los miembros paguen con PayPal. Ten en cuenta que con este método no se pueden evitar las comisiones si tienes una cuenta de PayPal para empresas." # Machine translated, remove this comment when verified
-              paypal_email: "Si quieres aceptar PayPal sin usar PayPal.me, escribe la dirección de correo a la que los miembros deben enviar los pagos." # Machine translated, remove this comment when verified
-              paypal_friend: "Se aplica a PayPal.me y a PayPal por correo. Márcalo si, según las condiciones de uso de PayPal, los pagos pueden considerarse entre amigos. Enviarlos así evita comisiones." # Machine translated, remove this comment when verified
-              check_payee: "Escribe a nombre de quién deben extenderse los cheques. Déjalo en blanco si no se aceptan cheques." # Machine translated, remove this comment when verified
-              check_address: "Escribe una dirección si aceptas cheques por correo postal. Así también se mostrarán las instrucciones de pago de facturas en línea." # Machine translated, remove this comment when verified
-              check_dropoff: "Escribe las instrucciones para entregar un cheque en persona. Déjalo en blanco si los cheques deben enviarse por correo postal o no se aceptan." # Machine translated, remove this comment when verified
-              cash_dropoff: "Escribe las instrucciones para entregar efectivo en persona. Déjalo en blanco si no se acepta efectivo." # Machine translated, remove this comment when verified
-              additional_info: "Escribe cualquier información adicional que quieras incluir en el área de instrucciones de pago." # Machine translated, remove this comment when verified
-              show_billing_contact: "Si se incluye el correo de contacto de facturación de arriba (si lo hay) al final de las instrucciones de pago. Desmárcalo y añádelo tú en «Información adicional» si quieres personalizar cómo aparece." # Machine translated, remove this comment when verified
+              _self: "Instrucciones o información de los distintos métodos de pago. Déjalo en blanco si no se acepta el método. Visita tu <a href='/accounts/mine'>página de cuentas</a> para ver cómo quedan las instrucciones." # MT
+              paypal_me: "Escribe tu <a href='https://paypal.me'>enlace de PayPal.me</a>. Es la forma más fácil de que los miembros paguen con PayPal. Ten en cuenta que con este método no se pueden evitar las comisiones si tienes una cuenta de PayPal para empresas." # MT
+              paypal_email: "Si quieres aceptar PayPal sin usar PayPal.me, escribe la dirección de correo a la que los miembros deben enviar los pagos." # MT
+              paypal_friend: "Se aplica a PayPal.me y a PayPal por correo. Márcalo si, según las condiciones de uso de PayPal, los pagos pueden considerarse entre amigos. Enviarlos así evita comisiones." # MT
+              check_payee: "Escribe a nombre de quién deben extenderse los cheques. Déjalo en blanco si no se aceptan cheques." # MT
+              check_address: "Escribe una dirección si aceptas cheques por correo postal. Así también se mostrarán las instrucciones de pago de facturas en línea." # MT
+              check_dropoff: "Escribe las instrucciones para entregar un cheque en persona. Déjalo en blanco si los cheques deben enviarse por correo postal o no se aceptan." # MT
+              cash_dropoff: "Escribe las instrucciones para entregar efectivo en persona. Déjalo en blanco si no se acepta efectivo." # MT
+              additional_info: "Escribe cualquier información adicional que quieras incluir en el área de instrucciones de pago." # MT
+              show_billing_contact: "Si se incluye el correo de contacto de facturación de arriba (si lo hay) al final de las instrucciones de pago. Desmárcalo y añádelo tú en «Información adicional» si quieres personalizar cómo aparece." # MT
             late_fee_policy:
-              fee_type: "Cómo se calcula el recargo" # Machine translated, remove this comment when verified
-              threshold: "Saldo pendiente mínimo para aplicar un recargo" # Machine translated, remove this comment when verified
-              amount: "Importe o porcentaje del recargo (p. ej. escribe «3» para el 3 % o 3,00, según el tipo)" # Machine translated, remove this comment when verified
+              fee_type: "Cómo se calcula el recargo" # MT
+              threshold: "Saldo pendiente mínimo para aplicar un recargo" # MT
+              amount: "Importe o porcentaje del recargo (p. ej. escribe «3» para el 3 % o 3,00, según el tipo)" # MT
     options:
       community:
         settings:
           default_landing_page:
-            meals: "Comidas" # Machine translated, remove this comment when verified
-            directory: "Directorio" # Machine translated, remove this comment when verified
-            calendars: "Calendarios" # Machine translated, remove this comment when verified
-            wiki: "Wiki" # Machine translated, remove this comment when verified
+            meals: "Comidas" # MT
+            directory: "Directorio" # MT
+            calendars: "Calendarios" # MT
+            wiki: "Wiki" # MT
           people:
             default_directory_sort:
-              name: "Por nombre" # Machine translated, remove this comment when verified
-              unit: "Por vivienda" # Machine translated, remove this comment when verified
+              name: "Por nombre" # MT
+              unit: "Por vivienda" # MT
           meals:
             default_invites:
-              all: "Todas las comunidades" # Machine translated, remove this comment when verified
-              own: "Solo la propia comunidad" # Machine translated, remove this comment when verified
+              all: "Todas las comunidades" # MT
+              own: "Solo la propia comunidad" # MT
           work:
             default_date_filter:
-              all: "Pasadas y futuras" # Machine translated, remove this comment when verified
-              curftr: "Actuales y futuras" # Machine translated, remove this comment when verified
+              all: "Pasadas y futuras" # MT
+              curftr: "Actuales y futuras" # MT
           billing:
             late_fee_policy:
               fee_type:
-                none: "Sin recargo por demora" # Machine translated, remove this comment when verified
-                fixed: "Fijo" # Machine translated, remove this comment when verified
-                percent: "Porcentaje" # Machine translated, remove this comment when verified
+                none: "Sin recargo por demora" # MT
+                fixed: "Fijo" # MT
+                percent: "Porcentaje" # MT

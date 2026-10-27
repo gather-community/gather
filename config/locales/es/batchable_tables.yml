@@ -1,10 +1,22 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
 es:
   batchable_tables:
     actions:
       gdrive__migration__owners:
-        send_request: "Enviar solicitud" # Machine translated, remove this comment when verified
+        send_request: "Enviar solicitud" # MT
     confirmations:
       gdrive__migration__owners:
         send_request:
-          one: "¿Seguro que quieres enviar un correo de solicitud a %{count} persona?" # Machine translated, remove this comment when verified
-          other: "¿Seguro que quieres enviar correos de solicitud a %{count} personas?" # Machine translated, remove this comment when verified
+          one: "¿Seguro que quieres enviar un correo de solicitud a %{count} persona?" # MT
+          other: "¿Seguro que quieres enviar correos de solicitud a %{count} personas?" # MT

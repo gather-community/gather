@@ -1,69 +1,81 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
 es:
   nav_links:
     people:
-      _self: "Personas" # Machine translated, remove this comment when verified
-      households: "Hogares" # Machine translated, remove this comment when verified
-      directory: "Directorio" # Machine translated, remove this comment when verified
-      birthdays: "Cumpleaños" # Machine translated, remove this comment when verified
-      vehicles: "Vehículos" # Machine translated, remove this comment when verified
-      memorials: "Homenajes" # Machine translated, remove this comment when verified
+      _self: "Personas" # MT
+      households: "Hogares" # MT
+      directory: "Directorio" # MT
+      birthdays: "Cumpleaños" # MT
+      vehicles: "Vehículos" # MT
+      memorials: "Homenajes" # MT
       settings:
-        _self: "Ajustes" # Machine translated, remove this comment when verified
-        general: "Ajustes generales" # Machine translated, remove this comment when verified
-        member_types: "Tipos de miembro" # Machine translated, remove this comment when verified
+        _self: "Ajustes" # MT
+        general: "Ajustes generales" # MT
+        member_types: "Tipos de miembro" # MT
     groups:
-      _self: "Grupos" # Machine translated, remove this comment when verified
-      groups: "Grupos" # Machine translated, remove this comment when verified
-      roles: "Roles" # Machine translated, remove this comment when verified
-      domains: "Dominios" # Machine translated, remove this comment when verified
+      _self: "Grupos" # MT
+      groups: "Grupos" # MT
+      roles: "Roles" # MT
+      domains: "Dominios" # MT
     meals:
-      _self: "Comidas" # Machine translated, remove this comment when verified
-      meals: "Comidas" # Machine translated, remove this comment when verified
-      jobs: "Tareas" # Machine translated, remove this comment when verified
-      report: "Informe" # Machine translated, remove this comment when verified
-      formulas: "Fórmulas" # Machine translated, remove this comment when verified
-      roles: "Roles" # Machine translated, remove this comment when verified
-      types: "Tipos" # Machine translated, remove this comment when verified
+      _self: "Comidas" # MT
+      meals: "Comidas" # MT
+      jobs: "Tareas" # MT
+      report: "Informe" # MT
+      formulas: "Fórmulas" # MT
+      roles: "Roles" # MT
+      types: "Tipos" # MT
       settings:
-        _self: "Ajustes" # Machine translated, remove this comment when verified
-        general: "Generales" # Machine translated, remove this comment when verified
-        restrictions: "Restricciones alimentarias" # Machine translated, remove this comment when verified
-        reminders: "Recordatorios" # Machine translated, remove this comment when verified
+        _self: "Ajustes" # MT
+        general: "Generales" # MT
+        restrictions: "Restricciones alimentarias" # MT
+        reminders: "Recordatorios" # MT
     calendars:
-      _self: "Calendarios" # Machine translated, remove this comment when verified
-      events: "Eventos" # Machine translated, remove this comment when verified
-      calendars: "Calendarios" # Machine translated, remove this comment when verified
-      protocols: "Normas" # Machine translated, remove this comment when verified
+      _self: "Calendarios" # MT
+      events: "Eventos" # MT
+      calendars: "Calendarios" # MT
+      protocols: "Normas" # MT
     wiki:
-      _self: "Wiki" # Machine translated, remove this comment when verified
+      _self: "Wiki" # MT
       wiki:
-        _self: "Wiki" # Machine translated, remove this comment when verified
+        _self: "Wiki" # MT
       gdrive:
-        _self: "Google Drive" # Machine translated, remove this comment when verified
+        _self: "Google Drive" # MT
         migration:
           dashboard:
-            status: "Estado" # Machine translated, remove this comment when verified
-            owners: "Propietarios" # Machine translated, remove this comment when verified
-            files: "Archivos" # Machine translated, remove this comment when verified
-            logs: "Registros" # Machine translated, remove this comment when verified
+            status: "Estado" # MT
+            owners: "Propietarios" # MT
+            files: "Archivos" # MT
+            logs: "Registros" # MT
     work:
-      _self: "Trabajo" # Machine translated, remove this comment when verified
-      signups: "Inscripciones" # Machine translated, remove this comment when verified
-      report: "Informe" # Machine translated, remove this comment when verified
-      jobs: "Tareas" # Machine translated, remove this comment when verified
-      periods: "Períodos" # Machine translated, remove this comment when verified
-      settings: "Ajustes" # Machine translated, remove this comment when verified
+      _self: "Trabajo" # MT
+      signups: "Inscripciones" # MT
+      report: "Informe" # MT
+      jobs: "Tareas" # MT
+      periods: "Períodos" # MT
+      settings: "Ajustes" # MT
     admin:
-      _self: "Administración" # Machine translated, remove this comment when verified
+      _self: "Administración" # MT
     billing:
-      _self: "Facturación" # Machine translated, remove this comment when verified
-      accounts: "Cuentas" # Machine translated, remove this comment when verified
-      templates: "Plantillas" # Machine translated, remove this comment when verified
+      _self: "Facturación" # MT
+      accounts: "Cuentas" # MT
+      templates: "Plantillas" # MT
     personal:
-      profile: "Perfil" # Machine translated, remove this comment when verified
-      accounts: "Cuentas" # Machine translated, remove this comment when verified
-      account: "Cuenta" # Machine translated, remove this comment when verified
-      calendars: "Calendarios" # Machine translated, remove this comment when verified
-      change_passwd: "Cambiar contraseña" # Machine translated, remove this comment when verified
-      notifications: "Notificaciones" # Machine translated, remove this comment when verified
-      sign_out: "Cerrar sesión" # Machine translated, remove this comment when verified
+      profile: "Perfil" # MT
+      accounts: "Cuentas" # MT
+      account: "Cuenta" # MT
+      calendars: "Calendarios" # MT
+      change_passwd: "Cambiar contraseña" # MT
+      notifications: "Notificaciones" # MT
+      sign_out: "Cerrar sesión" # MT

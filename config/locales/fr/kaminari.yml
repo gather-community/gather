@@ -1,0 +1,17 @@
+fr:
+  views:
+    pagination:
+      first: "&laquo;"
+      last: "&raquo;"
+      previous: "&lsaquo;"
+      next: "&rsaquo;"
+      truncate: "&hellip;"
+  helpers:
+    page_entries_info:
+      one_page:
+        display_entries:
+          zero: "Aucun élément (%{entry_name}) trouvé" # Machine translated, remove this comment when verified
+          one: "Affichage de <b>1</b> %{entry_name}" # Machine translated, remove this comment when verified
+          other: "Affichage de <b>tous les %{count}</b> %{entry_name}" # Machine translated, remove this comment when verified
+      more_pages:
+        display_entries: "Affichage de %{entry_name} <b>%{first}&nbsp;-&nbsp;%{last}</b> sur <b>%{total}</b> au total" # Machine translated, remove this comment when verified

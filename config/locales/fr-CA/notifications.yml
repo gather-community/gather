@@ -1,0 +1,18 @@
+fr-CA:
+  notifications:
+    preferences:
+      kinds:
+        meal_role_reminder: "Rappels pour mes quarts de repas" # Machine translated, remove this comment when verified
+        account_access: "Réinitialisations de mot de passe, confirmations d'adresse courriel et invitations à se connecter" # Machine translated, remove this comment when verified
+      show:
+        intro: "Choisissez les courriels que Gather vous envoie au sujet de ce qui vous concerne. Ceux qui sont grisés sont essentiels et ne peuvent pas être désactivés." # Machine translated, remove this comment when verified
+        email_lists_hint: "Vous êtes sur ces listes par l'intermédiaire de vos groupes. Pour ne plus recevoir les courriels d'une liste, désabonnez-vous ou quittez le groupe sur sa page." # Machine translated, remove this comment when verified
+    unsubscribes:
+      manage_html: "Vous pouvez choisir les courriels que vous recevez sur votre page %{link}. Vous devrez vous connecter." # Machine translated, remove this comment when verified
+      show:
+        confirm: "Ne plus envoyer de courriels « %{kind} » à %{email} ?" # Machine translated, remove this comment when verified
+        already_off: "Les courriels « %{kind} » à %{email} sont déjà désactivés." # Machine translated, remove this comment when verified
+      create:
+        done: "Nous n'enverrons plus de courriels « %{kind} » à %{email}." # Machine translated, remove this comment when verified
+      invalid:
+        explanation: "Ce lien de désabonnement n'est pas valide. Il provient peut-être d'un ancien courriel ou a été copié de façon incomplète." # Machine translated, remove this comment when verified

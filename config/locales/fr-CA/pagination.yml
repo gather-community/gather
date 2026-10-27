@@ -1,0 +1,4 @@
+fr-CA:
+  pagination:
+    page_entries_info:
+      "work/shift": "Quarts %{first} à %{last} sur %{total}" # Machine translated, remove this comment when verified

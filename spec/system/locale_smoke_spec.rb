@@ -15,14 +15,16 @@ describe "every module in every locale" do
     "households" => :households_path, "birthdays" => :people_birthdays_path,
     "member types" => :people_member_types_path, "groups" => :groups_groups_path, "roles" => :roles_path,
     "domains" => :domains_path, "wiki" => :wiki_pages_path, "accounts" => :accounts_path,
-    "notification settings" => :notification_preferences_path
+    "notification settings" => :notification_preferences_path,
+    "meal" => -> { meal_path(meal) }
   }
 
   # Whole words that would only appear in untranslated UI text. Test data is named so it doesn't use them.
   english_words = %w[the and your with Save Cancel Edit Delete Create Search Settings Upcoming Members
-    Show None Total Name Date]
+    Show None Name Entrees entrees Kids kids]
 
   let(:admin) { create(:admin, first_name: "Kim", last_name: "Lee") }
+  let(:meal) { create(:meal, :with_menu, title: "Ragout", entrees: "Ragout", kids: "Pasta", notes: "Merci") }
 
   before do
     create(:wiki_page, community: admin.community, role: "home", title: "Wiki", content: "Wiki")
@@ -39,7 +41,7 @@ describe "every module in every locale" do
 
       pages.each do |name, path|
         scenario name do
-          visit(send(path))
+          visit(path.is_a?(Proc) ? instance_exec(&path) : send(path))
           expect(page).to have_css("html[lang='#{locale}']")
           expect(page).not_to have_css(".translation_missing")
           next if locale == :en

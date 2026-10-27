@@ -1,0 +1,45 @@
+fr:
+  notifications:
+    preferences:
+      updated: "Vos préférences de notification ont été enregistrées." # Machine translated, remove this comment when verified
+      sections:
+        account: "Compte" # Machine translated, remove this comment when verified
+        meals: "Repas" # Machine translated, remove this comment when verified
+        work: "Travail" # Machine translated, remove this comment when verified
+        billing: "Facturation" # Machine translated, remove this comment when verified
+        community: "Communauté" # Machine translated, remove this comment when verified
+      kinds:
+        meal_reminder: "Rappels pour les repas auxquels mon foyer est inscrit" # Machine translated, remove this comment when verified
+        meal_role_reminder: "Rappels pour mes créneaux de repas" # Machine translated, remove this comment when verified
+        cook_menu_reminder: "Rappels au chef cuisinier pour publier le menu" # Machine translated, remove this comment when verified
+        meal_worker_change: "Changements dans une équipe de repas dont je fais partie" # Machine translated, remove this comment when verified
+        job_reminder: "Rappels pour mes tâches" # Machine translated, remove this comment when verified
+        job_choosing_notice: "Avis d'ouverture du choix des tâches" # Machine translated, remove this comment when verified
+        statement_reminder: "Rappels quand un paiement est dû" # Machine translated, remove this comment when verified
+        account_access: "Réinitialisations de mot de passe, confirmations d'adresse e-mail et invitations à se connecter" # Machine translated, remove this comment when verified
+        meal_message: "Messages et avis d'annulation d'une équipe de repas" # Machine translated, remove this comment when verified
+        statement_notice: "Relevés de compte" # Machine translated, remove this comment when verified
+        gdrive_migration_request: "Demandes d'aide pour déplacer les fichiers Google Drive de ma communauté" # Machine translated, remove this comment when verified
+        community_inactivity: "Avertissements indiquant que ma communauté pourrait être supprimée pour inactivité" # Machine translated, remove this comment when verified
+      show:
+        title: "Notifications" # Machine translated, remove this comment when verified
+        intro: "Choisissez les e-mails que Gather vous envoie au sujet de ce qui vous concerne. Ceux qui sont grisés sont essentiels et ne peuvent pas être désactivés." # Machine translated, remove this comment when verified
+        essential: "Essentiel, ne peut pas être désactivé" # Machine translated, remove this comment when verified
+        email_lists: "Listes de diffusion" # Machine translated, remove this comment when verified
+        email_lists_hint: "Vous êtes sur ces listes par l'intermédiaire de vos groupes. Pour ne plus recevoir les e-mails d'une liste, désabonnez-vous ou quittez le groupe sur sa page." # Machine translated, remove this comment when verified
+        view: "Voir" # Machine translated, remove this comment when verified
+        no_email_lists: "Vous n'êtes sur aucune liste de diffusion." # Machine translated, remove this comment when verified
+    unsubscribes:
+      manage_html: "Vous pouvez choisir les e-mails que vous recevez sur votre page %{link}. Vous devrez vous connecter." # Machine translated, remove this comment when verified
+      manage_link: "Notifications" # Machine translated, remove this comment when verified
+      show:
+        title: "Se désabonner" # Machine translated, remove this comment when verified
+        confirm: "Ne plus envoyer d'e-mails « %{kind} » à %{email} ?" # Machine translated, remove this comment when verified
+        already_off: "Les e-mails « %{kind} » à %{email} sont déjà désactivés." # Machine translated, remove this comment when verified
+        turn_off: "Se désabonner" # Machine translated, remove this comment when verified
+      create:
+        title: "Désabonnement effectué" # Machine translated, remove this comment when verified
+        done: "Nous n'enverrons plus d'e-mails « %{kind} » à %{email}." # Machine translated, remove this comment when verified
+      invalid:
+        title: "Se désabonner" # Machine translated, remove this comment when verified
+        explanation: "Ce lien de désabonnement n'est pas valide. Il provient peut-être d'un ancien e-mail ou a été copié de façon incomplète." # Machine translated, remove this comment when verified

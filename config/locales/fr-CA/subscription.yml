@@ -1,0 +1,7 @@
+fr-CA:
+  subscription:
+    subscriptions:
+      show:
+        check_email: "Consultez vos courriels pour les instructions, puis revenez ici une fois la vérification terminée." # Machine translated, remove this comment when verified
+      email_row:
+        billing_email: "Courriel de facturation" # Machine translated, remove this comment when verified

@@ -36,10 +36,10 @@ en:
               occurrence_missing: "This occurrence no longer exists. Go back to the calendar and try again."
               longer_than_repeat: "The event is longer than the time between repeats, so its occurrences would overlap."
               pattern_change_with_changes:
-                one: "1 occurrence in the part being changed has been moved or deleted, so the days it repeats on can't change. Undo that change first, or change the series from a later date."
+                one: "%{count} occurrence in the part being changed has been moved or deleted, so the days it repeats on can't change. Undo that change first, or change the series from a later date."
                 other: "%{count} occurrences in the part being changed have been moved or deleted, so the days it repeats on can't change. Undo those changes first, or change the series from a later date."
               all_day_change_with_changes:
-                one: "1 occurrence in the part being changed has been moved or deleted, so it can't switch between all-day and timed. Undo that change first, or change the series from a later date."
+                one: "%{count} occurrence in the part being changed has been moved or deleted, so it can't switch between all-day and timed. Undo that change first, or change the series from a later date."
                 other: "%{count} occurrences in the part being changed have been moved or deleted, so it can't switch between all-day and timed. Undo those changes first, or change the series from a later date."
             guidelines:
               not_accepted: "You must agree to the guidelines"

@@ -1,0 +1,20 @@
+fr-CA:
+  confirmations:
+    user:
+      invite: "Un courriel sera envoyé à « %{name} » avec les instructions pour se connecter. Continuer ?" # Machine translated, remove this comment when verified
+  cocoon:
+    add_links:
+      shifts: "Ajouter un quart" # Machine translated, remove this comment when verified
+  csv:
+    headers:
+      user:
+        email: "Courriel" # Machine translated, remove this comment when verified
+        google_email: "Courriel Google" # Machine translated, remove this comment when verified
+        paypal_email: "Courriel PayPal" # Machine translated, remove this comment when verified
+        mobile_phone: "Cellulaire" # Machine translated, remove this comment when verified
+      "meals/signup":
+        takeout: "Pour emporter" # Machine translated, remove this comment when verified
+  roles:
+    index:
+      descriptions:
+        work_coordinator: "Gère les tâches, les quarts et les périodes de travail" # Machine translated, remove this comment when verified

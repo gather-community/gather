@@ -520,6 +520,142 @@
     }
   },
   "fr": {
+    "batchable_tables": {
+      "confirmations": {
+        "gdrive__migration__owners": {
+          "send_request": {
+            "one": "Voulez-vous vraiment envoyer un e-mail de demande à %{count} personne ?",
+            "other": "Voulez-vous vraiment envoyer des e-mails de demande à %{count} personnes ?"
+          }
+        }
+      }
+    },
+    "calendar_nav_popover": {
+      "dismiss": "Fermer",
+      "message_html": "<b>Réservations</b> s'appelle désormais <b>Calendriers</b> ! Allez voir !"
+    },
+    "calendars": {
+      "calendar_list": {
+        "all": "Tous",
+        "deselect_all": "Tout désélectionner",
+        "select_all": "Tout sélectionner"
+      },
+      "drag": {
+        "calendar": {
+          "all": "Déplacer sur tous",
+          "content": "« %{name} » figure sur plusieurs calendriers :",
+          "selected": "(sélectionné)",
+          "this": "Déplacer uniquement sur %{calendar}",
+          "title": "Déplacer un événement sur plusieurs calendriers"
+        },
+        "confirm": "Voulez-vous vraiment déplacer l'événement « %{name} » ?",
+        "confirm_occurrence": "Voulez-vous vraiment déplacer cette occurrence de « %{name} » ?",
+        "error_title": "Erreur",
+        "load_error": "Impossible de vérifier comment cet événement peut être déplacé. Veuillez réessayer.",
+        "series": {
+          "content": "« %{name} » se répète. Quelles occurrences faut-il déplacer ?",
+          "following": "Celle-ci et les suivantes",
+          "occurrence": "Celle-ci uniquement",
+          "series": "Toutes les occurrences",
+          "title": "Déplacer un événement récurrent"
+        }
+      },
+      "grid": {
+        "agenda_label": "%{view}. Utilisez les flèches pour naviguer",
+        "agenda_label_all_day": "%{view}. Ligne « Toute la journée ». Utilisez les flèches pour naviguer",
+        "agenda_label_all_day_slots": "%{view}. Ligne « Toute la journée » suivie de %{slots}. Utilisez les flèches pour naviguer",
+        "agenda_label_slots": "%{view}. Grille de %{slots}. Utilisez les flèches pour naviguer",
+        "create_confirm": {
+          "range_html": "Créer un événement du <b>%{start}</b> au <b>%{end}</b> ?",
+          "same_day_html": "Créer un événement le <b>%{date}</b> ?",
+          "same_day_times_html": "Créer un événement le <b>%{date}</b> de <b>%{start}</b> à <b>%{end}</b> ?"
+        },
+        "day_calendar": "Calendrier journalier",
+        "event_count": {
+          "one": "%{count} événement",
+          "other": "%{count} événements",
+          "zero": "Aucun événement"
+        },
+        "event_count_this_month": {
+          "one": "%{count} événement ce mois-ci",
+          "other": "%{count} événements ce mois-ci",
+          "zero": "Aucun événement ce mois-ci"
+        },
+        "event_count_this_week": {
+          "one": "%{count} événement cette semaine",
+          "other": "%{count} événements cette semaine",
+          "zero": "Aucun événement cette semaine"
+        },
+        "half_hour_slots": "créneaux d'une demi-heure de %{start} à %{end}",
+        "header": {
+          "day_view": "Vue par jour",
+          "month_view": "Vue par mois",
+          "next": "Suivant",
+          "previous": "Précédent",
+          "today": "Aujourd'hui",
+          "toolbar": "Commandes du calendrier",
+          "week_view": "Vue par semaine"
+        },
+        "minute_slots": "créneaux de %{minutes} minutes de %{start} à %{end}",
+        "month_calendar": "Calendrier mensuel",
+        "now_showing": "Le calendrier affiche maintenant %{month}",
+        "this_week_date": "Cette semaine, %{date}",
+        "today_date": "Aujourd'hui, %{date}",
+        "week_calendar": "Calendrier hebdomadaire"
+      }
+    },
+    "common": {
+      "adults": "Adultes",
+      "all": "Tous",
+      "all_time": "Depuis le début",
+      "cancel": "Annuler",
+      "cancelled": "Annulé",
+      "children": "Enfants",
+      "clearing_the_filter": "effacer les filtres",
+      "close": "Fermer",
+      "community_count": {
+        "one": "%{count} communauté",
+        "other": "%{count} communautés"
+      },
+      "create_new": "Créer",
+      "default": "Par défaut",
+      "edit": "Modifier",
+      "false": "Faux",
+      "generated_at": "Généré le %{time}",
+      "hidden": "Masqué",
+      "inactive": "Inactif",
+      "loading_indicator": "Indicateur de chargement",
+      "max": "Max.",
+      "no": "Non",
+      "no_result_clear_filter_link_html": "Vous pouvez essayer d'%{link}.",
+      "none": "Aucun",
+      "none_bracketed": "[Aucun]",
+      "num_in_total": "%{count} au total",
+      "open_date_picker": "Ouvrir le sélecteur de date",
+      "print": "Imprimer",
+      "save": "Enregistrer",
+      "select_user": "Choisir une personne…",
+      "settings": "Paramètres",
+      "settings_updated": "Paramètres mis à jour.",
+      "this_month": "Ce mois-ci",
+      "this_quarter": "Ce trimestre",
+      "this_year": "Cette année",
+      "time_with_preposition": {
+        "at": "à %{t}",
+        "on": "le %{t}",
+        "until": "jusqu'au %{t}"
+      },
+      "true": "Vrai",
+      "unknown": "Inconnu",
+      "unlimited": "Illimité",
+      "with_inactive": "%{name} (inactif)",
+      "yes": "Oui"
+    },
+    "communities": {
+      "signup_action": {
+        "approval_template": "Bonjour %{name},\n\nBonne nouvelle ! Votre demande pour rejoindre Gather avec la communauté « %{community} » a été approuvée.\n\n#######################################\nSAISISSEZ ICI UNE NOTE PERSONNALISÉE ET\nMENTIONNEZ UN DÉTAIL SUR LA COMMUNAUTÉ\n#######################################\n\nVotre communauté est maintenant prête !\n\nVous devriez recevoir un e-mail distinct avec les instructions pour vous connecter la première fois.\n\nBienvenue à bord !\n\n%{approver}, pour l'équipe de Gather"
+      }
+    },
     "date": {
       "abbr_day_names": [
         "dim",
@@ -573,6 +709,66 @@
     "datepicker": {
       "dformat": "%-d %b %Y",
       "pformat": "D MMM YYYY"
+    },
+    "dropzone": {
+      "dictFileSizeUnits": {
+        "b": "o",
+        "gb": "Gio",
+        "kb": "Kio",
+        "mb": "Mio",
+        "tb": "Tio"
+      },
+      "dictFileTooBig": "Le fichier est trop volumineux ({{filesize}} Mio). La taille maximale est de {{maxFilesize}} Mio.",
+      "dictFileUnreadable": "Impossible de lire ce fichier. Veuillez réessayer ou en choisir un autre.",
+      "prompts": {
+        "default": "Cliquez ou glissez un fichier ici",
+        "models": {
+          "calendars/calendar": "Cliquez ou glissez une photo ici",
+          "user": "Cliquez ou glissez une photo ici"
+        }
+      }
+    },
+    "errors": {
+      "messages": {
+        "doesnt_match": "Ne correspond pas au mot de passe"
+      }
+    },
+    "meals": {
+      "report_charts": {
+        "avg_cost": "Coût moy.",
+        "avg_full_meal_price": "Prix moy. d'un repas complet",
+        "avg_servings": "Portions moy.",
+        "avg_servings_per_meal": "Portions moy. par repas",
+        "meals": "Repas",
+        "month": "Mois",
+        "number_of_meals": "Nombre de repas",
+        "titles": {
+          "community_rep": "Représentation moy. des communautés aux repas",
+          "community_rep_community": "Représentation moy. des communautés aux repas de %{community}",
+          "cost_by_month": "Prix moy. d'un repas complet, par mois",
+          "cost_by_month_community": "Prix moy. d'un repas complet de %{community}, par mois",
+          "cost_by_weekday": "Prix moy. d'un repas complet, par jour de la semaine",
+          "cost_by_weekday_community": "Prix moy. d'un repas complet de %{community}, par jour de la semaine",
+          "meal_types": "Types de repas moy. aux repas",
+          "meal_types_community": "Types de repas moy. aux repas de %{community}",
+          "meals_by_month": "Nombre de repas par mois",
+          "meals_by_month_community": "Nombre de repas de %{community} par mois",
+          "servings_by_month": "Portions moy. par repas, par mois",
+          "servings_by_month_community": "Portions moy. par repas de %{community}, par mois",
+          "servings_by_weekday": "Portions moy. par repas, par jour de la semaine",
+          "servings_by_weekday_community": "Portions moy. par repas de %{community}, par jour de la semaine"
+        },
+        "weekday": "Jour de la semaine"
+      }
+    },
+    "meals/assignments": {
+      "change_warning": "Remarque : si vous modifiez l'équipe du repas, un e-mail sera envoyé au comité ou à la personne responsable des repas ainsi qu'à toutes les personnes déjà ou nouvellement affectées."
+    },
+    "modal": {
+      "alert_title": "Avis",
+      "cancel": "Annuler",
+      "confirm_title": "Confirmer",
+      "ok": "OK"
     },
     "moment_formats": {
       "full_date": "dddd D MMMM YYYY",
@@ -583,12 +779,75 @@
       "wday_date": "ddd D MMM YYYY",
       "wday_date_time": "ddd D MMM YYYY HH:mm"
     },
+    "password": {
+      "strength": {
+        "excellent": "Excellent (score : %{bits})",
+        "good": "Bon (score : %{bits})",
+        "weak": "Trop faible (score : %{bits})"
+      }
+    },
+    "payment": {
+      "accountholder_required": "Veuillez indiquer le nom du titulaire du compte."
+    },
+    "subscription": {
+      "topup_notices": {
+        "calculating": "Calcul en cours…",
+        "cancel": "Votre recharge mensuelle sera annulée à la fin du mois de facturation en cours. Aucun autre prélèvement, et votre solde actuel est conservé.",
+        "error": "%{reason} (Tentative à %{time}.) Si cela se reproduit, contactez l'assistance Gather en indiquant cette heure.",
+        "error_default": "Un problème est survenu et votre recharge n'a pas été modifiée.",
+        "error_with_reference": "%{reason} Référence : %{reference}. (Tentative à %{time}.) Si cela se reproduit, contactez l'assistance Gather en indiquant cette référence et cette heure.",
+        "first_charge": "Votre moyen de paiement enregistré sera débité de %{amount} aujourd'hui pour un mois complet, puis de %{amount} à cette date chaque mois.",
+        "next_month": "À partir du prochain mois de facturation, vous serez débité de %{amount} par mois.",
+        "prorated_charge": "Votre moyen de paiement enregistré sera débité d'environ %{charge} aujourd'hui (au prorata), puis de %{amount} par mois à partir du %{date}.",
+        "prorated_credit": "Vous recevrez maintenant un crédit de %{credit} sur votre prochaine facture, puis %{amount} par mois à partir du %{date}."
+      }
+    },
     "timepicker": {
       "dformat": "%H:%M",
       "pformat": "HH:mm"
+    },
+    "wiki": {
+      "editor": {
+        "autosaved": "Enregistré automatiquement : ",
+        "bold": "Gras",
+        "fullscreen": "Plein écran",
+        "heading": "Titre",
+        "image": "Insérer une image",
+        "italic": "Italique",
+        "lines": {
+          "one": "lignes : %{count}",
+          "other": "lignes : %{count}"
+        },
+        "link": "Créer un lien",
+        "ordered_list": "Liste numérotée",
+        "preview": "Aperçu",
+        "quote": "Citation",
+        "side_by_side": "Côte à côte",
+        "unordered_list": "Liste à puces",
+        "words": {
+          "one": "mots : %{count}",
+          "other": "mots : %{count}"
+        }
+      },
+      "help": "Aide du wiki"
     }
   },
   "fr-CA": {
+    "batchable_tables": {
+      "confirmations": {
+        "gdrive__migration__owners": {
+          "send_request": {
+            "one": "Voulez-vous vraiment envoyer un courriel de demande à %{count} personne ?",
+            "other": "Voulez-vous vraiment envoyer des courriels de demande à %{count} personnes ?"
+          }
+        }
+      }
+    },
+    "communities": {
+      "signup_action": {
+        "approval_template": "Bonjour %{name},\n\nBonne nouvelle ! Votre demande pour rejoindre Gather avec la communauté « %{community} » a été approuvée.\n\n#######################################\nSAISISSEZ ICI UNE NOTE PERSONNALISÉE ET\nMENTIONNEZ UN DÉTAIL SUR LA COMMUNAUTÉ\n#######################################\n\nVotre communauté est maintenant prête !\n\nVous devriez recevoir un courriel distinct avec les instructions pour vous connecter la première fois.\n\nBienvenue à bord !\n\n%{approver}, pour l'équipe de Gather"
+      }
+    },
     "date": {
       "abbr_day_names": [
         "dim",
@@ -642,6 +901,9 @@
     "datepicker": {
       "dformat": "%-d %b %Y",
       "pformat": "D MMM YYYY"
+    },
+    "meals/assignments": {
+      "change_warning": "Remarque : si vous modifiez l'équipe du repas, un courriel sera envoyé au comité ou à la personne responsable des repas ainsi qu'à toutes les personnes déjà ou nouvellement affectées."
     },
     "moment_formats": {
       "full_date": "dddd D MMMM YYYY",

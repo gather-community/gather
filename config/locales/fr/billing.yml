@@ -1,223 +1,235 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
 fr:
   transaction_codes:
-    meal: "Repas" # Machine translated, remove this comment when verified
-    dues: "Cotisation" # Machine translated, remove this comment when verified
-    payment: "Paiement" # Machine translated, remove this comment when verified
-    reimb: "Remboursement" # Machine translated, remove this comment when verified
-    othcrd: "Autre crédit" # Machine translated, remove this comment when verified
-    othchg: "Autres frais" # Machine translated, remove this comment when verified
-    late: "Frais de retard" # Machine translated, remove this comment when verified
-    initbal: "Solde d'ouverture" # Machine translated, remove this comment when verified
+    meal: "Repas" # MT
+    dues: "Cotisation" # MT
+    payment: "Paiement" # MT
+    reimb: "Remboursement" # MT
+    othcrd: "Autre crédit" # MT
+    othchg: "Autres frais" # MT
+    late: "Frais de retard" # MT
+    initbal: "Solde d'ouverture" # MT
 
   accounts:
-    updated: "Compte mis à jour." # Machine translated, remove this comment when verified
-    late_fees_applied: "Frais de retard appliqués." # Machine translated, remove this comment when verified
-    credit_amount_html: "%{amount} CR" # Machine translated, remove this comment when verified
-    credit_abbr: "CR" # Machine translated, remove this comment when verified
-    not_applicable: "S.O." # Machine translated, remove this comment when verified
-    no_credit_limit: "Aucune" # Machine translated, remove this comment when verified
-    no_users_warning: "Le foyer de ce compte n'a aucune personne associée" # Machine translated, remove this comment when verified
-    late_fee_confirm: "Voulez-vous vraiment continuer ? Des frais seront facturés à %{count} foyers." # Machine translated, remove this comment when verified
-    late_fee_confirm_with_days: "Voulez-vous vraiment continuer ? Des frais seront facturés à %{count} foyers. Des frais ont été appliqués pour la dernière fois il y a %{days} jours." # Machine translated, remove this comment when verified
-    statement_confirm: "Voulez-vous vraiment continuer ? Des relevés seront envoyés à %{count} foyers." # Machine translated, remove this comment when verified
-    paypal_friend_confirm_html: "Si la question vous est posée, <strong>ne choisissez pas</strong> « Paiement de biens ou de services ? » pour éviter des frais." # Machine translated, remove this comment when verified
+    updated: "Compte mis à jour." # MT
+    late_fees_applied: "Frais de retard appliqués." # MT
+    credit_amount_html: "%{amount} CR" # MT
+    credit_abbr: "CR" # MT
+    not_applicable: "S.O." # MT
+    no_credit_limit: "Aucune" # MT
+    no_users_warning: "Le foyer de ce compte n'a aucune personne associée" # MT
+    late_fee_confirm: "Voulez-vous vraiment continuer ? Des frais seront facturés à %{count} foyers." # MT
+    late_fee_confirm_with_days: "Voulez-vous vraiment continuer ? Des frais seront facturés à %{count} foyers. Des frais ont été appliqués pour la dernière fois il y a %{days} jours." # MT
+    statement_confirm: "Voulez-vous vraiment continuer ? Des relevés seront envoyés à %{count} foyers." # MT
+    paypal_friend_confirm_html: "Si la question vous est posée, <strong>ne choisissez pas</strong> « Paiement de biens ou de services ? » pour éviter des frais." # MT
     details:
-      no_activity: "Ce compte n'a aucune activité." # Machine translated, remove this comment when verified
+      no_activity: "Ce compte n'a aucune activité." # MT
     other_accounts:
-      looking: "Vous cherchez un autre compte ?" # Machine translated, remove this comment when verified
-      each_community: "Chaque communauté gère ses propres comptes." # Machine translated, remove this comment when verified
+      looking: "Vous cherchez un autre compte ?" # MT
+      each_community: "Chaque communauté gère ses propres comptes." # MT
     payment_instructions:
-      how_to_pay: "Comment payer" # Machine translated, remove this comment when verified
-      paypal: "PayPal" # Machine translated, remove this comment when verified
-      click_logo: "Cliquez sur le logo ci-dessus pour payer avec PayPal." # Machine translated, remove this comment when verified
-      send_paypal_html: "Envoyez les paiements PayPal à %{email}." # Machine translated, remove this comment when verified
-      choose_friend_html: "Veillez à choisir %{friend} pour éviter des frais." # Machine translated, remove this comment when verified
-      sending_to_friend: "envoi à un proche" # Machine translated, remove this comment when verified
-      online_bill_pay: "Paiement de factures en ligne" # Machine translated, remove this comment when verified
-      bill_pay_intro: "La plupart des banques proposent le paiement de factures en ligne, qui permet d'envoyer facilement un chèque en ligne. Ajoutez un nouveau bénéficiaire et saisissez ce qui suit :" # Machine translated, remove this comment when verified
-      payee_name_html: "Nom du bénéficiaire : %{payee}" # Machine translated, remove this comment when verified
-      account_number_html: "Numéro de compte : %{number}" # Machine translated, remove this comment when verified
-      address: "Adresse :" # Machine translated, remove this comment when verified
-      check: "Chèque" # Machine translated, remove this comment when verified
-      payable_to_html: "Libellez les chèques à l'ordre de %{payee}" # Machine translated, remove this comment when verified
-      memo_line_html: "Inscrivez votre numéro de compte %{number} dans la zone de note." # Machine translated, remove this comment when verified
-      mail_to: "Envoyez les chèques à :" # Machine translated, remove this comment when verified
-      cash: "Espèces" # Machine translated, remove this comment when verified
-      none_provided: "Aucune instruction de paiement n'a été fournie." # Machine translated, remove this comment when verified
-      go_to_settings_html: "Rendez-vous sur la %{link} pour en saisir." # Machine translated, remove this comment when verified
-      settings_page: "page des paramètres" # Machine translated, remove this comment when verified
-      contact_html: "Pour toute question de facturation, contactez %{email}." # Machine translated, remove this comment when verified
+      how_to_pay: "Comment payer" # MT
+      paypal: "PayPal" # MT
+      click_logo: "Cliquez sur le logo ci-dessus pour payer avec PayPal." # MT
+      send_paypal_html: "Envoyez les paiements PayPal à %{email}." # MT
+      choose_friend_html: "Veillez à choisir %{friend} pour éviter des frais." # MT
+      sending_to_friend: "envoi à un proche" # MT
+      online_bill_pay: "Paiement de factures en ligne" # MT
+      bill_pay_intro: "La plupart des banques proposent le paiement de factures en ligne, qui permet d'envoyer facilement un chèque en ligne. Ajoutez un nouveau bénéficiaire et saisissez ce qui suit :" # MT
+      payee_name_html: "Nom du bénéficiaire : %{payee}" # MT
+      account_number_html: "Numéro de compte : %{number}" # MT
+      address: "Adresse :" # MT
+      check: "Chèque" # MT
+      payable_to_html: "Libellez les chèques à l'ordre de %{payee}" # MT
+      memo_line_html: "Inscrivez votre numéro de compte %{number} dans la zone de note." # MT
+      mail_to: "Envoyez les chèques à :" # MT
+      cash: "Espèces" # MT
+      none_provided: "Aucune instruction de paiement n'a été fournie." # MT
+      go_to_settings_html: "Rendez-vous sur la %{link} pour en saisir." # MT
+      settings_page: "page des paramètres" # MT
+      contact_html: "Pour toute question de facturation, contactez %{email}." # MT
     statement_list:
-      statements: "Relevés" # Machine translated, remove this comment when verified
-      date: "Date" # Machine translated, remove this comment when verified
-      activity: "Activité" # Machine translated, remove this comment when verified
-      total_due: "Total dû" # Machine translated, remove this comment when verified
+      statements: "Relevés" # MT
+      date: "Date" # MT
+      activity: "Activité" # MT
+      total_due: "Total dû" # MT
     summary:
-      summary: "Résumé" # Machine translated, remove this comment when verified
-      account_number: "Numéro de compte" # Machine translated, remove this comment when verified
-      last_statement_date: "Date du dernier relevé" # Machine translated, remove this comment when verified
-      last_statement_balance: "Solde du dernier relevé" # Machine translated, remove this comment when verified
-      new_credits: "Nouveaux paiements/crédits" # Machine translated, remove this comment when verified
-      balance_due: "Solde dû" # Machine translated, remove this comment when verified
-      due_date: "Échéance" # Machine translated, remove this comment when verified
-      new_charges: "Nouveaux frais" # Machine translated, remove this comment when verified
-      current_balance: "Solde actuel" # Machine translated, remove this comment when verified
-      credit_limit: "Limite de crédit" # Machine translated, remove this comment when verified
-      balance_due_footnote: "C'est le montant que vous devez actuellement : le montant dû sur votre dernier relevé, moins les paiements reçus depuis. Si vous avez déjà payé mais que ce n'est pas encore pris en compte ici, ne tenez pas compte de ce message." # Machine translated, remove this comment when verified
-      current_balance_footnote: "Ce solde comprend les frais et crédits depuis votre dernier relevé. S'il dépasse votre limite de crédit, vous ne pourrez pas vous inscrire aux repas." # Machine translated, remove this comment when verified
+      summary: "Résumé" # MT
+      account_number: "Numéro de compte" # MT
+      last_statement_date: "Date du dernier relevé" # MT
+      last_statement_balance: "Solde du dernier relevé" # MT
+      new_credits: "Nouveaux paiements/crédits" # MT
+      balance_due: "Solde dû" # MT
+      due_date: "Échéance" # MT
+      new_charges: "Nouveaux frais" # MT
+      current_balance: "Solde actuel" # MT
+      credit_limit: "Limite de crédit" # MT
+      balance_due_footnote: "C'est le montant que vous devez actuellement : le montant dû sur votre dernier relevé, moins les paiements reçus depuis. Si vous avez déjà payé mais que ce n'est pas encore pris en compte ici, ne tenez pas compte de ce message." # MT
+      current_balance_footnote: "Ce solde comprend les frais et crédits depuis votre dernier relevé. S'il dépasse votre limite de crédit, vous ne pourrez pas vous inscrire aux repas." # MT
     synopsis:
-      pay_by: "Veuillez payer %{amount} avant le %{date}. Merci !" # Machine translated, remove this comment when verified
-      pay: "Veuillez payer %{amount}. Merci !" # Machine translated, remove this comment when verified
-      zero: "Votre solde dû est nul. Bravo !" # Machine translated, remove this comment when verified
-      credit: "Votre compte a un crédit de %{amount}. Aucun paiement nécessaire !" # Machine translated, remove this comment when verified
+      pay_by: "Veuillez payer %{amount} avant le %{date}. Merci !" # MT
+      pay: "Veuillez payer %{amount}. Merci !" # MT
+      zero: "Votre solde dû est nul. Bravo !" # MT
+      credit: "Votre compte a un crédit de %{amount}. Aucun paiement nécessaire !" # MT
     transaction_export_form:
-      download: "Télécharger les transactions en CSV" # Machine translated, remove this comment when verified
-      incurred: "Engagées pendant…" # Machine translated, remove this comment when verified
-      recorded: "Enregistrées pendant…" # Machine translated, remove this comment when verified
-      select_dates: "Choisir les dates" # Machine translated, remove this comment when verified
+      download: "Télécharger les transactions en CSV" # MT
+      incurred: "Engagées pendant…" # MT
+      recorded: "Enregistrées pendant…" # MT
+      select_dates: "Choisir les dates" # MT
     edit:
-      title: "Modifier le compte : %{household}" # Machine translated, remove this comment when verified
-      no_users: "Ce compte n'a aucune personne associée et ne peut pas recevoir de relevés." # Machine translated, remove this comment when verified
-      cancel: "Annuler" # Machine translated, remove this comment when verified
+      title: "Modifier le compte : %{household}" # MT
+      no_users: "Ce compte n'a aucune personne associée et ne peut pas recevoir de relevés." # MT
+      cancel: "Annuler" # MT
     show:
-      title: "Compte : %{household}" # Machine translated, remove this comment when verified
+      title: "Compte : %{household}" # MT
     mine:
-      title: "Mon compte" # Machine translated, remove this comment when verified
-      title_with_community: "Mon compte %{community}" # Machine translated, remove this comment when verified
-      no_charges: "Aucun frais n'est encore associé à votre foyer." # Machine translated, remove this comment when verified
+      title: "Mon compte" # MT
+      title_with_community: "Mon compte %{community}" # MT
+      no_charges: "Aucun frais n'est encore associé à votre foyer." # MT
     index:
-      title: "Comptes" # Machine translated, remove this comment when verified
-      apply_late_fees: "Appliquer les frais de retard" # Machine translated, remove this comment when verified
-      send_statements: "Envoyer les relevés" # Machine translated, remove this comment when verified
-      no_accounts: "Aucun compte trouvé." # Machine translated, remove this comment when verified
-      num: "N°" # Machine translated, remove this comment when verified
-      household: "Foyer" # Machine translated, remove this comment when verified
-      last_statement_date: "Dernier relevé" # Machine translated, remove this comment when verified
-      due_last_statement: "Dû (dernier relevé)" # Machine translated, remove this comment when verified
-      new_credits: "Nouveaux crédits" # Machine translated, remove this comment when verified
-      balance_due: "Solde dû" # Machine translated, remove this comment when verified
-      new_charges: "Nouveaux frais" # Machine translated, remove this comment when verified
-      current_balance: "Solde actuel" # Machine translated, remove this comment when verified
-      credit_limit: "Limite de crédit" # Machine translated, remove this comment when verified
-      add_transaction: "Ajouter une transaction" # Machine translated, remove this comment when verified
-      totals: "Totaux" # Machine translated, remove this comment when verified
-      download_accounts: "Télécharger les comptes en CSV" # Machine translated, remove this comment when verified
+      title: "Comptes" # MT
+      apply_late_fees: "Appliquer les frais de retard" # MT
+      send_statements: "Envoyer les relevés" # MT
+      no_accounts: "Aucun compte trouvé." # MT
+      num: "N°" # MT
+      household: "Foyer" # MT
+      last_statement_date: "Dernier relevé" # MT
+      due_last_statement: "Dû (dernier relevé)" # MT
+      new_credits: "Nouveaux crédits" # MT
+      balance_due: "Solde dû" # MT
+      new_charges: "Nouveaux frais" # MT
+      current_balance: "Solde actuel" # MT
+      credit_limit: "Limite de crédit" # MT
+      add_transaction: "Ajouter une transaction" # MT
+      totals: "Totaux" # MT
+      download_accounts: "Télécharger les comptes en CSV" # MT
       summary:
-        one: "Il y a %{count} compte actif." # Machine translated, remove this comment when verified
-        other: "Il y a %{count} comptes actifs." # Machine translated, remove this comment when verified
-      active_account_definition: "Un compte actif est un compte qui a une activité en cours ou un solde actuel non nul." # Machine translated, remove this comment when verified
-      last_statement_run: "Les derniers relevés ont été envoyés le %{date}." # Machine translated, remove this comment when verified
-      statements_never_run: "Aucun relevé n'a encore été envoyé." # Machine translated, remove this comment when verified
+        one: "Il y a %{count} compte actif." # MT
+        other: "Il y a %{count} comptes actifs." # MT
+      active_account_definition: "Un compte actif est un compte qui a une activité en cours ou un solde actuel non nul." # MT
+      last_statement_run: "Les derniers relevés ont été envoyés le %{date}." # MT
+      statements_never_run: "Aucun relevé n'a encore été envoyé." # MT
       no_users:
-        one: "%{count} compte n'a aucune personne associée. Aucun relevé ne sera généré pour ce compte." # Machine translated, remove this comment when verified
-        other: "%{count} comptes n'ont aucune personne associée. Aucun relevé ne sera généré pour ces comptes." # Machine translated, remove this comment when verified
+        one: "%{count} compte n'a aucune personne associée. Aucun relevé ne sera généré pour ce compte." # MT
+        other: "%{count} comptes n'ont aucune personne associée. Aucun relevé ne sera généré pour ces comptes." # MT
       recent_statements:
-        one: "%{count} compte a reçu un relevé dans les dernières 24 heures. Aucun nouveau relevé ne sera généré pour ce compte." # Machine translated, remove this comment when verified
-        other: "%{count} comptes ont reçu un relevé dans les dernières 24 heures. Aucun nouveau relevé ne sera généré pour ces comptes." # Machine translated, remove this comment when verified
+        one: "%{count} compte a reçu un relevé dans les dernières 24 heures. Aucun nouveau relevé ne sera généré pour ce compte." # MT
+        other: "%{count} comptes ont reçu un relevé dans les dernières 24 heures. Aucun nouveau relevé ne sera généré pour ces comptes." # MT
     others:
-      one_html: "Vous avez un autre compte Gather auprès de %{cmty}." # Machine translated, remove this comment when verified
-      multiple_html: "Vous avez aussi des comptes Gather auprès de %{cmtys}." # Machine translated, remove this comment when verified
+      one_html: "Vous avez un autre compte Gather auprès de %{cmty}." # MT
+      multiple_html: "Vous avez aussi des comptes Gather auprès de %{cmtys}." # MT
     payment_badge_alt:
-      paypal: "Badge de paiement PayPal" # Machine translated, remove this comment when verified
-      online_bill_pay: "Badge de paiement de factures en ligne" # Machine translated, remove this comment when verified
-      check: "Badge de paiement par chèque" # Machine translated, remove this comment when verified
-      cash: "Badge de paiement en espèces" # Machine translated, remove this comment when verified
+      paypal: "Badge de paiement PayPal" # MT
+      online_bill_pay: "Badge de paiement de factures en ligne" # MT
+      check: "Badge de paiement par chèque" # MT
+      cash: "Badge de paiement en espèces" # MT
 
   statements:
-    generation_started: "Génération des relevés lancée. Actualisez la page dans un instant pour voir l'état des comptes mis à jour." # Machine translated, remove this comment when verified
-    no_users_not_generated: "Les foyers suivants n'ont aucune personne associée, aucun relevé n'a donc été généré pour eux : %{households}. Renvoyez les relevés une fois que ces foyers auront des personnes associées." # Machine translated, remove this comment when verified
+    generation_started: "Génération des relevés lancée. Actualisez la page dans un instant pour voir l'état des comptes mis à jour." # MT
+    no_users_not_generated: "Les foyers suivants n'ont aucune personne associée, aucun relevé n'a donc été généré pour eux : %{households}. Renvoyez les relevés une fois que ces foyers auront des personnes associées." # MT
     account_info:
-      account_community: "Communauté du compte" # Machine translated, remove this comment when verified
-      account_number: "Numéro de compte" # Machine translated, remove this comment when verified
-      household: "Foyer" # Machine translated, remove this comment when verified
+      account_community: "Communauté du compte" # MT
+      account_number: "Numéro de compte" # MT
+      household: "Foyer" # MT
     link_to_accounts_page:
-      notice_html: "Pour les informations de compte les plus récentes, %{link}." # Machine translated, remove this comment when verified
-      link: "consultez votre page de comptes" # Machine translated, remove this comment when verified
+      notice_html: "Pour les informations de compte les plus récentes, %{link}." # MT
+      link: "consultez votre page de comptes" # MT
     statement_rows:
-      load_more: "Charger plus…" # Machine translated, remove this comment when verified
-      loading: "Chargement…" # Machine translated, remove this comment when verified
+      load_more: "Charger plus…" # MT
+      loading: "Chargement…" # MT
     show:
-      title: "Relevé n° %{number}" # Machine translated, remove this comment when verified
-      statement_date: "Date du relevé" # Machine translated, remove this comment when verified
-      due_date: "Échéance" # Machine translated, remove this comment when verified
-      activity: "Activité" # Machine translated, remove this comment when verified
-      previous_balance: "Solde précédent" # Machine translated, remove this comment when verified
-      statement_balance: "Solde du relevé" # Machine translated, remove this comment when verified
+      title: "Relevé n° %{number}" # MT
+      statement_date: "Date du relevé" # MT
+      due_date: "Échéance" # MT
+      activity: "Activité" # MT
+      previous_balance: "Solde précédent" # MT
+      statement_balance: "Solde du relevé" # MT
 
   transactions:
-    added: "Transaction ajoutée." # Machine translated, remove this comment when verified
-    not_added: "La transaction n'a pas été ajoutée. Vous pouvez la modifier ci-dessous et réessayer, ou cliquer sur « Annuler » pour revenir à la page des comptes." # Machine translated, remove this comment when verified
+    added: "Transaction ajoutée." # MT
+    not_added: "La transaction n'a pas été ajoutée. Vous pouvez la modifier ci-dessous et réessayer, ou cliquer sur « Annuler » pour revenir à la page des comptes." # MT
     form:
-      cancel: "Annuler" # Machine translated, remove this comment when verified
+      cancel: "Annuler" # MT
     txn_rows:
-      no_activity: "Aucune activité pour cette période" # Machine translated, remove this comment when verified
+      no_activity: "Aucune activité pour cette période" # MT
     txn_table:
-      date: "Date" # Machine translated, remove this comment when verified
-      type: "Type" # Machine translated, remove this comment when verified
-      description: "Description" # Machine translated, remove this comment when verified
-      quantity: "Quantité" # Machine translated, remove this comment when verified
-      unit_price: "Prix unitaire" # Machine translated, remove this comment when verified
-      amount: "Montant" # Machine translated, remove this comment when verified
+      date: "Date" # MT
+      type: "Type" # MT
+      description: "Description" # MT
+      quantity: "Quantité" # MT
+      unit_price: "Prix unitaire" # MT
+      amount: "Montant" # MT
     confirm:
-      title: "Confirmer la transaction" # Machine translated, remove this comment when verified
-      intro: "Voici comment la nouvelle transaction apparaîtra sur le relevé du foyer. Les transactions ne peuvent plus être modifiées une fois créées. Vérifiez que les informations ci-dessous sont correctes." # Machine translated, remove this comment when verified
+      title: "Confirmer la transaction" # MT
+      intro: "Voici comment la nouvelle transaction apparaîtra sur le relevé du foyer. Les transactions ne peuvent plus être modifiées une fois créées. Vérifiez que les informations ci-dessous sont correctes." # MT
     index:
-      title: "Activité récente" # Machine translated, remove this comment when verified
-      title_with_household: "Activité récente : %{household}" # Machine translated, remove this comment when verified
-      account_community: "Communauté du compte" # Machine translated, remove this comment when verified
-      account_number: "Numéro de compte" # Machine translated, remove this comment when verified
-      household: "Foyer" # Machine translated, remove this comment when verified
-      activity: "Activité" # Machine translated, remove this comment when verified
-      no_activity: "Ce compte n'a aucune activité." # Machine translated, remove this comment when verified
-      last_statement_balance: "Solde du dernier relevé" # Machine translated, remove this comment when verified
-      current_balance: "Solde actuel" # Machine translated, remove this comment when verified
+      title: "Activité récente" # MT
+      title_with_household: "Activité récente : %{household}" # MT
+      account_community: "Communauté du compte" # MT
+      account_number: "Numéro de compte" # MT
+      household: "Foyer" # MT
+      activity: "Activité" # MT
+      no_activity: "Ce compte n'a aucune activité." # MT
+      last_statement_balance: "Solde du dernier relevé" # MT
+      current_balance: "Solde actuel" # MT
     new:
-      title: "Nouvelle transaction" # Machine translated, remove this comment when verified
+      title: "Nouvelle transaction" # MT
 
   billing:
-    late_fee_description: "Frais de retard de paiement" # Machine translated, remove this comment when verified
+    late_fee_description: "Frais de retard de paiement" # MT
     templates:
-      created: "Modèle créé." # Machine translated, remove this comment when verified
-      updated: "Modèle mis à jour." # Machine translated, remove this comment when verified
-      select_one: "Veuillez sélectionner au moins un modèle." # Machine translated, remove this comment when verified
-      applied: "Transactions créées." # Machine translated, remove this comment when verified
+      created: "Modèle créé." # MT
+      updated: "Modèle mis à jour." # MT
+      select_one: "Veuillez sélectionner au moins un modèle." # MT
+      applied: "Transactions créées." # MT
       edit:
-        title: "Modifier le modèle de facturation : %{description}" # Machine translated, remove this comment when verified
+        title: "Modifier le modèle de facturation : %{description}" # MT
       new:
-        title: "Nouveau modèle de transaction" # Machine translated, remove this comment when verified
+        title: "Nouveau modèle de transaction" # MT
       index:
-        title: "Modèles de transaction" # Machine translated, remove this comment when verified
-        apply: "Appliquer les modèles" # Machine translated, remove this comment when verified
-        create: "Créer un modèle" # Machine translated, remove this comment when verified
-        intro: "Les modèles de transaction permettent de créer facilement des lots de transactions en une seule fois." # Machine translated, remove this comment when verified
-        none_found: "Aucun modèle trouvé." # Machine translated, remove this comment when verified
-        description: "Description" # Machine translated, remove this comment when verified
-        type: "Type" # Machine translated, remove this comment when verified
-        member_types: "Type(s) de membre" # Machine translated, remove this comment when verified
-        amount: "Montant" # Machine translated, remove this comment when verified
+        title: "Modèles de transaction" # MT
+        apply: "Appliquer les modèles" # MT
+        create: "Créer un modèle" # MT
+        intro: "Les modèles de transaction permettent de créer facilement des lots de transactions en une seule fois." # MT
+        none_found: "Aucun modèle trouvé." # MT
+        description: "Description" # MT
+        type: "Type" # MT
+        member_types: "Type(s) de membre" # MT
+        amount: "Montant" # MT
       review:
-        title: "Appliquer les modèles" # Machine translated, remove this comment when verified
-        intro: "Vous allez créer les transactions suivantes pour les foyers suivants :" # Machine translated, remove this comment when verified
-        description: "Description" # Machine translated, remove this comment when verified
-        type: "Type" # Machine translated, remove this comment when verified
-        amount: "Montant" # Machine translated, remove this comment when verified
-        households: "Foyers" # Machine translated, remove this comment when verified
-        outdated_warning: "La liste de foyers ci-dessus peut devenir obsolète si les types de membre des foyers changent entre le chargement de cette page de confirmation et le clic sur « Appliquer » ci-dessous." # Machine translated, remove this comment when verified
-        cancel: "Annuler" # Machine translated, remove this comment when verified
-        apply: "Appliquer" # Machine translated, remove this comment when verified
+        title: "Appliquer les modèles" # MT
+        intro: "Vous allez créer les transactions suivantes pour les foyers suivants :" # MT
+        description: "Description" # MT
+        type: "Type" # MT
+        amount: "Montant" # MT
+        households: "Foyers" # MT
+        outdated_warning: "La liste de foyers ci-dessus peut devenir obsolète si les types de membre des foyers changent entre le chargement de cette page de confirmation et le clic sur « Appliquer » ci-dessous." # MT
+        cancel: "Annuler" # MT
+        apply: "Appliquer" # MT
 
   account_mailer:
     statement_notice:
-      subject: "Nouveau relevé de compte pour %{community}" # Machine translated, remove this comment when verified
-      created: "Un nouveau relevé a été créé dans Gather pour votre compte %{community}." # Machine translated, remove this comment when verified
-      amount_due: "Le montant dû est de %{amount}." # Machine translated, remove this comment when verified
-      credit: "Vous avez un solde créditeur de %{amount}. Aucun paiement n'est nécessaire." # Machine translated, remove this comment when verified
-      see_details: "Consultez le lien ci-dessous pour voir le détail :" # Machine translated, remove this comment when verified
-      thanks: "Merci de votre paiement rapide !" # Machine translated, remove this comment when verified
+      subject: "Nouveau relevé de compte pour %{community}" # MT
+      created: "Un nouveau relevé a été créé dans Gather pour votre compte %{community}." # MT
+      amount_due: "Le montant dû est de %{amount}." # MT
+      credit: "Vous avez un solde créditeur de %{amount}. Aucun paiement n'est nécessaire." # MT
+      see_details: "Consultez le lien ci-dessous pour voir le détail :" # MT
+      thanks: "Merci de votre paiement rapide !" # MT
     statement_reminder:
-      subject: "Rappel de paiement pour le compte %{community}" # Machine translated, remove this comment when verified
-      due_on: "Ceci est un rappel : le paiement d'un relevé Gather pour votre compte %{community} est dû le %{date}." # Machine translated, remove this comment when verified
-      due_soon: "Ceci est un rappel : le paiement d'un relevé Gather pour votre compte %{community} est bientôt dû." # Machine translated, remove this comment when verified
-      amount_due: "Le montant dû est de %{amount}. Consultez le lien ci-dessous pour voir le détail :" # Machine translated, remove this comment when verified
-      disregard: "Si vous avez déjà payé, ne tenez pas compte de cet avis." # Machine translated, remove this comment when verified
-      thanks: "Merci de votre paiement rapide !" # Machine translated, remove this comment when verified
+      subject: "Rappel de paiement pour le compte %{community}" # MT
+      due_on: "Ceci est un rappel : le paiement d'un relevé Gather pour votre compte %{community} est dû le %{date}." # MT
+      due_soon: "Ceci est un rappel : le paiement d'un relevé Gather pour votre compte %{community} est bientôt dû." # MT
+      amount_due: "Le montant dû est de %{amount}. Consultez le lien ci-dessous pour voir le détail :" # MT
+      disregard: "Si vous avez déjà payé, ne tenez pas compte de cet avis." # MT
+      thanks: "Merci de votre paiement rapide !" # MT

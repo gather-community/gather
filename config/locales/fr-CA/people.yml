@@ -1,16 +1,28 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
 fr-CA:
   people:
     users:
       confirmations:
-        expired_signed_out: "Le délai de confirmation a expiré. Connectez-vous avec votre ancienne adresse courriel et réessayez." # Machine translated, remove this comment when verified
+        expired_signed_out: "Le délai de confirmation a expiré. Connectez-vous avec votre ancienne adresse courriel et réessayez." # MT
       omniauth_failure_reasons:
-        no_email: "Google n'a pas fourni d'adresse courriel. Veuillez prévenir un administrateur" # Machine translated, remove this comment when verified
+        no_email: "Google n'a pas fourni d'adresse courriel. Veuillez prévenir un administrateur" # MT
   users:
-    email_change_canceled: "Changement d'adresse courriel annulé." # Machine translated, remove this comment when verified
-    confirm_new_email_self: "Vous devez confirmer votre nouvelle adresse courriel. Consultez vos courriels à l'adresse %{email}." # Machine translated, remove this comment when verified
-    confirm_new_email_other: "Cette personne doit confirmer sa nouvelle adresse courriel (%{email})." # Machine translated, remove this comment when verified
+    email_change_canceled: "Changement d'adresse courriel annulé." # MT
+    confirm_new_email_self: "Vous devez confirmer votre nouvelle adresse courriel. Consultez vos courriels à l'adresse %{email}." # MT
+    confirm_new_email_other: "Cette personne doit confirmer sa nouvelle adresse courriel (%{email})." # MT
     index:
-      email: "Courriel" # Machine translated, remove this comment when verified
-      mobile_phone: "Cellulaire" # Machine translated, remove this comment when verified
+      email: "Courriel" # MT
+      mobile_phone: "Cellulaire" # MT
     show:
-      email: "Courriel" # Machine translated, remove this comment when verified
+      email: "Courriel" # MT

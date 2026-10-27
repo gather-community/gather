@@ -1,69 +1,81 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
 fr:
   nav_links:
     people:
-      _self: "Personnes" # Machine translated, remove this comment when verified
-      households: "Foyers" # Machine translated, remove this comment when verified
-      directory: "Annuaire" # Machine translated, remove this comment when verified
-      birthdays: "Anniversaires" # Machine translated, remove this comment when verified
-      vehicles: "Véhicules" # Machine translated, remove this comment when verified
-      memorials: "Hommages" # Machine translated, remove this comment when verified
+      _self: "Personnes" # MT
+      households: "Foyers" # MT
+      directory: "Annuaire" # MT
+      birthdays: "Anniversaires" # MT
+      vehicles: "Véhicules" # MT
+      memorials: "Hommages" # MT
       settings:
-        _self: "Paramètres" # Machine translated, remove this comment when verified
-        general: "Paramètres généraux" # Machine translated, remove this comment when verified
-        member_types: "Types de membre" # Machine translated, remove this comment when verified
+        _self: "Paramètres" # MT
+        general: "Paramètres généraux" # MT
+        member_types: "Types de membre" # MT
     groups:
-      _self: "Groupes" # Machine translated, remove this comment when verified
-      groups: "Groupes" # Machine translated, remove this comment when verified
-      roles: "Rôles" # Machine translated, remove this comment when verified
-      domains: "Domaines" # Machine translated, remove this comment when verified
+      _self: "Groupes" # MT
+      groups: "Groupes" # MT
+      roles: "Rôles" # MT
+      domains: "Domaines" # MT
     meals:
-      _self: "Repas" # Machine translated, remove this comment when verified
-      meals: "Repas" # Machine translated, remove this comment when verified
-      jobs: "Tâches" # Machine translated, remove this comment when verified
-      report: "Rapport" # Machine translated, remove this comment when verified
-      formulas: "Formules" # Machine translated, remove this comment when verified
-      roles: "Rôles" # Machine translated, remove this comment when verified
-      types: "Types" # Machine translated, remove this comment when verified
+      _self: "Repas" # MT
+      meals: "Repas" # MT
+      jobs: "Tâches" # MT
+      report: "Rapport" # MT
+      formulas: "Formules" # MT
+      roles: "Rôles" # MT
+      types: "Types" # MT
       settings:
-        _self: "Paramètres" # Machine translated, remove this comment when verified
-        general: "Généraux" # Machine translated, remove this comment when verified
-        restrictions: "Restrictions alimentaires" # Machine translated, remove this comment when verified
-        reminders: "Rappels" # Machine translated, remove this comment when verified
+        _self: "Paramètres" # MT
+        general: "Généraux" # MT
+        restrictions: "Restrictions alimentaires" # MT
+        reminders: "Rappels" # MT
     calendars:
-      _self: "Calendriers" # Machine translated, remove this comment when verified
-      events: "Événements" # Machine translated, remove this comment when verified
-      calendars: "Calendriers" # Machine translated, remove this comment when verified
-      protocols: "Règlements" # Machine translated, remove this comment when verified
+      _self: "Calendriers" # MT
+      events: "Événements" # MT
+      calendars: "Calendriers" # MT
+      protocols: "Règlements" # MT
     wiki:
-      _self: "Wiki" # Machine translated, remove this comment when verified
+      _self: "Wiki" # MT
       wiki:
-        _self: "Wiki" # Machine translated, remove this comment when verified
+        _self: "Wiki" # MT
       gdrive:
-        _self: "Google Drive" # Machine translated, remove this comment when verified
+        _self: "Google Drive" # MT
         migration:
           dashboard:
-            status: "État" # Machine translated, remove this comment when verified
-            owners: "Propriétaires" # Machine translated, remove this comment when verified
-            files: "Fichiers" # Machine translated, remove this comment when verified
-            logs: "Journaux" # Machine translated, remove this comment when verified
+            status: "État" # MT
+            owners: "Propriétaires" # MT
+            files: "Fichiers" # MT
+            logs: "Journaux" # MT
     work:
-      _self: "Travail" # Machine translated, remove this comment when verified
-      signups: "Inscriptions" # Machine translated, remove this comment when verified
-      report: "Rapport" # Machine translated, remove this comment when verified
-      jobs: "Tâches" # Machine translated, remove this comment when verified
-      periods: "Périodes" # Machine translated, remove this comment when verified
-      settings: "Paramètres" # Machine translated, remove this comment when verified
+      _self: "Travail" # MT
+      signups: "Inscriptions" # MT
+      report: "Rapport" # MT
+      jobs: "Tâches" # MT
+      periods: "Périodes" # MT
+      settings: "Paramètres" # MT
     admin:
-      _self: "Administration" # Machine translated, remove this comment when verified
+      _self: "Administration" # MT
     billing:
-      _self: "Facturation" # Machine translated, remove this comment when verified
-      accounts: "Comptes" # Machine translated, remove this comment when verified
-      templates: "Modèles" # Machine translated, remove this comment when verified
+      _self: "Facturation" # MT
+      accounts: "Comptes" # MT
+      templates: "Modèles" # MT
     personal:
-      profile: "Profil" # Machine translated, remove this comment when verified
-      accounts: "Comptes" # Machine translated, remove this comment when verified
-      account: "Compte" # Machine translated, remove this comment when verified
-      calendars: "Calendriers" # Machine translated, remove this comment when verified
-      change_passwd: "Changer le mot de passe" # Machine translated, remove this comment when verified
-      notifications: "Notifications" # Machine translated, remove this comment when verified
-      sign_out: "Se déconnecter" # Machine translated, remove this comment when verified
+      profile: "Profil" # MT
+      accounts: "Comptes" # MT
+      account: "Compte" # MT
+      calendars: "Calendriers" # MT
+      change_passwd: "Changer le mot de passe" # MT
+      notifications: "Notifications" # MT
+      sign_out: "Se déconnecter" # MT

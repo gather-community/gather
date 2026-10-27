@@ -22,6 +22,8 @@
     <% if current_user && policy(Community.new).index? %>
       &nbsp;
       <%= link_to(t(".communities"), communities_url(host: Settings.url.host)) %>
+      &nbsp;
+      <%= link_to(t(".domains"), admin_domains_url(host: Settings.url.host)) %>
       <% if controller_name == "communities" && action_name == "index" %>
         &nbsp;
         <%= button_to(t(".resync_subscriptions"), resync_all_communities_path,

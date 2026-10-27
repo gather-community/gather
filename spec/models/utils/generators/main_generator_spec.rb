@@ -13,6 +13,7 @@ describe Utils::Generators::MainGenerator, :without_tenant, :perform_jobs do
     Calendars::System::OtherCommunitiesMealsCalendar
     Domain
     DomainOwnership
+    DomainMail::Check
     FeatureFlag
     FeatureFlagUser
     GDrive::Config

@@ -391,6 +391,12 @@ Rails.application.routes.draw do
   namespace :admin do
     get "settings/:type", to: "settings#edit", as: :settings
     patch "settings/:type", to: "settings#update"
+
+    # Operator dashboard for domains (apex domain; spans all clusters).
+    resources :domains, only: %i[index show] do
+      post :refresh, on: :collection
+      post :refresh, on: :member
+    end
   end
 
   namespace :subscription do

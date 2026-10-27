@@ -75,6 +75,9 @@ ignore_unused:
   - "activatables.*"                      # keyed by model i18n_key
   - "cocoon.add_links.*"                  # FormHelper#link_to_add, keyed by association
   - "{community_lens,date_range_lens}.*"  # Lens i18n_key + option names
+  # Built from DomainMail::Status state values in app/views/admin/domains/index.html.erb
+  - "admin.domains.index.{smtp2go_statuses,record_kinds,record_titles}.*"
+  - "admin.domains.lenses.*"              # Admin::ListsLens option names
   - "calendars.{all,community,my}_*"      # system calendar names
   - "calendars/protocol.durations.*"
   - "roles.index.descriptions.*"  # roles/index.html.erb, by role

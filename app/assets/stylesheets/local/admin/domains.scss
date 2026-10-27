@@ -1,4 +1,11 @@
 .admin--domains {
+  // A long record (e.g. an SPF string) wraps inside one continuous chip rather than breaking
+  // into what looks like separate records on each wrapped line.
+  table.key-value code {
+    display: inline-block;
+    word-break: break-word;
+  }
+
   ul.spf-lookups {
     margin: 2px 0 0;
     padding-left: 18px;

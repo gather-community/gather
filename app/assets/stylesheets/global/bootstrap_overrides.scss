@@ -30,8 +30,3 @@ input[type=checkbox] {
   padding: 0 !important;
   border: none;
 }
-// Companion to $code-color/$code-bg in bootstrap_variables.scss: without the pill background,
-// the padding is just phantom spacing.
-code {
-  padding: 0;
-}

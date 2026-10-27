@@ -107,7 +107,7 @@ de:
     index:
       title: "Domains" # MT
       add: "Domain hinzufügen" # MT
-      intro_html: "Auf diesen Domains kannst du E-Mail-Listen anlegen. Eine Anleitung zum Hinzufügen einer Domain findest du %{link}." # MT
+      intro_html: "Auf diesen Domains kannst du E-Mail-Listen anlegen. Eine Anleitung zum Hinzufügen einer Domain bekommst du, wenn du auf %{link} klickst." # MT
       none_found: "Keine Domains gefunden." # MT
     new:
       title: "Domain hinzufügen" # MT

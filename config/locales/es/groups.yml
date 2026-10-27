@@ -104,7 +104,7 @@ es:
     index:
       title: "Dominios" # MT
       add: "Añadir dominio" # MT
-      intro_html: "Estos son los dominios en los que puedes crear listas de correo. Para ver cómo añadir un dominio, haz clic %{link}." # MT
+      intro_html: "Estos son los dominios en los que puedes crear listas de correo. Para ver cómo añadir un dominio, haz clic en %{link}." # MT
       none_found: "No se encontraron dominios." # MT
     new:
       title: "Añadir dominio" # MT

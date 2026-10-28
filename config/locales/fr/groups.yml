@@ -104,7 +104,7 @@ fr:
     index:
       title: "Domaines" # MT
       add: "Ajouter un domaine" # MT
-      intro_html: "Voici les domaines sur lesquels vous pouvez créer des listes de diffusion. Pour savoir comment ajouter un domaine, cliquez %{link}." # MT
+      intro_html: "Voici les domaines sur lesquels vous pouvez créer des listes de diffusion. Pour savoir comment ajouter un domaine, cliquez sur %{link}." # MT
       none_found: "Aucun domaine trouvé." # MT
     new:
       title: "Ajouter un domaine" # MT

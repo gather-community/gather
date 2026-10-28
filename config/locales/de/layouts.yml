@@ -1,0 +1,159 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+# Strings for the page layout, shared partials and other app-wide views.
+de:
+  layouts:
+    mailer:
+      notification_settings: "Gather-Benachrichtigungseinstellungen: %{url}" # MT
+      machine_translated: "Diese E-Mail wurde automatisch übersetzt und kann Fehler enthalten." # MT
+    application:
+      impersonation_notice: "Du handelst als %{name}. Alles, was du tust, sieht so aus, als hätte diese Person es getan." # MT
+      stop_impersonating: "Identität verlassen" # MT
+      home: "Startseite" # MT
+      skip_to_content: "Zum Inhalt springen" # MT
+      show_menu: "Menü anzeigen" # MT
+      toggle_navigation: "Navigation ein-/ausblenden" # MT
+      loading: "Wird geladen" # MT
+      add_to_home_screen: "Gather zum Startbildschirm hinzufügen" # MT
+    footer:
+      privacy_policy: "Datenschutzerklärung" # MT
+      credits: "Danksagungen" # MT
+      settings: "Einstellungen" # MT
+      subscription: "Abo" # MT
+      billing: "Abrechnung" # MT
+      communities: "Gemeinschaften" # MT
+      resync_subscriptions: "Abos neu abgleichen" # MT
+      domains: "Domains" # MT
+      # Shown on pages in machine-translated locales (Gather::Locales::MACHINE_TRANSLATED).
+      machine_translated: "Diese Seite wurde automatisch übersetzt und kann Fehler enthalten." # MT
+      machine_translated_with_link_html: "Diese Seite wurde automatisch übersetzt und kann Fehler enthalten. %{link}" # MT
+      help_translate: "Hilf mit, die Übersetzung zu verbessern" # MT
+    head:
+      # The browser tab title. The page title is already HTML-escaped, hence _html.
+      title_html: "Gather: %{title}" # MT
+    personal_dropdown:
+      show_menu: "Persönliches Menü anzeigen" # MT
+  shared:
+    dropzone:
+      image_attachment: "Bildanhang" # MT
+    mobile_back_link:
+      back_to_html: "Zurück zu %{label}" # MT
+  home:
+    inactive:
+      title: "Konto inaktiv" # MT
+      body: "Dein Konto ist nicht aktiv. Du kannst trotzdem deine Konten ansehen und dein Profil bearbeiten. Das Menü findest du oben rechts." # MT
+  # Announcement shown once to accounts created before the 2021 rename (CalendarNavLinkPopoverView, JS).
+  calendar_nav_popover:
+    message_html: "<b>Reservierungen</b> heißen jetzt <b>Kalender</b>! Schau mal rein!" # MT
+    dismiss: "Schließen" # MT
+  landing:
+    invite_welcome: "Willkommen bei Gather! Bitte wähle unten aus, wie du dich anmelden möchtest." # MT
+    index:
+      blurb: "Gemeinsam lebt es sich besser." # MT
+      logo_alt: "Gather-Logo" # MT
+      sign_in_google: "Mit Google anmelden" # MT
+      sign_in_password: "Mit Passwort anmelden" # MT
+      learn_more: "Mehr erfahren" # MT
+      try_it_out: "Ausprobieren" # MT
+    signed_out:
+      title: "Gather – Abgemeldet" # MT
+      signed_out: "Du bist jetzt von Gather abgemeldet." # MT
+      public_computer_html: "Wenn dies ein <strong>öffentlicher Computer</strong> ist, solltest du dich<br/>%{link}." # MT
+      google_sign_out: "auch von deinem Google-Konto abmelden" # MT
+      return_home: "Zurück zur Startseite" # MT
+    privacy_policy:
+      title: "Datenschutzerklärung" # MT
+      english_only: "Die Datenschutzerklärung gibt es nur auf Englisch." # MT
+    markdown:
+      title: "Markdown-Formatierungshilfe" # MT
+      intro_html: "<strong>Markdown</strong> ist eine einfache Art, saubere und ansprechende Inhalte zu erstellen, ohne eine spezielle Sprache lernen zu müssen." # MT
+      if_you_type: "Wenn du Folgendes eingibst …" # MT
+      displayed_like: "Wird es so angezeigt:" # MT
+      outro: "Jetzt viel Spaß beim Erstellen von nützlichen und schönen Inhalten!" # MT
+      # Each example is shown as typed and then as rendered, so it must be valid Markdown.
+      examples:
+        formatting: "Einfache Formatierung wie **fett**, _kursiv_ und ~~durchgestrichen~~ geht ganz leicht." # MT
+        lists: |- # MT
+          Du kannst auch
+
+          * Aufzählungen
+          * erstellen
+              * mit
+              * eingerückten
+              * Unterlisten
+
+          und
+
+          1. nummerierte
+          2. Listen
+        headers: |- # MT
+          # Überschriften
+          ## Sind
+          ### Einfach
+
+          genauso!
+        tables: |- # MT
+          | Du  | Kannst    |
+          |------|--------|
+          | sogar hübsche | Tabellen machen |
+          | Wow! | Das ist super! |
+        links: |- # MT
+          Links auf andere Seiten sehen [so aus](http://example.com).
+
+          Eine URL als einfacher Text wird automatisch erkannt: https://gather.coop
+        images: |- # MT
+          So kannst du Bilder anzeigen:
+
+          ![Kätzchen](https://gather.coop/sample-image.png)
+        rule: |- # MT
+          Mit einer horizontalen Linie kannst du deinen Inhalt unterteilen:
+
+          ---
+
+          schön!
+        # Not named html or *_html: Rails treats such keys as already-safe HTML, so the
+        # tags in this example would render instead of being shown as typed.
+        raw_markup: |- # MT
+          Wenn du dich auskennst und reines HTML verwenden willst, probier es aus!
+
+          Zum Beispiel <blockquote>möchtest du vielleicht Blockzitate verwenden</blockquote>.
+  # Static error pages, generated into public/ by `rake error_pages:generate` (see Gather::ErrorPages).
+  error_pages:
+    "400":
+      title: "Der Server kann die Anfrage wegen eines Fehlers auf Client-Seite nicht verarbeiten (400 Bad Request)" # MT
+      heading: "Der Server kann die Anfrage wegen eines Fehlers auf Client-Seite nicht verarbeiten." # MT
+      body: "Bitte prüfe die Anfrage und versuche es noch einmal. Wenn du die Anwendung betreibst, findest du weitere Informationen in den Logs." # MT
+    "403":
+      title: "Du darfst diese Seite nicht ansehen (403)" # MT
+      heading: "Du darfst diese Seite nicht ansehen." # MT
+      body: "Wenn du glaubst, dass das ein Fehler ist, wende dich bitte an deine Admins." # MT
+    "404":
+      title: "Die gesuchte Seite gibt es nicht (404 Not found)" # MT
+      heading: "Die gesuchte Seite gibt es nicht." # MT
+      body: "Vielleicht hast du dich bei der Adresse vertippt, oder die Seite wurde verschoben. Wenn du die Anwendung betreibst, findest du weitere Informationen in den Logs." # MT
+    "406-unsupported-browser":
+      title: "Dein Browser wird nicht unterstützt (406 Not Acceptable)" # MT
+      heading: "Dein Browser wird nicht unterstützt." # MT
+      body: "Bitte aktualisiere deinen Browser, um fortzufahren." # MT
+    "422":
+      title: "Die gewünschte Änderung wurde abgelehnt (422 Unprocessable Entity)" # MT
+      heading: "Die gewünschte Änderung wurde abgelehnt." # MT
+      body: "Vielleicht wolltest du etwas ändern, auf das du keinen Zugriff hast. Wenn du die Anwendung betreibst, findest du weitere Informationen in den Logs." # MT
+    "500":
+      title: "Entschuldigung, da ist etwas schiefgelaufen (500 Internal Server Error)" # MT
+      heading: "Entschuldigung, da ist etwas schiefgelaufen." # MT
+      body: "Wenn du die Anwendung betreibst, findest du weitere Informationen in den Logs." # MT
+    offline:
+      title: "Du bist nicht mit dem Internet verbunden" # MT
+      heading: "Der Server war nicht erreichbar." # MT
+      body: "Vielleicht ist deine Internetverbindung unterbrochen. Lade die Seite neu." # MT

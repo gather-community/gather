@@ -60,12 +60,13 @@ class UserDecorator < ApplicationDecorator
     I18n.t("simple_form.options.user.preferred_contact.#{object.preferred_contact}")
   end
 
-  def unit_num_and_suffix_with_hash
-    unit_num.nil? ? nil : "##{unit_num_and_suffix}"
+  # E.g. "#12" in English, "Nr. 12" in German.
+  def formatted_unit_num
+    unit_num.nil? ? nil : h.t("households.number", number: unit_num_and_suffix)
   end
 
   def unit_link
-    unit_num.nil? ? nil : h.link_to("##{unit_num_and_suffix}", household)
+    unit_num.nil? ? nil : h.link_to(formatted_unit_num, household)
   end
 
   def first_phone_link

@@ -1,0 +1,548 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+de:
+  common:
+    settings: "Einstellungen" # MT
+    settings_updated: "Einstellungen aktualisiert." # MT
+    open_date_picker: "Datumsauswahl öffnen" # MT
+    select_user: "Person auswählen …" # MT
+    adults: "Erwachsene" # MT
+    all: "Alle" # MT
+    cancel: "Abbrechen" # MT
+    cancelled: "Abgesagt" # MT
+    children: "Kinder" # MT
+    clearing_the_filter: "die Filter zurückzusetzen" # MT
+    create_new: "Neu erstellen" # MT
+    # Placeholder for an empty value in a details table.
+    none_bracketed: "[Keine]" # MT
+    # A person or household name marked as inactive.
+    with_inactive: "%{name} (inaktiv)" # MT
+    close: "Schließen" # MT
+    print: "Drucken" # MT
+    loading_indicator: "Ladeanzeige" # MT
+    # Timestamp on printed pages.
+    generated_at: "Erstellt: %{time}" # MT
+    community_count:
+      one: "%{count} Gemeinschaft" # MT
+      other: "%{count} Gemeinschaften" # MT
+    default: "Standard" # MT
+    edit: "Bearbeiten" # MT
+    "false": "Falsch" # MT
+    hidden: "Verborgen" # MT
+    inactive: "Inaktiv" # MT
+    max: "Max." # MT
+    no_result_clear_filter_link_html: "Du kannst versuchen, %{link}." # MT
+    none: "Keine" # MT
+    num_in_total: "%{count} insgesamt" # MT
+    save: "Speichern" # MT
+    "true": "Wahr" # MT
+    unknown: "Unbekannt" # MT
+    unlimited: "Unbegrenzt" # MT
+    "yes": "Ja" # MT
+    "no": "Nein" # MT
+    time_with_preposition:
+      "on": "am %{t}" # MT
+      "at": "um %{t}" # MT
+      "until": "bis %{t}" # MT
+    this_year: "Dieses Jahr" # MT
+    this_quarter: "Dieses Quartal" # MT
+    this_month: "Dieser Monat" # MT
+    all_time: "Gesamter Zeitraum" # MT
+
+  helpers:
+    submit:
+      cancel: "Abbrechen" # MT
+      confirm: "Bestätigen" # MT
+      continue: "Weiter" # MT
+      create: "Speichern" # MT
+      go_back: "Zurück" # MT
+      import: "Importieren" # MT
+      opt_out: "Ablehnen" # MT
+      update: "Speichern" # MT
+      save_and_invite: "Speichern und einladen" # MT
+      sign_in: "Anmelden" # MT
+      send_reset_instructions: "Anleitung zum Zurücksetzen senden" # MT
+      set_password: "Passwort festlegen" # MT
+      meals_message:
+        create: "Nachricht senden" # MT
+      meals_signup:
+        save_and_next: "Speichern und zur nächsten Mahlzeit" # MT
+      wiki_page:
+        preview: "Vorschau" # MT
+
+  errors:
+    messages:
+      invalid_yaml: "Ungültiges YAML" # MT
+      invalid_custom_field_spec: "Diese Spezifikation ist ungültig. Bitte wende dich an den Gather-Support." # MT
+      no_semicolons: "Semikolons sind nicht erlaubt" # MT
+
+  # App modal button labels + default titles (exported to JS via config/i18n-js.yml).
+  modal:
+    ok: "OK" # MT
+    cancel: "Abbrechen" # MT
+    confirm_title: "Bestätigen" # MT
+    alert_title: "Hinweis" # MT
+
+  payment:
+    accountholder_required: "Bitte gib den Namen des Kontoinhabers an." # MT
+
+  confirmations:
+    billing/template:
+      destroy: "Möchtest du die Vorlage „%{description}“ für %{member_types} wirklich löschen? Das kann nicht rückgängig gemacht werden." # MT
+    domain:
+      destroy: "Möchtest du die Domain „%{name}“ wirklich löschen? Das kann nicht rückgängig gemacht werden." # MT
+    groups/group:
+      destroy: "Möchtest du die Gruppe „%{name}“ wirklich löschen? Das kann nicht rückgängig gemacht werden." # MT
+      deactivate: "Möchtest du die Gruppe „%{name}“ wirklich deaktivieren?" # MT
+    household:
+      destroy: "Möchtest du den Haushalt „%{name}“ wirklich löschen? Das kann nicht rückgängig gemacht werden." # MT
+      deactivate: "Möchtest du den Haushalt „%{name}“ wirklich deaktivieren? Dabei werden alle Personen im Haushalt deaktiviert." # MT
+    meals/meal:
+      close: "Möchtest du diese Mahlzeit wirklich schließen? Dann sind keine weiteren Anmeldungen möglich." # MT
+      destroy: "Möchtest du die Mahlzeit „%{title}“ wirklich löschen? Das kann nicht rückgängig gemacht werden." # MT
+      reopen: "Möchtest du diese Mahlzeit wirklich wieder öffnen? Dann sind wieder Anmeldungen möglich." # MT
+      unfinalize: "Möchtest du den Abschluss dieser Mahlzeit wirklich aufheben?" # MT
+    user:
+      destroy: "Möchtest du die Person „%{name}“ wirklich löschen? Das kann nicht rückgängig gemacht werden." # MT
+      deactivate: "Möchtest du die Person „%{name}“ wirklich deaktivieren? Sie wird dann aus allen ihren Gruppen entfernt." # MT
+      invite: "Dabei wird eine E-Mail mit einer Anleitung zur Anmeldung an „%{name}“ geschickt. Fortfahren?" # MT
+    people/member_type:
+      destroy: "Möchtest du die Mitgliedsart „%{name}“ wirklich löschen? Haushalte mit dieser Art haben dann keine Mitgliedsart mehr. Das kann nicht rückgängig gemacht werden." # MT
+    people/memorial:
+      destroy: "Möchtest du die Gedenkseite für „%{name}“ wirklich löschen? Das kann nicht rückgängig gemacht werden." # MT
+    people/memorial_message:
+      destroy: "Möchtest du diese Gedenknachricht wirklich löschen? Das kann nicht rückgängig gemacht werden." # MT
+    calendars/protocol:
+      destroy: "Möchtest du das Regelwerk „%{name}“ wirklich löschen? Das kann nicht rückgängig gemacht werden." # MT
+    calendars/calendar:
+      destroy: "Möchtest du den Kalender „%{name}“ wirklich löschen? Das kann nicht rückgängig gemacht werden." # MT
+      deactivate: "Möchtest du den Kalender „%{name}“ wirklich deaktivieren?" # MT
+    calendars/event:
+      destroy: "Möchtest du den Termin „%{name}“ wirklich löschen? Das kann nicht rückgängig gemacht werden." # MT
+      destroy_series: "Möchtest du wirklich alle vergangenen und künftigen Wiederholungen des Serientermins „%{name}“ löschen? Das kann nicht rückgängig gemacht werden." # MT
+    calendars/group:
+      destroy: "Möchtest du diese Kalendergruppe wirklich löschen? Das kann nicht rückgängig gemacht werden." # MT
+    gdrive/item:
+      destroy: "Möchtest du dieses Element wirklich entfernen? Es wird nicht aus Google Drive gelöscht, ist aber nicht mehr mit Gather verknüpft." # MT
+    gdrive/item_group:
+      destroy: "Möchtest du diese Gruppe wirklich entfernen?" # MT
+    gdrive/migration/operation:
+      destroy: "Möchtest du diese Migration wirklich löschen? Alle Informationen zur Migration werden gelöscht. Die Dateien in Google Drive bleiben davon völlig unberührt." # MT
+    meals/formula:
+      destroy: "Möchtest du die Preisformel „%{name}“ wirklich löschen? Das kann nicht rückgängig gemacht werden." # MT
+      deactivate: "Möchtest du die Preisformel „%{name}“ wirklich deaktivieren?" # MT
+    meals/role:
+      destroy: "Möchtest du die Rolle „%{title}“ wirklich löschen? Das kann nicht rückgängig gemacht werden." # MT
+      deactivate: "Möchtest du die Rolle „%{title}“ wirklich deaktivieren?" # MT
+    meals/type:
+      destroy: "Möchtest du die Essensart „%{name}“ wirklich löschen? Das kann nicht rückgängig gemacht werden." # MT
+      deactivate: "Möchtest du die Essensart „%{name}“ wirklich deaktivieren?" # MT
+    wiki/page:
+      destroy: "Möchtest du die Wiki-Seite „%{title}“ wirklich löschen? Das kann nicht rückgängig gemacht werden." # MT
+    work/job:
+      destroy: "Möchtest du die Aufgabe „%{title}“ wirklich löschen? Das kann nicht rückgängig gemacht werden." # MT
+    work/period:
+      destroy: "Möchtest du den Zeitraum „%{name}“ wirklich löschen? Das kann nicht rückgängig gemacht werden." # MT
+    work/shift:
+      unsignup: "Möchtest du dich wirklich von dieser Aufgabe abmelden?" # MT
+
+  activatables:
+    community:
+      one_html: "Diese Gemeinschaft wurde am %{time} deaktiviert." # MT
+      two_html: "Du kannst %{link}." # MT
+      three: "sie reaktivieren" # MT
+    user:
+      one_html: "Diese Person wurde am %{time} als inaktiv markiert." # MT
+      two_html: "Du kannst %{link}." # MT
+      three: "sie reaktivieren" # MT
+    household:
+      one_html: "Dieser Haushalt wurde am %{time} als inaktiv markiert." # MT
+      two_html: "Du kannst %{link}. <strong>Hinweis:</strong> Die Personen im Haushalt musst du einzeln reaktivieren." # MT
+      three: "ihn reaktivieren" # MT
+    groups/group:
+      one_html: "Diese Gruppe wurde am %{time} als inaktiv markiert." # MT
+      two_html: "Du kannst %{link}." # MT
+      three: "sie reaktivieren" # MT
+    calendars/calendar:
+      one_html: "Dieser Kalender wurde am %{time} als inaktiv markiert." # MT
+      two_html: "Du kannst %{link}." # MT
+      three: "ihn reaktivieren" # MT
+    meals/formula:
+      one_html: "Diese Preisformel wurde am %{time} als inaktiv markiert." # MT
+      two_html: "Du kannst %{link}." # MT
+      three: "sie reaktivieren" # MT
+    meals/role:
+      one_html: "Diese Rolle wurde am %{time} als inaktiv markiert." # MT
+      two_html: "Du kannst %{link}." # MT
+      three: "sie reaktivieren" # MT
+    meals/type:
+      one_html: "Diese Essensart wurde am %{time} als inaktiv markiert." # MT
+      two_html: "Du kannst %{link}." # MT
+      three: "sie reaktivieren" # MT
+
+  deactivatable:
+    community:
+      success:
+        activate: "Gemeinschaft reaktiviert." # MT
+    household:
+      success:
+        activate: "Haushalt aktiviert." # MT
+        deactivate: "Haushalt deaktiviert." # MT
+        destroy: "Haushalt gelöscht." # MT
+        hard_destroy: "Der Haushalt und alle seine Mitglieder wurden endgültig gelöscht." # MT
+    user:
+      success:
+        activate: "Person aktiviert." # MT
+        activate_unconfirmed: "Person aktiviert, sie braucht aber eine Einladung, um sich anzumelden. Klicke unten auf „Einladen“, um sie einzuladen." # MT
+        deactivate: "Person deaktiviert." # MT
+        destroy: "Person gelöscht." # MT
+        hard_destroy: "Die Person wurde endgültig gelöscht." # MT
+      error:
+        activate: "Fehler beim Aktivieren: %{message}" # MT
+        deactivate: "Fehler beim Deaktivieren: %{message}" # MT
+    billing/template:
+      success:
+        destroy: "Vorlage gelöscht." # MT
+    domain:
+      success:
+        destroy: "Domain gelöscht." # MT
+    gdrive/item:
+      success:
+        destroy: "Element entfernt." # MT
+    gdrive/item_group:
+      success:
+        destroy: "Gruppe entfernt." # MT
+    gdrive/migration/operation:
+      success:
+        destroy: "Vorgang gelöscht." # MT
+    groups/group:
+      success:
+        deactivate: "Gruppe deaktiviert." # MT
+        activate: "Gruppe aktiviert." # MT
+        destroy: "Gruppe gelöscht." # MT
+    calendars/protocol:
+      success:
+        destroy: "Regelwerk gelöscht." # MT
+    calendars/group:
+      success:
+        destroy: "Gruppe gelöscht." # MT
+    calendars/calendar:
+      success:
+        activate: "Kalender aktiviert." # MT
+        deactivate: "Kalender deaktiviert." # MT
+        destroy: "Kalender gelöscht." # MT
+    meals/meal:
+      success:
+        destroy: "Mahlzeit gelöscht." # MT
+    meals/formula:
+      success:
+        activate: "Preisformel aktiviert." # MT
+        deactivate: "Preisformel deaktiviert." # MT
+        destroy: "Preisformel gelöscht." # MT
+    meals/role:
+      success:
+        activate: "Rolle aktiviert." # MT
+        deactivate: "Rolle deaktiviert." # MT
+        destroy: "Rolle gelöscht." # MT
+    meals/type:
+      success:
+        activate: "Essensart aktiviert." # MT
+        deactivate: "Essensart deaktiviert." # MT
+        destroy: "Essensart gelöscht." # MT
+    people/member_type:
+      success:
+        destroy: "Mitgliedsart gelöscht." # MT
+    people/memorial:
+      success:
+        destroy: "Gedenkseite gelöscht." # MT
+    people/memorial_message:
+      success:
+        destroy: "Nachricht gelöscht." # MT
+    work/job:
+      success:
+        destroy: "Aufgabe gelöscht." # MT
+    work/period:
+      success:
+        destroy: "Zeitraum gelöscht." # MT
+
+  cocoon:
+    add_links:
+      vehicles: "Fahrzeug hinzufügen" # MT
+      emergency_contacts: "Notfallkontakt hinzufügen" # MT
+      up_guardianships: "Elternteil/Erziehungsberechtigte hinzufügen" # MT
+      pets: "Haustier hinzufügen" # MT
+      shifts: "Schicht hinzufügen" # MT
+      assignments: "Helfende Person hinzufügen" # MT
+      reminders: "Erinnerung hinzufügen" # MT
+      restrictions: "Einschränkung hinzufügen" # MT
+      signups: "Haushalt hinzufügen" # MT
+      groups/group:
+        memberships: "Mitglied hinzufügen" # MT
+      meals/signup:
+        parts: "Eintrag hinzufügen" # MT
+      meals/formula:
+        parts: "Essensart hinzufügen" # MT
+
+  select2:
+    prompts:
+      creator: "Bitte gib ein paar Buchstaben vom Namen der Person ein, die erstellt." # MT
+      sponsor: "Bitte gib ein paar Buchstaben vom Namen der Patenschaft ein." # MT
+      household: "Bitte gib ein paar Buchstaben vom Namen des Haushalts ein." # MT
+      guardian: "Bitte gib ein paar Buchstaben vom Namen der erziehungsberechtigten Person ein." # MT
+      user: "Bitte gib ein paar Buchstaben vom Namen der Person ein." # MT
+      job_choosing_proxy: "Bitte gib ein paar Buchstaben vom Namen der Person ein." # MT
+      type: "Bitte gib ein paar Buchstaben vom Namen der Essensart ein, oder den vollständigen Namen, um eine neue Art hinzuzufügen." # MT
+      category: "Bitte gib ein paar Buchstaben der Kategorie ein, oder die vollständige Kategorie, um eine neue hinzuzufügen." # MT
+      reimbursee: "Bitte gib ein paar Buchstaben vom Namen der erstattungsberechtigten Person ein." # MT
+    placeholders:
+      creator: "Erstellt von auswählen …" # MT
+      sponsor: "Patenschaft auswählen …" # MT
+      household: "Haushalt auswählen …" # MT
+      guardian: "Erziehungsberechtigte auswählen …" # MT
+      user: "Person auswählen …" # MT
+      job_choosing_proxy: "Person auswählen …" # MT
+      type: "Art auswählen oder eingeben …" # MT
+      category: "Kategorie auswählen oder eingeben …" # MT
+      reimbursee: "Erstattungsberechtigte Person auswählen …" # MT
+
+  csv:
+    headers:
+      user:
+        id: "ID" # MT
+        first_name: "Vorname" # MT
+        last_name: "Nachname" # MT
+        unit_num: "Wohnungsnr." # MT
+        unit_suffix: "Wohnungszusatz" # MT
+        birthdate: "Geburtstag" # MT
+        pronouns: "Pronomen" # MT
+        email: "E-Mail" # MT
+        google_email: "Google-E-Mail" # MT
+        paypal_email: "PayPal-E-Mail" # MT
+        child: "Ist Kind" # MT
+        full_access: "Voller Zugang" # MT
+        household_id: "Haushalts-ID" # MT
+        household_name: "Name des Haushalts" # MT
+        mobile_phone: "Mobiltelefon" # MT
+        home_phone: "Festnetz" # MT
+        work_phone: "Telefon Arbeit" # MT
+        joined_on: "Beitrittsdatum" # MT
+        deactivated_at: "Auszugsdatum" # MT
+        preferred_contact: "Bevorzugte Kontaktart" # MT
+        garage_nums: "Garagennr." # MT
+        vehicles: "Fahrzeuge" # MT
+        guardian_names: "Eltern/Erziehungsberechtigte" # MT
+        keyholders: "Schlüsselinhaber" # MT
+        emergency_contacts: "Notfallkontakte" # MT
+        pets: "Haustiere" # MT
+      billing/account:
+        number: "Nummer" # MT
+        community_id: "Gemeinschafts-ID" # MT
+        community_name: "Gemeinschaft" # MT
+        household_id: "Haushalts-ID" # MT
+        household_name: "Haushalt" # MT
+        balance_due: "Fälliger Betrag" # MT
+        current_balance: "Aktueller Saldo" # MT
+        credit_limit: "Kreditlimit" # MT
+        last_statement_id: "ID des letzten Kontoauszugs" # MT
+        last_statement_on: "Datum des letzten Kontoauszugs" # MT
+        due_last_statement: "Fällig laut letztem Kontoauszug" # MT
+        total_new_charges: "Neue Belastungen gesamt" # MT
+        total_new_credits: "Neue Gutschriften gesamt" # MT
+        created_at: "Erstellungszeit" # MT
+      billing/transaction:
+        id: "ID" # MT
+        incurred_on: "Angefallen am" # MT
+        code: "Code" # MT
+        chg_crd: "Art" # MT
+        description: "Beschreibung" # MT
+        household_id: "Haushalts-ID" # MT
+        household_name: "Haushalt" # MT
+        quantity: "Menge" # MT
+        unit_price: "Einzelpreis" # MT
+        amount: "Betrag" # MT
+        created_at: "Erfasst am" # MT
+        account_id: "Konto-ID" # MT
+        statement_id: "Kontoauszugs-ID" # MT
+        meal_id: "Mahlzeit-ID" # MT
+      meals/meal:
+        served_at: "Datum/Uhrzeit" # MT
+        calendars: "Orte" # MT
+        formula: "Preisformel" # MT
+        communities: "Gemeinschaften" # MT
+        role: "Rolle" # MT
+        # `action` and `id` are duplicated from `common` below so that the exporter, which does a
+        # plain lookup with no fallback, produces headers byte-identical to those Meals::Import
+        # expects (it checks the `meals/meal` scope first and falls back to `common`).
+        action: "Aktion" # MT
+        id: "ID" # MT
+        title: "Titel" # MT
+        entrees: "Hauptgericht" # MT
+        side: "Beilage" # MT
+        kids: "Kinder" # MT
+        dessert: "Nachtisch" # MT
+        notes: "Notizen" # MT
+        allergens: "Allergene" # MT
+        capacity: "Kapazität" # MT
+        status: "Status" # MT
+        signup_count: "Essensgäste gesamt" # MT
+        spots_left: "Freie Plätze" # MT
+        ingredient_cost: "Kosten für Zutaten" # MT
+        pantry_cost: "Vorratskosten" # MT
+        total_cost: "Gesamtkosten" # MT
+        payment_method: "Zahlungsmethode" # MT
+        reimbursee: "Erstattungsberechtigte Person" # MT
+        # The "Diners: "/"Price: " prefixes keep these from colliding with meal role titles,
+        # which Meals::Import matches by exact string.
+        diner_count: "Essensgäste: %{type}" # MT
+        type_price: "Preis: %{type}" # MT
+      meals/signup:
+        meal_id: "Mahlzeit-ID" # MT
+        served_at: "Datum/Uhrzeit der Mahlzeit" # MT
+        meal_title: "Titel der Mahlzeit" # MT
+        calendars: "Orte der Mahlzeit" # MT
+        formula: "Preisformel" # MT
+        community_id: "Gemeinschafts-ID" # MT
+        community_name: "Gemeinschaft" # MT
+        household_id: "Haushalts-ID" # MT
+        household_name: "Haushalt" # MT
+        diner_count: "Essensgäste: %{type}" # MT
+        total: "Essensgäste gesamt" # MT
+        takeout: "Zum Mitnehmen" # MT
+        comments: "Kommentare" # MT
+        created_at: "Anmeldezeit" # MT
+      common:
+        id: "ID" # MT
+        action: "Aktion" # MT
+    errors:
+      meals/meal:
+        calendar:
+          bad_id: "Kein Kalender mit der ID %{str} gefunden" # MT
+          bad_name: "Kein Kalender namens „%{str}“ gefunden" # MT
+        formula:
+          bad_id: "Keine Preisformel mit der ID %{str} gefunden" # MT
+          bad_name: "Keine Preisformel namens „%{str}“ gefunden" # MT
+        community:
+          bad_id: "Keine Gemeinschaft mit der ID %{str} gefunden" # MT
+          bad_name: "Keine Gemeinschaft namens „%{str}“ gefunden" # MT
+        file_empty: "Die Datei ist leer" # MT
+        invalid_headers: "Ungültige Spaltenüberschriften: %{headers}" # MT
+        missing_columns: "Fehlende Spalten: %{columns}" # MT
+        invalid_action: "Ungültige Aktion: %{action}" # MT
+        action_not_permitted: "Aktion nicht erlaubt (%{action})" # MT
+        served_at_required: "Datum/Uhrzeit ist erforderlich" # MT
+        invalid_served_at: "„%{str}“ ist kein gültiges Datum bzw. keine gültige Uhrzeit" # MT
+        calendars_required: "Kalender sind erforderlich" # MT
+        meal_id_not_found: "Keine Mahlzeit mit der ID „%{id}“ gefunden" # MT
+        meal_not_found: "Keine Mahlzeit am %{time} an diesen Orten gefunden: %{locations}" # MT
+        delete_failed: "Fehler beim Löschen der Mahlzeit %{id}: „%{error}“" # MT
+        user:
+          bad_id: "Keine Person mit der ID %{str} gefunden" # MT
+          bad_name: "Keine Person namens „%{str}“ gefunden" # MT
+
+  action_labels:
+    common:
+      new: "Hinzufügen" # MT
+      edit: "Bearbeiten" # MT
+      deactivate: "Deaktivieren" # MT
+      destroy: "Löschen" # MT
+      clone: "Kopieren" # MT
+      close: "Schließen" # MT
+      join: "Beitreten" # MT
+      leave: "Verlassen" # MT
+      opt_out: "Abmelden" # MT
+      rejoin: "Wieder beitreten" # MT
+      reopen: "Wieder öffnen" # MT
+      rescan: "Neu scannen" # MT
+      summary: "Übersicht" # MT
+      finalize: "Abschließen" # MT
+      unfinalize: "Abschluss aufheben" # MT
+      cancel: "Absagen" # MT
+      send_message: "Nachricht" # MT
+    community:
+      visit: "Besuchen" # MT
+    billing/account:
+      add_txn: "Buchung hinzufügen" # MT
+    user:
+      update_info: "Profil bearbeiten" # MT
+      update_photo: "Foto bearbeiten" # MT
+      invite: "Einladen" # MT
+      impersonate: "Als Person handeln" # MT
+      destroy: "Endgültig löschen" # MT
+      delete_self: "Mein Konto löschen" # MT
+    household:
+      destroy: "Endgültig löschen" # MT
+    wiki/page:
+      history: "Verlauf" # MT
+    work/job:
+      edit: "Aufgabe bearbeiten" # MT
+    work/shift:
+      edit_job: "Aufgabe bearbeiten" # MT
+      signup: "Anmelden" # MT
+      unsignup: "Abmelden" # MT
+    work/period:
+      review_notices: "Benachrichtigungen senden" # MT
+      send_notices: "Benachrichtigungen senden" # MT
+
+  dropzone:
+    prompts:
+      default: "Klicken oder Datei hierher ziehen" # MT
+      models:
+        user: "Klicken oder Foto hierher ziehen" # MT
+        calendars/calendar: "Klicken oder Foto hierher ziehen" # MT
+
+  titles:
+    meals/messages: "Nachricht zur Mahlzeit senden" # MT
+
+  roles:
+    admin: "Admin" # MT
+    calendar_coordinator: "Kalenderkoordination" # MT
+    cluster_admin: "Verbund-Admin" # MT
+    super_admin: "Super-Admin" # MT
+    biller: "Abrechnung" # MT
+    photographer: "Fotografie" # MT
+    meals_coordinator: "Mahlzeitenkoordination" # MT
+    wikiist: "Wiki-Team" # MT
+    work_coordinator: "Arbeitskoordination" # MT
+    new_community_approver: "Freigabe neuer Gemeinschaften" # MT
+    index:
+      title: "Rollen" # MT
+      people: "Personen" # MT
+      legend: "Legende" # MT
+      # Each line is "<role name> - <description>".
+      legend_item_html: "<strong>%{role}</strong> – %{description}" # MT
+      descriptions:
+        admin: "Alle anderen Rollen zusammen" # MT
+        biller: "Verwaltet Buchungen, Vorlagen, Kontoauszüge und Preisformeln und schließt Mahlzeiten ab" # MT
+        photographer: "Darf die Verzeichnisfotos aller bearbeiten" # MT
+        calendar_coordinator: "Verwaltet Kalender und die Termine aller" # MT
+        meals_coordinator: "Verwaltet Mahlzeiten, Mahlzeit-Rollen, Preisformeln und Essensarten" # MT
+        wikiist: "Verwaltet besonders geschützte Wiki-Seiten" # MT
+        work_coordinator: "Verwaltet Aufgaben, Schichten und Arbeitszeiträume" # MT
+
+  phone_types:
+    abbreviations:
+      home: "p" # MT
+      work: "d" # MT
+      mobile: "m" # MT
+
+  date_range_lens:
+    past_12: "Letzte 12 Monate" # MT
+
+  community_lens:
+    all: "Alle Gemeinschaften" # MT
+
+  lens_bar:
+    clear_filter: "Filter zurücksetzen" # MT
+
+  search_lens:
+    prompt: "Suchen …" # MT

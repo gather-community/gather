@@ -1,5 +1,141 @@
 {
   "de": {
+    "batchable_tables": {
+      "confirmations": {
+        "gdrive__migration__owners": {
+          "send_request": {
+            "one": "Möchtest du wirklich eine Anfrage-E-Mail an %{count} Person senden?",
+            "other": "Möchtest du wirklich Anfrage-E-Mails an %{count} Personen senden?"
+          }
+        }
+      }
+    },
+    "calendar_nav_popover": {
+      "dismiss": "Schließen",
+      "message_html": "<b>Reservierungen</b> heißen jetzt <b>Kalender</b>! Schau mal rein!"
+    },
+    "calendars": {
+      "calendar_list": {
+        "all": "Alle",
+        "deselect_all": "Alle abwählen",
+        "select_all": "Alle auswählen"
+      },
+      "drag": {
+        "calendar": {
+          "all": "Überall verschieben",
+          "content": "„%{name}“ steht in mehr als einem Kalender:",
+          "selected": "(ausgewählt)",
+          "this": "Nur in %{calendar} verschieben",
+          "title": "Termin in mehreren Kalendern verschieben"
+        },
+        "confirm": "Möchtest du den Termin „%{name}“ wirklich verschieben?",
+        "confirm_occurrence": "Möchtest du diese Wiederholung von „%{name}“ wirklich verschieben?",
+        "error_title": "Fehler",
+        "load_error": "Wir konnten nicht prüfen, wie dieser Termin verschoben werden kann. Bitte versuche es noch einmal.",
+        "series": {
+          "content": "„%{name}“ wiederholt sich. Welche Wiederholungen sollen verschoben werden?",
+          "following": "Diese und alle folgenden",
+          "occurrence": "Nur diese",
+          "series": "Alle Wiederholungen",
+          "title": "Serientermin verschieben"
+        }
+      },
+      "grid": {
+        "agenda_label": "%{view}. Mit den Pfeiltasten navigieren",
+        "agenda_label_all_day": "%{view}. Zeile „Ganztägig“. Mit den Pfeiltasten navigieren",
+        "agenda_label_all_day_slots": "%{view}. Zeile „Ganztägig“, danach %{slots}. Mit den Pfeiltasten navigieren",
+        "agenda_label_slots": "%{view}. Raster aus %{slots}. Mit den Pfeiltasten navigieren",
+        "create_confirm": {
+          "range_html": "Termin von <b>%{start}</b> bis <b>%{end}</b> anlegen?",
+          "same_day_html": "Termin am <b>%{date}</b> anlegen?",
+          "same_day_times_html": "Termin am <b>%{date}</b> von <b>%{start}</b> bis <b>%{end}</b> anlegen?"
+        },
+        "day_calendar": "Tageskalender",
+        "event_count": {
+          "one": "%{count} Termin",
+          "other": "%{count} Termine",
+          "zero": "Keine Termine"
+        },
+        "event_count_this_month": {
+          "one": "%{count} Termin diesen Monat",
+          "other": "%{count} Termine diesen Monat",
+          "zero": "Keine Termine diesen Monat"
+        },
+        "event_count_this_week": {
+          "one": "%{count} Termin diese Woche",
+          "other": "%{count} Termine diese Woche",
+          "zero": "Keine Termine diese Woche"
+        },
+        "half_hour_slots": "halbstündigen Zeitfenstern von %{start} bis %{end}",
+        "header": {
+          "day_view": "Tagesansicht",
+          "month_view": "Monatsansicht",
+          "next": "Weiter",
+          "previous": "Zurück",
+          "today": "Heute",
+          "toolbar": "Kalendersteuerung",
+          "week_view": "Wochenansicht"
+        },
+        "minute_slots": "%{minutes}-minütigen Zeitfenstern von %{start} bis %{end}",
+        "month_calendar": "Monatskalender",
+        "now_showing": "Kalender zeigt jetzt %{month}",
+        "this_week_date": "Diese Woche, %{date}",
+        "today_date": "Heute, %{date}",
+        "week_calendar": "Wochenkalender"
+      }
+    },
+    "common": {
+      "adults": "Erwachsene",
+      "all": "Alle",
+      "all_time": "Gesamter Zeitraum",
+      "cancel": "Abbrechen",
+      "cancelled": "Abgesagt",
+      "children": "Kinder",
+      "clearing_the_filter": "die Filter zurückzusetzen",
+      "close": "Schließen",
+      "community_count": {
+        "one": "%{count} Gemeinschaft",
+        "other": "%{count} Gemeinschaften"
+      },
+      "create_new": "Neu erstellen",
+      "default": "Standard",
+      "edit": "Bearbeiten",
+      "false": "Falsch",
+      "generated_at": "Erstellt: %{time}",
+      "hidden": "Verborgen",
+      "inactive": "Inaktiv",
+      "loading_indicator": "Ladeanzeige",
+      "max": "Max.",
+      "no": "Nein",
+      "no_result_clear_filter_link_html": "Du kannst versuchen, %{link}.",
+      "none": "Keine",
+      "none_bracketed": "[Keine]",
+      "num_in_total": "%{count} insgesamt",
+      "open_date_picker": "Datumsauswahl öffnen",
+      "print": "Drucken",
+      "save": "Speichern",
+      "select_user": "Person auswählen …",
+      "settings": "Einstellungen",
+      "settings_updated": "Einstellungen aktualisiert.",
+      "this_month": "Dieser Monat",
+      "this_quarter": "Dieses Quartal",
+      "this_year": "Dieses Jahr",
+      "time_with_preposition": {
+        "at": "um %{t}",
+        "on": "am %{t}",
+        "until": "bis %{t}"
+      },
+      "true": "Wahr",
+      "unknown": "Unbekannt",
+      "unlimited": "Unbegrenzt",
+      "with_inactive": "%{name} (inaktiv)",
+      "yes": "Ja"
+    },
+    "communities": {
+      "signup_action": {
+        "approval_template": "Hallo %{name},\n\ngute Nachrichten! Deine Bewerbung bei Gather für die Gemeinschaft „%{community}“ wurde angenommen.\n\n#######################################\nHIER EINE PERSÖNLICHE NOTIZ EINGEBEN,\nETWAS KONKRETES ZUR GEMEINSCHAFT NENNEN\n#######################################\n\nDeine Gemeinschaft ist jetzt startklar!\n\nDu bekommst eine separate E-Mail mit einer Anleitung für deine erste Anmeldung.\n\nWillkommen an Bord!\n\n%{approver} für das Gather-Team"
+      }
+    },
     "date": {
       "abbr_day_names": [
         "So",
@@ -54,6 +190,66 @@
       "dformat": "%-d. %b %Y",
       "pformat": "D. MMM YYYY"
     },
+    "dropzone": {
+      "dictFileSizeUnits": {
+        "b": "B",
+        "gb": "GiB",
+        "kb": "KiB",
+        "mb": "MiB",
+        "tb": "TiB"
+      },
+      "dictFileTooBig": "Die Datei ist zu groß ({{filesize}} MiB). Die maximale Größe beträgt {{maxFilesize}} MiB.",
+      "dictFileUnreadable": "Diese Datei konnte nicht gelesen werden. Versuche es noch einmal oder wähle eine andere.",
+      "prompts": {
+        "default": "Klicken oder Datei hierher ziehen",
+        "models": {
+          "calendars/calendar": "Klicken oder Foto hierher ziehen",
+          "user": "Klicken oder Foto hierher ziehen"
+        }
+      }
+    },
+    "errors": {
+      "messages": {
+        "doesnt_match": "Stimmt nicht mit dem Passwort überein"
+      }
+    },
+    "meals": {
+      "report_charts": {
+        "avg_cost": "Ø Kosten",
+        "avg_full_meal_price": "Ø Preis einer vollen Mahlzeit",
+        "avg_servings": "Ø Portionen",
+        "avg_servings_per_meal": "Ø Portionen pro Mahlzeit",
+        "meals": "Mahlzeiten",
+        "month": "Monat",
+        "number_of_meals": "Anzahl der Mahlzeiten",
+        "titles": {
+          "community_rep": "Ø Anteil der Gemeinschaften an Mahlzeiten",
+          "community_rep_community": "Ø Anteil der Gemeinschaften an Mahlzeiten von %{community}",
+          "cost_by_month": "Ø Preis einer vollen Mahlzeit nach Monat",
+          "cost_by_month_community": "Ø Preis einer vollen Mahlzeit von %{community} nach Monat",
+          "cost_by_weekday": "Ø Preis einer vollen Mahlzeit nach Wochentag",
+          "cost_by_weekday_community": "Ø Preis einer vollen Mahlzeit von %{community} nach Wochentag",
+          "meal_types": "Ø Essensarten bei Mahlzeiten",
+          "meal_types_community": "Ø Essensarten bei Mahlzeiten von %{community}",
+          "meals_by_month": "Anzahl der Mahlzeiten nach Monat",
+          "meals_by_month_community": "Anzahl der Mahlzeiten von %{community} nach Monat",
+          "servings_by_month": "Ø Portionen pro Mahlzeit nach Monat",
+          "servings_by_month_community": "Ø Portionen pro Mahlzeit von %{community} nach Monat",
+          "servings_by_weekday": "Ø Portionen pro Mahlzeit nach Wochentag",
+          "servings_by_weekday_community": "Ø Portionen pro Mahlzeit von %{community} nach Wochentag"
+        },
+        "weekday": "Wochentag"
+      }
+    },
+    "meals/assignments": {
+      "change_warning": "Hinweis: Wenn du die Helfenden einer Mahlzeit änderst, bekommen die Mahlzeitenkoordination und alle bisherigen und neu zugewiesenen Helfenden eine E-Mail."
+    },
+    "modal": {
+      "alert_title": "Hinweis",
+      "cancel": "Abbrechen",
+      "confirm_title": "Bestätigen",
+      "ok": "OK"
+    },
     "moment_formats": {
       "full_date": "dddd, D. MMMM YYYY",
       "hour": "HH:mm",
@@ -63,9 +259,57 @@
       "wday_date": "ddd, D. MMM YYYY",
       "wday_date_time": "ddd, D. MMM YYYY, HH:mm"
     },
+    "password": {
+      "strength": {
+        "excellent": "Ausgezeichnet (Punktzahl: %{bits})",
+        "good": "Gut (Punktzahl: %{bits})",
+        "weak": "Zu schwach (Punktzahl: %{bits})"
+      }
+    },
+    "payment": {
+      "accountholder_required": "Bitte gib den Namen des Kontoinhabers an."
+    },
+    "subscription": {
+      "topup_notices": {
+        "calculating": "Wird berechnet …",
+        "cancel": "Deine monatliche Aufladung wird zum Ende des aktuellen Abrechnungsmonats beendet. Es gibt keine weiteren Abbuchungen, und dein Guthaben bleibt erhalten.",
+        "error": "%{reason} (Versuch um %{time}.) Wenn das wieder passiert, wende dich bitte mit dieser Uhrzeit an den Gather-Support.",
+        "error_default": "Etwas ist schiefgelaufen, und deine Aufladung wurde nicht geändert.",
+        "error_with_reference": "%{reason} Referenz: %{reference}. (Versuch um %{time}.) Wenn das wieder passiert, wende dich bitte mit dieser Referenz und Uhrzeit an den Gather-Support.",
+        "first_charge": "Deine hinterlegte Zahlungsmethode wird heute mit %{amount} für einen vollen Monat belastet, danach jeden Monat an diesem Tag mit %{amount}.",
+        "next_month": "Ab dem nächsten Abrechnungsmonat werden dir %{amount} pro Monat berechnet.",
+        "prorated_charge": "Deine hinterlegte Zahlungsmethode wird heute mit etwa %{charge} belastet (anteilig), danach %{amount} pro Monat ab %{date}.",
+        "prorated_credit": "Du bekommst jetzt eine Gutschrift von %{credit} auf deine nächste Rechnung, danach %{amount} pro Monat ab %{date}."
+      }
+    },
     "timepicker": {
       "dformat": "%H:%M",
       "pformat": "HH:mm"
+    },
+    "wiki": {
+      "editor": {
+        "autosaved": "Automatisch gespeichert: ",
+        "bold": "Fett",
+        "fullscreen": "Vollbild",
+        "heading": "Überschrift",
+        "image": "Bild einfügen",
+        "italic": "Kursiv",
+        "lines": {
+          "one": "Zeilen: %{count}",
+          "other": "Zeilen: %{count}"
+        },
+        "link": "Link erstellen",
+        "ordered_list": "Nummerierte Liste",
+        "preview": "Vorschau",
+        "quote": "Zitat",
+        "side_by_side": "Nebeneinander",
+        "unordered_list": "Aufzählung",
+        "words": {
+          "one": "Wörter: %{count}",
+          "other": "Wörter: %{count}"
+        }
+      },
+      "help": "Wiki-Hilfe"
     }
   },
   "en": {

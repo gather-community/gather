@@ -1,0 +1,159 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+# Strings for the page layout, shared partials and other app-wide views.
+nb:
+  layouts:
+    mailer:
+      notification_settings: "Varselinnstillinger i Gather: %{url}" # MT
+      machine_translated: "Denne e-posten ble oversatt automatisk og kan inneholde feil." # MT
+    application:
+      impersonation_notice: "Du opptrer som %{name}. Alt du gjør, vil se ut som om denne personen gjorde det." # MT
+      stop_impersonating: "Slutt å opptre som en annen" # MT
+      home: "Hjem" # MT
+      skip_to_content: "Hopp til innholdet" # MT
+      show_menu: "Vis meny" # MT
+      toggle_navigation: "Vis/skjul navigasjon" # MT
+      loading: "Laster inn" # MT
+      add_to_home_screen: "Legg til Gather på startskjermen" # MT
+    footer:
+      privacy_policy: "Personvernerklæring" # MT
+      credits: "Bidragsytere" # MT
+      settings: "Innstillinger" # MT
+      subscription: "Abonnement" # MT
+      billing: "Fakturering" # MT
+      communities: "Fellesskap" # MT
+      resync_subscriptions: "Synkroniser abonnementer på nytt" # MT
+      domains: "Domener" # MT
+      # Shown on pages in machine-translated locales (Gather::Locales::MACHINE_TRANSLATED).
+      machine_translated: "Denne siden ble oversatt automatisk og kan inneholde feil." # MT
+      machine_translated_with_link_html: "Denne siden ble oversatt automatisk og kan inneholde feil. %{link}" # MT
+      help_translate: "Hjelp til med å forbedre oversettelsen" # MT
+    head:
+      # The browser tab title. The page title is already HTML-escaped, hence _html.
+      title_html: "Gather: %{title}" # MT
+    personal_dropdown:
+      show_menu: "Vis personlig meny" # MT
+  shared:
+    dropzone:
+      image_attachment: "Bildevedlegg" # MT
+    mobile_back_link:
+      back_to_html: "Tilbake til %{label}" # MT
+  home:
+    inactive:
+      title: "Kontoen er inaktiv" # MT
+      body: "Kontoen din er ikke aktiv. Du kan fortsatt se kontoene dine og redigere profilen din. Se menyen øverst til høyre på skjermen." # MT
+  # Announcement shown once to accounts created before the 2021 rename (CalendarNavLinkPopoverView, JS).
+  calendar_nav_popover:
+    message_html: "<b>Reservasjoner</b> heter nå <b>Kalendere</b>! Ta en titt!" # MT
+    dismiss: "Lukk" # MT
+  landing:
+    invite_welcome: "Velkommen til Gather! Velg en måte å logge inn på nedenfor." # MT
+    index:
+      blurb: "Livet er bedre sammen." # MT
+      logo_alt: "Gather-logo" # MT
+      sign_in_google: "Logg inn med Google" # MT
+      sign_in_password: "Logg inn med passord" # MT
+      learn_more: "Les mer" # MT
+      try_it_out: "Prøv det" # MT
+    signed_out:
+      title: "Gather – logget ut" # MT
+      signed_out: "Du er nå logget ut av Gather." # MT
+      public_computer_html: "Hvis dette er en <strong>offentlig datamaskin</strong>, bør du kanskje også<br/>%{link}." # MT
+      google_sign_out: "logge ut av Google-kontoen din" # MT
+      return_home: "Tilbake til startsiden" # MT
+    privacy_policy:
+      title: "Personvernerklæring" # MT
+      english_only: "Personvernerklæringen finnes bare på engelsk." # MT
+    markdown:
+      title: "Veiledning til Markdown-formatering" # MT
+      intro_html: "<strong>Markdown</strong> er en enkel måte å lage ryddig og rikt tekstinnhold på uten å måtte lære et eget språk." # MT
+      if_you_type: "Hvis du skriver …" # MT
+      displayed_like: "Vises det slik:" # MT
+      outro: "Ha det nå gøy med å lage masse nyttig og pent innhold!" # MT
+      # Each example is shown as typed and then as rendered, so it must be valid Markdown.
+      examples:
+        formatting: "Du kan enkelt lage enkel formatering som **fet**, _kursiv_ og ~~gjennomstreking~~." # MT
+        lists: |- # MT
+          Du kan også lage
+
+          * punkt-
+          * lister
+              * med
+              * innrykkede
+              * underlister
+
+          og
+
+          1. nummererte
+          2. lister
+        headers: |- # MT
+          # Overskrifter
+          ## Er
+          ### Enkle
+
+          også!
+        tables: |- # MT
+          | Du  | Kan    |
+          |------|--------|
+          | til og med lage pene | tabeller |
+          | Wow! | Så kult! |
+        links: |- # MT
+          Lenker til andre sider ser ut [slik](http://example.com).
+
+          Vanlig lenketekst blir gjenkjent automatisk: https://gather.coop
+        images: |- # MT
+          Du kan vise bilder slik:
+
+          ![Kattunge](https://gather.coop/sample-image.png)
+        rule: |- # MT
+          Du kan bruke en vannrett linje for å dele opp innholdet:
+
+          ---
+
+          fint!
+        # Not named html or *_html: Rails treats such keys as already-safe HTML, so the
+        # tags in this example would render instead of being shown as typed.
+        raw_markup: |- # MT
+          Hvis du er en erfaren bruker og vil bruke HTML direkte, prøv det!
+
+          For eksempel <blockquote>vil du kanskje bruke blokksitater</blockquote>.
+  # Static error pages, generated into public/ by `rake error_pages:generate` (see Gather::ErrorPages).
+  error_pages:
+    "400":
+      title: "Serveren kan ikke behandle forespørselen på grunn av en klientfeil (400 Bad Request)" # MT
+      heading: "Serveren kan ikke behandle forespørselen på grunn av en klientfeil." # MT
+      body: "Sjekk forespørselen og prøv igjen. Hvis du eier applikasjonen, kan du se i loggene for mer informasjon." # MT
+    "403":
+      title: "Du har ikke tilgang til denne siden (403)" # MT
+      heading: "Du har ikke tilgang til denne siden." # MT
+      body: "Hvis du mener at dette er en feil, kontakt administratoren din." # MT
+    "404":
+      title: "Siden du leter etter, finnes ikke (404 Not Found)" # MT
+      heading: "Siden du leter etter, finnes ikke." # MT
+      body: "Kanskje du skrev adressen feil, eller siden er flyttet. Hvis du eier applikasjonen, kan du se i loggene for mer informasjon." # MT
+    "406-unsupported-browser":
+      title: "Nettleseren din støttes ikke (406 Not Acceptable)" # MT
+      heading: "Nettleseren din støttes ikke." # MT
+      body: "Oppdater nettleseren din for å fortsette." # MT
+    "422":
+      title: "Endringen du ville gjøre, ble avvist (422 Unprocessable Entity)" # MT
+      heading: "Endringen du ville gjøre, ble avvist." # MT
+      body: "Kanskje du prøvde å endre noe du ikke har tilgang til. Hvis du eier applikasjonen, kan du se i loggene for mer informasjon." # MT
+    "500":
+      title: "Beklager, noe gikk galt (500 Internal Server Error)" # MT
+      heading: "Beklager, noe gikk galt." # MT
+      body: "Hvis du eier applikasjonen, kan du se i loggene for mer informasjon." # MT
+    offline:
+      title: "Du er ikke koblet til Internett" # MT
+      heading: "Det oppstod et problem med å kontakte serveren." # MT
+      body: "Kanskje du har mistet internettforbindelsen. Prøv å laste inn siden på nytt." # MT

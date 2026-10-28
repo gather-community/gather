@@ -1,0 +1,81 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+nl:
+  admin:
+    domains:
+      refresh_all_started:
+        one: "%{count} domein wordt op de achtergrond gecontroleerd. Dat duurt ongeveer %{seconds} seconden. Laad deze pagina opnieuw om de resultaten te zien." # MT
+        other: "%{count} domeinen worden op de achtergrond gecontroleerd. Dat duurt ongeveer %{seconds} seconden. Laad deze pagina opnieuw om de resultaten te zien." # MT
+      refresh_one_success: "%{domain} is opnieuw gecontroleerd." # MT
+      refresh_one_failed: "%{domain} is opnieuw gecontroleerd, maar het verzoek aan de SMTP2GO-API is mislukt, dus de validatiestatus is misschien verouderd. De fout is gemeld." # MT
+      lenses:
+        lists:
+          all: "Alle domeinen" # MT
+          with_lists: "Met mailinglijsten" # MT
+          without_lists: "Zonder mailinglijsten" # MT
+      show:
+        recheck: "Nu opnieuw controleren" # MT
+        cluster: "Cluster" # MT
+        communities: "Gemeenschappen" # MT
+        mailman_lists: "Mailinglijsten" # MT
+        no_mailman_lists: "Geen" # MT
+        created_at: "Aangemaakt" # MT
+        last_checked: "Laatst gecontroleerd" # MT
+        mx_heading: "MX-records" # MT
+        smtp2go_heading: "SMTP2GO-records" # MT
+        spf_heading: "SPF-record" # MT
+        spf_rule: "Correct als het SPF-record van het domein (het TXT-record dat begint met v=spf1) de vereiste include hieronder bevat en hoogstens 10 DNS-lookups gebruikt (de limiet uit RFC 7208, recursief geteld via includes). Andere mechanismen mogen ook aanwezig zijn." # MT
+        spf_lookups: "DNS-lookups" # MT
+        spf_lookups_count: "%{count} van %{limit} toegestaan" # MT
+        expected: "Verwacht" # MT
+        required: "Vereist" # MT
+        found: "Gevonden" # MT
+        no_records_found: "Geen gevonden" # MT
+        record: "Record" # MT
+        host: "Host" # MT
+        smtp2go_verified: "Geverifieerd door SMTP2GO?" # MT
+        never_checked_notice: "Dit domein is nog niet gecontroleerd. Gebruik “Nu opnieuw controleren” om de eerste controle uit te voeren." # MT
+      index:
+        title: "Domeinen" # MT
+        intro: "Deze pagina toont de status van de mailinstellingen van elk eigen domein: of de MX- en SPF-records kloppen en of de validatierecords van SMTP2GO aanwezig zijn. De resultaten komen van de laatste controle; gebruik de vernieuwknoppen om opnieuw te controleren." # MT
+        none_found: "Geen eigen domeinen gevonden." # MT
+        summary:
+          one: "Bij %{ok} van %{count} domein kloppen alle records." # MT
+          other: "Bij %{ok} van %{count} domeinen kloppen alle records." # MT
+        never_checked_prompt: "Er zijn nog geen controles uitgevoerd — gebruik “Alles vernieuwen” om de eerste uit te voeren." # MT
+        not_configured: "De API-sleutel van SMTP2GO is niet ingesteld, dus de verzendstatus en validatie kunnen niet worden gecontroleerd. Stel smtp2go.api_key in de instellingen in." # MT
+        headers:
+          domain: "Domein" # MT
+          communities: "Gemeenschappen" # MT
+          mx: "MX-records" # MT
+          spf: "SPF-record" # MT
+          smtp2go: "SMTP2GO-records" # MT
+          lists: "Mailinglijsten?" # MT
+        never_checked: "Nooit gecontroleerd" # MT
+        refresh_all: "Alles vernieuwen" # MT
+        refresh_row: "Dit domein opnieuw controleren" # MT
+        record_titles:
+          verified: "%{host} → %{target} — geverifieerd door SMTP2GO" # MT
+          in_dns: "%{host} → %{target} — gevonden in DNS, wacht op verificatie door SMTP2GO" # MT
+          missing: "%{host} → %{target} — niet gevonden in DNS" # MT
+        smtp2go_statuses:
+          verified: "Geverifieerd" # MT
+          pending: "In behandeling" # MT
+          not_added: "Niet toegevoegd" # MT
+          unknown: "Onbekend" # MT
+        record_kinds:
+          mx: "MX" # MT
+          spf: "SPF" # MT
+          dkim: "DKIM" # MT
+          return_path: "Return" # MT
+          tracking: "Tracking" # MT

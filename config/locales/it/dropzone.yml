@@ -1,0 +1,23 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+it:
+  dropzone:
+    dictFileTooBig: "Il file è troppo grande ({{filesize}} MiB). La dimensione massima è {{maxFilesize}} MiB." # MT
+    # Not a Dropzone option; used by our transformFile in file_upload_view.js.
+    dictFileUnreadable: "Impossibile leggere questo file. Riprova o scegline un altro." # MT
+    dictFileSizeUnits:
+      tb: "TiB" # MT
+      gb: "GiB" # MT
+      mb: "MiB" # MT
+      kb: "KiB" # MT
+      b: "B" # MT

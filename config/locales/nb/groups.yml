@@ -1,0 +1,125 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+nb:
+  groups:
+    created: "Gruppen er opprettet." # MT
+    updated: "Gruppen er oppdatert." # MT
+    joined: "Du er nå med i gruppen «%{name}»." # MT
+    left: "Du har forlatt gruppen «%{name}»." # MT
+    list_sync_started: "Synkroniseringen av listen er startet. Vent et øyeblikk til den er ferdig, og last inn siden på nytt." # MT
+    # E.g. "Knitting Club (Inactive, Hidden)".
+    name_with_suffixes: "%{name} (%{suffixes})"
+    show_more: "Vis %{count} til" # MT
+    hide: "Skjul" # MT
+    groups:
+      form:
+        email_list: "E-postliste" # MT
+        no_domains_html: "Du kan ikke opprette en e-postliste fordi ingen domener er knyttet til dette fellesskapet. %{link} for å rette opp dette." # MT
+        contact_staff: "Kontakt Gather-teamet" # MT
+        mailman_intro: "E-postlister leveres gjennom e-postlisteprogrammet Mailman." # MT
+        leave_blank: "La disse feltene stå tomme hvis gruppen ikke trenger en e-postliste." # MT
+        name_locked: "Listenavnet og domenet kan ikke endres etter at listen er opprettet. Hvis du må endre dem, sletter du listen og oppretter den på nytt, eller kontakter Gather-teamet." # MT
+        admin_panel: "Mailman-administrasjonspanelet" # MT
+        sync_intro: "Medlemmene i listen synkroniseres med Gather slik:" # MT
+        members_html: "<strong>Medlemmer</strong>: Alle medlemmer av denne gruppen synkroniseres automatisk til listen. Du kan legge til flere medlemmer manuelt via %{link}." # MT
+        moderators_html: "<strong>Moderatorer</strong>: Listemoderatorer synkroniseres etter innstillingene «Ledere kan moderere listen?» og «Kan moderere alle e-postlister?» ovenfor. Du kan legge til flere moderatorer manuelt via %{link}." # MT
+        owners_html: "<strong>Eiere</strong>: Listeeiere synkroniseres etter innstillingene «Ledere kan administrere listen?» og «Kan administrere alle e-postlister?» ovenfor. Du kan legge til flere eiere manuelt via %{link}." # MT
+        non_members_html: "<strong>Ikke-medlemmer</strong>: Mailmans funksjon for ikke-medlemmer kan brukes til 1) å la flere adresser sende e-post til listen uten å motta fra den og 2) å hindre personer i å sende til listen. Ikke-medlemmer får ikke e-post fra listen. Ikke-medlemmer synkroniseres ikke fra Gather, men kan legges til manuelt via %{link}. Se %{docs_link} for mer informasjon." # MT
+        mailman_docs: "Mailman-dokumentasjonen" # MT
+        only_non_users: "Bare adresser som ikke tilhører brukere i Gather, bør endres via Mailman-administrasjonspanelet." # MT
+        overwritten: "Manuelle endringer i medlemskap for brukere i Gather blir overskrevet under synkroniseringen." # MT
+        settings_intro_html: "Listeinnstillingene kan endres via %{link}. Følgende innstillinger blir alltid tilbakestilt av Gather:" # MT
+        index_page_html: "<strong>Vis listen på oversiktssiden</strong>: Lister blir aldri vist offentlig, siden dette bare er et privat e-postlistesystem." # MT
+        max_size_html: "<strong>Maksimal meldingsstørrelse</strong>: Meldinger kan være på høyst 5 MiB." # MT
+        subscription_policy_html: "<strong>Abonnementsregler</strong>: Moderatorene må godkjenne nye abonnementer manuelt. Man skal i hovedsak abonnere via Gather. Abonnementer via Mailman-nettstedet eller via e-post bør være sjeldne." # MT
+      edit:
+        title: "Rediger gruppe: %{name}" # MT
+      new:
+        title: "Opprett gruppe" # MT
+      index:
+        title: "Grupper" # MT
+        create: "Opprett gruppe" # MT
+        none_found: "Fant ingen grupper." # MT
+        name: "Navn" # MT
+        type: "Type" # MT
+        description: "Beskrivelse" # MT
+        members: "Medlemmer" # MT
+      show:
+        groups: "Grupper" # MT
+        email_list: "E-postliste" # MT
+        links: "Lenker" # MT
+        archives: "Listearkiv" # MT
+        panel: "Listepanel" # MT
+        all_can_send: "Hele fellesskapet kan sende?" # MT
+        additional_members_note: "Alle gruppemedlemmene ovenfor er automatisk medlemmer av listen. Disse adressene er også medlemmer." # MT
+        additional_senders_note: "Disse ekstra avsenderne kan sende til listen, men får ikke e-post fra den." # MT
+        last_sync_time: "Sist synkronisert" # MT
+        sync_note: "Endringer i Gather synkroniseres automatisk til e-postlistesystemet, men endringer som gjøres i listepanelet, synkroniseres ikke automatisk." # MT
+        sync_note_additional: "Det gjelder også listen over ekstra medlemmer og avsendere ovenfor." # MT
+        sync_now_html: "%{link} for å få de nyeste opplysningene." # MT
+        sync_now: "Synkroniser nå" # MT
+        no_list: "Denne gruppen har ingen tilknyttet e-postliste." # MT
+    # Templates that Mailman fetches for list emails. $listname and similar are Mailman placeholders,
+    # which must be kept as is.
+    mailman:
+      templates:
+        footer:
+          list_name: "$listname, en e-postliste for en gruppe i Gather" # MT
+          unsubscribe: "For å melde deg av, gå til gruppesiden og forlat gruppen eller velg den bort." # MT
+        list_admin_action_post:
+          body: |- # MT
+            Som listeadministrator blir du bedt om å godkjenne følgende
+            innlegg til e-postlisten:
+
+                Liste:   $listname
+                Fra:     $sender_email
+                Emne:    $subject
+
+            Meldingen holdes tilbake fordi:
+
+            $reasons
+
+            Når det passer deg, gå til kontrollpanelet ditt for å godkjenne
+            eller avvise forespørselen.
+    availability_hints:
+      single_community:
+        open: "Alle i fellesskapet kan se og bli med i denne gruppen." # MT
+        closed: "Alle i fellesskapet kan se denne gruppen, men bare administratorene i fellesskapet og gruppens ledere kan legge til personer." # MT
+        hidden: "Bare administratorene i fellesskapet og gruppens ledere kan se denne gruppen og legge til personer." # MT
+        "everybody": "Alle i fellesskapet kan se denne gruppen og er medlemmer som standard. Den som vil, kan velge den bort." # MT
+      multi_community:
+        open: "Alle i fellesskapene ovenfor kan se og bli med i denne gruppen." # MT
+        closed: "Alle i fellesskapene ovenfor kan se denne gruppen, men bare administratorer og gruppens ledere kan legge til personer." # MT
+        hidden: "Bare gruppens ledere og administratorene for fellesskapene ovenfor kan se denne gruppen og legge til personer." # MT
+        everybody: "Alle i fellesskapene ovenfor kan se denne gruppen og er medlemmer som standard. Den som vil, kan velge den bort." # MT
+  domains:
+    created: "Domenet er opprettet." # MT
+    index:
+      title: "Domener" # MT
+      add: "Legg til domene" # MT
+      intro_html: "Dette er domenene du kan opprette e-postlister på. Klikk på «%{link}» for å få instruksjoner om hvordan du legger til et domene." # MT
+      none_found: "Fant ingen domener." # MT
+    new:
+      title: "Legg til domene" # MT
+      intro: "Slik legger du til et domene i Gather:" # MT
+      consider: "Tenk over om det finnes postkasser, videresendingsadresser eller e-postlister for dette domenet." # MT
+      mailboxes_html: "<strong>Postkasser:</strong> Hvis det finnes postkasser for dette domenet, slutter de å virke når du peker domenet til Gather. For å unngå det kan du bruke et underdomene, f.eks. lists.yourdomain.com i stedet for yourdomain.com." # MT
+      forwarding_html: "<strong>Videresendingsadresser:</strong> Hvis det finnes videresendingsadresser for dette domenet, kan du flytte dem til Gather. Kontakt %{email}." # MT
+      lists_html: "<strong>E-postlister:</strong> Hvis det finnes e-postlister for dette domenet, kan du flytte dem til Gather. Kontakt %{email}." # MT
+      create: "Opprett domenet nedenfor ved å skrive inn hele domenenavnet, f.eks. «yourdomain.com», og klikke på «Lagre»." # MT
+      migrating: "Hvis du flytter videresendingsadresser eller e-postlister, må du sørge for at de er satt opp i Gather og klare til å ta imot e-post når du peker domenet til Gather." # MT
+      dns: "Til slutt peker du domenet til Gather. Legg inn disse tre DNS-postene:" # MT
+    show:
+      domain: "Domene" # MT
+      communities: "Fellesskap" # MT
+      lists: "Mailman-lister" # MT

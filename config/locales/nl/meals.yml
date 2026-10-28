@@ -1,0 +1,481 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+nl:
+  meals:
+    over_limit_notice_html: "Je huishouden heeft de kredietlimiet van %{limit} op zijn %{account_link} bij %{community} overschreden, dus je mag je niet aanmelden voor maaltijden van %{community}. Neem bij vragen contact op met de maaltijdcommissie of -coördinator van %{community}." # MT
+    cancelled_notice: "Deze maaltijd is geannuleerd." # MT
+    persion_is_helping:
+      one: "%{count} persoon uit je huishouden helpt mee met deze maaltijd" # MT
+      other: "%{count} personen uit je huishouden helpen mee met deze maaltijd" # MT
+    menu_posted_at: "Menu geplaatst op %{time}." # MT
+    type: "Type" # MT
+    category: "Categorie" # MT
+    spots_left:
+      one: "Nog %{count} plaats vrij" # MT
+      other: "Nog %{count} plaatsen vrij" # MT
+    form:
+      sections:
+        label:
+          general: "Algemeen" # MT
+          workers: "Medewerkers" # MT
+          menu: "Menu" # MT
+          signups: "Aanmeldingen" # MT
+          expenses: "Uitgaven" # MT
+        edit:
+          general: "Algemeen bewerken" # MT
+          workers: "Medewerkers bewerken" # MT
+          menu: "Menu bewerken" # MT
+          signups: "Aanmeldingen bewerken" # MT
+          expenses: "Uitgaven bewerken" # MT
+      summaries:
+        allows: "biedt plaats aan %{people}" # MT
+        allows_with_cmtys:
+          one: "biedt plaats aan %{people} uit %{count} gemeenschap" # MT
+          other: "biedt plaats aan %{people} uit %{count} gemeenschappen" # MT
+        no_workers: "Geen medewerkers ingevuld" # MT
+        no_menu: "Geen menu geplaatst" # MT
+        no_signups: "Er hebben zich nog geen huishoudens aangemeld" # MT
+        with_items: "met %{items}" # MT
+        and_allergen_count:
+          one: "en %{count} allergeen" # MT
+          other: "en %{count} allergenen" # MT
+        expenses:
+          ingredients: "%{cost} ingrediënten" # MT
+          pantry: "%{cost} voorraadkast" # MT
+          payment: "betaling via %{method}" # MT
+          none: "Geen informatie over uitgaven ingevuld" # MT
+        signups:
+          diners:
+            one: "%{count} eter" # MT
+            other: "%{count} eters" # MT
+          from_households:
+            one: "uit %{count} huishouden" # MT
+            other: "uit %{count} huishoudens" # MT
+    finalizing:
+      duplicates: "Er zijn dubbele aanmeldingen. Corrigeer dit door per soort eter aantallen in te vullen." # MT
+      cancelled: "De maaltijd is niet afgerond. Je kunt haar hieronder bewerken en het opnieuw proberen, of hieronder op “Annuleren” klikken om terug te gaan naar de maaltijdpagina." # MT
+      success: "Maaltijd afgerond" # MT
+      review_and_confirm_html: "<strong>Let op:</strong> deze maaltijd is nog niet afgerond. Controleer en bevestig hieronder wat je hebt ingevuld. Deze informatie kan niet meer worden gewijzigd zodra de afschriften zijn verstuurd, dus wees zorgvuldig." # MT
+    sign_up: "Aanmelden" # MT
+    closes_soon: "Sluit binnenkort!" # MT
+    no_menu_title: "[Geen menu]" # MT
+    takeout: "Afhalen" # MT
+    created: "Maaltijd aangemaakt." # MT
+    updated: "Maaltijd bijgewerkt." # MT
+    closed: "Maaltijd gesloten." # MT
+    reopened: "Maaltijd heropend." # MT
+    unfinalized: "Afronden van de maaltijd ongedaan gemaakt." # MT
+    cant_reopen_past_close: "Je kunt deze maaltijd niet heropenen, omdat de automatische sluitingstijd al voorbij is. Wijzig of verwijder eerst de automatische sluitingstijd." # MT
+    not_closed_before_summary: "Let op: deze maaltijd is nog niet gesloten en mensen kunnen zich nog aanmelden. Sluit de maaltijd voordat je dit overzicht afdrukt." # MT
+    formula_created: "Formule aangemaakt." # MT
+    formula_updated: "Formule bijgewerkt." # MT
+    type_created: "Type aangemaakt." # MT
+    type_updated: "Type bijgewerkt." # MT
+    role_created: "Rol aangemaakt." # MT
+    role_updated: "Rol bijgewerkt." # MT
+    restrictions_updated: "Bijgewerkt." # MT
+    # Name of the calendar event created for a meal.
+    event_name: "Maaltijd: %{title}" # MT
+    event_errors: "Bij het maken van een afspraak in %{calendar} voor deze maaltijd zijn de volgende fout(en) opgetreden: %{errors}." # MT
+    event_error: "%{attribute}: %{message}" # MT
+    signup_not_recorded: "Je aanmelding kon niet worden opgeslagen, omdat de maaltijd vol is of niet meer open is." # MT
+    report:
+      subhead_community: "%{range}, alleen maaltijden van %{community}" # MT
+    # Read by Gather.Views.Meals.ReportChartsView (JS). Each title has a variant naming the community,
+    # used when the cluster has more than one.
+    report_charts:
+      avg_servings: "Gem. porties" # MT
+      avg_servings_per_meal: "Gem. porties per maaltijd" # MT
+      avg_cost: "Gem. kosten" # MT
+      avg_full_meal_price: "Gem. prijs volledige maaltijd" # MT
+      meals: "Maaltijden" # MT
+      number_of_meals: "Aantal maaltijden" # MT
+      weekday: "Weekdag" # MT
+      month: "Maand" # MT
+      titles:
+        servings_by_month: "Gem. porties per maaltijd per maand" # MT
+        servings_by_month_community: "Gem. porties per maaltijd van %{community} per maand" # MT
+        cost_by_month: "Gem. prijs volledige maaltijd per maand" # MT
+        cost_by_month_community: "Gem. prijs volledige maaltijd van %{community} per maand" # MT
+        meals_by_month: "Aantal maaltijden per maand" # MT
+        meals_by_month_community: "Aantal maaltijden van %{community} per maand" # MT
+        servings_by_weekday: "Gem. porties per maaltijd per weekdag" # MT
+        servings_by_weekday_community: "Gem. porties per maaltijd van %{community} per weekdag" # MT
+        cost_by_weekday: "Gem. prijs volledige maaltijd per weekdag" # MT
+        cost_by_weekday_community: "Gem. prijs volledige maaltijd van %{community} per weekdag" # MT
+        community_rep: "Gem. vertegenwoordiging van gemeenschappen bij maaltijden" # MT
+        community_rep_community: "Gem. vertegenwoordiging van gemeenschappen bij maaltijden van %{community}" # MT
+        meal_types: "Gem. maaltijdtypes bij maaltijden" # MT
+        meal_types_community: "Gem. maaltijdtypes bij maaltijden van %{community}" # MT
+    portion_counts:
+      diners:
+        one: "%{count} eter" # MT
+        other: "%{count} eters" # MT
+      portions_html:
+        one: "<strong>%{count}</strong> portie" # MT
+        other: "<strong>%{count}</strong> porties" # MT
+      category_portions_html:
+        one: "<strong>%{count} %{category}</strong> portie" # MT
+        other: "<strong>%{count} %{category}</strong> porties" # MT
+      # Category label for formula parts with no category, when other parts have one.
+      other_category: "overig" # MT
+      # The * refers to the footnote on the summary page.
+      summary_html: "Deze maaltijd heeft %{diners} en vraagt ongeveer %{portions}.*" # MT
+      summary_list_html: "Deze maaltijd heeft %{diners} en vraagt ongeveer: %{portions}.*" # MT
+    meals:
+      index:
+        title: "Maaltijden" # MT
+        show_action_menu: "Actiemenu van de maaltijd tonen" # MT
+        create: "Maaltijd aanmaken" # MT
+        import: "Maaltijden importeren" # MT
+        no_meals: "Geen maaltijden gevonden." # MT
+        date_time: "Datum/tijd" # MT
+        location: "Locatie" # MT
+        cook: "Kok" # MT
+        meal_title: "Titel" # MT
+        going: "Ga je?" # MT
+        signups: "Aanmeldingen" # MT
+        full: "[Vol]" # MT
+        not_going: "Nee" # MT
+        meal_by_cook_html: "%{meal} door %{cook}" # MT
+        time_at_location: "%{time}, %{location}" # MT
+        signed_up_html: "%{signups} aangemeld" # MT
+        household_signed_up_html: "%{diners} aangemeld uit je huishouden" # MT
+        edit_signup: "(Bewerken)" # MT
+        download_meals_csv: "Maaltijden downloaden als CSV" # MT
+        download_signups_csv: "Aanmeldingen voor maaltijden downloaden als CSV" # MT
+      show:
+        untitled: "Maaltijd zonder titel" # MT
+        meals: "Maaltijden" # MT
+        previous_meal: "Vorige maaltijd" # MT
+        next_meal: "Volgende maaltijd" # MT
+        my_order: "Mijn bestelling" # MT
+        helping_out: "Helpt mee" # MT
+      new:
+        title: "Maaltijd aanmaken" # MT
+        missing_prereqs_html: "Voordat je een maaltijd kunt aanmaken, moet er %{items} zijn." # MT
+        formula: "een toepasbare kostenformule" # MT
+        calendar: "minstens één agenda waarin maaltijden kunnen plaatsvinden" # MT
+      edit:
+        title: "Maaltijd bewerken" # MT
+        title_with_meal: "Maaltijd bewerken: %{title}" # MT
+      signup_form:
+        account: "rekening" # MT
+        closed_not_signed_up: "Je hebt je niet voor deze maaltijd aangemeld en de aanmelding is nu gesloten." # MT
+        full_not_signed_up: "Je hebt je niet voor deze maaltijd aangemeld en ze is nu vol. Kijk later nog eens of er een plaats vrijkomt." # MT
+        not_signed_up: "Je hebt je niet voor deze maaltijd aangemeld." # MT
+        saved: "Aanmelding opgeslagen" # MT
+        closes_at: "Sluit op %{date} om %{time}" # MT
+        sign_up: "Aanmelden" # MT
+      household_worker_form:
+        worker_role: "%{name} – %{role}" # MT
+        no_more_workers: "Deze maaltijd heeft geen medewerkers meer nodig." # MT
+        still_needs_html:
+          one: "Deze maaltijd heeft nog <b>%{count} medewerker</b> nodig." # MT
+          other: "Deze maaltijd heeft nog <b>%{count} medewerkers</b> nodig." # MT
+        help_out: "Meehelpen" # MT
+      summary:
+        untitled: "Maaltijd zonder titel" # MT
+        signups: "Aanmeldingen" # MT
+        total: "Totaal" # MT
+        late_signups: "Late aanmeldingen" # MT
+        portion_footnote_html: "* Het totaal aantal porties is berekend met de portiegroottes in de %{link}." # MT
+        meal_formula: "maaltijdformule" # MT
+        grocery_calculator: "Boodschappencalculator" # MT
+        fixed_cost_html: "Op basis van de vaste prijs van deze maaltijd mogen de ingrediënten niet meer kosten dan %{amount}, zonder voorraadkast- en basisproducten (zie de maaltijdrichtlijnen van je gemeenschap voor een lijst van basisproducten die meetellen)." # MT
+        proportional_cost: "Op basis van de kostenverdelingsformule van deze maaltijd laat de tabel hieronder zien hoeveel je aan ingrediënten kunt uitgeven, afhankelijk van de gewenste maaltijdprijs. De bestedingslimieten zijn zonder voorraadkast- en basisproducten (zie de maaltijdrichtlijnen van je gemeenschap voor een lijst van basisproducten die meetellen)." # MT
+        meal_price: "Maaltijdprijs" # MT
+        max_ingredient_cost: "Max. kosten ingrediënten" # MT
+        cook_reimbursement: "Vergoeding kok" # MT
+      summary_signups_header:
+        community: "Gem." # MT
+        household: "Huishouden" # MT
+        takeout: "Afhalen" # MT
+        comments: "Opmerkingen" # MT
+      menu:
+        menu: "menu" # MT
+        at_location: "Locatie: %{location}" # MT
+        for_communities: "voor %{communities}" # MT
+        allergens: "allergenen" # MT
+        no_menu: "Nog geen menu geplaatst." # MT
+      jobs:
+        title: "Maaltijdtaken" # MT
+        title_for_user: "Maaltijdtaken: %{name}" # MT
+        no_jobs: "Geen taken gevonden." # MT
+        meal_at_location_html: "%{meal}, %{location}" # MT
+        role_workers_html: "%{role}: %{workers}" # MT
+      cost_info:
+        cost: "Kosten" # MT
+        unknown: "?"
+        included: "%{label} (inbegrepen)" # MT
+        proportional: "Deze maaltijd gebruikt een proportionele formule, dus de kosten worden berekend nadat de maaltijd heeft plaatsgevonden en is afgerond." # MT
+      who_is_going:
+        title: "Wie gaat er?" # MT
+        nobody: "Nog niemand!" # MT
+        household_count: "%{household} (%{count})" # MT
+      time_cook:
+        chefs_hat: "Koksmuts" # MT
+      signup_read_only:
+        part: "%{count} %{type}" # MT
+        takeout_requested: "Afhalen gevraagd" # MT
+        quoted_comments: "“%{comments}”" # MT
+      report:
+        title: "Maaltijdrapport" # MT
+        no_data: "Geen maaltijdgegevens gevonden voor %{range}. Het rapport bevat alleen afgeronde maaltijden." # MT
+        all_time: "Altijd" # MT
+        community_all_time: "%{community} altijd" # MT
+        overall_all_time: "Alles, altijd" # MT
+        meals: "Maaltijden" # MT
+        servings: "Porties" # MT
+        cost: "Kosten" # MT
+        by_month: "Per maand" # MT
+        by_weekday: "Per weekdag" # MT
+        by_community: "Per gemeenschap" # MT
+        by_type: "Per type" # MT
+        by_category: "Per categorie" # MT
+        footnote:
+          one: "De statistieken hierboven bevatten alleen afgeronde, niet-geannuleerde maaltijden. In deze periode is %{count} maaltijd geannuleerd." # MT
+          other: "De statistieken hierboven bevatten alleen afgeronde, niet-geannuleerde maaltijden. In deze periode zijn %{count} maaltijden geannuleerd." # MT
+        footnote_community:
+          one: "De statistieken hierboven bevatten alleen afgeronde, niet-geannuleerde maaltijden. In deze periode is bij %{community} %{count} maaltijd geannuleerd." # MT
+          other: "De statistieken hierboven bevatten alleen afgeronde, niet-geannuleerde maaltijden. In deze periode zijn bij %{community} %{count} maaltijden geannuleerd." # MT
+      report_main_table:
+        totals: "Totalen" # MT
+        general_averages: "Algemene gemiddelden" # MT
+        community_representation: "Gem. vertegenwoordiging van gemeenschappen" # MT
+        meals: "Maaltijden" # MT
+        servings: "Porties" # MT
+        cost: "Kosten" # MT
+        full_meal_price: "Prijs volledige maaltijd" # MT
+        total: "Totaal" # MT
+      report_type_table:
+        avg_servings: "Gem. porties" # MT
+        percent: "Procent" # MT
+      export_form:
+        select_dates: "Kies data" # MT
+      reimb_form:
+        meal: "Maaltijd:" # MT
+        by_cook: "Door %{cook}" # MT
+        time_at_location: "%{time}, %{location}" # MT
+        ingredients: "Uitgegeven aan ingrediënten:" # MT
+        pantry: "Uitgegeven aan voorraadkast- en basisproducten:" # MT
+        total: "Totaal te vergoeden bedrag:" # MT
+        # Blank for writing in an amount on the printed form.
+        amount_blank: "$"
+        method: "Manier van vergoeden:" # MT
+        account_credit: "Tegoed op rekening" # MT
+        check_payable: "Cheque op naam van:" # MT
+        paypal: "PayPal naar e-mailadres:" # MT
+      form:
+        general:
+          communities: "Gemeenschappen" # MT
+        expenses:
+          check_hint: "De ontvanger krijgt een cheque voor de kosten van de ingrediënten." # MT
+          credit_hint: "De ontvanger krijgt een tegoed op de Gather-rekening ter hoogte van de kosten van de ingrediënten." # MT
+          paypal_hint: "De ontvanger krijgt een PayPal-betaling ter hoogte van de kosten van de ingrediënten. Gebruikers kunnen hun PayPal-e-mailadres wijzigen door hun profiel te bewerken." # MT
+        workers:
+          formula_changed: "De formule voor deze maaltijd is gewijzigd, waardoor hieronder misschien andere rollen kunnen worden toegewezen. Sla de maaltijd op en kom terug naar deze pagina om eventuele nieuwe maaltijdrollen te zien. Bestaande toewijzingen worden niet verwijderd als hun rollen niet bij de nieuwe formule horen." # MT
+        menu:
+          allergens: "Allergenen" # MT
+    formulas:
+      index:
+        title: "Maaltijdformules" # MT
+        create: "Formule aanmaken" # MT
+        explanation: "Met maaltijdformules bepaal je hoe de kosten en het aantal porties van maaltijden worden berekend." # MT
+        no_formulas: "Geen formules gevonden." # MT
+        name: "Naam" # MT
+        meals: "Maaltijden" # MT
+        created_on: "Aangemaakt op" # MT
+      show:
+        title: "Maaltijdformule: %{name}" # MT
+        formulas: "Formules" # MT
+        meal_calculations: "Berekening maaltijd" # MT
+        pantry_calculations: "Berekening voorraadkast" # MT
+      new:
+        title: "Nieuwe maaltijdformule" # MT
+      edit:
+        title: "Maaltijdformule bewerken: %{name}" # MT
+      form:
+        meal_calculations: "Berekening maaltijd" # MT
+        pantry_calculations: "Berekening voorraadkast" # MT
+    types:
+      index:
+        title: "Maaltijdtypes" # MT
+        create: "Type aanmaken" # MT
+        explanation: "Maaltijdtypes geven eters verschillende keuzes bij het aanmelden voor een maaltijd en kunnen in maaltijdformules verschillende prijzen en portiegroottes krijgen." # MT
+        no_types: "Geen types gevonden." # MT
+      new:
+        title: "Maaltijdtype aanmaken" # MT
+      edit:
+        title: "Maaltijdtype bewerken: %{name}" # MT
+    roles:
+      index:
+        title: "Maaltijdrollen" # MT
+        create: "Rol aanmaken" # MT
+        explanation: "Maaltijdrollen staan voor de verschillende taken die bij het maken van een maaltijd horen." # MT
+        no_roles: "Geen rollen gevonden." # MT
+      new:
+        title: "Maaltijdrol aanmaken" # MT
+      edit:
+        title: "Maaltijdrol bewerken: %{title}" # MT
+    restrictions:
+      edit:
+        title: "Instellingen maaltijden: dieetwensen" # MT
+        restriction: "Beperking" # MT
+        opposite: "Tegenovergestelde" # MT
+        deactivated: "Gedeactiveerd?" # MT
+      restriction_fields:
+        restriction_placeholder: "bijv. gluten" # MT
+        opposite_placeholder: "bijv. glutenvrij" # MT
+        restriction: "Beperking" # MT
+        opposite: "Tegenovergestelde" # MT
+    imports:
+      # Placeholder names for the example table when the community has no calendars or formula yet.
+      sample_calendar_1: "Eetzaal" # MT
+      sample_calendar_2: "Keuken" # MT
+      sample_formula: "Hoofdformule" # MT
+      new:
+        title: "Maaltijden importeren" # MT
+        intro: "Je kunt maaltijden importeren in CSV-formaat. Spreadsheetprogramma’s zoals Excel of Google Spreadsheets kunnen naar CSV exporteren, en dat bestand kun je dan in Gather importeren." # MT
+      show:
+        title: "Maaltijden importeren" # MT
+      form:
+        upload_file: "Bestand uploaden" # MT
+      results:
+        succeeded: "Je import is gelukt!" # MT
+        check_meals_html: "Kijk op de %{link} om je geïmporteerde maaltijden te zien." # MT
+        meals_page: "maaltijdpagina" # MT
+        crashed: "Er is een onverwachte fout opgetreden tijdens het importeren." # MT
+        crashed_try_again_html: "%{link} en neem contact op met je beheerder als de fout blijft optreden." # MT
+        try_again_below: "Probeer het hieronder opnieuw" # MT
+        issues: "Er zijn een of meer problemen met je maaltijdgegevens." # MT
+        resolve_html: "Los de problemen hieronder op en %{link}." # MT
+        try_again: "probeer het opnieuw" # MT
+        row: "Rij %{number}" # MT
+      # Column names in these instructions come from csv.headers.meals/meal so they match what the import accepts.
+      instructions:
+        data_format: "Gegevensformaat" # MT
+        use_columns: "Maak je importbestand met de volgende kolommen:" # MT
+        served_at: "Verplicht. De datum en tijd van de maaltijd. Gebruik een eenduidig formaat zoals JJJJ-MM-DD UU:MM" # MT
+        calendars_html: "Verplicht. De locatie(s) van de maaltijd. Gebruik de exacte namen of numerieke ID’s van agenda’s uit het %{link}." # MT
+        calendar_system: "agendasysteem" # MT
+        formula_html: "Optioneel. De %{link} voor de maaltijd. Gebruik de exacte naam of de numerieke ID van de formule. Als je niets invult, wordt de standaardformule gebruikt." # MT
+        formula: "formule" # MT
+        communities: "Optioneel. Welke gemeenschappen voor de maaltijd zijn uitgenodigd. Gebruik exacte namen, afkortingen of numerieke ID’s, gescheiden door puntkomma’s. Als je niets invult, worden alle gemeenschappen uitgenodigd." # MT
+        role_column_html: "&lt;<em>Naam rol</em>&gt; of %{role}&lt;<em>ID rol</em>&gt;" # MT
+        roles_html: "Optioneel. Geef medewerkers voor de maaltijd op door per %{link} een kolom toe te voegen. Gebruik exacte namen of numerieke ID’s van medewerkers, gescheiden door puntkomma’s." # MT
+        meal_role: "maaltijdrol" # MT
+        action: "Optioneel. Geef “create”, “update” of “destroy” op. Als je niets invult, wordt “create” gebruikt. Bij “update” of “destroy” wordt de maaltijd gezocht op ID als die is opgegeven, en anders op datum/tijd en locaties." # MT
+        id: "Optioneel. De ID van de maaltijd die je wilt bijwerken of verwijderen. Wordt genegeerd als de actie “create” is." # MT
+        example_data: "Voorbeeldgegevens" # MT
+        # Sample worker names in the example table.
+        sample_worker_1: "Sanne de Jong" # MT
+        sample_workers_2: "Mohammed Iris; Sundar Premji" # MT
+        sample_worker_3: "Li Yun" # MT
+        sample_workers_4: "Tamika Johnson; Silvia Rodriguez" # MT
+    messages:
+      sent: "Bericht verstuurd." # MT
+      new:
+        cancel_title: "Maaltijd annuleren" # MT
+        dont_cancel: "Maaltijd niet annuleren" # MT
+        send_and_cancel: "Bericht versturen en maaltijd annuleren" # MT
+    finalize:
+      title: "Maaltijd afronden: %{title}" # MT
+      untitled: "Zonder titel" # MT
+      confirm:
+        household: "Huishouden" # MT
+        calculated_cost: "Berekende kosten" # MT
+        cook_reimbursement_request: "Vergoeding gevraagd door kok" # MT
+      complete:
+        success: "Maaltijd afgerond!" # MT
+        check: "Stuur nu een cheque van %{amount} naar %{name}." # MT
+        credit: "Op de Gather-rekening van %{name} is %{amount} bijgeschreven." # MT
+        paypal: "Stuur nu %{amount} via PayPal naar %{email}." # MT
+    settings:
+      edit:
+        title: "Instellingen maaltijden: algemeen" # MT
+  meals/assignments:
+    change_warning: "Let op: als je de medewerkers van een maaltijd wijzigt, krijgen de maaltijdcommissie of -coördinator en alle huidige en nieuw toegewezen medewerkers een melding per e-mail." # MT
+  meals/formulas:
+    pantry: "Voorraadkast" # MT
+    calc_types:
+      fixed: "Vast" # MT
+      share: "Proportioneel" # MT
+      percent: "Percentage" # MT
+    hints:
+      meal: "De kosten van een maaltijd kunnen als vast bedrag worden berekend, of proportioneel op basis van de kosten van de ingrediënten." # MT
+      pantry: "Een bijdrage voor de voorraadkast wordt bij elke eter in rekening gebracht om de inkoop van basisproducten voor de keuken te dekken. Ze kan worden berekend als vast bedrag of als percentage van de maaltijdkosten van de eter." # MT
+      meal_type:
+        fixed: "Voeg elk maaltijdtype toe, met de prijs en de relatieve portiegrootte. Portiegroottes helpen koks bij het doen van boodschappen." # MT
+        share: "Voeg elk maaltijdtype toe, met het aandeel in procenten en de relatieve portiegrootte.\n\nDe procentuele aandelen bepalen de kosten. Moet een maaltijdtype bijvoorbeeld 1/4 korting krijgen, vul dan 75% in. 100% staat voor een volledig, gelijk aandeel in de kosten van de ingrediënten, 0% betekent gratis.\n\nPortiegroottes helpen koks bij het doen van boodschappen." # MT
+    cant_edit_notice: "Deze formule hoort bij bestaande maaltijden, dus je kunt de berekeningen niet bewerken." # MT
+  meals/formula_parts:
+    portion_options:
+      one_qtr: "¼ portie" # MT
+      half: "½ portie" # MT
+      three_qtr: "¾ portie" # MT
+      full: "Volledige portie" # MT
+    portion_short_names:
+      one_qtr: "¼"
+      half: "½"
+      three_qtr: "¾"
+      full: "Volledig" # MT
+  meals/messages:
+    cancel_notice_html: "Het annuleren van een maaltijd kan niet ongedaan worden gemaakt. Stuur een bericht waarin je uitlegt waarom de maaltijd is geannuleerd. De maaltijd wordt pas geannuleerd als het bericht is verstuurd." # MT
+  meal_mailer:
+    meal_link:
+      see_more: "Meer over de maaltijd vind je hier: %{url}" # MT
+    meal_reminder:
+      subject: "Herinnering maaltijd: %{datetime} – %{title} (locatie: %{location})" # MT
+      reminder: "Dit is een herinnering dat je bent aangemeld voor de maaltijd “%{title}” op %{date}." # MT
+      reminder_at_location: "Dit is een herinnering dat je bent aangemeld voor de maaltijd “%{title}” op %{date} (locatie: %{location})." # MT
+      comments_intro: "Je aanmelding bevatte de volgende opmerkingen:" # MT
+      staff: "Het maaltijdteam bestaat uit:" # MT
+      staff_member: "- %{role}: %{name}" # MT
+      bon_appetit: "Eet smakelijk!" # MT
+      body:
+        diner_count:
+          one: "Er is %{count} eter uit je huishouden aangemeld." # MT
+          other: "Er zijn %{count} eters uit je huishouden aangemeld." # MT
+    role_reminder:
+      subject: "Herinnering taak: %{role} op %{datetime} (locatie: %{location})%{note}" # MT
+      scheduled: "Dit is een herinnering dat je bent ingeroosterd als %{role} voor de maaltijd “%{title}” op %{date}." # MT
+      shift: "Je dienst is %{times}. De maaltijd wordt volgens planning om %{time} geserveerd." # MT
+      shift_at_location: "Je dienst is %{times} (locatie: %{location}). De maaltijd wordt volgens planning om %{time} geserveerd." # MT
+      note_intro: "Deze herinnering bevat de volgende opmerking:" # MT
+      crucial: "Je hulp is onmisbaar! Kom op tijd voor je dienst!" # MT
+      contacts_intro: "Hier zijn contactgegevens van andere medewerkers van de maaltijd:" # MT
+      contact: "%{role}: %{name}, %{email}, %{phones}" # MT
+    worker_change_notice:
+      subject: "Melding: wijziging in maaltijdtaken" # MT
+      intro: "%{name} heeft zojuist de volgende wijziging(en) gemaakt in de maaltijd “%{title}” op %{date}." # MT
+      intro_at_location: "%{name} heeft zojuist de volgende wijziging(en) gemaakt in de maaltijd “%{title}” op %{date} (locatie: %{location})." # MT
+      added: "- %{name} is toegevoegd als %{role}" # MT
+      removed: "- %{name} is verwijderd als %{role}" # MT
+      thanks: "Bedankt en eet smakelijk!" # MT
+    cook_menu_reminder:
+      subject: "Herinnering menu: plaats het menu voor %{date}" # MT
+      second_reminder: "** Tweede herinnering **" # MT
+      reminder: "Dit is een herinnering om een menu te plaatsen voor je maaltijd op %{date}." # MT
+      asap: "Plaats zo snel mogelijk een menu, zodat bewoners vooruit kunnen plannen en er genoeg mensen komen!" # MT
+      post_here: "Je kunt hier een menu plaatsen:" # MT
+      thanks: "Bedankt!" # MT
+    normal_message:
+      subject: "Bericht over de maaltijd op %{datetime}" # MT
+      intro: "%{sender} heeft het volgende bericht gestuurd over de maaltijd “%{title}” op %{date}." # MT
+      intro_at_location: "%{sender} heeft het volgende bericht gestuurd over de maaltijd “%{title}” op %{date} (locatie: %{location})." # MT
+    cancellation_message:
+      subject: "Maaltijd op %{datetime} GEANNULEERD" # MT
+      regret: "Helaas moeten we je laten weten dat de maaltijd “%{title}” op %{date} is GEANNULEERD." # MT
+      regret_at_location: "Helaas moeten we je laten weten dat de maaltijd “%{title}” op %{date} (locatie: %{location}) is GEANNULEERD." # MT
+      sender_wrote: "%{sender} heeft het volgende bericht gestuurd over de annulering:" # MT

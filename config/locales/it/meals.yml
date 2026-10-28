@@ -1,0 +1,481 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+it:
+  meals:
+    over_limit_notice_html: "Il tuo nucleo ha superato il limite di credito di %{limit} del suo %{account_link} presso %{community}, quindi non puoi iscriverti ai pasti organizzati da %{community}. Per domande, contatta la commissione o il responsabile dei pasti di %{community}." # MT
+    cancelled_notice: "Questo pasto è stato annullato." # MT
+    persion_is_helping:
+      one: "%{count} persona del tuo nucleo aiuta con questo pasto" # MT
+      other: "%{count} persone del tuo nucleo aiutano con questo pasto" # MT
+    menu_posted_at: "Menù pubblicato: %{time}." # MT
+    type: "Tipo" # MT
+    category: "Categoria" # MT
+    spots_left:
+      one: "%{count} posto rimasto" # MT
+      other: "%{count} posti rimasti" # MT
+    form:
+      sections:
+        label:
+          general: "Generale" # MT
+          workers: "Squadra" # MT
+          menu: "Menù" # MT
+          signups: "Iscrizioni" # MT
+          expenses: "Spese" # MT
+        edit:
+          general: "Modifica generale" # MT
+          workers: "Modifica squadra" # MT
+          menu: "Modifica menù" # MT
+          signups: "Modifica iscrizioni" # MT
+          expenses: "Modifica spese" # MT
+      summaries:
+        allows: "ammette %{people}" # MT
+        allows_with_cmtys:
+          one: "ammette %{people} da %{count} comunità" # MT
+          other: "ammette %{people} da %{count} comunità" # MT
+        no_workers: "Nessun membro della squadra inserito" # MT
+        no_menu: "Nessun menù pubblicato" # MT
+        no_signups: "Nessun nucleo si è iscritto" # MT
+        with_items: "con %{items}" # MT
+        and_allergen_count:
+          one: "e %{count} allergene" # MT
+          other: "e %{count} allergeni" # MT
+        expenses:
+          ingredients: "ingredienti: %{cost}" # MT
+          pantry: "dispensa: %{cost}" # MT
+          payment: "pagamento tramite %{method}" # MT
+          none: "Nessuna informazione sulle spese inserita" # MT
+        signups:
+          diners:
+            one: "%{count} commensale" # MT
+            other: "%{count} commensali" # MT
+          from_households:
+            one: "da %{count} nucleo" # MT
+            other: "da %{count} nuclei" # MT
+    finalizing:
+      duplicates: "Ci sono iscrizioni duplicate. Correggile inserendo i numeri per ogni tipo di commensale." # MT
+      cancelled: "Il pasto non è stato finalizzato. Puoi modificarlo qui sotto e riprovare, oppure fare clic su «Annulla» qui sotto per tornare alla pagina dei pasti." # MT
+      success: "Pasto finalizzato" # MT
+      review_and_confirm_html: "<strong>Nota:</strong> questo pasto non è ancora stato finalizzato. Controlla e conferma i dati qui sotto. Queste informazioni non si possono modificare dopo l'invio degli estratti conto, quindi fai attenzione." # MT
+    sign_up: "Iscriviti" # MT
+    closes_soon: "Chiude presto!" # MT
+    no_menu_title: "[Nessun menù]" # MT
+    takeout: "Da asporto" # MT
+    created: "Pasto creato." # MT
+    updated: "Pasto aggiornato." # MT
+    closed: "Pasto chiuso." # MT
+    reopened: "Pasto riaperto." # MT
+    unfinalized: "Finalizzazione del pasto annullata." # MT
+    cant_reopen_past_close: "Non puoi riaprire questo pasto perché il suo orario di chiusura automatica è già passato. Modifica o rimuovi l'orario di chiusura automatica prima di procedere." # MT
+    not_closed_before_summary: "Nota: questo pasto non è ancora chiuso e ci si può ancora iscrivere. Dovresti chiudere il pasto prima di stampare questo riepilogo." # MT
+    formula_created: "Formula creata." # MT
+    formula_updated: "Formula aggiornata." # MT
+    type_created: "Tipo creato." # MT
+    type_updated: "Tipo aggiornato." # MT
+    role_created: "Ruolo creato." # MT
+    role_updated: "Ruolo aggiornato." # MT
+    restrictions_updated: "Aggiornamento completato." # MT
+    # Name of the calendar event created for a meal.
+    event_name: "Pasto: %{title}" # MT
+    event_errors: "Nella creazione di un evento sul calendario %{calendar} per questo pasto si sono verificati i seguenti errori: %{errors}." # MT
+    event_error: "%{attribute}: %{message}" # MT
+    signup_not_recorded: "Non è stato possibile registrare la tua iscrizione perché il pasto è al completo o non è più aperto." # MT
+    report:
+      subhead_community: "%{range}, solo pasti di %{community}" # MT
+    # Read by Gather.Views.Meals.ReportChartsView (JS). Each title has a variant naming the community,
+    # used when the cluster has more than one.
+    report_charts:
+      avg_servings: "Porzioni medie" # MT
+      avg_servings_per_meal: "Porzioni medie per pasto" # MT
+      avg_cost: "Costo medio" # MT
+      avg_full_meal_price: "Prezzo medio del pasto intero" # MT
+      meals: "Pasti" # MT
+      number_of_meals: "Numero di pasti" # MT
+      weekday: "Giorno della settimana" # MT
+      month: "Mese" # MT
+      titles:
+        servings_by_month: "Porzioni medie per pasto, per mese" # MT
+        servings_by_month_community: "Porzioni medie per pasto, per mese (%{community})" # MT
+        cost_by_month: "Prezzo medio del pasto intero, per mese" # MT
+        cost_by_month_community: "Prezzo medio del pasto intero, per mese (%{community})" # MT
+        meals_by_month: "Numero di pasti per mese" # MT
+        meals_by_month_community: "Numero di pasti per mese (%{community})" # MT
+        servings_by_weekday: "Porzioni medie per pasto, per giorno della settimana" # MT
+        servings_by_weekday_community: "Porzioni medie per pasto, per giorno della settimana (%{community})" # MT
+        cost_by_weekday: "Prezzo medio del pasto intero, per giorno della settimana" # MT
+        cost_by_weekday_community: "Prezzo medio del pasto intero, per giorno della settimana (%{community})" # MT
+        community_rep: "Rappresentanza media delle comunità ai pasti" # MT
+        community_rep_community: "Rappresentanza media delle comunità ai pasti (%{community})" # MT
+        meal_types: "Tipi di pasto medi ai pasti" # MT
+        meal_types_community: "Tipi di pasto medi ai pasti (%{community})" # MT
+    portion_counts:
+      diners:
+        one: "%{count} commensale" # MT
+        other: "%{count} commensali" # MT
+      portions_html:
+        one: "<strong>%{count}</strong> porzione" # MT
+        other: "<strong>%{count}</strong> porzioni" # MT
+      category_portions_html:
+        one: "<strong>%{count}</strong> porzione (<strong>%{category}</strong>)" # MT
+        other: "<strong>%{count}</strong> porzioni (<strong>%{category}</strong>)" # MT
+      # Category label for formula parts with no category, when other parts have one.
+      other_category: "altro" # MT
+      # The * refers to the footnote on the summary page.
+      summary_html: "Questo pasto ha %{diners} e richiederà circa %{portions}.*" # MT
+      summary_list_html: "Questo pasto ha %{diners} e richiederà circa: %{portions}.*" # MT
+    meals:
+      index:
+        title: "Pasti" # MT
+        show_action_menu: "Mostra il menu delle azioni sul pasto" # MT
+        create: "Crea pasto" # MT
+        import: "Importa pasti" # MT
+        no_meals: "Nessun pasto trovato." # MT
+        date_time: "Data/ora" # MT
+        location: "Luogo" # MT
+        cook: "Cuoco" # MT
+        meal_title: "Titolo" # MT
+        going: "Partecipi?" # MT
+        signups: "Iscrizioni" # MT
+        full: "[Al completo]" # MT
+        not_going: "No" # MT
+        meal_by_cook_html: "%{meal} a cura di %{cook}" # MT
+        time_at_location: "%{time}, %{location}" # MT
+        signed_up_html: "Iscritti: %{signups}" # MT
+        household_signed_up_html: "Iscritti del tuo nucleo: %{diners}" # MT
+        edit_signup: "(Modifica)" # MT
+        download_meals_csv: "Scarica i pasti come CSV" # MT
+        download_signups_csv: "Scarica le iscrizioni ai pasti come CSV" # MT
+      show:
+        untitled: "Pasto senza titolo" # MT
+        meals: "Pasti" # MT
+        previous_meal: "Pasto precedente" # MT
+        next_meal: "Pasto successivo" # MT
+        my_order: "Il mio ordine" # MT
+        helping_out: "Chi aiuta" # MT
+      new:
+        title: "Crea pasto" # MT
+        missing_prereqs_html: "Prima di poter creare un pasto serve %{items}." # MT
+        formula: "una formula dei costi applicabile" # MT
+        calendar: "almeno un calendario che possa ospitare pasti" # MT
+      edit:
+        title: "Modifica pasto" # MT
+        title_with_meal: "Modifica pasto: %{title}" # MT
+      signup_form:
+        account: "conto" # MT
+        closed_not_signed_up: "Non ti sei iscritto a questo pasto e ora le iscrizioni sono chiuse." # MT
+        full_not_signed_up: "Non ti sei iscritto a questo pasto e ora è al completo. Puoi ricontrollare più tardi per vedere se si libera un posto." # MT
+        not_signed_up: "Non ti sei iscritto a questo pasto." # MT
+        saved: "Iscrizione salvata" # MT
+        closes_at: "Chiusura: %{date}, ore %{time}" # MT
+        sign_up: "Iscriviti" # MT
+      household_worker_form:
+        worker_role: "%{name} – %{role}" # MT
+        no_more_workers: "Questo pasto non ha bisogno di altre persone nella squadra." # MT
+        still_needs_html:
+          one: "A questo pasto serve ancora <b>%{count} persona</b>." # MT
+          other: "A questo pasto servono ancora <b>%{count} persone</b>." # MT
+        help_out: "Dai una mano" # MT
+      summary:
+        untitled: "Pasto senza titolo" # MT
+        signups: "Iscrizioni" # MT
+        total: "Totale" # MT
+        late_signups: "Iscrizioni tardive" # MT
+        portion_footnote_html: "* Porzioni totali calcolate in base alle dimensioni delle porzioni nella %{link}." # MT
+        meal_formula: "formula del pasto" # MT
+        grocery_calculator: "Calcolatore della spesa" # MT
+        fixed_cost_html: "In base al costo fisso di questo pasto, gli ingredienti non dovrebbero costare più di %{amount}, esclusi i prodotti di dispensa e di base (vedi le linee guida sui pasti della tua comunità per l'elenco dei prodotti di base ammessi)." # MT
+        proportional_cost: "In base alla formula di ripartizione dei costi di questo pasto, la tabella qui sotto mostra quanto si può spendere per gli ingredienti a seconda del prezzo del pasto desiderato. I limiti di spesa non includono i prodotti di dispensa e di base (vedi le linee guida sui pasti della tua comunità per l'elenco dei prodotti di base ammessi)." # MT
+        meal_price: "Prezzo del pasto" # MT
+        max_ingredient_cost: "Costo massimo degli ingredienti" # MT
+        cook_reimbursement: "Rimborso al cuoco" # MT
+      summary_signups_header:
+        community: "Com." # MT
+        household: "Nucleo" # MT
+        takeout: "Da asporto" # MT
+        comments: "Commenti" # MT
+      menu:
+        menu: "menù" # MT
+        at_location: "Luogo: %{location}" # MT
+        for_communities: "per %{communities}" # MT
+        allergens: "allergeni" # MT
+        no_menu: "Nessun menù ancora pubblicato." # MT
+      jobs:
+        title: "Incarichi dei pasti" # MT
+        title_for_user: "Incarichi dei pasti: %{name}" # MT
+        no_jobs: "Nessun incarico trovato." # MT
+        meal_at_location_html: "%{meal} (luogo: %{location})" # MT
+        role_workers_html: "%{role}: %{workers}" # MT
+      cost_info:
+        cost: "Costo" # MT
+        unknown: "?"
+        included: "%{label} (incluso)" # MT
+        proportional: "Questo pasto usa una formula proporzionale, quindi i costi verranno calcolati dopo che il pasto si è svolto ed è stato finalizzato." # MT
+      who_is_going:
+        title: "Chi partecipa?" # MT
+        nobody: "Ancora nessuno!" # MT
+        household_count: "%{household} (%{count})" # MT
+      time_cook:
+        chefs_hat: "Cappello da cuoco" # MT
+      signup_read_only:
+        part: "%{count} %{type}" # MT
+        takeout_requested: "Richiesto da asporto" # MT
+        quoted_comments: "«%{comments}»" # MT
+      report:
+        title: "Report dei pasti" # MT
+        no_data: "Nessun dato sui pasti trovato per %{range}. Il report include solo i pasti finalizzati." # MT
+        all_time: "Da sempre" # MT
+        community_all_time: "%{community} – da sempre" # MT
+        overall_all_time: "Complessivo, da sempre" # MT
+        meals: "Pasti" # MT
+        servings: "Porzioni" # MT
+        cost: "Costo" # MT
+        by_month: "Per mese" # MT
+        by_weekday: "Per giorno della settimana" # MT
+        by_community: "Per comunità" # MT
+        by_type: "Per tipo" # MT
+        by_category: "Per categoria" # MT
+        footnote:
+          one: "Le statistiche qui sopra includono solo i pasti finalizzati e non annullati. In questo periodo c'è stato %{count} pasto annullato." # MT
+          other: "Le statistiche qui sopra includono solo i pasti finalizzati e non annullati. In questo periodo ci sono stati %{count} pasti annullati." # MT
+        footnote_community:
+          one: "Le statistiche qui sopra includono solo i pasti finalizzati e non annullati. In questo periodo c'è stato %{count} pasto annullato presso %{community}." # MT
+          other: "Le statistiche qui sopra includono solo i pasti finalizzati e non annullati. In questo periodo ci sono stati %{count} pasti annullati presso %{community}." # MT
+      report_main_table:
+        totals: "Totali" # MT
+        general_averages: "Medie generali" # MT
+        community_representation: "Rappresentanza media delle comunità" # MT
+        meals: "Pasti" # MT
+        servings: "Porzioni" # MT
+        cost: "Costo" # MT
+        full_meal_price: "Prezzo del pasto intero" # MT
+        total: "Totale" # MT
+      report_type_table:
+        avg_servings: "Porzioni medie" # MT
+        percent: "Percentuale" # MT
+      export_form:
+        select_dates: "Seleziona le date" # MT
+      reimb_form:
+        meal: "Pasto:" # MT
+        by_cook: "A cura di %{cook}" # MT
+        time_at_location: "%{time}, %{location}" # MT
+        ingredients: "Importo speso per gli ingredienti:" # MT
+        pantry: "Importo speso per i prodotti di dispensa e di base:" # MT
+        total: "Importo totale da rimborsare:" # MT
+        # Blank for writing in an amount on the printed form.
+        amount_blank: "$"
+        method: "Metodo di rimborso:" # MT
+        account_credit: "Accredito sul conto" # MT
+        check_payable: "Assegno intestato a:" # MT
+        paypal: "PayPal all'indirizzo email:" # MT
+      form:
+        general:
+          communities: "Comunità" # MT
+        expenses:
+          check_hint: "Chi riceve il rimborso riceverà un assegno per il costo degli ingredienti." # MT
+          credit_hint: "Chi riceve il rimborso riceverà un accredito sul proprio conto Gather pari al costo degli ingredienti." # MT
+          paypal_hint: "Chi riceve il rimborso riceverà un pagamento PayPal pari al costo degli ingredienti. Gli utenti possono cambiare il proprio indirizzo email PayPal modificando il profilo." # MT
+        workers:
+          formula_changed: "La formula di questo pasto è stata cambiata, quindi qui sotto potrebbero essere disponibili altri ruoli da assegnare. Per vedere i nuovi ruoli, salva il pasto e torna a questa pagina. Le assegnazioni esistenti non verranno eliminate anche se i loro ruoli non sono associati alla nuova formula." # MT
+        menu:
+          allergens: "Allergeni" # MT
+    formulas:
+      index:
+        title: "Formule dei pasti" # MT
+        create: "Crea formula" # MT
+        explanation: "Le formule dei pasti permettono di personalizzare il calcolo dei costi e delle porzioni dei pasti." # MT
+        no_formulas: "Nessuna formula trovata." # MT
+        name: "Nome" # MT
+        meals: "Pasti" # MT
+        created_on: "Data di creazione" # MT
+      show:
+        title: "Formula del pasto: %{name}" # MT
+        formulas: "Formule" # MT
+        meal_calculations: "Calcoli del pasto" # MT
+        pantry_calculations: "Calcoli della dispensa" # MT
+      new:
+        title: "Nuova formula del pasto" # MT
+      edit:
+        title: "Modifica formula del pasto: %{name}" # MT
+      form:
+        meal_calculations: "Calcoli del pasto" # MT
+        pantry_calculations: "Calcoli della dispensa" # MT
+    types:
+      index:
+        title: "Tipi di pasto" # MT
+        create: "Crea tipo" # MT
+        explanation: "I tipi di pasto offrono ai commensali diverse opzioni quando si iscrivono a un pasto e nelle formule dei pasti possono avere costi e dimensioni delle porzioni diversi." # MT
+        no_types: "Nessun tipo trovato." # MT
+      new:
+        title: "Crea tipo di pasto" # MT
+      edit:
+        title: "Modifica tipo di pasto: %{name}" # MT
+    roles:
+      index:
+        title: "Ruoli dei pasti" # MT
+        create: "Crea ruolo" # MT
+        explanation: "I ruoli dei pasti rappresentano i vari incarichi necessari per preparare un pasto." # MT
+        no_roles: "Nessun ruolo trovato." # MT
+      new:
+        title: "Crea ruolo del pasto" # MT
+      edit:
+        title: "Modifica ruolo del pasto: %{title}" # MT
+    restrictions:
+      edit:
+        title: "Impostazioni dei pasti: restrizioni alimentari" # MT
+        restriction: "Restrizione" # MT
+        opposite: "Opposto" # MT
+        deactivated: "Disattivata?" # MT
+      restriction_fields:
+        restriction_placeholder: "es. Glutine" # MT
+        opposite_placeholder: "es. Senza glutine" # MT
+        restriction: "Restrizione" # MT
+        opposite: "Opposto" # MT
+    imports:
+      # Placeholder names for the example table when the community has no calendars or formula yet.
+      sample_calendar_1: "Sala da pranzo" # MT
+      sample_calendar_2: "Cucina" # MT
+      sample_formula: "Formula principale" # MT
+      new:
+        title: "Importa pasti" # MT
+        intro: "Puoi importare i pasti in formato CSV. I fogli di calcolo come Excel o Fogli Google possono esportare in formato CSV, che puoi poi importare in Gather." # MT
+      show:
+        title: "Importa pasti" # MT
+      form:
+        upload_file: "Carica file" # MT
+      results:
+        succeeded: "L'importazione è riuscita!" # MT
+        check_meals_html: "Vai alla %{link} per vedere i pasti importati." # MT
+        meals_page: "pagina dei pasti" # MT
+        crashed: "Si è verificato un errore imprevisto durante l'importazione." # MT
+        crashed_try_again_html: "Ti chiediamo di %{link} e di contattare il tuo amministratore se l'errore persiste." # MT
+        try_again_below: "riprovare qui sotto" # MT
+        issues: "Ci sono uno o più problemi nei dati dei pasti." # MT
+        resolve_html: "Risolvi i problemi qui sotto e %{link}." # MT
+        try_again: "riprova" # MT
+        row: "Riga %{number}" # MT
+      # Column names in these instructions come from csv.headers.meals/meal so they match what the import accepts.
+      instructions:
+        data_format: "Formato dei dati" # MT
+        use_columns: "Prepara il file da importare usando le seguenti colonne:" # MT
+        served_at: "Obbligatorio. Data e ora del pasto. Usa un formato non ambiguo come AAAA-MM-GG HH:MM" # MT
+        calendars_html: "Obbligatorio. Il luogo o i luoghi del pasto. Usa i nomi esatti o gli ID numerici dei calendari del %{link}." # MT
+        calendar_system: "sistema dei calendari" # MT
+        formula_html: "Facoltativo. La %{link} del pasto. Usa il nome esatto della formula o il suo ID numerico. Se non indicata, si usa la formula predefinita." # MT
+        formula: "formula" # MT
+        communities: "Facoltativo. Le comunità invitate al pasto. Usa nomi esatti, abbreviazioni o ID numerici, separati da punto e virgola. Se non indicate, si invitano tutte le comunità." # MT
+        role_column_html: "&lt;<em>Nome del ruolo</em>&gt; oppure %{role}&lt;<em>ID del ruolo</em>&gt;" # MT
+        roles_html: "Facoltativo. Indica chi lavora al pasto aggiungendo una colonna per ogni %{link}. Usa i nomi esatti delle persone o gli ID numerici, separati da punto e virgola." # MT
+        meal_role: "ruolo del pasto" # MT
+        action: "Facoltativo. Indica «create», «update» o «destroy». Se non indicato, vale «create». Con «update» o «destroy», il pasto viene individuato tramite l'ID, se indicato, altrimenti tramite data/ora e luoghi." # MT
+        id: "Facoltativo. L'ID del pasto da aggiornare o eliminare. Ignorato se l'azione è «create»." # MT
+        example_data: "Dati di esempio" # MT
+        # Sample worker names in the example table.
+        sample_worker_1: "Sara Bianchi" # MT
+        sample_workers_2: "Mohammed Iris; Sundar Premji" # MT
+        sample_worker_3: "Li Yun" # MT
+        sample_workers_4: "Giulia Esposito; Silvia Rodríguez" # MT
+    messages:
+      sent: "Messaggio inviato." # MT
+      new:
+        cancel_title: "Annulla pasto" # MT
+        dont_cancel: "Non annullare il pasto" # MT
+        send_and_cancel: "Invia il messaggio e annulla il pasto" # MT
+    finalize:
+      title: "Finalizza pasto: %{title}" # MT
+      untitled: "Senza titolo" # MT
+      confirm:
+        household: "Nucleo" # MT
+        calculated_cost: "Costo calcolato" # MT
+        cook_reimbursement_request: "Richiesta di rimborso del cuoco" # MT
+      complete:
+        success: "Pasto finalizzato!" # MT
+        check: "Ora invia un assegno di %{amount} a %{name}." # MT
+        credit: "Il conto Gather di %{name} è stato accreditato di %{amount}." # MT
+        paypal: "Ora invia %{amount} a %{email} tramite PayPal." # MT
+    settings:
+      edit:
+        title: "Impostazioni dei pasti: generali" # MT
+  meals/assignments:
+    change_warning: "Nota: se cambi le persone assegnate al pasto, verrà inviata una notifica via email alla commissione o al responsabile dei pasti e a tutte le persone assegnate, attuali e nuove." # MT
+  meals/formulas:
+    pantry: "Dispensa" # MT
+    calc_types:
+      fixed: "Fisso" # MT
+      share: "Proporzionale" # MT
+      percent: "Percentuale" # MT
+    hints:
+      meal: "I costi dei pasti possono essere calcolati come costo fisso o in proporzione al costo degli ingredienti." # MT
+      pantry: "La quota dispensa è un addebito a carico di ogni commensale per coprire l'acquisto dei prodotti di base per la cucina. Può essere un importo fisso o una percentuale del costo del pasto del commensale." # MT
+      meal_type:
+        fixed: "Aggiungi ogni tipo di pasto, il suo prezzo e la dimensione relativa della porzione. Le dimensioni delle porzioni aiutano i cuochi a fare la spesa." # MT
+        share: "Aggiungi ogni tipo di pasto, la sua quota percentuale e la dimensione relativa della porzione.\n\nLe quote percentuali servono a determinare il costo. Per esempio, se un tipo di pasto deve avere uno sconto di 1/4, inserisci 75%. Il 100% rappresenta una quota intera e uguale del costo degli ingredienti, mentre lo 0% significa nessun addebito.\n\nLe dimensioni delle porzioni aiutano i cuochi a fare la spesa." # MT
+    cant_edit_notice: "Questa formula è legata a pasti esistenti, quindi non puoi modificarne i calcoli." # MT
+  meals/formula_parts:
+    portion_options:
+      one_qtr: "¼ di porzione" # MT
+      half: "½ porzione" # MT
+      three_qtr: "¾ di porzione" # MT
+      full: "Porzione intera" # MT
+    portion_short_names:
+      one_qtr: "¼"
+      half: "½"
+      three_qtr: "¾"
+      full: "Intera" # MT
+  meals/messages:
+    cancel_notice_html: "L'annullamento di un pasto non si può revocare. Invia un messaggio che spieghi perché il pasto è stato annullato. Il pasto non verrà annullato finché il messaggio non sarà inviato." # MT
+  meal_mailer:
+    meal_link:
+      see_more: "Maggiori informazioni sul pasto qui: %{url}" # MT
+    meal_reminder:
+      subject: "Promemoria pasto: %{datetime} – %{title}, %{location}" # MT
+      reminder: "Ti ricordiamo che sei iscritto al pasto «%{title}» del %{date}." # MT
+      reminder_at_location: "Ti ricordiamo che sei iscritto al pasto «%{title}» del %{date} (luogo: %{location})." # MT
+      comments_intro: "La tua iscrizione includeva questi commenti:" # MT
+      staff: "La squadra del pasto è:" # MT
+      staff_member: "- %{role}: %{name}" # MT
+      bon_appetit: "Buon appetito!" # MT
+      body:
+        diner_count:
+          one: "Dal tuo nucleo è iscritto %{count} commensale." # MT
+          other: "Dal tuo nucleo sono iscritti %{count} commensali." # MT
+    role_reminder:
+      subject: "Promemoria incarico: %{role}, %{datetime}, %{location}%{note}" # MT
+      scheduled: "Ti ricordiamo che sei in programma come %{role} per il pasto «%{title}» del %{date}." # MT
+      shift: "Il tuo turno: %{times}. Il pasto verrà servito alle ore %{time}." # MT
+      shift_at_location: "Il tuo turno: %{times} (luogo: %{location}). Il pasto verrà servito alle ore %{time}." # MT
+      note_intro: "Questo promemoria contiene la seguente nota:" # MT
+      crucial: "Il tuo aiuto è fondamentale! Arriva puntuale per il tuo turno!" # MT
+      contacts_intro: "Ecco i contatti delle altre persone che lavorano al pasto:" # MT
+      contact: "%{role}: %{name}, %{email}, %{phones}" # MT
+    worker_change_notice:
+      subject: "Avviso di modifica degli incarichi del pasto" # MT
+      intro: "%{name} ha appena apportato le seguenti modifiche al pasto «%{title}» del %{date}." # MT
+      intro_at_location: "%{name} ha appena apportato le seguenti modifiche al pasto «%{title}» del %{date} (luogo: %{location})." # MT
+      added: "- %{name} è stato aggiunto come %{role}" # MT
+      removed: "- %{name} è stato rimosso come %{role}" # MT
+      thanks: "Grazie e buon appetito!" # MT
+    cook_menu_reminder:
+      subject: "Promemoria menù: pubblica il menù del %{date}" # MT
+      second_reminder: "** Secondo promemoria **" # MT
+      reminder: "Ti ricordiamo di pubblicare il menù del tuo pasto del %{date}." # MT
+      asap: "Pubblica il menù il prima possibile, così i residenti possono organizzarsi e la partecipazione sarà buona!" # MT
+      post_here: "Puoi pubblicare il menù qui:" # MT
+      thanks: "Grazie!" # MT
+    normal_message:
+      subject: "Messaggio sul pasto del %{datetime}" # MT
+      intro: "%{sender} ha inviato il seguente messaggio sul pasto «%{title}» del %{date}." # MT
+      intro_at_location: "%{sender} ha inviato il seguente messaggio sul pasto «%{title}» del %{date} (luogo: %{location})." # MT
+    cancellation_message:
+      subject: "Pasto del %{datetime} ANNULLATO" # MT
+      regret: "Siamo spiacenti di informarti che il pasto «%{title}» del %{date} è stato ANNULLATO." # MT
+      regret_at_location: "Siamo spiacenti di informarti che il pasto «%{title}» del %{date} (luogo: %{location}) è stato ANNULLATO." # MT
+      sender_wrote: "%{sender} ha inviato il seguente messaggio sull'annullamento:" # MT

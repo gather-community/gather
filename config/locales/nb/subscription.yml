@@ -1,0 +1,115 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+nb:
+  subscription:
+    messaging_topup:
+      updated: "Den månedlige påfyllingen for meldinger er satt opp. Meldingssaldoen din er nå %{balance}." # MT
+      canceled: "Den månedlige påfyllingen for meldinger avsluttes ved slutten av inneværende faktureringsmåned." # MT
+    detailed_statuses:
+      active: "Aktiv" # MT
+      scheduled: "Planlagt" # MT
+      needs_payment_method: "Mangler betaling" # MT
+      awaiting_microdeposits: "Mangler bankbekreftelse" # MT
+      payment_processing: "Behandles" # MT
+      incomplete: "Venter på betaling" # MT
+      incomplete_expired: "Utløpt" # MT
+      past_due: "Forfalt" # MT
+      unpaid: "Ubetalt" # MT
+      canceled: "Avsluttet" # MT
+      other: "Ukjent" # MT
+      unknown: "Ukjent" # MT
+    # Descriptions of the messaging balance transactions a topup creates.
+    messaging_transactions:
+      credit: "Månedlig påfylling for meldinger" # MT
+      reversal: "Tilbakeføring av påfylling for meldinger som ikke ble betalt" # MT
+    # e.g. "$5.00/month"
+    per_month: "%{amount}/måned" # MT
+    every_months:
+      one: "%{amount} per %{count} måned" # MT
+      other: "%{amount} per %{count} måneder" # MT
+    pay_starting: "Betal %{amount} fra og med %{date}" # MT
+    pay_now_and_then: "Betal %{now} nå og deretter %{recurring}" # MT
+    # Messaging topup row statuses, shown only when the topup isn't cleanly active.
+    topup_statuses:
+      canceling: "Avsluttes %{date}" # MT
+      past_due: "Forfalt" # MT
+      payment_processing: "Betalingen behandles" # MT
+    # Text built by the messaging-topup Stimulus controller.
+    topup_notices:
+      cancel: "Den månedlige påfyllingen avsluttes ved slutten av inneværende faktureringsmåned. Du blir ikke belastet mer, og saldoen din blir stående." # MT
+      first_charge: "Den lagrede betalingsmåten din blir belastet %{amount} i dag for en hel måned, og deretter %{amount} på denne datoen hver måned." # MT
+      calculating: "Beregner …" # MT
+      next_month: "Fra og med neste faktureringsmåned blir du belastet %{amount} per måned." # MT
+      prorated_credit: "Nå får du en kreditering på %{credit} på neste faktura, og deretter %{amount} per måned fra og med %{date}." # MT
+      prorated_charge: "Nå blir den lagrede betalingsmåten din belastet omtrent %{charge} i dag (forholdsmessig), og deretter %{amount} per måned fra og med %{date}." # MT
+      error_default: "Noe gikk galt, og påfyllingen din ble ikke endret." # MT
+      error_with_reference: "%{reason} Referanse: %{reference}. (Forsøkt %{time}.) Hvis dette fortsetter å skje, kontakt Gather-brukerstøtten og oppgi referansen og tidspunktet." # MT
+      error: "%{reason} (Forsøkt %{time}.) Hvis dette fortsetter å skje, kontakt Gather-brukerstøtten og oppgi tidspunktet." # MT
+    subscriptions:
+      show:
+        title: "Abonnement" # MT
+        expired: "Abonnementet ditt utløp før betalingen var fullført. Prøv igjen." # MT
+        verify_required: "Bankkontoen din må bekreftes." # MT
+        microdeposit_html: "Om en dag eller to kommer det en %{link} på kontoen din. Bruk knappen nedenfor for å fullføre bekreftelsen." # MT
+        microdeposit: "mikroinnskudd" # MT
+        check_email: "Sjekk e-posten din for instruksjoner, og kom tilbake hit når bekreftelsen er fullført." # MT
+        verify_button: "Bekreft bankkontoen din" # MT
+        ready_for_payment: "Abonnementet ditt er klart for betaling." # MT
+        not_setup: "Abonnementet ditt er ikke satt opp ennå." # MT
+        contact_staff: "Kontakt Gather-teamet for å tegne abonnement." # MT
+        needs_payment_method: "Abonnementet ditt er aktivt, men vi trenger fortsatt betalingsopplysningene dine." # MT
+        processing: "Betalingen for abonnementet ditt behandles. Det kan ta noen dager, avhengig av betalingsmåten. I mellomtiden kan du gjerne bruke Gather!" # MT
+        active: "Abonnementet ditt er aktivt. Takk for at du er en del av Gather!" # MT
+        problem: "Det er et problem med abonnementet ditt." # MT
+      billing_portal_link:
+        visit_html: "Du finner mer informasjon i %{link}." # MT
+        billing_portal: "faktureringsportalen vår" # MT
+      base_rows:
+        num_users: "Antall brukere" # MT
+        tier: "Nivå" # MT
+        tier_value: "%{tier} (%{price}/måned/bruker)" # MT
+        discount: "Rabatt" # MT
+        months_per_cycle: "Måneder per faktureringsperiode" # MT
+        total_payment: "Totalt å betale" # MT
+        not_charged_until: "* Du legger inn betalingsopplysningene dine nå, men blir ikke belastet før %{date}." # MT
+        prorated: "* Den første betalingen beregnes forholdsmessig for dagene som har gått siden %{date}." # MT
+      email_row:
+        billing_email: "E-post for fakturering" # MT
+      messaging:
+        title: "Meldinger" # MT
+        current_balance: "Nåværende saldo" # MT
+        monthly_topup: "Månedlig påfylling" # MT
+        none: "Ingen" # MT
+        edit: "Rediger" # MT
+        add: "Legg til" # MT
+        next_payment_date: "Neste betalingsdato" # MT
+        status: "Status" # MT
+      messaging_topup_modal:
+        title: "Månedlig påfylling for meldinger" # MT
+        intro: "Velg hvor mye meldingskreditt som skal legges til saldoen din hver måned. Den lagrede betalingsmåten din blir belastet automatisk." # MT
+        none: "Ingen" # MT
+        cancel: "Avbryt" # MT
+        save: "Lagre" # MT
+      post_payment:
+        title: "App-abonnement" # MT
+        next_payment_date: "Neste betalingsdato" # MT
+      pre_payment:
+        title: "App-abonnement" # MT
+        start_date: "Startdato" # MT
+        update_info_html: "Hvis noe av dette må oppdateres, kontakt %{email}." # MT
+        ready_enter_payment: "Ser bra ut, jeg er klar til å legge inn betalingsopplysningene mine" # MT
+        ready_to_pay: "Ser bra ut, jeg er klar til å betale" # MT
+      payment:
+        title: "Betaling" # MT
+        canadian_debit: "Kanadisk forhåndsgodkjent debitering" # MT
+        popup_note: "Når du klikker på «Betal» nedenfor, åpnes et popup-vindu der du legger inn bankopplysningene dine." # MT

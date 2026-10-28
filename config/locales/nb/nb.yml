@@ -1,0 +1,548 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+nb:
+  common:
+    settings: "Innstillinger" # MT
+    settings_updated: "Innstillingene er oppdatert." # MT
+    open_date_picker: "Åpne datovelger" # MT
+    select_user: "Velg bruker …" # MT
+    adults: "Voksne" # MT
+    all: "Alle" # MT
+    cancel: "Avbryt" # MT
+    cancelled: "Avlyst" # MT
+    children: "Barn" # MT
+    clearing_the_filter: "fjerne filtrene" # MT
+    create_new: "Opprett ny" # MT
+    # Placeholder for an empty value in a details table.
+    none_bracketed: "[Ingen]" # MT
+    # A person or household name marked as inactive.
+    with_inactive: "%{name} (inaktiv)" # MT
+    close: "Lukk" # MT
+    print: "Skriv ut" # MT
+    loading_indicator: "Lasteindikator" # MT
+    # Timestamp on printed pages.
+    generated_at: "Generert: %{time}" # MT
+    community_count:
+      one: "%{count} fellesskap" # MT
+      other: "%{count} fellesskap" # MT
+    default: "Standard" # MT
+    edit: "Rediger" # MT
+    "false": "Usann" # MT
+    hidden: "Skjult" # MT
+    inactive: "Inaktiv" # MT
+    max: "Maks." # MT
+    no_result_clear_filter_link_html: "Du kan prøve å %{link}." # MT
+    none: "Ingen" # MT
+    num_in_total: "%{count} totalt" # MT
+    save: "Lagre" # MT
+    "true": "Sann" # MT
+    unknown: "Ukjent" # MT
+    unlimited: "Ubegrenset" # MT
+    "yes": "Ja" # MT
+    "no": "Nei" # MT
+    time_with_preposition:
+      "on": "%{t}" # MT
+      "at": "kl. %{t}" # MT
+      "until": "fram til kl. %{t}" # MT
+    this_year: "I år" # MT
+    this_quarter: "Dette kvartalet" # MT
+    this_month: "Denne måneden" # MT
+    all_time: "Hele tiden" # MT
+
+  helpers:
+    submit:
+      cancel: "Avbryt" # MT
+      confirm: "Bekreft" # MT
+      continue: "Fortsett" # MT
+      create: "Lagre" # MT
+      go_back: "Gå tilbake" # MT
+      import: "Importer" # MT
+      opt_out: "Meld deg ut" # MT
+      update: "Lagre" # MT
+      save_and_invite: "Lagre og inviter" # MT
+      sign_in: "Logg inn" # MT
+      send_reset_instructions: "Send instruksjoner for tilbakestilling" # MT
+      set_password: "Angi passord" # MT
+      meals_message:
+        create: "Send melding" # MT
+      meals_signup:
+        save_and_next: "Lagre og gå til neste måltid" # MT
+      wiki_page:
+        preview: "Forhåndsvis" # MT
+
+  errors:
+    messages:
+      invalid_yaml: "Ugyldig YAML" # MT
+      invalid_custom_field_spec: "Denne spesifikasjonen er ugyldig. Kontakt Gather-brukerstøtten for å få hjelp." # MT
+      no_semicolons: "Semikolon er ikke tillatt" # MT
+
+  # App modal button labels + default titles (exported to JS via config/i18n-js.yml).
+  modal:
+    ok: "OK" # MT
+    cancel: "Avbryt" # MT
+    confirm_title: "Bekreft" # MT
+    alert_title: "Merknad" # MT
+
+  payment:
+    accountholder_required: "Oppgi navnet på kontoinnehaveren." # MT
+
+  confirmations:
+    billing/template:
+      destroy: "Er du sikker på at du vil slette malen «%{description}» for %{member_types}? Dette kan ikke angres." # MT
+    domain:
+      destroy: "Er du sikker på at du vil slette domenet «%{name}»? Dette kan ikke angres." # MT
+    groups/group:
+      destroy: "Er du sikker på at du vil slette gruppen «%{name}»? Dette kan ikke angres." # MT
+      deactivate: "Er du sikker på at du vil deaktivere gruppen «%{name}»?" # MT
+    household:
+      destroy: "Er du sikker på at du vil slette husstanden «%{name}»? Dette kan ikke angres." # MT
+      deactivate: "Er du sikker på at du vil deaktivere husstanden «%{name}»? Alle brukere i husstanden blir da deaktivert." # MT
+    meals/meal:
+      close: "Er du sikker på at du vil stenge dette måltidet? Det blir ikke mulig å melde seg på flere." # MT
+      destroy: "Er du sikker på at du vil slette måltidet «%{title}»? Dette kan ikke angres." # MT
+      reopen: "Er du sikker på at du vil åpne dette måltidet igjen? Det blir mulig å melde seg på." # MT
+      unfinalize: "Er du sikker på at du vil oppheve sluttføringen av dette måltidet?" # MT
+    user:
+      destroy: "Er du sikker på at du vil slette brukeren «%{name}»? Dette kan ikke angres." # MT
+      deactivate: "Er du sikker på at du vil deaktivere brukeren «%{name}»? Personen blir da fjernet fra alle grupper hen er med i." # MT
+      invite: "Dette sender en e-post til «%{name}» med instruksjoner for hvordan man logger inn. Fortsette?" # MT
+    people/member_type:
+      destroy: "Er du sikker på at du vil slette medlemstypen «%{name}»? Husstander med denne typen får ingen medlemstype. Dette kan ikke angres." # MT
+    people/memorial:
+      destroy: "Er du sikker på at du vil slette minnesiden for «%{name}»? Dette kan ikke angres." # MT
+    people/memorial_message:
+      destroy: "Er du sikker på at du vil slette denne minnehilsenen? Dette kan ikke angres." # MT
+    calendars/protocol:
+      destroy: "Er du sikker på at du vil slette regelverket «%{name}»? Dette kan ikke angres." # MT
+    calendars/calendar:
+      destroy: "Er du sikker på at du vil slette kalenderen «%{name}»? Dette kan ikke angres." # MT
+      deactivate: "Er du sikker på at du vil deaktivere kalenderen «%{name}»?" # MT
+    calendars/event:
+      destroy: "Er du sikker på at du vil slette hendelsen «%{name}»? Dette kan ikke angres." # MT
+      destroy_series: "Er du sikker på at du vil slette alle forekomster av den gjentakende hendelsen «%{name}», både tidligere og kommende? Dette kan ikke angres." # MT
+    calendars/group:
+      destroy: "Er du sikker på at du vil slette denne kalendergruppen? Dette kan ikke angres." # MT
+    gdrive/item:
+      destroy: "Er du sikker på at du vil fjerne dette elementet? Det blir ikke slettet fra Google Drive, men det blir ikke lenger knyttet til Gather." # MT
+    gdrive/item_group:
+      destroy: "Er du sikker på at du vil fjerne denne gruppen?" # MT
+    gdrive/migration/operation:
+      destroy: "Er du sikker på at du vil slette denne migreringen? All informasjon om migreringen blir slettet. Ingen faktiske filer i Google Drive blir berørt." # MT
+    meals/formula:
+      destroy: "Er du sikker på at du vil slette formelen «%{name}»? Dette kan ikke angres." # MT
+      deactivate: "Er du sikker på at du vil deaktivere formelen «%{name}»?" # MT
+    meals/role:
+      destroy: "Er du sikker på at du vil slette rollen «%{title}»? Dette kan ikke angres." # MT
+      deactivate: "Er du sikker på at du vil deaktivere rollen «%{title}»?" # MT
+    meals/type:
+      destroy: "Er du sikker på at du vil slette typen «%{name}»? Dette kan ikke angres." # MT
+      deactivate: "Er du sikker på at du vil deaktivere typen «%{name}»?" # MT
+    wiki/page:
+      destroy: "Er du sikker på at du vil slette wikisiden «%{title}»? Dette kan ikke angres." # MT
+    work/job:
+      destroy: "Er du sikker på at du vil slette oppgaven «%{title}»? Dette kan ikke angres." # MT
+    work/period:
+      destroy: "Er du sikker på at du vil slette perioden «%{name}»? Dette kan ikke angres." # MT
+    work/shift:
+      unsignup: "Er du sikker på at du vil fjerne navnet ditt fra denne oppgaven?" # MT
+
+  activatables:
+    community:
+      one_html: "Dette fellesskapet ble deaktivert %{time}." # MT
+      two_html: "Du kan %{link}." # MT
+      three: "aktivere det igjen" # MT
+    user:
+      one_html: "Denne brukeren ble markert som inaktiv %{time}." # MT
+      two_html: "Du kan %{link}." # MT
+      three: "aktivere brukeren igjen" # MT
+    household:
+      one_html: "Denne husstanden ble markert som inaktiv %{time}." # MT
+      two_html: "Du kan %{link}. <strong>Merk:</strong> Du må aktivere brukeren/brukerne i husstanden igjen hver for seg." # MT
+      three: "aktivere den igjen" # MT
+    groups/group:
+      one_html: "Denne gruppen ble markert som inaktiv %{time}." # MT
+      two_html: "Du kan %{link}." # MT
+      three: "aktivere den igjen" # MT
+    calendars/calendar:
+      one_html: "Denne kalenderen ble markert som inaktiv %{time}." # MT
+      two_html: "Du kan %{link}." # MT
+      three: "aktivere den igjen" # MT
+    meals/formula:
+      one_html: "Denne formelen ble markert som inaktiv %{time}." # MT
+      two_html: "Du kan %{link}." # MT
+      three: "aktivere den igjen" # MT
+    meals/role:
+      one_html: "Denne rollen ble markert som inaktiv %{time}." # MT
+      two_html: "Du kan %{link}." # MT
+      three: "aktivere den igjen" # MT
+    meals/type:
+      one_html: "Denne typen ble markert som inaktiv %{time}." # MT
+      two_html: "Du kan %{link}." # MT
+      three: "aktivere den igjen" # MT
+
+  deactivatable:
+    community:
+      success:
+        activate: "Fellesskapet er aktivert igjen." # MT
+    household:
+      success:
+        activate: "Husstanden er aktivert." # MT
+        deactivate: "Husstanden er deaktivert." # MT
+        destroy: "Husstanden er slettet." # MT
+        hard_destroy: "Husstanden og alle medlemmene er slettet for godt." # MT
+    user:
+      success:
+        activate: "Brukeren er aktivert." # MT
+        activate_unconfirmed: "Brukeren er aktivert, men trenger en invitasjon for å logge inn. Klikk på «Inviter» nedenfor for å invitere brukeren." # MT
+        deactivate: "Brukeren er deaktivert." # MT
+        destroy: "Brukeren er slettet." # MT
+        hard_destroy: "Brukeren er slettet for godt." # MT
+      error:
+        activate: "Feil under aktivering: %{message}" # MT
+        deactivate: "Feil under deaktivering: %{message}" # MT
+    billing/template:
+      success:
+        destroy: "Malen er slettet." # MT
+    domain:
+      success:
+        destroy: "Domenet er slettet." # MT
+    gdrive/item:
+      success:
+        destroy: "Elementet er fjernet." # MT
+    gdrive/item_group:
+      success:
+        destroy: "Gruppen er fjernet." # MT
+    gdrive/migration/operation:
+      success:
+        destroy: "Operasjonen er slettet." # MT
+    groups/group:
+      success:
+        deactivate: "Gruppen er deaktivert." # MT
+        activate: "Gruppen er aktivert." # MT
+        destroy: "Gruppen er slettet." # MT
+    calendars/protocol:
+      success:
+        destroy: "Regelverket er slettet." # MT
+    calendars/group:
+      success:
+        destroy: "Gruppen er slettet." # MT
+    calendars/calendar:
+      success:
+        activate: "Kalenderen er aktivert." # MT
+        deactivate: "Kalenderen er deaktivert." # MT
+        destroy: "Kalenderen er slettet." # MT
+    meals/meal:
+      success:
+        destroy: "Måltidet er slettet." # MT
+    meals/formula:
+      success:
+        activate: "Formelen er aktivert." # MT
+        deactivate: "Formelen er deaktivert." # MT
+        destroy: "Formelen er slettet." # MT
+    meals/role:
+      success:
+        activate: "Rollen er aktivert." # MT
+        deactivate: "Rollen er deaktivert." # MT
+        destroy: "Rollen er slettet." # MT
+    meals/type:
+      success:
+        activate: "Typen er aktivert." # MT
+        deactivate: "Typen er deaktivert." # MT
+        destroy: "Typen er slettet." # MT
+    people/member_type:
+      success:
+        destroy: "Medlemstypen er slettet." # MT
+    people/memorial:
+      success:
+        destroy: "Minnesiden er slettet." # MT
+    people/memorial_message:
+      success:
+        destroy: "Hilsenen er slettet." # MT
+    work/job:
+      success:
+        destroy: "Oppgaven er slettet." # MT
+    work/period:
+      success:
+        destroy: "Perioden er slettet." # MT
+
+  cocoon:
+    add_links:
+      vehicles: "Legg til kjøretøy" # MT
+      emergency_contacts: "Legg til nødkontakt" # MT
+      up_guardianships: "Legg til forelder/foresatt" # MT
+      pets: "Legg til kjæledyr" # MT
+      shifts: "Legg til vakt" # MT
+      assignments: "Legg til medhjelper" # MT
+      reminders: "Legg til påminnelse" # MT
+      restrictions: "Legg til restriksjon" # MT
+      signups: "Legg til husstand" # MT
+      groups/group:
+        memberships: "Legg til medlem" # MT
+      meals/signup:
+        parts: "Legg til element" # MT
+      meals/formula:
+        parts: "Legg til måltidstype" # MT
+
+  select2:
+    prompts:
+      creator: "Skriv noen bokstaver av navnet til den som opprettet." # MT
+      sponsor: "Skriv noen bokstaver av navnet til kontaktpersonen." # MT
+      household: "Skriv noen bokstaver av navnet på husstanden." # MT
+      guardian: "Skriv noen bokstaver av navnet til den foresatte." # MT
+      user: "Skriv noen bokstaver av navnet til brukeren." # MT
+      job_choosing_proxy: "Skriv noen bokstaver av navnet til brukeren." # MT
+      type: "Skriv noen bokstaver av navnet på måltidstypen, eller skriv hele navnet for å legge til en ny type." # MT
+      category: "Skriv noen bokstaver av kategorien, eller skriv hele kategorien for å legge til en ny." # MT
+      reimbursee: "Skriv noen bokstaver av navnet til mottakeren av refusjonen." # MT
+    placeholders:
+      creator: "Velg hvem som opprettet …" # MT
+      sponsor: "Velg kontaktperson …" # MT
+      household: "Velg husstand …" # MT
+      guardian: "Velg foresatt …" # MT
+      user: "Velg bruker …" # MT
+      job_choosing_proxy: "Velg bruker …" # MT
+      type: "Velg eller skriv inn type …" # MT
+      category: "Velg eller skriv inn kategori …" # MT
+      reimbursee: "Velg mottaker av refusjon …" # MT
+
+  csv:
+    headers:
+      user:
+        id: "ID" # MT
+        first_name: "Fornavn" # MT
+        last_name: "Etternavn" # MT
+        unit_num: "Boenhetsnr." # MT
+        unit_suffix: "Boenhetssuffiks" # MT
+        birthdate: "Bursdag" # MT
+        pronouns: "Pronomen" # MT
+        email: "E-post" # MT
+        google_email: "Google-e-post" # MT
+        paypal_email: "PayPal-e-post" # MT
+        child: "Er barn" # MT
+        full_access: "Full tilgang" # MT
+        household_id: "Husstands-ID" # MT
+        household_name: "Navn på husstand" # MT
+        mobile_phone: "Mobiltelefon" # MT
+        home_phone: "Telefon hjemme" # MT
+        work_phone: "Telefon jobb" # MT
+        joined_on: "Innflyttingsdato" # MT
+        deactivated_at: "Utflyttingsdato" # MT
+        preferred_contact: "Foretrukket kontaktmåte" # MT
+        garage_nums: "Garasjenr." # MT
+        vehicles: "Kjøretøy" # MT
+        guardian_names: "Foreldre/foresatte" # MT
+        keyholders: "Nøkkelinnehavere" # MT
+        emergency_contacts: "Nødkontakter" # MT
+        pets: "Kjæledyr" # MT
+      billing/account:
+        number: "Nummer" # MT
+        community_id: "Fellesskaps-ID" # MT
+        community_name: "Fellesskap" # MT
+        household_id: "Husstands-ID" # MT
+        household_name: "Husstand" # MT
+        balance_due: "Å betale" # MT
+        current_balance: "Nåværende saldo" # MT
+        credit_limit: "Kredittgrense" # MT
+        last_statement_id: "ID for siste kontoutskrift" # MT
+        last_statement_on: "Dato for siste kontoutskrift" # MT
+        due_last_statement: "Å betale, siste kontoutskrift" # MT
+        total_new_charges: "Nye belastninger totalt" # MT
+        total_new_credits: "Nye krediteringer totalt" # MT
+        created_at: "Opprettet" # MT
+      billing/transaction:
+        id: "ID" # MT
+        incurred_on: "Påløpt dato" # MT
+        code: "Kode" # MT
+        chg_crd: "Type" # MT
+        description: "Beskrivelse" # MT
+        household_id: "Husstands-ID" # MT
+        household_name: "Husstand" # MT
+        quantity: "Antall" # MT
+        unit_price: "Enhetspris" # MT
+        amount: "Beløp" # MT
+        created_at: "Registrert dato" # MT
+        account_id: "Konto-ID" # MT
+        statement_id: "Kontoutskrift-ID" # MT
+        meal_id: "Måltids-ID" # MT
+      meals/meal:
+        served_at: "Dato/tid" # MT
+        calendars: "Steder" # MT
+        formula: "Formel" # MT
+        communities: "Fellesskap" # MT
+        role: "Rolle" # MT
+        # `action` and `id` are duplicated from `common` below so that the exporter, which does a
+        # plain lookup with no fallback, produces headers byte-identical to those Meals::Import
+        # expects (it checks the `meals/meal` scope first and falls back to `common`).
+        action: "Handling" # MT
+        id: "ID" # MT
+        title: "Tittel" # MT
+        entrees: "Hovedrett" # MT
+        side: "Tilbehør" # MT
+        kids: "Barn" # MT
+        dessert: "Dessert" # MT
+        notes: "Merknader" # MT
+        allergens: "Allergener" # MT
+        capacity: "Kapasitet" # MT
+        status: "Status" # MT
+        signup_count: "Matgjester totalt" # MT
+        spots_left: "Ledige plasser" # MT
+        ingredient_cost: "Kostnad for ingredienser" # MT
+        pantry_cost: "Kostnad for basisvarer" # MT
+        total_cost: "Total kostnad" # MT
+        payment_method: "Betalingsmåte" # MT
+        reimbursee: "Mottaker av refusjon" # MT
+        # The "Diners: "/"Price: " prefixes keep these from colliding with meal role titles,
+        # which Meals::Import matches by exact string.
+        diner_count: "Matgjester: %{type}" # MT
+        type_price: "Pris: %{type}" # MT
+      meals/signup:
+        meal_id: "Måltids-ID" # MT
+        served_at: "Dato/tid for måltid" # MT
+        meal_title: "Tittel på måltid" # MT
+        calendars: "Steder for måltid" # MT
+        formula: "Formel" # MT
+        community_id: "Fellesskaps-ID" # MT
+        community_name: "Fellesskap" # MT
+        household_id: "Husstands-ID" # MT
+        household_name: "Husstand" # MT
+        diner_count: "Matgjester: %{type}" # MT
+        total: "Matgjester totalt" # MT
+        takeout: "Ta med" # MT
+        comments: "Kommentarer" # MT
+        created_at: "Påmeldingstidspunkt" # MT
+      common:
+        id: "ID" # MT
+        action: "Handling" # MT
+    errors:
+      meals/meal:
+        calendar:
+          bad_id: "Fant ingen kalender med ID-en %{str}" # MT
+          bad_name: "Fant ingen kalender med navnet «%{str}»" # MT
+        formula:
+          bad_id: "Fant ingen måltidsformel med ID-en %{str}" # MT
+          bad_name: "Fant ingen måltidsformel med navnet «%{str}»" # MT
+        community:
+          bad_id: "Fant ikke noe fellesskap med ID-en %{str}" # MT
+          bad_name: "Fant ikke noe fellesskap med navnet «%{str}»" # MT
+        file_empty: "Filen er tom" # MT
+        invalid_headers: "Ugyldige kolonneoverskrifter: %{headers}" # MT
+        missing_columns: "Kolonner som mangler: %{columns}" # MT
+        invalid_action: "Ugyldig handling: %{action}" # MT
+        action_not_permitted: "Handlingen er ikke tillatt (%{action})" # MT
+        served_at_required: "Dato/tid er påkrevd" # MT
+        invalid_served_at: "«%{str}» er ikke en gyldig dato/tid" # MT
+        calendars_required: "Kalender(e) er påkrevd" # MT
+        meal_id_not_found: "Fant ikke noe måltid med ID-en «%{id}»" # MT
+        meal_not_found: "Fant ikke noe måltid som serveres %{time} på disse stedene: %{locations}" # MT
+        delete_failed: "Feil ved sletting av måltid %{id}: «%{error}»" # MT
+        user:
+          bad_id: "Fant ingen bruker med ID-en %{str}" # MT
+          bad_name: "Fant ingen bruker med navnet «%{str}»" # MT
+
+  action_labels:
+    common:
+      new: "Legg til" # MT
+      edit: "Rediger" # MT
+      deactivate: "Deaktiver" # MT
+      destroy: "Slett" # MT
+      clone: "Kopier" # MT
+      close: "Steng" # MT
+      join: "Bli med" # MT
+      leave: "Forlat" # MT
+      opt_out: "Velg bort" # MT
+      rejoin: "Bli med igjen" # MT
+      reopen: "Åpne igjen" # MT
+      rescan: "Skann på nytt" # MT
+      summary: "Sammendrag" # MT
+      finalize: "Sluttfør" # MT
+      unfinalize: "Opphev sluttføring" # MT
+      cancel: "Avlys" # MT
+      send_message: "Melding" # MT
+    community:
+      visit: "Besøk" # MT
+    billing/account:
+      add_txn: "Legg til transaksjon" # MT
+    user:
+      update_info: "Rediger profil" # MT
+      update_photo: "Rediger bilde" # MT
+      invite: "Inviter" # MT
+      impersonate: "Opptre som" # MT
+      destroy: "Slett for godt" # MT
+      delete_self: "Slett kontoen min" # MT
+    household:
+      destroy: "Slett for godt" # MT
+    wiki/page:
+      history: "Historikk" # MT
+    work/job:
+      edit: "Rediger oppgave" # MT
+    work/shift:
+      edit_job: "Rediger oppgave" # MT
+      signup: "Meld på" # MT
+      unsignup: "Fjern påmelding" # MT
+    work/period:
+      review_notices: "Send beskjeder" # MT
+      send_notices: "Send beskjeder" # MT
+
+  dropzone:
+    prompts:
+      default: "Klikk eller dra en fil hit" # MT
+      models:
+        user: "Klikk eller dra et bilde hit" # MT
+        calendars/calendar: "Klikk eller dra et bilde hit" # MT
+
+  titles:
+    meals/messages: "Send melding om måltid" # MT
+
+  roles:
+    admin: "Administrator" # MT
+    calendar_coordinator: "Kalenderkoordinator" # MT
+    cluster_admin: "Klyngeadministrator" # MT
+    super_admin: "Superadministrator" # MT
+    biller: "Faktureringsansvarlig" # MT
+    photographer: "Fotograf" # MT
+    meals_coordinator: "Måltidskoordinator" # MT
+    wikiist: "Wikiredaktør" # MT
+    work_coordinator: "Arbeidskoordinator" # MT
+    new_community_approver: "Godkjenner av nye fellesskap" # MT
+    index:
+      title: "Roller" # MT
+      people: "Personer" # MT
+      legend: "Forklaring" # MT
+      # Each line is "<role name> - <description>".
+      legend_item_html: "<strong>%{role}</strong> – %{description}" # MT
+      descriptions:
+        admin: "Alle de andre rollene til sammen" # MT
+        biller: "Administrerer transaksjoner, maler, kontoutskrifter og formler, og sluttfører måltider" # MT
+        photographer: "Kan redigere alles bilder i medlemslisten" # MT
+        calendar_coordinator: "Administrerer kalendere og alles kalenderhendelser" # MT
+        meals_coordinator: "Administrerer måltider, måltidsroller, faktureringsformler og måltidstyper" # MT
+        wikiist: "Administrerer wikisider med særskilt beskyttelse" # MT
+        work_coordinator: "Administrerer oppgaver, vakter og arbeidsperioder" # MT
+
+  phone_types:
+    abbreviations:
+      home: "h" # MT
+      work: "j" # MT
+      mobile: "m" # MT
+
+  date_range_lens:
+    past_12: "Siste 12 måneder" # MT
+
+  community_lens:
+    all: "Alle fellesskap" # MT
+
+  lens_bar:
+    clear_filter: "Fjern filter" # MT
+
+  search_lens:
+    prompt: "Søk …" # MT

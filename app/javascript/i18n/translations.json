@@ -939,6 +939,142 @@
     }
   },
   "fi": {
+    "batchable_tables": {
+      "confirmations": {
+        "gdrive__migration__owners": {
+          "send_request": {
+            "one": "Haluatko varmasti lähettää pyyntösähköpostin %{count} henkilölle?",
+            "other": "Haluatko varmasti lähettää pyyntösähköpostit %{count} henkilölle?"
+          }
+        }
+      }
+    },
+    "calendar_nav_popover": {
+      "dismiss": "Sulje",
+      "message_html": "<b>Varaukset</b> on nyt nimeltään <b>Kalenterit</b>! Käy katsomassa!"
+    },
+    "calendars": {
+      "calendar_list": {
+        "all": "Kaikki",
+        "deselect_all": "Poista kaikki valinnat",
+        "select_all": "Valitse kaikki"
+      },
+      "drag": {
+        "calendar": {
+          "all": "Siirrä kaikissa",
+          "content": "”%{name}” on useammassa kuin yhdessä kalenterissa:",
+          "selected": "(valittu)",
+          "this": "Siirrä vain kalenterissa %{calendar}",
+          "title": "Siirrä useassa kalenterissa oleva tapahtuma"
+        },
+        "confirm": "Haluatko varmasti siirtää tapahtuman ”%{name}”?",
+        "confirm_occurrence": "Haluatko varmasti siirtää tämän tapahtuman ”%{name}” kerran?",
+        "error_title": "Virhe",
+        "load_error": "Emme pystyneet tarkistamaan, miten tämän tapahtuman voi siirtää. Yritä uudelleen.",
+        "series": {
+          "content": "”%{name}” toistuu. Mitkä kerrat siirretään?",
+          "following": "Tämä ja seuraavat",
+          "occurrence": "Vain tämä",
+          "series": "Kaikki kerrat",
+          "title": "Siirrä toistuva tapahtuma"
+        }
+      },
+      "grid": {
+        "agenda_label": "%{view}. Liiku nuolinäppäimillä",
+        "agenda_label_all_day": "%{view}. Koko päivän rivi. Liiku nuolinäppäimillä",
+        "agenda_label_all_day_slots": "%{view}. Koko päivän rivi ja sen jälkeen %{slots}. Liiku nuolinäppäimillä",
+        "agenda_label_slots": "%{view}. Ruudukko: %{slots}. Liiku nuolinäppäimillä",
+        "create_confirm": {
+          "range_html": "Luodaanko tapahtuma ajalle <b>%{start}</b> – <b>%{end}</b>?",
+          "same_day_html": "Luodaanko tapahtuma <b>%{date}</b>?",
+          "same_day_times_html": "Luodaanko tapahtuma <b>%{date}</b> klo <b>%{start}</b>–<b>%{end}</b>?"
+        },
+        "day_calendar": "Päiväkalenteri",
+        "event_count": {
+          "one": "%{count} tapahtuma",
+          "other": "%{count} tapahtumaa",
+          "zero": "Ei tapahtumia"
+        },
+        "event_count_this_month": {
+          "one": "%{count} tapahtuma tässä kuussa",
+          "other": "%{count} tapahtumaa tässä kuussa",
+          "zero": "Ei tapahtumia tässä kuussa"
+        },
+        "event_count_this_week": {
+          "one": "%{count} tapahtuma tällä viikolla",
+          "other": "%{count} tapahtumaa tällä viikolla",
+          "zero": "Ei tapahtumia tällä viikolla"
+        },
+        "half_hour_slots": "puolen tunnin aikavälit %{start}–%{end}",
+        "header": {
+          "day_view": "Päivänäkymä",
+          "month_view": "Kuukausinäkymä",
+          "next": "Seuraava",
+          "previous": "Edellinen",
+          "today": "Tänään",
+          "toolbar": "Kalenterin säätimet",
+          "week_view": "Viikkonäkymä"
+        },
+        "minute_slots": "aikavälit (%{minutes} min) %{start}–%{end}",
+        "month_calendar": "Kuukausikalenteri",
+        "now_showing": "Kalenterissa näkyy nyt: %{month}",
+        "this_week_date": "Tällä viikolla, %{date}",
+        "today_date": "Tänään, %{date}",
+        "week_calendar": "Viikkokalenteri"
+      }
+    },
+    "common": {
+      "adults": "Aikuiset",
+      "all": "Kaikki",
+      "all_time": "Kaikki ajat",
+      "cancel": "Peruuta",
+      "cancelled": "Peruttu",
+      "children": "Lapset",
+      "clearing_the_filter": "suodattimien tyhjentämistä",
+      "close": "Sulje",
+      "community_count": {
+        "one": "%{count} yhteisö",
+        "other": "%{count} yhteisöä"
+      },
+      "create_new": "Luo uusi",
+      "default": "Oletus",
+      "edit": "Muokkaa",
+      "false": "Epätosi",
+      "generated_at": "Luotu: %{time}",
+      "hidden": "Piilotettu",
+      "inactive": "Ei aktiivinen",
+      "loading_indicator": "Latausilmaisin",
+      "max": "Enint.",
+      "no": "Ei",
+      "no_result_clear_filter_link_html": "Voit kokeilla %{link}.",
+      "none": "Ei mitään",
+      "none_bracketed": "[Ei mitään]",
+      "num_in_total": "yhteensä %{count}",
+      "open_date_picker": "Avaa päivämäärän valitsin",
+      "print": "Tulosta",
+      "save": "Tallenna",
+      "select_user": "Valitse käyttäjä …",
+      "settings": "Asetukset",
+      "settings_updated": "Asetukset päivitetty.",
+      "this_month": "Tämä kuukausi",
+      "this_quarter": "Tämä vuosineljännes",
+      "this_year": "Tämä vuosi",
+      "time_with_preposition": {
+        "at": "klo %{t}",
+        "on": "%{t}",
+        "until": "klo %{t} asti"
+      },
+      "true": "Tosi",
+      "unknown": "Tuntematon",
+      "unlimited": "Rajoittamaton",
+      "with_inactive": "%{name} (ei aktiivinen)",
+      "yes": "Kyllä"
+    },
+    "communities": {
+      "signup_action": {
+        "approval_template": "Hei %{name},\n\nHienoja uutisia! Hakemuksesi liittyä Gatheriin yhteisölle ”%{community}” on hyväksytty.\n\n#######################################\nKIRJOITA TÄHÄN HENKILÖKOHTAINEN VIESTI,\nMAINITSE JOTAIN YHTEISÖSTÄ\n#######################################\n\nYhteisösi on nyt valmis käyttöön!\n\nSaat erillisen sähköpostin, jossa on ohjeet ensimmäiseen kirjautumiseen.\n\nTervetuloa mukaan!\n\n%{approver}, Gather-tiimin puolesta"
+      }
+    },
     "date": {
       "abbr_day_names": [
         "su",
@@ -993,6 +1129,66 @@
       "dformat": "%-d.%-m.%Y",
       "pformat": "D.M.YYYY"
     },
+    "dropzone": {
+      "dictFileSizeUnits": {
+        "b": "B",
+        "gb": "GiB",
+        "kb": "KiB",
+        "mb": "MiB",
+        "tb": "TiB"
+      },
+      "dictFileTooBig": "Tiedosto on liian suuri ({{filesize}} MiB). Enimmäiskoko on {{maxFilesize}} MiB.",
+      "dictFileUnreadable": "Tiedostoa ei voitu lukea. Yritä uudelleen tai valitse toinen tiedosto.",
+      "prompts": {
+        "default": "Napsauta tai vedä tiedosto tähän",
+        "models": {
+          "calendars/calendar": "Napsauta tai vedä kuva tähän",
+          "user": "Napsauta tai vedä kuva tähän"
+        }
+      }
+    },
+    "errors": {
+      "messages": {
+        "doesnt_match": "Ei vastaa salasanaa"
+      }
+    },
+    "meals": {
+      "report_charts": {
+        "avg_cost": "Hinta keskim.",
+        "avg_full_meal_price": "Täyden aterian hinta keskim.",
+        "avg_servings": "Annoksia keskim.",
+        "avg_servings_per_meal": "Annoksia keskim. ateriaa kohden",
+        "meals": "Ateriat",
+        "month": "Kuukausi",
+        "number_of_meals": "Aterioiden määrä",
+        "titles": {
+          "community_rep": "Yhteisöjen keskimääräinen edustus aterioilla",
+          "community_rep_community": "Yhteisöjen keskimääräinen edustus aterioilla (%{community})",
+          "cost_by_month": "Täyden aterian keskihinta kuukausittain",
+          "cost_by_month_community": "Täyden aterian keskihinta kuukausittain (%{community})",
+          "cost_by_weekday": "Täyden aterian keskihinta viikonpäivittäin",
+          "cost_by_weekday_community": "Täyden aterian keskihinta viikonpäivittäin (%{community})",
+          "meal_types": "Ateriatyyppien keskimääräinen jakauma aterioilla",
+          "meal_types_community": "Ateriatyyppien keskimääräinen jakauma aterioilla (%{community})",
+          "meals_by_month": "Aterioiden määrä kuukausittain",
+          "meals_by_month_community": "Aterioiden määrä kuukausittain (%{community})",
+          "servings_by_month": "Annoksia keskimäärin ateriaa kohden kuukausittain",
+          "servings_by_month_community": "Annoksia keskimäärin ateriaa kohden kuukausittain (%{community})",
+          "servings_by_weekday": "Annoksia keskimäärin ateriaa kohden viikonpäivittäin",
+          "servings_by_weekday_community": "Annoksia keskimäärin ateriaa kohden viikonpäivittäin (%{community})"
+        },
+        "weekday": "Viikonpäivä"
+      }
+    },
+    "meals/assignments": {
+      "change_warning": "Huomaa: Jos muutat aterian tekijöitä, ateriatoimikunnalle tai -vastaavalle sekä kaikille nykyisille ja uusille tekijöille lähetetään ilmoitus sähköpostitse."
+    },
+    "modal": {
+      "alert_title": "Ilmoitus",
+      "cancel": "Peruuta",
+      "confirm_title": "Vahvista",
+      "ok": "OK"
+    },
     "moment_formats": {
       "full_date": "dddd D. MMMM[ta] YYYY",
       "hour": "H.mm",
@@ -1002,9 +1198,57 @@
       "wday_date": "ddd D.M.YYYY",
       "wday_date_time": "ddd D.M.YYYY [klo] H.mm"
     },
+    "password": {
+      "strength": {
+        "excellent": "Erinomainen (pisteet: %{bits})",
+        "good": "Hyvä (pisteet: %{bits})",
+        "weak": "Liian heikko (pisteet: %{bits})"
+      }
+    },
+    "payment": {
+      "accountholder_required": "Anna tilinhaltijan nimi."
+    },
+    "subscription": {
+      "topup_notices": {
+        "calculating": "Lasketaan …",
+        "cancel": "Kuukausittainen täydennys perutaan nykyisen laskutuskuukauden lopussa. Uusia veloituksia ei tule, ja nykyinen saldosi säilyy.",
+        "error": "%{reason} (Yritetty: %{time}.) Jos tämä toistuu, ota yhteyttä Gatherin tukeen ja kerro viite ja aika.",
+        "error_default": "Jokin meni vikaan, eikä täydennystäsi muutettu.",
+        "error_with_reference": "%{reason} Viite: %{reference}. (Yritetty: %{time}.) Jos tämä toistuu, ota yhteyttä Gatherin tukeen ja kerro viite ja aika.",
+        "first_charge": "Tallennettua maksutapaasi veloitetaan tänään %{amount} täydestä kuukaudesta ja sen jälkeen %{amount} tänä päivänä joka kuukausi.",
+        "next_month": "Seuraavasta laskutuskuukaudesta alkaen sinua veloitetaan %{amount} kuukaudessa.",
+        "prorated_charge": "Tallennettua maksutapaasi veloitetaan nyt tänään noin %{charge} (suhteutettuna) ja sen jälkeen %{amount} kuukaudessa alkaen %{date}.",
+        "prorated_credit": "Saat nyt %{credit} hyvitystä seuraavaan laskuusi ja sen jälkeen veloitus on %{amount} kuukaudessa alkaen %{date}."
+      }
+    },
     "timepicker": {
       "dformat": "%-H.%M",
       "pformat": "H.mm"
+    },
+    "wiki": {
+      "editor": {
+        "autosaved": "Tallennettu automaattisesti: ",
+        "bold": "Lihavointi",
+        "fullscreen": "Koko näyttö päälle/pois",
+        "heading": "Otsikko",
+        "image": "Lisää kuva",
+        "italic": "Kursiivi",
+        "lines": {
+          "one": "rivejä: %{count}",
+          "other": "rivejä: %{count}"
+        },
+        "link": "Luo linkki",
+        "ordered_list": "Numeroitu luettelo",
+        "preview": "Esikatselu päälle/pois",
+        "quote": "Lainaus",
+        "side_by_side": "Rinnakkaisnäkymä päälle/pois",
+        "unordered_list": "Luettelo",
+        "words": {
+          "one": "sanoja: %{count}",
+          "other": "sanoja: %{count}"
+        }
+      },
+      "help": "Wikin ohje"
     }
   },
   "fr": {
@@ -1408,6 +1652,142 @@
     }
   },
   "it": {
+    "batchable_tables": {
+      "confirmations": {
+        "gdrive__migration__owners": {
+          "send_request": {
+            "one": "Vuoi davvero inviare un'email di richiesta a %{count} persona?",
+            "other": "Vuoi davvero inviare email di richiesta a %{count} persone?"
+          }
+        }
+      }
+    },
+    "calendar_nav_popover": {
+      "dismiss": "Chiudi",
+      "message_html": "<b>Prenotazioni</b> ora si chiama <b>Calendari</b>! Dai un'occhiata!"
+    },
+    "calendars": {
+      "calendar_list": {
+        "all": "Tutti",
+        "deselect_all": "Deseleziona tutti",
+        "select_all": "Seleziona tutti"
+      },
+      "drag": {
+        "calendar": {
+          "all": "Sposta su tutti",
+          "content": "«%{name}» compare su più di un calendario:",
+          "selected": "(selezionato)",
+          "this": "Sposta solo su %{calendar}",
+          "title": "Sposta evento su più calendari"
+        },
+        "confirm": "Vuoi davvero spostare l'evento «%{name}»?",
+        "confirm_occurrence": "Vuoi davvero spostare questa occorrenza di «%{name}»?",
+        "error_title": "Errore",
+        "load_error": "Non siamo riusciti a verificare come si può spostare questo evento. Riprova.",
+        "series": {
+          "content": "«%{name}» si ripete. Quali occorrenze vuoi spostare?",
+          "following": "Questa e le successive",
+          "occurrence": "Solo questa",
+          "series": "Tutte le occorrenze",
+          "title": "Sposta evento ricorrente"
+        }
+      },
+      "grid": {
+        "agenda_label": "%{view}. Usa i tasti freccia per spostarti",
+        "agenda_label_all_day": "%{view}. Riga «Tutto il giorno». Usa i tasti freccia per spostarti",
+        "agenda_label_all_day_slots": "%{view}. Riga «Tutto il giorno» seguita da %{slots}. Usa i tasti freccia per spostarti",
+        "agenda_label_slots": "%{view}. Griglia di %{slots}. Usa i tasti freccia per spostarti",
+        "create_confirm": {
+          "range_html": "Creare un evento da <b>%{start}</b> a <b>%{end}</b>?",
+          "same_day_html": "Creare un evento per <b>%{date}</b>?",
+          "same_day_times_html": "Creare un evento per <b>%{date}</b> dalle ore <b>%{start}</b> alle ore <b>%{end}</b>?"
+        },
+        "day_calendar": "Calendario giornaliero",
+        "event_count": {
+          "one": "%{count} evento",
+          "other": "%{count} eventi",
+          "zero": "Nessun evento"
+        },
+        "event_count_this_month": {
+          "one": "%{count} evento questo mese",
+          "other": "%{count} eventi questo mese",
+          "zero": "Nessun evento questo mese"
+        },
+        "event_count_this_week": {
+          "one": "%{count} evento questa settimana",
+          "other": "%{count} eventi questa settimana",
+          "zero": "Nessun evento questa settimana"
+        },
+        "half_hour_slots": "fasce di mezz'ora da %{start} a %{end}",
+        "header": {
+          "day_view": "Vista giorno",
+          "month_view": "Vista mese",
+          "next": "Successivo",
+          "previous": "Precedente",
+          "today": "Oggi",
+          "toolbar": "Controlli del calendario",
+          "week_view": "Vista settimana"
+        },
+        "minute_slots": "fasce di %{minutes} minuti da %{start} a %{end}",
+        "month_calendar": "Calendario mensile",
+        "now_showing": "Il calendario ora mostra: %{month}",
+        "this_week_date": "Questa settimana, %{date}",
+        "today_date": "Oggi, %{date}",
+        "week_calendar": "Calendario settimanale"
+      }
+    },
+    "common": {
+      "adults": "Adulti",
+      "all": "Tutti",
+      "all_time": "Da sempre",
+      "cancel": "Annulla",
+      "cancelled": "Annullato",
+      "children": "Bambini",
+      "clearing_the_filter": "rimuovere i filtri",
+      "close": "Chiudi",
+      "community_count": {
+        "one": "%{count} comunità",
+        "other": "%{count} comunità"
+      },
+      "create_new": "Crea nuovo",
+      "default": "Predefinito",
+      "edit": "Modifica",
+      "false": "Falso",
+      "generated_at": "Generato: %{time}",
+      "hidden": "Nascosto",
+      "inactive": "Non attivo",
+      "loading_indicator": "Indicatore di caricamento",
+      "max": "Max",
+      "no": "No",
+      "no_result_clear_filter_link_html": "Puoi provare a %{link}.",
+      "none": "Nessuno",
+      "none_bracketed": "[Nessuno]",
+      "num_in_total": "%{count} in totale",
+      "open_date_picker": "Apri il selettore di date",
+      "print": "Stampa",
+      "save": "Salva",
+      "select_user": "Seleziona utente …",
+      "settings": "Impostazioni",
+      "settings_updated": "Impostazioni aggiornate.",
+      "this_month": "Questo mese",
+      "this_quarter": "Questo trimestre",
+      "this_year": "Quest'anno",
+      "time_with_preposition": {
+        "at": "alle ore %{t}",
+        "on": "il %{t}",
+        "until": "fino alle ore %{t}"
+      },
+      "true": "Vero",
+      "unknown": "Sconosciuto",
+      "unlimited": "Illimitato",
+      "with_inactive": "%{name} (non attivo)",
+      "yes": "Sì"
+    },
+    "communities": {
+      "signup_action": {
+        "approval_template": "Ciao %{name},\n\nOttime notizie! La tua richiesta di unirti a Gather per la comunità «%{community}» è stata approvata.\n\n#######################################\nINSERISCI QUI UNA NOTA PERSONALE, CITA\nQUALCOSA DI SPECIFICO SULLA COMUNITÀ\n#######################################\n\nLa tua comunità è pronta!\n\nRiceverai un'email separata con le istruzioni per il primo accesso.\n\nBenvenuto a bordo!\n\n%{approver} per il team di Gather"
+      }
+    },
     "date": {
       "abbr_day_names": [
         "dom",
@@ -1462,6 +1842,66 @@
       "dformat": "%-d %b %Y",
       "pformat": "D MMM YYYY"
     },
+    "dropzone": {
+      "dictFileSizeUnits": {
+        "b": "B",
+        "gb": "GiB",
+        "kb": "KiB",
+        "mb": "MiB",
+        "tb": "TiB"
+      },
+      "dictFileTooBig": "Il file è troppo grande ({{filesize}} MiB). La dimensione massima è {{maxFilesize}} MiB.",
+      "dictFileUnreadable": "Impossibile leggere questo file. Riprova o scegline un altro.",
+      "prompts": {
+        "default": "Fai clic o trascina qui il file",
+        "models": {
+          "calendars/calendar": "Fai clic o trascina qui la foto",
+          "user": "Fai clic o trascina qui la foto"
+        }
+      }
+    },
+    "errors": {
+      "messages": {
+        "doesnt_match": "Non corrisponde alla password"
+      }
+    },
+    "meals": {
+      "report_charts": {
+        "avg_cost": "Costo medio",
+        "avg_full_meal_price": "Prezzo medio del pasto intero",
+        "avg_servings": "Porzioni medie",
+        "avg_servings_per_meal": "Porzioni medie per pasto",
+        "meals": "Pasti",
+        "month": "Mese",
+        "number_of_meals": "Numero di pasti",
+        "titles": {
+          "community_rep": "Rappresentanza media delle comunità ai pasti",
+          "community_rep_community": "Rappresentanza media delle comunità ai pasti (%{community})",
+          "cost_by_month": "Prezzo medio del pasto intero, per mese",
+          "cost_by_month_community": "Prezzo medio del pasto intero, per mese (%{community})",
+          "cost_by_weekday": "Prezzo medio del pasto intero, per giorno della settimana",
+          "cost_by_weekday_community": "Prezzo medio del pasto intero, per giorno della settimana (%{community})",
+          "meal_types": "Tipi di pasto medi ai pasti",
+          "meal_types_community": "Tipi di pasto medi ai pasti (%{community})",
+          "meals_by_month": "Numero di pasti per mese",
+          "meals_by_month_community": "Numero di pasti per mese (%{community})",
+          "servings_by_month": "Porzioni medie per pasto, per mese",
+          "servings_by_month_community": "Porzioni medie per pasto, per mese (%{community})",
+          "servings_by_weekday": "Porzioni medie per pasto, per giorno della settimana",
+          "servings_by_weekday_community": "Porzioni medie per pasto, per giorno della settimana (%{community})"
+        },
+        "weekday": "Giorno della settimana"
+      }
+    },
+    "meals/assignments": {
+      "change_warning": "Nota: se cambi le persone assegnate al pasto, verrà inviata una notifica via email alla commissione o al responsabile dei pasti e a tutte le persone assegnate, attuali e nuove."
+    },
+    "modal": {
+      "alert_title": "Avviso",
+      "cancel": "Annulla",
+      "confirm_title": "Conferma",
+      "ok": "OK"
+    },
     "moment_formats": {
       "full_date": "dddd D MMMM YYYY",
       "hour": "HH:mm",
@@ -1471,12 +1911,196 @@
       "wday_date": "ddd D MMM YYYY",
       "wday_date_time": "ddd D MMM YYYY, HH:mm"
     },
+    "password": {
+      "strength": {
+        "excellent": "Ottima (punteggio: %{bits})",
+        "good": "Buona (punteggio: %{bits})",
+        "weak": "Troppo debole (punteggio: %{bits})"
+      }
+    },
+    "payment": {
+      "accountholder_required": "Indica il nome dell'intestatario del conto."
+    },
+    "subscription": {
+      "topup_notices": {
+        "calculating": "Calcolo in corso…",
+        "cancel": "La tua ricarica mensile verrà annullata alla fine del mese di fatturazione in corso. Non ci saranno altri addebiti e il saldo attuale resta.",
+        "error": "%{reason} (Tentativo: %{time}.) Se continua a succedere, contatta l'assistenza di Gather indicando questo riferimento e l'ora.",
+        "error_default": "Qualcosa è andato storto e la tua ricarica non è stata modificata.",
+        "error_with_reference": "%{reason} Riferimento: %{reference}. (Tentativo: %{time}.) Se continua a succedere, contatta l'assistenza di Gather indicando questo riferimento e l'ora.",
+        "first_charge": "Oggi sul metodo di pagamento registrato verranno addebitati %{amount} per un mese intero, poi %{amount} in questo giorno di ogni mese.",
+        "next_month": "Dal prossimo mese di fatturazione ti verranno addebitati %{amount} al mese.",
+        "prorated_charge": "Ora sul metodo di pagamento registrato verranno addebitati oggi circa %{charge} (in proporzione), poi %{amount} al mese dal giorno %{date}.",
+        "prorated_credit": "Ora riceverai un accredito di %{credit} sulla prossima fattura, poi %{amount} al mese dal giorno %{date}."
+      }
+    },
     "timepicker": {
       "dformat": "%H:%M",
       "pformat": "HH:mm"
+    },
+    "wiki": {
+      "editor": {
+        "autosaved": "Salvato automaticamente: ",
+        "bold": "Grassetto",
+        "fullscreen": "Schermo intero",
+        "heading": "Titolo",
+        "image": "Inserisci immagine",
+        "italic": "Corsivo",
+        "lines": {
+          "one": "righe: %{count}",
+          "other": "righe: %{count}"
+        },
+        "link": "Crea link",
+        "ordered_list": "Elenco numerato",
+        "preview": "Mostra/nascondi anteprima",
+        "quote": "Citazione",
+        "side_by_side": "Affiancato",
+        "unordered_list": "Elenco puntato",
+        "words": {
+          "one": "parole: %{count}",
+          "other": "parole: %{count}"
+        }
+      },
+      "help": "Guida al wiki"
     }
   },
   "nb": {
+    "batchable_tables": {
+      "confirmations": {
+        "gdrive__migration__owners": {
+          "send_request": {
+            "one": "Er du sikker på at du vil sende en forespørsel på e-post til %{count} person?",
+            "other": "Er du sikker på at du vil sende forespørsler på e-post til %{count} personer?"
+          }
+        }
+      }
+    },
+    "calendar_nav_popover": {
+      "dismiss": "Lukk",
+      "message_html": "<b>Reservasjoner</b> heter nå <b>Kalendere</b>! Ta en titt!"
+    },
+    "calendars": {
+      "calendar_list": {
+        "all": "Alle",
+        "deselect_all": "Fjern alle valg",
+        "select_all": "Velg alle"
+      },
+      "drag": {
+        "calendar": {
+          "all": "Flytt i alle",
+          "content": "«%{name}» vises i mer enn én kalender:",
+          "selected": "(valgt)",
+          "this": "Flytt bare i %{calendar}",
+          "title": "Flytt hendelse i flere kalendere"
+        },
+        "confirm": "Er du sikker på at du vil flytte hendelsen «%{name}»?",
+        "confirm_occurrence": "Er du sikker på at du vil flytte denne forekomsten av «%{name}»?",
+        "error_title": "Feil",
+        "load_error": "Vi kunne ikke sjekke hvordan denne hendelsen kan flyttes. Prøv igjen.",
+        "series": {
+          "content": "«%{name}» gjentas. Hvilke forekomster skal flyttes?",
+          "following": "Denne og de neste",
+          "occurrence": "Bare denne",
+          "series": "Alle forekomster",
+          "title": "Flytt gjentakende hendelse"
+        }
+      },
+      "grid": {
+        "agenda_label": "%{view}. Bruk piltastene for å navigere",
+        "agenda_label_all_day": "%{view}. Rad for hele dagen. Bruk piltastene for å navigere",
+        "agenda_label_all_day_slots": "%{view}. Rad for hele dagen etterfulgt av %{slots}. Bruk piltastene for å navigere",
+        "agenda_label_slots": "%{view}. Rutenett med %{slots}. Bruk piltastene for å navigere",
+        "create_confirm": {
+          "range_html": "Opprette hendelse fra <b>%{start}</b> til <b>%{end}</b>?",
+          "same_day_html": "Opprette hendelse <b>%{date}</b>?",
+          "same_day_times_html": "Opprette hendelse <b>%{date}</b> fra <b>%{start}</b> til <b>%{end}</b>?"
+        },
+        "day_calendar": "Dagskalender",
+        "event_count": {
+          "one": "%{count} hendelse",
+          "other": "%{count} hendelser",
+          "zero": "Ingen hendelser"
+        },
+        "event_count_this_month": {
+          "one": "%{count} hendelse denne måneden",
+          "other": "%{count} hendelser denne måneden",
+          "zero": "Ingen hendelser denne måneden"
+        },
+        "event_count_this_week": {
+          "one": "%{count} hendelse denne uken",
+          "other": "%{count} hendelser denne uken",
+          "zero": "Ingen hendelser denne uken"
+        },
+        "half_hour_slots": "tidsluker på en halvtime fra %{start} til %{end}",
+        "header": {
+          "day_view": "Dagsvisning",
+          "month_view": "Månedsvisning",
+          "next": "Neste",
+          "previous": "Forrige",
+          "today": "I dag",
+          "toolbar": "Kalenderkontroller",
+          "week_view": "Ukevisning"
+        },
+        "minute_slots": "tidsluker på %{minutes} minutter fra %{start} til %{end}",
+        "month_calendar": "Månedskalender",
+        "now_showing": "Kalenderen viser nå %{month}",
+        "this_week_date": "Denne uken, %{date}",
+        "today_date": "I dag, %{date}",
+        "week_calendar": "Ukekalender"
+      }
+    },
+    "common": {
+      "adults": "Voksne",
+      "all": "Alle",
+      "all_time": "Hele tiden",
+      "cancel": "Avbryt",
+      "cancelled": "Avlyst",
+      "children": "Barn",
+      "clearing_the_filter": "fjerne filtrene",
+      "close": "Lukk",
+      "community_count": {
+        "one": "%{count} fellesskap",
+        "other": "%{count} fellesskap"
+      },
+      "create_new": "Opprett ny",
+      "default": "Standard",
+      "edit": "Rediger",
+      "false": "Usann",
+      "generated_at": "Generert: %{time}",
+      "hidden": "Skjult",
+      "inactive": "Inaktiv",
+      "loading_indicator": "Lasteindikator",
+      "max": "Maks.",
+      "no": "Nei",
+      "no_result_clear_filter_link_html": "Du kan prøve å %{link}.",
+      "none": "Ingen",
+      "none_bracketed": "[Ingen]",
+      "num_in_total": "%{count} totalt",
+      "open_date_picker": "Åpne datovelger",
+      "print": "Skriv ut",
+      "save": "Lagre",
+      "select_user": "Velg bruker …",
+      "settings": "Innstillinger",
+      "settings_updated": "Innstillingene er oppdatert.",
+      "this_month": "Denne måneden",
+      "this_quarter": "Dette kvartalet",
+      "this_year": "I år",
+      "time_with_preposition": {
+        "at": "kl. %{t}",
+        "on": "%{t}",
+        "until": "fram til kl. %{t}"
+      },
+      "true": "Sann",
+      "unknown": "Ukjent",
+      "unlimited": "Ubegrenset",
+      "with_inactive": "%{name} (inaktiv)",
+      "yes": "Ja"
+    },
+    "communities": {
+      "signup_action": {
+        "approval_template": "Hei %{name}!\n\nGode nyheter! Søknaden om å bli med i Gather for fellesskapet «%{community}» er godkjent.\n\n#######################################\nSKRIV EN PERSONLIG HILSEN HER, NEVN\nNOE BESTEMT OM FELLESSKAPET\n#######################################\n\nFellesskapet deres er nå klart til bruk!\n\nDu får en egen e-post med instruksjoner for hvordan du logger inn første gang.\n\nVelkommen om bord!\n\n%{approver} for Gather-teamet"
+      }
+    },
     "date": {
       "abbr_day_names": [
         "søn",
@@ -1531,6 +2155,66 @@
       "dformat": "%-d. %b %Y",
       "pformat": "D. MMM YYYY"
     },
+    "dropzone": {
+      "dictFileSizeUnits": {
+        "b": "B",
+        "gb": "GiB",
+        "kb": "KiB",
+        "mb": "MiB",
+        "tb": "TiB"
+      },
+      "dictFileTooBig": "Filen er for stor ({{filesize}} MiB). Maks størrelse er {{maxFilesize}} MiB.",
+      "dictFileUnreadable": "Kunne ikke lese filen. Prøv igjen, eller velg en annen fil.",
+      "prompts": {
+        "default": "Klikk eller dra en fil hit",
+        "models": {
+          "calendars/calendar": "Klikk eller dra et bilde hit",
+          "user": "Klikk eller dra et bilde hit"
+        }
+      }
+    },
+    "errors": {
+      "messages": {
+        "doesnt_match": "Samsvarer ikke med passordet"
+      }
+    },
+    "meals": {
+      "report_charts": {
+        "avg_cost": "Snittkostnad",
+        "avg_full_meal_price": "Snittpris for helt måltid",
+        "avg_servings": "Snitt porsjoner",
+        "avg_servings_per_meal": "Snitt porsjoner per måltid",
+        "meals": "Måltider",
+        "month": "Måned",
+        "number_of_meals": "Antall måltider",
+        "titles": {
+          "community_rep": "Snittfordeling av fellesskap ved måltider",
+          "community_rep_community": "Snittfordeling av fellesskap ved måltider i %{community}",
+          "cost_by_month": "Snittpris for helt måltid etter måned",
+          "cost_by_month_community": "Snittpris for helt måltid i %{community} etter måned",
+          "cost_by_weekday": "Snittpris for helt måltid etter ukedag",
+          "cost_by_weekday_community": "Snittpris for helt måltid i %{community} etter ukedag",
+          "meal_types": "Snittfordeling av måltidstyper ved måltider",
+          "meal_types_community": "Snittfordeling av måltidstyper ved måltider i %{community}",
+          "meals_by_month": "Antall måltider etter måned",
+          "meals_by_month_community": "Antall måltider i %{community} etter måned",
+          "servings_by_month": "Snitt porsjoner per måltid etter måned",
+          "servings_by_month_community": "Snitt porsjoner per måltid i %{community} etter måned",
+          "servings_by_weekday": "Snitt porsjoner per måltid etter ukedag",
+          "servings_by_weekday_community": "Snitt porsjoner per måltid i %{community} etter ukedag"
+        },
+        "weekday": "Ukedag"
+      }
+    },
+    "meals/assignments": {
+      "change_warning": "Merk: Hvis du endrer medhjelpere, sendes et varsel på e-post til måltidskomiteen eller måltidsansvarlig og til alle nåværende og nylig tildelte medhjelpere."
+    },
+    "modal": {
+      "alert_title": "Merknad",
+      "cancel": "Avbryt",
+      "confirm_title": "Bekreft",
+      "ok": "OK"
+    },
     "moment_formats": {
       "full_date": "dddd D. MMMM YYYY",
       "hour": "HH:mm",
@@ -1540,12 +2224,196 @@
       "wday_date": "ddd D. MMM YYYY",
       "wday_date_time": "ddd D. MMM YYYY, HH:mm"
     },
+    "password": {
+      "strength": {
+        "excellent": "Utmerket (poeng: %{bits})",
+        "good": "Bra (poeng: %{bits})",
+        "weak": "For svakt (poeng: %{bits})"
+      }
+    },
+    "payment": {
+      "accountholder_required": "Oppgi navnet på kontoinnehaveren."
+    },
+    "subscription": {
+      "topup_notices": {
+        "calculating": "Beregner …",
+        "cancel": "Den månedlige påfyllingen avsluttes ved slutten av inneværende faktureringsmåned. Du blir ikke belastet mer, og saldoen din blir stående.",
+        "error": "%{reason} (Forsøkt %{time}.) Hvis dette fortsetter å skje, kontakt Gather-brukerstøtten og oppgi tidspunktet.",
+        "error_default": "Noe gikk galt, og påfyllingen din ble ikke endret.",
+        "error_with_reference": "%{reason} Referanse: %{reference}. (Forsøkt %{time}.) Hvis dette fortsetter å skje, kontakt Gather-brukerstøtten og oppgi referansen og tidspunktet.",
+        "first_charge": "Den lagrede betalingsmåten din blir belastet %{amount} i dag for en hel måned, og deretter %{amount} på denne datoen hver måned.",
+        "next_month": "Fra og med neste faktureringsmåned blir du belastet %{amount} per måned.",
+        "prorated_charge": "Nå blir den lagrede betalingsmåten din belastet omtrent %{charge} i dag (forholdsmessig), og deretter %{amount} per måned fra og med %{date}.",
+        "prorated_credit": "Nå får du en kreditering på %{credit} på neste faktura, og deretter %{amount} per måned fra og med %{date}."
+      }
+    },
     "timepicker": {
       "dformat": "%H:%M",
       "pformat": "HH:mm"
+    },
+    "wiki": {
+      "editor": {
+        "autosaved": "Lagret automatisk: ",
+        "bold": "Fet",
+        "fullscreen": "Fullskjerm av/på",
+        "heading": "Overskrift",
+        "image": "Sett inn bilde",
+        "italic": "Kursiv",
+        "lines": {
+          "one": "linjer: %{count}",
+          "other": "linjer: %{count}"
+        },
+        "link": "Lag lenke",
+        "ordered_list": "Nummerert liste",
+        "preview": "Forhåndsvisning av/på",
+        "quote": "Sitat",
+        "side_by_side": "Side ved side av/på",
+        "unordered_list": "Punktliste",
+        "words": {
+          "one": "ord: %{count}",
+          "other": "ord: %{count}"
+        }
+      },
+      "help": "Hjelp til wikien"
     }
   },
   "nl": {
+    "batchable_tables": {
+      "confirmations": {
+        "gdrive__migration__owners": {
+          "send_request": {
+            "one": "Weet je zeker dat je een verzoek per e-mail wilt sturen naar %{count} persoon?",
+            "other": "Weet je zeker dat je verzoeken per e-mail wilt sturen naar %{count} personen?"
+          }
+        }
+      }
+    },
+    "calendar_nav_popover": {
+      "dismiss": "Sluiten",
+      "message_html": "<b>Reserveringen</b> heet nu <b>Agenda’s</b>! Neem een kijkje!"
+    },
+    "calendars": {
+      "calendar_list": {
+        "all": "Alle",
+        "deselect_all": "Alles deselecteren",
+        "select_all": "Alles selecteren"
+      },
+      "drag": {
+        "calendar": {
+          "all": "Overal verplaatsen",
+          "content": "“%{name}” staat in meer dan één agenda:",
+          "selected": "(geselecteerd)",
+          "this": "Alleen verplaatsen in %{calendar}",
+          "title": "Afspraak in meerdere agenda’s verplaatsen"
+        },
+        "confirm": "Weet je zeker dat je de afspraak “%{name}” wilt verplaatsen?",
+        "confirm_occurrence": "Weet je zeker dat je deze herhaling van “%{name}” wilt verplaatsen?",
+        "error_title": "Fout",
+        "load_error": "We konden niet nagaan hoe deze afspraak verplaatst kan worden. Probeer het opnieuw.",
+        "series": {
+          "content": "“%{name}” herhaalt zich. Welke herhalingen moeten worden verplaatst?",
+          "following": "Deze en volgende",
+          "occurrence": "Alleen deze",
+          "series": "Alle herhalingen",
+          "title": "Terugkerende afspraak verplaatsen"
+        }
+      },
+      "grid": {
+        "agenda_label": "%{view}. Gebruik de pijltjestoetsen om te navigeren",
+        "agenda_label_all_day": "%{view}. Rij “Hele dag”. Gebruik de pijltjestoetsen om te navigeren",
+        "agenda_label_all_day_slots": "%{view}. Rij “Hele dag”, gevolgd door %{slots}. Gebruik de pijltjestoetsen om te navigeren",
+        "agenda_label_slots": "%{view}. Raster met %{slots}. Gebruik de pijltjestoetsen om te navigeren",
+        "create_confirm": {
+          "range_html": "Afspraak aanmaken van <b>%{start}</b> tot <b>%{end}</b>?",
+          "same_day_html": "Afspraak aanmaken op <b>%{date}</b>?",
+          "same_day_times_html": "Afspraak aanmaken op <b>%{date}</b> van <b>%{start}</b> tot <b>%{end}</b>?"
+        },
+        "day_calendar": "Dagagenda",
+        "event_count": {
+          "one": "%{count} afspraak",
+          "other": "%{count} afspraken",
+          "zero": "Geen afspraken"
+        },
+        "event_count_this_month": {
+          "one": "%{count} afspraak deze maand",
+          "other": "%{count} afspraken deze maand",
+          "zero": "Geen afspraken deze maand"
+        },
+        "event_count_this_week": {
+          "one": "%{count} afspraak deze week",
+          "other": "%{count} afspraken deze week",
+          "zero": "Geen afspraken deze week"
+        },
+        "half_hour_slots": "tijdvakken van een half uur van %{start} tot %{end}",
+        "header": {
+          "day_view": "Dagweergave",
+          "month_view": "Maandweergave",
+          "next": "Volgende",
+          "previous": "Vorige",
+          "today": "Vandaag",
+          "toolbar": "Agendabediening",
+          "week_view": "Weekweergave"
+        },
+        "minute_slots": "tijdvakken van %{minutes} minuten van %{start} tot %{end}",
+        "month_calendar": "Maandagenda",
+        "now_showing": "De agenda toont nu %{month}",
+        "this_week_date": "Deze week, %{date}",
+        "today_date": "Vandaag, %{date}",
+        "week_calendar": "Weekagenda"
+      }
+    },
+    "common": {
+      "adults": "Volwassenen",
+      "all": "Alle",
+      "all_time": "Altijd",
+      "cancel": "Annuleren",
+      "cancelled": "Geannuleerd",
+      "children": "Kinderen",
+      "clearing_the_filter": "de filters te wissen",
+      "close": "Sluiten",
+      "community_count": {
+        "one": "%{count} gemeenschap",
+        "other": "%{count} gemeenschappen"
+      },
+      "create_new": "Nieuw aanmaken",
+      "default": "Standaard",
+      "edit": "Bewerken",
+      "false": "Onwaar",
+      "generated_at": "Gemaakt: %{time}",
+      "hidden": "Verborgen",
+      "inactive": "Inactief",
+      "loading_indicator": "Laadindicator",
+      "max": "Max.",
+      "no": "Nee",
+      "no_result_clear_filter_link_html": "Je kunt proberen %{link}.",
+      "none": "Geen",
+      "none_bracketed": "[Geen]",
+      "num_in_total": "%{count} in totaal",
+      "open_date_picker": "Datumkiezer openen",
+      "print": "Afdrukken",
+      "save": "Opslaan",
+      "select_user": "Kies een gebruiker …",
+      "settings": "Instellingen",
+      "settings_updated": "Instellingen bijgewerkt.",
+      "this_month": "Deze maand",
+      "this_quarter": "Dit kwartaal",
+      "this_year": "Dit jaar",
+      "time_with_preposition": {
+        "at": "om %{t}",
+        "on": "op %{t}",
+        "until": "tot %{t}"
+      },
+      "true": "Waar",
+      "unknown": "Onbekend",
+      "unlimited": "Onbeperkt",
+      "with_inactive": "%{name} (inactief)",
+      "yes": "Ja"
+    },
+    "communities": {
+      "signup_action": {
+        "approval_template": "Beste %{name},\n\nGoed nieuws! Je aanvraag om met de gemeenschap “%{community}” bij Gather aan te sluiten, is goedgekeurd.\n\n#######################################\nSCHRIJF HIER EEN PERSOONLIJKE NOTITIE,\nNOEM IETS SPECIFIEKS OVER DE GEMEENSCHAP\n#######################################\n\nJe gemeenschap is nu klaar voor gebruik!\n\nJe ontvangt een aparte e-mail met instructies om voor het eerst in te loggen.\n\nWelkom aan boord!\n\n%{approver} namens het Gather-team"
+      }
+    },
     "date": {
       "abbr_day_names": [
         "zo",
@@ -1600,6 +2468,66 @@
       "dformat": "%-d %b %Y",
       "pformat": "D MMM YYYY"
     },
+    "dropzone": {
+      "dictFileSizeUnits": {
+        "b": "B",
+        "gb": "GiB",
+        "kb": "KiB",
+        "mb": "MiB",
+        "tb": "TiB"
+      },
+      "dictFileTooBig": "Het bestand is te groot ({{filesize}} MiB). De maximale grootte is {{maxFilesize}} MiB.",
+      "dictFileUnreadable": "Dit bestand kon niet worden gelezen. Probeer het opnieuw of kies een ander bestand.",
+      "prompts": {
+        "default": "Klik of sleep een bestand hierheen",
+        "models": {
+          "calendars/calendar": "Klik of sleep een foto hierheen",
+          "user": "Klik of sleep een foto hierheen"
+        }
+      }
+    },
+    "errors": {
+      "messages": {
+        "doesnt_match": "Komt niet overeen met het wachtwoord"
+      }
+    },
+    "meals": {
+      "report_charts": {
+        "avg_cost": "Gem. kosten",
+        "avg_full_meal_price": "Gem. prijs volledige maaltijd",
+        "avg_servings": "Gem. porties",
+        "avg_servings_per_meal": "Gem. porties per maaltijd",
+        "meals": "Maaltijden",
+        "month": "Maand",
+        "number_of_meals": "Aantal maaltijden",
+        "titles": {
+          "community_rep": "Gem. vertegenwoordiging van gemeenschappen bij maaltijden",
+          "community_rep_community": "Gem. vertegenwoordiging van gemeenschappen bij maaltijden van %{community}",
+          "cost_by_month": "Gem. prijs volledige maaltijd per maand",
+          "cost_by_month_community": "Gem. prijs volledige maaltijd van %{community} per maand",
+          "cost_by_weekday": "Gem. prijs volledige maaltijd per weekdag",
+          "cost_by_weekday_community": "Gem. prijs volledige maaltijd van %{community} per weekdag",
+          "meal_types": "Gem. maaltijdtypes bij maaltijden",
+          "meal_types_community": "Gem. maaltijdtypes bij maaltijden van %{community}",
+          "meals_by_month": "Aantal maaltijden per maand",
+          "meals_by_month_community": "Aantal maaltijden van %{community} per maand",
+          "servings_by_month": "Gem. porties per maaltijd per maand",
+          "servings_by_month_community": "Gem. porties per maaltijd van %{community} per maand",
+          "servings_by_weekday": "Gem. porties per maaltijd per weekdag",
+          "servings_by_weekday_community": "Gem. porties per maaltijd van %{community} per weekdag"
+        },
+        "weekday": "Weekdag"
+      }
+    },
+    "meals/assignments": {
+      "change_warning": "Let op: als je de medewerkers van een maaltijd wijzigt, krijgen de maaltijdcommissie of -coördinator en alle huidige en nieuw toegewezen medewerkers een melding per e-mail."
+    },
+    "modal": {
+      "alert_title": "Melding",
+      "cancel": "Annuleren",
+      "confirm_title": "Bevestigen",
+      "ok": "OK"
+    },
     "moment_formats": {
       "full_date": "dddd D MMMM YYYY",
       "hour": "HH:mm",
@@ -1609,12 +2537,196 @@
       "wday_date": "ddd D MMM YYYY",
       "wday_date_time": "ddd D MMM YYYY HH:mm"
     },
+    "password": {
+      "strength": {
+        "excellent": "Uitstekend (score: %{bits})",
+        "good": "Goed (score: %{bits})",
+        "weak": "Te zwak (score: %{bits})"
+      }
+    },
+    "payment": {
+      "accountholder_required": "Vul de naam van de rekeninghouder in."
+    },
+    "subscription": {
+      "topup_notices": {
+        "calculating": "Berekenen …",
+        "cancel": "Je maandelijkse opwaardering wordt aan het einde van de huidige factuurmaand stopgezet. Er worden geen kosten meer in rekening gebracht en je huidige tegoed blijft staan.",
+        "error": "%{reason} (Geprobeerd: %{time}.) Blijft dit gebeuren, neem dan contact op met de ondersteuning van Gather en vermeld die referentie en dat tijdstip.",
+        "error_default": "Er is iets misgegaan en je opwaardering is niet gewijzigd.",
+        "error_with_reference": "%{reason} Referentie: %{reference}. (Geprobeerd: %{time}.) Blijft dit gebeuren, neem dan contact op met de ondersteuning van Gather en vermeld die referentie en dat tijdstip.",
+        "first_charge": "Vandaag wordt %{amount} voor een volledige maand van je opgeslagen betaalmethode afgeschreven, daarna elke maand op deze dag %{amount}.",
+        "next_month": "Vanaf de volgende factuurmaand betaal je %{amount} per maand.",
+        "prorated_charge": "Vandaag wordt ongeveer %{charge} (naar rato) van je opgeslagen betaalmethode afgeschreven, daarna vanaf %{date} %{amount} per maand.",
+        "prorated_credit": "Je krijgt nu een tegoed van %{credit} op je volgende factuur, daarna betaal je vanaf %{date} %{amount} per maand."
+      }
+    },
     "timepicker": {
       "dformat": "%H:%M",
       "pformat": "HH:mm"
+    },
+    "wiki": {
+      "editor": {
+        "autosaved": "Automatisch opgeslagen: ",
+        "bold": "Vet",
+        "fullscreen": "Volledig scherm aan/uit",
+        "heading": "Kop",
+        "image": "Afbeelding invoegen",
+        "italic": "Cursief",
+        "lines": {
+          "one": "regels: %{count}",
+          "other": "regels: %{count}"
+        },
+        "link": "Link maken",
+        "ordered_list": "Genummerde lijst",
+        "preview": "Voorbeeld aan/uit",
+        "quote": "Citaat",
+        "side_by_side": "Naast elkaar aan/uit",
+        "unordered_list": "Opsomming",
+        "words": {
+          "one": "woorden: %{count}",
+          "other": "woorden: %{count}"
+        }
+      },
+      "help": "Hulp bij de wiki"
     }
   },
   "sv": {
+    "batchable_tables": {
+      "confirmations": {
+        "gdrive__migration__owners": {
+          "send_request": {
+            "one": "Vill du verkligen skicka ett förfrågningsmejl till %{count} person?",
+            "other": "Vill du verkligen skicka förfrågningsmejl till %{count} personer?"
+          }
+        }
+      }
+    },
+    "calendar_nav_popover": {
+      "dismiss": "Stäng",
+      "message_html": "<b>Bokningar</b> heter nu <b>Kalendrar</b>! Ta en titt!"
+    },
+    "calendars": {
+      "calendar_list": {
+        "all": "Alla",
+        "deselect_all": "Avmarkera alla",
+        "select_all": "Välj alla"
+      },
+      "drag": {
+        "calendar": {
+          "all": "Flytta i alla",
+          "content": "”%{name}” finns i mer än en kalender:",
+          "selected": "(vald)",
+          "this": "Flytta bara i %{calendar}",
+          "title": "Flytta händelse i flera kalendrar"
+        },
+        "confirm": "Vill du verkligen flytta händelsen ”%{name}”?",
+        "confirm_occurrence": "Vill du verkligen flytta det här tillfället av ”%{name}”?",
+        "error_title": "Fel",
+        "load_error": "Vi kunde inte kontrollera hur händelsen kan flyttas. Försök igen.",
+        "series": {
+          "content": "”%{name}” upprepas. Vilka tillfällen ska flyttas?",
+          "following": "Det här och följande",
+          "occurrence": "Bara det här",
+          "series": "Alla tillfällen",
+          "title": "Flytta återkommande händelse"
+        }
+      },
+      "grid": {
+        "agenda_label": "%{view}. Navigera med piltangenterna",
+        "agenda_label_all_day": "%{view}. Raden Heldag. Navigera med piltangenterna",
+        "agenda_label_all_day_slots": "%{view}. Raden Heldag följd av %{slots}. Navigera med piltangenterna",
+        "agenda_label_slots": "%{view}. Rutnät med %{slots}. Navigera med piltangenterna",
+        "create_confirm": {
+          "range_html": "Skapa händelse från <b>%{start}</b> till <b>%{end}</b>?",
+          "same_day_html": "Skapa händelse den <b>%{date}</b>?",
+          "same_day_times_html": "Skapa händelse den <b>%{date}</b> från <b>%{start}</b> till <b>%{end}</b>?"
+        },
+        "day_calendar": "Dagskalender",
+        "event_count": {
+          "one": "%{count} händelse",
+          "other": "%{count} händelser",
+          "zero": "Inga händelser"
+        },
+        "event_count_this_month": {
+          "one": "%{count} händelse den här månaden",
+          "other": "%{count} händelser den här månaden",
+          "zero": "Inga händelser den här månaden"
+        },
+        "event_count_this_week": {
+          "one": "%{count} händelse den här veckan",
+          "other": "%{count} händelser den här veckan",
+          "zero": "Inga händelser den här veckan"
+        },
+        "half_hour_slots": "halvtimmesintervall från %{start} till %{end}",
+        "header": {
+          "day_view": "Dagvy",
+          "month_view": "Månadsvy",
+          "next": "Nästa",
+          "previous": "Föregående",
+          "today": "I dag",
+          "toolbar": "Kalenderkontroller",
+          "week_view": "Veckovy"
+        },
+        "minute_slots": "%{minutes}-minutersintervall från %{start} till %{end}",
+        "month_calendar": "Månadskalender",
+        "now_showing": "Kalendern visar nu %{month}",
+        "this_week_date": "Den här veckan, %{date}",
+        "today_date": "I dag, %{date}",
+        "week_calendar": "Veckokalender"
+      }
+    },
+    "common": {
+      "adults": "Vuxna",
+      "all": "Alla",
+      "all_time": "Hela tiden",
+      "cancel": "Avbryt",
+      "cancelled": "Inställd",
+      "children": "Barn",
+      "clearing_the_filter": "rensa filtren",
+      "close": "Stäng",
+      "community_count": {
+        "one": "%{count} gemenskap",
+        "other": "%{count} gemenskaper"
+      },
+      "create_new": "Skapa ny",
+      "default": "Standard",
+      "edit": "Redigera",
+      "false": "Falskt",
+      "generated_at": "Skapad: %{time}",
+      "hidden": "Dold",
+      "inactive": "Inaktiv",
+      "loading_indicator": "Laddningsindikator",
+      "max": "Max",
+      "no": "Nej",
+      "no_result_clear_filter_link_html": "Du kan försöka %{link}.",
+      "none": "Ingen",
+      "none_bracketed": "[Ingen]",
+      "num_in_total": "%{count} totalt",
+      "open_date_picker": "Öppna datumväljaren",
+      "print": "Skriv ut",
+      "save": "Spara",
+      "select_user": "Välj person …",
+      "settings": "Inställningar",
+      "settings_updated": "Inställningarna har uppdaterats.",
+      "this_month": "Den här månaden",
+      "this_quarter": "Det här kvartalet",
+      "this_year": "I år",
+      "time_with_preposition": {
+        "at": "kl. %{t}",
+        "on": "%{t}",
+        "until": "till %{t}"
+      },
+      "true": "Sant",
+      "unknown": "Okänd",
+      "unlimited": "Obegränsat",
+      "with_inactive": "%{name} (inaktiv)",
+      "yes": "Ja"
+    },
+    "communities": {
+      "signup_action": {
+        "approval_template": "Hej %{name}!\n\nGoda nyheter! Din ansökan om att gå med i Gather med gemenskapen ”%{community}” har godkänts.\n\n#######################################\nSKRIV EN PERSONLIG HÄLSNING HÄR, NÄMN\nNÅGOT SÄRSKILT OM GEMENSKAPEN\n#######################################\n\nEr gemenskap är nu redo att användas!\n\nDu får ett separat mejl med instruktioner för hur du loggar in första gången.\n\nVälkommen ombord!\n\n%{approver} för Gather-teamet"
+      }
+    },
     "date": {
       "abbr_day_names": [
         "sön",
@@ -1669,6 +2781,66 @@
       "dformat": "%-d %b %Y",
       "pformat": "D MMM YYYY"
     },
+    "dropzone": {
+      "dictFileSizeUnits": {
+        "b": "B",
+        "gb": "GiB",
+        "kb": "KiB",
+        "mb": "MiB",
+        "tb": "TiB"
+      },
+      "dictFileTooBig": "Filen är för stor ({{filesize}} MiB). Maxstorleken är {{maxFilesize}} MiB.",
+      "dictFileUnreadable": "Det gick inte att läsa filen. Försök igen eller välj en annan fil.",
+      "prompts": {
+        "default": "Klicka eller dra hit en fil",
+        "models": {
+          "calendars/calendar": "Klicka eller dra hit ett foto",
+          "user": "Klicka eller dra hit ett foto"
+        }
+      }
+    },
+    "errors": {
+      "messages": {
+        "doesnt_match": "Stämmer inte med lösenordet"
+      }
+    },
+    "meals": {
+      "report_charts": {
+        "avg_cost": "Snittkostnad",
+        "avg_full_meal_price": "Snittpris för hel måltid",
+        "avg_servings": "Snitt portioner",
+        "avg_servings_per_meal": "Snitt portioner per måltid",
+        "meals": "Måltider",
+        "month": "Månad",
+        "number_of_meals": "Antal måltider",
+        "titles": {
+          "community_rep": "Snittfördelning av gemenskaper vid måltider",
+          "community_rep_community": "Snittfördelning av gemenskaper vid måltider i %{community}",
+          "cost_by_month": "Snittpris för hel måltid per månad",
+          "cost_by_month_community": "Snittpris för hel måltid i %{community} per månad",
+          "cost_by_weekday": "Snittpris för hel måltid per veckodag",
+          "cost_by_weekday_community": "Snittpris för hel måltid i %{community} per veckodag",
+          "meal_types": "Snittfördelning av måltidstyper vid måltider",
+          "meal_types_community": "Snittfördelning av måltidstyper vid måltider i %{community}",
+          "meals_by_month": "Antal måltider per månad",
+          "meals_by_month_community": "Antal måltider i %{community} per månad",
+          "servings_by_month": "Snitt portioner per måltid per månad",
+          "servings_by_month_community": "Snitt portioner per måltid i %{community} per månad",
+          "servings_by_weekday": "Snitt portioner per måltid per veckodag",
+          "servings_by_weekday_community": "Snitt portioner per måltid i %{community} per veckodag"
+        },
+        "weekday": "Veckodag"
+      }
+    },
+    "meals/assignments": {
+      "change_warning": "Obs! Om du ändrar måltidens medhjälpare skickas ett mejl till måltidsgruppen eller måltidsansvarig och till alla nuvarande och nya medhjälpare."
+    },
+    "modal": {
+      "alert_title": "Meddelande",
+      "cancel": "Avbryt",
+      "confirm_title": "Bekräfta",
+      "ok": "OK"
+    },
     "moment_formats": {
       "full_date": "dddd D MMMM YYYY",
       "hour": "HH:mm",
@@ -1678,9 +2850,57 @@
       "wday_date": "ddd D MMM YYYY",
       "wday_date_time": "ddd D MMM YYYY HH:mm"
     },
+    "password": {
+      "strength": {
+        "excellent": "Utmärkt (poäng: %{bits})",
+        "good": "Bra (poäng: %{bits})",
+        "weak": "För svagt (poäng: %{bits})"
+      }
+    },
+    "payment": {
+      "accountholder_required": "Ange kontoinnehavarens namn."
+    },
+    "subscription": {
+      "topup_notices": {
+        "calculating": "Beräknar …",
+        "cancel": "Din månatliga påfyllning upphör i slutet av den aktuella faktureringsmånaden. Inga fler debiteringar görs, och ditt saldo finns kvar.",
+        "error": "%{reason} (Försök kl. %{time}.) Om det händer igen, kontakta Gathers support med den här tiden.",
+        "error_default": "Något gick fel, och din påfyllning ändrades inte.",
+        "error_with_reference": "%{reason} Referens: %{reference}. (Försök kl. %{time}.) Om det händer igen, kontakta Gathers support med den här referensen och tiden.",
+        "first_charge": "Din sparade betalningsmetod debiteras %{amount} i dag för en hel månad, och sedan %{amount} samma dag varje månad.",
+        "next_month": "Från och med nästa faktureringsmånad debiteras du %{amount} per månad.",
+        "prorated_charge": "Din sparade betalningsmetod debiteras cirka %{charge} i dag (proportionellt), och sedan %{amount} per månad från och med %{date}.",
+        "prorated_credit": "Du får nu en kreditering på %{credit} på din nästa faktura, och sedan %{amount} per månad från och med %{date}."
+      }
+    },
     "timepicker": {
       "dformat": "%H:%M",
       "pformat": "HH:mm"
+    },
+    "wiki": {
+      "editor": {
+        "autosaved": "Sparades automatiskt: ",
+        "bold": "Fet",
+        "fullscreen": "Helskärm",
+        "heading": "Rubrik",
+        "image": "Infoga bild",
+        "italic": "Kursiv",
+        "lines": {
+          "one": "rader: %{count}",
+          "other": "rader: %{count}"
+        },
+        "link": "Skapa länk",
+        "ordered_list": "Numrerad lista",
+        "preview": "Förhandsgranska",
+        "quote": "Citat",
+        "side_by_side": "Sida vid sida",
+        "unordered_list": "Punktlista",
+        "words": {
+          "one": "ord: %{count}",
+          "other": "ord: %{count}"
+        }
+      },
+      "help": "Hjälp för wikin"
     }
   }
 }

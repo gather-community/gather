@@ -1,0 +1,548 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+sv:
+  common:
+    settings: "Inställningar" # MT
+    settings_updated: "Inställningarna har uppdaterats." # MT
+    open_date_picker: "Öppna datumväljaren" # MT
+    select_user: "Välj person …" # MT
+    adults: "Vuxna" # MT
+    all: "Alla" # MT
+    cancel: "Avbryt" # MT
+    cancelled: "Inställd" # MT
+    children: "Barn" # MT
+    clearing_the_filter: "rensa filtren" # MT
+    create_new: "Skapa ny" # MT
+    # Placeholder for an empty value in a details table.
+    none_bracketed: "[Ingen]" # MT
+    # A person or household name marked as inactive.
+    with_inactive: "%{name} (inaktiv)" # MT
+    close: "Stäng" # MT
+    print: "Skriv ut" # MT
+    loading_indicator: "Laddningsindikator" # MT
+    # Timestamp on printed pages.
+    generated_at: "Skapad: %{time}" # MT
+    community_count:
+      one: "%{count} gemenskap" # MT
+      other: "%{count} gemenskaper" # MT
+    default: "Standard" # MT
+    edit: "Redigera" # MT
+    "false": "Falskt" # MT
+    hidden: "Dold" # MT
+    inactive: "Inaktiv" # MT
+    max: "Max" # MT
+    no_result_clear_filter_link_html: "Du kan försöka %{link}." # MT
+    none: "Ingen" # MT
+    num_in_total: "%{count} totalt" # MT
+    save: "Spara" # MT
+    "true": "Sant" # MT
+    unknown: "Okänd" # MT
+    unlimited: "Obegränsat" # MT
+    "yes": "Ja" # MT
+    "no": "Nej" # MT
+    time_with_preposition:
+      "on": "%{t}" # MT
+      "at": "kl. %{t}" # MT
+      "until": "till %{t}" # MT
+    this_year: "I år" # MT
+    this_quarter: "Det här kvartalet" # MT
+    this_month: "Den här månaden" # MT
+    all_time: "Hela tiden" # MT
+
+  helpers:
+    submit:
+      cancel: "Avbryt" # MT
+      confirm: "Bekräfta" # MT
+      continue: "Fortsätt" # MT
+      create: "Spara" # MT
+      go_back: "Gå tillbaka" # MT
+      import: "Importera" # MT
+      opt_out: "Avböj" # MT
+      update: "Spara" # MT
+      save_and_invite: "Spara och bjud in" # MT
+      sign_in: "Logga in" # MT
+      send_reset_instructions: "Skicka instruktioner för återställning" # MT
+      set_password: "Ange lösenord" # MT
+      meals_message:
+        create: "Skicka meddelande" # MT
+      meals_signup:
+        save_and_next: "Spara och gå till nästa måltid" # MT
+      wiki_page:
+        preview: "Förhandsgranska" # MT
+
+  errors:
+    messages:
+      invalid_yaml: "Ogiltig YAML" # MT
+      invalid_custom_field_spec: "Specifikationen är ogiltig. Kontakta Gathers support för hjälp." # MT
+      no_semicolons: "Semikolon är inte tillåtna" # MT
+
+  # App modal button labels + default titles (exported to JS via config/i18n-js.yml).
+  modal:
+    ok: "OK" # MT
+    cancel: "Avbryt" # MT
+    confirm_title: "Bekräfta" # MT
+    alert_title: "Meddelande" # MT
+
+  payment:
+    accountholder_required: "Ange kontoinnehavarens namn." # MT
+
+  confirmations:
+    billing/template:
+      destroy: "Vill du verkligen radera mallen ”%{description}” för %{member_types}? Det går inte att ångra." # MT
+    domain:
+      destroy: "Vill du verkligen radera domänen ”%{name}”? Det går inte att ångra." # MT
+    groups/group:
+      destroy: "Vill du verkligen radera gruppen ”%{name}”? Det går inte att ångra." # MT
+      deactivate: "Vill du verkligen inaktivera gruppen ”%{name}”?" # MT
+    household:
+      destroy: "Vill du verkligen radera hushållet ”%{name}”? Det går inte att ångra." # MT
+      deactivate: "Vill du verkligen inaktivera hushållet ”%{name}”? Alla personer i hushållet inaktiveras." # MT
+    meals/meal:
+      close: "Vill du verkligen stänga måltiden? Inga fler anmälningar tillåts." # MT
+      destroy: "Vill du verkligen radera måltiden ”%{title}”? Det går inte att ångra." # MT
+      reopen: "Vill du verkligen öppna måltiden igen? Nya anmälningar tillåts." # MT
+      unfinalize: "Vill du verkligen ångra slutförandet av måltiden?" # MT
+    user:
+      destroy: "Vill du verkligen radera personen ”%{name}”? Det går inte att ångra." # MT
+      deactivate: "Vill du verkligen inaktivera personen ”%{name}”? Personen tas bort från alla grupper hen är med i." # MT
+      invite: "Ett mejl med instruktioner för att logga in skickas till ”%{name}”. Fortsätta?" # MT
+    people/member_type:
+      destroy: "Vill du verkligen radera medlemstypen ”%{name}”? Hushåll med den typen får ingen medlemstyp. Det går inte att ångra." # MT
+    people/memorial:
+      destroy: "Vill du verkligen radera minnessidan för ”%{name}”? Det går inte att ångra." # MT
+    people/memorial_message:
+      destroy: "Vill du verkligen radera minnesmeddelandet? Det går inte att ångra." # MT
+    calendars/protocol:
+      destroy: "Vill du verkligen radera regelverket ”%{name}”? Det går inte att ångra." # MT
+    calendars/calendar:
+      destroy: "Vill du verkligen radera kalendern ”%{name}”? Det går inte att ångra." # MT
+      deactivate: "Vill du verkligen inaktivera kalendern ”%{name}”?" # MT
+    calendars/event:
+      destroy: "Vill du verkligen radera händelsen ”%{name}”? Det går inte att ångra." # MT
+      destroy_series: "Vill du verkligen radera alla tidigare och kommande tillfällen av den återkommande händelsen ”%{name}”? Det går inte att ångra." # MT
+    calendars/group:
+      destroy: "Vill du verkligen radera kalendergruppen? Det går inte att ångra." # MT
+    gdrive/item:
+      destroy: "Vill du verkligen ta bort objektet? Det raderas inte från Google Drive, men det är inte längre kopplat till Gather." # MT
+    gdrive/item_group:
+      destroy: "Vill du verkligen ta bort gruppen?" # MT
+    gdrive/migration/operation:
+      destroy: "Vill du verkligen radera migreringen? All information om migreringen raderas. Filerna i Google Drive påverkas inte på något sätt." # MT
+    meals/formula:
+      destroy: "Vill du verkligen radera formeln ”%{name}”? Det går inte att ångra." # MT
+      deactivate: "Vill du verkligen inaktivera formeln ”%{name}”?" # MT
+    meals/role:
+      destroy: "Vill du verkligen radera rollen ”%{title}”? Det går inte att ångra." # MT
+      deactivate: "Vill du verkligen inaktivera rollen ”%{title}”?" # MT
+    meals/type:
+      destroy: "Vill du verkligen radera typen ”%{name}”? Det går inte att ångra." # MT
+      deactivate: "Vill du verkligen inaktivera typen ”%{name}”?" # MT
+    wiki/page:
+      destroy: "Vill du verkligen radera wikisidan ”%{title}”? Det går inte att ångra." # MT
+    work/job:
+      destroy: "Vill du verkligen radera uppgiften ”%{title}”? Det går inte att ångra." # MT
+    work/period:
+      destroy: "Vill du verkligen radera perioden ”%{name}”? Det går inte att ångra." # MT
+    work/shift:
+      unsignup: "Vill du verkligen ta bort ditt namn från uppgiften?" # MT
+
+  activatables:
+    community:
+      one_html: "Gemenskapen inaktiverades %{time}." # MT
+      two_html: "Du kan %{link}." # MT
+      three: "aktivera den igen" # MT
+    user:
+      one_html: "Personen markerades som inaktiv %{time}." # MT
+      two_html: "Du kan %{link}." # MT
+      three: "aktivera personen igen" # MT
+    household:
+      one_html: "Hushållet markerades som inaktivt %{time}." # MT
+      two_html: "Du kan %{link}. <strong>Obs!</strong> Du behöver aktivera hushållets personer igen var för sig." # MT
+      three: "aktivera det igen" # MT
+    groups/group:
+      one_html: "Gruppen markerades som inaktiv %{time}." # MT
+      two_html: "Du kan %{link}." # MT
+      three: "aktivera den igen" # MT
+    calendars/calendar:
+      one_html: "Kalendern markerades som inaktiv %{time}." # MT
+      two_html: "Du kan %{link}." # MT
+      three: "aktivera den igen" # MT
+    meals/formula:
+      one_html: "Formeln markerades som inaktiv %{time}." # MT
+      two_html: "Du kan %{link}." # MT
+      three: "aktivera den igen" # MT
+    meals/role:
+      one_html: "Rollen markerades som inaktiv %{time}." # MT
+      two_html: "Du kan %{link}." # MT
+      three: "aktivera den igen" # MT
+    meals/type:
+      one_html: "Typen markerades som inaktiv %{time}." # MT
+      two_html: "Du kan %{link}." # MT
+      three: "aktivera den igen" # MT
+
+  deactivatable:
+    community:
+      success:
+        activate: "Gemenskapen har aktiverats igen." # MT
+    household:
+      success:
+        activate: "Hushållet har aktiverats." # MT
+        deactivate: "Hushållet har inaktiverats." # MT
+        destroy: "Hushållet har raderats." # MT
+        hard_destroy: "Hushållet och alla dess medlemmar har raderats permanent." # MT
+    user:
+      success:
+        activate: "Personen har aktiverats." # MT
+        activate_unconfirmed: "Personen har aktiverats, men behöver en inbjudan för att logga in. Klicka på ”Bjud in” nedan för att bjuda in personen." # MT
+        deactivate: "Personen har inaktiverats." # MT
+        destroy: "Personen har raderats." # MT
+        hard_destroy: "Personen har raderats permanent." # MT
+      error:
+        activate: "Fel vid aktivering: %{message}" # MT
+        deactivate: "Fel vid inaktivering: %{message}" # MT
+    billing/template:
+      success:
+        destroy: "Mallen har raderats." # MT
+    domain:
+      success:
+        destroy: "Domänen har raderats." # MT
+    gdrive/item:
+      success:
+        destroy: "Objektet har tagits bort." # MT
+    gdrive/item_group:
+      success:
+        destroy: "Gruppen har tagits bort." # MT
+    gdrive/migration/operation:
+      success:
+        destroy: "Åtgärden har raderats." # MT
+    groups/group:
+      success:
+        deactivate: "Gruppen har inaktiverats." # MT
+        activate: "Gruppen har aktiverats." # MT
+        destroy: "Gruppen har raderats." # MT
+    calendars/protocol:
+      success:
+        destroy: "Regelverket har raderats." # MT
+    calendars/group:
+      success:
+        destroy: "Gruppen har raderats." # MT
+    calendars/calendar:
+      success:
+        activate: "Kalendern har aktiverats." # MT
+        deactivate: "Kalendern har inaktiverats." # MT
+        destroy: "Kalendern har raderats." # MT
+    meals/meal:
+      success:
+        destroy: "Måltiden har raderats." # MT
+    meals/formula:
+      success:
+        activate: "Formeln har aktiverats." # MT
+        deactivate: "Formeln har inaktiverats." # MT
+        destroy: "Formeln har raderats." # MT
+    meals/role:
+      success:
+        activate: "Rollen har aktiverats." # MT
+        deactivate: "Rollen har inaktiverats." # MT
+        destroy: "Rollen har raderats." # MT
+    meals/type:
+      success:
+        activate: "Typen har aktiverats." # MT
+        deactivate: "Typen har inaktiverats." # MT
+        destroy: "Typen har raderats." # MT
+    people/member_type:
+      success:
+        destroy: "Medlemstypen har raderats." # MT
+    people/memorial:
+      success:
+        destroy: "Minnessidan har raderats." # MT
+    people/memorial_message:
+      success:
+        destroy: "Meddelandet har raderats." # MT
+    work/job:
+      success:
+        destroy: "Uppgiften har raderats." # MT
+    work/period:
+      success:
+        destroy: "Perioden har raderats." # MT
+
+  cocoon:
+    add_links:
+      vehicles: "Lägg till fordon" # MT
+      emergency_contacts: "Lägg till nödkontakt" # MT
+      up_guardianships: "Lägg till förälder/vårdnadshavare" # MT
+      pets: "Lägg till husdjur" # MT
+      shifts: "Lägg till pass" # MT
+      assignments: "Lägg till medhjälpare" # MT
+      reminders: "Lägg till påminnelse" # MT
+      restrictions: "Lägg till restriktion" # MT
+      signups: "Lägg till hushåll" # MT
+      groups/group:
+        memberships: "Lägg till medlem" # MT
+      meals/signup:
+        parts: "Lägg till rad" # MT
+      meals/formula:
+        parts: "Lägg till måltidstyp" # MT
+
+  select2:
+    prompts:
+      creator: "Skriv några bokstäver av namnet på den som skapar." # MT
+      sponsor: "Skriv några bokstäver av kontaktpersonens namn." # MT
+      household: "Skriv några bokstäver av hushållets namn." # MT
+      guardian: "Skriv några bokstäver av vårdnadshavarens namn." # MT
+      user: "Skriv några bokstäver av personens namn." # MT
+      job_choosing_proxy: "Skriv några bokstäver av personens namn." # MT
+      type: "Skriv några bokstäver av måltidstypens namn, eller hela namnet för att lägga till en ny typ." # MT
+      category: "Skriv några bokstäver av kategorin, eller hela kategorin för att lägga till en ny." # MT
+      reimbursee: "Skriv några bokstäver av mottagarens namn." # MT
+    placeholders:
+      creator: "Välj vem som skapar …" # MT
+      sponsor: "Välj kontaktperson …" # MT
+      household: "Välj hushåll …" # MT
+      guardian: "Välj vårdnadshavare …" # MT
+      user: "Välj person …" # MT
+      job_choosing_proxy: "Välj person …" # MT
+      type: "Välj eller ange typ …" # MT
+      category: "Välj eller ange kategori …" # MT
+      reimbursee: "Välj mottagare …" # MT
+
+  csv:
+    headers:
+      user:
+        id: "Id" # MT
+        first_name: "Förnamn" # MT
+        last_name: "Efternamn" # MT
+        unit_num: "Lägenhetsnr" # MT
+        unit_suffix: "Lägenhetstillägg" # MT
+        birthdate: "Födelsedag" # MT
+        pronouns: "Pronomen" # MT
+        email: "E-post" # MT
+        google_email: "Google-e-post" # MT
+        paypal_email: "PayPal-e-post" # MT
+        child: "Är barn" # MT
+        full_access: "Full åtkomst" # MT
+        household_id: "Hushålls-id" # MT
+        household_name: "Hushållets namn" # MT
+        mobile_phone: "Mobiltelefon" # MT
+        home_phone: "Hemtelefon" # MT
+        work_phone: "Arbetstelefon" # MT
+        joined_on: "Inflyttningsdatum" # MT
+        deactivated_at: "Utflyttningsdatum" # MT
+        preferred_contact: "Föredraget kontaktsätt" # MT
+        garage_nums: "Garagenr" # MT
+        vehicles: "Fordon" # MT
+        guardian_names: "Föräldrar/vårdnadshavare" # MT
+        keyholders: "Nyckelinnehavare" # MT
+        emergency_contacts: "Nödkontakter" # MT
+        pets: "Husdjur" # MT
+      billing/account:
+        number: "Nummer" # MT
+        community_id: "Gemenskaps-id" # MT
+        community_name: "Gemenskap" # MT
+        household_id: "Hushålls-id" # MT
+        household_name: "Hushåll" # MT
+        balance_due: "Att betala" # MT
+        current_balance: "Aktuellt saldo" # MT
+        credit_limit: "Kreditgräns" # MT
+        last_statement_id: "Id för senaste kontoutdrag" # MT
+        last_statement_on: "Datum för senaste kontoutdrag" # MT
+        due_last_statement: "Att betala enligt senaste kontoutdrag" # MT
+        total_new_charges: "Nya debiteringar totalt" # MT
+        total_new_credits: "Nya krediteringar totalt" # MT
+        created_at: "Skapad" # MT
+      billing/transaction:
+        id: "Id" # MT
+        incurred_on: "Uppkom" # MT
+        code: "Kod" # MT
+        chg_crd: "Typ" # MT
+        description: "Beskrivning" # MT
+        household_id: "Hushålls-id" # MT
+        household_name: "Hushåll" # MT
+        quantity: "Antal" # MT
+        unit_price: "Styckpris" # MT
+        amount: "Belopp" # MT
+        created_at: "Registrerad" # MT
+        account_id: "Konto-id" # MT
+        statement_id: "Kontoutdrags-id" # MT
+        meal_id: "Måltids-id" # MT
+      meals/meal:
+        served_at: "Datum/tid" # MT
+        calendars: "Platser" # MT
+        formula: "Formel" # MT
+        communities: "Gemenskaper" # MT
+        role: "Roll" # MT
+        # `action` and `id` are duplicated from `common` below so that the exporter, which does a
+        # plain lookup with no fallback, produces headers byte-identical to those Meals::Import
+        # expects (it checks the `meals/meal` scope first and falls back to `common`).
+        action: "Åtgärd" # MT
+        id: "Id" # MT
+        title: "Titel" # MT
+        entrees: "Huvudrätt" # MT
+        side: "Tillbehör" # MT
+        kids: "Barn" # MT
+        dessert: "Efterrätt" # MT
+        notes: "Anteckningar" # MT
+        allergens: "Allergener" # MT
+        capacity: "Kapacitet" # MT
+        status: "Status" # MT
+        signup_count: "Matgäster totalt" # MT
+        spots_left: "Platser kvar" # MT
+        ingredient_cost: "Kostnad för ingredienser" # MT
+        pantry_cost: "Kostnad för baslager" # MT
+        total_cost: "Total kostnad" # MT
+        payment_method: "Betalningsmetod" # MT
+        reimbursee: "Mottagare av ersättning" # MT
+        # The "Diners: "/"Price: " prefixes keep these from colliding with meal role titles,
+        # which Meals::Import matches by exact string.
+        diner_count: "Matgäster: %{type}" # MT
+        type_price: "Pris: %{type}" # MT
+      meals/signup:
+        meal_id: "Måltids-id" # MT
+        served_at: "Måltidens datum/tid" # MT
+        meal_title: "Måltidens titel" # MT
+        calendars: "Måltidens platser" # MT
+        formula: "Formel" # MT
+        community_id: "Gemenskaps-id" # MT
+        community_name: "Gemenskap" # MT
+        household_id: "Hushålls-id" # MT
+        household_name: "Hushåll" # MT
+        diner_count: "Matgäster: %{type}" # MT
+        total: "Matgäster totalt" # MT
+        takeout: "Att ta med" # MT
+        comments: "Kommentarer" # MT
+        created_at: "Anmäld" # MT
+      common:
+        id: "Id" # MT
+        action: "Åtgärd" # MT
+    errors:
+      meals/meal:
+        calendar:
+          bad_id: "Hittade ingen kalender med id %{str}" # MT
+          bad_name: "Hittade ingen kalender som heter ”%{str}”" # MT
+        formula:
+          bad_id: "Hittade ingen måltidsformel med id %{str}" # MT
+          bad_name: "Hittade ingen måltidsformel som heter ”%{str}”" # MT
+        community:
+          bad_id: "Hittade ingen gemenskap med id %{str}" # MT
+          bad_name: "Hittade ingen gemenskap som heter ”%{str}”" # MT
+        file_empty: "Filen är tom" # MT
+        invalid_headers: "Ogiltiga kolumnrubriker: %{headers}" # MT
+        missing_columns: "Saknade kolumner: %{columns}" # MT
+        invalid_action: "Ogiltig åtgärd: %{action}" # MT
+        action_not_permitted: "Åtgärden är inte tillåten (%{action})" # MT
+        served_at_required: "Datum/tid krävs" # MT
+        invalid_served_at: "”%{str}” är inte ett giltigt datum eller en giltig tid" # MT
+        calendars_required: "Kalender krävs" # MT
+        meal_id_not_found: "Hittade ingen måltid med id ”%{id}”" # MT
+        meal_not_found: "Hittade ingen måltid %{time} på platserna: %{locations}" # MT
+        delete_failed: "Fel vid radering av måltid %{id}: ”%{error}”" # MT
+        user:
+          bad_id: "Hittade ingen person med id %{str}" # MT
+          bad_name: "Hittade ingen person som heter ”%{str}”" # MT
+
+  action_labels:
+    common:
+      new: "Lägg till" # MT
+      edit: "Redigera" # MT
+      deactivate: "Inaktivera" # MT
+      destroy: "Radera" # MT
+      clone: "Kopiera" # MT
+      close: "Stäng" # MT
+      join: "Gå med" # MT
+      leave: "Lämna" # MT
+      opt_out: "Välj bort" # MT
+      rejoin: "Gå med igen" # MT
+      reopen: "Öppna igen" # MT
+      rescan: "Sök igenom igen" # MT
+      summary: "Sammanfattning" # MT
+      finalize: "Slutför" # MT
+      unfinalize: "Ångra slutförande" # MT
+      cancel: "Ställ in" # MT
+      send_message: "Meddelande" # MT
+    community:
+      visit: "Besök" # MT
+    billing/account:
+      add_txn: "Lägg till transaktion" # MT
+    user:
+      update_info: "Redigera profil" # MT
+      update_photo: "Redigera foto" # MT
+      invite: "Bjud in" # MT
+      impersonate: "Agera som personen" # MT
+      destroy: "Radera permanent" # MT
+      delete_self: "Radera mitt konto" # MT
+    household:
+      destroy: "Radera permanent" # MT
+    wiki/page:
+      history: "Historik" # MT
+    work/job:
+      edit: "Redigera uppgift" # MT
+    work/shift:
+      edit_job: "Redigera uppgift" # MT
+      signup: "Anmäl dig" # MT
+      unsignup: "Ta bort anmälan" # MT
+    work/period:
+      review_notices: "Skicka meddelanden" # MT
+      send_notices: "Skicka meddelanden" # MT
+
+  dropzone:
+    prompts:
+      default: "Klicka eller dra hit en fil" # MT
+      models:
+        user: "Klicka eller dra hit ett foto" # MT
+        calendars/calendar: "Klicka eller dra hit ett foto" # MT
+
+  titles:
+    meals/messages: "Skicka meddelande om måltid" # MT
+
+  roles:
+    admin: "Administratör" # MT
+    calendar_coordinator: "Kalendersamordnare" # MT
+    cluster_admin: "Klusteradministratör" # MT
+    super_admin: "Superadministratör" # MT
+    biller: "Faktureringsansvarig" # MT
+    photographer: "Fotograf" # MT
+    meals_coordinator: "Måltidssamordnare" # MT
+    wikiist: "Wikiansvarig" # MT
+    work_coordinator: "Arbetssamordnare" # MT
+    new_community_approver: "Godkännare av nya gemenskaper" # MT
+    index:
+      title: "Roller" # MT
+      people: "Personer" # MT
+      legend: "Förklaring" # MT
+      # Each line is "<role name> - <description>".
+      legend_item_html: "<strong>%{role}</strong> – %{description}" # MT
+      descriptions:
+        admin: "Alla andra roller tillsammans" # MT
+        biller: "Hanterar transaktioner, mallar, kontoutdrag och formler och slutför måltider" # MT
+        photographer: "Kan redigera allas foton i medlemsförteckningen" # MT
+        calendar_coordinator: "Hanterar kalendrar och allas händelser" # MT
+        meals_coordinator: "Hanterar måltider, måltidsroller, formler och måltidstyper" # MT
+        wikiist: "Hanterar särskilt skyddade wikisidor" # MT
+        work_coordinator: "Hanterar uppgifter, pass och arbetsperioder" # MT
+
+  phone_types:
+    abbreviations:
+      home: "h" # MT
+      work: "a" # MT
+      mobile: "m" # MT
+
+  date_range_lens:
+    past_12: "Senaste 12 månaderna" # MT
+
+  community_lens:
+    all: "Alla gemenskaper" # MT
+
+  lens_bar:
+    clear_filter: "Rensa filter" # MT
+
+  search_lens:
+    prompt: "Sök …" # MT

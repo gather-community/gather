@@ -1,0 +1,114 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+# Additional translations at https://github.com/plataformatec/devise/wiki/I18n
+
+fi:
+  devise:
+    confirmations:
+      confirmed: "Sähköpostiosoitteesi on vahvistettu." # MT
+      send_instructions: "Saat muutaman minuutin kuluttua sähköpostin, jossa on ohjeet sähköpostiosoitteesi vahvistamiseen." # MT
+      send_paranoid_instructions: "Jos sähköpostiosoitteesi on tietokannassamme, saat muutaman minuutin kuluttua sähköpostin, jossa on ohjeet sähköpostiosoitteesi vahvistamiseen." # MT
+    failure:
+      already_authenticated: "Olet jo kirjautunut sisään." # MT
+      inactive: "Tiliäsi ei ole vielä aktivoitu." # MT
+      invalid: "Virheellinen %{authentication_keys} tai salasana." # MT
+      locked: "Tilisi on lukittu." # MT
+      last_attempt: "Sinulla on vielä yksi yritys ennen kuin tilisi lukitaan." # MT
+      not_found_in_database: "Virheellinen %{authentication_keys} tai salasana." # MT
+      timeout: "Istuntosi vanhentui. Kirjaudu uudelleen sisään jatkaaksesi." # MT
+      unauthenticated: "Kirjaudu sisään nähdäksesi sivun." # MT
+      unconfirmed: "Ensimmäisellä kirjautumiskerralla sinun täytyy käyttää kutsua." # MT
+    authentication_keys:
+      email: "sähköpostiosoite" # MT
+    mailer:
+      confirmation_instructions:
+        subject: "Vahvista sähköpostiosoitteesi" # MT
+      reset_password_instructions:
+        subject: "Salasanasi vaihtaminen" # MT
+      unlock_instructions:
+        subject: "Ohjeet lukituksen avaamiseen" # MT
+    omniauth_callbacks:
+      failure: "Kirjautuminen palvelun %{kind} kautta ei onnistunut, koska %{reason}." # MT
+      success: "Tunnistautuminen palvelun %{kind} tilillä onnistui." # MT
+    passwords:
+      new:
+        title: "Unohtunut salasana" # MT
+        instructions: "Anna sähköpostiosoitteesi, niin lähetämme sinulle ohjeet sähköpostitse. Vaihda salasanasi sähköpostin ohjeiden mukaan. Sähköpostin saapuminen voi kestää hetken." # MT
+      edit:
+        title: "Anna uusi salasana" # MT
+        instructions: "Anna uusi salasana alle, niin sinut kirjataan sisään Gatheriin." # MT
+      no_token: "Tälle sivulle pääsee vain salasanan vaihtoviestin linkistä. Jos tulit salasanan vaihtoviestin kautta, varmista, että käytit koko annetun osoitteen." # MT
+      send_instructions: "Saat muutaman minuutin kuluttua sähköpostin, jossa on ohjeet salasanasi vaihtamiseen." # MT
+      send_paranoid_instructions: "Jos sähköpostiosoitteesi on tietokannassamme, saat muutaman minuutin kuluttua sähköpostiisi linkin salasanan palauttamiseen." # MT
+      updated: "Salasanasi on vaihdettu. Olet nyt kirjautunut sisään." # MT
+      updated_not_active: "Salasanasi on vaihdettu." # MT
+    registrations:
+      destroyed: "Hei hei! Tilisi on poistettu. Toivottavasti näemme pian uudelleen." # MT
+      signed_up: "Tervetuloa! Rekisteröityminen onnistui." # MT
+      signed_up_but_inactive: "Rekisteröityminen onnistui. Emme kuitenkaan voineet kirjata sinua sisään, koska tiliäsi ei ole vielä aktivoitu." # MT
+      signed_up_but_locked: "Rekisteröityminen onnistui. Emme kuitenkaan voineet kirjata sinua sisään, koska tilisi on lukittu." # MT
+      signed_up_but_unconfirmed: "Sähköpostiosoitteeseesi on lähetetty viesti, jossa on vahvistuslinkki. Aktivoi tilisi linkin kautta." # MT
+      update_needs_confirmation: "Tilisi päivitettiin, mutta meidän täytyy vielä vahvistaa uusi sähköpostiosoitteesi. Tarkista sähköpostisi ja vahvista uusi osoite viestin linkistä." # MT
+      updated: "Tilisi on päivitetty." # MT
+    sessions:
+      new:
+        title: "Kirjaudu sisään" # MT
+      signed_in: "Kirjautuminen onnistui." # MT
+      signed_out: "Uloskirjautuminen onnistui." # MT
+      already_signed_out: "Uloskirjautuminen onnistui." # MT
+    unlocks:
+      send_instructions: "Saat muutaman minuutin kuluttua sähköpostin, jossa on ohjeet tilisi lukituksen avaamiseen." # MT
+      send_paranoid_instructions: "Jos tilisi on olemassa, saat muutaman minuutin kuluttua sähköpostin, jossa on ohjeet sen lukituksen avaamiseen." # MT
+      unlocked: "Tilisi lukitus on avattu. Kirjaudu sisään jatkaaksesi." # MT
+    # Overrides devise-i18n's "Forgot your password?" to keep our wording.
+    shared:
+      links:
+        forgot_your_password: "Etkö tiedä salasanaasi?" # MT
+  auth_mailer:
+    cant_reset_password:
+      request_received: "Saimme pyynnön vaihtaa salasanasi." # MT
+      no_full_access: "Valitettavasti profiilillasi ei ole täysiä käyttöoikeuksia järjestelmään, joten et voi kirjautua sisään." # MT
+      contact_admin: "Ota yhteyttä Gatherin ylläpitäjään, jos tämä on mielestäsi virhe." # MT
+    confirmation_instructions:
+      use_link: "Vahvista uusi sähköpostiosoitteesi tällä linkillä:" # MT
+      thanks: "Kiitos, että autat tässä tärkeässä turvatoimessa!" # MT
+    reset_password_instructions:
+      use_link: "Saimme pyynnön vaihtaa salasanasi. Voit tehdä sen tällä linkillä:" # MT
+      ignore: "Jos et pyytänyt tätä, voit jättää viestin huomiotta, eikä salasanasi muutu." # MT
+    sign_in_invitation:
+      subject: "Ohjeet Gatheriin kirjautumiseen" # MT
+      invited: "Sinut on kutsuttu kirjautumaan Gatheriin, yhteisöjärjestelmään, jota yhteisö %{community} käyttää!" # MT
+      click_link: "Aloita napsauttamalla alla olevaa linkkiä." # MT
+      choose_method: "Siellä voit valita, kirjaudutko Googlella vai salasanalla. Jos et ole vielä asettanut salasanaa, voit tehdä sen siellä." # MT
+      expiry:
+        one: "Tämä linkki vanhenee %{count} päivän kuluttua." # MT
+        other: "Tämä linkki vanhenee %{count} päivän kuluttua." # MT
+      see_you: "Toivottavasti nähdään pian!" # MT
+  errors:
+    messages:
+      already_confirmed: "on jo vahvistettu, yritä kirjautua sisään" # MT
+      confirmation: "Ei vastaa salasanaa" # MT
+      confirmation_period_expired: "täytyy vahvistaa ajassa %{period}, pyydä uusi" # MT
+      doesnt_match: "Ei vastaa salasanaa" # MT
+      expired: "on vanhentunut, pyydä uusi" # MT
+      not_found: "Sähköpostiosoitetta ei löytynyt" # MT
+      not_locked: "ei ollut lukittu" # MT
+      not_saved:
+        one: "1 virhe esti kohteen %{calendar} tallentamisen:" # MT
+        other: "%{count} virhettä esti kohteen %{calendar} tallentamisen:" # MT
+  password:
+    strength:
+      weak: "Liian heikko (pisteet: %{bits})" # MT
+      good: "Hyvä (pisteet: %{bits})" # MT
+      excellent: "Erinomainen (pisteet: %{bits})" # MT
+    strength_info: "Käytämme älykästä salasanan vahvuuden tarkistusta varmistaaksemme, että salasanasi on turvallinen eikä sitä voi helposti murtaa.\n\nVoit vahvistaa salasanaasi:\n\n  - tekemällä siitä pidemmän\n  - välttämällä sanakirjasta löytyviä sanoja\n  - käyttämällä sekaisin kirjaimia, numeroita ja erikoismerkkejä" # MT

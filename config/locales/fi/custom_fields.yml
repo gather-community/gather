@@ -1,0 +1,149 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+fi:
+  custom_fields:
+    boolean:
+      "true": "Kyllä" # MT
+      "false": "Ei" # MT
+    labels:
+      community:
+        settings:
+          main_nav_customizations: "Ylävalikon mukautukset" # MT
+          time_zone: "Aikavyöhyke" # MT
+          default_landing_page: "Oletusaloitussivu" # MT
+          people:
+            _self: "Ihmiset" # MT
+            default_directory_sort: "Jäsenluettelon oletusjärjestys" # MT
+            plain_user_selects: "Tavalliset käyttäjävalikot" # MT
+            user_custom_fields_spec: "Käyttäjien omien kenttien määrittely" # MT
+          meals:
+            _self: "Ateriat" # MT
+            reimb_instructions: "Kulukorvausohjeet" # MT
+            allergens: "Allergeenit" # MT
+            show_reimb_form: "Näytä tulostettava kulukorvauslomake" # MT
+            cooks_can_finalize: "Kokit voivat viimeistellä aterioita" # MT
+            cooks_can_change_invites: "Kokit voivat muuttaa aterian yhteisöjä" # MT
+            default_invites: "Aterioiden oletusyhteisöt" # MT
+            allow_job_signup_on_meal_page: "Salli ateriatehtäviin ilmoittautuminen ateriasivulla" # MT
+            default_capacity: "Oletuskapasiteetti" # MT
+            reminder_lead_times:
+              _self: "Muistutukset päivää etukäteen" # MT
+              diner: "Ruokailijamuistutus" # MT
+              early_menu: "Varhainen ruokalistamuistutus" # MT
+              late_menu: "Myöhäinen ruokalistamuistutus" # MT
+          calendars:
+            _self: "Kalenterit" # MT
+            kinds: "Tyypit" # MT
+            meals:
+              _self: "Ateriatapahtumat" # MT
+              default_total_time: "Oletuskokonaisaika" # MT
+              default_prep_time: "Oletusvalmisteluaika" # MT
+          work:
+            _self: "Työ" # MT
+            default_date_filter: "Ilmoittautumisten oletuspäivämääräsuodatin" # MT
+          billing:
+            _self: "Laskutus" # MT
+            contact: "Laskutuksen yhteystieto" # MT
+            payment_instructions: "Maksuohjeet" # MT
+            statement_terms: "Tiliotteen maksuehto" # MT
+            statement_reminder_lead_time: "Tiliotemuistutus\npäivää etukäteen" # MT
+            paypal_reimbursement: "Tarjoa kulukorvaus PayPalilla" # MT
+            payment_methods:
+              _self: "Maksutapojen tiedot" # MT
+              paypal_me: "PayPal.me" # MT
+              paypal_email: "PayPal sähköpostilla" # MT
+              paypal_friend: "Pyydä jäseniä lähettämään PayPal-maksu ”ystävälle lähetettynä”" # MT
+              check_payee: "Shekin saaja" # MT
+              check_address: "Shekkien postiosoite" # MT
+              check_dropoff: "Ohjeet shekin jättämiseen" # MT
+              cash_dropoff: "Ohjeet käteisen jättämiseen" # MT
+              additional_info: "Lisätiedot" # MT
+              show_billing_contact: "Näytä laskutuksen yhteyssähköposti lisätietojen yhteydessä" # MT
+            late_fee_policy:
+              _self: "Viivästysmaksukäytäntö" # MT
+              fee_type: "Maksun tyyppi" # MT
+              threshold: "Raja" # MT
+              amount: "Määrä" # MT
+    hints:
+      community:
+        settings:
+          main_nav_customizations: "Tällä asetuksella voit muokata ylävalikon linkkejä. Kirjoita linkit Markdown-muodossa. Esimerkki: [Linkin nimi](https://example.com). Jos linkin nimi vastaa olemassa olevaa linkkiä, se korvaa oletusosoitteen. Tyhjä osoite poistaa linkin kokonaan. Kaikki muu teksti ja muotoilu ohitetaan." # MT
+          people:
+            plain_user_selects: "Käytä tavallisia pudotusvalikoita hakukenttien sijaan. Voi sopia paremmin pienille yhteisöille." # MT
+            user_custom_fields_spec: "Kirjoita YAML-muotoinen määrittely omille kentille, jotka näkyvät tämän yhteisön käyttäjiä katseltaessa ja muokattaessa. Ota yhteyttä Gatherin tukeen, jos tarvitset apua määrittelyn kirjoittamisessa." # MT
+          meals:
+            reimb_instructions: "Mitä kokkien pitää tehdä kuiteillaan saadakseen kulukorvauksen. Voit esimerkiksi pyytää kokkeja kirjaamaan summat Gatherin aterian muokkaussivulle, käyttämään sisäänrakennettua kulukorvauslomaketta tai noudattamaan jotain muuta käytäntöä." # MT
+            allergens: "Pilkuilla erotettu luettelo allergeeneista, joista kokit valitsevat ruokalistaa julkaistessaan." # MT
+            show_reimb_form: "Näytetäänkö aterian yhteenvetosivulla tulostettava kulukorvauslomake (sisältää ruokaostosten ja ruokavaraston summat sekä korvaustavan). Poista valinta, jos haluat käyttää sähköistä kulukorvausmenettelyä." # MT
+            cooks_can_finalize: "Voivatko pääkokit viimeistellä aterioita laskutusvastaavien, ateriakoordinaattorien ja ylläpitäjien lisäksi." # MT
+            cooks_can_change_invites: "Voivatko pääkokit muuttaa sitä, mitkä yhteisöt kutsutaan ateriaan." # MT
+            default_invites: "Mitkä yhteisöt kutsutaan ateriaan oletuksena." # MT
+            allow_job_signup_on_meal_page: "Voivatko ruokailijat tarjoutua auttamaan ateriassa samalla, kun ilmoittautuvat syömään." # MT
+            default_capacity: "Oletusasetus sille, kuinka monelle ihmiselle ateria riittää." # MT
+            reminder_lead_times:
+              _self: "Kuinka monta päivää etukäteen erilaiset muistutukset lähetetään. Muistutukset lähetetään klo 6 paikallista aikaa. Jos annat ”0”, muistutus lähetetään aterian päivän aamuna. Lisää muistutusasetuksia on ateriaroolien sivulla." # MT
+              diner: "Kaikille ruokailijoille lähetettävä muistutus." # MT
+              early_menu: "Pääkokille lähetettävä muistutus ruokalistan kirjaamisesta." # MT
+              late_menu: "Toinen, kiireellisempi muistutus pääkokille, jos ruokalistaa ei ole vieläkään kirjattu. Pitäisi olla vähemmän päiviä etukäteen kuin varhainen ruokalistamuistutus." # MT
+          calendars:
+            kinds: "Erilaiset tapahtumatyypit pilkuilla erotettuina. Voidaan käyttää tapahtumien säännöissä. Jos kenttä on tyhjä, tyyppikenttää ei näytetä tapahtumalomakkeessa." # MT
+            meals:
+              default_total_time: "Ateriatapahtumien oletuskesto minuutteina, mukaan lukien valmistelu ja siivous" # MT
+              default_prep_time: "Aterian oletusvalmisteluaika minuutteina" # MT
+          billing:
+            contact: "Sähköpostiosoite laskutusta koskeville kysymyksille. Näytetään maksuohjeiden yhteydessä." # MT
+            payment_instructions: "Miten tilille maksetaan." # MT
+            statement_terms: "Kuinka monen päivän kuluttua luomispäivästä tiliote erääntyy. Jos arvo on nolla (0), tiliotteilla ei ole eräpäivää." # MT
+            statement_reminder_lead_time: "Kuinka monta päivää ennen eräpäivää tiliotteen maksumuistutus lähetetään. Muistutuksia ei lähetetä, jos tiliotteilla ei ole eräpäivää tai saldo on maksettu." # MT
+            paypal_reimbursement: "Salli kokkien pyytää aterioiden kulukorvaukset PayPalilla. PayPal-maksut tehdään käsin (ei automaattisesti)." # MT
+            payment_methods:
+              _self: "Ohjeet tai tiedot eri maksutavoista. Jätä tyhjäksi, jos maksutapaa ei hyväksytä. Katso <a href='/accounts/mine'>tilisivultasi</a>, miltä ohjeet näyttävät." # MT
+              paypal_me: "Anna <a href='https://paypal.me'>PayPal.me-linkkisi</a>. Tämä on jäsenille helpoin tapa maksaa PayPalilla. Huomaa, että tällä tavalla maksulta ei voi välttyä, jos sinulla on PayPalin yritystili." # MT
+              paypal_email: "Jos haluat hyväksyä PayPalin mutta et halua käyttää PayPal.me-palvelua, anna sähköpostiosoite, johon jäsenten pitäisi lähettää maksut." # MT
+              paypal_friend: "Koskee sekä PayPal.me-palvelua että PayPalia sähköpostilla. Valitse, jos maksut voi PayPalin käyttöehtojen mukaan perustellusti katsoa ystävien välisiksi. Näin lähetettäessä maksuja ei peritä." # MT
+              check_payee: "Kenelle shekit kirjoitetaan. Jätä tyhjäksi, jos shekkejä ei hyväksytä." # MT
+              check_address: "Anna osoite, jos hyväksyt shekit postitse. Tällöin näytetään myös ohjeet verkkopankkimaksuun." # MT
+              check_dropoff: "Ohjeet shekin jättämiseen henkilökohtaisesti. Jätä tyhjäksi, jos shekit pitää postittaa tai niitä ei hyväksytä." # MT
+              cash_dropoff: "Ohjeet käteisen jättämiseen henkilökohtaisesti. Jätä tyhjäksi, jos käteistä ei hyväksytä." # MT
+              additional_info: "Muut tiedot, jotka haluat näyttää maksuohjeiden kohdalla." # MT
+              show_billing_contact: "Näytetäänkö yllä annettu laskutuksen yhteyssähköposti (jos annettu) maksuohjeiden lopussa. Poista valinta ja lisää se itse kohtaan ”Lisätiedot”, jos haluat muokata sen esitystapaa." # MT
+            late_fee_policy:
+              fee_type: "Miten maksu lasketaan" # MT
+              threshold: "Pienin maksamaton saldo, jolla maksu peritään" # MT
+              amount: "Maksun suuruus rahana tai prosentteina (esim. anna ”3”, niin maksu on tyypistä riippuen 3 % tai 3,00)" # MT
+    options:
+      community:
+        settings:
+          default_landing_page:
+            meals: "Ateriat" # MT
+            directory: "Jäsenluettelo" # MT
+            calendars: "Kalenterit" # MT
+            wiki: "Wiki" # MT
+          people:
+            default_directory_sort:
+              name: "Nimen mukaan" # MT
+              unit: "Asunnon mukaan" # MT
+          meals:
+            default_invites:
+              all: "Kaikki yhteisöt" # MT
+              own: "Vain oma yhteisö" # MT
+          work:
+            default_date_filter:
+              all: "Menneet ja tulevat" # MT
+              curftr: "Nykyiset ja tulevat" # MT
+          billing:
+            late_fee_policy:
+              fee_type:
+                none: "Ei viivästysmaksua" # MT
+                fixed: "Kiinteä" # MT
+                percent: "Prosentti" # MT

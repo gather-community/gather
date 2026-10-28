@@ -1,0 +1,370 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+sv:
+  gdrive:
+    config_updated: "Konfigurationen har uppdaterats." # MT
+    group_added: "Gruppen har lagts till." # MT
+    item_created: "Objektet har skapats." # MT
+    old_migration: "Din migrering skapades för mer än 30 dagar sedan. Fundera på att avsluta och radera den." # MT
+    auth_cancelled: "Det verkar som att du avbröt inloggningen hos Google." # MT
+    wrong_account: "Du loggade in på Google med %{signed_in}. Logga in med %{expected} i stället." # MT
+    authenticated: "Inloggningen hos Google lyckades." # MT
+    connection_problem: "Det är problem med anslutningen till Google Drive. Kontakta Gathers support. (%{code})" # MT
+    view_in_drive: "Visa i Google Drive" # MT
+    browse:
+      index:
+        title: "Google Drive" # MT
+        settings: "Inställningar" # MT
+        migration: "Migrering" # MT
+        reconnect: "Din gemenskap behöver anslutas till Google Drive igen." # MT
+        authenticate_as_html: "Logga in hos Google som %{user}." # MT
+        reconnect_notify_admin: "Din gemenskap behöver anslutas till Google Drive igen. Meddela en Gather-administratör." # MT
+        not_connected: "Din gemenskap är inte ansluten till Google Drive än." # MT
+        not_connected_get_started_html: "Din gemenskap är inte ansluten till Google Drive än. Gå till %{link} för att komma igång." # MT
+        settings_page: "inställningssidan" # MT
+        no_drives_html: "Din gemenskap har inga kopplade delade enheter. Gå till %{link} för att koppla en enhet." # MT
+        not_connected_talk_to_admin: "Din gemenskap är inte ansluten till Google Drive än. Prata med en Gather-administratör." # MT
+        no_files: "Inga filer hittades." # MT
+        migrating_html: "Letar du efter något? Filerna håller på att flyttas till den här nya enheten som ägs av gemenskapen. Om du inte hittar något, titta på den %{link}." # MT
+        old_location: "gamla platsen" # MT
+        file_icon: "Filikon" # MT
+        no_files_in_folder: "Inga filer hittades i mappen." # MT
+        folder_icon: "Mappikon" # MT
+      auth_button:
+        authenticate: "Logga in med Google" # MT
+    items:
+      new:
+        title: "Lägg till objekt i Google Drive" # MT
+    item_groups:
+      new:
+        title: "Lägg till grupp till objekt i Google Drive" # MT
+    config:
+      index:
+        title: "Inställningar för Google Drive" # MT
+        migration: "Migrering" # MT
+        migrate_files: "Migrera filer" # MT
+        link_item: "Koppla objekt" # MT
+        credentials: "Inloggningsuppgifter för Google Workspace" # MT
+        add_credentials_html: "Din gemenskap är inte ansluten till Google Drive än. Lägg till inloggningsuppgifterna för er Google Workspace för att ansluta. Se %{link} för hur du kommer igång." # MT
+        config_guide: "konfigurationsguiden" # MT
+        authentication: "Inloggning" # MT
+        update_credentials: "Om du behöver uppdatera inloggningsuppgifterna för Google Workspace kan du göra det här." # MT
+        introduction: "Introduktion" # MT
+        system_user_html: "<strong>Systemanvändare:</strong> %{user}" # MT
+        intro_html: "Lägg till objekt nedan för att koppla dem till Gather och synkronisera behörigheter. Delade enheter som listas nedan visas på Gathers %{link} för dem som har behörighet. Mappar och filer går inte att nå via bläddringssidan om inte den delade enhet de ligger i går att nå." # MT
+        browse_page: "bläddringssida för Google Drive" # MT
+        name: "Namn" # MT
+        status: "Status" # MT
+        groups_permissions: "Grupper och behörigheter" # MT
+        # e.g. "Viewer (View files)"
+        access_level: "%{level} (%{hint})" # MT
+        add_group: "Lägg till grupp" # MT
+        none_linked:
+          drive: "Inga delade enheter är kopplade till Gather." # MT
+          folder: "Inga mappar är kopplade till Gather." # MT
+          file: "Inga filer är kopplade till Gather." # MT
+        revoke_html: "Om du behöver koppla från Google eller uppdatera inloggningsuppgifterna för Google Workspace kan du %{link}." # MT
+        revoke: "återkalla auktoriseringen" # MT
+        revoke_confirm: "Vill du verkligen återkalla auktoriseringen? Ingen kan använda Google Drive-funktionerna för gemenskapen förrän auktoriseringen har återställts." # MT
+      guide:
+        title: "Konfigurationsguide för Google Drive" # MT
+        # Markdown, rendered with Gather's Markdown renderer. Google's menu and button names are in quotes
+        # or bold so they can be matched to Google's own (translated) interface.
+        body: |- # MT
+          Den här guiden visar hur du skaffar de inloggningsuppgifter som behövs för att ansluta gemenskapens Google Workspace till Gather.
+
+          ## Förutsättningar
+
+          * Gemenskapen måste ha registrerat sig för **Google Workspace**.
+              * Abonnemanget Business Starter räcker.
+              * Det behövs bara ett användarkonto.
+              * Välj ett namn för gemenskapen till kontot (t.ex. workspace.admin@yourdomain.com) i stället för ett personnamn (t.ex. annasvensson@yourdomain.com).
+          * Den som följer instruktionerna måste vara inloggad hos Google som en användare i gemenskapens Google Workspace med **Superadministratör**-behörighet. Om ni bara har ett konto har det kontot superadministratörsbehörighet.
+
+          ## Grundkonfiguration
+
+          ### Skapa ett projekt
+
+          1. Gå till https://console.cloud.google.com
+          2. Kontrollera att du är inloggad hos Google som användaren med superadministratörsbehörighet.
+          3. Godkänn villkoren. Vänta några minuter medan organisationsresursen skapas.
+          4. Gå till https://console.cloud.google.com/projectcreate för att skapa ett projekt.
+          5. Döp det till **Gather Main**.
+          6. Välj organisationen för din domän.
+          7. Använd standardvärdet för plats.
+
+          ### Aktiverade API:er
+
+          1. Med det nya projektet valt, gå till https://console.cloud.google.com/ → Navigeringsmenyn → API:er och tjänster → Aktiverade API:er och tjänster
+          2. Klicka på **Aktivera API:er och tjänster**.
+          3. Aktivera **Google Drive API**.
+
+          ### OAuth-klient-ID
+
+          1. Med det nya projektet valt, gå till https://console.cloud.google.com/ → Navigeringsmenyn → API:er och tjänster → Aktiverade API:er och tjänster → Inloggningsuppgifter.
+          2. Klicka på **Skapa inloggningsuppgifter** → **OAuth-klient-ID**
+          3. Välj **Webbapplikation**.
+          4. Namn: **Drive OAuth Client ID**.
+          5. Lägg till https://gather.coop under **Auktoriserade JavaScript-ursprung**.
+          6. Lägg till https://gather.coop/gdrive/setup/auth/callback under **Auktoriserade omdirigerings-URI:er**.
+          7. Kopiera klient-ID:t och klienthemligheten till ett säkert ställe och spara dem till senare.
+              1. Klient-ID:t ser ut ungefär så här: `302773344240-7g2n5abcdef8es2cvpc0roj7t.apps.googleusercontent.com`
+              2. Klienthemligheten ser ut ungefär så här: `AIza73uyhc63ehd763ehesysqyhw-hei2asda_2rs`
+
+          ### OAuth-samtyckesskärm
+
+          1. Med det nya projektet valt, gå till https://console.cloud.google.com/ → Navigeringsmenyn → API:er och tjänster → OAuth-samtyckesskärm.
+          2. Välj **Intern**.
+          3. Appnamn: **Gather**.
+          4. E-postadress för användarsupport: e-postadressen till användaren med superadministratörsbehörighet.
+          5. Ingen logotyp.
+          6. Appens startsida: https://gather.coop
+          7. Integritetspolicy: https://gather.coop/privacy-policy
+          8. Auktoriserade domäner:
+              1. gather.coop
+          9. Utvecklarens kontaktadress: support@gather.coop
+          10. Omfattningar
+              1. auth/userinfo.email
+              2. auth/drive
+    item_kinds:
+      drive:
+        one: "Delad enhet" # MT
+        other: "Delade enheter" # MT
+      folder:
+        one: "Mapp" # MT
+        other: "Mappar" # MT
+      file:
+        one: "Fil" # MT
+        other: "Filer" # MT
+    access_levels:
+      reader: "Läsare" # MT
+      commenter: "Kommentator" # MT
+      writer: "Bidragsgivare" # MT
+      fileOrganizer: "Innehållsansvarig" # MT
+    access_level_hints:
+      reader: "Se filer" # MT
+      commenter: "Se och kommentera filer" # MT
+      writer: "Se, lägga till och redigera filer" # MT
+      fileOrganizer: "Se, lägga till, redigera, flytta, radera och dela filer" # MT
+    item_error_types:
+      inaccessible: "Går inte att nå" # MT
+      not_shareable: "Går inte att dela" # MT
+    request_statuses:
+      new: "Ny" # MT
+      opened: "Öppnad" # MT
+      opted_out: "Avböjd" # MT
+
+    migration:
+      requests_sending: "Förfrågningarna skickas strax. Om ägaren redan har en förfrågan skickas ingen ny." # MT
+      created: "Migreringen har skapats. Genomsökningen av filer börjar strax." # MT
+      scan_started: "Genomsökningen har förberetts och börjar strax." # MT
+      updated: "Migreringen har uppdaterats." # MT
+      deleted: "Åtgärden har raderats. Ändringar bevakas inte längre." # MT
+      # Name of the shared drive created for each person to drop their files into.
+      file_drop_drive_name: "Gather-filinlämning %{id}" # MT
+      request_subject: "[Åtgärd krävs] Hjälp %{community} att ordna sina filer i Google Drive!" # MT
+      request:
+        # Shared by the request pages.
+        title: "Omorganisering av filer i %{community}" # MT
+        previous: "< Föregående" # MT
+        next: "Nästa >" # MT
+        troubleshooting: "Felsökning" # MT
+        intro:
+          introduction: "Introduktion" # MT
+          ready: "Ja, jag hjälper gärna till!" # MT
+        what_is_this:
+          using_gather_html: "%{community} använder <a href=\"https://gather.coop\">Gather</a> för att ordna sina filer i Google Drive." # MT
+          problem: "Just nu ägs gemenskapens filer av den som skapade dem. Det kan leda till att filer raderas av misstag när någon lämnar gemenskapen." # MT
+          solution: "För att förhindra det flyttar gemenskapen alla sina filer till en delad enhet som gemenskapen äger." # MT
+          own_many_html: "Du äger ungefär %{count} filer i den %{link} för %{community}. Vi behöver ditt tillstånd för att flytta dem till den nya enheten." # MT
+          own_one_html: "Du äger minst en fil i den %{link} för %{community}. Vi behöver ditt tillstånd för att flytta den till den nya enheten." # MT
+          old_folder: "gamla mappen i Google Drive" # MT
+          retain_access: "Du har fortfarande åtkomst till filerna om du är medlem i gemenskapen." # MT
+          questions_html: "Om du har frågor eller funderingar kan du kontakta %{contact}, som samordnar omorganiseringen." # MT
+          opt_out_html: "Om du hellre inte vill hjälpa till kan du %{link}." # MT
+          opt_out: "avböja" # MT
+        step1:
+          heading: "Steg 1: Filer du äger" # MT
+          view_files: "Klicka nedan för att se filerna du äger i mappen i Google Drive för %{community}. En ny flik öppnas i webbläsaren." # MT
+          view_files_button: "Visa filer jag äger" # MT
+          see_something_like: "Du bör se något i stil med det här:" # MT
+          no_files: "Jag ser inga matchande filer" # MT
+          no_files_help_html: "Om du inte ser några matchande filer, kontrollera att du är inloggad hos Google med kontot %{email}." # MT
+        step2:
+          heading: "Steg 2: Välj filer" # MT
+          select: "Välj de filer du vill överföra." # MT
+          easiest: "Det enklaste sättet är att:" # MT
+          click_first: "Klicka på den första filen i listan." # MT
+          go_to_end: "Gå till slutet av listan." # MT
+          shift_click_html: "<strong>Håll ned SKIFT-tangenten</strong> och klicka på den sista filen i listan." # MT
+          see_something_like: "Då bör du se något i stil med det här:" # MT
+          one_at_a_time: "Jag kan bara välja en fil åt gången" # MT
+          holding_html: "Följ de tre stegen ovan och se till att du <strong>håller ned</strong> SKIFT-tangenten när du klickar på den andra filen." # MT
+          shift_explained: "Om du håller ned SKIFT-tangenten när du klickar väljer du ALLA filer i listan mellan den fil som är vald och den fil du klickar på." # MT
+        step3:
+          heading: "Steg 3: Organisera > Flytta" # MT
+          click_sequence: "Klicka på följande i tur och ordning:" # MT
+          dots: "ikonen med tre punkter" # MT
+          organize: "Organisera" # MT
+          move: "Flytta" # MT
+        step4:
+          heading: "Steg 4: Välj enheten för filinlämning" # MT
+          all_locations: "Klicka på ”Alla platser”" # MT
+          shared_drives: "Klicka på ”Delade enheter”" # MT
+          next_to_html: "Klicka på ”Flytta” bredvid %{drive}" # MT
+          move_button: "Klicka på knappen ”Flytta”" # MT
+          no_shared_drives: "Jag ser inte ”Delade enheter” i listan ”Alla platser”" # MT
+          signed_in_html: "Kontrollera att du är inloggad hos Google med kontot %{email}. Om du fortfarande inte ser ”Delade enheter”, öppna %{link} i en ny flik och försök sedan med steget igen." # MT
+          this_link: "den här länken" # MT
+          still_trouble_html: "Om det fortfarande inte fungerar, kontakta %{contact} för att få hjälp." # MT
+          unselected: "Jag avmarkerade några av filerna av misstag" # MT
+          go_back_html: "Inga problem! Gå tillbaka till %{link}." # MT
+          step2: "steg 2" # MT
+          ownership: "Jag vill inte ändra ägarskapet" # MT
+          ownership_explained: "Alla filer i den nya delade enheten för %{community} ägs av gemenskapen, inte av någon enskild person. Då tar filerna inte upp plats i ditt personliga lagringsutrymme i Google Drive, och de kan inte raderas av misstag." # MT
+          still_access: "Du har fortfarande åtkomst till filerna om du är medlem i gemenskapen." # MT
+        step5:
+          heading: "Steg 5: Kontrollera att alla filer har flyttats" # MT
+          empty_list: "Nu bör du se en tom fillista, ungefär så här:" # MT
+          done: "I så fall är du klar!" # MT
+          finish: "Slutför" # MT
+          not_empty: "Fillistan är inte tom" # MT
+          head_back_html: "Inga problem! Gå tillbaka till %{link}." # MT
+          step2: "steg 2" # MT
+          some_files: "Det finns filer jag inte vill överföra" # MT
+          use_opt_out_html: "Använd %{link} för att meddela samordnaren." # MT
+          opt_out_form: "formuläret för att avböja" # MT
+        finish:
+          heading: "Klart!" # MT
+          thanks: "Stort tack för att du hjälper %{community} att ordna sina filer!" # MT
+          great_day: "Ha en fin dag!" # MT
+        opt_out:
+          heading: "Avböj filurval" # MT
+          not_active: "Din migreringsförfrågan verkar inte vara aktiv, så du kan inte avböja." # MT
+          why: "Berätta gärna varför du avböjer." # MT
+          still_own: "Enligt våra uppgifter äger du fortfarande filerna nedan. Om du inte vill hjälpa till att överföra dem till gemenskapen, berätta gärna varför du avböjer." # MT
+          went_wrong: "Om du försökte överföra filer men något gick fel, berätta vad som hände." # MT
+          didnt_mean_html: "Om du inte menade att avböja kan du %{link}." # MT
+          go_back_link: "gå tillbaka" # MT
+          go_back: "Gå tillbaka" # MT
+          not_transferred: "Filer som inte överförts" # MT
+          name: "Namn" # MT
+          modified: "Ändrad" # MT
+          file_icon: "Filikon" # MT
+        opted_out:
+          heading: "Avböjt" # MT
+          opted_out: "Du har avböjt att hjälpa %{community} att ordna sina filer i Google Drive." # MT
+          opt_back_in_html: "Om du vill vara med igen kan du göra det genom att %{link}." # MT
+          clicking_here: "klicka här" # MT
+        mobile_warning:
+          thanks: "Tack för att du vill hjälpa %{community} att ordna sina filer i Google Drive!" # MT
+          mobile: "Mobil enhet?" # MT
+          looks_like_mobile: "Det verkar som att du använder en mobil enhet." # MT
+          works_better: "Det här fungerar mycket bättre på en bärbar eller stationär dator med fullt tangentbord och mus." # MT
+          proceed_html: "%{link}, men om du har många filer i den gamla mappen i Google Drive kan det bli mödosamt." # MT
+          welcome_to_proceed: "Du får gärna fortsätta" # MT
+          switch_html: "Om du vill byta till en dator kan du använda samma %{link} i mejlet som tog dig hit." # MT
+          link: "länk" # MT
+          thanks_again: "Tack igen, hur du än gör!" # MT
+          what_is_this: "Vad är det här?" # MT
+      mailer:
+        migration_request:
+          dear: "Hej %{name}!" # MT
+          using_gather: "%{community} använder Gather för att ordna sina filer i Google Drive." # MT
+          problem: "Just nu ägs gemenskapens filer av den som skapade dem. Det kan leda till att filer raderas av misstag när någon lämnar gemenskapen!" # MT
+          solution: "För att förhindra det flyttar gemenskapen alla sina filer till en delad enhet som gemenskapen äger." # MT
+          own_many: "Ditt Google-konto %{email} äger ungefär %{count} filer i den gamla mappen i Google Drive för %{community}. Vi behöver ditt tillstånd för att flytta dem till den nya enheten." # MT
+          own_one: "Ditt Google-konto %{email} äger minst en fil i den gamla mappen i Google Drive för %{community}. Vi behöver ditt tillstånd för att flytta den till den nya enheten." # MT
+          go_here: "Gå hit för att hjälpa till: %{url}" # MT
+          retain_access: "Du har fortfarande åtkomst till filerna om du är medlem i gemenskapen. Om du har frågor eller funderingar kan du kontakta %{contact} på %{email}, som samordnar omorganiseringen. Om du hellre inte vill hjälpa till kan du också avböja på webbadressen ovan." # MT
+          thanks: "Tack för din tid och omtanke!" # MT
+      dashboard:
+        # Shared by the dashboard pages.
+        title: "Migrering av Google Drive" # MT
+        synopsis:
+          not_begun_contact: "Genomsökningen av filer har inte börjat. Kontakta Gathers support." # MT
+          not_begun_wait: "Genomsökningen av filer har inte börjat. Vänta en stund och ladda om sidan." # MT
+          in_progress: "Genomsökningen pågår. %{count} filer har genomsökts hittills." # MT
+          complete: "Genomsökningen är klar. Ändringar bevakas." # MT
+          auth_error_html: "Genomsökningen avbröts på grund av ett auktoriseringsfel. Se till att %{user} har <strong>redigeringsåtkomst</strong> till din %{folder_link}. Prova att klicka på ”Återkalla auktorisering” och logga in igen på %{home_link}. Kör sedan genomsökningen igen." # MT
+          source_folder: "källmapp" # MT
+          main_page: "huvudsidan för Google Drive" # MT
+          too_many_errors: "Genomsökningen avbröts på grund av för många fel. Se felen nedan. Rätta dem och kör sedan genomsökningen igen." # MT
+          cancelled_unknown: "Genomsökningen avbröts av okänd anledning." # MT
+          unknown_state: "Genomsökningen är i ett okänt tillstånd." # MT
+        status:
+          show:
+            system_user: "Systemanvändare" # MT
+            contact: "Kontakt" # MT
+            contact_value: "%{name} <%{email}>" # MT
+            source_folder: "Källmapp" # MT
+            destination_folder: "Målmapp" # MT
+            total_files: "Filer totalt" # MT
+            files_by_status:
+              pending: "Väntande filer" # MT
+              declined: "Avböjda filer" # MT
+              errored: "Filer med fel" # MT
+              transferred: "Överförda filer" # MT
+              copied: "Kopierade filer" # MT
+              ignored: "Ignorerade filer" # MT
+              disappeared: "Försvunna filer" # MT
+        logs:
+          index:
+            logs: "Loggar" # MT
+            none: "Inga loggar än." # MT
+            time: "Tid" # MT
+            message: "Meddelande" # MT
+        files:
+          index:
+            files: "Filer" # MT
+            name: "Namn" # MT
+            owner: "Ägare" # MT
+            modified: "Ändrad" # MT
+            status: "Status" # MT
+            error: "Fel" # MT
+            file_icon: "Filikon" # MT
+        owners:
+          index:
+            owners: "Ägare" # MT
+            files: "Filer" # MT
+            request: "Förfrågan" # MT
+            owner: "Ägare" # MT
+            total: "Totalt" # MT
+            date_sent: "Skickad" # MT
+            status: "Status" # MT
+          show:
+            files: "Filer" # MT
+            total_files: "Filer totalt" # MT
+            request: "Förfrågan" # MT
+            date_sent: "Skickad" # MT
+            status: "Status" # MT
+            intro_page: "Förfrågans introduktionssida" # MT
+            link: "Länk" # MT
+            opened_note: "Observera att om du klickar på länken får förfrågan statusen ”Öppnad”." # MT
+            file_drop_drive: "Enhet för filinlämning" # MT
+            opt_out_reason: "Skäl till att avböja" # MT
+      operations:
+        form:
+          intro: "Ange uppgifterna nedan för att konfigurera migreringen. En genomsökning av filerna startar och du skickas till migreringens kontrollpanel." # MT
+        new:
+          title: "Skapa migrering" # MT
+        edit:
+          title: "Redigera migrering" # MT
+      # Labels for GDrive::Migration::File#error_type. Keep in sync with the error_type_enum DB constraint.
+      errors:
+        forbidden: "Ingen behörighet" # MT
+        not_found: "Hittades inte" # MT
+        ancestor_inaccessible: "Överordnad mapp går inte att nå" # MT
+        client_error_ensuring_tree: "Fel när målmapparna skapades" # MT
+        client_error_moving_to_temp_drive: "Fel vid flytt till tillfällig enhet" # MT
+        client_error_moving_to_destination: "Fel vid flytt till målet" # MT

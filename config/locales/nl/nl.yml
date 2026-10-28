@@ -1,0 +1,548 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+nl:
+  common:
+    settings: "Instellingen" # MT
+    settings_updated: "Instellingen bijgewerkt." # MT
+    open_date_picker: "Datumkiezer openen" # MT
+    select_user: "Kies een gebruiker …" # MT
+    adults: "Volwassenen" # MT
+    all: "Alle" # MT
+    cancel: "Annuleren" # MT
+    cancelled: "Geannuleerd" # MT
+    children: "Kinderen" # MT
+    clearing_the_filter: "de filters te wissen" # MT
+    create_new: "Nieuw aanmaken" # MT
+    # Placeholder for an empty value in a details table.
+    none_bracketed: "[Geen]" # MT
+    # A person or household name marked as inactive.
+    with_inactive: "%{name} (inactief)" # MT
+    close: "Sluiten" # MT
+    print: "Afdrukken" # MT
+    loading_indicator: "Laadindicator" # MT
+    # Timestamp on printed pages.
+    generated_at: "Gemaakt: %{time}" # MT
+    community_count:
+      one: "%{count} gemeenschap" # MT
+      other: "%{count} gemeenschappen" # MT
+    default: "Standaard" # MT
+    edit: "Bewerken" # MT
+    "false": "Onwaar" # MT
+    hidden: "Verborgen" # MT
+    inactive: "Inactief" # MT
+    max: "Max." # MT
+    no_result_clear_filter_link_html: "Je kunt proberen %{link}." # MT
+    none: "Geen" # MT
+    num_in_total: "%{count} in totaal" # MT
+    save: "Opslaan" # MT
+    "true": "Waar" # MT
+    unknown: "Onbekend" # MT
+    unlimited: "Onbeperkt" # MT
+    "yes": "Ja" # MT
+    "no": "Nee" # MT
+    time_with_preposition:
+      "on": "op %{t}" # MT
+      "at": "om %{t}" # MT
+      "until": "tot %{t}" # MT
+    this_year: "Dit jaar" # MT
+    this_quarter: "Dit kwartaal" # MT
+    this_month: "Deze maand" # MT
+    all_time: "Altijd" # MT
+
+  helpers:
+    submit:
+      cancel: "Annuleren" # MT
+      confirm: "Bevestigen" # MT
+      continue: "Doorgaan" # MT
+      create: "Opslaan" # MT
+      go_back: "Teruggaan" # MT
+      import: "Importeren" # MT
+      opt_out: "Afmelden" # MT
+      update: "Opslaan" # MT
+      save_and_invite: "Opslaan en uitnodigen" # MT
+      sign_in: "Inloggen" # MT
+      send_reset_instructions: "Herstelinstructies versturen" # MT
+      set_password: "Wachtwoord instellen" # MT
+      meals_message:
+        create: "Bericht versturen" # MT
+      meals_signup:
+        save_and_next: "Opslaan en naar volgende maaltijd" # MT
+      wiki_page:
+        preview: "Voorbeeld" # MT
+
+  errors:
+    messages:
+      invalid_yaml: "Ongeldige YAML" # MT
+      invalid_custom_field_spec: "Deze specificatie is ongeldig. Neem contact op met de ondersteuning van Gather voor hulp." # MT
+      no_semicolons: "Puntkomma’s zijn niet toegestaan" # MT
+
+  # App modal button labels + default titles (exported to JS via config/i18n-js.yml).
+  modal:
+    ok: "OK" # MT
+    cancel: "Annuleren" # MT
+    confirm_title: "Bevestigen" # MT
+    alert_title: "Melding" # MT
+
+  payment:
+    accountholder_required: "Vul de naam van de rekeninghouder in." # MT
+
+  confirmations:
+    billing/template:
+      destroy: "Weet je zeker dat je het sjabloon “%{description}” voor %{member_types} wilt verwijderen? Dit kan niet ongedaan worden gemaakt." # MT
+    domain:
+      destroy: "Weet je zeker dat je het domein “%{name}” wilt verwijderen? Dit kan niet ongedaan worden gemaakt." # MT
+    groups/group:
+      destroy: "Weet je zeker dat je de groep “%{name}” wilt verwijderen? Dit kan niet ongedaan worden gemaakt." # MT
+      deactivate: "Weet je zeker dat je de groep “%{name}” wilt deactiveren?" # MT
+    household:
+      destroy: "Weet je zeker dat je het huishouden “%{name}” wilt verwijderen? Dit kan niet ongedaan worden gemaakt." # MT
+      deactivate: "Weet je zeker dat je het huishouden “%{name}” wilt deactiveren? Daarmee worden alle gebruikers in het huishouden gedeactiveerd." # MT
+    meals/meal:
+      close: "Weet je zeker dat je deze maaltijd wilt sluiten? Er zijn dan geen aanmeldingen meer mogelijk." # MT
+      destroy: "Weet je zeker dat je de maaltijd “%{title}” wilt verwijderen? Dit kan niet ongedaan worden gemaakt." # MT
+      reopen: "Weet je zeker dat je deze maaltijd wilt heropenen? Er zijn dan weer nieuwe aanmeldingen mogelijk." # MT
+      unfinalize: "Weet je zeker dat je het afronden van deze maaltijd ongedaan wilt maken?" # MT
+    user:
+      destroy: "Weet je zeker dat je de gebruiker “%{name}” wilt verwijderen? Dit kan niet ongedaan worden gemaakt." # MT
+      deactivate: "Weet je zeker dat je de gebruiker “%{name}” wilt deactiveren? Deze persoon wordt dan uit alle groepen verwijderd." # MT
+      invite: "Er wordt een e-mail naar “%{name}” gestuurd met instructies om in te loggen. Doorgaan?" # MT
+    people/member_type:
+      destroy: "Weet je zeker dat je het lidtype “%{name}” wilt verwijderen? Huishoudens met dit type hebben dan geen lidtype meer. Dit kan niet ongedaan worden gemaakt." # MT
+    people/memorial:
+      destroy: "Weet je zeker dat je de gedenkpagina voor “%{name}” wilt verwijderen? Dit kan niet ongedaan worden gemaakt." # MT
+    people/memorial_message:
+      destroy: "Weet je zeker dat je dit bericht op de gedenkpagina wilt verwijderen? Dit kan niet ongedaan worden gemaakt." # MT
+    calendars/protocol:
+      destroy: "Weet je zeker dat je het reglement “%{name}” wilt verwijderen? Dit kan niet ongedaan worden gemaakt." # MT
+    calendars/calendar:
+      destroy: "Weet je zeker dat je de agenda “%{name}” wilt verwijderen? Dit kan niet ongedaan worden gemaakt." # MT
+      deactivate: "Weet je zeker dat je de agenda “%{name}” wilt deactiveren?" # MT
+    calendars/event:
+      destroy: "Weet je zeker dat je de afspraak “%{name}” wilt verwijderen? Dit kan niet ongedaan worden gemaakt." # MT
+      destroy_series: "Weet je zeker dat je elke herhaling van de terugkerende afspraak “%{name}” wilt verwijderen, in het verleden en in de toekomst? Dit kan niet ongedaan worden gemaakt." # MT
+    calendars/group:
+      destroy: "Weet je zeker dat je deze agendagroep wilt verwijderen? Dit kan niet ongedaan worden gemaakt." # MT
+    gdrive/item:
+      destroy: "Weet je zeker dat je dit item wilt verwijderen? Het wordt niet uit Google Drive verwijderd, maar is dan niet meer aan Gather gekoppeld." # MT
+    gdrive/item_group:
+      destroy: "Weet je zeker dat je deze groep wilt verwijderen?" # MT
+    gdrive/migration/operation:
+      destroy: "Weet je zeker dat je deze migratie wilt verwijderen? Alle informatie over de migratie wordt verwijderd. De bestanden in Google Drive zelf blijven helemaal onaangetast." # MT
+    meals/formula:
+      destroy: "Weet je zeker dat je de formule “%{name}” wilt verwijderen? Dit kan niet ongedaan worden gemaakt." # MT
+      deactivate: "Weet je zeker dat je de formule “%{name}” wilt deactiveren?" # MT
+    meals/role:
+      destroy: "Weet je zeker dat je de rol “%{title}” wilt verwijderen? Dit kan niet ongedaan worden gemaakt." # MT
+      deactivate: "Weet je zeker dat je de rol “%{title}” wilt deactiveren?" # MT
+    meals/type:
+      destroy: "Weet je zeker dat je het type “%{name}” wilt verwijderen? Dit kan niet ongedaan worden gemaakt." # MT
+      deactivate: "Weet je zeker dat je het type “%{name}” wilt deactiveren?" # MT
+    wiki/page:
+      destroy: "Weet je zeker dat je de wikipagina “%{title}” wilt verwijderen? Dit kan niet ongedaan worden gemaakt." # MT
+    work/job:
+      destroy: "Weet je zeker dat je de taak “%{title}” wilt verwijderen? Dit kan niet ongedaan worden gemaakt." # MT
+    work/period:
+      destroy: "Weet je zeker dat je de periode “%{name}” wilt verwijderen? Dit kan niet ongedaan worden gemaakt." # MT
+    work/shift:
+      unsignup: "Weet je zeker dat je je naam van deze taak wilt halen?" # MT
+
+  activatables:
+    community:
+      one_html: "Deze gemeenschap is gedeactiveerd op %{time}." # MT
+      two_html: "Je kunt %{link}." # MT
+      three: "haar opnieuw activeren" # MT
+    user:
+      one_html: "Deze gebruiker is op %{time} als inactief gemarkeerd." # MT
+      two_html: "Je kunt %{link}." # MT
+      three: "deze persoon opnieuw activeren" # MT
+    household:
+      one_html: "Dit huishouden is op %{time} als inactief gemarkeerd." # MT
+      two_html: "Je kunt %{link}. <strong>Let op:</strong> je moet de gebruiker(s) van het huishouden apart opnieuw activeren." # MT
+      three: "het opnieuw activeren" # MT
+    groups/group:
+      one_html: "Deze groep is op %{time} als inactief gemarkeerd." # MT
+      two_html: "Je kunt %{link}." # MT
+      three: "haar opnieuw activeren" # MT
+    calendars/calendar:
+      one_html: "Deze agenda is op %{time} als inactief gemarkeerd." # MT
+      two_html: "Je kunt %{link}." # MT
+      three: "haar opnieuw activeren" # MT
+    meals/formula:
+      one_html: "Deze formule is op %{time} als inactief gemarkeerd." # MT
+      two_html: "Je kunt %{link}." # MT
+      three: "haar opnieuw activeren" # MT
+    meals/role:
+      one_html: "Deze rol is op %{time} als inactief gemarkeerd." # MT
+      two_html: "Je kunt %{link}." # MT
+      three: "haar opnieuw activeren" # MT
+    meals/type:
+      one_html: "Dit type is op %{time} als inactief gemarkeerd." # MT
+      two_html: "Je kunt %{link}." # MT
+      three: "het opnieuw activeren" # MT
+
+  deactivatable:
+    community:
+      success:
+        activate: "Gemeenschap opnieuw geactiveerd." # MT
+    household:
+      success:
+        activate: "Huishouden geactiveerd." # MT
+        deactivate: "Huishouden gedeactiveerd." # MT
+        destroy: "Huishouden verwijderd." # MT
+        hard_destroy: "Het huishouden en al zijn leden zijn definitief verwijderd." # MT
+    user:
+      success:
+        activate: "Gebruiker geactiveerd." # MT
+        activate_unconfirmed: "Gebruiker geactiveerd, maar deze persoon heeft een uitnodiging nodig om in te loggen. Klik hieronder op “Uitnodigen” om een uitnodiging te sturen." # MT
+        deactivate: "Gebruiker gedeactiveerd." # MT
+        destroy: "Gebruiker verwijderd." # MT
+        hard_destroy: "De gebruiker is definitief verwijderd." # MT
+      error:
+        activate: "Fout bij het activeren: %{message}" # MT
+        deactivate: "Fout bij het deactiveren: %{message}" # MT
+    billing/template:
+      success:
+        destroy: "Sjabloon verwijderd." # MT
+    domain:
+      success:
+        destroy: "Domein verwijderd." # MT
+    gdrive/item:
+      success:
+        destroy: "Item verwijderd." # MT
+    gdrive/item_group:
+      success:
+        destroy: "Groep verwijderd." # MT
+    gdrive/migration/operation:
+      success:
+        destroy: "Bewerking verwijderd." # MT
+    groups/group:
+      success:
+        deactivate: "Groep gedeactiveerd." # MT
+        activate: "Groep geactiveerd." # MT
+        destroy: "Groep verwijderd." # MT
+    calendars/protocol:
+      success:
+        destroy: "Reglement verwijderd." # MT
+    calendars/group:
+      success:
+        destroy: "Groep verwijderd." # MT
+    calendars/calendar:
+      success:
+        activate: "Agenda geactiveerd." # MT
+        deactivate: "Agenda gedeactiveerd." # MT
+        destroy: "Agenda verwijderd." # MT
+    meals/meal:
+      success:
+        destroy: "Maaltijd verwijderd." # MT
+    meals/formula:
+      success:
+        activate: "Formule geactiveerd." # MT
+        deactivate: "Formule gedeactiveerd." # MT
+        destroy: "Formule verwijderd." # MT
+    meals/role:
+      success:
+        activate: "Rol geactiveerd." # MT
+        deactivate: "Rol gedeactiveerd." # MT
+        destroy: "Rol verwijderd." # MT
+    meals/type:
+      success:
+        activate: "Type geactiveerd." # MT
+        deactivate: "Type gedeactiveerd." # MT
+        destroy: "Type verwijderd." # MT
+    people/member_type:
+      success:
+        destroy: "Lidtype verwijderd." # MT
+    people/memorial:
+      success:
+        destroy: "Gedenkpagina verwijderd." # MT
+    people/memorial_message:
+      success:
+        destroy: "Bericht verwijderd." # MT
+    work/job:
+      success:
+        destroy: "Taak verwijderd." # MT
+    work/period:
+      success:
+        destroy: "Periode verwijderd." # MT
+
+  cocoon:
+    add_links:
+      vehicles: "Voertuig toevoegen" # MT
+      emergency_contacts: "Contact voor noodgevallen toevoegen" # MT
+      up_guardianships: "Ouder/voogd toevoegen" # MT
+      pets: "Huisdier toevoegen" # MT
+      shifts: "Dienst toevoegen" # MT
+      assignments: "Medewerker toevoegen" # MT
+      reminders: "Herinnering toevoegen" # MT
+      restrictions: "Beperking toevoegen" # MT
+      signups: "Huishouden toevoegen" # MT
+      groups/group:
+        memberships: "Lid toevoegen" # MT
+      meals/signup:
+        parts: "Item toevoegen" # MT
+      meals/formula:
+        parts: "Maaltijdtype toevoegen" # MT
+
+  select2:
+    prompts:
+      creator: "Typ een paar letters van de naam van de maker." # MT
+      sponsor: "Typ een paar letters van de naam van de sponsor." # MT
+      household: "Typ een paar letters van de naam van het huishouden." # MT
+      guardian: "Typ een paar letters van de naam van de voogd." # MT
+      user: "Typ een paar letters van de naam van de gebruiker." # MT
+      job_choosing_proxy: "Typ een paar letters van de naam van de gebruiker." # MT
+      type: "Typ een paar letters van de naam van het maaltijdtype, of vul de volledige naam in om een nieuw type toe te voegen." # MT
+      category: "Typ een paar letters van de categorie, of vul de volledige categorie in om een nieuwe toe te voegen." # MT
+      reimbursee: "Typ een paar letters van de naam van de ontvanger van de vergoeding." # MT
+    placeholders:
+      creator: "Kies een maker …" # MT
+      sponsor: "Kies een sponsor …" # MT
+      household: "Kies een huishouden …" # MT
+      guardian: "Kies een voogd …" # MT
+      user: "Kies een gebruiker …" # MT
+      job_choosing_proxy: "Kies een gebruiker …" # MT
+      type: "Kies of vul een type in …" # MT
+      category: "Kies of vul een categorie in …" # MT
+      reimbursee: "Kies de ontvanger van de vergoeding …" # MT
+
+  csv:
+    headers:
+      user:
+        id: "ID" # MT
+        first_name: "Voornaam" # MT
+        last_name: "Achternaam" # MT
+        unit_num: "Woningnr." # MT
+        unit_suffix: "Toevoeging woningnr." # MT
+        birthdate: "Verjaardag" # MT
+        pronouns: "Voornaamwoorden" # MT
+        email: "E-mail" # MT
+        google_email: "Google-e-mail" # MT
+        paypal_email: "PayPal-e-mail" # MT
+        child: "Is kind" # MT
+        full_access: "Volledige toegang" # MT
+        household_id: "ID huishouden" # MT
+        household_name: "Naam huishouden" # MT
+        mobile_phone: "Mobiel" # MT
+        home_phone: "Telefoon thuis" # MT
+        work_phone: "Telefoon werk" # MT
+        joined_on: "Lid sinds" # MT
+        deactivated_at: "Vertrekdatum" # MT
+        preferred_contact: "Voorkeur voor contact" # MT
+        garage_nums: "Garagenrs." # MT
+        vehicles: "Voertuigen" # MT
+        guardian_names: "Ouders/voogden" # MT
+        keyholders: "Sleutelhouders" # MT
+        emergency_contacts: "Contacten voor noodgevallen" # MT
+        pets: "Huisdieren" # MT
+      billing/account:
+        number: "Nummer" # MT
+        community_id: "ID gemeenschap" # MT
+        community_name: "Gemeenschap" # MT
+        household_id: "ID huishouden" # MT
+        household_name: "Huishouden" # MT
+        balance_due: "Te betalen" # MT
+        current_balance: "Huidig saldo" # MT
+        credit_limit: "Kredietlimiet" # MT
+        last_statement_id: "ID laatste afschrift" # MT
+        last_statement_on: "Datum laatste afschrift" # MT
+        due_last_statement: "Te betalen laatste afschrift" # MT
+        total_new_charges: "Totaal nieuwe afschrijvingen" # MT
+        total_new_credits: "Totaal nieuwe tegoeden" # MT
+        created_at: "Aangemaakt op" # MT
+      billing/transaction:
+        id: "ID" # MT
+        incurred_on: "Datum ontstaan" # MT
+        code: "Code" # MT
+        chg_crd: "Type" # MT
+        description: "Omschrijving" # MT
+        household_id: "ID huishouden" # MT
+        household_name: "Huishouden" # MT
+        quantity: "Aantal" # MT
+        unit_price: "Prijs per stuk" # MT
+        amount: "Bedrag" # MT
+        created_at: "Datum geboekt" # MT
+        account_id: "ID rekening" # MT
+        statement_id: "ID afschrift" # MT
+        meal_id: "ID maaltijd" # MT
+      meals/meal:
+        served_at: "Datum/tijd" # MT
+        calendars: "Locaties" # MT
+        formula: "Formule" # MT
+        communities: "Gemeenschappen" # MT
+        role: "Rol" # MT
+        # `action` and `id` are duplicated from `common` below so that the exporter, which does a
+        # plain lookup with no fallback, produces headers byte-identical to those Meals::Import
+        # expects (it checks the `meals/meal` scope first and falls back to `common`).
+        action: "Actie" # MT
+        id: "ID" # MT
+        title: "Titel" # MT
+        entrees: "Hoofdgerechten" # MT
+        side: "Bijgerecht" # MT
+        kids: "Kinderen" # MT
+        dessert: "Dessert" # MT
+        notes: "Opmerkingen" # MT
+        allergens: "Allergenen" # MT
+        capacity: "Capaciteit" # MT
+        status: "Status" # MT
+        signup_count: "Totaal eters" # MT
+        spots_left: "Plaatsen vrij" # MT
+        ingredient_cost: "Kosten ingrediënten" # MT
+        pantry_cost: "Kosten voorraadkast" # MT
+        total_cost: "Totale kosten" # MT
+        payment_method: "Betaalmethode" # MT
+        reimbursee: "Ontvanger vergoeding" # MT
+        # The "Diners: "/"Price: " prefixes keep these from colliding with meal role titles,
+        # which Meals::Import matches by exact string.
+        diner_count: "Eters: %{type}" # MT
+        type_price: "Prijs: %{type}" # MT
+      meals/signup:
+        meal_id: "ID maaltijd" # MT
+        served_at: "Datum/tijd maaltijd" # MT
+        meal_title: "Titel maaltijd" # MT
+        calendars: "Locaties maaltijd" # MT
+        formula: "Formule" # MT
+        community_id: "ID gemeenschap" # MT
+        community_name: "Gemeenschap" # MT
+        household_id: "ID huishouden" # MT
+        household_name: "Huishouden" # MT
+        diner_count: "Eters: %{type}" # MT
+        total: "Totaal eters" # MT
+        takeout: "Afhalen" # MT
+        comments: "Opmerkingen" # MT
+        created_at: "Tijd aanmelding" # MT
+      common:
+        id: "ID" # MT
+        action: "Actie" # MT
+    errors:
+      meals/meal:
+        calendar:
+          bad_id: "Geen agenda gevonden met ID %{str}" # MT
+          bad_name: "Geen agenda gevonden met de naam “%{str}”" # MT
+        formula:
+          bad_id: "Geen maaltijdformule gevonden met ID %{str}" # MT
+          bad_name: "Geen maaltijdformule gevonden met de naam “%{str}”" # MT
+        community:
+          bad_id: "Geen gemeenschap gevonden met ID %{str}" # MT
+          bad_name: "Geen gemeenschap gevonden met de naam “%{str}”" # MT
+        file_empty: "Het bestand is leeg" # MT
+        invalid_headers: "Ongeldige kolomkoppen: %{headers}" # MT
+        missing_columns: "Ontbrekende kolommen: %{columns}" # MT
+        invalid_action: "Ongeldige actie: %{action}" # MT
+        action_not_permitted: "Actie niet toegestaan (%{action})" # MT
+        served_at_required: "Datum/tijd is verplicht" # MT
+        invalid_served_at: "“%{str}” is geen geldige datum/tijd" # MT
+        calendars_required: "Agenda(’s) zijn verplicht" # MT
+        meal_id_not_found: "Geen maaltijd gevonden met ID “%{id}”" # MT
+        meal_not_found: "Geen maaltijd gevonden op %{time} op de locaties: %{locations}" # MT
+        delete_failed: "Fout bij het verwijderen van maaltijd %{id}: “%{error}”" # MT
+        user:
+          bad_id: "Geen gebruiker gevonden met ID %{str}" # MT
+          bad_name: "Geen gebruiker gevonden met de naam “%{str}”" # MT
+
+  action_labels:
+    common:
+      new: "Toevoegen" # MT
+      edit: "Bewerken" # MT
+      deactivate: "Deactiveren" # MT
+      destroy: "Verwijderen" # MT
+      clone: "Kopiëren" # MT
+      close: "Sluiten" # MT
+      join: "Lid worden" # MT
+      leave: "Verlaten" # MT
+      opt_out: "Afmelden" # MT
+      rejoin: "Opnieuw lid worden" # MT
+      reopen: "Heropenen" # MT
+      rescan: "Opnieuw scannen" # MT
+      summary: "Overzicht" # MT
+      finalize: "Afronden" # MT
+      unfinalize: "Afronden ongedaan maken" # MT
+      cancel: "Annuleren" # MT
+      send_message: "Bericht" # MT
+    community:
+      visit: "Bezoeken" # MT
+    billing/account:
+      add_txn: "Transactie toevoegen" # MT
+    user:
+      update_info: "Profiel bewerken" # MT
+      update_photo: "Foto bewerken" # MT
+      invite: "Uitnodigen" # MT
+      impersonate: "Voordoen als" # MT
+      destroy: "Definitief verwijderen" # MT
+      delete_self: "Mijn account verwijderen" # MT
+    household:
+      destroy: "Definitief verwijderen" # MT
+    wiki/page:
+      history: "Geschiedenis" # MT
+    work/job:
+      edit: "Taak bewerken" # MT
+    work/shift:
+      edit_job: "Taak bewerken" # MT
+      signup: "Aanmelden" # MT
+      unsignup: "Aanmelding verwijderen" # MT
+    work/period:
+      review_notices: "Berichten versturen" # MT
+      send_notices: "Berichten versturen" # MT
+
+  dropzone:
+    prompts:
+      default: "Klik of sleep een bestand hierheen" # MT
+      models:
+        user: "Klik of sleep een foto hierheen" # MT
+        calendars/calendar: "Klik of sleep een foto hierheen" # MT
+
+  titles:
+    meals/messages: "Maaltijdbericht versturen" # MT
+
+  roles:
+    admin: "Beheerder" # MT
+    calendar_coordinator: "Agendacoördinator" # MT
+    cluster_admin: "Clusterbeheerder" # MT
+    super_admin: "Superbeheerder" # MT
+    biller: "Facturatiebeheerder" # MT
+    photographer: "Fotograaf" # MT
+    meals_coordinator: "Maaltijdcoördinator" # MT
+    wikiist: "Wikiredacteur" # MT
+    work_coordinator: "Werkcoördinator" # MT
+    new_community_approver: "Goedkeurder nieuwe gemeenschappen" # MT
+    index:
+      title: "Rollen" # MT
+      people: "Mensen" # MT
+      legend: "Legenda" # MT
+      # Each line is "<role name> - <description>".
+      legend_item_html: "<strong>%{role}</strong> – %{description}" # MT
+      descriptions:
+        admin: "Alle andere rollen samen" # MT
+        biller: "Beheert transacties, sjablonen, afschriften en formules, en rondt maaltijden af" # MT
+        photographer: "Kan ieders foto in de ledenlijst bewerken" # MT
+        calendar_coordinator: "Beheert agenda’s en ieders afspraken" # MT
+        meals_coordinator: "Beheert maaltijden, maaltijdrollen, formules en maaltijdtypes" # MT
+        wikiist: "Beheert speciaal beveiligde wikipagina’s" # MT
+        work_coordinator: "Beheert taken, diensten en werkperiodes" # MT
+
+  phone_types:
+    abbreviations:
+      home: "t" # MT
+      work: "w" # MT
+      mobile: "m" # MT
+
+  date_range_lens:
+    past_12: "Afgelopen 12 maanden" # MT
+
+  community_lens:
+    all: "Alle gemeenschappen" # MT
+
+  lens_bar:
+    clear_filter: "Filter wissen" # MT
+
+  search_lens:
+    prompt: "Zoeken …" # MT

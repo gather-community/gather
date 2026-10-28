@@ -1,0 +1,219 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+it:
+  people:
+    # The placeholder household and user that a deleted member's records are reassigned to.
+    deleted_placeholder:
+      household: "Membri eliminati" # MT
+      first_name: "Membro" # MT
+      last_name: "eliminato" # MT
+    sign_in_invitations:
+      sent:
+        one: "Invito inviato." # MT
+        other: "Inviti inviati." # MT
+      none_selected: "Non hai selezionato nessun utente." # MT
+      new:
+        title: "Invita utenti ad accedere" # MT
+        no_users: "Nessun utente trovato." # MT
+        instructions_html: "Seleziona gli utenti che vuoi invitare. Gli utenti con %{icon} accanto al nome non hanno mai effettuato l'accesso." # MT
+        select_no_sign_ins: "Seleziona chi non ha mai effettuato l'accesso" # MT
+        select_all: "Seleziona tutti" # MT
+        send: "Invia inviti" # MT
+    memorials:
+      created: "Pagina commemorativa creata." # MT
+      updated: "Pagina commemorativa aggiornata." # MT
+      index:
+        title: "Pagine commemorative" # MT
+        create: "Crea pagina commemorativa" # MT
+        no_memorials: "Nessuna pagina commemorativa trovata." # MT
+        photo_of: "Foto di %{name}" # MT
+      show:
+        memorials: "Pagine commemorative" # MT
+        photo_of: "Foto di %{name}" # MT
+        obituary: "Necrologio" # MT
+        community_memories: "Ricordi della comunità" # MT
+      new:
+        title: "Crea pagina commemorativa" # MT
+      edit:
+        title: "Modifica pagina commemorativa: %{name}" # MT
+    memorial_messages:
+      created: "Grazie per il tuo messaggio." # MT
+      updated: "Messaggio aggiornato." # MT
+      edit:
+        title: "Modifica messaggio commemorativo" # MT
+    member_types:
+      created: "Tipo di membro creato." # MT
+      updated: "Tipo di membro aggiornato." # MT
+      index:
+        title: "Tipi di membro" # MT
+        create: "Crea tipo di membro" # MT
+        explanation: "I tipi di membro vengono assegnati ai nuclei e permettono di personalizzare gli addebiti ricorrenti." # MT
+        no_member_types: "Nessun tipo di membro trovato." # MT
+        name: "Nome" # MT
+      new:
+        title: "Crea tipo di membro" # MT
+      edit:
+        title: "Modifica tipo di membro: %{name}" # MT
+    vehicles:
+      index:
+        title: "Veicoli" # MT
+        no_vehicles: "Nessun veicolo trovato." # MT
+        vehicle: "Marca/Modello/Colore/Targa" # MT
+        owner: "Proprietario" # MT
+    settings:
+      edit:
+        title: "Impostazioni delle persone" # MT
+    birthdays:
+      index:
+        title: "Compleanni" # MT
+        no_users: "Nessun utente trovato." # MT
+        # Shown when a user's birthday is unknown.
+        unknown: "?"
+    password_changes:
+      success: "Password cambiata." # MT
+      show:
+        title: "Cambia password" # MT
+      password_fields:
+        new_password: "Nuova password" # MT
+        retype_new_password: "Ripeti la nuova password" # MT
+        reveal: "Mostra le password" # MT
+        mask: "Nascondi le password" # MT
+    users:
+      confirmations:
+        sign_in_to_use_gather: "Accedi per usare Gather." # MT
+        expired_signed_in: "Il periodo di conferma è scaduto. Usa il link «Invia di nuovo le istruzioni di conferma» qui sotto per riprovare." # MT
+        expired_signed_out: "Il periodo di conferma è scaduto. Accedi con il tuo vecchio indirizzo email e riprova." # MT
+      # Each completes Devise's "Could not sign you in from Google because %{reason}." (devise.omniauth_callbacks.failure).
+      omniauth_failure_reasons:
+        no_email: "Google non ha fornito un indirizzo email. Avvisa un amministratore." # MT
+        invitation_expired: "il tuo invito è scaduto" # MT
+        wrong_google_id: "devi accedere con l'ID Google %{google_id}" # MT
+        google_id_taken: "il tuo ID Google %{google_id} è associato a un altro utente" # MT
+        invitation_required: "il primo accesso va fatto tramite un invito" # MT
+        google_id_not_found: "il tuo ID Google %{google_id} non è stato trovato nel sistema" # MT
+        cancelled: "l'accesso è stato annullato" # MT
+        session_expired: "la tua sessione di accesso è scaduta. Riprova" # MT
+        unexpected: "si è verificato un errore non specificato. Gli amministratori sono stati avvisati" # MT
+    deletion:
+      blocked_intro: "Non è ancora possibile eliminarlo definitivamente:" # MT
+      confirmation_mismatch: "Il testo di conferma non corrispondeva, quindi non è stato eliminato nulla." # MT
+      self_success: "Il tuo account è stato eliminato definitivamente." # MT
+      blockers:
+        balance: "Il nucleo «%{name}» ha un saldo del conto non regolato che va risolto prima." # MT
+        guardian: "È tutore di %{names}: prima elimina questi membri o assegnali a qualcun altro." # MT
+        external_ward: "Alcuni membri di questo nucleo sono tutori di %{names} in altri nuclei: prima elimina questi membri o assegnali a qualcun altro." # MT
+        last_admin: "È l'unico amministratore della comunità: prima assegna il ruolo di amministratore a un altro membro." # MT
+  users:
+    greeting: "Ciao %{name}," # MT
+    photo_of: "Foto di %{name}" # MT
+    confirmation_resent: "Istruzioni inviate." # MT
+    email_change_canceled: "Cambio di email annullato." # MT
+    created: "Utente creato." # MT
+    created_and_invited: "Utente creato e invitato." # MT
+    updated: "Utente aggiornato." # MT
+    profile_updated: "Profilo aggiornato." # MT
+    confirm_new_email_self: "Devi confermare il tuo nuovo indirizzo email. Controlla la posta all'indirizzo %{email}." # MT
+    confirm_new_email_other: "Questo utente deve confermare il suo nuovo indirizzo email (%{email})." # MT
+    invitation_invalidated: "Questa modifica potrebbe però aver reso non valido un invito ad accedere. Potresti volerne inviare uno nuovo." # MT
+    household_hint:
+      choose_html: "Scegli un nucleo esistente per questo utente. Se non esiste, devi %{link}." # MT
+      create_link: "prima crearlo" # MT
+      child_note: "Per un limite del sistema, ogni utente di Gather deve appartenere a un solo nucleo, ma i bambini possono avere genitori o tutori di nuclei diversi. Tutte le funzioni del sistema che riguardano i bambini trattano allo stesso modo tutti i genitori/tutori e tutti i nuclei associati al bambino." # MT
+    preferred_contact_tooltip: "Preferisce essere contattato tramite: %{method}" # MT
+    all_users: "Tutti gli utenti" # MT
+    index:
+      title: "Rubrica" # MT
+      print_title: "Rubrica di %{community}" # MT
+      show_action_menu: "Mostra il menu delle azioni sull'utente" # MT
+      create_adult: "Crea adulto" # MT
+      create_child: "Crea bambino" # MT
+      invite_to_sign_in: "Invita ad accedere" # MT
+      no_users: "Nessun utente trovato." # MT
+      name: "Nome" # MT
+      unit: "Unità" # MT
+      email: "Email" # MT
+      mobile_phone: "Cellulare" # MT
+      home_phone: "Telefono di casa" # MT
+      work_phone: "Telefono di lavoro" # MT
+      preferred_contact: "Pref." # MT
+      download_csv: "Scarica come CSV" # MT
+    show:
+      directory: "Rubrica" # MT
+      email: "Email" # MT
+      pending_confirmation: "In attesa di conferma: %{email}" # MT
+      resend_confirmation: "Invia di nuovo le istruzioni di conferma" # MT
+      cancel_change: "Annulla la modifica" # MT
+      unconfirmed: "* Questo indirizzo non è ancora stato confermato, usalo con cautela." # MT
+      phone: "Telefono" # MT
+      preferred_contact: "Metodo di contatto preferito" # MT
+      birthday: "Compleanno" # MT
+      age: "Età" # MT
+      joined_on: "Data di ingresso" # MT
+      recent_head_cook_meals: "Pasti recenti come capocuoco" # MT
+      date: "Data" # MT
+      meal_title: "Titolo" # MT
+      signups: "Iscrizioni" # MT
+    new:
+      title: "Crea utente" # MT
+    edit:
+      profile: "Profilo" # MT
+      edit_user: "Modifica utente: %{name}" # MT
+      edit_photo: "Modifica foto: %{name}" # MT
+    full_form:
+      hide_photo_from_cluster: "Non mostrare la foto agli utenti di %{communities}" # MT
+      privacy_hint_html: "Per maggiori informazioni sulle impostazioni della privacy, consulta l'%{link}." # MT
+      privacy_policy: "informativa sulla privacy" # MT
+      household_info: "Informazioni sul nucleo" # MT
+      household_note_named_html: "I campi qui sotto sono associati al nucleo %{name}. Modificarli qui li cambia per <em>tutti gli utenti del nucleo</em>." # MT
+      household_note_unnamed_html: "I campi qui sotto sono associati al nucleo dell'utente. Modificarli qui li cambia per <em>tutti gli utenti del nucleo</em>." # MT
+      move_household_html: "Puoi anche %{link}." # MT
+      move_household_link: "spostarlo in un altro nucleo" # MT
+  households:
+    greeting: "Cari membri del nucleo %{name}," # MT
+    created: "Nucleo creato." # MT
+    updated: "Nucleo aggiornato." # MT
+    emergency_contact: "%{name} (%{relationship})" # MT
+    pets:
+      summary: "%{name} (%{species}, %{color})" # MT
+      vet: "Veterinario" # MT
+      caregivers: "Chi se ne occupa" # MT
+      health_issues: "Problemi di salute" # MT
+    # Unit and garage numbers, e.g. "#12".
+    number: "n. %{number}" # MT
+    index:
+      title: "Nuclei" # MT
+      create: "Crea nucleo" # MT
+      no_households: "Nessun nucleo trovato." # MT
+      name: "Nome" # MT
+      unit: "N. unità" # MT
+      users: "Utenti" # MT
+    show:
+      title: "Nucleo: %{name}" # MT
+      households: "Nuclei" # MT
+      missing_photo: "Foto dell'utente mancante" # MT
+    new:
+      title: "Crea nucleo" # MT
+    edit:
+      title: "Modifica nucleo: %{name}" # MT
+    attribs:
+      household: "Nucleo" # MT
+      members: "Membri" # MT
+      vehicles: "Veicoli" # MT
+      garage: "Garage" # MT
+      member_type: "Tipo di membro" # MT
+      emergency_contacts: "Contatti di emergenza" # MT
+      pets: "Animali domestici" # MT
+      keyholders: "Altri possessori delle chiavi dell'unità" # MT
+    unit_community:
+      unit: "Unità" # MT
+      community: "Comunità" # MT

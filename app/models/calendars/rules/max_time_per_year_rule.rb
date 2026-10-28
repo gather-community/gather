@@ -39,8 +39,7 @@ module Calendars
       def kind_calendar_str
         kind_str = (kinds || []).join("/").presence
         calendar_str = (calendars&.map(&:name) || []).join("/").presence
-        joined = [kind_str, calendar_str].compact.join(" ")
-        joined.blank? ? "" : "#{joined} "
+        [kind_str, calendar_str].compact.join(" ")
       end
     end
   end

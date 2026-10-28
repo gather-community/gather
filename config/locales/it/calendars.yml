@@ -1,0 +1,316 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+it:
+  calendars:
+    all_day: "Tutto il giorno" # MT
+    # Names of the built-in system calendars and legacy export feeds.
+    my_meals: "I miei pasti" # MT
+    all_meals: "Tutti i pasti" # MT
+    community_meals: "Pasti di %{community}" # MT
+    community_events: "Eventi di %{community}" # MT
+    my_events: "I miei eventi" # MT
+    my_jobs: "I miei incarichi" # MT
+    # Names of calendar export feeds, shown in the subscriber's calendar app.
+    feed_names:
+      all: "Tutti i calendari di %{community}" # MT
+      single: "%{calendar} (%{community})" # MT
+      multiple:
+        one: "%{count} calendario di %{community}" # MT
+        other: "%{count} calendari di %{community}" # MT
+    meal_by_cook: "A cura di %{cook}" # MT
+    # The first and last days of a multi-day job shift.
+    job_start: "%{name} (inizio)" # MT
+    job_end: "%{name} (fine)" # MT
+    created: "Calendario creato." # MT
+    updated: "Calendario aggiornato." # MT
+    group_created: "Gruppo creato." # MT
+    group_updated: "Gruppo aggiornato." # MT
+    protocol_created: "Regolamento creato." # MT
+    protocol_updated: "Regolamento aggiornato." # MT
+    event_created: "Evento creato." # MT
+    event_updated: "Evento aggiornato." # MT
+    event_deleted: "Evento eliminato." # MT
+    token_reset: "Token reimpostato." # MT
+    residents_only: "Solo i residenti di %{community} possono prenotare questo calendario." # MT
+    # Appended to IceCube's own (localized) description of a recurrence rule, e.g.
+    # "Weekly" + "on Mondays" + "at 6:00pm" + "until Aug 31 2026".
+    timespan:
+      all_day: "%{date} (tutto il giorno)" # MT
+      all_day_range: "%{first} – %{last} (tutto il giorno)" # MT
+    recurrence:
+      # Indexed by weekday, Sunday first.
+      on_weekdays: ["la domenica", "il lunedì", "il martedì", "il mercoledì", "il giovedì", "il venerdì", "il sabato"] # MT
+      on_day_of_month: "il giorno %{ordinal}" # MT
+      on_date: "il giorno %{date}" # MT
+      at_time: "alle ore %{time}" # MT
+      from_date: "a partire dal giorno %{date}" # MT
+      between_dates: "nel periodo %{first}–%{last}" # MT
+    rules:
+      max_lead_days: "Al massimo %{count} giorni nel futuro" # MT
+      max_length: "Al massimo %{length} dopo l'ora di inizio" # MT
+      other_communities_forbidden: "I residenti di altre comunità non possono creare eventi" # MT
+      sponsor_required: "Ti serve un referente di %{community}" # MT
+      fixed_time: "deve essere alle ore %{time}" # MT
+    calendars:
+      index:
+        title: "Calendari" # MT
+        create_group: "Crea gruppo" # MT
+        create_calendar: "Crea calendario" # MT
+        no_calendars: "Nessun calendario trovato." # MT
+      table:
+        name: "Nome" # MT
+        events: "Eventi" # MT
+      new:
+        title: "Crea calendario" # MT
+      edit:
+        title: "Modifica calendario: %{name}" # MT
+    groups:
+      new:
+        title: "Crea gruppo di calendari" # MT
+      edit:
+        title: "Modifica gruppo di calendari: %{name}" # MT
+    calendar_list:
+      all: "Tutti" # MT
+      select_all: "Seleziona tutti" # MT
+      deselect_all: "Deseleziona tutti" # MT
+    # Text built by the calendar grid's JavaScript (calendar_view.js), mostly for screen readers.
+    grid:
+      create_confirm:
+        same_day_html: "Creare un evento per <b>%{date}</b>?" # MT
+        same_day_times_html: "Creare un evento per <b>%{date}</b> dalle ore <b>%{start}</b> alle ore <b>%{end}</b>?" # MT
+        range_html: "Creare un evento da <b>%{start}</b> a <b>%{end}</b>?" # MT
+      now_showing: "Il calendario ora mostra: %{month}" # MT
+      event_count:
+        zero: "Nessun evento" # MT
+        one: "%{count} evento" # MT
+        other: "%{count} eventi" # MT
+      event_count_this_week:
+        zero: "Nessun evento questa settimana" # MT
+        one: "%{count} evento questa settimana" # MT
+        other: "%{count} eventi questa settimana" # MT
+      event_count_this_month:
+        zero: "Nessun evento questo mese" # MT
+        one: "%{count} evento questo mese" # MT
+        other: "%{count} eventi questo mese" # MT
+      month_calendar: "Calendario mensile" # MT
+      day_calendar: "Calendario giornaliero" # MT
+      week_calendar: "Calendario settimanale" # MT
+      # %{view} is day_calendar or week_calendar; %{slots} is half_hour_slots or minute_slots.
+      agenda_label: "%{view}. Usa i tasti freccia per spostarti" # MT
+      agenda_label_all_day: "%{view}. Riga «Tutto il giorno». Usa i tasti freccia per spostarti" # MT
+      agenda_label_slots: "%{view}. Griglia di %{slots}. Usa i tasti freccia per spostarti" # MT
+      agenda_label_all_day_slots: "%{view}. Riga «Tutto il giorno» seguita da %{slots}. Usa i tasti freccia per spostarti" # MT
+      half_hour_slots: "fasce di mezz'ora da %{start} a %{end}" # MT
+      minute_slots: "fasce di %{minutes} minuti da %{start} a %{end}" # MT
+      today_date: "Oggi, %{date}" # MT
+      this_week_date: "Questa settimana, %{date}" # MT
+      header:
+        toolbar: "Controlli del calendario" # MT
+        previous: "Precedente" # MT
+        next: "Successivo" # MT
+        today: "Oggi" # MT
+        day_view: "Vista giorno" # MT
+        week_view: "Vista settimana" # MT
+        month_view: "Vista mese" # MT
+    events:
+      index:
+        title: "Eventi e prenotazioni" # MT
+        edit_calendar: "Modifica calendario" # MT
+        export: "Esporta" # MT
+        create_event: "Crea evento" # MT
+        permalink: "Link permanente" # MT
+        show_early: "Mostra prima mattina" # MT
+        hide_early: "Nascondi prima mattina" # MT
+        create_confirm_title: "Creare l'evento?" # MT
+        cancel: "Annulla" # MT
+        ok: "OK" # MT
+      single_calendar_sidebar:
+        calendars: "Calendari" # MT
+      all_events_sidebar:
+        calendars: "Calendari" # MT
+      new:
+        title: "%{calendar}: crea evento" # MT
+        no_calendars_title: "Nessun calendario" # MT
+        no_calendars: "La tua comunità non ha calendari su cui puoi creare un evento." # MT
+        create_one: "Puoi crearne uno." # MT
+        select_calendar: "Seleziona calendario" # MT
+      edit:
+        title: "Modifica evento: %{name}" # MT
+      form:
+        agree_to_guidelines: "Accetto le linee guida qui sopra" # MT
+      series_notice:
+        applies_from: "Le modifiche fatte qui sotto valgono solo dal giorno %{date} in poi." # MT
+        edit_earlier_html: "Per modificare tutte le occorrenze future, modifica l'occorrenza del giorno %{link}." # MT
+        started: "Questa occorrenza è già iniziata, quindi non può essere modificata." # MT
+        edit_later_html: "Per modificare la serie da quel momento in poi, modifica l'occorrenza del giorno %{link}." # MT
+      # Repeat settings in the event form.
+      repeat_fields:
+        repeat_units:
+          daily:
+            one: "giorno" # MT
+            other: "giorni" # MT
+          weekly:
+            one: "settimana" # MT
+            other: "settimane" # MT
+          monthly:
+            one: "mese" # MT
+            other: "mesi" # MT
+          yearly:
+            one: "anno" # MT
+            other: "anni" # MT
+        # The monthly "On" choices, worked out from the start date (RecurrencePattern.monthly_by_options).
+        monthly_by:
+          day_of_month: "Giorno %{day}" # MT
+          day_of_week:
+            first: "%{weekday}, la prima volta nel mese" # MT
+            second: "%{weekday}, la seconda volta nel mese" # MT
+            third: "%{weekday}, la terza volta nel mese" # MT
+            fourth: "%{weekday}, la quarta volta nel mese" # MT
+          last_day_of_week: "%{weekday}, l'ultima volta nel mese" # MT
+          last_day_of_month: "L'ultimo giorno del mese" # MT
+        start_weekday: "Il giorno della settimana della data di inizio è sempre incluso" # MT
+        pattern_fixed: "Questo evento si ripete in un modo che questo modulo non può mostrare (%{description}), quindi le sue impostazioni di ripetizione non si possono modificare qui." # MT
+        recurrence_unavailable: "Gli eventi ricorrenti non sono disponibili su questo calendario perché %{reasons}." # MT
+        recurrence_blockers:
+          overlap_not_allowed: "gli eventi non possono sovrapporsi" # MT
+          fixed_start_time: "ha un'ora di inizio fissa" # MT
+          fixed_end_time: "ha un'ora di fine fissa" # MT
+          max_lead_days: "limita con quanto anticipo si possono prenotare gli eventi" # MT
+          max_days_per_year: "limita i giorni prenotabili all'anno" # MT
+          max_minutes_per_year: "limita il tempo prenotabile all'anno" # MT
+    eventlets:
+      show:
+        title: "Evento: %{name}" # MT
+        calendars: "Calendari" # MT
+        calendar: "Calendario" # MT
+        date_time: "Data/ora" # MT
+        repeats: "Ripetizione" # MT
+        meal: "Pasto" # MT
+        group: "Gruppo" # MT
+        reserved_by: "Prenotato da" # MT
+        sponsor: "Referente" # MT
+        type: "Tipo" # MT
+        note: "Nota" # MT
+    protocols:
+      index:
+        title: "Regolamenti" # MT
+        create: "Crea regolamento" # MT
+        no_protocols: "Nessun regolamento trovato." # MT
+        name: "Nome" # MT
+        calendars: "Calendari" # MT
+        types: "Tipi" # MT
+        rules: "Regole" # MT
+      new:
+        title: "Crea regolamento" # MT
+      edit:
+        title: "Modifica regolamento: %{name}" # MT
+    exports:
+      index:
+        title: "Esportazione del calendario" # MT
+        select_calendars: "Seleziona i calendari" # MT
+        export_link: "Link di esportazione" # MT
+        copy_link: "Copia link" # MT
+        visit_link: "Apri il link nel browser" # MT
+        personalized: "Questo è il tuo link di esportazione personale per i calendari selezionati." # MT
+        selection_changes_link: "Se cambi la selezione dei calendari (spuntando le caselle), il link cambia di conseguenza. Anche cambiare le opzioni qui sotto cambia il link." # MT
+        options: "Opzioni" # MT
+        import_instructions: "Istruzioni per l'importazione" # MT
+        google_calendar: "Google Calendar" # MT
+        apple_calendar: "Calendario di Apple" # MT
+        method_1: "Metodo 1" # MT
+        method_2: "Metodo 2" # MT
+        google_method_1: "Se hai effettuato l'accesso al tuo account Google, prova semplicemente a fare clic su «Apri il link nel browser» qui sopra. Google Calendar dovrebbe aprirsi da solo e chiederti di importare." # MT
+        google_steps:
+          - "Fai clic su «Copia link» qui sopra per copiare l'URL del calendario negli appunti." # MT
+          - "A sinistra nella schermata di Google Calendar, fai clic sul «+» accanto ad «Altri calendari»." # MT
+          - "Fai clic su «Da URL»." # MT
+          - "Incolla l'URL che hai copiato prima." # MT
+          - "Fai clic su «Aggiungi calendario»." # MT
+          - "Dopo qualche secondo gli eventi dovrebbero comparire nel tuo calendario." # MT
+        apple_method_1: "Prova semplicemente a fare clic su «Apri il link nel browser» qui sopra. Se il tuo browser è impostato per aprire i link webcal con Calendario di Apple, potrebbe funzionare subito!" # MT
+        apple_steps:
+          - "Fai clic su «Copia link» qui sopra per copiare l'URL del calendario negli appunti." # MT
+          - "Apri Calendario." # MT
+          - "Fai clic sul menu «File»." # MT
+          - "Fai clic su «Nuova sottoscrizione calendario…»." # MT
+          - "Incolla l'URL che hai copiato prima." # MT
+          - "Fai clic su «Iscriviti»." # MT
+          - "Se richiesto, imposta le opzioni della sottoscrizione. L'intervallo di aggiornamento automatico consigliato è «Ogni ora»." # MT
+          - "Ora gli eventi dovrebbero comparire nel tuo calendario." # MT
+        reset_token_html: "Se hai condiviso per errore i tuoi link personali dei calendari e vuoi renderli di nuovo privati, %{link}. Nota: i vecchi link smetteranno di funzionare, quindi dovrai aggiornare la tua app del calendario." # MT
+        reset_token_link: "fai clic qui per reimpostare il tuo token segreto" # MT
+    legacy_exports:
+      index:
+        title: "Esportazione del calendario" # MT
+        old_page: "Sei arrivato alla vecchia pagina di esportazione del calendario. Questa pagina è stata sostituita da un sistema di esportazione più nuovo e potente." # MT
+        new_page: "Puoi accedere alla nuova pagina facendo clic sul pulsante «Esporta» nella pagina principale dei calendari." # MT
+        links_removed: "Quando fai clic sul pulsante qui sotto per passare alla nuova pagina di esportazione, i link che puntano a questa vecchia pagina verranno rimossi. Se in futuro dovrai esportare i calendari, vai alla pagina principale dei calendari e fai clic su «Esporta»." # MT
+        proceed: "Ho capito! Portami alla nuova pagina di esportazione e rimuovi i vecchi link!" # MT
+    # The drag-and-drop move modal in the calendar grid (calendar_view.js).
+    drag:
+      confirm: "Vuoi davvero spostare l'evento «%{name}»?" # MT
+      confirm_occurrence: "Vuoi davvero spostare questa occorrenza di «%{name}»?" # MT
+      error_title: "Errore" # MT
+      load_error: "Non siamo riusciti a verificare come si può spostare questo evento. Riprova." # MT
+      calendar:
+        title: "Sposta evento su più calendari" # MT
+        content: "«%{name}» compare su più di un calendario:" # MT
+        selected: "(selezionato)" # MT
+        this: "Sposta solo su %{calendar}" # MT
+        all: "Sposta su tutti" # MT
+      series:
+        title: "Sposta evento ricorrente" # MT
+        content: "«%{name}» si ripete. Quali occorrenze vuoi spostare?" # MT
+        occurrence: "Solo questa" # MT
+        following: "Questa e le successive" # MT
+        series: "Tutte le occorrenze" # MT
+    eventlet_deletion:
+      success:
+        event: "Evento eliminato." # MT
+        series: "Tutte le occorrenze dell'evento sono state eliminate." # MT
+        following: "Questa occorrenza dell'evento e tutte le successive sono state eliminate." # MT
+        occurrence: "L'occorrenza è stata eliminata." # MT
+        calendar_series: "L'evento è stato rimosso da %{calendar}." # MT
+        calendar_occurrence: "L'occorrenza è stata rimossa da %{calendar}." # MT
+      prompts:
+        calendar:
+          title: "Elimina evento su più calendari" # MT
+          selected_html: "%{name} (selezionato)" # MT
+          content: "«%{name}» compare su più di un calendario:" # MT
+          this: "Elimina da %{calendar}" # MT
+          all: "Elimina da tutti i calendari" # MT
+        series:
+          title: "Elimina evento ricorrente" # MT
+          content_all: "«%{name}» si ripete. Quali occorrenze vuoi eliminare?" # MT
+          content_this: "«%{name}» si ripete. Quali occorrenze vuoi eliminare da %{calendar}?" # MT
+          occurrence: "Solo questa" # MT
+          following: "Questa e le successive" # MT
+          series: "Tutte le occorrenze" # MT
+  calendars/protocol:
+    applicability: "Ambito di applicazione" # MT
+    no_kinds_html: "Questa comunità non ha tipi di evento definiti. Vedi la <a href='%{url}'>pagina delle impostazioni</a>." # MT
+    rules: "Regole" # MT
+    durations:
+      mins:
+        one: "1 minuto" # MT
+        other: "%{formatted} minuti" # MT
+      days:
+        one: "1 giorno" # MT
+        other: "%{formatted} giorni" # MT
+    exceeded_time: "Puoi prenotare al massimo %{max} all'anno per gli eventi %{kind_calendar} e hai già prenotato %{booked}" # MT
+  calendar_exports:
+    meals:
+      diner_count:
+        one: "%{count} commensale del tuo nucleo" # MT
+        other: "%{count} commensali del tuo nucleo" # MT
+      signup_comments: "Commenti all'iscrizione:\n%{comments}" # MT

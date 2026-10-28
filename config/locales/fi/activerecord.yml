@@ -1,0 +1,502 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+fi:
+  activemodel:
+    attributes:
+      # EventletForm (drag-and-drop), for its error messages.
+      calendars/eventlet:
+        starts_at: "Alkamisaika" # MT
+        ends_at: "Päättymisaika" # MT
+      calendars/event:
+        calendar: "Kalenteri" # MT
+        pre_notice: "Ilmoitus" # MT
+        name: "Tapahtuman nimi" # MT
+        starts_at: "Alkamisaika" # MT
+        ends_at: "Päättymisaika" # MT
+        creator: "Luoja" # MT
+        group: "Ryhmä" # MT
+        all_day: "Koko päivän tapahtuma?" # MT
+        kind: "Tyyppi" # MT
+        note: "Huomautus" # MT
+        guidelines: "Ohjeet" # MT
+        repeat_frequency: "Toistuu" # MT
+        repeat_interval: "Toistoväli" # MT
+        repeat_weekdays: "Päivinä" # MT
+        repeat_monthly_by: "Päivänä" # MT
+        repeat_ends: "Päättyy" # MT
+        repeat_ends_on: "Päättymispäivä" # MT
+        repeat_count: "Kertojen määrä" # MT
+    errors:
+      models:
+        # EventForm, which takes Calendars::Event's model name.
+        calendars/event:
+          attributes:
+            base:
+              overlap: "Tämä tapahtuma menee päällekkäin olemassa olevan kanssa" # MT
+              changed_from_started: "Tämä kerta on jo alkanut, joten sitä ei voi muuttaa. Avaa myöhempi kerta, jos haluat muuttaa sarjaa siitä eteenpäin." # MT
+              moved_before_kept: "Et voi siirtää tätä kertaa ajankohtaan %{time}, koska silloin sarjan kaksi osaa menisivät päällekkäin." # MT
+              occurrence_missing: "Tätä kertaa ei ole enää olemassa. Palaa kalenteriin ja yritä uudelleen." # MT
+              longer_than_repeat: "Tapahtuma on pidempi kuin toistojen väli, joten sen kerrat menisivät päällekkäin." # MT
+              pattern_change_with_changes:
+                one: "Muutettavassa osassa %{count} kerta on siirretty tai poistettu, joten toistopäiviä ei voi muuttaa. Kumoa ensin se muutos tai muuta sarjaa myöhemmästä päivästä alkaen." # MT
+                other: "Muutettavassa osassa %{count} kertaa on siirretty tai poistettu, joten toistopäiviä ei voi muuttaa. Kumoa ensin ne muutokset tai muuta sarjaa myöhemmästä päivästä alkaen." # MT
+              all_day_change_with_changes:
+                one: "Muutettavassa osassa %{count} kerta on siirretty tai poistettu, joten sitä ei voi vaihtaa koko päivän ja kellonaikaan sidotun välillä. Kumoa ensin se muutos tai muuta sarjaa myöhemmästä päivästä alkaen." # MT
+                other: "Muutettavassa osassa %{count} kertaa on siirretty tai poistettu, joten sitä ei voi vaihtaa koko päivän ja kellonaikaan sidotun välillä. Kumoa ensin ne muutokset tai muuta sarjaa myöhemmästä päivästä alkaen." # MT
+            guidelines:
+              not_accepted: "Sinun täytyy hyväksyä ohjeet" # MT
+            starts_at:
+              changed_after_start: "ei voi muuttaa tapahtuman alettua" # MT
+            ends_at:
+              before_start: "täytyy olla alkamisajan jälkeen" # MT
+              in_past: "ei voi muuttaa menneeseen aikaan" # MT
+            repeat_frequency:
+              not_offered: "ei ole käytettävissä tässä kalenterissa" # MT
+              stop_repeating: "ei voi muuttaa arvoon ”Ei koskaan”. Jos haluat lopettaa sarjan, poista tämä ja seuraavat kerrat." # MT
+            repeat_ends_on:
+              before_start: "täytyy olla alkamispäivänä tai sen jälkeen" # MT
+            repeat_monthly_by:
+              not_on_start_date: "ei ole käytettävissä alkamispäivälle. Valitse uudelleen." # MT
+        # EventletForm (drag-and-drop) and EventletDeletionForm, which take Calendars::Eventlet's model name.
+        calendars/eventlet:
+          attributes:
+            base:
+              not_recurring: "Tämä tapahtuma ei kuulu sarjaan" # MT
+              following_only_all_calendars: "Vaihtoehdon ”Tämä ja seuraavat” voi poistaa vain kaikista kalentereista" # MT
+              occurrence_missing: "Tätä kertaa ei ole enää olemassa. Lataa kalenteri uudelleen ja yritä uudelleen." # MT
+              one_calendar: "Tämä tapahtuma on vain yhdessä kalenterissa." # MT
+              other_calendar_not_editable: "Et voi muuttaa tätä tapahtumaa kaikissa sen kalentereissa. Valitse sen sijaan siirto vain tässä kalenterissa." # MT
+              offsets_too_far_apart: "Tapahtuman ajat sen eri kalentereissa voivat poiketa toisistaan enintään %{hours} tuntia. Jos haluat siirtää sitä pidemmälle, valitse ”Siirrä kaikissa”." # MT
+              series_started: "Tämä sarja on jo alkanut. Valitse ”Tämä ja seuraavat”, jos haluat muuttaa sitä tästä päivästä eteenpäin." # MT
+              following_from_past: "Jo alkaneita kertoja ei voi siirtää vaihtoehdolla ”Tämä ja seuraavat”." # MT
+              moved_before_kept: "Et voi siirtää kertoja ”Tämä ja seuraavat” tähän, koska silloin sarjan kaksi osaa menisivät päällekkäin." # MT
+              fixed_pattern: "Et voi siirtää kohdetta ”%{choice}” tähän, koska sarja toistuu kiinteän kaavan mukaan, johon uusi aika ei kuulu." # MT
+              overlap: "Tämä tapahtuma menee päällekkäin olemassa olevan kanssa" # MT
+            occurrence_start:
+              required_for_single: "tarvitaan yksittäisen kerran muuttamiseen" # MT
+              not_in_series: "ei ole tämän sarjan kelvollinen kerta" # MT
+            starts_at:
+              changed_after_start: "ei voi muuttaa tapahtuman alettua" # MT
+            ends_at:
+              before_start: "täytyy olla alkamisajan jälkeen" # MT
+              in_past: "ei voi muuttaa menneeseen aikaan" # MT
+  activerecord:
+    models:
+      meals/meal: "Ateria" # MT
+    attributes:
+      user:
+        first_name: "Etunimi" # MT
+        last_name: "Sukunimi" # MT
+        email: "Sähköpostiosoite" # MT
+        google_email: "Google-tunnus" # MT
+        phone: "Puhelin" # MT
+        mobile_phone: "Matkapuhelin" # MT
+        home_phone: "Koti" # MT
+        work_phone: "Työ" # MT
+        birthday_str: "Syntymäpäivä" # MT
+        preferred_contact: "Toivottu yhteydenottotapa" # MT
+        joined_on: "Liittymispäivä" # MT
+        job_choosing_proxy_id: "Tehtävien valinnan sijainen" # MT
+        up_guardianships: "Vanhemmat/huoltajat" # MT
+        privacy_settings: "Yksityisyysasetukset" # MT
+        paypal_email: "PayPal-sähköposti" # MT
+        school: "Koulu" # MT
+        allergies: "Allergiat" # MT
+        doctor: "Lääkärin tiedot" # MT
+        medical: "Terveystiedot" # MT
+        remember_me: "Pysy kirjautuneena selaimen sulkemisen jälkeen" # MT
+        child: "Käyttäjä on lapsi?" # MT
+        full_access: "Käyttäjällä on täydet käyttöoikeudet järjestelmään?" # MT
+        certify_13_or_older: "Vakuutan, että tämä käyttäjä on vähintään 13-vuotias" # MT
+        pronouns: "Pronominit" # MT
+      household:
+        name: "Kotitalouden nimi" # MT
+        community_id: "Yhteisö" # MT
+        member_type_id: "Jäsentyyppi" # MT
+        unit_num_and_suffix: "Asunnon numero" # MT
+        vehicles: "Ajoneuvot" # MT
+        keyholders: "Asunnon muut avaimenhaltijat" # MT
+        emergency_contacts: "Hätäyhteyshenkilöt" # MT
+        garage_nums: "Autotallin numero(t)" # MT
+      meals/meal:
+        no_allergens: "Ei mitään näistä" # MT
+        community_id: "Järjestävä yhteisö" # MT
+        served_at: "Päivämäärä/aika" # MT
+        communities: "Yhteisöt" # MT
+        calendar_ids: "Varattavat paikat" # MT
+        formula: "Hinnoittelukaava" # MT
+        capacity: "Kapasiteetti" # MT
+        title: "Otsikko" # MT
+        entrees: "Pääruoka" # MT
+        side: "Lisuke" # MT
+        kids: "Lapset" # MT
+        dessert: "Jälkiruoka" # MT
+        notes: "Huomautukset" # MT
+        auto_close_time: "Automaattinen sulkemisaika" # MT
+      meals/message:
+        meal: "Ateria" # MT
+        body: "Viesti" # MT
+        recipient_type: "Vastaanottajat" # MT
+      meals/cost:
+        ingredient_cost: "Raaka-aineiden hinta" # MT
+        pantry_cost: "Korvattavat ruokavarastokulut" # MT
+        payment_method: "Korvaustapa" # MT
+        reimbursee_id: "Korvauksen saaja" # MT
+      meals/formula:
+        name: "Nimi" # MT
+        meal_calc_type: "Laskentatapa" # MT
+        pantry_calc_type: "Laskentatapa" # MT
+        is_default: "Oletuskaava?" # MT
+        parts: "Ateriatyypit" # MT
+        pantry_fee: "Ruokavarastomaksu" # MT
+        pantry_fee_formatted: "Ruokavarastomaksu" # MT
+        pantry_reimbursement: "Salli ruokavarastokulujen korvaus?" # MT
+        takeout: "Salli pyynnöt ottaa ateria mukaan?" # MT
+        role_ids: "Roolit" # MT
+      meals/formula_part:
+        name: "Nimi" # MT
+        type_id: "Tyyppi" # MT
+        share_formatted: "Hinta/osuus" # MT
+        portion_size: "Annoskoko" # MT
+      meals/role:
+        title: "Tehtävän nimi" # MT
+        time_type: "Ajat" # MT
+        shift_start: "Alkamisaika" # MT
+        shift_end: "Päättymisaika" # MT
+        work_hours: "Työtunnit" # MT
+        work_job_title: "Tehtävän nimi Työ-osiossa" # MT
+        description: "Tehtävän kuvaus" # MT
+        double_signups_allowed: "Sama henkilö voi ilmoittautua tähän rooliin useammin kuin kerran samalla aterialla" # MT
+        count_per_meal: "Henkilöitä ateriaa kohden" # MT
+        reminders: "Muistutukset" # MT
+      meals/role_reminder:
+        rel_magnitude: "Lähetysaika" # MT
+        note: "Huomautus (valinnainen)" # MT
+      meals/signup:
+        spots_left: "Paikkoja jäljellä" # MT
+        comments: "Kommentit kokille" # MT
+        takeout: "Pyydä mukaan" # MT
+      billing/transaction:
+        incurred_on: "Syntymispäivä" # MT
+        household_name: "Kotitalouden nimi" # MT
+        code: "Tyyppi" # MT
+        description: "Kuvaus" # MT
+        value: "Summa" # MT
+      billing/account:
+        household_id: "Kotitalous" # MT
+        community_id: "Yhteisön tili" # MT
+        current_balance: "Nykyinen saldo" # MT
+        credit_limit: "Luottoraja" # MT
+      billing/template:
+        code: "Tyyppi" # MT
+        description: "Kuvaus" # MT
+        value: "Summa" # MT
+        member_type_ids: "Jäsentyypit" # MT
+      gdrive/config:
+        org_user_id: "Google Workspace -käyttäjätunnus" # MT
+        client_id: "Sovelluksen asiakastunnus" # MT
+        client_secret_to_write: "Sovelluksen asiakassalaisuus" # MT
+      gdrive/migration/operation:
+        contact_email: "Yhteyshenkilön sähköposti" # MT
+        contact_name: "Yhteyshenkilön nimi" # MT
+        src_folder_id: "Lähteen ID" # MT
+        dest_folder_id: "Kohteen ID" # MT
+      gdrive/migration/request:
+        opt_out_reason: "Kieltäytymisen syy" # MT
+      gdrive/item:
+        external_id: "ID" # MT
+        kind: "Tyyppi" # MT
+      gdrive/item_group:
+        access_level: "Käyttöoikeustaso" # MT
+        group_id: "Ryhmä" # MT
+        item_id: "Kohde" # MT
+      groups/group:
+        availability: "Saatavuus" # MT
+        can_request_jobs: "Voi pyytää tehtäviä?" # MT
+        can_administer_email_lists: "Voi hallinnoida kaikkia sähköpostilistoja?" # MT
+        can_moderate_email_lists: "Voi moderoida kaikkia sähköpostilistoja?" # MT
+        description: "Kuvaus" # MT
+        kind: "Tyyppi" # MT
+        name: "Nimi" # MT
+        communities: "Yhteisöt" # MT
+        memberships: "Jäsenet" # MT
+      groups/mailman/list:
+        domain_id: "Verkkotunnus" # MT
+        all_cmty_members_can_send: "Kaikki yhteisön jäsenet voivat lähettää listalle?" # MT
+        managers_can_administer: "Vastaavat voivat hallinnoida listaa?" # MT
+        managers_can_moderate: "Vastaavat voivat moderoida listaa?" # MT
+        members: "Listan jäsenet" # MT
+        additional_members: "Muut jäsenet" # MT
+        additional_senders: "Muut lähettäjät" # MT
+        settings: "Listan asetukset" # MT
+        address: "Listan osoite" # MT
+        _destroy: "Poistetaanko tämä lista?" # MT
+      calendars/protocol:
+        fixed_end_time: "Kiinteä päättymisaika" # MT
+        fixed_start_time: "Kiinteä alkamisaika" # MT
+        kinds: "Tapahtumatyypit" # MT
+        max_days_per_year: "Enint. päiviä/vuosi" # MT
+        max_lead_days: "Enint. ennakkoaika" # MT
+        max_length_minutes: "Enint. kesto" # MT
+        max_minutes_per_year: "Enint. minuutteja/vuosi" # MT
+        other_communities: "Muut yhteisöt" # MT
+        pre_notice: "Ennakkoilmoitus" # MT
+        requires_kind: "Tyyppi pakollinen" # MT
+        calendar_ids: "Kalenterit" # MT
+      calendars/group:
+        name: "Ryhmän nimi" # MT
+      calendars/calendar:
+        name: "Nimi" # MT
+        guidelines: "Ohjeet" # MT
+        hidden: "Piilotettu" # MT
+        abbrv: "Lyhenne" # MT
+        group_id: "Kalenteriryhmä" # MT
+        color: "Väri" # MT
+        default_calendar_view: "Kalenterinäkymä" # MT
+        meal_hostable: "Voi järjestää aterioita?" # MT
+        allow_overlap: "Tapahtumat voivat mennä päällekkäin?" # MT
+        selected_by_default: "Valittu oletuksena kalenteriluettelossa?" # MT
+      people/emergency_contact:
+        name: "Nimi" # MT
+        relationship: "Suhde kotitalouteen" # MT
+        main_phone: "Pääpuhelin" # MT
+        alt_phone: "Muu puhelin" # MT
+        email: "Sähköposti" # MT
+        location: "Sijainti" # MT
+        country_code: "Maa" # MT
+      people/vehicle:
+        make: "Merkki" # MT
+        model: "Malli" # MT
+        color: "Väri" # MT
+        plate: "Rekisterinumero" # MT
+      people/pet:
+        name: "Nimi" # MT
+        species: "Laji/rotu" # MT
+        color: "Väri" # MT
+        vet: "Eläinlääkärin tiedot" # MT
+        caregivers: "Hoitajan tiedot" # MT
+        health_issues: "Terveysongelmat" # MT
+      people/memorial:
+        user_id: "Edesmennyt" # MT
+        birth_year: "Syntymävuosi" # MT
+        death_year: "Kuolinvuosi" # MT
+      work/job:
+        description: "Kuvaus" # MT
+        double_signups_allowed: "Sama henkilö voi ilmoittautua tämän tehtävän vuoroon useammin kuin kerran?" # MT
+        hours: "Tunnit" # MT
+        hours_per_shift: "Tunteja vuoroa kohden" # MT
+        period_id: "Jakso" # MT
+        reminders: "Muistutukset" # MT
+        requester_id: "Pyytäjä" # MT
+        shifts: "Vuorot" # MT
+        slot_type: "Paikkojen tyyppi" # MT
+        time_type: "Ajat" # MT
+        title: "Otsikko" # MT
+      work/period:
+        name: "Nimi" # MT
+        phase: "Vaihe" # MT
+        starts_on: "Alkaa" # MT
+        ends_on: "Päättyy" # MT
+        quota_type: "Kiintiö" # MT
+        auto_open_time: "Automaattinen avautumisaika" # MT
+        pick_type: "Valintatapa" # MT
+        round_duration: "Kierroksen kesto" # MT
+        workers_per_round: "Tekijöitä ryhmää kohden" # MT
+        max_rounds_per_worker: "Enint. kierroksia tekijää kohden" # MT
+        job_copy_source_id: "Tehtävien kopiointi" # MT
+        copy_preassignments: "Kopioi ennalta määrätyt?" # MT
+        meal_job_sync_settings: "Ateriatehtävien synkronointi" # MT
+      work/job_reminder:
+        abs_rel: "Tyyppi" # MT
+        abs_time: "Lähetysaika" # MT
+        rel_magnitude: "Lähetysaika" # MT
+        note: "Huomautus" # MT
+      work/shift:
+        start_time: "Alkamisaika" # MT
+        end_time: "Päättymisaika" # MT
+        hours: "Tunnit" # MT
+        slots: "Paikkoja" # MT
+        workers: "Tekijät" # MT
+      wiki/page:
+        title: "Otsikko" # MT
+        content: "Sisältö" # MT
+        comment: "Kommentti" # MT
+        editable_by: "Muokkausoikeus" # MT
+        data_source: "Tietolähde" # MT
+    errors:
+      messages:
+        invalid_content_type: "Tiedosto on väärää tyyppiä" # MT
+        too_big: "Tiedosto on liian suuri (enintään %{max} MiB)" # MT
+        attached: "Tiedosto puuttuu" # MT
+      models:
+        billing/transaction:
+          attributes:
+            unit_price:
+              blank_with_quantity: "ei voi olla tyhjä, jos määrä on annettu" # MT
+            quantity:
+              blank_with_unit_price: "ei voi olla tyhjä, jos yksikköhinta on annettu" # MT
+        domain:
+          attributes:
+            base:
+              at_least_one_ownership: "Valitse vähintään yksi yhteisö" # MT
+        gdrive/config:
+          attributes:
+            org_user_id:
+              invalid: "Täytyy olla sähköpostiosoite" # MT
+            client_id:
+              invalid: "Täytyy päättyä .apps.googleusercontent.com" # MT
+            client_secret_to_write:
+              wrong_length: "Täytyy olla tasan %{count} merkkiä" # MT
+        gdrive/migration/operation:
+          attributes:
+            contact_email:
+              invalid: "Täytyy olla sähköpostiosoite" # MT
+            dest_folder_id:
+              invalid: "Saa sisältää vain kirjaimia, numeroita, _ tai -" # MT
+            src_folder_id:
+              invalid: "Saa sisältää vain kirjaimia, numeroita, _ tai -" # MT
+        groups/group:
+          attributes:
+            base:
+              at_least_one_affiliation: "Valitse vähintään yksi yhteisö" # MT
+        groups/mailman/list:
+          attributes:
+            name:
+              invalid: "Sisältää virheellisiä merkkejä" # MT
+              taken: "Toinen tämän verkkotunnuksen lista käyttää jo tätä nimeä" # MT
+        groups/membership:
+          attributes:
+            user_id:
+              unaffiliated: "Ei kuulu liitettyyn yhteisöön" # MT
+        household:
+          name:
+            taken: "Tässä yhteisössä on jo tämänniminen kotitalous" # MT
+        meals/formula_part:
+          negative: "Ei saa olla negatiivinen" # MT
+        meals/signup:
+          exceeded_spots:
+            one: "Jäljellä olevien paikkojen perusteella voit ilmoittaa vain yhden henkilön." # MT
+            other: "Jäljellä olevien paikkojen perusteella voit ilmoittaa enintään %{count} henkilöä." # MT
+          nobody_signed_up: "Sinun täytyy ilmoittaa vähintään yksi henkilö" # MT
+          duplicate_types: "Ilmoita kukin tyyppi vain kerran" # MT
+        meals/meal:
+          attributes:
+            capacity:
+              below_signups: "täytyy olla vähintään %{count} nykyisten ilmoittautumisten vuoksi" # MT
+            title:
+              blank_with_menu: "ei voi olla tyhjä, jos muita ruokalistan kohtia on annettu" # MT
+            entrees:
+              blank_with_menu: "ei voi olla tyhjä, jos muita ruokalistan kohtia on annettu" # MT
+            invitations:
+              none: "sinun täytyy kutsua vähintään yksi yhteisö" # MT
+            auto_close_time:
+              not_before_meal: "täytyy olla nykyhetken ja aterian ajankohdan välillä" # MT
+            allergens:
+              none_checked: "vähintään yksi ruutu täytyy valita, jos ruokalista on annettu" # MT
+              none_with_others: "”Ei mitään näistä” ei voi valita, jos muita allergeeneja on valittu" # MT
+        meals/assignment:
+          attributes:
+            user_id:
+              role_not_in_formula: "Rooli ”%{role}” ei vastaa valittua hinnoittelukaavaa" # MT
+        calendars/event:
+          attributes:
+            starts_at:
+              after_meal_time: "täytyy olla aterian ajankohtana tai ennen sitä (%{time})" # MT
+            ends_at:
+              before_meal_time: "täytyy olla aterian ajankohdan jälkeen (%{time})" # MT
+        calendars/eventlet:
+          attributes:
+            base:
+              all_day_not_allowed: "Koko päivän tapahtumat eivät ole sallittuja tässä kalenterissa" # MT
+        calendars/event_override:
+          attributes:
+            occurrence_start:
+              not_in_series: "ei ole tämän sarjan kelvollinen kerta" # MT
+            ends_at:
+              before_start: "täytyy olla alkamisajan jälkeen" # MT
+        calendars/eventlet_override:
+          attributes:
+            base:
+              no_change: "täytyy joko poistaa kerta tai antaa siirtymämuutokset" # MT
+            eventlet:
+              different_event: "täytyy kuulua samaan tapahtumaan kuin poikkeus" # MT
+        user:
+          password:
+            password_strength: "Salasanasi oli liian heikko. Kokeile tehdä siitä pidempi tai lisätä erikoismerkkejä." # MT
+          attributes:
+            certify_13_or_older:
+              accepted_full_access: "Iän vahvistus vaaditaan lapsille, joilla on täydet käyttöoikeudet" # MT
+              accepted_becoming_adult: "Iän vahvistus vaaditaan, kun lapsi muutetaan aikuiseksi" # MT
+            birthday_str:
+              too_young: "Lasten täytyy olla vähintään 13-vuotiaita saadakseen täydet käyttöoikeudet" # MT
+        calendars/calendar:
+          attributes:
+            abbrv:
+              blank: "ei voi olla tyhjä, jos kalenterissa voi järjestää aterioita" # MT
+            color:
+              invalid: "Täytyy olla HEX-muodossa (esim. #112233)" # MT
+            allow_overlap:
+              repeating_events: "täytyy olla päällä niin kauan kuin tässä kalenterissa on toistuvia tapahtumia" # MT
+        calendars/protocol:
+          attributes:
+            base:
+              repeating_events: "Kiinteät ajat, ennakkopäivät ja vuosirajat eivät voi koskea näitä kalentereita, joissa on toistuvia tapahtumia: %{calendars}. Toistuvat tapahtumat vaativat kalenterit ilman näitä sääntöjä." # MT
+        meals/formula:
+          at_least_one_type: "Sinun täytyy lisätä vähintään yksi ateriatyyppi." # MT
+          at_least_one_nonzero_type: "Sinun täytyy lisätä vähintään yksi nollasta poikkeava ateriatyyppi, jos laskentatapa on suhteellinen." # MT
+          attributes:
+            is_default:
+              cant_unset: "Et voi poistaa oletusta. Aseta sen sijaan toinen hinnoittelukaava oletukseksi." # MT
+            role_ids:
+              must_have_head_cook: "Täytyy sisältää: %{title}" # MT
+        meals/role:
+          attributes:
+            shift_end:
+              not_after_start: "Täytyy olla alkamisajan jälkeen" # MT
+        wiki/page:
+          sample_not_editable: "Esimerkkisivua ei voi muokata, jotta se säilyy ehjänä muiden käyttäjien malliksi. Jos haluat kokeilla, luo uusi sivu alla olevalla linkillä ”Uusi wikisivu”." # MT
+          data_fetch:
+            main: "Tämän sivun tietojen hakemisessa oli ongelma (%{error})" # MT
+            connection_error: "Tietolähteeseen ei saatu yhteyttä" # MT
+            invalid_protocol: "Tietolähteen URL-osoitteen täytyy käyttää HTTP:tä tai HTTPS:ää" # MT
+            invalid_json: "Virheellinen JSON" # MT
+            template_error: "Mallivirhe: %{details}" # MT
+          attributes:
+            title:
+              reserved_slug: "Tämä otsikko on erityinen varattu sana tai ilmaus. Valitse toinen." # MT
+        work/job:
+          attributes:
+            hours_per_shift:
+              uneven_divisor: "Täytyy olla %{hours} tuntia tai jakaa se tasan" # MT
+            shifts:
+              more_than_one_shift_for_full_single: "Yhden vuoron tehtäviin voi lisätä vain yhden vuoron." # MT
+              more_than_one_shift_for_full_period: "Koko jakson tehtäviin voi lisätä vain yhden vuoron." # MT
+              duplicate_start_end_times: "Useammalla vuorolla ei voi olla samat alkamis- ja päättymisajat." # MT
+              different_length_shifts: "Kaikkien vuorojen täytyy olla yhtä pitkiä." # MT
+        work/period:
+          attributes:
+            name:
+              reserved_slug: "on varattu sana, valitse toinen" # MT
+            ends_on:
+              not_after_start: "täytyy olla alkamispäivän jälkeen" # MT
+            auto_open_time:
+              blank: "Ei voi olla tyhjä, jos valintatapa on ”vuorotellen”. Jos et vielä tiedä tarkkaa aikaa, anna likimääräinen aika ja päivitä se myöhemmin." # MT
+        work/shift:
+          attributes:
+            starts_at:
+              elapsed_doesnt_equal_job: "Vuoron täytyy kestää %{hours} tuntia" # MT
+              elapsed_doesnt_evenly_divide_job: "Vuoron pituuden täytyy olla %{hours} tuntia tai jakaa se tasan" # MT
+            ends_at:
+              not_after_start: "täytyy olla alkamisajan jälkeen" # MT
+            assignments:
+              no_double_assignments: "Samaa tekijää ei voi määrätä kahdesti" # MT

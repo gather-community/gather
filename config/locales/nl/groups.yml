@@ -1,0 +1,125 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+nl:
+  groups:
+    created: "Groep aangemaakt." # MT
+    updated: "Groep bijgewerkt." # MT
+    joined: "Je bent lid geworden van de groep “%{name}”." # MT
+    left: "Je hebt de groep “%{name}” verlaten." # MT
+    list_sync_started: "Synchroniseren van de lijst is gestart. Wacht even tot het klaar is en vernieuw de pagina." # MT
+    # E.g. "Knitting Club (Inactive, Hidden)".
+    name_with_suffixes: "%{name} (%{suffixes})"
+    show_more: "Nog %{count} tonen" # MT
+    hide: "Verbergen" # MT
+    groups:
+      form:
+        email_list: "Mailinglijst" # MT
+        no_domains_html: "Je kunt geen mailinglijst aanmaken, omdat er geen domeinen aan deze gemeenschap zijn gekoppeld. %{link} om dit op te lossen." # MT
+        contact_staff: "Neem contact op met Gather" # MT
+        mailman_intro: "Mailinglijsten worden geleverd via de mailinglijstsoftware Mailman." # MT
+        leave_blank: "Laat deze velden leeg als je geen mailinglijst nodig hebt voor deze groep." # MT
+        name_locked: "De naam en het domein van de lijst kunnen na het aanmaken niet meer worden bewerkt. Moet je ze wijzigen, verwijder de lijst dan en maak haar opnieuw aan, of neem contact op met Gather." # MT
+        admin_panel: "beheerpaneel van Mailman" # MT
+        sync_intro: "De leden van de lijst worden als volgt met Gather gesynchroniseerd:" # MT
+        members_html: "<strong>Leden</strong>: alle leden van deze groep worden automatisch met de lijst gesynchroniseerd. Je kunt via het %{link} met de hand extra leden toevoegen." # MT
+        moderators_html: "<strong>Moderators</strong>: moderators van de lijst worden gesynchroniseerd volgens de instellingen “Kunnen groepsleiders de lijst modereren?” en “Kan alle mailinglijsten modereren?” hierboven. Je kunt via het %{link} met de hand extra moderators toevoegen." # MT
+        owners_html: "<strong>Eigenaren</strong>: eigenaren van de lijst worden gesynchroniseerd volgens de instellingen “Kunnen groepsleiders de lijst beheren?” en “Kan alle mailinglijsten beheren?” hierboven. Je kunt via het %{link} met de hand extra eigenaren toevoegen." # MT
+        non_members_html: "<strong>Niet-leden</strong>: met de functie “niet-lid” van Mailman kun je 1) extra adressen naar de lijst laten mailen zonder dat ze mail van de lijst ontvangen en 2) mensen verbieden naar de lijst te mailen. Niet-leden ontvangen geen e-mail van de lijst. Niet-leden worden niet vanuit Gather gesynchroniseerd, maar kunnen via het %{link} met de hand worden toegevoegd. Zie de %{docs_link} voor meer informatie." # MT
+        mailman_docs: "documentatie van Mailman" # MT
+        only_non_users: "Via het beheerpaneel van Mailman pas je alleen adressen aan die niet bij gebruikers van Gather horen." # MT
+        overwritten: "Handmatige wijzigingen in het lidmaatschap van gebruikers van Gather worden bij het synchroniseren overschreven." # MT
+        settings_intro_html: "De instellingen van de lijst kun je aanpassen via het %{link}. De volgende instellingen worden door Gather altijd teruggezet:" # MT
+        index_page_html: "<strong>Lijst tonen op de indexpagina</strong>: lijsten worden nooit getoond, omdat dit alleen een systeem voor besloten mailinglijsten is." # MT
+        max_size_html: "<strong>Maximale berichtgrootte</strong>: berichten zijn beperkt tot 5 MiB." # MT
+        subscription_policy_html: "<strong>Inschrijvingsbeleid</strong>: moderators moeten nieuwe inschrijvingen met de hand goedkeuren. Inschrijven gaat in de eerste plaats via Gather. Inschrijvingen via de website van Mailman of per e-mail zouden zeldzaam moeten zijn." # MT
+      edit:
+        title: "Groep bewerken: %{name}" # MT
+      new:
+        title: "Groep aanmaken" # MT
+      index:
+        title: "Groepen" # MT
+        create: "Groep aanmaken" # MT
+        none_found: "Geen groepen gevonden." # MT
+        name: "Naam" # MT
+        type: "Type" # MT
+        description: "Beschrijving" # MT
+        members: "Leden" # MT
+      show:
+        groups: "Groepen" # MT
+        email_list: "Mailinglijst" # MT
+        links: "Links" # MT
+        archives: "Archief van de lijst" # MT
+        panel: "Paneel van de lijst" # MT
+        all_can_send: "Kan de hele gemeenschap mailen?" # MT
+        additional_members_note: "Alle groepsleden hierboven zijn automatisch lid van de lijst. Deze adressen zijn ook lid." # MT
+        additional_senders_note: "Deze extra afzenders kunnen naar de lijst mailen, maar ontvangen geen mail van de lijst." # MT
+        last_sync_time: "Laatst gesynchroniseerd" # MT
+        sync_note: "Wijzigingen in Gather worden automatisch met het mailinglijstsysteem gesynchroniseerd, maar wijzigingen in het paneel van de mailinglijst worden niet automatisch gesynchroniseerd." # MT
+        sync_note_additional: "Dat geldt ook voor de lijst met extra leden en afzenders hierboven." # MT
+        sync_now_html: "%{link} voor de meest actuele informatie." # MT
+        sync_now: "Nu synchroniseren" # MT
+        no_list: "Deze groep heeft geen gekoppelde mailinglijst." # MT
+    # Templates that Mailman fetches for list emails. $listname and similar are Mailman placeholders,
+    # which must be kept as is.
+    mailman:
+      templates:
+        footer:
+          list_name: "$listname, een mailinglijst van een Gather-groep" # MT
+          unsubscribe: "Ga naar de pagina van de groep en verlaat de groep of meld je af om je uit te schrijven." # MT
+        list_admin_action_post:
+          body: |- # MT
+            Als beheerder van de lijst wordt je gevraagd het volgende bericht
+            op de mailinglijst goed te keuren:
+
+                Lijst:     $listname
+                Van:       $sender_email
+                Onderwerp: $subject
+
+            Het bericht wordt tegengehouden omdat:
+
+            $reasons
+
+            Ga wanneer het je uitkomt naar je dashboard om het verzoek goed
+            te keuren of af te wijzen.
+    availability_hints:
+      single_community:
+        open: "Iedereen in de gemeenschap kan deze groep zien en er lid van worden." # MT
+        closed: "Iedereen in de gemeenschap kan deze groep zien, maar alleen beheerders van de gemeenschap en de groepsleiders kunnen mensen toevoegen." # MT
+        hidden: "Alleen beheerders van de gemeenschap en de groepsleiders kunnen deze groep zien en mensen toevoegen." # MT
+        "everybody": "Iedereen in de gemeenschap kan deze groep zien en is standaard lid. Wie wil, kan zich afmelden." # MT
+      multi_community:
+        open: "Iedereen in de gemeenschappen hierboven kan deze groep zien en er lid van worden." # MT
+        closed: "Iedereen in de gemeenschappen hierboven kan deze groep zien, maar alleen beheerders en de groepsleiders kunnen mensen toevoegen." # MT
+        hidden: "Alleen de groepsleiders en de beheerders van de gemeenschappen hierboven kunnen deze groep zien en mensen toevoegen." # MT
+        everybody: "Iedereen in de gemeenschappen hierboven kan deze groep zien en is standaard lid. Wie wil, kan zich afmelden." # MT
+  domains:
+    created: "Domein aangemaakt." # MT
+    index:
+      title: "Domeinen" # MT
+      add: "Domein toevoegen" # MT
+      intro_html: "Dit zijn de domeinen waarop je mailinglijsten kunt aanmaken. Klik voor instructies om een domein toe te voegen op %{link}." # MT
+      none_found: "Geen domeinen gevonden." # MT
+    new:
+      title: "Domein toevoegen" # MT
+      intro: "Zo voeg je een domein toe aan Gather:" # MT
+      consider: "Ga na of er voor dit domein mailboxen, doorstuuradressen of mailinglijsten bestaan." # MT
+      mailboxes_html: "<strong>Mailboxen:</strong> als er voor dit domein mailboxen bestaan, werken die niet meer zodra je het domein naar Gather laat verwijzen. Om dat te voorkomen, kun je een subdomein gebruiken, bijv. lists.jouwdomein.nl in plaats van jouwdomein.nl." # MT
+      forwarding_html: "<strong>Doorstuuradressen:</strong> als er voor dit domein doorstuuradressen bestaan, kun je die naar Gather overzetten. Neem contact op met %{email}." # MT
+      lists_html: "<strong>Mailinglijsten:</strong> als er voor dit domein mailinglijsten bestaan, kun je die naar Gather overzetten. Neem contact op met %{email}." # MT
+      create: "Maak hieronder het domein aan door de volledige domeinnaam in te vullen, bijv. “jouwdomein.nl”, en op “Opslaan” te klikken." # MT
+      migrating: "Zet je doorstuuradressen of mailinglijsten over, zorg dan dat die in Gather zijn ingesteld en klaar zijn om e-mail te ontvangen voordat je het domein naar Gather laat verwijzen." # MT
+      dns: "Laat tot slot het domein naar Gather verwijzen. Stel de volgende drie DNS-records in:" # MT
+    show:
+      domain: "Domein" # MT
+      communities: "Gemeenschappen" # MT
+      lists: "Mailman-lijsten" # MT

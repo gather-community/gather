@@ -1,0 +1,481 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+sv:
+  meals:
+    over_limit_notice_html: "Ditt hushåll har överskridit kreditgränsen på %{limit} för sitt %{account_link} i %{community}, så du kan inte anmäla dig till måltider som %{community} ordnar. Kontakta måltidsgruppen eller måltidsansvarig i %{community} om du har frågor." # MT
+    cancelled_notice: "Måltiden har ställts in." # MT
+    persion_is_helping:
+      one: "%{count} person från ditt hushåll hjälper till med måltiden" # MT
+      other: "%{count} personer från ditt hushåll hjälper till med måltiden" # MT
+    menu_posted_at: "Menyn lades upp %{time}." # MT
+    type: "Typ" # MT
+    category: "Kategori" # MT
+    spots_left:
+      one: "%{count} plats kvar" # MT
+      other: "%{count} platser kvar" # MT
+    form:
+      sections:
+        label:
+          general: "Allmänt" # MT
+          workers: "Medhjälpare" # MT
+          menu: "Meny" # MT
+          signups: "Anmälningar" # MT
+          expenses: "Utgifter" # MT
+        edit:
+          general: "Redigera allmänt" # MT
+          workers: "Redigera medhjälpare" # MT
+          menu: "Redigera meny" # MT
+          signups: "Redigera anmälningar" # MT
+          expenses: "Redigera utgifter" # MT
+      summaries:
+        allows: "för %{people}" # MT
+        allows_with_cmtys:
+          one: "för %{people} från %{count} gemenskap" # MT
+          other: "för %{people} från %{count} gemenskaper" # MT
+        no_workers: "Inga medhjälpare angivna" # MT
+        no_menu: "Ingen meny upplagd" # MT
+        no_signups: "Inga hushåll har anmält sig" # MT
+        with_items: "med %{items}" # MT
+        and_allergen_count:
+          one: "och %{count} allergen" # MT
+          other: "och %{count} allergener" # MT
+        expenses:
+          ingredients: "%{cost} för ingredienser" # MT
+          pantry: "%{cost} för baslager" # MT
+          payment: "betalning via %{method}" # MT
+          none: "Inga uppgifter om utgifter angivna" # MT
+        signups:
+          diners:
+            one: "%{count} matgäst" # MT
+            other: "%{count} matgäster" # MT
+          from_households:
+            one: "från %{count} hushåll" # MT
+            other: "från %{count} hushåll" # MT
+    finalizing:
+      duplicates: "Det finns dubbla anmälningar. Rätta till det genom att ange antal för varje typ av matgäst." # MT
+      cancelled: "Måltiden slutfördes inte. Du kan redigera den nedan och försöka igen, eller klicka på ”Avbryt” nedan för att gå tillbaka till måltidssidan." # MT
+      success: "Måltiden har slutförts" # MT
+      review_and_confirm_html: "<strong>Obs!</strong> Måltiden har inte slutförts än. Granska och bekräfta dina uppgifter nedan. De kan inte ändras när kontoutdragen har skickats, så var noggrann." # MT
+    sign_up: "Anmäl dig" # MT
+    closes_soon: "Stänger snart!" # MT
+    no_menu_title: "[Ingen meny]" # MT
+    takeout: "Att ta med" # MT
+    created: "Måltiden har skapats." # MT
+    updated: "Måltiden har uppdaterats." # MT
+    closed: "Måltiden har stängts." # MT
+    reopened: "Måltiden har öppnats igen." # MT
+    unfinalized: "Slutförandet av måltiden har ångrats." # MT
+    cant_reopen_past_close: "Du kan inte öppna måltiden igen eftersom dess automatiska stängningstid har passerat. Ändra eller ta bort den automatiska stängningstiden först." # MT
+    not_closed_before_summary: "Obs! Måltiden är inte stängd än, så man kan fortfarande anmäla sig. Du bör stänga måltiden innan du skriver ut sammanfattningen." # MT
+    formula_created: "Formeln har skapats." # MT
+    formula_updated: "Formeln har uppdaterats." # MT
+    type_created: "Typen har skapats." # MT
+    type_updated: "Typen har uppdaterats." # MT
+    role_created: "Rollen har skapats." # MT
+    role_updated: "Rollen har uppdaterats." # MT
+    restrictions_updated: "Uppdaterat." # MT
+    # Name of the calendar event created for a meal.
+    event_name: "Måltid: %{title}" # MT
+    event_errors: "Följande fel uppstod när en händelse i %{calendar} skulle skapas för måltiden: %{errors}." # MT
+    event_error: "%{attribute}: %{message}" # MT
+    signup_not_recorded: "Din anmälan kunde inte sparas eftersom måltiden är full eller inte längre öppen." # MT
+    report:
+      subhead_community: "%{range}, bara måltider i %{community}" # MT
+    # Read by Gather.Views.Meals.ReportChartsView (JS). Each title has a variant naming the community,
+    # used when the cluster has more than one.
+    report_charts:
+      avg_servings: "Snitt portioner" # MT
+      avg_servings_per_meal: "Snitt portioner per måltid" # MT
+      avg_cost: "Snittkostnad" # MT
+      avg_full_meal_price: "Snittpris för hel måltid" # MT
+      meals: "Måltider" # MT
+      number_of_meals: "Antal måltider" # MT
+      weekday: "Veckodag" # MT
+      month: "Månad" # MT
+      titles:
+        servings_by_month: "Snitt portioner per måltid per månad" # MT
+        servings_by_month_community: "Snitt portioner per måltid i %{community} per månad" # MT
+        cost_by_month: "Snittpris för hel måltid per månad" # MT
+        cost_by_month_community: "Snittpris för hel måltid i %{community} per månad" # MT
+        meals_by_month: "Antal måltider per månad" # MT
+        meals_by_month_community: "Antal måltider i %{community} per månad" # MT
+        servings_by_weekday: "Snitt portioner per måltid per veckodag" # MT
+        servings_by_weekday_community: "Snitt portioner per måltid i %{community} per veckodag" # MT
+        cost_by_weekday: "Snittpris för hel måltid per veckodag" # MT
+        cost_by_weekday_community: "Snittpris för hel måltid i %{community} per veckodag" # MT
+        community_rep: "Snittfördelning av gemenskaper vid måltider" # MT
+        community_rep_community: "Snittfördelning av gemenskaper vid måltider i %{community}" # MT
+        meal_types: "Snittfördelning av måltidstyper vid måltider" # MT
+        meal_types_community: "Snittfördelning av måltidstyper vid måltider i %{community}" # MT
+    portion_counts:
+      diners:
+        one: "%{count} matgäst" # MT
+        other: "%{count} matgäster" # MT
+      portions_html:
+        one: "<strong>%{count}</strong> portion" # MT
+        other: "<strong>%{count}</strong> portioner" # MT
+      category_portions_html:
+        one: "<strong>%{count} portion %{category}</strong>" # MT
+        other: "<strong>%{count} portioner %{category}</strong>" # MT
+      # Category label for formula parts with no category, when other parts have one.
+      other_category: "övrigt" # MT
+      # The * refers to the footnote on the summary page.
+      summary_html: "Måltiden har %{diners} och kräver ungefär %{portions}.*" # MT
+      summary_list_html: "Måltiden har %{diners} och kräver ungefär: %{portions}.*" # MT
+    meals:
+      index:
+        title: "Måltider" # MT
+        show_action_menu: "Visa åtgärdsmeny för måltiden" # MT
+        create: "Skapa måltid" # MT
+        import: "Importera måltider" # MT
+        no_meals: "Inga måltider hittades." # MT
+        date_time: "Datum/tid" # MT
+        location: "Plats" # MT
+        cook: "Kock" # MT
+        meal_title: "Titel" # MT
+        going: "Ska du?" # MT
+        signups: "Anmälningar" # MT
+        full: "[Fullt]" # MT
+        not_going: "Nej" # MT
+        meal_by_cook_html: "%{meal} av %{cook}" # MT
+        time_at_location: "%{time}, %{location}" # MT
+        signed_up_html: "%{signups} anmälda" # MT
+        household_signed_up_html: "%{diners} anmälda från ditt hushåll" # MT
+        edit_signup: "(Redigera)" # MT
+        download_meals_csv: "Ladda ner måltider som CSV" # MT
+        download_signups_csv: "Ladda ner anmälningar som CSV" # MT
+      show:
+        untitled: "Måltid utan titel" # MT
+        meals: "Måltider" # MT
+        previous_meal: "Föregående måltid" # MT
+        next_meal: "Nästa måltid" # MT
+        my_order: "Min beställning" # MT
+        helping_out: "Hjälper till" # MT
+      new:
+        title: "Skapa måltid" # MT
+        missing_prereqs_html: "Innan du kan skapa en måltid måste det finnas %{items}." # MT
+        formula: "en tillämplig kostnadsformel" # MT
+        calendar: "minst en kalender där måltider kan hållas" # MT
+      edit:
+        title: "Redigera måltid" # MT
+        title_with_meal: "Redigera måltid: %{title}" # MT
+      signup_form:
+        account: "konto" # MT
+        closed_not_signed_up: "Du har inte anmält dig till måltiden, och den är nu stängd." # MT
+        full_not_signed_up: "Du har inte anmält dig till måltiden, och den är nu full. Titta in senare och se om en plats blir ledig." # MT
+        not_signed_up: "Du har inte anmält dig till måltiden." # MT
+        saved: "Anmälan har sparats" # MT
+        closes_at: "Stänger %{date} kl. %{time}" # MT
+        sign_up: "Anmäl dig" # MT
+      household_worker_form:
+        worker_role: "%{name} – %{role}" # MT
+        no_more_workers: "Måltiden behöver inga fler medhjälpare." # MT
+        still_needs_html:
+          one: "Måltiden behöver fortfarande <b>%{count} medhjälpare</b>." # MT
+          other: "Måltiden behöver fortfarande <b>%{count} medhjälpare</b>." # MT
+        help_out: "Hjälp till" # MT
+      summary:
+        untitled: "Måltid utan titel" # MT
+        signups: "Anmälningar" # MT
+        total: "Totalt" # MT
+        late_signups: "Sena anmälningar" # MT
+        portion_footnote_html: "* Totalt antal portioner beräknas med portionsstorlekarna i %{link}." # MT
+        meal_formula: "måltidsformeln" # MT
+        grocery_calculator: "Inköpskalkylator" # MT
+        fixed_cost_html: "Utifrån måltidens fasta kostnad bör ingredienserna kosta högst %{amount}, baslager inte inräknat (se gemenskapens riktlinjer för måltider för vad som räknas som baslager)." # MT
+        proportional_cost: "Utifrån måltidens kostnadsfördelning visar tabellen nedan hur mycket som kan läggas på ingredienser beroende på önskat pris. Gränserna gäller utan baslager (se gemenskapens riktlinjer för måltider för vad som räknas som baslager)." # MT
+        meal_price: "Måltidens pris" # MT
+        max_ingredient_cost: "Max kostnad för ingredienser" # MT
+        cook_reimbursement: "Ersättning till kocken" # MT
+      summary_signups_header:
+        community: "Gem." # MT
+        household: "Hushåll" # MT
+        takeout: "Att ta med" # MT
+        comments: "Kommentarer" # MT
+      menu:
+        menu: "meny" # MT
+        at_location: "Plats: %{location}" # MT
+        for_communities: "för %{communities}" # MT
+        allergens: "allergener" # MT
+        no_menu: "Ingen meny upplagd än." # MT
+      jobs:
+        title: "Måltidsuppgifter" # MT
+        title_for_user: "Måltidsuppgifter: %{name}" # MT
+        no_jobs: "Inga uppgifter hittades." # MT
+        meal_at_location_html: "%{meal}, %{location}" # MT
+        role_workers_html: "%{role}: %{workers}" # MT
+      cost_info:
+        cost: "Kostnad" # MT
+        unknown: "?"
+        included: "%{label} (ingår)" # MT
+        proportional: "Måltiden använder en proportionell formel, så kostnaderna beräknas när måltiden har ägt rum och slutförts." # MT
+      who_is_going:
+        title: "Vilka kommer?" # MT
+        nobody: "Ingen än!" # MT
+        household_count: "%{household} (%{count})" # MT
+      time_cook:
+        chefs_hat: "Kockmössa" # MT
+      signup_read_only:
+        part: "%{count} %{type}" # MT
+        takeout_requested: "Vill ha att ta med" # MT
+        quoted_comments: "”%{comments}”" # MT
+      report:
+        title: "Måltidsrapport" # MT
+        no_data: "Inga måltidsdata hittades för %{range}. Rapporten omfattar bara slutförda måltider." # MT
+        all_time: "Hela tiden" # MT
+        community_all_time: "%{community}, hela tiden" # MT
+        overall_all_time: "Totalt, hela tiden" # MT
+        meals: "Måltider" # MT
+        servings: "Portioner" # MT
+        cost: "Kostnad" # MT
+        by_month: "Per månad" # MT
+        by_weekday: "Per veckodag" # MT
+        by_community: "Per gemenskap" # MT
+        by_type: "Per typ" # MT
+        by_category: "Per kategori" # MT
+        footnote:
+          one: "Statistiken ovan omfattar bara slutförda måltider som inte ställts in. Under perioden ställdes %{count} måltid in." # MT
+          other: "Statistiken ovan omfattar bara slutförda måltider som inte ställts in. Under perioden ställdes %{count} måltider in." # MT
+        footnote_community:
+          one: "Statistiken ovan omfattar bara slutförda måltider som inte ställts in. Under perioden ställdes %{count} måltid in i %{community}." # MT
+          other: "Statistiken ovan omfattar bara slutförda måltider som inte ställts in. Under perioden ställdes %{count} måltider in i %{community}." # MT
+      report_main_table:
+        totals: "Summor" # MT
+        general_averages: "Allmänna genomsnitt" # MT
+        community_representation: "Snittfördelning av gemenskaper" # MT
+        meals: "Måltider" # MT
+        servings: "Portioner" # MT
+        cost: "Kostnad" # MT
+        full_meal_price: "Pris för hel måltid" # MT
+        total: "Totalt" # MT
+      report_type_table:
+        avg_servings: "Snitt portioner" # MT
+        percent: "Procent" # MT
+      export_form:
+        select_dates: "Välj datum" # MT
+      reimb_form:
+        meal: "Måltid:" # MT
+        by_cook: "Av %{cook}" # MT
+        time_at_location: "%{time}, %{location}" # MT
+        ingredients: "Belopp för ingredienser:" # MT
+        pantry: "Belopp för baslager:" # MT
+        total: "Totalt belopp att ersätta:" # MT
+        # Blank for writing in an amount on the printed form.
+        amount_blank: "$"
+        method: "Ersättningssätt:" # MT
+        account_credit: "Tillgodohavande på kontot" # MT
+        check_payable: "Check ställd till:" # MT
+        paypal: "PayPal till e-postadress:" # MT
+      form:
+        general:
+          communities: "Gemenskaper" # MT
+        expenses:
+          check_hint: "Mottagaren får en check på ingredienskostnaden." # MT
+          credit_hint: "Mottagaren får ingredienskostnaden tillgodo på sitt konto i Gather." # MT
+          paypal_hint: "Mottagaren får ingredienskostnaden via PayPal. Man kan ändra sin PayPal-adress genom att redigera sin profil." # MT
+        workers:
+          formula_changed: "Måltidens formel har ändrats, vilket kan göra andra roller tillgängliga nedan. Spara måltiden och kom tillbaka till sidan för att se nya roller. Befintliga tilldelningar raderas inte även om deras roller inte hör till den nya formeln." # MT
+        menu:
+          allergens: "Allergener" # MT
+    formulas:
+      index:
+        title: "Måltidsformler" # MT
+        create: "Skapa formel" # MT
+        explanation: "Med måltidsformler kan du anpassa hur måltidskostnader och portioner beräknas." # MT
+        no_formulas: "Inga formler hittades." # MT
+        name: "Namn" # MT
+        meals: "Måltider" # MT
+        created_on: "Skapad" # MT
+      show:
+        title: "Måltidsformel: %{name}" # MT
+        formulas: "Formler" # MT
+        meal_calculations: "Beräkning av måltid" # MT
+        pantry_calculations: "Beräkning av baslager" # MT
+      new:
+        title: "Ny måltidsformel" # MT
+      edit:
+        title: "Redigera måltidsformel: %{name}" # MT
+      form:
+        meal_calculations: "Beräkning av måltid" # MT
+        pantry_calculations: "Beräkning av baslager" # MT
+    types:
+      index:
+        title: "Måltidstyper" # MT
+        create: "Skapa typ" # MT
+        explanation: "Måltidstyper ger matgäster olika val när de anmäler sig och kan få olika kostnader och portionsstorlekar i måltidsformlerna." # MT
+        no_types: "Inga typer hittades." # MT
+      new:
+        title: "Skapa måltidstyp" # MT
+      edit:
+        title: "Redigera måltidstyp: %{name}" # MT
+    roles:
+      index:
+        title: "Måltidsroller" # MT
+        create: "Skapa roll" # MT
+        explanation: "Måltidsroller är de olika uppgifterna som behövs för att få till en måltid." # MT
+        no_roles: "Inga roller hittades." # MT
+      new:
+        title: "Skapa måltidsroll" # MT
+      edit:
+        title: "Redigera måltidsroll: %{title}" # MT
+    restrictions:
+      edit:
+        title: "Måltidsinställningar: Kostrestriktioner" # MT
+        restriction: "Restriktion" # MT
+        opposite: "Motsats" # MT
+        deactivated: "Inaktiverad?" # MT
+      restriction_fields:
+        restriction_placeholder: "t.ex. Gluten" # MT
+        opposite_placeholder: "t.ex. Glutenfri" # MT
+        restriction: "Restriktion" # MT
+        opposite: "Motsats" # MT
+    imports:
+      # Placeholder names for the example table when the community has no calendars or formula yet.
+      sample_calendar_1: "Matsal" # MT
+      sample_calendar_2: "Kök" # MT
+      sample_formula: "Huvudformel" # MT
+      new:
+        title: "Importera måltider" # MT
+        intro: "Du kan importera måltider i CSV-format. Kalkylprogram som Excel och Google Kalkylark kan exportera till CSV, som du sedan kan importera till Gather." # MT
+      show:
+        title: "Importera måltider" # MT
+      form:
+        upload_file: "Ladda upp fil" # MT
+      results:
+        succeeded: "Importen lyckades!" # MT
+        check_meals_html: "Gå till %{link} för att se de importerade måltiderna." # MT
+        meals_page: "måltidssidan" # MT
+        crashed: "Ett oväntat fel uppstod under importen." # MT
+        crashed_try_again_html: "%{link}, och kontakta din administratör om felet kvarstår." # MT
+        try_again_below: "Försök igen nedan" # MT
+        issues: "Det fanns ett eller flera problem med dina måltidsdata." # MT
+        resolve_html: "Lös problemen nedan och %{link}." # MT
+        try_again: "försök igen" # MT
+        row: "Rad %{number}" # MT
+      # Column names in these instructions come from csv.headers.meals/meal so they match what the import accepts.
+      instructions:
+        data_format: "Dataformat" # MT
+        use_columns: "Bygg upp importfilen med följande kolumner:" # MT
+        served_at: "Obligatorisk. Datum och tid för måltiden. Använd ett entydigt format som ÅÅÅÅ-MM-DD TT:MM" # MT
+        calendars_html: "Obligatorisk. Måltidens plats eller platser. Använd exakta namn eller numeriska id:n för kalendrar från %{link}." # MT
+        calendar_system: "kalendersystemet" # MT
+        formula_html: "Valfri. Måltidens %{link}. Använd formelns exakta namn eller numeriska id. Om inget anges används standardformeln." # MT
+        formula: "formel" # MT
+        communities: "Valfri. Vilka gemenskaper som bjuds in till måltiden. Använd exakta namn, förkortningar eller numeriska id:n, separerade med semikolon. Om inget anges bjuds alla gemenskaper in." # MT
+        role_column_html: "&lt;<em>Rollnamn</em>&gt; eller %{role}&lt;<em>Roll-id</em>&gt;" # MT
+        roles_html: "Valfri. Ange måltidens medhjälpare genom att lägga till en kolumn per %{link}. Använd exakta namn eller numeriska id:n separerade med semikolon." # MT
+        meal_role: "måltidsroll" # MT
+        action: "Valfri. Ange ”create”, ”update” eller ”destroy”. Om inget anges används ”create”. Vid ”update” eller ”destroy” matchas måltiden på id om det anges, annars på datum/tid och platser." # MT
+        id: "Valfri. Id för måltiden som ska uppdateras eller raderas. Ignoreras om åtgärden är ”create”." # MT
+        example_data: "Exempeldata" # MT
+        # Sample worker names in the example table.
+        sample_worker_1: "Anna Lindberg" # MT
+        sample_workers_2: "Mohammed Iris; Sundar Premji" # MT
+        sample_worker_3: "Li Yun" # MT
+        sample_workers_4: "Amina Yusuf; Erik Nyström" # MT
+    messages:
+      sent: "Meddelandet har skickats." # MT
+      new:
+        cancel_title: "Ställ in måltiden" # MT
+        dont_cancel: "Ställ inte in måltiden" # MT
+        send_and_cancel: "Skicka meddelandet och ställ in måltiden" # MT
+    finalize:
+      title: "Slutför måltid: %{title}" # MT
+      untitled: "Utan titel" # MT
+      confirm:
+        household: "Hushåll" # MT
+        calculated_cost: "Beräknad kostnad" # MT
+        cook_reimbursement_request: "Kockens ersättningsanspråk" # MT
+      complete:
+        success: "Måltiden har slutförts!" # MT
+        check: "Skicka en check på %{amount} till %{name} nu." # MT
+        credit: "%{amount} har satts in på Gather-kontot för %{name}." # MT
+        paypal: "Skicka %{amount} till %{email} via PayPal nu." # MT
+    settings:
+      edit:
+        title: "Måltidsinställningar: Allmänt" # MT
+  meals/assignments:
+    change_warning: "Obs! Om du ändrar måltidens medhjälpare skickas ett mejl till måltidsgruppen eller måltidsansvarig och till alla nuvarande och nya medhjälpare." # MT
+  meals/formulas:
+    pantry: "Baslager" # MT
+    calc_types:
+      fixed: "Fast" # MT
+      share: "Proportionell" # MT
+      percent: "Procent" # MT
+    hints:
+      meal: "Måltidskostnaden kan beräknas som en fast kostnad eller proportionellt utifrån ingredienskostnaden." # MT
+      pantry: "En avgift för baslager tas ut av varje matgäst för att täcka inköp av baslager till köket. Den kan vara ett fast belopp eller en procentandel av matgästens måltidskostnad." # MT
+      meal_type:
+        fixed: "Lägg till varje måltidstyp med pris och relativ portionsstorlek. Portionsstorlekarna hjälper kockarna att handla." # MT
+        share: "Lägg till varje måltidstyp med procentuell andel och relativ portionsstorlek.\n\nDen procentuella andelen avgör kostnaden. Om en måltidstyp till exempel ska ha en fjärdedels rabatt, ange 75 %. 100 % betyder en hel, lika andel av ingredienskostnaden, och 0 % betyder att det är gratis.\n\nPortionsstorlekarna hjälper kockarna att handla." # MT
+    cant_edit_notice: "Formeln används av befintliga måltider, så du kan inte ändra beräkningarna." # MT
+  meals/formula_parts:
+    portion_options:
+      one_qtr: "¼ portion" # MT
+      half: "½ portion" # MT
+      three_qtr: "¾ portion" # MT
+      full: "Hel portion" # MT
+    portion_short_names:
+      one_qtr: "¼"
+      half: "½"
+      three_qtr: "¾"
+      full: "Hel" # MT
+  meals/messages:
+    cancel_notice_html: "Det går inte att ångra att en måltid ställs in. Skicka ett meddelande som förklarar varför måltiden ställs in. Måltiden ställs inte in förrän meddelandet har skickats." # MT
+  meal_mailer:
+    meal_link:
+      see_more: "Mer om måltiden finns här: %{url}" # MT
+    meal_reminder:
+      subject: "Påminnelse om måltid: %{datetime} – %{title}, %{location}" # MT
+      reminder: "Det här är en påminnelse om att du är anmäld till måltiden ”%{title}” %{date}." # MT
+      reminder_at_location: "Det här är en påminnelse om att du är anmäld till måltiden ”%{title}” %{date} (plats: %{location})." # MT
+      comments_intro: "Din anmälan hade följande kommentarer:" # MT
+      staff: "Måltidens team:" # MT
+      staff_member: "- %{role}: %{name}" # MT
+      bon_appetit: "Smaklig måltid!" # MT
+      body:
+        diner_count:
+          one: "%{count} matgäst från ditt hushåll är anmäld." # MT
+          other: "%{count} matgäster från ditt hushåll är anmälda." # MT
+    role_reminder:
+      subject: "Påminnelse om uppgift: %{role} %{datetime}, %{location}%{note}" # MT
+      scheduled: "Det här är en påminnelse om att du är schemalagd som %{role} för måltiden ”%{title}” %{date}." # MT
+      shift: "Ditt pass är %{times}. Måltiden serveras kl. %{time}." # MT
+      shift_at_location: "Ditt pass är %{times} (plats: %{location}). Måltiden serveras kl. %{time}." # MT
+      note_intro: "Påminnelsen har följande anteckning:" # MT
+      crucial: "Din hjälp är viktig! Kom i tid till ditt pass!" # MT
+      contacts_intro: "Här är kontaktuppgifter till andra medhjälpare vid måltiden:" # MT
+      contact: "%{role}: %{name}, %{email}, %{phones}" # MT
+    worker_change_notice:
+      subject: "Ändring av uppgifter för en måltid" # MT
+      intro: "%{name} gjorde just följande ändringar för måltiden ”%{title}” %{date}." # MT
+      intro_at_location: "%{name} gjorde just följande ändringar för måltiden ”%{title}” %{date} (plats: %{location})." # MT
+      added: "- %{name} lades till som %{role}" # MT
+      removed: "- %{name} togs bort som %{role}" # MT
+      thanks: "Tack och smaklig måltid!" # MT
+    cook_menu_reminder:
+      subject: "Menypåminnelse: Lägg upp menyn för %{date}" # MT
+      second_reminder: "** Andra påminnelsen **" # MT
+      reminder: "Det här är en påminnelse om att lägga upp en meny för din måltid %{date}." # MT
+      asap: "Lägg upp en meny så snart som möjligt så att alla kan planera och många kommer!" # MT
+      post_here: "Du kan lägga upp en meny här:" # MT
+      thanks: "Tack!" # MT
+    normal_message:
+      subject: "Meddelande om måltiden %{datetime}" # MT
+      intro: "%{sender} skickade följande meddelande om måltiden ”%{title}” %{date}." # MT
+      intro_at_location: "%{sender} skickade följande meddelande om måltiden ”%{title}” %{date} (plats: %{location})." # MT
+    cancellation_message:
+      subject: "Måltiden %{datetime} INSTÄLLD" # MT
+      regret: "Tyvärr har måltiden ”%{title}” %{date} STÄLLTS IN." # MT
+      regret_at_location: "Tyvärr har måltiden ”%{title}” %{date} (plats: %{location}) STÄLLTS IN." # MT
+      sender_wrote: "%{sender} skickade följande meddelande om att måltiden ställs in:" # MT

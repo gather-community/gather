@@ -1,0 +1,125 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+fi:
+  groups:
+    created: "Ryhmä luotu." # MT
+    updated: "Ryhmä päivitetty." # MT
+    joined: "Liityit ryhmään ”%{name}”." # MT
+    left: "Erosit ryhmästä ”%{name}”." # MT
+    list_sync_started: "Listan synkronointi aloitettu. Odota hetki, että se valmistuu, ja päivitä sivu." # MT
+    # E.g. "Knitting Club (Inactive, Hidden)".
+    name_with_suffixes: "%{name} (%{suffixes})"
+    show_more: "Näytä %{count} lisää" # MT
+    hide: "Piilota" # MT
+    groups:
+      form:
+        email_list: "Sähköpostilista" # MT
+        no_domains_html: "Et voi luoda sähköpostilistaa, koska tähän yhteisöön ei ole liitetty verkkotunnuksia. %{link}, niin asia korjataan." # MT
+        contact_staff: "Ota yhteyttä Gatherin henkilökuntaan" # MT
+        mailman_intro: "Sähköpostilistat toimivat Mailman-postituslistaohjelmistolla." # MT
+        leave_blank: "Jätä nämä kentät tyhjiksi, jos ryhmä ei tarvitse sähköpostilistaa." # MT
+        name_locked: "Listan nimeä ja verkkotunnusta ei voi muokata listan luomisen jälkeen. Jos sinun täytyy muuttaa niitä, poista lista ja luo se uudelleen tai ota yhteyttä Gatherin henkilökuntaan." # MT
+        admin_panel: "Mailmanin hallintapaneeli" # MT
+        sync_intro: "Listan jäsenet synkronoidaan Gatherin kanssa näin:" # MT
+        members_html: "<strong>Jäsenet</strong>: Kaikki tämän ryhmän jäsenet synkronoidaan listalle automaattisesti. Voit lisätä muita jäseniä käsin täällä: %{link}." # MT
+        moderators_html: "<strong>Moderaattorit</strong>: Listan moderaattorit synkronoidaan yllä olevien asetusten ”Vastaavat voivat moderoida listaa?” ja ”Voi moderoida kaikkia sähköpostilistoja?” mukaan. Voit lisätä muita moderaattoreita käsin täällä: %{link}." # MT
+        owners_html: "<strong>Omistajat</strong>: Listan omistajat synkronoidaan yllä olevien asetusten ”Vastaavat voivat hallinnoida listaa?” ja ”Voi hallinnoida kaikkia sähköpostilistoja?” mukaan. Voit lisätä muita omistajia käsin täällä: %{link}." # MT
+        non_members_html: "<strong>Ei-jäsenet</strong>: Mailmanin ei-jäsen-toiminnolla voi 1) sallia muiden osoitteiden lähettää listalle ilman, että ne saavat listan viestejä, ja 2) estää ihmisiä lähettämästä listalle. Ei-jäsenet eivät saa listan viestejä. Ei-jäseniä ei synkronoida Gatherista, mutta heitä voi lisätä käsin täällä: %{link}. Lisätietoja: %{docs_link}." # MT
+        mailman_docs: "Mailmanin ohjeet" # MT
+        only_non_users: "Mailmanin hallintapaneelissa kannattaa muokata vain osoitteita, jotka eivät kuulu Gatherin käyttäjille." # MT
+        overwritten: "Kaikki Gatherin käyttäjien jäsenyyksiin tehdyt käsin tehdyt muutokset korvataan synkronoinnissa." # MT
+        settings_intro_html: "Listan asetuksia voi muokata täällä: %{link}. Gather palauttaa seuraavat asetukset väkisin:" # MT
+        index_page_html: "<strong>Näytä lista hakemistosivulla</strong>: Listoja ei koskaan mainosteta, koska tämä on vain yksityisten postituslistojen järjestelmä." # MT
+        max_size_html: "<strong>Viestin enimmäiskoko</strong>: Viestit on rajattu 5 MiB:iin." # MT
+        subscription_policy_html: "<strong>Tilauskäytäntö</strong>: Moderaattorien täytyy hyväksyä kaikki uudet tilaukset käsin. Ensisijainen tapa tilata on Gatherin kautta. Tilausten Mailman-sivuston tai sähköpostin kautta pitäisi olla harvinaisia." # MT
+      edit:
+        title: "Muokkaa ryhmää: %{name}" # MT
+      new:
+        title: "Luo ryhmä" # MT
+      index:
+        title: "Ryhmät" # MT
+        create: "Luo ryhmä" # MT
+        none_found: "Ryhmiä ei löytynyt." # MT
+        name: "Nimi" # MT
+        type: "Tyyppi" # MT
+        description: "Kuvaus" # MT
+        members: "Jäsenet" # MT
+      show:
+        groups: "Ryhmät" # MT
+        email_list: "Sähköpostilista" # MT
+        links: "Linkit" # MT
+        archives: "Listan arkisto" # MT
+        panel: "Listan paneeli" # MT
+        all_can_send: "Koko yhteisö voi lähettää?" # MT
+        additional_members_note: "Kaikki yllä olevat ryhmän jäsenet ovat automaattisesti listan jäseniä. Myös nämä osoitteet ovat jäseniä." # MT
+        additional_senders_note: "Nämä muut lähettäjät voivat lähettää listalle, mutta eivät saa listan viestejä." # MT
+        last_sync_time: "Viimeisin synkronointi" # MT
+        sync_note: "Gatherissa tehdyt muutokset synkronoidaan postituslistajärjestelmään automaattisesti, mutta postituslistan paneelissa tehtyjä muutoksia ei synkronoida automaattisesti." # MT
+        sync_note_additional: "Tämä koskee myös yllä olevaa luetteloa muista jäsenistä ja lähettäjistä." # MT
+        sync_now_html: "%{link}, niin saat tuoreimmat tiedot." # MT
+        sync_now: "Synkronoi nyt" # MT
+        no_list: "Tähän ryhmään ei ole liitetty sähköpostilistaa." # MT
+    # Templates that Mailman fetches for list emails. $listname and similar are Mailman placeholders,
+    # which must be kept as is.
+    mailman:
+      templates:
+        footer:
+          list_name: "$listname, Gather-ryhmän sähköpostilista" # MT
+          unsubscribe: "Voit lopettaa tilauksen ryhmän sivulla eroamalla ryhmästä tai kieltäytymällä listasta." # MT
+        list_admin_action_post:
+          body: |- # MT
+            Listan ylläpitäjänä sinua pyydetään hyväksymään seuraava
+            postituslistalle lähetetty viesti:
+
+                Lista:    $listname
+                Lähettäjä: $sender_email
+                Aihe:     $subject
+
+            Viesti on pidätetty, koska:
+
+            $reasons
+
+            Käy sopivana hetkenä hallintanäkymässäsi hyväksymässä tai
+            hylkäämässä pyyntö.
+    availability_hints:
+      single_community:
+        open: "Kuka tahansa yhteisöstä voi nähdä tämän ryhmän ja liittyä siihen." # MT
+        closed: "Kuka tahansa yhteisöstä voi nähdä tämän ryhmän, mutta vain yhteisön ylläpitäjät ja ryhmän vastaavat voivat lisätä siihen ihmisiä." # MT
+        hidden: "Vain yhteisön ylläpitäjät ja ryhmän vastaavat voivat nähdä tämän ryhmän ja lisätä siihen ihmisiä." # MT
+        "everybody": "Kaikki yhteisössä voivat nähdä tämän ryhmän ja ovat oletuksena sen jäseniä. Halutessaan voi kieltäytyä." # MT
+      multi_community:
+        open: "Kuka tahansa yllä olevista yhteisöistä voi nähdä tämän ryhmän ja liittyä siihen." # MT
+        closed: "Kuka tahansa yllä olevista yhteisöistä voi nähdä tämän ryhmän, mutta vain ylläpitäjät ja ryhmän vastaavat voivat lisätä siihen ihmisiä." # MT
+        hidden: "Vain ryhmän vastaavat ja yllä olevien yhteisöjen ylläpitäjät voivat nähdä tämän ryhmän ja lisätä siihen ihmisiä." # MT
+        everybody: "Kaikki yllä olevissa yhteisöissä voivat nähdä tämän ryhmän ja ovat oletuksena sen jäseniä. Halutessaan voi kieltäytyä." # MT
+  domains:
+    created: "Verkkotunnus luotu." # MT
+    index:
+      title: "Verkkotunnukset" # MT
+      add: "Lisää verkkotunnus" # MT
+      intro_html: "Näissä verkkotunnuksissa voit luoda sähköpostilistoja. Ohjeet verkkotunnuksen lisäämiseen saat valitsemalla %{link}." # MT
+      none_found: "Verkkotunnuksia ei löytynyt." # MT
+    new:
+      title: "Lisää verkkotunnus" # MT
+      intro: "Verkkotunnuksen lisääminen Gatheriin:" # MT
+      consider: "Mieti, onko tälle verkkotunnukselle määritetty postilaatikoita, edelleenlähetysosoitteita tai postituslistoja." # MT
+      mailboxes_html: "<strong>Postilaatikot:</strong> Jos verkkotunnukselle on määritetty postilaatikoita, ne lakkaavat toimimasta, kun ohjaat verkkotunnuksen Gatheriin. Voit välttää tämän käyttämällä aliverkkotunnusta, esim. lists.oma-verkkotunnus.fi eikä oma-verkkotunnus.fi." # MT
+      forwarding_html: "<strong>Edelleenlähetysosoitteet:</strong> Jos verkkotunnukselle on määritetty edelleenlähetysosoitteita, voit siirtää ne Gatheriin. Ota yhteyttä: %{email}." # MT
+      lists_html: "<strong>Postituslistat:</strong> Jos verkkotunnukselle on määritetty postituslistoja, voit siirtää ne Gatheriin. Ota yhteyttä: %{email}." # MT
+      create: "Luo verkkotunnus alla kirjoittamalla koko verkkotunnuksen nimi, esim. ”oma-verkkotunnus.fi”, ja valitsemalla ”Tallenna”." # MT
+      migrating: "Jos siirrät edelleenlähetysosoitteita tai postituslistoja, varmista, että ne on määritetty Gatherissa ja valmiina vastaanottamaan sähköpostia, kun ohjaat verkkotunnuksen Gatheriin." # MT
+      dns: "Ohjaa lopuksi verkkotunnus Gatheriin. Aseta seuraavat kolme DNS-tietuetta:" # MT
+    show:
+      domain: "Verkkotunnus" # MT
+      communities: "Yhteisöt" # MT
+      lists: "Mailman-listat" # MT

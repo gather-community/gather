@@ -1,0 +1,502 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+nl:
+  activemodel:
+    attributes:
+      # EventletForm (drag-and-drop), for its error messages.
+      calendars/eventlet:
+        starts_at: "Begintijd" # MT
+        ends_at: "Eindtijd" # MT
+      calendars/event:
+        calendar: "Agenda" # MT
+        pre_notice: "Mededeling" # MT
+        name: "Naam van de afspraak" # MT
+        starts_at: "Begintijd" # MT
+        ends_at: "Eindtijd" # MT
+        creator: "Maker" # MT
+        group: "Groep" # MT
+        all_day: "Afspraak voor de hele dag?" # MT
+        kind: "Type" # MT
+        note: "Opmerking" # MT
+        guidelines: "Richtlijnen" # MT
+        repeat_frequency: "Herhalen" # MT
+        repeat_interval: "Elke" # MT
+        repeat_weekdays: "Op" # MT
+        repeat_monthly_by: "Op" # MT
+        repeat_ends: "Eindigt" # MT
+        repeat_ends_on: "Einddatum" # MT
+        repeat_count: "Aantal keer" # MT
+    errors:
+      models:
+        # EventForm, which takes Calendars::Event's model name.
+        calendars/event:
+          attributes:
+            base:
+              overlap: "Deze afspraak overlapt met een bestaande afspraak" # MT
+              changed_from_started: "Deze herhaling is al begonnen en kan dus niet meer worden gewijzigd. Open een latere herhaling om de reeks vanaf dan te wijzigen." # MT
+              moved_before_kept: "Je kunt deze herhaling niet naar %{time} verplaatsen, omdat dan twee delen van de reeks overlappen." # MT
+              occurrence_missing: "Deze herhaling bestaat niet meer. Ga terug naar de agenda en probeer het opnieuw." # MT
+              longer_than_repeat: "De afspraak duurt langer dan de tijd tussen de herhalingen, dus de herhalingen zouden overlappen." # MT
+              pattern_change_with_changes:
+                one: "%{count} herhaling in het deel dat je wijzigt is verplaatst of verwijderd, dus de dagen waarop de afspraak zich herhaalt kunnen niet veranderen. Maak die wijziging eerst ongedaan of wijzig de reeks vanaf een latere datum." # MT
+                other: "%{count} herhalingen in het deel dat je wijzigt zijn verplaatst of verwijderd, dus de dagen waarop de afspraak zich herhaalt kunnen niet veranderen. Maak die wijzigingen eerst ongedaan of wijzig de reeks vanaf een latere datum." # MT
+              all_day_change_with_changes:
+                one: "%{count} herhaling in het deel dat je wijzigt is verplaatst of verwijderd, dus de afspraak kan niet wisselen tussen hele dag en met tijden. Maak die wijziging eerst ongedaan of wijzig de reeks vanaf een latere datum." # MT
+                other: "%{count} herhalingen in het deel dat je wijzigt zijn verplaatst of verwijderd, dus de afspraak kan niet wisselen tussen hele dag en met tijden. Maak die wijzigingen eerst ongedaan of wijzig de reeks vanaf een latere datum." # MT
+            guidelines:
+              not_accepted: "Je moet akkoord gaan met de richtlijnen" # MT
+            starts_at:
+              changed_after_start: "kan niet meer worden gewijzigd nadat de afspraak is begonnen" # MT
+            ends_at:
+              before_start: "moet na de begintijd liggen" # MT
+              in_past: "kan niet worden gewijzigd naar een tijd in het verleden" # MT
+            repeat_frequency:
+              not_offered: "is niet beschikbaar in deze agenda" # MT
+              stop_repeating: "kan niet worden gewijzigd naar “Nooit”. Verwijder deze en de volgende herhalingen om de reeks te beëindigen." # MT
+            repeat_ends_on:
+              before_start: "moet op of na de begindatum liggen" # MT
+            repeat_monthly_by:
+              not_on_start_date: "is niet beschikbaar voor de begindatum. Kies opnieuw." # MT
+        # EventletForm (drag-and-drop) and EventletDeletionForm, which take Calendars::Eventlet's model name.
+        calendars/eventlet:
+          attributes:
+            base:
+              not_recurring: "Deze afspraak hoort niet bij een reeks" # MT
+              following_only_all_calendars: "“Deze en volgende” kan alleen uit alle agenda’s worden verwijderd" # MT
+              occurrence_missing: "Deze herhaling bestaat niet meer. Laad de agenda opnieuw en probeer het nog eens." # MT
+              one_calendar: "Deze afspraak staat maar in één agenda." # MT
+              other_calendar_not_editable: "Je kunt deze afspraak niet in al haar agenda’s wijzigen. Kies in plaats daarvan “Alleen verplaatsen in” deze agenda." # MT
+              offsets_too_far_apart: "De tijden van een afspraak in haar verschillende agenda’s mogen niet meer dan %{hours} uur uit elkaar liggen. Kies “Overal verplaatsen” om haar verder te verplaatsen." # MT
+              series_started: "Deze reeks is al begonnen. Kies “Deze en volgende” om haar vanaf deze datum te wijzigen." # MT
+              following_from_past: "Herhalingen die al zijn begonnen, kunnen niet met “Deze en volgende” worden verplaatst." # MT
+              moved_before_kept: "Je kunt “deze en volgende” niet hierheen verplaatsen, omdat dan twee delen van de reeks overlappen." # MT
+              fixed_pattern: "Je kunt “%{choice}” niet hierheen verplaatsen, omdat deze reeks zich herhaalt volgens een vast patroon waar de nieuwe tijd niet in past." # MT
+              overlap: "Deze afspraak overlapt met een bestaande afspraak" # MT
+            occurrence_start:
+              required_for_single: "is verplicht om één herhaling te wijzigen" # MT
+              not_in_series: "is geen geldige herhaling in deze reeks" # MT
+            starts_at:
+              changed_after_start: "kan niet meer worden gewijzigd nadat de afspraak is begonnen" # MT
+            ends_at:
+              before_start: "moet na de begintijd liggen" # MT
+              in_past: "kan niet worden gewijzigd naar een tijd in het verleden" # MT
+  activerecord:
+    models:
+      meals/meal: "Maaltijd" # MT
+    attributes:
+      user:
+        first_name: "Voornaam" # MT
+        last_name: "Achternaam" # MT
+        email: "E-mailadres" # MT
+        google_email: "Google-ID" # MT
+        phone: "Telefoon" # MT
+        mobile_phone: "Mobiel" # MT
+        home_phone: "Thuis" # MT
+        work_phone: "Werk" # MT
+        birthday_str: "Verjaardag" # MT
+        preferred_contact: "Voorkeur voor contact" # MT
+        joined_on: "Lid sinds" # MT
+        job_choosing_proxy_id: "Kiest taken namens" # MT
+        up_guardianships: "Ouders/voogden" # MT
+        privacy_settings: "Privacy-instellingen" # MT
+        paypal_email: "PayPal-e-mailadres" # MT
+        school: "School" # MT
+        allergies: "Allergieën" # MT
+        doctor: "Gegevens huisarts" # MT
+        medical: "Medische gegevens" # MT
+        remember_me: "Ingelogd blijven nadat je je browser sluit" # MT
+        child: "Is de gebruiker een kind?" # MT
+        full_access: "Moet de gebruiker volledige toegang tot het systeem hebben?" # MT
+        certify_13_or_older: "Ik verklaar dat deze gebruiker 13 jaar of ouder is" # MT
+        pronouns: "Voornaamwoorden" # MT
+      household:
+        name: "Naam huishouden" # MT
+        community_id: "Gemeenschap" # MT
+        member_type_id: "Lidtype" # MT
+        unit_num_and_suffix: "Woningnummer" # MT
+        vehicles: "Voertuigen" # MT
+        keyholders: "Extra sleutelhouders woning" # MT
+        emergency_contacts: "Contacten voor noodgevallen" # MT
+        garage_nums: "Garagenummer(s)" # MT
+      meals/meal:
+        no_allergens: "Geen van deze" # MT
+        community_id: "Organiserende gemeenschap" # MT
+        served_at: "Datum/tijd" # MT
+        communities: "Gemeenschappen" # MT
+        calendar_ids: "Reserveerbare locatie(s)" # MT
+        formula: "Formule" # MT
+        capacity: "Capaciteit" # MT
+        title: "Titel" # MT
+        entrees: "Hoofdgerecht" # MT
+        side: "Bijgerecht" # MT
+        kids: "Kinderen" # MT
+        dessert: "Dessert" # MT
+        notes: "Opmerkingen" # MT
+        auto_close_time: "Automatische sluitingstijd" # MT
+      meals/message:
+        meal: "Maaltijd" # MT
+        body: "Bericht" # MT
+        recipient_type: "Ontvangers" # MT
+      meals/cost:
+        ingredient_cost: "Kosten ingrediënten" # MT
+        pantry_cost: "Te vergoeden kosten voorraadkast" # MT
+        payment_method: "Manier van vergoeden" # MT
+        reimbursee_id: "Ontvanger vergoeding" # MT
+      meals/formula:
+        name: "Naam" # MT
+        meal_calc_type: "Soort berekening" # MT
+        pantry_calc_type: "Soort berekening" # MT
+        is_default: "Standaardformule?" # MT
+        parts: "Maaltijdtypes" # MT
+        pantry_fee: "Bijdrage voorraadkast" # MT
+        pantry_fee_formatted: "Bijdrage voorraadkast" # MT
+        pantry_reimbursement: "Vergoeding voor voorraadkast toestaan?" # MT
+        takeout: "Afhaalverzoeken toestaan?" # MT
+        role_ids: "Rollen" # MT
+      meals/formula_part:
+        name: "Naam" # MT
+        type_id: "Type" # MT
+        share_formatted: "Prijs/aandeel" # MT
+        portion_size: "Portiegrootte" # MT
+      meals/role:
+        title: "Naam taak" # MT
+        time_type: "Tijden" # MT
+        shift_start: "Begintijd" # MT
+        shift_end: "Eindtijd" # MT
+        work_hours: "Werkuren" # MT
+        work_job_title: "Naam taak in werksysteem" # MT
+        description: "Beschrijving taak" # MT
+        double_signups_allowed: "Dezelfde persoon kan zich bij één maaltijd meer dan eens voor deze rol aanmelden" # MT
+        count_per_meal: "Personen per maaltijd" # MT
+        reminders: "Herinneringen" # MT
+      meals/role_reminder:
+        rel_magnitude: "Verzendtijd" # MT
+        note: "Opmerking (optioneel)" # MT
+      meals/signup:
+        spots_left: "Plaatsen vrij" # MT
+        comments: "Opmerkingen voor de kok" # MT
+        takeout: "Afhalen aanvragen" # MT
+      billing/transaction:
+        incurred_on: "Datum ontstaan" # MT
+        household_name: "Naam huishouden" # MT
+        code: "Type" # MT
+        description: "Omschrijving" # MT
+        value: "Bedrag" # MT
+      billing/account:
+        household_id: "Huishouden" # MT
+        community_id: "Rekening bij gemeenschap" # MT
+        current_balance: "Huidig saldo" # MT
+        credit_limit: "Kredietlimiet" # MT
+      billing/template:
+        code: "Type" # MT
+        description: "Omschrijving" # MT
+        value: "Bedrag" # MT
+        member_type_ids: "Lidtypes" # MT
+      gdrive/config:
+        org_user_id: "Gebruikers-ID Google Workspace" # MT
+        client_id: "Client-ID van de app" # MT
+        client_secret_to_write: "Clientgeheim van de app" # MT
+      gdrive/migration/operation:
+        contact_email: "E-mailadres contactpersoon" # MT
+        contact_name: "Naam contactpersoon" # MT
+        src_folder_id: "Bron-ID" # MT
+        dest_folder_id: "Doel-ID" # MT
+      gdrive/migration/request:
+        opt_out_reason: "Reden van afmelden" # MT
+      gdrive/item:
+        external_id: "ID" # MT
+        kind: "Type" # MT
+      gdrive/item_group:
+        access_level: "Toegangsniveau" # MT
+        group_id: "Groep" # MT
+        item_id: "Item" # MT
+      groups/group:
+        availability: "Beschikbaarheid" # MT
+        can_request_jobs: "Kan taken aanvragen?" # MT
+        can_administer_email_lists: "Kan alle mailinglijsten beheren?" # MT
+        can_moderate_email_lists: "Kan alle mailinglijsten modereren?" # MT
+        description: "Beschrijving" # MT
+        kind: "Type" # MT
+        name: "Naam" # MT
+        communities: "Gemeenschappen" # MT
+        memberships: "Leden" # MT
+      groups/mailman/list:
+        domain_id: "Domein" # MT
+        all_cmty_members_can_send: "Kunnen alle leden van de gemeenschap naar de lijst mailen?" # MT
+        managers_can_administer: "Kunnen groepsleiders de lijst beheren?" # MT
+        managers_can_moderate: "Kunnen groepsleiders de lijst modereren?" # MT
+        members: "Leden van de lijst" # MT
+        additional_members: "Extra leden" # MT
+        additional_senders: "Extra afzenders" # MT
+        settings: "Instellingen van de lijst" # MT
+        address: "Adres van de lijst" # MT
+        _destroy: "Deze lijst verwijderen?" # MT
+      calendars/protocol:
+        fixed_end_time: "Vaste eindtijd" # MT
+        fixed_start_time: "Vaste begintijd" # MT
+        kinds: "Afspraaktypes" # MT
+        max_days_per_year: "Max. dagen/jaar" # MT
+        max_lead_days: "Max. tijd vooruit" # MT
+        max_length_minutes: "Max. duur" # MT
+        max_minutes_per_year: "Max. minuten/jaar" # MT
+        other_communities: "Andere gemeenschappen" # MT
+        pre_notice: "Mededeling vooraf" # MT
+        requires_kind: "Type verplicht" # MT
+        calendar_ids: "Agenda’s" # MT
+      calendars/group:
+        name: "Naam groep" # MT
+      calendars/calendar:
+        name: "Naam" # MT
+        guidelines: "Richtlijnen" # MT
+        hidden: "Verborgen" # MT
+        abbrv: "Afkorting" # MT
+        group_id: "Agendagroep" # MT
+        color: "Kleur" # MT
+        default_calendar_view: "Agendaweergave" # MT
+        meal_hostable: "Kunnen hier maaltijden plaatsvinden?" # MT
+        allow_overlap: "Mogen afspraken elkaar overlappen?" # MT
+        selected_by_default: "Standaard geselecteerd in de lijst met agenda’s?" # MT
+      people/emergency_contact:
+        name: "Naam" # MT
+        relationship: "Relatie tot het huishouden" # MT
+        main_phone: "Telefoon" # MT
+        alt_phone: "Andere telefoon" # MT
+        email: "E-mail" # MT
+        location: "Woonplaats" # MT
+        country_code: "Land" # MT
+      people/vehicle:
+        make: "Merk" # MT
+        model: "Model" # MT
+        color: "Kleur" # MT
+        plate: "Kenteken" # MT
+      people/pet:
+        name: "Naam" # MT
+        species: "Soort/ras" # MT
+        color: "Kleur" # MT
+        vet: "Gegevens dierenarts" # MT
+        caregivers: "Gegevens verzorgers" # MT
+        health_issues: "Gezondheidsproblemen" # MT
+      people/memorial:
+        user_id: "Overledene" # MT
+        birth_year: "Geboortejaar" # MT
+        death_year: "Sterfjaar" # MT
+      work/job:
+        description: "Beschrijving" # MT
+        double_signups_allowed: "Kan dezelfde persoon zich meer dan eens aanmelden voor een dienst van deze taak?" # MT
+        hours: "Uren" # MT
+        hours_per_shift: "Uren per dienst" # MT
+        period_id: "Periode" # MT
+        reminders: "Herinneringen" # MT
+        requester_id: "Aanvrager" # MT
+        shifts: "Diensten" # MT
+        slot_type: "Soort plekken" # MT
+        time_type: "Tijden" # MT
+        title: "Titel" # MT
+      work/period:
+        name: "Naam" # MT
+        phase: "Fase" # MT
+        starts_on: "Begint op" # MT
+        ends_on: "Eindigt op" # MT
+        quota_type: "Quotum" # MT
+        auto_open_time: "Automatische openingstijd" # MT
+        pick_type: "Manier van kiezen" # MT
+        round_duration: "Duur van een ronde" # MT
+        workers_per_round: "Personen per groep" # MT
+        max_rounds_per_worker: "Max. rondes per persoon" # MT
+        job_copy_source_id: "Taken kopiëren" # MT
+        copy_preassignments: "Vooraf toegewezen plekken kopiëren?" # MT
+        meal_job_sync_settings: "Synchronisatie maaltijdtaken" # MT
+      work/job_reminder:
+        abs_rel: "Type" # MT
+        abs_time: "Verzendtijd" # MT
+        rel_magnitude: "Verzendtijd" # MT
+        note: "Opmerking" # MT
+      work/shift:
+        start_time: "Begintijd" # MT
+        end_time: "Eindtijd" # MT
+        hours: "Uren" # MT
+        slots: "Aantal plekken" # MT
+        workers: "Medewerkers" # MT
+      wiki/page:
+        title: "Titel" # MT
+        content: "Inhoud" # MT
+        comment: "Opmerking" # MT
+        editable_by: "Te bewerken door" # MT
+        data_source: "Gegevensbron" # MT
+    errors:
+      messages:
+        invalid_content_type: "Het bestand heeft een onjuist type" # MT
+        too_big: "Het bestand is te groot (maximaal %{max} MiB)" # MT
+        attached: "Het bestand ontbreekt" # MT
+      models:
+        billing/transaction:
+          attributes:
+            unit_price:
+              blank_with_quantity: "mag niet leeg zijn als er een aantal is ingevuld" # MT
+            quantity:
+              blank_with_unit_price: "mag niet leeg zijn als er een prijs per stuk is ingevuld" # MT
+        domain:
+          attributes:
+            base:
+              at_least_one_ownership: "Kies minstens één gemeenschap" # MT
+        gdrive/config:
+          attributes:
+            org_user_id:
+              invalid: "Moet een e-mailadres zijn" # MT
+            client_id:
+              invalid: "Moet eindigen op .apps.googleusercontent.com" # MT
+            client_secret_to_write:
+              wrong_length: "Moet precies %{count} tekens lang zijn" # MT
+        gdrive/migration/operation:
+          attributes:
+            contact_email:
+              invalid: "Moet een e-mailadres zijn" # MT
+            dest_folder_id:
+              invalid: "Mag alleen letters, cijfers, _ of - bevatten" # MT
+            src_folder_id:
+              invalid: "Mag alleen letters, cijfers, _ of - bevatten" # MT
+        groups/group:
+          attributes:
+            base:
+              at_least_one_affiliation: "Kies minstens één gemeenschap" # MT
+        groups/mailman/list:
+          attributes:
+            name:
+              invalid: "Bevat ongeldige tekens" # MT
+              taken: "Een andere lijst op dit domein gebruikt deze naam al" # MT
+        groups/membership:
+          attributes:
+            user_id:
+              unaffiliated: "Komt niet uit een aangesloten gemeenschap" # MT
+        household:
+          name:
+            taken: "Er is al een huishouden met deze naam in deze gemeenschap" # MT
+        meals/formula_part:
+          negative: "Mag niet negatief zijn" # MT
+        meals/signup:
+          exceeded_spots:
+            one: "Op basis van het aantal vrije plaatsen kun je maar één persoon aanmelden." # MT
+            other: "Op basis van het aantal vrije plaatsen kun je hoogstens %{count} personen aanmelden." # MT
+          nobody_signed_up: "Je moet minstens één persoon aanmelden" # MT
+          duplicate_types: "Meld elk type maar één keer aan" # MT
+        meals/meal:
+          attributes:
+            capacity:
+              below_signups: "moet door de huidige aanmeldingen minstens %{count} zijn" # MT
+            title:
+              blank_with_menu: "mag niet leeg zijn als er andere menu-onderdelen zijn ingevuld" # MT
+            entrees:
+              blank_with_menu: "mag niet leeg zijn als er andere menu-onderdelen zijn ingevuld" # MT
+            invitations:
+              none: "je moet minstens één gemeenschap uitnodigen" # MT
+            auto_close_time:
+              not_before_meal: "moet tussen nu en het tijdstip van de maaltijd liggen" # MT
+            allergens:
+              none_checked: "er moet minstens één vakje zijn aangevinkt als er een menu is ingevuld" # MT
+              none_with_others: "“Geen van deze” kan niet worden gekozen als er andere allergenen zijn" # MT
+        meals/assignment:
+          attributes:
+            user_id:
+              role_not_in_formula: "De rol “%{role}” past niet bij de gekozen formule" # MT
+        calendars/event:
+          attributes:
+            starts_at:
+              after_meal_time: "moet op of vóór het tijdstip van de maaltijd (%{time}) liggen" # MT
+            ends_at:
+              before_meal_time: "moet na het tijdstip van de maaltijd (%{time}) liggen" # MT
+        calendars/eventlet:
+          attributes:
+            base:
+              all_day_not_allowed: "Afspraken voor de hele dag zijn in deze agenda niet toegestaan" # MT
+        calendars/event_override:
+          attributes:
+            occurrence_start:
+              not_in_series: "is geen geldige herhaling in deze reeks" # MT
+            ends_at:
+              before_start: "moet na de begintijd liggen" # MT
+        calendars/eventlet_override:
+          attributes:
+            base:
+              no_change: "moet de herhaling verwijderen of verschuivingen opgeven" # MT
+            eventlet:
+              different_event: "moet bij dezelfde afspraak horen als de aanpassing" # MT
+        user:
+          password:
+            password_strength: "Je wachtwoord was te zwak. Maak het langer of voeg speciale tekens toe." # MT
+          attributes:
+            certify_13_or_older:
+              accepted_full_access: "Voor kinderen met volledige toegang is een leeftijdsverklaring verplicht" # MT
+              accepted_becoming_adult: "Om een kind in een volwassene te veranderen is een leeftijdsverklaring verplicht" # MT
+            birthday_str:
+              too_young: "Kinderen moeten 13 jaar of ouder zijn om volledige toegang te krijgen" # MT
+        calendars/calendar:
+          attributes:
+            abbrv:
+              blank: "mag niet leeg zijn als er in deze agenda maaltijden kunnen plaatsvinden" # MT
+            color:
+              invalid: "Moet in hexadecimaal formaat zijn (bijv. #112233)" # MT
+            allow_overlap:
+              repeating_events: "moet aan blijven zolang deze agenda terugkerende afspraken heeft" # MT
+        calendars/protocol:
+          attributes:
+            base:
+              repeating_events: "Vaste tijden, een maximale tijd vooruit en jaarlimieten gelden niet voor %{calendars}, want daarin staan terugkerende afspraken. Terugkerende afspraken hebben agenda’s zonder deze regels nodig." # MT
+        meals/formula:
+          at_least_one_type: "Je moet minstens één maaltijdtype opnemen." # MT
+          at_least_one_nonzero_type: "Bij een proportionele berekening moet je minstens één maaltijdtype opnemen dat niet nul is." # MT
+          attributes:
+            is_default:
+              cant_unset: "Je kunt de standaard niet uitzetten. Maak in plaats daarvan een andere formule de standaard." # MT
+            role_ids:
+              must_have_head_cook: "Moet %{title} bevatten" # MT
+        meals/role:
+          attributes:
+            shift_end:
+              not_after_start: "Moet na de begintijd liggen" # MT
+        wiki/page:
+          sample_not_editable: "De voorbeeldpagina kan niet worden bewerkt, zodat ze intact blijft als naslag voor andere gebruikers. Wil je experimenteren, maak dan een nieuwe pagina via de link “Nieuwe wikipagina” hieronder." # MT
+          data_fetch:
+            main: "Er was een probleem bij het ophalen van gegevens voor deze pagina (%{error})" # MT
+            connection_error: "Kon geen verbinding maken met de gegevensbron" # MT
+            invalid_protocol: "De URL van de gegevensbron moet HTTP of HTTPS gebruiken" # MT
+            invalid_json: "Ongeldige JSON" # MT
+            template_error: "Fout in sjabloon: %{details}" # MT
+          attributes:
+            title:
+              reserved_slug: "Deze titel is een speciaal gereserveerd woord of zinsdeel. Kies een andere." # MT
+        work/job:
+          attributes:
+            hours_per_shift:
+              uneven_divisor: "Moet gelijk zijn aan %{hours} uur of daar precies in passen" # MT
+            shifts:
+              more_than_one_shift_for_full_single: "Je kunt maar één dienst toevoegen voor taken met één dienst." # MT
+              more_than_one_shift_for_full_period: "Je kunt maar één dienst toevoegen voor taken voor de hele periode." # MT
+              duplicate_start_end_times: "Meerdere diensten kunnen niet dezelfde begin- en eindtijd hebben." # MT
+              different_length_shifts: "Alle diensten moeten even lang zijn." # MT
+        work/period:
+          attributes:
+            name:
+              reserved_slug: "is een gereserveerd woord, kies een andere" # MT
+            ends_on:
+              not_after_start: "moet na de begindatum liggen" # MT
+            auto_open_time:
+              blank: "Mag niet leeg zijn als de manier van kiezen “om de beurt” is. Weet je de precieze tijd nog niet, vul dan iets bij benadering in en pas het later aan." # MT
+        work/shift:
+          attributes:
+            starts_at:
+              elapsed_doesnt_equal_job: "De dienst moet %{hours} uur duren" # MT
+              elapsed_doesnt_evenly_divide_job: "De duur van de dienst moet gelijk zijn aan %{hours} uur of daar precies in passen" # MT
+            ends_at:
+              not_after_start: "moet na de begintijd liggen" # MT
+            assignments:
+              no_double_assignments: "Dezelfde persoon kan niet twee keer worden toegewezen" # MT

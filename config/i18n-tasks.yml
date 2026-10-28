@@ -13,7 +13,8 @@ data:
   external:
     <% {"activesupport" => "lib/active_support/locale", "activemodel" => "lib/active_model/locale",
         "activerecord" => "lib/active_record/locale", "actionview" => "lib/action_view/locale",
-        "rails-i18n" => "rails/locale", "devise-i18n" => "rails/locales"}.each do |gem, dir| %>
+        "rails-i18n" => "rails/locale", "devise-i18n" => "rails/locales",
+        "ice_cube" => "config/locales"}.each do |gem, dir| %>
     - "<%= Gem.loaded_specs[gem].full_gem_path %>/<%= dir %>/%{locale}.yml"
     <% end %>
 

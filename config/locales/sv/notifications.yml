@@ -1,0 +1,57 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+sv:
+  notifications:
+    preferences:
+      updated: "Dina aviseringsinställningar har sparats." # MT
+      sections:
+        account: "Konto" # MT
+        meals: "Måltider" # MT
+        work: "Arbete" # MT
+        billing: "Fakturering" # MT
+        community: "Gemenskap" # MT
+      kinds:
+        meal_reminder: "Påminnelser om måltider som mitt hushåll har anmält sig till" # MT
+        meal_role_reminder: "Påminnelser om mina måltidspass" # MT
+        cook_menu_reminder: "Påminnelser till huvudkocken om att lägga upp menyn" # MT
+        meal_worker_change: "Ändringar i ett måltidsteam jag är med i" # MT
+        job_reminder: "Påminnelser om mina uppgifter" # MT
+        job_choosing_notice: "Meddelanden om att uppgiftsvalet har öppnat" # MT
+        statement_reminder: "Påminnelser när en betalning förfaller" # MT
+        account_access: "Lösenordsåterställningar, bekräftelser av e-postadress och inbjudningar att logga in" # MT
+        meal_message: "Meddelanden och inställningsbesked från ett måltidsteam" # MT
+        statement_notice: "Kontoutdrag" # MT
+        gdrive_migration_request: "Förfrågningar om att hjälpa till att flytta min gemenskaps filer i Google Drive" # MT
+        community_inactivity: "Varningar om att min gemenskap kan raderas på grund av inaktivitet" # MT
+      show:
+        title: "Aviseringar" # MT
+        intro: "Välj vilka mejl Gather skickar dig om saker du är involverad i. Gråmarkerade är nödvändiga och går inte att välja bort." # MT
+        essential: "Nödvändig och går inte att välja bort" # MT
+        email_lists: "E-postlistor" # MT
+        email_lists_hint: "Du finns med på de här listorna genom dina grupper. Om du inte vill få mejl från en lista, välj bort eller lämna gruppen på dess sida." # MT
+        view: "Visa" # MT
+        no_email_lists: "Du finns inte med på några e-postlistor." # MT
+    unsubscribes:
+      manage_html: "Du kan välja vilka mejl du får på sidan %{link}. Du behöver logga in." # MT
+      manage_link: "Aviseringar" # MT
+      show:
+        title: "Avsluta prenumeration" # MT
+        confirm: "Sluta skicka mejl om ”%{kind}” till %{email}?" # MT
+        already_off: "Mejl om ”%{kind}” till %{email} är redan avstängda." # MT
+        turn_off: "Avsluta prenumeration" # MT
+      create:
+        title: "Prenumeration avslutad" # MT
+        done: "Vi skickar inte längre mejl om ”%{kind}” till %{email}." # MT
+      invalid:
+        title: "Avsluta prenumeration" # MT
+        explanation: "Den här avregistreringslänken är ogiltig. Den kan komma från ett gammalt mejl, eller så kopierades den inte helt." # MT

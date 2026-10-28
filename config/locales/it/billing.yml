@@ -1,0 +1,238 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+it:
+  transaction_codes:
+    meal: "Pasto" # MT
+    dues: "Quote associative" # MT
+    payment: "Pagamento" # MT
+    reimb: "Rimborso" # MT
+    othcrd: "Altro accredito" # MT
+    othchg: "Altro addebito" # MT
+    late: "Penale di mora" # MT
+    initbal: "Saldo iniziale" # MT
+
+  accounts:
+    updated: "Conto aggiornato." # MT
+    late_fees_applied: "Penali di mora applicate." # MT
+    # An amount that is a credit, e.g. "$5.00 CR".
+    credit_amount_html: "%{amount} a credito" # MT
+    # Shown in its own column next to credit amounts on statements.
+    credit_abbr: "a credito" # MT
+    not_applicable: "N/D" # MT
+    no_credit_limit: "Nessuno" # MT
+    no_users_warning: "Il nucleo del conto non ha utenti associati" # MT
+    late_fee_confirm: "Confermi? Le penali verranno addebitate a %{count} nuclei." # MT
+    late_fee_confirm_with_days: "Confermi? Le penali verranno addebitate a %{count} nuclei. L'ultima applicazione delle penali risale a %{days} giorni fa." # MT
+    statement_confirm: "Confermi? Gli estratti conto verranno inviati a %{count} nuclei." # MT
+    paypal_friend_confirm_html: "Se ti viene chiesto, <strong>non</strong> selezionare «Pagamento per beni o servizi?», così eviti che ti venga addebitata una commissione." # MT
+    details:
+      no_activity: "Non ci sono movimenti su questo conto." # MT
+    other_accounts:
+      looking: "Cerchi un altro conto?" # MT
+      each_community: "Ogni comunità gestisce i propri conti." # MT
+    payment_instructions:
+      how_to_pay: "Come pagare" # MT
+      paypal: "PayPal" # MT
+      click_logo: "Fai clic sul logo qui sopra per pagare con PayPal." # MT
+      send_paypal_html: "Invia i pagamenti PayPal a %{email}." # MT
+      choose_friend_html: "Assicurati di scegliere %{friend} per evitare che ti venga addebitata una commissione." # MT
+      sending_to_friend: "invio ad amici" # MT
+      online_bill_pay: "Pagamento online delle bollette" # MT
+      bill_pay_intro: "La maggior parte delle banche offre un servizio di pagamento online delle bollette, con cui puoi inviare facilmente un assegno online. Aggiungi un nuovo beneficiario e inserisci quanto segue:" # MT
+      payee_name_html: "Nome del beneficiario: %{payee}" # MT
+      account_number_html: "Numero di conto: %{number}" # MT
+      address: "Indirizzo:" # MT
+      check: "Assegno" # MT
+      payable_to_html: "Intesta gli assegni a %{payee}" # MT
+      memo_line_html: "Scrivi il tuo numero di conto %{number} nella causale." # MT
+      mail_to: "Spedisci gli assegni a:" # MT
+      cash: "Contanti" # MT
+      none_provided: "Non sono state fornite istruzioni di pagamento." # MT
+      go_to_settings_html: "Vai alla %{link} per inserirle." # MT
+      settings_page: "pagina delle impostazioni" # MT
+      contact_html: "Per qualsiasi domanda sulla fatturazione, contatta %{email}." # MT
+    statement_list:
+      statements: "Estratti conto" # MT
+      date: "Data" # MT
+      activity: "Movimenti" # MT
+      total_due: "Totale dovuto" # MT
+    summary:
+      summary: "Riepilogo" # MT
+      account_number: "Numero di conto" # MT
+      last_statement_date: "Data dell'ultimo estratto conto" # MT
+      last_statement_balance: "Saldo dell'ultimo estratto conto" # MT
+      new_credits: "Nuovi pagamenti/accrediti" # MT
+      balance_due: "Saldo dovuto" # MT
+      due_date: "Scadenza" # MT
+      new_charges: "Nuovi addebiti" # MT
+      current_balance: "Saldo attuale" # MT
+      credit_limit: "Limite di credito" # MT
+      balance_due_footnote: "Questo è l'importo che devi attualmente. Corrisponde all'importo dovuto nel tuo ultimo estratto conto meno i pagamenti ricevuti da allora. Se hai già inviato il pagamento ma non compare qui, ignora questo messaggio." # MT
+      current_balance_footnote: "Questo saldo comprende gli addebiti e gli accrediti dall'ultimo estratto conto. Se supera il tuo limite di credito, non potrai iscriverti ai pasti." # MT
+    synopsis:
+      pay_by: "Paga %{amount} entro il giorno %{date}. Grazie!" # MT
+      pay: "Paga %{amount}. Grazie!" # MT
+      zero: "Il tuo saldo dovuto è zero. Ottimo lavoro!" # MT
+      credit: "Il tuo conto ha un credito di %{amount}. Nessun pagamento necessario!" # MT
+    transaction_export_form:
+      download: "Scarica i movimenti come CSV" # MT
+      incurred: "Sostenuti nel periodo …" # MT
+      recorded: "Registrati nel periodo …" # MT
+      select_dates: "Seleziona le date" # MT
+    edit:
+      title: "Modifica conto: %{household}" # MT
+      no_users: "Questo conto non ha utenti associati e non può ricevere estratti conto." # MT
+      cancel: "Annulla" # MT
+    show:
+      title: "Conto: %{household}" # MT
+    mine:
+      title: "Il mio conto" # MT
+      title_with_community: "Il mio conto (%{community})" # MT
+      no_charges: "Non ci sono ancora addebiti associati al tuo nucleo." # MT
+    index:
+      title: "Conti" # MT
+      apply_late_fees: "Applica penali di mora" # MT
+      send_statements: "Invia estratti conto" # MT
+      no_accounts: "Nessun conto trovato." # MT
+      num: "N." # MT
+      household: "Nucleo" # MT
+      last_statement_date: "Data ultimo e/c" # MT
+      due_last_statement: "Dovuto ultimo e/c" # MT
+      new_credits: "Nuovi accrediti" # MT
+      balance_due: "Saldo dovuto" # MT
+      new_charges: "Nuovi addebiti" # MT
+      current_balance: "Saldo attuale" # MT
+      credit_limit: "Limite di credito" # MT
+      add_transaction: "Aggiungi movimento" # MT
+      totals: "Totali" # MT
+      download_accounts: "Scarica i conti come CSV" # MT
+      summary:
+        one: "C'è %{count} conto attivo." # MT
+        other: "Ci sono %{count} conti attivi." # MT
+      active_account_definition: "Un conto attivo è un conto con movimenti in corso o con un saldo attuale diverso da zero." # MT
+      last_statement_run: "Gli estratti conto sono stati inviati l'ultima volta il giorno %{date}." # MT
+      statements_never_run: "Gli estratti conto non sono mai stati inviati." # MT
+      no_users:
+        one: "C'è %{count} conto senza utenti associati. Per quel conto non verrà generato un estratto conto." # MT
+        other: "Ci sono %{count} conti senza utenti associati. Per quei conti non verranno generati estratti conto." # MT
+      recent_statements:
+        one: "C'è %{count} conto con un estratto conto nelle ultime 24 ore. Per quel conto non verrà generato un nuovo estratto conto." # MT
+        other: "Ci sono %{count} conti con estratti conto nelle ultime 24 ore. Per quei conti non verranno generati estratti conto." # MT
+    others:
+      one_html: "Hai un altro conto Gather presso %{cmty}." # MT
+      multiple_html: "Hai anche conti Gather presso %{cmtys}." # MT
+    payment_badge_alt:
+      paypal: "Simbolo di pagamento PayPal" # MT
+      online_bill_pay: "Simbolo di pagamento online delle bollette" # MT
+      check: "Simbolo di pagamento con assegno" # MT
+      cash: "Simbolo di pagamento in contanti" # MT
+
+  statements:
+    generation_started: "Generazione degli estratti conto avviata. Prova a ricaricare la pagina tra un momento per vedere lo stato aggiornato dei conti." # MT
+    no_users_not_generated: "I seguenti nuclei non hanno utenti associati, quindi per loro non sono stati generati estratti conto: %{households}. Riprova a inviare gli estratti conto quando i nuclei avranno utenti associati." # MT
+    account_info:
+      account_community: "Comunità del conto" # MT
+      account_number: "Numero di conto" # MT
+      household: "Nucleo" # MT
+    link_to_accounts_page:
+      notice_html: "Per le informazioni più aggiornate sul conto, %{link}." # MT
+      link: "visita la pagina dei tuoi conti" # MT
+    statement_rows:
+      load_more: "Carica altri …" # MT
+      loading: "Caricamento …" # MT
+    show:
+      title: "Estratto conto n. %{number}" # MT
+      statement_date: "Data dell'estratto conto" # MT
+      due_date: "Scadenza" # MT
+      activity: "Movimenti" # MT
+      previous_balance: "Saldo precedente" # MT
+      statement_balance: "Saldo dell'estratto conto" # MT
+
+  transactions:
+    added: "Movimento aggiunto." # MT
+    not_added: "Il movimento non è stato aggiunto. Puoi modificarlo qui sotto e riprovare, oppure fare clic su «Annulla» qui sotto per tornare alla pagina dei conti." # MT
+    form:
+      cancel: "Annulla" # MT
+    txn_rows:
+      no_activity: "Nessun movimento in questo periodo" # MT
+    txn_table:
+      date: "Data" # MT
+      type: "Tipo" # MT
+      description: "Descrizione" # MT
+      quantity: "Quantità" # MT
+      unit_price: "Prezzo unitario" # MT
+      amount: "Importo" # MT
+    confirm:
+      title: "Conferma movimento" # MT
+      intro: "Ecco come apparirà il nuovo movimento nell'estratto conto del nucleo. I movimenti non si possono modificare dopo la creazione. Verifica che le informazioni qui sotto siano corrette." # MT
+    index:
+      title: "Movimenti recenti" # MT
+      title_with_household: "Movimenti recenti: %{household}" # MT
+      account_community: "Comunità del conto" # MT
+      account_number: "Numero di conto" # MT
+      household: "Nucleo" # MT
+      activity: "Movimenti" # MT
+      no_activity: "Non ci sono movimenti su questo conto." # MT
+      last_statement_balance: "Saldo dell'ultimo estratto conto" # MT
+      current_balance: "Saldo attuale" # MT
+    new:
+      title: "Nuovo movimento" # MT
+
+  billing:
+    # Description of the transaction LateFeeApplier creates.
+    late_fee_description: "Penale per pagamento in ritardo" # MT
+    templates:
+      created: "Modello creato." # MT
+      updated: "Modello aggiornato." # MT
+      select_one: "Seleziona almeno un modello." # MT
+      applied: "Movimenti creati." # MT
+      edit:
+        title: "Modifica modello di fatturazione: %{description}" # MT
+      new:
+        title: "Nuovo modello di movimento" # MT
+      index:
+        title: "Modelli di movimento" # MT
+        apply: "Applica modelli" # MT
+        create: "Crea modello" # MT
+        intro: "I modelli di movimento permettono di creare facilmente gruppi di movimenti in una volta sola." # MT
+        none_found: "Nessun modello trovato." # MT
+        description: "Descrizione" # MT
+        type: "Tipo" # MT
+        member_types: "Tipi di membro" # MT
+        amount: "Importo" # MT
+      review:
+        title: "Applica modelli" # MT
+        intro: "Stai per creare i seguenti movimenti per i seguenti nuclei:" # MT
+        description: "Descrizione" # MT
+        type: "Tipo" # MT
+        amount: "Importo" # MT
+        households: "Nuclei" # MT
+        outdated_warning: "L'elenco dei nuclei qui sopra potrebbe non essere più aggiornato se i tipi di membro dei nuclei vengono modificati tra il caricamento di questa pagina di conferma e il clic su «Applica» qui sotto." # MT
+        cancel: "Annulla" # MT
+        apply: "Applica" # MT
+
+  account_mailer:
+    statement_notice:
+      subject: "Nuovo estratto conto (%{community})" # MT
+      created: "In Gather è stato creato un nuovo estratto conto per il tuo conto presso %{community}." # MT
+      amount_due: "L'importo dovuto è %{amount}." # MT
+      credit: "Hai un saldo a credito di %{amount}. Non è necessario alcun pagamento." # MT
+      see_details: "Visita il link qui sotto per vedere i dettagli:" # MT
+      thanks: "Grazie per il pagamento puntuale!" # MT
+    statement_reminder:
+      subject: "Promemoria di pagamento per il conto presso %{community}" # MT
+      due_on: "Ti ricordiamo che il pagamento di un estratto conto Gather per il tuo conto presso %{community} scade il giorno %{date}." # MT
+      due_soon: "Ti ricordiamo che il pagamento di un estratto conto Gather per il tuo conto presso %{community} scade a breve." # MT
+      amount_due: "L'importo dovuto è %{amount}. Visita il link qui sotto per vedere i dettagli:" # MT
+      disregard: "Se hai già inviato il pagamento, ignora questo avviso." # MT
+      thanks: "Grazie per il pagamento puntuale!" # MT

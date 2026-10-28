@@ -1,0 +1,412 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+it:
+  simple_form:
+    "yes": 'Sì' # MT
+    "no": 'No' # MT
+    required:
+      text: 'obbligatorio' # MT
+      mark: '*'
+      # You can uncomment the line below if you need to overwrite the whole required html.
+      # When using html, text and mark won't be used.
+      # html: '<abbr title="required">*</abbr>'
+    error_notification:
+      default_message: "Controlla i problemi qui sotto:" # MT
+      # FormHelper#error_summary, under the errors that belong to no field.
+      field_errors:
+        one: "C'è 1 errore nel modulo qui sotto." # MT
+        other: "Ci sono %{count} errori nel modulo qui sotto." # MT
+    labels:
+      # These labels are here instead of activerecord b/c these are for things that
+      # aren't ActiveRecord models.
+      communities_signup:
+        contact_first_name: "Nome" # MT
+        contact_last_name: "Cognome" # MT
+        contact_email: "Indirizzo email" # MT
+        community_name: "Nome della comunità" # MT
+        slug: "URL della comunità" # MT
+        introduction: "La tua comunità" # MT
+        country_code: "Paese" # MT
+        time_zone: "Fuso orario" # MT
+        want_sample_data: "Dati di esempio" # MT
+      communities_signup_action:
+        decision: "Azione" # MT
+        message: "Messaggio" # MT
+      calendars_export:
+        dont_personalize: "Non personalizzare gli eventi" # MT
+        own_only: "Solo i miei eventi" # MT
+      payment:
+        accountholder_name: "Nome dell'intestatario del conto" # MT
+        payment_method: "Metodo di pagamento" # MT
+    placeholders:
+      meals_meal:
+        title: "es. Pasta e fagioli alla veneta" # MT
+        entrees: "es. Pasta e fagioli con cotechino. Disponibile la versione senza carne. Poco piccante!" # MT
+        side: "es. Cime di rapa stufate con burro e scalogno" # MT
+        kids: "es. Pasta al pomodoro e uova sode" # MT
+        dessert: "es. Quadrotti di cioccolato fondente" # MT
+        notes: "es. Alcuni ingredienti biologici e locali, dove possibile" # MT
+      calendars_protocol:
+        kinds: "Seleziona i tipi o lascia vuoto per applicare a tutti …" # MT
+        calendar_ids: "Seleziona i calendari o lascia vuoto per applicare a tutti …" # MT
+      calendars_event:
+        name: "es. Serata giochi" # MT
+      domain:
+        name: "es. tuodominio.it" # MT
+      billing_transaction:
+        description: "es. Assegno n. 12345" # MT
+      gdrive_config:
+        org_user_id: "es. tuonome@tuodominio.it" # MT
+      user:
+        birthday_str: "es. 29 feb 1981 (anno facoltativo)" # MT
+      people_memorial_message:
+        body: "Aggiungi il tuo messaggio" # MT
+      household:
+        name: "es. Rossi o Singh-Bianchi" # MT
+        vehicles:
+          make: "es. Toyota" # MT
+          model: "es. Prius" # MT
+          color: "es. Blu" # MT
+        emergency_contacts:
+          relationship: "es. Mamma di Sara" # MT
+          location: "es. Bologna" # MT
+      work_job:
+        reminders:
+          note: "es. Affilare la sega (facoltativo)" # MT
+      work_period:
+        name: "es. Estate 1969" # MT
+      wiki_page:
+        comment: "Un commento su questa modifica." # MT
+    hints:
+      markdown_suffix_html: "Puoi usare la <a href='/about/markdown' target='_new'>formattazione avanzata</a>." # MT
+      communities_signup:
+        community_name: "Fino a 20 caratteri." # MT
+        slug: "Lettere minuscole, numeri e trattini; deve iniziare con una lettera. Fino a 20 caratteri." # MT
+        introduction: "Raccontaci qualcosa della tua comunità e perché pensi che Gather faccia al caso vostro. Includi uno o più link a pagine web pubbliche (ad es. il sito della comunità, pagine social) che attestino l'identità della tua comunità." # MT
+      communities_signup_action:
+        message_approve: "L'email di approvazione completa è mostrata qui sopra. Aggiungi una nota personale all'email di approvazione sostituendo il testo segnaposto." # MT
+        message_deny: "Annota perché questa richiesta viene respinta. Serve solo come riferimento interno e non verrà inviato a chi ha fatto la richiesta." # MT
+      meals_meal:
+        formula_id: "Le <a href=\"/meals/formulas\">formule dei pasti</a> determinano come viene calcolato il costo del pasto." # MT
+        capacity: "Quante persone può accogliere il pasto?" # MT
+        auto_close_time: "Inserisci un orario futuro in cui il pasto verrà chiuso automaticamente. Se vuoto, il pasto va chiuso a mano." # MT
+        resource_ids: "Seleziona il luogo o i luoghi prenotabili per questo pasto. Le prenotazioni verranno generate automaticamente. Se il luogo non è prenotabile, indicalo nel titolo, ad es. «Cena condivisa a casa di Giovanna»." # MT
+      billing_account:
+        credit_limit: "Lascia vuoto per un credito illimitato. Inserisci zero per nessun credito." # MT
+      billing_transaction:
+        incurred_on: "Questa data comparirà come data del movimento negli estratti conto. Con il movimento verrà salvata anche la data di oggi." # MT
+        description: "La descrizione verrà mostrata all'utente nell'estratto conto. Una descrizione dettagliata può aiutare a risolvere eventuali discrepanze in futuro." # MT
+        code_html: "<i class='fa fa-arrow-up'></i> Aumenta l'importo dovuto dall'utente &nbsp;&nbsp;&nbsp; <i class='fa fa-arrow-down'></i> Diminuisce l'importo dovuto dall'utente" # MT
+        value: "L'importo deve essere positivo. Il tipo di movimento (sopra) determina se l'importo aumenta o diminuisce il conto." # MT
+      billing_template:
+        member_type_ids: "Seleziona i tipi di membro a cui si applica questo modello." # MT
+      calendars_export:
+        dont_personalize: "Per impostazione predefinita, le esportazioni del calendario sono personalizzate per te e il tuo nucleo, quindi non dovresti condividere i tuoi link di esportazione. Se ti serve un link non personalizzato da usare in un luogo pubblico, seleziona questa casella." # MT
+        own_only: "Seleziona questa casella per esportare solo gli eventi che hai creato per te. Gli eventi di gruppo e i pasti non verranno inclusi." # MT
+      domain:
+        communities: "Le comunità per cui questo dominio è disponibile/visibile." # MT
+      gdrive_config:
+        org_user_id: "È l'ID dell'utente Google Workspace della tua comunità. Deve avere accesso come Gestore al Drive condiviso della comunità." # MT
+        client_id: "Termina con .apps.googleusercontent.com" # MT
+        client_secret_to_write: "Lascia vuoto per non modificare il secret." # MT
+      gdrive_item:
+        external_id: "Puoi ricavare questo ID dall'URL dell'elemento in Google Drive. Deve essere una sequenza di lettere, numeri, «_» e «-». Esempi: 0AExZ3_Cu5q7uUk9PVA e 1KRjAC5Bt4WtLilnkUeTvF_okbLgONGQuDkrc." # MT
+      gdrive_item_group:
+        access_level: "Per cartelle e file, non può essere inferiore al livello di accesso impostato per questo gruppo sul Drive condiviso che li contiene." # MT
+      gdrive_migration_operation:
+        contact_email: "Indirizzo email della persona di contatto." # MT
+        contact_name: "Una persona della comunità che si occupa della migrazione e può rispondere alle domande." # MT
+        src_folder_id: "L'ID della cartella di origine della migrazione. Puoi ricavarlo dall'URL dell'elemento in Google Drive. Deve essere una sequenza di lettere, numeri, «_» e «-». Esempio: 1KRjAC5Bt4WtLilnkUeTvF_okbLgONGQuDkrc." # MT
+        dest_folder_id: "L'ID del Drive condiviso OPPURE della cartella di destinazione della migrazione. Puoi ricavarlo dall'URL dell'elemento in Google Drive. Deve essere una sequenza di lettere, numeri, «_» e «-». Esempi: 0AExZ3_Cu5q7uUk9PVA e 1KRjAC5Bt4WtLilnkUeTvF_okbLgONGQuDkrc." # MT
+      groups_group:
+        availability: "Se le persone possono unirsi a questo gruppo da sole. I gruppi «Tutti» includono automaticamente tutti gli utenti adulti." # MT
+        can_request_jobs: "Se questo gruppo deve comparire nel modulo degli incarichi tra i possibili richiedenti." # MT
+        can_administer_email_lists: "Se gli utenti di questo gruppo possono modificare le impostazioni di tutte le liste email della comunità tramite il pannello di amministrazione di Mailman." # MT
+        can_moderate_email_lists: "Se gli utenti di questo gruppo devono fare da moderatori per tutte le liste email della comunità." # MT
+        kind: "Che tipo di gruppo è. Serve solo per la visualizzazione, non ha altri effetti." # MT
+        communities: "Le comunità per cui questo gruppo è disponibile/visibile." # MT
+        mailman_list:
+          name: "La prima parte dell'indirizzo. Può contenere solo lettere minuscole, numeri o i caratteri . - _." # MT
+          domain_id: "Il nome di dominio dell'indirizzo della lista." # MT
+          all_cmty_members_can_send:
+            single_community: "Se tutti i membri della comunità possono scrivere a questa lista. Se non selezionato, possono scrivere solo i membri del gruppo. Non cambia chi riceve le email della lista." # MT
+            multi_community: "Se tutti i membri delle comunità del gruppo possono scrivere a questa lista. Se non selezionato, possono scrivere solo i membri del gruppo. Non cambia chi riceve le email della lista." # MT
+          managers_can_administer: "Se i responsabili di questo gruppo possono modificare le impostazioni di questa lista email tramite il pannello di amministrazione di Mailman." # MT
+          managers_can_moderate: "Se i responsabili di questo gruppo devono fare da moderatori per questa lista email." # MT
+          _destroy: "Seleziona questa casella per chiudere la lista email." # MT
+      calendars_event:
+        repeat_ends_on: "L'ultima occorrenza cade in questa data o prima." # MT
+        all_day: "Seleziona questa casella se il tuo evento non ha orari precisi. Comparirà in cima al calendario. Non va usato per prenotare risorse." # MT
+        group_id: "Gli eventi con un gruppo possono essere modificati dagli altri membri del gruppo e non vengono inclusi quando esporti «Solo i miei eventi»." # MT
+      calendars_protocol:
+        kinds: "A quali tipi di evento si applica questo regolamento? Lascia vuoto per applicarlo a tutti." # MT
+        calendar_ids: "A quali calendari si applica questo regolamento? Lascia vuoto per applicarlo a tutti." # MT
+        fixed_end_time: "Tutti gli eventi interessati dovranno terminare a quest'ora. Se è prima dell'ora di inizio fissa, verrà considerata del giorno successivo." # MT
+        fixed_start_time: "Tutti gli eventi interessati dovranno iniziare a quest'ora." # MT
+        max_days_per_year: "Gli utenti non potranno creare eventi interessati in più di questo numero di giorni all'anno." # MT
+        max_lead_days: "Gli utenti non potranno creare eventi interessati con più di questo numero di giorni di anticipo" # MT
+        max_length_minutes: "Gli utenti non potranno creare eventi che durano più di questo numero di minuti." # MT
+        max_minutes_per_year: "Gli utenti non potranno creare più di questo numero di minuti di eventi interessati all'anno." # MT
+        other_communities: "Limita la possibilità dei membri delle altre comunità del tuo gruppo di comunità di vedere e creare eventi interessati. Se vuoto, non ci sono limiti per i membri delle altre comunità." # MT
+        pre_notice: "Un avviso inserito qui verrà mostrato in cima al modulo degli eventi interessati." # MT
+        requires_kind: "Se selezionato, gli eventi interessati dovranno indicare un tipo. Usalo insieme ad altri regolamenti per applicare regole speciali ad alcuni tipi di eventi." # MT
+        name: "Un nome breve e descrittivo per questo regolamento." # MT
+      calendars_calendar:
+        default_calendar_view: "Stile del calendario degli eventi al primo caricamento" # MT
+        abbrv: "Abbreviazione da usare nei testi brevi, ad es. nell'oggetto delle email (max 6 lettere)" # MT
+        meal_hostable: "Se sì, questo calendario comparirà tra i luoghi possibili quando si crea un pasto." # MT
+        guidelines: "Testo che l'utente deve accettare quando crea un evento." # MT
+        color: "Il colore degli eventi di questo calendario nella vista principale. Usa la notazione esadecimale. I colori senza x non sono ancora stati usati (a meno che tu non abbia molti calendari)." # MT
+      user:
+        joined_on: "Data approssimativa in cui sei entrato nella comunità" # MT
+        job_choosing_proxy_id: "Una persona esterna al tuo nucleo che può iscriversi agli incarichi per conto tuo. I membri del nucleo possono già farlo." # MT
+        email: "L'indirizzo email a cui preferisci essere contattato. Serve anche per accedere con la password." # MT
+        google_email: "L'indirizzo email legato all'account Google usato per accedere. Non compare nella rubrica. Chiedi a un <a href='/roles'>amministratore</a> se devi cambiarlo." # MT
+        paypal_email: "L'indirizzo email del tuo conto PayPal. Serve per i rimborsi ai cuochi. Lascia vuoto per usare l'indirizzo email principale indicato sopra." # MT
+        full_access: "I bambini senza accesso completo non possono accedere a Gather ma compaiono nella rubrica. I bambini con accesso completo contano come adulti ai fini della fatturazione." # MT
+        certify_13_or_older: "I bambini devono avere almeno 13 anni per accedere a Gather." # MT
+      meals_formula:
+        is_default: "Se selezionata, sarà la formula proposta per impostazione predefinita quando si crea un nuovo pasto." # MT
+        pantry_fee_formatted: "Ai commensali con un costo del pasto di 0,00 non verrà addebitata la quota dispensa, anche se l'importo della quota è fisso." # MT
+        pantry_reimbursement: "Se selezionato, i cuochi possono acquistare prodotti di dispensa e chiederne il rimborso." # MT
+        takeout: "Se selezionato, i commensali possono chiedere il pasto da asporto. I dettagli di come funziona l'asporto li decide e li comunica la comunità." # MT
+        role_ids: "Quali ruoli servono per i pasti con questa formula?" # MT
+      meals_role:
+        double_signups_allowed: "Le doppie assegnazioni potrebbero non essere adatte ad alcuni ruoli." # MT
+        time_type: "Per alcuni ruoli (come il capocuoco) le persone potrebbero voler scegliere da sole gli orari di lavoro. In tal caso scegli «Questo ruolo è solo per una certa data». Se serve un orario preciso, scegli «Questo ruolo ha data e ora stabilite»." # MT
+        shift_start: "Numero di minuti prima/dopo l'inizio del pasto in cui le persone devono presentarsi. I valori negativi indicano momenti prima dell'inizio del pasto." # MT
+        shift_end: "Numero di minuti prima/dopo l'inizio del pasto in cui termina questo ruolo. I valori negativi indicano momenti prima dell'inizio del pasto." # MT
+        work_job_title: "Se indicato, è il nome con cui l'incarico comparirà nel modulo Lavoro. Indica un nome diverso se il nome del ruolo qui sopra può risultare ambiguo nel modulo Lavoro (ad es. qui «Pulizie dopo il pasto» invece di «Pulizie» sopra)." # MT
+        work_hours: "Quante ore varrà l'incarico se importato nel modulo Lavoro? Puoi lasciare vuoto se non usi il modulo Lavoro." # MT
+        description: "Questa descrizione verrà copiata nel modulo Lavoro durante la sincronizzazione degli incarichi." # MT
+        count_per_meal: "Quante persone servono di solito per questo ruolo in un pasto?" # MT
+      meals_type:
+        name: "Un nome breve e descrittivo per il tipo." # MT
+        category: "Le categorie servono per calcolare le porzioni e per i report." # MT
+      people_memorial:
+        user_id: "Deve essere un utente non attivo di questa comunità. La sua foto del profilo attuale verrà usata nella pagina commemorativa." # MT
+      wiki_page:
+        content: "Consulta la <a href='/wiki/sample' target='_blank'>Pagina di esempio</a> per consigli su come creare contenuti wiki." # MT
+        data_source: "Avanzato. URL di una fonte di dati JSON da usare con la <a href='http://mustache.github.io/mustache.5.html' target='_new'>sintassi dei modelli Mustache</a> nel contenuto della pagina." # MT
+      work_job:
+        hours: "Numero stimato di ore che richiederà l'incarico. Sono ammessi i decimali." # MT
+        slot_type: "Usa una delle opzioni «per tutta la comunità» per cose come le giornate di lavoro. Nel dubbio, scegli «numero fisso di posti»." # MT
+        hours_per_shift: "Quante ore vale ogni turno." # MT
+        double_signups_allowed: "Le doppie iscrizioni potrebbero non essere adatte ad alcuni incarichi." # MT
+      work_period:
+        quota_type: "Impostare un monte ore attiva un messaggio in cima alla pagina delle iscrizioni che indica a ciascuno qual è la sua giusta parte di lavoro." # MT
+        auto_open_time: "Se inserisci un orario qui, dopo quell'orario il periodo passerà automaticamente alla fase «Aperto». Obbligatorio se la modalità di scelta è «Gruppi di persone scelgono a turno»." # MT
+        pick_type: "Scegli «Gruppi di persone scelgono a turno» se stai organizzando un evento di scelta degli incarichi ed è troppo caotico che tutti scelgano insieme. Gruppi più piccoli di persone sceglieranno allora a turno gli incarichi, in vari «turni di scelta»." # MT
+        max_rounds_per_worker: "Quanti turni di scelta deve fare una persona per raggiungere il suo monte ore? Più turni significano un evento di scelta più lungo." # MT
+        workers_per_round: "Quante persone devono scegliere gli incarichi in ogni turno di scelta? Più persone significano una scelta più caotica. Meno persone significano più turni, quindi l'evento di scelta dura di più." # MT
+        round_duration: "Quanto deve durare ogni turno di scelta? Il tempo deve bastare perché una persona media possa scegliere con calma." # MT
+        job_copy_source_id: "Se vuoi, scegli un periodo da cui copiare gli incarichi quando crei il periodo. Gli incarichi dei pasti non verranno copiati e vanno invece sincronizzati (vedi sotto)." # MT
+    options:
+      calendars_event:
+        repeat_frequency:
+          none: "Mai" # MT
+          daily: "Ogni giorno" # MT
+          weekly: "Ogni settimana" # MT
+          monthly: "Ogni mese" # MT
+          yearly: "Ogni anno" # MT
+        repeat_ends:
+          never: "Mai" # MT
+          on_date: "In una data" # MT
+          after_count: "Dopo un numero di volte" # MT
+      billing_account:
+        active:
+          active_only: "Mostra solo attivi" # MT
+          all: "Mostra tutti" # MT
+      communities_signup:
+        status:
+          all: "Tutte" # MT
+          pending: "In attesa" # MT
+          approved: "Approvata" # MT
+          denied: "Respinta" # MT
+          created: "Creata" # MT
+          failed: "Non riuscita" # MT
+        want_sample_data:
+          "true": "Sì, includi dati di esempio" # MT
+          "false": "No, non includere dati di esempio" # MT
+      communities_signup_action:
+        decision:
+          approve: "Approva" # MT
+          deny: "Respingi" # MT
+      gdrive_item:
+        kind:
+          drive: "Drive condiviso" # MT
+          folder: "Cartella" # MT
+          file: "File" # MT
+      gdrive_item_group:
+        access_level:
+          reader: "Visualizzatore: visualizzare i file" # MT
+          commenter: "Commentatore: visualizzare e commentare i file" # MT
+          writer: "Collaboratore: visualizzare, aggiungere e modificare i file" # MT
+          fileOrganizer: "Gestore dei contenuti: visualizzare, aggiungere, modificare, spostare, eliminare e condividere i file" # MT
+      groups_group:
+        availability:
+          open: "Aperto" # MT
+          closed: "Chiuso" # MT
+          hidden: "Nascosto" # MT
+          everybody: "Tutti" # MT
+        kind:
+          committee: "Commissione" # MT
+          subcommittee: "Sottocommissione" # MT
+          team: "Squadra" # MT
+          task_force: "Gruppo di lavoro" # MT
+          club: "Club" # MT
+          crew: "Équipe" # MT
+          squad: "Gruppetto" # MT
+          circle: "Cerchio" # MT
+          group: "Gruppo" # MT
+          other: "Altro" # MT
+        memberships:
+          kind:
+            joiner: "Membro" # MT
+            manager: "Responsabile" # MT
+            opt_out: "Escluso su richiesta" # MT
+        sort:
+          name: "Per nome" # MT
+          type: "Per tipo" # MT
+      meals_meal:
+        time:
+          past: "Passati" # MT
+          finalizable: "Da finalizzare" # MT
+          all: "Tutti" # MT
+          upcoming: "Prossimi" # MT
+        cost:
+          payment_method:
+            check: "Assegno" # MT
+            credit: "Accredito sul saldo" # MT
+            paypal: "PayPal" # MT
+      meals_formula:
+        meal_calc_type:
+          fixed: "Fisso" # MT
+          share: "Proporzionale" # MT
+        pantry_calc_type:
+          fixed: "Fisso" # MT
+          percent: "Percentuale" # MT
+      meals_message:
+        recipient_type:
+          diners: "Commensali" # MT
+          team: "Squadra" # MT
+          all: "Commensali + squadra" # MT
+      user:
+        preferred_contact:
+          email: "Email" # MT
+          text: "SMS" # MT
+          phone: "Telefono" # MT
+        life_stage:
+          any: "Adulti + bambini" # MT
+          adult: "Adulti" # MT
+          child: "Bambini" # MT
+        sort:
+          name: "Per nome" # MT
+          unit: "Per unità" # MT
+        view:
+          album: "Album" # MT
+          table: "Tabella" # MT
+          albumall: "Album con non attivi" # MT
+          tableall: "Tabella con non attivi" # MT
+      calendars_protocol:
+        other_communities:
+          sponsor: "Possono creare solo indicando un referente" # MT
+          read_only: "Possono solo vedere" # MT
+          forbidden: "Non possono vedere né creare" # MT
+      calendars_calendar:
+        default_calendar_view:
+          week: "Settimana" # MT
+          month: "Mese" # MT
+      gdrive_migration:
+        owner:
+          any: "Qualsiasi proprietario" # MT
+        status:
+          any: "Qualsiasi stato" # MT
+          pending: "In attesa" # MT
+          errored: "Con errori" # MT
+          declined: "Rifiutati" # MT
+          transferred: "Trasferiti" # MT
+          copied: "Copiati" # MT
+          ignored: "Ignorati" # MT
+          disappeared: "Scomparsi" # MT
+      wiki_page:
+        editable_by:
+          everyone: "Tutti" # MT
+          wikiist: "Solo curatori del wiki e amministratori" # MT
+      work_job:
+        slot_type:
+          fixed: "È un incarico normale con un numero fisso di posti" # MT
+          full_single: "È un incarico per tutta la comunità (turno singolo)" # MT
+          full_multiple: "È un incarico per tutta la comunità (più turni)" # MT
+        time_type:
+          date_time: "Questo incarico ha data e ora stabilite" # MT
+          date_only: "Questo incarico è per una data o un intervallo di date" # MT
+          full_period: "Questo incarico vale per tutto il periodo di lavoro" # MT
+        reminders:
+          abs_rel:
+            relative: "Tempo relativo" # MT
+            absolute: "Ora esatta" # MT
+          rel_unit_sign:
+            days_before: "Giorni prima (alle 6)" # MT
+            days_after: "Giorni dopo (alle 6)" # MT
+            hours_before: "Ore prima" # MT
+            hours_after: "Ore dopo" # MT
+        requester:
+          any: "Qualsiasi richiedente" # MT
+          none: "Nessun richiedente" # MT
+        preassigned:
+          any: "Tutti gli incarichi" # MT
+          y: "Preassegnati" # MT
+          n: "Non preassegnati" # MT
+      meals_role:
+        time_type:
+          date_time: "Questo ruolo ha data e ora stabilite" # MT
+          date_only: "Questo ruolo è solo per una certa data" # MT
+        reminders:
+          rel_unit_sign:
+            days_before: "Giorni prima (alle 6)" # MT
+            days_after: "Giorni dopo (alle 6)" # MT
+            hours_before: "Ore prima" # MT
+            hours_after: "Ore dopo" # MT
+      work_period:
+        phase:
+          archived: "Archiviato: periodo passato, non modificabile" # MT
+          draft: "Bozza: incarichi ancora in preparazione, iscrizioni nascoste" # MT
+          open: "Aperto: si possono scegliere gli incarichi!" # MT
+          published: "Pubblicato: il calendario di lavoro definitivo" # MT
+          ready: "Pronto: incarichi definiti, riepilogo visibile, ma non ci si può iscrivere" # MT
+        quota_type:
+          none: "Nessuno" # MT
+          by_person: "Per persona" # MT
+          by_household: "Per nucleo" # MT
+        pick_type:
+          free_for_all: "Tutti scelgono insieme" # MT
+          staggered: "Gruppi di persone scelgono a turno" # MT
+        meal_job_sync:
+          "false": "Non sincronizzare gli incarichi dei pasti" # MT
+          "true": "Sincronizza gli incarichi dei pasti per le formule e i ruoli selezionati" # MT
+      work_shift:
+        lens:
+          all: "Tutti gli incarichi" # MT
+          open: "Incarichi liberi" # MT
+          mine: "I miei incarichi" # MT
+          myhh: "Il mio nucleo" # MT
+          notpre: "Non preassegnati" # MT
+        date_range:
+          all: "Passati e futuri" # MT
+          curftr: "Attuali e futuri" # MT
+          past: "Solo passati" # MT
+
+    prompts:
+      user:
+        preferred_contact: "Come preferisci essere contattato per questioni non urgenti?" # MT

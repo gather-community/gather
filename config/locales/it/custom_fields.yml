@@ -1,0 +1,149 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+it:
+  custom_fields:
+    boolean:
+      "true": "Sì" # MT
+      "false": "No" # MT
+    labels:
+      community:
+        settings:
+          main_nav_customizations: "Personalizzazioni del menu principale" # MT
+          time_zone: "Fuso orario" # MT
+          default_landing_page: "Pagina iniziale predefinita" # MT
+          people:
+            _self: "Persone" # MT
+            default_directory_sort: "Ordinamento predefinito della rubrica" # MT
+            plain_user_selects: "Menu a tendina semplici per gli utenti" # MT
+            user_custom_fields_spec: "Specifica dei campi personalizzati degli utenti" # MT
+          meals:
+            _self: "Pasti" # MT
+            reimb_instructions: "Istruzioni per i rimborsi" # MT
+            allergens: "Allergeni" # MT
+            show_reimb_form: "Mostra il modulo di rimborso stampabile" # MT
+            cooks_can_finalize: "I cuochi possono finalizzare i pasti" # MT
+            cooks_can_change_invites: "I cuochi possono cambiare le comunità invitate ai pasti" # MT
+            default_invites: "Comunità invitate ai pasti per impostazione predefinita" # MT
+            allow_job_signup_on_meal_page: "Consenti l'iscrizione agli incarichi dalla pagina del pasto" # MT
+            default_capacity: "Capienza predefinita" # MT
+            reminder_lead_times:
+              _self: "Giorni di anticipo dei promemoria" # MT
+              diner: "Promemoria per i commensali" # MT
+              early_menu: "Primo promemoria per il menù" # MT
+              late_menu: "Ultimo promemoria per il menù" # MT
+          calendars:
+            _self: "Calendari" # MT
+            kinds: "Tipi" # MT
+            meals:
+              _self: "Eventi dei pasti" # MT
+              default_total_time: "Durata totale predefinita" # MT
+              default_prep_time: "Tempo di preparazione predefinito" # MT
+          work:
+            _self: "Lavoro" # MT
+            default_date_filter: "Filtro predefinito per data delle iscrizioni" # MT
+          billing:
+            _self: "Fatturazione" # MT
+            contact: "Contatto per la fatturazione" # MT
+            payment_instructions: "Istruzioni di pagamento" # MT
+            statement_terms: "Scadenza degli estratti conto" # MT
+            statement_reminder_lead_time: "Giorni di anticipo del\npromemoria per l'estratto conto" # MT
+            paypal_reimbursement: "Offri il rimborso tramite PayPal" # MT
+            payment_methods:
+              _self: "Informazioni sui metodi di pagamento" # MT
+              paypal_me: "PayPal.me" # MT
+              paypal_email: "PayPal tramite email" # MT
+              paypal_friend: "Chiedi ai membri di inviare i pagamenti PayPal come «invio ad amici»" # MT
+              check_payee: "Beneficiario degli assegni" # MT
+              check_address: "Indirizzo postale per gli assegni" # MT
+              check_dropoff: "Istruzioni per la consegna degli assegni" # MT
+              cash_dropoff: "Istruzioni per la consegna dei contanti" # MT
+              additional_info: "Informazioni aggiuntive" # MT
+              show_billing_contact: "Mostra l'email del contatto per la fatturazione con le informazioni aggiuntive" # MT
+            late_fee_policy:
+              _self: "Regole per le penali di mora" # MT
+              fee_type: "Tipo di penale" # MT
+              threshold: "Soglia" # MT
+              amount: "Importo" # MT
+    hints:
+      community:
+        settings:
+          main_nav_customizations: "Usa questa impostazione per modificare i link del menu principale. Inserisci i link in formato Markdown. Esempio: [Nome del link](https://example.com). Se il nome del link corrisponde a uno esistente, sostituisce l'URL predefinito. Un URL vuoto rimuove del tutto il link. Tutto il resto del testo e del markup viene ignorato." # MT
+          people:
+            plain_user_selects: "Usa semplici menu a tendina invece dei campi con ricerca durante la digitazione. Può essere preferibile per comunità più piccole." # MT
+            user_custom_fields_spec: "Inserisci in formato YAML la specifica dei campi personalizzati che appariranno quando si visualizzano o modificano gli utenti di questa comunità. Contatta l'assistenza di Gather se ti serve aiuto per scriverla." # MT
+          meals:
+            reimb_instructions: "Cosa devono fare i cuochi con gli scontrini per ottenere il rimborso. Per esempio inserire gli importi nella pagina di modifica del pasto in Gather, usare il modulo di rimborso integrato o seguire un'altra procedura." # MT
+            allergens: "Elenco di allergeni, separati da virgole, tra cui i cuochi scelgono quando pubblicano i menù." # MT
+            show_reimb_form: "Se mostrare un modulo di rimborso stampabile (con importi per spesa e dispensa e metodo di rimborso) nella pagina di riepilogo del pasto. Deseleziona se preferisci una procedura di rimborso elettronica." # MT
+            cooks_can_finalize: "Se i capocuochi possono finalizzare i pasti, oltre ai responsabili fatturazione, ai coordinatori dei pasti e agli amministratori." # MT
+            cooks_can_change_invites: "Se i capocuochi possono cambiare le comunità invitate a un pasto." # MT
+            default_invites: "Quali comunità sono invitate a un pasto per impostazione predefinita." # MT
+            allow_job_signup_on_meal_page: "Se i commensali possono offrirsi di aiutare per un pasto mentre si iscrivono al pasto stesso." # MT
+            default_capacity: "Il numero predefinito di persone che un pasto può accogliere." # MT
+            reminder_lead_times:
+              _self: "Con quanti giorni di anticipo vengono inviati i vari tipi di promemoria. I promemoria vengono inviati alle 6 del mattino, ora locale. Con «0» il promemoria viene inviato la mattina del giorno del pasto. Altre impostazioni dei promemoria si trovano nella pagina dei ruoli dei pasti." # MT
+              diner: "Il promemoria inviato a tutti i commensali." # MT
+              early_menu: "Il promemoria inviato al capocuoco per ricordargli di inserire il menù." # MT
+              late_menu: "Un secondo promemoria, più urgente, inviato al capocuoco se non ha ancora inserito il menù. Deve avere meno giorni di anticipo del primo promemoria per il menù." # MT
+          calendars:
+            kinds: "Tipi di eventi diversi, separati da virgole. Si possono usare nei regolamenti degli eventi. Se vuoto, il campo «Tipo» non appare nel modulo dell'evento." # MT
+            meals:
+              default_total_time: "Durata totale predefinita degli eventi dei pasti in minuti, compresi preparazione e riordino" # MT
+              default_prep_time: "Tempo di preparazione predefinito dei pasti in minuti" # MT
+          billing:
+            contact: "Email per domande sulla fatturazione. Viene inclusa nelle istruzioni di pagamento." # MT
+            payment_instructions: "Come inviare il pagamento per un conto." # MT
+            statement_terms: "Numero di giorni dopo la data di creazione entro cui va pagato un estratto conto. Se zero (0), gli estratti conto non hanno scadenza." # MT
+            statement_reminder_lead_time: "Con quanti giorni di anticipo rispetto alla scadenza viene inviato il promemoria di pagamento dell'estratto conto. I promemoria non vengono inviati se gli estratti conto non hanno scadenza o se il saldo è stato pagato." # MT
+            paypal_reimbursement: "Consenti ai cuochi di chiedere che i rimborsi dei pasti vengano inviati tramite PayPal. I pagamenti PayPal vanno fatti a mano (non sono automatici)." # MT
+            payment_methods:
+              _self: "Istruzioni o informazioni per i vari metodi di pagamento. Lascia vuoto se il metodo non è accettato. Visita la <a href='/accounts/mine'>pagina dei conti</a> per vedere come appaiono le istruzioni." # MT
+              paypal_me: "Inserisci il tuo <a href='https://paypal.me'>link PayPal.me</a>. È il modo più semplice per i membri di pagare con PayPal. Nota che con questo metodo non è possibile evitare una commissione se hai un conto PayPal business." # MT
+              paypal_email: "Se vuoi accettare PayPal ma non usare PayPal.me, inserisci l'indirizzo email a cui i membri devono inviare i pagamenti." # MT
+              paypal_friend: "Vale sia per PayPal.me sia per PayPal tramite email. Seleziona se, secondo le condizioni d'uso di PayPal, puoi considerare i pagamenti come tra amici. Inviare i pagamenti in questo modo evita le commissioni." # MT
+              check_payee: "Indica a chi vanno intestati gli assegni. Lascia vuoto se gli assegni non sono accettati." # MT
+              check_address: "Inserisci un indirizzo se accetti assegni per posta. Così verranno mostrate anche le istruzioni per il pagamento online delle bollette." # MT
+              check_dropoff: "Inserisci le istruzioni per consegnare un assegno di persona. Lascia vuoto se gli assegni vanno spediti per posta o non sono accettati." # MT
+              cash_dropoff: "Inserisci le istruzioni per consegnare contanti di persona. Lascia vuoto se i contanti non sono accettati." # MT
+              additional_info: "Inserisci altre informazioni che vuoi includere nell'area delle istruzioni di pagamento." # MT
+              show_billing_contact: "Se includere l'email del contatto per la fatturazione indicata sopra (se presente) in fondo alle istruzioni di pagamento. Deseleziona e aggiungila tu in «Informazioni aggiuntive» se vuoi personalizzare il modo in cui appare." # MT
+            late_fee_policy:
+              fee_type: "Come viene calcolata la penale" # MT
+              threshold: "Saldo insoluto minimo perché venga applicata una penale" # MT
+              amount: "Importo o percentuale della penale (es. inserisci «3» per il 3% o 3,00, a seconda del tipo)" # MT
+    options:
+      community:
+        settings:
+          default_landing_page:
+            meals: "Pasti" # MT
+            directory: "Rubrica" # MT
+            calendars: "Calendari" # MT
+            wiki: "Wiki" # MT
+          people:
+            default_directory_sort:
+              name: "Per nome" # MT
+              unit: "Per unità abitativa" # MT
+          meals:
+            default_invites:
+              all: "Tutte le comunità" # MT
+              own: "Solo la propria comunità" # MT
+          work:
+            default_date_filter:
+              all: "Passate e future" # MT
+              curftr: "Attuali e future" # MT
+          billing:
+            late_fee_policy:
+              fee_type:
+                none: "Nessuna penale" # MT
+                fixed: "Fissa" # MT
+                percent: "Percentuale" # MT

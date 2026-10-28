@@ -1,0 +1,238 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+fi:
+  transaction_codes:
+    meal: "Ateria" # MT
+    dues: "Jäsenmaksu" # MT
+    payment: "Maksu" # MT
+    reimb: "Kulukorvaus" # MT
+    othcrd: "Muu hyvitys" # MT
+    othchg: "Muu veloitus" # MT
+    late: "Viivästysmaksu" # MT
+    initbal: "Alkusaldo" # MT
+
+  accounts:
+    updated: "Tili päivitetty." # MT
+    late_fees_applied: "Viivästysmaksut veloitettu." # MT
+    # An amount that is a credit, e.g. "$5.00 CR".
+    credit_amount_html: "%{amount} hyvitystä" # MT
+    # Shown in its own column next to credit amounts on statements.
+    credit_abbr: "hyvitys" # MT
+    not_applicable: "–" # MT
+    no_credit_limit: "Ei rajaa" # MT
+    no_users_warning: "Tilin kotitaloudella ei ole käyttäjiä" # MT
+    late_fee_confirm: "Oletko varma? Maksut veloitetaan %{count} kotitaloudelta." # MT
+    late_fee_confirm_with_days: "Oletko varma? Maksut veloitetaan %{count} kotitaloudelta. Maksut veloitettiin viimeksi %{days} päivää sitten." # MT
+    statement_confirm: "Oletko varma? Tiliotteet lähetetään %{count} kotitaloudelle." # MT
+    paypal_friend_confirm_html: "<strong>Älä</strong> valitse ”Maksu tuotteista tai palveluista?”, jos sitä kysytään, ettei sinulta peritä maksua." # MT
+    details:
+      no_activity: "Tilillä ei ole tapahtumia." # MT
+    other_accounts:
+      looking: "Etsitkö toista tiliä?" # MT
+      each_community: "Jokainen yhteisö hallinnoi omia tilejään." # MT
+    payment_instructions:
+      how_to_pay: "Näin maksat" # MT
+      paypal: "PayPal" # MT
+      click_logo: "Maksa PayPalilla napsauttamalla yllä olevaa logoa." # MT
+      send_paypal_html: "Lähetä PayPal-maksut osoitteeseen %{email}." # MT
+      choose_friend_html: "Muista valita vaihtoehto %{friend}, ettei sinulta peritä maksua." # MT
+      sending_to_friend: "Ystäville ja perheelle" # MT
+      online_bill_pay: "Verkkopankkimaksu" # MT
+      bill_pay_intro: "Useimmat pankit tarjoavat verkkomaksun, jolla voit helposti lähettää shekin verkossa. Lisää uusi maksunsaaja ja anna seuraavat tiedot:" # MT
+      payee_name_html: "Maksunsaajan nimi: %{payee}" # MT
+      account_number_html: "Tilinumero: %{number}" # MT
+      address: "Osoite:" # MT
+      check: "Shekki" # MT
+      payable_to_html: "Kirjoita shekin saajaksi %{payee}" # MT
+      memo_line_html: "Kirjoita tilinumerosi %{number} viestiriville." # MT
+      mail_to: "Postita shekit osoitteeseen:" # MT
+      cash: "Käteinen" # MT
+      none_provided: "Maksuohjeita ei ole annettu." # MT
+      go_to_settings_html: "Anna ohjeet täällä: %{link}." # MT
+      settings_page: "asetussivu" # MT
+      contact_html: "Laskutusta koskevissa kysymyksissä ota yhteyttä: %{email}." # MT
+    statement_list:
+      statements: "Tiliotteet" # MT
+      date: "Päivämäärä" # MT
+      activity: "Tapahtumat" # MT
+      total_due: "Maksettavaa yhteensä" # MT
+    summary:
+      summary: "Yhteenveto" # MT
+      account_number: "Tilinumero" # MT
+      last_statement_date: "Viimeisimmän tiliotteen päivämäärä" # MT
+      last_statement_balance: "Viimeisimmän tiliotteen saldo" # MT
+      new_credits: "Uudet maksut/hyvitykset" # MT
+      balance_due: "Maksettava saldo" # MT
+      due_date: "Eräpäivä" # MT
+      new_charges: "Uudet veloitukset" # MT
+      current_balance: "Nykyinen saldo" # MT
+      credit_limit: "Luottoraja" # MT
+      balance_due_footnote: "Tämä on summa, jonka olet tällä hetkellä velkaa. Se on viimeisimmän tiliotteen maksettava summa vähennettynä sen jälkeen saaduilla maksuilla. Jos olet jo maksanut, mutta maksu ei näy tässä, voit jättää tämän huomiotta." # MT
+      current_balance_footnote: "Tämä saldo sisältää viimeisimmän tiliotteen jälkeiset veloitukset ja hyvitykset. Jos se ylittää luottorajasi, et voi ilmoittautua aterioille." # MT
+    synopsis:
+      pay_by: "Maksa %{amount} viimeistään %{date}. Kiitos!" # MT
+      pay: "Maksa %{amount}. Kiitos!" # MT
+      zero: "Maksettava saldosi on nolla. Hienoa!" # MT
+      credit: "Tililläsi on hyvitystä %{amount}. Maksua ei tarvita!" # MT
+    transaction_export_form:
+      download: "Lataa tapahtumat CSV-tiedostona" # MT
+      incurred: "Syntynyt välillä …" # MT
+      recorded: "Kirjattu välillä …" # MT
+      select_dates: "Valitse päivämäärät" # MT
+    edit:
+      title: "Muokkaa tiliä: %{household}" # MT
+      no_users: "Tähän tiliin ei liity käyttäjiä, eikä se voi vastaanottaa tiliotteita." # MT
+      cancel: "Peruuta" # MT
+    show:
+      title: "Tili: %{household}" # MT
+    mine:
+      title: "Oma tili" # MT
+      title_with_community: "Oma tili: %{community}" # MT
+      no_charges: "Kotitaloudellasi ei ole vielä veloituksia." # MT
+    index:
+      title: "Tilit" # MT
+      apply_late_fees: "Veloita viivästysmaksut" # MT
+      send_statements: "Lähetä tiliotteet" # MT
+      no_accounts: "Tilejä ei löytynyt." # MT
+      num: "Nro" # MT
+      household: "Kotitalous" # MT
+      last_statement_date: "Ed. tiliotteen pvm" # MT
+      due_last_statement: "Ed. tiliotteella maksettavaa" # MT
+      new_credits: "Uudet hyvitykset" # MT
+      balance_due: "Maksettava saldo" # MT
+      new_charges: "Uudet veloitukset" # MT
+      current_balance: "Nykyinen saldo" # MT
+      credit_limit: "Luottoraja" # MT
+      add_transaction: "Lisää tapahtuma" # MT
+      totals: "Yhteensä" # MT
+      download_accounts: "Lataa tilit CSV-tiedostona" # MT
+      summary:
+        one: "Aktiivisia tilejä on %{count}." # MT
+        other: "Aktiivisia tilejä on %{count}." # MT
+      active_account_definition: "Aktiivisella tilillä on ajankohtaisia tapahtumia tai nollasta poikkeava nykyinen saldo." # MT
+      last_statement_run: "Tiliotteet lähetettiin viimeksi %{date}." # MT
+      statements_never_run: "Tiliotteita ei ole koskaan lähetetty." # MT
+      no_users:
+        one: "Tilejä, joihin ei liity käyttäjiä, on %{count}. Tälle tilille ei luoda tiliotetta." # MT
+        other: "Tilejä, joihin ei liity käyttäjiä, on %{count}. Näille tileille ei luoda tiliotteita." # MT
+      recent_statements:
+        one: "Tilejä, joilla on tiliote viimeisen 24 tunnin ajalta, on %{count}. Tälle tilille ei luoda uutta tiliotetta." # MT
+        other: "Tilejä, joilla on tiliote viimeisen 24 tunnin ajalta, on %{count}. Näille tileille ei luoda tiliotteita." # MT
+    others:
+      one_html: "Sinulla on toinen Gather-tili yhteisössä %{cmty}." # MT
+      multiple_html: "Sinulla on Gather-tilejä myös näissä yhteisöissä: %{cmtys}." # MT
+    payment_badge_alt:
+      paypal: "PayPal-maksun merkki" # MT
+      online_bill_pay: "Verkkopankkimaksun merkki" # MT
+      check: "Shekkimaksun merkki" # MT
+      cash: "Käteismaksun merkki" # MT
+
+  statements:
+    generation_started: "Tiliotteiden luonti aloitettu. Päivitä sivu hetken kuluttua nähdäksesi tilien päivittyneet tilat." # MT
+    no_users_not_generated: "Seuraaviin kotitalouksiin ei liity käyttäjiä, joten niille ei luotu tiliotteita: %{households}. Yritä lähettää tiliotteet uudelleen, kun kotitalouksiin on liitetty käyttäjiä." # MT
+    account_info:
+      account_community: "Tilin yhteisö" # MT
+      account_number: "Tilinumero" # MT
+      household: "Kotitalous" # MT
+    link_to_accounts_page:
+      notice_html: "Ajantasaisimmat tilitiedot: %{link}." # MT
+      link: "siirry tilisivullesi" # MT
+    statement_rows:
+      load_more: "Lataa lisää …" # MT
+      loading: "Ladataan …" # MT
+    show:
+      title: "Tiliote nro %{number}" # MT
+      statement_date: "Tiliotteen päivämäärä" # MT
+      due_date: "Eräpäivä" # MT
+      activity: "Tapahtumat" # MT
+      previous_balance: "Edellinen saldo" # MT
+      statement_balance: "Tiliotteen saldo" # MT
+
+  transactions:
+    added: "Tapahtuma lisätty." # MT
+    not_added: "Tapahtumaa ei lisätty. Voit muokata sitä alla ja yrittää uudelleen tai palata tilisivulle valitsemalla alta ”Peruuta”." # MT
+    form:
+      cancel: "Peruuta" # MT
+    txn_rows:
+      no_activity: "Tällä jaksolla ei ollut tapahtumia" # MT
+    txn_table:
+      date: "Päivämäärä" # MT
+      type: "Tyyppi" # MT
+      description: "Kuvaus" # MT
+      quantity: "Määrä" # MT
+      unit_price: "Yksikköhinta" # MT
+      amount: "Summa" # MT
+    confirm:
+      title: "Vahvista tapahtuma" # MT
+      intro: "Alla näkyy, miltä uusi tapahtuma näyttää kotitalouden tiliotteella. Tapahtumia ei voi muokata luomisen jälkeen. Tarkista, että alla olevat tiedot ovat oikein." # MT
+    index:
+      title: "Viimeaikaiset tapahtumat" # MT
+      title_with_household: "Viimeaikaiset tapahtumat: %{household}" # MT
+      account_community: "Tilin yhteisö" # MT
+      account_number: "Tilinumero" # MT
+      household: "Kotitalous" # MT
+      activity: "Tapahtumat" # MT
+      no_activity: "Tilillä ei ole tapahtumia." # MT
+      last_statement_balance: "Viimeisimmän tiliotteen saldo" # MT
+      current_balance: "Nykyinen saldo" # MT
+    new:
+      title: "Uusi tapahtuma" # MT
+
+  billing:
+    # Description of the transaction LateFeeApplier creates.
+    late_fee_description: "Viivästysmaksu" # MT
+    templates:
+      created: "Pohja luotu." # MT
+      updated: "Pohja päivitetty." # MT
+      select_one: "Valitse vähintään yksi pohja." # MT
+      applied: "Tapahtumat luotu." # MT
+      edit:
+        title: "Muokkaa laskutuspohjaa: %{description}" # MT
+      new:
+        title: "Uusi tapahtumapohja" # MT
+      index:
+        title: "Tapahtumapohjat" # MT
+        apply: "Käytä pohjia" # MT
+        create: "Luo pohja" # MT
+        intro: "Tapahtumapohjien avulla on helppo luoda kerralla useita tapahtumia." # MT
+        none_found: "Pohjia ei löytynyt." # MT
+        description: "Kuvaus" # MT
+        type: "Tyyppi" # MT
+        member_types: "Jäsentyyppi/-tyypit" # MT
+        amount: "Summa" # MT
+      review:
+        title: "Käytä pohjia" # MT
+        intro: "Olet luomassa seuraavat tapahtumat seuraaville kotitalouksille:" # MT
+        description: "Kuvaus" # MT
+        type: "Tyyppi" # MT
+        amount: "Summa" # MT
+        households: "Kotitaloudet" # MT
+        outdated_warning: "Yllä oleva kotitalousluettelo voi vanhentua, jos kotitalouksien jäsentyyppejä muutetaan tämän vahvistussivun latauksen ja alla olevan ”Käytä”-painikkeen valitsemisen välillä." # MT
+        cancel: "Peruuta" # MT
+        apply: "Käytä" # MT
+
+  account_mailer:
+    statement_notice:
+      subject: "Uusi tiliote: %{community}" # MT
+      created: "Gatheriin on luotu uusi tiliote tilillesi yhteisössä %{community}." # MT
+      amount_due: "Maksettava summa on %{amount}." # MT
+      credit: "Sinulla on hyvitystä %{amount}. Maksua ei tarvita." # MT
+      see_details: "Katso tiedot alla olevasta linkistä:" # MT
+      thanks: "Kiitos nopeasta maksustasi!" # MT
+    statement_reminder:
+      subject: "Maksumuistutus tilistä: %{community}" # MT
+      due_on: "Muistutus: tilisi (yhteisö %{community}) Gather-tiliotteen maksu erääntyy %{date}." # MT
+      due_soon: "Muistutus: tilisi (yhteisö %{community}) Gather-tiliotteen maksu erääntyy pian." # MT
+      amount_due: "Maksettava summa on %{amount}. Katso tiedot alla olevasta linkistä:" # MT
+      disregard: "Jos olet jo maksanut, voit jättää tämän ilmoituksen huomiotta." # MT
+      thanks: "Kiitos nopeasta maksustasi!" # MT

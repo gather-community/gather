@@ -11,8 +11,7 @@ module Lens
     end
 
     def html(options = {})
-      h.content_tag(:form, inner, class: "form-inline lens-bar hidden-print #{options[:position]}",
-        data: {controller: "lens-bar"})
+      h.content_tag(:form, inner, class: "form-inline lens-bar hidden-print #{options[:position]}")
     end
 
     private

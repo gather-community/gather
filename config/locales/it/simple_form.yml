@@ -88,6 +88,8 @@ it:
       wiki_page:
         comment: "Un commento su questa modifica." # MT
     hints:
+      feature_flag:
+        name: "Il nome che il codice cerca, ad es. messaging per FeatureFlag.lookup(\"messaging\"). Lettere minuscole, numeri e trattini bassi. Non potrà essere modificato in seguito." # MT
       markdown_suffix_html: "Puoi usare la <a href='/about/markdown' target='_new'>formattazione avanzata</a>." # MT
       communities_signup:
         community_name: "Fino a 20 caratteri." # MT
@@ -212,6 +214,11 @@ it:
         round_duration: "Quanto deve durare ogni turno di scelta? Il tempo deve bastare perché una persona media possa scegliere con calma." # MT
         job_copy_source_id: "Se vuoi, scegli un periodo da cui copiare gli incarichi quando crei il periodo. Gli incarichi dei pasti non verranno copiati e vanno invece sincronizzati (vedi sotto)." # MT
     options:
+      feature_flag:
+        mode:
+          "off": "Disattivato" # MT
+          selected_users: "Attivo per gli utenti selezionati" # MT
+          everyone: "Attivo per tutti" # MT
       calendars_event:
         repeat_frequency:
           none: "Mai" # MT

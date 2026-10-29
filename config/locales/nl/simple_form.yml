@@ -88,6 +88,8 @@ nl:
       wiki_page:
         comment: "Een opmerking over deze wijziging." # MT
     hints:
+      feature_flag:
+        name: "De naam die de code opzoekt, bijv. messaging voor FeatureFlag.lookup(\"messaging\"). Kleine letters, cijfers en underscores. Deze kan later niet worden gewijzigd." # MT
       markdown_suffix_html: "Je kunt <a href='/about/markdown' target='_new'>uitgebreide opmaak</a> gebruiken." # MT
       communities_signup:
         community_name: "Hoogstens 20 tekens." # MT
@@ -212,6 +214,11 @@ nl:
         round_duration: "Hoe lang duurt elke ronde? Er moet net genoeg tijd zijn voor een gemiddeld persoon om rustig te kiezen." # MT
         job_copy_source_id: "Kies eventueel een periode waaruit taken worden gekopieerd bij het aanmaken van de periode. Maaltijdtaken worden niet gekopieerd, die moeten worden gesynchroniseerd (zie hieronder)." # MT
     options:
+      feature_flag:
+        mode:
+          "off": "Uit" # MT
+          selected_users: "Aan voor geselecteerde gebruikers" # MT
+          everyone: "Aan voor iedereen" # MT
       calendars_event:
         repeat_frequency:
           none: "Nooit" # MT

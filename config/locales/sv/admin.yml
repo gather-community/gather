@@ -12,6 +12,60 @@
 # ======================================================================================================
 sv:
   admin:
+    feature_flags:
+      created: "Flaggan ”%{name}” har skapats." # MT
+      deleted: "Flaggan ”%{name}” har tagits bort." # MT
+      user_added: "%{user} har lagts till i ”%{name}”." # MT
+      user_removed: "%{user} har tagits bort från ”%{name}”." # MT
+      mode_changed:
+        "off": "”%{name}” är nu av." # MT
+        selected_users: "”%{name}” är nu på endast för valda användare." # MT
+        everyone: "”%{name}” är nu på för alla." # MT
+      modes:
+        "off": "Av" # MT
+        selected_users: "Valda användare" # MT
+        everyone: "Alla" # MT
+      mode_switch_label: "Läge för %{name}" # MT
+      index:
+        title: "Funktionsflaggor" # MT
+        intro: "Funktionsflaggor slår på och av funktioner som inte släppts än. Varje flagga kan vara av, på endast för valda användare (från vilken gemenskap som helst) eller på för alla." # MT
+        new_flag: "Ny flagga" # MT
+        none_found: "Inga funktionsflaggor än." # MT
+        headers:
+          name: "Flagga" # MT
+          state: "Läge" # MT
+          users: "Valda användare" # MT
+        user_count:
+          one: "%{count} användare" # MT
+          other: "%{count} användare" # MT
+      new:
+        title: "Ny funktionsflagga" # MT
+      show:
+        delete: "Ta bort" # MT
+        delete_confirm: "Ta bort flaggan ”%{name}” och dess lista över valda användare? All kod som slår upp den här flaggan kommer att behandla den som av." # MT
+        state: "Läge" # MT
+        usage: "I koden" # MT
+        created_at: "Skapad" # MT
+        users_heading: "Valda användare" # MT
+        users_hint:
+          "off": "Flaggan är av, så de här användarna ser inte funktionen. Välj ”Valda användare” ovan för att slå på den bara för de här personerna." # MT
+          selected_users: "Bara de här användarna ser funktionen." # MT
+          everyone: "Flaggan är på för alla, så den här listan används inte just nu. Den sparas ifall du byter tillbaka." # MT
+        no_users: "Inga användare valda än. Sök ovan för att lägga till någon." # MT
+        remove: "Ta bort %{name}" # MT
+        headers:
+          name: "Namn" # MT
+          community: "Gemenskap" # MT
+          email: "E-post" # MT
+        search:
+          label: "Lägg till en användare" # MT
+          placeholder: "Lägg till en användare från vilken gemenskap som helst: sök på namn eller e-post" # MT
+          too_short:
+            one: "Skriv minst %{count} tecken" # MT
+            other: "Skriv minst %{count} tecken" # MT
+          searching: "Söker…" # MT
+          no_results: "Inga matchande användare" # MT
+          error: "Sökningen misslyckades. Försök igen." # MT
     domains:
       refresh_all_started:
         one: "Kontrollerar %{count} domän i bakgrunden. Det bör ta ungefär %{seconds} sekunder. Ladda om sidan för att se resultatet." # MT

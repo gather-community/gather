@@ -1,0 +1,71 @@
+.admin--feature-flags {
+  table.index td.name a {
+    font-family: $font-family-monospace;
+  }
+
+  .feature-flag-mode-switch {
+    display: inline-block;
+    margin: 0;
+
+    // The current mode of an "off" flag: solid gray, so it reads as selected like the colored modes.
+    .btn-off {
+      @include button-variant($btn-default-color, darken($btn-default-bg, 20%), darken($btn-default-border, 20%));
+    }
+
+    .btn.active {
+      box-shadow: none;
+      font-weight: bold;
+      cursor: default;
+    }
+  }
+
+  .user-search {
+    position: relative;
+    max-width: 36em;
+    margin-bottom: 20px;
+  }
+
+  .user-search-results {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: $zindex-dropdown;
+    max-height: 22em;
+    overflow-y: auto;
+    margin: 2px 0 0;
+    padding: 4px 0;
+    list-style: none;
+    background: #fff;
+    border: 1px solid $dropdown-border;
+    border-radius: $border-radius-base;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+
+    li {
+      padding: 6px 12px;
+    }
+
+    .user-search-option {
+      cursor: pointer;
+
+      &.active {
+        background: $dropdown-link-hover-bg;
+      }
+    }
+
+    .user-search-name {
+      display: block;
+      font-weight: bold;
+    }
+
+    .user-search-details,
+    .user-search-message {
+      color: $text-muted;
+      font-size: $font-size-small;
+    }
+  }
+
+  table.feature-flag-users td.actions {
+    text-align: right;
+  }
+}

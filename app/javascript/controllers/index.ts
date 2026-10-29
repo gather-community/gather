@@ -44,3 +44,6 @@ application.register("calendars--eventlet-delete", Calendars__EventletDeleteCont
 
 import Calendars__EventFormController from "./calendars/event_form_controller";
 application.register("calendars--event-form", Calendars__EventFormController);
+
+import Admin__UserSearchController from "./admin/user_search_controller";
+application.register("admin--user-search", Admin__UserSearchController);

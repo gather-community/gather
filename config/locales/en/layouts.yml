@@ -22,6 +22,7 @@ en:
       communities: "Communities"
       resync_subscriptions: "Resync subscriptions"
       domains: "Domains"
+      feature_flags: "Feature Flags"
       # Shown on pages in machine-translated locales (Gather::Locales::MACHINE_TRANSLATED).
       machine_translated: "This page was translated automatically and may contain mistakes."
       machine_translated_with_link_html: "This page was translated automatically and may contain mistakes. %{link}"

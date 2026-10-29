@@ -12,6 +12,62 @@
 # ======================================================================================================
 nb:
   admin:
+    feature_flags:
+      created: "Flagget «%{name}» er opprettet." # MT
+      deleted: "Flagget «%{name}» er slettet." # MT
+      user_added: "%{user} er lagt til i «%{name}»." # MT
+      user_removed: "%{user} er fjernet fra «%{name}»." # MT
+      mode_changed:
+        "off": "«%{name}» er nå av." # MT
+        selected_users: "«%{name}» er nå på bare for valgte brukere." # MT
+        everyone: "«%{name}» er nå på for alle." # MT
+      modes:
+        "off": "Av" # MT
+        selected_users: "Valgte brukere" # MT
+        everyone: "Alle" # MT
+      index:
+        title: "Funksjonsflagg" # MT
+        intro: "Funksjonsflagg slår av og på funksjoner som ikke er lansert ennå. Hvert flagg kan være av, på bare for valgte brukere (fra hvilket som helst fellesskap) eller på for alle." # MT
+        new_flag: "Nytt flagg" # MT
+        none_found: "Ingen funksjonsflagg ennå." # MT
+        headers:
+          name: "Flagg" # MT
+          state: "Tilstand" # MT
+          users: "Valgte brukere" # MT
+        user_count:
+          one: "%{count} bruker" # MT
+          other: "%{count} brukere" # MT
+      new:
+        title: "Nytt funksjonsflagg" # MT
+      edit:
+        title: "Rediger funksjonsflagg: %{name}" # MT
+      show:
+        title: "Funksjonsflagg: %{name}" # MT
+        delete: "Slett" # MT
+        delete_confirm: "Slette flagget «%{name}» og listen over valgte brukere? All kode som slår opp dette flagget, vil behandle det som av." # MT
+        state: "Tilstand" # MT
+        usage: "I koden" # MT
+        created_at: "Opprettet" # MT
+        users_heading: "Valgte brukere" # MT
+        users_hint:
+          "off": "Flagget er av, så disse brukerne ser ikke funksjonen. Rediger flagget og velg «På for valgte brukere» for å slå det på bare for disse personene." # MT
+          selected_users: "Bare disse brukerne ser funksjonen." # MT
+          everyone: "Flagget er på for alle, så denne listen brukes ikke akkurat nå. Den beholdes i tilfelle du bytter tilbake." # MT
+        no_users: "Ingen brukere valgt ennå. Søk ovenfor for å legge til noen." # MT
+        remove: "Fjern %{name}" # MT
+        headers:
+          name: "Navn" # MT
+          community: "Fellesskap" # MT
+          email: "E-post" # MT
+        search:
+          label: "Legg til en bruker" # MT
+          placeholder: "Legg til en bruker fra hvilket som helst fellesskap: søk på navn eller e-post" # MT
+          too_short:
+            one: "Skriv minst %{count} tegn" # MT
+            other: "Skriv minst %{count} tegn" # MT
+          searching: "Søker…" # MT
+          no_results: "Ingen brukere passer" # MT
+          error: "Søket mislyktes. Prøv igjen." # MT
     domains:
       refresh_all_started:
         one: "Sjekker %{count} domene i bakgrunnen. Det bør ta omtrent %{seconds} sekunder. Last inn siden på nytt for å se resultatene." # MT

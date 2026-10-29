@@ -12,6 +12,62 @@
 # ======================================================================================================
 es:
   admin:
+    feature_flags:
+      created: "Se creó el indicador «%{name}»." # MT
+      deleted: "Se eliminó el indicador «%{name}»." # MT
+      user_added: "Se añadió a %{user} a «%{name}»." # MT
+      user_removed: "Se quitó a %{user} de «%{name}»." # MT
+      mode_changed:
+        "off": "«%{name}» está ahora desactivado." # MT
+        selected_users: "«%{name}» está ahora activado solo para usuarios seleccionados." # MT
+        everyone: "«%{name}» está ahora activado para todos." # MT
+      modes:
+        "off": "Desactivado" # MT
+        selected_users: "Usuarios seleccionados" # MT
+        everyone: "Todos" # MT
+      index:
+        title: "Indicadores de funcionalidad" # MT
+        intro: "Los indicadores de funcionalidad activan y desactivan funciones aún no publicadas. Cada indicador puede estar desactivado, activado solo para usuarios seleccionados (de cualquier comunidad) o activado para todos." # MT
+        new_flag: "Nuevo indicador" # MT
+        none_found: "Todavía no hay indicadores de funcionalidad." # MT
+        headers:
+          name: "Indicador" # MT
+          state: "Estado" # MT
+          users: "Usuarios seleccionados" # MT
+        user_count:
+          one: "%{count} usuario" # MT
+          other: "%{count} usuarios" # MT
+      new:
+        title: "Nuevo indicador de funcionalidad" # MT
+      edit:
+        title: "Editar indicador de funcionalidad: %{name}" # MT
+      show:
+        title: "Indicador de funcionalidad: %{name}" # MT
+        delete: "Eliminar" # MT
+        delete_confirm: "¿Eliminar el indicador «%{name}» y su lista de usuarios seleccionados? Cualquier código que consulte este indicador lo tratará como desactivado." # MT
+        state: "Estado" # MT
+        usage: "En el código" # MT
+        created_at: "Creado" # MT
+        users_heading: "Usuarios seleccionados" # MT
+        users_hint:
+          "off": "El indicador está desactivado, así que estos usuarios no ven la función. Edita el indicador y elige «Activado para usuarios seleccionados» para activarlo solo para estas personas." # MT
+          selected_users: "Solo estos usuarios ven la función." # MT
+          everyone: "El indicador está activado para todos, así que esta lista no se usa por ahora. Se conserva por si vuelves a cambiarlo." # MT
+        no_users: "Todavía no hay usuarios seleccionados. Busca arriba para añadir a alguien." # MT
+        remove: "Quitar a %{name}" # MT
+        headers:
+          name: "Nombre" # MT
+          community: "Comunidad" # MT
+          email: "Correo electrónico" # MT
+        search:
+          label: "Añadir un usuario" # MT
+          placeholder: "Añade un usuario de cualquier comunidad: busca por nombre o correo electrónico" # MT
+          too_short:
+            one: "Escribe al menos %{count} carácter" # MT
+            other: "Escribe al menos %{count} caracteres" # MT
+          searching: "Buscando…" # MT
+          no_results: "No hay usuarios que coincidan" # MT
+          error: "La búsqueda falló. Inténtalo de nuevo." # MT
     domains:
       refresh_all_started:
         one: "Comprobando %{count} dominio en segundo plano. Debería tardar unos %{seconds} segundos. Recarga esta página para ver los resultados." # MT

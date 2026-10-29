@@ -13,6 +13,9 @@
 de:
   activemodel:
     attributes:
+      feature_flag:
+        name: "Name" # MT
+        mode: "Status" # MT
       # EventletForm (drag-and-drop), for its error messages.
       calendars/eventlet:
         starts_at: "Startzeit" # MT
@@ -38,6 +41,10 @@ de:
         repeat_count: "Anzahl" # MT
     errors:
       models:
+        feature_flag:
+          attributes:
+            name:
+              invalid: "muss mit einem Kleinbuchstaben beginnen und darf nur Kleinbuchstaben, Ziffern und Unterstriche enthalten" # MT
         # EventForm, which takes Calendars::Event's model name.
         calendars/event:
           attributes:
@@ -92,6 +99,7 @@ de:
               in_past: "kann nicht auf eine Zeit in der Vergangenheit geändert werden" # MT
   activerecord:
     models:
+      feature_flag: "Feature-Flag" # MT
       meals/meal: "Mahlzeit" # MT
     attributes:
       user:

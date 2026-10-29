@@ -1,5 +1,68 @@
 en:
   admin:
+    feature_flags:
+      created: "Created the '%{name}' flag."
+      deleted: "Deleted the '%{name}' flag."
+      user_added: "Added %{user} to '%{name}'."
+      user_removed: "Removed %{user} from '%{name}'."
+      mode_changed:
+        "off": "'%{name}' is now off."
+        selected_users: "'%{name}' is now on for selected users only."
+        everyone: "'%{name}' is now on for everyone."
+      # Labels for FeatureFlag::MODES, shown as the flag's current state.
+      modes:
+        "off": "Off"
+        selected_users: "Selected Users"
+        everyone: "Everyone"
+      index:
+        title: "Feature Flags"
+        intro: >-
+          Feature flags turn unreleased features on and off. Each flag can be off, on for selected
+          users only (from any community), or on for everyone.
+        new_flag: "New Flag"
+        none_found: "No feature flags yet."
+        headers:
+          name: "Flag"
+          state: "State"
+          users: "Selected Users"
+        user_count:
+          one: "%{count} user"
+          other: "%{count} users"
+      new:
+        title: "New Feature Flag"
+      edit:
+        title: "Edit Feature Flag: %{name}"
+      show:
+        title: "Feature Flag: %{name}"
+        delete: "Delete"
+        delete_confirm: >-
+          Delete the '%{name}' flag and its list of selected users? Any code that looks up this
+          flag will treat it as off.
+        state: "State"
+        usage: "In Code"
+        created_at: "Created"
+        users_heading: "Selected Users"
+        users_hint:
+          "off": >-
+            The flag is off, so these users don't see the feature. Edit the flag and choose 'On for
+            selected users' to turn it on for just these people.
+          selected_users: "Only these users see the feature."
+          everyone: "The flag is on for everyone, so this list isn't used right now. It's kept in case you switch back."
+        no_users: "No users selected yet. Search above to add someone."
+        remove: "Remove %{name}"
+        headers:
+          name: "Name"
+          community: "Community"
+          email: "Email"
+        search:
+          label: "Add a user"
+          placeholder: "Add a user from any community: search by name or email"
+          too_short:
+            one: "Type at least %{count} character"
+            other: "Type at least %{count} characters"
+          searching: "Searching…"
+          no_results: "No matching users"
+          error: "The search failed. Please try again."
     domains:
       refresh_all_started:
         one: >-

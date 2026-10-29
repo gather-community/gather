@@ -13,6 +13,9 @@
 es:
   activemodel:
     attributes:
+      feature_flag:
+        name: "Nombre" # MT
+        mode: "Estado" # MT
       calendars/eventlet:
         starts_at: "Hora de inicio" # MT
         ends_at: "Hora de fin" # MT
@@ -37,6 +40,10 @@ es:
         repeat_count: "Número de veces" # MT
     errors:
       models:
+        feature_flag:
+          attributes:
+            name:
+              invalid: "debe empezar por una letra minúscula y contener solo letras minúsculas, números y guiones bajos" # MT
         calendars/event:
           attributes:
             base:
@@ -89,6 +96,7 @@ es:
               in_past: "no se puede cambiar a un momento pasado" # MT
   activerecord:
     models:
+      feature_flag: "Indicador de funcionalidad" # MT
       meals/meal: "Comida" # MT
     attributes:
       user:

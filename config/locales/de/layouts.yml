@@ -34,6 +34,7 @@ de:
       communities: "Gemeinschaften" # MT
       resync_subscriptions: "Abos neu abgleichen" # MT
       domains: "Domains" # MT
+      feature_flags: "Feature-Flags" # MT
       # Shown on pages in machine-translated locales (Gather::Locales::MACHINE_TRANSLATED).
       machine_translated: "Diese Seite wurde automatisch übersetzt und kann Fehler enthalten." # MT
       machine_translated_with_link_html: "Diese Seite wurde automatisch übersetzt und kann Fehler enthalten. %{link}" # MT

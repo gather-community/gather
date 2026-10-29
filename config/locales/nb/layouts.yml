@@ -34,6 +34,7 @@ nb:
       communities: "Fellesskap" # MT
       resync_subscriptions: "Synkroniser abonnementer på nytt" # MT
       domains: "Domener" # MT
+      feature_flags: "Funksjonsflagg" # MT
       # Shown on pages in machine-translated locales (Gather::Locales::MACHINE_TRANSLATED).
       machine_translated: "Denne siden ble oversatt automatisk og kan inneholde feil." # MT
       machine_translated_with_link_html: "Denne siden ble oversatt automatisk og kan inneholde feil. %{link}" # MT

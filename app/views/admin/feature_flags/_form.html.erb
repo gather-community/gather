@@ -1,0 +1,9 @@
+<%= gather_form_for(form, url: form.persisted? ? admin_feature_flag_path(form) : admin_feature_flags_path) do |f| %>
+  <% unless form.persisted? %>
+    <%= f.input :name, maxlength: FeatureFlag::NAME_MAX_LENGTH, input_html: {autocomplete: "off"} %>
+  <% end %>
+  <%= f.input :mode, as: :radio_buttons, collection: FeatureFlag::MODES, include_blank: false %>
+  <%= form_actions do %>
+    <%= f.button :primary %>
+  <% end %>
+<% end %>

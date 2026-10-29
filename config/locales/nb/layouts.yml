@@ -38,6 +38,9 @@ nb:
       machine_translated: "Denne siden ble oversatt automatisk og kan inneholde feil." # MT
       machine_translated_with_link_html: "Denne siden ble oversatt automatisk og kan inneholde feil. %{link}" # MT
       help_translate: "Hjelp til med å forbedre oversettelsen" # MT
+      change_language: "Bytt språk" # MT
+      browser_default: "Nettleserens språk" # MT
+      language: "Språk" # MT
     head:
       # The browser tab title. The page title is already HTML-escaped, hence _html.
       title_html: "Gather: %{title}" # MT

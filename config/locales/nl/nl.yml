@@ -12,6 +12,7 @@
 # ======================================================================================================
 nl:
   common:
+    language_name: "Nederlands" # MT
     settings: "Instellingen" # MT
     settings_updated: "Instellingen bijgewerkt." # MT
     open_date_picker: "Datumkiezer openen" # MT

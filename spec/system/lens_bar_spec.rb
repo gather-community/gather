@@ -19,6 +19,8 @@ describe "lens bar", js: true do
 
     select_lens(:community, long_community.name)
     expect(page).to have_echoed_url(%r{https?://#{long_community.subdomain}\.})
+    # The controller sets the width when it connects, just after the page loads.
+    expect(page).to have_css("select[data-param-name=community][style*=width]")
     width = lens_node(:community)[:style][/width: (\d+)px/, 1].to_i
     expect(width).to be > 155 # The stylesheet's width for the community lens
     expect(width).to be <= 240

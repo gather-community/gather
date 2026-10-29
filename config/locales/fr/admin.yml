@@ -25,7 +25,6 @@ fr:
         "off": "Désactivé" # MT
         selected_users: "Utilisateurs sélectionnés" # MT
         everyone: "Tout le monde" # MT
-      mode_switch_label: "État de %{name}" # MT
       index:
         title: "Indicateurs de fonctionnalité" # MT
         intro: "Les indicateurs de fonctionnalité activent et désactivent des fonctionnalités pas encore publiées. Chaque indicateur peut être désactivé, activé uniquement pour des utilisateurs sélectionnés (de n'importe quelle communauté), ou activé pour tout le monde." # MT
@@ -40,7 +39,10 @@ fr:
           other: "%{count} utilisateurs" # MT
       new:
         title: "Nouvel indicateur de fonctionnalité" # MT
+      edit:
+        title: "Modifier l'indicateur de fonctionnalité : %{name}" # MT
       show:
+        title: "Indicateur de fonctionnalité : %{name}" # MT
         delete: "Supprimer" # MT
         delete_confirm: "Supprimer l'indicateur « %{name} » et sa liste d'utilisateurs sélectionnés ? Tout code qui consulte cet indicateur le considérera comme désactivé." # MT
         state: "État" # MT
@@ -48,7 +50,7 @@ fr:
         created_at: "Créé le" # MT
         users_heading: "Utilisateurs sélectionnés" # MT
         users_hint:
-          "off": "L'indicateur est désactivé, donc ces utilisateurs ne voient pas la fonctionnalité. Choisissez « Utilisateurs sélectionnés » ci-dessus pour l'activer uniquement pour ces personnes." # MT
+          "off": "L'indicateur est désactivé, donc ces utilisateurs ne voient pas la fonctionnalité. Modifiez l'indicateur et choisissez « Activé pour les utilisateurs sélectionnés » pour l'activer uniquement pour ces personnes." # MT
           selected_users: "Seuls ces utilisateurs voient la fonctionnalité." # MT
           everyone: "L'indicateur est activé pour tout le monde, donc cette liste n'est pas utilisée pour l'instant. Elle est conservée au cas où vous reviendriez en arrière." # MT
         no_users: "Aucun utilisateur sélectionné pour l'instant. Faites une recherche ci-dessus pour ajouter quelqu'un." # MT

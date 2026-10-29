@@ -25,7 +25,6 @@ es:
         "off": "Desactivado" # MT
         selected_users: "Usuarios seleccionados" # MT
         everyone: "Todos" # MT
-      mode_switch_label: "Estado de %{name}" # MT
       index:
         title: "Indicadores de funcionalidad" # MT
         intro: "Los indicadores de funcionalidad activan y desactivan funciones aún no publicadas. Cada indicador puede estar desactivado, activado solo para usuarios seleccionados (de cualquier comunidad) o activado para todos." # MT
@@ -40,7 +39,10 @@ es:
           other: "%{count} usuarios" # MT
       new:
         title: "Nuevo indicador de funcionalidad" # MT
+      edit:
+        title: "Editar indicador de funcionalidad: %{name}" # MT
       show:
+        title: "Indicador de funcionalidad: %{name}" # MT
         delete: "Eliminar" # MT
         delete_confirm: "¿Eliminar el indicador «%{name}» y su lista de usuarios seleccionados? Cualquier código que consulte este indicador lo tratará como desactivado." # MT
         state: "Estado" # MT
@@ -48,7 +50,7 @@ es:
         created_at: "Creado" # MT
         users_heading: "Usuarios seleccionados" # MT
         users_hint:
-          "off": "El indicador está desactivado, así que estos usuarios no ven la función. Elige «Usuarios seleccionados» arriba para activarlo solo para estas personas." # MT
+          "off": "El indicador está desactivado, así que estos usuarios no ven la función. Edita el indicador y elige «Activado para usuarios seleccionados» para activarlo solo para estas personas." # MT
           selected_users: "Solo estos usuarios ven la función." # MT
           everyone: "El indicador está activado para todos, así que esta lista no se usa por ahora. Se conserva por si vuelves a cambiarlo." # MT
         no_users: "Todavía no hay usuarios seleccionados. Busca arriba para añadir a alguien." # MT

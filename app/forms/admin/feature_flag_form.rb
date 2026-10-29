@@ -29,12 +29,12 @@ module Admin
       allow_blank: true
     validate :name_unique
 
-    def initialize(flag: nil, params: nil)
+    def initialize(flag: nil, params: nil, permitted: Admin::FeatureFlagPolicy.permitted_attributes)
       @flag = flag || FeatureFlag.new(mode: :off)
       return if params.blank?
       params = ActionController::Parameters.new(params) unless params.is_a?(ActionController::Parameters)
       # Assign through our own writers so the name gets normalized.
-      params.permit(Admin::FeatureFlagPolicy.permitted_attributes).each { |attr, value| send(:"#{attr}=", value) }
+      params.permit(permitted).each { |attr, value| send(:"#{attr}=", value) }
     end
 
     def save

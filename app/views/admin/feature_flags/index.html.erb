@@ -27,7 +27,7 @@
         <% user_count = @user_counts[flag.id] || 0 %>
         <tr id="feature-flag-<%= flag.id %>">
           <td class="name"><%= link_to(flag.name, admin_feature_flag_path(flag)) %></td>
-          <td><%= render("mode_switch", flag: flag) %></td>
+          <td><%= t("admin.feature_flags.modes.#{flag.mode}") %></td>
           <td class="<%= flag.mode == :selected_users ? "" : "text-muted" %>">
             <%= link_to(t(".user_count", count: user_count), admin_feature_flag_path(flag)) %>
           </td>

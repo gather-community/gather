@@ -24,6 +24,11 @@ module Admin
       @form = FeatureFlagForm.new
     end
 
+    def edit
+      authorize(%i[admin feature_flag])
+      @form = FeatureFlagForm.new(flag: find_flag)
+    end
+
     def create
       authorize(%i[admin feature_flag])
       @form = FeatureFlagForm.new(params: params.require(:feature_flag))
@@ -37,11 +42,14 @@ module Admin
 
     def update
       authorize(%i[admin feature_flag])
-      flag = find_flag
-      flag.update!(params.require(:feature_flag)
-        .permit(policy(%i[admin feature_flag]).permitted_attributes_for_update))
-      flash[:success] = t("admin.feature_flags.mode_changed.#{flag.mode}", name: flag.name)
-      redirect_back(fallback_location: admin_feature_flags_path)
+      @form = FeatureFlagForm.new(flag: find_flag, params: params.require(:feature_flag),
+        permitted: policy(%i[admin feature_flag]).permitted_attributes_for_update)
+      if @form.save
+        flash[:success] = t("admin.feature_flags.mode_changed.#{@form.mode}", name: @form.name)
+        redirect_to(admin_feature_flag_path(@form.flag))
+      else
+        render(:edit, status: :unprocessable_entity)
+      end
     end
 
     def destroy

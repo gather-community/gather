@@ -25,7 +25,6 @@ nb:
         "off": "Av" # MT
         selected_users: "Valgte brukere" # MT
         everyone: "Alle" # MT
-      mode_switch_label: "Tilstand for %{name}" # MT
       index:
         title: "Funksjonsflagg" # MT
         intro: "Funksjonsflagg slår av og på funksjoner som ikke er lansert ennå. Hvert flagg kan være av, på bare for valgte brukere (fra hvilket som helst fellesskap) eller på for alle." # MT
@@ -40,7 +39,10 @@ nb:
           other: "%{count} brukere" # MT
       new:
         title: "Nytt funksjonsflagg" # MT
+      edit:
+        title: "Rediger funksjonsflagg: %{name}" # MT
       show:
+        title: "Funksjonsflagg: %{name}" # MT
         delete: "Slett" # MT
         delete_confirm: "Slette flagget «%{name}» og listen over valgte brukere? All kode som slår opp dette flagget, vil behandle det som av." # MT
         state: "Tilstand" # MT
@@ -48,7 +50,7 @@ nb:
         created_at: "Opprettet" # MT
         users_heading: "Valgte brukere" # MT
         users_hint:
-          "off": "Flagget er av, så disse brukerne ser ikke funksjonen. Velg «Valgte brukere» ovenfor for å slå det på bare for disse personene." # MT
+          "off": "Flagget er av, så disse brukerne ser ikke funksjonen. Rediger flagget og velg «På for valgte brukere» for å slå det på bare for disse personene." # MT
           selected_users: "Bare disse brukerne ser funksjonen." # MT
           everyone: "Flagget er på for alle, så denne listen brukes ikke akkurat nå. Den beholdes i tilfelle du bytter tilbake." # MT
         no_users: "Ingen brukere valgt ennå. Søk ovenfor for å legge til noen." # MT

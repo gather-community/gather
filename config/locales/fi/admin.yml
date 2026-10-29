@@ -25,7 +25,6 @@ fi:
         "off": "Pois" # MT
         selected_users: "Valitut käyttäjät" # MT
         everyone: "Kaikki" # MT
-      mode_switch_label: "Lipun %{name} tila" # MT
       index:
         title: "Ominaisuusliput" # MT
         intro: "Ominaisuusliput kytkevät julkaisemattomia ominaisuuksia päälle ja pois. Kukin lippu voi olla pois päältä, päällä vain valituille käyttäjille (mistä tahansa yhteisöstä) tai päällä kaikille." # MT
@@ -40,7 +39,10 @@ fi:
           other: "%{count} käyttäjää" # MT
       new:
         title: "Uusi ominaisuuslippu" # MT
+      edit:
+        title: "Muokkaa ominaisuuslippua: %{name}" # MT
       show:
+        title: "Ominaisuuslippu: %{name}" # MT
         delete: "Poista" # MT
         delete_confirm: "Poistetaanko lippu ”%{name}” ja sen valittujen käyttäjien luettelo? Koodi, joka hakee tätä lippua, käsittelee sitä pois päältä olevana." # MT
         state: "Tila" # MT
@@ -48,7 +50,7 @@ fi:
         created_at: "Luotu" # MT
         users_heading: "Valitut käyttäjät" # MT
         users_hint:
-          "off": "Lippu on pois päältä, joten nämä käyttäjät eivät näe ominaisuutta. Valitse yläpuolelta ”Valitut käyttäjät”, jos haluat kytkeä sen päälle vain näille henkilöille." # MT
+          "off": "Lippu on pois päältä, joten nämä käyttäjät eivät näe ominaisuutta. Muokkaa lippua ja valitse ”Päällä valituille käyttäjille”, jos haluat kytkeä sen päälle vain näille henkilöille." # MT
           selected_users: "Vain nämä käyttäjät näkevät ominaisuuden." # MT
           everyone: "Lippu on päällä kaikille, joten tätä luetteloa ei käytetä nyt. Se säilytetään siltä varalta, että vaihdat takaisin." # MT
         no_users: "Käyttäjiä ei ole vielä valittu. Lisää joku hakemalla yläpuolelta." # MT

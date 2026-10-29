@@ -25,7 +25,6 @@ nl:
         "off": "Uit" # MT
         selected_users: "Geselecteerde gebruikers" # MT
         everyone: "Iedereen" # MT
-      mode_switch_label: "Status van %{name}" # MT
       index:
         title: "Featureflags" # MT
         intro: "Met featureflags zet je functies die nog niet zijn uitgebracht aan en uit. Elke flag kan uit staan, alleen aan staan voor geselecteerde gebruikers (uit elke gemeenschap) of aan staan voor iedereen." # MT
@@ -40,7 +39,10 @@ nl:
           other: "%{count} gebruikers" # MT
       new:
         title: "Nieuwe featureflag" # MT
+      edit:
+        title: "Featureflag bewerken: %{name}" # MT
       show:
+        title: "Featureflag: %{name}" # MT
         delete: "Verwijderen" # MT
         delete_confirm: "De flag “%{name}” en de lijst met geselecteerde gebruikers verwijderen? Code die deze flag opzoekt, behandelt hem dan als uit." # MT
         state: "Status" # MT
@@ -48,7 +50,7 @@ nl:
         created_at: "Aangemaakt" # MT
         users_heading: "Geselecteerde gebruikers" # MT
         users_hint:
-          "off": "De flag staat uit, dus deze gebruikers zien de functie niet. Kies hierboven “Geselecteerde gebruikers” om hem alleen voor deze mensen aan te zetten." # MT
+          "off": "De flag staat uit, dus deze gebruikers zien de functie niet. Bewerk de flag en kies “Aan voor geselecteerde gebruikers” om hem alleen voor deze mensen aan te zetten." # MT
           selected_users: "Alleen deze gebruikers zien de functie." # MT
           everyone: "De flag staat aan voor iedereen, dus deze lijst wordt nu niet gebruikt. Hij blijft bewaard voor het geval je terugschakelt." # MT
         no_users: "Nog geen gebruikers geselecteerd. Zoek hierboven om iemand toe te voegen." # MT

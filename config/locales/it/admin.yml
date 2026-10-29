@@ -25,7 +25,6 @@ it:
         "off": "Disattivato" # MT
         selected_users: "Utenti selezionati" # MT
         everyone: "Tutti" # MT
-      mode_switch_label: "Stato di %{name}" # MT
       index:
         title: "Feature flag" # MT
         intro: "I feature flag attivano e disattivano funzionalità non ancora rilasciate. Ogni flag può essere disattivato, attivo solo per gli utenti selezionati (di qualsiasi comunità) oppure attivo per tutti." # MT
@@ -40,7 +39,10 @@ it:
           other: "%{count} utenti" # MT
       new:
         title: "Nuovo feature flag" # MT
+      edit:
+        title: "Modifica feature flag: %{name}" # MT
       show:
+        title: "Feature flag: %{name}" # MT
         delete: "Elimina" # MT
         delete_confirm: "Eliminare il flag «%{name}» e il suo elenco di utenti selezionati? Il codice che consulta questo flag lo considererà disattivato." # MT
         state: "Stato" # MT
@@ -48,7 +50,7 @@ it:
         created_at: "Creato" # MT
         users_heading: "Utenti selezionati" # MT
         users_hint:
-          "off": "Il flag è disattivato, quindi questi utenti non vedono la funzionalità. Scegli «Utenti selezionati» qui sopra per attivarlo solo per queste persone." # MT
+          "off": "Il flag è disattivato, quindi questi utenti non vedono la funzionalità. Modifica il flag e scegli «Attivo per gli utenti selezionati» per attivarlo solo per queste persone." # MT
           selected_users: "Solo questi utenti vedono la funzionalità." # MT
           everyone: "Il flag è attivo per tutti, quindi al momento questo elenco non viene usato. Viene conservato nel caso tu torni indietro." # MT
         no_users: "Ancora nessun utente selezionato. Cerca qui sopra per aggiungere qualcuno." # MT

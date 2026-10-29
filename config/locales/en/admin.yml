@@ -9,12 +9,11 @@ en:
         "off": "'%{name}' is now off."
         selected_users: "'%{name}' is now on for selected users only."
         everyone: "'%{name}' is now on for everyone."
-      # Labels for FeatureFlag::MODES on the switch buttons.
+      # Labels for FeatureFlag::MODES, shown as the flag's current state.
       modes:
         "off": "Off"
         selected_users: "Selected Users"
         everyone: "Everyone"
-      mode_switch_label: "State of %{name}"
       index:
         title: "Feature Flags"
         intro: >-
@@ -31,7 +30,10 @@ en:
           other: "%{count} users"
       new:
         title: "New Feature Flag"
+      edit:
+        title: "Edit Feature Flag: %{name}"
       show:
+        title: "Feature Flag: %{name}"
         delete: "Delete"
         delete_confirm: >-
           Delete the '%{name}' flag and its list of selected users? Any code that looks up this
@@ -42,8 +44,8 @@ en:
         users_heading: "Selected Users"
         users_hint:
           "off": >-
-            The flag is off, so these users don't see the feature. Choose 'Selected Users' above to
-            turn it on for just these people.
+            The flag is off, so these users don't see the feature. Edit the flag and choose 'On for
+            selected users' to turn it on for just these people.
           selected_users: "Only these users see the feature."
           everyone: "The flag is on for everyone, so this list isn't used right now. It's kept in case you switch back."
         no_users: "No users selected yet. Search above to add someone."

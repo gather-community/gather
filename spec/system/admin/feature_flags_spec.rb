@@ -20,31 +20,31 @@ describe "admin feature flags dashboard" do
     login_as(actor, scope: :user)
   end
 
-  def mode_button(row, label)
-    row.find("button", text: label)
-  end
-
-  scenario "switching a flag's mode from the index" do
+  scenario "changing a flag's state from its edit page" do
     visit(admin_feature_flags_path)
 
     expect(page).to have_content("Feature Flags")
-    gdrive_row = find("tr", text: "gdrive")
-    expect(mode_button(gdrive_row, "Everyone")["aria-pressed"]).to eq("true")
+    expect(find("tr", text: "gdrive")).to have_content("Everyone")
+    expect(find("tr", text: "messaging")).to have_content("Off")
 
-    messaging_row = find("tr", text: "messaging")
-    expect(mode_button(messaging_row, "Off")["aria-pressed"]).to eq("true")
-    mode_button(messaging_row, "Everyone").click
+    click_link("messaging")
+    expect(page).to have_title("Feature Flag: messaging")
+    click_link("Edit")
+    expect(page).to have_content("Edit Feature Flag: messaging")
+    # The name can't be changed after creation.
+    expect(page).not_to have_field("Name")
+    choose("On for everyone")
+    click_button("Save")
 
     expect(page).to have_content("'messaging' is now on for everyone.")
-    expect(mode_button(find("tr", text: "messaging"), "Everyone")["aria-pressed"]).to eq("true")
+    expect(page).to have_content("Feature Flag: messaging")
     expect(messaging.reload.mode).to eq(:everyone)
   end
 
   scenario "adding users from any community with the search box, then removing one", js: true do
+    messaging.update!(mode: :selected_users)
     visit(admin_feature_flag_path(messaging))
     expect(page).to have_content("No users selected yet.")
-    click_button("Selected Users")
-    expect(page).to have_content("'messaging' is now on for selected users only.")
 
     search = find("input[role=combobox]")
     search.fill_in(with: "j")

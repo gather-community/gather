@@ -1,6 +1,10 @@
-<% content_for(:title, @flag.name) %>
+<% content_for(:title, t(".title", name: @flag.name)) %>
 
 <% content_for(:action_links) do %>
+  <% if policy(%i[admin feature_flag]).update? %>
+    <%= link_to(icon_tag("pencil") << " " << t("action_labels.common.edit"),
+          edit_admin_feature_flag_path(@flag), class: "btn btn-default") %>
+  <% end %>
   <% if policy(%i[admin feature_flag]).destroy? %>
     <%= link_to(icon_tag("trash") << " " << t(".delete"), admin_feature_flag_path(@flag),
           method: :delete, class: "btn btn-danger",
@@ -14,7 +18,7 @@
 <table class="key-value">
   <tr>
     <td><%= t(".state") %></td>
-    <td><%= render("mode_switch", flag: @flag) %></td>
+    <td><%= t("admin.feature_flags.modes.#{@flag.mode}") %></td>
   </tr>
   <tr>
     <td><%= t(".usage") %></td>

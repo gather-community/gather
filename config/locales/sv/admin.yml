@@ -25,7 +25,6 @@ sv:
         "off": "Av" # MT
         selected_users: "Valda användare" # MT
         everyone: "Alla" # MT
-      mode_switch_label: "Läge för %{name}" # MT
       index:
         title: "Funktionsflaggor" # MT
         intro: "Funktionsflaggor slår på och av funktioner som inte släppts än. Varje flagga kan vara av, på endast för valda användare (från vilken gemenskap som helst) eller på för alla." # MT
@@ -40,7 +39,10 @@ sv:
           other: "%{count} användare" # MT
       new:
         title: "Ny funktionsflagga" # MT
+      edit:
+        title: "Redigera funktionsflagga: %{name}" # MT
       show:
+        title: "Funktionsflagga: %{name}" # MT
         delete: "Ta bort" # MT
         delete_confirm: "Ta bort flaggan ”%{name}” och dess lista över valda användare? All kod som slår upp den här flaggan kommer att behandla den som av." # MT
         state: "Läge" # MT
@@ -48,7 +50,7 @@ sv:
         created_at: "Skapad" # MT
         users_heading: "Valda användare" # MT
         users_hint:
-          "off": "Flaggan är av, så de här användarna ser inte funktionen. Välj ”Valda användare” ovan för att slå på den bara för de här personerna." # MT
+          "off": "Flaggan är av, så de här användarna ser inte funktionen. Redigera flaggan och välj ”På för valda användare” för att slå på den bara för de här personerna." # MT
           selected_users: "Bara de här användarna ser funktionen." # MT
           everyone: "Flaggan är på för alla, så den här listan används inte just nu. Den sparas ifall du byter tillbaka." # MT
         no_users: "Inga användare valda än. Sök ovan för att lägga till någon." # MT

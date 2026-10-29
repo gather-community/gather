@@ -25,7 +25,6 @@ de:
         "off": "Aus" # MT
         selected_users: "Ausgewählte Benutzer" # MT
         everyone: "Alle" # MT
-      mode_switch_label: "Status von %{name}" # MT
       index:
         title: "Feature-Flags" # MT
         intro: "Feature-Flags schalten noch nicht veröffentlichte Funktionen ein und aus. Jedes Flag kann aus sein, nur für ausgewählte Benutzer an (aus jeder Gemeinschaft) oder für alle an." # MT
@@ -40,7 +39,10 @@ de:
           other: "%{count} Benutzer" # MT
       new:
         title: "Neues Feature-Flag" # MT
+      edit:
+        title: "Feature-Flag bearbeiten: %{name}" # MT
       show:
+        title: "Feature-Flag: %{name}" # MT
         delete: "Löschen" # MT
         delete_confirm: "Das Flag „%{name}“ und seine Liste ausgewählter Benutzer löschen? Code, der dieses Flag abfragt, behandelt es dann als aus." # MT
         state: "Status" # MT
@@ -48,7 +50,7 @@ de:
         created_at: "Angelegt" # MT
         users_heading: "Ausgewählte Benutzer" # MT
         users_hint:
-          "off": "Das Flag ist aus, daher sehen diese Benutzer die Funktion nicht. Wähle oben „Ausgewählte Benutzer“, um es nur für diese Personen einzuschalten." # MT
+          "off": "Das Flag ist aus, daher sehen diese Benutzer die Funktion nicht. Bearbeite das Flag und wähle „An für ausgewählte Benutzer“, um es nur für diese Personen einzuschalten." # MT
           selected_users: "Nur diese Benutzer sehen die Funktion." # MT
           everyone: "Das Flag ist für alle an, daher wird diese Liste gerade nicht verwendet. Sie bleibt erhalten, falls du zurückschaltest." # MT
         no_users: "Noch keine Benutzer ausgewählt. Suche oben, um jemanden hinzuzufügen." # MT

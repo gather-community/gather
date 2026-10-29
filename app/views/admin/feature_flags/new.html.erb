@@ -1,9 +1,3 @@
 <% content_for(:title, t(".title")) %>
 
-<%= gather_form_for(@form, url: admin_feature_flags_path, method: :post) do |f| %>
-  <%= f.input :name, maxlength: FeatureFlag::NAME_MAX_LENGTH, input_html: {autocomplete: "off"} %>
-  <%= f.input :mode, as: :radio_buttons, collection: FeatureFlag::MODES, include_blank: false %>
-  <%= form_actions do %>
-    <%= f.button :primary %>
-  <% end %>
-<% end %>
+<%= render("form", form: @form) %>

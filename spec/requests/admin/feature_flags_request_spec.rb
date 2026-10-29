@@ -59,7 +59,7 @@ describe "admin feature flags request" do
   describe "update" do
     it "changes only the mode" do
       patch(admin_feature_flag_path(flag), params: {feature_flag: {mode: "everyone", name: "renamed"}})
-      expect(response).to redirect_to(admin_feature_flags_path)
+      expect(response).to redirect_to(admin_feature_flag_path(flag))
       expect(flag.reload.mode).to eq(:everyone)
       expect(flag.name).to eq("messaging")
     end

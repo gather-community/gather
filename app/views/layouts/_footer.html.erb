@@ -31,6 +31,22 @@
       <% end %>
     <% end %>
 
+    <%# Checked against the person at the keyboard, like the locale itself (ApplicationControllable::Locale). %>
+    <% if Gather::Locales.enabled?(real_current_user) %>
+      &nbsp;
+      <span class="language-menu" data-controller="language-menu"
+            data-language-menu-cookie-value="<%= Gather::Locales::COOKIE %>"
+            data-language-menu-domain-value="<%= Settings.url.host %>">
+        <%= link_to(t(".change_language"), "#",
+              data: {action: "language-menu#show", language_menu_target: "link"}) %>
+        <%= select_tag(:locale,
+              options_for_select([[t(".browser_default"), ""]] + Gather::Locales.menu_options,
+                Gather::Locales.find(cookies[Gather::Locales::COOKIE]).to_s),
+              id: "language-menu-select", class: "hidden", aria: {label: t(".language")},
+              data: {action: "language-menu#choose", language_menu_target: "select"}) %>
+      </span>
+    <% end %>
+
     <% if Gather::Locales::MACHINE_TRANSLATED.include?(I18n.locale) %>
       <p class="machine-translation-notice">
         <% if Settings.translation_help_url.present? %>

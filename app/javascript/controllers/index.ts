@@ -44,3 +44,6 @@ application.register("calendars--eventlet-delete", Calendars__EventletDeleteCont
 
 import Calendars__EventFormController from "./calendars/event_form_controller";
 application.register("calendars--event-form", Calendars__EventFormController);
+
+import LanguageMenuController from "./language_menu_controller";
+application.register("language-menu", LanguageMenuController);

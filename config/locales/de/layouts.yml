@@ -38,6 +38,9 @@ de:
       machine_translated: "Diese Seite wurde automatisch übersetzt und kann Fehler enthalten." # MT
       machine_translated_with_link_html: "Diese Seite wurde automatisch übersetzt und kann Fehler enthalten. %{link}" # MT
       help_translate: "Hilf mit, die Übersetzung zu verbessern" # MT
+      change_language: "Sprache ändern" # MT
+      browser_default: "Sprache des Browsers" # MT
+      language: "Sprache" # MT
     head:
       # The browser tab title. The page title is already HTML-escaped, hence _html.
       title_html: "Gather: %{title}" # MT

@@ -52,4 +52,9 @@
   .machine-translation-notice {
     margin: 10px 0 0;
   }
+
+  .language-menu select {
+    font-size: 13px;
+    color: $text-muted;
+  }
 }

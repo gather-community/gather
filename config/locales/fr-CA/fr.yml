@@ -11,6 +11,8 @@
 # See "Translations" in CLAUDE.md for the rest.
 # ======================================================================================================
 fr-CA:
+  common:
+    language_name: "Français (Canada)" # MT
   confirmations:
     user:
       invite: "Un courriel sera envoyé à « %{name} » avec les instructions pour se connecter. Continuer ?" # MT

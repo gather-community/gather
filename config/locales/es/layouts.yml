@@ -36,6 +36,9 @@ es:
       machine_translated: "Esta página se tradujo automáticamente y puede contener errores." # MT
       machine_translated_with_link_html: "Esta página se tradujo automáticamente y puede contener errores. %{link}" # MT
       help_translate: "Ayuda a mejorar la traducción" # MT
+      change_language: "Cambiar idioma" # MT
+      browser_default: "Idioma del navegador" # MT
+      language: "Idioma" # MT
     head:
       title_html: "Gather: %{title}" # MT
     personal_dropdown:

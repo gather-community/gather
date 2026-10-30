@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
-# Sets the locale for each request from the browser's Accept-Language header. See Gather::Locales.
+# Sets the locale for each request from the language menu's cookie or the browser's Accept-Language header.
+# See Gather::Locales.
 module ApplicationControllable::Locale
   extend ActiveSupport::Concern
 
@@ -17,10 +18,12 @@ module ApplicationControllable::Locale
   def switch_locale(&action)
     # The flag is checked against the person at the keyboard (whose browser sent the header), not the
     # user they're impersonating.
-    locale = Gather::Locales.for_request(request.headers["Accept-Language"], user: real_current_user)
+    locale = Gather::Locales.for_request(request.headers["Accept-Language"], user: real_current_user,
+      chosen: cookies[Gather::Locales::COOKIE])
     I18n.with_locale(locale, &action)
-    # rubocop:disable Gather/HardCodedString -- an HTTP header name
-    response.headers["Vary"] = [response.headers["Vary"].presence, "Accept-Language"].compact.join(", ")
+    # rubocop:disable Gather/HardCodedString -- HTTP header names
+    vary = [response.headers["Vary"].presence, "Accept-Language, Cookie"]
+    response.headers["Vary"] = vary.compact.join(", ")
     # rubocop:enable Gather/HardCodedString
   end
 end

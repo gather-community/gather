@@ -12,6 +12,7 @@
 # ======================================================================================================
 fi:
   common:
+    language_name: "Suomi" # MT
     settings: "Asetukset" # MT
     settings_updated: "Asetukset päivitetty." # MT
     open_date_picker: "Avaa päivämäärän valitsin" # MT

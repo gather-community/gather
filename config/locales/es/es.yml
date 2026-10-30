@@ -12,6 +12,7 @@
 # ======================================================================================================
 es:
   common:
+    language_name: "Español" # MT
     settings: "Ajustes" # MT
     settings_updated: "Ajustes actualizados." # MT
     open_date_picker: "Abrir el selector de fecha" # MT

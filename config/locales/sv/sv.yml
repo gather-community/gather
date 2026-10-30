@@ -12,6 +12,7 @@
 # ======================================================================================================
 sv:
   common:
+    language_name: "Svenska" # MT
     settings: "Inställningar" # MT
     settings_updated: "Inställningarna har uppdaterats." # MT
     open_date_picker: "Öppna datumväljaren" # MT

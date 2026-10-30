@@ -26,6 +26,10 @@ en:
       machine_translated: "This page was translated automatically and may contain mistakes."
       machine_translated_with_link_html: "This page was translated automatically and may contain mistakes. %{link}"
       help_translate: "Help improve the translation"
+      # The language menu (Gather::Locales.menu_options names each language in its own language).
+      change_language: "Change Language"
+      browser_default: "Browser Default"
+      language: "Language"
     head:
       # The browser tab title. The page title is already HTML-escaped, hence _html.
       title_html: "Gather: %{title}"

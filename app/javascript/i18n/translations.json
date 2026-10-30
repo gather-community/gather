@@ -104,6 +104,7 @@
       "generated_at": "Erstellt: %{time}",
       "hidden": "Verborgen",
       "inactive": "Inaktiv",
+      "language_name": "Deutsch",
       "loading_indicator": "Ladeanzeige",
       "max": "Max.",
       "no": "Nein",
@@ -417,6 +418,7 @@
       "generated_at": "Generated: %{time}",
       "hidden": "Hidden",
       "inactive": "Inactive",
+      "language_name": "English",
       "loading_indicator": "Loading indicator",
       "max": "Max",
       "no": "No",
@@ -730,6 +732,7 @@
       "generated_at": "Generado: %{time}",
       "hidden": "Oculto",
       "inactive": "Inactivo",
+      "language_name": "Español",
       "loading_indicator": "Indicador de carga",
       "max": "Máx.",
       "no": "No",
@@ -1043,6 +1046,7 @@
       "generated_at": "Luotu: %{time}",
       "hidden": "Piilotettu",
       "inactive": "Ei aktiivinen",
+      "language_name": "Suomi",
       "loading_indicator": "Latausilmaisin",
       "max": "Enint.",
       "no": "Ei",
@@ -1356,6 +1360,7 @@
       "generated_at": "Généré le %{time}",
       "hidden": "Masqué",
       "inactive": "Inactif",
+      "language_name": "Français",
       "loading_indicator": "Indicateur de chargement",
       "max": "Max.",
       "no": "Non",
@@ -1575,6 +1580,9 @@
         }
       }
     },
+    "common": {
+      "language_name": "Français (Canada)"
+    },
     "communities": {
       "signup_action": {
         "approval_template": "Bonjour %{name},\n\nBonne nouvelle ! Votre demande pour rejoindre Gather avec la communauté « %{community} » a été approuvée.\n\n#######################################\nSAISISSEZ ICI UNE NOTE PERSONNALISÉE ET\nMENTIONNEZ UN DÉTAIL SUR LA COMMUNAUTÉ\n#######################################\n\nVotre communauté est maintenant prête !\n\nVous devriez recevoir un courriel distinct avec les instructions pour vous connecter la première fois.\n\nBienvenue à bord !\n\n%{approver}, pour l'équipe de Gather"
@@ -1756,6 +1764,7 @@
       "generated_at": "Generato: %{time}",
       "hidden": "Nascosto",
       "inactive": "Non attivo",
+      "language_name": "Italiano",
       "loading_indicator": "Indicatore di caricamento",
       "max": "Max",
       "no": "No",
@@ -2069,6 +2078,7 @@
       "generated_at": "Generert: %{time}",
       "hidden": "Skjult",
       "inactive": "Inaktiv",
+      "language_name": "Norsk bokmål",
       "loading_indicator": "Lasteindikator",
       "max": "Maks.",
       "no": "Nei",
@@ -2382,6 +2392,7 @@
       "generated_at": "Gemaakt: %{time}",
       "hidden": "Verborgen",
       "inactive": "Inactief",
+      "language_name": "Nederlands",
       "loading_indicator": "Laadindicator",
       "max": "Max.",
       "no": "Nee",
@@ -2695,6 +2706,7 @@
       "generated_at": "Skapad: %{time}",
       "hidden": "Dold",
       "inactive": "Inaktiv",
+      "language_name": "Svenska",
       "loading_indicator": "Laddningsindikator",
       "max": "Max",
       "no": "Nej",

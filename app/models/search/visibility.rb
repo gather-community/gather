@@ -135,13 +135,15 @@ module Search
           UNSCOPED_MODELS[kind].all
         end
       return if relation.nil?
-      HOUSEHOLD_KINDS.include?(kind) ? in_active_household_here(relation) : relation
+      HOUSEHOLD_KINDS.include?(kind) ? in_visible_household_here(relation) : relation
     end
 
-    # Pets, emergency contacts and vehicles show only for active households in this community. The
-    # index can lag behind a household moving community or being deactivated, so check the database.
-    def in_active_household_here(relation)
-      relation.joins(:household).where(households: {community_id: community.id, deactivated_at: nil})
+    # Pets, emergency contacts and vehicles show only for households in this community that the user can
+    # see, so a deactivated household's only show to admins, as in the directory. The index can lag behind
+    # a household moving community or being deactivated, so check the database.
+    def in_visible_household_here(relation)
+      households = Pundit.policy_scope!(user, Household).where(community_id: community.id)
+      relation.where(household_id: households.select(:id))
     end
 
     def visible_calendar_ids

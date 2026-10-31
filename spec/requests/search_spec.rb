@@ -251,6 +251,28 @@ describe "search" do
       end
     end
 
+    context "with an emergency contact in a deactivated household" do
+      let(:household) { create(:household) }
+      let!(:contact) { create(:emergency_contact, household: household, name: "Wilhelmina Quartz") }
+
+      before do
+        refresh_indices
+        household.update_column(:deactivated_at, Time.current)
+      end
+
+      it "hides it from members" do
+        expect(gather_search("wilhelmina")).not_to include("Wilhelmina")
+      end
+
+      context "as an admin" do
+        let(:actor) { create(:admin) }
+
+        it "shows it, as the directory does" do
+          expect(gather_search("wilhelmina")).to include("Wilhelmina")
+        end
+      end
+    end
+
     context "with a pet whose household has left the community" do
       let(:household) { create(:household) }
       let!(:pet) { create(:pet, name: "Waffles", household: household) }

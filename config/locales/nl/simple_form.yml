@@ -90,6 +90,7 @@ nl:
     hints:
       feature_flag:
         name: "De naam die de code opzoekt, bijv. messaging voor FeatureFlag.lookup(\"messaging\"). Kleine letters, cijfers en underscores. Deze kan later niet worden gewijzigd." # MT
+        user_ids: "Alleen deze gebruikers zien de functie. Wijzigingen gaan in zodra je opslaat. Als je de flag opslaat als uit of aan voor iedereen, worden ze verwijderd." # MT
       markdown_suffix_html: "Je kunt <a href='/about/markdown' target='_new'>uitgebreide opmaak</a> gebruiken." # MT
       communities_signup:
         community_name: "Hoogstens 20 tekens." # MT

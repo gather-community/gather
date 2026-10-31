@@ -14,17 +14,22 @@ de:
   admin:
     feature_flags:
       created: "Das Flag „%{name}“ wurde angelegt." # MT
+      updated: "Das Flag „%{name}“ wurde gespeichert." # MT
       deleted: "Das Flag „%{name}“ wurde gelöscht." # MT
-      user_added: "%{user} wurde zu „%{name}“ hinzugefügt." # MT
-      user_removed: "%{user} wurde aus „%{name}“ entfernt." # MT
-      mode_changed:
-        "off": "„%{name}“ ist jetzt aus." # MT
-        selected_users: "„%{name}“ ist jetzt nur für ausgewählte Benutzer an." # MT
-        everyone: "„%{name}“ ist jetzt für alle an." # MT
       modes:
         "off": "Aus" # MT
         selected_users: "Ausgewählte Benutzer" # MT
         everyone: "Alle" # MT
+      user_picker:
+        label: "Benutzer zum Hinzufügen suchen" # MT
+        placeholder: "Nach Name oder E-Mail in einer beliebigen Gemeinschaft suchen" # MT
+        too_short:
+          one: "Gib mindestens %{count} Zeichen ein" # MT
+          other: "Gib mindestens %{count} Zeichen ein" # MT
+        searching: "Suche läuft…" # MT
+        no_results: "Keine passenden Benutzer" # MT
+        error: "Die Suche ist fehlgeschlagen. Bitte versuche es noch einmal." # MT
+        remove: "Entfernen" # MT
       index:
         title: "Feature-Flags" # MT
         intro: "Feature-Flags schalten noch nicht veröffentlichte Funktionen ein und aus. Jedes Flag kann aus sein, nur für ausgewählte Benutzer an (aus jeder Gemeinschaft) oder für alle an." # MT
@@ -49,25 +54,11 @@ de:
         usage: "Im Code" # MT
         created_at: "Angelegt" # MT
         users_heading: "Ausgewählte Benutzer" # MT
-        users_hint:
-          "off": "Das Flag ist aus, daher sehen diese Benutzer die Funktion nicht. Bearbeite das Flag und wähle „An für ausgewählte Benutzer“, um es nur für diese Personen einzuschalten." # MT
-          selected_users: "Nur diese Benutzer sehen die Funktion." # MT
-          everyone: "Das Flag ist für alle an, daher wird diese Liste gerade nicht verwendet. Sie bleibt erhalten, falls du zurückschaltest." # MT
-        no_users: "Noch keine Benutzer ausgewählt. Suche oben, um jemanden hinzuzufügen." # MT
-        remove: "%{name} entfernen" # MT
+        no_users: "Noch keine Benutzer ausgewählt. Bearbeite das Flag, um welche hinzuzufügen." # MT
         headers:
           name: "Name" # MT
           community: "Gemeinschaft" # MT
           email: "E-Mail" # MT
-        search:
-          label: "Benutzer hinzufügen" # MT
-          placeholder: "Benutzer aus einer beliebigen Gemeinschaft hinzufügen: nach Name oder E-Mail suchen" # MT
-          too_short:
-            one: "Gib mindestens %{count} Zeichen ein" # MT
-            other: "Gib mindestens %{count} Zeichen ein" # MT
-          searching: "Suche läuft…" # MT
-          no_results: "Keine passenden Benutzer" # MT
-          error: "Die Suche ist fehlgeschlagen. Bitte versuche es noch einmal." # MT
     domains:
       refresh_all_started:
         one: "%{count} Domain wird im Hintergrund geprüft. Das dauert etwa %{seconds} Sekunden. Lade diese Seite neu, um die Ergebnisse zu sehen." # MT

@@ -16,6 +16,7 @@ fi:
       feature_flag:
         name: "Nimi" # MT
         mode: "Tila" # MT
+        user_ids: "Käyttäjät" # MT
       # EventletForm (drag-and-drop), for its error messages.
       calendars/eventlet:
         starts_at: "Alkamisaika" # MT

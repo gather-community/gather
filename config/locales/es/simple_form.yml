@@ -84,6 +84,7 @@ es:
     hints:
       feature_flag:
         name: "El nombre que busca el código, p. ej. messaging para FeatureFlag.lookup(\"messaging\"). Letras minúsculas, números y guiones bajos. No se puede cambiar después." # MT
+        user_ids: "Solo estos usuarios ven la función. Los cambios se aplican al guardar. Si guardas el indicador como desactivado o activado para todos, se quitan." # MT
       markdown_suffix_html: "Puedes usar <a href='/about/markdown' target='_new'>formato enriquecido</a>." # MT
       communities_signup:
         community_name: "Hasta 20 caracteres." # MT

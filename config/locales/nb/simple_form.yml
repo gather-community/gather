@@ -90,6 +90,7 @@ nb:
     hints:
       feature_flag:
         name: "Navnet koden slår opp, f.eks. messaging for FeatureFlag.lookup(\"messaging\"). Små bokstaver, tall og understreker. Det kan ikke endres senere." # MT
+        user_ids: "Bare disse brukerne ser funksjonen. Endringene trer i kraft når du lagrer. Hvis du lagrer flagget som av eller på for alle, fjernes de." # MT
       markdown_suffix_html: "Du kan bruke <a href='/about/markdown' target='_new'>formatering</a>." # MT
       communities_signup:
         community_name: "Opptil 20 tegn." # MT

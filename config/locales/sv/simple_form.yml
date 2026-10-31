@@ -84,6 +84,7 @@ sv:
     hints:
       feature_flag:
         name: "Namnet som koden slår upp, t.ex. messaging för FeatureFlag.lookup(\"messaging\"). Små bokstäver, siffror och understreck. Det kan inte ändras senare." # MT
+        user_ids: "Bara de här användarna ser funktionen. Ändringarna gäller när du sparar. Om du sparar flaggan som av eller på för alla tas de bort." # MT
       markdown_suffix_html: "Du kan använda <a href='/about/markdown' target='_new'>formatering</a>." # MT
       communities_signup:
         community_name: "Högst 20 tecken." # MT

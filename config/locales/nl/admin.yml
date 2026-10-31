@@ -14,17 +14,22 @@ nl:
   admin:
     feature_flags:
       created: "De flag “%{name}” is aangemaakt." # MT
+      updated: "De flag “%{name}” is opgeslagen." # MT
       deleted: "De flag “%{name}” is verwijderd." # MT
-      user_added: "%{user} is toegevoegd aan “%{name}”." # MT
-      user_removed: "%{user} is verwijderd uit “%{name}”." # MT
-      mode_changed:
-        "off": "“%{name}” staat nu uit." # MT
-        selected_users: "“%{name}” staat nu alleen aan voor geselecteerde gebruikers." # MT
-        everyone: "“%{name}” staat nu aan voor iedereen." # MT
       modes:
         "off": "Uit" # MT
         selected_users: "Geselecteerde gebruikers" # MT
         everyone: "Iedereen" # MT
+      user_picker:
+        label: "Zoek een gebruiker om toe te voegen" # MT
+        placeholder: "Zoek op naam of e-mail in elke gemeenschap" # MT
+        too_short:
+          one: "Typ minstens %{count} teken" # MT
+          other: "Typ minstens %{count} tekens" # MT
+        searching: "Zoeken…" # MT
+        no_results: "Geen overeenkomende gebruikers" # MT
+        error: "Het zoeken is mislukt. Probeer het opnieuw." # MT
+        remove: "Verwijderen" # MT
       index:
         title: "Featureflags" # MT
         intro: "Met featureflags zet je functies die nog niet zijn uitgebracht aan en uit. Elke flag kan uit staan, alleen aan staan voor geselecteerde gebruikers (uit elke gemeenschap) of aan staan voor iedereen." # MT
@@ -49,25 +54,11 @@ nl:
         usage: "In de code" # MT
         created_at: "Aangemaakt" # MT
         users_heading: "Geselecteerde gebruikers" # MT
-        users_hint:
-          "off": "De flag staat uit, dus deze gebruikers zien de functie niet. Bewerk de flag en kies “Aan voor geselecteerde gebruikers” om hem alleen voor deze mensen aan te zetten." # MT
-          selected_users: "Alleen deze gebruikers zien de functie." # MT
-          everyone: "De flag staat aan voor iedereen, dus deze lijst wordt nu niet gebruikt. Hij blijft bewaard voor het geval je terugschakelt." # MT
-        no_users: "Nog geen gebruikers geselecteerd. Zoek hierboven om iemand toe te voegen." # MT
-        remove: "%{name} verwijderen" # MT
+        no_users: "Nog geen gebruikers geselecteerd. Bewerk de flag om er een paar toe te voegen." # MT
         headers:
           name: "Naam" # MT
           community: "Gemeenschap" # MT
           email: "E-mail" # MT
-        search:
-          label: "Gebruiker toevoegen" # MT
-          placeholder: "Voeg een gebruiker uit elke gemeenschap toe: zoek op naam of e-mail" # MT
-          too_short:
-            one: "Typ minstens %{count} teken" # MT
-            other: "Typ minstens %{count} tekens" # MT
-          searching: "Zoeken…" # MT
-          no_results: "Geen overeenkomende gebruikers" # MT
-          error: "Het zoeken is mislukt. Probeer het opnieuw." # MT
     domains:
       refresh_all_started:
         one: "%{count} domein wordt op de achtergrond gecontroleerd. Dat duurt ongeveer %{seconds} seconden. Laad deze pagina opnieuw om de resultaten te zien." # MT

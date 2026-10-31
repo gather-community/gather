@@ -31,69 +31,30 @@
   </tr>
 </table>
 
-<h2><%= t(".users_heading") %></h2>
-<p class="hint"><%= t(".users_hint.#{@flag.mode}") %></p>
-
-<% if policy(%i[admin feature_flag]).manage_users? %>
-  <div class="user-search" data-controller="admin--user-search"
-       data-admin--user-search-url-value="<%= user_search_admin_feature_flag_path(@flag) %>"
-       data-admin--user-search-min-length-value="<%= Admin::FeatureFlagsController::USER_SEARCH_MIN_LENGTH %>"
-       data-admin--user-search-too-short-value="<%= t(".search.too_short",
-         count: Admin::FeatureFlagsController::USER_SEARCH_MIN_LENGTH) %>"
-       data-admin--user-search-searching-value="<%= t(".search.searching") %>"
-       data-admin--user-search-no-results-value="<%= t(".search.no_results") %>"
-       data-admin--user-search-error-value="<%= t(".search.error") %>">
-    <div class="input-group">
-      <span class="input-group-addon"><%= icon_tag("search") %></span>
-      <input type="text" class="form-control" autocomplete="off" spellcheck="false"
-             role="combobox" aria-autocomplete="list" aria-expanded="false"
-             aria-controls="user-search-results"
-             aria-label="<%= t(".search.label") %>"
-             placeholder="<%= t(".search.placeholder") %>"
-             data-admin--user-search-target="input"
-             data-action="input->admin--user-search#search keydown->admin--user-search#keydown
-                          blur->admin--user-search#close focus->admin--user-search#search">
+<% if @flag.mode == :selected_users %>
+  <h2><%= t(".users_heading") %></h2>
+  <% if @users.empty? %>
+    <div class="center-notice">
+      <%= t(".no_users") %>
     </div>
-    <ul id="user-search-results" class="user-search-results" role="listbox" hidden
-        data-admin--user-search-target="results"
-        data-action="mousedown->admin--user-search#preventBlur"></ul>
-    <%= form_with(url: admin_feature_flag_users_path(@flag), method: :post,
-          data: {"admin--user-search-target": "form"}) do %>
-      <%= hidden_field_tag(:user_id, nil, data: {"admin--user-search-target": "userId"}) %>
-    <% end %>
-  </div>
-<% end %>
-
-<% if @users.empty? %>
-  <div class="center-notice">
-    <%= t(".no_users") %>
-  </div>
-<% else %>
-  <table class="index feature-flag-users">
-    <thead>
-      <tr>
-        <th><%= t(".headers.name") %></th>
-        <th><%= t(".headers.community") %></th>
-        <th><%= t(".headers.email") %></th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @users.each do |user| %>
-        <tr id="feature-flag-user-<%= user.id %>">
-          <td><%= link_to(user.full_name, user_url(user)) %></td>
-          <td><%= user.community.name %></td>
-          <td><%= user.email %></td>
-          <td class="actions">
-            <%= button_to(admin_feature_flag_user_path(@flag, user), method: :delete,
-                  class: "btn btn-link", form: {style: "display:inline"},
-                  title: t(".remove", name: user.full_name),
-                  aria: {label: t(".remove", name: user.full_name)}) do %>
-              <%= icon_tag("times") %>
-            <% end %>
-          </td>
+  <% else %>
+    <table class="index">
+      <thead>
+        <tr>
+          <th><%= t(".headers.name") %></th>
+          <th><%= t(".headers.community") %></th>
+          <th><%= t(".headers.email") %></th>
         </tr>
-      <% end %>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        <% @users.each do |user| %>
+          <tr>
+            <td><%= link_to(user.full_name, user_url(user)) %></td>
+            <td><%= user.community.name %></td>
+            <td><%= user.email %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
 <% end %>

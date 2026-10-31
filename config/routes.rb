@@ -400,8 +400,7 @@ Rails.application.routes.draw do
 
     # Operator dashboard for feature flags (apex domain; flags are global, users from any cluster).
     resources :feature_flags, path: "feature-flags" do
-      get :user_search, path: "user-search", on: :member, defaults: {format: :json}
-      resources :users, only: %i[create destroy], controller: "feature_flag_users"
+      get :user_search, path: "user-search", on: :collection, defaults: {format: :json}
     end
   end
 

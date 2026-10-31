@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module Admin
-  # Operator dashboard for feature flags: switch each flag off, on for selected users, or on for
-  # everyone, and manage the selected users. Flags are global, and users can come from any cluster.
+  # Operator dashboard for feature flags: set each flag off, on for selected users, or on for
+  # everyone, and choose the selected users. Flags are global, and users can come from any cluster.
   class FeatureFlagsController < AdminController
     USER_SEARCH_MIN_LENGTH = 2
     USER_SEARCH_LIMIT = 10
@@ -45,7 +45,7 @@ module Admin
       @form = FeatureFlagForm.new(flag: find_flag, params: params.require(:feature_flag),
         permitted: policy(%i[admin feature_flag]).permitted_attributes_for_update)
       if @form.save
-        flash[:success] = t("admin.feature_flags.mode_changed.#{@form.mode}", name: @form.name)
+        flash[:success] = t("admin.feature_flags.updated", name: @form.name)
         redirect_to(admin_feature_flag_path(@form.flag))
       else
         render(:edit, status: :unprocessable_entity)
@@ -60,19 +60,19 @@ module Admin
       redirect_to(admin_feature_flags_path)
     end
 
-    # JSON for the add-user search box. Matches active users in any cluster by name or email,
-    # leaving out users already on the flag.
+    # JSON for the Users field's search box. Matches active users in any cluster by name or email,
+    # leaving out the users already chosen on the form (`exclude`, comma-separated IDs).
     def user_search
-      authorize(%i[admin feature_flag], :manage_users?)
-      flag = find_flag
+      authorize(%i[admin feature_flag])
       query = params[:q].to_s.strip
+      exclude_ids = params[:exclude].to_s.split(",").map(&:to_i)
       users = if query.size < USER_SEARCH_MIN_LENGTH
         User.none
       else
         pattern = "%#{User.sanitize_sql_like(query)}%"
         User.active.non_placeholder
           .where("(users.first_name || ' ' || users.last_name) ILIKE :p OR users.email ILIKE :p", p: pattern)
-          .where.not(id: flag.feature_flag_users.select(:user_id))
+          .where.not(id: exclude_ids)
           .including_communities.by_name.limit(USER_SEARCH_LIMIT)
       end
       render(json: {results: users.decorate.map { |u| user_search_result(u) }})

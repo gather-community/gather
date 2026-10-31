@@ -90,6 +90,7 @@ fi:
     hints:
       feature_flag:
         name: "Nimi, jolla koodi hakee lipun, esim. messaging kutsussa FeatureFlag.lookup(\"messaging\"). Pieniä kirjaimia, numeroita ja alaviivoja. Nimeä ei voi muuttaa myöhemmin." # MT
+        user_ids: "Vain nämä käyttäjät näkevät ominaisuuden. Muutokset tulevat voimaan, kun tallennat. Jos tallennat lipun pois päältä tai päällä kaikille, heidät poistetaan." # MT
       markdown_suffix_html: "Voit käyttää <a href='/about/markdown' target='_new'>monipuolista muotoilua</a>." # MT
       communities_signup:
         community_name: "Enintään 20 merkkiä." # MT

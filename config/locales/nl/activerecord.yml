@@ -16,6 +16,7 @@ nl:
       feature_flag:
         name: "Naam" # MT
         mode: "Status" # MT
+        user_ids: "Gebruikers" # MT
       # EventletForm (drag-and-drop), for its error messages.
       calendars/eventlet:
         starts_at: "Begintijd" # MT

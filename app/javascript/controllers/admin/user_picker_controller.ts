@@ -10,12 +10,14 @@ interface UserResult {
 const DEBOUNCE_MS = 200;
 
 /*
- * Typeahead for picking a user from any community. Queries a JSON endpoint as the user types,
- * shows the matches in a listbox (mouse or arrow keys + Enter), and submits the chosen user's ID
- * through a hidden form. All user-facing messages come in as translated values from the view.
+ * Picks any number of users from any community for a form field. A typeahead queries a JSON
+ * endpoint as the user types and shows the matches in a listbox (mouse or arrow keys + Enter).
+ * Each chosen user is added to a list as a hidden user_ids[] field, copied from a <template>, so
+ * nothing changes until the enclosing form is saved. User-facing messages come in as translated
+ * values from the view.
  */
 export default class extends Controller<HTMLElement> {
-  static targets = ["input", "results", "form", "userId"];
+  static targets = ["input", "results", "chosen", "template"];
   static values = {
     url: String,
     minLength: Number,
@@ -27,8 +29,8 @@ export default class extends Controller<HTMLElement> {
 
   declare readonly inputTarget: HTMLInputElement;
   declare readonly resultsTarget: HTMLUListElement;
-  declare readonly formTarget: HTMLFormElement;
-  declare readonly userIdTarget: HTMLInputElement;
+  declare readonly chosenTarget: HTMLUListElement;
+  declare readonly templateTarget: HTMLTemplateElement;
   declare readonly urlValue: string;
   declare readonly minLengthValue: number;
   declare readonly tooShortValue: string;
@@ -92,6 +94,11 @@ export default class extends Controller<HTMLElement> {
     this.activeIndex = -1;
   }
 
+  remove(event: Event): void {
+    (event.currentTarget as HTMLElement).closest("li")?.remove();
+    this.inputTarget.focus();
+  }
+
   // Clicking a result would otherwise blur the input and close the list before the click lands.
   preventBlur(event: MouseEvent): void {
     event.preventDefault();
@@ -102,7 +109,8 @@ export default class extends Controller<HTMLElement> {
     this.abortController = new AbortController();
     this.showMessage(this.searchingValue);
     try {
-      const url = `${this.urlValue}?q=${encodeURIComponent(query)}`;
+      const params = new URLSearchParams({q: query, exclude: this.chosenIds().join(",")});
+      const url = `${this.urlValue}?${params}`;
       const response = await fetch(url, {
         headers: {Accept: "application/json"},
         signal: this.abortController.signal,
@@ -134,17 +142,17 @@ export default class extends Controller<HTMLElement> {
 
   private buildOption(user: UserResult, index: number): HTMLLIElement {
     const li = document.createElement("li");
-    li.id = `user-search-option-${user.id}`;
-    li.className = "user-search-option";
+    li.id = `user-picker-option-${user.id}`;
+    li.className = "user-picker-option";
     li.setAttribute("role", "option");
     li.setAttribute("aria-selected", "false");
 
     const name = document.createElement("span");
-    name.className = "user-search-name";
+    name.className = "user-picker-name";
     name.textContent = user.name;
 
     const details = document.createElement("span");
-    details.className = "user-search-details";
+    details.className = "user-picker-details";
     details.textContent = [user.community, user.email].filter(Boolean).join(" · ");
 
     li.append(name, details);
@@ -157,7 +165,7 @@ export default class extends Controller<HTMLElement> {
     this.results = [];
     this.activeIndex = -1;
     const li = document.createElement("li");
-    li.className = "user-search-message";
+    li.className = "user-picker-message";
     li.textContent = message;
     this.resultsTarget.replaceChildren(li);
     this.open();
@@ -178,7 +186,7 @@ export default class extends Controller<HTMLElement> {
 
   private setActive(index: number): void {
     this.activeIndex = index;
-    const options = this.resultsTarget.querySelectorAll<HTMLLIElement>(".user-search-option");
+    const options = this.resultsTarget.querySelectorAll<HTMLLIElement>(".user-picker-option");
     options.forEach((option, i) => {
       const active = i === index;
       option.classList.toggle("active", active);
@@ -191,9 +199,30 @@ export default class extends Controller<HTMLElement> {
   }
 
   private choose(user: UserResult): void {
-    this.inputTarget.value = user.name;
+    const item = this.templateTarget.content.firstElementChild?.cloneNode(true);
+    if (!(item instanceof HTMLLIElement)) {
+      throw new Error("User picker template must contain an <li>");
+    }
+    item.dataset.userId = String(user.id);
+    item.querySelectorAll<HTMLInputElement>("input[type=hidden]").forEach((input) => {
+      input.value = String(user.id);
+    });
+    this.setText(item, ".user-picker-name", user.name);
+    this.setText(item, ".user-picker-details", [user.community, user.email].filter(Boolean).join(" · "));
+    this.chosenTarget.append(item);
+    this.inputTarget.value = "";
     this.close();
-    this.userIdTarget.value = String(user.id);
-    this.formTarget.requestSubmit();
+  }
+
+  private setText(item: HTMLElement, selector: string, text: string): void {
+    const element = item.querySelector(selector);
+    if (element) {
+      element.textContent = text;
+    }
+  }
+
+  private chosenIds(): string[] {
+    return Array.from(this.chosenTarget.querySelectorAll<HTMLLIElement>("li[data-user-id]"))
+      .map((item) => item.dataset.userId ?? "");
   }
 }

@@ -16,6 +16,7 @@ it:
       feature_flag:
         name: "Nome" # MT
         mode: "Stato" # MT
+        user_ids: "Utenti" # MT
       # EventletForm (drag-and-drop), for its error messages.
       calendars/eventlet:
         starts_at: "Ora di inizio" # MT

@@ -1,0 +1,11 @@
+<li class="user-picker-item" data-user-id="<%= id %>">
+  <%= hidden_field_tag("feature_flag[user_ids][]", id, id: nil) %>
+  <span class="user-picker-name"><%= name %></span>
+  <span class="user-picker-details"><%= details %></span>
+  <button type="button" class="btn btn-link user-picker-remove"
+          title="<%= t("admin.feature_flags.user_picker.remove") %>"
+          aria-label="<%= t("admin.feature_flags.user_picker.remove") %>"
+          data-action="admin--user-picker#remove">
+    <%= icon_tag("times") %>
+  </button>
+</li>

@@ -16,8 +16,8 @@ class FeatureFlag < ApplicationRecord
   NAME_MAX_LENGTH = 64
 
   # The admin UI presents a flag as being in one of these modes, which map onto interface and status.
-  # Switching modes never touches the user list, so a flag can be turned off and back on to
-  # selected users without losing anyone.
+  # Setting the mode here doesn't touch the user list; Admin::FeatureFlagForm clears it when a flag
+  # is saved in a mode other than selected users.
   MODES = %i[off selected_users everyone].freeze
 
   has_many :feature_flag_users, dependent: :destroy, inverse_of: :feature_flag

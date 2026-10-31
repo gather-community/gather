@@ -8,7 +8,7 @@ describe Admin::FeatureFlagPolicy do
 
     let(:record) { %i[admin feature_flag] }
 
-    permissions :index?, :show?, :create?, :update?, :destroy?, :manage_users? do
+    permissions :index?, :show?, :create?, :update?, :destroy?, :user_search? do
       it "permits super admins only" do
         expect(subject).to permit(super_admin, record)
         expect(subject).not_to permit(cluster_admin, record)
@@ -46,8 +46,8 @@ describe Admin::FeatureFlagPolicy do
 
     it "allows only the mode to change after creation" do
       policy = described_class.new(actor, %i[admin feature_flag])
-      expect(policy.permitted_attributes).to eq(%i[name mode])
-      expect(policy.permitted_attributes_for_update).to eq(%i[mode])
+      expect(policy.permitted_attributes).to eq([:name, :mode, {user_ids: []}])
+      expect(policy.permitted_attributes_for_update).to eq([:mode, {user_ids: []}])
     end
   end
 end

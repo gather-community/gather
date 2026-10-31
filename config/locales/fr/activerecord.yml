@@ -16,6 +16,7 @@ fr:
       feature_flag:
         name: "Nom" # MT
         mode: "État" # MT
+        user_ids: "Utilisateurs" # MT
       calendars/eventlet:
         starts_at: "Heure de début" # MT
         ends_at: "Heure de fin" # MT

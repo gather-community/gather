@@ -11,7 +11,7 @@ module Admin
     end
 
     def self.permitted_attributes
-      %i[name mode]
+      [:name, :mode, {user_ids: []}]
     end
 
     def index?
@@ -34,8 +34,8 @@ module Admin
       active_super_admin?
     end
 
-    # Also covers the user search that feeds the add-user box.
-    def manage_users?
+    # The user search that feeds the Users field on the form.
+    def user_search?
       active_super_admin?
     end
 
@@ -43,7 +43,7 @@ module Admin
 
     # Renaming would silently disconnect the flag from the code that looks it up by name.
     def permitted_attributes_for_update
-      %i[mode]
+      [:mode, {user_ids: []}]
     end
   end
 end

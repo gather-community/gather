@@ -3,13 +3,11 @@
     font-family: $font-family-monospace;
   }
 
-  .user-search {
+  .user-picker-search {
     position: relative;
-    max-width: 36em;
-    margin-bottom: 20px;
   }
 
-  .user-search-results {
+  .user-picker-results {
     position: absolute;
     top: 100%;
     left: 0;
@@ -29,7 +27,7 @@
       padding: 6px 12px;
     }
 
-    .user-search-option {
+    .user-picker-option {
       cursor: pointer;
 
       &.active {
@@ -37,19 +35,38 @@
       }
     }
 
-    .user-search-name {
+    .user-picker-name {
       display: block;
       font-weight: bold;
     }
-
-    .user-search-details,
-    .user-search-message {
-      color: $text-muted;
-      font-size: $font-size-small;
-    }
   }
 
-  table.feature-flag-users td.actions {
-    text-align: right;
+  .user-picker-details,
+  .user-picker-message {
+    color: $text-muted;
+    font-size: $font-size-small;
+  }
+
+  // The chosen users, one per row under the search box.
+  .user-picker-chosen {
+    margin: 8px 0 0;
+    padding: 0;
+    list-style: none;
+
+    .user-picker-item {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      padding: 4px 0 4px 4px;
+      border-bottom: 1px solid $table-border-color;
+    }
+
+    .user-picker-details {
+      flex: 1;
+    }
+
+    .user-picker-remove {
+      padding: 0 6px;
+    }
   }
 }

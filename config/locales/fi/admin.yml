@@ -14,17 +14,22 @@ fi:
   admin:
     feature_flags:
       created: "Lippu ”%{name}” luotiin." # MT
+      updated: "Lippu ”%{name}” tallennettiin." # MT
       deleted: "Lippu ”%{name}” poistettiin." # MT
-      user_added: "%{user} lisättiin lippuun ”%{name}”." # MT
-      user_removed: "%{user} poistettiin lipusta ”%{name}”." # MT
-      mode_changed:
-        "off": "”%{name}” on nyt pois päältä." # MT
-        selected_users: "”%{name}” on nyt päällä vain valituille käyttäjille." # MT
-        everyone: "”%{name}” on nyt päällä kaikille." # MT
       modes:
         "off": "Pois" # MT
         selected_users: "Valitut käyttäjät" # MT
         everyone: "Kaikki" # MT
+      user_picker:
+        label: "Hae lisättävää käyttäjää" # MT
+        placeholder: "Hae nimellä tai sähköpostilla mistä tahansa yhteisöstä" # MT
+        too_short:
+          one: "Kirjoita vähintään %{count} merkki" # MT
+          other: "Kirjoita vähintään %{count} merkkiä" # MT
+        searching: "Haetaan…" # MT
+        no_results: "Ei vastaavia käyttäjiä" # MT
+        error: "Haku epäonnistui. Yritä uudelleen." # MT
+        remove: "Poista" # MT
       index:
         title: "Ominaisuusliput" # MT
         intro: "Ominaisuusliput kytkevät julkaisemattomia ominaisuuksia päälle ja pois. Kukin lippu voi olla pois päältä, päällä vain valituille käyttäjille (mistä tahansa yhteisöstä) tai päällä kaikille." # MT
@@ -49,25 +54,11 @@ fi:
         usage: "Koodissa" # MT
         created_at: "Luotu" # MT
         users_heading: "Valitut käyttäjät" # MT
-        users_hint:
-          "off": "Lippu on pois päältä, joten nämä käyttäjät eivät näe ominaisuutta. Muokkaa lippua ja valitse ”Päällä valituille käyttäjille”, jos haluat kytkeä sen päälle vain näille henkilöille." # MT
-          selected_users: "Vain nämä käyttäjät näkevät ominaisuuden." # MT
-          everyone: "Lippu on päällä kaikille, joten tätä luetteloa ei käytetä nyt. Se säilytetään siltä varalta, että vaihdat takaisin." # MT
-        no_users: "Käyttäjiä ei ole vielä valittu. Lisää joku hakemalla yläpuolelta." # MT
-        remove: "Poista %{name}" # MT
+        no_users: "Käyttäjiä ei ole vielä valittu. Lisää käyttäjiä muokkaamalla lippua." # MT
         headers:
           name: "Nimi" # MT
           community: "Yhteisö" # MT
           email: "Sähköposti" # MT
-        search:
-          label: "Lisää käyttäjä" # MT
-          placeholder: "Lisää käyttäjä mistä tahansa yhteisöstä: hae nimellä tai sähköpostilla" # MT
-          too_short:
-            one: "Kirjoita vähintään %{count} merkki" # MT
-            other: "Kirjoita vähintään %{count} merkkiä" # MT
-          searching: "Haetaan…" # MT
-          no_results: "Ei vastaavia käyttäjiä" # MT
-          error: "Haku epäonnistui. Yritä uudelleen." # MT
     domains:
       refresh_all_started:
         one: "Tarkistetaan %{count} verkkotunnus taustalla. Tämän pitäisi kestää noin %{seconds} sekuntia. Lataa sivu uudelleen nähdäksesi tulokset." # MT

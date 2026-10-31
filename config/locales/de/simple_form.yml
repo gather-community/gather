@@ -32,6 +32,7 @@ de:
         introduction: "Über deine Gemeinschaft" # MT
         country_code: "Land" # MT
         time_zone: "Zeitzone" # MT
+        locale: "Sprache" # MT
         want_sample_data: "Beispieldaten" # MT
       communities_signup_action:
         decision: "Aktion" # MT
@@ -87,6 +88,7 @@ de:
         community_name: "Bis zu 20 Zeichen." # MT
         slug: "Kleinbuchstaben, Ziffern und Bindestriche; muss mit einem Buchstaben beginnen. Bis zu 20 Zeichen." # MT
         introduction: "Erzähl uns ein bisschen über deine Gemeinschaft und warum Gather gut zu euch passt. Bitte gib einen oder mehrere Links zu öffentlich zugänglichen Webseiten an (z. B. eure Website oder Social-Media-Seiten), die zeigen, wer eure Gemeinschaft ist." # MT
+        locale: "Die Sprache, in der Gather den Mitgliedern deiner Gemeinschaft E-Mails schickt, bis sie ihre eigene wählen." # MT
       communities_signup_action:
         message_approve: "Die vollständige E-Mail zur Annahme steht oben. Ersetze den Platzhaltertext durch eine persönliche Notiz." # MT
         message_deny: "Halte fest, warum diese Bewerbung abgelehnt wird. Das ist nur für interne Zwecke und wird nicht an die Bewerber verschickt." # MT
@@ -169,6 +171,7 @@ de:
         paypal_email: "Die E-Mail-Adresse deines PayPal-Kontos. Wird für Rückerstattungen an die Küchenleitung verwendet. Leer lassen, um die Haupt-E-Mail-Adresse oben zu verwenden." # MT
         full_access: "Kinder ohne vollen Zugang können sich nicht bei Gather anmelden, erscheinen aber im Verzeichnis. Kinder mit vollem Zugang zählen bei der Abrechnung als Erwachsene." # MT
         certify_13_or_older: "Kinder müssen mindestens 13 Jahre alt sein, um sich bei Gather anzumelden." # MT
+        locale: "E-Mails und Kalender-Feeds von Gather sind in dieser Sprache. Die Website richtet sich nach deinem Browser oder nach der Sprache, die du unten auf einer Seite wählst." # MT
       meals_formula:
         is_default: "Wenn angehakt, ist diese Preisformel beim Anlegen neuer Mahlzeiten vorausgewählt." # MT
         pantry_fee_formatted: "Essensgästen mit Mahlzeitkosten von 0,00 wird keine Vorratsgebühr berechnet, auch wenn die Gebühr fest ist." # MT

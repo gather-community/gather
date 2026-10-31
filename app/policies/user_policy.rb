@@ -144,6 +144,8 @@ class UserPolicy < ApplicationPolicy
     permitted << {household_attributes: [:id] + household_permitted}
 
     permitted << :google_email if active_admin?
+    # The email language only matters once other languages are turned on for the person.
+    permitted << :locale if Gather::Locales.enabled?(record)
     grantable_roles.each { |r| permitted << :"role_#{r}" }
     permitted.compact
   end

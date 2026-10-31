@@ -20,6 +20,7 @@ fi:
         settings:
           main_nav_customizations: "Ylävalikon mukautukset" # MT
           time_zone: "Aikavyöhyke" # MT
+          locale: "Oletuskieli" # MT
           default_landing_page: "Oletusaloitussivu" # MT
           people:
             _self: "Ihmiset" # MT
@@ -78,6 +79,7 @@ fi:
       community:
         settings:
           main_nav_customizations: "Tällä asetuksella voit muokata ylävalikon linkkejä. Kirjoita linkit Markdown-muodossa. Esimerkki: [Linkin nimi](https://example.com). Jos linkin nimi vastaa olemassa olevaa linkkiä, se korvaa oletusosoitteen. Tyhjä osoite poistaa linkin kokonaan. Kaikki muu teksti ja muotoilu ohitetaan." # MT
+          locale: "Sähköpostien ja kalenterisyötteiden kieli jäsenille, jotka eivät ole valinneet omaansa. Sivusto käyttää kunkin selaimen kieltä tai kieltä, jonka hän valitsee sivun alareunasta." # MT
           people:
             plain_user_selects: "Käytä tavallisia pudotusvalikoita hakukenttien sijaan. Voi sopia paremmin pienille yhteisöille." # MT
             user_custom_fields_spec: "Kirjoita YAML-muotoinen määrittely omille kentille, jotka näkyvät tämän yhteisön käyttäjiä katseltaessa ja muokattaessa. Ota yhteyttä Gatherin tukeen, jos tarvitset apua määrittelyn kirjoittamisessa." # MT

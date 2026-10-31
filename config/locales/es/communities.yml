@@ -98,6 +98,7 @@ es:
         slug: "Identificador de URL" # MT
         country: "País" # MT
         time_zone: "Zona horaria" # MT
+        locale: "Idioma" # MT
         sample_data: "Datos de ejemplo" # MT
         about: "Acerca de" # MT
         approval_message: "Mensaje de aprobación" # MT

@@ -178,6 +178,7 @@ nb:
       household_note_unnamed_html: "Feltene nedenfor hører til brukerens husstand. Hvis du endrer dem her, endres de for <em>alle brukere i husstanden</em>." # MT
       move_household_html: "Du kan også %{link}." # MT
       move_household_link: "flytte personen til en annen husstand" # MT
+      community_default_language: "Fellesskapets standard (%{language})" # MT
   households:
     greeting: "Hei, husstanden %{name}!" # MT
     created: "Husstanden er opprettet." # MT

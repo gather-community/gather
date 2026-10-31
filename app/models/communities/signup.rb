@@ -12,6 +12,7 @@
 #  slug                :string(63)       not null
 #  country_code        :string(2)        default("US"), not null
 #  time_zone           :string           not null, default("UTC")
+#  locale              :string(10)       not null, default("en")
 #  introduction        :text             not null
 #  want_sample_data    :boolean          not null, default(false)
 #  status              :string           not null, default("pending")

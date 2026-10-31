@@ -20,6 +20,7 @@ nl:
         settings:
           main_nav_customizations: "Aanpassingen van het hoofdmenu" # MT
           time_zone: "Tijdzone" # MT
+          locale: "Standaardtaal" # MT
           default_landing_page: "Standaard startpagina" # MT
           people:
             _self: "Mensen" # MT
@@ -78,6 +79,7 @@ nl:
       community:
         settings:
           main_nav_customizations: "Hiermee bewerk je de links in het hoofdmenu. Voer links in Markdown-opmaak in. Voorbeeld: [Naam van de link](https://example.com). Als de naam van de link overeenkomt met een bestaande link, vervangt deze de standaard-URL. Een lege URL verwijdert een link helemaal. Alle andere tekst en opmaak wordt genegeerd." # MT
+          locale: "De taal van e-mails en agendafeeds voor leden die zelf geen taal hebben gekozen. De website volgt de browser van ieder, of de taal die iemand onderaan de pagina kiest." # MT
           people:
             plain_user_selects: "Gebruik eenvoudige keuzelijsten in plaats van zoekvakken waarin je typt. Kan prettiger zijn voor kleinere gemeenschappen." # MT
             user_custom_fields_spec: "Voer een specificatie in YAML-formaat in voor eigen velden die verschijnen bij het bekijken en bewerken van gebruikers van deze gemeenschap. Neem contact op met de ondersteuning van Gather als je hulp nodig hebt bij het schrijven van deze specificatie." # MT

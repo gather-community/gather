@@ -178,6 +178,7 @@ de:
       household_note_unnamed_html: "Die folgenden Felder gehören zum Haushalt der Person. Wenn du sie hier änderst, ändern sie sich für <em>alle Personen im Haushalt</em>." # MT
       move_household_html: "Du kannst die Person auch %{link}." # MT
       move_household_link: "in einen anderen Haushalt verschieben" # MT
+      community_default_language: "Standard der Gemeinschaft (%{language})" # MT
   households:
     greeting: "Hallo Haushalt %{name}," # MT
     created: "Haushalt erstellt." # MT

@@ -16,6 +16,7 @@ module Communities
       ActsAsTenant.with_tenant(cluster) do
         community = cluster.communities.first
         community.settings.time_zone = signup.time_zone
+        community.settings.locale = signup.locale
         community.save!
       end
 

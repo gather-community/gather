@@ -5,7 +5,7 @@ require "rails_helper"
 describe Communities::SignupApprovalJob do
   include_context "jobs"
 
-  let!(:signup) { create(:communities_signup, :approved, want_sample_data: false) }
+  let!(:signup) { create(:communities_signup, :approved, want_sample_data: false, locale: "fr") }
 
   subject(:job) { described_class.new(signup.id) }
 
@@ -25,6 +25,7 @@ describe Communities::SignupApprovalJob do
       expect(community).to be_present
       expect(community.slug).to eq(signup.slug)
       expect(community.settings.time_zone).to eq(signup.time_zone)
+      expect(community.settings.locale).to eq("fr")
 
       user = User.find_by(email: signup.contact_email)
       expect(user).to be_present

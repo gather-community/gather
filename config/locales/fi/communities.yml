@@ -99,6 +99,7 @@ fi:
         slug: "URL-tunniste" # MT
         country: "Maa" # MT
         time_zone: "Aikavyöhyke" # MT
+        locale: "Kieli" # MT
         sample_data: "Esimerkkiaineisto" # MT
         about: "Tietoja" # MT
         approval_message: "Hyväksymisviesti" # MT

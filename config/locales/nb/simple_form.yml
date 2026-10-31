@@ -38,6 +38,7 @@ nb:
         introduction: "Om fellesskapet deres" # MT
         country_code: "Land" # MT
         time_zone: "Tidssone" # MT
+        locale: "Språk" # MT
         want_sample_data: "Eksempeldata" # MT
       communities_signup_action:
         decision: "Handling" # MT
@@ -93,6 +94,7 @@ nb:
         community_name: "Opptil 20 tegn." # MT
         slug: "Små bokstaver, tall og bindestrek. Må begynne med en bokstav. Opptil 20 tegn." # MT
         introduction: "Fortell litt om fellesskapet deres og hvorfor dere tror Gather passer for dere. Ta med én eller flere lenker til offentlig tilgjengelige nettsider (f.eks. nettstedet til fellesskapet eller sider på sosiale medier) som viser hvem fellesskapet er." # MT
+        locale: "Språket Gather sender e-post til medlemmene i fellesskapet deres på, til de velger sitt eget." # MT
       communities_signup_action:
         message_approve: "Hele e-posten om godkjenning vises ovenfor. Legg til en personlig hilsen i e-posten ved å erstatte plassholderteksten." # MT
         message_deny: "Skriv ned hvorfor søknaden blir avslått. Dette er bare til intern bruk og blir ikke sendt til søkeren." # MT
@@ -175,6 +177,7 @@ nb:
         paypal_email: "E-postadressen til PayPal-kontoen din. Brukes til refusjoner til kokker. La feltet stå tomt for å bruke hovedadressen din ovenfor." # MT
         full_access: "Barn uten full tilgang kan ikke logge inn i Gather, men vises i medlemslisten. Barn med full tilgang regnes som voksne ved fakturering." # MT
         certify_13_or_older: "Barn må være 13 år eller eldre for å logge inn i Gather." # MT
+        locale: "E-post og kalenderfeeder fra Gather kommer på dette språket. Nettstedet følger nettleseren din, eller språket du velger nederst på en side." # MT
       meals_formula:
         is_default: "Hvis det er krysset av, blir dette formelen som er valgt som standard når nye måltider opprettes." # MT
         pantry_fee_formatted: "Matgjester med en måltidskostnad på 0 blir ikke belastet basisvaregebyr, selv om gebyret er et fast beløp." # MT

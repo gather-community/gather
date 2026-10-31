@@ -34,6 +34,7 @@
 #  last_name              :string           not null
 #  last_sign_in_at        :datetime
 #  last_sign_in_ip        :inet
+#  locale                 :string(10)
 #  medical                :text
 #  mobile_phone           :string
 #  notification_prefs     :jsonb            not null
@@ -221,7 +222,7 @@ class User < ApplicationRecord
   delegate :country_code, to: :community, allow_nil: true
 
   normalize_attributes :email, :google_email, :paypal_email, with: :email
-  normalize_attributes :first_name, :last_name, :preferred_contact
+  normalize_attributes :first_name, :last_name, :preferred_contact, :locale
 
   handle_phone_types :mobile, :home, :work # In order of general preference
 
@@ -232,6 +233,8 @@ class User < ApplicationRecord
   validates :google_email, format: Devise.email_regexp, uniqueness: true,
     unless: ->(u) { u.google_email.blank? }
   validates :first_name, presence: true
+  # Nil means "use the community's default". See Gather::Locales.for_user.
+  validates :locale, inclusion: {in: ->(_) { Gather::Locales.available.map(&:to_s) }}, allow_nil: true
   validates :last_name, presence: true
   validates :up_guardianships, presence: true, if: :child?
   validates :password, presence: true, if: :password_required?

@@ -178,6 +178,7 @@ fi:
       household_note_unnamed_html: "Alla olevat kentät liittyvät käyttäjän kotitalouteen. Jos muutat niitä tässä, ne muuttuvat <em>kaikille kotitalouden käyttäjille</em>." # MT
       move_household_html: "Voit myös %{link}." # MT
       move_household_link: "siirtää hänet toiseen kotitalouteen" # MT
+      community_default_language: "Yhteisön oletus (%{language})" # MT
   households:
     greeting: "Hei, kotitalous %{name}," # MT
     created: "Kotitalous luotu." # MT

@@ -119,6 +119,7 @@ nb:
         full_access: "Skal brukeren ha full tilgang til systemet?" # MT
         certify_13_or_older: "Jeg bekrefter at denne brukeren er 13 år eller eldre" # MT
         pronouns: "Pronomen" # MT
+        locale: "Språk for e-post" # MT
       household:
         name: "Navn på husstanden" # MT
         community_id: "Fellesskap" # MT

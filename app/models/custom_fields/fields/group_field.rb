@@ -6,7 +6,7 @@ module CustomFields
     class GroupField < Field
       attr_accessor :fields
 
-      PERMITTED_TYPES = %w[boolean decimal email enum group integer markdown
+      PERMITTED_TYPES = %w[boolean decimal email enum group integer locale markdown
         spec string text time_zone url].freeze
 
       def initialize(key:, fields:)

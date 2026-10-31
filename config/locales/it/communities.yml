@@ -99,6 +99,7 @@ it:
         slug: "Slug dell'URL" # MT
         country: "Paese" # MT
         time_zone: "Fuso orario" # MT
+        locale: "Lingua" # MT
         sample_data: "Dati di esempio" # MT
         about: "Informazioni" # MT
         approval_message: "Messaggio di approvazione" # MT

@@ -166,6 +166,7 @@ en:
       household_note_unnamed_html: "The below fields are associated with the user's household. Changing them here will change them for <em>all users in the household</em>."
       move_household_html: "You can also %{link}."
       move_household_link: "move them to another household"
+      community_default_language: "Community default (%{language})"
   households:
     greeting: "Dear %{name} Household,"
     created: "Household created successfully."

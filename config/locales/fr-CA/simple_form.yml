@@ -16,6 +16,8 @@ fr-CA:
       communities_signup:
         contact_email: "Adresse courriel" # MT
     hints:
+      communities_signup:
+        locale: "La langue des courriels que Gather envoie aux membres de votre communauté, tant qu'ils n'ont pas choisi la leur." # MT
       communities_signup_action:
         message_approve: "Le courriel d'approbation complet est affiché ci-dessus. Ajoutez une note personnalisée en remplaçant le texte indicatif." # MT
       gdrive_migration_operation:
@@ -31,6 +33,7 @@ fr-CA:
         email: "L'adresse courriel à laquelle vous préférez être contacté. Aussi utilisée pour la connexion avec mot de passe." # MT
         google_email: "L'adresse courriel liée au compte Google utilisé pour la connexion. Elle n'est pas affichée dans l'annuaire. Demandez à un <a href='/roles'>administrateur</a> si vous devez la changer." # MT
         paypal_email: "L'adresse courriel de votre compte PayPal. Utilisée pour les remboursements des cuisiniers. Laissez vide pour utiliser votre adresse courriel principale ci-dessus." # MT
+        locale: "Les courriels et les flux de calendrier de Gather seront dans cette langue. Le site suit votre navigateur, ou la langue que vous choisissez en bas de chaque page." # MT
       meals_formula:
         takeout: "Si la case est cochée, les convives peuvent demander leur repas pour emporter. Le fonctionnement concret est à décider et à communiquer par la communauté." # MT
       work_job:

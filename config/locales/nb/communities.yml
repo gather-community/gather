@@ -99,6 +99,7 @@ nb:
         slug: "URL-slug" # MT
         country: "Land" # MT
         time_zone: "Tidssone" # MT
+        locale: "Språk" # MT
         sample_data: "Eksempeldata" # MT
         about: "Om fellesskapet" # MT
         approval_message: "Melding ved godkjenning" # MT

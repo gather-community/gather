@@ -99,6 +99,7 @@ sv:
         slug: "URL-slug" # MT
         country: "Land" # MT
         time_zone: "Tidszon" # MT
+        locale: "Språk" # MT
         sample_data: "Exempeldata" # MT
         about: "Om gemenskapen" # MT
         approval_message: "Meddelande vid godkännande" # MT

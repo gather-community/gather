@@ -87,6 +87,7 @@ en:
         slug: "URL Slug"
         country: "Country"
         time_zone: "Time Zone"
+        locale: "Language"
         sample_data: "Sample Data"
         about: "About"
         approval_message: "Approval Message"

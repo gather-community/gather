@@ -217,6 +217,24 @@ describe User do
       end
     end
 
+    describe "locale" do
+      it "accepts a language Gather is available in" do
+        expect(build(:user, locale: "fr-CA")).to be_valid
+      end
+
+      it "stores a blank choice as nil, meaning the community's default" do
+        user = build(:user, locale: "")
+        expect(user).to be_valid
+        expect(user.locale).to be_nil
+      end
+
+      it "rejects anything else" do
+        user = build(:user, locale: "xx")
+        expect(user).to be_invalid
+        expect(user.errors[:locale]).to be_present
+      end
+    end
+
     describe "age certification" do
       context "with full access child" do
         context "with new record" do

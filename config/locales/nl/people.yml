@@ -178,6 +178,7 @@ nl:
       household_note_unnamed_html: "De velden hieronder horen bij het huishouden van de gebruiker. Als je ze hier wijzigt, wijzig je ze voor <em>alle gebruikers in het huishouden</em>." # MT
       move_household_html: "Je kunt deze persoon ook %{link}." # MT
       move_household_link: "naar een ander huishouden verplaatsen" # MT
+      community_default_language: "Standaard van de gemeenschap (%{language})" # MT
   households:
     greeting: "Beste huishouden %{name}," # MT
     created: "Huishouden aangemaakt." # MT

@@ -28,9 +28,8 @@ class Communities::SignupPolicy < ApplicationPolicy
   # Defined as a class method so it can be called without instantiating the policy,
   # since the signup form is public and there is no current_user to pass to the constructor.
   def self.permitted_attributes
-    %i[contact_first_name contact_last_name contact_email
-       community_name slug country_code time_zone
-       introduction want_sample_data]
+    %i[contact_first_name contact_last_name contact_email community_name slug country_code time_zone locale
+      introduction want_sample_data]
   end
 
   def permitted_attributes

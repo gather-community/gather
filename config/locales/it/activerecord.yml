@@ -119,6 +119,7 @@ it:
         full_access: "L'utente deve avere accesso completo al sistema?" # MT
         certify_13_or_older: "Certifico che questo utente ha almeno 13 anni" # MT
         pronouns: "Pronomi" # MT
+        locale: "Lingua delle email" # MT
       household:
         name: "Nome del nucleo" # MT
         community_id: "Comunità" # MT

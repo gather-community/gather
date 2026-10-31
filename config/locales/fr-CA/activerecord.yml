@@ -17,6 +17,7 @@ fr-CA:
         email: "Adresse courriel" # MT
         mobile_phone: "Cellulaire" # MT
         paypal_email: "Courriel PayPal" # MT
+        locale: "Langue des courriels" # MT
       "meals/formula":
         takeout: "Autoriser les demandes pour emporter ?" # MT
       "meals/signup":

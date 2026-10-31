@@ -1,0 +1,472 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+fr:
+  meals:
+    over_limit_notice_html: "Votre foyer a dépassé sa limite de crédit %{community} de %{limit} (voir %{account_link}) : vous ne pouvez donc pas vous inscrire aux repas organisés par %{community}. Pour toute question, contactez le comité ou la personne responsable des repas de %{community}." # MT
+    cancelled_notice: "Ce repas a été annulé." # MT
+    persion_is_helping:
+      one: "%{count} personne de votre foyer aide pour ce repas" # MT
+      other: "%{count} personnes de votre foyer aident pour ce repas" # MT
+    menu_posted_at: "Menu publié le %{time}." # MT
+    type: "Type" # MT
+    category: "Catégorie" # MT
+    spots_left:
+      one: "%{count} place restante" # MT
+      other: "%{count} places restantes" # MT
+    form:
+      sections:
+        label:
+          general: "Général" # MT
+          workers: "Équipe" # MT
+          menu: "Menu" # MT
+          signups: "Inscriptions" # MT
+          expenses: "Dépenses" # MT
+        edit:
+          general: "Modifier les infos générales" # MT
+          workers: "Modifier l'équipe" # MT
+          menu: "Modifier le menu" # MT
+          signups: "Modifier les inscriptions" # MT
+          expenses: "Modifier les dépenses" # MT
+      summaries:
+        allows: "accueille %{people}" # MT
+        allows_with_cmtys:
+          one: "accueille %{people} de %{count} communauté" # MT
+          other: "accueille %{people} de %{count} communautés" # MT
+        no_workers: "Aucune personne dans l'équipe" # MT
+        no_menu: "Aucun menu publié" # MT
+        no_signups: "Aucun foyer inscrit" # MT
+        with_items: "avec %{items}" # MT
+        and_allergen_count:
+          one: "et %{count} allergène" # MT
+          other: "et %{count} allergènes" # MT
+        expenses:
+          ingredients: "%{cost} d'ingrédients" # MT
+          pantry: "%{cost} de garde-manger" # MT
+          payment: "paiement par %{method}" # MT
+          none: "Aucune information sur les dépenses" # MT
+        signups:
+          diners:
+            one: "%{count} convive" # MT
+            other: "%{count} convives" # MT
+          from_households:
+            one: "de %{count} foyer" # MT
+            other: "de %{count} foyers" # MT
+    finalizing:
+      duplicates: "Il y a des inscriptions en double. Corrigez-les en indiquant les nombres pour chaque type de convive." # MT
+      cancelled: "Le repas n'a pas été finalisé. Vous pouvez le modifier ci-dessous et réessayer, ou cliquer sur « Annuler » pour revenir à la page des repas." # MT
+      success: "Repas finalisé" # MT
+      review_and_confirm_html: "<strong>Remarque :</strong> ce repas n'est pas encore finalisé. Vérifiez et confirmez vos saisies ci-dessous. Ces informations ne pourront plus être modifiées une fois les relevés envoyés : soyez attentif." # MT
+    sign_up: "S'inscrire" # MT
+    closes_soon: "Ferme bientôt !" # MT
+    no_menu_title: "[Pas de menu]" # MT
+    takeout: "À emporter" # MT
+    created: "Repas créé." # MT
+    updated: "Repas mis à jour." # MT
+    closed: "Repas fermé." # MT
+    reopened: "Repas rouvert." # MT
+    unfinalized: "Finalisation du repas annulée." # MT
+    cant_reopen_past_close: "Vous ne pouvez pas rouvrir ce repas, car son heure de fermeture automatique est passée. Modifiez ou supprimez-la avant de continuer." # MT
+    not_closed_before_summary: "Remarque : ce repas n'est pas encore fermé et des personnes peuvent encore s'y inscrire. Fermez le repas avant d'imprimer ce résumé." # MT
+    formula_created: "Formule créée." # MT
+    formula_updated: "Formule mise à jour." # MT
+    type_created: "Type créé." # MT
+    type_updated: "Type mis à jour." # MT
+    role_created: "Rôle créé." # MT
+    role_updated: "Rôle mis à jour." # MT
+    restrictions_updated: "Mise à jour effectuée." # MT
+    event_name: "Repas : %{title}" # MT
+    event_errors: "Les erreurs suivantes se sont produites lors de la création d'un événement %{calendar} pour ce repas : %{errors}." # MT
+    event_error: "%{attribute} : %{message}" # MT
+    signup_not_recorded: "Votre inscription n'a pas pu être enregistrée, car le repas est complet ou n'est plus ouvert." # MT
+    report:
+      subhead_community: "%{range}, repas de %{community} uniquement" # MT
+    report_charts:
+      avg_servings: "Portions moy." # MT
+      avg_servings_per_meal: "Portions moy. par repas" # MT
+      avg_cost: "Coût moy." # MT
+      avg_full_meal_price: "Prix moy. d'un repas complet" # MT
+      meals: "Repas" # MT
+      number_of_meals: "Nombre de repas" # MT
+      weekday: "Jour de la semaine" # MT
+      month: "Mois" # MT
+      titles:
+        servings_by_month: "Portions moy. par repas, par mois" # MT
+        servings_by_month_community: "Portions moy. par repas de %{community}, par mois" # MT
+        cost_by_month: "Prix moy. d'un repas complet, par mois" # MT
+        cost_by_month_community: "Prix moy. d'un repas complet de %{community}, par mois" # MT
+        meals_by_month: "Nombre de repas par mois" # MT
+        meals_by_month_community: "Nombre de repas de %{community} par mois" # MT
+        servings_by_weekday: "Portions moy. par repas, par jour de la semaine" # MT
+        servings_by_weekday_community: "Portions moy. par repas de %{community}, par jour de la semaine" # MT
+        cost_by_weekday: "Prix moy. d'un repas complet, par jour de la semaine" # MT
+        cost_by_weekday_community: "Prix moy. d'un repas complet de %{community}, par jour de la semaine" # MT
+        community_rep: "Représentation moy. des communautés aux repas" # MT
+        community_rep_community: "Représentation moy. des communautés aux repas de %{community}" # MT
+        meal_types: "Types de repas moy. aux repas" # MT
+        meal_types_community: "Types de repas moy. aux repas de %{community}" # MT
+    portion_counts:
+      diners:
+        one: "%{count} convive" # MT
+        other: "%{count} convives" # MT
+      portions_html:
+        one: "<strong>%{count}</strong> portion" # MT
+        other: "<strong>%{count}</strong> portions" # MT
+      category_portions_html:
+        one: "<strong>%{count} %{category}</strong> portion" # MT
+        other: "<strong>%{count} %{category}</strong> portions" # MT
+      other_category: "autre" # MT
+      summary_html: "Ce repas a %{diners} et nécessitera environ %{portions}.*" # MT
+      summary_list_html: "Ce repas a %{diners} et nécessitera environ : %{portions}.*" # MT
+    meals:
+      index:
+        title: "Repas" # MT
+        show_action_menu: "Afficher le menu d'actions du repas" # MT
+        create: "Créer un repas" # MT
+        import: "Importer des repas" # MT
+        no_meals: "Aucun repas trouvé." # MT
+        date_time: "Date/heure" # MT
+        location: "Lieu" # MT
+        cook: "Cuisinier" # MT
+        meal_title: "Titre" # MT
+        going: "Inscrit ?" # MT
+        signups: "Inscriptions" # MT
+        full: "[Complet]" # MT
+        not_going: "Non" # MT
+        meal_by_cook_html: "%{meal} par %{cook}" # MT
+        time_at_location: "%{time} à %{location}" # MT
+        signed_up_html: "%{signups} inscrits" # MT
+        household_signed_up_html: "%{diners} inscrits de votre foyer" # MT
+        edit_signup: "(Modifier)" # MT
+        download_meals_csv: "Télécharger les repas en CSV" # MT
+        download_signups_csv: "Télécharger les inscriptions aux repas en CSV" # MT
+      show:
+        untitled: "Repas sans titre" # MT
+        meals: "Repas" # MT
+        previous_meal: "Repas précédent" # MT
+        next_meal: "Repas suivant" # MT
+        my_order: "Ma commande" # MT
+        helping_out: "Aider" # MT
+      new:
+        title: "Créer un repas" # MT
+        missing_prereqs_html: "Avant de pouvoir créer un repas, il faut %{items}." # MT
+        formula: "une formule de coût applicable" # MT
+        calendar: "au moins un calendrier pouvant accueillir des repas" # MT
+      edit:
+        title: "Modifier le repas" # MT
+        title_with_meal: "Modifier le repas : %{title}" # MT
+      signup_form:
+        account: "compte" # MT
+        closed_not_signed_up: "Vous n'êtes pas inscrit à ce repas et il est maintenant fermé." # MT
+        full_not_signed_up: "Vous n'êtes pas inscrit à ce repas et il est maintenant complet. Revenez plus tard pour voir si une place se libère." # MT
+        not_signed_up: "Vous n'êtes pas inscrit à ce repas." # MT
+        saved: "Inscription enregistrée" # MT
+        closes_at: "Ferme le %{date} à %{time}" # MT
+        sign_up: "S'inscrire" # MT
+      household_worker_form:
+        worker_role: "%{name} - %{role}" # MT
+        no_more_workers: "Ce repas n'a besoin de personne de plus." # MT
+        still_needs_html:
+          one: "Ce repas a encore besoin de <b>%{count} personne</b>." # MT
+          other: "Ce repas a encore besoin de <b>%{count} personnes</b>." # MT
+        help_out: "Aider" # MT
+      summary:
+        untitled: "Repas sans titre" # MT
+        signups: "Inscriptions" # MT
+        total: "Total" # MT
+        late_signups: "Inscriptions tardives" # MT
+        portion_footnote_html: "* Total des portions calculé à partir des tailles de portion de la %{link}." # MT
+        meal_formula: "formule du repas" # MT
+        grocery_calculator: "Calculateur de courses" # MT
+        fixed_cost_html: "D'après le coût fixe de ce repas, les ingrédients ne devraient pas coûter plus de %{amount}, hors produits de garde-manger et de base (voir les consignes de repas de votre communauté pour la liste de ces produits)." # MT
+        proportional_cost: "D'après la formule de partage des coûts de ce repas, le tableau ci-dessous indique combien vous pouvez dépenser en ingrédients selon le prix de repas voulu. Ces plafonds ne comprennent pas les produits de garde-manger et de base (voir les consignes de repas de votre communauté pour la liste de ces produits)." # MT
+        meal_price: "Prix du repas" # MT
+        max_ingredient_cost: "Coût max. des ingrédients" # MT
+        cook_reimbursement: "Remboursement du cuisinier" # MT
+      summary_signups_header:
+        community: "Comm." # MT
+        household: "Foyer" # MT
+        takeout: "À emporter" # MT
+        comments: "Commentaires" # MT
+      menu:
+        menu: "menu" # MT
+        at_location: "À %{location}" # MT
+        for_communities: "pour %{communities}" # MT
+        allergens: "allergènes" # MT
+        no_menu: "Aucun menu publié pour le moment." # MT
+      jobs:
+        title: "Tâches des repas" # MT
+        title_for_user: "Tâches des repas : %{name}" # MT
+        no_jobs: "Aucune tâche trouvée." # MT
+        meal_at_location_html: "%{meal} à %{location}" # MT
+        role_workers_html: "%{role} : %{workers}" # MT
+      cost_info:
+        cost: "Coût" # MT
+        unknown: "?"
+        included: "%{label} (compris)" # MT
+        proportional: "Ce repas utilise une formule proportionnelle : le coût sera calculé une fois le repas passé et finalisé." # MT
+      who_is_going:
+        title: "Qui vient ?" # MT
+        nobody: "Personne pour l'instant !" # MT
+        household_count: "%{household} (%{count})" # MT
+      time_cook:
+        chefs_hat: "Toque de chef" # MT
+      signup_read_only:
+        part: "%{count} %{type}" # MT
+        takeout_requested: "À emporter demandé" # MT
+        quoted_comments: "« %{comments} »" # MT
+      report:
+        title: "Rapport des repas" # MT
+        no_data: "Aucune donnée de repas trouvée pour %{range}. Le rapport ne comprend que les repas finalisés." # MT
+        all_time: "Depuis le début" # MT
+        community_all_time: "%{community} depuis le début" # MT
+        overall_all_time: "Ensemble depuis le début" # MT
+        meals: "Repas" # MT
+        servings: "Portions" # MT
+        cost: "Coût" # MT
+        by_month: "Par mois" # MT
+        by_weekday: "Par jour de la semaine" # MT
+        by_community: "Par communauté" # MT
+        by_type: "Par type" # MT
+        by_category: "Par catégorie" # MT
+        footnote:
+          one: "Les statistiques ci-dessus ne comprennent que les repas finalisés et non annulés. %{count} repas a été annulé pendant cette période." # MT
+          other: "Les statistiques ci-dessus ne comprennent que les repas finalisés et non annulés. %{count} repas ont été annulés pendant cette période." # MT
+        footnote_community:
+          one: "Les statistiques ci-dessus ne comprennent que les repas finalisés et non annulés. %{count} repas a été annulé à %{community} pendant cette période." # MT
+          other: "Les statistiques ci-dessus ne comprennent que les repas finalisés et non annulés. %{count} repas ont été annulés à %{community} pendant cette période." # MT
+      report_main_table:
+        totals: "Totaux" # MT
+        general_averages: "Moyennes générales" # MT
+        community_representation: "Représentation moy. des communautés" # MT
+        meals: "Repas" # MT
+        servings: "Portions" # MT
+        cost: "Coût" # MT
+        full_meal_price: "Prix d'un repas complet" # MT
+        total: "Total" # MT
+      report_type_table:
+        avg_servings: "Portions moy." # MT
+        percent: "Pourcentage" # MT
+      export_form:
+        select_dates: "Choisir les dates" # MT
+      reimb_form:
+        meal: "Repas :" # MT
+        by_cook: "Par %{cook}" # MT
+        time_at_location: "%{time} à %{location}" # MT
+        ingredients: "Montant dépensé en ingrédients :" # MT
+        pantry: "Montant dépensé en produits de garde-manger et de base :" # MT
+        total: "Montant total à rembourser :" # MT
+        amount_blank: "$"
+        method: "Mode de remboursement :" # MT
+        account_credit: "Crédit sur le compte" # MT
+        check_payable: "Chèque à l'ordre de :" # MT
+        paypal: "PayPal à l'adresse e-mail :" # MT
+      form:
+        general:
+          communities: "Communautés" # MT
+        expenses:
+          check_hint: "La personne à rembourser recevra un chèque du montant des ingrédients." # MT
+          credit_hint: "La personne à rembourser recevra un crédit du montant des ingrédients sur son compte Gather." # MT
+          paypal_hint: "La personne à rembourser recevra un paiement PayPal du montant des ingrédients. Chacun peut changer son adresse e-mail PayPal en modifiant son profil." # MT
+        workers:
+          formula_changed: "La formule de ce repas a été changée, ce qui peut rendre d'autres rôles disponibles ci-dessous. Pour voir les nouveaux rôles, enregistrez le repas et revenez sur cette page. Les attributions existantes ne seront pas supprimées si leurs rôles ne sont pas associés à la nouvelle formule." # MT
+        menu:
+          allergens: "Allergènes" # MT
+    formulas:
+      index:
+        title: "Formules de repas" # MT
+        create: "Créer une formule" # MT
+        explanation: "Les formules de repas permettent de personnaliser le calcul des coûts et des portions." # MT
+        no_formulas: "Aucune formule trouvée." # MT
+        name: "Nom" # MT
+        meals: "Repas" # MT
+        created_on: "Créée le" # MT
+      show:
+        title: "Formule de repas : %{name}" # MT
+        formulas: "Formules" # MT
+        meal_calculations: "Calculs du repas" # MT
+        pantry_calculations: "Calculs du garde-manger" # MT
+      new:
+        title: "Nouvelle formule de repas" # MT
+      edit:
+        title: "Modifier la formule de repas : %{name}" # MT
+      form:
+        meal_calculations: "Calculs du repas" # MT
+        pantry_calculations: "Calculs du garde-manger" # MT
+    types:
+      index:
+        title: "Types de repas" # MT
+        create: "Créer un type" # MT
+        explanation: "Les types de repas offrent différents choix aux convives lors de l'inscription et peuvent avoir des coûts et tailles de portion différents dans les formules." # MT
+        no_types: "Aucun type trouvé." # MT
+      new:
+        title: "Créer un type de repas" # MT
+      edit:
+        title: "Modifier le type de repas : %{name}" # MT
+    roles:
+      index:
+        title: "Rôles de repas" # MT
+        create: "Créer un rôle" # MT
+        explanation: "Les rôles de repas représentent les différentes tâches nécessaires pour préparer un repas." # MT
+        no_roles: "Aucun rôle trouvé." # MT
+      new:
+        title: "Créer un rôle de repas" # MT
+      edit:
+        title: "Modifier le rôle de repas : %{title}" # MT
+    restrictions:
+      edit:
+        title: "Paramètres des repas : restrictions alimentaires" # MT
+        restriction: "Restriction" # MT
+        opposite: "Contraire" # MT
+        deactivated: "Désactivée ?" # MT
+      restriction_fields:
+        restriction_placeholder: "par ex. Gluten" # MT
+        opposite_placeholder: "par ex. Sans gluten" # MT
+        restriction: "Restriction" # MT
+        opposite: "Contraire" # MT
+    imports:
+      sample_calendar_1: "Salle à manger" # MT
+      sample_calendar_2: "Cuisine" # MT
+      sample_formula: "Formule principale" # MT
+      new:
+        title: "Importer des repas" # MT
+        intro: "Vous pouvez importer des repas au format CSV. Les tableurs comme Excel ou Google Sheets peuvent exporter au format CSV, que vous pouvez ensuite importer dans Gather." # MT
+      show:
+        title: "Importer des repas" # MT
+      form:
+        upload_file: "Envoyer le fichier" # MT
+      results:
+        succeeded: "Votre importation a réussi !" # MT
+        check_meals_html: "Consultez la %{link} pour voir vos repas importés." # MT
+        meals_page: "page des repas" # MT
+        crashed: "Une erreur inattendue s'est produite pendant l'importation." # MT
+        crashed_try_again_html: "Veuillez %{link}, et contactez votre administrateur si l'erreur persiste." # MT
+        try_again_below: "réessayer ci-dessous" # MT
+        issues: "Vos données de repas présentent un ou plusieurs problèmes." # MT
+        resolve_html: "Corrigez les problèmes ci-dessous et %{link}." # MT
+        try_again: "réessayez" # MT
+        row: "Ligne %{number}" # MT
+      instructions:
+        data_format: "Format des données" # MT
+        use_columns: "Construisez votre fichier d'importation avec les colonnes suivantes :" # MT
+        served_at: "Obligatoire. La date et l'heure du repas. Utilisez un format sans ambiguïté, comme AAAA-MM-JJ HH:MM" # MT
+        calendars_html: "Obligatoire. Le ou les lieux du repas. Utilisez les noms exacts ou les ID numériques des calendriers du %{link}." # MT
+        calendar_system: "système de calendriers" # MT
+        formula_html: "Facultatif. La %{link} du repas. Utilisez le nom exact ou l'ID numérique de la formule. Par défaut, la formule par défaut." # MT
+        formula: "formule" # MT
+        communities: "Facultatif. Les communautés invitées au repas. Utilisez les noms exacts, abréviations ou ID numériques, séparés par des points-virgules. Par défaut, toutes les communautés." # MT
+        role_column_html: "&lt;<em>Nom du rôle</em>&gt; ou %{role}&lt;<em>ID du rôle</em>&gt;" # MT
+        roles_html: "Facultatif. Indiquez l'équipe du repas en ajoutant une colonne par %{link}. Utilisez les noms exacts ou les ID numériques des personnes, séparés par des points-virgules." # MT
+        meal_role: "rôle de repas" # MT
+        action: "Facultatif. Indiquez « create », « update » ou « destroy ». Par défaut, « create ». Avec « update » ou « destroy », le repas est retrouvé par son ID s'il est indiqué, sinon par sa date, son heure et ses lieux." # MT
+        id: "Facultatif. L'ID du repas à modifier ou supprimer. Ignoré si l'action est « create »." # MT
+        example_data: "Exemple de données" # MT
+        sample_worker_1: "Sophie Martin" # MT
+        sample_workers_2: "Mohammed Iris; Sundar Premji" # MT
+        sample_worker_3: "Li Yun" # MT
+        sample_workers_4: "Aminata Diallo; Lucie Moreau" # MT
+    messages:
+      sent: "Message envoyé." # MT
+      new:
+        cancel_title: "Annuler le repas" # MT
+        dont_cancel: "Ne pas annuler le repas" # MT
+        send_and_cancel: "Envoyer le message et annuler le repas" # MT
+    finalize:
+      title: "Finaliser le repas : %{title}" # MT
+      untitled: "Sans titre" # MT
+      confirm:
+        household: "Foyer" # MT
+        calculated_cost: "Coût calculé" # MT
+        cook_reimbursement_request: "Demande de remboursement du cuisinier" # MT
+      complete:
+        success: "Repas finalisé !" # MT
+        check: "Envoyez maintenant un chèque de %{amount} à %{name}." # MT
+        credit: "Le compte Gather de %{name} a été crédité de %{amount}." # MT
+        paypal: "Envoyez maintenant %{amount} à %{email} par PayPal." # MT
+    settings:
+      edit:
+        title: "Paramètres des repas : général" # MT
+  meals/assignments:
+    change_warning: "Remarque : si vous modifiez l'équipe du repas, un e-mail sera envoyé au comité ou à la personne responsable des repas ainsi qu'à toutes les personnes déjà ou nouvellement affectées." # MT
+  meals/formulas:
+    pantry: "Garde-manger" # MT
+    calc_types:
+      fixed: "Fixe" # MT
+      share: "Proportionnel" # MT
+      percent: "Pourcentage" # MT
+    hints:
+      meal: "Le coût des repas peut être fixe ou proportionnel au coût des ingrédients." # MT
+      pantry: "Les frais de garde-manger sont facturés à chaque convive pour couvrir l'achat des produits de base de la cuisine. Ils peuvent être un montant fixe ou un pourcentage du coût du repas du convive." # MT
+      meal_type:
+        fixed: "Ajoutez chaque type de repas, son prix et sa taille de portion relative. Les tailles de portion aident les cuisiniers à faire les courses." # MT
+        share: "Ajoutez chaque type de repas, sa part en pourcentage et sa taille de portion relative.\n\nLes parts en pourcentage servent à calculer le coût. Par exemple, si un type de repas doit avoir une réduction d'un quart, saisissez 75 %. 100 % représente une part entière et égale du coût des ingrédients, et 0 % signifie gratuit.\n\nLes tailles de portion aident les cuisiniers à faire les courses." # MT
+    cant_edit_notice: "Cette formule est liée à des repas existants : vous ne pouvez donc pas modifier les calculs." # MT
+  meals/formula_parts:
+    portion_options:
+      one_qtr: "¼ de portion" # MT
+      half: "½ portion" # MT
+      three_qtr: "¾ de portion" # MT
+      full: "Portion entière" # MT
+    portion_short_names:
+      one_qtr: "¼"
+      half: "½"
+      three_qtr: "¾"
+      full: "Entière" # MT
+  meals/messages:
+    cancel_notice_html: "L'annulation d'un repas est définitive. Envoyez un message expliquant pourquoi le repas est annulé. Le repas ne sera annulé qu'une fois le message envoyé." # MT
+  meal_mailer:
+    meal_link:
+      see_more: "Plus d'informations sur le repas ici : %{url}" # MT
+    meal_reminder:
+      subject: "Rappel de repas : %{datetime} - %{title} à %{location}" # MT
+      reminder: "Ceci est un rappel : vous êtes inscrit au repas « %{title} » le %{date}." # MT
+      reminder_at_location: "Ceci est un rappel : vous êtes inscrit au repas « %{title} » le %{date} à %{location}." # MT
+      comments_intro: "Votre inscription comprenait les commentaires suivants :" # MT
+      staff: "L'équipe du repas :" # MT
+      staff_member: "- %{role} : %{name}" # MT
+      bon_appetit: "Bon appétit !" # MT
+      body:
+        diner_count:
+          one: "%{count} convive de votre foyer est inscrit." # MT
+          other: "%{count} convives de votre foyer sont inscrits." # MT
+    role_reminder:
+      subject: "Rappel de tâche : %{role} le %{datetime} à %{location}%{note}" # MT
+      scheduled: "Ceci est un rappel : vous êtes prévu comme %{role} pour le repas « %{title} » le %{date}." # MT
+      shift: "Votre créneau est %{times}. Le repas doit être servi à %{time}." # MT
+      shift_at_location: "Votre créneau est %{times} à %{location}. Le repas doit être servi à %{time}." # MT
+      note_intro: "Ce rappel comprend la note suivante :" # MT
+      crucial: "Votre aide est essentielle ! Merci d'arriver à l'heure pour votre créneau !" # MT
+      contacts_intro: "Voici les coordonnées d'autres personnes de l'équipe du repas :" # MT
+      contact: "%{role} : %{name}, %{email}, %{phones}" # MT
+    worker_change_notice:
+      subject: "Avis de changement d'équipe pour un repas" # MT
+      intro: "%{name} vient de faire les changements suivants au repas « %{title} » du %{date}." # MT
+      intro_at_location: "%{name} vient de faire les changements suivants au repas « %{title} » du %{date} à %{location}." # MT
+      added: "- %{name} a été ajouté comme %{role}" # MT
+      removed: "- %{name} a été retiré comme %{role}" # MT
+      thanks: "Merci et bon appétit !" # MT
+    cook_menu_reminder:
+      subject: "Rappel de menu : veuillez publier le menu du %{date}" # MT
+      second_reminder: "** Deuxième rappel **" # MT
+      reminder: "Ceci est un rappel pour publier le menu de votre repas du %{date}." # MT
+      asap: "Publiez un menu dès que possible pour que les résidents puissent s'organiser et pour assurer une bonne participation !" # MT
+      post_here: "Vous pouvez publier un menu ici :" # MT
+      thanks: "Merci !" # MT
+    normal_message:
+      subject: "Message au sujet du repas du %{datetime}" # MT
+      intro: "%{sender} a envoyé le message suivant au sujet du repas « %{title} » du %{date}." # MT
+      intro_at_location: "%{sender} a envoyé le message suivant au sujet du repas « %{title} » du %{date} à %{location}." # MT
+    cancellation_message:
+      subject: "Repas du %{datetime} ANNULÉ" # MT
+      regret: "Nous avons le regret de vous informer que le repas « %{title} » du %{date} a été ANNULÉ." # MT
+      regret_at_location: "Nous avons le regret de vous informer que le repas « %{title} » du %{date} à %{location} a été ANNULÉ." # MT
+      sender_wrote: "%{sender} a envoyé le message suivant au sujet de l'annulation :" # MT

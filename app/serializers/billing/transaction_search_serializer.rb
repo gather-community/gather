@@ -3,14 +3,12 @@
 module Billing
   # Serializes Transactions for Elasticsearch.
   class TransactionSearchSerializer < ApplicationSerializer
-    attributes :id, :kind, :community_id, :account_id, :statement_id, :description, :code
+    attributes :id, :kind, :community_id, :account_id, :statement_id, :description
 
     def kind = "transaction"
 
     def community_id = object.account.community_id
 
     def description = object.description.to_s
-
-    def code = object.code.to_s
   end
 end

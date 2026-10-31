@@ -20,8 +20,7 @@ describe UserSearchSerializer do
   end
 
   it "includes contact fields" do
-    expect(data).to have_key(:email)
-    expect(data).to have_key(:home_phone)
-    expect(data).to have_key(:mobile_phone)
+    # Contact details and allergies aren't searched or shown, so they stay out of the index.
+    expect(data.keys).not_to include(:email, :allergies, :home_phone, :mobile_phone, :work_phone)
   end
 end

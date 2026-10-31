@@ -1,0 +1,35 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+fr-CA:
+  meals:
+    takeout: "Pour emporter" # MT
+    meals:
+      summary_signups_header:
+        takeout: "Pour emporter" # MT
+      signup_read_only:
+        takeout_requested: "Pour emporter demandé" # MT
+      reimb_form:
+        paypal: "PayPal à l'adresse courriel :" # MT
+      form:
+        expenses:
+          paypal_hint: "La personne à rembourser recevra un paiement PayPal du montant des ingrédients. Chacun peut changer son adresse courriel PayPal en modifiant son profil." # MT
+    imports:
+      form:
+        upload_file: "Téléverser le fichier" # MT
+  "meals/assignments":
+    change_warning: "Remarque : si vous modifiez l'équipe du repas, un courriel sera envoyé au comité ou à la personne responsable des repas ainsi qu'à toutes les personnes déjà ou nouvellement affectées." # MT
+  meal_mailer:
+    role_reminder:
+      shift: "Votre quart est %{times}. Le repas doit être servi à %{time}." # MT
+      shift_at_location: "Votre quart est %{times} à %{location}. Le repas doit être servi à %{time}." # MT
+      crucial: "Votre aide est essentielle ! Merci d'arriver à l'heure pour votre quart !" # MT

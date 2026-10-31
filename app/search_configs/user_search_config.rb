@@ -24,11 +24,6 @@ module UserSearchConfig
         indexes :community_id, type: :integer
         indexes :first_name, analyzer: "english_stemmed"
         indexes :last_name, analyzer: "english_stemmed"
-        indexes :email, type: :keyword
-        indexes :allergies, analyzer: "english_stemmed"
-        indexes :home_phone, type: :keyword
-        indexes :mobile_phone, type: :keyword
-        indexes :work_phone, type: :keyword
       end
     end
 

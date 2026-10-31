@@ -23,6 +23,7 @@ NOT_SEARCHABLE_MODELS = [
   "Communities::Signup",
   "Community",
   "Domain",
+  "DomainMail::Check",
   "DomainOwnership",
   "FeatureFlag",
   "FeatureFlagUser",

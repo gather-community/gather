@@ -1,0 +1,406 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+sv:
+  simple_form:
+    "yes": "Ja" # MT
+    "no": "Nej" # MT
+    required:
+      text: "obligatoriskt" # MT
+      mark: "*"
+    error_notification:
+      default_message: "Rätta till problemen nedan:" # MT
+      field_errors:
+        one: "Det finns 1 fel i formuläret nedan." # MT
+        other: "Det finns %{count} fel i formuläret nedan." # MT
+    labels:
+      communities_signup:
+        contact_first_name: "Förnamn" # MT
+        contact_last_name: "Efternamn" # MT
+        contact_email: "E-postadress" # MT
+        community_name: "Gemenskapens namn" # MT
+        slug: "Gemenskapens webbadress" # MT
+        introduction: "Om er gemenskap" # MT
+        country_code: "Land" # MT
+        time_zone: "Tidszon" # MT
+        want_sample_data: "Exempeldata" # MT
+      communities_signup_action:
+        decision: "Åtgärd" # MT
+        message: "Meddelande" # MT
+      calendars_export:
+        dont_personalize: "Anpassa inte händelser personligt" # MT
+        own_only: "Bara mina händelser" # MT
+      payment:
+        accountholder_name: "Kontoinnehavarens namn" # MT
+        payment_method: "Betalningsmetod" # MT
+    placeholders:
+      meals_meal:
+        title: "t.ex. Röda bönor och ris från södern" # MT
+        entrees: "t.ex. Röda bönor, ris och rökt fläskkorv. Vegetariskt alternativ finns. Milt kryddat!" # MT
+        side: "t.ex. Bräserad grönkål med smör och schalottenlök" # MT
+        kids: "t.ex. Makaroner och ost och kokta ägg" # MT
+        dessert: "t.ex. Rutor av mörk choklad" # MT
+        notes: "t.ex. Vissa ingredienser ekologiska och lokala när det går" # MT
+      calendars_protocol:
+        kinds: "Välj typer eller lämna tomt för att gälla alla …" # MT
+        calendar_ids: "Välj kalendrar eller lämna tomt för att gälla alla …" # MT
+      calendars_event:
+        name: "t.ex. Spelkväll" # MT
+      domain:
+        name: "t.ex. yourdomain.com" # MT
+      billing_transaction:
+        description: "t.ex. Check nr 12345" # MT
+      gdrive_config:
+        org_user_id: "t.ex. dittnamn@yourdomain.com" # MT
+      user:
+        birthday_str: "t.ex. 29 feb 1981 (år valfritt)" # MT
+      people_memorial_message:
+        body: "Skriv ditt meddelande" # MT
+      household:
+        name: "t.ex. Andersson eller Singh-Lindqvist" # MT
+        vehicles:
+          make: "t.ex. Toyota" # MT
+          model: "t.ex. Prius" # MT
+          color: "t.ex. Blå" # MT
+        emergency_contacts:
+          relationship: "t.ex. Saras mamma" # MT
+          location: "t.ex. Uppsala" # MT
+      work_job:
+        reminders:
+          note: "t.ex. Slipa sågen (valfritt)" # MT
+      work_period:
+        name: "t.ex. Sommaren 1969" # MT
+      wiki_page:
+        comment: "En kommentar om ändringen." # MT
+    hints:
+      markdown_suffix_html: "Du kan använda <a href='/about/markdown' target='_new'>formatering</a>." # MT
+      communities_signup:
+        community_name: "Högst 20 tecken." # MT
+        slug: "Små bokstäver, siffror och bindestreck. Måste börja med en bokstav. Högst 20 tecken." # MT
+        introduction: "Berätta lite om er gemenskap och varför ni tror att Gather passar er. Ta med en eller flera länkar till offentliga webbsidor (t.ex. gemenskapens webbplats eller sidor i sociala medier) som visar vilka ni är." # MT
+      communities_signup_action:
+        message_approve: "Hela mejlet om godkännande visas ovan. Lägg till en personlig hälsning genom att ersätta platshållartexten." # MT
+        message_deny: "Ange varför ansökan avslås. Det här är bara för internt bruk och skickas inte till den sökande." # MT
+      meals_meal:
+        formula_id: "<a href=\"/meals/formulas\">Måltidsformler</a> bestämmer hur måltidens kostnad beräknas." # MT
+        capacity: "Hur många personer räcker måltiden till?" # MT
+        auto_close_time: "Ange en tidpunkt i framtiden då måltiden ska stängas automatiskt. Om fältet är tomt måste måltiden stängas manuellt." # MT
+        resource_ids: "Välj bokningsbara platser för måltiden. Bokningar skapas automatiskt. Om platsen inte går att boka, ange den i titeln, t.ex. ”Knytkalas hos Jenny”." # MT
+      billing_account:
+        credit_limit: "Lämna tomt för obegränsad kredit. Ange noll för ingen kredit." # MT
+      billing_transaction:
+        incurred_on: "Det här datumet visas som transaktionsdatum på kontoutdragen. Dagens datum sparas också med transaktionen." # MT
+        description: "Beskrivningen visas på kontoutdraget. En utförlig beskrivning kan hjälpa till att reda ut oklarheter senare." # MT
+        code_html: "<i class='fa fa-arrow-up'></i> Ökar beloppet som är skyldigt &nbsp;&nbsp;&nbsp; <i class='fa fa-arrow-down'></i> Minskar beloppet som är skyldigt" # MT
+        value: "Beloppet måste vara positivt. Transaktionstypen (ovan) avgör om beloppet ökar eller minskar kontot." # MT
+      billing_template:
+        member_type_ids: "Välj de medlemstyper som mallen gäller för." # MT
+      calendars_export:
+        dont_personalize: "Kalenderexporter är som standard anpassade för dig och ditt hushåll, så du bör inte dela dina exportlänkar. Om du behöver en länk som inte är personlig att använda på en offentlig plats, markera den här rutan." # MT
+        own_only: "Markera rutan för att bara exportera händelser som du har skapat åt dig själv. Grupp- och måltidshändelser tas inte med." # MT
+      domain:
+        communities: "Vilka gemenskaper domänen är tillgänglig och synlig för." # MT
+      gdrive_config:
+        org_user_id: "Användar-id för gemenskapens användare i Google Workspace. Den bör ha behörigheten Ansvarig för gemenskapens delade enhet." # MT
+        client_id: "Slutar med .apps.googleusercontent.com" # MT
+        client_secret_to_write: "Lämna tomt för att behålla hemligheten oförändrad." # MT
+      gdrive_item:
+        external_id: "Id:t finns i objektets webbadress i Google Drive. Det består av bokstäver, siffror, ”_” och ”-”. Exempel: 0AExZ3_Cu5q7uUk9PVA och 1KRjAC5Bt4WtLilnkUeTvF_okbLgONGQuDkrc." # MT
+      gdrive_item_group:
+        access_level: "För mappar och filer kan den inte vara lägre än den åtkomstnivå som gruppen har på den delade enheten de ligger i." # MT
+      gdrive_migration_operation:
+        contact_email: "Kontaktpersonens e-postadress." # MT
+        contact_name: "En person i gemenskapen som ansvarar för migreringen och kan svara på frågor om den." # MT
+        src_folder_id: "Id för migreringens källmapp. Id:t finns i objektets webbadress i Google Drive. Det består av bokstäver, siffror, ”_” och ”-”. Exempel: 1KRjAC5Bt4WtLilnkUeTvF_okbLgONGQuDkrc." # MT
+        dest_folder_id: "Id för migreringens delade målenhet ELLER målmapp. Id:t finns i objektets webbadress i Google Drive. Det består av bokstäver, siffror, ”_” och ”-”. Exempel: 0AExZ3_Cu5q7uUk9PVA och 1KRjAC5Bt4WtLilnkUeTvF_okbLgONGQuDkrc." # MT
+      groups_group:
+        availability: "Om personer kan gå med i gruppen på egen hand. Grupper för ”Alla” omfattar automatiskt alla vuxna." # MT
+        can_request_jobs: "Om gruppen ska visas i uppgiftsformuläret som möjlig beställare." # MT
+        can_administer_email_lists: "Om personer i gruppen ska kunna ändra inställningarna för alla gemenskapens e-postlistor via Mailmans administrationspanel." # MT
+        can_moderate_email_lists: "Om personer i gruppen ska vara moderatorer för alla gemenskapens e-postlistor." # MT
+        kind: "Vilken sorts grupp det är. Används bara för visning och har ingen annan betydelse." # MT
+        communities: "Vilka gemenskaper gruppen är tillgänglig och synlig för." # MT
+        mailman_list:
+          name: "Första delen av adressen. Får bara innehålla små bokstäver, siffror och tecknen . - _." # MT
+          domain_id: "Domännamnet för listans adress." # MT
+          all_cmty_members_can_send:
+            single_community: "Om alla medlemmar i gemenskapen får skicka till listan. Om rutan inte är markerad får bara gruppens medlemmar skicka. Påverkar inte vem som får mejl från listan." # MT
+            multi_community: "Om alla medlemmar i gruppens gemenskaper får skicka till listan. Om rutan inte är markerad får bara gruppens medlemmar skicka. Påverkar inte vem som får mejl från listan." # MT
+          managers_can_administer: "Om gruppens ledare ska kunna ändra inställningarna för den här e-postlistan via Mailmans administrationspanel." # MT
+          managers_can_moderate: "Om gruppens ledare ska vara moderatorer för den här e-postlistan." # MT
+          _destroy: "Markera rutan för att stänga ner e-postlistan." # MT
+      calendars_event:
+        repeat_ends_on: "Det sista tillfället är på eller före det här datumet." # MT
+        all_day: "Markera rutan om händelsen inte har bestämda tider. Den visas då överst i kalendern. Ska inte användas för att boka resurser." # MT
+        group_id: "Händelser med en grupp kan redigeras av andra medlemmar i gruppen och tas inte med när du exporterar ”Bara mina händelser”." # MT
+      calendars_protocol:
+        kinds: "Vilka händelsetyper gäller regelverket för? Lämna tomt för att gälla alla." # MT
+        calendar_ids: "Vilka kalendrar gäller regelverket för? Lämna tomt för att gälla alla." # MT
+        fixed_end_time: "Alla berörda händelser måste sluta vid den här tiden. Om den är före den fasta starttiden räknas den som nästa dag." # MT
+        fixed_start_time: "Alla berörda händelser måste börja vid den här tiden." # MT
+        max_days_per_year: "Personer får inte skapa berörda händelser på fler än så här många dagar per år." # MT
+        max_lead_days: "Personer får inte skapa berörda händelser mer än så här många dagar i förväg" # MT
+        max_length_minutes: "Personer får inte skapa händelser som är längre än så här många minuter." # MT
+        max_minutes_per_year: "Personer får inte skapa mer än så här många minuter av berörda händelser per år." # MT
+        other_communities: "Begränsar möjligheten för medlemmar i andra gemenskaper i klustret att se och skapa berörda händelser. Om fältet är tomt finns inga begränsningar för medlemmar i andra gemenskaper." # MT
+        pre_notice: "Ett meddelande som anges här visas överst i händelseformuläret för berörda händelser." # MT
+        requires_kind: "Om rutan är markerad måste berörda händelser ange en typ. Använd det tillsammans med andra regelverk för att ha särskilda regler för vissa typer av händelser." # MT
+        name: "Ett kort, beskrivande namn på regelverket." # MT
+      calendars_calendar:
+        default_calendar_view: "Kalenderns visning när den laddas första gången" # MT
+        abbrv: "Förkortning för korta texter, t.ex. ämnesrader i mejl (högst 6 bokstäver)" # MT
+        meal_hostable: "Om ja, visas kalendern som möjlig plats när en måltid skapas." # MT
+        guidelines: "Text som man måste godkänna när man skapar en händelse." # MT
+        color: "Färgen på kalenderns händelser i kalenderns huvudvy. Använd HEX-färgkod. Färger utan x har inte använts än (om du inte har väldigt många kalendrar)." # MT
+      user:
+        joined_on: "Ungefärligt datum när du kom med i gemenskapen" # MT
+        job_choosing_proxy_id: "Någon utanför ditt hushåll som kan anmäla sig till uppgifter åt dig. Medlemmar i ditt hushåll kan redan göra det." # MT
+        email: "Den e-postadress du helst vill bli kontaktad på. Används också för att logga in med lösenord." # MT
+        google_email: "E-postadressen till det Google-konto du loggar in med. Visas inte i medlemsförteckningen. Fråga en <a href='/roles'>administratör</a> om den behöver ändras." # MT
+        paypal_email: "E-postadressen till ditt PayPal-konto. Används för ersättning till kockar. Lämna tomt för att använda din vanliga e-postadress ovan." # MT
+        full_access: "Barn utan full åtkomst kan inte logga in i Gather men syns i medlemsförteckningen. Barn med full åtkomst räknas som vuxna vid fakturering." # MT
+        certify_13_or_older: "Barn måste vara minst 13 år för att logga in i Gather." # MT
+      meals_formula:
+        is_default: "Om rutan är markerad blir det här formeln som väljs som standard när nya måltider skapas." # MT
+        pantry_fee_formatted: "Matgäster med en måltidskostnad på 0,00 debiteras ingen avgift för baslager, även om avgiften är fast." # MT
+        pantry_reimbursement: "Om rutan är markerad får kockar köpa in baslager och begära ersättning för det." # MT
+        takeout: "Om rutan är markerad kan matgäster beställa sin måltid att ta med. Hur det går till i detalj bestämmer och kommunicerar gemenskapen själv." # MT
+        role_ids: "Vilka roller behövs för måltider med den här formeln?" # MT
+      meals_role:
+        double_signups_allowed: "Dubbla tilldelningar passar inte alla roller." # MT
+        time_type: "För vissa roller (som huvudkock) vill man ofta välja sina arbetstider själv. Välj i så fall ”bara datum”. Om ett bestämt schema önskas, välj ”datum och tid”." # MT
+        shift_start: "Hur många minuter före eller efter måltidens start man ska komma. Negativa värden betyder före måltidens start." # MT
+        shift_end: "Hur många minuter före eller efter måltidens start rollen slutar. Negativa värden betyder före måltidens start." # MT
+        work_job_title: "Om det anges visas uppgiften så här i arbetsmodulen. Ange en annan titel om rolltiteln ovan kan bli otydlig i arbetsmodulen (t.ex. ”Diskare till måltid” här och ”Diskare” ovan)." # MT
+        work_hours: "Hur många timmar är uppgiften värd om den importeras till arbetsmodulen? Lämna tomt om ni inte använder arbetsmodulen." # MT
+        description: "Beskrivningen kopieras till arbetsmodulen när uppgifterna synkroniseras." # MT
+        count_per_meal: "Hur många personer behövs vanligtvis för rollen vid en måltid?" # MT
+      meals_type:
+        name: "Ett kort, beskrivande namn på typen." # MT
+        category: "Kategorier används för att beräkna antal portioner och i rapporter." # MT
+      people_memorial:
+        user_id: "Måste vara en inaktiv person i gemenskapen. Personens nuvarande profilfoto används på minnessidan." # MT
+      wiki_page:
+        content: "Se <a href='/wiki/sample' target='_blank'>exempelsidan</a> för tips om hur du skapar innehåll i wikin." # MT
+        data_source: "Avancerat. Webbadress till en JSON-datakälla som används med <a href='http://mustache.github.io/mustache.5.html' target='_new'>Mustache-mallsyntax</a> i sidans innehåll." # MT
+      work_job:
+        hours: "Uppskattat antal timmar som uppgiften tar. Decimaler tillåtna." # MT
+        slot_type: "Använd ”hela gemenskapen” för sådant som arbetsdagar. Välj ”fast antal” om du är osäker." # MT
+        hours_per_shift: "Hur många timmar varje pass räknas som." # MT
+        double_signups_allowed: "Dubbla anmälningar passar inte alla uppgifter." # MT
+      work_period:
+        quota_type: "Med en kvot visas ett meddelande överst på anmälningssidan som talar om vad som är var och ens rättvisa andel av arbetet." # MT
+        auto_open_time: "Om du anger en tid här byter perioden automatiskt till fasen ”Öppen” efter den tiden. Krävs om valtypen är ”turas om”." # MT
+        pick_type: "Välj ”turas om” om ni planerar ett uppgiftsval och det blir för rörigt om alla väljer samtidigt. Mindre grupper turas då om att välja uppgifter i ”omgångar”." # MT
+        max_rounds_per_worker: "Hur många omgångar ska en person behöva gå igenom för att nå sin kvot? Fler omgångar betyder ett längre uppgiftsval." # MT
+        workers_per_round: "Hur många personer ska välja uppgifter i varje omgång? Fler personer betyder ett rörigare val. Färre personer betyder fler omgångar, så uppgiftsvalet tar längre tid." # MT
+        round_duration: "Hur lång ska varje omgång vara? Tiden ska räcka för att en genomsnittlig person ska kunna välja i lugn och ro." # MT
+        job_copy_source_id: "Välj en period att kopiera uppgifter från när perioden skapas, om du vill. Måltidsuppgifter kopieras inte utan ska synkroniseras i stället (se nedan)." # MT
+    options:
+      calendars_event:
+        repeat_frequency:
+          none: "Aldrig" # MT
+          daily: "Dagligen" # MT
+          weekly: "Varje vecka" # MT
+          monthly: "Varje månad" # MT
+          yearly: "Varje år" # MT
+        repeat_ends:
+          never: "Aldrig" # MT
+          on_date: "Ett visst datum" # MT
+          after_count: "Efter ett antal gånger" # MT
+      billing_account:
+        active:
+          active_only: "Visa bara aktiva" # MT
+          all: "Visa alla" # MT
+      communities_signup:
+        status:
+          all: "Alla" # MT
+          pending: "Väntande" # MT
+          approved: "Godkänd" # MT
+          denied: "Avslagen" # MT
+          created: "Skapad" # MT
+          failed: "Misslyckad" # MT
+        want_sample_data:
+          "true": "Ja, ta med exempeldata" # MT
+          "false": "Nej, ta inte med exempeldata" # MT
+      communities_signup_action:
+        decision:
+          approve: "Godkänn" # MT
+          deny: "Avslå" # MT
+      gdrive_item:
+        kind:
+          drive: "Delad enhet" # MT
+          folder: "Mapp" # MT
+          file: "Fil" # MT
+      gdrive_item_group:
+        access_level:
+          reader: "Läsare: Se filer" # MT
+          commenter: "Kommentator: Se och kommentera filer" # MT
+          writer: "Bidragsgivare: Se, lägga till och redigera filer" # MT
+          fileOrganizer: "Innehållsansvarig: Se, lägga till, redigera, flytta, radera och dela filer" # MT
+      groups_group:
+        availability:
+          open: "Öppen" # MT
+          closed: "Stängd" # MT
+          hidden: "Dold" # MT
+          everybody: "Alla" # MT
+        kind:
+          committee: "Kommitté" # MT
+          subcommittee: "Underkommitté" # MT
+          team: "Team" # MT
+          task_force: "Arbetsgrupp" # MT
+          club: "Klubb" # MT
+          crew: "Lag" # MT
+          squad: "Patrull" # MT
+          circle: "Cirkel" # MT
+          group: "Grupp" # MT
+          other: "Annat" # MT
+        memberships:
+          kind:
+            joiner: "Medlem" # MT
+            manager: "Ledare" # MT
+            opt_out: "Avböjt" # MT
+        sort:
+          name: "Efter namn" # MT
+          type: "Efter typ" # MT
+      meals_meal:
+        time:
+          past: "Tidigare" # MT
+          finalizable: "Kan slutföras" # MT
+          all: "Alla" # MT
+          upcoming: "Kommande" # MT
+        cost:
+          payment_method:
+            check: "Check" # MT
+            credit: "Tillgodohavande på kontot" # MT
+            paypal: "PayPal" # MT
+      meals_formula:
+        meal_calc_type:
+          fixed: "Fast" # MT
+          share: "Proportionell" # MT
+        pantry_calc_type:
+          fixed: "Fast" # MT
+          percent: "Procent" # MT
+      meals_message:
+        recipient_type:
+          diners: "Matgäster" # MT
+          team: "Team" # MT
+          all: "Matgäster + team" # MT
+      user:
+        preferred_contact:
+          email: "E-post" # MT
+          text: "Sms" # MT
+          phone: "Telefon" # MT
+        life_stage:
+          any: "Vuxna + barn" # MT
+          adult: "Vuxna" # MT
+          child: "Barn" # MT
+        sort:
+          name: "Efter namn" # MT
+          unit: "Efter lägenhet" # MT
+        view:
+          album: "Album" # MT
+          table: "Tabell" # MT
+          albumall: "Album med inaktiva" # MT
+          tableall: "Tabell med inaktiva" # MT
+      calendars_protocol:
+        other_communities:
+          sponsor: "Får skapa bara om kontaktperson anges" # MT
+          read_only: "Får bara se" # MT
+          forbidden: "Får varken se eller skapa" # MT
+      calendars_calendar:
+        default_calendar_view:
+          week: "Vecka" # MT
+          month: "Månad" # MT
+      gdrive_migration:
+        owner:
+          any: "Alla ägare" # MT
+        status:
+          any: "Alla statusar" # MT
+          pending: "Väntande" # MT
+          errored: "Fel" # MT
+          declined: "Avböjd" # MT
+          transferred: "Överförd" # MT
+          copied: "Kopierad" # MT
+          ignored: "Ignorerad" # MT
+          disappeared: "Försvunnen" # MT
+      wiki_page:
+        editable_by:
+          everyone: "Alla" # MT
+          wikiist: "Bara wikiansvariga och administratörer" # MT
+      work_job:
+        slot_type:
+          fixed: "Det här är en vanlig uppgift med ett fast antal platser" # MT
+          full_single: "Uppgiften är för hela gemenskapen (ett pass)" # MT
+          full_multiple: "Uppgiften är för hela gemenskapen (flera pass)" # MT
+        time_type:
+          date_time: "Uppgiften har ett bestämt datum och en bestämd tid" # MT
+          date_only: "Uppgiften gäller ett visst datum eller datumintervall" # MT
+          full_period: "Uppgiften gäller hela arbetsperioden" # MT
+        reminders:
+          abs_rel:
+            relative: "Relativ tid" # MT
+            absolute: "Exakt tid" # MT
+          rel_unit_sign:
+            days_before: "Dagar före (kl. 6)" # MT
+            days_after: "Dagar efter (kl. 6)" # MT
+            hours_before: "Timmar före" # MT
+            hours_after: "Timmar efter" # MT
+        requester:
+          any: "Alla beställare" # MT
+          none: "Ingen beställare" # MT
+        preassigned:
+          any: "Alla uppgifter" # MT
+          y: "Förtilldelade" # MT
+          n: "Inte förtilldelade" # MT
+      meals_role:
+        time_type:
+          date_time: "Rollen har ett bestämt datum och en bestämd tid" # MT
+          date_only: "Rollen gäller bara ett visst datum" # MT
+        reminders:
+          rel_unit_sign:
+            days_before: "Dagar före (kl. 6)" # MT
+            days_after: "Dagar efter (kl. 6)" # MT
+            hours_before: "Timmar före" # MT
+            hours_after: "Timmar efter" # MT
+      work_period:
+        phase:
+          archived: "Arkiverad: Perioden är passerad och kan inte redigeras" # MT
+          draft: "Utkast: Uppgifterna förbereds, anmälningar är dolda" # MT
+          open: "Öppen: Nu kan man välja uppgifter!" # MT
+          published: "Publicerad: Det slutliga arbetsschemat" # MT
+          ready: "Redo: Uppgifterna är klara och översikten syns, men det går inte att anmäla sig" # MT
+        quota_type:
+          none: "Ingen" # MT
+          by_person: "Per person" # MT
+          by_household: "Per hushåll" # MT
+        pick_type:
+          free_for_all: "Alla väljer samtidigt" # MT
+          staggered: "Grupper turas om att välja" # MT
+        meal_job_sync:
+          "false": "Synkronisera inte måltidsuppgifter" # MT
+          "true": "Synkronisera måltidsuppgifter för valda formler och roller" # MT
+      work_shift:
+        lens:
+          all: "Alla uppgifter" # MT
+          open: "Lediga uppgifter" # MT
+          mine: "Mina uppgifter" # MT
+          myhh: "Mitt hushåll" # MT
+          notpre: "Inte förtilldelade" # MT
+        date_range:
+          all: "Tidigare och kommande" # MT
+          curftr: "Aktuella och kommande" # MT
+          past: "Bara tidigare" # MT
+
+    prompts:
+      user:
+        preferred_contact: "Hur ska andra kontakta dig när det inte är akut?" # MT

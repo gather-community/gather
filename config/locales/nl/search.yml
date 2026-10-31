@@ -1,0 +1,113 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+nl:
+  search:
+    untitled: "(zonder titel)" # MT
+    kinds:
+      wiki_page: "Wiki" # MT
+      event: "Afspraak" # MT
+      calendar: "Agenda" # MT
+      group: "Groep" # MT
+      user: "Persoon" # MT
+      household: "Huishouden" # MT
+      meal: "Maaltijd" # MT
+      memorial: "Gedenkpagina" # MT
+      emergency_contact: "Contact voor noodgevallen" # MT
+      pet: "Huisdier" # MT
+      vehicle: "Voertuig" # MT
+      transaction: "Transactie" # MT
+    details:
+      separator: " · " # MT
+      household: "Huishouden %{name}" # MT
+      head_cook: "Hoofdkok: %{name}" # MT
+      updated_by: "Bijgewerkt op %{date} door %{name}" # MT
+      updated: "Bijgewerkt op %{date}" # MT
+      members:
+        one: "%{count} lid" # MT
+        other: "%{count} leden" # MT
+      child: "Kind" # MT
+      unit: "Woning %{unit}" # MT
+      years: "%{birth}–%{death}" # MT
+      date_range: "%{first} – %{last}" # MT
+      pet_color_species: "%{species}, %{color}" # MT
+      modified: "Gewijzigd op %{date}" # MT
+      drive_types:
+        doc: "Google-document" # MT
+        sheet: "Google-spreadsheet" # MT
+        slide: "Google-presentatie" # MT
+        folder: "Map" # MT
+        pdf: "PDF" # MT
+    count_capped: "%{count}+" # MT
+    load_error: "Fout bij het laden van de resultaten. Probeer het opnieuw." # MT
+    index:
+      title: "Zoeken" # MT
+      form_label: "Zoeken" # MT
+      input_label: "Gather doorzoeken" # MT
+      placeholder: "Gather en Google Drive doorzoeken…" # MT
+      placeholder_no_drive: "Gather doorzoeken…" # MT
+      submit: "Zoeken" # MT
+      search_tips: "Zoektips" # MT
+      gather: "Gather" # MT
+      results: "Resultaten" # MT
+      google_drive: "Google Drive" # MT
+      loading: "Laden…" # MT
+      load_more: "Meer resultaten" # MT
+      empty_query: "Voer hierboven een zoekterm in om Gather en Google Drive te doorzoeken." # MT
+      empty_query_no_drive: "Voer hierboven een zoekterm in om Gather te doorzoeken." # MT
+      no_types: "Selecteer minstens één type om te zoeken." # MT
+    results_gather:
+      no_results: "Geen resultaten gevonden." # MT
+    results_drive:
+      no_results: "Geen Drive-bestanden gevonden." # MT
+    results_drive_auth_error:
+      reconnect: "Je gemeenschap moet opnieuw met Google Drive worden verbonden. Laat het een beheerder van Gather weten." # MT
+    type_filters:
+      types:
+        wiki_page: "Wikipagina's" # MT
+        event: "Afspraken" # MT
+        calendar: "Agenda's" # MT
+        group: "Groepen" # MT
+        user: "Personen" # MT
+        household: "Huishoudens" # MT
+        meal: "Maaltijden" # MT
+        memorial: "Gedenkpagina's" # MT
+        emergency_contact: "Contacten voor noodgevallen" # MT
+        pet: "Huisdieren" # MT
+        vehicle: "Voertuigen" # MT
+        transaction: "Transacties" # MT
+        drive_doc: "Google Documenten" # MT
+        drive_sheet: "Google Spreadsheets" # MT
+        drive_slide: "Google Presentaties" # MT
+        drive_pdf: "PDF's" # MT
+        drive_folder: "Mappen" # MT
+        drive_other: "Andere bestanden" # MT
+      filter: "Filter" # MT
+      gather: "Gather" # MT
+      google_drive: "Google Drive" # MT
+      select_all: "Alles selecteren" # MT
+      deselect_all: "Alles deselecteren" # MT
+    search_tips_modal:
+      title: "Zoektips" # MT
+      intro: "Voer woorden in om Gather (wikipagina's, afspraken, personen, maaltijden en meer) en Google Drive te doorzoeken." # MT
+      intro_no_drive: "Voer woorden in om Gather (wikipagina's, afspraken, personen, maaltijden en meer) te doorzoeken." # MT
+      basic_search: "Eenvoudig zoeken" # MT
+      both_words: "Items die beide woorden bevatten" # MT
+      word_start: "Woorden die beginnen met ‘%{start}’" # MT
+      word_start_drive: "Woorden die beginnen met ‘%{start}’. In Google Drive komt dit alleen overeen met het begin van bestandsnamen, niet met de inhoud van bestanden." # MT
+      exact_phrase: "De exacte woordgroep ‘%{phrase}’" # MT
+      special_syntax: "Speciale syntaxis" # MT
+      title_only: "Alleen zoeken in het titel- of naamveld" # MT
+      drive_type_html: "Drive-resultaten filteren op bestandstype. Opties: %{options}" # MT
+      combining: "Combineren" # MT
+      title_and_word: "Items met de naam ‘%{title}’ die ‘%{word}’ bevatten" # MT
+      sheet_and_phrase: "Google Spreadsheets met de woordgroep ‘%{phrase}’" # MT

@@ -16,8 +16,8 @@ describe Billing::TransactionSearchSerializer do
       kind: "transaction",
       community_id: community.id,
       account_id: account.id,
-      description: "Monthly dues",
-      code: "dues"
+      description: "Monthly dues"
     )
+    expect(data).not_to have_key(:code)
   end
 end

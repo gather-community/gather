@@ -4,23 +4,24 @@ module Gather
   # Builds the static pages in public/ (404.html, 500.html, offline.html, ...) from the templates in
   # app/views/error_pages, so their text comes from the locale files like everything else.
   #
-  # The default locale's page is written to public/404.html. Each other released locale gets
+  # The default locale's page is written to public/404.html. Each other translated locale gets
   # public/404.<locale>.html, which is what Rails' exception app (ActionDispatch::PublicExceptions) and
-  # ApplicationControllable#render_error_page look for first.
+  # ApplicationControllable#render_error_page look for first. They're only served in a locale the request
+  # was given, so the i18n feature flag (see Gather::Locales) decides whether anyone sees them.
   #
   # The pages are static so they can be served when the app is down, so they're generated ahead of time with
   # `rake error_pages:generate` and committed. spec/i18n_spec.rb fails if they're out of date.
   module ErrorPages
     NAMES = %w[400 403 404 406-unsupported-browser 422 500 offline].freeze
 
-    # Writes every page for every released locale into `dir`.
+    # Writes every page for every translated locale into `dir`.
     def self.write_all(dir = Rails.public_path)
       files.each { |path, html| File.write(File.join(dir, path), html) }
     end
 
-    # A hash of public/-relative file name => rendered HTML for every page and released locale.
+    # A hash of public/-relative file name => rendered HTML for every page and translated locale.
     def self.files
-      Locales::RELEASED.product(NAMES).to_h do |locale, name|
+      Locales::TRANSLATED.product(NAMES).to_h do |locale, name|
         [file_name(name, locale), render(name, locale)]
       end
     end

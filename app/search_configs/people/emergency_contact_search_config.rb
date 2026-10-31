@@ -25,7 +25,6 @@ module People
           indexes :household_id, type: :integer
           indexes :name, analyzer: "english_stemmed"
           indexes :relationship, analyzer: "english_stemmed"
-          indexes :email, type: :keyword
         end
       end
 

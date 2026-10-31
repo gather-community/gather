@@ -46,6 +46,12 @@
     position: relative;
   }
 
+  // The last time slot can end a fraction of a pixel below the grid. That overflow gives the scroller a
+  // scrollbar FullCalendar doesn't know about, so the header columns stop lining up with the grid.
+  .fc-time-grid {
+    overflow: hidden;
+  }
+
   .fc-gather-time-slots {
     position: absolute;
     top: 0;

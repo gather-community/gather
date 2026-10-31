@@ -1,0 +1,81 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+nb:
+  admin:
+    domains:
+      refresh_all_started:
+        one: "Sjekker %{count} domene i bakgrunnen. Det bør ta omtrent %{seconds} sekunder. Last inn siden på nytt for å se resultatene." # MT
+        other: "Sjekker %{count} domener i bakgrunnen. Det bør ta omtrent %{seconds} sekunder. Last inn siden på nytt for å se resultatene." # MT
+      refresh_one_success: "Sjekket %{domain} på nytt." # MT
+      refresh_one_failed: "Sjekket %{domain} på nytt, men forespørselen til SMTP2GO-API-et mislyktes, så valideringsstatusen kan være utdatert. Feilen er rapportert." # MT
+      lenses:
+        lists:
+          all: "Alle domener" # MT
+          with_lists: "Med e-postlister" # MT
+          without_lists: "Uten e-postlister" # MT
+      show:
+        recheck: "Sjekk på nytt nå" # MT
+        cluster: "Klynge" # MT
+        communities: "Fellesskap" # MT
+        mailman_lists: "E-postlister" # MT
+        no_mailman_lists: "Ingen" # MT
+        created_at: "Opprettet" # MT
+        last_checked: "Sist sjekket" # MT
+        mx_heading: "MX-poster" # MT
+        smtp2go_heading: "SMTP2GO-poster" # MT
+        spf_heading: "SPF-post" # MT
+        spf_rule: "Riktig når domenets SPF-post (TXT-posten som begynner med v=spf1) inneholder include-oppføringen som kreves nedenfor, og bruker høyst 10 DNS-oppslag (grensen i RFC 7208, telt rekursivt gjennom include-oppføringer). Andre mekanismer kan også være med." # MT
+        spf_lookups: "DNS-oppslag" # MT
+        spf_lookups_count: "%{count} av %{limit} tillatte" # MT
+        expected: "Forventet" # MT
+        required: "Påkrevd" # MT
+        found: "Funnet" # MT
+        no_records_found: "Fant ingen" # MT
+        record: "Post" # MT
+        host: "Vert" # MT
+        smtp2go_verified: "Bekreftet av SMTP2GO?" # MT
+        never_checked_notice: "Dette domenet er ikke sjekket ennå. Bruk «Sjekk på nytt nå» for å kjøre den første sjekken." # MT
+      index:
+        title: "Domener" # MT
+        intro: "Denne siden viser status for e-postoppsettet til hvert egendefinerte domene: om MX- og SPF-postene er riktige, og om valideringspostene for SMTP2GO er på plass. Resultatene er fra den siste sjekken. Bruk oppdateringsknappene for å sjekke på nytt." # MT
+        none_found: "Fant ingen egendefinerte domener." # MT
+        summary:
+          one: "%{ok} av %{count} domene har alle poster riktige." # MT
+          other: "%{ok} av %{count} domener har alle poster riktige." # MT
+        never_checked_prompt: "Ingen sjekker er kjørt ennå – bruk «Oppdater alle» for å kjøre den første." # MT
+        not_configured: "API-nøkkelen for SMTP2GO er ikke satt opp, så sendestatus og validering kan ikke sjekkes. Angi smtp2go.api_key i innstillingene." # MT
+        headers:
+          domain: "Domene" # MT
+          communities: "Fellesskap" # MT
+          mx: "MX-poster" # MT
+          spf: "SPF-post" # MT
+          smtp2go: "SMTP2GO-poster" # MT
+          lists: "E-postlister?" # MT
+        never_checked: "Aldri sjekket" # MT
+        refresh_all: "Oppdater alle" # MT
+        refresh_row: "Sjekk dette domenet på nytt" # MT
+        record_titles:
+          verified: "%{host} → %{target} – bekreftet av SMTP2GO" # MT
+          in_dns: "%{host} → %{target} – funnet i DNS, venter på bekreftelse fra SMTP2GO" # MT
+          missing: "%{host} → %{target} – ikke funnet i DNS" # MT
+        smtp2go_statuses:
+          verified: "Bekreftet" # MT
+          pending: "Venter" # MT
+          not_added: "Ikke lagt til" # MT
+          unknown: "Ukjent" # MT
+        record_kinds:
+          mx: "MX" # MT
+          spf: "SPF" # MT
+          dkim: "DKIM" # MT
+          return_path: "Retur" # MT
+          tracking: "Sporing" # MT

@@ -1,0 +1,149 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+de:
+  custom_fields:
+    boolean:
+      "true": "Ja" # MT
+      "false": "Nein" # MT
+    labels:
+      community:
+        settings:
+          main_nav_customizations: "Anpassungen des Hauptmenüs" # MT
+          time_zone: "Zeitzone" # MT
+          default_landing_page: "Standard-Startseite" # MT
+          people:
+            _self: "Personen" # MT
+            default_directory_sort: "Standardsortierung im Verzeichnis" # MT
+            plain_user_selects: "Einfache Personenauswahl" # MT
+            user_custom_fields_spec: "Spezifikation eigener Personenfelder" # MT
+          meals:
+            _self: "Mahlzeiten" # MT
+            reimb_instructions: "Anleitung zur Rückerstattung" # MT
+            allergens: "Allergene" # MT
+            show_reimb_form: "Druckbares Rückerstattungsformular anzeigen" # MT
+            cooks_can_finalize: "Küchenleitung darf Mahlzeiten abschließen" # MT
+            cooks_can_change_invites: "Küchenleitung darf eingeladene Gemeinschaften ändern" # MT
+            default_invites: "Standardmäßig eingeladene Gemeinschaften" # MT
+            allow_job_signup_on_meal_page: "Anmeldung für Mahlzeit-Aufgaben auf der Mahlzeitseite erlauben" # MT
+            default_capacity: "Standardkapazität" # MT
+            reminder_lead_times:
+              _self: "Erinnerung Tage im Voraus" # MT
+              diner: "Erinnerung für Essensgäste" # MT
+              early_menu: "Frühe Menü-Erinnerung" # MT
+              late_menu: "Späte Menü-Erinnerung" # MT
+          calendars:
+            _self: "Kalender" # MT
+            kinds: "Arten" # MT
+            meals:
+              _self: "Mahlzeit-Termine" # MT
+              default_total_time: "Standard-Gesamtdauer" # MT
+              default_prep_time: "Standard-Vorbereitungszeit" # MT
+          work:
+            _self: "Arbeit" # MT
+            default_date_filter: "Standard-Datumsfilter für Anmeldungen" # MT
+          billing:
+            _self: "Abrechnung" # MT
+            contact: "Kontakt für die Abrechnung" # MT
+            payment_instructions: "Zahlungsanleitung" # MT
+            statement_terms: "Zahlungsfrist für Kontoauszüge" # MT
+            statement_reminder_lead_time: "Kontoauszug-Erinnerung\nTage im Voraus" # MT
+            paypal_reimbursement: "Rückerstattung per PayPal anbieten" # MT
+            payment_methods:
+              _self: "Angaben zu Zahlungsmethoden" # MT
+              paypal_me: "PayPal.me" # MT
+              paypal_email: "PayPal per E-Mail" # MT
+              paypal_friend: "Mitglieder bitten, PayPal-Zahlungen als „an Freunde senden“ zu schicken" # MT
+              check_payee: "Scheck-Empfänger" # MT
+              check_address: "Postanschrift für Schecks" # MT
+              check_dropoff: "Anleitung zur Abgabe von Schecks" # MT
+              cash_dropoff: "Anleitung zur Abgabe von Bargeld" # MT
+              additional_info: "Weitere Informationen" # MT
+              show_billing_contact: "E-Mail für die Abrechnung bei den weiteren Informationen anzeigen" # MT
+            late_fee_policy:
+              _self: "Regelung für Säumnisgebühren" # MT
+              fee_type: "Gebührenart" # MT
+              threshold: "Schwellenwert" # MT
+              amount: "Betrag" # MT
+    hints:
+      community:
+        settings:
+          main_nav_customizations: "Hier bearbeitest du die Links im Hauptmenü. Gib Links im Markdown-Format ein. Beispiel: [Linkname](https://example.com). Wenn der Linkname einem vorhandenen Link entspricht, ersetzt er dessen Standard-URL. Eine leere URL entfernt einen Link ganz. Aller andere Text und alle andere Formatierung werden ignoriert." # MT
+          people:
+            plain_user_selects: "Einfache Auswahllisten statt Suchfeldern verwenden. Kann für kleinere Gemeinschaften praktischer sein." # MT
+            user_custom_fields_spec: "Gib eine Spezifikation im YAML-Format für eigene Felder ein, die beim Ansehen und Bearbeiten von Personen in dieser Gemeinschaft erscheinen. Wende dich an den Gather-Support, wenn du dabei Hilfe brauchst." # MT
+          meals:
+            reimb_instructions: "Was die Küchenleitung mit ihren Belegen tun soll, um die Kosten erstattet zu bekommen. Zum Beispiel die Beträge auf der Bearbeitungsseite der Mahlzeit in Gather eingeben, das eingebaute Rückerstattungsformular verwenden oder ein anderes Verfahren." # MT
+            allergens: "Kommagetrennte Liste der Allergene, aus denen die Küchenleitung beim Eintragen des Menüs auswählt." # MT
+            show_reimb_form: "Ob auf der Übersichtsseite der Mahlzeit ein druckbares Rückerstattungsformular angezeigt wird (mit Einkaufs- und Vorratsbeträgen und Art der Rückerstattung). Deaktiviere es, wenn ihr die Rückerstattung lieber elektronisch abwickelt." # MT
+            cooks_can_finalize: "Ob die Küchenleitung Mahlzeiten abschließen darf, zusätzlich zu Abrechnung, Mahlzeitenkoordination und Admins." # MT
+            cooks_can_change_invites: "Ob die Küchenleitung ändern darf, welche Gemeinschaften zu einer Mahlzeit eingeladen sind." # MT
+            default_invites: "Welche Gemeinschaften standardmäßig zu einer Mahlzeit eingeladen sind." # MT
+            allow_job_signup_on_meal_page: "Ob Essensgäste bei der Anmeldung zur Mahlzeit auch anbieten können, bei der Mahlzeit mitzuhelfen." # MT
+            default_capacity: "Die Standardeinstellung, wie viele Personen eine Mahlzeit aufnehmen kann." # MT
+            reminder_lead_times:
+              _self: "Wie viele Tage im Voraus die verschiedenen Erinnerungen verschickt werden. Erinnerungen gehen um 6 Uhr Ortszeit raus. Bei „0“ wird die Erinnerung am Morgen des Tages der Mahlzeit verschickt. Weitere Einstellungen für Erinnerungen findest du auf der Seite der Mahlzeit-Rollen." # MT
+              diner: "Die Erinnerung an alle Essensgäste." # MT
+              early_menu: "Die Erinnerung an die Küchenleitung, das Menü einzutragen." # MT
+              late_menu: "Eine zweite, dringendere Erinnerung an die Küchenleitung, wenn sie noch kein Menü eingetragen hat. Sollte weniger Tage im Voraus liegen als die frühe Menü-Erinnerung." # MT
+          calendars:
+            kinds: "Verschiedene Arten von Terminen, durch Kommas getrennt. Können in Regelwerken verwendet werden. Wenn leer, erscheint das Feld „Art“ nicht im Terminformular." # MT
+            meals:
+              default_total_time: "Standard-Gesamtdauer von Mahlzeit-Terminen in Minuten, einschließlich Vorbereitung und Aufräumen" # MT
+              default_prep_time: "Standard-Vorbereitungszeit für Mahlzeiten in Minuten" # MT
+          billing:
+            contact: "E-Mail für Fragen zur Abrechnung. Wird mit der Zahlungsanleitung angezeigt." # MT
+            payment_instructions: "Wie man eine Zahlung für ein Konto schickt." # MT
+            statement_terms: "Anzahl der Tage nach dem Erstellungsdatum, bis ein Kontoauszug fällig ist. Bei null (0) haben Kontoauszüge kein Fälligkeitsdatum." # MT
+            statement_reminder_lead_time: "Wie viele Tage vor dem Fälligkeitsdatum die Zahlungserinnerung für den Kontoauszug verschickt wird. Erinnerungen gehen nicht raus, wenn Kontoauszüge kein Fälligkeitsdatum haben oder der Saldo bezahlt ist." # MT
+            paypal_reimbursement: "Der Küchenleitung erlauben, die Rückerstattung für Mahlzeiten per PayPal anzufordern. PayPal-Zahlungen müssen manuell gemacht werden (nicht automatisch)." # MT
+            payment_methods:
+              _self: "Anleitungen oder Informationen zu den verschiedenen Zahlungsmethoden. Leer lassen, wenn eine Methode nicht akzeptiert wird. Auf deiner <a href='/accounts/mine'>Kontenseite</a> siehst du, wie die Anleitung aussieht." # MT
+              paypal_me: "Gib deinen <a href='https://paypal.me'>PayPal.me-Link</a> ein. So können Mitglieder am einfachsten mit PayPal bezahlen. Mit einem geschäftlichen PayPal-Konto lässt sich bei dieser Methode keine Gebühr vermeiden." # MT
+              paypal_email: "Wenn du PayPal akzeptieren, aber nicht PayPal.me verwenden willst, gib die E-Mail-Adresse ein, an die Mitglieder Zahlungen schicken sollen." # MT
+              paypal_friend: "Gilt für PayPal.me und PayPal per E-Mail. Wähle diese Option, wenn sich die Zahlungen nach den Nutzungsbedingungen von PayPal als Zahlungen unter Freunden rechtfertigen lassen. So fallen keine Gebühren an." # MT
+              check_payee: "Gib ein, an wen Schecks ausgestellt werden sollen. Leer lassen, wenn keine Schecks akzeptiert werden." # MT
+              check_address: "Gib eine Adresse ein, wenn du Schecks per Post akzeptierst. Dann wird auch eine Anleitung für Online-Überweisungen angezeigt." # MT
+              check_dropoff: "Gib eine Anleitung zur persönlichen Abgabe von Schecks ein. Leer lassen, wenn Schecks per Post geschickt werden müssen oder nicht akzeptiert werden." # MT
+              cash_dropoff: "Gib eine Anleitung zur persönlichen Abgabe von Bargeld ein. Leer lassen, wenn kein Bargeld akzeptiert wird." # MT
+              additional_info: "Gib weitere Informationen ein, die bei der Zahlungsanleitung stehen sollen." # MT
+              show_billing_contact: "Ob die E-Mail für die Abrechnung oben (falls angegeben) unten in der Zahlungsanleitung angezeigt wird. Deaktiviere es und trag sie selbst bei „Weitere Informationen“ ein, wenn du sie anders darstellen willst." # MT
+            late_fee_policy:
+              fee_type: "Wie die Gebühr berechnet wird" # MT
+              threshold: "Mindestsaldo, ab dem eine Gebühr erhoben wird" # MT
+              amount: "Betrag oder Prozentsatz der Gebühr (z. B. „3“ für 3 % oder 3,00, je nach Art)" # MT
+    options:
+      community:
+        settings:
+          default_landing_page:
+            meals: "Mahlzeiten" # MT
+            directory: "Verzeichnis" # MT
+            calendars: "Kalender" # MT
+            wiki: "Wiki" # MT
+          people:
+            default_directory_sort:
+              name: "Nach Name" # MT
+              unit: "Nach Wohnung" # MT
+          meals:
+            default_invites:
+              all: "Alle Gemeinschaften" # MT
+              own: "Nur die eigene Gemeinschaft" # MT
+          work:
+            default_date_filter:
+              all: "Vergangene und künftige" # MT
+              curftr: "Aktuelle und künftige" # MT
+          billing:
+            late_fee_policy:
+              fee_type:
+                none: "Keine Säumnisgebühr" # MT
+                fixed: "Fest" # MT
+                percent: "Prozentual" # MT

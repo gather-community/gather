@@ -1,0 +1,151 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+fi:
+  communities:
+    community:
+      statuses:
+        all: "Kaikki tilat" # MT
+        trial: "Kokeilu" # MT
+        subscribed: "Tilattu" # MT
+        problem: "Ongelma" # MT
+        warning: "Varoitus" # MT
+        deactivated: "Poistettu käytöstä" # MT
+    resync_started: "Tilauksen uudelleensynkronointi aloitettu. Päivitä sivu hetken kuluttua nähdäksesi muutokset." # MT
+    incorrect_slug: "Väärä tunniste. Yhteisöä ei poistettu." # MT
+    being_deleted: "Poistetaan: %{name}." # MT
+    admin:
+      id: "ID" # MT
+      name: "Nimi" # MT
+      slug: "Tunniste" # MT
+      abbreviation: "Lyhenne" # MT
+      country: "Maa" # MT
+      time_zone: "Aikavyöhyke" # MT
+      cluster: "Yhteisöryhmä" # MT
+      cluster_value: "%{name} (ID %{id})" # MT
+      created: "Luotu" # MT
+      status: "Tila" # MT
+      subscription: "Tilaus" # MT
+      stripe_id: "Stripe-ID" # MT
+      not_in_stripe: "Tilausta ei löytynyt Stripestä" # MT
+      detailed_status: "Tarkka tila" # MT
+      last_synced: "Synkronoitu viimeksi" # MT
+      users: "Käyttäjät" # MT
+      price: "Hinta" # MT
+      # E.g. "$5.00/user/month × 12 months (USD)"
+      price_value_html: "%{price}/käyttäjä/kk &times; %{months} kk (%{currency})" # MT
+      discount: "Alennus" # MT
+      next_payment: "Seuraava maksu" # MT
+      contact: "Yhteyshenkilö" # MT
+      address: "Osoite" # MT
+      subscription_intent: "Aiottu tilaus" # MT
+      tier: "Taso" # MT
+      start_date: "Alkamispäivä" # MT
+    index:
+      title: "Yhteisöt" # MT
+      view_signups: "Näytä hakemukset" # MT
+      id: "ID" # MT
+      name: "Nimi" # MT
+      created: "Luotu" # MT
+      last_login: "Viimeisin kirjautuminen" # MT
+      status: "Tila" # MT
+      users: "Käyttäjät" # MT
+      meals: "Ateriat" # MT
+      reservations: "Varaukset" # MT
+      jobs: "Tehtävät" # MT
+      transactions: "Tap." # MT
+      subscription: "Tilaus" # MT
+      cluster: "Yhteisöryhmä" # MT
+      never: "Ei koskaan" # MT
+      intent: "Aikomus: %{tier}" # MT
+    signups:
+      captcha_failed: "Captcha-tarkistus epäonnistui. Yritä uudelleen." # MT
+      approved: "Hakemus hyväksytty. Yhteisön käyttöönotto on käynnissä." # MT
+      denied: "Hakemus hylätty." # MT
+      index:
+        title: "Yhteisöjen liittymishakemukset" # MT
+        none_found: "Hakemuksia ei löytynyt." # MT
+        community_name: "Yhteisön nimi" # MT
+        contact: "Yhteyshenkilö" # MT
+        submitted: "Lähetetty" # MT
+        status: "Tila" # MT
+      new:
+        title: "Liity Gatheriin!" # MT
+        intro: "Gather on yhteisöjen hallintajärjestelmä yhteisöasumiseen ja muihin yhteisöllisiin asumismuotoihin. Pyydä uutta yhteisöä täyttämällä alla oleva lomake. Käsittelemme hakemuksesi ja otamme yhteyttä sähköpostitse. Pidätämme oikeuden hylätä hakemukset yhteisöiltä, jotka eivät sovi tehtäväämme." # MT
+        contact_person: "Yhteyshenkilö" # MT
+        contact_hint: "Tästä henkilöstä tulee yhteisön ensimmäinen ylläpitäjä." # MT
+        community_details: "Yhteisön tiedot" # MT
+        settings: "Asetukset" # MT
+        final_steps: "Viimeiset vaiheet" # MT
+        verification: "Vahvistus" # MT
+        submit: "Lähetä hakemus" # MT
+      review:
+        title: "Käsittele hakemus: %{name}" # MT
+        status: "Tila" # MT
+        reviewed: "%{date}, käsittelijä: %{name}" # MT
+        contact_name: "Yhteyshenkilön nimi" # MT
+        contact_email: "Yhteyshenkilön sähköposti" # MT
+        submitted: "Lähetetty" # MT
+        community_name: "Yhteisön nimi" # MT
+        slug: "URL-tunniste" # MT
+        country: "Maa" # MT
+        time_zone: "Aikavyöhyke" # MT
+        sample_data: "Esimerkkiaineisto" # MT
+        about: "Tietoja" # MT
+        approval_message: "Hyväksymisviesti" # MT
+        internal_notes: "Sisäiset muistiinpanot" # MT
+        denial_reason: "Hylkäyksen syy (ei lähetetä käyttäjälle)" # MT
+        submit: "Lähetä" # MT
+      submitted:
+        title: "Hakemus lähetetty" # MT
+        thanks: "Kiitos hakemuksestasi Gatheriin!" # MT
+        review_time_html: "Käsittelemme hakemukset yleensä 48 tunnin kuluessa. Seuraa saapuneita viestejäsi osoitteessa %{email}." # MT
+    # The approval email the signup review page pre-fills for the approver to personalize.
+    signup_action:
+      approval_template: |- # MT
+        Hei %{name},
+
+        Hienoja uutisia! Hakemuksesi liittyä Gatheriin yhteisölle ”%{community}” on hyväksytty.
+
+        #######################################
+        KIRJOITA TÄHÄN HENKILÖKOHTAINEN VIESTI,
+        MAINITSE JOTAIN YHTEISÖSTÄ
+        #######################################
+
+        Yhteisösi on nyt valmis käyttöön!
+
+        Saat erillisen sähköpostin, jossa on ohjeet ensimmäiseen kirjautumiseen.
+
+        Tervetuloa mukaan!
+
+        %{approver}, Gather-tiimin puolesta
+    signup_mailer:
+      application_approved:
+        subject: "Gather-yhteisösi on hyväksytty! (Mukana viesti, lähettäjä: %{approver})" # MT
+      application_denied:
+        subject: "Gather-yhteisöhakemuksestasi" # MT
+        dear: "Hei %{name}," # MT
+        body: "Kiitos kiinnostuksestasi Gatheria kohtaan. Käsittelimme hakemuksesi yhteisölle ”%{community}”, emmekä valitettavasti voi tällä hetkellä edetä pyyntösi kanssa." # MT
+        sign_off: "Ystävällisin terveisin," # MT
+        team: "Gather-tiimi" # MT
+    inactivity_mailer:
+      warning:
+        subject: "Käyttämättömyysvaroitus: %{community}" # MT
+        subject_final: "[Viimeinen poistovaroitus] %{community}" # MT
+        intro: "Tämä on käyttämättömyysvaroitus %{count}/%{max} Gather-yhteisölle ”%{community}”." # MT
+        last_login: "Viimeisin kirjautuminen: %{date}" # MT
+        never: "Ei koskaan" # MT
+        final: "Kukaan yhteisöstäsi ei ole kirjautunut Gatheriin yli 90 päivään. Tämä on viimeinen varoitus ennen kuin yhteisösi tiedot poistetaan pysyvästi." # MT
+        final_days: "Yhteisösi poistetaan noin 7 päivän kuluttua, ellei joku kirjaudu sisään." # MT
+        not_final: "Kukaan yhteisöstäsi ei ole kirjautunut Gatheriin yli 90 päivään. Jos kukaan ei kirjaudu, uusi varoitus lähetetään 7 päivän kuluttua. Kolmen varoituksen jälkeen yhteisösi tiedot poistetaan pysyvästi." # MT
+        prevent: "Voit estää poiston kirjautumalla yhteisöösi osoitteessa:" # MT
+        contact: "Jos tämä varoitus on mielestäsi virhe tai tarvitset apua, ota meihin yhteyttä osoitteessa support@gather.coop." # MT

@@ -25,7 +25,6 @@ module Billing
           indexes :account_id, type: :integer
           indexes :statement_id, type: :integer
           indexes :description, analyzer: "english_stemmed"
-          indexes :code, type: :keyword
         end
       end
 

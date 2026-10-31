@@ -1,0 +1,57 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+fr:
+  notifications:
+    preferences:
+      updated: "Vos préférences de notification ont été enregistrées." # MT
+      sections:
+        account: "Compte" # MT
+        meals: "Repas" # MT
+        work: "Travail" # MT
+        billing: "Facturation" # MT
+        community: "Communauté" # MT
+      kinds:
+        meal_reminder: "Rappels pour les repas auxquels mon foyer est inscrit" # MT
+        meal_role_reminder: "Rappels pour mes créneaux de repas" # MT
+        cook_menu_reminder: "Rappels au chef cuisinier pour publier le menu" # MT
+        meal_worker_change: "Changements dans une équipe de repas dont je fais partie" # MT
+        job_reminder: "Rappels pour mes tâches" # MT
+        job_choosing_notice: "Avis d'ouverture du choix des tâches" # MT
+        statement_reminder: "Rappels quand un paiement est dû" # MT
+        account_access: "Réinitialisations de mot de passe, confirmations d'adresse e-mail et invitations à se connecter" # MT
+        meal_message: "Messages et avis d'annulation d'une équipe de repas" # MT
+        statement_notice: "Relevés de compte" # MT
+        gdrive_migration_request: "Demandes d'aide pour déplacer les fichiers Google Drive de ma communauté" # MT
+        community_inactivity: "Avertissements indiquant que ma communauté pourrait être supprimée pour inactivité" # MT
+      show:
+        title: "Notifications" # MT
+        intro: "Choisissez les e-mails que Gather vous envoie au sujet de ce qui vous concerne. Ceux qui sont grisés sont essentiels et ne peuvent pas être désactivés." # MT
+        essential: "Essentiel, ne peut pas être désactivé" # MT
+        email_lists: "Listes de diffusion" # MT
+        email_lists_hint: "Vous êtes sur ces listes par l'intermédiaire de vos groupes. Pour ne plus recevoir les e-mails d'une liste, désabonnez-vous ou quittez le groupe sur sa page." # MT
+        view: "Voir" # MT
+        no_email_lists: "Vous n'êtes sur aucune liste de diffusion." # MT
+    unsubscribes:
+      manage_html: "Vous pouvez choisir les e-mails que vous recevez sur votre page %{link}. Vous devrez vous connecter." # MT
+      manage_link: "Notifications" # MT
+      show:
+        title: "Se désabonner" # MT
+        confirm: "Ne plus envoyer d'e-mails « %{kind} » à %{email} ?" # MT
+        already_off: "Les e-mails « %{kind} » à %{email} sont déjà désactivés." # MT
+        turn_off: "Se désabonner" # MT
+      create:
+        title: "Désabonnement effectué" # MT
+        done: "Nous n'enverrons plus d'e-mails « %{kind} » à %{email}." # MT
+      invalid:
+        title: "Se désabonner" # MT
+        explanation: "Ce lien de désabonnement n'est pas valide. Il provient peut-être d'un ancien e-mail ou a été copié de façon incomplète." # MT

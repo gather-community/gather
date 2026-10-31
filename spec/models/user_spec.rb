@@ -114,6 +114,12 @@ describe User do
       expect(User.matching("go zo")).to be_empty
     end
 
+    it "matches with or without accents, like the work shift search" do
+      zoe = create(:user, first_name: "Zoë", last_name: "Lefèvre")
+      expect(User.matching("zoe lef")).to contain_exactly(zoe)
+      expect(User.matching("Zoë")).to contain_exactly(zoe)
+    end
+
     it "treats hyphens as word breaks" do
       hyphenated = create(:user, first_name: "Ana", last_name: "Nader-Jenkins")
       expect(User.matching("jen")).to contain_exactly(hyphenated)

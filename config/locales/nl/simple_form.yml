@@ -1,0 +1,412 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+nl:
+  simple_form:
+    "yes": 'Ja' # MT
+    "no": 'Nee' # MT
+    required:
+      text: 'verplicht' # MT
+      mark: '*'
+      # You can uncomment the line below if you need to overwrite the whole required html.
+      # When using html, text and mark won't be used.
+      # html: '<abbr title="required">*</abbr>'
+    error_notification:
+      default_message: "Bekijk de problemen hieronder:" # MT
+      # FormHelper#error_summary, under the errors that belong to no field.
+      field_errors:
+        one: "Er staat 1 fout in het formulier hieronder." # MT
+        other: "Er staan %{count} fouten in het formulier hieronder." # MT
+    labels:
+      # These labels are here instead of activerecord b/c these are for things that
+      # aren't ActiveRecord models.
+      communities_signup:
+        contact_first_name: "Voornaam" # MT
+        contact_last_name: "Achternaam" # MT
+        contact_email: "E-mailadres" # MT
+        community_name: "Naam van de gemeenschap" # MT
+        slug: "URL van de gemeenschap" # MT
+        introduction: "Over je gemeenschap" # MT
+        country_code: "Land" # MT
+        time_zone: "Tijdzone" # MT
+        want_sample_data: "Voorbeeldgegevens" # MT
+      communities_signup_action:
+        decision: "Actie" # MT
+        message: "Bericht" # MT
+      calendars_export:
+        dont_personalize: "Afspraken niet personaliseren" # MT
+        own_only: "Alleen mijn afspraken" # MT
+      payment:
+        accountholder_name: "Naam rekeninghouder" # MT
+        payment_method: "Betaalmethode" # MT
+    placeholders:
+      meals_meal:
+        title: "bijv. Bruine bonen met rijst" # MT
+        entrees: "bijv. Bruine bonen, rijst en gerookte worst. Vegetarische versie beschikbaar. Mild gekruid!" # MT
+        side: "bijv. Gestoofde boerenkool met boter en sjalotjes" # MT
+        kids: "bijv. Macaroni met kaas en gekookte eieren" # MT
+        dessert: "bijv. Blokjes pure chocolade" # MT
+        notes: "bijv. Sommige ingrediënten biologisch en waar mogelijk lokaal" # MT
+      calendars_protocol:
+        kinds: "Kies types of laat leeg om op alles toe te passen …" # MT
+        calendar_ids: "Kies agenda’s of laat leeg om op alles toe te passen …" # MT
+      calendars_event:
+        name: "bijv. Spelletjesavond" # MT
+      domain:
+        name: "bijv. jouwdomein.nl" # MT
+      billing_transaction:
+        description: "bijv. cheque nr. 12345" # MT
+      gdrive_config:
+        org_user_id: "bijv. jouwnaam@jouwdomein.nl" # MT
+      user:
+        birthday_str: "bijv. 29 feb 1981 (jaar optioneel)" # MT
+      people_memorial_message:
+        body: "Voeg je bericht toe" # MT
+      household:
+        name: "bijv. De Vries of Jansen-Bakker" # MT
+        vehicles:
+          make: "bijv. Toyota" # MT
+          model: "bijv. Prius" # MT
+          color: "bijv. Blauw" # MT
+        emergency_contacts:
+          relationship: "bijv. moeder van Sanne" # MT
+          location: "bijv. Zwolle" # MT
+      work_job:
+        reminders:
+          note: "bijv. Zaag slijpen (optioneel)" # MT
+      work_period:
+        name: "bijv. Zomer 1969" # MT
+      wiki_page:
+        comment: "Een opmerking over deze wijziging." # MT
+    hints:
+      markdown_suffix_html: "Je kunt <a href='/about/markdown' target='_new'>uitgebreide opmaak</a> gebruiken." # MT
+      communities_signup:
+        community_name: "Hoogstens 20 tekens." # MT
+        slug: "Kleine letters, cijfers en koppeltekens; moet met een letter beginnen. Hoogstens 20 tekens." # MT
+        introduction: "Vertel ons iets over je gemeenschap en waarom Gather volgens jou goed past. Voeg een of meer links toe naar openbare webpagina’s (bijv. de website of socialemediapagina’s van je gemeenschap) waaruit blijkt wie jullie zijn." # MT
+      communities_signup_action:
+        message_approve: "De volledige goedkeuringsmail staat hierboven. Voeg een persoonlijke notitie toe door de voorbeeldtekst te vervangen." # MT
+        message_deny: "Noteer waarom deze aanvraag wordt afgewezen. Dit is alleen voor intern gebruik en wordt niet naar de aanvrager gestuurd." # MT
+      meals_meal:
+        formula_id: "<a href=\"/meals/formulas\">Maaltijdformules</a> bepalen hoe de kosten van de maaltijd worden berekend." # MT
+        capacity: "Aan hoeveel mensen biedt de maaltijd plaats?" # MT
+        auto_close_time: "Vul een tijd in de toekomst in waarop de maaltijd automatisch moet sluiten. Als je dit leeg laat, moet de maaltijd met de hand worden gesloten." # MT
+        resource_ids: "Kies de reserveerbare locatie(s) voor deze maaltijd. Reserveringen worden automatisch aangemaakt. Is de locatie niet reserveerbaar, vermeld haar dan in de titel, bijv. “Samen eten bij Jan thuis”." # MT
+      billing_account:
+        credit_limit: "Laat leeg voor onbeperkt krediet. Vul nul in voor geen krediet." # MT
+      billing_transaction:
+        incurred_on: "Deze datum staat als transactiedatum op afschriften. De datum van vandaag wordt ook bij de transactie opgeslagen." # MT
+        description: "De omschrijving staat voor de gebruiker op het afschrift. Een duidelijke omschrijving helpt later om verschillen op te lossen." # MT
+        code_html: "<i class='fa fa-arrow-up'></i> Verhoogt het bedrag dat de gebruiker verschuldigd is &nbsp;&nbsp;&nbsp; <i class='fa fa-arrow-down'></i> Verlaagt het bedrag dat de gebruiker verschuldigd is" # MT
+        value: "Het bedrag moet positief zijn. Het transactietype (hierboven) bepaalt of het bedrag het saldo van de rekening verhoogt of verlaagt." # MT
+      billing_template:
+        member_type_ids: "Kies het lidtype of de lidtypes waarvoor dit sjabloon geldt." # MT
+      calendars_export:
+        dont_personalize: "Standaard zijn agenda-exports op jou en je huishouden afgestemd, dus deel je exportlinks niet. Heb je een niet-gepersonaliseerde link nodig voor een openbare plek, vink dan dit vakje aan." # MT
+        own_only: "Vink dit vakje aan om alleen afspraken te exporteren die je voor jezelf hebt gemaakt. Groepsafspraken en maaltijdafspraken worden niet meegenomen." # MT
+      domain:
+        communities: "Voor welke gemeenschappen dit domein beschikbaar en zichtbaar is." # MT
+      gdrive_config:
+        org_user_id: "Dit is de gebruikers-ID van de Google Workspace-gebruiker van je gemeenschap. Deze gebruiker moet de toegang “Beheerder” hebben tot de gedeelde drive van je gemeenschap." # MT
+        client_id: "Eindigt op .apps.googleusercontent.com" # MT
+        client_secret_to_write: "Laat leeg om het geheim niet te wijzigen." # MT
+      gdrive_item:
+        external_id: "Je vindt deze ID in de URL van het item in Google Drive. Het is een reeks letters, cijfers, “_” en “-”. Voorbeelden: 0AExZ3_Cu5q7uUk9PVA en 1KRjAC5Bt4WtLilnkUeTvF_okbLgONGQuDkrc." # MT
+      gdrive_item_group:
+        access_level: "Voor mappen en bestanden mag dit niet lager zijn dan het toegangsniveau van deze groep op de gedeelde drive waarin ze staan." # MT
+      gdrive_migration_operation:
+        contact_email: "E-mailadres van de contactpersoon." # MT
+        contact_name: "Iemand in de gemeenschap die verantwoordelijk is voor de migratie en er vragen over kan beantwoorden." # MT
+        src_folder_id: "De ID van de bronmap voor de migratie. Je vindt deze ID in de URL van het item in Google Drive. Het is een reeks letters, cijfers, “_” en “-”. Voorbeeld: 1KRjAC5Bt4WtLilnkUeTvF_okbLgONGQuDkrc." # MT
+        dest_folder_id: "De ID van de gedeelde doeldrive OF doelmap voor de migratie. Je vindt deze ID in de URL van het item in Google Drive. Het is een reeks letters, cijfers, “_” en “-”. Voorbeelden: 0AExZ3_Cu5q7uUk9PVA en 1KRjAC5Bt4WtLilnkUeTvF_okbLgONGQuDkrc." # MT
+      groups_group:
+        availability: "Of mensen zelf lid kunnen worden van deze groep. Groepen voor “Iedereen” bevatten automatisch alle volwassen gebruikers." # MT
+        can_request_jobs: "Of deze groep op het takenformulier als mogelijke aanvrager wordt getoond." # MT
+        can_administer_email_lists: "Of gebruikers in deze groep via het beheerpaneel van Mailman de instellingen van alle mailinglijsten in de gemeenschap kunnen wijzigen." # MT
+        can_moderate_email_lists: "Of gebruikers in deze groep moderator zijn van alle mailinglijsten in de gemeenschap." # MT
+        kind: "Wat voor groep dit is. Wordt alleen gebruikt voor de weergave, verder heeft het geen betekenis." # MT
+        communities: "Voor welke gemeenschappen deze groep beschikbaar en zichtbaar is." # MT
+        mailman_list:
+          name: "Het eerste deel van het adres. Mag alleen kleine letters, cijfers of de tekens . - _ bevatten." # MT
+          domain_id: "De domeinnaam voor het adres van de lijst." # MT
+          all_cmty_members_can_send:
+            single_community: "Of alle leden van de gemeenschap naar deze lijst kunnen mailen. Als dit uit staat, kunnen alleen groepsleden mailen. Heeft geen invloed op wie mail van de lijst ontvangt." # MT
+            multi_community: "Of alle leden van de gemeenschappen van de groep naar deze lijst kunnen mailen. Als dit uit staat, kunnen alleen groepsleden mailen. Heeft geen invloed op wie mail van de lijst ontvangt." # MT
+          managers_can_administer: "Of de groepsleiders van deze groep via het beheerpaneel van Mailman de instellingen van deze mailinglijst kunnen wijzigen." # MT
+          managers_can_moderate: "Of de groepsleiders van deze groep moderator zijn van deze mailinglijst." # MT
+          _destroy: "Vink dit vakje aan om de mailinglijst op te heffen." # MT
+      calendars_event:
+        repeat_ends_on: "De laatste herhaling valt op of vóór deze datum." # MT
+        all_day: "Vink dit vakje aan als je afspraak geen vaste tijden heeft. Ze verschijnt dan bovenaan de agenda. Niet gebruiken om ruimtes of spullen te boeken." # MT
+        group_id: "Afspraken met een groep kunnen door andere leden van de groep worden bewerkt en worden niet meegenomen als je “Alleen mijn afspraken” exporteert." # MT
+      calendars_protocol:
+        kinds: "Voor welke afspraaktypes geldt dit reglement? Laat leeg om het op alle types toe te passen." # MT
+        calendar_ids: "Voor welke agenda’s geldt dit reglement? Laat leeg om het op alle agenda’s toe te passen." # MT
+        fixed_end_time: "Alle afspraken waarvoor dit geldt, moeten op deze tijd eindigen. Ligt deze tijd vóór de vaste begintijd, dan geldt ze voor de volgende dag." # MT
+        fixed_start_time: "Alle afspraken waarvoor dit geldt, moeten op deze tijd beginnen." # MT
+        max_days_per_year: "Gebruikers kunnen op niet meer dan dit aantal dagen per jaar afspraken maken waarvoor dit geldt." # MT
+        max_lead_days: "Gebruikers kunnen afspraken waarvoor dit geldt niet meer dan dit aantal dagen vooruit maken" # MT
+        max_length_minutes: "Gebruikers kunnen geen afspraken maken die langer duren dan dit aantal minuten." # MT
+        max_minutes_per_year: "Gebruikers kunnen per jaar niet meer dan dit aantal minuten aan afspraken maken waarvoor dit geldt." # MT
+        other_communities: "Beperkt hoe leden van andere gemeenschappen in je cluster afspraken waarvoor dit geldt kunnen bekijken en maken. Als je dit leeg laat, gelden er geen beperkingen voor leden van andere gemeenschappen." # MT
+        pre_notice: "Een mededeling die je hier invult, wordt bovenaan het afspraakformulier getoond bij afspraken waarvoor dit geldt." # MT
+        requires_kind: "Als dit is aangevinkt, moet bij afspraken waarvoor dit geldt een type worden opgegeven. Gebruik dit samen met andere reglementen om speciale regels af te dwingen voor sommige soorten afspraken." # MT
+        name: "Een korte, beschrijvende naam voor dit reglement." # MT
+      calendars_calendar:
+        default_calendar_view: "Weergave van de agenda bij het eerste laden" # MT
+        abbrv: "Afkorting voor korte teksten, bijv. onderwerpregels van e-mails (max. 6 letters)" # MT
+        meal_hostable: "Als dit is aangevinkt, verschijnt deze agenda als mogelijke locatie bij het aanmaken van een maaltijd." # MT
+        guidelines: "Tekst waarmee de gebruiker akkoord moet gaan bij het maken van een afspraak." # MT
+        color: "De kleur van de afspraken in deze agenda in de hoofdweergave. Gebruik hexadecimale kleurcodes. Kleuren zonder x zijn nog niet gebruikt (tenzij je veel agenda’s hebt)." # MT
+      user:
+        joined_on: "Ongeveer de datum waarop je bij de gemeenschap kwam" # MT
+        job_choosing_proxy_id: "Iemand buiten je huishouden die namens jou kan aanmelden voor taken. Leden van je huishouden kunnen dit standaard al." # MT
+        email: "Het e-mailadres waarop je het liefst benaderd wordt. Wordt ook gebruikt om met een wachtwoord in te loggen." # MT
+        google_email: "Het e-mailadres van het Google-account waarmee je inlogt. Wordt niet in de ledenlijst getoond. Vraag een <a href='/roles'>beheerder</a> als dit moet worden gewijzigd." # MT
+        paypal_email: "Het e-mailadres van je PayPal-account. Wordt gebruikt voor vergoedingen aan koks. Laat leeg om je hoofde-mailadres hierboven te gebruiken." # MT
+        full_access: "Kinderen zonder volledige toegang kunnen niet bij Gather inloggen, maar staan wel in de ledenlijst. Kinderen met volledige toegang tellen voor de facturatie als volwassenen." # MT
+        certify_13_or_older: "Kinderen moeten 13 jaar of ouder zijn om bij Gather in te loggen." # MT
+      meals_formula:
+        is_default: "Als dit is aangevinkt, wordt deze formule standaard gekozen bij het aanmaken van een nieuwe maaltijd." # MT
+        pantry_fee_formatted: "Eters met maaltijdkosten van 0,00 betalen geen bijdrage voor de voorraadkast, ook niet als het bedrag vast is." # MT
+        pantry_reimbursement: "Als dit is aangevinkt, mogen koks voorraadkastproducten kopen en daarvoor een vergoeding aanvragen." # MT
+        takeout: "Als dit is aangevinkt, kunnen eters vragen om hun maaltijd af te halen. Hoe afhalen precies werkt, bepaalt en communiceert de gemeenschap zelf." # MT
+        role_ids: "Welke rollen zijn nodig voor maaltijden met deze formule?" # MT
+      meals_role:
+        double_signups_allowed: "Dubbele toewijzingen zijn misschien niet geschikt voor sommige rollen." # MT
+        time_type: "Voor sommige rollen (zoals hoofdkok) willen mensen misschien zelf kiezen wanneer ze werken. Kies dan “alleen een bepaalde datum”. Wil je een vast schema, kies dan “vaste datum en tijd”." # MT
+        shift_start: "Aantal minuten voor of na het begin van de maaltijd waarop mensen er moeten zijn. Negatieve getallen staan voor tijden vóór het begin van de maaltijd." # MT
+        shift_end: "Aantal minuten voor of na het begin van de maaltijd waarop deze rol eindigt. Negatieve getallen staan voor tijden vóór het begin van de maaltijd." # MT
+        work_job_title: "Als je dit invult, verschijnt de taak zo in de module Werk. Vul een andere naam in als de naam van de rol hierboven in de module Werk onduidelijk kan zijn (bijv. “Afwas maaltijd” hier tegenover “Afwas” hierboven)." # MT
+        work_hours: "Hoeveel uur is de taak waard als ze in de module Werk wordt geïmporteerd? Je kunt dit leeg laten als je de module Werk niet gebruikt." # MT
+        description: "Deze beschrijving wordt bij het synchroniseren van taken naar de module Werk gekopieerd." # MT
+        count_per_meal: "Hoeveel mensen zijn er meestal nodig voor deze rol bij één maaltijd?" # MT
+      meals_type:
+        name: "Een korte, beschrijvende naam voor het type." # MT
+        category: "Categorieën worden gebruikt om het aantal porties te berekenen en voor rapporten." # MT
+      people_memorial:
+        user_id: "Moet een inactieve gebruiker in deze gemeenschap zijn. De huidige profielfoto wordt op de gedenkpagina gebruikt." # MT
+      wiki_page:
+        content: "Zie de <a href='/wiki/sample' target='_blank'>voorbeeldpagina</a> voor tips over het maken van wikiteksten." # MT
+        data_source: "Gevorderd. URL van een JSON-gegevensbron voor gebruik met de <a href='http://mustache.github.io/mustache.5.html' target='_new'>Mustache-sjabloonsyntaxis</a> in de inhoud van de pagina." # MT
+      work_job:
+        hours: "Geschat aantal uren dat de taak kost. Decimalen zijn toegestaan." # MT
+        slot_type: "Gebruik “voor de hele gemeenschap” voor zaken als werkdagen. Twijfel je, kies dan “vast aantal plekken”." # MT
+        hours_per_shift: "Het aantal uren dat elke dienst oplevert." # MT
+        double_signups_allowed: "Dubbele aanmeldingen zijn misschien niet geschikt voor sommige taken." # MT
+      work_period:
+        quota_type: "Met een quotum verschijnt bovenaan de aanmeldpagina een statusbericht waarin gebruikers zien wat hun eerlijke deel van het werk is." # MT
+        auto_open_time: "Als je hier een tijd invult, gaat de periode na die tijd automatisch naar de fase “open”. Verplicht als de manier van kiezen “om de beurt” is." # MT
+        pick_type: "Kies “om de beurt” als je een moment plant waarop taken worden gekozen en het te druk wordt als iedereen tegelijk kiest. Kleinere groepen mensen kiezen dan om de beurt taken in “rondes”." # MT
+        max_rounds_per_worker: "Hoeveel rondes moet iemand doorlopen om aan het quotum te komen? Meer rondes betekent dat het kiezen langer duurt." # MT
+        workers_per_round: "Hoeveel mensen kiezen er per ronde taken? Meer mensen betekent drukker kiezen. Minder mensen betekent meer rondes, dus het kiezen duurt langer." # MT
+        round_duration: "Hoe lang duurt elke ronde? Er moet net genoeg tijd zijn voor een gemiddeld persoon om rustig te kiezen." # MT
+        job_copy_source_id: "Kies eventueel een periode waaruit taken worden gekopieerd bij het aanmaken van de periode. Maaltijdtaken worden niet gekopieerd, die moeten worden gesynchroniseerd (zie hieronder)." # MT
+    options:
+      calendars_event:
+        repeat_frequency:
+          none: "Nooit" # MT
+          daily: "Dagelijks" # MT
+          weekly: "Wekelijks" # MT
+          monthly: "Maandelijks" # MT
+          yearly: "Jaarlijks" # MT
+        repeat_ends:
+          never: "Nooit" # MT
+          on_date: "Op een datum" # MT
+          after_count: "Na een aantal keer" # MT
+      billing_account:
+        active:
+          active_only: "Alleen actieve tonen" # MT
+          all: "Alles tonen" # MT
+      communities_signup:
+        status:
+          all: "Alle" # MT
+          pending: "In behandeling" # MT
+          approved: "Goedgekeurd" # MT
+          denied: "Afgewezen" # MT
+          created: "Aangemaakt" # MT
+          failed: "Mislukt" # MT
+        want_sample_data:
+          "true": "Ja, voorbeeldgegevens toevoegen" # MT
+          "false": "Nee, geen voorbeeldgegevens toevoegen" # MT
+      communities_signup_action:
+        decision:
+          approve: "Goedkeuren" # MT
+          deny: "Afwijzen" # MT
+      gdrive_item:
+        kind:
+          drive: "Gedeelde drive" # MT
+          folder: "Map" # MT
+          file: "Bestand" # MT
+      gdrive_item_group:
+        access_level:
+          reader: "Kijker: bestanden bekijken" # MT
+          commenter: "Reageerder: bestanden bekijken en erop reageren" # MT
+          writer: "Bijdrager: bestanden bekijken, toevoegen en bewerken" # MT
+          fileOrganizer: "Contentbeheerder: bestanden bekijken, toevoegen, bewerken, verplaatsen, verwijderen en delen" # MT
+      groups_group:
+        availability:
+          open: "Open" # MT
+          closed: "Gesloten" # MT
+          hidden: "Verborgen" # MT
+          everybody: "Iedereen" # MT
+        kind:
+          committee: "Commissie" # MT
+          subcommittee: "Subcommissie" # MT
+          team: "Team" # MT
+          task_force: "Werkgroep" # MT
+          club: "Club" # MT
+          crew: "Ploeg" # MT
+          squad: "Brigade" # MT
+          circle: "Kring" # MT
+          group: "Groep" # MT
+          other: "Overig" # MT
+        memberships:
+          kind:
+            joiner: "Lid" # MT
+            manager: "Groepsleider" # MT
+            opt_out: "Afgemeld" # MT
+        sort:
+          name: "Op naam" # MT
+          type: "Op type" # MT
+      meals_meal:
+        time:
+          past: "Verleden" # MT
+          finalizable: "Af te ronden" # MT
+          all: "Altijd" # MT
+          upcoming: "Binnenkort" # MT
+        cost:
+          payment_method:
+            check: "Cheque" # MT
+            credit: "Tegoed op saldo" # MT
+            paypal: "PayPal" # MT
+      meals_formula:
+        meal_calc_type:
+          fixed: "Vast" # MT
+          share: "Proportioneel" # MT
+        pantry_calc_type:
+          fixed: "Vast" # MT
+          percent: "Percentage" # MT
+      meals_message:
+        recipient_type:
+          diners: "Eters" # MT
+          team: "Team" # MT
+          all: "Eters + team" # MT
+      user:
+        preferred_contact:
+          email: "E-mail" # MT
+          text: "Sms" # MT
+          phone: "Telefoon" # MT
+        life_stage:
+          any: "Volwassenen + kinderen" # MT
+          adult: "Volwassenen" # MT
+          child: "Kinderen" # MT
+        sort:
+          name: "Op naam" # MT
+          unit: "Op woning" # MT
+        view:
+          album: "Album" # MT
+          table: "Tabel" # MT
+          albumall: "Album met inactieven" # MT
+          tableall: "Tabel met inactieven" # MT
+      calendars_protocol:
+        other_communities:
+          sponsor: "Kan alleen aanmaken als er een sponsor is opgegeven" # MT
+          read_only: "Kan alleen bekijken" # MT
+          forbidden: "Kan niet bekijken of aanmaken" # MT
+      calendars_calendar:
+        default_calendar_view:
+          week: "Week" # MT
+          month: "Maand" # MT
+      gdrive_migration:
+        owner:
+          any: "Alle eigenaren" # MT
+        status:
+          any: "Alle statussen" # MT
+          pending: "In afwachting" # MT
+          errored: "Met fout" # MT
+          declined: "Geweigerd" # MT
+          transferred: "Overgedragen" # MT
+          copied: "Gekopieerd" # MT
+          ignored: "Genegeerd" # MT
+          disappeared: "Verdwenen" # MT
+      wiki_page:
+        editable_by:
+          everyone: "Iedereen" # MT
+          wikiist: "Alleen wikiredacteuren en beheerders" # MT
+      work_job:
+        slot_type:
+          fixed: "Dit is een gewone taak met een vast aantal plekken" # MT
+          full_single: "Deze taak is voor de hele gemeenschap (één dienst)" # MT
+          full_multiple: "Deze taak is voor de hele gemeenschap (meerdere diensten)" # MT
+        time_type:
+          date_time: "Deze taak heeft een vaste datum en tijd" # MT
+          date_only: "Deze taak is voor een bepaalde datum of periode" # MT
+          full_period: "Deze taak is voor de hele werkperiode" # MT
+        reminders:
+          abs_rel:
+            relative: "Relatieve tijd" # MT
+            absolute: "Exacte tijd" # MT
+          rel_unit_sign:
+            days_before: "Dagen ervoor (om 6 uur)" # MT
+            days_after: "Dagen erna (om 6 uur)" # MT
+            hours_before: "Uren ervoor" # MT
+            hours_after: "Uren erna" # MT
+        requester:
+          any: "Alle aanvragers" # MT
+          none: "Geen aanvrager" # MT
+        preassigned:
+          any: "Alle taken" # MT
+          y: "Vooraf toegewezen" # MT
+          n: "Niet vooraf toegewezen" # MT
+      meals_role:
+        time_type:
+          date_time: "Deze rol heeft een vaste datum en tijd" # MT
+          date_only: "Deze rol is alleen voor een bepaalde datum" # MT
+        reminders:
+          rel_unit_sign:
+            days_before: "Dagen ervoor (om 6 uur)" # MT
+            days_after: "Dagen erna (om 6 uur)" # MT
+            hours_before: "Uren ervoor" # MT
+            hours_after: "Uren erna" # MT
+      work_period:
+        phase:
+          archived: "Gearchiveerd: de periode ligt in het verleden en kan niet worden bewerkt" # MT
+          draft: "Concept: taken worden nog ingesteld, aanmeldingen verborgen" # MT
+          open: "Open: mensen kunnen taken kiezen!" # MT
+          published: "Gepubliceerd: het definitieve werkrooster" # MT
+          ready: "Gereed: taken staan vast, overzicht zichtbaar, maar aanmelden kan nog niet" # MT
+        quota_type:
+          none: "Geen" # MT
+          by_person: "Per persoon" # MT
+          by_household: "Per huishouden" # MT
+        pick_type:
+          free_for_all: "Iedereen kiest tegelijk" # MT
+          staggered: "Groepen kiezen om de beurt" # MT
+        meal_job_sync:
+          "false": "Maaltijdtaken niet synchroniseren" # MT
+          "true": "Maaltijdtaken synchroniseren voor de gekozen formules en rollen" # MT
+      work_shift:
+        lens:
+          all: "Alle taken" # MT
+          open: "Open taken" # MT
+          mine: "Mijn taken" # MT
+          myhh: "Mijn huishouden" # MT
+          notpre: "Niet vooraf toegewezen" # MT
+        date_range:
+          all: "Verleden en toekomst" # MT
+          curftr: "Huidig en toekomst" # MT
+          past: "Alleen verleden" # MT
+
+    prompts:
+      user:
+        preferred_contact: "Hoe kunnen mensen je benaderen als het geen noodgeval is?" # MT

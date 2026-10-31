@@ -1,0 +1,502 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+sv:
+  activemodel:
+    attributes:
+      # EventletForm (drag-and-drop), for its error messages.
+      calendars/eventlet:
+        starts_at: "Starttid" # MT
+        ends_at: "Sluttid" # MT
+      calendars/event:
+        calendar: "Kalender" # MT
+        pre_notice: "Meddelande" # MT
+        name: "Händelsens namn" # MT
+        starts_at: "Starttid" # MT
+        ends_at: "Sluttid" # MT
+        creator: "Skapad av" # MT
+        group: "Grupp" # MT
+        all_day: "Heldagshändelse?" # MT
+        kind: "Typ" # MT
+        note: "Anteckning" # MT
+        guidelines: "Riktlinjer" # MT
+        repeat_frequency: "Upprepas" # MT
+        repeat_interval: "Var" # MT
+        repeat_weekdays: "På" # MT
+        repeat_monthly_by: "På" # MT
+        repeat_ends: "Slutar" # MT
+        repeat_ends_on: "Slutdatum" # MT
+        repeat_count: "Antal gånger" # MT
+    errors:
+      models:
+        # EventForm, which takes Calendars::Event's model name.
+        calendars/event:
+          attributes:
+            base:
+              overlap: "Händelsen överlappar en befintlig händelse" # MT
+              changed_from_started: "Det här tillfället har redan börjat, så det kan inte ändras. Öppna ett senare tillfälle för att ändra serien från och med då." # MT
+              moved_before_kept: "Du kan inte flytta tillfället till %{time} eftersom två delar av serien då skulle överlappa." # MT
+              occurrence_missing: "Tillfället finns inte längre. Gå tillbaka till kalendern och försök igen." # MT
+              longer_than_repeat: "Händelsen är längre än tiden mellan upprepningarna, så tillfällena skulle överlappa." # MT
+              pattern_change_with_changes:
+                one: "%{count} tillfälle i den del som ändras har flyttats eller raderats, så upprepningsdagarna kan inte ändras. Ångra den ändringen först, eller ändra serien från ett senare datum." # MT
+                other: "%{count} tillfällen i den del som ändras har flyttats eller raderats, så upprepningsdagarna kan inte ändras. Ångra de ändringarna först, eller ändra serien från ett senare datum." # MT
+              all_day_change_with_changes:
+                one: "%{count} tillfälle i den del som ändras har flyttats eller raderats, så den kan inte växla mellan heldag och tider. Ångra den ändringen först, eller ändra serien från ett senare datum." # MT
+                other: "%{count} tillfällen i den del som ändras har flyttats eller raderats, så den kan inte växla mellan heldag och tider. Ångra de ändringarna först, eller ändra serien från ett senare datum." # MT
+            guidelines:
+              not_accepted: "Du måste godkänna riktlinjerna" # MT
+            starts_at:
+              changed_after_start: "kan inte ändras efter att händelsen har börjat" # MT
+            ends_at:
+              before_start: "måste vara efter starttiden" # MT
+              in_past: "kan inte ändras till en tid som har passerat" # MT
+            repeat_frequency:
+              not_offered: "är inte tillgänglig i den här kalendern" # MT
+              stop_repeating: "kan inte ändras till Aldrig. För att avsluta serien, radera det här och följande tillfällen." # MT
+            repeat_ends_on:
+              before_start: "måste vara på eller efter startdatumet" # MT
+            repeat_monthly_by:
+              not_on_start_date: "är inte tillgängligt för startdatumet. Välj igen." # MT
+        # EventletForm (drag-and-drop) and EventletDeletionForm, which take Calendars::Eventlet's model name.
+        calendars/eventlet:
+          attributes:
+            base:
+              not_recurring: "Händelsen ingår inte i en serie" # MT
+              following_only_all_calendars: "”Det här och följande” kan bara raderas från alla kalendrar" # MT
+              occurrence_missing: "Tillfället finns inte längre. Ladda om kalendern och försök igen." # MT
+              one_calendar: "Händelsen finns bara i en kalender." # MT
+              other_calendar_not_editable: "Du kan inte ändra händelsen i alla dess kalendrar. Välj ”Flytta bara i” den här kalendern i stället." # MT
+              offsets_too_far_apart: "En händelses tider i olika kalendrar får inte skilja sig mer än %{hours} timmar. För att flytta den längre, välj ”Flytta i alla”." # MT
+              series_started: "Serien har redan börjat. Välj ”Det här och följande” för att ändra den från och med det här datumet." # MT
+              following_from_past: "Tillfällen som redan har börjat kan inte flyttas med ”Det här och följande”." # MT
+              moved_before_kept: "Du kan inte flytta ”det här och följande” hit eftersom två delar av serien då skulle överlappa." # MT
+              fixed_pattern: "Du kan inte flytta ”%{choice}” hit eftersom serien upprepas i ett fast mönster som inte innehåller den nya tiden." # MT
+              overlap: "Händelsen överlappar en befintlig händelse" # MT
+            occurrence_start:
+              required_for_single: "krävs för att ändra ett enskilt tillfälle" # MT
+              not_in_series: "är inte ett giltigt tillfälle i serien" # MT
+            starts_at:
+              changed_after_start: "kan inte ändras efter att händelsen har börjat" # MT
+            ends_at:
+              before_start: "måste vara efter starttiden" # MT
+              in_past: "kan inte ändras till en tid som har passerat" # MT
+  activerecord:
+    models:
+      meals/meal: "Måltid" # MT
+    attributes:
+      user:
+        first_name: "Förnamn" # MT
+        last_name: "Efternamn" # MT
+        email: "E-postadress" # MT
+        google_email: "Google-id" # MT
+        phone: "Telefon" # MT
+        mobile_phone: "Mobil" # MT
+        home_phone: "Hem" # MT
+        work_phone: "Arbete" # MT
+        birthday_str: "Födelsedag" # MT
+        preferred_contact: "Föredraget kontaktsätt" # MT
+        joined_on: "Inflyttningsdatum" # MT
+        job_choosing_proxy_id: "Ombud vid uppgiftsval" # MT
+        up_guardianships: "Föräldrar/vårdnadshavare" # MT
+        privacy_settings: "Integritetsinställningar" # MT
+        paypal_email: "PayPal-e-post" # MT
+        school: "Skola" # MT
+        allergies: "Allergier" # MT
+        doctor: "Läkare" # MT
+        medical: "Medicinsk information" # MT
+        remember_me: "Förbli inloggad när du stänger webbläsaren" # MT
+        child: "Är personen ett barn?" # MT
+        full_access: "Ska personen ha full åtkomst till systemet?" # MT
+        certify_13_or_older: "Jag intygar att personen är minst 13 år" # MT
+        pronouns: "Pronomen" # MT
+      household:
+        name: "Hushållets namn" # MT
+        community_id: "Gemenskap" # MT
+        member_type_id: "Medlemstyp" # MT
+        unit_num_and_suffix: "Lägenhetsnummer" # MT
+        vehicles: "Fordon" # MT
+        keyholders: "Fler nyckelinnehavare" # MT
+        emergency_contacts: "Nödkontakter" # MT
+        garage_nums: "Garagenummer" # MT
+      meals/meal:
+        no_allergens: "Inga av dessa" # MT
+        community_id: "Värdgemenskap" # MT
+        served_at: "Datum/tid" # MT
+        communities: "Gemenskaper" # MT
+        calendar_ids: "Bokningsbara platser" # MT
+        formula: "Formel" # MT
+        capacity: "Kapacitet" # MT
+        title: "Titel" # MT
+        entrees: "Huvudrätt" # MT
+        side: "Tillbehör" # MT
+        kids: "Barn" # MT
+        dessert: "Efterrätt" # MT
+        notes: "Anteckningar" # MT
+        auto_close_time: "Automatisk stängningstid" # MT
+      meals/message:
+        meal: "Måltid" # MT
+        body: "Meddelande" # MT
+        recipient_type: "Mottagare" # MT
+      meals/cost:
+        ingredient_cost: "Kostnad för ingredienser" # MT
+        pantry_cost: "Ersättningsbar kostnad för baslager" # MT
+        payment_method: "Ersättningssätt" # MT
+        reimbursee_id: "Mottagare av ersättning" # MT
+      meals/formula:
+        name: "Namn" # MT
+        meal_calc_type: "Beräkningstyp" # MT
+        pantry_calc_type: "Beräkningstyp" # MT
+        is_default: "Standardformel?" # MT
+        parts: "Måltidstyper" # MT
+        pantry_fee: "Avgift för baslager" # MT
+        pantry_fee_formatted: "Avgift för baslager" # MT
+        pantry_reimbursement: "Tillåt ersättning för baslager?" # MT
+        takeout: "Tillåt beställning av mat att ta med?" # MT
+        role_ids: "Roller" # MT
+      meals/formula_part:
+        name: "Namn" # MT
+        type_id: "Typ" # MT
+        share_formatted: "Pris/andel" # MT
+        portion_size: "Portionsstorlek" # MT
+      meals/role:
+        title: "Uppgiftens titel" # MT
+        time_type: "Tider" # MT
+        shift_start: "Starttid" # MT
+        shift_end: "Sluttid" # MT
+        work_hours: "Arbetstimmar" # MT
+        work_job_title: "Titel i arbetsmodulen" # MT
+        description: "Uppgiftsbeskrivning" # MT
+        double_signups_allowed: "Samma person kan anmäla sig mer än en gång till rollen vid samma måltid" # MT
+        count_per_meal: "Personer per måltid" # MT
+        reminders: "Påminnelser" # MT
+      meals/role_reminder:
+        rel_magnitude: "Skickas" # MT
+        note: "Anteckning (valfri)" # MT
+      meals/signup:
+        spots_left: "Platser kvar" # MT
+        comments: "Kommentarer till kocken" # MT
+        takeout: "Beställ att ta med" # MT
+      billing/transaction:
+        incurred_on: "Uppkom" # MT
+        household_name: "Hushållets namn" # MT
+        code: "Typ" # MT
+        description: "Beskrivning" # MT
+        value: "Belopp" # MT
+      billing/account:
+        household_id: "Hushåll" # MT
+        community_id: "Konto i gemenskap" # MT
+        current_balance: "Aktuellt saldo" # MT
+        credit_limit: "Kreditgräns" # MT
+      billing/template:
+        code: "Typ" # MT
+        description: "Beskrivning" # MT
+        value: "Belopp" # MT
+        member_type_ids: "Medlemstyper" # MT
+      gdrive/config:
+        org_user_id: "Användar-id i Google Workspace" # MT
+        client_id: "Appens klient-id" # MT
+        client_secret_to_write: "Appens klienthemlighet" # MT
+      gdrive/migration/operation:
+        contact_email: "Kontaktens e-post" # MT
+        contact_name: "Kontaktens namn" # MT
+        src_folder_id: "Käll-id" # MT
+        dest_folder_id: "Mål-id" # MT
+      gdrive/migration/request:
+        opt_out_reason: "Skäl till att avböja" # MT
+      gdrive/item:
+        external_id: "Id" # MT
+        kind: "Typ" # MT
+      gdrive/item_group:
+        access_level: "Åtkomstnivå" # MT
+        group_id: "Grupp" # MT
+        item_id: "Objekt" # MT
+      groups/group:
+        availability: "Tillgänglighet" # MT
+        can_request_jobs: "Får beställa uppgifter?" # MT
+        can_administer_email_lists: "Får administrera alla e-postlistor?" # MT
+        can_moderate_email_lists: "Får moderera alla e-postlistor?" # MT
+        description: "Beskrivning" # MT
+        kind: "Typ" # MT
+        name: "Namn" # MT
+        communities: "Gemenskaper" # MT
+        memberships: "Medlemmar" # MT
+      groups/mailman/list:
+        domain_id: "Domän" # MT
+        all_cmty_members_can_send: "Alla i gemenskapen får skicka till listan?" # MT
+        managers_can_administer: "Ledare får administrera listan?" # MT
+        managers_can_moderate: "Ledare får moderera listan?" # MT
+        members: "Listans medlemmar" # MT
+        additional_members: "Extra medlemmar" # MT
+        additional_senders: "Extra avsändare" # MT
+        settings: "Listans inställningar" # MT
+        address: "Listans adress" # MT
+        _destroy: "Radera listan?" # MT
+      calendars/protocol:
+        fixed_end_time: "Fast sluttid" # MT
+        fixed_start_time: "Fast starttid" # MT
+        kinds: "Händelsetyper" # MT
+        max_days_per_year: "Max dagar/år" # MT
+        max_lead_days: "Max tid i förväg" # MT
+        max_length_minutes: "Max längd" # MT
+        max_minutes_per_year: "Max minuter/år" # MT
+        other_communities: "Andra gemenskaper" # MT
+        pre_notice: "Förhandsmeddelande" # MT
+        requires_kind: "Typ krävs" # MT
+        calendar_ids: "Kalendrar" # MT
+      calendars/group:
+        name: "Gruppens namn" # MT
+      calendars/calendar:
+        name: "Namn" # MT
+        guidelines: "Riktlinjer" # MT
+        hidden: "Dold" # MT
+        abbrv: "Förkortning" # MT
+        group_id: "Kalendergrupp" # MT
+        color: "Färg" # MT
+        default_calendar_view: "Kalendervy" # MT
+        meal_hostable: "Kan måltider hållas här?" # MT
+        allow_overlap: "Får händelser överlappa varandra?" # MT
+        selected_by_default: "Vald som standard i kalenderlistan?" # MT
+      people/emergency_contact:
+        name: "Namn" # MT
+        relationship: "Relation till hushållet" # MT
+        main_phone: "Huvudtelefon" # MT
+        alt_phone: "Annan telefon" # MT
+        email: "E-post" # MT
+        location: "Ort" # MT
+        country_code: "Land" # MT
+      people/vehicle:
+        make: "Märke" # MT
+        model: "Modell" # MT
+        color: "Färg" # MT
+        plate: "Registreringsnummer" # MT
+      people/pet:
+        name: "Namn" # MT
+        species: "Art/ras" # MT
+        color: "Färg" # MT
+        vet: "Veterinär" # MT
+        caregivers: "Skötare" # MT
+        health_issues: "Hälsoproblem" # MT
+      people/memorial:
+        user_id: "Avliden person" # MT
+        birth_year: "Födelseår" # MT
+        death_year: "Dödsår" # MT
+      work/job:
+        description: "Beskrivning" # MT
+        double_signups_allowed: "Samma person kan anmäla sig mer än en gång till ett pass för uppgiften?" # MT
+        hours: "Timmar" # MT
+        hours_per_shift: "Timmar per pass" # MT
+        period_id: "Period" # MT
+        reminders: "Påminnelser" # MT
+        requester_id: "Beställare" # MT
+        shifts: "Pass" # MT
+        slot_type: "Typ av platser" # MT
+        time_type: "Tider" # MT
+        title: "Titel" # MT
+      work/period:
+        name: "Namn" # MT
+        phase: "Fas" # MT
+        starts_on: "Börjar" # MT
+        ends_on: "Slutar" # MT
+        quota_type: "Kvot" # MT
+        auto_open_time: "Automatisk öppningstid" # MT
+        pick_type: "Valtyp" # MT
+        round_duration: "Omgångens längd" # MT
+        workers_per_round: "Personer per grupp" # MT
+        max_rounds_per_worker: "Max omgångar per person" # MT
+        job_copy_source_id: "Kopiera uppgifter" # MT
+        copy_preassignments: "Kopiera förtilldelningar?" # MT
+        meal_job_sync_settings: "Synkronisering av måltidsuppgifter" # MT
+      work/job_reminder:
+        abs_rel: "Typ" # MT
+        abs_time: "Skickas" # MT
+        rel_magnitude: "Skickas" # MT
+        note: "Anteckning" # MT
+      work/shift:
+        start_time: "Starttid" # MT
+        end_time: "Sluttid" # MT
+        hours: "Timmar" # MT
+        slots: "Antal platser" # MT
+        workers: "Medhjälpare" # MT
+      wiki/page:
+        title: "Titel" # MT
+        content: "Innehåll" # MT
+        comment: "Kommentar" # MT
+        editable_by: "Kan redigeras av" # MT
+        data_source: "Datakälla" # MT
+    errors:
+      messages:
+        invalid_content_type: "Filen har fel typ" # MT
+        too_big: "Filen är för stor (högst %{max} MiB)" # MT
+        attached: "Filen saknas" # MT
+      models:
+        billing/transaction:
+          attributes:
+            unit_price:
+              blank_with_quantity: "får inte vara tomt om antal anges" # MT
+            quantity:
+              blank_with_unit_price: "får inte vara tomt om styckpris anges" # MT
+        domain:
+          attributes:
+            base:
+              at_least_one_ownership: "Välj minst en gemenskap" # MT
+        gdrive/config:
+          attributes:
+            org_user_id:
+              invalid: "Måste vara en e-postadress" # MT
+            client_id:
+              invalid: "Måste sluta med .apps.googleusercontent.com" # MT
+            client_secret_to_write:
+              wrong_length: "Måste vara exakt %{count} tecken" # MT
+        gdrive/migration/operation:
+          attributes:
+            contact_email:
+              invalid: "Måste vara en e-postadress" # MT
+            dest_folder_id:
+              invalid: "Får bara innehålla bokstäver, siffror, _ eller -" # MT
+            src_folder_id:
+              invalid: "Får bara innehålla bokstäver, siffror, _ eller -" # MT
+        groups/group:
+          attributes:
+            base:
+              at_least_one_affiliation: "Välj minst en gemenskap" # MT
+        groups/mailman/list:
+          attributes:
+            name:
+              invalid: "Innehåller ogiltiga tecken" # MT
+              taken: "En annan lista på den här domänen använder redan namnet" # MT
+        groups/membership:
+          attributes:
+            user_id:
+              unaffiliated: "Inte från en anknuten gemenskap" # MT
+        household:
+          name:
+            taken: "Det finns redan ett hushåll med det namnet i gemenskapen" # MT
+        meals/formula_part:
+          negative: "Får inte vara negativt" # MT
+        meals/signup:
+          exceeded_spots:
+            one: "Utifrån antalet platser kvar kan du bara anmäla en person." # MT
+            other: "Utifrån antalet platser kvar kan du anmäla högst %{count} personer." # MT
+          nobody_signed_up: "Du måste anmäla minst en person" # MT
+          duplicate_types: "Anmäl varje typ bara en gång" # MT
+        meals/meal:
+          attributes:
+            capacity:
+              below_signups: "måste vara minst %{count} på grund av befintliga anmälningar" # MT
+            title:
+              blank_with_menu: "får inte vara tomt om andra menypunkter har angetts" # MT
+            entrees:
+              blank_with_menu: "får inte vara tomt om andra menypunkter har angetts" # MT
+            invitations:
+              none: "du måste bjuda in minst en gemenskap" # MT
+            auto_close_time:
+              not_before_meal: "måste vara mellan nu och måltidens tid" # MT
+            allergens:
+              none_checked: "minst en ruta måste markeras om en meny har angetts" # MT
+              none_with_others: "”Inga av dessa” kan inte väljas om andra allergener är markerade" # MT
+        meals/assignment:
+          attributes:
+            user_id:
+              role_not_in_formula: "Rollen ”%{role}” passar inte den valda formeln" # MT
+        calendars/event:
+          attributes:
+            starts_at:
+              after_meal_time: "måste vara vid eller före måltidens tid (%{time})" # MT
+            ends_at:
+              before_meal_time: "måste vara efter måltidens tid (%{time})" # MT
+        calendars/eventlet:
+          attributes:
+            base:
+              all_day_not_allowed: "Heldagshändelser är inte tillåtna i den här kalendern" # MT
+        calendars/event_override:
+          attributes:
+            occurrence_start:
+              not_in_series: "är inte ett giltigt tillfälle i serien" # MT
+            ends_at:
+              before_start: "måste vara efter starttiden" # MT
+        calendars/eventlet_override:
+          attributes:
+            base:
+              no_change: "måste antingen radera tillfället eller ange tidsförskjutningar" # MT
+            eventlet:
+              different_event: "måste höra till samma händelse som ändringen" # MT
+        user:
+          password:
+            password_strength: "Ditt lösenord var för svagt. Gör det längre eller lägg till specialtecken." # MT
+          attributes:
+            certify_13_or_older:
+              accepted_full_access: "Åldersintyg krävs för barn med full åtkomst" # MT
+              accepted_becoming_adult: "Åldersintyg krävs för att ändra ett barn till vuxen" # MT
+            birthday_str:
+              too_young: "Barn måste vara minst 13 år för att ha full åtkomst" # MT
+        calendars/calendar:
+          attributes:
+            abbrv:
+              blank: "får inte vara tomt om måltider kan hållas i kalendern" # MT
+            color:
+              invalid: "Måste vara i hexformat (t.ex. #112233)" # MT
+            allow_overlap:
+              repeating_events: "måste vara på så länge kalendern har återkommande händelser" # MT
+        calendars/protocol:
+          attributes:
+            base:
+              repeating_events: "Fasta tider, tid i förväg och årsgränser kan inte gälla för %{calendars}, som har återkommande händelser. Återkommande händelser kräver kalendrar utan de här reglerna." # MT
+        meals/formula:
+          at_least_one_type: "Du måste ta med minst en måltidstyp." # MT
+          at_least_one_nonzero_type: "Du måste ta med minst en måltidstyp som inte är noll om beräkningstypen är proportionell." # MT
+          attributes:
+            is_default:
+              cant_unset: "Du kan inte ta bort standardvalet. Gör en annan formel till standard i stället." # MT
+            role_ids:
+              must_have_head_cook: "Måste innehålla %{title}" # MT
+        meals/role:
+          attributes:
+            shift_end:
+              not_after_start: "Måste vara efter starttiden" # MT
+        wiki/page:
+          sample_not_editable: "Exempelsidan kan inte redigeras, så att den finns kvar som referens för andra. Om du vill experimentera, skapa en ny sida med länken ”Ny wikisida” nedan." # MT
+          data_fetch:
+            main: "Det uppstod ett problem när data hämtades till sidan (%{error})" # MT
+            connection_error: "Kunde inte ansluta till datakällan" # MT
+            invalid_protocol: "Datakällans webbadress måste använda HTTP eller HTTPS" # MT
+            invalid_json: "Ogiltig JSON" # MT
+            template_error: "Mallfel: %{details}" # MT
+          attributes:
+            title:
+              reserved_slug: "Titeln är ett reserverat ord eller uttryck. Välj en annan." # MT
+        work/job:
+          attributes:
+            hours_per_shift:
+              uneven_divisor: "Måste vara lika med eller jämnt dela %{hours} timmar" # MT
+            shifts:
+              more_than_one_shift_for_full_single: "Du kan bara lägga till ett pass för uppgifter med ett pass." # MT
+              more_than_one_shift_for_full_period: "Du kan bara lägga till ett pass för uppgifter som gäller hela perioden." # MT
+              duplicate_start_end_times: "Flera pass kan inte ha samma start- och sluttider." # MT
+              different_length_shifts: "Alla pass måste vara lika långa." # MT
+        work/period:
+          attributes:
+            name:
+              reserved_slug: "är ett reserverat ord, välj ett annat" # MT
+            ends_on:
+              not_after_start: "måste vara efter startdatumet" # MT
+            auto_open_time:
+              blank: "Får inte vara tomt om valtypen är ”turas om”. Om du inte vet exakt tid än, ange en ungefärlig och uppdatera den senare." # MT
+        work/shift:
+          attributes:
+            starts_at:
+              elapsed_doesnt_equal_job: "Passet måste vara %{hours} timmar" # MT
+              elapsed_doesnt_evenly_divide_job: "Passets längd måste vara lika med eller jämnt dela %{hours} timmar" # MT
+            ends_at:
+              not_after_start: "måste vara efter starttiden" # MT
+            assignments:
+              no_double_assignments: "Dubbla tilldelningar är inte tillåtna" # MT

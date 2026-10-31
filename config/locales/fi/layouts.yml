@@ -1,0 +1,163 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+# Strings for the page layout, shared partials and other app-wide views.
+fi:
+  layouts:
+    mailer:
+      notification_settings: "Gatherin ilmoitusasetukset: %{url}" # MT
+      machine_translated: "Tämä sähköposti on käännetty automaattisesti, ja siinä voi olla virheitä." # MT
+    application:
+      impersonation_notice: "Toimit käyttäjänä %{name}. Kaikki tekemäsi toimet näyttävät hänen tekemiltään." # MT
+      stop_impersonating: "Lopeta toisena käyttäjänä toimiminen" # MT
+      home: "Etusivu" # MT
+      search: "Haku" # MT
+      skip_to_content: "Siirry sisältöön" # MT
+      show_menu: "Näytä valikko" # MT
+      toggle_navigation: "Näytä/piilota navigointi" # MT
+      loading: "Ladataan" # MT
+      add_to_home_screen: "Lisää Gather aloitusnäytöllesi" # MT
+    footer:
+      privacy_policy: "Tietosuojaseloste" # MT
+      credits: "Tekijät" # MT
+      settings: "Asetukset" # MT
+      subscription: "Tilaus" # MT
+      billing: "Laskutus" # MT
+      communities: "Yhteisöt" # MT
+      resync_subscriptions: "Synkronoi tilaukset uudelleen" # MT
+      domains: "Verkkotunnukset" # MT
+      # Shown on pages in machine-translated locales (Gather::Locales::MACHINE_TRANSLATED).
+      machine_translated: "Tämä sivu on käännetty automaattisesti, ja siinä voi olla virheitä." # MT
+      machine_translated_with_link_html: "Tämä sivu on käännetty automaattisesti, ja siinä voi olla virheitä. %{link}" # MT
+      help_translate: "Auta parantamaan käännöstä" # MT
+      change_language: "Vaihda kieli" # MT
+      browser_default: "Selaimen kieli" # MT
+      language: "Kieli" # MT
+    head:
+      # The browser tab title. The page title is already HTML-escaped, hence _html.
+      title_html: "Gather: %{title}" # MT
+    personal_dropdown:
+      show_menu: "Näytä henkilökohtainen valikko" # MT
+  shared:
+    dropzone:
+      image_attachment: "Kuvaliite" # MT
+    mobile_back_link:
+      back_to_html: "Takaisin: %{label}" # MT
+  home:
+    inactive:
+      title: "Tili ei ole aktiivinen" # MT
+      body: "Tilisi ei ole aktiivinen. Voit silti katsoa tilejäsi ja muokata profiiliasi. Katso valikko näytön oikeasta yläkulmasta." # MT
+  # Announcement shown once to accounts created before the 2021 rename (CalendarNavLinkPopoverView, JS).
+  calendar_nav_popover:
+    message_html: "<b>Varaukset</b> on nyt nimeltään <b>Kalenterit</b>! Käy katsomassa!" # MT
+    dismiss: "Sulje" # MT
+  landing:
+    invite_welcome: "Tervetuloa Gatheriin! Valitse alta kirjautumistapa." # MT
+    index:
+      blurb: "Yhdessä on parempi." # MT
+      logo_alt: "Gatherin logo" # MT
+      sign_in_google: "Kirjaudu Googlella" # MT
+      sign_in_password: "Kirjaudu salasanalla" # MT
+      learn_more: "Lue lisää" # MT
+      try_it_out: "Kokeile" # MT
+    signed_out:
+      title: "Gather – kirjauduttu ulos" # MT
+      signed_out: "Olet nyt kirjautunut ulos Gatherista." # MT
+      public_computer_html: "Jos tämä on <strong>julkinen tietokone</strong>, kannattaa ehkä myös<br/>%{link}." # MT
+      google_sign_out: "kirjautua ulos Google-tililtäsi" # MT
+      return_home: "Palaa etusivulle" # MT
+    privacy_policy:
+      title: "Tietosuojaseloste" # MT
+      english_only: "Tietosuojaseloste on saatavilla vain englanniksi." # MT
+    markdown:
+      title: "Markdown-muotoiluopas" # MT
+      intro_html: "<strong>Markdown</strong> on yksinkertainen tapa luoda siistiä ja monipuolista tekstisisältöä ilman, että tarvitsee opetella erityistä kieltä." # MT
+      if_you_type: "Jos kirjoitat …" # MT
+      displayed_like: "Se näytetään näin:" # MT
+      outro: "Pidä hauskaa luodessasi paljon hyödyllistä ja kaunista sisältöä!" # MT
+      # Each example is shown as typed and then as rendered, so it must be valid Markdown.
+      examples:
+        formatting: "Voit helposti tehdä yksinkertaisia muotoiluja, kuten **lihavointia**, _kursiivia_ ja ~~yliviivausta~~." # MT
+        lists: |- # MT
+          Voit myös tehdä
+
+          * luettelomerkittyjä
+          * luetteloita
+              * joissa
+              * sisennettyjä
+              * alaluetteloita
+
+          ja
+
+          1. numeroituja
+          2. luetteloita
+        headers: |- # MT
+          # Otsikot
+          ## ovat
+          ### helppoja
+
+          nekin!
+        tables: |- # MT
+          | Voit  | tehdä    |
+          |------|--------|
+          | jopa kauniita | taulukoita |
+          | Vau! | Tosi siistiä! |
+        links: |- # MT
+          Linkit muille sivuille näyttävät [tältä](http://example.com).
+
+          Pelkkä linkkiteksti tunnistetaan automaattisesti: https://gather.coop
+        images: |- # MT
+          Voit näyttää kuvia näin:
+
+          ![Kissa](https://gather.coop/sample-image.png)
+        rule: |- # MT
+          Voit jakaa sisältöä vaakaviivalla:
+
+          ---
+
+          hienoa!
+        # Not named html or *_html: Rails treats such keys as already-safe HTML, so the
+        # tags in this example would render instead of being shown as typed.
+        raw_markup: |- # MT
+          Jos olet kokenut käyttäjä ja haluat käyttää suoraa HTML:ää, kokeile!
+
+          Voit esimerkiksi <blockquote>käyttää lainauslohkoja</blockquote>.
+  # Static error pages, generated into public/ by `rake error_pages:generate` (see Gather::ErrorPages).
+  error_pages:
+    "400":
+      title: "Palvelin ei voi käsitellä pyyntöä asiakkaan virheen vuoksi (400 Bad Request)" # MT
+      heading: "Palvelin ei voi käsitellä pyyntöä asiakkaan virheen vuoksi." # MT
+      body: "Tarkista pyyntö ja yritä uudelleen. Jos olet sovelluksen omistaja, katso lisätietoja lokeista." # MT
+    "403":
+      title: "Sinulla ei ole oikeutta nähdä tätä sivua (403)" # MT
+      heading: "Sinulla ei ole oikeutta nähdä tätä sivua." # MT
+      body: "Jos tämä on mielestäsi virhe, ota yhteyttä ylläpitäjään." # MT
+    "404":
+      title: "Etsimääsi sivua ei ole olemassa (404 Not found)" # MT
+      heading: "Etsimääsi sivua ei ole olemassa." # MT
+      body: "Kirjoitit ehkä osoitteen väärin, tai sivu on voinut siirtyä. Jos olet sovelluksen omistaja, katso lisätietoja lokeista." # MT
+    "406-unsupported-browser":
+      title: "Selaintasi ei tueta (406 Not Acceptable)" # MT
+      heading: "Selaintasi ei tueta." # MT
+      body: "Päivitä selaimesi jatkaaksesi." # MT
+    "422":
+      title: "Haluamasi muutos hylättiin (422 Unprocessable Entity)" # MT
+      heading: "Haluamasi muutos hylättiin." # MT
+      body: "Yritit ehkä muuttaa jotain, johon sinulla ei ole oikeutta. Jos olet sovelluksen omistaja, katso lisätietoja lokeista." # MT
+    "500":
+      title: "Valitettavasti jokin meni vikaan (500 Internal Server Error)" # MT
+      heading: "Valitettavasti jokin meni vikaan." # MT
+      body: "Jos olet sovelluksen omistaja, katso lisätietoja lokeista." # MT
+    offline:
+      title: "Et ole yhteydessä internetiin" # MT
+      heading: "Palvelimeen yhdistämisessä oli ongelma." # MT
+      body: "Internetyhteytesi on ehkä katkennut. Yritä ladata sivu uudelleen." # MT

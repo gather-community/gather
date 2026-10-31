@@ -1,0 +1,81 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+fi:
+  admin:
+    domains:
+      refresh_all_started:
+        one: "Tarkistetaan %{count} verkkotunnus taustalla. Tämän pitäisi kestää noin %{seconds} sekuntia. Lataa sivu uudelleen nähdäksesi tulokset." # MT
+        other: "Tarkistetaan %{count} verkkotunnusta taustalla. Tämän pitäisi kestää noin %{seconds} sekuntia. Lataa sivu uudelleen nähdäksesi tulokset." # MT
+      refresh_one_success: "Tarkistettu uudelleen: %{domain}." # MT
+      refresh_one_failed: "Tarkistettu uudelleen: %{domain}. SMTP2GO-rajapinnan pyyntö kuitenkin epäonnistui, joten vahvistuksen tila voi olla vanhentunut. Virheestä on ilmoitettu." # MT
+      lenses:
+        lists:
+          all: "Kaikki verkkotunnukset" # MT
+          with_lists: "Postituslistoja" # MT
+          without_lists: "Ei postituslistoja" # MT
+      show:
+        recheck: "Tarkista nyt" # MT
+        cluster: "Yhteisöryhmä" # MT
+        communities: "Yhteisöt" # MT
+        mailman_lists: "Postituslistat" # MT
+        no_mailman_lists: "Ei yhtään" # MT
+        created_at: "Luotu" # MT
+        last_checked: "Tarkistettu viimeksi" # MT
+        mx_heading: "MX-tietueet" # MT
+        smtp2go_heading: "SMTP2GO-tietueet" # MT
+        spf_heading: "SPF-tietue" # MT
+        spf_rule: "Oikein, kun verkkotunnuksen SPF-tietue (sen v=spf1-alkuinen TXT-tietue) sisältää alla näkyvän vaaditun include-määrityksen ja käyttää enintään 10 DNS-hakua (RFC 7208:n raja, laskettuna rekursiivisesti include-määritysten kautta). Mukana voi olla myös muita mekanismeja." # MT
+        spf_lookups: "DNS-haut" # MT
+        spf_lookups_count: "%{count}/%{limit} sallitusta" # MT
+        expected: "Odotettu" # MT
+        required: "Vaadittu" # MT
+        found: "Löydetty" # MT
+        no_records_found: "Ei löytynyt" # MT
+        record: "Tietue" # MT
+        host: "Isäntä" # MT
+        smtp2go_verified: "SMTP2GO:n vahvistama?" # MT
+        never_checked_notice: "Tätä verkkotunnusta ei ole vielä tarkistettu. Tee ensimmäinen tarkistus painikkeella ”Tarkista nyt”." # MT
+      index:
+        title: "Verkkotunnukset" # MT
+        intro: "Tällä sivulla näkyy kunkin oman verkkotunnuksen sähköpostiasetusten tila: ovatko MX- ja SPF-tietueet oikein ja ovatko SMTP2GO:n vahvistustietueet paikallaan. Tulokset ovat viimeisimmästä tarkistuksesta. Voit tarkistaa uudelleen päivityspainikkeilla." # MT
+        none_found: "Omia verkkotunnuksia ei löytynyt." # MT
+        summary:
+          one: "Kaikki tietueet ovat oikein: %{ok}/%{count} verkkotunnus." # MT
+          other: "Kaikki tietueet ovat oikein: %{ok}/%{count} verkkotunnusta." # MT
+        never_checked_prompt: "Tarkistuksia ei ole vielä tehty – tee ensimmäinen painikkeella ”Päivitä kaikki”." # MT
+        not_configured: "SMTP2GO:n API-avainta ei ole määritetty, joten lähetyksen tilaa ja vahvistusta ei voi tarkistaa. Aseta smtp2go.api_key asetuksiin." # MT
+        headers:
+          domain: "Verkkotunnus" # MT
+          communities: "Yhteisöt" # MT
+          mx: "MX-tietueet" # MT
+          spf: "SPF-tietue" # MT
+          smtp2go: "SMTP2GO-tietueet" # MT
+          lists: "Postituslistoja?" # MT
+        never_checked: "Ei koskaan tarkistettu" # MT
+        refresh_all: "Päivitä kaikki" # MT
+        refresh_row: "Tarkista tämä verkkotunnus uudelleen" # MT
+        record_titles:
+          verified: "%{host} → %{target} – SMTP2GO:n vahvistama" # MT
+          in_dns: "%{host} → %{target} – löytyy DNS:stä, odottaa SMTP2GO:n vahvistusta" # MT
+          missing: "%{host} → %{target} – ei löydy DNS:stä" # MT
+        smtp2go_statuses:
+          verified: "Vahvistettu" # MT
+          pending: "Odottaa" # MT
+          not_added: "Ei lisätty" # MT
+          unknown: "Tuntematon" # MT
+        record_kinds:
+          mx: "MX" # MT
+          spf: "SPF" # MT
+          dkim: "DKIM" # MT
+          return_path: "Return" # MT
+          tracking: "Seuranta" # MT

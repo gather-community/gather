@@ -1,0 +1,149 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+fr:
+  communities:
+    community:
+      statuses:
+        all: "Tous les états" # MT
+        trial: "Essai" # MT
+        subscribed: "Abonnée" # MT
+        problem: "Problème" # MT
+        warning: "Avertissement" # MT
+        deactivated: "Désactivée" # MT
+    resync_started: "Resynchronisation des abonnements lancée. Actualisez dans une minute pour voir les mises à jour." # MT
+    incorrect_slug: "Identifiant incorrect. La communauté n'a pas été supprimée." # MT
+    being_deleted: "%{name} est en cours de suppression." # MT
+    admin:
+      id: "ID" # MT
+      name: "Nom" # MT
+      slug: "Identifiant" # MT
+      abbreviation: "Abréviation" # MT
+      country: "Pays" # MT
+      time_zone: "Fuseau horaire" # MT
+      cluster: "Grappe" # MT
+      cluster_value: "%{name} (ID %{id})" # MT
+      created: "Créée" # MT
+      status: "État" # MT
+      subscription: "Abonnement" # MT
+      stripe_id: "ID Stripe" # MT
+      not_in_stripe: "Abonnement introuvable dans Stripe" # MT
+      detailed_status: "État détaillé" # MT
+      last_synced: "Dernière synchronisation" # MT
+      users: "Utilisateurs" # MT
+      price: "Prix" # MT
+      price_value_html: "%{price}/utilisateur/mois &times; %{months} mois (%{currency})" # MT
+      discount: "Remise" # MT
+      next_payment: "Prochain paiement" # MT
+      contact: "Contact" # MT
+      address: "Adresse" # MT
+      subscription_intent: "Intention d'abonnement" # MT
+      tier: "Formule" # MT
+      start_date: "Date de début" # MT
+    index:
+      title: "Communautés" # MT
+      view_signups: "Voir les demandes" # MT
+      id: "ID" # MT
+      name: "Nom" # MT
+      created: "Créée" # MT
+      last_login: "Dernière connexion" # MT
+      status: "État" # MT
+      users: "Utilisateurs" # MT
+      meals: "Repas" # MT
+      reservations: "Événements" # MT
+      jobs: "Tâches" # MT
+      transactions: "Transactions" # MT
+      subscription: "Abonnement" # MT
+      cluster: "Grappe" # MT
+      never: "Jamais" # MT
+      intent: "Intention : %{tier}" # MT
+    signups:
+      captcha_failed: "La vérification captcha a échoué. Veuillez réessayer." # MT
+      approved: "Demande approuvée. La configuration de la communauté est en cours." # MT
+      denied: "Demande refusée." # MT
+      index:
+        title: "Demandes d'inscription de communautés" # MT
+        none_found: "Aucune demande trouvée." # MT
+        community_name: "Nom de la communauté" # MT
+        contact: "Contact" # MT
+        submitted: "Envoyée" # MT
+        status: "État" # MT
+      new:
+        title: "Rejoindre Gather !" # MT
+        intro: "Gather est une plateforme de gestion de communauté pour l'habitat participatif et d'autres communautés de vie collaborative. Pour demander une nouvelle communauté, remplissez le formulaire ci-dessous. Nous examinerons votre demande et vous répondrons par e-mail. Nous nous réservons le droit de refuser les communautés dont l'activité ne correspond pas à notre mission." # MT
+        contact_person: "Personne de contact" # MT
+        contact_hint: "Cette personne deviendra le premier administrateur de la communauté." # MT
+        community_details: "Détails de la communauté" # MT
+        settings: "Paramètres" # MT
+        final_steps: "Dernières étapes" # MT
+        verification: "Vérification" # MT
+        submit: "Envoyer la demande" # MT
+      review:
+        title: "Examiner la demande : %{name}" # MT
+        status: "État" # MT
+        reviewed: "le %{date} par %{name}" # MT
+        contact_name: "Nom du contact" # MT
+        contact_email: "E-mail du contact" # MT
+        submitted: "Envoyée" # MT
+        community_name: "Nom de la communauté" # MT
+        slug: "Identifiant d'URL" # MT
+        country: "Pays" # MT
+        time_zone: "Fuseau horaire" # MT
+        sample_data: "Données d'exemple" # MT
+        about: "À propos" # MT
+        approval_message: "Message d'approbation" # MT
+        internal_notes: "Notes internes" # MT
+        denial_reason: "Motif du refus (non envoyé à l'utilisateur)" # MT
+        submit: "Envoyer" # MT
+      submitted:
+        title: "Demande envoyée" # MT
+        thanks: "Merci d'avoir demandé à rejoindre Gather !" # MT
+        review_time_html: "Nous examinons généralement les demandes sous 48 heures. Surveillez votre boîte de réception à l'adresse %{email} pour une réponse." # MT
+    signup_action:
+      approval_template: |- # MT
+        Bonjour %{name},
+
+        Bonne nouvelle ! Votre demande pour rejoindre Gather avec la communauté « %{community} » a été approuvée.
+
+        #######################################
+        SAISISSEZ ICI UNE NOTE PERSONNALISÉE ET
+        MENTIONNEZ UN DÉTAIL SUR LA COMMUNAUTÉ
+        #######################################
+
+        Votre communauté est maintenant prête !
+
+        Vous devriez recevoir un e-mail distinct avec les instructions pour vous connecter la première fois.
+
+        Bienvenue à bord !
+
+        %{approver}, pour l'équipe de Gather
+    signup_mailer:
+      application_approved:
+        subject: "Votre communauté Gather a été approuvée ! (Avec un mot de %{approver})" # MT
+      application_denied:
+        subject: "Au sujet de votre demande de communauté Gather" # MT
+        dear: "Bonjour %{name}," # MT
+        body: "Merci de l'intérêt que vous portez à Gather. Après examen de votre demande pour « %{community} », nous ne sommes pas en mesure d'y donner suite pour le moment." # MT
+        sign_off: "Cordialement," # MT
+        team: "L'équipe de Gather" # MT
+    inactivity_mailer:
+      warning:
+        subject: "Avertissement d'inactivité pour %{community}" # MT
+        subject_final: "[Dernier avertissement avant suppression] %{community}" # MT
+        intro: "Ceci est l'avertissement d'inactivité %{count} sur %{max} pour la communauté Gather « %{community} »." # MT
+        last_login: "Dernière connexion : %{date}" # MT
+        never: "Jamais" # MT
+        final: "Personne de votre communauté ne s'est connecté à Gather depuis plus de 90 jours. Ceci est le dernier avertissement avant la suppression définitive des données de votre communauté." # MT
+        final_days: "Votre communauté sera supprimée dans environ 7 jours, à moins que quelqu'un ne se connecte." # MT
+        not_final: "Personne de votre communauté ne s'est connecté à Gather depuis plus de 90 jours. Si personne ne se connecte, un autre avertissement sera envoyé dans 7 jours. Après 3 avertissements, les données de votre communauté seront définitivement supprimées." # MT
+        prevent: "Pour empêcher la suppression, il suffit de vous connecter à votre communauté à l'adresse :" # MT
+        contact: "Si vous pensez que cet avertissement est une erreur ou si vous avez besoin d'aide, écrivez-nous à support@gather.coop." # MT

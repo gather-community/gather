@@ -13,7 +13,8 @@ data:
   external:
     <% {"activesupport" => "lib/active_support/locale", "activemodel" => "lib/active_model/locale",
         "activerecord" => "lib/active_record/locale", "actionview" => "lib/action_view/locale",
-        "rails-i18n" => "rails/locale", "devise-i18n" => "rails/locales"}.each do |gem, dir| %>
+        "rails-i18n" => "rails/locale", "devise-i18n" => "rails/locales",
+        "ice_cube" => "config/locales"}.each do |gem, dir| %>
     - "<%= Gem.loaded_specs[gem].full_gem_path %>/<%= dir %>/%{locale}.yml"
     <% end %>
 
@@ -55,6 +56,9 @@ ignore_missing:
   # default_i18n_subject runs in the protected meal_message helper, but action_name is the public
   # normal_message/cancellation_message action that called it, and those keys exist.
   - meal_mailer.meal_message.subject
+  # Sample names for generated demo data, read by Faker (config/initializers/faker.rb). Demo content is
+  # English until new communities get starter content in their own language.
+  - "random_data.*"
 
 # Keys looked up by frameworks or by dynamically built key strings, which the scanner can't see.
 ignore_unused:
@@ -72,6 +76,9 @@ ignore_unused:
   - "activatables.*"                      # keyed by model i18n_key
   - "cocoon.add_links.*"                  # FormHelper#link_to_add, keyed by association
   - "{community_lens,date_range_lens}.*"  # Lens i18n_key + option names
+  # Built from DomainMail::Status state values in app/views/admin/domains/index.html.erb
+  - "admin.domains.index.{smtp2go_statuses,record_kinds,record_titles}.*"
+  - "admin.domains.lenses.*"              # Admin::ListsLens option names
   - "calendars.{all,community,my}_*"      # system calendar names
   - "calendars/protocol.durations.*"
   - "roles.index.descriptions.*"  # roles/index.html.erb, by role

@@ -1,0 +1,151 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+nb:
+  communities:
+    community:
+      statuses:
+        all: "Alle statuser" # MT
+        trial: "Prøveperiode" # MT
+        subscribed: "Abonnerer" # MT
+        problem: "Problem" # MT
+        warning: "Advarsel" # MT
+        deactivated: "Deaktivert" # MT
+    resync_started: "Synkronisering av abonnementet er startet. Last inn siden på nytt om et minutt for å se endringene." # MT
+    incorrect_slug: "Feil slug. Fellesskapet ble ikke slettet." # MT
+    being_deleted: "%{name} blir slettet." # MT
+    admin:
+      id: "ID" # MT
+      name: "Navn" # MT
+      slug: "Slug" # MT
+      abbreviation: "Forkortelse" # MT
+      country: "Land" # MT
+      time_zone: "Tidssone" # MT
+      cluster: "Klynge" # MT
+      cluster_value: "%{name} (ID %{id})" # MT
+      created: "Opprettet" # MT
+      status: "Status" # MT
+      subscription: "Abonnement" # MT
+      stripe_id: "Stripe-ID" # MT
+      not_in_stripe: "Fant ikke abonnementet i Stripe" # MT
+      detailed_status: "Detaljert status" # MT
+      last_synced: "Sist synkronisert" # MT
+      users: "Brukere" # MT
+      price: "Pris" # MT
+      # E.g. "$5.00/user/month × 12 months (USD)"
+      price_value_html: "%{price}/bruker/måned &times; %{months} måneder (%{currency})" # MT
+      discount: "Rabatt" # MT
+      next_payment: "Neste betaling" # MT
+      contact: "Kontakt" # MT
+      address: "Adresse" # MT
+      subscription_intent: "Ønsket abonnement" # MT
+      tier: "Nivå" # MT
+      start_date: "Startdato" # MT
+    index:
+      title: "Fellesskap" # MT
+      view_signups: "Vis søknader" # MT
+      id: "ID" # MT
+      name: "Navn" # MT
+      created: "Opprettet" # MT
+      last_login: "Siste innlogging" # MT
+      status: "Status" # MT
+      users: "Brukere" # MT
+      meals: "Måltider" # MT
+      reservations: "Book." # MT
+      jobs: "Oppg." # MT
+      transactions: "Trans." # MT
+      subscription: "Abonnement" # MT
+      cluster: "Klynge" # MT
+      never: "Aldri" # MT
+      intent: "Ønsket: %{tier}" # MT
+    signups:
+      captcha_failed: "Captcha-kontrollen mislyktes. Prøv igjen." # MT
+      approved: "Søknaden er godkjent. Fellesskapet blir satt opp." # MT
+      denied: "Søknaden er avslått." # MT
+      index:
+        title: "Søknader fra fellesskap" # MT
+        none_found: "Fant ingen søknader." # MT
+        community_name: "Navn på fellesskapet" # MT
+        contact: "Kontakt" # MT
+        submitted: "Sendt inn" # MT
+        status: "Status" # MT
+      new:
+        title: "Bli med i Gather!" # MT
+        intro: "Gather er en plattform for å administrere bofellesskap og andre fellesskap der folk bor sammen. Fyll ut skjemaet nedenfor for å søke om et nytt fellesskap. Vi går gjennom søknaden din og tar kontakt på e-post. Vi forbeholder oss retten til å avslå søknader fra fellesskap som ikke passer med formålet vårt." # MT
+        contact_person: "Kontaktperson" # MT
+        contact_hint: "Denne personen blir fellesskapets første administrator." # MT
+        community_details: "Om fellesskapet" # MT
+        settings: "Innstillinger" # MT
+        final_steps: "Siste steg" # MT
+        verification: "Bekreftelse" # MT
+        submit: "Send søknad" # MT
+      review:
+        title: "Gå gjennom søknad: %{name}" # MT
+        status: "Status" # MT
+        reviewed: "%{date} av %{name}" # MT
+        contact_name: "Navn på kontaktperson" # MT
+        contact_email: "E-post til kontaktperson" # MT
+        submitted: "Sendt inn" # MT
+        community_name: "Navn på fellesskapet" # MT
+        slug: "URL-slug" # MT
+        country: "Land" # MT
+        time_zone: "Tidssone" # MT
+        sample_data: "Eksempeldata" # MT
+        about: "Om fellesskapet" # MT
+        approval_message: "Melding ved godkjenning" # MT
+        internal_notes: "Interne notater" # MT
+        denial_reason: "Grunn til avslag (sendes ikke til søkeren)" # MT
+        submit: "Send" # MT
+      submitted:
+        title: "Søknaden er sendt" # MT
+        thanks: "Takk for at du søkte om å bli med i Gather!" # MT
+        review_time_html: "Vi går vanligvis gjennom søknader innen 48 timer. Følg med på innboksen din på %{email} for svar." # MT
+    # The approval email the signup review page pre-fills for the approver to personalize.
+    signup_action:
+      approval_template: |- # MT
+        Hei %{name}!
+
+        Gode nyheter! Søknaden om å bli med i Gather for fellesskapet «%{community}» er godkjent.
+
+        #######################################
+        SKRIV EN PERSONLIG HILSEN HER, NEVN
+        NOE BESTEMT OM FELLESSKAPET
+        #######################################
+
+        Fellesskapet deres er nå klart til bruk!
+
+        Du får en egen e-post med instruksjoner for hvordan du logger inn første gang.
+
+        Velkommen om bord!
+
+        %{approver} for Gather-teamet
+    signup_mailer:
+      application_approved:
+        subject: "Fellesskapet deres i Gather er godkjent! (Med en hilsen fra %{approver})" # MT
+      application_denied:
+        subject: "Angående søknaden deres til Gather" # MT
+        dear: "Hei %{name}!" # MT
+        body: "Takk for interessen for Gather. Vi har gått gjennom søknaden for «%{community}» og kan dessverre ikke gå videre med den nå." # MT
+        sign_off: "Vennlig hilsen" # MT
+        team: "Gather-teamet" # MT
+    inactivity_mailer:
+      warning:
+        subject: "Advarsel om inaktivitet for %{community}" # MT
+        subject_final: "[Siste advarsel før sletting] %{community}" # MT
+        intro: "Dette er inaktivitetsadvarsel %{count} av %{max} for Gather-fellesskapet «%{community}»." # MT
+        last_login: "Siste innlogging: %{date}" # MT
+        never: "Aldri" # MT
+        final: "Ingen i fellesskapet deres har logget inn i Gather på over 90 dager. Dette er den siste advarselen før dataene til fellesskapet slettes for godt." # MT
+        final_days: "Fellesskapet deres blir slettet om omtrent 7 dager hvis ingen logger inn." # MT
+        not_final: "Ingen i fellesskapet deres har logget inn i Gather på over 90 dager. Hvis ingen logger inn, sendes en ny advarsel om 7 dager. Etter 3 advarsler slettes dataene til fellesskapet for godt." # MT
+        prevent: "For å unngå sletting holder det å logge inn i fellesskapet deres her:" # MT
+        contact: "Hvis du mener at denne advarselen er en feil, eller du trenger hjelp, kontakt oss på support@gather.coop." # MT

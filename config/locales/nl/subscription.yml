@@ -1,0 +1,115 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+nl:
+  subscription:
+    messaging_topup:
+      updated: "Je maandelijkse opwaardering voor berichten is ingesteld. Je berichtentegoed is nu %{balance}." # MT
+      canceled: "Je maandelijkse opwaardering voor berichten wordt aan het einde van de huidige factuurmaand stopgezet." # MT
+    detailed_statuses:
+      active: "Actief" # MT
+      scheduled: "Gepland" # MT
+      needs_payment_method: "Betaling nodig" # MT
+      awaiting_microdeposits: "Bankverificatie nodig" # MT
+      payment_processing: "In verwerking" # MT
+      incomplete: "Wacht op betaling" # MT
+      incomplete_expired: "Verlopen" # MT
+      past_due: "Achterstallig" # MT
+      unpaid: "Onbetaald" # MT
+      canceled: "Stopgezet" # MT
+      other: "Onbekend" # MT
+      unknown: "Onbekend" # MT
+    # Descriptions of the messaging balance transactions a topup creates.
+    messaging_transactions:
+      credit: "Maandelijkse opwaardering voor berichten" # MT
+      reversal: "Terugboeking van niet-geïnde opwaardering voor berichten" # MT
+    # e.g. "$5.00/month"
+    per_month: "%{amount}/maand" # MT
+    every_months:
+      one: "%{amount} elke %{count} maand" # MT
+      other: "%{amount} elke %{count} maanden" # MT
+    pay_starting: "Betaal %{amount} vanaf %{date}" # MT
+    pay_now_and_then: "Betaal nu %{now} en daarna %{recurring}" # MT
+    # Messaging topup row statuses, shown only when the topup isn't cleanly active.
+    topup_statuses:
+      canceling: "Wordt stopgezet op %{date}" # MT
+      past_due: "Achterstallig" # MT
+      payment_processing: "Betaling in verwerking" # MT
+    # Text built by the messaging-topup Stimulus controller.
+    topup_notices:
+      cancel: "Je maandelijkse opwaardering wordt aan het einde van de huidige factuurmaand stopgezet. Er worden geen kosten meer in rekening gebracht en je huidige tegoed blijft staan." # MT
+      first_charge: "Vandaag wordt %{amount} voor een volledige maand van je opgeslagen betaalmethode afgeschreven, daarna elke maand op deze dag %{amount}." # MT
+      calculating: "Berekenen …" # MT
+      next_month: "Vanaf de volgende factuurmaand betaal je %{amount} per maand." # MT
+      prorated_credit: "Je krijgt nu een tegoed van %{credit} op je volgende factuur, daarna betaal je vanaf %{date} %{amount} per maand." # MT
+      prorated_charge: "Vandaag wordt ongeveer %{charge} (naar rato) van je opgeslagen betaalmethode afgeschreven, daarna vanaf %{date} %{amount} per maand." # MT
+      error_default: "Er is iets misgegaan en je opwaardering is niet gewijzigd." # MT
+      error_with_reference: "%{reason} Referentie: %{reference}. (Geprobeerd: %{time}.) Blijft dit gebeuren, neem dan contact op met de ondersteuning van Gather en vermeld die referentie en dat tijdstip." # MT
+      error: "%{reason} (Geprobeerd: %{time}.) Blijft dit gebeuren, neem dan contact op met de ondersteuning van Gather en vermeld die referentie en dat tijdstip." # MT
+    subscriptions:
+      show:
+        title: "Abonnement" # MT
+        expired: "Je abonnement is verlopen voordat de betaling was afgerond. Probeer het opnieuw." # MT
+        verify_required: "Je bankrekening moet worden geverifieerd." # MT
+        microdeposit_html: "Over een dag of twee komt er een %{link} op je rekening binnen. Gebruik de knop hieronder om de verificatie af te ronden." # MT
+        microdeposit: "kleine proefstorting" # MT
+        check_email: "Kijk in je e-mail voor instructies en kom hier terug zodra de verificatie klaar is." # MT
+        verify_button: "Je bankrekening verifiëren" # MT
+        ready_for_payment: "Je abonnement is klaar voor betaling." # MT
+        not_setup: "Je abonnement is nog niet ingesteld." # MT
+        contact_staff: "Neem contact op met Gather om een abonnement te nemen." # MT
+        needs_payment_method: "Je abonnement is actief, maar we hebben je betaalgegevens nog nodig." # MT
+        processing: "De betaling van je abonnement wordt verwerkt. Afhankelijk van de betaalmethode kan dat een paar dagen duren. Intussen kun je Gather gewoon gebruiken!" # MT
+        active: "Je abonnement is actief. Bedankt dat je bij Gather hoort!" # MT
+        problem: "Er is een probleem met je abonnement." # MT
+      billing_portal_link:
+        visit_html: "Ga naar ons %{link} voor meer informatie." # MT
+        billing_portal: "factuurportaal" # MT
+      base_rows:
+        num_users: "Aantal gebruikers" # MT
+        tier: "Niveau" # MT
+        tier_value: "%{tier} (%{price}/maand/gebruiker)" # MT
+        discount: "Korting" # MT
+        months_per_cycle: "Maanden per factuurperiode" # MT
+        total_payment: "Totaalbedrag" # MT
+        not_charged_until: "* Je vult nu je betaalgegevens in, maar er wordt pas op %{date} iets afgeschreven." # MT
+        prorated: "* Je eerste betaling wordt naar rato berekend voor de dagen sinds %{date}." # MT
+      email_row:
+        billing_email: "E-mailadres voor facturatie" # MT
+      messaging:
+        title: "Berichten" # MT
+        current_balance: "Huidig tegoed" # MT
+        monthly_topup: "Maandelijkse opwaardering" # MT
+        none: "Geen" # MT
+        edit: "Bewerken" # MT
+        add: "Toevoegen" # MT
+        next_payment_date: "Volgende betaaldatum" # MT
+        status: "Status" # MT
+      messaging_topup_modal:
+        title: "Maandelijkse opwaardering voor berichten" # MT
+        intro: "Kies hoeveel berichtentegoed er elke maand bij je tegoed komt. Het bedrag wordt automatisch van je opgeslagen betaalmethode afgeschreven." # MT
+        none: "Geen" # MT
+        cancel: "Annuleren" # MT
+        save: "Opslaan" # MT
+      post_payment:
+        title: "Abonnement op de app" # MT
+        next_payment_date: "Volgende betaaldatum" # MT
+      pre_payment:
+        title: "Abonnement op de app" # MT
+        start_date: "Begindatum" # MT
+        update_info_html: "Moet iets van deze informatie worden bijgewerkt, neem dan contact op met %{email}." # MT
+        ready_enter_payment: "Ziet er goed uit, ik ben klaar om mijn betaalgegevens in te vullen" # MT
+        ready_to_pay: "Ziet er goed uit, ik ben klaar om te betalen" # MT
+      payment:
+        title: "Betaling" # MT
+        canadian_debit: "Canadese vooraf gemachtigde incasso" # MT
+        popup_note: "Nadat je hieronder op “Betalen” klikt, vraagt een pop-upvenster om je bankgegevens." # MT

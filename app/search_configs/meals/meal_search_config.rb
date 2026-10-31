@@ -29,7 +29,6 @@ module Meals
           indexes :kids, analyzer: "english_stemmed"
           indexes :dessert, analyzer: "english_stemmed"
           indexes :notes, analyzer: "english_stemmed"
-          indexes :allergens, analyzer: "english_stemmed"
           indexes :served_at, type: :date
         end
       end

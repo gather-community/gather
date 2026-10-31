@@ -1,0 +1,412 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+fi:
+  simple_form:
+    "yes": "Kyllä" # MT
+    "no": "Ei" # MT
+    required:
+      text: "pakollinen" # MT
+      mark: "*"
+      # You can uncomment the line below if you need to overwrite the whole required html.
+      # When using html, text and mark won't be used.
+      # html: '<abbr title="required">*</abbr>'
+    error_notification:
+      default_message: "Tarkista alla olevat ongelmat:" # MT
+      # FormHelper#error_summary, under the errors that belong to no field.
+      field_errors:
+        one: "Alla olevassa lomakkeessa on 1 virhe." # MT
+        other: "Alla olevassa lomakkeessa on %{count} virhettä." # MT
+    labels:
+      # These labels are here instead of activerecord b/c these are for things that
+      # aren't ActiveRecord models.
+      communities_signup:
+        contact_first_name: "Etunimi" # MT
+        contact_last_name: "Sukunimi" # MT
+        contact_email: "Sähköpostiosoite" # MT
+        community_name: "Yhteisön nimi" # MT
+        slug: "Yhteisön URL-osoite" # MT
+        introduction: "Tietoja yhteisöstäsi" # MT
+        country_code: "Maa" # MT
+        time_zone: "Aikavyöhyke" # MT
+        want_sample_data: "Esimerkkiaineisto" # MT
+      communities_signup_action:
+        decision: "Toiminto" # MT
+        message: "Viesti" # MT
+      calendars_export:
+        dont_personalize: "Älä mukauta tapahtumia" # MT
+        own_only: "Vain omat tapahtumani" # MT
+      payment:
+        accountholder_name: "Tilinhaltijan nimi" # MT
+        payment_method: "Maksutapa" # MT
+    placeholders:
+      meals_meal:
+        title: "esim. Karjalanpaisti ja perunamuusi" # MT
+        entrees: "esim. Karjalanpaisti, perunamuusi ja puolukkahillo. Myös kasvisversio. Mietoa!" # MT
+        side: "esim. Uunijuurekset voin ja salottisipulin kera" # MT
+        kids: "esim. Makaronilaatikko ja keitetyt kananmunat" # MT
+        dessert: "esim. Tummaa suklaata paloina" # MT
+        notes: "esim. Osa raaka-aineista luomua ja lähiruokaa, kun mahdollista" # MT
+      calendars_protocol:
+        kinds: "Valitse tyypit tai jätä tyhjäksi, niin koskee kaikkia …" # MT
+        calendar_ids: "Valitse kalenterit tai jätä tyhjäksi, niin koskee kaikkia …" # MT
+      calendars_event:
+        name: "esim. Peli-ilta" # MT
+      domain:
+        name: "esim. oma-verkkotunnus.fi" # MT
+      billing_transaction:
+        description: "esim. Shekki nro 12345" # MT
+      gdrive_config:
+        org_user_id: "esim. nimesi@oma-verkkotunnus.fi" # MT
+      user:
+        birthday_str: "esim. 29.2.1981 (vuosi vapaaehtoinen)" # MT
+      people_memorial_message:
+        body: "Kirjoita viestisi" # MT
+      household:
+        name: "esim. Virtanen tai Singh-Korhonen" # MT
+        vehicles:
+          make: "esim. Toyota" # MT
+          model: "esim. Prius" # MT
+          color: "esim. sininen" # MT
+        emergency_contacts:
+          relationship: "esim. Sannan äiti" # MT
+          location: "esim. Tampere" # MT
+      work_job:
+        reminders:
+          note: "esim. Teroita saha (vapaaehtoinen)" # MT
+      work_period:
+        name: "esim. Kesä 1969" # MT
+      wiki_page:
+        comment: "Kommentti tästä muutoksesta." # MT
+    hints:
+      markdown_suffix_html: "Voit käyttää <a href='/about/markdown' target='_new'>monipuolista muotoilua</a>." # MT
+      communities_signup:
+        community_name: "Enintään 20 merkkiä." # MT
+        slug: "Pieniä kirjaimia, numeroita ja yhdysmerkkejä; alussa oltava kirjain. Enintään 20 merkkiä." # MT
+        introduction: "Kerro vähän yhteisöstäsi ja siitä, miksi Gather sopisi teille. Liitä mukaan yksi tai useampi linkki julkisille verkkosivuille (esim. yhteisösi verkkosivusto tai some-sivut), joista yhteisösi voi tunnistaa." # MT
+      communities_signup_action:
+        message_approve: "Koko hyväksymisviesti näkyy yllä. Lisää viestiin henkilökohtainen tervehdys korvaamalla paikkamerkkiteksti." # MT
+        message_deny: "Kirjaa, miksi hakemus hylätään. Tämä on vain sisäiseen käyttöön, eikä sitä lähetetä hakijalle." # MT
+      meals_meal:
+        formula_id: "<a href=\"/meals/formulas\">Hinnoittelukaavat</a> määräävät, miten aterian hinta lasketaan." # MT
+        capacity: "Kuinka monelle ihmiselle ateria riittää?" # MT
+        auto_close_time: "Anna tuleva ajankohta, jolloin ateria suljetaan automaattisesti. Jos kenttä on tyhjä, ateria täytyy sulkea käsin." # MT
+        resource_ids: "Valitse aterialle varattavat paikat. Varaukset luodaan automaattisesti. Jos paikkaa ei voi varata, kerro se otsikossa, esim. ”Nyyttärit Jaanan luona”." # MT
+      billing_account:
+        credit_limit: "Jätä tyhjäksi, jos luotto on rajaton. Anna nolla, jos luottoa ei ole." # MT
+      billing_transaction:
+        incurred_on: "Tämä päivämäärä näkyy tiliotteilla tapahtuman päivämääränä. Myös tämän päivän päivämäärä tallennetaan tapahtuman yhteyteen." # MT
+        description: "Kuvaus näytetään käyttäjälle tiliotteella. Tarkka kuvaus voi auttaa selvittämään epäselvyyksiä myöhemmin." # MT
+        code_html: "<i class='fa fa-arrow-up'></i> Kasvattaa käyttäjän velkaa &nbsp;&nbsp;&nbsp; <i class='fa fa-arrow-down'></i> Pienentää käyttäjän velkaa" # MT
+        value: "Summan täytyy olla positiivinen. Tapahtuman tyyppi (yllä) määrää, kasvattaako vai pienentääkö summa tiliä." # MT
+      billing_template:
+        member_type_ids: "Valitse jäsentyypit, joita tämä pohja koskee." # MT
+      calendars_export:
+        dont_personalize: "Oletuksena kalenterivienti on mukautettu sinulle ja kotitaloudellesi, joten vientilinkkejä ei kannata jakaa. Jos tarvitset mukauttamattoman linkin julkiseen paikkaan, valitse tämä ruutu." # MT
+        own_only: "Valitse tämä ruutu, jos haluat viedä vain itsellesi luomasi tapahtumat. Ryhmätapahtumat ja ateriatapahtumat jätetään pois." # MT
+      domain:
+        communities: "Mille yhteisöille tämä verkkotunnus on käytettävissä/näkyvissä." # MT
+      gdrive_config:
+        org_user_id: "Tämä on yhteisösi Google Workspace -käyttäjän käyttäjätunnus. Sillä pitäisi olla ylläpitäjän oikeudet yhteisösi jaettuun Driveen." # MT
+        client_id: "Päättyy .apps.googleusercontent.com" # MT
+        client_secret_to_write: "Jätä tyhjäksi, jos et halua muuttaa salaisuutta." # MT
+      gdrive_item:
+        external_id: "Saat tämän tunnuksen kohteen Google Drive -osoitteesta. Se on jono kirjaimia, numeroita sekä merkkejä ”_” ja ”-”. Esimerkkejä: 0AExZ3_Cu5q7uUk9PVA ja 1KRjAC5Bt4WtLilnkUeTvF_okbLgONGQuDkrc." # MT
+      gdrive_item_group:
+        access_level: "Kansioiden ja tiedostojen käyttöoikeustaso ei voi olla alempi kuin tälle ryhmälle niiden jaetussa Drivessa asetettu taso." # MT
+      gdrive_migration_operation:
+        contact_email: "Yhteyshenkilön sähköpostiosoite." # MT
+        contact_name: "Yhteisön jäsen, joka vastaa siirrosta ja osaa vastata sitä koskeviin kysymyksiin." # MT
+        src_folder_id: "Siirron lähdekansion tunnus. Saat sen kohteen Google Drive -osoitteesta. Se on jono kirjaimia, numeroita sekä merkkejä ”_” ja ”-”. Esimerkki: 1KRjAC5Bt4WtLilnkUeTvF_okbLgONGQuDkrc." # MT
+        dest_folder_id: "Siirron kohteena olevan jaetun Driven TAI kansion tunnus. Saat sen kohteen Google Drive -osoitteesta. Se on jono kirjaimia, numeroita sekä merkkejä ”_” ja ”-”. Esimerkkejä: 0AExZ3_Cu5q7uUk9PVA ja 1KRjAC5Bt4WtLilnkUeTvF_okbLgONGQuDkrc." # MT
+      groups_group:
+        availability: "Voivatko ihmiset liittyä ryhmään itse. ”Kaikki”-ryhmiin kuuluvat automaattisesti kaikki aikuiset käyttäjät." # MT
+        can_request_jobs: "Näytetäänkö tämä ryhmä tehtävälomakkeella mahdollisena pyytäjänä." # MT
+        can_administer_email_lists: "Voivatko tämän ryhmän käyttäjät muuttaa kaikkien yhteisön sähköpostilistojen asetuksia Mailmanin hallintapaneelissa." # MT
+        can_moderate_email_lists: "Toimivatko tämän ryhmän käyttäjät kaikkien yhteisön sähköpostilistojen moderaattoreina." # MT
+        kind: "Millainen ryhmä tämä on. Käytetään vain näyttämiseen, ei muuta merkitystä." # MT
+        communities: "Mille yhteisöille tämä ryhmä on käytettävissä/näkyvissä." # MT
+        mailman_list:
+          name: "Osoitteen ensimmäinen osa. Voi sisältää vain pieniä kirjaimia, numeroita tai merkkejä . - _." # MT
+          domain_id: "Listan osoitteen verkkotunnus." # MT
+          all_cmty_members_can_send:
+            single_community: "Voivatko kaikki yhteisön jäsenet lähettää tälle listalle. Jos valinta poistetaan, vain ryhmän jäsenet voivat lähettää. Ei vaikuta siihen, kuka saa listan viestit." # MT
+            multi_community: "Voivatko kaikki ryhmän yhteisöjen jäsenet lähettää tälle listalle. Jos valinta poistetaan, vain ryhmän jäsenet voivat lähettää. Ei vaikuta siihen, kuka saa listan viestit." # MT
+          managers_can_administer: "Voivatko ryhmän vastaavat muuttaa tämän sähköpostilistan asetuksia Mailmanin hallintapaneelissa." # MT
+          managers_can_moderate: "Toimivatko ryhmän vastaavat tämän sähköpostilistan moderaattoreina." # MT
+          _destroy: "Valitse tämä ruutu, jos haluat lakkauttaa sähköpostilistan." # MT
+      calendars_event:
+        repeat_ends_on: "Viimeinen kerta on tänä päivänä tai sitä ennen." # MT
+        all_day: "Valitse tämä ruutu, jos tapahtumallasi ei ole tarkkoja kellonaikoja. Se näkyy kalenterin yläosassa. Ei pidä käyttää tilojen tai välineiden varaamiseen." # MT
+        group_id: "Ryhmän tapahtumia voivat muokata muutkin ryhmän jäsenet, eikä niitä viedä, kun valitset viennissä ”Vain omat tapahtumani”." # MT
+      calendars_protocol:
+        kinds: "Mitä tapahtumatyyppejä nämä säännöt koskevat? Jätä tyhjäksi, niin koskee kaikkia." # MT
+        calendar_ids: "Mitä kalentereita nämä säännöt koskevat? Jätä tyhjäksi, niin koskee kaikkia." # MT
+        fixed_end_time: "Kaikkien sääntöjen piiriin kuuluvien tapahtumien täytyy päättyä tähän aikaan. Jos aika on ennen kiinteää alkamisaikaa, sen katsotaan olevan seuraavana päivänä." # MT
+        fixed_start_time: "Kaikkien sääntöjen piiriin kuuluvien tapahtumien täytyy alkaa tähän aikaan." # MT
+        max_days_per_year: "Käyttäjät eivät voi luoda sääntöjen piiriin kuuluvia tapahtumia useammalle päivälle vuodessa kuin tämä." # MT
+        max_lead_days: "Käyttäjät eivät voi luoda sääntöjen piiriin kuuluvia tapahtumia tätä useampaa päivää etukäteen" # MT
+        max_length_minutes: "Käyttäjät eivät voi luoda tapahtumia, jotka kestävät tätä useamman minuutin." # MT
+        max_minutes_per_year: "Käyttäjät eivät voi luoda sääntöjen piiriin kuuluvia tapahtumia vuodessa enempää kuin tämän verran minuutteja." # MT
+        other_communities: "Rajoittaa yhteisöryhmäsi muiden yhteisöjen jäsenten mahdollisuutta nähdä ja luoda sääntöjen piiriin kuuluvia tapahtumia. Jos kenttä on tyhjä, muiden yhteisöjen jäseniä ei rajoiteta." # MT
+        pre_notice: "Tähän kirjoitettu ilmoitus näytetään sääntöjen piiriin kuuluvien tapahtumien lomakkeen yläosassa." # MT
+        requires_kind: "Jos valittu, sääntöjen piiriin kuuluville tapahtumille täytyy valita tyyppi. Käytä yhdessä muiden sääntöjen kanssa, jos haluat erityissääntöjä joillekin tapahtumatyypeille." # MT
+        name: "Lyhyt, kuvaava nimi näille säännöille." # MT
+      calendars_calendar:
+        default_calendar_view: "Tapahtumakalenterin näkymä ensimmäisellä latauskerralla" # MT
+        abbrv: "Lyhenne lyhyisiin teksteihin, esim. sähköpostien aiheisiin (enintään 6 kirjainta)" # MT
+        meal_hostable: "Jos kyllä, tämä kalenteri näkyy mahdollisena paikkana aterioita luotaessa." # MT
+        guidelines: "Teksti, joka käyttäjän täytyy hyväksyä tapahtumaa luodessaan." # MT
+        color: "Tämän kalenterin tapahtumien väri pääkalenterinäkymässä. Käytä HEX-värikoodia. Värit ilman x-merkkiä ovat vielä käyttämättä (ellei sinulla ole paljon kalentereita)." # MT
+      user:
+        joined_on: "Likimääräinen päivämäärä, jolloin liityit yhteisöön" # MT
+        job_choosing_proxy_id: "Joku kotitaloutesi ulkopuolelta, joka voi ilmoittautua tehtäviin puolestasi. Kotitaloutesi jäsenet voivat tehdä tämän jo oletuksena." # MT
+        email: "Sähköpostiosoite, johon haluat sinuun otettavan yhteyttä. Käytetään myös salasanalla kirjautumiseen." # MT
+        google_email: "Sen Google-tilin sähköpostiosoite, jolla kirjaudut. Ei näy jäsenluettelossa. Pyydä <a href='/roles'>ylläpitäjää</a> muuttamaan tämä tarvittaessa." # MT
+        paypal_email: "PayPal-tilisi sähköpostiosoite. Käytetään kokkien kulukorvauksiin. Jätä tyhjäksi, jos haluat käyttää yllä näkyvää pääsähköpostiosoitettasi." # MT
+        full_access: "Lapset, joilla ei ole täysiä käyttöoikeuksia, eivät voi kirjautua Gatheriin, mutta he näkyvät jäsenluettelossa. Lapset, joilla on täydet käyttöoikeudet, lasketaan laskutuksessa aikuisiksi." # MT
+        certify_13_or_older: "Lasten täytyy olla vähintään 13-vuotiaita voidakseen kirjautua Gatheriin." # MT
+      meals_formula:
+        is_default: "Jos valittu, tämä hinnoittelukaava on oletuksena valittuna uusia aterioita luotaessa." # MT
+        pantry_fee_formatted: "Ruokailijoilta, joiden aterian hinta on 0,00, ei peritä ruokavarastomaksua, vaikka maksu olisi kiinteä." # MT
+        pantry_reimbursement: "Jos valittu, kokit voivat ostaa ruokavarastotuotteita ja hakea niistä kulukorvausta." # MT
+        takeout: "Jos valittu, ruokailijat voivat pyytää ateriansa mukaan. Yhteisö päättää ja tiedottaa itse, miten mukaan ottaminen käytännössä toimii." # MT
+        role_ids: "Mitä rooleja tämän hinnoittelukaavan aterioihin tarvitaan?" # MT
+      meals_role:
+        double_signups_allowed: "Kaksoisvuorot eivät välttämättä sovi kaikkiin rooleihin." # MT
+        time_type: "Joissakin rooleissa (kuten pääkokki) ihmiset haluavat ehkä valita työaikansa itse. Valitse silloin ”vain päivämäärä”. Jos halutaan tietty aikataulu, valitse ”päivämäärä ja aika”." # MT
+        shift_start: "Kuinka monta minuuttia ennen aterian alkua tai sen jälkeen ihmisten pitää saapua. Negatiiviset luvut tarkoittavat aikaa ennen aterian alkua." # MT
+        shift_end: "Kuinka monta minuuttia ennen aterian alkua tai sen jälkeen tämä rooli päättyy. Negatiiviset luvut tarkoittavat aikaa ennen aterian alkua." # MT
+        work_job_title: "Jos annettu, tehtävä näkyy tällä nimellä Työ-osiossa. Anna eri nimi, jos yllä oleva roolin nimi voi olla Työ-osiossa epäselvä (esim. tähän ”Aterian siivooja” ja yllä ”Siivooja”)." # MT
+        work_hours: "Kuinka monen tunnin arvoinen tehtävä on, kun se tuodaan Työ-osioon? Voit jättää tyhjäksi, jos Työ-osio ei ole käytössä." # MT
+        description: "Tämä kuvaus kopioidaan Työ-osioon tehtävien synkronoinnissa." # MT
+        count_per_meal: "Kuinka monta ihmistä tähän rooliin yleensä tarvitaan yhdelle aterialle?" # MT
+      meals_type:
+        name: "Lyhyt, kuvaava nimi tyypille." # MT
+        category: "Luokkia käytetään annosmäärien laskemiseen ja raportointiin." # MT
+      people_memorial:
+        user_id: "Täytyy olla tämän yhteisön käyttäjä, joka ei ole aktiivinen. Hänen nykyistä profiilikuvaansa käytetään muistosivulla." # MT
+      wiki_page:
+        content: "Katso <a href='/wiki/sample' target='_blank'>esimerkkisivulta</a> vinkkejä wikisisällön luomiseen." # MT
+        data_source: "Edistynyt. JSON-tietolähteen URL-osoite, jota käytetään sivun sisällössä <a href='http://mustache.github.io/mustache.5.html' target='_new'>Mustache-mallisyntaksin</a> kanssa." # MT
+      work_job:
+        hours: "Arvioitu tuntimäärä, jonka tehtävä vie. Desimaalit sallittu." # MT
+        slot_type: "Käytä vaihtoehtoa ”koko yhteisö” esimerkiksi talkoopäiville. Jos olet epävarma, valitse ”kiinteä määrä”." # MT
+        hours_per_shift: "Kuinka monta tuntia kustakin vuorosta hyvitetään." # MT
+        double_signups_allowed: "Kaksoisilmoittautumiset eivät välttämättä sovi kaikkiin tehtäviin." # MT
+      work_period:
+        quota_type: "Kun kiintiö on asetettu, ilmoittautumissivun yläosassa näkyy tilaviesti, joka kertoo käyttäjille heidän reilun osuutensa työstä." # MT
+        auto_open_time: "Jos annat ajan, jakso siirtyy automaattisesti vaiheeseen ”avoin” sen jälkeen. Pakollinen, jos valintatapa on ”vuorotellen”." # MT
+        pick_type: "Valitse ”vuorotellen”, jos suunnittelet tehtävien valintatilaisuutta ja olisi liian hektistä, jos kaikki valitsisivat yhtä aikaa. Silloin pienemmät ryhmät valitsevat tehtäviä vuorotellen ”kierroksittain”." # MT
+        max_rounds_per_worker: "Kuinka monta kierrosta tekijän pitää käydä läpi täyttääkseen kiintiönsä? Useampi kierros tarkoittaa pidempää valintatilaisuutta." # MT
+        workers_per_round: "Kuinka monta tekijää valitsee tehtäviä samalla kierroksella? Useampi tekijä tarkoittaa hektisempää valintaa. Harvempi tekijä tarkoittaa useampia kierroksia, jolloin valintatilaisuus kestää pidempään." # MT
+        round_duration: "Kuinka pitkä kunkin kierroksen pitää olla? Ajan pitäisi riittää juuri ja juuri keskivertoihmiselle valita rauhassa." # MT
+        job_copy_source_id: "Valitse halutessasi jakso, josta tehtävät kopioidaan jaksoa luotaessa. Ateriatehtäviä ei kopioida, vaan ne pitää synkronoida (katso alta)." # MT
+    options:
+      calendars_event:
+        repeat_frequency:
+          none: "Ei koskaan" # MT
+          daily: "Päivittäin" # MT
+          weekly: "Viikoittain" # MT
+          monthly: "Kuukausittain" # MT
+          yearly: "Vuosittain" # MT
+        repeat_ends:
+          never: "Ei koskaan" # MT
+          on_date: "Tiettynä päivänä" # MT
+          after_count: "Tietyn kertamäärän jälkeen" # MT
+      billing_account:
+        active:
+          active_only: "Näytä vain aktiiviset" # MT
+          all: "Näytä kaikki" # MT
+      communities_signup:
+        status:
+          all: "Kaikki" # MT
+          pending: "Odottaa" # MT
+          approved: "Hyväksytty" # MT
+          denied: "Hylätty" # MT
+          created: "Luotu" # MT
+          failed: "Epäonnistui" # MT
+        want_sample_data:
+          "true": "Kyllä, mukaan esimerkkiaineisto" # MT
+          "false": "Ei, ilman esimerkkiaineistoa" # MT
+      communities_signup_action:
+        decision:
+          approve: "Hyväksy" # MT
+          deny: "Hylkää" # MT
+      gdrive_item:
+        kind:
+          drive: "Jaettu Drive" # MT
+          folder: "Kansio" # MT
+          file: "Tiedosto" # MT
+      gdrive_item_group:
+        access_level:
+          reader: "Katselija: Tiedostojen katselu" # MT
+          commenter: "Kommentoija: Tiedostojen katselu ja kommentointi" # MT
+          writer: "Osallistuja: Tiedostojen katselu, lisääminen ja muokkaus" # MT
+          fileOrganizer: "Sisällönhallitsija: Tiedostojen katselu, lisääminen, muokkaus, siirtäminen, poistaminen ja jakaminen" # MT
+      groups_group:
+        availability:
+          open: "Avoin" # MT
+          closed: "Suljettu" # MT
+          hidden: "Piilotettu" # MT
+          everybody: "Kaikki" # MT
+        kind:
+          committee: "Toimikunta" # MT
+          subcommittee: "Alatoimikunta" # MT
+          team: "Tiimi" # MT
+          task_force: "Työryhmä" # MT
+          club: "Kerho" # MT
+          crew: "Porukka" # MT
+          squad: "Ryhmä" # MT
+          circle: "Piiri" # MT
+          group: "Ryhmä" # MT
+          other: "Muu" # MT
+        memberships:
+          kind:
+            joiner: "Jäsen" # MT
+            manager: "Vastaava" # MT
+            opt_out: "Kieltäytynyt" # MT
+        sort:
+          name: "Nimen mukaan" # MT
+          type: "Tyypin mukaan" # MT
+      meals_meal:
+        time:
+          past: "Menneet" # MT
+          finalizable: "Viimeisteltävissä" # MT
+          all: "Kaikki" # MT
+          upcoming: "Tulevat" # MT
+        cost:
+          payment_method:
+            check: "Shekki" # MT
+            credit: "Hyvitys saldoon" # MT
+            paypal: "PayPal" # MT
+      meals_formula:
+        meal_calc_type:
+          fixed: "Kiinteä" # MT
+          share: "Suhteellinen" # MT
+        pantry_calc_type:
+          fixed: "Kiinteä" # MT
+          percent: "Prosentti" # MT
+      meals_message:
+        recipient_type:
+          diners: "Ruokailijat" # MT
+          team: "Tiimi" # MT
+          all: "Ruokailijat + tiimi" # MT
+      user:
+        preferred_contact:
+          email: "Sähköposti" # MT
+          text: "Tekstiviesti" # MT
+          phone: "Puhelin" # MT
+        life_stage:
+          any: "Aikuiset + lapset" # MT
+          adult: "Aikuiset" # MT
+          child: "Lapset" # MT
+        sort:
+          name: "Nimen mukaan" # MT
+          unit: "Asunnon mukaan" # MT
+        view:
+          album: "Albumi" # MT
+          table: "Taulukko" # MT
+          albumall: "Albumi ja ei-aktiiviset" # MT
+          tableall: "Taulukko ja ei-aktiiviset" # MT
+      calendars_protocol:
+        other_communities:
+          sponsor: "Voi luoda vain, jos vastuuhenkilö on nimetty" # MT
+          read_only: "Voi vain katsella" # MT
+          forbidden: "Ei voi katsella eikä luoda" # MT
+      calendars_calendar:
+        default_calendar_view:
+          week: "Viikko" # MT
+          month: "Kuukausi" # MT
+      gdrive_migration:
+        owner:
+          any: "Kaikki omistajat" # MT
+        status:
+          any: "Kaikki tilat" # MT
+          pending: "Odottaa" # MT
+          errored: "Virhe" # MT
+          declined: "Hylätty" # MT
+          transferred: "Siirretty" # MT
+          copied: "Kopioitu" # MT
+          ignored: "Ohitettu" # MT
+          disappeared: "Kadonnut" # MT
+      wiki_page:
+        editable_by:
+          everyone: "Kaikki" # MT
+          wikiist: "Vain wikivastaavat ja ylläpitäjät" # MT
+      work_job:
+        slot_type:
+          fixed: "Tämä on tavallinen tehtävä, jossa on kiinteä määrä paikkoja" # MT
+          full_single: "Tämä tehtävä on koko yhteisölle (yksi vuoro)" # MT
+          full_multiple: "Tämä tehtävä on koko yhteisölle (useita vuoroja)" # MT
+        time_type:
+          date_time: "Tällä tehtävällä on määrätty päivämäärä ja aika" # MT
+          date_only: "Tämä tehtävä on tiettynä päivänä tai tietyllä aikavälillä" # MT
+          full_period: "Tämä tehtävä kestää koko työjakson" # MT
+        reminders:
+          abs_rel:
+            relative: "Suhteellinen aika" # MT
+            absolute: "Tarkka aika" # MT
+          rel_unit_sign:
+            days_before: "Päivää ennen (klo 6)" # MT
+            days_after: "Päivää jälkeen (klo 6)" # MT
+            hours_before: "Tuntia ennen" # MT
+            hours_after: "Tuntia jälkeen" # MT
+        requester:
+          any: "Kaikki pyytäjät" # MT
+          none: "Ei pyytäjää" # MT
+        preassigned:
+          any: "Kaikki tehtävät" # MT
+          y: "Ennalta määrätty" # MT
+          n: "Ei ennalta määrätty" # MT
+      meals_role:
+        time_type:
+          date_time: "Tällä roolilla on määrätty päivämäärä ja aika" # MT
+          date_only: "Tämä rooli on vain tiettynä päivänä" # MT
+        reminders:
+          rel_unit_sign:
+            days_before: "Päivää ennen (klo 6)" # MT
+            days_after: "Päivää jälkeen (klo 6)" # MT
+            hours_before: "Tuntia ennen" # MT
+            hours_after: "Tuntia jälkeen" # MT
+      work_period:
+        phase:
+          archived: "Arkistoitu: Jakso on mennyt, ei muokattavissa" # MT
+          draft: "Luonnos: Tehtäviä vielä valmistellaan, ilmoittautumiset piilossa" # MT
+          open: "Avoin: Tehtäviä voi valita!" # MT
+          published: "Julkaistu: Lopullinen työvuorolista" # MT
+          ready: "Valmis: Tehtävät lyöty lukkoon, yhteenveto näkyvissä, mutta ilmoittautua ei voi" # MT
+        quota_type:
+          none: "Ei kiintiötä" # MT
+          by_person: "Henkilöittäin" # MT
+          by_household: "Kotitalouksittain" # MT
+        pick_type:
+          free_for_all: "Kaikki valitsevat yhtä aikaa" # MT
+          staggered: "Tekijäryhmät valitsevat vuorotellen" # MT
+        meal_job_sync:
+          "false": "Älä synkronoi ateriatehtäviä" # MT
+          "true": "Synkronoi valittujen hinnoittelukaavojen ja roolien ateriatehtävät" # MT
+      work_shift:
+        lens:
+          all: "Kaikki tehtävät" # MT
+          open: "Avoimet tehtävät" # MT
+          mine: "Omat tehtäväni" # MT
+          myhh: "Oma kotitalous" # MT
+          notpre: "Ei ennalta määrätyt" # MT
+        date_range:
+          all: "Menneet ja tulevat" # MT
+          curftr: "Nykyiset ja tulevat" # MT
+          past: "Vain menneet" # MT
+
+    prompts:
+      user:
+        preferred_contact: "Miten sinuun voi ottaa yhteyttä muissa kuin hätätilanteissa?" # MT

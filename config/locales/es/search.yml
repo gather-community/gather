@@ -1,0 +1,113 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+es:
+  search:
+    untitled: "(sin título)" # MT
+    kinds:
+      wiki_page: "Wiki" # MT
+      event: "Evento" # MT
+      calendar: "Calendario" # MT
+      group: "Grupo" # MT
+      user: "Persona" # MT
+      household: "Hogar" # MT
+      meal: "Comida" # MT
+      memorial: "Homenaje" # MT
+      emergency_contact: "Contacto de emergencia" # MT
+      pet: "Mascota" # MT
+      vehicle: "Vehículo" # MT
+      transaction: "Movimiento" # MT
+    details:
+      separator: " · " # MT
+      household: "Hogar %{name}" # MT
+      head_cook: "Jefe de cocina: %{name}" # MT
+      updated_by: "Actualizado el %{date} por %{name}" # MT
+      updated: "Actualizado el %{date}" # MT
+      members:
+        one: "%{count} miembro" # MT
+        other: "%{count} miembros" # MT
+      child: "Menor" # MT
+      unit: "Vivienda %{unit}" # MT
+      years: "%{birth}–%{death}" # MT
+      date_range: "%{first} – %{last}" # MT
+      pet_color_species: "%{species} %{color}" # MT
+      modified: "Modificado el %{date}" # MT
+      drive_types:
+        doc: "Google Docs" # MT
+        sheet: "Google Sheets" # MT
+        slide: "Google Slides" # MT
+        folder: "Carpeta" # MT
+        pdf: "PDF" # MT
+    count_capped: "%{count}+" # MT
+    load_error: "Error al cargar los resultados. Inténtalo de nuevo." # MT
+    index:
+      title: "Búsqueda" # MT
+      form_label: "Búsqueda" # MT
+      input_label: "Buscar en Gather" # MT
+      placeholder: "Buscar en Gather y Google Drive…" # MT
+      placeholder_no_drive: "Buscar en Gather…" # MT
+      submit: "Buscar" # MT
+      search_tips: "Consejos de búsqueda" # MT
+      gather: "Gather" # MT
+      results: "Resultados" # MT
+      google_drive: "Google Drive" # MT
+      loading: "Cargando…" # MT
+      load_more: "Más resultados" # MT
+      empty_query: "Escribe un término arriba para buscar en Gather y Google Drive." # MT
+      empty_query_no_drive: "Escribe un término arriba para buscar en Gather." # MT
+      no_types: "Selecciona al menos un tipo para buscar." # MT
+    results_gather:
+      no_results: "No se encontraron resultados." # MT
+    results_drive:
+      no_results: "No se encontraron archivos de Drive." # MT
+    results_drive_auth_error:
+      reconnect: "Tu comunidad tiene que volver a conectarse a Google Drive. Avisa a un administrador de Gather." # MT
+    type_filters:
+      types:
+        wiki_page: "Páginas del wiki" # MT
+        event: "Eventos" # MT
+        calendar: "Calendarios" # MT
+        group: "Grupos" # MT
+        user: "Personas" # MT
+        household: "Hogares" # MT
+        meal: "Comidas" # MT
+        memorial: "Homenajes" # MT
+        emergency_contact: "Contactos de emergencia" # MT
+        pet: "Mascotas" # MT
+        vehicle: "Vehículos" # MT
+        transaction: "Movimientos" # MT
+        drive_doc: "Google Docs" # MT
+        drive_sheet: "Google Sheets" # MT
+        drive_slide: "Google Slides" # MT
+        drive_pdf: "PDF" # MT
+        drive_folder: "Carpetas" # MT
+        drive_other: "Otros archivos" # MT
+      filter: "Filtrar" # MT
+      gather: "Gather" # MT
+      google_drive: "Google Drive" # MT
+      select_all: "Seleccionar todo" # MT
+      deselect_all: "Deseleccionar todo" # MT
+    search_tips_modal:
+      title: "Consejos de búsqueda" # MT
+      intro: "Escribe palabras para buscar en Gather (páginas del wiki, eventos, personas, comidas y más) y en Google Drive." # MT
+      intro_no_drive: "Escribe palabras para buscar en Gather (páginas del wiki, eventos, personas, comidas y más)." # MT
+      basic_search: "Búsqueda básica" # MT
+      both_words: "Elementos que contienen ambas palabras" # MT
+      word_start: "Palabras que empiezan por «%{start}»" # MT
+      word_start_drive: "Palabras que empiezan por «%{start}». En Google Drive, solo se busca al principio de los nombres de archivo, no en su contenido." # MT
+      exact_phrase: "La frase exacta «%{phrase}»" # MT
+      special_syntax: "Sintaxis especial" # MT
+      title_only: "Buscar solo en el título o el nombre" # MT
+      drive_type_html: "Filtrar los resultados de Drive por tipo de archivo. Opciones: %{options}" # MT
+      combining: "Combinaciones" # MT
+      title_and_word: "Elementos llamados «%{title}» que contienen «%{word}»" # MT
+      sheet_and_phrase: "Hojas de Google Sheets que coinciden con la frase «%{phrase}»" # MT

@@ -1,0 +1,81 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+it:
+  admin:
+    domains:
+      refresh_all_started:
+        one: "Controllo in background di %{count} dominio. Dovrebbe richiedere circa %{seconds} secondi. Ricarica questa pagina per vedere i risultati." # MT
+        other: "Controllo in background di %{count} domini. Dovrebbe richiedere circa %{seconds} secondi. Ricarica questa pagina per vedere i risultati." # MT
+      refresh_one_success: "%{domain} ricontrollato." # MT
+      refresh_one_failed: "%{domain} ricontrollato, ma la richiesta all'API di SMTP2GO non è riuscita, quindi lo stato di convalida potrebbe non essere aggiornato. L'errore è stato segnalato." # MT
+      lenses:
+        lists:
+          all: "Tutti i domini" # MT
+          with_lists: "Con mailing list" # MT
+          without_lists: "Senza mailing list" # MT
+      show:
+        recheck: "Ricontrolla ora" # MT
+        cluster: "Gruppo di comunità" # MT
+        communities: "Comunità" # MT
+        mailman_lists: "Mailing list" # MT
+        no_mailman_lists: "Nessuna" # MT
+        created_at: "Creato" # MT
+        last_checked: "Ultimo controllo" # MT
+        mx_heading: "Record MX" # MT
+        smtp2go_heading: "Record SMTP2GO" # MT
+        spf_heading: "Record SPF" # MT
+        spf_rule: "È corretto quando il record SPF del dominio (il suo record TXT che inizia con v=spf1) contiene l'include richiesto indicato qui sotto e usa al massimo 10 ricerche DNS (il limite della RFC 7208, contato ricorsivamente attraverso gli include). Possono essere presenti anche altri meccanismi." # MT
+        spf_lookups: "Ricerche DNS" # MT
+        spf_lookups_count: "%{count} su %{limit} consentite" # MT
+        expected: "Previsto" # MT
+        required: "Richiesto" # MT
+        found: "Trovato" # MT
+        no_records_found: "Nessuno trovato" # MT
+        record: "Record" # MT
+        host: "Host" # MT
+        smtp2go_verified: "Verificato da SMTP2GO?" # MT
+        never_checked_notice: "Questo dominio non è ancora stato controllato. Usa «Ricontrolla ora» per eseguire il primo controllo." # MT
+      index:
+        title: "Domini" # MT
+        intro: "Questa pagina mostra lo stato della configurazione della posta di ogni dominio personalizzato: se i record MX e SPF sono corretti e se i record di convalida di SMTP2GO sono presenti. I risultati sono quelli dell'ultimo controllo; usa i pulsanti di aggiornamento per ricontrollare." # MT
+        none_found: "Nessun dominio personalizzato trovato." # MT
+        summary:
+          one: "%{ok} dominio su %{count} ha tutti i record corretti." # MT
+          other: "%{ok} domini su %{count} hanno tutti i record corretti." # MT
+        never_checked_prompt: "Non è stato ancora eseguito alcun controllo: usa «Aggiorna tutti» per eseguire il primo." # MT
+        not_configured: "La chiave API di SMTP2GO non è configurata, quindi non è possibile controllare lo stato di invio e la convalida. Imposta smtp2go.api_key nelle impostazioni." # MT
+        headers:
+          domain: "Dominio" # MT
+          communities: "Comunità" # MT
+          mx: "Record MX" # MT
+          spf: "Record SPF" # MT
+          smtp2go: "Record SMTP2GO" # MT
+          lists: "Mailing list?" # MT
+        never_checked: "Mai controllato" # MT
+        refresh_all: "Aggiorna tutti" # MT
+        refresh_row: "Ricontrolla questo dominio" # MT
+        record_titles:
+          verified: "%{host} → %{target} — verificato da SMTP2GO" # MT
+          in_dns: "%{host} → %{target} — trovato nel DNS, in attesa di verifica da SMTP2GO" # MT
+          missing: "%{host} → %{target} — non trovato nel DNS" # MT
+        smtp2go_statuses:
+          verified: "Verificato" # MT
+          pending: "In attesa" # MT
+          not_added: "Non aggiunto" # MT
+          unknown: "Sconosciuto" # MT
+        record_kinds:
+          mx: "MX" # MT
+          spf: "SPF" # MT
+          dkim: "DKIM" # MT
+          return_path: "Return" # MT
+          tracking: "Tracking" # MT

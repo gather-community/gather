@@ -1,0 +1,115 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+it:
+  subscription:
+    messaging_topup:
+      updated: "La tua ricarica mensile per la messaggistica è impostata. Il tuo saldo messaggistica ora è %{balance}." # MT
+      canceled: "La tua ricarica mensile per la messaggistica verrà annullata alla fine del mese di fatturazione in corso." # MT
+    detailed_statuses:
+      active: "Attivo" # MT
+      scheduled: "Programmato" # MT
+      needs_payment_method: "Pagamento necessario" # MT
+      awaiting_microdeposits: "Verifica bancaria necessaria" # MT
+      payment_processing: "In elaborazione" # MT
+      incomplete: "In attesa di pagamento" # MT
+      incomplete_expired: "Scaduto" # MT
+      past_due: "Scaduto, non pagato" # MT
+      unpaid: "Non pagato" # MT
+      canceled: "Annullato" # MT
+      other: "Sconosciuto" # MT
+      unknown: "Sconosciuto" # MT
+    # Descriptions of the messaging balance transactions a topup creates.
+    messaging_transactions:
+      credit: "Ricarica mensile messaggistica" # MT
+      reversal: "Storno della ricarica messaggistica non riscossa" # MT
+    # e.g. "$5.00/month"
+    per_month: "%{amount}/mese" # MT
+    every_months:
+      one: "%{amount} ogni %{count} mese" # MT
+      other: "%{amount} ogni %{count} mesi" # MT
+    pay_starting: "Paga %{amount} a partire dal giorno %{date}" # MT
+    pay_now_and_then: "Paga %{now} ora e poi %{recurring} in seguito" # MT
+    # Messaging topup row statuses, shown only when the topup isn't cleanly active.
+    topup_statuses:
+      canceling: "Annullamento il giorno %{date}" # MT
+      past_due: "Scaduto, non pagato" # MT
+      payment_processing: "Pagamento in elaborazione" # MT
+    # Text built by the messaging-topup Stimulus controller.
+    topup_notices:
+      cancel: "La tua ricarica mensile verrà annullata alla fine del mese di fatturazione in corso. Non ci saranno altri addebiti e il saldo attuale resta." # MT
+      first_charge: "Oggi sul metodo di pagamento registrato verranno addebitati %{amount} per un mese intero, poi %{amount} in questo giorno di ogni mese." # MT
+      calculating: "Calcolo in corso…" # MT
+      next_month: "Dal prossimo mese di fatturazione ti verranno addebitati %{amount} al mese." # MT
+      prorated_credit: "Ora riceverai un accredito di %{credit} sulla prossima fattura, poi %{amount} al mese dal giorno %{date}." # MT
+      prorated_charge: "Ora sul metodo di pagamento registrato verranno addebitati oggi circa %{charge} (in proporzione), poi %{amount} al mese dal giorno %{date}." # MT
+      error_default: "Qualcosa è andato storto e la tua ricarica non è stata modificata." # MT
+      error_with_reference: "%{reason} Riferimento: %{reference}. (Tentativo: %{time}.) Se continua a succedere, contatta l'assistenza di Gather indicando questo riferimento e l'ora." # MT
+      error: "%{reason} (Tentativo: %{time}.) Se continua a succedere, contatta l'assistenza di Gather indicando questo riferimento e l'ora." # MT
+    subscriptions:
+      show:
+        title: "Abbonamento" # MT
+        expired: "Il tuo abbonamento è scaduto prima che il pagamento fosse completato. Riprova." # MT
+        verify_required: "Il tuo conto bancario deve essere verificato." # MT
+        microdeposit_html: "Entro un paio di giorni arriverà sul tuo conto un %{link}. Usa il pulsante qui sotto per completare la verifica." # MT
+        microdeposit: "microdeposito" # MT
+        check_email: "Controlla la tua email per le istruzioni e torna qui quando la verifica è completata." # MT
+        verify_button: "Verifica il tuo conto bancario" # MT
+        ready_for_payment: "Il tuo abbonamento è pronto per il pagamento." # MT
+        not_setup: "Il tuo abbonamento non è ancora configurato." # MT
+        contact_staff: "Contatta lo staff di Gather per abbonarti." # MT
+        needs_payment_method: "Il tuo abbonamento è attivo, ma dobbiamo ancora raccogliere i tuoi dati di pagamento." # MT
+        processing: "Il pagamento del tuo abbonamento è in elaborazione. Può richiedere qualche giorno a seconda del metodo di pagamento. Nel frattempo puoi usare Gather!" # MT
+        active: "Il tuo abbonamento è attivo. Grazie di far parte di Gather!" # MT
+        problem: "C'è un problema con il tuo abbonamento." # MT
+      billing_portal_link:
+        visit_html: "Per maggiori informazioni puoi visitare il nostro %{link}." # MT
+        billing_portal: "portale di fatturazione" # MT
+      base_rows:
+        num_users: "Numero di utenti" # MT
+        tier: "Fascia" # MT
+        tier_value: "%{tier} (%{price}/mese/utente)" # MT
+        discount: "Sconto" # MT
+        months_per_cycle: "Mesi per ciclo di fatturazione" # MT
+        total_payment: "Pagamento totale" # MT
+        not_charged_until: "* Inserirai ora i tuoi dati di pagamento, ma l'addebito avverrà solo dal giorno %{date}." # MT
+        prorated: "* Il tuo primo pagamento sarà calcolato in proporzione ai giorni trascorsi dal giorno %{date}." # MT
+      email_row:
+        billing_email: "Email di fatturazione" # MT
+      messaging:
+        title: "Messaggistica" # MT
+        current_balance: "Saldo attuale" # MT
+        monthly_topup: "Ricarica mensile" # MT
+        none: "Nessuna" # MT
+        edit: "Modifica" # MT
+        add: "Aggiungi" # MT
+        next_payment_date: "Data del prossimo pagamento" # MT
+        status: "Stato" # MT
+      messaging_topup_modal:
+        title: "Ricarica mensile messaggistica" # MT
+        intro: "Scegli quanto credito per la messaggistica aggiungere al tuo saldo ogni mese. Il metodo di pagamento registrato viene addebitato automaticamente." # MT
+        none: "Nessuna" # MT
+        cancel: "Annulla" # MT
+        save: "Salva" # MT
+      post_payment:
+        title: "Abbonamento all'app" # MT
+        next_payment_date: "Data del prossimo pagamento" # MT
+      pre_payment:
+        title: "Abbonamento all'app" # MT
+        start_date: "Data di inizio" # MT
+        update_info_html: "Se qualcuna di queste informazioni va aggiornata, contatta %{email}." # MT
+        ready_enter_payment: "Va bene, sono pronto a inserire i miei dati di pagamento" # MT
+        ready_to_pay: "Va bene, sono pronto a pagare" # MT
+      payment:
+        title: "Pagamento" # MT
+        canadian_debit: "Addebito preautorizzato canadese" # MT
+        popup_note: "Dopo aver fatto clic su «Paga» qui sotto, una finestra pop-up raccoglierà i tuoi dati bancari." # MT

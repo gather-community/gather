@@ -1,0 +1,149 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+nl:
+  custom_fields:
+    boolean:
+      "true": "Ja" # MT
+      "false": "Nee" # MT
+    labels:
+      community:
+        settings:
+          main_nav_customizations: "Aanpassingen van het hoofdmenu" # MT
+          time_zone: "Tijdzone" # MT
+          default_landing_page: "Standaard startpagina" # MT
+          people:
+            _self: "Mensen" # MT
+            default_directory_sort: "Standaardsortering ledenlijst" # MT
+            plain_user_selects: "Eenvoudige keuzelijsten voor gebruikers" # MT
+            user_custom_fields_spec: "Specificatie van eigen gebruikersvelden" # MT
+          meals:
+            _self: "Maaltijden" # MT
+            reimb_instructions: "Instructies voor vergoedingen" # MT
+            allergens: "Allergenen" # MT
+            show_reimb_form: "Afdrukbaar vergoedingsformulier tonen" # MT
+            cooks_can_finalize: "Koks kunnen maaltijden afronden" # MT
+            cooks_can_change_invites: "Koks kunnen de gemeenschappen van een maaltijd wijzigen" # MT
+            default_invites: "Standaardgemeenschappen voor maaltijden" # MT
+            allow_job_signup_on_meal_page: "Aanmelden voor maaltijdtaken op de maaltijdpagina toestaan" # MT
+            default_capacity: "Standaardcapaciteit" # MT
+            reminder_lead_times:
+              _self: "Herinneringen, aantal dagen vooraf" # MT
+              diner: "Herinnering voor eters" # MT
+              early_menu: "Vroege menuherinnering" # MT
+              late_menu: "Late menuherinnering" # MT
+          calendars:
+            _self: "Agenda’s" # MT
+            kinds: "Types" # MT
+            meals:
+              _self: "Maaltijdafspraken" # MT
+              default_total_time: "Standaard totale duur" # MT
+              default_prep_time: "Standaard voorbereidingstijd" # MT
+          work:
+            _self: "Werk" # MT
+            default_date_filter: "Standaard datumfilter voor aanmeldingen" # MT
+          billing:
+            _self: "Facturatie" # MT
+            contact: "Contact voor facturatie" # MT
+            payment_instructions: "Betaalinstructies" # MT
+            statement_terms: "Betaaltermijn afschriften" # MT
+            statement_reminder_lead_time: "Herinnering afschrift\naantal dagen vooraf" # MT
+            paypal_reimbursement: "Vergoeding via PayPal aanbieden" # MT
+            payment_methods:
+              _self: "Informatie over betaalmethoden" # MT
+              paypal_me: "PayPal.me" # MT
+              paypal_email: "PayPal via e-mail" # MT
+              paypal_friend: "Leden vragen PayPal-betalingen te versturen als “Vrienden en familie”" # MT
+              check_payee: "Begunstigde cheques" # MT
+              check_address: "Postadres voor cheques" # MT
+              check_dropoff: "Instructies voor het afgeven van cheques" # MT
+              cash_dropoff: "Instructies voor het afgeven van contant geld" # MT
+              additional_info: "Aanvullende informatie" # MT
+              show_billing_contact: "E-mailadres voor facturatie tonen bij aanvullende informatie" # MT
+            late_fee_policy:
+              _self: "Beleid voor boetes bij late betaling" # MT
+              fee_type: "Soort boete" # MT
+              threshold: "Drempel" # MT
+              amount: "Bedrag" # MT
+    hints:
+      community:
+        settings:
+          main_nav_customizations: "Hiermee bewerk je de links in het hoofdmenu. Voer links in Markdown-opmaak in. Voorbeeld: [Naam van de link](https://example.com). Als de naam van de link overeenkomt met een bestaande link, vervangt deze de standaard-URL. Een lege URL verwijdert een link helemaal. Alle andere tekst en opmaak wordt genegeerd." # MT
+          people:
+            plain_user_selects: "Gebruik eenvoudige keuzelijsten in plaats van zoekvakken waarin je typt. Kan prettiger zijn voor kleinere gemeenschappen." # MT
+            user_custom_fields_spec: "Voer een specificatie in YAML-formaat in voor eigen velden die verschijnen bij het bekijken en bewerken van gebruikers van deze gemeenschap. Neem contact op met de ondersteuning van Gather als je hulp nodig hebt bij het schrijven van deze specificatie." # MT
+          meals:
+            reimb_instructions: "Wat koks met hun bonnetjes moeten doen om een vergoeding te krijgen. Bijvoorbeeld de bedragen invullen op de bewerkpagina van de maaltijd in Gather, het ingebouwde vergoedingsformulier gebruiken, of een andere werkwijze." # MT
+            allergens: "Door komma’s gescheiden lijst van allergenen waaruit koks kiezen bij het plaatsen van menu’s." # MT
+            show_reimb_form: "Of er op de overzichtspagina van de maaltijd een afdrukbaar vergoedingsformulier wordt getoond (met bedragen voor boodschappen en voorraadkast en de manier van vergoeden). Vink dit uit als je liever elektronisch vergoedt." # MT
+            cooks_can_finalize: "Of hoofdkoks maaltijden kunnen afronden, naast facturatiebeheerders, maaltijdcoördinatoren en beheerders." # MT
+            cooks_can_change_invites: "Of hoofdkoks kunnen wijzigen welke gemeenschappen voor een maaltijd zijn uitgenodigd." # MT
+            default_invites: "Welke gemeenschappen standaard voor een maaltijd zijn uitgenodigd." # MT
+            allow_job_signup_on_meal_page: "Of eters kunnen aanbieden om mee te helpen met een maaltijd terwijl ze zich voor de maaltijd aanmelden." # MT
+            default_capacity: "Standaardinstelling voor het aantal mensen dat een maaltijd aankan." # MT
+            reminder_lead_times:
+              _self: "Hoeveel dagen vooraf herinneringen van verschillende soorten worden verstuurd. Herinneringen worden om 6 uur ’s ochtends plaatselijke tijd verstuurd. Een “0” betekent dat de herinnering op de ochtend van de dag van de maaltijd wordt verstuurd. Zie de pagina met maaltijdrollen voor meer instellingen voor herinneringen." # MT
+              diner: "De herinnering die naar alle eters wordt gestuurd." # MT
+              early_menu: "De herinnering aan de hoofdkok om een menu in te vullen." # MT
+              late_menu: "Een tweede, dringendere herinnering aan de hoofdkok als die nog steeds geen menu heeft ingevuld. Moet minder dagen vooraf zijn dan de vroege menuherinnering." # MT
+          calendars:
+            kinds: "Verschillende soorten afspraken, gescheiden door komma’s. Kunnen in reglementen worden gebruikt. Als dit leeg is, verschijnt het veld “Type” niet in het afspraakformulier." # MT
+            meals:
+              default_total_time: "Standaard totale duur van maaltijdafspraken in minuten, inclusief voorbereiden en opruimen" # MT
+              default_prep_time: "Standaard voorbereidingstijd van maaltijden in minuten" # MT
+          billing:
+            contact: "E-mailadres voor vragen over facturatie. Wordt bij de betaalinstructies vermeld." # MT
+            payment_instructions: "Hoe je een betaling voor een rekening doet." # MT
+            statement_terms: "Aantal dagen na de aanmaakdatum waarbinnen een afschrift betaald moet zijn. Bij nul (0) hebben afschriften geen uiterste betaaldatum." # MT
+            statement_reminder_lead_time: "Hoeveel dagen vóór de uiterste betaaldatum de betalingsherinnering voor het afschrift wordt verstuurd. Er worden geen herinneringen verstuurd als afschriften geen uiterste betaaldatum hebben of als het saldo al is betaald." # MT
+            paypal_reimbursement: "Koks kunnen vragen om maaltijdvergoedingen via PayPal te ontvangen. PayPal-betalingen moeten met de hand worden gedaan (niet automatisch)." # MT
+            payment_methods:
+              _self: "Instructies of informatie voor verschillende betaalmethoden. Laat leeg als een methode niet wordt geaccepteerd. Ga naar je <a href='/accounts/mine'>rekeningenpagina</a> om te zien hoe de instructies eruitzien." # MT
+              paypal_me: "Vul je <a href='https://paypal.me'>PayPal.me-link</a> in. Zo kunnen leden het makkelijkst met PayPal betalen. Let op: met een zakelijk PayPal-account betaal je bij deze methode altijd transactiekosten." # MT
+              paypal_email: "Wil je PayPal accepteren maar niet PayPal.me gebruiken, vul dan het e-mailadres in waarnaar leden betalingen moeten sturen." # MT
+              paypal_friend: "Geldt voor PayPal.me en PayPal via e-mail. Kies dit als je volgens de gebruiksvoorwaarden van PayPal kunt verantwoorden dat de betalingen tussen vrienden zijn. Zo betaal je geen transactiekosten." # MT
+              check_payee: "Vul in op wiens naam cheques moeten worden uitgeschreven. Laat leeg als cheques niet worden geaccepteerd." # MT
+              check_address: "Vul een adres in als je cheques per post accepteert. Dan worden ook instructies voor online bankieren getoond." # MT
+              check_dropoff: "Vul instructies in voor het persoonlijk afgeven van een cheque. Laat leeg als cheques per post moeten worden verstuurd of niet worden geaccepteerd." # MT
+              cash_dropoff: "Vul instructies in voor het persoonlijk afgeven van contant geld. Laat leeg als contant geld niet wordt geaccepteerd." # MT
+              additional_info: "Vul aanvullende informatie in die je bij de betaalinstructies wilt vermelden." # MT
+              show_billing_contact: "Of het e-mailadres voor facturatie hierboven (als dat is ingevuld) onderaan de betaalinstructies wordt vermeld. Vink dit uit en zet het zelf bij “Aanvullende informatie” als je wilt bepalen hoe het wordt vermeld." # MT
+            late_fee_policy:
+              fee_type: "Hoe de boete wordt berekend" # MT
+              threshold: "Minimaal openstaand saldo waarbij een boete wordt opgelegd" # MT
+              amount: "Bedrag of percentage van de boete (vul bijv. “3” in voor 3% of 3,00, afhankelijk van het type)" # MT
+    options:
+      community:
+        settings:
+          default_landing_page:
+            meals: "Maaltijden" # MT
+            directory: "Ledenlijst" # MT
+            calendars: "Agenda’s" # MT
+            wiki: "Wiki" # MT
+          people:
+            default_directory_sort:
+              name: "Op naam" # MT
+              unit: "Op woning" # MT
+          meals:
+            default_invites:
+              all: "Alle gemeenschappen" # MT
+              own: "Alleen eigen gemeenschap" # MT
+          work:
+            default_date_filter:
+              all: "Verleden en toekomst" # MT
+              curftr: "Huidig en toekomst" # MT
+          billing:
+            late_fee_policy:
+              fee_type:
+                none: "Geen boete" # MT
+                fixed: "Vast bedrag" # MT
+                percent: "Percentage" # MT

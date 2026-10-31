@@ -47,3 +47,9 @@ application.register("calendars--eventlet-delete", Calendars__EventletDeleteCont
 
 import Calendars__EventFormController from "./calendars/event_form_controller";
 application.register("calendars--event-form", Calendars__EventFormController);
+
+import LensBarController from "./lens_bar_controller";
+application.register("lens-bar", LensBarController);
+
+import LanguageMenuController from "./language_menu_controller";
+application.register("language-menu", LanguageMenuController);

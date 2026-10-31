@@ -1,0 +1,163 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+# Strings for the page layout, shared partials and other app-wide views.
+it:
+  layouts:
+    mailer:
+      notification_settings: "Impostazioni delle notifiche di Gather: %{url}" # MT
+      machine_translated: "Questa email è stata tradotta automaticamente e potrebbe contenere errori." # MT
+    application:
+      impersonation_notice: "Stai impersonando %{name}. Qualsiasi azione tu faccia risulterà fatta da questa persona." # MT
+      stop_impersonating: "Smetti di impersonare" # MT
+      home: "Home" # MT
+      search: "Cerca" # MT
+      skip_to_content: "Vai al contenuto" # MT
+      show_menu: "Mostra menu" # MT
+      toggle_navigation: "Mostra/nascondi navigazione" # MT
+      loading: "Caricamento" # MT
+      add_to_home_screen: "Aggiungi Gather alla schermata Home" # MT
+    footer:
+      privacy_policy: "Informativa sulla privacy" # MT
+      credits: "Riconoscimenti" # MT
+      settings: "Impostazioni" # MT
+      subscription: "Abbonamento" # MT
+      billing: "Fatturazione" # MT
+      communities: "Comunità" # MT
+      resync_subscriptions: "Risincronizza abbonamenti" # MT
+      domains: "Domini" # MT
+      # Shown on pages in machine-translated locales (Gather::Locales::MACHINE_TRANSLATED).
+      machine_translated: "Questa pagina è stata tradotta automaticamente e potrebbe contenere errori." # MT
+      machine_translated_with_link_html: "Questa pagina è stata tradotta automaticamente e potrebbe contenere errori. %{link}" # MT
+      help_translate: "Aiuta a migliorare la traduzione" # MT
+      change_language: "Cambia lingua" # MT
+      browser_default: "Lingua del browser" # MT
+      language: "Lingua" # MT
+    head:
+      # The browser tab title. The page title is already HTML-escaped, hence _html.
+      title_html: "Gather: %{title}" # MT
+    personal_dropdown:
+      show_menu: "Mostra il menu personale" # MT
+  shared:
+    dropzone:
+      image_attachment: "Immagine allegata" # MT
+    mobile_back_link:
+      back_to_html: "Torna a: %{label}" # MT
+  home:
+    inactive:
+      title: "Account non attivo" # MT
+      body: "Il tuo account non è attivo. Puoi comunque vedere i tuoi conti e modificare il tuo profilo. Usa il menu in alto a destra dello schermo." # MT
+  # Announcement shown once to accounts created before the 2021 rename (CalendarNavLinkPopoverView, JS).
+  calendar_nav_popover:
+    message_html: "<b>Prenotazioni</b> ora si chiama <b>Calendari</b>! Dai un'occhiata!" # MT
+    dismiss: "Chiudi" # MT
+  landing:
+    invite_welcome: "Benvenuto in Gather! Scegli qui sotto come accedere." # MT
+    index:
+      blurb: "La vita è più bella insieme." # MT
+      logo_alt: "Logo di Gather" # MT
+      sign_in_google: "Accedi con Google" # MT
+      sign_in_password: "Accedi con la password" # MT
+      learn_more: "Scopri di più" # MT
+      try_it_out: "Prova" # MT
+    signed_out:
+      title: "Gather – Disconnesso" # MT
+      signed_out: "Sei uscito da Gather." # MT
+      public_computer_html: "Se questo è un <strong>computer pubblico</strong>, potresti anche voler<br/>%{link}." # MT
+      google_sign_out: "uscire dal tuo account Google" # MT
+      return_home: "Torna alla home" # MT
+    privacy_policy:
+      title: "Informativa sulla privacy" # MT
+      english_only: "L'informativa sulla privacy è disponibile solo in inglese." # MT
+    markdown:
+      title: "Guida alla formattazione Markdown" # MT
+      intro_html: "Il <strong>Markdown</strong> è un modo semplice per creare contenuti testuali puliti e ricchi senza dover imparare un linguaggio speciale." # MT
+      if_you_type: "Se scrivi …" # MT
+      displayed_like: "Verrà visualizzato così:" # MT
+      outro: "Ora divertiti a creare tanti contenuti utili e belli!" # MT
+      # Each example is shown as typed and then as rendered, so it must be valid Markdown.
+      examples:
+        formatting: "Puoi applicare facilmente formattazioni semplici come **grassetto**, _corsivo_ e ~~barrato~~." # MT
+        lists: |- # MT
+          Puoi anche creare
+
+          * elenchi
+          * puntati
+              * con
+              * sottoelenchi
+              * rientrati
+
+          e
+
+          1. elenchi
+          2. numerati
+        headers: |- # MT
+          # Anche
+          ## i titoli
+          ### sono facili
+
+          da fare!
+        tables: |- # MT
+          | Puoi  | perfino    |
+          |------|--------|
+          | creare belle | tabelle |
+          | Wow! | Fantastico! |
+        links: |- # MT
+          I link ad altre pagine appaiono [così](http://example.com).
+
+          Il testo di un link semplice viene riconosciuto automaticamente: https://gather.coop
+        images: |- # MT
+          Puoi mostrare le immagini così:
+
+          ![Gattino](https://gather.coop/sample-image.png)
+        rule: |- # MT
+          Puoi usare una linea orizzontale per dividere i contenuti:
+
+          ---
+
+          bello!
+        # Not named html or *_html: Rails treats such keys as already-safe HTML, so the
+        # tags in this example would render instead of being shown as typed.
+        raw_markup: |- # MT
+          Se sei un utente esperto e vuoi usare direttamente l'HTML, provalo!
+
+          Per esempio, <blockquote>potresti voler usare le citazioni in blocco</blockquote>.
+  # Static error pages, generated into public/ by `rake error_pages:generate` (see Gather::ErrorPages).
+  error_pages:
+    "400":
+      title: "Il server non può elaborare la richiesta a causa di un errore del client (400 Bad Request)" # MT
+      heading: "Il server non può elaborare la richiesta a causa di un errore del client." # MT
+      body: "Controlla la richiesta e riprova. Se sei il proprietario dell'applicazione, consulta i log per maggiori informazioni." # MT
+    "403":
+      title: "Non hai il permesso di vedere quella pagina (403)" # MT
+      heading: "Non hai il permesso di vedere quella pagina." # MT
+      body: "Se pensi che si tratti di un errore, contatta il tuo amministratore." # MT
+    "404":
+      title: "La pagina che cercavi non esiste (404 Not Found)" # MT
+      heading: "La pagina che cercavi non esiste." # MT
+      body: "Potresti aver scritto male l'indirizzo, oppure la pagina è stata spostata. Se sei il proprietario dell'applicazione, consulta i log per maggiori informazioni." # MT
+    "406-unsupported-browser":
+      title: "Il tuo browser non è supportato (406 Not Acceptable)" # MT
+      heading: "Il tuo browser non è supportato." # MT
+      body: "Aggiorna il browser per continuare." # MT
+    "422":
+      title: "La modifica che volevi fare è stata rifiutata (422 Unprocessable Entity)" # MT
+      heading: "La modifica che volevi fare è stata rifiutata." # MT
+      body: "Forse hai provato a modificare qualcosa a cui non hai accesso. Se sei il proprietario dell'applicazione, consulta i log per maggiori informazioni." # MT
+    "500":
+      title: "Siamo spiacenti, qualcosa è andato storto (500 Internal Server Error)" # MT
+      heading: "Siamo spiacenti, qualcosa è andato storto." # MT
+      body: "Se sei il proprietario dell'applicazione, consulta i log per maggiori informazioni." # MT
+    offline:
+      title: "Non sei connesso a Internet" # MT
+      heading: "Si è verificato un problema nel contattare il server." # MT
+      body: "Potresti aver perso la connessione a Internet. Prova a ricaricare la pagina." # MT

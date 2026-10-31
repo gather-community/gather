@@ -25,8 +25,6 @@ module Groups
           indexes :community_ids, type: :integer
           indexes :name, analyzer: "english_stemmed"
           indexes :description, analyzer: "english_stemmed"
-          indexes :mailman_list_name, analyzer: "english_stemmed"
-          indexes :mailman_list_fqdn, analyzer: "english_stemmed"
         end
       end
 

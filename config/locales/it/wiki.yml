@@ -1,0 +1,93 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+it:
+  wiki:
+    page_deleted: "Pagina eliminata." # MT
+    page_listing: "Elenco delle pagine wiki" # MT
+    new_page: "Nuova pagina wiki" # MT
+    help: "Guida al wiki" # MT
+    # The markdown editor's toolbar buttons and status bar.
+    editor:
+      autosaved: "Salvato automaticamente: " # MT
+      bold: "Grassetto" # MT
+      fullscreen: "Schermo intero" # MT
+      heading: "Titolo" # MT
+      image: "Inserisci immagine" # MT
+      italic: "Corsivo" # MT
+      lines:
+        one: "righe: %{count}" # MT
+        other: "righe: %{count}" # MT
+      link: "Crea link" # MT
+      ordered_list: "Elenco numerato" # MT
+      preview: "Mostra/nascondi anteprima" # MT
+      quote: "Citazione" # MT
+      side_by_side: "Affiancato" # MT
+      unordered_list: "Elenco puntato" # MT
+      words:
+        one: "parole: %{count}" # MT
+        other: "parole: %{count}" # MT
+    pages:
+      history_table:
+        version: "Versione" # MT
+        date: "Data" # MT
+        author: "Autore" # MT
+        comment: "Commento" # MT
+        compare: "Confronta selezionate" # MT
+        return: "Torna alla pagina" # MT
+      all:
+        title: "Elenco delle pagine wiki" # MT
+      compare:
+        title: "Confronto wiki: %{title}" # MT
+        differences: "Differenze tra le versioni %{old} e %{new}" # MT
+        versions_between: "Versioni tra %{old} e %{new}" # MT
+      edit:
+        title: "Modifica pagina wiki: %{title}" # MT
+      history:
+        title: "Cronologia wiki: %{title}" # MT
+      new:
+        title: "Nuova pagina wiki" # MT
+      show:
+        wiki_home: "Home del wiki" # MT
+    not_found_create: "Non esiste una pagina wiki chiamata «%{title}». Puoi crearla qui sotto!" # MT
+    preview_notice: "Questa è un'anteprima. Per salvare o continuare a modificare la pagina, usa il modulo qui sotto." # MT
+    revision_info: "Pagina modificata il %{time} da %{user}" # MT
+    revision_info_no_by: "Pagina modificata il %{time}" # MT
+    special_pages:
+      home:
+        title: "Wiki" # MT
+        content: |- # MT
+          Questa è la **home page del tuo wiki**!
+
+          Guarda la [[Pagina di esempio]] per qualche consiglio su come riempirla di informazioni utili!
+      sample:
+        title: "Pagina di esempio" # MT
+        content: |- # MT
+          Questa è una pagina wiki di esempio.
+
+          Fai clic su **Modifica** qui sopra per vedere come funziona questa pagina! E non preoccuparti, non puoi rompere niente!
+
+          ## Formattazione
+
+          Per modificare una pagina wiki si usa il **Markdown**, un modo semplice per creare contenuti puliti e gradevoli senza dover imparare un linguaggio speciale. Per saperne di più sul Markdown, consulta la [Guida alla formattazione Markdown](/about/markdown).
+
+          ## Link
+
+          I link ad altre pagine sono molto importanti! Puoi creare un link ad altre **pagine wiki** così: [[Pagina divertente]].
+
+          Nota che il link qui sopra è (probabilmente) rosso. Questo perché la pagina non esiste ancora. Se fai clic sul link, potrai creare la pagina. A quel punto il link diventerà blu!
+
+          Se come testo del link vuoi usare qualcosa di diverso dal titolo della pagina, puoi [[Pagina divertente|fare così]].
+
+          I link a pagine esterne appaiono [così](http://example.com).
+
+          Un URL in testo semplice viene riconosciuto automaticamente e trasformato in link: https://gather.coop

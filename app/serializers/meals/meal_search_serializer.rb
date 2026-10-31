@@ -4,14 +4,9 @@ module Meals
   # Serializes Meals for Elasticsearch.
   class MealSearchSerializer < ApplicationSerializer
     attributes :id, :kind, :community_id, :title, :entrees, :side, :kids,
-      :dessert, :notes, :allergens, :served_at
+      :dessert, :notes, :served_at
 
     def kind = "meal"
-
-    def allergens
-      return "" unless object.allergens.is_a?(Hash)
-      object.allergens.select { |_, v| v }.keys.join(" ")
-    end
 
     def title = object.title.to_s
 

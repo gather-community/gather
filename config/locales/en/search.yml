@@ -24,7 +24,7 @@ en:
       updated_by: "Updated %{date} by %{name}"
       updated: "Updated %{date}"
       members:
-        one: "1 member"
+        one: "%{count} member"
         other: "%{count} members"
       child: "Child"
       unit: "Unit %{unit}"

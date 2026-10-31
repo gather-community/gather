@@ -11,11 +11,26 @@ describe "request locale" do
     allow(I18n).to receive(:with_locale).and_call_original
   end
 
-  it "serves released locales to signed-out visitors and varies by Accept-Language" do
+  it "serves the default locale without the feature flag and varies by Accept-Language and Cookie" do
     get("/", headers: french)
     expect(response).to have_http_status(:ok)
     expect(response.body).to include('<html lang="en"')
-    expect(response.headers["Vary"]).to include("Accept-Language")
+    expect(response.headers["Vary"]).to include("Accept-Language", "Cookie")
+  end
+
+  context "with the feature flag on for everyone" do
+    before { create(:feature_flag, name: "i18n", status: true) }
+
+    it "serves signed-out visitors their browser's locale" do
+      get("/", headers: french)
+      expect(response.body).to include('<html lang="fr-CA"')
+    end
+
+    it "prefers the locale chosen in the language menu" do
+      cookies[Gather::Locales::COOKIE] = "de"
+      get("/", headers: french)
+      expect(response.body).to include('<html lang="de"')
+    end
   end
 
   context "when signed in" do
@@ -24,7 +39,8 @@ describe "request locale" do
       sign_in(user)
     end
 
-    it "ignores unreleased locales without the feature flag" do
+    it "ignores the header and cookie without the feature flag" do
+      cookies[Gather::Locales::COOKIE] = "de"
       get(users_path, headers: french)
       expect(response).to have_http_status(:ok)
       expect(response.body).to include('<html lang="en"')
@@ -35,12 +51,10 @@ describe "request locale" do
         create(:feature_flag, name: "i18n", interface: "user").users << user
       end
 
-      # Pages can't render in French until it's translated (tests raise on missing translations), so this
-      # runs the action in the current locale and only checks which locale was chosen.
       it "switches to the browser's locale" do
-        expect(I18n).to receive(:with_locale).with(:"fr-CA") { |&block| block.call }
         get(users_path, headers: french)
         expect(response).to have_http_status(:ok)
+        expect(response.body).to include('<html lang="fr-CA"')
       end
     end
   end

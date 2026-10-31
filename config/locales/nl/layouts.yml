@@ -1,0 +1,163 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+# Strings for the page layout, shared partials and other app-wide views.
+nl:
+  layouts:
+    mailer:
+      notification_settings: "Meldingsinstellingen van Gather: %{url}" # MT
+      machine_translated: "Deze e-mail is automatisch vertaald en kan fouten bevatten." # MT
+    application:
+      impersonation_notice: "Je doet je voor als %{name}. Alles wat je doet, lijkt door deze persoon te zijn gedaan." # MT
+      stop_impersonating: "Stoppen met voordoen" # MT
+      home: "Start" # MT
+      search: "Zoeken" # MT
+      skip_to_content: "Naar de inhoud" # MT
+      show_menu: "Menu tonen" # MT
+      toggle_navigation: "Navigatie in- of uitklappen" # MT
+      loading: "Laden" # MT
+      add_to_home_screen: "Zet Gather op je beginscherm" # MT
+    footer:
+      privacy_policy: "Privacybeleid" # MT
+      credits: "Credits" # MT
+      settings: "Instellingen" # MT
+      subscription: "Abonnement" # MT
+      billing: "Facturatie" # MT
+      communities: "Gemeenschappen" # MT
+      resync_subscriptions: "Abonnementen opnieuw synchroniseren" # MT
+      domains: "Domeinen" # MT
+      # Shown on pages in machine-translated locales (Gather::Locales::MACHINE_TRANSLATED).
+      machine_translated: "Deze pagina is automatisch vertaald en kan fouten bevatten." # MT
+      machine_translated_with_link_html: "Deze pagina is automatisch vertaald en kan fouten bevatten. %{link}" # MT
+      help_translate: "Help de vertaling te verbeteren" # MT
+      change_language: "Taal wijzigen" # MT
+      browser_default: "Taal van de browser" # MT
+      language: "Taal" # MT
+    head:
+      # The browser tab title. The page title is already HTML-escaped, hence _html.
+      title_html: "Gather: %{title}" # MT
+    personal_dropdown:
+      show_menu: "Persoonlijk menu tonen" # MT
+  shared:
+    dropzone:
+      image_attachment: "Afbeelding als bijlage" # MT
+    mobile_back_link:
+      back_to_html: "Terug naar %{label}" # MT
+  home:
+    inactive:
+      title: "Account inactief" # MT
+      body: "Je account is niet actief. Je kunt nog wel je rekeningen bekijken en je profiel bewerken. Zie het menu rechtsboven in het scherm." # MT
+  # Announcement shown once to accounts created before the 2021 rename (CalendarNavLinkPopoverView, JS).
+  calendar_nav_popover:
+    message_html: "<b>Reserveringen</b> heet nu <b>Agenda’s</b>! Neem een kijkje!" # MT
+    dismiss: "Sluiten" # MT
+  landing:
+    invite_welcome: "Welkom bij Gather! Kies hieronder hoe je wilt inloggen." # MT
+    index:
+      blurb: "Samen is het leven beter." # MT
+      logo_alt: "Logo van Gather" # MT
+      sign_in_google: "Inloggen met Google" # MT
+      sign_in_password: "Inloggen met wachtwoord" # MT
+      learn_more: "Meer weten" # MT
+      try_it_out: "Probeer het uit" # MT
+    signed_out:
+      title: "Gather – uitgelogd" # MT
+      signed_out: "Je bent nu uitgelogd bij Gather." # MT
+      public_computer_html: "Is dit een <strong>openbare computer</strong>, dan wil je misschien ook<br/>%{link}." # MT
+      google_sign_out: "uitloggen bij je Google-account" # MT
+      return_home: "Terug naar de startpagina" # MT
+    privacy_policy:
+      title: "Privacybeleid" # MT
+      english_only: "Het privacybeleid is alleen in het Engels beschikbaar." # MT
+    markdown:
+      title: "Opmaakhandleiding voor Markdown" # MT
+      intro_html: "<strong>Markdown</strong> is een eenvoudige manier om nette, goed opgemaakte tekst te maken zonder dat je een speciale taal hoeft te leren." # MT
+      if_you_type: "Als je dit typt …" # MT
+      displayed_like: "Ziet het er zo uit:" # MT
+      outro: "Veel plezier met het maken van veel nuttige en mooie inhoud!" # MT
+      # Each example is shown as typed and then as rendered, so it must be valid Markdown.
+      examples:
+        formatting: "Je kunt makkelijk eenvoudige opmaak gebruiken, zoals **vet**, _cursief_ en ~~doorgehaald~~." # MT
+        lists: |- # MT
+          Je kunt ook
+
+          * lijsten
+          * met opsommingstekens
+              * met
+              * ingesprongen
+              * sublijsten
+
+          en
+
+          1. genummerde
+          2. lijsten maken
+        headers: |- # MT
+          # Kopjes
+          ## Zijn
+          ### Ook
+
+          heel makkelijk!
+        tables: |- # MT
+          | Je   | Kunt   |
+          |------|--------|
+          | zelfs mooie | tabellen maken |
+          | Wauw! | Dat is supergaaf! |
+        links: |- # MT
+          Links naar andere pagina’s zien er [zo uit](http://example.com).
+
+          Een gewone link als tekst wordt automatisch herkend: https://gather.coop
+        images: |- # MT
+          Je kunt zo afbeeldingen tonen:
+
+          ![Poesje](https://gather.coop/sample-image.png)
+        rule: |- # MT
+          Je kunt een horizontale lijn gebruiken om je inhoud te verdelen:
+
+          ---
+
+          mooi!
+        # Not named html or *_html: Rails treats such keys as already-safe HTML, so the
+        # tags in this example would render instead of being shown as typed.
+        raw_markup: |- # MT
+          Ben je een gevorderde gebruiker en wil je gewone HTML gebruiken? Probeer het uit!
+
+          Je kunt bijvoorbeeld <blockquote>citaatblokken gebruiken</blockquote>.
+  # Static error pages, generated into public/ by `rake error_pages:generate` (see Gather::ErrorPages).
+  error_pages:
+    "400":
+      title: "De server kan het verzoek niet verwerken door een fout aan de kant van de client (400 Bad Request)" # MT
+      heading: "De server kan het verzoek niet verwerken door een fout aan de kant van de client." # MT
+      body: "Controleer het verzoek en probeer het opnieuw. Ben je de eigenaar van de applicatie, kijk dan in de logboeken voor meer informatie." # MT
+    "403":
+      title: "Je mag die pagina niet bekijken (403)" # MT
+      heading: "Je mag die pagina niet bekijken." # MT
+      body: "Denk je dat dit een vergissing is, neem dan contact op met je beheerder." # MT
+    "404":
+      title: "De pagina die je zocht bestaat niet (404 Not Found)" # MT
+      heading: "De pagina die je zocht bestaat niet." # MT
+      body: "Misschien heb je het adres verkeerd getypt of is de pagina verplaatst. Ben je de eigenaar van de applicatie, kijk dan in de logboeken voor meer informatie." # MT
+    "406-unsupported-browser":
+      title: "Je browser wordt niet ondersteund (406 Not Acceptable)" # MT
+      heading: "Je browser wordt niet ondersteund." # MT
+      body: "Werk je browser bij om verder te gaan." # MT
+    "422":
+      title: "De wijziging die je wilde is geweigerd (422 Unprocessable Entity)" # MT
+      heading: "De wijziging die je wilde is geweigerd." # MT
+      body: "Misschien probeerde je iets te wijzigen waartoe je geen toegang had. Ben je de eigenaar van de applicatie, kijk dan in de logboeken voor meer informatie." # MT
+    "500":
+      title: "Sorry, er is iets misgegaan (500 Internal Server Error)" # MT
+      heading: "Sorry, er is iets misgegaan." # MT
+      body: "Ben je de eigenaar van de applicatie, kijk dan in de logboeken voor meer informatie." # MT
+    offline:
+      title: "Je bent niet verbonden met internet" # MT
+      heading: "Er was een probleem bij het verbinden met de server." # MT
+      body: "Misschien is je internetverbinding weggevallen. Probeer de pagina opnieuw te laden." # MT

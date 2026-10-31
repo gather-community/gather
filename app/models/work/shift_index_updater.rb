@@ -29,6 +29,16 @@ module Work
       assignments.each { |a| reindex(a.shift) }
     end
 
+    # Recreates the index with the current settings and indexes every shift in every cluster. Run by
+    # `rake search:reindex`, e.g. after the index's analysis settings change. Returns the number indexed.
+    def rebuild_index
+      Shift.__elasticsearch__.create_index!(force: true)
+      ActsAsTenant.without_tenant do
+        shifts = Shift.includes(:job, assignments: :user)
+        shifts.find_each.count { |shift| shift.__elasticsearch__.index_document }
+      end
+    end
+
     def reindex(shifts)
       Array.wrap(shifts).each { |s| s.__elasticsearch__.index_document }
     end

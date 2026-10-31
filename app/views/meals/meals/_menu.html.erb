@@ -25,7 +25,7 @@
   <% if meal.menu_posted? %>
     <% meal.nonempty_menu_items.each do |item, text| %>
       <hr/>
-      <div class="menu-label smaller"><%= item %></div>
+      <div class="menu-label smaller"><%= Meals::Meal.human_attribute_name(item) %></div>
       <section><%= safe_render_markdown(text) %></section>
     <% end %>
     <hr/>

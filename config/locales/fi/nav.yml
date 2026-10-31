@@ -1,0 +1,82 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+fi:
+  nav_links:
+    people:
+      _self: "Ihmiset" # MT
+      households: "Kotitaloudet" # MT
+      directory: "Jäsenluettelo" # MT
+      birthdays: "Syntymäpäivät" # MT
+      vehicles: "Ajoneuvot" # MT
+      memorials: "Muistosivut" # MT
+      settings:
+        _self: "Asetukset" # MT
+        general: "Yleiset asetukset" # MT
+        member_types: "Jäsentyypit" # MT
+    groups:
+      _self: "Ryhmät" # MT
+      groups: "Ryhmät" # MT
+      roles: "Roolit" # MT
+      domains: "Verkkotunnukset" # MT
+    meals:
+      _self: "Ateriat" # MT
+      meals: "Ateriat" # MT
+      jobs: "Tehtävät" # MT
+      report: "Raportti" # MT
+      formulas: "Hinnoittelukaavat" # MT
+      roles: "Roolit" # MT
+      types: "Tyypit" # MT
+      settings:
+        _self: "Asetukset" # MT
+        general: "Yleiset" # MT
+        restrictions: "Ruokavaliorajoitukset" # MT
+        reminders: "Muistutukset" # MT
+
+    calendars:
+      _self: "Kalenterit" # MT
+      events: "Tapahtumat" # MT
+      calendars: "Kalenterit" # MT
+      protocols: "Säännöt" # MT
+    wiki:
+      _self: "Wiki" # MT
+      wiki:
+        _self: "Wiki" # MT
+      gdrive:
+        _self: "Google Drive" # MT
+        migration:
+          dashboard:
+            status: "Tila" # MT
+            owners: "Omistajat" # MT
+            files: "Tiedostot" # MT
+            logs: "Lokit" # MT
+    work:
+      _self: "Työ" # MT
+      signups: "Ilmoittautumiset" # MT
+      report: "Raportti" # MT
+      jobs: "Tehtävät" # MT
+      periods: "Jaksot" # MT
+      settings: "Asetukset" # MT
+    admin:
+      _self: "Ylläpito" # MT
+    billing:
+      _self: "Laskutus" # MT
+      accounts: "Tilit" # MT
+      templates: "Pohjat" # MT
+    personal:
+      profile: "Profiili" # MT
+      accounts: "Tilit" # MT
+      account: "Tili" # MT
+      calendars: "Kalenterit" # MT
+      change_passwd: "Vaihda salasana" # MT
+      notifications: "Ilmoitukset" # MT
+      sign_out: "Kirjaudu ulos" # MT

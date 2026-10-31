@@ -94,7 +94,7 @@ en:
       billing_transaction:
         incurred_on: "This date will show as the trasaction date on statements. Today's date will also be saved with the transaction."
         description: "Description will be shown to the user on the statement. A detailed description can help resolve discrepancies in the future."
-        code_html: "<i class='fa fa-arrow-up'></i> Increases amount user owes &nbsp;&nbsp;&nbsp; <i class='fa fa-arrow-down'></i> Decreases amount user owes"
+        code: "Charges increase what the household owes. Credits decrease it."
         value: "Amount must be positive. The transaction type (above) determines whether the amount increases or decreases the account."
       billing_template:
         member_type_ids: "Select the member type(s) this template applies to."
@@ -215,6 +215,17 @@ en:
         active:
           active_only: "Show Active Only"
           all: "Show All"
+      # Transaction type labels on the transaction and template forms. Statements and lists use the
+      # shorter transaction_codes.* labels.
+      billing_transaction:
+        code:
+          meal: "Meal charge"
+          dues: "Membership dues charge"
+          payout: "Payout to user"
+          othchg: "Other charge"
+          payment: "Payment to community"
+          reimb: "Meal reimbursement credit"
+          othcrd: "Other credit"
       communities_signup:
         status:
           all: "All"

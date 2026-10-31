@@ -39,7 +39,7 @@ module Meals
     end
 
     def blank?
-      ingredient_cost.blank? && pantry_cost.blank? && payment_method.blank?
+      ingredient_cost.blank? && pantry_cost.blank?
     end
 
     def parts_by_type

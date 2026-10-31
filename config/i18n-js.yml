@@ -31,3 +31,4 @@ translations:
       - "*.subscription.topup_notices.*"
       - "*.communities.signup_action.*"
       - "*.search.load_error"
+      - "*.search.count_capped"

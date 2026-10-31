@@ -225,22 +225,13 @@ module Work
       filters = [{term: {community_id: current_community.id}}]
       filters << {term: {period_id: @period.id}} if @period
 
-      search = Work::Shift.search(
-        query: {
-          bool: {
-            must: {
-              multi_match: {
-                fields: Work::Shift.indexed_fields,
-                query: lenses[:search].value,
-                type: :cross_fields,
-                operator: :and
-              }
-            },
-            filter: filters
-          }
-        },
-        size: 500
-      )
+      # Each word must start a word in one of the fields, so "ma" matches Max but "ax" doesn't, the same
+      # as the people search (User.matching).
+      words = lenses[:search].value.to_s.tr("-", " ").split
+      must = words.map do |word|
+        {multi_match: {fields: Work::Shift.indexed_fields, query: word, type: :phrase_prefix}}
+      end
+      search = Work::Shift.search(query: {bool: {must: must, filter: filters}}, size: 500)
       @shifts = @shifts.merge(search.records.records)
     end
 

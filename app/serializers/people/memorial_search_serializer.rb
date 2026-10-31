@@ -7,9 +7,10 @@ module People
 
     def kind = "memorial"
 
-    def community_id = object.user.household.community_id
+    # The memorial keeps its own copy of these, since it outlives the user's account.
+    delegate :community_id, to: :object
 
-    def user_name = "#{object.user.first_name} #{object.user.last_name}"
+    def user_name = "#{object.first_name} #{object.last_name}"
 
     def obituary = object.obituary.to_s
 

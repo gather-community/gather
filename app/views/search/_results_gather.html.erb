@@ -1,26 +1,33 @@
-<% if results.empty? %>
+<%# With append: true, renders only the list items for a later page, which the JS adds to the list. %>
+<% items = capture do %>
+  <% results.each do |hit| %>
+    <% kind = hit.kind %>
+    <% highlight = search_result_highlight(hit.result) %>
+    <% url = search_result_url(kind, hit.source) %>
+    <% title = search_result_title(kind, hit.source, highlight) %>
+    <% details = search_result_details(hit) %>
+    <% meta = capture do %>
+      <%= search_result_kind_icon(kind) %> <%= search_result_kind_label(kind) %><% if details.present? %><%= t("search.details.separator") %><%= details %><% end %>
+    <% end %>
+    <li>
+      <div class="result-title"><%= url ? link_to(title, url) : title %></div>
+      <%# The details line links to the same place as the title. It's left out of the tab order so
+          keyboard users don't land on the same link twice. %>
+      <% if url %>
+        <%= link_to(meta, url, class: "result-meta", tabindex: -1) %>
+      <% else %>
+        <div class="result-meta"><%= meta %></div>
+      <% end %>
+      <% if (excerpt = search_result_excerpt(kind, highlight)) %>
+        <div class="result-excerpt"><%= highlighted(excerpt) %>&hellip;</div>
+      <% end %>
+    </li>
+  <% end %>
+<% end %>
+<% if local_assigns[:append] %>
+  <%= items %>
+<% elsif results.empty? %>
   <div class="center-notice"><%= t(".no_results") %></div>
 <% else %>
-  <ul class="search-result-list">
-    <% results.each do |result| %>
-      <% src = result._source %>
-      <% kind = src.kind %>
-      <% highlight = search_result_highlight(result) %>
-      <li>
-        <div class="result-title">
-          <%
-            title = search_result_title(kind, src, highlight)
-            url   = search_result_url(kind, src)
-          %>
-          <%= url ? link_to(title, url) : title %>
-        </div>
-        <div class="result-meta text-muted">
-          <%= search_result_kind_icon(kind) %> <%= search_result_kind_label(kind) %>
-        </div>
-        <% if (snippet = search_result_snippet(kind, highlight)) %>
-          <div class="result-snippet detail"><%= highlighted(snippet) %>&hellip;</div>
-        <% end %>
-      </li>
-    <% end %>
-  </ul>
+  <ul class="search-result-list" data-search-target="gatherList"><%= items %></ul>
 <% end %>

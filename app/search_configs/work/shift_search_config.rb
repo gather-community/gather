@@ -13,17 +13,19 @@ module Work
         number_of_shards: 1,
         analysis: {
           analyzer: {
-            english_stemmed: {
+            # Not stemmed, since the search lens matches the start of words (see ShiftsController), and
+            # stems would stop a partly typed word like "cleani" from matching "cleaning".
+            words: {
               tokenizer: "standard",
-              filter: %w[lowercase porter_stem]
+              filter: %w[lowercase]
             }
           }
         }
       } do
         mappings dynamic: "false" do
-          indexes :job_title, analyzer: "english_stemmed"
-          indexes :requester_name, analyzer: "english_stemmed"
-          indexes :assignee_names, analyzer: "english_stemmed"
+          indexes :job_title, analyzer: "words"
+          indexes :requester_name, analyzer: "words"
+          indexes :assignee_names, analyzer: "words"
           indexes :community_id, type: :integer
           indexes :period_id, type: :integer
         end

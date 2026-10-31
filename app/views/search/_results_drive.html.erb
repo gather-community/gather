@@ -1,12 +1,19 @@
-<% if results.empty? %>
-  <div class="center-notice"><%= t(".no_results") %></div>
-<% else %>
-  <ul class="search-result-list">
-    <% results.each do |file| %>
-      <li>
+<%# With append: true, renders only the list items for a later page, which the JS adds to the list. %>
+<% items = capture do %>
+  <% results.each do |file| %>
+    <li>
+      <div class="result-title">
         <%= image_tag(file.icon_link, class: "file-icon", alt: "") %>
         <%= link_to(file.name, file.web_view_link, target: "_blank") %>
-      </li>
-    <% end %>
-  </ul>
+      </div>
+      <div class="result-meta"><%= search_drive_file_details(file) %></div>
+    </li>
+  <% end %>
+<% end %>
+<% if local_assigns[:append] %>
+  <%= items %>
+<% elsif results.empty? %>
+  <div class="center-notice"><%= t(".no_results") %></div>
+<% else %>
+  <ul class="search-result-list" data-search-target="driveList"><%= items %></ul>
 <% end %>

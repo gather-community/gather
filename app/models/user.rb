@@ -176,9 +176,15 @@ class User < ApplicationRecord
   scope :active_or_assigned_to, lambda { |meal|
     where(arel_table[:deactivated_at].eq(nil).or(arel_table[:id].in(meal.assignments.map(&:user_id))))
   }
+  # Each word of the query must start a word of the name, so "ma gre" matches Max Greenfelder but
+  # "ax" doesn't. Hyphens count as word breaks. Matches Work::Shift's search lens (see ShiftsController).
   scope :matching, lambda { |q|
-    joins(:household)
-      .where("(first_name || ' ' || last_name) ILIKE ?", "%#{q}%")
+    words = q.to_s.tr("-", " ").split
+    name_words = "(' ' || translate(first_name || ' ' || last_name, '-', ' '))"
+    by_name = words.reduce(joins(:household)) do |rel, word|
+      rel.where("#{name_words} ILIKE ?", "% #{sanitize_sql_like(word)}%")
+    end
+    by_name
       .or( # Exact unit num without suffix
         joins(:household)
           .where("unit_num::varchar ILIKE ?", q)

@@ -50,7 +50,7 @@ describe "search" do
       json = response.parsed_body
       expect(json["html"]).to include(wiki_page_path(slug: wiki_page.slug))
       expect(json["count"]).to be >= 1
-      expect(json["next_page_token"]).to be_nil
+      expect(json["next_offset"]).to be_nil
     end
 
     context "with no matching results" do
@@ -65,7 +65,7 @@ describe "search" do
 
     context "with drive-only types filter" do
       it "returns no gather results" do
-        get(search_path, params: {search: "solar", source: "gather", types: "drive"},
+        get(search_path, params: {search: "solar", source: "gather", types: "drive_doc"},
           headers: {"Accept" => "application/json"})
         json = response.parsed_body
         expect(json["html"]).to include("No results found")
@@ -76,18 +76,16 @@ describe "search" do
 
   describe "GET /search (JSON, drive source)" do
     context "without gdrive config" do
-      it "returns no drive results" do
+      it "is not found, since the community has no Drive search" do
         get(search_path, params: {search: "solar", source: "drive"},
           headers: {"Accept" => "application/json"})
-        expect(response).to have_http_status(:ok)
-        json = response.parsed_body
-        expect(json["html"]).to include("No Drive files found")
-        expect(json["next_page_token"]).to be_nil
+        expect(response).to have_http_status(:not_found)
       end
     end
 
     context "when actor has no google_email" do
       let(:actor) { create(:user, google_email: nil) }
+      let!(:config) { create(:gdrive_config, community: community) }
 
       it "returns no drive results without calling the Drive API" do
         expect_any_instance_of(GDrive::Wrapper).not_to receive(:list_files)
@@ -108,20 +106,41 @@ describe "search" do
         allow_any_instance_of(GDrive::Wrapper).to receive(:list_files).and_return(
           instance_double(Google::Apis::DriveV3::FileList,
             files: [instance_double(Google::Apis::DriveV3::File,
+              id: "f1",
               name: "Budget Doc",
+              drive_id: "drive_abc",
+              mime_type: "application/vnd.google-apps.document",
+              modified_time: Time.zone.parse("2026-10-20 10:00"),
               web_view_link: "https://drive.google.com/f1",
               icon_link: "https://icons.example.com/doc")],
             next_page_token: nil)
         )
       end
 
-      it "passes the user's google_email and mapped drive IDs in the Drive query" do
+      it "searches all drives as the user's google_email" do
         expect_any_instance_of(GDrive::Wrapper).to receive(:list_files).with(
-          hash_including(q: a_string_including("'jane@example.com' in readers")
-            .and(include("'drive_abc' in parents")))
+          hash_including(corpora: "allDrives", q: a_string_including("'jane@example.com' in readers"))
         )
         get(search_path, params: {search: "budget", source: "drive"},
           headers: {"Accept" => "application/json"})
+      end
+
+      it "marks the count as capped only when Drive has more pages" do
+        get(search_path, params: {search: "budget", source: "drive"},
+          headers: {"Accept" => "application/json"})
+        expect(response.parsed_body["capped"]).to be(false)
+
+        allow_any_instance_of(GDrive::Searcher).to receive(:search)
+          .and_return({files: [], next_page_token: "token_abc"})
+        get(search_path, params: {search: "budget", source: "drive"},
+          headers: {"Accept" => "application/json"})
+        expect(response.parsed_body["capped"]).to be(true)
+      end
+
+      it "shows each file's type and modified date" do
+        get(search_path, params: {search: "budget", source: "drive"},
+          headers: {"Accept" => "application/json"})
+        expect(response.parsed_body["html"]).to include("Google Doc · Modified")
       end
 
       it "returns the files the Drive API returns" do
@@ -208,6 +227,45 @@ describe "search" do
       end
     end
 
+    context "with an event on a calendar that other communities are forbidden to see" do
+      let(:calendar) { create(:calendar, name: "Private Lounge") }
+      let!(:event) { create(:event, name: "Poker night", calendar: calendar) }
+
+      before do
+        create(:calendar_protocol, calendars: [calendar], other_communities: "forbidden")
+        refresh_indices
+      end
+
+      it "shows it to members of this community" do
+        expect(gather_search("poker")).to include("Private Lounge")
+      end
+
+      context "when a user from another community visits this one" do
+        let(:actor) { create(:user, community: create(:community)) }
+
+        before { use_subdomain(community.slug) }
+
+        it "hides it" do
+          expect(gather_search("poker")).not_to include("Private Lounge")
+        end
+      end
+    end
+
+    context "with a pet whose household has left the community" do
+      let(:household) { create(:household) }
+      let!(:pet) { create(:pet, name: "Waffles", household: household) }
+
+      it "hides it even though the index still has the old community" do
+        refresh_indices
+        household.update_column(:community_id, create(:community).id)
+        expect(gather_search("waffles")).not_to include("Waffles")
+      end
+    end
+
+    it "links a transaction with no statement to its account, which the member can see" do
+      expect(gather_search("dinner")).to include(account_path(own_account))
+    end
+
     context "with a group the member can't see" do
       let!(:hidden_group) { create(:group, name: "Secret Squirrels", availability: "hidden") }
 
@@ -257,6 +315,156 @@ describe "search" do
       expect(html).not_to include("<script>")
       expect(html).not_to include("<img")
       expect(html).to include("&lt;script&gt;")
+    end
+  end
+
+  describe "paging", search: SearchController::GATHER_MODELS do
+    before do
+      12.times { |i| create(:wiki_page, community: community, title: "Compost tip #{i + 1}") }
+      refresh_indices
+    end
+
+    def gather_page(offset)
+      get(search_path, params: {search: "compost", source: "gather", offset: offset},
+        headers: {"Accept" => "application/json"})
+      response.parsed_body
+    end
+
+    it "counts every visible hit but loads records only for the page shown" do
+      expect_any_instance_of(Search::Visibility).to receive(:load_hits)
+        .with(have_attributes(size: 10)).and_call_original
+      json = gather_page(0)
+      expect(json["count"]).to eq(12)
+      expect(json["html"].scan("<li>").size).to eq(10)
+      expect(json["next_offset"]).to eq(10)
+    end
+
+    it "serves later pages from the cached results without searching again" do
+      allow(Rails).to receive(:cache).and_return(ActiveSupport::Cache::MemoryStore.new)
+      gather_page(0)
+      expect(Elasticsearch::Model).not_to receive(:search)
+      json = gather_page(10)
+      expect(json["html"].scan("<li>").size).to eq(2)
+    end
+
+    it "searches again for a later page when the cached results have expired" do
+      cache = ActiveSupport::Cache::MemoryStore.new
+      allow(Rails).to receive(:cache).and_return(cache)
+      gather_page(0)
+      Timecop.travel(SearchController::RESULTS_CACHE_EXPIRY + 1.minute) do
+        json = gather_page(10)
+        expect(json["html"].scan("<li>").size).to eq(2)
+        expect(json["next_offset"]).to be_nil
+      end
+    end
+
+    # The test cache store keeps nothing, so every later page searches again, as after expiry.
+    it "returns an empty page, not an error, if the results shrank after the cache expired" do
+      gather_page(0)
+      ActsAsTenant.with_tenant(community.cluster) do
+        Wiki::Page.where("title LIKE ?", "Compost%").where.not(title: "Compost tip 1").destroy_all
+      end
+      refresh_indices
+      json = gather_page(10)
+      expect(response).to have_http_status(:ok)
+      expect(json["html"]).not_to include("<li>")
+      expect(json).to include("count" => 1, "next_offset" => nil)
+    end
+
+    it "returns just the remaining list items for a later page" do
+      json = gather_page(10)
+      expect(json["html"].scan("<li>").size).to eq(2)
+      expect(json["html"]).not_to include("<ul")
+      expect(json["next_offset"]).to be_nil
+    end
+  end
+
+  describe "query matching", search: SearchController::GATHER_MODELS do
+    let!(:pizza) { create(:meal, :with_menu, title: "Pizza night") }
+    let!(:german) { create(:meal, :with_menu, title: "German feast") }
+    let!(:potato_bar) { create(:meal, :with_menu, title: "Baked potato bar") }
+    let!(:potato_salad) { create(:meal, :with_menu, title: "Potato salad, baked beans") }
+
+    before { refresh_indices }
+
+    it "requires every word to match" do
+      expect(gather_search("pizza german")).to include("No results found")
+      html = gather_search("potato baked")
+      expect(html).to include(meal_path(potato_bar))
+      expect(html).to include(meal_path(potato_salad))
+    end
+
+    it "matches a quoted phrase exactly" do
+      html = gather_search('"baked potato"')
+      expect(html).to include(meal_path(potato_bar))
+      expect(html).not_to include(meal_path(potato_salad))
+    end
+
+    it "finds meals by menu and shows the matching menu as the excerpt" do
+      create(:meal, :with_menu, title: "Sunday supper", entrees: "Mushroom lasagna")
+      refresh_indices
+      expect(gather_search("lasagna")).to include("Mushroom <mark>lasagna</mark>")
+    end
+
+    it "finds memorials by name and obituary" do
+      person = create(:user, first_name: "Ingrid", last_name: "Okafor")
+      create(:memorial, user: person, birth_year: 1938, death_year: 2024, obituary: "A tireless gardener.")
+      refresh_indices
+      expect(gather_search("Okafor")).to include("1938–2024")
+      expect(gather_search("gardener")).to include("tireless <mark>gardener</mark>")
+    end
+  end
+
+  describe "result details", search: SearchController::GATHER_MODELS do
+    it "shows a one-off event's date, without the time, and its calendar" do
+      calendar = create(:calendar, name: "Common House")
+      create(:event, name: "Quilting bee", calendar: calendar,
+        starts_at: Time.zone.parse("2026-11-03 19:00"), ends_at: Time.zone.parse("2026-11-03 21:00"))
+      refresh_indices
+      expect(gather_search("quilting")).to include("Event · Nov 03 2026 · Common House")
+    end
+
+    it "shows a multi-day event's date range" do
+      create(:event, name: "Garden retreat",
+        starts_at: Time.zone.parse("2026-11-03 19:00"), ends_at: Time.zone.parse("2026-11-05 12:00"))
+      refresh_indices
+      expect(gather_search("retreat")).to include("Nov 03 2026 – Nov 05 2026")
+    end
+
+    it "shows a repeating event's pattern without the time" do
+      create(:event, name: "Choir practice", recurrence_rule: IceCube::Rule.weekly.to_hash,
+        starts_at: Time.zone.parse("2026-11-04 19:00"), ends_at: Time.zone.parse("2026-11-04 20:00"))
+      refresh_indices
+      html = gather_search("choir")
+      expect(html).to include("Weekly on Wednesdays from Nov 04")
+      expect(html).not_to include("7:00pm")
+    end
+
+    it "shows a meal's time, location and head cook" do
+      cook = create(:user, first_name: "Rosa", last_name: "Ibarra")
+      meal = create(:meal, :with_menu, title: "Tamale night", head_cook: cook)
+      refresh_indices
+      html = gather_search("tamale")
+      expect(html).to include(CGI.escapeHTML(meal.decorate.served_at_datetime))
+      expect(html).to include("Head cook: Rosa Ibarra")
+    end
+
+    it "shows a transaction's date, amount and household" do
+      household = create(:household, name: "Okonkwo")
+      account = Billing::Account.find_or_create_by!(household: household, community: community)
+      create(:transaction, account: account, description: "Firewood", value: 12.5, incurred_on: "2026-10-01")
+      refresh_indices
+      sign_in(create(:biller)) # Only billers can see another household's transactions.
+      html = gather_search("firewood")
+      expect(html).to include("$12.50")
+      expect(html).to include("Okonkwo household")
+    end
+
+    it "shows a pet's color, species and household" do
+      create(:pet, name: "Biscuit", species: "Beagle", color: "Tan",
+        household: create(:household, name: "Lund"))
+      refresh_indices
+      expect(gather_search("biscuit")).to include("Tan Beagle · Lund household")
     end
   end
 

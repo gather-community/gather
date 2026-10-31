@@ -16,6 +16,31 @@ en:
       pet: "Pet"
       vehicle: "Vehicle"
       transaction: "Transaction"
+    # Facts shown after a result's kind label (SearchHelper#search_result_details), joined by separator.
+    details:
+      separator: " · "
+      household: "%{name} household"
+      head_cook: "Head cook: %{name}"
+      updated_by: "Updated %{date} by %{name}"
+      updated: "Updated %{date}"
+      members:
+        one: "1 member"
+        other: "%{count} members"
+      child: "Child"
+      unit: "Unit %{unit}"
+      years: "%{birth}–%{death}"
+      date_range: "%{first} – %{last}"
+      pet_color_species: "%{color} %{species}"
+      modified: "Modified %{date}"
+      # Google Drive file types, keyed like the type: search syntax (Search::QueryParser::MIME_TYPES).
+      drive_types:
+        doc: "Google Doc"
+        sheet: "Google Sheet"
+        slide: "Google Slides"
+        folder: "Folder"
+        pdf: "PDF"
+    # Result count when there are more results than are fetched, e.g. "200+".
+    count_capped: "%{count}+"
     # Shown by search_controller.ts when fetching a section's results fails.
     load_error: "Error loading results. Please try again."
     index:
@@ -23,15 +48,18 @@ en:
       form_label: "Search"
       input_label: "Search Gather"
       placeholder: "Search Gather and Google Drive…"
+      placeholder_no_drive: "Search Gather…"
       submit: "Search"
       search_tips: "Search tips"
       # Section headings and mobile tab names; a result count may follow.
       gather: "Gather"
+      results: "Results"
       google_drive: "Google Drive"
       loading: "Loading…"
-      load_more_drive: "Load more Drive results"
-      filter: "Filter"
+      load_more: "More results"
       empty_query: "Enter a search term above to search Gather and Google Drive."
+      empty_query_no_drive: "Enter a search term above to search Gather."
+      no_types: "Select at least one type to search."
     results_gather:
       no_results: "No results found."
     results_drive:
@@ -41,7 +69,7 @@ en:
     # Checkbox labels in the search sidebar, keyed by the type value sent in the `types` param.
     type_filters:
       types:
-        wiki_page: "Wiki pages"
+        wiki_page: "Wiki Pages"
         event: "Events"
         calendar: "Calendars"
         group: "Groups"
@@ -49,18 +77,32 @@ en:
         household: "Households"
         meal: "Meals"
         memorial: "Memorials"
-        emergency_contact: "Emergency contacts"
+        emergency_contact: "Emergency Contacts"
         pet: "Pets"
         vehicle: "Vehicles"
         transaction: "Transactions"
-        drive: "Google Drive"
+        drive_doc: "Google Docs"
+        drive_sheet: "Google Sheets"
+        drive_slide: "Google Slides"
+        drive_pdf: "PDFs"
+        drive_folder: "Folders"
+        drive_other: "Other Files"
+      # Section headings. Without Google Drive there's one section, headed "Filter".
+      filter: "Filter"
+      gather: "Gather"
+      google_drive: "Google Drive"
+      select_all: "Select All"
+      deselect_all: "Deselect All"
     # The search tips modal. The search syntax examples (in <code>) are not translated, since they are
     # literal query syntax; descriptions that mention an example take it as an interpolation.
     search_tips_modal:
       title: "Search Tips"
       intro: "Enter words to search across Gather (wiki pages, events, people, meals, and more) and Google Drive."
+      intro_no_drive: "Enter words to search across Gather (wiki pages, events, people, meals, and more)."
       basic_search: "Basic search"
       both_words: "Items containing both words"
+      word_start: "Words starting with “%{start}”"
+      word_start_drive: "Words starting with “%{start}”. In Google Drive, this only matches the start of file names, not file contents."
       exact_phrase: "The exact phrase “%{phrase}”"
       special_syntax: "Special syntax"
       title_only: "Search only in the title or name field"
@@ -69,4 +111,3 @@ en:
       combining: "Combining"
       title_and_word: "Items named “%{title}” containing “%{word}”"
       sheet_and_phrase: "Google Sheets matching the phrase “%{phrase}”"
-      checkbox_hint: "Use the checkboxes on the right to filter by content type."

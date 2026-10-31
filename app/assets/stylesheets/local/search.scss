@@ -8,13 +8,13 @@
       width: 100%;
     }
 
-    .search-tips-link {
-      display: inline-block;
-      margin-left: 12px;
-      vertical-align: middle;
+    .search-tips-button {
       color: $text-muted;
-      font-size: 13px;
-      white-space: nowrap;
+
+      // question-circle renders smaller than the search icon beside it at the same size.
+      .fa {
+        font-size: 16px;
+      }
     }
   }
 
@@ -96,10 +96,10 @@
 
     li {
       padding: 8px 0;
-      border-bottom: 1px solid $light-border-color;
 
-      &:last-child {
-        border-bottom: none;
+      // Bootstrap's 0.2em mark padding makes highlights crowd neighboring lines.
+      mark {
+        padding: 0 1px;
       }
 
       .result-title {
@@ -107,12 +107,27 @@
       }
 
       .result-meta {
+        display: block;
         font-size: 12px;
         margin-top: 2px;
+        color: $text-muted;
+      }
+
+      // The details line links to the result too, but reads as muted text until hovered.
+      a.result-meta:hover {
+        color: $text-muted;
+        text-decoration: underline;
       }
 
       .result-kind-icon {
         margin-right: 3px;
+      }
+
+      .result-excerpt {
+        margin-top: 4px;
+        font-size: 13px;
+        line-height: 1.6;
+        color: $text-muted;
       }
 
       .file-icon {
@@ -141,35 +156,62 @@
       margin-top: 0;
     }
   }
+}
 
-  .search-sidebar-heading {
-    font-size: 14px;
-    color: $text-muted;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    margin: 0 0 8px;
+// Search tips modal: section headings sit close to their table, with more room between sections.
+#search-tips-modal .modal-body {
+  h4 {
+    margin: 24px 0 6px;
   }
 
-  .type-filter-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px 16px;
-
-    @media screen and (min-width: $screen-md-min) {
-      flex-direction: column;
-      gap: 4px;
-    }
+  p + h4 {
+    margin-top: 16px;
   }
 
-  .type-filter-item {
-    font-weight: normal;
+  .key-value {
+    width: 100%;
+    margin-bottom: 0;
+  }
+}
+
+// Search box in the top nav (sm and up; the mobile nav has an icon instead)
+.nav-search-form {
+  display: inline-block;
+  position: relative;
+  vertical-align: middle;
+  margin-right: 8px;
+
+  .nav-search-icon {
+    position: absolute;
+    left: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.7);
+    pointer-events: none;
+  }
+
+  .nav-search-input {
+    width: 180px;
+    height: 26px;
+    padding: 0 8px 0 26px;
     font-size: 13px;
-    color: $text-color;
-    cursor: pointer;
-    margin: 0;
+    color: #fff;
+    // Matches the selected main nav item.
+    background-color: $theme-main-lighter;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    transition: background-color 0.15s, width 0.15s;
 
-    input[type="checkbox"] {
-      margin-right: 5px;
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    &:focus {
+      outline: none;
+      width: 220px;
+      background-color: lighten($theme-main-lighter, 5%);
+      border-color: rgba(255, 255, 255, 0.5);
     }
   }
 }

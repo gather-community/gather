@@ -339,6 +339,7 @@
       "accountholder_required": "Please specify the accountholder name."
     },
     "search": {
+      "count_capped": "%{count}+",
       "load_error": "Error loading results. Please try again."
     },
     "subscription": {

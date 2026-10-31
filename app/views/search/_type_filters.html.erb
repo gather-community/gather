@@ -1,10 +1,29 @@
-<div class="type-filter-list" data-search-target="typeFilters">
-  <% SearchController::ALL_TYPES_WITH_DRIVE.each do |type| %>
-    <label class="type-filter-item">
-      <input type="checkbox" value="<%= type %>"
-             <%= "checked" if @types.include?(type) %>
-             data-action="change->search#typeChanged">
-      <%= t(".types.#{type}") %>
-    </label>
+<%# Same look and behavior as the calendar list checkboxes (calendars/_calendar_list.html.erb). With Drive,
+    the list splits into a Gather section and a Google Drive section. Each is sorted by its labels. %>
+<%
+  sections =
+    if @drive_available
+      [[t(".gather"), SearchController::ALL_TYPES], [t(".google_drive"), SearchController::DRIVE_TYPES]]
+    else
+      [[t(".filter"), SearchController::ALL_TYPES]]
+    end
+%>
+<div class="checkbox-list-wrapper" data-search-target="typeFilters">
+  <% sections.each_with_index do |(heading, types), i| %>
+    <h3 class="<%= "top" if i.zero? %>"><%= heading %></h3>
+    <ul class="no-bullets checkbox-list">
+      <% Gather::Collation.sort_by(types) { |type| t(".types.#{type}") }.each do |type| %>
+        <li>
+          <label>
+            <%= check_box_tag("types[]", type, @types.include?(type), id: "search-type-#{type}",
+                  autocomplete: "off", data: {action: "change->search#typeChanged"}) %>
+            <%= t(".types.#{type}") %>
+          </label>
+        </li>
+      <% end %>
+    </ul>
   <% end %>
+  <button type="button" class="select-all-link" data-action="search#toggleAll">
+    <%= @types == @all_types ? t(".deselect_all") : t(".select_all") %>
+  </button>
 </div>

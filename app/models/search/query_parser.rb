@@ -7,6 +7,7 @@ module Search
   # Supported syntax:
   #   solar panels            - full-text search for both words
   #   "solar panels"          - exact phrase match
+  #   sol*                    - words starting with "sol"
   #   title:minutes           - restrict to title/name field only
   #   title:"budget 2024"     - exact phrase in title/name
   #   type:doc                - Drive only: restrict by MIME type (doc/sheet/slide/folder/pdf)
@@ -37,7 +38,10 @@ module Search
     def to_gdrive_q
       parts = ["trashed = false"]
       parts.concat(title_terms.map { |t| "name contains '#{escape(t)}'" })
-      parts.concat(full_text_terms.map { |t| "fullText contains '#{escape(t)}'" })
+      parts.concat(full_text_terms.map do |t|
+        # Drive's full-text search only matches whole words, but its name search matches prefixes.
+        wildcard?(t) ? "name contains '#{escape(t.delete_suffix("*"))}'" : "fullText contains '#{escape(t)}'"
+      end)
       parts << "mimeType = '#{MIME_TYPES[type_filter]}'" if MIME_TYPES.key?(type_filter.to_s)
       parts.join(" and ")
     end
@@ -85,19 +89,9 @@ module Search
     # community_ids contains the ID (multi-community models like Groups::Group).
     # rubocop:disable Metrics/MethodLength
     def to_gather_query(community_id:, kinds: nil, extra_filters: [])
-      must = []
-      if full_text_terms.any?
-        must << {
-          multi_match: {
-            query: full_text_terms.join(" "),
-            fields: GATHER_FIELDS,
-            type: "best_fields"
-          }
-        }
-      end
-      title_terms.each do |t|
-        must << {multi_match: {query: t, fields: %w[title name], type: "best_fields"}}
-      end
+      # Every word or quoted phrase must match, each in any one field.
+      must = full_text_terms.map { |t| term_query(t, GATHER_FIELDS) } +
+        title_terms.map { |t| term_query(t, TITLE_FIELDS) }
 
       community_filter = {
         bool: {
@@ -126,34 +120,49 @@ module Search
           encoder: "html",
           pre_tags: ["<mark>"],
           post_tags: ["</mark>"],
-          fields: {
-            content: {fragment_size: 200, number_of_fragments: 1},
-            description: {fragment_size: 200, number_of_fragments: 1},
-            note: {fragment_size: 200, number_of_fragments: 1},
-            notes: {fragment_size: 200, number_of_fragments: 1},
-            title: {},
-            name: {}
-          }
-        },
-        size: 30
+          fields: EXCERPT_FIELDS.index_with { {fragment_size: 200, number_of_fragments: 1} }
+            .merge(TITLE_FIELDS.index_with { {} })
+        }
       }
     end
     # rubocop:enable Metrics/MethodLength
 
-    # Fields searched across all Gather indexed models.
-    # title/name weighted higher; body fields have default weight.
-    GATHER_FIELDS = %w[
-      title^3 name^3 first_name^3 last_name^3
-      content description note notes body
-      location address
-      email relationship
-      make model plate
-      code unit_num
-      mailman_list_name mailman_list_fqdn
-      species color vet health_issues caregivers
+    # The fields searched across all Gather indexed models, by how a match is shown to the user. Every
+    # searched field is visible in the result somehow, so a hit is never unexplained.
+    #
+    # Shown as the result title. Also what title: searches.
+    TITLE_FIELDS = %w[title name first_name last_name user_name].freeze
+    # Shown in the title or details line (see SearchHelper).
+    DETAIL_FIELDS = %w[species color make model plate relationship unit_num location].freeze
+    # Prose shown as a highlighted excerpt below the details line.
+    EXCERPT_FIELDS = %w[
+      content description note notes guidelines obituary messages_body
+      entrees side kids dessert vet health_issues caregivers
     ].freeze
+    GATHER_FIELDS = (TITLE_FIELDS.map { |f| "#{f}^3" } + DETAIL_FIELDS + EXCERPT_FIELDS).freeze
 
     private
+
+    # A quoted phrase (which keeps its spaces) must match exactly. A word that the analyzer splits
+    # into several tokens, like "gluten-free", needs all of them in one field.
+    def term_query(term, fields)
+      type =
+        if wildcard?(term)
+          # Matches the words before the * exactly and the last one as a prefix.
+          term = term.delete_suffix("*")
+          {type: "phrase_prefix"}
+        elsif term.include?(" ")
+          {type: "phrase"}
+        else
+          {type: "best_fields", operator: "and"}
+        end
+      # lenient skips numeric fields like unit_num when the term isn't a number.
+      {multi_match: {query: term, fields: fields, lenient: true, **type}}
+    end
+
+    def wildcard?(term)
+      term.end_with?("*") && term.length > 1
+    end
 
     # rubocop:disable Metrics/MethodLength
     def parse(raw)

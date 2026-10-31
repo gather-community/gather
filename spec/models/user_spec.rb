@@ -86,16 +86,18 @@ describe User do
       ]
     end
 
-    it "matches partial first_name" do
-      expect(User.matching("don")).to contain_exactly(users[0])
+    it "matches the start of the first name, not the middle" do
+      expect(User.matching("Gor")).to contain_exactly(users[0])
+      expect(User.matching("don")).to be_empty
     end
 
     it "matches full first_name" do
       expect(User.matching("gordon")).to contain_exactly(users[0])
     end
 
-    it "matches partial last_name" do
+    it "matches the start of the last name, not the middle" do
       expect(User.matching("Dru")).to contain_exactly(users[0], users[1])
+      expect(User.matching("ruck")).to be_empty
     end
 
     it "matches full last_name" do
@@ -106,6 +108,18 @@ describe User do
       expect(User.matching("Gordon Druck")).to contain_exactly(users[0])
     end
 
+    it "requires every word to start a word of the name, in any order" do
+      expect(User.matching("go dr")).to contain_exactly(users[0])
+      expect(User.matching("dr go")).to contain_exactly(users[0])
+      expect(User.matching("go zo")).to be_empty
+    end
+
+    it "treats hyphens as word breaks" do
+      hyphenated = create(:user, first_name: "Ana", last_name: "Nader-Jenkins")
+      expect(User.matching("jen")).to contain_exactly(hyphenated)
+      expect(User.matching("Nader-Jen")).to contain_exactly(hyphenated)
+    end
+
     it "matches exact unit number with suffix with or without -, or exact unit number" do
       expect(User.matching("10")).to be_empty
       expect(User.matching("99B")).to contain_exactly(users[0])
@@ -113,7 +127,7 @@ describe User do
       expect(User.matching("99")).to contain_exactly(users[0], users[1], users[2], users[3])
       expect(User.matching("99X")).to contain_exactly(users[2], users[3])
       expect(User.matching("99-X")).to contain_exactly(users[2], users[3])
-      expect(User.matching("x")).to contain_exactly(users[1], users[5])
+      expect(User.matching("x")).to contain_exactly(users[5]) # Not Soox, since x is mid-word
     end
   end
 

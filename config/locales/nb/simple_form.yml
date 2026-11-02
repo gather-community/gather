@@ -38,7 +38,7 @@ nb:
         introduction: "Om fellesskapet deres" # MT
         country_code: "Land" # MT
         time_zone: "Tidssone" # MT
-        locale: "Språk" # MT
+        locale: "Standardspråk" # MT
         want_sample_data: "Eksempeldata" # MT
       communities_signup_action:
         decision: "Handling" # MT
@@ -94,7 +94,6 @@ nb:
         community_name: "Opptil 20 tegn." # MT
         slug: "Små bokstaver, tall og bindestrek. Må begynne med en bokstav. Opptil 20 tegn." # MT
         introduction: "Fortell litt om fellesskapet deres og hvorfor dere tror Gather passer for dere. Ta med én eller flere lenker til offentlig tilgjengelige nettsider (f.eks. nettstedet til fellesskapet eller sider på sosiale medier) som viser hvem fellesskapet er." # MT
-        locale: "Språket medlemmene i fellesskapet deres starter med for e-post og kalenderfeeder. Hver og en kan endre det i profilen sin." # MT
       communities_signup_action:
         message_approve: "Hele e-posten om godkjenning vises ovenfor. Legg til en personlig hilsen i e-posten ved å erstatte plassholderteksten." # MT
         message_deny: "Skriv ned hvorfor søknaden blir avslått. Dette er bare til intern bruk og blir ikke sendt til søkeren." # MT

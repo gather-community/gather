@@ -32,7 +32,7 @@ sv:
         introduction: "Om er gemenskap" # MT
         country_code: "Land" # MT
         time_zone: "Tidszon" # MT
-        locale: "Språk" # MT
+        locale: "Standardspråk" # MT
         want_sample_data: "Exempeldata" # MT
       communities_signup_action:
         decision: "Åtgärd" # MT
@@ -88,7 +88,6 @@ sv:
         community_name: "Högst 20 tecken." # MT
         slug: "Små bokstäver, siffror och bindestreck. Måste börja med en bokstav. Högst 20 tecken." # MT
         introduction: "Berätta lite om er gemenskap och varför ni tror att Gather passar er. Ta med en eller flera länkar till offentliga webbsidor (t.ex. gemenskapens webbplats eller sidor i sociala medier) som visar vilka ni är." # MT
-        locale: "Språket som medlemmarna i er gemenskap börjar med för mejl och kalenderflöden. Var och en kan ändra det i sin profil." # MT
       communities_signup_action:
         message_approve: "Hela mejlet om godkännande visas ovan. Lägg till en personlig hälsning genom att ersätta platshållartexten." # MT
         message_deny: "Ange varför ansökan avslås. Det här är bara för internt bruk och skickas inte till den sökande." # MT

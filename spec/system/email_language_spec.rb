@@ -59,9 +59,9 @@ describe "email language" do
 
         page.driver.header("Accept-Language", "en")
         visit(new_communities_signup_path)
-        expect(page).to have_select("Language", selected: "English")
+        expect(page).to have_select("Default Language", selected: "English")
         fill_in_signup
-        select("Svenska", from: "Language")
+        select("Svenska", from: "Default Language")
         click_button("Submit Application")
         expect(page).to have_title("Application Submitted")
         expect(Communities::Signup.last.locale).to eq("sv")
@@ -87,10 +87,17 @@ describe "email language" do
       expect(page).not_to have_field("Default Language")
     end
 
+    scenario "the community's default language can't be changed by posting it" do
+      visit("/admin/settings/community")
+      page.driver.submit(:patch, "/admin/settings/community",
+        {community: {settings: {time_zone: "UTC", locale: "de"}}})
+      expect(community.reload.settings.locale).to eq("en")
+    end
+
     scenario "a signup is in English" do
       allow_any_instance_of(Communities::SignupsController).to receive(:verify_hcaptcha).and_return(true)
       visit(new_communities_signup_path)
-      expect(page).not_to have_field("Language")
+      expect(page).not_to have_field("Default Language")
       fill_in_signup
       click_button("Submit Application")
       expect(page).to have_title("Application Submitted")

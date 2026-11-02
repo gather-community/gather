@@ -26,7 +26,7 @@ en:
         introduction: "About Your Community"
         country_code: "Country"
         time_zone: "Time Zone"
-        locale: "Language"
+        locale: "Default Language"
         want_sample_data: "Sample Data"
       communities_signup_action:
         decision: "Action"
@@ -82,7 +82,6 @@ en:
         community_name: "Up to 20 characters."
         slug: "Lowercase letters, numbers, and hyphens; must start with a letter. Up to 20 characters."
         introduction: "Tell us a bit about your community and why you think Gather is a good fit. Please include one or more links to publicly accessible webpages (e.g. your community website, social media pages) that establish your community's identity."
-        locale: "The language your community's members start with for emails and calendar feeds. Each member can change it on their profile."
       communities_signup_action:
         message_approve: "The full approval email is shown above. Add a personalized note to the approval email by replacing the placeholder text."
         message_deny: "Record why this application is being denied. This is for internal reference only and will not be sent to the applicant."

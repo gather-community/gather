@@ -38,7 +38,7 @@ it:
         introduction: "La tua comunità" # MT
         country_code: "Paese" # MT
         time_zone: "Fuso orario" # MT
-        locale: "Lingua" # MT
+        locale: "Lingua predefinita" # MT
         want_sample_data: "Dati di esempio" # MT
       communities_signup_action:
         decision: "Azione" # MT
@@ -94,7 +94,6 @@ it:
         community_name: "Fino a 20 caratteri." # MT
         slug: "Lettere minuscole, numeri e trattini; deve iniziare con una lettera. Fino a 20 caratteri." # MT
         introduction: "Raccontaci qualcosa della tua comunità e perché pensi che Gather faccia al caso vostro. Includi uno o più link a pagine web pubbliche (ad es. il sito della comunità, pagine social) che attestino l'identità della tua comunità." # MT
-        locale: "La lingua iniziale delle email e dei calendari esportati per i membri della tua comunità. Ognuno può cambiarla nel proprio profilo." # MT
       communities_signup_action:
         message_approve: "L'email di approvazione completa è mostrata qui sopra. Aggiungi una nota personale all'email di approvazione sostituendo il testo segnaposto." # MT
         message_deny: "Annota perché questa richiesta viene respinta. Serve solo come riferimento interno e non verrà inviato a chi ha fatto la richiesta." # MT

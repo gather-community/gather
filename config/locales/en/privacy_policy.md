@@ -50,6 +50,8 @@ When you register with the system or update your information via the system.
 
 A cookie is used to store a secret key that proves you have signed into the system. This is how your "session" is maintained as you use the system. This is a standard and very common procedure with web applications.
 
+If you choose a language from the menu at the bottom of a page, a second cookie remembers that choice so the system appears in that language. It holds only the language you chose (for example, "fr" for French) and is deleted when you close your browser.
+
 If you disable cookies you will not be able to use the system.
 
 We do not use cookies to track your activity on other sites, tailor advertising, or anything other than the above.
@@ -132,4 +134,4 @@ If you have any questions regarding this privacy policy, you may contact us usin
 
 Gather<br/>220 Collingwood St #140<br/>Ann Arbor, MI 48103<br/>USA<br/>support@gather.coop
 
-Last Edited on 2017-01-17
+Last Edited on 2026-11-02

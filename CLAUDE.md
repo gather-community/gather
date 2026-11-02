@@ -381,7 +381,7 @@ The dispositions map is a **declaration**, not an assertion — it does not read
 
 **How the locale is chosen** ([lib/gather/locales.rb](lib/gather/locales.rb)):
 
-- **Web requests** get English unless the `i18n` feature flag is on. With the flag on (`"basic"` interface for everyone, `"user"` for chosen users), they get the language picked from the footer's language menu, which is stored in the `locale` cookie, or else the best match for the browser's `Accept-Language` header. The flag covers every locale at once; there's no per-locale release. This happens in the `ApplicationControllable::Locale` around_action. Everything runs inside `I18n.with_locale`. Never assign `I18n.locale =`, because it leaks across requests.
+- **Web requests** get English unless the `i18n` feature flag is on. With the flag on (`"basic"` interface for everyone, `"user"` for chosen users), they get the language picked from the footer's language menu, which is stored in the `locale` session cookie (so it lasts until the browser closes), or else the best match for the browser's `Accept-Language` header. The flag covers every locale at once; there's no per-locale release. This happens in the `ApplicationControllable::Locale` around_action. Everything runs inside `I18n.with_locale`. Never assign `I18n.locale =`, because it leaks across requests.
 - **Email** renders in the recipient's locale via the `RecipientLocale` mailer concern, which every mailer must include ([spec](spec/mailers/recipient_locale_spec.rb)). For now that's always the default locale. Don't rely on the ambient locale in mailers: ActiveJob restores the *sender's* locale when delivering.
 - **Jobs** (`ApplicationJob`) and **calendar feeds** run in the default locale.
 

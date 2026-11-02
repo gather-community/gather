@@ -35,7 +35,10 @@ describe "language menu", js: true do
       select("Deutsch", from: "language-menu-select")
       expect(page).to have_css("html[lang='de']")
       expect(page).to have_link("Sprache ändern")
-      expect(page.driver.browser.manage.cookie_named(Gather::Locales::COOKIE)[:value]).to eq("de")
+      cookie = page.driver.browser.manage.cookie_named(Gather::Locales::COOKIE)
+      expect(cookie[:value]).to eq("de")
+      # A session cookie, so the choice ends when the browser closes.
+      expect(cookie[:expires]).to be_nil
 
       # The menu shows the choice when it's opened again.
       click_link("Sprache ändern")

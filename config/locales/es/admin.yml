@@ -20,16 +20,6 @@ es:
         "off": "Desactivado" # MT
         selected_users: "Usuarios seleccionados" # MT
         everyone: "Todos" # MT
-      user_picker:
-        label: "Buscar un usuario para añadir" # MT
-        placeholder: "Busca por nombre o correo electrónico en cualquier comunidad" # MT
-        too_short:
-          one: "Escribe al menos %{count} carácter" # MT
-          other: "Escribe al menos %{count} caracteres" # MT
-        searching: "Buscando…" # MT
-        no_results: "No hay usuarios que coincidan" # MT
-        error: "La búsqueda falló. Inténtalo de nuevo." # MT
-        remove: "Quitar" # MT
       index:
         title: "Indicadores de funcionalidad" # MT
         intro: "Los indicadores de funcionalidad activan y desactivan funciones aún no publicadas. Cada indicador puede estar desactivado, activado solo para usuarios seleccionados (de cualquier comunidad) o activado para todos." # MT

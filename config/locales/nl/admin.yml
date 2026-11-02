@@ -20,16 +20,6 @@ nl:
         "off": "Uit" # MT
         selected_users: "Geselecteerde gebruikers" # MT
         everyone: "Iedereen" # MT
-      user_picker:
-        label: "Zoek een gebruiker om toe te voegen" # MT
-        placeholder: "Zoek op naam of e-mail in elke gemeenschap" # MT
-        too_short:
-          one: "Typ minstens %{count} teken" # MT
-          other: "Typ minstens %{count} tekens" # MT
-        searching: "Zoeken…" # MT
-        no_results: "Geen overeenkomende gebruikers" # MT
-        error: "Het zoeken is mislukt. Probeer het opnieuw." # MT
-        remove: "Verwijderen" # MT
       index:
         title: "Featureflags" # MT
         intro: "Met featureflags zet je functies die nog niet zijn uitgebracht aan en uit. Elke flag kan uit staan, alleen aan staan voor geselecteerde gebruikers (uit elke gemeenschap) of aan staan voor iedereen." # MT

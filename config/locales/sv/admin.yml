@@ -20,16 +20,6 @@ sv:
         "off": "Av" # MT
         selected_users: "Valda användare" # MT
         everyone: "Alla" # MT
-      user_picker:
-        label: "Sök efter en användare att lägga till" # MT
-        placeholder: "Sök på namn eller e-post i vilken gemenskap som helst" # MT
-        too_short:
-          one: "Skriv minst %{count} tecken" # MT
-          other: "Skriv minst %{count} tecken" # MT
-        searching: "Söker…" # MT
-        no_results: "Inga matchande användare" # MT
-        error: "Sökningen misslyckades. Försök igen." # MT
-        remove: "Ta bort" # MT
       index:
         title: "Funktionsflaggor" # MT
         intro: "Funktionsflaggor slår på och av funktioner som inte släppts än. Varje flagga kan vara av, på endast för valda användare (från vilken gemenskap som helst) eller på för alla." # MT

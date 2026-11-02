@@ -45,8 +45,5 @@ application.register("calendars--eventlet-delete", Calendars__EventletDeleteCont
 import Calendars__EventFormController from "./calendars/event_form_controller";
 application.register("calendars--event-form", Calendars__EventFormController);
 
-import Admin__UserPickerController from "./admin/user_picker_controller";
-application.register("admin--user-picker", Admin__UserPickerController);
-
 import Admin__FeatureFlagFormController from "./admin/feature_flag_form_controller";
 application.register("admin--feature-flag-form", Admin__FeatureFlagFormController);

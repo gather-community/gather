@@ -24,34 +24,34 @@ describe "admin feature flags request" do
   end
 
   describe "user_search" do
-    def search(query, exclude: nil)
-      get(user_search_admin_feature_flags_path, params: {q: query, exclude: exclude}.compact)
+    # Same response shape as /users.json, so the standard select2 user select can read it.
+    def search(query, page: nil)
+      get(user_search_admin_feature_flags_path, params: {search: query, page: page}.compact)
       expect(response).to have_http_status(:ok)
-      response.parsed_body["results"]
+      response.parsed_body
     end
 
-    it "matches active users by name across clusters, with their community" do
-      results = search("jane")
+    it "matches active users by name across clusters, with their community and email" do
+      results = search("jane")["results"]
       expect(results.pluck("name")).to contain_exactly("Jane Doe", "Janet Smith", "Jane Far")
       far = results.find { |r| r["name"] == "Jane Far" }
-      expect(far).to eq("id" => far_user.id, "name" => "Jane Far", "email" => "far@example.org",
-        "community" => "Far Community")
+      expect(far).to eq("id" => far_user.id, "name" => "Jane Far",
+        "details" => "Far Community · far@example.org")
     end
 
     it "matches by email" do
-      expect(search("jsmith@").pluck("name")).to eq(["Janet Smith"])
+      expect(search("jsmith@")["results"].pluck("name")).to eq(["Janet Smith"])
     end
 
     it "treats LIKE wildcards literally" do
-      expect(search("%%")).to eq([])
+      expect(search("%%")["results"]).to eq([])
     end
 
-    it "leaves out users already chosen on the form" do
-      expect(search("jane", exclude: "#{jane.id},#{janet.id}").pluck("name")).to eq(["Jane Far"])
-    end
-
-    it "returns nothing for a query that's too short" do
-      expect(search("j")).to eq([])
+    it "pages the results" do
+      stub_const("UserSelectJson::PER_PAGE", 2)
+      expect(search("jane")["meta"]).to eq("more" => true)
+      expect(search("jane", page: 2)["results"].size).to eq(1)
+      expect(search("jane", page: 2)["meta"]).to eq("more" => false)
     end
   end
 

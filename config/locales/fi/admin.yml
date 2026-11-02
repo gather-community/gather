@@ -20,16 +20,6 @@ fi:
         "off": "Pois" # MT
         selected_users: "Valitut käyttäjät" # MT
         everyone: "Kaikki" # MT
-      user_picker:
-        label: "Hae lisättävää käyttäjää" # MT
-        placeholder: "Hae nimellä tai sähköpostilla mistä tahansa yhteisöstä" # MT
-        too_short:
-          one: "Kirjoita vähintään %{count} merkki" # MT
-          other: "Kirjoita vähintään %{count} merkkiä" # MT
-        searching: "Haetaan…" # MT
-        no_results: "Ei vastaavia käyttäjiä" # MT
-        error: "Haku epäonnistui. Yritä uudelleen." # MT
-        remove: "Poista" # MT
       index:
         title: "Ominaisuusliput" # MT
         intro: "Ominaisuusliput kytkevät julkaisemattomia ominaisuuksia päälle ja pois. Kukin lippu voi olla pois päältä, päällä vain valituille käyttäjille (mistä tahansa yhteisöstä) tai päällä kaikille." # MT

@@ -47,36 +47,23 @@ describe "admin feature flags dashboard" do
     messaging.users << jane
     visit(edit_admin_feature_flag_path(messaging))
 
-    # The current user is already listed.
-    expect(page).to have_css(".user-picker-item", text: "Jane Doe")
+    users_field = find(".feature_flag_user_ids")
+    # The current user is already chosen.
+    expect(users_field).to have_css(".select2-selection__choice", text: "Jane Doe")
 
-    search = find("input[role=combobox]")
-    search.fill_in(with: "j")
-    expect(page).to have_css(".user-picker-message", text: "Type at least 2 characters")
-
-    # Users from other clusters show up, with their community and email. Users already chosen don't.
-    search.fill_in(with: "jan")
-    expect(page).to have_css(".user-picker-option", count: 1, text: "Janet Far")
-    expect(page).to have_css(".user-picker-details", text: "Far Community · far@example.org")
-    find(".user-picker-option", text: "Janet Far").click
-    expect(page).to have_css(".user-picker-item", text: "Janet Far")
+    # Users from other clusters show up, with their community and email on a second line.
+    select2("Janet", from: "#feature_flag_user_ids", multiple: true)
+    expect(users_field).to have_css(".select2-selection__choice", text: "Janet Far")
+    select2("Bob", from: "#feature_flag_user_ids", multiple: true)
+    expect(users_field).to have_css(".select2-selection__choice", text: "Bob Smith")
 
     # Nothing is saved yet.
     ActsAsTenant.without_tenant { expect(messaging.reload.users).to eq([jane]) }
 
-    # Keyboard selection, and Enter in the search box doesn't submit the form.
-    search.fill_in(with: "bob")
-    expect(page).to have_css(".user-picker-option", text: "Bob Smith")
-    search.send_keys(:down, :enter)
-    expect(page).to have_css(".user-picker-item", text: "Bob Smith")
-    expect(page).to have_content("Edit Feature Flag: messaging")
-
-    search.fill_in(with: "zzz")
-    expect(page).to have_css(".user-picker-message", text: "No matching users")
-    search.send_keys(:escape)
-
-    find(".user-picker-item", text: "Jane Doe").find("button[aria-label='Remove']").click
-    expect(page).not_to have_css(".user-picker-item", text: "Jane Doe")
+    users_field.find(".select2-selection__choice", text: "Jane Doe")
+      .find(".select2-selection__choice__remove").click
+    find("body").click # Removing a choice opens the dropdown.
+    expect(users_field).not_to have_css(".select2-selection__choice", text: "Jane Doe")
 
     click_button("Save")
     expect(page).to have_content("Saved the 'messaging' flag.")
@@ -87,6 +74,16 @@ describe "admin feature flags dashboard" do
       expect(messaging.reload.users).to contain_exactly(far_user, bob)
       expect(messaging.on?(far_user)).to be(true)
       expect(messaging.on?(jane)).to be(false)
+    end
+  end
+
+  scenario "search results show each user's community and email", js: true do
+    messaging.update!(mode: :selected_users)
+    visit(edit_admin_feature_flag_path(messaging))
+    find(".feature_flag_user_ids .select2-search__field").click.set("Janet")
+    with_top_level_scope do
+      result = find(".select2-results li", text: "Janet Far")
+      expect(result).to have_css(".select2-result-details", text: "Far Community · far@example.org")
     end
   end
 

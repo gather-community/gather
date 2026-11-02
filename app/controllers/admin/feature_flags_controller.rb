@@ -4,8 +4,7 @@ module Admin
   # Operator dashboard for feature flags: set each flag off, on for selected users, or on for
   # everyone, and choose the selected users. Flags are global, and users can come from any cluster.
   class FeatureFlagsController < AdminController
-    USER_SEARCH_MIN_LENGTH = 2
-    USER_SEARCH_LIMIT = 10
+    include UserSelectJson
 
     def index
       authorize(%i[admin feature_flag])
@@ -60,32 +59,21 @@ module Admin
       redirect_to(admin_feature_flags_path)
     end
 
-    # JSON for the Users field's search box. Matches active users in any cluster by name or email,
-    # leaving out the users already chosen on the form (`exclude`, comma-separated IDs).
+    # JSON for the Users field's select2. Matches active users in any cluster by name or email. On the
+    # apex domain tenant scoping is off, which is why this can't use /users.json.
     def user_search
       authorize(%i[admin feature_flag])
-      query = params[:q].to_s.strip
-      exclude_ids = params[:exclude].to_s.split(",").map(&:to_i)
-      users = if query.size < USER_SEARCH_MIN_LENGTH
-        User.none
-      else
-        pattern = "%#{User.sanitize_sql_like(query)}%"
-        User.active.non_placeholder
-          .where("(users.first_name || ' ' || users.last_name) ILIKE :p OR users.email ILIKE :p", p: pattern)
-          .where.not(id: exclude_ids)
-          .including_communities.by_name.limit(USER_SEARCH_LIMIT)
-      end
-      render(json: {results: users.decorate.map { |u| user_search_result(u) }})
+      pattern = "%#{User.sanitize_sql_like(params[:search].to_s.strip)}%"
+      users = User.active.non_placeholder
+        .where("(users.first_name || ' ' || users.last_name) ILIKE :p OR users.email ILIKE :p", p: pattern)
+        .including_communities.by_name
+      render_user_select_json(users, details: true)
     end
 
     private
 
     def find_flag
       policy_scope([:admin, FeatureFlag]).find(params[:id])
-    end
-
-    def user_search_result(user)
-      {id: user.id, name: user.full_name, email: user.email, community: user.community.name}
     end
   end
 end

@@ -9,17 +9,6 @@ en:
         "off": "Off"
         selected_users: "Selected Users"
         everyone: "Everyone"
-      # The Users field on the flag form (_user_picker.html.erb).
-      user_picker:
-        label: "Search for a user to add"
-        placeholder: "Search by name or email in any community"
-        too_short:
-          one: "Type at least %{count} character"
-          other: "Type at least %{count} characters"
-        searching: "Searching…"
-        no_results: "No matching users"
-        error: "The search failed. Please try again."
-        remove: "Remove"
       index:
         title: "Feature Flags"
         intro: >-

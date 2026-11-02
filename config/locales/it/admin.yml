@@ -20,16 +20,6 @@ it:
         "off": "Disattivato" # MT
         selected_users: "Utenti selezionati" # MT
         everyone: "Tutti" # MT
-      user_picker:
-        label: "Cerca un utente da aggiungere" # MT
-        placeholder: "Cerca per nome o email in qualsiasi comunità" # MT
-        too_short:
-          one: "Digita almeno %{count} carattere" # MT
-          other: "Digita almeno %{count} caratteri" # MT
-        searching: "Ricerca in corso…" # MT
-        no_results: "Nessun utente corrispondente" # MT
-        error: "La ricerca non è riuscita. Riprova." # MT
-        remove: "Rimuovi" # MT
       index:
         title: "Feature flag" # MT
         intro: "I feature flag attivano e disattivano funzionalità non ancora rilasciate. Ogni flag può essere disattivato, attivo solo per gli utenti selezionati (di qualsiasi comunità) oppure attivo per tutti." # MT

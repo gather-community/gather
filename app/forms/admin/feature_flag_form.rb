@@ -16,7 +16,7 @@ module Admin
 
     delegate :name, :name=, :mode, :mode=, :persisted?, :new_record?, :id, :to_param, to: :@flag
 
-    attr_reader :flag
+    attr_reader :flag, :user_ids
 
     def self.model_name
       FeatureFlag.model_name
@@ -45,7 +45,7 @@ module Admin
       @user_ids = Array.wrap(ids).compact_blank.map(&:to_i).uniq
     end
 
-    # The selected users, for display. Users can be in any cluster.
+    # The selected users, for the user select's initial options. Users can be in any cluster.
     def users
       User.where(id: @user_ids).including_communities.by_name.decorate
     end

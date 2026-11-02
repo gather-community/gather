@@ -20,16 +20,6 @@ nb:
         "off": "Av" # MT
         selected_users: "Valgte brukere" # MT
         everyone: "Alle" # MT
-      user_picker:
-        label: "Søk etter en bruker å legge til" # MT
-        placeholder: "Søk på navn eller e-post i hvilket som helst fellesskap" # MT
-        too_short:
-          one: "Skriv minst %{count} tegn" # MT
-          other: "Skriv minst %{count} tegn" # MT
-        searching: "Søker…" # MT
-        no_results: "Ingen brukere passer" # MT
-        error: "Søket mislyktes. Prøv igjen." # MT
-        remove: "Fjern" # MT
       index:
         title: "Funksjonsflagg" # MT
         intro: "Funksjonsflagg slår av og på funksjoner som ikke er lansert ennå. Hvert flagg kan være av, på bare for valgte brukere (fra hvilket som helst fellesskap) eller på for alle." # MT

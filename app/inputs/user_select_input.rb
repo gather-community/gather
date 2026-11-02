@@ -8,7 +8,8 @@ class UserSelectInput < SimpleForm::Inputs::CollectionSelectInput
   def input(wrapper_options)
     # We can't use a plain user select for the specific_community_full_access context if multi community
     # it's dependent on a selection in the form so AJAX is required.
-    if current_community.settings.people.plain_user_selects &&
+    # Pages on the apex domain (operator pages) have no community, so they always use select2.
+    if current_community&.settings&.people&.plain_user_selects &&
         !(current_cluster.multi_community? && options["context"] == "specific_community_full_access")
       setup_plain_select
     else

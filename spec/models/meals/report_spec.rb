@@ -107,14 +107,14 @@ describe(Meals::Report) do
         # Very old meal in different community.
         meals << create(:meal, :finalized, formula: formula, community: community2, served_at: 2.years.ago)
 
-        # Meal in communityX. Should not show in results.
-        meals << create(:meal, :finalized, formula: formula, community: communityX)
-
         meals.each do |m|
           m.signups << build(:meal_signup, meal: m, diner_counts: [2, 0, 0, 0])
           m.signups << build(:meal_signup, meal: m, diner_counts: [0, 1, 0, 0])
           m.save!
         end
+
+        # Meal in communityX. Should not show in results.
+        create_meal_in_community_x(diner_counts: [[2, 0, 0, 0], [0, 1, 0, 0]])
       end
 
       it "should have correct data from cluster" do
@@ -195,9 +195,7 @@ describe(Meals::Report) do
           meal.signups << build(:meal_signup, meal: meal, diner_counts: [2, 0, 0, 0])
           meal.save!
         end
-        meal3 = create(:meal, :finalized, formula: formula, community: communityX, served_at: 2.months.ago)
-        meal3.signups << build(:meal_signup, meal: meal3, diner_counts: [2, 0, 0, 0])
-        meal3.save!
+        create_meal_in_community_x(diner_counts: [[2, 0, 0, 0]], served_at: 2.months.ago)
       end
 
       describe "by_month" do
@@ -306,6 +304,21 @@ describe(Meals::Report) do
           expect(report.by_category[nil]["avg_servings_pct"]).to be_within(0.01).of(2.5)
         end
       end
+    end
+  end
+
+  # communityX is in another cluster, so its meal and everything the meal needs must be created there.
+  def create_meal_in_community_x(diner_counts:, served_at: 7.days.from_now)
+    with_tenant(communityX.cluster) do
+      formula = create(:meal_formula, community: communityX, parts_attrs: [
+        {type: "Adult", share: "100%", category: "Green", portion: 1},
+        {type: "Teen", share: "75%", category: "Blue", portion: 0.75},
+        {type: "Kid", share: "50%", category: "Green", portion: 0.5},
+        {type: "Little Kid", share: "0%", category: nil, portion: 0.25}
+      ])
+      meal = create(:meal, :finalized, formula: formula, community: communityX, served_at: served_at)
+      diner_counts.each { |counts| meal.signups << build(:meal_signup, meal: meal, diner_counts: counts) }
+      meal.save!
     end
   end
 end

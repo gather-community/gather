@@ -4,7 +4,7 @@ require "rails_helper"
 
 describe "pages", js: true do
   let(:actor) { create(:user, first_name: "Jane", last_name: "Doe") }
-  let(:other_community) { create(:community, cluster: actor.cluster) }
+  let(:other_community) { create(:community) }
   let!(:decoy_page) { create(:wiki_page, community: other_community, title: "Another Page") }
 
   before do

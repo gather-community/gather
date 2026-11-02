@@ -1,8 +1,15 @@
 name: RSpec & JS Tests
-on: [push]
+# `push` only fires for branches in this repo, so PRs from forks also need `pull_request`.
+on:
+  push:
+  pull_request:
 jobs:
   tests:
     name: Tests
+    # Branches in this repo already run on `push`, so skip their `pull_request` run to avoid running
+    # the suite twice. Fork PRs run on `pull_request` with a read-only token and no secrets, which is
+    # fine because the suite doesn't use any.
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
     runs-on: ubuntu-24.04
     env:
       CI: true

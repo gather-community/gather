@@ -349,7 +349,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_31_120000) do
   create_table "feature_flags", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "interface", default: "basic", null: false
-    t.string "name", null: false
+    t.string "name", limit: 64, null: false
     t.boolean "status"
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_feature_flags_on_name", unique: true

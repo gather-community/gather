@@ -12,6 +12,43 @@
 # ======================================================================================================
 de:
   admin:
+    feature_flags:
+      created: "Das Flag „%{name}“ wurde angelegt." # MT
+      updated: "Das Flag „%{name}“ wurde gespeichert." # MT
+      deleted: "Das Flag „%{name}“ wurde gelöscht." # MT
+      modes:
+        "off": "Aus" # MT
+        selected_users: "Ausgewählte Benutzer" # MT
+        everyone: "Alle" # MT
+      index:
+        title: "Feature-Flags" # MT
+        intro: "Feature-Flags schalten noch nicht veröffentlichte Funktionen ein und aus. Jedes Flag kann aus sein, nur für ausgewählte Benutzer an (aus jeder Gemeinschaft) oder für alle an." # MT
+        new_flag: "Neues Flag" # MT
+        none_found: "Noch keine Feature-Flags." # MT
+        headers:
+          name: "Flag" # MT
+          state: "Status" # MT
+          users: "Ausgewählte Benutzer" # MT
+        user_count:
+          one: "%{count} Benutzer" # MT
+          other: "%{count} Benutzer" # MT
+      new:
+        title: "Neues Feature-Flag" # MT
+      edit:
+        title: "Feature-Flag bearbeiten: %{name}" # MT
+      show:
+        title: "Feature-Flag: %{name}" # MT
+        delete: "Löschen" # MT
+        delete_confirm: "Das Flag „%{name}“ und seine Liste ausgewählter Benutzer löschen? Code, der dieses Flag abfragt, behandelt es dann als aus." # MT
+        state: "Status" # MT
+        usage: "Im Code" # MT
+        created_at: "Angelegt" # MT
+        users_heading: "Ausgewählte Benutzer" # MT
+        no_users: "Noch keine Benutzer ausgewählt. Bearbeite das Flag, um welche hinzuzufügen." # MT
+        headers:
+          name: "Name" # MT
+          community: "Gemeinschaft" # MT
+          email: "E-Mail" # MT
     domains:
       refresh_all_started:
         one: "%{count} Domain wird im Hintergrund geprüft. Das dauert etwa %{seconds} Sekunden. Lade diese Seite neu, um die Ergebnisse zu sehen." # MT

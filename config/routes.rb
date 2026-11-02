@@ -292,6 +292,9 @@ Rails.application.routes.draw do
     end
   end
 
+  # Top-level search.
+  get "search", to: "search#index", as: :search
+
   resources :wiki_pages, controller: "wiki/pages", param: :slug, path: "wiki" do
     collection do
       get :all
@@ -396,6 +399,11 @@ Rails.application.routes.draw do
     resources :domains, only: %i[index show] do
       post :refresh, on: :collection
       post :refresh, on: :member
+    end
+
+    # Operator dashboard for feature flags (apex domain; flags are global, users from any cluster).
+    resources :feature_flags, path: "feature-flags" do
+      get :user_search, path: "user-search", on: :collection, defaults: {format: :json}
     end
   end
 

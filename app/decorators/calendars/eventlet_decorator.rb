@@ -48,11 +48,14 @@ module Calendars
     # with the series' dates (#dates_clause), so until-rules and count rules read the same. The time is
     # included because for a rescheduled occurrence the Date/Time row shows the moved time, not the
     # series time.
-    def recurrence_description
+    #
+    # Pass include_time: false to leave out the time, e.g. for a search result that shows only dates.
+    def recurrence_description(include_time: true)
       return nil unless series_event.recurring?
       rule = series_event.schedule.rrules.first
       base = shorten_day_of_month(without_end(rule).to_s)
-      [base, anchor_day_phrase(rule), time_phrase, dates_clause].reject(&:blank?).join(" ")
+      time = include_time ? time_phrase : nil
+      [base, anchor_day_phrase(rule), time, dates_clause].reject(&:blank?).join(" ")
     end
 
     private

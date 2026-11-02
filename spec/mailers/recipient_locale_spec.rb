@@ -30,6 +30,7 @@ describe RecipientLocale do
 
     # ActiveJob restores the locale that was active at enqueue time, i.e. the sender's browser language.
     it "renders in the recipient's locale, not the one it was enqueued under" do
+      clear_enqueued_jobs # Only this example's email should be delivered.
       I18n.with_locale(:fr) { AuthMailer.sign_in_invitation(user, "xyz").deliver_later }
       perform_enqueued_jobs(only: ActionMailer::MailDeliveryJob)
       expect(ActionMailer::Base.deliveries.last.subject).to eq("Instructions for Signing in to Gather")

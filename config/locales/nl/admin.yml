@@ -12,6 +12,43 @@
 # ======================================================================================================
 nl:
   admin:
+    feature_flags:
+      created: "De flag “%{name}” is aangemaakt." # MT
+      updated: "De flag “%{name}” is opgeslagen." # MT
+      deleted: "De flag “%{name}” is verwijderd." # MT
+      modes:
+        "off": "Uit" # MT
+        selected_users: "Geselecteerde gebruikers" # MT
+        everyone: "Iedereen" # MT
+      index:
+        title: "Featureflags" # MT
+        intro: "Met featureflags zet je functies die nog niet zijn uitgebracht aan en uit. Elke flag kan uit staan, alleen aan staan voor geselecteerde gebruikers (uit elke gemeenschap) of aan staan voor iedereen." # MT
+        new_flag: "Nieuwe flag" # MT
+        none_found: "Nog geen featureflags." # MT
+        headers:
+          name: "Flag" # MT
+          state: "Status" # MT
+          users: "Geselecteerde gebruikers" # MT
+        user_count:
+          one: "%{count} gebruiker" # MT
+          other: "%{count} gebruikers" # MT
+      new:
+        title: "Nieuwe featureflag" # MT
+      edit:
+        title: "Featureflag bewerken: %{name}" # MT
+      show:
+        title: "Featureflag: %{name}" # MT
+        delete: "Verwijderen" # MT
+        delete_confirm: "De flag “%{name}” en de lijst met geselecteerde gebruikers verwijderen? Code die deze flag opzoekt, behandelt hem dan als uit." # MT
+        state: "Status" # MT
+        usage: "In de code" # MT
+        created_at: "Aangemaakt" # MT
+        users_heading: "Geselecteerde gebruikers" # MT
+        no_users: "Nog geen gebruikers geselecteerd. Bewerk de flag om er een paar toe te voegen." # MT
+        headers:
+          name: "Naam" # MT
+          community: "Gemeenschap" # MT
+          email: "E-mail" # MT
     domains:
       refresh_all_started:
         one: "%{count} domein wordt op de achtergrond gecontroleerd. Dat duurt ongeveer %{seconds} seconden. Laad deze pagina opnieuw om de resultaten te zien." # MT

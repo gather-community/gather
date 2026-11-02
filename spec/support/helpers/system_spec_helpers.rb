@@ -64,7 +64,8 @@ module SystemSpecHelpers
       # Several of the elements selected below are inserted at the bottom of the DOM so we can't scope them.
       with_top_level_scope do
         if multiple
-          span_el.find(".select2-search__field").click
+          # Typing is needed for AJAX selects (nothing loads until you do) and harmless for others.
+          span_el.find(".select2-search__field").click.set(value)
         else
           execute_script("$('#{css}').select2('open')")
           find(".select2-search--dropdown .select2-search__field").set(value)

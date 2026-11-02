@@ -20,6 +20,7 @@ nl:
       impersonation_notice: "Je doet je voor als %{name}. Alles wat je doet, lijkt door deze persoon te zijn gedaan." # MT
       stop_impersonating: "Stoppen met voordoen" # MT
       home: "Start" # MT
+      search: "Zoeken" # MT
       skip_to_content: "Naar de inhoud" # MT
       show_menu: "Menu tonen" # MT
       toggle_navigation: "Navigatie in- of uitklappen" # MT
@@ -34,6 +35,7 @@ nl:
       communities: "Gemeenschappen" # MT
       resync_subscriptions: "Abonnementen opnieuw synchroniseren" # MT
       domains: "Domeinen" # MT
+      feature_flags: "Featureflags" # MT
       # Shown on pages in machine-translated locales (Gather::Locales::MACHINE_TRANSLATED).
       machine_translated: "Deze pagina is automatisch vertaald en kan fouten bevatten." # MT
       machine_translated_with_link_html: "Deze pagina is automatisch vertaald en kan fouten bevatten. %{link}" # MT

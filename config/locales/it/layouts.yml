@@ -20,6 +20,7 @@ it:
       impersonation_notice: "Stai impersonando %{name}. Qualsiasi azione tu faccia risulterà fatta da questa persona." # MT
       stop_impersonating: "Smetti di impersonare" # MT
       home: "Home" # MT
+      search: "Cerca" # MT
       skip_to_content: "Vai al contenuto" # MT
       show_menu: "Mostra menu" # MT
       toggle_navigation: "Mostra/nascondi navigazione" # MT
@@ -34,6 +35,7 @@ it:
       communities: "Comunità" # MT
       resync_subscriptions: "Risincronizza abbonamenti" # MT
       domains: "Domini" # MT
+      feature_flags: "Feature flag" # MT
       # Shown on pages in machine-translated locales (Gather::Locales::MACHINE_TRANSLATED).
       machine_translated: "Questa pagina è stata tradotta automaticamente e potrebbe contenere errori." # MT
       machine_translated_with_link_html: "Questa pagina è stata tradotta automaticamente e potrebbe contenere errori. %{link}" # MT

@@ -33,6 +33,7 @@ module Meals
     include Wisper.model
     include TimeCalculable
     include Statusable
+    include MealSearchConfig
 
     DEFAULT_TIME = 18.hours + 15.minutes
     DEFAULT_CAPACITY = 64

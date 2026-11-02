@@ -52,7 +52,7 @@ describe "email language" do
         allow_any_instance_of(Communities::SignupsController).to receive(:verify_hcaptcha).and_return(true)
       end
 
-      scenario "the language starts as the page's and becomes the new community's default" do
+      scenario "the language starts as the page's and becomes the community's default", perform_jobs: true do
         page.driver.header("Accept-Language", "nl")
         visit(new_communities_signup_path)
         expect(page).to have_select("communities_signup[locale]", selected: "Nederlands")
@@ -94,7 +94,7 @@ describe "email language" do
       expect(community.reload.settings.locale).to eq("en")
     end
 
-    scenario "a signup is in English" do
+    scenario "a signup is in English", perform_jobs: true do
       allow_any_instance_of(Communities::SignupsController).to receive(:verify_hcaptcha).and_return(true)
       visit(new_communities_signup_path)
       expect(page).not_to have_field("Default Language")

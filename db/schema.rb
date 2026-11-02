@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_25_180000) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_31_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -285,6 +285,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_25_180000) do
     t.string "time_zone", limit: 64, default: "UTC", null: false
     t.datetime "updated_at", null: false
     t.boolean "want_sample_data", default: false, null: false
+    t.string "locale", limit: 10, default: "en", null: false
     t.index ["slug"], name: "index_community_signups_on_slug", unique: true
   end
 
@@ -1222,6 +1223,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_25_180000) do
     t.string "work_phone"
     t.boolean "deleted_placeholder", default: false, null: false
     t.jsonb "notification_prefs", default: {}, null: false
+    t.string "locale", limit: 10, null: false
     t.index ["alternate_id"], name: "index_users_on_alternate_id"
     t.index ["cluster_id"], name: "index_users_on_cluster_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true

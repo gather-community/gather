@@ -38,6 +38,7 @@ fi:
         introduction: "Tietoja yhteisöstäsi" # MT
         country_code: "Maa" # MT
         time_zone: "Aikavyöhyke" # MT
+        locale: "Kieli" # MT
         want_sample_data: "Esimerkkiaineisto" # MT
       communities_signup_action:
         decision: "Toiminto" # MT
@@ -93,6 +94,7 @@ fi:
         community_name: "Enintään 20 merkkiä." # MT
         slug: "Pieniä kirjaimia, numeroita ja yhdysmerkkejä; alussa oltava kirjain. Enintään 20 merkkiä." # MT
         introduction: "Kerro vähän yhteisöstäsi ja siitä, miksi Gather sopisi teille. Liitä mukaan yksi tai useampi linkki julkisille verkkosivuille (esim. yhteisösi verkkosivusto tai some-sivut), joista yhteisösi voi tunnistaa." # MT
+        locale: "Kieli, jolla yhteisönne jäsenet aloittavat sähköpostien ja kalenterisyötteiden osalta. Jokainen voi vaihtaa sen profiilissaan." # MT
       communities_signup_action:
         message_approve: "Koko hyväksymisviesti näkyy yllä. Lisää viestiin henkilökohtainen tervehdys korvaamalla paikkamerkkiteksti." # MT
         message_deny: "Kirjaa, miksi hakemus hylätään. Tämä on vain sisäiseen käyttöön, eikä sitä lähetetä hakijalle." # MT
@@ -175,6 +177,7 @@ fi:
         paypal_email: "PayPal-tilisi sähköpostiosoite. Käytetään kokkien kulukorvauksiin. Jätä tyhjäksi, jos haluat käyttää yllä näkyvää pääsähköpostiosoitettasi." # MT
         full_access: "Lapset, joilla ei ole täysiä käyttöoikeuksia, eivät voi kirjautua Gatheriin, mutta he näkyvät jäsenluettelossa. Lapset, joilla on täydet käyttöoikeudet, lasketaan laskutuksessa aikuisiksi." # MT
         certify_13_or_older: "Lasten täytyy olla vähintään 13-vuotiaita voidakseen kirjautua Gatheriin." # MT
+        locale: "Gatherin sähköpostit ja kalenterisyötteet tulevat tällä kielellä. Sivusto käyttää selaimesi kieliasetusta tai kieltä, jonka valitset sivun alareunasta." # MT
       meals_formula:
         is_default: "Jos valittu, tämä hinnoittelukaava on oletuksena valittuna uusia aterioita luotaessa." # MT
         pantry_fee_formatted: "Ruokailijoilta, joiden aterian hinta on 0,00, ei peritä ruokavarastomaksua, vaikka maksu olisi kiinteä." # MT

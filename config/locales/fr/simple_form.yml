@@ -32,6 +32,7 @@ fr:
         introduction: "À propos de votre communauté" # MT
         country_code: "Pays" # MT
         time_zone: "Fuseau horaire" # MT
+        locale: "Langue" # MT
         want_sample_data: "Données d'exemple" # MT
       communities_signup_action:
         decision: "Action" # MT
@@ -87,6 +88,7 @@ fr:
         community_name: "20 caractères maximum." # MT
         slug: "Lettres minuscules, chiffres et traits d'union ; doit commencer par une lettre. 20 caractères maximum." # MT
         introduction: "Parlez-nous un peu de votre communauté et de ce qui vous fait penser que Gather lui convient. Indiquez un ou plusieurs liens vers des pages web publiques (par ex. le site de votre communauté, ses réseaux sociaux) qui permettent de l'identifier." # MT
+        locale: "La langue de départ des e-mails et des flux de calendrier pour les membres de votre communauté. Chaque membre peut la changer dans son profil." # MT
       communities_signup_action:
         message_approve: "L'e-mail d'approbation complet est affiché ci-dessus. Ajoutez une note personnalisée en remplaçant le texte indicatif." # MT
         message_deny: "Indiquez pourquoi cette demande est refusée. C'est uniquement pour référence interne : ce ne sera pas envoyé au demandeur." # MT
@@ -169,6 +171,7 @@ fr:
         paypal_email: "L'adresse e-mail de votre compte PayPal. Utilisée pour les remboursements des cuisiniers. Laissez vide pour utiliser votre adresse e-mail principale ci-dessus." # MT
         full_access: "Les enfants sans accès complet ne peuvent pas se connecter à Gather, mais figurent dans l'annuaire. Les enfants avec accès complet comptent comme des adultes pour la facturation." # MT
         certify_13_or_older: "Les enfants doivent avoir 13 ans ou plus pour se connecter à Gather." # MT
+        locale: "Les e-mails et les flux de calendrier de Gather seront dans cette langue. Le site suit la langue de votre navigateur, ou la langue que vous choisissez en bas de chaque page." # MT
       meals_formula:
         is_default: "Si la case est cochée, cette formule sera choisie par défaut lors de la création d'un repas." # MT
         pantry_fee_formatted: "Les convives dont le coût du repas est de 0,00 ne seront pas facturés pour le garde-manger, même si ces frais sont fixes." # MT

@@ -119,6 +119,7 @@ sv:
         full_access: "Ska personen ha full åtkomst till systemet?" # MT
         certify_13_or_older: "Jag intygar att personen är minst 13 år" # MT
         pronouns: "Pronomen" # MT
+        locale: "Standardspråk" # MT
       household:
         name: "Hushållets namn" # MT
         community_id: "Gemenskap" # MT

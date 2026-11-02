@@ -35,4 +35,44 @@ describe RecipientLocale do
       expect(ActionMailer::Base.deliveries.last.subject).to eq("Instructions for Signing in to Gather")
     end
   end
+
+  describe "the recipient's language" do
+    let(:community) { Defaults.community }
+    let(:german) { create(:user, locale: "de") }
+    let(:swedish) { create(:user, locale: "sv") }
+    let(:other_swede) { create(:user, locale: "sv") }
+
+    def warning_subject(admins)
+      Communities::InactivityMailer.with(recipient: admins).warning(community, 1, nil, admins).subject
+    end
+
+    context "with the i18n feature flag on" do
+      before { create(:feature_flag, name: "i18n", status: true) }
+
+      it "renders mail sent with .with(recipient:) in the recipient's language" do
+        expect(warning_subject([german])).to eq("Warnung wegen Inaktivität für #{community.name}")
+      end
+
+      it "renders a group sharing a language in that language" do
+        expect(warning_subject([other_swede, swedish])).to eq("Varning för inaktivitet i #{community.name}")
+      end
+
+      it "uses the default locale for a group that doesn't share one" do
+        expect(warning_subject([german, swedish])).to eq("Inactivity warning for #{community.name}")
+      end
+
+      it "renders mailers whose recipient is an argument in that user's language" do
+        mail_subject = AuthMailer.sign_in_invitation(german, "xyz").subject
+        expect(mail_subject).to eq("Anleitung zur Anmeldung bei Gather")
+      end
+    end
+
+    context "with the i18n feature flag off" do
+      it "renders in the default locale whatever the recipient chose" do
+        expect(warning_subject([german])).to eq("Inactivity warning for #{community.name}")
+        mail_subject = AuthMailer.sign_in_invitation(german, "xyz").subject
+        expect(mail_subject).to eq("Instructions for Signing in to Gather")
+      end
+    end
+  end
 end

@@ -72,6 +72,29 @@ module Gather
       (locale.to_sym == :en) ? "und-x-icu" : "#{locale}-x-icu"
     end
 
+    # The most characters a locale code can have, for the columns that store one (e.g. users.locale).
+    MAX_LENGTH = 10
+
+    # The locale for what Gather sends `user` without their browser involved: emails and calendar feeds. It's
+    # the language on their profile, which starts as their community's default. Only the app default is used
+    # unless the feature flag is on for them.
+    def self.for_user(user)
+      return I18n.default_locale unless user && enabled?(user)
+      find(user.locale) || I18n.default_locale
+    end
+
+    # The locale for what Gather sends on behalf of `community` to people who aren't users, or to no one in
+    # particular, e.g. its public calendar feed. Only the app default is used unless the feature flag is on
+    # for everyone.
+    def self.for_community(community)
+      enabled?(nil) ? community_default(community) : I18n.default_locale
+    end
+
+    # The language a community's new members start with (see User#assign_default_locale).
+    def self.community_default(community)
+      find(community&.settings&.locale) || I18n.default_locale
+    end
+
     # Whether `user` (nil when signed out) gets locales other than the default. A "user"-interface flag needs
     # a user to check, so it's off for signed-out visitors.
     def self.enabled?(user)

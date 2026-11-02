@@ -119,6 +119,7 @@ fi:
         full_access: "Käyttäjällä on täydet käyttöoikeudet järjestelmään?" # MT
         certify_13_or_older: "Vakuutan, että tämä käyttäjä on vähintään 13-vuotias" # MT
         pronouns: "Pronominit" # MT
+        locale: "Oletuskieli" # MT
       household:
         name: "Kotitalouden nimi" # MT
         community_id: "Yhteisö" # MT

@@ -238,13 +238,28 @@ describe Communities::InactivityWarningJob do
     before { make_inactive }
 
     it "calls the mailer with the admin" do
-      admins_arg = nil
-      allow(Communities::InactivityMailer).to receive(:warning) do |_cmty, _count, _login, admins|
-        admins_arg = admins
-        mail_dbl
-      end
+      calls = record_notifications(Communities::InactivityMailer, :warning)
       perform_job
-      expect(admins_arg).to include(admin)
+      expect(calls.size).to eq(1)
+      recipients, _cmty, _count, _login, admins = calls.first
+      expect(recipients).to eq([admin])
+      expect(admins).to eq([admin])
+    end
+
+    context "with admins who read email in different languages" do
+      let!(:other_admin) { make_admin(community) }
+
+      before do
+        create(:feature_flag, name: "i18n", status: true)
+        admin.update!(locale: "de")
+        other_admin.update!(locale: "fr")
+      end
+
+      it "sends one message per language" do
+        calls = record_notifications(Communities::InactivityMailer, :warning)
+        perform_job
+        expect(calls.map(&:first)).to contain_exactly([admin], [other_admin])
+      end
     end
   end
 end

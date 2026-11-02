@@ -119,6 +119,7 @@ de:
         full_access: "Soll die Person vollen Zugang zum System haben?" # MT
         certify_13_or_older: "Ich bestätige, dass diese Person mindestens 13 Jahre alt ist" # MT
         pronouns: "Pronomen" # MT
+        locale: "Standardsprache" # MT
       household:
         name: "Name des Haushalts" # MT
         community_id: "Gemeinschaft" # MT

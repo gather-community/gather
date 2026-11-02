@@ -20,6 +20,7 @@ de:
         settings:
           main_nav_customizations: "Anpassungen des Hauptmenüs" # MT
           time_zone: "Zeitzone" # MT
+          locale: "Standardsprache" # MT
           default_landing_page: "Standard-Startseite" # MT
           people:
             _self: "Personen" # MT
@@ -78,6 +79,7 @@ de:
       community:
         settings:
           main_nav_customizations: "Hier bearbeitest du die Links im Hauptmenü. Gib Links im Markdown-Format ein. Beispiel: [Linkname](https://example.com). Wenn der Linkname einem vorhandenen Link entspricht, ersetzt er dessen Standard-URL. Eine leere URL entfernt einen Link ganz. Aller andere Text und alle andere Formatierung werden ignoriert." # MT
+          locale: "Die Sprache, mit der neue Mitglieder für E-Mails und Kalender-Feeds starten. Alle können ihre in ihrem Profil ändern. Die Website richtet sich nach der Spracheinstellung des Browsers oder nach der Sprache, die jemand unten auf der Seite wählt." # MT
           people:
             plain_user_selects: "Einfache Auswahllisten statt Suchfeldern verwenden. Kann für kleinere Gemeinschaften praktischer sein." # MT
             user_custom_fields_spec: "Gib eine Spezifikation im YAML-Format für eigene Felder ein, die beim Ansehen und Bearbeiten von Personen in dieser Gemeinschaft erscheinen. Wende dich an den Gather-Support, wenn du dabei Hilfe brauchst." # MT

@@ -20,6 +20,7 @@ nb:
         settings:
           main_nav_customizations: "Tilpasninger av toppmenyen" # MT
           time_zone: "Tidssone" # MT
+          locale: "Standardspråk" # MT
           default_landing_page: "Standard startside" # MT
           people:
             _self: "Personer" # MT
@@ -78,6 +79,7 @@ nb:
       community:
         settings:
           main_nav_customizations: "Her redigerer du lenkene i toppmenyen. Skriv lenker i Markdown-format. Eksempel: [Lenkenavn](https://example.com). Hvis lenkenavnet er det samme som en eksisterende lenke, erstatter den standardadressen. En tom adresse fjerner lenken helt. All annen tekst og formatering blir ignorert." # MT
+          locale: "Språket nye medlemmer starter med for e-post og kalenderfeeder. Hver og en kan endre sitt i profilen sin. Nettstedet følger språkinnstillingen i hver persons nettleser, eller språket de velger nederst på siden." # MT
           people:
             plain_user_selects: "Bruk enkle nedtrekkslister i stedet for søkefelt der du skriver inn navn. Kan passe bedre for mindre fellesskap." # MT
             user_custom_fields_spec: "Skriv inn en spesifikasjon i YAML-format for egendefinerte felt som vises når personer i dette fellesskapet vises eller redigeres. Kontakt Gather-brukerstøtten hvis du trenger hjelp med å skrive spesifikasjonen." # MT

@@ -120,4 +120,25 @@ describe "calendar exports ICS endpoints" do
       end
     end
   end
+
+  context "with other languages turned on" do
+    before do
+      create(:feature_flag, name: "i18n", status: true)
+      user.update!(locale: "de")
+      community.settings.locale = "fr"
+      community.save!
+    end
+
+    # Calendar apps send their own Accept-Language, which says nothing about the feed's owner.
+    it "renders a personalized feed in its owner's language" do
+      get("/calendars/export.ics?calendars=all&token=#{user_token}", headers: {"Accept-Language" => "sv"})
+      expect(response.body).to match("X-WR-CALNAME:Alle Kalender TS")
+    end
+
+    it "renders a community feed in the community's language" do
+      get("/calendars/community-export.ics?calendars=all&token=#{cmty_token}",
+        headers: {"Accept-Language" => "sv"})
+      expect(response.body).to match("X-WR-CALNAME:Tous les calendriers de TS")
+    end
+  end
 end

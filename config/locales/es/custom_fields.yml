@@ -20,6 +20,7 @@ es:
         settings:
           main_nav_customizations: "Personalización del menú superior" # MT
           time_zone: "Zona horaria" # MT
+          locale: "Idioma predeterminado" # MT
           default_landing_page: "Página de inicio predeterminada" # MT
           people:
             _self: "Personas" # MT
@@ -78,6 +79,7 @@ es:
       community:
         settings:
           main_nav_customizations: "Usa este ajuste para editar los enlaces del menú superior. Escribe los enlaces en formato Markdown. Ejemplo: [Nombre del enlace](https://example.com). Si el nombre del enlace coincide con uno existente, sustituirá la URL predeterminada. Una URL en blanco elimina el enlace por completo. Se ignora cualquier otro texto o marcado." # MT
+          locale: "El idioma con el que empiezan los nuevos miembros para los correos y calendarios exportados. Cada miembro puede cambiar el suyo en su perfil. El sitio web sigue el idioma configurado en el navegador de cada persona, o el idioma que elija al pie de la página." # MT
           people:
             plain_user_selects: "Usar listas desplegables simples en lugar de cuadros con búsqueda. Puede ser preferible en comunidades pequeñas." # MT
             user_custom_fields_spec: "Escribe en formato YAML la especificación de los campos personalizados que aparecerán al ver o editar personas de esta comunidad. Contacta con el soporte de Gather si necesitas ayuda para escribirla." # MT

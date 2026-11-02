@@ -22,6 +22,7 @@ fr-CA:
     hints:
       community:
         settings:
+          locale: "La langue de départ des courriels et des flux de calendrier pour les nouveaux membres. Chaque membre peut la changer dans son profil. Le site suit la langue du navigateur de chacun, ou la langue choisie en bas de la page." # MT
           billing:
             contact: "Courriel pour les questions de facturation. Il sera indiqué avec les instructions de paiement." # MT
             payment_methods:

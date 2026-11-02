@@ -99,6 +99,7 @@ nl:
         slug: "URL-slug" # MT
         country: "Land" # MT
         time_zone: "Tijdzone" # MT
+        locale: "Taal" # MT
         sample_data: "Voorbeeldgegevens" # MT
         about: "Over" # MT
         approval_message: "Goedkeuringsbericht" # MT

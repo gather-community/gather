@@ -38,6 +38,7 @@ it:
         introduction: "La tua comunità" # MT
         country_code: "Paese" # MT
         time_zone: "Fuso orario" # MT
+        locale: "Lingua" # MT
         want_sample_data: "Dati di esempio" # MT
       communities_signup_action:
         decision: "Azione" # MT
@@ -93,6 +94,7 @@ it:
         community_name: "Fino a 20 caratteri." # MT
         slug: "Lettere minuscole, numeri e trattini; deve iniziare con una lettera. Fino a 20 caratteri." # MT
         introduction: "Raccontaci qualcosa della tua comunità e perché pensi che Gather faccia al caso vostro. Includi uno o più link a pagine web pubbliche (ad es. il sito della comunità, pagine social) che attestino l'identità della tua comunità." # MT
+        locale: "La lingua iniziale delle email e dei calendari esportati per i membri della tua comunità. Ognuno può cambiarla nel proprio profilo." # MT
       communities_signup_action:
         message_approve: "L'email di approvazione completa è mostrata qui sopra. Aggiungi una nota personale all'email di approvazione sostituendo il testo segnaposto." # MT
         message_deny: "Annota perché questa richiesta viene respinta. Serve solo come riferimento interno e non verrà inviato a chi ha fatto la richiesta." # MT
@@ -175,6 +177,7 @@ it:
         paypal_email: "L'indirizzo email del tuo conto PayPal. Serve per i rimborsi ai cuochi. Lascia vuoto per usare l'indirizzo email principale indicato sopra." # MT
         full_access: "I bambini senza accesso completo non possono accedere a Gather ma compaiono nella rubrica. I bambini con accesso completo contano come adulti ai fini della fatturazione." # MT
         certify_13_or_older: "I bambini devono avere almeno 13 anni per accedere a Gather." # MT
+        locale: "Le email e i calendari esportati da Gather saranno in questa lingua. Il sito segue l'impostazione della lingua del tuo browser, o la lingua che scegli in fondo a qualsiasi pagina." # MT
       meals_formula:
         is_default: "Se selezionata, sarà la formula proposta per impostazione predefinita quando si crea un nuovo pasto." # MT
         pantry_fee_formatted: "Ai commensali con un costo del pasto di 0,00 non verrà addebitata la quota dispensa, anche se l'importo della quota è fisso." # MT

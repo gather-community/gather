@@ -98,6 +98,7 @@ fr:
         slug: "Identifiant d'URL" # MT
         country: "Pays" # MT
         time_zone: "Fuseau horaire" # MT
+        locale: "Langue" # MT
         sample_data: "Données d'exemple" # MT
         about: "À propos" # MT
         approval_message: "Message d'approbation" # MT

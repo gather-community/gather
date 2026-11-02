@@ -54,7 +54,7 @@ module CustomFields
           if field.collection
             i18n_prefix = i18n_key(:options)
             params[:collection] = field.collection.map do |item|
-              [item, I18n.t("#{i18n_prefix}.#{item}", default: item)]
+              [item, field.option_label(item) || I18n.t("#{i18n_prefix}.#{item}", default: item)]
             end
             params[:value_method] = :first
             params[:label_method] = :last

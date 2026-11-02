@@ -20,23 +20,25 @@ class AuthMailer < Devise::Mailer
   # Adds the notification settings footer, like ApplicationMailer.
   layout "mailer"
 
+  # Each email goes to the user it's about, so it's in their locale.
+
   def reset_password_instructions(user, token, opts = {})
     return if user.fake?
     set_notification_preferences_url(user)
-    super(user.decorate, token, opts)
+    in_locale_of(user) { super(user.decorate, token, opts) }
   end
 
   def cant_reset_password(user)
     return if user.fake?
     set_notification_preferences_url(user)
     @user = user.decorate
-    mail(to: @user)
+    in_locale_of(user) { mail(to: @user) }
   end
 
   def confirmation_instructions(user, token, opts = {})
     return if user.fake?
     set_notification_preferences_url(user)
-    super(user.decorate, token, opts)
+    in_locale_of(user) { super(user.decorate, token, opts) }
   end
 
   def sign_in_invitation(user, token)
@@ -45,7 +47,7 @@ class AuthMailer < Devise::Mailer
     @user = user.decorate
     @token = token
     @expiry_days = (Devise.reset_password_within / 1.day).to_i
-    mail(to: @user.email, subject: default_i18n_subject)
+    in_locale_of(user) { mail(to: @user.email, subject: default_i18n_subject) }
   end
 
   private

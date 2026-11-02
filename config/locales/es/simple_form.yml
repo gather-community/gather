@@ -32,6 +32,7 @@ es:
         introduction: "Sobre tu comunidad" # MT
         country_code: "País" # MT
         time_zone: "Zona horaria" # MT
+        locale: "Idioma" # MT
         want_sample_data: "Datos de ejemplo" # MT
       communities_signup_action:
         decision: "Acción" # MT
@@ -87,6 +88,7 @@ es:
         community_name: "Hasta 20 caracteres." # MT
         slug: "Letras minúsculas, números y guiones; debe empezar por una letra. Hasta 20 caracteres." # MT
         introduction: "Cuéntanos un poco sobre tu comunidad y por qué crees que Gather le encaja. Incluye uno o más enlaces a páginas web públicas (p. ej. la web de tu comunidad o sus redes sociales) que permitan identificarla." # MT
+        locale: "El idioma con el que empiezan los miembros de tu comunidad para los correos y calendarios exportados. Cada miembro puede cambiarlo en su perfil." # MT
       communities_signup_action:
         message_approve: "Arriba se muestra el correo de aprobación completo. Añade una nota personalizada sustituyendo el texto de ejemplo." # MT
         message_deny: "Indica por qué se rechaza esta solicitud. Es solo para referencia interna y no se enviará al solicitante." # MT
@@ -169,6 +171,7 @@ es:
         paypal_email: "La dirección de correo de tu cuenta de PayPal. Se usa para los reembolsos de los cocineros. Déjalo en blanco para usar tu dirección de correo principal de arriba." # MT
         full_access: "Los niños sin acceso completo no pueden iniciar sesión en Gather, pero aparecen en el directorio. Los niños con acceso completo cuentan como adultos a efectos de facturación." # MT
         certify_13_or_older: "Los niños deben tener 13 años o más para iniciar sesión en Gather." # MT
+        locale: "Los correos y calendarios exportados de Gather estarán en este idioma. El sitio web sigue el idioma configurado en tu navegador, o el idioma que elijas al pie de cualquier página." # MT
       meals_formula:
         is_default: "Si se marca, esta será la fórmula seleccionada por defecto al crear una comida." # MT
         pantry_fee_formatted: "A los comensales con un coste de comida de 0,00 no se les cobrará la despensa, aunque el importe sea fijo." # MT

@@ -1,6 +1,11 @@
 en:
   activemodel:
     attributes:
+      # Admin::FeatureFlagForm, which takes FeatureFlag's model name.
+      feature_flag:
+        name: "Name"
+        mode: "State"
+        user_ids: "Users"
       # EventletForm (drag-and-drop), for its error messages.
       calendars/eventlet:
         starts_at: "Start Time"
@@ -26,6 +31,10 @@ en:
         repeat_count: "Number of Times"
     errors:
       models:
+        feature_flag:
+          attributes:
+            name:
+              invalid: "must start with a lowercase letter and contain only lowercase letters, numbers and underscores"
         # EventForm, which takes Calendars::Event's model name.
         calendars/event:
           attributes:
@@ -36,10 +45,10 @@ en:
               occurrence_missing: "This occurrence no longer exists. Go back to the calendar and try again."
               longer_than_repeat: "The event is longer than the time between repeats, so its occurrences would overlap."
               pattern_change_with_changes:
-                one: "1 occurrence in the part being changed has been moved or deleted, so the days it repeats on can't change. Undo that change first, or change the series from a later date."
+                one: "%{count} occurrence in the part being changed has been moved or deleted, so the days it repeats on can't change. Undo that change first, or change the series from a later date."
                 other: "%{count} occurrences in the part being changed have been moved or deleted, so the days it repeats on can't change. Undo those changes first, or change the series from a later date."
               all_day_change_with_changes:
-                one: "1 occurrence in the part being changed has been moved or deleted, so it can't switch between all-day and timed. Undo that change first, or change the series from a later date."
+                one: "%{count} occurrence in the part being changed has been moved or deleted, so it can't switch between all-day and timed. Undo that change first, or change the series from a later date."
                 other: "%{count} occurrences in the part being changed have been moved or deleted, so it can't switch between all-day and timed. Undo those changes first, or change the series from a later date."
             guidelines:
               not_accepted: "You must agree to the guidelines"
@@ -80,6 +89,7 @@ en:
               in_past: "can't be changed to a time in the past"
   activerecord:
     models:
+      feature_flag: "Feature Flag"
       meals/meal: "Meal"
     attributes:
       user:

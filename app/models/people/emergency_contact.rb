@@ -20,6 +20,7 @@
 module People
   class EmergencyContact < ApplicationRecord
     include Phoneable
+    include EmergencyContactSearchConfig
 
     acts_as_tenant :cluster
 

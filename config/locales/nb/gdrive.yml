@@ -1,0 +1,370 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+nb:
+  gdrive:
+    config_updated: "Innstillingene er oppdatert." # MT
+    group_added: "Gruppen er lagt til." # MT
+    item_created: "Elementet er opprettet." # MT
+    old_migration: "Migreringen din ble opprettet for mer enn 30 dager siden. Vurder å avslutte og slette migreringen." # MT
+    auth_cancelled: "Det ser ut som du avbrøt autentiseringen hos Google." # MT
+    wrong_account: "Du logget inn hos Google som %{signed_in}. Logg inn som %{expected} i stedet." # MT
+    authenticated: "Autentiseringen hos Google er fullført." # MT
+    connection_problem: "Det er et problem med tilkoblingen til Google Drive. Kontakt Gather-brukerstøtten. (%{code})" # MT
+    view_in_drive: "Vis i Google Drive" # MT
+    browse:
+      index:
+        title: "Google Drive" # MT
+        settings: "Innstillinger" # MT
+        migration: "Migrering" # MT
+        reconnect: "Fellesskapet ditt må kobles til Google Drive på nytt." # MT
+        authenticate_as_html: "Autentiser deg hos Google som %{user}." # MT
+        reconnect_notify_admin: "Fellesskapet ditt må kobles til Google Drive på nytt. Gi beskjed til en Gather-administrator." # MT
+        not_connected: "Fellesskapet ditt er ikke koblet til Google Drive ennå." # MT
+        not_connected_get_started_html: "Fellesskapet ditt er ikke koblet til Google Drive ennå. Gå til %{link} for å komme i gang." # MT
+        settings_page: "innstillingssiden" # MT
+        no_drives_html: "Fellesskapet ditt har ingen tilknyttede delte disker. Gå til %{link} for å knytte til en disk." # MT
+        not_connected_talk_to_admin: "Fellesskapet ditt er ikke koblet til Google Drive ennå. Snakk med en Gather-administrator." # MT
+        no_files: "Fant ingen filer." # MT
+        migrating_html: "Leter du etter noe? Filene blir nå flyttet til denne nye disken som fellesskapet eier. Hvis du ikke finner noe, kan du prøve %{link}." # MT
+        old_location: "det gamle stedet" # MT
+        file_icon: "Filikon" # MT
+        no_files_in_folder: "Fant ingen filer i denne mappen." # MT
+        folder_icon: "Mappeikon" # MT
+      auth_button:
+        authenticate: "Autentiser med Google" # MT
+    items:
+      new:
+        title: "Legg til Google Drive-element" # MT
+    item_groups:
+      new:
+        title: "Legg til gruppe for Google Drive-element" # MT
+    config:
+      index:
+        title: "Innstillinger for Google Drive" # MT
+        migration: "Migrering" # MT
+        migrate_files: "Migrer filer" # MT
+        link_item: "Knytt til element" # MT
+        credentials: "Påloggingsinformasjon for Google Workspace" # MT
+        add_credentials_html: "Fellesskapet ditt er ikke koblet til Google Drive ennå. Legg inn påloggingsinformasjonen for Google Workspace for å koble til. Se %{link} for å komme i gang." # MT
+        config_guide: "oppsettsveiledningen" # MT
+        authentication: "Autentisering" # MT
+        update_credentials: "Hvis du må oppdatere påloggingsinformasjonen for Google Workspace, kan du gjøre det her." # MT
+        introduction: "Innledning" # MT
+        system_user_html: "<strong>Systembruker:</strong> %{user}" # MT
+        intro_html: "Legg til elementer nedenfor for å knytte dem til Gather og synkronisere tillatelser. Delte disker som står nedenfor, vises på %{link} i Gather for brukere som har tillatelse. Mapper og filer er ikke tilgjengelige via oversiktssiden med mindre den delte disken de ligger i, er tilgjengelig." # MT
+        browse_page: "oversiktssiden for Google Drive" # MT
+        name: "Navn" # MT
+        status: "Status" # MT
+        groups_permissions: "Grupper og tillatelser" # MT
+        # e.g. "Viewer (View files)"
+        access_level: "%{level} (%{hint})" # MT
+        add_group: "Legg til gruppe" # MT
+        none_linked:
+          drive: "Ingen delte disker er knyttet til Gather." # MT
+          folder: "Ingen mapper er knyttet til Gather." # MT
+          file: "Ingen filer er knyttet til Gather." # MT
+        revoke_html: "Hvis du må koble fra Google eller oppdatere påloggingsinformasjonen for Google Workspace, kan du %{link}." # MT
+        revoke: "trekke tilbake autorisasjonen" # MT
+        revoke_confirm: "Er du sikker på at du vil trekke tilbake autorisasjonen? Ingen kan bruke Google Drive-funksjonene for dette fellesskapet før autorisasjonen er gitt på nytt." # MT
+      guide:
+        title: "Oppsettsveiledning for Google Drive" # MT
+        # Markdown, rendered with Gather's Markdown renderer. Google's menu and button names are in quotes
+        # or bold so they can be matched to Google's own (translated) interface.
+        body: |- # MT
+          Denne veiledningen tar deg gjennom hvordan du skaffer påloggingsinformasjonen som trengs for å koble fellesskapets Google Workspace til Gather.
+
+          ## Forutsetninger
+
+          * Fellesskapet må ha registrert seg for **Google Workspace**.
+              * Abonnementet Business Starter er nok.
+              * Det trengs bare én brukerkonto.
+              * Velg et navn for fellesskapet til kontoen (f.eks. workspace.admin@dittdomene.no) i stedet for et personnavn (f.eks. ola.nordmann@dittdomene.no).
+          * Den som følger disse instruksjonene, må være logget inn hos Google som en bruker i fellesskapets Google Workspace med rettigheter som **superadministrator**. Hvis dere bare har én konto, har den kontoen rettigheter som superadministrator.
+
+          ## Hovedoppsett
+
+          ### Opprette et prosjekt
+
+          1. Gå til https://console.cloud.google.com
+          2. Kontroller at du er logget inn hos Google som brukeren med rettigheter som superadministrator.
+          3. Godta vilkårene. Vent noen minutter mens organisasjonsressursen din klargjøres.
+          4. Gå til https://console.cloud.google.com/projectcreate for å opprette et prosjekt.
+          5. Gi det navnet **Gather Main**.
+          6. Velg organisasjonen for domenet ditt.
+          7. Bruk standardverdien for plassering.
+
+          ### Aktiverte API-er
+
+          1. Med det nye prosjektet valgt går du til https://console.cloud.google.com/ → hamburgermenyen → **API-er og tjenester** → **Aktiverte API-er og tjenester**
+          2. Klikk på **Aktiver API-er og tjenester**.
+          3. Aktiver **Google Drive API**.
+
+          ### OAuth-klient-ID
+
+          1. Med det nye prosjektet valgt går du til https://console.cloud.google.com/ → hamburgermenyen → **API-er og tjenester** → **Aktiverte API-er og tjenester** → **Legitimasjon**.
+          2. Klikk på **Opprett legitimasjon** → **OAuth-klient-ID**
+          3. Velg **Nettapplikasjon**.
+          4. Navn: **Drive OAuth Client ID**.
+          5. Under **Autoriserte JavaScript-opphav** legger du til https://gather.coop.
+          6. Under **Autoriserte viderekoblings-URI-er** legger du til https://gather.coop/gdrive/setup/auth/callback.
+          7. Kopier klient-ID-en og klienthemmeligheten til et trygt sted, og ta vare på dem til senere.
+              1. Klient-ID-en skal se omtrent slik ut: `302773344240-7g2n5abcdef8es2cvpc0roj7t.apps.googleusercontent.com`
+              2. Klienthemmeligheten skal se omtrent slik ut: `AIza73uyhc63ehd763ehesysqyhw-hei2asda_2rs`
+
+          ### OAuth-samtykkeskjerm
+
+          1. Med det nye prosjektet valgt går du til https://console.cloud.google.com/ → hamburgermenyen → **API-er og tjenester** → **OAuth-samtykkeskjerm**.
+          2. Velg **Intern**.
+          3. Appnavn: **Gather**.
+          4. E-postadresse for brukerstøtte: e-postadressen til brukeren med rettigheter som superadministrator.
+          5. Ingen logo.
+          6. Startside for appen: https://gather.coop
+          7. Personvernerklæring: https://gather.coop/privacy-policy
+          8. Autoriserte domener:
+              1. gather.coop
+          9. E-postadresse til utvikleren: support@gather.coop
+          10. Tilgangsområder
+              1. auth/userinfo.email
+              2. auth/drive
+    item_kinds:
+      drive:
+        one: "Delt disk" # MT
+        other: "Delte disker" # MT
+      folder:
+        one: "Mappe" # MT
+        other: "Mapper" # MT
+      file:
+        one: "Fil" # MT
+        other: "Filer" # MT
+    access_levels:
+      reader: "Leser" # MT
+      commenter: "Kommentator" # MT
+      writer: "Bidragsyter" # MT
+      fileOrganizer: "Innholdsadministrator" # MT
+    access_level_hints:
+      reader: "Se filer" # MT
+      commenter: "Se og kommentere filer" # MT
+      writer: "Se, legge til og redigere filer" # MT
+      fileOrganizer: "Se, legge til, redigere, flytte, slette og dele filer" # MT
+    item_error_types:
+      inaccessible: "Ikke tilgjengelig" # MT
+      not_shareable: "Kan ikke deles" # MT
+    request_statuses:
+      new: "Ny" # MT
+      opened: "Åpnet" # MT
+      opted_out: "Valgt bort" # MT
+
+    migration:
+      requests_sending: "Forespørslene blir sendt om et øyeblikk. Hvis eieren allerede har en forespørsel, blir det ikke sendt en ny." # MT
+      created: "Migreringen er opprettet. Skanningen av filer starter om et øyeblikk." # MT
+      scan_started: "Skanningen er satt i gang og starter om et øyeblikk." # MT
+      updated: "Migreringen er oppdatert." # MT
+      deleted: "Operasjonen er slettet. Endringer blir ikke lenger overvåket." # MT
+      # Name of the shared drive created for each person to drop their files into.
+      file_drop_drive_name: "Gather filmottak %{id}" # MT
+      request_subject: "[Handling kreves] Hjelp %{community} med å omorganisere Google Drive-filene!" # MT
+      request:
+        # Shared by the request pages.
+        title: "Omorganisering av filer for %{community}" # MT
+        previous: "< Forrige" # MT
+        next: "Neste >" # MT
+        troubleshooting: "Feilsøking" # MT
+        intro:
+          introduction: "Innledning" # MT
+          ready: "Ja, jeg er klar til å hjelpe!" # MT
+        what_is_this:
+          using_gather_html: "%{community} bruker <a href=\"https://gather.coop\">Gather</a> til å omorganisere Google Drive-filene sine." # MT
+          problem: "I dag eies filene til fellesskapet av den som opprettet dem. Det kan føre til at filer blir slettet ved et uhell når noen flytter fra fellesskapet." # MT
+          solution: "For å unngå dette flytter fellesskapet alle filene sine til en delt disk som fellesskapet eier." # MT
+          own_many_html: "Du eier omtrent %{count} filer i %{link} for %{community}. Vi trenger tillatelsen din til å flytte dem til den nye disken." # MT
+          own_one_html: "Du eier minst én fil i %{link} for %{community}. Vi trenger tillatelsen din til å flytte den til den nye disken." # MT
+          old_folder: "den gamle Google Drive-mappen" # MT
+          retain_access: "Du beholder tilgangen til filene hvis du er medlem av fellesskapet." # MT
+          questions_html: "Hvis du har spørsmål eller bekymringer, kan du kontakte %{contact}, som koordinerer omorganiseringen." # MT
+          opt_out_html: "Hvis du helst ikke vil hjelpe til med dette, kan du %{link}." # MT
+          opt_out: "melde deg ut" # MT
+        step1:
+          heading: "Steg 1: Filer du eier" # MT
+          view_files: "Klikk nedenfor for å se filene du eier i Google Drive-mappen til %{community}. Dette åpner en ny fane i nettleseren." # MT
+          view_files_button: "Vis filer jeg eier" # MT
+          see_something_like: "Du skal se noe slikt:" # MT
+          no_files: "Jeg ser ingen filer som passer" # MT
+          no_files_help_html: "Hvis du ikke ser noen filer som passer, må du sjekke at du er logget inn hos Google med kontoen %{email}." # MT
+        step2:
+          heading: "Steg 2: Velg filer" # MT
+          select: "Velg filene du vil overføre." # MT
+          easiest: "Den enkleste måten å gjøre det på er å:" # MT
+          click_first: "Klikke på den første filen i listen." # MT
+          go_to_end: "Gå til slutten av listen." # MT
+          shift_click_html: "<strong>Holde nede SHIFT-tasten</strong> og klikke på den siste filen i listen." # MT
+          see_something_like: "Da skal du se noe slikt:" # MT
+          one_at_a_time: "Jeg kan bare velge én fil om gangen" # MT
+          holding_html: "Sørg for at du følger de tre stegene ovenfor og <strong>holder nede</strong> SHIFT-tasten når du klikker på den andre filen." # MT
+          shift_explained: "Når du holder nede SHIFT-tasten mens du klikker, velger du ALLE filene i listen mellom filen som allerede er valgt og filen du klikker på." # MT
+        step3:
+          heading: "Steg 3: Organiser > Flytt" # MT
+          click_sequence: "Klikk på følgende i denne rekkefølgen:" # MT
+          dots: "Ikonet med tre prikker («Flere handlinger»)" # MT
+          organize: "Organiser" # MT
+          move: "Flytt" # MT
+        step4:
+          heading: "Steg 4: Velg disken for filmottak" # MT
+          all_locations: "Klikk på «Alle steder»" # MT
+          shared_drives: "Klikk på «Delte disker»" # MT
+          next_to_html: "Ved siden av %{drive} klikker du på «Flytt»" # MT
+          move_button: "Klikk på knappen «Flytt»" # MT
+          no_shared_drives: "Jeg ser ikke «Delte disker» i listen «Alle steder»" # MT
+          signed_in_html: "Sjekk at du er logget inn hos Google med kontoen %{email}. Hvis du fortsatt ikke ser «Delte disker», kan du prøve å åpne %{link} i en ny fane og deretter prøve dette steget igjen." # MT
+          this_link: "denne lenken" # MT
+          still_trouble_html: "Hvis du fortsatt har problemer, kan du kontakte %{contact} for å få hjelp." # MT
+          unselected: "Jeg fjernet valget av noen av filene ved et uhell" # MT
+          go_back_html: "Ikke noe problem! Gå tilbake til %{link}." # MT
+          step2: "steg 2" # MT
+          ownership: "Jeg vil ikke endre eierskapet" # MT
+          ownership_explained: "Alle filene på den nye delte disken til %{community} eies av fellesskapet, ikke av enkeltpersoner. Slik tar ikke filene opp plass i lagringskvoten din i Google Drive, og de kan ikke slettes ved et uhell." # MT
+          still_access: "Du har fortsatt tilgang til filene hvis du er medlem av fellesskapet." # MT
+        step5:
+          heading: "Steg 5: Sjekk at alle filene er flyttet" # MT
+          empty_list: "Nå skal du se en tom liste over filer, omtrent slik:" # MT
+          done: "I så fall er du ferdig!" # MT
+          finish: "Fullfør" # MT
+          not_empty: "Listen over filer er ikke tom" # MT
+          head_back_html: "Ikke noe problem! Gå tilbake til %{link}." # MT
+          step2: "steg 2" # MT
+          some_files: "Det er noen filer jeg ikke vil overføre" # MT
+          use_opt_out_html: "Bruk %{link} for å gi beskjed til koordinatoren." # MT
+          opt_out_form: "skjemaet for å melde deg ut" # MT
+        finish:
+          heading: "Ferdig!" # MT
+          thanks: "Tusen takk for at du hjalp til med å omorganisere filene til %{community}!" # MT
+          great_day: "Ha en fin dag!" # MT
+        opt_out:
+          heading: "Meld deg ut av filoverføringen" # MT
+          not_active: "Det ser ut som migreringsforespørselen din ikke er aktiv, så du kan ikke melde deg ut." # MT
+          why: "Fortell oss gjerne hvorfor du velger å melde deg ut." # MT
+          still_own: "Ifølge våre opplysninger eier du fortsatt filene nedenfor. Hvis du ikke vil hjelpe til med å overføre disse filene til fellesskapet, kan du fortelle oss hvorfor du velger å melde deg ut." # MT
+          went_wrong: "Hvis du prøvde å overføre filer, men noe gikk galt, kan du fortelle hva som skjedde." # MT
+          didnt_mean_html: "Hvis du ikke mente å melde deg ut, kan du %{link}." # MT
+          go_back_link: "gå tilbake" # MT
+          go_back: "Gå tilbake" # MT
+          not_transferred: "Filer som ikke er overført" # MT
+          name: "Navn" # MT
+          modified: "Endret" # MT
+          file_icon: "Filikon" # MT
+        opted_out:
+          heading: "Meldt ut" # MT
+          opted_out: "Du har meldt deg ut av arbeidet med å omorganisere Google Drive-filene til %{community}." # MT
+          opt_back_in_html: "Hvis du vil melde deg inn igjen, kan du gjøre det ved å %{link}." # MT
+          clicking_here: "klikke her" # MT
+        mobile_warning:
+          thanks: "Takk for at du vil hjelpe %{community} med å omorganisere Google Drive-filene!" # MT
+          mobile: "Mobil enhet?" # MT
+          looks_like_mobile: "Det ser ut som du bruker en mobil enhet." # MT
+          works_better: "Dette fungerer mye bedre på en bærbar eller stasjonær datamaskin med fullt tastatur og mus eller styreplate." # MT
+          proceed_html: "%{link}, men hvis du har mange filer i den gamle Google Drive-mappen, kan det bli tungvint." # MT
+          welcome_to_proceed: "Du kan gjerne fortsette" # MT
+          switch_html: "Hvis du vil bytte til en bærbar eller stasjonær datamaskin, kan du bruke den samme %{link} i e-posten som førte deg hit." # MT
+          link: "lenken" # MT
+          thanks_again: "Uansett, takk igjen!" # MT
+          what_is_this: "Hva er dette?" # MT
+      mailer:
+        migration_request:
+          dear: "Hei %{name}!" # MT
+          using_gather: "%{community} bruker Gather til å omorganisere Google Drive-filene sine." # MT
+          problem: "I dag eies filene til fellesskapet av den som opprettet dem. Det kan føre til at filer blir slettet ved et uhell når noen flytter fra fellesskapet!" # MT
+          solution: "For å unngå dette flytter fellesskapet alle filene sine til en delt disk som fellesskapet eier." # MT
+          own_many: "Google-kontoen din %{email} eier omtrent %{count} filer i den gamle Google Drive-mappen for %{community}. Vi trenger tillatelsen din til å flytte dem til den nye disken." # MT
+          own_one: "Google-kontoen din %{email} eier minst én fil i den gamle Google Drive-mappen for %{community}. Vi trenger tillatelsen din til å flytte den til den nye disken." # MT
+          go_here: "Gå hit for å hjelpe til: %{url}" # MT
+          retain_access: "Du beholder tilgangen til filene hvis du er medlem av fellesskapet. Hvis du har spørsmål eller bekymringer, kan du kontakte %{contact} på %{email}, som koordinerer omorganiseringen. Hvis du helst ikke vil hjelpe til med dette, kan du også melde deg ut på nettadressen ovenfor." # MT
+          thanks: "Takk for at du tok deg tid!" # MT
+      dashboard:
+        # Shared by the dashboard pages.
+        title: "Migrering av Google Drive" # MT
+        synopsis:
+          not_begun_contact: "Skanningen av filer har ikke startet. Kontakt Gather-brukerstøtten." # MT
+          not_begun_wait: "Skanningen av filer har ikke startet. Vent et øyeblikk, og last deretter inn siden på nytt." # MT
+          in_progress: "Skanningen av filer pågår. %{count} filer er skannet så langt." # MT
+          complete: "Skanningen av filer er fullført. Overvåker endringer." # MT
+          auth_error_html: "Skanningen av filer ble avbrutt på grunn av en autorisasjonsfeil. Sjekk at %{user} har tilgang til å <strong>redigere</strong> %{folder_link}. Prøv å klikke på «Trekk tilbake autorisasjon» og logge inn igjen på %{home_link}. Prøv deretter å kjøre skanningen på nytt." # MT
+          source_folder: "kildemappen" # MT
+          main_page: "hovedsiden for Google Drive" # MT
+          too_many_errors: "Skanningen av filer ble avbrutt fordi det oppstod for mange feil. Se feilene nedenfor. Rett feilene og prøv å kjøre skanningen på nytt." # MT
+          cancelled_unknown: "Skanningen av filer ble avbrutt av ukjent grunn." # MT
+          unknown_state: "Skanningen av filer har ukjent status." # MT
+        status:
+          show:
+            system_user: "Systembruker" # MT
+            contact: "Kontakt" # MT
+            contact_value: "%{name} <%{email}>" # MT
+            source_folder: "Kildemappe" # MT
+            destination_folder: "Målmappe" # MT
+            total_files: "Filer totalt" # MT
+            files_by_status:
+              pending: "Filer som venter" # MT
+              declined: "Filer som er avslått" # MT
+              errored: "Filer med feil" # MT
+              transferred: "Filer som er overført" # MT
+              copied: "Filer som er kopiert" # MT
+              ignored: "Filer som er ignorert" # MT
+              disappeared: "Filer som er forsvunnet" # MT
+        logs:
+          index:
+            logs: "Logger" # MT
+            none: "Ingen logger ennå." # MT
+            time: "Tid" # MT
+            message: "Melding" # MT
+        files:
+          index:
+            files: "Filer" # MT
+            name: "Navn" # MT
+            owner: "Eier" # MT
+            modified: "Endret" # MT
+            status: "Status" # MT
+            error: "Feil" # MT
+            file_icon: "Filikon" # MT
+        owners:
+          index:
+            owners: "Eiere" # MT
+            files: "Filer" # MT
+            request: "Forespørsel" # MT
+            owner: "Eier" # MT
+            total: "Totalt" # MT
+            date_sent: "Dato sendt" # MT
+            status: "Status" # MT
+          show:
+            files: "Filer" # MT
+            total_files: "Filer totalt" # MT
+            request: "Forespørsel" # MT
+            date_sent: "Dato sendt" # MT
+            status: "Status" # MT
+            intro_page: "Innledningsside for forespørselen" # MT
+            link: "Lenke" # MT
+            opened_note: "Merk at hvis du klikker på denne lenken, endres forespørselen til statusen «åpnet»." # MT
+            file_drop_drive: "Disk for filmottak" # MT
+            opt_out_reason: "Grunn til utmelding" # MT
+      operations:
+        form:
+          intro: "Fyll ut opplysningene nedenfor for å sette opp migreringen. En skanning av filer blir satt i gang, og du blir sendt videre til oversikten over migreringen." # MT
+        new:
+          title: "Opprett migrering" # MT
+        edit:
+          title: "Rediger migrering" # MT
+      # Labels for GDrive::Migration::File#error_type. Keep in sync with the error_type_enum DB constraint.
+      errors:
+        forbidden: "Ingen tillatelse" # MT
+        not_found: "Ikke funnet" # MT
+        ancestor_inaccessible: "Overordnet mappe er ikke tilgjengelig" # MT
+        client_error_ensuring_tree: "Feil ved oppretting av målmapper" # MT
+        client_error_moving_to_temp_drive: "Feil ved flytting til midlertidig disk" # MT
+        client_error_moving_to_destination: "Feil ved flytting til målet" # MT

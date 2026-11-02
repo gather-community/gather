@@ -1,0 +1,125 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+sv:
+  search:
+    # Title for a search result with neither a title nor a name.
+    untitled: "(utan titel)" # MT
+    # Singular label shown under each search result, keyed by result kind (SearchHelper::KINDS).
+    kinds:
+      wiki_page: "Wiki" # MT
+      event: "Händelse" # MT
+      calendar: "Kalender" # MT
+      group: "Grupp" # MT
+      user: "Person" # MT
+      household: "Hushåll" # MT
+      meal: "Måltid" # MT
+      memorial: "Minnessida" # MT
+      emergency_contact: "Nödkontakt" # MT
+      pet: "Husdjur" # MT
+      vehicle: "Fordon" # MT
+      transaction: "Transaktion" # MT
+    # Facts shown after a result's kind label (SearchHelper#search_result_details), joined by separator.
+    details:
+      separator: " · " # MT
+      household: "Hushåll: %{name}" # MT
+      head_cook: "Huvudkock: %{name}" # MT
+      updated_by: "Uppdaterad %{date} av %{name}" # MT
+      updated: "Uppdaterad %{date}" # MT
+      members:
+        one: "%{count} medlem" # MT
+        other: "%{count} medlemmar" # MT
+      child: "Barn" # MT
+      unit: "Lägenhet %{unit}" # MT
+      years: "%{birth}–%{death}" # MT
+      date_range: "%{first} – %{last}" # MT
+      pet_color_species: "%{species}, %{color}" # MT
+      modified: "Ändrad %{date}" # MT
+      # Google Drive file types, keyed like the type: search syntax (Search::QueryParser::MIME_TYPES).
+      drive_types:
+        doc: "Google Dokument" # MT
+        sheet: "Google Kalkylark" # MT
+        slide: "Google Presentationer" # MT
+        folder: "Mapp" # MT
+        pdf: "PDF" # MT
+    # Result count when there are more results than are fetched, e.g. "200+".
+    count_capped: "%{count}+" # MT
+    # Shown by search_controller.ts when fetching a section's results fails.
+    load_error: "Det gick inte att läsa in resultaten. Försök igen." # MT
+    index:
+      title: "Sök" # MT
+      form_label: "Sök" # MT
+      input_label: "Sök i Gather" # MT
+      placeholder: "Sök i Gather och Google Drive…" # MT
+      placeholder_no_drive: "Sök i Gather…" # MT
+      submit: "Sök" # MT
+      search_tips: "Söktips" # MT
+      # Section headings and mobile tab names; a result count may follow.
+      gather: "Gather" # MT
+      results: "Resultat" # MT
+      google_drive: "Google Drive" # MT
+      loading: "Laddar…" # MT
+      load_more: "Fler resultat" # MT
+      empty_query: "Skriv ett sökord ovan för att söka i Gather och Google Drive." # MT
+      empty_query_no_drive: "Skriv ett sökord ovan för att söka i Gather." # MT
+      no_types: "Välj minst en typ att söka efter." # MT
+    results_gather:
+      no_results: "Inga resultat hittades." # MT
+    results_drive:
+      no_results: "Inga filer hittades i Drive." # MT
+    results_drive_auth_error:
+      reconnect: "Din gemenskap behöver anslutas till Google Drive igen. Meddela en Gather-administratör." # MT
+    # Checkbox labels in the search sidebar, keyed by the type value sent in the `types` param.
+    type_filters:
+      types:
+        wiki_page: "Wikisidor" # MT
+        event: "Händelser" # MT
+        calendar: "Kalendrar" # MT
+        group: "Grupper" # MT
+        user: "Personer" # MT
+        household: "Hushåll" # MT
+        meal: "Måltider" # MT
+        memorial: "Minnessidor" # MT
+        emergency_contact: "Nödkontakter" # MT
+        pet: "Husdjur" # MT
+        vehicle: "Fordon" # MT
+        transaction: "Transaktioner" # MT
+        drive_doc: "Google Dokument" # MT
+        drive_sheet: "Google Kalkylark" # MT
+        drive_slide: "Google Presentationer" # MT
+        drive_pdf: "PDF-filer" # MT
+        drive_folder: "Mappar" # MT
+        drive_other: "Övriga filer" # MT
+      # Section headings. Without Google Drive there's one section, headed "Filter".
+      filter: "Filter" # MT
+      gather: "Gather" # MT
+      google_drive: "Google Drive" # MT
+      select_all: "Markera alla" # MT
+      deselect_all: "Avmarkera alla" # MT
+    # The search tips modal. The search syntax examples (in <code>) are not translated, since they are
+    # literal query syntax; descriptions that mention an example take it as an interpolation.
+    search_tips_modal:
+      title: "Söktips" # MT
+      intro: "Skriv ord för att söka i Gather (wikisidor, händelser, personer, måltider med mera) och Google Drive." # MT
+      intro_no_drive: "Skriv ord för att söka i Gather (wikisidor, händelser, personer, måltider med mera)." # MT
+      basic_search: "Enkel sökning" # MT
+      both_words: "Objekt som innehåller båda orden" # MT
+      word_start: "Ord som börjar med ”%{start}”" # MT
+      word_start_drive: "Ord som börjar med ”%{start}”. I Google Drive matchar detta bara början av filnamn, inte filinnehåll." # MT
+      exact_phrase: "Den exakta frasen ”%{phrase}”" # MT
+      special_syntax: "Särskild syntax" # MT
+      title_only: "Sök bara i fältet för titel eller namn" # MT
+      # %{options} is a comma-separated list of file type codes, e.g. doc, sheet.
+      drive_type_html: "Filtrera resultat från Drive efter filtyp. Alternativ: %{options}" # MT
+      combining: "Kombinera" # MT
+      title_and_word: "Objekt med namnet ”%{title}” som innehåller ”%{word}”" # MT
+      sheet_and_phrase: "Google Kalkylark som matchar frasen ”%{phrase}”" # MT

@@ -22,6 +22,7 @@ module Groups
   class Group < ApplicationRecord
     include Wisper.model
     include Deactivatable
+    include GroupSearchConfig
 
     KINDS = %i[committee subcommittee team task_force club crew circle squad group].freeze
     AVAILABILITIES = %i[open closed everybody hidden].freeze

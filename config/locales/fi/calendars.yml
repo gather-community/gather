@@ -1,0 +1,316 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+fi:
+  calendars:
+    all_day: "Koko päivä" # MT
+    # Names of the built-in system calendars and legacy export feeds.
+    my_meals: "Omat ateriat" # MT
+    all_meals: "Kaikki ateriat" # MT
+    community_meals: "Ateriat: %{community}" # MT
+    community_events: "Tapahtumat: %{community}" # MT
+    my_events: "Omat tapahtumat" # MT
+    my_jobs: "Omat tehtävät" # MT
+    # Names of calendar export feeds, shown in the subscriber's calendar app.
+    feed_names:
+      all: "Kaikki kalenterit: %{community}" # MT
+      single: "%{community}: %{calendar}" # MT
+      multiple:
+        one: "%{community}: %{count} kalenteri" # MT
+        other: "%{community}: %{count} kalenteria" # MT
+    meal_by_cook: "Kokki: %{cook}" # MT
+    # The first and last days of a multi-day job shift.
+    job_start: "%{name} (alku)" # MT
+    job_end: "%{name} (loppu)" # MT
+    created: "Kalenteri luotu." # MT
+    updated: "Kalenteri päivitetty." # MT
+    group_created: "Ryhmä luotu." # MT
+    group_updated: "Ryhmä päivitetty." # MT
+    protocol_created: "Säännöt luotu." # MT
+    protocol_updated: "Säännöt päivitetty." # MT
+    event_created: "Tapahtuma luotu." # MT
+    event_updated: "Tapahtuma päivitetty." # MT
+    event_deleted: "Tapahtuma poistettu." # MT
+    token_reset: "Tunniste nollattu." # MT
+    residents_only: "Vain yhteisön %{community} asukkaat voivat varata tämän kalenterin." # MT
+    # Appended to IceCube's own (localized) description of a recurrence rule, e.g.
+    # "Weekly" + "on Mondays" + "at 6:00pm" + "until Aug 31 2026".
+    timespan:
+      all_day: "%{date} (koko päivä)" # MT
+      all_day_range: "%{first} – %{last} (koko päivä)" # MT
+    recurrence:
+      # Indexed by weekday, Sunday first.
+      on_weekdays: ["sunnuntaisin", "maanantaisin", "tiistaisin", "keskiviikkoisin", "torstaisin", "perjantaisin", "lauantaisin"] # MT
+      on_day_of_month: "kuukauden %{ordinal} päivänä" # MT
+      on_date: "päivämäärä: %{date}" # MT
+      at_time: "klo %{time}" # MT
+      from_date: "alkaen %{date}" # MT
+      between_dates: "%{first}–%{last}" # MT
+    rules:
+      max_lead_days: "Saa olla enintään %{count} päivän päässä tulevaisuudessa" # MT
+      max_length: "Saa päättyä enintään %{length} alkamisajan jälkeen" # MT
+      other_communities_forbidden: "Muiden yhteisöjen asukkaat eivät voi luoda tapahtumia" # MT
+      sponsor_required: "Tarvitset vastuuhenkilön, joka on jäsen yhteisössä %{community}" # MT
+      fixed_time: "Täytyy olla %{time}" # MT
+    calendars:
+      index:
+        title: "Kalenterit" # MT
+        create_group: "Luo ryhmä" # MT
+        create_calendar: "Luo kalenteri" # MT
+        no_calendars: "Kalentereita ei löytynyt." # MT
+      table:
+        name: "Nimi" # MT
+        events: "Tapahtumat" # MT
+      new:
+        title: "Luo kalenteri" # MT
+      edit:
+        title: "Muokkaa kalenteria: %{name}" # MT
+    groups:
+      new:
+        title: "Luo kalenteriryhmä" # MT
+      edit:
+        title: "Muokkaa kalenteriryhmää: %{name}" # MT
+    calendar_list:
+      all: "Kaikki" # MT
+      select_all: "Valitse kaikki" # MT
+      deselect_all: "Poista kaikki valinnat" # MT
+    # Text built by the calendar grid's JavaScript (calendar_view.js), mostly for screen readers.
+    grid:
+      create_confirm:
+        same_day_html: "Luodaanko tapahtuma <b>%{date}</b>?" # MT
+        same_day_times_html: "Luodaanko tapahtuma <b>%{date}</b> klo <b>%{start}</b>–<b>%{end}</b>?" # MT
+        range_html: "Luodaanko tapahtuma ajalle <b>%{start}</b> – <b>%{end}</b>?" # MT
+      now_showing: "Kalenterissa näkyy nyt: %{month}" # MT
+      event_count:
+        zero: "Ei tapahtumia" # MT
+        one: "%{count} tapahtuma" # MT
+        other: "%{count} tapahtumaa" # MT
+      event_count_this_week:
+        zero: "Ei tapahtumia tällä viikolla" # MT
+        one: "%{count} tapahtuma tällä viikolla" # MT
+        other: "%{count} tapahtumaa tällä viikolla" # MT
+      event_count_this_month:
+        zero: "Ei tapahtumia tässä kuussa" # MT
+        one: "%{count} tapahtuma tässä kuussa" # MT
+        other: "%{count} tapahtumaa tässä kuussa" # MT
+      month_calendar: "Kuukausikalenteri" # MT
+      day_calendar: "Päiväkalenteri" # MT
+      week_calendar: "Viikkokalenteri" # MT
+      # %{view} is day_calendar or week_calendar; %{slots} is half_hour_slots or minute_slots.
+      agenda_label: "%{view}. Liiku nuolinäppäimillä" # MT
+      agenda_label_all_day: "%{view}. Koko päivän rivi. Liiku nuolinäppäimillä" # MT
+      agenda_label_slots: "%{view}. Ruudukko: %{slots}. Liiku nuolinäppäimillä" # MT
+      agenda_label_all_day_slots: "%{view}. Koko päivän rivi ja sen jälkeen %{slots}. Liiku nuolinäppäimillä" # MT
+      half_hour_slots: "puolen tunnin aikavälit %{start}–%{end}" # MT
+      minute_slots: "aikavälit (%{minutes} min) %{start}–%{end}" # MT
+      today_date: "Tänään, %{date}" # MT
+      this_week_date: "Tällä viikolla, %{date}" # MT
+      header:
+        toolbar: "Kalenterin säätimet" # MT
+        previous: "Edellinen" # MT
+        next: "Seuraava" # MT
+        today: "Tänään" # MT
+        day_view: "Päivänäkymä" # MT
+        week_view: "Viikkonäkymä" # MT
+        month_view: "Kuukausinäkymä" # MT
+    events:
+      index:
+        title: "Tapahtumat ja varaukset" # MT
+        edit_calendar: "Muokkaa kalenteria" # MT
+        export: "Vie" # MT
+        create_event: "Luo tapahtuma" # MT
+        permalink: "Pysyvä linkki" # MT
+        show_early: "Näytä varhainen aamu" # MT
+        hide_early: "Piilota varhainen aamu" # MT
+        create_confirm_title: "Luodaanko tapahtuma?" # MT
+        cancel: "Peruuta" # MT
+        ok: "OK" # MT
+      single_calendar_sidebar:
+        calendars: "Kalenterit" # MT
+      all_events_sidebar:
+        calendars: "Kalenterit" # MT
+      new:
+        title: "%{calendar}: Luo tapahtuma" # MT
+        no_calendars_title: "Ei kalentereita" # MT
+        no_calendars: "Yhteisölläsi ei ole kalentereita, joihin voisit luoda tapahtuman." # MT
+        create_one: "Voit luoda sellaisen." # MT
+        select_calendar: "Valitse kalenteri" # MT
+      edit:
+        title: "Muokkaa tapahtumaa: %{name}" # MT
+      form:
+        agree_to_guidelines: "Hyväksyn yllä olevat ohjeet" # MT
+      series_notice:
+        applies_from: "Alla tehdyt muutokset koskevat vain aikaa %{date} alkaen." # MT
+        edit_earlier_html: "Jos haluat muuttaa kaikkia tulevia kertoja, muokkaa tätä kertaa: %{link}." # MT
+        started: "Tämä kerta on jo alkanut, joten sitä ei voi muuttaa." # MT
+        edit_later_html: "Jos haluat muuttaa sarjaa siitä eteenpäin, muokkaa tätä kertaa: %{link}." # MT
+      # Repeat settings in the event form.
+      repeat_fields:
+        repeat_units:
+          daily:
+            one: "päivä" # MT
+            other: "päivää" # MT
+          weekly:
+            one: "viikko" # MT
+            other: "viikkoa" # MT
+          monthly:
+            one: "kuukausi" # MT
+            other: "kuukautta" # MT
+          yearly:
+            one: "vuosi" # MT
+            other: "vuotta" # MT
+        # The monthly "On" choices, worked out from the start date (RecurrencePattern.monthly_by_options).
+        monthly_by:
+          day_of_month: "Päivä %{day}" # MT
+          day_of_week:
+            first: "Kuukauden ensimmäinen %{weekday}" # MT
+            second: "Kuukauden toinen %{weekday}" # MT
+            third: "Kuukauden kolmas %{weekday}" # MT
+            fourth: "Kuukauden neljäs %{weekday}" # MT
+          last_day_of_week: "Kuukauden viimeinen %{weekday}" # MT
+          last_day_of_month: "Kuukauden viimeinen päivä" # MT
+        start_weekday: "Alkamispäivän viikonpäivä on aina mukana" # MT
+        pattern_fixed: "Tämä tapahtuma toistuu tavalla, jota tämä lomake ei pysty näyttämään (%{description}), joten sen toistoasetuksia ei voi muuttaa täällä." # MT
+        recurrence_unavailable: "Toistuvat tapahtumat eivät ole käytettävissä tässä kalenterissa, koska %{reasons}." # MT
+        recurrence_blockers:
+          overlap_not_allowed: "sen tapahtumat eivät saa mennä päällekkäin" # MT
+          fixed_start_time: "sillä on kiinteä alkamisaika" # MT
+          fixed_end_time: "sillä on kiinteä päättymisaika" # MT
+          max_lead_days: "se rajoittaa, kuinka pitkälle etukäteen tapahtumia voi varata" # MT
+          max_days_per_year: "se rajoittaa varattujen päivien määrää vuodessa" # MT
+          max_minutes_per_year: "se rajoittaa varattua aikaa vuodessa" # MT
+    eventlets:
+      show:
+        title: "Tapahtuma: %{name}" # MT
+        calendars: "Kalenterit" # MT
+        calendar: "Kalenteri" # MT
+        date_time: "Päivämäärä/aika" # MT
+        repeats: "Toistuu" # MT
+        meal: "Ateria" # MT
+        group: "Ryhmä" # MT
+        reserved_by: "Varaaja" # MT
+        sponsor: "Vastuuhenkilö" # MT
+        type: "Tyyppi" # MT
+        note: "Huomautus" # MT
+    protocols:
+      index:
+        title: "Säännöt" # MT
+        create: "Luo säännöt" # MT
+        no_protocols: "Sääntöjä ei löytynyt." # MT
+        name: "Nimi" # MT
+        calendars: "Kalenterit" # MT
+        types: "Tyypit" # MT
+        rules: "Säännöt" # MT
+      new:
+        title: "Luo säännöt" # MT
+      edit:
+        title: "Muokkaa sääntöjä: %{name}" # MT
+    exports:
+      index:
+        title: "Kalenterin vienti" # MT
+        select_calendars: "Valitse kalenterit" # MT
+        export_link: "Vientilinkki" # MT
+        copy_link: "Kopioi linkki" # MT
+        visit_link: "Avaa linkki selaimessa" # MT
+        personalized: "Tämä on henkilökohtainen vientilinkkisi valituille kalentereille." # MT
+        selection_changes_link: "Jos muutat kalenterien valintaa (valintaruuduilla), linkki muuttuu sen mukaan. Myös alla olevien asetusten muuttaminen muuttaa linkkiä." # MT
+        options: "Asetukset" # MT
+        import_instructions: "Tuontiohjeet" # MT
+        google_calendar: "Google Kalenteri" # MT
+        apple_calendar: "Applen Kalenteri" # MT
+        method_1: "Tapa 1" # MT
+        method_2: "Tapa 2" # MT
+        google_method_1: "Jos olet kirjautunut Google-tilillesi, kokeile vain valita yltä ”Avaa linkki selaimessa”. Google Kalenterin pitäisi avautua itsestään ja kysyä tuonnista." # MT
+        google_steps:
+          - "Kopioi kalenterin osoite leikepöydälle valitsemalla yltä ”Kopioi linkki”." # MT
+          - "Valitse Google Kalenterin vasemmasta reunasta ”+” kohdan ”Muut kalenterit” vierestä." # MT
+          - "Valitse ”URL-osoitteesta”." # MT
+          - "Liitä yllä kopioimasi osoite." # MT
+          - "Valitse ”Lisää kalenteri”." # MT
+          - "Tapahtumien pitäisi näkyä kalenterissasi muutaman sekunnin kuluttua." # MT
+        apple_method_1: "Kokeile vain valita yltä ”Avaa linkki selaimessa”. Jos selaimesi on asetettu avaamaan webcal-linkit Applen Kalenterissa, se voi toimia suoraan!" # MT
+        apple_steps:
+          - "Kopioi kalenterin osoite leikepöydälle valitsemalla yltä ”Kopioi linkki”." # MT
+          - "Avaa Applen Kalenteri." # MT
+          - "Valitse valikko ”Arkisto”." # MT
+          - "Valitse ”Tilaa” tai ”Uusi kalenteritilaus”." # MT
+          - "Liitä yllä kopioimasi osoite." # MT
+          - "Valitse OK/Tilaa." # MT
+          - "Määritä tilauksen asetukset, jos niitä kysytään. Suositeltu automaattisen päivityksen väli on ”Joka tunti”." # MT
+          - "Tapahtumien pitäisi nyt näkyä kalenterissasi." # MT
+        reset_token_html: "Jos jaoit vahingossa henkilökohtaiset kalenterilinkkisi ja haluat tehdä niistä taas yksityiset, %{link}. Huomaa: vanhat linkit lakkaavat silloin toimimasta, joten sinun täytyy päivittää kalenterisovelluksesi." # MT
+        reset_token_link: "nollaa salainen tunnisteesi tästä" # MT
+    legacy_exports:
+      index:
+        title: "Kalenterin vienti" # MT
+        old_page: "Olet päätynyt vanhalle kalenterin vientisivulle. Se on korvattu uudemmalla ja monipuolisemmalla vientijärjestelmällä." # MT
+        new_page: "Uudelle sivulle pääset valitsemalla Kalenterit-pääsivulla ”Vie”." # MT
+        links_removed: "Kun siirryt alla olevalla painikkeella uudelle kalenterin vientisivulle, tähän vanhaan sivuun johtavat linkit poistetaan. Jos haluat jatkossa viedä kalentereita, mene Kalenterit-pääsivulle ja valitse ”Vie”." # MT
+        proceed: "Selvä! Vie minut uudelle kalenterin vientisivulle ja poista vanhat linkit!" # MT
+    # The drag-and-drop move modal in the calendar grid (calendar_view.js).
+    drag:
+      confirm: "Haluatko varmasti siirtää tapahtuman ”%{name}”?" # MT
+      confirm_occurrence: "Haluatko varmasti siirtää tämän tapahtuman ”%{name}” kerran?" # MT
+      error_title: "Virhe" # MT
+      load_error: "Emme pystyneet tarkistamaan, miten tämän tapahtuman voi siirtää. Yritä uudelleen." # MT
+      calendar:
+        title: "Siirrä useassa kalenterissa oleva tapahtuma" # MT
+        content: "”%{name}” on useammassa kuin yhdessä kalenterissa:" # MT
+        selected: "(valittu)" # MT
+        this: "Siirrä vain kalenterissa %{calendar}" # MT
+        all: "Siirrä kaikissa" # MT
+      series:
+        title: "Siirrä toistuva tapahtuma" # MT
+        content: "”%{name}” toistuu. Mitkä kerrat siirretään?" # MT
+        occurrence: "Vain tämä" # MT
+        following: "Tämä ja seuraavat" # MT
+        series: "Kaikki kerrat" # MT
+    eventlet_deletion:
+      success:
+        event: "Tapahtuma poistettu." # MT
+        series: "Kaikki tapahtuman kerrat poistettiin." # MT
+        following: "Tämä ja kaikki tapahtuman seuraavat kerrat poistettiin." # MT
+        occurrence: "Kerta poistettiin." # MT
+        calendar_series: "Tapahtuma poistettiin kalenterista %{calendar}." # MT
+        calendar_occurrence: "Kerta poistettiin kalenterista %{calendar}." # MT
+      prompts:
+        calendar:
+          title: "Poista useassa kalenterissa oleva tapahtuma" # MT
+          selected_html: "%{name} (valittu)" # MT
+          content: "”%{name}” on useammassa kuin yhdessä kalenterissa:" # MT
+          this: "Poista kalenterista %{calendar}" # MT
+          all: "Poista kaikista kalentereista" # MT
+        series:
+          title: "Poista toistuva tapahtuma" # MT
+          content_all: "”%{name}” toistuu. Mitkä kerrat poistetaan?" # MT
+          content_this: "”%{name}” toistuu. Mitkä kerrat poistetaan kalenterista %{calendar}?" # MT
+          occurrence: "Vain tämä" # MT
+          following: "Tämä ja seuraavat" # MT
+          series: "Kaikki kerrat" # MT
+  calendars/protocol:
+    applicability: "Soveltaminen" # MT
+    no_kinds_html: "Tälle yhteisölle ei ole määritetty tapahtumatyyppejä. Katso <a href='%{url}'>asetussivu</a>." # MT
+    rules: "Säännöt" # MT
+    durations:
+      mins:
+        one: "1 minuutti" # MT
+        other: "%{formatted} minuuttia" # MT
+      days:
+        one: "1 päivä" # MT
+        other: "%{formatted} päivää" # MT
+    exceeded_time: "Voit varata %{kind_calendar} tapahtumia vuodessa enintään %{max}, ja olet jo varannut %{booked}" # MT
+  calendar_exports:
+    meals:
+      diner_count:
+        one: "%{count} ruokailija kotitaloudestasi" # MT
+        other: "%{count} ruokailijaa kotitaloudestasi" # MT
+      signup_comments: "Ilmoittautumisen kommentit:\n%{comments}" # MT

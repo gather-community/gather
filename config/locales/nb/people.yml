@@ -1,0 +1,219 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+nb:
+  people:
+    # The placeholder household and user that a deleted member's records are reassigned to.
+    deleted_placeholder:
+      household: "Slettede medlemmer" # MT
+      first_name: "Slettet" # MT
+      last_name: "medlem" # MT
+    sign_in_invitations:
+      sent:
+        one: "Invitasjonen er sendt." # MT
+        other: "Invitasjonene er sendt." # MT
+      none_selected: "Du valgte ingen brukere." # MT
+      new:
+        title: "Inviter brukere til å logge inn" # MT
+        no_users: "Fant ingen brukere." # MT
+        instructions_html: "Kryss av for brukerne du vil invitere. Brukere med %{icon} ved navnet har aldri logget inn." # MT
+        select_no_sign_ins: "Velg alle som ikke har logget inn" # MT
+        select_all: "Velg alle" # MT
+        send: "Send invitasjoner" # MT
+    memorials:
+      created: "Minnesiden er opprettet." # MT
+      updated: "Minnesiden er oppdatert." # MT
+      index:
+        title: "Minnesider" # MT
+        create: "Opprett minneside" # MT
+        no_memorials: "Fant ingen minnesider." # MT
+        photo_of: "Bilde av %{name}" # MT
+      show:
+        memorials: "Minnesider" # MT
+        photo_of: "Bilde av %{name}" # MT
+        obituary: "Minneord" # MT
+        community_memories: "Minner fra fellesskapet" # MT
+      new:
+        title: "Opprett minneside" # MT
+      edit:
+        title: "Rediger minneside: %{name}" # MT
+    memorial_messages:
+      created: "Takk for meldingen din." # MT
+      updated: "Meldingen er oppdatert." # MT
+      edit:
+        title: "Rediger minnehilsen" # MT
+    member_types:
+      created: "Medlemstypen er opprettet." # MT
+      updated: "Medlemstypen er oppdatert." # MT
+      index:
+        title: "Medlemstyper" # MT
+        create: "Opprett medlemstype" # MT
+        explanation: "Medlemstyper tildeles husstander og gjør det mulig å tilpasse faste belastninger." # MT
+        no_member_types: "Fant ingen medlemstyper." # MT
+        name: "Navn" # MT
+      new:
+        title: "Opprett medlemstype" # MT
+      edit:
+        title: "Rediger medlemstype: %{name}" # MT
+    vehicles:
+      index:
+        title: "Kjøretøy" # MT
+        no_vehicles: "Fant ingen kjøretøy." # MT
+        vehicle: "Merke/modell/farge/skilt" # MT
+        owner: "Eier" # MT
+    settings:
+      edit:
+        title: "Innstillinger for personer" # MT
+    birthdays:
+      index:
+        title: "Bursdager" # MT
+        no_users: "Fant ingen brukere." # MT
+        # Shown when a user's birthday is unknown.
+        unknown: "?"
+    password_changes:
+      success: "Passordet er endret." # MT
+      show:
+        title: "Endre passord" # MT
+      password_fields:
+        new_password: "Nytt passord" # MT
+        retype_new_password: "Gjenta nytt passord" # MT
+        reveal: "Vis passord" # MT
+        mask: "Skjul passord" # MT
+    users:
+      confirmations:
+        sign_in_to_use_gather: "Logg inn for å bruke Gather." # MT
+        expired_signed_in: "Bekreftelsesfristen er utløpt. Bruk lenken «Send bekreftelsesinstruksjonene på nytt» nedenfor for å prøve igjen." # MT
+        expired_signed_out: "Bekreftelsesfristen er utløpt. Logg inn med den gamle e-postadressen din og prøv igjen." # MT
+      # Each completes Devise's "Could not sign you in from Google because %{reason}." (devise.omniauth_callbacks.failure).
+      omniauth_failure_reasons:
+        no_email: "Google ikke oppga noen e-postadresse. Gi beskjed til en administrator." # MT
+        invitation_expired: "invitasjonen din er utløpt" # MT
+        wrong_google_id: "du må logge inn med Google-ID-en %{google_id}" # MT
+        google_id_taken: "Google-ID-en din %{google_id} er knyttet til en annen bruker" # MT
+        invitation_required: "du må bruke en invitasjon første gang du logger inn" # MT
+        google_id_not_found: "Google-ID-en din %{google_id} ble ikke funnet i systemet" # MT
+        cancelled: "innloggingen ble avbrutt" # MT
+        session_expired: "innloggingsøkten din er utløpt. Prøv igjen" # MT
+        unexpected: "det oppstod en ukjent feil. Administratorene har fått beskjed" # MT
+    deletion:
+      blocked_intro: "Dette kan ikke slettes for godt ennå:" # MT
+      confirmation_mismatch: "Bekreftelsesteksten stemte ikke, så ingenting ble slettet." # MT
+      self_success: "Kontoen din er slettet for godt." # MT
+      blockers:
+        balance: "Husstanden «%{name}» har en uoppgjort saldo som må ordnes først." # MT
+        guardian: "Personen er foresatt for %{names}. Slett disse medlemmene eller gi dem en annen foresatt først." # MT
+        external_ward: "Medlemmer av denne husstanden er foresatte for %{names} i andre husstander. Slett disse medlemmene eller gi dem en annen foresatt først." # MT
+        last_admin: "Personen er den eneste administratoren i fellesskapet. Gi et annet medlem administratorrollen først." # MT
+  users:
+    greeting: "Hei %{name}!" # MT
+    photo_of: "Bilde av %{name}" # MT
+    confirmation_resent: "Instruksjonene er sendt." # MT
+    email_change_canceled: "Endringen av e-postadresse er avbrutt." # MT
+    created: "Brukeren er opprettet." # MT
+    created_and_invited: "Brukeren er opprettet og invitert." # MT
+    updated: "Brukeren er oppdatert." # MT
+    profile_updated: "Profilen er oppdatert." # MT
+    confirm_new_email_self: "Du må bekrefte den nye e-postadressen din. Sjekk e-posten din på %{email}." # MT
+    confirm_new_email_other: "Denne brukeren må bekrefte den nye e-postadressen sin (%{email})." # MT
+    invitation_invalidated: "Denne endringen kan imidlertid ha gjort en innloggingsinvitasjon ugyldig. Det kan være lurt å sende en ny." # MT
+    household_hint:
+      choose_html: "Velg en eksisterende husstand for denne brukeren. Hvis den ikke finnes, må du %{link}." # MT
+      create_link: "opprette den først" # MT
+      child_note: "På grunn av en begrensning i systemet må alle brukere i Gather høre til én husstand, men barn kan ha foreldre eller foresatte fra flere husstander. Alle funksjoner i systemet som gjelder barn, behandler alle foreldre/foresatte og alle husstander knyttet til barnet likt." # MT
+    preferred_contact_tooltip: "Vil helst kontaktes via: %{method}" # MT
+    all_users: "Alle brukere" # MT
+    index:
+      title: "Medlemsliste" # MT
+      print_title: "Medlemsliste for %{community}" # MT
+      show_action_menu: "Vis handlingsmeny for brukeren" # MT
+      create_adult: "Opprett voksen" # MT
+      create_child: "Opprett barn" # MT
+      invite_to_sign_in: "Inviter til å logge inn" # MT
+      no_users: "Fant ingen brukere." # MT
+      name: "Navn" # MT
+      unit: "Boenhet" # MT
+      email: "E-post" # MT
+      mobile_phone: "Mobiltelefon" # MT
+      home_phone: "Telefon hjemme" # MT
+      work_phone: "Telefon jobb" # MT
+      preferred_contact: "Foretr." # MT
+      download_csv: "Last ned som CSV" # MT
+    show:
+      directory: "Medlemsliste" # MT
+      email: "E-post" # MT
+      pending_confirmation: "Venter på bekreftelse: %{email}" # MT
+      resend_confirmation: "Send bekreftelsesinstruksjonene på nytt" # MT
+      cancel_change: "Avbryt endringen" # MT
+      unconfirmed: "* Denne adressen er ikke bekreftet ennå, bruk den med forsiktighet." # MT
+      phone: "Telefon" # MT
+      preferred_contact: "Foretrukket kontaktmåte" # MT
+      birthday: "Bursdag" # MT
+      age: "Alder" # MT
+      joined_on: "Innflyttingsdato" # MT
+      recent_head_cook_meals: "Nylige måltider som hovedkokk" # MT
+      date: "Dato" # MT
+      meal_title: "Tittel" # MT
+      signups: "Påmeldinger" # MT
+    new:
+      title: "Opprett bruker" # MT
+    edit:
+      profile: "Profil" # MT
+      edit_user: "Rediger bruker: %{name}" # MT
+      edit_photo: "Rediger bilde: %{name}" # MT
+    full_form:
+      hide_photo_from_cluster: "Ikke vis bildet til brukere i %{communities}" # MT
+      privacy_hint_html: "Du finner mer informasjon om personverninnstillinger i %{link}." # MT
+      privacy_policy: "personvernerklæringen" # MT
+      household_info: "Om husstanden" # MT
+      household_note_named_html: "Feltene nedenfor hører til husstanden %{name}. Hvis du endrer dem her, endres de for <em>alle brukere i husstanden</em>." # MT
+      household_note_unnamed_html: "Feltene nedenfor hører til brukerens husstand. Hvis du endrer dem her, endres de for <em>alle brukere i husstanden</em>." # MT
+      move_household_html: "Du kan også %{link}." # MT
+      move_household_link: "flytte personen til en annen husstand" # MT
+  households:
+    greeting: "Hei, husstanden %{name}!" # MT
+    created: "Husstanden er opprettet." # MT
+    updated: "Husstanden er oppdatert." # MT
+    emergency_contact: "%{name} (%{relationship})" # MT
+    pets:
+      summary: "%{name} (%{species}, %{color})" # MT
+      vet: "Veterinær" # MT
+      caregivers: "Dyrepassere" # MT
+      health_issues: "Helseproblemer" # MT
+    # Unit and garage numbers, e.g. "#12".
+    number: "nr. %{number}" # MT
+    index:
+      title: "Husstander" # MT
+      create: "Opprett husstand" # MT
+      no_households: "Fant ingen husstander." # MT
+      name: "Navn" # MT
+      unit: "Boenhet nr." # MT
+      users: "Brukere" # MT
+    show:
+      title: "Husstand: %{name}" # MT
+      households: "Husstander" # MT
+      missing_photo: "Mangler bilde av brukeren" # MT
+    new:
+      title: "Opprett husstand" # MT
+    edit:
+      title: "Rediger husstand: %{name}" # MT
+    attribs:
+      household: "Husstand" # MT
+      members: "Medlemmer" # MT
+      vehicles: "Kjøretøy" # MT
+      garage: "Garasje" # MT
+      member_type: "Medlemstype" # MT
+      emergency_contacts: "Nødkontakter" # MT
+      pets: "Kjæledyr" # MT
+      keyholders: "Andre med nøkkel til boenheten" # MT
+    unit_community:
+      unit: "Boenhet" # MT
+      community: "Fellesskap" # MT

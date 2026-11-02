@@ -26,10 +26,18 @@
               <%= link_to(image_tag("logo-white.png"), logo_link_url, alt: t(".home")) %>
             </div>
             <div class="nav-3 personal-nav">
-              <a href="#content" id="skip-link">
+              <%# Hidden until focused, so keyboard and screen reader users still get it. %>
+              <a href="#content" id="skip-link" class="sr-only sr-only-focusable">
                 <%= t(".skip_to_content") %>
               </a>
               <% if user_signed_in? && current_community %>
+                <% if FeatureFlag.lookup("search").on?(current_user) %>
+                  <form action="<%= search_path %>" method="get" class="nav-search-form" role="search">
+                    <%= icon_tag("search", class: "nav-search-icon") %>
+                    <input type="search" name="search" class="nav-search-input"
+                           placeholder="<%= t(".search") %>" aria-label="<%= t(".search") %>">
+                  </form>
+                <% end %>
                 <ul class="nav">
                   <%= render("layouts/personal_dropdown") %>
                 </ul>
@@ -74,6 +82,10 @@
             <span class="icon-bar"></span>
           </button>
           <%= link_to(image_tag("logo-white.png"), logo_link_url, class: "logo", alt: t(".home")) %>
+          <% if user_signed_in? && current_community && FeatureFlag.lookup("search").on?(current_user) %>
+            <%= link_to(icon_tag("search"), search_path, class: "search-nav-link mobile-search-link",
+                        title: t(".search"), aria: {label: t(".search")}) %>
+          <% end %>
         </div>
 
         <% if user_signed_in? && current_community %>

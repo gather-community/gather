@@ -1,0 +1,115 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+fi:
+  subscription:
+    messaging_topup:
+      updated: "Kuukausittainen viestintäsaldon täydennys on asetettu. Viestintäsaldosi on nyt %{balance}." # MT
+      canceled: "Kuukausittainen viestintäsaldon täydennys perutaan nykyisen laskutuskuukauden lopussa." # MT
+    detailed_statuses:
+      active: "Aktiivinen" # MT
+      scheduled: "Ajastettu" # MT
+      needs_payment_method: "Maksu puuttuu" # MT
+      awaiting_microdeposits: "Pankkivahvistus puuttuu" # MT
+      payment_processing: "Käsitellään" # MT
+      incomplete: "Odottaa maksua" # MT
+      incomplete_expired: "Vanhentunut" # MT
+      past_due: "Erääntynyt" # MT
+      unpaid: "Maksamatta" # MT
+      canceled: "Peruttu" # MT
+      other: "Tuntematon" # MT
+      unknown: "Tuntematon" # MT
+    # Descriptions of the messaging balance transactions a topup creates.
+    messaging_transactions:
+      credit: "Kuukausittainen viestintäsaldon täydennys" # MT
+      reversal: "Perimättä jääneen viestintäsaldon täydennyksen peruutus" # MT
+    # e.g. "$5.00/month"
+    per_month: "%{amount}/kk" # MT
+    every_months:
+      one: "%{amount} %{count} kuukauden välein" # MT
+      other: "%{amount} %{count} kuukauden välein" # MT
+    pay_starting: "Maksa %{amount} alkaen %{date}" # MT
+    pay_now_and_then: "Maksa nyt %{now} ja sen jälkeen %{recurring}" # MT
+    # Messaging topup row statuses, shown only when the topup isn't cleanly active.
+    topup_statuses:
+      canceling: "Perutaan: %{date}" # MT
+      past_due: "Erääntynyt" # MT
+      payment_processing: "Maksua käsitellään" # MT
+    # Text built by the messaging-topup Stimulus controller.
+    topup_notices:
+      cancel: "Kuukausittainen täydennys perutaan nykyisen laskutuskuukauden lopussa. Uusia veloituksia ei tule, ja nykyinen saldosi säilyy." # MT
+      first_charge: "Tallennettua maksutapaasi veloitetaan tänään %{amount} täydestä kuukaudesta ja sen jälkeen %{amount} tänä päivänä joka kuukausi." # MT
+      calculating: "Lasketaan …" # MT
+      next_month: "Seuraavasta laskutuskuukaudesta alkaen sinua veloitetaan %{amount} kuukaudessa." # MT
+      prorated_credit: "Saat nyt %{credit} hyvitystä seuraavaan laskuusi ja sen jälkeen veloitus on %{amount} kuukaudessa alkaen %{date}." # MT
+      prorated_charge: "Tallennettua maksutapaasi veloitetaan nyt tänään noin %{charge} (suhteutettuna) ja sen jälkeen %{amount} kuukaudessa alkaen %{date}." # MT
+      error_default: "Jokin meni vikaan, eikä täydennystäsi muutettu." # MT
+      error_with_reference: "%{reason} Viite: %{reference}. (Yritetty: %{time}.) Jos tämä toistuu, ota yhteyttä Gatherin tukeen ja kerro viite ja aika." # MT
+      error: "%{reason} (Yritetty: %{time}.) Jos tämä toistuu, ota yhteyttä Gatherin tukeen ja kerro viite ja aika." # MT
+    subscriptions:
+      show:
+        title: "Tilaus" # MT
+        expired: "Tilauksesi vanheni ennen kuin maksu oli valmis. Yritä uudelleen." # MT
+        verify_required: "Pankkitilisi täytyy vahvistaa." # MT
+        microdeposit_html: "Tilillesi tulee päivän tai kahden kuluessa %{link}. Viimeistele vahvistus alla olevalla painikkeella." # MT
+        microdeposit: "mikrotalletus" # MT
+        check_email: "Katso ohjeet sähköpostistasi ja palaa tänne, kun vahvistus on valmis." # MT
+        verify_button: "Vahvista pankkitilisi" # MT
+        ready_for_payment: "Tilauksesi on valmis maksettavaksi." # MT
+        not_setup: "Tilaustasi ei ole vielä otettu käyttöön." # MT
+        contact_staff: "Ota yhteyttä Gatherin henkilökuntaan tilataksesi." # MT
+        needs_payment_method: "Tilauksesi on aktiivinen, mutta tarvitsemme vielä maksutietosi." # MT
+        processing: "Tilauksesi maksua käsitellään. Tämä voi kestää muutaman päivän maksutavasta riippuen. Voit sillä välin käyttää Gatheria!" # MT
+        active: "Tilauksesi on aktiivinen. Kiitos, että olet mukana Gatherissa!" # MT
+        problem: "Tilauksessasi on ongelma." # MT
+      billing_portal_link:
+        visit_html: "Lisätietoja: %{link}." # MT
+        billing_portal: "laskutusportaali" # MT
+      base_rows:
+        num_users: "Käyttäjien määrä" # MT
+        tier: "Taso" # MT
+        tier_value: "%{tier} (%{price}/kk/käyttäjä)" # MT
+        discount: "Alennus" # MT
+        months_per_cycle: "Kuukautta laskutusjaksossa" # MT
+        total_payment: "Maksu yhteensä" # MT
+        not_charged_until: "* Annat maksutietosi nyt, mutta sinua veloitetaan vasta %{date}." # MT
+        prorated: "* Ensimmäinen maksusi suhteutetaan kattamaan päivät alkaen %{date}." # MT
+      email_row:
+        billing_email: "Laskutussähköposti" # MT
+      messaging:
+        title: "Viestintä" # MT
+        current_balance: "Nykyinen saldo" # MT
+        monthly_topup: "Kuukausitäydennys" # MT
+        none: "Ei mitään" # MT
+        edit: "Muokkaa" # MT
+        add: "Lisää" # MT
+        next_payment_date: "Seuraava maksupäivä" # MT
+        status: "Tila" # MT
+      messaging_topup_modal:
+        title: "Viestintäsaldon kuukausitäydennys" # MT
+        intro: "Valitse, kuinka paljon viestintäsaldoa lisätään saldoosi joka kuukausi. Tallennettua maksutapaasi veloitetaan automaattisesti." # MT
+        none: "Ei mitään" # MT
+        cancel: "Peruuta" # MT
+        save: "Tallenna" # MT
+      post_payment:
+        title: "Sovelluksen tilaus" # MT
+        next_payment_date: "Seuraava maksupäivä" # MT
+      pre_payment:
+        title: "Sovelluksen tilaus" # MT
+        start_date: "Alkamispäivä" # MT
+        update_info_html: "Jos joitain näistä tiedoista pitää päivittää, ota yhteyttä: %{email}." # MT
+        ready_enter_payment: "Näyttää hyvältä, olen valmis antamaan maksutietoni" # MT
+        ready_to_pay: "Näyttää hyvältä, olen valmis maksamaan" # MT
+      payment:
+        title: "Maksu" # MT
+        canadian_debit: "Kanadalainen ennalta valtuutettu suoraveloitus" # MT
+        popup_note: "Ponnahdusikkuna kysyy pankkitietosi, kun olet valinnut alta ”Maksa”." # MT

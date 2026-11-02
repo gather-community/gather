@@ -867,6 +867,11 @@ $breadcrumb-active-color:       $text-muted;
 
 // $code-color:                  #c7254e
 // $code-bg:                     #f9f2f4
+// Bootstrap's crimson-on-pink treatment makes data (DNS records, settings keys) look like error
+// text; a quiet gray chip (the style the wiki always used) reads as data everywhere.
+// (Literal values: this file loads before Bootstrap defines $gray-dark / $pre-bg.)
+$code-color: #333; // $gray-dark
+$code-bg: #f5f5f5; // $pre-bg
 
 // $kbd-color:                   #fff
 // $kbd-bg:                      #333

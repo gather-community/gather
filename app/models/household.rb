@@ -25,6 +25,7 @@ class Household < ApplicationRecord
   include Wisper.model
   include Deactivatable
   include SemicolonDisallowable
+  include HouseholdSearchConfig
 
   acts_as_tenant :cluster
 

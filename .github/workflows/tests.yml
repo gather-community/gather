@@ -11,6 +11,9 @@ jobs:
       POSTGRES_PASSWORD: postgres
       POSTGRES_HOST: localhost
       RUBYOPT: -W:deprecated # Turn on deprecated warnings so we can move toward ruby 3
+      SETTINGS__ACTIVE_RECORD_ENCRYPTION__PRIMARY_KEY: bSmPiBY7txA3M+/pwJEbJkK2KkjgOhhvPWzDyiT1yuY=
+      SETTINGS__ACTIVE_RECORD_ENCRYPTION__DETERMINISTIC_KEY: 2owOM6yqhEXNEnAS/0benxgeUlpkkJgMbhOow9F5yLc=
+      SETTINGS__ACTIVE_RECORD_ENCRYPTION__KEY_DERIVATION_SALT: SBp2RtTby8BAWMKD4j06D0nwkJc=
     services:
       postgres:
         image: postgres:11

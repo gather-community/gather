@@ -1,0 +1,93 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+fi:
+  wiki:
+    page_deleted: "Sivu poistettu." # MT
+    page_listing: "Wikisivujen luettelo" # MT
+    new_page: "Uusi wikisivu" # MT
+    help: "Wikin ohje" # MT
+    # The markdown editor's toolbar buttons and status bar.
+    editor:
+      autosaved: "Tallennettu automaattisesti: " # MT
+      bold: "Lihavointi" # MT
+      fullscreen: "Koko näyttö päälle/pois" # MT
+      heading: "Otsikko" # MT
+      image: "Lisää kuva" # MT
+      italic: "Kursiivi" # MT
+      lines:
+        one: "rivejä: %{count}" # MT
+        other: "rivejä: %{count}" # MT
+      link: "Luo linkki" # MT
+      ordered_list: "Numeroitu luettelo" # MT
+      preview: "Esikatselu päälle/pois" # MT
+      quote: "Lainaus" # MT
+      side_by_side: "Rinnakkaisnäkymä päälle/pois" # MT
+      unordered_list: "Luettelo" # MT
+      words:
+        one: "sanoja: %{count}" # MT
+        other: "sanoja: %{count}" # MT
+    pages:
+      history_table:
+        version: "Versio" # MT
+        date: "Päivämäärä" # MT
+        author: "Tekijä" # MT
+        comment: "Kommentti" # MT
+        compare: "Vertaa valittuja" # MT
+        return: "Palaa sivulle" # MT
+      all:
+        title: "Wikisivujen luettelo" # MT
+      compare:
+        title: "Wikin vertailu: %{title}" # MT
+        differences: "Erot versioiden %{old} ja %{new} välillä" # MT
+        versions_between: "Versiot %{old} ja %{new} välillä" # MT
+      edit:
+        title: "Muokkaa wikisivua: %{title}" # MT
+      history:
+        title: "Wikin historia: %{title}" # MT
+      new:
+        title: "Uusi wikisivu" # MT
+      show:
+        wiki_home: "Wikin etusivu" # MT
+    not_found_create: "Wikisivua nimeltä ”%{title}” ei ole. Voit luoda sen alla!" # MT
+    preview_notice: "Tämä on esikatselu. Tallenna tai jatka sivun muokkaamista alla olevalla lomakkeella." # MT
+    revision_info: "Sivua muokattu %{time}, muokkaaja: %{user}" # MT
+    revision_info_no_by: "Sivua muokattu %{time}" # MT
+    special_pages:
+      home:
+        title: "Wiki" # MT
+        content: |- # MT
+          Tämä on **wikisi etusivu**!
+
+          Katso [[Esimerkkisivu]], niin saat vinkkejä sen täyttämiseen hyödyllisellä tiedolla!
+      sample:
+        title: "Esimerkkisivu" # MT
+        content: |- # MT
+          Tämä on esimerkki wikisivusta.
+
+          Valitse yltä **Muokkaa**, niin näet, miten tämä sivu toimii! Älä huoli, et voi rikkoa mitään!
+
+          ## Muotoilu
+
+          Wikisivua muokataan **Markdownilla**, joka on yksinkertainen tapa luoda siistiä ja hyvännäköistä sisältöä ilman, että tarvitsee opetella erityistä kieltä. Lisätietoja Markdownista on [Markdown-muotoiluoppaassa](/about/markdown).
+
+          ## Linkit
+
+          Linkit muille sivuille ovat hyvin tärkeitä! Voit linkittää muille **wikisivuille** näin: [[Hauska sivu]].
+
+          Huomaa, että yllä oleva linkki on (luultavasti) punainen. Tämä johtuu siitä, ettei sivua ole vielä olemassa. Jos napsautat linkkiä, voit luoda sivun. Sen jälkeen linkki muuttuu siniseksi!
+
+          Jos haluat käyttää linkin tekstinä jotain muuta kuin sivun otsikkoa, voit [[Hauska sivu|tehdä näin]].
+
+          Linkit ulkoisille sivuille näyttävät [tältä](http://example.com).
+
+          Pelkkänä tekstinä kirjoitettu URL tunnistetaan ja muutetaan linkiksi automaattisesti: https://gather.coop

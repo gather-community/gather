@@ -92,19 +92,22 @@ The port is `url.port` in `config/settings.local.yml` (3000 if unset). Each dev 
 
 **Run only one dev server per dev env.** Before starting one, check whether a server is already running on that port (`pgrep -af thin`). If one is, use it. Don't start a second server on another port, and don't start one from a git worktree. A worktree has no `storage/` directory, because `storage/` is gitignored. It shares the database, though, so pages render normally while every photo and attachment fails with `ActiveStorage::FileNotFoundError`. That looks like broken images, and it confuses whoever is browsing the app. If you need to see a branch in the browser, check it out in the main checkout and use the existing server.
 
-Screenshots use the Selenium container (`gather-selenium`) via a Ruby script with `selenium-webdriver`. The container shares `vibrant_borg`'s network namespace; reach it from this container at `172.18.0.3:4444`. The app is at `172.18.0.2`. Use `--host-resolver-rules` to make Chrome resolve both apex and wildcard subdomains to `172.18.0.2`.
+Screenshots use the same Selenium container as the system specs (see [Headless Chrome for System Tests](#headless-chrome-for-system-tests)), driven by a Ruby script with `selenium-webdriver`. That container shares the devcontainer's network namespace, so it's at `localhost:4444` (the `SELENIUM_REMOTE_URL` env var), and the app's dev server is at `127.0.0.1` from Chrome's point of view. Use `--host-resolver-rules` to make Chrome resolve both apex and wildcard subdomains to `127.0.0.1`.
 
 ```ruby
 # tmp/screenshot.rb — adapt as needed
 require 'selenium-webdriver'
+require 'yaml'
 
-SELENIUM_URL  = 'http://172.18.0.3:4444'
-APP_IP        = '172.18.0.2'
+SELENIUM_URL  = ENV.fetch('SELENIUM_REMOTE_URL', 'http://localhost:4444')
+APP_IP        = '127.0.0.1'
 PORT          = 3000                               # url.port from config/settings.local.yml
 APEX_URL      = "https://gatherdev.org:#{PORT}"
 COMMUNITY_URL = "https://foo.gatherdev.org:#{PORT}" # adjust community slug
-EMAIL         = 'user@example.com'                 # set a known password first (see below)
-PASSWORD      = 'testtest1'
+# Sign in as the user's own dev account (see "Sign-in credentials" below).
+DEV_USER      = YAML.safe_load(File.read('config/settings.local.yml')).fetch('dev_user')
+EMAIL         = DEV_USER.fetch('email')
+PASSWORD      = DEV_USER.fetch('password')
 
 options = Selenium::WebDriver::Chrome::Options.new
 options.add_argument('--ignore-certificate-errors')
@@ -138,7 +141,24 @@ ensure
 end
 ```
 
-To set a known password for any user before running the script:
+#### Sign-in credentials for scripts
+
+Scripts that drive the app sign in with the credentials stored in `config/settings.local.yml`
+under `dev_user` (documented in `config/templates/settings.local.yml`):
+
+```yaml
+dev_user:
+  email: someone@example.com
+  password: "..."
+```
+
+This is the user's own dev account, usually a super admin. **Never overwrite this account's
+password** — that locks the user out of their own dev environment. If `dev_user` is missing from
+the local config, ask the user for their credentials and add the entry; don't reset their
+password to work around it.
+
+When a screenshot needs a different role (a regular member, a biller, etc.), pick a
+**sample-data user** — never the `dev_user` account — and set a known password on it:
 
 ```ruby
 # bundle exec rails runner this snippet
@@ -158,8 +178,11 @@ GitHub's drag-and-drop uploads go to its `user-attachments` CDN through a browse
 1. Crop the dead space off the full-page screenshot — `vips` is installed:
 
 ```bash
-vips crop tmp/shot.png tmp/pr_shot.png 0 0 1280 680   # args: x y width height
+vipsheader -f width tmp/shot.png                        # usually 1272, not 1280: the scrollbar takes 8px
+vips crop tmp/shot.png tmp/pr_shot.png 0 0 1272 680   # args: x y width height
 ```
+
+The crop area must fit inside the image, or `vips` fails with "bad extract area". Check the size with `vipsheader -f width` / `-f height` first.
 
 2. Commit the image and push. `tmp/` is gitignored, so force-add. Tag the message with `[skip ci]` — this commit is a throwaway that never reaches `develop`, and a full CI run on it wastes ~28 min of runner time:
 
@@ -244,7 +267,7 @@ FeatureFlag.lookup("messaging").on?(current_user)
 - Don't gate inbound webhooks/background reconciliation: turning a flag off shouldn't strand data that already exists.
 - Specs that exercise a flagged feature must turn it on: `create(:feature_flag, name: "messaging", status: true)`.
 
-Existing flags: `messaging`, `gdrive`, `restrictions`, `i18n` (lets chosen users see unreleased locales; see below).
+Existing flags: `messaging`, `gdrive`, `restrictions`, `search` (global search page), `i18n` (turns on every locale other than English, for everyone or for chosen users; see below).
 
 ### Controller Conventions
 
@@ -266,6 +289,7 @@ Existing flags: `messaging`, `gdrive`, `restrictions`, `i18n` (lets chosen users
   - **Show pages: use the decorator pattern.** Define `show_action_link_set` in the decorator returning an `ActionLinkSet` of `ActionLink` instances. In the view: `<% content_for(:action_links, resource.action_links(:show)) %>`. `ActionLink` checks the policy automatically (`{action}?`) unless you pass `permitted: true/false`. Pass `html: {target: "_blank"}` for extra link HTML attributes, `data: {key: val}` for Stimulus/data attributes, `btn_class: :danger` for destructive actions. Add labels under `action_labels.{model_i18n_key}.{action}` or `action_labels.common.{action}` in `en.yml`.
   - **One-off action links** (e.g. on index pages): use `concat(link_to(icon_tag("icon") << " Label", path, class: "btn btn-..."))` inside the `content_for` block, wrapped in a policy check.
 - **Key-value table style for detail displays** — use `<table class="key-value">` for showing record details on show/review pages. Variants: `key-value-narrow` (narrow value column), `key-value-wide` (wide value column), `key-value-full` (full width). First `<td>` is styled as a muted label; second `<td>` holds the value.
+- **Empty-state / prompt messages use `<div class="center-notice">`** — use this for "no items found" messages on index pages and for empty-state prompts (e.g. "Enter a search term above…"). Do not use `<p class="text-muted">` for these messages.
 - **No "Back" links on show/review pages** — do not add "Back to list" or similar navigation links; this is not a Gather convention.
 - **Controller method order** — always put `index` first, followed by `show`, `new`, `edit`, `create`, `update`, `destroy`. Custom actions can go in sensible places after the standard ones.
 - **Public controllers must guard shared template policy calls** — when a controller skips `authenticate_user!` (e.g. for a public signup page), shared templates like `_footer.html.erb` and `_nav.html.erb` still render with `current_user = nil`. Any `policy()` call in those templates must be wrapped in `if current_user`, because `ApplicationPolicy#initialize` raises `Pundit::NotAuthorizedError` when user is nil. Always guard: `<% if current_user && policy(Foo.new).action? %>`.
@@ -299,12 +323,13 @@ When introducing a new model, follow the established conventions:
 - **Add a factory** under `spec/factories/<module>/` and a model spec.
 - **Decorators/policies** come only when the model becomes user-facing.
 
-**Four "wholesome" specs iterate over every model — a new model must satisfy all four (or be added to the relevant allowlist):**
+**Five "wholesome" specs iterate over every model — a new model must satisfy all five (or be added to the relevant allowlist):**
 
 - [spec/models/tenancy_spec.rb](spec/models/tenancy_spec.rb) — every model must have `acts_as_tenant`. Allowlist (`ALLOWLISTED_CLASSES`) only for genuinely non-tenant models.
 - [spec/models/utils/generators/main_generator_spec.rb](spec/models/utils/generators/main_generator_spec.rb) — every model must get at least one record from sample-data generation, **or** be added to `NO_SAMPLE_DATA_CLASSES` (use this for models created on demand, e.g. via a webhook).
 - [spec/models/community_deletion_spec.rb](spec/models/community_deletion_spec.rb) — every tenant model needs a factory call in the setup and must cascade to zero rows when a community is destroyed (wire `dependent: :destroy` from `Community` and/or its parent), **or** be added to `EXEMPT_MODELS`. Prefer wiring the cascade so deletion is actually tested.
 - [spec/services/people/deletion_dispositions_spec.rb](spec/services/people/deletion_dispositions_spec.rb) — every model must appear in both `USER_DISPOSITIONS` and `HOUSEHOLD_DISPOSITIONS`, declaring what happens to its rows when a user or household is permanently deleted: `:none`, `:destroy`, `:anonymize`, `:nullify`, `:retain`, or `:subject`. There is no allowlist — a new model must be classified. Models declared `:none` are checked by reflection to confirm they really have no association to the deleted record.
+- [spec/models/search_indexing_spec.rb](spec/models/search_indexing_spec.rb) — every model must either be in global search (indexed in Elasticsearch via a search config/serializer and listed in `SearchController::GATHER_MODELS`; STI subclasses of a listed model count) **or** be added to `NOT_SEARCHABLE_MODELS`. Its job is to make you decide whether the model should be searchable. It also fails on allowlisted models that are actually in global search and on stale entries. `Work::Shift` is allowlisted even though it's in Elasticsearch, because it's only searched from its own page.
 
 The dispositions map is a **declaration**, not an assertion — it does not read `People::UserDeletion`'s implementation, so it must be updated alongside that service. Its job is to make you consider deletion when adding a model. Behavior is verified in [user_deletion_spec.rb](spec/services/people/user_deletion_spec.rb) and [household_deletion_spec.rb](spec/services/people/household_deletion_spec.rb).
 
@@ -338,16 +363,25 @@ The dispositions map is a **declaration**, not an assertion — it does not read
 - **Fragment caches** must include `I18n.locale` in the cache key.
 - **Missing translations raise** in development and test (`config.i18n.raise_on_missing_translations`).
 - **Linters enforce this everywhere.** `.erb_lint.yml` checks every view and `.rubocop.yml` (`Gather/HardCodedString`) checks all Ruby under `app/`. Both have a short `exclude` list: staff-only mail and the new-community generators (starter content). [spec/lint/i18n_linters_spec.rb](spec/lint/i18n_linters_spec.rb) runs both in CI. Run them locally with `bundle exec erb_lint --lint-all` and `bundle exec rubocop --only Gather/HardCodedString,Gather/NumberToCurrency`.
-  - Views get three checks: literal text between tags (`HardCodedString`), literal `aria-label`/`alt`/`title`/`placeholder` values ([.erb_linters/hard_coded_attribute.rb](.erb_linters/hard_coded_attribute.rb)), and text-like string literals inside ERB tags.
+  - Views get three checks: literal text between tags (`HardCodedText`), literal `aria-label`/`alt`/`title`/`placeholder` values ([.erb_linters/hard_coded_attribute.rb](.erb_linters/hard_coded_attribute.rb)), and text-like string literals inside ERB tags.
   - The Ruby cop ([lib/rubocop/cop/gather/hard_coded_string.rb](lib/rubocop/cop/gather/hard_coded_string.rb)) flags strings that start with a capitalized word ("Close", "Generated: …"). It skips exception, log and `EventLog` messages, regexps, class names, and strings used as keys or compared against (`headers["Vary"]`, `type == "User"`).
   - The view linter skips inline JS, both in `<script>` tags and in `javascript_tag do` blocks. Strings the JS shows to users still go through `I18n.t`.
-  - For a genuine false positive, disable inline and say why: `# rubocop:disable Gather/HardCodedString` or `<%# erb_lint:disable HardCodedString %>` on the same line.
-- **Static error pages** (`public/404.html` etc.) are generated from `app/views/error_pages/` by `bundle exec rake error_pages:generate`, one copy per released locale. Edit the templates and regenerate rather than editing `public/` by hand.
+  - For a genuine false positive, disable inline and say why: `# rubocop:disable Gather/HardCodedString` or `<%# erb_lint:disable HardCodedText %>` on the same line. The view linter is named `HardCodedText` (see `.erb_lint.yml`); `HardCodedString` is the Ruby cop's name.
+- **Static error pages** (`public/404.html` etc.) are generated from `app/views/error_pages/` by `bundle exec rake error_pages:generate`, one copy per translated locale. Edit the templates and regenerate rather than editing `public/` by hand.
 - **[spec/i18n_spec.rb](spec/i18n_spec.rb) runs in CI** (config in `config/i18n-tasks.yml`). It fails on keys used in code but missing from `en`, on unused keys, on interpolation variables that differ between locales, on a stale JS export, and on stale static error pages. Run `bundle exec i18n-tasks missing -l en` and `bundle exec i18n-tasks unused -l en` locally. When a key is built dynamically (`t("gdrive.item_kinds.#{kind}")`), add a pattern to `ignore_unused` with a comment saying where it's used. Delete keys that are really unused.
+
+**Translations.** Every key must exist in every locale, not just `en` ([spec/i18n_spec.rb](spec/i18n_spec.rb) checks the locales in `Gather::Locales::TRANSLATED`). When you add a key or change the meaning of its English text, write the other locales' values too, in the same commit:
+
+- **Mark every value you translate** with `# MT` at the end of its line. For a multi-line value, put it after the `|-` on the key's line. People reviewing a language remove the `# MT` once they've checked the string. Count what's left with `grep -c "# MT" config/locales/fr/*.yml`. Every file with `# MT` lines starts with a header comment explaining the marker for reviewers; copy it from an existing file (e.g. `config/locales/fr/nav.yml`) when you create a new locale file.
+- **Changing English text re-marks it.** If you change what a key's English says, rewrite its translations and mark them again, even if a person had verified them.
+- **Use the glossary** ([config/locales/GLOSSARY.md](config/locales/GLOSSARY.md)) for Gather's terms and each language's voice (`vous` in French, `du` in German, and so on), so the same thing has the same name everywhere.
+- **Keep the structure:** same `%{placeholders}`, same HTML in `_html` keys, and the plural sub-keys the locale needs (French, for example, uses `one` for 0 and 1).
+- **Canadian French** (`config/locales/fr-CA/`) only holds keys where Québec usage differs from `fr`; everything else falls back to `fr`.
+- **Don't translate** date/time formats (written by hand per locale, see above) or the legal documents, which stay English.
 
 **How the locale is chosen** ([lib/gather/locales.rb](lib/gather/locales.rb)):
 
-- **Web requests** use the best match for the browser's `Accept-Language` header among `Gather::Locales::RELEASED` (currently only `en`), via the `ApplicationControllable::Locale` around_action. Users with the `i18n` feature flag (`"user"` interface) can also get unreleased locales; set your browser's language to preview one. Everything runs inside `I18n.with_locale`. Never assign `I18n.locale =`, because it leaks across requests.
+- **Web requests** get English unless the `i18n` feature flag is on. With the flag on (`"basic"` interface for everyone, `"user"` for chosen users), they get the language picked from the footer's language menu, which is stored in the `locale` cookie, or else the best match for the browser's `Accept-Language` header. The flag covers every locale at once; there's no per-locale release. This happens in the `ApplicationControllable::Locale` around_action. Everything runs inside `I18n.with_locale`. Never assign `I18n.locale =`, because it leaks across requests.
 - **Email** renders in the recipient's locale via the `RecipientLocale` mailer concern, which every mailer must include ([spec](spec/mailers/recipient_locale_spec.rb)). For now that's always the default locale. Don't rely on the ambient locale in mailers: ActiveJob restores the *sender's* locale when delivering.
 - **Jobs** (`ApplicationJob`) and **calendar feeds** run in the default locale.
 
@@ -429,6 +463,44 @@ Gather uses several locale files under `config/locales/en/`. Each type of string
 - **System tests require headless Chrome.** See the [Selenium Docker service](#headless-chrome-for-system-tests) section below.
 - **Run individual or small numbers of specs locally; use CI for full suite runs.** When fixing a specific failure, run the affected file/line with `bundle exec rspec spec/path/to/spec.rb:42` locally to confirm it passes before pushing — this avoids burning a ~28 min CI cycle on a fix that doesn't work. Only push to CI when you need the full suite run (e.g. after a Rails upgrade or broad refactor). Non-browser specs (model, request, job, mailer) run fine locally; system specs require headless Chrome (see below).
 - **Replicate CI failures locally before iterating.** Add a diagnostic assertion with a descriptive failure message (e.g. `expect(count).to eq(1), "Expected 1, got #{count}. Details: #{things.inspect}"`) to extract values that aren't visible in a normal failure.
+
+**Use system specs (`spec/system/`)** as the ultimate end to end test when the thing being tested involves user interaction with a rendered page — clicking links, filling in forms, seeing content, navigating between pages, or JavaScript behavior. System specs run a real browser (headless Chrome via Selenium) and are the right tool for:
+- Form flows (create/edit/delete with validation feedback)
+- Multi-step user journeys or navigation paths
+- Stimulus/JS-driven interactions (AJAX loading, dynamic UI)
+- Content that depends on the view layer (decorators, partials, lenses)
+- Verifying what a user actually sees on a page
+
+Use `login_as(actor, scope: :user)` (Warden helper) and `visit`/`click_on`/`fill_in`/`have_content` etc. Tag with `js: true` only when the test requires JavaScript execution.
+
+**Use request specs (`spec/requests/`)** when there is no meaningful browser interaction to test — the value is in the HTTP response itself or a server-side side effect. Request specs hit the stack at the Rack level (no browser) and are the right tool for:
+- JSON/API endpoints (asserting on `response.parsed_body`, status codes, headers)
+- Non-HTML responses like ICS calendar exports or webhook receivers
+- OAuth/auth callbacks where the logic is in the redirect and session state
+- Side effects triggered by a request (jobs enqueued, records created) that don't need a rendered view
+- Authorization redirects for unauthenticated access (faster than a full system spec)
+
+Use `sign_in(actor)` (Devise helper) and `get`/`post`/`delete` etc. Mock or stub collaborators where it makes the test clearer (e.g. stubbing ES or Drive calls).
+
+**When a controller has both HTML and JSON responses** (e.g. wiki search), write a system spec for the HTML/interactive flow and a request spec for the JSON endpoint separately.
+
+**Model specs (`spec/models/`)** — test validations, scopes, callbacks, instance methods, and class methods directly on the model. Use `build`/`create` factories. Don't test pure framework behavior (e.g. that `belongs_to` works). Concerns with their own logic get their own spec file under `spec/models/concerns/`.
+
+**Policy specs (`spec/policies/`)** — test each `action?` method against the full set of relevant user roles. Use `include_context "policy permissions"` for the standard role actors (`admin`, `user`, `other_user`, etc.), the `permissions :action? do` block helper, and `it_behaves_like` shared examples. Also test scoping and `permitted_attributes` if the policy defines it.
+
+**Decorator specs (`spec/decorators/`)** — test presentation and formatting logic by calling decorator methods directly (`record.decorate`). Assert on the returned strings or HTML fragments. Do not use a browser; decorators are plain Ruby objects.
+
+**Form specs (`spec/forms/`)** — test form objects (subclasses of the `Calendars::EventForm` pattern) by instantiating them directly with params and calling `save`. Test validation errors, attribute parsing/normalization, and the happy-path save. Don't duplicate model validations that are already covered in model specs.
+
+**Job specs (`spec/jobs/`)** — use `include_context "jobs"` and call `perform_job`. Test which records are acted on, which mailer methods are called (stub the mailer, assert `.with` arguments using `mlrdbl` message doubler), and which side effects occur (records updated, other jobs enqueued). Use `Timecop` where time-sensitivity matters.
+
+**Mailer specs (`spec/mailers/`)** — call the mailer method directly (`described_class.some_action(args).deliver_now`) and assert on `mail.to`, `mail.subject`, and `mail.body.encoded`. All templates are text-only; check text body content, not HTML parts.
+
+**Serializer specs (`spec/serializers/`)** — instantiate the serializer directly (`described_class.new(record).as_json`) and assert on the returned hash keys and values. Useful for Elasticsearch index serializers where field names and types must be exact.
+
+**Lens specs (`spec/lenses/`)** — only write these for lenses with non-trivial selection or defaulting logic. Instantiate the lens with doubles for `context`, `storage`, and `set`. Test `#selection` (which record is chosen by default) and `#render`/`#empty?` behavior. Simple lenses (pure select from param) don't need dedicated specs.
+
+**Validator specs (`spec/validators/`)** — build a model instance that exercises the validator and assert `be_valid` / `have_errors`. Only write a dedicated spec file for a custom validator if it is reused across multiple models; otherwise, cover it in the model spec.
 
 ## Handling Dependabot Batches
 

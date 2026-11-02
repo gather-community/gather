@@ -1,0 +1,370 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+de:
+  gdrive:
+    config_updated: "Konfiguration aktualisiert." # MT
+    group_added: "Gruppe hinzugefügt." # MT
+    item_created: "Element erstellt." # MT
+    old_migration: "Deine Migration wurde vor mehr als 30 Tagen angelegt. Bitte überlege, ob du sie abschließen und löschen kannst." # MT
+    auth_cancelled: "Du hast die Google-Anmeldung anscheinend abgebrochen." # MT
+    wrong_account: "Du hast dich bei Google mit %{signed_in} angemeldet. Bitte melde dich stattdessen mit %{expected} an." # MT
+    authenticated: "Erfolgreich bei Google angemeldet." # MT
+    connection_problem: "Es gibt ein Problem mit deiner Google-Drive-Verbindung. Bitte wende dich an den Gather-Support. (%{code})" # MT
+    view_in_drive: "In Google Drive ansehen" # MT
+    browse:
+      index:
+        title: "Google Drive" # MT
+        settings: "Einstellungen" # MT
+        migration: "Migration" # MT
+        reconnect: "Deine Gemeinschaft muss neu mit Google Drive verbunden werden." # MT
+        authenticate_as_html: "Bitte melde dich bei Google als %{user} an." # MT
+        reconnect_notify_admin: "Deine Gemeinschaft muss neu mit Google Drive verbunden werden. Bitte gib einem Gather-Admin Bescheid." # MT
+        not_connected: "Deine Gemeinschaft ist noch nicht mit Google Drive verbunden." # MT
+        not_connected_get_started_html: "Deine Gemeinschaft ist noch nicht mit Google Drive verbunden. Um loszulegen, geh auf die %{link}." # MT
+        settings_page: "Einstellungsseite" # MT
+        no_drives_html: "Deine Gemeinschaft hat keine verknüpften geteilten Ablagen. Um eine zu verknüpfen, geh auf die %{link}." # MT
+        not_connected_talk_to_admin: "Deine Gemeinschaft ist noch nicht mit Google Drive verbunden. Bitte sprich mit einem Gather-Admin." # MT
+        no_files: "Keine Dateien gefunden." # MT
+        migrating_html: "Suchst du etwas? Die Dateien werden gerade in diese neue Ablage verschoben, die der Gemeinschaft gehört. Wenn du etwas nicht findest, sieh am %{link} nach." # MT
+        old_location: "alten Speicherort" # MT
+        file_icon: "Dateisymbol" # MT
+        no_files_in_folder: "In diesem Ordner wurden keine Dateien gefunden." # MT
+        folder_icon: "Ordnersymbol" # MT
+      auth_button:
+        authenticate: "Bei Google anmelden" # MT
+    items:
+      new:
+        title: "Google-Drive-Element hinzufügen" # MT
+    item_groups:
+      new:
+        title: "Gruppe zum Google-Drive-Element hinzufügen" # MT
+    config:
+      index:
+        title: "Google-Drive-Einstellungen" # MT
+        migration: "Migration" # MT
+        migrate_files: "Dateien migrieren" # MT
+        link_item: "Element verknüpfen" # MT
+        credentials: "Google-Workspace-Anmeldedaten" # MT
+        add_credentials_html: "Deine Gemeinschaft ist noch nicht mit Google Drive verbunden. Gib deine Google-Workspace-Anmeldedaten ein, um sie zu verbinden. Wie du anfängst, steht in der %{link}." # MT
+        config_guide: "Einrichtungsanleitung" # MT
+        authentication: "Anmeldung" # MT
+        update_credentials: "Hier kannst du deine Google-Workspace-Anmeldedaten aktualisieren." # MT
+        introduction: "Einführung" # MT
+        system_user_html: "<strong>Systemkonto:</strong> %{user}" # MT
+        intro_html: "Füge unten Elemente hinzu, um sie mit Gather zu verknüpfen und die Berechtigungen abzugleichen. Die unten aufgeführten geteilten Ablagen werden auf der %{link} von Gather allen angezeigt, die die Berechtigung dafür haben. Ordner und Dateien sind über die Übersichtsseite nur erreichbar, wenn ihre übergeordnete geteilte Ablage erreichbar ist." # MT
+        browse_page: "Google-Drive-Übersichtsseite" # MT
+        name: "Name" # MT
+        status: "Status" # MT
+        groups_permissions: "Gruppen und Berechtigungen" # MT
+        # e.g. "Viewer (View files)"
+        access_level: "%{level} (%{hint})" # MT
+        add_group: "Gruppe hinzufügen" # MT
+        none_linked:
+          drive: "Keine geteilten Ablagen mit Gather verknüpft." # MT
+          folder: "Keine Ordner mit Gather verknüpft." # MT
+          file: "Keine Dateien mit Gather verknüpft." # MT
+        revoke_html: "Wenn du die Verbindung zu Google trennen oder deine Google-Workspace-Anmeldedaten aktualisieren musst, kannst du die %{link}." # MT
+        revoke: "Autorisierung widerrufen" # MT
+        revoke_confirm: "Möchtest du die Autorisierung wirklich widerrufen? Niemand kann dann die Google-Drive-Funktionen für diese Gemeinschaft nutzen, bis die Autorisierung wiederhergestellt ist." # MT
+      guide:
+        title: "Einrichtungsanleitung für Google Drive" # MT
+        # Markdown, rendered with Gather's Markdown renderer. Google's menu and button names are in quotes
+        # or bold so they can be matched to Google's own (translated) interface.
+        body: |- # MT
+          Diese Anleitung führt dich durch die Schritte, um die Anmeldedaten zu bekommen, mit denen du den Google Workspace deiner Gemeinschaft mit Gather verbindest.
+
+          ## Voraussetzungen
+
+          * Die Gemeinschaft muss sich für **Google Workspace** registriert haben.
+              * Der Tarif Business Starter reicht aus.
+              * Es wird nur ein Nutzerkonto gebraucht.
+              * Wähle für das Konto einen Namen der Gemeinschaft (z. B. workspace.admin@yourdomain.com) statt eines Personennamens (z. B. maxmustermann@yourdomain.com).
+          * Wer diese Anleitung befolgt, muss bei Google mit einem Konto im Google Workspace der Gemeinschaft angemeldet sein, das **Super Admin**-Rechte hat. Wenn ihr nur ein Konto habt, hat dieses Konto Super-Admin-Rechte.
+
+          ## Grundeinrichtung
+
+          ### Ein Projekt anlegen
+
+          1. Geh auf https://console.cloud.google.com
+          2. Achte darauf, dass du bei Google mit dem Konto mit Super-Admin-Rechten angemeldet bist.
+          3. Akzeptiere die Nutzungsbedingungen. Warte ein paar Minuten, bis die Ressource deiner Organisation bereitgestellt ist.
+          4. Geh auf https://console.cloud.google.com/projectcreate, um ein Projekt anzulegen.
+          5. Nenne es **Gather Main**.
+          6. Wähle die Organisation für deine Domain.
+          7. Übernimm den Standardwert für den Speicherort.
+
+          ### Aktivierte APIs
+
+          1. Geh mit dem neuen Projekt ausgewählt auf https://console.cloud.google.com/ → Navigationsmenü → APIs & Dienste → Aktivierte APIs & Dienste
+          2. Klicke auf **APIs und Dienste aktivieren**.
+          3. Aktiviere die **Google Drive API**.
+
+          ### OAuth-Client-ID
+
+          1. Geh mit dem neuen Projekt ausgewählt auf https://console.cloud.google.com/ → Navigationsmenü → APIs & Dienste → Aktivierte APIs & Dienste → Anmeldedaten.
+          2. Klicke auf **Anmeldedaten erstellen** → **OAuth-Client-ID**
+          3. Wähle **Webanwendung**.
+          4. Name: **Drive OAuth Client ID**.
+          5. Füge unter **Autorisierte JavaScript-Quellen** https://gather.coop hinzu.
+          6. Füge unter **Autorisierte Weiterleitungs-URIs** https://gather.coop/gdrive/setup/auth/callback hinzu.
+          7. Kopiere die Client-ID und den Clientschlüssel an einen sicheren Ort und bewahre sie für später auf.
+              1. Die Client-ID sieht etwa so aus: `302773344240-7g2n5abcdef8es2cvpc0roj7t.apps.googleusercontent.com`
+              2. Der Clientschlüssel sieht etwa so aus: `AIza73uyhc63ehd763ehesysqyhw-hei2asda_2rs`
+
+          ### OAuth-Zustimmungsbildschirm
+
+          1. Geh mit dem neuen Projekt ausgewählt auf https://console.cloud.google.com/ → Navigationsmenü → APIs & Dienste → OAuth-Zustimmungsbildschirm.
+          2. Wähle **Intern**.
+          3. App-Name: **Gather**.
+          4. E-Mail-Adresse für Nutzersupport: die E-Mail-Adresse des Kontos mit Super-Admin-Rechten.
+          5. Kein Logo.
+          6. Startseite der App: https://gather.coop
+          7. Datenschutzerklärung: https://gather.coop/privacy-policy
+          8. Autorisierte Domains:
+              1. gather.coop
+          9. Kontaktdaten des Entwicklers: support@gather.coop
+          10. Bereiche
+              1. auth/userinfo.email
+              2. auth/drive
+    item_kinds:
+      drive:
+        one: "Geteilte Ablage" # MT
+        other: "Geteilte Ablagen" # MT
+      folder:
+        one: "Ordner" # MT
+        other: "Ordner" # MT
+      file:
+        one: "Datei" # MT
+        other: "Dateien" # MT
+    access_levels:
+      reader: "Betrachter" # MT
+      commenter: "Kommentator" # MT
+      writer: "Mitbearbeiter" # MT
+      fileOrganizer: "Inhaltsmanager" # MT
+    access_level_hints:
+      reader: "Dateien ansehen" # MT
+      commenter: "Dateien ansehen und kommentieren" # MT
+      writer: "Dateien ansehen, hinzufügen und bearbeiten" # MT
+      fileOrganizer: "Dateien ansehen, hinzufügen, bearbeiten, verschieben, löschen und freigeben" # MT
+    item_error_types:
+      inaccessible: "Nicht erreichbar" # MT
+      not_shareable: "Nicht freigebbar" # MT
+    request_statuses:
+      new: "Neu" # MT
+      opened: "Geöffnet" # MT
+      opted_out: "Abgelehnt" # MT
+
+    migration:
+      requests_sending: "Die Anfragen werden gleich verschickt. Wenn eine Person schon eine offene Anfrage hat, bekommt sie keine neue." # MT
+      created: "Migration angelegt. Der Dateiscan beginnt gleich." # MT
+      scan_started: "Scan vorbereitet, er beginnt gleich." # MT
+      updated: "Migration aktualisiert." # MT
+      deleted: "Vorgang gelöscht. Änderungen werden nicht mehr überwacht." # MT
+      # Name of the shared drive created for each person to drop their files into.
+      file_drop_drive_name: "Gather-Dateiablage %{id}" # MT
+      request_subject: "[Handlung erforderlich] Hilf %{community}, die Google-Drive-Dateien neu zu ordnen!" # MT
+      request:
+        # Shared by the request pages.
+        title: "Neuordnung der Dateien von %{community}" # MT
+        previous: "< Zurück" # MT
+        next: "Weiter >" # MT
+        troubleshooting: "Fehlerbehebung" # MT
+        intro:
+          introduction: "Einführung" # MT
+          ready: "Ja, ich helfe gern!" # MT
+        what_is_this:
+          using_gather_html: "%{community} nutzt <a href=\"https://gather.coop\">Gather</a>, um seine Google-Drive-Dateien neu zu ordnen." # MT
+          problem: "Zurzeit gehören die Dateien der Gemeinschaft der Person, die sie erstellt hat. Wenn jemand die Gemeinschaft verlässt, können Dateien so versehentlich gelöscht werden." # MT
+          solution: "Um das zu verhindern, verschiebt die Gemeinschaft alle ihre Dateien in eine geteilte Ablage, die ihr selbst gehört." # MT
+          own_many_html: "Dir gehören etwa %{count} Dateien im %{link} von %{community}. Wir brauchen deine Erlaubnis, um sie in die neue Ablage zu verschieben." # MT
+          own_one_html: "Dir gehört mindestens eine Datei im %{link} von %{community}. Wir brauchen deine Erlaubnis, um sie in die neue Ablage zu verschieben." # MT
+          old_folder: "alten Google-Drive-Ordner" # MT
+          retain_access: "Wenn du Mitglied der Gemeinschaft bist, hast du weiterhin Zugriff auf die Dateien." # MT
+          questions_html: "Wenn du Fragen oder Bedenken hast, wende dich an %{contact}, die oder der die Neuordnung koordiniert." # MT
+          opt_out_html: "Wenn du dabei lieber nicht helfen möchtest, kannst du %{link}." # MT
+          opt_out: "ablehnen" # MT
+        step1:
+          heading: "Schritt 1: Deine Dateien" # MT
+          view_files: "Klicke unten, um die Dateien zu sehen, die dir im Google-Drive-Ordner von %{community} gehören. Dabei öffnet sich ein neuer Browser-Tab." # MT
+          view_files_button: "Meine Dateien ansehen" # MT
+          see_something_like: "Du solltest etwa Folgendes sehen:" # MT
+          no_files: "Ich sehe keine passenden Dateien" # MT
+          no_files_help_html: "Wenn du keine passenden Dateien siehst, prüfe, ob du bei Google mit dem Konto %{email} angemeldet bist." # MT
+        step2:
+          heading: "Schritt 2: Dateien auswählen" # MT
+          select: "Wähle die Dateien aus, die du übertragen möchtest." # MT
+          easiest: "Am einfachsten geht das so:" # MT
+          click_first: "Klicke auf die erste Datei in der Liste." # MT
+          go_to_end: "Geh ans Ende der Liste." # MT
+          shift_click_html: "<strong>Halte die Umschalttaste gedrückt</strong> und klicke auf die letzte Datei in der Liste." # MT
+          see_something_like: "Dann solltest du etwa Folgendes sehen:" # MT
+          one_at_a_time: "Ich kann immer nur eine Datei auswählen" # MT
+          holding_html: "Achte darauf, dass du die drei Schritte oben befolgst und die Umschalttaste <strong>gedrückt hältst</strong>, wenn du auf die zweite Datei klickst." # MT
+          shift_explained: "Wenn du beim Klicken die Umschalttaste gedrückt hältst, wählst du ALLE Dateien in der Liste zwischen der gerade ausgewählten Datei und der Datei aus, auf die du klickst." # MT
+        step3:
+          heading: "Schritt 3: Organisieren > Verschieben" # MT
+          click_sequence: "Klicke nacheinander auf:" # MT
+          dots: "das Symbol mit den drei Punkten" # MT
+          organize: "Organisieren" # MT
+          move: "Verschieben" # MT
+        step4:
+          heading: "Schritt 4: Dateiablage auswählen" # MT
+          all_locations: "Klicke auf „Alle Speicherorte“" # MT
+          shared_drives: "Klicke auf „Geteilte Ablagen“" # MT
+          next_to_html: "Klicke neben %{drive} auf „Verschieben“" # MT
+          move_button: "Klicke auf den Button „Verschieben“" # MT
+          no_shared_drives: "Ich sehe „Geteilte Ablagen“ nicht in der Liste „Alle Speicherorte“" # MT
+          signed_in_html: "Prüfe, ob du bei Google mit dem Konto %{email} angemeldet bist. Wenn du „Geteilte Ablagen“ immer noch nicht siehst, öffne %{link} in einem neuen Tab und versuche diesen Schritt dann noch einmal." # MT
+          this_link: "diesen Link" # MT
+          still_trouble_html: "Wenn es immer noch nicht klappt, wende dich an %{contact}." # MT
+          unselected: "Ich habe versehentlich einige Dateien abgewählt" # MT
+          go_back_html: "Kein Problem! Geh zurück zu %{link}." # MT
+          step2: "Schritt 2" # MT
+          ownership: "Ich möchte die Eigentümerschaft nicht ändern" # MT
+          ownership_explained: "Alle Dateien in der neuen geteilten Ablage von %{community} gehören der Gemeinschaft, nicht einer einzelnen Person. So belegen die Dateien keinen Platz in deinem persönlichen Google-Drive-Speicher und können nicht versehentlich gelöscht werden." # MT
+          still_access: "Wenn du aktuell Mitglied der Gemeinschaft bist, hast du weiterhin Zugriff auf die Dateien." # MT
+        step5:
+          heading: "Schritt 5: Prüfen, ob alle Dateien verschoben sind" # MT
+          empty_list: "Du solltest jetzt eine leere Dateiliste sehen, etwa so:" # MT
+          done: "Wenn ja, bist du fertig!" # MT
+          finish: "Abschließen" # MT
+          not_empty: "Die Dateiliste ist nicht leer" # MT
+          head_back_html: "Kein Problem! Geh zurück zu %{link}." # MT
+          step2: "Schritt 2" # MT
+          some_files: "Es gibt Dateien, die ich nicht übertragen möchte" # MT
+          use_opt_out_html: "Bitte gib der koordinierenden Person über das %{link} Bescheid." # MT
+          opt_out_form: "Ablehnungsformular" # MT
+        finish:
+          heading: "Alles erledigt!" # MT
+          thanks: "Vielen Dank, dass du hilfst, die Dateien von %{community} neu zu ordnen!" # MT
+          great_day: "Einen schönen Tag noch!" # MT
+        opt_out:
+          heading: "Dateiauswahl ablehnen" # MT
+          not_active: "Deine Migrationsanfrage ist anscheinend nicht aktiv, deshalb kannst du nicht ablehnen." # MT
+          why: "Bitte sag uns, warum du ablehnst." # MT
+          still_own: "Laut unseren Daten gehören dir noch die Dateien unten. Wenn du nicht helfen möchtest, sie der Gemeinschaft zu übertragen, sag uns bitte, warum du ablehnst." # MT
+          went_wrong: "Wenn du versucht hast, Dateien zu übertragen, und etwas schiefgelaufen ist, erzähl uns bitte, was passiert ist." # MT
+          didnt_mean_html: "Wenn du nicht ablehnen wolltest, kannst du %{link}." # MT
+          go_back_link: "zurückgehen" # MT
+          go_back: "Zurück" # MT
+          not_transferred: "Nicht übertragene Dateien" # MT
+          name: "Name" # MT
+          modified: "Geändert" # MT
+          file_icon: "Dateisymbol" # MT
+        opted_out:
+          heading: "Abgelehnt" # MT
+          opted_out: "Du hast abgelehnt, bei der Neuordnung der Google-Drive-Dateien von %{community} zu helfen." # MT
+          opt_back_in_html: "Wenn du doch mitmachen möchtest, kannst du das tun, indem du %{link}." # MT
+          clicking_here: "hier klickst" # MT
+        mobile_warning:
+          thanks: "Danke, dass du %{community} helfen möchtest, die Google-Drive-Dateien neu zu ordnen!" # MT
+          mobile: "Mobilgerät?" # MT
+          looks_like_mobile: "Du nutzt anscheinend ein Mobilgerät." # MT
+          works_better: "Das geht viel besser an einem Laptop oder Computer mit richtiger Tastatur und Maus." # MT
+          proceed_html: "%{link}, aber wenn du viele Dateien im alten Google-Drive-Ordner hast, kann es mühsam werden." # MT
+          welcome_to_proceed: "Du kannst gern weitermachen" # MT
+          switch_html: "Wenn du zu einem Laptop oder Computer wechseln willst, kannst du denselben %{link} aus der E-Mail verwenden, über die du hierhergekommen bist." # MT
+          link: "Link" # MT
+          thanks_again: "So oder so: Danke noch mal!" # MT
+          what_is_this: "Worum geht es?" # MT
+      mailer:
+        migration_request:
+          dear: "Hallo %{name}," # MT
+          using_gather: "%{community} nutzt Gather, um seine Google-Drive-Dateien neu zu ordnen." # MT
+          problem: "Zurzeit gehören die Dateien der Gemeinschaft der Person, die sie erstellt hat. Wenn jemand die Gemeinschaft verlässt, können Dateien so versehentlich gelöscht werden!" # MT
+          solution: "Um das zu verhindern, verschiebt die Gemeinschaft alle ihre Dateien in eine geteilte Ablage, die ihr selbst gehört." # MT
+          own_many: "Deinem Google-Konto %{email} gehören etwa %{count} Dateien im alten Google-Drive-Ordner von %{community}. Wir brauchen deine Erlaubnis, um sie in die neue Ablage zu verschieben." # MT
+          own_one: "Deinem Google-Konto %{email} gehört mindestens eine Datei im alten Google-Drive-Ordner von %{community}. Wir brauchen deine Erlaubnis, um sie in die neue Ablage zu verschieben." # MT
+          go_here: "Hier kannst du helfen: %{url}" # MT
+          retain_access: "Wenn du Mitglied der Gemeinschaft bist, hast du weiterhin Zugriff auf die Dateien. Wenn du Fragen oder Bedenken hast, wende dich an %{contact} unter %{email}, die oder der die Neuordnung koordiniert. Wenn du lieber nicht helfen möchtest, kannst du unter der URL oben auch ablehnen." # MT
+          thanks: "Danke für deine Zeit und Mühe!" # MT
+      dashboard:
+        # Shared by the dashboard pages.
+        title: "Google-Drive-Migration" # MT
+        synopsis:
+          not_begun_contact: "Der Dateiscan hat nicht begonnen. Bitte wende dich an den Gather-Support." # MT
+          not_begun_wait: "Der Dateiscan hat nicht begonnen. Bitte warte einen Moment und lade die Seite neu." # MT
+          in_progress: "Dateiscan läuft. Bisher %{count} Dateien gescannt." # MT
+          complete: "Dateiscan abgeschlossen. Änderungen werden überwacht." # MT
+          auth_error_html: "Der Dateiscan wurde wegen eines Autorisierungsfehlers abgebrochen. Bitte stelle sicher, dass %{user} <strong>Bearbeitungszugriff</strong> auf deinen %{folder_link} hat. Klicke auf „Autorisierung widerrufen“ und melde dich auf der %{home_link} erneut an. Starte den Scan dann noch einmal." # MT
+          source_folder: "Quellordner" # MT
+          main_page: "Hauptseite von Google Drive" # MT
+          too_many_errors: "Der Dateiscan wurde wegen zu vieler Fehler abgebrochen. Die Fehler stehen unten. Behebe sie und starte den Scan dann noch einmal." # MT
+          cancelled_unknown: "Der Dateiscan wurde aus unbekanntem Grund abgebrochen." # MT
+          unknown_state: "Der Dateiscan ist in einem unbekannten Zustand." # MT
+        status:
+          show:
+            system_user: "Systemkonto" # MT
+            contact: "Kontakt" # MT
+            contact_value: "%{name} <%{email}>" # MT
+            source_folder: "Quellordner" # MT
+            destination_folder: "Zielordner" # MT
+            total_files: "Dateien gesamt" # MT
+            files_by_status:
+              pending: "Ausstehende Dateien" # MT
+              declined: "Abgelehnte Dateien" # MT
+              errored: "Fehlerhafte Dateien" # MT
+              transferred: "Übertragene Dateien" # MT
+              copied: "Kopierte Dateien" # MT
+              ignored: "Ignorierte Dateien" # MT
+              disappeared: "Verschwundene Dateien" # MT
+        logs:
+          index:
+            logs: "Protokoll" # MT
+            none: "Noch keine Einträge." # MT
+            time: "Zeit" # MT
+            message: "Nachricht" # MT
+        files:
+          index:
+            files: "Dateien" # MT
+            name: "Name" # MT
+            owner: "Eigentümer" # MT
+            modified: "Geändert" # MT
+            status: "Status" # MT
+            error: "Fehler" # MT
+            file_icon: "Dateisymbol" # MT
+        owners:
+          index:
+            owners: "Eigentümer" # MT
+            files: "Dateien" # MT
+            request: "Anfrage" # MT
+            owner: "Eigentümer" # MT
+            total: "Gesamt" # MT
+            date_sent: "Gesendet am" # MT
+            status: "Status" # MT
+          show:
+            files: "Dateien" # MT
+            total_files: "Dateien gesamt" # MT
+            request: "Anfrage" # MT
+            date_sent: "Gesendet am" # MT
+            status: "Status" # MT
+            intro_page: "Einführungsseite der Anfrage" # MT
+            link: "Link" # MT
+            opened_note: "Wenn du auf diesen Link klickst, wechselt die Anfrage in den Status „Geöffnet“." # MT
+            file_drop_drive: "Dateiablage" # MT
+            opt_out_reason: "Grund für die Ablehnung" # MT
+      operations:
+        form:
+          intro: "Gib unten die Angaben ein, um deine Migration einzurichten. Dann startet ein Dateiscan, und du wirst zum Migrations-Dashboard weitergeleitet." # MT
+        new:
+          title: "Migration anlegen" # MT
+        edit:
+          title: "Migration bearbeiten" # MT
+      # Labels for GDrive::Migration::File#error_type. Keep in sync with the error_type_enum DB constraint.
+      errors:
+        forbidden: "Keine Berechtigung" # MT
+        not_found: "Nicht gefunden" # MT
+        ancestor_inaccessible: "Übergeordneter Ordner nicht erreichbar" # MT
+        client_error_ensuring_tree: "Fehler beim Anlegen der Zielordner" # MT
+        client_error_moving_to_temp_drive: "Fehler beim Verschieben in die temporäre Ablage" # MT
+        client_error_moving_to_destination: "Fehler beim Verschieben ans Ziel" # MT

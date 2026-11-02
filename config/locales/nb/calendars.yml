@@ -1,0 +1,316 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+nb:
+  calendars:
+    all_day: "Hele dagen" # MT
+    # Names of the built-in system calendars and legacy export feeds.
+    my_meals: "Mine måltider" # MT
+    all_meals: "Alle måltider" # MT
+    community_meals: "Måltider i %{community}" # MT
+    community_events: "Hendelser i %{community}" # MT
+    my_events: "Mine hendelser" # MT
+    my_jobs: "Mine oppgaver" # MT
+    # Names of calendar export feeds, shown in the subscriber's calendar app.
+    feed_names:
+      all: "Alle kalendere i %{community}" # MT
+      single: "%{community} %{calendar}" # MT
+      multiple:
+        one: "%{count} kalender i %{community}" # MT
+        other: "%{count} kalendere i %{community}" # MT
+    meal_by_cook: "Av %{cook}" # MT
+    # The first and last days of a multi-day job shift.
+    job_start: "%{name} (start)" # MT
+    job_end: "%{name} (slutt)" # MT
+    created: "Kalenderen er opprettet." # MT
+    updated: "Kalenderen er oppdatert." # MT
+    group_created: "Gruppen er opprettet." # MT
+    group_updated: "Gruppen er oppdatert." # MT
+    protocol_created: "Regelverket er opprettet." # MT
+    protocol_updated: "Regelverket er oppdatert." # MT
+    event_created: "Hendelsen er opprettet." # MT
+    event_updated: "Hendelsen er oppdatert." # MT
+    event_deleted: "Hendelsen er slettet." # MT
+    token_reset: "Tokenet er tilbakestilt." # MT
+    residents_only: "Bare de som bor i %{community}, kan booke denne kalenderen." # MT
+    # Appended to IceCube's own (localized) description of a recurrence rule, e.g.
+    # "Weekly" + "on Mondays" + "at 6:00pm" + "until Aug 31 2026".
+    timespan:
+      all_day: "%{date} (hele dagen)" # MT
+      all_day_range: "%{first} – %{last} (hele dagen)" # MT
+    recurrence:
+      # Indexed by weekday, Sunday first.
+      on_weekdays: ["på søndager", "på mandager", "på tirsdager", "på onsdager", "på torsdager", "på fredager", "på lørdager"] # MT
+      on_day_of_month: "den %{ordinal}" # MT
+      on_date: "den %{date}" # MT
+      at_time: "kl. %{time}" # MT
+      from_date: "fra %{date}" # MT
+      between_dates: "%{first}–%{last}" # MT
+    rules:
+      max_lead_days: "Kan være høyst %{count} dager fram i tid" # MT
+      max_length: "Kan vare høyst %{length} etter starttidspunktet" # MT
+      other_communities_forbidden: "Beboere fra andre fellesskap kan ikke opprette hendelser" # MT
+      sponsor_required: "Du må ha en kontaktperson fra %{community}" # MT
+      fixed_time: "Må være %{time}" # MT
+    calendars:
+      index:
+        title: "Kalendere" # MT
+        create_group: "Opprett gruppe" # MT
+        create_calendar: "Opprett kalender" # MT
+        no_calendars: "Fant ingen kalendere." # MT
+      table:
+        name: "Navn" # MT
+        events: "Hendelser" # MT
+      new:
+        title: "Opprett kalender" # MT
+      edit:
+        title: "Rediger kalender: %{name}" # MT
+    groups:
+      new:
+        title: "Opprett kalendergruppe" # MT
+      edit:
+        title: "Rediger kalendergruppe: %{name}" # MT
+    calendar_list:
+      all: "Alle" # MT
+      select_all: "Velg alle" # MT
+      deselect_all: "Fjern alle valg" # MT
+    # Text built by the calendar grid's JavaScript (calendar_view.js), mostly for screen readers.
+    grid:
+      create_confirm:
+        same_day_html: "Opprette hendelse <b>%{date}</b>?" # MT
+        same_day_times_html: "Opprette hendelse <b>%{date}</b> fra <b>%{start}</b> til <b>%{end}</b>?" # MT
+        range_html: "Opprette hendelse fra <b>%{start}</b> til <b>%{end}</b>?" # MT
+      now_showing: "Kalenderen viser nå %{month}" # MT
+      event_count:
+        zero: "Ingen hendelser" # MT
+        one: "%{count} hendelse" # MT
+        other: "%{count} hendelser" # MT
+      event_count_this_week:
+        zero: "Ingen hendelser denne uken" # MT
+        one: "%{count} hendelse denne uken" # MT
+        other: "%{count} hendelser denne uken" # MT
+      event_count_this_month:
+        zero: "Ingen hendelser denne måneden" # MT
+        one: "%{count} hendelse denne måneden" # MT
+        other: "%{count} hendelser denne måneden" # MT
+      month_calendar: "Månedskalender" # MT
+      day_calendar: "Dagskalender" # MT
+      week_calendar: "Ukekalender" # MT
+      # %{view} is day_calendar or week_calendar; %{slots} is half_hour_slots or minute_slots.
+      agenda_label: "%{view}. Bruk piltastene for å navigere" # MT
+      agenda_label_all_day: "%{view}. Rad for hele dagen. Bruk piltastene for å navigere" # MT
+      agenda_label_slots: "%{view}. Rutenett med %{slots}. Bruk piltastene for å navigere" # MT
+      agenda_label_all_day_slots: "%{view}. Rad for hele dagen etterfulgt av %{slots}. Bruk piltastene for å navigere" # MT
+      half_hour_slots: "tidsluker på en halvtime fra %{start} til %{end}" # MT
+      minute_slots: "tidsluker på %{minutes} minutter fra %{start} til %{end}" # MT
+      today_date: "I dag, %{date}" # MT
+      this_week_date: "Denne uken, %{date}" # MT
+      header:
+        toolbar: "Kalenderkontroller" # MT
+        previous: "Forrige" # MT
+        next: "Neste" # MT
+        today: "I dag" # MT
+        day_view: "Dagsvisning" # MT
+        week_view: "Ukevisning" # MT
+        month_view: "Månedsvisning" # MT
+    events:
+      index:
+        title: "Hendelser og bookinger" # MT
+        edit_calendar: "Rediger kalender" # MT
+        export: "Eksporter" # MT
+        create_event: "Opprett hendelse" # MT
+        permalink: "Permanent lenke" # MT
+        show_early: "Vis tidlig morgen" # MT
+        hide_early: "Skjul tidlig morgen" # MT
+        create_confirm_title: "Opprette hendelse?" # MT
+        cancel: "Avbryt" # MT
+        ok: "OK" # MT
+      single_calendar_sidebar:
+        calendars: "Kalendere" # MT
+      all_events_sidebar:
+        calendars: "Kalendere" # MT
+      new:
+        title: "%{calendar}: Opprett hendelse" # MT
+        no_calendars_title: "Ingen kalendere" # MT
+        no_calendars: "Fellesskapet ditt har ingen kalendere der du kan opprette en hendelse." # MT
+        create_one: "Du kan opprette en." # MT
+        select_calendar: "Velg kalender" # MT
+      edit:
+        title: "Rediger hendelse: %{name}" # MT
+      form:
+        agree_to_guidelines: "Jeg godtar retningslinjene ovenfor" # MT
+      series_notice:
+        applies_from: "Endringer du gjør nedenfor, gjelder bare fra og med %{date}." # MT
+        edit_earlier_html: "For å endre alle framtidige forekomster, rediger forekomsten %{link}." # MT
+        started: "Denne forekomsten har allerede begynt, så den kan ikke endres." # MT
+        edit_later_html: "For å endre serien fra da av, rediger forekomsten %{link}." # MT
+      # Repeat settings in the event form.
+      repeat_fields:
+        repeat_units:
+          daily:
+            one: "dag" # MT
+            other: "dager" # MT
+          weekly:
+            one: "uke" # MT
+            other: "uker" # MT
+          monthly:
+            one: "måned" # MT
+            other: "måneder" # MT
+          yearly:
+            one: "år" # MT
+            other: "år" # MT
+        # The monthly "On" choices, worked out from the start date (RecurrencePattern.monthly_by_options).
+        monthly_by:
+          day_of_month: "Dag %{day}" # MT
+          day_of_week:
+            first: "Første %{weekday}" # MT
+            second: "Andre %{weekday}" # MT
+            third: "Tredje %{weekday}" # MT
+            fourth: "Fjerde %{weekday}" # MT
+          last_day_of_week: "Siste %{weekday}" # MT
+          last_day_of_month: "Siste dag i måneden" # MT
+        start_weekday: "Ukedagen til startdatoen er alltid med" # MT
+        pattern_fixed: "Denne hendelsen gjentas på en måte som dette skjemaet ikke kan vise (%{description}), så gjentakelsesinnstillingene kan ikke endres her." # MT
+        recurrence_unavailable: "Gjentakende hendelser er ikke tilgjengelige i denne kalenderen fordi %{reasons}." # MT
+        recurrence_blockers:
+          overlap_not_allowed: "hendelser i den ikke kan overlappe" # MT
+          fixed_start_time: "den har et fast starttidspunkt" # MT
+          fixed_end_time: "den har et fast sluttidspunkt" # MT
+          max_lead_days: "den begrenser hvor langt fram i tid hendelser kan bookes" # MT
+          max_days_per_year: "den begrenser antall dager som kan bookes per år" # MT
+          max_minutes_per_year: "den begrenser tiden som kan bookes per år" # MT
+    eventlets:
+      show:
+        title: "Hendelse: %{name}" # MT
+        calendars: "Kalendere" # MT
+        calendar: "Kalender" # MT
+        date_time: "Dato/tid" # MT
+        repeats: "Gjentas" # MT
+        meal: "Måltid" # MT
+        group: "Gruppe" # MT
+        reserved_by: "Booket av" # MT
+        sponsor: "Kontaktperson" # MT
+        type: "Type" # MT
+        note: "Merknad" # MT
+    protocols:
+      index:
+        title: "Regelverk" # MT
+        create: "Opprett regelverk" # MT
+        no_protocols: "Fant ingen regelverk." # MT
+        name: "Navn" # MT
+        calendars: "Kalendere" # MT
+        types: "Typer" # MT
+        rules: "Regler" # MT
+      new:
+        title: "Opprett regelverk" # MT
+      edit:
+        title: "Rediger regelverk: %{name}" # MT
+    exports:
+      index:
+        title: "Kalendereksport" # MT
+        select_calendars: "Velg kalendere" # MT
+        export_link: "Eksportlenke" # MT
+        copy_link: "Kopier lenke" # MT
+        visit_link: "Åpne lenken i nettleseren" # MT
+        personalized: "Dette er din personlige eksportlenke for de valgte kalenderne." # MT
+        selection_changes_link: "Hvis du endrer hvilke kalendere som er valgt (ved å krysse av i boksene), endres lenken tilsvarende. Lenken endres også hvis du endrer alternativene nedenfor." # MT
+        options: "Alternativer" # MT
+        import_instructions: "Instruksjoner for import" # MT
+        google_calendar: "Google Kalender" # MT
+        apple_calendar: "Apple Kalender" # MT
+        method_1: "Metode 1" # MT
+        method_2: "Metode 2" # MT
+        google_method_1: "Hvis du er logget inn på Google-kontoen din, kan du prøve å bare klikke på «Åpne lenken i nettleseren» ovenfor. Google Kalender skal da åpnes av seg selv og spørre om du vil importere." # MT
+        google_steps:
+          - "Klikk på «Kopier lenke» ovenfor for å kopiere kalenderens nettadresse til utklippstavlen." # MT
+          - "Til venstre i Google Kalender klikker du på «+» ved siden av «Andre kalendere»." # MT
+          - "Klikk på «Fra nettadresse»." # MT
+          - "Lim inn nettadressen du kopierte ovenfor." # MT
+          - "Klikk på «Legg til kalender»." # MT
+          - "Hendelsene skal vises i kalenderen din etter noen sekunder." # MT
+        apple_method_1: "Prøv å bare klikke på «Åpne lenken i nettleseren» ovenfor. Hvis nettleseren din åpner webcal-lenker med Apple Kalender, kan det hende det fungerer med en gang!" # MT
+        apple_steps:
+          - "Klikk på «Kopier lenke» ovenfor for å kopiere kalenderens nettadresse til utklippstavlen." # MT
+          - "Åpne Apple Kalender." # MT
+          - "Klikk på menyen «Arkiv»." # MT
+          - "Klikk på «Abonner» eller «Nytt kalenderabonnement»." # MT
+          - "Lim inn nettadressen du kopierte ovenfor." # MT
+          - "Klikk på OK/Abonner." # MT
+          - "Velg innstillinger for abonnementet hvis du blir spurt. Vi anbefaler automatisk oppdatering «Hver time»." # MT
+          - "Hendelsene skal nå vises i kalenderen din." # MT
+        reset_token_html: "Hvis du ved et uhell deler de personlige kalenderlenkene dine og vil gjøre dem private igjen, %{link}. Merk: Da slutter de gamle lenkene å virke, så du må oppdatere kalenderappen din." # MT
+        reset_token_link: "klikk her for å tilbakestille det hemmelige tokenet ditt" # MT
+    legacy_exports:
+      index:
+        title: "Kalendereksport" # MT
+        old_page: "Du har kommet til den gamle siden for kalendereksport. Denne siden er erstattet av et nyere og kraftigere eksportsystem." # MT
+        new_page: "Du kommer til den nye siden ved å klikke på knappen «Eksporter» på hovedsiden for kalendere." # MT
+        links_removed: "Når du klikker på knappen nedenfor for å gå til den nye siden for kalendereksport, blir lenkene til denne gamle siden fjernet. Hvis du trenger å eksportere kalendere senere, går du bare til hovedsiden for kalendere og klikker på «Eksporter»." # MT
+        proceed: "Skjønner! Ta meg til den nye siden for kalendereksport og fjern de gamle lenkene!" # MT
+    # The drag-and-drop move modal in the calendar grid (calendar_view.js).
+    drag:
+      confirm: "Er du sikker på at du vil flytte hendelsen «%{name}»?" # MT
+      confirm_occurrence: "Er du sikker på at du vil flytte denne forekomsten av «%{name}»?" # MT
+      error_title: "Feil" # MT
+      load_error: "Vi kunne ikke sjekke hvordan denne hendelsen kan flyttes. Prøv igjen." # MT
+      calendar:
+        title: "Flytt hendelse i flere kalendere" # MT
+        content: "«%{name}» vises i mer enn én kalender:" # MT
+        selected: "(valgt)" # MT
+        this: "Flytt bare i %{calendar}" # MT
+        all: "Flytt i alle" # MT
+      series:
+        title: "Flytt gjentakende hendelse" # MT
+        content: "«%{name}» gjentas. Hvilke forekomster skal flyttes?" # MT
+        occurrence: "Bare denne" # MT
+        following: "Denne og de neste" # MT
+        series: "Alle forekomster" # MT
+    eventlet_deletion:
+      success:
+        event: "Hendelsen er slettet." # MT
+        series: "Alle forekomster av hendelsen er slettet." # MT
+        following: "Denne og alle senere forekomster av hendelsen er slettet." # MT
+        occurrence: "Forekomsten er slettet." # MT
+        calendar_series: "Hendelsen er fjernet fra %{calendar}." # MT
+        calendar_occurrence: "Forekomsten er fjernet fra %{calendar}." # MT
+      prompts:
+        calendar:
+          title: "Slett hendelse i flere kalendere" # MT
+          selected_html: "%{name} (valgt)" # MT
+          content: "«%{name}» vises i mer enn én kalender:" # MT
+          this: "Slett fra %{calendar}" # MT
+          all: "Slett fra alle kalendere" # MT
+        series:
+          title: "Slett gjentakende hendelse" # MT
+          content_all: "«%{name}» gjentas. Hvilke forekomster skal slettes?" # MT
+          content_this: "«%{name}» gjentas. Hvilke forekomster skal slettes fra %{calendar}?" # MT
+          occurrence: "Bare denne" # MT
+          following: "Denne og de neste" # MT
+          series: "Alle forekomster" # MT
+  calendars/protocol:
+    applicability: "Gjelder for" # MT
+    no_kinds_html: "Dette fellesskapet har ingen hendelsestyper. Se <a href='%{url}'>innstillingssiden</a>." # MT
+    rules: "Regler" # MT
+    durations:
+      mins:
+        one: "1 minutt" # MT
+        other: "%{formatted} minutter" # MT
+      days:
+        one: "1 dag" # MT
+        other: "%{formatted} dager" # MT
+    exceeded_time: "Du kan booke høyst %{max} %{kind_calendar} per år, og du har allerede booket %{booked}" # MT
+  calendar_exports:
+    meals:
+      diner_count:
+        one: "%{count} matgjest fra husstanden din" # MT
+        other: "%{count} matgjester fra husstanden din" # MT
+      signup_comments: "Kommentarer til påmeldingen:\n%{comments}" # MT

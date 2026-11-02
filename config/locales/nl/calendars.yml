@@ -1,0 +1,316 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+nl:
+  calendars:
+    all_day: "Hele dag" # MT
+    # Names of the built-in system calendars and legacy export feeds.
+    my_meals: "Mijn maaltijden" # MT
+    all_meals: "Alle maaltijden" # MT
+    community_meals: "Maaltijden %{community}" # MT
+    community_events: "Afspraken %{community}" # MT
+    my_events: "Mijn afspraken" # MT
+    my_jobs: "Mijn taken" # MT
+    # Names of calendar export feeds, shown in the subscriber's calendar app.
+    feed_names:
+      all: "Alle agenda’s van %{community}" # MT
+      single: "%{community} %{calendar}" # MT
+      multiple:
+        one: "%{count} agenda van %{community}" # MT
+        other: "%{count} agenda’s van %{community}" # MT
+    meal_by_cook: "Door %{cook}" # MT
+    # The first and last days of a multi-day job shift.
+    job_start: "%{name} (begin)" # MT
+    job_end: "%{name} (einde)" # MT
+    created: "Agenda aangemaakt." # MT
+    updated: "Agenda bijgewerkt." # MT
+    group_created: "Groep aangemaakt." # MT
+    group_updated: "Groep bijgewerkt." # MT
+    protocol_created: "Reglement aangemaakt." # MT
+    protocol_updated: "Reglement bijgewerkt." # MT
+    event_created: "Afspraak aangemaakt." # MT
+    event_updated: "Afspraak bijgewerkt." # MT
+    event_deleted: "Afspraak verwijderd." # MT
+    token_reset: "Token opnieuw ingesteld." # MT
+    residents_only: "Alleen bewoners van %{community} mogen deze agenda reserveren." # MT
+    # Appended to IceCube's own (localized) description of a recurrence rule, e.g.
+    # "Weekly" + "on Mondays" + "at 6:00pm" + "until Aug 31 2026".
+    timespan:
+      all_day: "%{date} (hele dag)" # MT
+      all_day_range: "%{first} – %{last} (hele dag)" # MT
+    recurrence:
+      # Indexed by weekday, Sunday first.
+      on_weekdays: ["op zondag", "op maandag", "op dinsdag", "op woensdag", "op donderdag", "op vrijdag", "op zaterdag"] # MT
+      on_day_of_month: "op de %{ordinal}" # MT
+      on_date: "op %{date}" # MT
+      at_time: "om %{time}" # MT
+      from_date: "vanaf %{date}" # MT
+      between_dates: "van %{first} tot %{last}" # MT
+    rules:
+      max_lead_days: "Mag hoogstens %{count} dagen in de toekomst liggen" # MT
+      max_length: "Mag hoogstens %{length} na de begintijd eindigen" # MT
+      other_communities_forbidden: "Bewoners van andere gemeenschappen mogen geen afspraken maken" # MT
+      sponsor_required: "Je moet een sponsor hebben uit %{community}" # MT
+      fixed_time: "Moet %{time} zijn" # MT
+    calendars:
+      index:
+        title: "Agenda’s" # MT
+        create_group: "Groep aanmaken" # MT
+        create_calendar: "Agenda aanmaken" # MT
+        no_calendars: "Geen agenda’s gevonden." # MT
+      table:
+        name: "Naam" # MT
+        events: "Afspraken" # MT
+      new:
+        title: "Agenda aanmaken" # MT
+      edit:
+        title: "Agenda bewerken: %{name}" # MT
+    groups:
+      new:
+        title: "Agendagroep aanmaken" # MT
+      edit:
+        title: "Agendagroep bewerken: %{name}" # MT
+    calendar_list:
+      all: "Alle" # MT
+      select_all: "Alles selecteren" # MT
+      deselect_all: "Alles deselecteren" # MT
+    # Text built by the calendar grid's JavaScript (calendar_view.js), mostly for screen readers.
+    grid:
+      create_confirm:
+        same_day_html: "Afspraak aanmaken op <b>%{date}</b>?" # MT
+        same_day_times_html: "Afspraak aanmaken op <b>%{date}</b> van <b>%{start}</b> tot <b>%{end}</b>?" # MT
+        range_html: "Afspraak aanmaken van <b>%{start}</b> tot <b>%{end}</b>?" # MT
+      now_showing: "De agenda toont nu %{month}" # MT
+      event_count:
+        zero: "Geen afspraken" # MT
+        one: "%{count} afspraak" # MT
+        other: "%{count} afspraken" # MT
+      event_count_this_week:
+        zero: "Geen afspraken deze week" # MT
+        one: "%{count} afspraak deze week" # MT
+        other: "%{count} afspraken deze week" # MT
+      event_count_this_month:
+        zero: "Geen afspraken deze maand" # MT
+        one: "%{count} afspraak deze maand" # MT
+        other: "%{count} afspraken deze maand" # MT
+      month_calendar: "Maandagenda" # MT
+      day_calendar: "Dagagenda" # MT
+      week_calendar: "Weekagenda" # MT
+      # %{view} is day_calendar or week_calendar; %{slots} is half_hour_slots or minute_slots.
+      agenda_label: "%{view}. Gebruik de pijltjestoetsen om te navigeren" # MT
+      agenda_label_all_day: "%{view}. Rij “Hele dag”. Gebruik de pijltjestoetsen om te navigeren" # MT
+      agenda_label_slots: "%{view}. Raster met %{slots}. Gebruik de pijltjestoetsen om te navigeren" # MT
+      agenda_label_all_day_slots: "%{view}. Rij “Hele dag”, gevolgd door %{slots}. Gebruik de pijltjestoetsen om te navigeren" # MT
+      half_hour_slots: "tijdvakken van een half uur van %{start} tot %{end}" # MT
+      minute_slots: "tijdvakken van %{minutes} minuten van %{start} tot %{end}" # MT
+      today_date: "Vandaag, %{date}" # MT
+      this_week_date: "Deze week, %{date}" # MT
+      header:
+        toolbar: "Agendabediening" # MT
+        previous: "Vorige" # MT
+        next: "Volgende" # MT
+        today: "Vandaag" # MT
+        day_view: "Dagweergave" # MT
+        week_view: "Weekweergave" # MT
+        month_view: "Maandweergave" # MT
+    events:
+      index:
+        title: "Afspraken en reserveringen" # MT
+        edit_calendar: "Agenda bewerken" # MT
+        export: "Exporteren" # MT
+        create_event: "Afspraak aanmaken" # MT
+        permalink: "Permalink" # MT
+        show_early: "Vroege ochtend tonen" # MT
+        hide_early: "Vroege ochtend verbergen" # MT
+        create_confirm_title: "Afspraak aanmaken?" # MT
+        cancel: "Annuleren" # MT
+        ok: "OK" # MT
+      single_calendar_sidebar:
+        calendars: "Agenda’s" # MT
+      all_events_sidebar:
+        calendars: "Agenda’s" # MT
+      new:
+        title: "%{calendar}: afspraak aanmaken" # MT
+        no_calendars_title: "Geen agenda’s" # MT
+        no_calendars: "Je gemeenschap heeft geen agenda’s waarin je een afspraak kunt aanmaken." # MT
+        create_one: "Je kunt er een aanmaken." # MT
+        select_calendar: "Kies een agenda" # MT
+      edit:
+        title: "Afspraak bewerken: %{name}" # MT
+      form:
+        agree_to_guidelines: "Ik ga akkoord met de richtlijnen hierboven" # MT
+      series_notice:
+        applies_from: "Wijzigingen die je hieronder maakt, gelden pas vanaf %{date}." # MT
+        edit_earlier_html: "Wil je alle toekomstige herhalingen wijzigen, bewerk dan de herhaling van %{link}." # MT
+        started: "Deze herhaling is al begonnen en kan dus niet meer worden gewijzigd." # MT
+        edit_later_html: "Wil je de reeks vanaf dan wijzigen, bewerk dan de herhaling van %{link}." # MT
+      # Repeat settings in the event form.
+      repeat_fields:
+        repeat_units:
+          daily:
+            one: "dag" # MT
+            other: "dagen" # MT
+          weekly:
+            one: "week" # MT
+            other: "weken" # MT
+          monthly:
+            one: "maand" # MT
+            other: "maanden" # MT
+          yearly:
+            one: "jaar" # MT
+            other: "jaar" # MT
+        # The monthly "On" choices, worked out from the start date (RecurrencePattern.monthly_by_options).
+        monthly_by:
+          day_of_month: "Dag %{day}" # MT
+          day_of_week:
+            first: "De eerste %{weekday}" # MT
+            second: "De tweede %{weekday}" # MT
+            third: "De derde %{weekday}" # MT
+            fourth: "De vierde %{weekday}" # MT
+          last_day_of_week: "De laatste %{weekday}" # MT
+          last_day_of_month: "De laatste dag van de maand" # MT
+        start_weekday: "De dag van de begindatum hoort er altijd bij" # MT
+        pattern_fixed: "Deze afspraak herhaalt zich op een manier die dit formulier niet kan tonen (%{description}), dus de herhaalinstellingen kunnen hier niet worden gewijzigd." # MT
+        recurrence_unavailable: "Terugkerende afspraken zijn in deze agenda niet mogelijk, omdat %{reasons}." # MT
+        recurrence_blockers:
+          overlap_not_allowed: "afspraken in deze agenda niet mogen overlappen" # MT
+          fixed_start_time: "deze agenda een vaste begintijd heeft" # MT
+          fixed_end_time: "deze agenda een vaste eindtijd heeft" # MT
+          max_lead_days: "deze agenda beperkt hoe ver vooruit je kunt boeken" # MT
+          max_days_per_year: "deze agenda het aantal geboekte dagen per jaar beperkt" # MT
+          max_minutes_per_year: "deze agenda de geboekte tijd per jaar beperkt" # MT
+    eventlets:
+      show:
+        title: "Afspraak: %{name}" # MT
+        calendars: "Agenda’s" # MT
+        calendar: "Agenda" # MT
+        date_time: "Datum/tijd" # MT
+        repeats: "Herhaling" # MT
+        meal: "Maaltijd" # MT
+        group: "Groep" # MT
+        reserved_by: "Gereserveerd door" # MT
+        sponsor: "Sponsor" # MT
+        type: "Type" # MT
+        note: "Opmerking" # MT
+    protocols:
+      index:
+        title: "Reglementen" # MT
+        create: "Reglement aanmaken" # MT
+        no_protocols: "Geen reglementen gevonden." # MT
+        name: "Naam" # MT
+        calendars: "Agenda’s" # MT
+        types: "Types" # MT
+        rules: "Regels" # MT
+      new:
+        title: "Reglement aanmaken" # MT
+      edit:
+        title: "Reglement bewerken: %{name}" # MT
+    exports:
+      index:
+        title: "Agenda’s exporteren" # MT
+        select_calendars: "Kies agenda’s" # MT
+        export_link: "Exportlink" # MT
+        copy_link: "Link kopiëren" # MT
+        visit_link: "Link openen in browser" # MT
+        personalized: "Dit is je persoonlijke exportlink voor de gekozen agenda’s." # MT
+        selection_changes_link: "Als je de keuze van agenda’s wijzigt (door de vakjes aan te vinken), verandert de link mee. Ook als je de opties hieronder wijzigt, verandert de link." # MT
+        options: "Opties" # MT
+        import_instructions: "Instructies voor importeren" # MT
+        google_calendar: "Google Agenda" # MT
+        apple_calendar: "Apple Agenda" # MT
+        method_1: "Methode 1" # MT
+        method_2: "Methode 2" # MT
+        google_method_1: "Als je bent ingelogd bij je Google-account, klik dan gewoon hierboven op “Link openen in browser”. Google Agenda zou vanzelf moeten openen en je vragen om te importeren." # MT
+        google_steps:
+          - "Klik hierboven op “Link kopiëren” om de URL van de agenda naar het klembord te kopiëren." # MT
+          - "Klik links in Google Agenda op de “+” naast “Andere agenda’s”." # MT
+          - "Klik op “Via URL”." # MT
+          - "Plak de URL die je hierboven hebt gekopieerd." # MT
+          - "Klik op “Agenda toevoegen”." # MT
+          - "Na een paar seconden zouden de afspraken in je agenda moeten verschijnen." # MT
+        apple_method_1: "Klik gewoon hierboven op “Link openen in browser”. Als je browser webcal-links met Apple Agenda opent, werkt het misschien meteen!" # MT
+        apple_steps:
+          - "Klik hierboven op “Link kopiëren” om de URL van de agenda naar het klembord te kopiëren." # MT
+          - "Open Apple Agenda." # MT
+          - "Klik op het menu “Archief”." # MT
+          - "Klik op “Abonneer” of “Nieuw agenda-abonnement”." # MT
+          - "Plak de URL die je hierboven hebt gekopieerd." # MT
+          - "Klik op “OK” of “Abonneer”." # MT
+          - "Stel de abonnementsopties in als daarom gevraagd wordt. Als interval voor automatisch vernieuwen raden we “Elk uur” aan." # MT
+          - "De afspraken zouden nu in je agenda moeten verschijnen." # MT
+        reset_token_html: "Heb je je persoonlijke agendalinks per ongeluk gedeeld en wil je ze weer privé maken, %{link}. Let op: de oude links werken dan niet meer, dus je moet je agenda-app bijwerken." # MT
+        reset_token_link: "klik dan hier om je geheime token opnieuw in te stellen" # MT
+    legacy_exports:
+      index:
+        title: "Agenda’s exporteren" # MT
+        old_page: "Je bent op de oude exportpagina voor agenda’s terechtgekomen. Deze pagina is vervangen door een nieuwer, krachtiger exportsysteem." # MT
+        new_page: "Je komt op de nieuwe pagina door op de hoofdpagina van Agenda’s op de knop “Exporteren” te klikken." # MT
+        links_removed: "Zodra je op de knop hieronder klikt om naar de nieuwe exportpagina te gaan, worden de links naar deze oude pagina verwijderd. Wil je later agenda’s exporteren, ga dan naar de hoofdpagina van Agenda’s en klik op “Exporteren”." # MT
+        proceed: "Begrepen! Breng me naar de nieuwe exportpagina en verwijder de oude links!" # MT
+    # The drag-and-drop move modal in the calendar grid (calendar_view.js).
+    drag:
+      confirm: "Weet je zeker dat je de afspraak “%{name}” wilt verplaatsen?" # MT
+      confirm_occurrence: "Weet je zeker dat je deze herhaling van “%{name}” wilt verplaatsen?" # MT
+      error_title: "Fout" # MT
+      load_error: "We konden niet nagaan hoe deze afspraak verplaatst kan worden. Probeer het opnieuw." # MT
+      calendar:
+        title: "Afspraak in meerdere agenda’s verplaatsen" # MT
+        content: "“%{name}” staat in meer dan één agenda:" # MT
+        selected: "(geselecteerd)" # MT
+        this: "Alleen verplaatsen in %{calendar}" # MT
+        all: "Overal verplaatsen" # MT
+      series:
+        title: "Terugkerende afspraak verplaatsen" # MT
+        content: "“%{name}” herhaalt zich. Welke herhalingen moeten worden verplaatst?" # MT
+        occurrence: "Alleen deze" # MT
+        following: "Deze en volgende" # MT
+        series: "Alle herhalingen" # MT
+    eventlet_deletion:
+      success:
+        event: "Afspraak verwijderd." # MT
+        series: "Alle herhalingen van de afspraak zijn verwijderd." # MT
+        following: "Deze en alle volgende herhalingen van de afspraak zijn verwijderd." # MT
+        occurrence: "De herhaling is verwijderd." # MT
+        calendar_series: "De afspraak is verwijderd uit %{calendar}." # MT
+        calendar_occurrence: "De herhaling is verwijderd uit %{calendar}." # MT
+      prompts:
+        calendar:
+          title: "Afspraak in meerdere agenda’s verwijderen" # MT
+          selected_html: "%{name} (geselecteerd)" # MT
+          content: "“%{name}” staat in meer dan één agenda:" # MT
+          this: "Verwijderen uit %{calendar}" # MT
+          all: "Verwijderen uit alle agenda’s" # MT
+        series:
+          title: "Terugkerende afspraak verwijderen" # MT
+          content_all: "“%{name}” herhaalt zich. Welke herhalingen moeten worden verwijderd?" # MT
+          content_this: "“%{name}” herhaalt zich. Welke herhalingen moeten uit %{calendar} worden verwijderd?" # MT
+          occurrence: "Alleen deze" # MT
+          following: "Deze en volgende" # MT
+          series: "Alle herhalingen" # MT
+  calendars/protocol:
+    applicability: "Toepassing" # MT
+    no_kinds_html: "Deze gemeenschap heeft geen afspraaktypes ingesteld. Zie de <a href='%{url}'>instellingenpagina</a>." # MT
+    rules: "Regels" # MT
+    durations:
+      mins:
+        one: "1 minuut" # MT
+        other: "%{formatted} minuten" # MT
+      days:
+        one: "1 dag" # MT
+        other: "%{formatted} dagen" # MT
+    exceeded_time: "Je kunt per jaar hoogstens %{max} aan %{kind_calendar} afspraken boeken en je hebt al %{booked} geboekt" # MT
+  calendar_exports:
+    meals:
+      diner_count:
+        one: "%{count} eter uit je huishouden" # MT
+        other: "%{count} eters uit je huishouden" # MT
+      signup_comments: "Opmerkingen bij de aanmelding:\n%{comments}" # MT

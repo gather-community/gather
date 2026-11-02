@@ -1,5 +1,7 @@
 en:
   common:
+    # This language's name in itself, for the language menu. The same in every page language.
+    language_name: "English"
     settings: "Settings"
     settings_updated: "Settings updated successfully."
     open_date_picker: "Open date picker"

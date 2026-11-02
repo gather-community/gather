@@ -105,16 +105,16 @@ en:
       totals: "Totals"
       download_accounts: "Download Accounts as CSV"
       summary:
-        one: "There is 1 active account."
+        one: "There is %{count} active account."
         other: "There are %{count} active accounts."
       active_account_definition: "An active account is one having current activity or a non-zero current balance."
       last_statement_run: "Statements were last sent out on %{date}."
       statements_never_run: "Statements have never been sent out."
       no_users:
-        one: "There is 1 account with no associated users. A statement will not be generated for that account."
+        one: "There is %{count} account with no associated users. A statement will not be generated for that account."
         other: "There are %{count} accounts with no associated users. Statements will not be generated for those accounts."
       recent_statements:
-        one: "There is 1 account with a statement in the last 24 hours. A new statement will not be generated for that account."
+        one: "There is %{count} account with a statement in the last 24 hours. A new statement will not be generated for that account."
         other: "There are %{count} accounts with statements in the last 24 hours. Statements will not be generated for those accounts."
     others:
       one_html: "You have another Gather account with %{cmty}."

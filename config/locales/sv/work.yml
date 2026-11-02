@@ -1,0 +1,210 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+sv:
+  work:
+    job_created: "Uppgiften har skapats." # MT
+    job_updated: "Uppgiften har uppdaterats." # MT
+    job_synced_from_meals: "Den här uppgiften synkroniserades från måltidssystemet och kan inte redigeras direkt. Den uppdateras automatiskt när måltider läggs till eller ändras." # MT
+    period_created: "Perioden har skapats." # MT
+    period_updated: "Perioden har uppdaterats." # MT
+    period_copied: "Vissa uppgifter har kopierats från perioden ”%{name}”. Granska och justera nedan. Uppgifterna kopieras när du sparar perioden." # MT
+    notices_wrong_phase: "Meddelanden kan inte skickas eftersom perioden inte är i fasen ”Redo” eller ”Öppen”." # MT
+    notices_no_quota: "Meddelanden kan inte skickas eftersom perioden inte har någon kvot." # MT
+    notices_sent: "Meddelandena är på väg!" # MT
+    signed_up: "Du är anmäld. Hurra!" # MT
+    signup_removed: "Din anmälan har tagits bort." # MT
+    # Compact hours, e.g. "3h" on the signup cards.
+    hours_abbr: "%{hours} h" # MT
+    jobs:
+      form:
+        reminders_on_role_html: "Påminnelser för den här uppgiften ställs in på dess %{link}." # MT
+        reminders_on_role: "Påminnelser för den här uppgiften ställs in på dess sida för måltidsroller." # MT
+        meal_role_page: "sida för måltidsroller" # MT
+        shifts: "Pass" # MT
+      edit:
+        title: "Redigera uppgift: %{title}" # MT
+      new:
+        title: "Skapa uppgift" # MT
+      index:
+        title: "Uppgifter" # MT
+        title_with_period: "Uppgifter: %{period}" # MT
+        create: "Skapa uppgift" # MT
+      show:
+        jobs: "Uppgifter" # MT
+        hours: "%{hours} timmar" # MT
+    periods:
+      form:
+        do_not_copy: "Kopiera inte uppgifter" # MT
+        meal_formula: "Måltidsformel" # MT
+        meal_roles_to_sync: "Måltidsroller att synkronisera" # MT
+        sync_hint: "Måltidsuppgifter synkroniseras när perioden ändras eller när måltider läggs till, ändras eller tas bort. Anmälningar synkroniseras oavsett om man anmäler sig via måltids- eller arbetssystemet. Ändringar av måltidsroller synkroniseras bara om perioden är ett utkast." # MT
+        shares: "Andelar" # MT
+      edit:
+        title: "Redigera period: %{name}" # MT
+      new:
+        title: "Skapa period" # MT
+      index:
+        title: "Arbetsperioder" # MT
+        create: "Skapa period" # MT
+        name: "Namn" # MT
+        start: "Start" # MT
+        end: "Slut" # MT
+        phase: "Fas" # MT
+        links: "Länkar" # MT
+        signups: "Anmälningar" # MT
+        report: "Rapport" # MT
+        jobs: "Uppgifter" # MT
+      review_notices:
+        title: "Meddelanden om uppgiftsval: %{name}" # MT
+        intro: "Följande meddelanden kommer att skickas:" # MT
+      show:
+        title: "Period: %{name}" # MT
+        periods: "Perioder" # MT
+        date: "Datum" # MT
+        max_rounds_per_worker:
+          one: "max. %{count} omgång per person" # MT
+          other: "max. %{count} omgångar per person" # MT
+        workers_per_round:
+          one: "%{count} person per omgång" # MT
+          other: "%{count} personer per omgång" # MT
+        minutes_per_round:
+          one: "%{count} minut per omgång" # MT
+          other: "%{count} minuter per omgång" # MT
+        shares: "Andelar" # MT
+      report:
+        title: "Arbetsrapport" # MT
+        title_with_period: "Arbetsrapport: %{period}" # MT
+        overview: "Översikt" # MT
+        total_hours: "Timmar totalt" # MT
+        jobs: "Uppgifter" # MT
+        people: "Personer" # MT
+        quota: "Kvot" # MT
+        by_person: "Per person" # MT
+        by_household: "Per hushåll" # MT
+        regular: "Vanliga" # MT
+        name: "Namn" # MT
+    settings:
+      edit:
+        title: "Inställningar för arbete" # MT
+    shifts:
+      shift:
+        sign_up: "Anmäl dig!" # MT
+      shifts:
+        list_label: "Lista över anmälningar" # MT
+      index:
+        title: "Anmälan till uppgifter" # MT
+      show:
+        signups: "Anmälningar" # MT
+    no_periods_html: "Det finns inga tillgängliga perioder. Se %{link}." # MT
+    periods_page: "sidan för perioder" # MT
+    not_setup: "Det ser ut som att din gemenskap inte har konfigurerat Gathers system för arbetsfördelning.\nPrata med Gather-administratören i din gemenskap för mer information." # MT
+    choosing_as: "Du väljer åt %{name}. Alla uppgifter du anmäler dig till tilldelas den personen." # MT
+    no_signups: "Inga anmälningar" # MT
+    phase_notices:
+      shifts:
+        draft: "Perioden är ett utkast, så det går inte att anmäla sig till uppgifter än." # MT
+        archived: "Perioden är arkiverad, så inga anmälningar är tillåtna." # MT
+      jobs:
+        archived: "Perioden är arkiverad." # MT
+      report:
+        draft: "Perioden är ett utkast, så rapporten syns inte än." # MT
+        archived: "Perioden är arkiverad." # MT
+    num_hours: "%{num} timmar" # MT
+    preassigned: "Den här platsen var förtilldelad." # MT
+    synopsis:
+      done: "Du är klar!" # MT
+      regular: "vanliga" # MT
+      # %{chunks} is a list like "3/10 regular hours, 2/4 Pitch-In hours and 1/2 Mowing hours".
+      for_user_html: "Du har anmält dig till %{chunks}." # MT
+      for_household_html: "Ditt hushåll har %{chunks}." # MT
+      chunk:
+        single_html: "%{fraction} timmar" # MT
+        multiple_html: "%{fraction} timmar %{title}" # MT
+      start_choosing: "Du kan börja välja uppgifter %{at_or_on_time}." # MT
+      round_limit_with_next: "Din gräns per omgång är %{prev} timmar och höjs till %{next} %{at_or_on_time}." # MT
+      round_limit_until: "Din gräns per omgång är %{prev} timmar %{until_time}." # MT
+  work/jobs:
+    shifts: "Pass" # MT
+    unlimited: "Obegränsat" # MT
+    full_community: "Det här är en uppgift för hela gemenskapen" # MT
+    preassignments: "Den här uppgiften har förtilldelningar" # MT
+    meal_related: "Den här uppgiften hör till en måltid" # MT
+    none_found: "Inga uppgifter hittades." # MT
+  work/period:
+    phase_names:
+      archived: "Arkiverad" # MT
+      draft: "Utkast" # MT
+      open: "Öppen" # MT
+      published: "Publicerad" # MT
+      ready: "Redo" # MT
+    num_minutes:
+      one: "%{count} minut" # MT
+      other: "%{count} minuter" # MT
+  work/shares:
+    portion_options:
+      none: "Ingen andel" # MT
+      one_qtr: "¼ andel" # MT
+      half: "½ andel" # MT
+      three_qtr: "¾ andel" # MT
+      full: "Hel andel" # MT
+    intro: "Hur ska gemenskapens arbete fördelas? De flesta bör få en hel andel, men ibland behövs undantag. En halv andel betyder att personen arbetar hälften så många timmar som någon med en hel andel, och så vidare." # MT
+    priority_hint_html: "Systemet räknar automatiskt ut vem som väljer först utifrån hur många timmar som behövs. Personer med <i class='fa fa-star'></i> går före dem utan." # MT
+    change_warning: "Perioden är aktiv just nu. Om du ändrar andelar eller kvottyp ändras kvotberäkningarna. Var försiktig!" # MT
+  work/shift:
+    choosing_as: "Väljer åt %{name}" # MT
+    slots_exceeded: "Tyvärr, någon hann före dig!" # MT
+    already_signed_up: "Du är redan anmäld till det här passet." # MT
+    not_signed_up: "Du är inte anmäld till det här passet." # MT
+    round_limit_exceeded: "Du har överskridit din gräns för omgången." # MT
+    slots_open:
+      one: "%{count} plats ledig" # MT
+      other: "%{count} platser lediga" # MT
+  work/job_reminder:
+    absolute: "Kl. %{time}" # MT
+    relative:
+      days_before:
+        one: "%{count} dag före" # MT
+        other: "%{count} dagar före" # MT
+      days_after:
+        one: "%{count} dag efter" # MT
+        other: "%{count} dagar efter" # MT
+      hours_before:
+        one: "%{count} timme före" # MT
+        other: "%{count} timmar före" # MT
+      hours_after:
+        one: "%{count} timme efter" # MT
+        other: "%{count} timmar efter" # MT
+  work_mailer:
+    job_reminder:
+      subject: "Påminnelse om uppgift: %{title}, %{times}" # MT
+      # The time is left out of the subject when the reminder has a note.
+      subject_with_note: "Påminnelse om uppgift: %{title}: %{note}" # MT
+      scheduled: "Det här är en påminnelse om att du är schemalagd som ”%{job}” (%{times})." # MT
+      note_intro: "Påminnelsen har följande anteckning:" # MT
+      see_description: "Se uppgiftens beskrivning här: %{url}." # MT
+      thanks: "Tack för din insats för gemenskapen!" # MT
+    job_choosing_notice:
+      subject: "Snart är det dags för uppgiftsval!" # MT
+      coming_up_on: "Uppgiftsvalet börjar %{date}!" # MT
+      coming_up_soon: "Uppgiftsvalet börjar snart!" # MT
+      quota: "Du har %{got} förtilldelade timmar och din kvot är %{quota}, så du behöver välja %{need} vanliga timmar." # MT
+      also_choose: "Du förväntas också välja %{hours}." # MT
+      full_community_hours: "%{hours} timmar %{title}" # MT
+      begin_at: "Du kan börja välja kl. %{time}." # MT
+      schedule_intro: "Ditt schema för omgångarna ser ut så här:" # MT
+      round_with_limit: "* Kl. %{time} kan du välja upp till %{limit} timmar." # MT
+      round_finish: "* Kl. %{time} kan du välja klart." # MT
+      go_to: "Gå till %{url} vid tiderna ovan för att välja dina uppgifter. Du kan också titta in tidigare för att se vilka uppgifter som finns och planera dina val. Men du kan inte anmäla dig förrän vid tiderna ovan." # MT
+      choosing_begins: "Valet börjar kl. %{time}." # MT
+      visit: "Gå till %{url} för mer information." # MT
+      thanks: "Tack för att du är med!" # MT

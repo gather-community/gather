@@ -1,0 +1,82 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+nl:
+  nav_links:
+    people:
+      _self: "Mensen" # MT
+      households: "Huishoudens" # MT
+      directory: "Ledenlijst" # MT
+      birthdays: "Verjaardagen" # MT
+      vehicles: "Voertuigen" # MT
+      memorials: "Gedenkpagina’s" # MT
+      settings:
+        _self: "Instellingen" # MT
+        general: "Algemene instellingen" # MT
+        member_types: "Lidtypes" # MT
+    groups:
+      _self: "Groepen" # MT
+      groups: "Groepen" # MT
+      roles: "Rollen" # MT
+      domains: "Domeinen" # MT
+    meals:
+      _self: "Maaltijden" # MT
+      meals: "Maaltijden" # MT
+      jobs: "Taken" # MT
+      report: "Rapport" # MT
+      formulas: "Formules" # MT
+      roles: "Rollen" # MT
+      types: "Types" # MT
+      settings:
+        _self: "Instellingen" # MT
+        general: "Algemeen" # MT
+        restrictions: "Dieetwensen" # MT
+        reminders: "Herinneringen" # MT
+
+    calendars:
+      _self: "Agenda’s" # MT
+      events: "Afspraken" # MT
+      calendars: "Agenda’s" # MT
+      protocols: "Reglementen" # MT
+    wiki:
+      _self: "Wiki" # MT
+      wiki:
+        _self: "Wiki" # MT
+      gdrive:
+        _self: "Google Drive" # MT
+        migration:
+          dashboard:
+            status: "Status" # MT
+            owners: "Eigenaren" # MT
+            files: "Bestanden" # MT
+            logs: "Logboeken" # MT
+    work:
+      _self: "Werk" # MT
+      signups: "Aanmeldingen" # MT
+      report: "Rapport" # MT
+      jobs: "Taken" # MT
+      periods: "Periodes" # MT
+      settings: "Instellingen" # MT
+    admin:
+      _self: "Beheer" # MT
+    billing:
+      _self: "Facturatie" # MT
+      accounts: "Rekeningen" # MT
+      templates: "Sjablonen" # MT
+    personal:
+      profile: "Profiel" # MT
+      accounts: "Rekeningen" # MT
+      account: "Account" # MT
+      calendars: "Agenda’s" # MT
+      change_passwd: "Wachtwoord wijzigen" # MT
+      notifications: "Meldingen" # MT
+      sign_out: "Uitloggen" # MT

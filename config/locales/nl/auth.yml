@@ -1,0 +1,114 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+# Additional translations at https://github.com/plataformatec/devise/wiki/I18n
+
+nl:
+  devise:
+    confirmations:
+      confirmed: "Je e-mailadres is bevestigd." # MT
+      send_instructions: "Je ontvangt binnen enkele minuten een e-mail met instructies om je e-mailadres te bevestigen." # MT
+      send_paranoid_instructions: "Als je e-mailadres in onze database staat, ontvang je binnen enkele minuten een e-mail met instructies om je e-mailadres te bevestigen." # MT
+    failure:
+      already_authenticated: "Je bent al ingelogd." # MT
+      inactive: "Je account is nog niet geactiveerd." # MT
+      invalid: "Ongeldig(e) %{authentication_keys} of wachtwoord." # MT
+      locked: "Je account is geblokkeerd." # MT
+      last_attempt: "Je hebt nog één poging voordat je account wordt geblokkeerd." # MT
+      not_found_in_database: "Ongeldig(e) %{authentication_keys} of wachtwoord." # MT
+      timeout: "Je sessie is verlopen. Log opnieuw in om verder te gaan." # MT
+      unauthenticated: "Log in om die pagina te bekijken." # MT
+      unconfirmed: "De eerste keer dat je inlogt, moet je een uitnodiging gebruiken." # MT
+    authentication_keys:
+      email: "e-mailadres" # MT
+    mailer:
+      confirmation_instructions:
+        subject: "Bevestig je e-mailadres" # MT
+      reset_password_instructions:
+        subject: "Je wachtwoord opnieuw instellen" # MT
+      unlock_instructions:
+        subject: "Instructies om je account te deblokkeren" # MT
+    omniauth_callbacks:
+      failure: "Inloggen via %{kind} is niet gelukt, omdat %{reason}." # MT
+      success: "Ingelogd met je %{kind}-account." # MT
+    passwords:
+      new:
+        title: "Wachtwoord vergeten" # MT
+        instructions: "Vul je e-mailadres in, dan sturen we je instructies per e-mail. Volg de instructies in de e-mail om je wachtwoord opnieuw in te stellen. Het kan even duren voordat de e-mail aankomt." # MT
+      edit:
+        title: "Vul een nieuw wachtwoord in" # MT
+        instructions: "Vul hieronder een nieuw wachtwoord in, dan word je ingelogd bij Gather." # MT
+      no_token: "Je kunt deze pagina alleen openen vanuit een e-mail om je wachtwoord opnieuw in te stellen. Kom je wel uit zo’n e-mail, controleer dan of je de volledige URL hebt gebruikt." # MT
+      send_instructions: "Je ontvangt binnen enkele minuten een e-mail met instructies om je wachtwoord opnieuw in te stellen." # MT
+      send_paranoid_instructions: "Als je e-mailadres in onze database staat, ontvang je binnen enkele minuten een link om je wachtwoord te herstellen." # MT
+      updated: "Je wachtwoord is gewijzigd. Je bent nu ingelogd." # MT
+      updated_not_active: "Je wachtwoord is gewijzigd." # MT
+    registrations:
+      destroyed: "Tot ziens! Je account is opgeheven. We hopen je snel weer te zien." # MT
+      signed_up: "Welkom! Je bent geregistreerd." # MT
+      signed_up_but_inactive: "Je bent geregistreerd. We konden je echter niet inloggen, omdat je account nog niet is geactiveerd." # MT
+      signed_up_but_locked: "Je bent geregistreerd. We konden je echter niet inloggen, omdat je account is geblokkeerd." # MT
+      signed_up_but_unconfirmed: "Er is een bericht met een bevestigingslink naar je e-mailadres gestuurd. Volg de link om je account te activeren." # MT
+      update_needs_confirmation: "Je account is bijgewerkt, maar we moeten je nieuwe e-mailadres nog controleren. Kijk in je e-mail en volg de bevestigingslink om je nieuwe e-mailadres te bevestigen." # MT
+      updated: "Je account is bijgewerkt." # MT
+    sessions:
+      new:
+        title: "Inloggen" # MT
+      signed_in: "Je bent ingelogd." # MT
+      signed_out: "Je bent uitgelogd." # MT
+      already_signed_out: "Je bent uitgelogd." # MT
+    unlocks:
+      send_instructions: "Je ontvangt binnen enkele minuten een e-mail met instructies om je account te deblokkeren." # MT
+      send_paranoid_instructions: "Als je account bestaat, ontvang je binnen enkele minuten een e-mail met instructies om het te deblokkeren." # MT
+      unlocked: "Je account is gedeblokkeerd. Log in om verder te gaan." # MT
+    # Overrides devise-i18n's "Forgot your password?" to keep our wording.
+    shared:
+      links:
+        forgot_your_password: "Weet je je wachtwoord niet?" # MT
+  auth_mailer:
+    cant_reset_password:
+      request_received: "We hebben een verzoek ontvangen om je wachtwoord opnieuw in te stellen." # MT
+      no_full_access: "Helaas heeft je profiel geen volledige toegang tot het systeem, dus je mag niet inloggen." # MT
+      contact_admin: "Neem contact op met de beheerder van Gather als je denkt dat dit niet klopt." # MT
+    confirmation_instructions:
+      use_link: "Bevestig je nieuwe e-mailadres via deze link:" # MT
+      thanks: "Bedankt voor je medewerking aan deze belangrijke beveiligingsmaatregel!" # MT
+    reset_password_instructions:
+      use_link: "We hebben een verzoek ontvangen om je wachtwoord opnieuw in te stellen. Gebruik daarvoor deze link:" # MT
+      ignore: "Heb je dit niet aangevraagd? Negeer deze e-mail dan gewoon; je wachtwoord blijft ongewijzigd." # MT
+    sign_in_invitation:
+      subject: "Instructies om in te loggen bij Gather" # MT
+      invited: "Je bent uitgenodigd om in te loggen bij Gather, het systeem dat %{community} gebruikt om de gemeenschap te beheren!" # MT
+      click_link: "Klik op de link hieronder om te beginnen." # MT
+      choose_method: "Daar kun je kiezen of je inlogt met Google of met een wachtwoord. Heb je nog geen wachtwoord, dan kun je er een instellen." # MT
+      expiry:
+        one: "Deze link verloopt over %{count} dag." # MT
+        other: "Deze link verloopt over %{count} dagen." # MT
+      see_you: "Tot snel!" # MT
+  errors:
+    messages:
+      already_confirmed: "is al bevestigd, probeer in te loggen" # MT
+      confirmation: "komt niet overeen met het wachtwoord" # MT
+      confirmation_period_expired: "moet binnen %{period} worden bevestigd, vraag een nieuwe aan" # MT
+      doesnt_match: "Komt niet overeen met het wachtwoord" # MT
+      expired: "is verlopen, vraag een nieuwe aan" # MT
+      not_found: "E-mailadres niet gevonden" # MT
+      not_locked: "was niet geblokkeerd" # MT
+      not_saved:
+        one: "Door 1 fout kon %{calendar} niet worden opgeslagen:" # MT
+        other: "Door %{count} fouten kon %{calendar} niet worden opgeslagen:" # MT
+  password:
+    strength:
+      weak: "Te zwak (score: %{bits})" # MT
+      good: "Goed (score: %{bits})" # MT
+      excellent: "Uitstekend (score: %{bits})" # MT
+    strength_info: "We controleren de sterkte van je wachtwoord met een slimme test, zodat het veilig is en niet makkelijk te kraken.\n\nZo maak je je wachtwoord sterker:\n\n  - maak het langer\n  - vermijd woorden uit het woordenboek\n  - gebruik een mix van letters, cijfers en symbolen" # MT

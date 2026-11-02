@@ -1,0 +1,111 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+sv:
+  devise:
+    confirmations:
+      confirmed: "Din e-postadress har bekräftats." # MT
+      send_instructions: "Om några minuter får du ett mejl med instruktioner för hur du bekräftar din e-postadress." # MT
+      send_paranoid_instructions: "Om din e-postadress finns i vår databas får du om några minuter ett mejl med instruktioner för hur du bekräftar den." # MT
+    failure:
+      already_authenticated: "Du är redan inloggad." # MT
+      inactive: "Ditt konto är inte aktiverat ännu." # MT
+      invalid: "Ogiltig %{authentication_keys} eller ogiltigt lösenord." # MT
+      locked: "Ditt konto är låst." # MT
+      last_attempt: "Du har ett försök kvar innan ditt konto låses." # MT
+      not_found_in_database: "Ogiltig %{authentication_keys} eller ogiltigt lösenord." # MT
+      timeout: "Din session har gått ut. Logga in igen för att fortsätta." # MT
+      unauthenticated: "Logga in för att se den här sidan." # MT
+      unconfirmed: "Du måste använda en inbjudan första gången du loggar in." # MT
+    authentication_keys:
+      email: "e-postadress" # MT
+    mailer:
+      confirmation_instructions:
+        subject: "Bekräfta din e-postadress" # MT
+      reset_password_instructions:
+        subject: "Återställ lösenord" # MT
+      unlock_instructions:
+        subject: "Instruktioner för upplåsning" # MT
+    omniauth_callbacks:
+      failure: "Det gick inte att logga in dig via %{kind} eftersom %{reason}." # MT
+      success: "Du har loggat in med ditt %{kind}-konto." # MT
+    passwords:
+      new:
+        title: "Glömt lösenord" # MT
+        instructions: "Ange din e-postadress så skickar vi instruktioner till dig. Följ dem för att återställa ditt lösenord. Det kan ta en stund innan mejlet kommer fram." # MT
+      edit:
+        title: "Ange nytt lösenord" # MT
+        instructions: "Ange ett nytt lösenord nedan så loggas du in i Gather." # MT
+      no_token: "Du kan bara komma åt den här sidan från ett mejl om lösenordsåterställning. Om du kom därifrån, kontrollera att du använde hela webbadressen." # MT
+      send_instructions: "Om några minuter får du ett mejl med instruktioner för hur du återställer ditt lösenord." # MT
+      send_paranoid_instructions: "Om din e-postadress finns i vår databas får du om några minuter en länk för att återställa ditt lösenord." # MT
+      updated: "Ditt lösenord har ändrats. Du är nu inloggad." # MT
+      updated_not_active: "Ditt lösenord har ändrats." # MT
+    registrations:
+      destroyed: "Hej då! Ditt konto har avslutats. Vi hoppas att vi ses igen snart." # MT
+      signed_up: "Välkommen! Du har registrerat dig." # MT
+      signed_up_but_inactive: "Du har registrerat dig, men vi kunde inte logga in dig eftersom ditt konto inte är aktiverat ännu." # MT
+      signed_up_but_locked: "Du har registrerat dig, men vi kunde inte logga in dig eftersom ditt konto är låst." # MT
+      signed_up_but_unconfirmed: "Ett meddelande med en bekräftelselänk har skickats till din e-postadress. Följ länken för att aktivera ditt konto." # MT
+      update_needs_confirmation: "Ditt konto har uppdaterats, men vi behöver kontrollera din nya e-postadress. Titta i din inkorg och följ bekräftelselänken." # MT
+      updated: "Ditt konto har uppdaterats." # MT
+    sessions:
+      new:
+        title: "Logga in" # MT
+      signed_in: "Du är inloggad." # MT
+      signed_out: "Du är utloggad." # MT
+      already_signed_out: "Du är utloggad." # MT
+    unlocks:
+      send_instructions: "Om några minuter får du ett mejl med instruktioner för hur du låser upp ditt konto." # MT
+      send_paranoid_instructions: "Om ditt konto finns får du om några minuter ett mejl med instruktioner för hur du låser upp det." # MT
+      unlocked: "Ditt konto har låsts upp. Logga in för att fortsätta." # MT
+    shared:
+      links:
+        forgot_your_password: "Vet du inte ditt lösenord?" # MT
+  auth_mailer:
+    cant_reset_password:
+      request_received: "Vi har fått en begäran om att återställa ditt lösenord." # MT
+      no_full_access: "Tyvärr har din profil inte full åtkomst till systemet, så du kan inte logga in." # MT
+      contact_admin: "Om du tror att det är fel, kontakta Gather-administratören i din gemenskap." # MT
+    confirmation_instructions:
+      use_link: "Bekräfta din nya e-postadress via den här länken:" # MT
+      thanks: "Tack för att du hjälper till med den här viktiga säkerhetsåtgärden!" # MT
+    reset_password_instructions:
+      use_link: "Vi har fått en begäran om att återställa ditt lösenord. Använd den här länken för att göra det:" # MT
+      ignore: "Om du inte har bett om detta kan du strunta i mejlet. Ditt lösenord ändras inte." # MT
+    sign_in_invitation:
+      subject: "Instruktioner för att logga in i Gather" # MT
+      invited: "Du har bjudits in att logga in i Gather, systemet som %{community} använder för att hantera gemenskapen!" # MT
+      click_link: "Klicka på länken nedan för att komma igång." # MT
+      choose_method: "Där kan du välja att logga in med Google eller med ett lösenord. Om du inte har ett lösenord än kan du skapa ett." # MT
+      expiry:
+        one: "Länken går ut om %{count} dag." # MT
+        other: "Länken går ut om %{count} dagar." # MT
+      see_you: "Vi ses snart!" # MT
+  errors:
+    messages:
+      already_confirmed: "har redan bekräftats, försök att logga in" # MT
+      confirmation: "stämmer inte med lösenordet" # MT
+      confirmation_period_expired: "måste bekräftas inom %{period}, begär en ny" # MT
+      doesnt_match: "Stämmer inte med lösenordet" # MT
+      expired: "har gått ut, begär en ny" # MT
+      not_found: "E-postadressen hittades inte" # MT
+      not_locked: "var inte låst" # MT
+      not_saved:
+        one: "Ett fel hindrade %{calendar} från att sparas:" # MT
+        other: "%{count} fel hindrade %{calendar} från att sparas:" # MT
+  password:
+    strength:
+      weak: "För svagt (poäng: %{bits})" # MT
+      good: "Bra (poäng: %{bits})" # MT
+      excellent: "Utmärkt (poäng: %{bits})" # MT
+    strength_info: "Vi kontrollerar hur starkt ditt lösenord är med ett smart test, så att det är säkert och inte lätt att knäcka.\n\nSå gör du lösenordet starkare:\n\n  - gör det längre\n  - undvik ord som finns i ordboken\n  - blanda bokstäver, siffror och specialtecken" # MT

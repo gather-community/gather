@@ -14,6 +14,7 @@ describe Community, :without_tenant do
     "Community",                                    # managed directly by this test (Defaults.community is destroyed)
     "Domain",                                       # cluster-scoped, spans communities; orphan cleanup tested below
     "DomainOwnership",                              # destroyed via community cascade; Domain survival tested below
+    "DomainMail::Check",                            # destroyed via Domain cascade; tested in orphan tests below
     "FeatureFlag",                                  # not tenant-scoped
     "FeatureFlagUser",                              # not tenant-scoped
     "Groups::Affiliation",                          # destroyed via community cascade; Group survival tested below
@@ -157,6 +158,7 @@ describe Community, :without_tenant do
       domain_only     = create(:domain)
       domain_spanning = create(:domain)
       domain_spanning.communities << community2
+      orphan_check = create(:domain_mail_check, domain: domain_only)
 
       group_only     = create(:group)
       group_spanning = create(:group)
@@ -185,6 +187,8 @@ describe Community, :without_tenant do
       # one that also belongs to community2 must survive.
       expect(Domain.exists?(domain_only.id)).to be(false),
         "domain affiliated only with the destroyed community should be gone"
+      expect(DomainMail::Check.exists?(orphan_check.id)).to be(false),
+        "mail migration check should be destroyed along with its domain"
       expect(Domain.exists?(domain_spanning.id)).to be(true),
         "domain spanning two communities should survive when only one is destroyed"
       expect(Groups::Group.exists?(group_only.id)).to be(false),

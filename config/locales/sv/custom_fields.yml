@@ -1,0 +1,149 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+sv:
+  custom_fields:
+    boolean:
+      "true": "Ja" # MT
+      "false": "Nej" # MT
+    labels:
+      community:
+        settings:
+          main_nav_customizations: "Anpassningar av huvudmenyn" # MT
+          time_zone: "Tidszon" # MT
+          default_landing_page: "Standardstartsida" # MT
+          people:
+            _self: "Personer" # MT
+            default_directory_sort: "Standardsortering i medlemsförteckningen" # MT
+            plain_user_selects: "Enkla personlistor" # MT
+            user_custom_fields_spec: "Specifikation av egna personfält" # MT
+          meals:
+            _self: "Måltider" # MT
+            reimb_instructions: "Instruktioner för ersättning" # MT
+            allergens: "Allergener" # MT
+            show_reimb_form: "Visa utskrivbart ersättningsformulär" # MT
+            cooks_can_finalize: "Kockar får slutföra måltider" # MT
+            cooks_can_change_invites: "Kockar får ändra inbjudna gemenskaper" # MT
+            default_invites: "Inbjudna gemenskaper som standard" # MT
+            allow_job_signup_on_meal_page: "Tillåt anmälan till måltidsuppgifter på måltidssidan" # MT
+            default_capacity: "Standardkapacitet" # MT
+            reminder_lead_times:
+              _self: "Påminnelse dagar i förväg" # MT
+              diner: "Påminnelse till matgäster" # MT
+              early_menu: "Tidig menypåminnelse" # MT
+              late_menu: "Sen menypåminnelse" # MT
+          calendars:
+            _self: "Kalendrar" # MT
+            kinds: "Typer" # MT
+            meals:
+              _self: "Måltidshändelser" # MT
+              default_total_time: "Standardtid totalt" # MT
+              default_prep_time: "Standardtid för förberedelser" # MT
+          work:
+            _self: "Arbete" # MT
+            default_date_filter: "Standarddatumfilter för anmälningar" # MT
+          billing:
+            _self: "Fakturering" # MT
+            contact: "Kontakt för fakturering" # MT
+            payment_instructions: "Betalningsinstruktioner" # MT
+            statement_terms: "Betalningsvillkor för kontoutdrag" # MT
+            statement_reminder_lead_time: "Påminnelse om kontoutdrag\ndagar i förväg" # MT
+            paypal_reimbursement: "Erbjud ersättning via PayPal" # MT
+            payment_methods:
+              _self: "Information om betalningsmetoder" # MT
+              paypal_me: "PayPal.me" # MT
+              paypal_email: "PayPal via e-post" # MT
+              paypal_friend: "Be medlemmar skicka PayPal-betalningar som ”skicka till en vän”" # MT
+              check_payee: "Mottagare av check" # MT
+              check_address: "Postadress för checkar" # MT
+              check_dropoff: "Instruktioner för att lämna checkar" # MT
+              cash_dropoff: "Instruktioner för att lämna kontanter" # MT
+              additional_info: "Övrig information" # MT
+              show_billing_contact: "Visa e-post för fakturering med övrig information" # MT
+            late_fee_policy:
+              _self: "Regler för förseningsavgift" # MT
+              fee_type: "Avgiftstyp" # MT
+              threshold: "Tröskel" # MT
+              amount: "Belopp" # MT
+    hints:
+      community:
+        settings:
+          main_nav_customizations: "Här redigerar du länkarna i huvudmenyn. Ange länkar i Markdown-format. Exempel: [Länknamn](https://example.com). Om länknamnet är samma som en befintlig länk ersätter den standardadressen. En tom webbadress tar bort länken helt. All annan text och formatering ignoreras." # MT
+          people:
+            plain_user_selects: "Använd enkla rullgardinslistor i stället för sökrutor. Kan passa bättre för mindre gemenskaper." # MT
+            user_custom_fields_spec: "Ange en specifikation i YAML-format för egna fält som visas när man ser och redigerar personer i gemenskapen. Kontakta Gathers support om du behöver hjälp att skriva specifikationen." # MT
+          meals:
+            reimb_instructions: "Vad kockar ska göra med sina kvitton för att få ersättning. Till exempel ange beloppen på måltidens redigeringssida i Gather, använda det inbyggda ersättningsformuläret eller något annat sätt." # MT
+            allergens: "Kommaseparerad lista över allergener som kockar väljer bland när de lägger upp menyer." # MT
+            show_reimb_form: "Om ett utskrivbart ersättningsformulär (med belopp för matvaror och baslager samt ersättningssätt) ska visas på måltidens sammanfattningssida. Avmarkera om ni hellre sköter ersättningen elektroniskt." # MT
+            cooks_can_finalize: "Om huvudkockar får slutföra måltider, utöver faktureringsansvariga, måltidssamordnare och administratörer." # MT
+            cooks_can_change_invites: "Om huvudkockar får ändra vilka gemenskaper som bjuds in till en måltid." # MT
+            default_invites: "Vilka gemenskaper som bjuds in till en måltid som standard." # MT
+            allow_job_signup_on_meal_page: "Om matgäster kan erbjuda sig att hjälpa till med en måltid när de anmäler sig till den." # MT
+            default_capacity: "Standardinställningen för hur många personer en måltid räcker till." # MT
+            reminder_lead_times:
+              _self: "Hur många dagar i förväg olika påminnelser skickas. Påminnelser skickas kl. 6 lokal tid. Om du anger ”0” skickas påminnelsen på morgonen samma dag som måltiden. Fler inställningar för påminnelser finns på sidan för måltidsroller." # MT
+              diner: "Påminnelsen som skickas till alla matgäster." # MT
+              early_menu: "Påminnelsen till huvudkocken om att lägga upp en meny." # MT
+              late_menu: "En andra, mer brådskande påminnelse till huvudkocken om menyn fortfarande saknas. Bör vara färre dagar i förväg än den tidiga menypåminnelsen." # MT
+          calendars:
+            kinds: "Olika typer av händelser, separerade med kommatecken. Kan användas i regelverk. Om fältet är tomt visas inte fältet ”Typ” i händelseformuläret." # MT
+            meals:
+              default_total_time: "Standardlängd för måltidshändelser i minuter, inklusive förberedelser och städning" # MT
+              default_prep_time: "Standardtid för att förbereda måltider i minuter" # MT
+          billing:
+            contact: "E-post för frågor om fakturering. Visas med betalningsinstruktionerna." # MT
+            payment_instructions: "Hur man betalar för ett konto." # MT
+            statement_terms: "Antal dagar efter att ett kontoutdrag skapats tills det förfaller. Om noll (0) har kontoutdrag inget förfallodatum." # MT
+            statement_reminder_lead_time: "Hur många dagar före förfallodatumet betalningspåminnelsen för kontoutdraget skickas. Påminnelser skickas inte om kontoutdragen saknar förfallodatum eller om saldot är betalt." # MT
+            paypal_reimbursement: "Låt kockar begära ersättning för måltider via PayPal. PayPal-betalningar måste göras manuellt (inte automatiskt)." # MT
+            payment_methods:
+              _self: "Instruktioner eller information för olika betalningsmetoder. Lämna tomt om metoden inte accepteras. Gå till din <a href='/accounts/mine'>kontosida</a> för att se hur instruktionerna ser ut." # MT
+              paypal_me: "Ange din <a href='https://paypal.me'>PayPal.me-länk</a>. Det är det enklaste sättet för medlemmar att betala med PayPal. Med ett företagskonto hos PayPal går det inte att undvika en avgift med den här metoden." # MT
+              paypal_email: "Om du vill ta emot PayPal men inte använda PayPal.me, ange den e-postadress som medlemmar ska skicka betalningar till." # MT
+              paypal_friend: "Gäller både PayPal.me och PayPal via e-post. Välj detta om betalningarna kan räknas som betalningar mellan vänner enligt PayPals användarvillkor. Då tillkommer inga avgifter." # MT
+              check_payee: "Ange vem checkar ska ställas ut till. Lämna tomt om checkar inte accepteras." # MT
+              check_address: "Ange en adress om du tar emot checkar per post. Då visas också instruktioner för betalning via internetbanken." # MT
+              check_dropoff: "Ange instruktioner för att lämna en check personligen. Lämna tomt om checkar måste skickas per post eller inte accepteras." # MT
+              cash_dropoff: "Ange instruktioner för att lämna kontanter personligen. Lämna tomt om kontanter inte accepteras." # MT
+              additional_info: "Ange övrig information som ska visas med betalningsinstruktionerna." # MT
+              show_billing_contact: "Om e-posten för fakturering ovan (om den finns) ska visas längst ner i betalningsinstruktionerna. Avmarkera och lägg till den själv under ”Övrig information” om du vill anpassa hur den visas." # MT
+            late_fee_policy:
+              fee_type: "Hur avgiften beräknas" # MT
+              threshold: "Lägsta utestående saldo för att en avgift ska tas ut" # MT
+              amount: "Avgiftens belopp eller procentsats (t.ex. ange ”3” för 3 % eller 3,00, beroende på typ)" # MT
+    options:
+      community:
+        settings:
+          default_landing_page:
+            meals: "Måltider" # MT
+            directory: "Medlemsförteckning" # MT
+            calendars: "Kalendrar" # MT
+            wiki: "Wiki" # MT
+          people:
+            default_directory_sort:
+              name: "Efter namn" # MT
+              unit: "Efter lägenhet" # MT
+          meals:
+            default_invites:
+              all: "Alla gemenskaper" # MT
+              own: "Bara den egna gemenskapen" # MT
+          work:
+            default_date_filter:
+              all: "Tidigare och kommande" # MT
+              curftr: "Aktuella och kommande" # MT
+          billing:
+            late_fee_policy:
+              fee_type:
+                none: "Ingen förseningsavgift" # MT
+                fixed: "Fast" # MT
+                percent: "Procent" # MT

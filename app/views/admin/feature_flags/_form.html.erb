@@ -1,0 +1,22 @@
+<div class="feature-flag-form" data-controller="admin--feature-flag-form">
+  <%= gather_form_for(form, url: form.persisted? ? admin_feature_flag_path(form) : admin_feature_flags_path) do |f| %>
+    <% unless form.persisted? %>
+      <%= f.input :name, maxlength: FeatureFlag::NAME_MAX_LENGTH, input_html: {autocomplete: "off"} %>
+    <% end %>
+    <%= f.input :mode, as: :radio_buttons, collection: FeatureFlag::MODES, include_blank: false,
+          input_html: {data: {action: "change->admin--feature-flag-form#toggleUsers"}} %>
+    <%# Only used while the flag is on for selected users. Saving in another mode deletes the users.
+        The search spans every cluster, so it uses the admin endpoint instead of /users.json. %>
+    <%= f.input :user_ids, as: :user_select, multiple: true, src: user_search_admin_feature_flags_path,
+          label_method: :full_name,
+          wrapper_html: {class: ("hidden" unless form.mode == :selected_users),
+                         data: {"admin--feature-flag-form-target": "usersField"}} %>
+    <%= form_actions do %>
+      <%= f.button :primary %>
+    <% end %>
+  <% end %>
+</div>
+
+<%= javascript_tag do %>
+  $(function() { new Gather.Views.AjaxSelect2({el: '.feature-flag-form'}); });
+<% end %>

@@ -64,6 +64,7 @@ describe "deletion dispositions", :without_tenant do
     "Community" => :none,
     "Domain" => :none,
     "DomainOwnership" => :none,
+    "DomainMail::Check" => :none,
     "FeatureFlag" => :none,
     "FeatureFlagUser" => :destroy,
     "GDrive::Config" => :none,

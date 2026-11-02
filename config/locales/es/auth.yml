@@ -1,0 +1,111 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+es:
+  devise:
+    confirmations:
+      confirmed: "Tu dirección de correo se confirmó correctamente." # MT
+      send_instructions: "En unos minutos recibirás un correo con instrucciones para confirmar tu dirección de correo." # MT
+      send_paranoid_instructions: "Si tu dirección de correo está en nuestra base de datos, en unos minutos recibirás un correo con instrucciones para confirmarla." # MT
+    failure:
+      already_authenticated: "Ya has iniciado sesión." # MT
+      inactive: "Tu cuenta aún no está activada." # MT
+      invalid: "%{authentication_keys} o contraseña no válidos." # MT
+      locked: "Tu cuenta está bloqueada." # MT
+      last_attempt: "Te queda un intento antes de que se bloquee tu cuenta." # MT
+      not_found_in_database: "%{authentication_keys} o contraseña no válidos." # MT
+      timeout: "Tu sesión expiró. Vuelve a iniciar sesión para continuar." # MT
+      unauthenticated: "Inicia sesión para ver esa página." # MT
+      unconfirmed: "La primera vez que inicies sesión debes usar una invitación." # MT
+    authentication_keys:
+      email: "Correo electrónico" # MT
+    mailer:
+      confirmation_instructions:
+        subject: "Confirma tu dirección de correo" # MT
+      reset_password_instructions:
+        subject: "Restablecimiento de tu contraseña" # MT
+      unlock_instructions:
+        subject: "Instrucciones de desbloqueo" # MT
+    omniauth_callbacks:
+      failure: "No se pudo iniciar tu sesión con %{kind} porque %{reason}." # MT
+      success: "Sesión iniciada correctamente con tu cuenta de %{kind}." # MT
+    passwords:
+      new:
+        title: "Contraseña olvidada" # MT
+        instructions: "Escribe tu dirección de correo para recibir instrucciones por correo. Síguelas para restablecer tu contraseña. El correo puede tardar unos momentos en llegar." # MT
+      edit:
+        title: "Escribe una contraseña nueva" # MT
+        instructions: "Escribe abajo una contraseña nueva e iniciarás sesión en Gather." # MT
+      no_token: "Solo puedes acceder a esta página desde un correo de restablecimiento de contraseña. Si vienes de uno, asegúrate de haber usado la URL completa." # MT
+      send_instructions: "En unos minutos recibirás un correo con instrucciones para restablecer tu contraseña." # MT
+      send_paranoid_instructions: "Si tu dirección de correo está en nuestra base de datos, en unos minutos recibirás un enlace para recuperar la contraseña." # MT
+      updated: "Tu contraseña se cambió correctamente. Ya has iniciado sesión." # MT
+      updated_not_active: "Tu contraseña se cambió correctamente." # MT
+    registrations:
+      destroyed: "¡Adiós! Tu cuenta se canceló correctamente. Esperamos volver a verte pronto." # MT
+      signed_up: "¡Bienvenido! Te registraste correctamente." # MT
+      signed_up_but_inactive: "Te registraste correctamente, pero no pudimos iniciar tu sesión porque tu cuenta aún no está activada." # MT
+      signed_up_but_locked: "Te registraste correctamente, pero no pudimos iniciar tu sesión porque tu cuenta está bloqueada." # MT
+      signed_up_but_unconfirmed: "Se envió un mensaje con un enlace de confirmación a tu dirección de correo. Sigue el enlace para activar tu cuenta." # MT
+      update_needs_confirmation: "Tu cuenta se actualizó correctamente, pero tenemos que verificar tu nueva dirección de correo. Revisa tu correo y sigue el enlace para confirmarla." # MT
+      updated: "Tu cuenta se actualizó correctamente." # MT
+    sessions:
+      new:
+        title: "Iniciar sesión" # MT
+      signed_in: "Sesión iniciada correctamente." # MT
+      signed_out: "Sesión cerrada correctamente." # MT
+      already_signed_out: "Sesión cerrada correctamente." # MT
+    unlocks:
+      send_instructions: "En unos minutos recibirás un correo con instrucciones para desbloquear tu cuenta." # MT
+      send_paranoid_instructions: "Si tu cuenta existe, en unos minutos recibirás un correo con instrucciones para desbloquearla." # MT
+      unlocked: "Tu cuenta se desbloqueó correctamente. Inicia sesión para continuar." # MT
+    shared:
+      links:
+        forgot_your_password: "¿No sabes tu contraseña?" # MT
+  auth_mailer:
+    cant_reset_password:
+      request_received: "Recibimos una solicitud para restablecer tu contraseña." # MT
+      no_full_access: "Lamentablemente, tu perfil no tiene acceso completo al sistema y por eso no puedes iniciar sesión." # MT
+      contact_admin: "Si crees que es un error, ponte en contacto con el administrador de Gather de tu comunidad." # MT
+    confirmation_instructions:
+      use_link: "Confirma tu nueva dirección de correo con este enlace:" # MT
+      thanks: "¡Gracias por colaborar con esta importante medida de seguridad!" # MT
+    reset_password_instructions:
+      use_link: "Recibimos una solicitud para restablecer tu contraseña. Para hacerlo, usa este enlace:" # MT
+      ignore: "Si no hiciste esta solicitud, ignora este correo y tu contraseña no cambiará." # MT
+    sign_in_invitation:
+      subject: "Instrucciones para iniciar sesión en Gather" # MT
+      invited: "¡Te han invitado a iniciar sesión en Gather, el sistema de gestión comunitaria de %{community}!" # MT
+      click_link: "Haz clic en el enlace de abajo para empezar." # MT
+      choose_method: "Desde ahí podrás elegir iniciar sesión con Google o con una contraseña. Si aún no tienes contraseña, podrás crearla." # MT
+      expiry:
+        one: "Este enlace caducará en %{count} día." # MT
+        other: "Este enlace caducará en %{count} días." # MT
+      see_you: "¡Esperamos verte pronto!" # MT
+  errors:
+    messages:
+      already_confirmed: "ya estaba confirmado, intenta iniciar sesión" # MT
+      confirmation: "no coincide con la contraseña" # MT
+      confirmation_period_expired: "debe confirmarse en un plazo de %{period}, solicita uno nuevo" # MT
+      doesnt_match: "No coincide con la contraseña" # MT
+      expired: "ha caducado, solicita uno nuevo" # MT
+      not_found: "No se encontró el correo" # MT
+      not_locked: "no estaba bloqueado" # MT
+      not_saved:
+        one: "Un error impidió guardar este %{calendar}:" # MT
+        other: "%{count} errores impidieron guardar este %{calendar}:" # MT
+  password:
+    strength:
+      weak: "Demasiado débil (puntuación: %{bits})" # MT
+      good: "Buena (puntuación: %{bits})" # MT
+      excellent: "Excelente (puntuación: %{bits})" # MT
+    strength_info: "Usamos una comprobación inteligente de la seguridad de la contraseña para asegurarnos de que la tuya es segura y no se puede descifrar fácilmente.\n\nPuedes hacer más segura tu contraseña:\n\n  - haciéndola más larga\n  - evitando palabras del diccionario\n  - combinando letras, números y símbolos" # MT

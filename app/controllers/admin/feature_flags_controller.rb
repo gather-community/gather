@@ -1,0 +1,79 @@
+# frozen_string_literal: true
+
+module Admin
+  # Operator dashboard for feature flags: set each flag off, on for selected users, or on for
+  # everyone, and choose the selected users. Flags are global, and users can come from any cluster.
+  class FeatureFlagsController < AdminController
+    include UserSelectJson
+
+    def index
+      authorize(%i[admin feature_flag])
+      @flags = policy_scope([:admin, FeatureFlag]).by_name
+      @user_counts = FeatureFlagUser.where(feature_flag: @flags).group(:feature_flag_id).count
+    end
+
+    def show
+      authorize(%i[admin feature_flag])
+      @flag = find_flag
+      @users = @flag.users.including_communities.by_name.decorate
+    end
+
+    def new
+      authorize(%i[admin feature_flag])
+      @form = FeatureFlagForm.new
+    end
+
+    def edit
+      authorize(%i[admin feature_flag])
+      @form = FeatureFlagForm.new(flag: find_flag)
+    end
+
+    def create
+      authorize(%i[admin feature_flag])
+      @form = FeatureFlagForm.new(params: params.require(:feature_flag))
+      if @form.save
+        flash[:success] = t("admin.feature_flags.created", name: @form.name)
+        redirect_to(admin_feature_flag_path(@form.flag))
+      else
+        render(:new, status: :unprocessable_entity)
+      end
+    end
+
+    def update
+      authorize(%i[admin feature_flag])
+      @form = FeatureFlagForm.new(flag: find_flag, params: params.require(:feature_flag),
+        permitted: policy(%i[admin feature_flag]).permitted_attributes_for_update)
+      if @form.save
+        flash[:success] = t("admin.feature_flags.updated", name: @form.name)
+        redirect_to(admin_feature_flag_path(@form.flag))
+      else
+        render(:edit, status: :unprocessable_entity)
+      end
+    end
+
+    def destroy
+      authorize(%i[admin feature_flag])
+      flag = find_flag
+      flag.destroy!
+      flash[:success] = t("admin.feature_flags.deleted", name: flag.name)
+      redirect_to(admin_feature_flags_path)
+    end
+
+    # JSON for the Users field's select2. Matches active users in any cluster by name or email. On the
+    # apex domain tenant scoping is off, which is why this can't use /users.json.
+    def user_search
+      authorize(%i[admin feature_flag])
+      pattern = "%#{User.sanitize_sql_like(params[:search].to_s.strip)}%"
+      users = User.active.non_placeholder
+        .where("(users.first_name || ' ' || users.last_name) ILIKE :p OR users.email ILIKE :p", p: pattern)
+        .including_communities.by_name
+      render_user_select_json(users, details: true)
+    end
+
+    private
+
+    def find_flag
+      policy_scope([:admin, FeatureFlag]).find(params[:id])
+    end
+  end
+end

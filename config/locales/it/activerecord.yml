@@ -13,6 +13,10 @@
 it:
   activemodel:
     attributes:
+      feature_flag:
+        name: "Nome" # MT
+        mode: "Stato" # MT
+        user_ids: "Utenti" # MT
       # EventletForm (drag-and-drop), for its error messages.
       calendars/eventlet:
         starts_at: "Ora di inizio" # MT
@@ -38,6 +42,10 @@ it:
         repeat_count: "Numero di volte" # MT
     errors:
       models:
+        feature_flag:
+          attributes:
+            name:
+              invalid: "deve iniziare con una lettera minuscola e contenere solo lettere minuscole, numeri e trattini bassi" # MT
         # EventForm, which takes Calendars::Event's model name.
         calendars/event:
           attributes:
@@ -92,6 +100,7 @@ it:
               in_past: "non si può spostare a un momento passato" # MT
   activerecord:
     models:
+      feature_flag: "Feature flag" # MT
       meals/meal: "Pasto" # MT
     attributes:
       user:

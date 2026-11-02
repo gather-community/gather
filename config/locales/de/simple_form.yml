@@ -82,6 +82,9 @@ de:
       wiki_page:
         comment: "Ein Kommentar zu dieser Änderung." # MT
     hints:
+      feature_flag:
+        name: "Der Name, den der Code abfragt, z. B. messaging für FeatureFlag.lookup(\"messaging\"). Kleinbuchstaben, Ziffern und Unterstriche. Er kann später nicht geändert werden." # MT
+        user_ids: "Nur diese Benutzer sehen die Funktion. Änderungen werden beim Speichern wirksam. Wenn du das Flag als aus oder für alle an speicherst, werden sie entfernt." # MT
       markdown_suffix_html: "Du kannst <a href='/about/markdown' target='_new'>Formatierungen</a> verwenden." # MT
       communities_signup:
         community_name: "Bis zu 20 Zeichen." # MT
@@ -206,6 +209,11 @@ de:
         round_duration: "Wie lange soll jede Runde dauern? Die Zeit sollte gerade reichen, damit eine durchschnittliche Person in Ruhe wählen kann." # MT
         job_copy_source_id: "Wähle bei Bedarf einen Zeitraum, aus dem beim Anlegen Aufgaben kopiert werden. Mahlzeit-Aufgaben werden nicht kopiert, sondern abgeglichen (siehe unten)." # MT
     options:
+      feature_flag:
+        mode:
+          "off": "Aus" # MT
+          selected_users: "An für ausgewählte Benutzer" # MT
+          everyone: "An für alle" # MT
       calendars_event:
         repeat_frequency:
           none: "Nie" # MT

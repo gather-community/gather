@@ -12,6 +12,43 @@
 # ======================================================================================================
 nb:
   admin:
+    feature_flags:
+      created: "Flagget «%{name}» er opprettet." # MT
+      updated: "Flagget «%{name}» er lagret." # MT
+      deleted: "Flagget «%{name}» er slettet." # MT
+      modes:
+        "off": "Av" # MT
+        selected_users: "Valgte brukere" # MT
+        everyone: "Alle" # MT
+      index:
+        title: "Funksjonsflagg" # MT
+        intro: "Funksjonsflagg slår av og på funksjoner som ikke er lansert ennå. Hvert flagg kan være av, på bare for valgte brukere (fra hvilket som helst fellesskap) eller på for alle." # MT
+        new_flag: "Nytt flagg" # MT
+        none_found: "Ingen funksjonsflagg ennå." # MT
+        headers:
+          name: "Flagg" # MT
+          state: "Tilstand" # MT
+          users: "Valgte brukere" # MT
+        user_count:
+          one: "%{count} bruker" # MT
+          other: "%{count} brukere" # MT
+      new:
+        title: "Nytt funksjonsflagg" # MT
+      edit:
+        title: "Rediger funksjonsflagg: %{name}" # MT
+      show:
+        title: "Funksjonsflagg: %{name}" # MT
+        delete: "Slett" # MT
+        delete_confirm: "Slette flagget «%{name}» og listen over valgte brukere? All kode som slår opp dette flagget, vil behandle det som av." # MT
+        state: "Tilstand" # MT
+        usage: "I koden" # MT
+        created_at: "Opprettet" # MT
+        users_heading: "Valgte brukere" # MT
+        no_users: "Ingen brukere valgt ennå. Rediger flagget for å legge til noen." # MT
+        headers:
+          name: "Navn" # MT
+          community: "Fellesskap" # MT
+          email: "E-post" # MT
     domains:
       refresh_all_started:
         one: "Sjekker %{count} domene i bakgrunnen. Det bør ta omtrent %{seconds} sekunder. Last inn siden på nytt for å se resultatene." # MT

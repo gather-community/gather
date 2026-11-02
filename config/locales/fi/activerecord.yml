@@ -13,6 +13,10 @@
 fi:
   activemodel:
     attributes:
+      feature_flag:
+        name: "Nimi" # MT
+        mode: "Tila" # MT
+        user_ids: "Käyttäjät" # MT
       # EventletForm (drag-and-drop), for its error messages.
       calendars/eventlet:
         starts_at: "Alkamisaika" # MT
@@ -38,6 +42,10 @@ fi:
         repeat_count: "Kertojen määrä" # MT
     errors:
       models:
+        feature_flag:
+          attributes:
+            name:
+              invalid: "täytyy alkaa pienellä kirjaimella ja sisältää vain pieniä kirjaimia, numeroita ja alaviivoja" # MT
         # EventForm, which takes Calendars::Event's model name.
         calendars/event:
           attributes:
@@ -92,6 +100,7 @@ fi:
               in_past: "ei voi muuttaa menneeseen aikaan" # MT
   activerecord:
     models:
+      feature_flag: "Ominaisuuslippu" # MT
       meals/meal: "Ateria" # MT
     attributes:
       user:

@@ -12,6 +12,43 @@
 # ======================================================================================================
 fi:
   admin:
+    feature_flags:
+      created: "Lippu ”%{name}” luotiin." # MT
+      updated: "Lippu ”%{name}” tallennettiin." # MT
+      deleted: "Lippu ”%{name}” poistettiin." # MT
+      modes:
+        "off": "Pois" # MT
+        selected_users: "Valitut käyttäjät" # MT
+        everyone: "Kaikki" # MT
+      index:
+        title: "Ominaisuusliput" # MT
+        intro: "Ominaisuusliput kytkevät julkaisemattomia ominaisuuksia päälle ja pois. Kukin lippu voi olla pois päältä, päällä vain valituille käyttäjille (mistä tahansa yhteisöstä) tai päällä kaikille." # MT
+        new_flag: "Uusi lippu" # MT
+        none_found: "Ominaisuuslippuja ei ole vielä." # MT
+        headers:
+          name: "Lippu" # MT
+          state: "Tila" # MT
+          users: "Valitut käyttäjät" # MT
+        user_count:
+          one: "%{count} käyttäjä" # MT
+          other: "%{count} käyttäjää" # MT
+      new:
+        title: "Uusi ominaisuuslippu" # MT
+      edit:
+        title: "Muokkaa ominaisuuslippua: %{name}" # MT
+      show:
+        title: "Ominaisuuslippu: %{name}" # MT
+        delete: "Poista" # MT
+        delete_confirm: "Poistetaanko lippu ”%{name}” ja sen valittujen käyttäjien luettelo? Koodi, joka hakee tätä lippua, käsittelee sitä pois päältä olevana." # MT
+        state: "Tila" # MT
+        usage: "Koodissa" # MT
+        created_at: "Luotu" # MT
+        users_heading: "Valitut käyttäjät" # MT
+        no_users: "Käyttäjiä ei ole vielä valittu. Lisää käyttäjiä muokkaamalla lippua." # MT
+        headers:
+          name: "Nimi" # MT
+          community: "Yhteisö" # MT
+          email: "Sähköposti" # MT
     domains:
       refresh_all_started:
         one: "Tarkistetaan %{count} verkkotunnus taustalla. Tämän pitäisi kestää noin %{seconds} sekuntia. Lataa sivu uudelleen nähdäksesi tulokset." # MT

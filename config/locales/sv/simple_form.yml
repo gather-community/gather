@@ -82,6 +82,9 @@ sv:
       wiki_page:
         comment: "En kommentar om ändringen." # MT
     hints:
+      feature_flag:
+        name: "Namnet som koden slår upp, t.ex. messaging för FeatureFlag.lookup(\"messaging\"). Små bokstäver, siffror och understreck. Det kan inte ändras senare." # MT
+        user_ids: "Bara de här användarna ser funktionen. Ändringarna gäller när du sparar. Om du sparar flaggan som av eller på för alla tas de bort." # MT
       markdown_suffix_html: "Du kan använda <a href='/about/markdown' target='_new'>formatering</a>." # MT
       communities_signup:
         community_name: "Högst 20 tecken." # MT
@@ -206,6 +209,11 @@ sv:
         round_duration: "Hur lång ska varje omgång vara? Tiden ska räcka för att en genomsnittlig person ska kunna välja i lugn och ro." # MT
         job_copy_source_id: "Välj en period att kopiera uppgifter från när perioden skapas, om du vill. Måltidsuppgifter kopieras inte utan ska synkroniseras i stället (se nedan)." # MT
     options:
+      feature_flag:
+        mode:
+          "off": "Av" # MT
+          selected_users: "På för valda användare" # MT
+          everyone: "På för alla" # MT
       calendars_event:
         repeat_frequency:
           none: "Aldrig" # MT

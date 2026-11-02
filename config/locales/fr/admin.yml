@@ -12,6 +12,43 @@
 # ======================================================================================================
 fr:
   admin:
+    feature_flags:
+      created: "L'indicateur « %{name} » a été créé." # MT
+      updated: "L'indicateur « %{name} » a été enregistré." # MT
+      deleted: "L'indicateur « %{name} » a été supprimé." # MT
+      modes:
+        "off": "Désactivé" # MT
+        selected_users: "Utilisateurs sélectionnés" # MT
+        everyone: "Tout le monde" # MT
+      index:
+        title: "Indicateurs de fonctionnalité" # MT
+        intro: "Les indicateurs de fonctionnalité activent et désactivent des fonctionnalités pas encore publiées. Chaque indicateur peut être désactivé, activé uniquement pour des utilisateurs sélectionnés (de n'importe quelle communauté), ou activé pour tout le monde." # MT
+        new_flag: "Nouvel indicateur" # MT
+        none_found: "Aucun indicateur de fonctionnalité pour l'instant." # MT
+        headers:
+          name: "Indicateur" # MT
+          state: "État" # MT
+          users: "Utilisateurs sélectionnés" # MT
+        user_count:
+          one: "%{count} utilisateur" # MT
+          other: "%{count} utilisateurs" # MT
+      new:
+        title: "Nouvel indicateur de fonctionnalité" # MT
+      edit:
+        title: "Modifier l'indicateur de fonctionnalité : %{name}" # MT
+      show:
+        title: "Indicateur de fonctionnalité : %{name}" # MT
+        delete: "Supprimer" # MT
+        delete_confirm: "Supprimer l'indicateur « %{name} » et sa liste d'utilisateurs sélectionnés ? Tout code qui consulte cet indicateur le considérera comme désactivé." # MT
+        state: "État" # MT
+        usage: "Dans le code" # MT
+        created_at: "Créé le" # MT
+        users_heading: "Utilisateurs sélectionnés" # MT
+        no_users: "Aucun utilisateur sélectionné pour l'instant. Modifiez l'indicateur pour en ajouter." # MT
+        headers:
+          name: "Nom" # MT
+          community: "Communauté" # MT
+          email: "E-mail" # MT
     domains:
       refresh_all_started:
         one: "Vérification de %{count} domaine en arrière-plan. Cela devrait prendre environ %{seconds} secondes. Rechargez cette page pour voir les résultats." # MT

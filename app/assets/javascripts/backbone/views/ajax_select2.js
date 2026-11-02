@@ -71,7 +71,8 @@ Gather.Views.AjaxSelect2 = Backbone.View.extend({
     return {
       results: data.results.map(u => ({
         id: u.id,
-        text: u[labelAttr]
+        text: u[labelAttr],
+        details: u.details
       })),
       pagination: {
         more: data.meta && data.meta.more
@@ -93,12 +94,18 @@ Gather.Views.AjaxSelect2 = Backbone.View.extend({
   },
 
   /*
-   * Adds a [Create New] suffix in the result list if an item has newTag true.
-   * Only applicable if `tags` is true.
+   * Adds a [Create New] suffix in the result list if an item has newTag true (only applicable if
+   * `tags` is true). Shows a muted second line if the endpoint sent `details` (e.g. a user's
+   * community and email). Built with .text() so nothing from the server is treated as HTML.
    */
   templateResult(params) {
     if (params.newTag) {
       return `${params.text} [${I18n.t("common.create_new")}]`;
+    } else if (params.details) {
+      return $("<span>").append(
+        $("<span class=\"select2-result-name\">").text(params.text),
+        $("<span class=\"select2-result-details\">").text(params.details)
+      );
     } else {
       return params.text;
     }

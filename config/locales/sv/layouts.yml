@@ -35,6 +35,7 @@ sv:
       communities: "Gemenskaper" # MT
       resync_subscriptions: "Synkronisera abonnemang igen" # MT
       domains: "Domäner" # MT
+      feature_flags: "Funktionsflaggor" # MT
       # Shown on pages in machine-translated locales (Gather::Locales::MACHINE_TRANSLATED).
       machine_translated: "Den här sidan har översatts automatiskt och kan innehålla fel." # MT
       machine_translated_with_link_html: "Den här sidan har översatts automatiskt och kan innehålla fel. %{link}" # MT

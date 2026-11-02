@@ -12,6 +12,43 @@
 # ======================================================================================================
 es:
   admin:
+    feature_flags:
+      created: "Se creó el indicador «%{name}»." # MT
+      updated: "Se guardó el indicador «%{name}»." # MT
+      deleted: "Se eliminó el indicador «%{name}»." # MT
+      modes:
+        "off": "Desactivado" # MT
+        selected_users: "Usuarios seleccionados" # MT
+        everyone: "Todos" # MT
+      index:
+        title: "Indicadores de funcionalidad" # MT
+        intro: "Los indicadores de funcionalidad activan y desactivan funciones aún no publicadas. Cada indicador puede estar desactivado, activado solo para usuarios seleccionados (de cualquier comunidad) o activado para todos." # MT
+        new_flag: "Nuevo indicador" # MT
+        none_found: "Todavía no hay indicadores de funcionalidad." # MT
+        headers:
+          name: "Indicador" # MT
+          state: "Estado" # MT
+          users: "Usuarios seleccionados" # MT
+        user_count:
+          one: "%{count} usuario" # MT
+          other: "%{count} usuarios" # MT
+      new:
+        title: "Nuevo indicador de funcionalidad" # MT
+      edit:
+        title: "Editar indicador de funcionalidad: %{name}" # MT
+      show:
+        title: "Indicador de funcionalidad: %{name}" # MT
+        delete: "Eliminar" # MT
+        delete_confirm: "¿Eliminar el indicador «%{name}» y su lista de usuarios seleccionados? Cualquier código que consulte este indicador lo tratará como desactivado." # MT
+        state: "Estado" # MT
+        usage: "En el código" # MT
+        created_at: "Creado" # MT
+        users_heading: "Usuarios seleccionados" # MT
+        no_users: "Todavía no hay usuarios seleccionados. Edita el indicador para añadir algunos." # MT
+        headers:
+          name: "Nombre" # MT
+          community: "Comunidad" # MT
+          email: "Correo electrónico" # MT
     domains:
       refresh_all_started:
         one: "Comprobando %{count} dominio en segundo plano. Debería tardar unos %{seconds} segundos. Recarga esta página para ver los resultados." # MT

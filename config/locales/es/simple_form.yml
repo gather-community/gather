@@ -82,6 +82,9 @@ es:
       wiki_page:
         comment: "Un comentario sobre este cambio." # MT
     hints:
+      feature_flag:
+        name: "El nombre que busca el código, p. ej. messaging para FeatureFlag.lookup(\"messaging\"). Letras minúsculas, números y guiones bajos. No se puede cambiar después." # MT
+        user_ids: "Solo estos usuarios ven la función. Los cambios se aplican al guardar. Si guardas el indicador como desactivado o activado para todos, se quitan." # MT
       markdown_suffix_html: "Puedes usar <a href='/about/markdown' target='_new'>formato enriquecido</a>." # MT
       communities_signup:
         community_name: "Hasta 20 caracteres." # MT
@@ -206,6 +209,11 @@ es:
         round_duration: "¿Cuánto debe durar cada ronda? Debería haber el tiempo justo para que una persona media elija con calma." # MT
         job_copy_source_id: "Si quieres, elige un período del que copiar las tareas al crear este. Las tareas de comidas no se copiarán; deben sincronizarse (ver abajo)." # MT
     options:
+      feature_flag:
+        mode:
+          "off": "Desactivado" # MT
+          selected_users: "Activado para usuarios seleccionados" # MT
+          everyone: "Activado para todos" # MT
       calendars_event:
         repeat_frequency:
           none: "Nunca" # MT

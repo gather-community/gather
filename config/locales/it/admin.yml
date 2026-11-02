@@ -12,6 +12,43 @@
 # ======================================================================================================
 it:
   admin:
+    feature_flags:
+      created: "Il flag «%{name}» è stato creato." # MT
+      updated: "Il flag «%{name}» è stato salvato." # MT
+      deleted: "Il flag «%{name}» è stato eliminato." # MT
+      modes:
+        "off": "Disattivato" # MT
+        selected_users: "Utenti selezionati" # MT
+        everyone: "Tutti" # MT
+      index:
+        title: "Feature flag" # MT
+        intro: "I feature flag attivano e disattivano funzionalità non ancora rilasciate. Ogni flag può essere disattivato, attivo solo per gli utenti selezionati (di qualsiasi comunità) oppure attivo per tutti." # MT
+        new_flag: "Nuovo flag" # MT
+        none_found: "Ancora nessun feature flag." # MT
+        headers:
+          name: "Flag" # MT
+          state: "Stato" # MT
+          users: "Utenti selezionati" # MT
+        user_count:
+          one: "%{count} utente" # MT
+          other: "%{count} utenti" # MT
+      new:
+        title: "Nuovo feature flag" # MT
+      edit:
+        title: "Modifica feature flag: %{name}" # MT
+      show:
+        title: "Feature flag: %{name}" # MT
+        delete: "Elimina" # MT
+        delete_confirm: "Eliminare il flag «%{name}» e il suo elenco di utenti selezionati? Il codice che consulta questo flag lo considererà disattivato." # MT
+        state: "Stato" # MT
+        usage: "Nel codice" # MT
+        created_at: "Creato" # MT
+        users_heading: "Utenti selezionati" # MT
+        no_users: "Ancora nessun utente selezionato. Modifica il flag per aggiungerne." # MT
+        headers:
+          name: "Nome" # MT
+          community: "Comunità" # MT
+          email: "Email" # MT
     domains:
       refresh_all_started:
         one: "Controllo in background di %{count} dominio. Dovrebbe richiedere circa %{seconds} secondi. Ricarica questa pagina per vedere i risultati." # MT

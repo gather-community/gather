@@ -13,6 +13,10 @@
 nb:
   activemodel:
     attributes:
+      feature_flag:
+        name: "Navn" # MT
+        mode: "Tilstand" # MT
+        user_ids: "Brukere" # MT
       # EventletForm (drag-and-drop), for its error messages.
       calendars/eventlet:
         starts_at: "Starttid" # MT
@@ -38,6 +42,10 @@ nb:
         repeat_count: "Antall ganger" # MT
     errors:
       models:
+        feature_flag:
+          attributes:
+            name:
+              invalid: "må begynne med en liten bokstav og kan bare inneholde små bokstaver, tall og understreker" # MT
         # EventForm, which takes Calendars::Event's model name.
         calendars/event:
           attributes:
@@ -92,6 +100,7 @@ nb:
               in_past: "kan ikke endres til et tidspunkt som har vært" # MT
   activerecord:
     models:
+      feature_flag: "Funksjonsflagg" # MT
       meals/meal: "Måltid" # MT
     attributes:
       user:

@@ -76,6 +76,13 @@ en:
       wiki_page:
         comment: "A comment about this change."
     hints:
+      feature_flag:
+        name: >-
+          The name the code looks up, e.g. messaging for FeatureFlag.lookup("messaging"). Lowercase
+          letters, numbers and underscores. It can't be changed later.
+        user_ids: >-
+          Only these users see the feature. Changes take effect when you save. Saving the flag as
+          off or on for everyone removes them.
       markdown_suffix_html: "You can use <a href='/about/markdown' target='_new'>rich formatting</a>."
       communities_signup:
         community_name: "Up to 20 characters."
@@ -200,6 +207,11 @@ en:
         round_duration: "How long should each round be? There should be just enough time for an average person to choose comfortably."
         job_copy_source_id: "Choose a period from which to copy jobs upon period creation, if desired. Meal jobs will not be copied and should be sync'd instead (see below)."
     options:
+      feature_flag:
+        mode:
+          "off": "Off"
+          selected_users: "On for selected users"
+          everyone: "On for everyone"
       calendars_event:
         repeat_frequency:
           none: "Never"

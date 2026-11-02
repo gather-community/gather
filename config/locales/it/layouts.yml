@@ -35,6 +35,7 @@ it:
       communities: "Comunità" # MT
       resync_subscriptions: "Risincronizza abbonamenti" # MT
       domains: "Domini" # MT
+      feature_flags: "Feature flag" # MT
       # Shown on pages in machine-translated locales (Gather::Locales::MACHINE_TRANSLATED).
       machine_translated: "Questa pagina è stata tradotta automaticamente e potrebbe contenere errori." # MT
       machine_translated_with_link_html: "Questa pagina è stata tradotta automaticamente e potrebbe contenere errori. %{link}" # MT

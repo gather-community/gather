@@ -88,6 +88,9 @@ fi:
       wiki_page:
         comment: "Kommentti tästä muutoksesta." # MT
     hints:
+      feature_flag:
+        name: "Nimi, jolla koodi hakee lipun, esim. messaging kutsussa FeatureFlag.lookup(\"messaging\"). Pieniä kirjaimia, numeroita ja alaviivoja. Nimeä ei voi muuttaa myöhemmin." # MT
+        user_ids: "Vain nämä käyttäjät näkevät ominaisuuden. Muutokset tulevat voimaan, kun tallennat. Jos tallennat lipun pois päältä tai päällä kaikille, heidät poistetaan." # MT
       markdown_suffix_html: "Voit käyttää <a href='/about/markdown' target='_new'>monipuolista muotoilua</a>." # MT
       communities_signup:
         community_name: "Enintään 20 merkkiä." # MT
@@ -212,6 +215,11 @@ fi:
         round_duration: "Kuinka pitkä kunkin kierroksen pitää olla? Ajan pitäisi riittää juuri ja juuri keskivertoihmiselle valita rauhassa." # MT
         job_copy_source_id: "Valitse halutessasi jakso, josta tehtävät kopioidaan jaksoa luotaessa. Ateriatehtäviä ei kopioida, vaan ne pitää synkronoida (katso alta)." # MT
     options:
+      feature_flag:
+        mode:
+          "off": "Pois" # MT
+          selected_users: "Päällä valituille käyttäjille" # MT
+          everyone: "Päällä kaikille" # MT
       calendars_event:
         repeat_frequency:
           none: "Ei koskaan" # MT

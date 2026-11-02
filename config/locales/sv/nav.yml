@@ -68,6 +68,9 @@ sv:
       settings: "Inställningar" # MT
     admin:
       _self: "Admin" # MT
+    messaging:
+      _self: "Sms" # MT
+      settings: "Inställningar" # MT
     billing:
       _self: "Fakturering" # MT
       accounts: "Konton" # MT

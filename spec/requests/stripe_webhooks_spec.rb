@@ -52,6 +52,33 @@ describe "Stripe webhooks" do
       with_default_tenant { expect(Messaging::Account.first.balance_cents).to eq(1500) }
     end
 
+    it "describes the texting setup fee line distinctly from the monthly topup" do
+      event = invoice_event("invoice.paid", line_amount: 2400)
+      event[:data][:object][:lines][:data][0][:parent] = {type: "invoice_item_details",
+                                                          invoice_item_details: {proration: false}}
+      post_event(event)
+      with_default_tenant { expect(Messaging::Transaction.first.description).to eq("Texting setup payment") }
+    end
+
+    it "starts submitting a texting registration once its setup invoice is paid" do
+      registration = with_default_tenant do
+        create(:messaging_registration, community: community, status: "awaiting_payment",
+          stripe_invoice_id: "in_test")
+      end
+      expect { post_event(invoice_event("invoice.paid", line_amount: 2400)) }
+        .to have_enqueued_job(Messaging::AdvanceRegistrationJob).with(registration.id)
+      with_default_tenant { expect(registration.reload.paid_at).to be_present }
+    end
+
+    it "doesn't restart a registration on a redelivered paid event" do
+      with_default_tenant do
+        create(:messaging_registration, community: community, status: "brand_pending",
+          stripe_invoice_id: "in_test", paid_at: 1.hour.ago)
+      end
+      expect { post_event(invoice_event("invoice.paid", line_amount: 2400)) }
+        .not_to have_enqueued_job(Messaging::AdvanceRegistrationJob)
+    end
+
     it "credits the actual invoiced (prorated) line amount" do
       post_event(invoice_event("invoice.paid", line_amount: 300))
       with_default_tenant { expect(Messaging::Transaction.first.amount_cents).to eq(300) }

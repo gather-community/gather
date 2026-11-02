@@ -68,6 +68,9 @@ nb:
       settings: "Innstillinger" # MT
     admin:
       _self: "Admin" # MT
+    messaging:
+      _self: "SMS" # MT
+      settings: "Innstillinger" # MT
     billing:
       _self: "Fakturering" # MT
       accounts: "Kontoer" # MT

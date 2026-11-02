@@ -32,6 +32,8 @@ it:
     messaging_transactions:
       credit: "Ricarica mensile messaggistica" # MT
       reversal: "Storno della ricarica messaggistica non riscossa" # MT
+      setup_credit: "Pagamento di attivazione SMS" # MT
+      setup_reversal: "Storno del pagamento di attivazione SMS non riscosso" # MT
     # e.g. "$5.00/month"
     per_month: "%{amount}/mese" # MT
     every_months:
@@ -94,6 +96,7 @@ it:
         add: "Aggiungi" # MT
         next_payment_date: "Data del prossimo pagamento" # MT
         status: "Stato" # MT
+        set_up_texting: "Attiva gli SMS" # MT
       messaging_topup_modal:
         title: "Ricarica mensile messaggistica" # MT
         intro: "Scegli quanto credito per la messaggistica aggiungere al tuo saldo ogni mese. Il metodo di pagamento registrato viene addebitato automaticamente." # MT

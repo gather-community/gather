@@ -1,0 +1,84 @@
+<% content_for(:title, t(".title")) %>
+<% costs = Messaging::SetupFormDecorator.new(@setup) %>
+<% template = Messaging::CampaignTemplate.new(current_community) %>
+
+<p><%= t(".intro") %></p>
+
+<h2><%= t(".costs") %></h2>
+<table class="key-value">
+  <% costs.setup_fee_rows.each do |label, amount| %>
+    <tr>
+      <td><%= label %></td>
+      <td><%= amount %></td>
+    </tr>
+  <% end %>
+  <tr>
+    <td><strong><%= t(".setup_fee") %></strong></td>
+    <td><strong><%= costs.setup_fee %></strong></td>
+  </tr>
+  <tr>
+    <td><%= t(".monthly_fixed") %></td>
+    <td><%= t(".per_month", amount: costs.monthly_fixed) %></td>
+  </tr>
+  <tr>
+    <td><%= t(".per_100_texts") %></td>
+    <td><%= t(".per_100", amount: costs.price_per_100_texts) %></td>
+  </tr>
+</table>
+<p class="hint"><%= t(".costs_hint") %></p>
+
+<%= gather_form_for(@setup, url: messaging_setup_path, method: :post) do |f| %>
+  <h2><%= t(".package") %></h2>
+  <p class="hint"><%= t(".package_hint", fixed: costs.monthly_fixed) %></p>
+  <%= f.input(:package_cents, as: :radio_buttons, collection: costs.package_collection) %>
+
+  <h2><%= t(".organization") %></h2>
+  <p class="hint"><%= t(".organization_hint") %></p>
+  <%= f.input(:legal_name, maxlength: Messaging::Registration::NAME_MAX) %>
+  <%= f.input(:display_name, maxlength: Messaging::Registration::NAME_MAX) %>
+  <%= f.input(:entity_type, collection: Messaging::Registration::ENTITY_TYPES.map(&:to_sym)) %>
+  <%= f.input(:ein, maxlength: Messaging::Registration::EIN_MAX) %>
+  <%= f.input(:street, maxlength: Messaging::Registration::ADDRESS_MAX) %>
+  <%= f.input(:city, maxlength: Messaging::Registration::ADDRESS_MAX) %>
+  <%= f.input(:state, collection: Messaging::SetupForm.us_states) %>
+  <%= f.input(:postal_code, maxlength: Messaging::Registration::POSTAL_CODE_MAX) %>
+  <%= f.input(:email, maxlength: Messaging::Registration::EMAIL_MAX) %>
+  <%= f.input(:phone, as: :tel, maxlength: Messaging::Registration::PHONE_MAX) %>
+  <%= f.input(:website, maxlength: Messaging::Registration::WEBSITE_MAX) %>
+
+  <h2><%= t(".campaign") %></h2>
+  <p class="hint"><%= t(".campaign_hint") %></p>
+  <%# The campaign is submitted in English, word for word, whatever the page's language. %>
+  <table class="key-value key-value-wide" lang="en">
+    <tr>
+      <td><%= t(".campaign_description") %></td>
+      <td><%= template.description %></td>
+    </tr>
+    <tr>
+      <td><%= t(".message_flow") %></td>
+      <td><%= template.message_flow %></td>
+    </tr>
+    <% template.samples.each_with_index do |sample, i| %>
+      <tr>
+        <td><%= t(".sample", number: i + 1) %></td>
+        <td><%= sample %></td>
+      </tr>
+    <% end %>
+    <tr>
+      <td><%= t(".help_reply") %></td>
+      <td><%= template.help_message %></td>
+    </tr>
+    <tr>
+      <td><%= t(".opt_out_reply") %></td>
+      <td><%= template.opt_out_message %></td>
+    </tr>
+  </table>
+
+  <h2><%= t(".payment") %></h2>
+  <p><%= t(".payment_summary", setup_fee: costs.setup_fee) %></p>
+  <%= f.input(:accept_fees, as: :boolean, label: t(".accept_fees", setup_fee: costs.setup_fee)) %>
+
+  <%= form_actions do %>
+    <%= f.button(:primary, t(".submit")) %>
+  <% end %>
+<% end %>

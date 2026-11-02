@@ -1,6 +1,21 @@
 en:
   activemodel:
     attributes:
+      # Messaging::SetupForm, which takes Messaging::Registration's model name.
+      messaging/registration:
+        package_cents: "Monthly package"
+        legal_name: "Legal name"
+        display_name: "Name people know you by"
+        entity_type: "Type of organization"
+        ein: "EIN"
+        street: "Street address"
+        city: "City"
+        state: "State"
+        postal_code: "ZIP code"
+        email: "Contact email"
+        phone: "Contact phone"
+        website: "Website"
+        accept_fees: "Setup fee"
       # EventletForm (drag-and-drop), for its error messages.
       calendars/eventlet:
         starts_at: "Start Time"
@@ -26,6 +41,15 @@ en:
         repeat_count: "Number of Times"
     errors:
       models:
+        # Messaging::SetupForm, which takes Messaging::Registration's model name.
+        messaging/registration:
+          attributes:
+            base:
+              payment_failed: "Your payment didn't go through: %{reason}"
+            ein:
+              invalid: "must be 9 digits, like 12-3456789"
+            postal_code:
+              invalid: "must be a 5-digit ZIP code"
         # EventForm, which takes Calendars::Event's model name.
         calendars/event:
           attributes:

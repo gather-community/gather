@@ -13,6 +13,21 @@
 fi:
   activemodel:
     attributes:
+      # Messaging::SetupForm, which takes Messaging::Registration's model name.
+      messaging/registration:
+        package_cents: "Kuukausipaketti" # MT
+        legal_name: "Virallinen nimi" # MT
+        display_name: "Nimi, jolla teidät tunnetaan" # MT
+        entity_type: "Organisaation tyyppi" # MT
+        ein: "EIN" # MT
+        street: "Katuosoite" # MT
+        city: "Kaupunki" # MT
+        state: "Osavaltio" # MT
+        postal_code: "Postinumero (ZIP)" # MT
+        email: "Yhteyssähköposti" # MT
+        phone: "Yhteyspuhelin" # MT
+        website: "Verkkosivusto" # MT
+        accept_fees: "Käyttöönottomaksu" # MT
       # EventletForm (drag-and-drop), for its error messages.
       calendars/eventlet:
         starts_at: "Alkamisaika" # MT
@@ -38,6 +53,15 @@ fi:
         repeat_count: "Kertojen määrä" # MT
     errors:
       models:
+        # Messaging::SetupForm, which takes Messaging::Registration's model name.
+        messaging/registration:
+          attributes:
+            base:
+              payment_failed: "Maksusi ei mennyt läpi: %{reason}" # MT
+            ein:
+              invalid: "on oltava 9 numeroa, esim. 12-3456789" # MT
+            postal_code:
+              invalid: "on oltava 5-numeroinen postinumero (ZIP)" # MT
         # EventForm, which takes Calendars::Event's model name.
         calendars/event:
           attributes:

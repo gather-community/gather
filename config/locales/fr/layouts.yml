@@ -31,6 +31,7 @@ fr:
       settings: "Paramètres" # MT
       subscription: "Abonnement" # MT
       billing: "Facturation" # MT
+      texting: "SMS" # MT
       communities: "Communautés" # MT
       resync_subscriptions: "Resynchroniser les abonnements" # MT
       domains: "Domaines" # MT

@@ -17,6 +17,10 @@ every 5.minutes do
   ].join(","))
 end
 
+every 15.minutes do
+  enqueue("Messaging::AdvanceRegistrationsJob")
+end
+
 every 1.day, at: "2:30 am" do
   enqueue("Subscription::SyncAllJob")
 end

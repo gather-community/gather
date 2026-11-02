@@ -88,6 +88,12 @@ nl:
       wiki_page:
         comment: "Een opmerking over deze wijziging." # MT
     hints:
+      messaging_registration:
+        legal_name: "Precies zoals geregistreerd bij de IRS." # MT
+        display_name: "De naam waaronder je gemeenschap bekend is, als die afwijkt van de officiële naam." # MT
+        ein: "Het 9-cijferige Employer Identification Number (fiscaal nummer) van je gemeenschap, van de IRS (de Amerikaanse belastingdienst)." # MT
+        email: "De providers kunnen over de registratie contact opnemen met dit adres." # MT
+        website: "De website van je gemeenschap, of het Gather-adres." # MT
       markdown_suffix_html: "Je kunt <a href='/about/markdown' target='_new'>uitgebreide opmaak</a> gebruiken." # MT
       communities_signup:
         community_name: "Hoogstens 20 tekens." # MT
@@ -212,6 +218,11 @@ nl:
         round_duration: "Hoe lang duurt elke ronde? Er moet net genoeg tijd zijn voor een gemiddeld persoon om rustig te kiezen." # MT
         job_copy_source_id: "Kies eventueel een periode waaruit taken worden gekopieerd bij het aanmaken van de periode. Maaltijdtaken worden niet gekopieerd, die moeten worden gesynchroniseerd (zie hieronder)." # MT
     options:
+      messaging_registration:
+        entity_type:
+          NON_PROFIT: "Non-profitorganisatie" # MT
+          PRIVATE_PROFIT: "Privébedrijf (inclusief coöperaties en LLC's)" # MT
+          GOVERNMENT: "Overheid" # MT
       calendars_event:
         repeat_frequency:
           none: "Nooit" # MT

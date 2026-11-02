@@ -13,6 +13,20 @@
 fr:
   activemodel:
     attributes:
+      messaging/registration:
+        package_cents: "Forfait mensuel" # MT
+        legal_name: "Raison sociale" # MT
+        display_name: "Nom sous lequel on vous connaît" # MT
+        entity_type: "Type d'organisation" # MT
+        ein: "EIN" # MT
+        street: "Adresse" # MT
+        city: "Ville" # MT
+        state: "État" # MT
+        postal_code: "Code postal (ZIP)" # MT
+        email: "E-mail de contact" # MT
+        phone: "Téléphone de contact" # MT
+        website: "Site web" # MT
+        accept_fees: "Frais de mise en service" # MT
       calendars/eventlet:
         starts_at: "Heure de début" # MT
         ends_at: "Heure de fin" # MT
@@ -37,6 +51,14 @@ fr:
         repeat_count: "Nombre de fois" # MT
     errors:
       models:
+        messaging/registration:
+          attributes:
+            base:
+              payment_failed: "Votre paiement n'a pas abouti : %{reason}" # MT
+            ein:
+              invalid: "doit comporter 9 chiffres, par exemple 12-3456789" # MT
+            postal_code:
+              invalid: "doit être un code postal (ZIP) à 5 chiffres" # MT
         calendars/event:
           attributes:
             base:

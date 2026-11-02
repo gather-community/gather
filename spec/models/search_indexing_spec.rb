@@ -62,6 +62,7 @@ NOT_SEARCHABLE_MODELS = [
   "Meals::SignupPart",
   "Meals::Type",
   "Messaging::Account",
+  "Messaging::Registration",
   "Messaging::Transaction",
   "People::Guardianship",
   "People::MemberType",

@@ -51,6 +51,8 @@ describe "messaging monthly topup", js: true do
 
   before do
     create(:feature_flag, name: "messaging", status: true)
+    # The package can only be changed here once texting has been set up.
+    create(:messaging_registration, :paid, community: actor.community)
     allow(Stripe::Subscription).to receive(:retrieve) do |args|
       if args[:id].to_s.start_with?("sub_topup")
         fake_topup_sub(amount_cents: 500, status: topup_status,

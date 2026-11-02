@@ -68,6 +68,9 @@ nl:
       settings: "Instellingen" # MT
     admin:
       _self: "Beheer" # MT
+    messaging:
+      _self: "Sms" # MT
+      settings: "Instellingen" # MT
     billing:
       _self: "Facturatie" # MT
       accounts: "Rekeningen" # MT

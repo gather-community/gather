@@ -4,10 +4,9 @@ require "rails_helper"
 
 describe Subscription::MessagingTopup do
   describe ".options_for" do
-    it "maps usd to the 2/5/10/20 dollar tiers in cents" do
+    it "maps usd to the 5/10/20 dollar tiers in cents, leaving out tiers below the fixed monthly costs" do
       expect(described_class.options_for("usd")).to eq(
         [
-          {cents: 200, label: "$2.00"},
           {cents: 500, label: "$5.00"},
           {cents: 1000, label: "$10.00"},
           {cents: 2000, label: "$20.00"}

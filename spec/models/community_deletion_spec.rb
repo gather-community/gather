@@ -22,7 +22,7 @@ describe Community, :without_tenant do
     "MailTestRun",                                  # not tenant-scoped
     "Reminder",                                     # STI abstract base; JobReminder/RoleReminder are the leaves
     "ReminderDelivery",                             # STI abstract base; job/role delivery subclasses are the leaves
-    "Role",                                         # Rolify; not tenant-scoped
+    "Role"                                         # Rolify; not tenant-scoped
   ].freeze
 
   it "EXEMPT_MODELS has no stale entries" do
@@ -30,7 +30,7 @@ describe Community, :without_tenant do
     actual = ApplicationRecord.descendants.reject(&:test_mock?).map(&:name)
     stale = EXEMPT_MODELS - actual
     expect(stale).to be_empty,
-      "Remove these from EXEMPT_MODELS in community_deletion_spec.rb (class no longer exists): #{stale.join(', ')}"
+      "Remove these from EXEMPT_MODELS in community_deletion_spec.rb (class no longer exists): #{stale.join(", ")}"
   end
 
   it "handles FK constraints when a user created/sponsored events in another community's calendar" do
@@ -59,7 +59,7 @@ describe Community, :without_tenant do
       # create their own config, but Community has_one :gdrive_config so only one can be destroyed
       # cleanly. All gdrive factories share this one config and item.
       shared_gdrive_config = create(:gdrive_config)
-      shared_gdrive_item   = create(:gdrive_item, gdrive_config: shared_gdrive_config)
+      shared_gdrive_item = create(:gdrive_item, gdrive_config: shared_gdrive_config)
 
       # ── Billing ───────────────────────────────────────────────────────────
       create(:account)
@@ -89,19 +89,19 @@ describe Community, :without_tenant do
 
       # ── GDrive ────────────────────────────────────────────────────────────
       # shared_gdrive_config already created above
-      create(:gdrive_item,              gdrive_config: shared_gdrive_config)
-      create(:gdrive_item_group,        item: shared_gdrive_item)
-      create(:gdrive_token,             gdrive_config: shared_gdrive_config)
+      create(:gdrive_item, gdrive_config: shared_gdrive_config)
+      create(:gdrive_item_group, item: shared_gdrive_item)
+      create(:gdrive_token, gdrive_config: shared_gdrive_config)
       create(:gdrive_synced_permission, item: shared_gdrive_item)
 
       # Migration sub-records share one operation (unique-per-community constraint).
       operation = create(:gdrive_migration_operation)
-      scan      = create(:gdrive_migration_scan, operation: operation)
+      scan = create(:gdrive_migration_scan, operation: operation)
       create(:gdrive_migration_scan_task, scan: scan)
-      create(:gdrive_migration_file,       operation: operation)
+      create(:gdrive_migration_file, operation: operation)
       create(:gdrive_migration_folder_map, operation: operation)
-      create(:gdrive_migration_log,        operation: operation)
-      create(:gdrive_migration_request,    operation: operation)
+      create(:gdrive_migration_log, operation: operation)
+      create(:gdrive_migration_request, operation: operation)
 
       # ── Groups ────────────────────────────────────────────────────────────
       create(:group)
@@ -111,6 +111,7 @@ describe Community, :without_tenant do
 
       # ── Messaging ─────────────────────────────────────────────────────────
       create(:messaging_transaction) # also creates a Messaging::Account
+      create(:messaging_registration)
 
       # ── People ────────────────────────────────────────────────────────────
       create(:user)
@@ -120,7 +121,7 @@ describe Community, :without_tenant do
       billing_template.member_types << member_type # also creates Billing::TemplateMemberType
       create(:memorial)
       create(:memorial_message)
-      create(:pet,     household: shared_household)
+      create(:pet, household: shared_household)
       create(:vehicle, household: shared_household)
 
       # ── Meals ─────────────────────────────────────────────────────────────
@@ -155,12 +156,12 @@ describe Community, :without_tenant do
       create(:work_shift)
 
       # ── Orphan tests: domain and group ────────────────────────────────────
-      domain_only     = create(:domain)
+      domain_only = create(:domain)
       domain_spanning = create(:domain)
       domain_spanning.communities << community2
       orphan_check = create(:domain_mail_check, domain: domain_only)
 
-      group_only     = create(:group)
+      group_only = create(:group)
       group_spanning = create(:group)
       group_spanning.communities << community2
 

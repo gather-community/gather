@@ -32,6 +32,7 @@ nb:
       settings: "Innstillinger" # MT
       subscription: "Abonnement" # MT
       billing: "Fakturering" # MT
+      texting: "SMS" # MT
       communities: "Fellesskap" # MT
       resync_subscriptions: "Synkroniser abonnementer på nytt" # MT
       domains: "Domener" # MT

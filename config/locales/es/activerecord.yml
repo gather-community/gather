@@ -13,6 +13,20 @@
 es:
   activemodel:
     attributes:
+      messaging/registration:
+        package_cents: "Paquete mensual" # MT
+        legal_name: "Nombre legal" # MT
+        display_name: "Nombre por el que se conoce a tu comunidad" # MT
+        entity_type: "Tipo de organización" # MT
+        ein: "EIN" # MT
+        street: "Dirección" # MT
+        city: "Ciudad" # MT
+        state: "Estado" # MT
+        postal_code: "Código postal (ZIP)" # MT
+        email: "Correo electrónico de contacto" # MT
+        phone: "Teléfono de contacto" # MT
+        website: "Sitio web" # MT
+        accept_fees: "Cuota de alta" # MT
       calendars/eventlet:
         starts_at: "Hora de inicio" # MT
         ends_at: "Hora de fin" # MT
@@ -37,6 +51,14 @@ es:
         repeat_count: "Número de veces" # MT
     errors:
       models:
+        messaging/registration:
+          attributes:
+            base:
+              payment_failed: "Tu pago no se completó: %{reason}" # MT
+            ein:
+              invalid: "debe tener 9 dígitos, como 12-3456789" # MT
+            postal_code:
+              invalid: "debe ser un código postal (ZIP) de 5 dígitos" # MT
         calendars/event:
           attributes:
             base:

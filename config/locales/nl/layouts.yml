@@ -32,6 +32,7 @@ nl:
       settings: "Instellingen" # MT
       subscription: "Abonnement" # MT
       billing: "Facturatie" # MT
+      texting: "Sms" # MT
       communities: "Gemeenschappen" # MT
       resync_subscriptions: "Abonnementen opnieuw synchroniseren" # MT
       domains: "Domeinen" # MT

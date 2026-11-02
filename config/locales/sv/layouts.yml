@@ -32,6 +32,7 @@ sv:
       settings: "Inställningar" # MT
       subscription: "Abonnemang" # MT
       billing: "Fakturering" # MT
+      texting: "Sms" # MT
       communities: "Gemenskaper" # MT
       resync_subscriptions: "Synkronisera abonnemang igen" # MT
       domains: "Domäner" # MT

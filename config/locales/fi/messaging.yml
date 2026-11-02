@@ -1,0 +1,82 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+fi:
+  messaging:
+    # Ledger descriptions for the setup fees, debited as Telnyx charges them.
+    fees:
+      brand_registration: "Organisaatiosi rekisteröinti operaattoreille" # MT
+      campaign_review: "Operaattoreiden suorittama tekstiviestiohjelmasi tarkistus" # MT
+      campaign_prepaid: "Tekstiviestiohjelman maksu, ensimmäiset 3 kuukautta" # MT
+    registration_statuses:
+      draft: "Maksamatta" # MT
+      awaiting_payment: "Odottaa maksua" # MT
+      submitting: "Lähetetään" # MT
+      brand_pending: "Organisaatiotasi vahvistetaan" # MT
+      campaign_pending: "Operaattoreiden tarkistettavana" # MT
+      approved: "Hyväksytty" # MT
+      failed: "Hylätty" # MT
+    registration_explanations:
+      draft: "Käyttöönottomaksusi ei mennyt läpi. Yritä ottaa tekstiviestit käyttöön uudelleen." # MT
+      awaiting_payment: "Rekisteröimme yhteisösi operaattoreille heti, kun maksusi on mennyt läpi." # MT
+      submitting: "Maksusi meni läpi, ja lähetämme rekisteröintisi operaattoreille." # MT
+      brand_pending: "Olemme rekisteröineet organisaatiosi operaattoreille, ja ne vahvistavat sitä parhaillaan. Tämä vie yleensä muutaman minuutin, mutta voi kestää päivän tai kaksi." # MT
+      campaign_pending: "Operaattorit tarkistavat tekstiviestiohjelmaasi. Tämä kestää yleensä 1–3 viikkoa. Lähetämme sinulle sähköpostia, kun tarkistus on valmis." # MT
+      approved: "Operaattorit ovat hyväksyneet tekstiviestiohjelmasi." # MT
+      failed: "Operaattorit eivät hyväksyneet rekisteröintiäsi. Ota yhteyttä Gatherin tukeen, niin selvitämme asian." # MT
+    settings:
+      show:
+        title: "Tekstiviestit" # MT
+        status: "Tila" # MT
+        failure_reason: "Syy" # MT
+        organization: "Organisaatio" # MT
+        entity_type: "Tyyppi" # MT
+        submitted_on: "Lähetetty" # MT
+        approved_on: "Hyväksytty" # MT
+        balance: "Viestintäsaldo" # MT
+        not_set_up: "Tekstiviestien avulla yhteisösi voi lähettää viestejä aterioista, työvuoroista ja ryhmistä. Tekstiviestejä ei ole vielä otettu käyttöön." # MT
+        set_up: "Ota tekstiviestit käyttöön" # MT
+        unsupported: "Tekstiviestit ovat toistaiseksi käytettävissä vain Yhdysvalloissa toimiville yhteisöille." # MT
+        no_subscription_html: "Jotta voit ottaa tekstiviestit käyttöön, yhteisölläsi on oltava voimassa oleva Gather-tilaus ja maksutapa. Lisää maksutapa %{link}." # MT
+        topup_exists_html: "Yhteisölläsi on jo kuukausittainen viestipaketti. Poista se %{link} ennen kuin otat tekstiviestit käyttöön, ja valitse uusi käyttöönoton aikana." # MT
+        subscription_page: "tilaussivulla" # MT
+    setups:
+      new:
+        title: "Ota tekstiviestit käyttöön" # MT
+        intro: "Yhdysvaltalaiset operaattorit vaativat, että jokainen tekstiviestejä lähettävä organisaatio rekisteröityy ensin. Gather rekisteröi yhteisösi puolestasi alla olevilla tiedoilla ja veloittaa Gather-maksutavaltasi operaattoreiden maksut ja ensimmäisen tekstiviestikuukautesi." # MT
+        costs: "Mitä se maksaa" # MT
+        setup_fee: "Käyttöönottomaksu (kertamaksu)" # MT
+        monthly_fixed: "Kiinteät kuukausikulut (ohjelmamaksu ja puhelinnumero)" # MT
+        per_month: "%{amount}/kk" # MT
+        per_100_texts: "Tekstiviestit" # MT
+        per_100: "%{amount} / 100 kpl (yksi tekstiviesti 20 henkilölle lasketaan 20 viestiksi)" # MT
+        costs_hint: "Nämä ovat operaattoreiden ja tekstiviestipalvelumme maksuja, jotka veloitamme omakustannushintaan. Käyttöönottomaksua ei palauteta, vaikka operaattorit eivät hyväksyisi rekisteröintiäsi." # MT
+        package: "Kuukausipaketti" # MT
+        package_hint: "Pakettisi veloitetaan joka kuukausi ja lisätään viestintäsaldoosi. Siitä vähennetään joka kuukausi %{fixed} kiinteitä kuluja, ja loput käytetään tekstiviesteihin." # MT
+        package_option:
+          one: "%{amount}/kk (noin %{count} tekstiviesti)" # MT
+          other: "%{amount}/kk (noin %{count} tekstiviestiä)" # MT
+        organization: "Organisaatiosi" # MT
+        organization_hint: "Operaattorit vertaavat näitä tietoja IRS:n (Yhdysvaltain veroviranomaisen) rekistereihin, joten kirjoita ne täsmälleen niin kuin ne ovat yhteisösi veroasiakirjoissa." # MT
+        campaign: "Mitä rekisteröimme" # MT
+        campaign_hint: "Tämä on tekstiviestiohjelma, jonka rekisteröimme yhteisöllesi, siinä muodossa kuin operaattorit sen tarkistavat. Gather kirjoittaa sen, joten sitä ei tarvitse muuttaa." # MT
+        campaign_description: "Kuvaus" # MT
+        message_flow: "Miten jäsenet liittyvät" # MT
+        sample: "Esimerkkiviesti %{number}" # MT
+        help_reply: "Vastaus HELP-viestiin" # MT
+        opt_out_reply: "Vastaus STOP-viestiin" # MT
+        payment: "Maksu" # MT
+        payment_summary: "Veloitamme Gather-maksutavaltasi tänään %{setup_fee} käyttöönotosta sekä ensimmäisen kuukauden paketin ja sen jälkeen pakettisi joka kuukausi." # MT
+        accept_fees: "Ymmärrän, että %{setup_fee} käyttöönottomaksua ei palauteta, vaikka operaattorit eivät hyväksyisi rekisteröintiä." # MT
+        submit: "Ota käyttöön ja maksa" # MT
+      create:
+        success: "Kiitos! Rekisteröimme yhteisöäsi operaattoreille. Tältä sivulta näet, miten asia etenee." # MT

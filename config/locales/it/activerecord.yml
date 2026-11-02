@@ -13,6 +13,21 @@
 it:
   activemodel:
     attributes:
+      # Messaging::SetupForm, which takes Messaging::Registration's model name.
+      messaging/registration:
+        package_cents: "Pacchetto mensile" # MT
+        legal_name: "Ragione sociale" # MT
+        display_name: "Nome con cui vi conoscono" # MT
+        entity_type: "Tipo di organizzazione" # MT
+        ein: "EIN" # MT
+        street: "Indirizzo" # MT
+        city: "Città" # MT
+        state: "Stato" # MT
+        postal_code: "CAP (ZIP code)" # MT
+        email: "Email di contatto" # MT
+        phone: "Telefono di contatto" # MT
+        website: "Sito web" # MT
+        accept_fees: "Costo di attivazione" # MT
       # EventletForm (drag-and-drop), for its error messages.
       calendars/eventlet:
         starts_at: "Ora di inizio" # MT
@@ -38,6 +53,15 @@ it:
         repeat_count: "Numero di volte" # MT
     errors:
       models:
+        # Messaging::SetupForm, which takes Messaging::Registration's model name.
+        messaging/registration:
+          attributes:
+            base:
+              payment_failed: "Il pagamento non è andato a buon fine: %{reason}" # MT
+            ein:
+              invalid: "deve essere di 9 cifre, ad esempio 12-3456789" # MT
+            postal_code:
+              invalid: "deve essere un CAP (ZIP code) di 5 cifre" # MT
         # EventForm, which takes Calendars::Event's model name.
         calendars/event:
           attributes:

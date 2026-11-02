@@ -27,6 +27,11 @@
             <%= link_to(selected_cents ? t(".edit") : t(".add"), "#", class: "messaging-topup-edit",
                   data: {action: "messaging-topup#open"}) %>
           <% end %>
+          <%# Before texting is set up, the first package is chosen as part of setup. %>
+          <% if current_community.messaging_supported? && !current_community.messaging_registration&.paid? &&
+                Messaging::MessagingPolicy.new(current_user, current_community).administer? %>
+            <%= link_to(t(".set_up_texting"), new_messaging_setup_path) %>
+          <% end %>
         </td>
       </tr>
       <% if topup&.show_next_payment_date? %>

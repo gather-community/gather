@@ -83,6 +83,7 @@ ignore_unused:
   - "calendars/protocol.durations.*"
   - "roles.index.descriptions.*"  # roles/index.html.erb, by role
   - "subscription.messaging_transactions.*"  # Stripe::TopupProcessor, by direction
+  - "messaging.{fees,registration_statuses,registration_explanations}.*"  # by fee key and registration status
   - "calendars.drag.{confirm,confirm_occurrence}"  # calendar_view.js#confirmMove, by series scope
   - "calendars.drag.series.{occurrence,following,series}"  # calendar_view.js#promptForSeriesScope
   - "search.kinds.*"               # SearchHelper#search_result_kind_label, by result kind

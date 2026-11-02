@@ -14,3 +14,5 @@ fr-CA:
   layouts:
     mailer:
       machine_translated: "Ce courriel a été traduit automatiquement et peut contenir des erreurs." # MT
+    footer:
+      texting: "Textos" # MT

@@ -88,6 +88,12 @@ it:
       wiki_page:
         comment: "Un commento su questa modifica." # MT
     hints:
+      messaging_registration:
+        legal_name: "Esattamente come registrato presso l'IRS." # MT
+        display_name: "Il nome con cui è conosciuta la tua comunità, se diverso dalla ragione sociale." # MT
+        ein: "L'Employer Identification Number (codice fiscale) a 9 cifre della tua comunità, rilasciato dall'IRS (il fisco statunitense)." # MT
+        email: "Gli operatori potrebbero contattare questo indirizzo riguardo alla registrazione." # MT
+        website: "Il sito web della tua comunità, o il suo indirizzo Gather." # MT
       markdown_suffix_html: "Puoi usare la <a href='/about/markdown' target='_new'>formattazione avanzata</a>." # MT
       communities_signup:
         community_name: "Fino a 20 caratteri." # MT
@@ -212,6 +218,11 @@ it:
         round_duration: "Quanto deve durare ogni turno di scelta? Il tempo deve bastare perché una persona media possa scegliere con calma." # MT
         job_copy_source_id: "Se vuoi, scegli un periodo da cui copiare gli incarichi quando crei il periodo. Gli incarichi dei pasti non verranno copiati e vanno invece sincronizzati (vedi sotto)." # MT
     options:
+      messaging_registration:
+        entity_type:
+          NON_PROFIT: "Ente non profit" # MT
+          PRIVATE_PROFIT: "Azienda privata (incluse cooperative e LLC)" # MT
+          GOVERNMENT: "Ente pubblico" # MT
       calendars_event:
         repeat_frequency:
           none: "Mai" # MT

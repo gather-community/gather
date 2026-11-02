@@ -1,0 +1,82 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+de:
+  messaging:
+    # Ledger descriptions for the setup fees, debited as Telnyx charges them.
+    fees:
+      brand_registration: "Registrierung deiner Organisation bei den Mobilfunkanbietern" # MT
+      campaign_review: "Prüfung deines SMS-Programms durch die Mobilfunkanbieter" # MT
+      campaign_prepaid: "Gebühr für das SMS-Programm, erste 3 Monate" # MT
+    registration_statuses:
+      draft: "Nicht bezahlt" # MT
+      awaiting_payment: "Wartet auf Zahlung" # MT
+      submitting: "Wird übermittelt" # MT
+      brand_pending: "Organisation wird geprüft" # MT
+      campaign_pending: "In Prüfung bei den Mobilfunkanbietern" # MT
+      approved: "Genehmigt" # MT
+      failed: "Abgelehnt" # MT
+    registration_explanations:
+      draft: "Deine Einrichtungszahlung ist nicht durchgegangen. Versuche noch einmal, SMS einzurichten." # MT
+      awaiting_payment: "Wir registrieren deine Gemeinschaft bei den Mobilfunkanbietern, sobald deine Zahlung eingegangen ist." # MT
+      submitting: "Deine Zahlung ist eingegangen, und wir übermitteln deine Registrierung an die Mobilfunkanbieter." # MT
+      brand_pending: "Wir haben deine Organisation bei den Mobilfunkanbietern registriert, und sie wird jetzt geprüft. Das dauert meist ein paar Minuten, kann aber auch ein bis zwei Tage dauern." # MT
+      campaign_pending: "Die Mobilfunkanbieter prüfen dein SMS-Programm. Das dauert meist 1 bis 3 Wochen. Wir schicken dir eine E-Mail, sobald sie fertig sind." # MT
+      approved: "Die Mobilfunkanbieter haben dein SMS-Programm genehmigt." # MT
+      failed: "Die Mobilfunkanbieter haben deine Registrierung nicht genehmigt. Bitte wende dich an den Gather-Support, damit wir das klären können." # MT
+    settings:
+      show:
+        title: "SMS" # MT
+        status: "Status" # MT
+        failure_reason: "Grund" # MT
+        organization: "Organisation" # MT
+        entity_type: "Art" # MT
+        submitted_on: "Eingereicht" # MT
+        approved_on: "Genehmigt" # MT
+        balance: "Nachrichtenguthaben" # MT
+        not_set_up: "Mit SMS kann deine Gemeinschaft Nachrichten zu Mahlzeiten, Schichten und Gruppen verschicken. SMS sind noch nicht eingerichtet." # MT
+        set_up: "SMS einrichten" # MT
+        unsupported: "SMS gibt es vorerst nur für Gemeinschaften in den USA." # MT
+        no_subscription_html: "Um SMS einzurichten, braucht deine Gemeinschaft ein aktives Gather-Abo mit einer Zahlungsmethode. Auf der %{link} kannst du eine hinzufügen." # MT
+        topup_exists_html: "Deine Gemeinschaft hat bereits ein monatliches Nachrichtenpaket. Entferne es auf der %{link}, bevor du SMS einrichtest, und wähle bei der Einrichtung ein neues." # MT
+        subscription_page: "Abo-Seite" # MT
+    setups:
+      new:
+        title: "SMS einrichten" # MT
+        intro: "US-Mobilfunkanbieter verlangen, dass sich jede Organisation, die SMS verschickt, vorher registriert. Gather registriert deine Gemeinschaft für dich mit den Angaben unten und belastet deine Gather-Zahlungsmethode mit den Gebühren der Anbieter und deinem ersten SMS-Monat." # MT
+        costs: "Kosten" # MT
+        setup_fee: "Einrichtungsgebühr (einmalig)" # MT
+        monthly_fixed: "Monatliche Fixkosten (Programmgebühr und Telefonnummer)" # MT
+        per_month: "%{amount}/Monat" # MT
+        per_100_texts: "SMS" # MT
+        per_100: "%{amount} pro 100 (eine SMS an 20 Personen zählt als 20)" # MT
+        costs_hint: "Das sind die Gebühren der Mobilfunkanbieter und unseres SMS-Dienstleisters, die wir zum Selbstkostenpreis weitergeben. Die Einrichtungsgebühr wird nicht erstattet, auch wenn die Anbieter deine Registrierung nicht genehmigen." # MT
+        package: "Monatspaket" # MT
+        package_hint: "Dein Paket wird jeden Monat berechnet und deinem Nachrichtenguthaben gutgeschrieben. Davon gehen jeden Monat Fixkosten von %{fixed} ab, der Rest bezahlt die SMS." # MT
+        package_option:
+          one: "%{amount}/Monat (etwa %{count} SMS)" # MT
+          other: "%{amount}/Monat (etwa %{count} SMS)" # MT
+        organization: "Deine Organisation" # MT
+        organization_hint: "Die Mobilfunkanbieter gleichen diese Angaben mit den Unterlagen der IRS (der US-Steuerbehörde) ab. Gib sie also genau so ein, wie sie in den Steuerunterlagen deiner Gemeinschaft stehen." # MT
+        campaign: "Was wir registrieren" # MT
+        campaign_hint: "Das ist das SMS-Programm, das wir für deine Gemeinschaft registrieren, in dem Wortlaut, den die Anbieter prüfen. Gather schreibt es, du musst also nichts ändern." # MT
+        campaign_description: "Beschreibung" # MT
+        message_flow: "Wie sich Mitglieder anmelden" # MT
+        sample: "Beispielnachricht %{number}" # MT
+        help_reply: "Antwort auf HELP" # MT
+        opt_out_reply: "Antwort auf STOP" # MT
+        payment: "Zahlung" # MT
+        payment_summary: "Wir belasten deine Gather-Zahlungsmethode heute mit %{setup_fee} für die Einrichtung plus dem Paket für deinen ersten Monat und danach jeden Monat mit deinem Paket." # MT
+        accept_fees: "Mir ist klar, dass die Einrichtungsgebühr von %{setup_fee} nicht erstattet wird, auch wenn die Anbieter die Registrierung nicht genehmigen." # MT
+        submit: "Einrichten und bezahlen" # MT
+      create:
+        success: "Danke! Wir registrieren deine Gemeinschaft bei den Mobilfunkanbietern. Auf dieser Seite siehst du, wie es vorangeht." # MT

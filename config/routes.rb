@@ -305,6 +305,11 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :messaging do
+    resource :settings, only: :show
+    resource :setup, only: %i[new create]
+  end
+
   namespace :gdrive do
     get "/", to: "browse#index", as: :home
     get "item/:item_id", to: "browse#index", as: :browse

@@ -46,11 +46,16 @@ module Subscription
     # The selectable topup tiers for a currency as [{cents:, label:}], or [] if the currency has no
     # mapping (in which case the topup UI is hidden). cents is what we charge/store; label is the
     # human-formatted amount for the radio options.
+    #
+    # In the fixed fees' currency, tiers that don't cover the monthly fixed costs (campaign fee and number
+    # rental) are left out, since they'd leave nothing for texts.
     def self.options_for(currency)
-      (AMOUNTS_BY_CURRENCY[currency] || []).map do |amount|
+      options = (AMOUNTS_BY_CURRENCY[currency] || []).map do |amount|
         money = Money.from_amount(amount, currency)
         {cents: money.cents.to_i, label: money.format}
       end
+      return options unless currency == Messaging::Fees::CURRENCY
+      options.select { |option| option[:cents] > Messaging::Fees.monthly_fixed_cents }
     end
 
     # Fetches live data from Stripe. Leaves stripe_sub populated for the request.

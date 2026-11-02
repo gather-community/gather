@@ -32,6 +32,7 @@ de:
       settings: "Einstellungen" # MT
       subscription: "Abo" # MT
       billing: "Abrechnung" # MT
+      texting: "SMS" # MT
       communities: "Gemeinschaften" # MT
       resync_subscriptions: "Abos neu abgleichen" # MT
       domains: "Domains" # MT

@@ -56,6 +56,9 @@ en:
       settings: "Settings"
     admin:
       _self: "Admin"
+    messaging:
+      _self: "Texting"
+      settings: "Settings"
     billing:
       _self: "Billing"
       accounts: "Accounts"

@@ -83,6 +83,10 @@ messaging:
   # costs (number rental, A2P 10DLC registration) are NOT amortized here — they're debited to
   # the account separately. See Messaging::CostCalculator.
   markup: 0.2
+  # A public screenshot of the texting opt-in page, linked from the 10DLC campaign's message flow,
+  # because carrier reviewers can't sign in to see the page itself. Required before any campaign is
+  # submitted (Messaging::CampaignTemplate raises without it). Set per environment.
+  opt_in_screenshot_url: ~
 
 # Telnyx credentials, for SENDING SMS (pricing is hardcoded, so this isn't needed to quote a
 # cost). Deliberately blank here; set per environment (config/settings.local.yml in dev,
@@ -90,6 +94,8 @@ messaging:
 # — a leaked key is full account access, so guard it accordingly.
 telnyx:
   api_key:
+  # No trailing slash. Includes the API version. Overridable so dev can point at a local stub.
+  base_url: https://api.telnyx.com/v2
 
 # SMTP2GO API key, for the mail domain migration page (reads sender domain verification status
 # from the SMTP2GO API). Deliberately blank here; set per environment (config/settings.local.yml

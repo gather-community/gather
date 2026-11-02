@@ -67,6 +67,9 @@ de:
       settings: "Einstellungen" # MT
     admin:
       _self: "Admin" # MT
+    messaging:
+      _self: "SMS" # MT
+      settings: "Einstellungen" # MT
     billing:
       _self: "Abrechnung" # MT
       accounts: "Konten" # MT

@@ -67,6 +67,9 @@ fr:
       settings: "Paramètres" # MT
     admin:
       _self: "Administration" # MT
+    messaging:
+      _self: "SMS" # MT
+      settings: "Paramètres" # MT
     billing:
       _self: "Facturation" # MT
       accounts: "Comptes" # MT

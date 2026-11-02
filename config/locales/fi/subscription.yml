@@ -32,6 +32,8 @@ fi:
     messaging_transactions:
       credit: "Kuukausittainen viestintäsaldon täydennys" # MT
       reversal: "Perimättä jääneen viestintäsaldon täydennyksen peruutus" # MT
+      setup_credit: "Tekstiviestien käyttöönottomaksu" # MT
+      setup_reversal: "Perimättä jääneen tekstiviestien käyttöönottomaksun peruutus" # MT
     # e.g. "$5.00/month"
     per_month: "%{amount}/kk" # MT
     every_months:
@@ -94,6 +96,7 @@ fi:
         add: "Lisää" # MT
         next_payment_date: "Seuraava maksupäivä" # MT
         status: "Tila" # MT
+        set_up_texting: "Ota tekstiviestit käyttöön" # MT
       messaging_topup_modal:
         title: "Viestintäsaldon kuukausitäydennys" # MT
         intro: "Valitse, kuinka paljon viestintäsaldoa lisätään saldoosi joka kuukausi. Tallennettua maksutapaasi veloitetaan automaattisesti." # MT

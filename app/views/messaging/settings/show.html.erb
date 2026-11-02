@@ -1,0 +1,56 @@
+<% content_for(:title, t(".title")) %>
+
+<% if @registration&.paid? %>
+  <% registration = @registration.decorate %>
+  <p><%= registration.status_explanation %></p>
+  <table class="key-value">
+    <tr>
+      <td><%= t(".status") %></td>
+      <td><%= registration.status_label %></td>
+    </tr>
+    <% if registration.failed? && registration.failure_reason.present? %>
+      <tr>
+        <td><%= t(".failure_reason") %></td>
+        <td><%= registration.failure_reason %></td>
+      </tr>
+    <% end %>
+    <tr>
+      <td><%= t(".organization") %></td>
+      <td><%= registration.legal_name %></td>
+    </tr>
+    <tr>
+      <td><%= t(".entity_type") %></td>
+      <td><%= registration.entity_type_label %></td>
+    </tr>
+    <% if registration.submitted_on %>
+      <tr>
+        <td><%= t(".submitted_on") %></td>
+        <td><%= registration.submitted_on %></td>
+      </tr>
+    <% end %>
+    <% if registration.approved_on %>
+      <tr>
+        <td><%= t(".approved_on") %></td>
+        <td><%= registration.approved_on %></td>
+      </tr>
+    <% end %>
+    <tr>
+      <td><%= t(".balance") %></td>
+      <td><%= format_money(@account ? @account.balance.to_d : 0) %></td>
+    </tr>
+  </table>
+<% else %>
+  <div class="center-notice">
+    <% case @setup_blocker %>
+    <% when :unsupported %>
+      <%= t(".unsupported") %>
+    <% when :no_subscription %>
+      <%= t(".no_subscription_html", link: link_to(t(".subscription_page"), subscription_path)) %>
+    <% when :topup_exists %>
+      <%= t(".topup_exists_html", link: link_to(t(".subscription_page"), subscription_path)) %>
+    <% else %>
+      <p><%= t(".not_set_up") %></p>
+      <%= link_to(icon_tag("comment") << " " << t(".set_up"), new_messaging_setup_path, class: "btn btn-primary") %>
+    <% end %>
+  </div>
+<% end %>

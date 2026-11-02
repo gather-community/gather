@@ -1,0 +1,38 @@
+<% content_for(:title, t(".title")) %>
+
+<% content_for(:action_links) do %>
+  <% if policy(%i[admin feature_flag]).create? %>
+    <%= link_to(icon_tag("plus") << " " << t(".new_flag"), new_admin_feature_flag_path,
+          class: "btn btn-primary") %>
+  <% end %>
+<% end %>
+
+<p><%= t(".intro") %></p>
+
+<% if @flags.empty? %>
+  <div class="center-notice">
+    <%= t(".none_found") %>
+  </div>
+<% else %>
+  <table class="index">
+    <thead>
+      <tr>
+        <th><%= t(".headers.name") %></th>
+        <th><%= t(".headers.state") %></th>
+        <th><%= t(".headers.users") %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @flags.each do |flag| %>
+        <% user_count = @user_counts[flag.id] || 0 %>
+        <tr id="feature-flag-<%= flag.id %>">
+          <td class="name"><%= link_to(flag.name, admin_feature_flag_path(flag)) %></td>
+          <td><%= t("admin.feature_flags.modes.#{flag.mode}") %></td>
+          <td class="<%= flag.mode == :selected_users ? "" : "text-muted" %>">
+            <%= link_to(t(".user_count", count: user_count), admin_feature_flag_path(flag)) %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

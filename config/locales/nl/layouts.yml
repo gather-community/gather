@@ -35,6 +35,7 @@ nl:
       communities: "Gemeenschappen" # MT
       resync_subscriptions: "Abonnementen opnieuw synchroniseren" # MT
       domains: "Domeinen" # MT
+      feature_flags: "Featureflags" # MT
       # Shown on pages in machine-translated locales (Gather::Locales::MACHINE_TRANSLATED).
       machine_translated: "Deze pagina is automatisch vertaald en kan fouten bevatten." # MT
       machine_translated_with_link_html: "Deze pagina is automatisch vertaald en kan fouten bevatten. %{link}" # MT

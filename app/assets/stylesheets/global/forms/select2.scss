@@ -12,8 +12,9 @@
     height: 33px;
   }
 
+  // A minimum, not a fixed height, so the box grows when the choices wrap onto more lines.
   .select2-selection--multiple {
-    height: 39px;
+    min-height: 39px;
   }
 }
 
@@ -27,4 +28,15 @@
 .select2-search__field, .select2-search input {
   -webkit-box-shadow: none;
   box-shadow: none;
+}
+
+// Two-line results for selects whose endpoint sends `details` (see ajax_select2.js#templateResult).
+.select2-result-name {
+  display: block;
+}
+
+.select2-result-details {
+  display: block;
+  font-size: $font-size-small;
+  opacity: 0.7; // Muted on both the plain and the highlighted (blue) row.
 }

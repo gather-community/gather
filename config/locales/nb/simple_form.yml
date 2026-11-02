@@ -88,6 +88,9 @@ nb:
       wiki_page:
         comment: "En kommentar om denne endringen." # MT
     hints:
+      feature_flag:
+        name: "Navnet koden slår opp, f.eks. messaging for FeatureFlag.lookup(\"messaging\"). Små bokstaver, tall og understreker. Det kan ikke endres senere." # MT
+        user_ids: "Bare disse brukerne ser funksjonen. Endringene trer i kraft når du lagrer. Hvis du lagrer flagget som av eller på for alle, fjernes de." # MT
       markdown_suffix_html: "Du kan bruke <a href='/about/markdown' target='_new'>formatering</a>." # MT
       communities_signup:
         community_name: "Opptil 20 tegn." # MT
@@ -212,6 +215,11 @@ nb:
         round_duration: "Hvor lang skal hver runde være? Det bør være akkurat nok tid til at en gjennomsnittlig person kan velge i ro og mak." # MT
         job_copy_source_id: "Velg eventuelt en periode du vil kopiere oppgaver fra når perioden opprettes. Måltidsoppgaver blir ikke kopiert og bør synkroniseres i stedet (se nedenfor)." # MT
     options:
+      feature_flag:
+        mode:
+          "off": "Av" # MT
+          selected_users: "På for valgte brukere" # MT
+          everyone: "På for alle" # MT
       calendars_event:
         repeat_frequency:
           none: "Aldri" # MT

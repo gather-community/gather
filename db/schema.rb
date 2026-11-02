@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_25_180000) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_29_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -348,7 +348,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_25_180000) do
   create_table "feature_flags", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "interface", default: "basic", null: false
-    t.string "name", null: false
+    t.string "name", limit: 64, null: false
     t.boolean "status"
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_feature_flags_on_name", unique: true

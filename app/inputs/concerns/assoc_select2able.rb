@@ -9,7 +9,8 @@ module AssocSelect2able
 
   def setup_select2
     # Load in the current association value(s) as the initial selection for the select.
-    options[:collection] ||= [object.send(assoc_name)].compact
+    options[:collection] ||=
+      multiple_assoc? ? object.send(assoc_name.pluralize) : [object.send(assoc_name)].compact
 
     input_html_options[:data] ||= {}
     input_html_options[:data][:"select2-src"] = options.delete(:src) || "/#{assoc_class.model_name.route_key}"
@@ -20,8 +21,13 @@ module AssocSelect2able
     input_html_options[:data][:"select2-tags"] = options.delete(:tags)
   end
 
+  # Singular for both user_id and user_ids (multiple: true), so both share the select2.*.user strings.
   def assoc_name
-    @assoc_name ||= attribute_name.to_s.sub(/_id\z/, "")
+    @assoc_name ||= attribute_name.to_s.sub(/_ids?\z/, "")
+  end
+
+  def multiple_assoc?
+    attribute_name.to_s.end_with?("_ids")
   end
 
   def assoc_class

@@ -1,6 +1,11 @@
 en:
   activemodel:
     attributes:
+      # Admin::FeatureFlagForm, which takes FeatureFlag's model name.
+      feature_flag:
+        name: "Name"
+        mode: "State"
+        user_ids: "Users"
       # EventletForm (drag-and-drop), for its error messages.
       calendars/eventlet:
         starts_at: "Start Time"
@@ -26,6 +31,10 @@ en:
         repeat_count: "Number of Times"
     errors:
       models:
+        feature_flag:
+          attributes:
+            name:
+              invalid: "must start with a lowercase letter and contain only lowercase letters, numbers and underscores"
         # EventForm, which takes Calendars::Event's model name.
         calendars/event:
           attributes:
@@ -80,6 +89,7 @@ en:
               in_past: "can't be changed to a time in the past"
   activerecord:
     models:
+      feature_flag: "Feature Flag"
       meals/meal: "Meal"
     attributes:
       user:

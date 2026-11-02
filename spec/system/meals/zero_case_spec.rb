@@ -19,7 +19,9 @@ describe "meals" do
       create_list(:meal, 2, community: friend_cmty,
                             communities: [cmty, friend_cmty])
     end
-    let!(:other_meal) { create(:meal, :with_menu, community: other_cmty, title: "Flapjacks") }
+    let!(:other_meal) do
+      with_tenant(other_cmty.cluster) { create(:meal, :with_menu, community: other_cmty, title: "Flapjacks") }
+    end
 
     scenario "index" do
       visit "/meals?community=all"

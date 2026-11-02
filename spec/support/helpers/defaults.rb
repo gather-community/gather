@@ -16,7 +16,8 @@ class Defaults
       @community ||= FactoryBot.create(:community, name: "Default", slug: "default", abbrv: "df")
     else
       @other_communities ||= {}
-      @other_communities[tenant.id] ||= Community.order(:id).first || FactoryBot.create(:community)
+      # A community of its own, like the default cluster's, so specs can add others alongside it.
+      @other_communities[tenant.id] ||= FactoryBot.create(:community)
     end
   end
 

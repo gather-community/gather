@@ -40,6 +40,7 @@ class UploadsController < ApplicationController
 
   def ensure_permitted_class
     return if Array.wrap(PERMITTED_ATTRIBS[params[:class_name]]).include?(params[:attrib])
-    render(json: {error: ["Unpermitted attribute"]}, status: :forbidden)
+    # Only a tampered request gets here, so this isn't user-facing text.
+    render(json: {error: ["Unpermitted attribute"]}, status: :forbidden) # rubocop:disable Gather/HardCodedString
   end
 end

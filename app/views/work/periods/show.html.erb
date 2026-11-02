@@ -1,8 +1,8 @@
-<% content_for(:title, "Period: #{period.name}") %>
+<% content_for(:title, t(".title", name: period.name)) %>
 <% content_for(:action_links, period.action_links) %>
 
 <% content_for(:mobile_back_link) do %>
-  <%= render partial: "shared/mobile_back_link", locals: {label: "Periods", path: work_periods_path } %>
+  <%= render partial: "shared/mobile_back_link", locals: {label: t(".periods"), path: work_periods_path } %>
 <% end %>
 
 <table class="key-value">
@@ -11,7 +11,7 @@
     <td><%= t("simple_form.options.work_period.phase.#{period.phase}") %></td>
   </tr>
   <tr>
-    <td>Date</td>
+    <td><%= t(".date") %></td>
     <td><%= l(period.starts_on) %>–<%= l(period.ends_on) %></td>
   </tr>
   <tr>
@@ -29,9 +29,9 @@
         <%= t("simple_form.options.work_period.pick_type.#{period.pick_type}") %>
         <% if period.staggered? %>
           <ul>
-            <li><%= period.max_rounds_per_worker %> max. rounds per worker</li>
-            <li><%= period.workers_per_round %> workers per round</li>
-            <li><%= period.round_duration %> minutes per round</li>
+            <li><%= t(".max_rounds_per_worker", count: period.max_rounds_per_worker) %></li>
+            <li><%= t(".workers_per_round", count: period.workers_per_round) %></li>
+            <li><%= t(".minutes_per_round", count: period.round_duration) %></li>
           </ul>
         <% end %>
       </td>
@@ -41,7 +41,7 @@
 
 <% unless period.quota_none? %>
   <div class="shares">
-    <h2>Shares</h2>
+    <h2><%= t(".shares") %></h2>
     <% @users_by_life_stage.each do |kind, users| %>
       <% if @users_by_life_stage.size > 1 %>
         <h3><%= t("common.#{kind.pluralize}") %></h3>

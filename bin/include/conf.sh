@@ -38,12 +38,16 @@ run_conf() {
   local keep_secret_key=false
   local existing_encryption_key=""
   local keep_encryption_keys=false
+  local existing_port=""
 
   if _conf_config_exists; then
     msg_warn "Configuration files already exist."
     if ! gum confirm "Generate new configuration?"; then
       return 0
     fi
+
+    # Each dev env's port is chosen to avoid the others, so keep it without asking.
+    existing_port="$(yq -r '.url.port // ""' "$settings_yml" 2>/dev/null || echo "")"
 
     existing_secret_key="$(_conf_get_existing_secret_key)"
     if [[ -n "$existing_secret_key" ]]; then
@@ -91,6 +95,10 @@ run_conf() {
     yq -i ".active_record_encryption.primary_key = \"$(openssl rand -hex 32)\"" "$settings_yml"
     yq -i ".active_record_encryption.deterministic_key = \"$(openssl rand -hex 32)\"" "$settings_yml"
     yq -i ".active_record_encryption.key_derivation_salt = \"$(openssl rand -hex 32)\"" "$settings_yml"
+  fi
+
+  if [[ -n "$existing_port" ]]; then
+    yq -i ".url.port = $existing_port" "$settings_yml"
   fi
 
   msg_success "Configuration files generated!"

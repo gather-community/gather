@@ -36,6 +36,7 @@
 #  last_sign_in_ip        :inet
 #  medical                :text
 #  mobile_phone           :string
+#  notification_prefs     :jsonb            not null
 #  paypal_email           :string(255)
 #  preferred_contact      :string
 #  privacy_settings       :jsonb            not null
@@ -83,6 +84,7 @@ class User < ApplicationRecord
   include Deactivatable
   include SemicolonDisallowable
   include CustomFields
+  include UserSearchConfig
 
   ROLES = %i[super_admin cluster_admin admin biller photographer calendar_coordinator
     meals_coordinator wikiist work_coordinator new_community_approver].freeze
@@ -167,16 +169,28 @@ class User < ApplicationRecord
   scope :by_name_adults_first, -> { order(arel_table[:child].eq(true)).by_name }
   scope :inactive_last, -> { order(arel_table[:deactivated_at].not_eq(nil)) }
   scope :including_communities, -> { includes(household: :community) }
-  scope :by_community_and_name, -> { including_communities.order("communities.name").by_name }
+  scope :by_community_and_name, -> { including_communities.alpha_order(communities: :name).by_name }
   scope :by_birthday, lambda {
     order(Arel.sql(%i[month day year].map { |d| "EXTRACT(#{d} FROM birthdate)" }.join(", ")))
   }
   scope :active_or_assigned_to, lambda { |meal|
     where(arel_table[:deactivated_at].eq(nil).or(arel_table[:id].in(meal.assignments.map(&:user_id))))
   }
+  # Accented letters and the plain letters they fold to when matching names, for Postgres's translate().
+  # Pairs up character by character. Hyphens become spaces, so they count as word breaks.
+  NAME_FOLD_FROM = "-ÀÁÂÃÄÅàáâãäåÇçÈÉÊËèéêëÌÍÎÏìíîïÑñÒÓÔÕÖØòóôõöøÙÚÛÜùúûüÝýÿŠšŽžČčĆćŁłŃńŚśŹźŻżĘęĄąŘřĚěŮů"
+  NAME_FOLD_TO = " AAAAAAaaaaaaCcEEEEeeeeIIIIiiiiNnOOOOOOooooooUUUUuuuuYyySsZzCcCcLlNnSsZzZzEeAaRrEeUu"
+
+  # Each word of the query must start a word of the name, so "ma gre" matches Max Greenfelder but
+  # "ax" doesn't, and accents don't matter, so "zoe" matches Zoë. The same as Work::Shift.text_search.
   scope :matching, lambda { |q|
-    joins(:household)
-      .where("(first_name || ' ' || last_name) ILIKE ?", "%#{q}%")
+    words = I18n.transliterate(q.to_s).tr("-", " ").split
+    name_words = "(' ' || translate(first_name || ' ' || last_name, #{connection.quote(NAME_FOLD_FROM)}, " \
+      "#{connection.quote(NAME_FOLD_TO)}))"
+    by_name = words.reduce(joins(:household)) do |rel, word|
+      rel.where("#{name_words} ILIKE ?", "% #{sanitize_sql_like(word)}%")
+    end
+    by_name
       .or( # Exact unit num without suffix
         joins(:household)
           .where("unit_num::varchar ILIKE ?", q)
@@ -310,7 +324,8 @@ class User < ApplicationRecord
   end
 
   def name
-    "#{first_name} #{last_name}#{" (Inactive)" unless active?}"
+    full = "#{first_name} #{last_name}"
+    active? ? full : I18n.t("common.with_inactive", name: full)
   end
 
   def life_stage
@@ -333,6 +348,28 @@ class User < ApplicationRecord
     settings = {} if settings.blank?
     settings.each { |k, v| settings[k] = ["1", "true", true].include?(v) }
     self[:privacy_settings] = settings
+  end
+
+  # Whether this user wants the given kind of notification over the given channel.
+  # Required and internal kinds are always on. notification_prefs only stores overrides of the default (on).
+  def notification_enabled?(kind_key, channel: :email)
+    kind = Notifications::Catalog.find(kind_key)
+    return true unless kind.configurable?
+    notification_prefs.dig(kind.key.to_s, channel.to_s) != false
+  end
+
+  # Sets prefs for the given kind and channel, storing only values that differ from the default.
+  def set_notification_pref(kind_key, enabled, channel: :email)
+    kind = Notifications::Catalog.find(kind_key)
+    raise ArgumentError, "#{kind.key} is not configurable" unless kind.configurable?
+    prefs = notification_prefs.deep_dup
+    if enabled
+      prefs[kind.key.to_s]&.delete(channel.to_s)
+      prefs.delete(kind.key.to_s) if prefs[kind.key.to_s].blank?
+    else
+      (prefs[kind.key.to_s] ||= {})[channel.to_s] = false
+    end
+    self.notification_prefs = prefs
   end
 
   def activate

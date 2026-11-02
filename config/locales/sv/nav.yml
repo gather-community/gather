@@ -1,0 +1,82 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+sv:
+  nav_links:
+    people:
+      _self: "Personer" # MT
+      households: "Hushåll" # MT
+      directory: "Medlemsförteckning" # MT
+      birthdays: "Födelsedagar" # MT
+      vehicles: "Fordon" # MT
+      memorials: "Minnessidor" # MT
+      settings:
+        _self: "Inställningar" # MT
+        general: "Allmänna inställningar" # MT
+        member_types: "Medlemstyper" # MT
+    groups:
+      _self: "Grupper" # MT
+      groups: "Grupper" # MT
+      roles: "Roller" # MT
+      domains: "Domäner" # MT
+    meals:
+      _self: "Måltider" # MT
+      meals: "Måltider" # MT
+      jobs: "Uppgifter" # MT
+      report: "Rapport" # MT
+      formulas: "Formler" # MT
+      roles: "Roller" # MT
+      types: "Typer" # MT
+      settings:
+        _self: "Inställningar" # MT
+        general: "Allmänt" # MT
+        restrictions: "Kostrestriktioner" # MT
+        reminders: "Påminnelser" # MT
+
+    calendars:
+      _self: "Kalendrar" # MT
+      events: "Händelser" # MT
+      calendars: "Kalendrar" # MT
+      protocols: "Regelverk" # MT
+    wiki:
+      _self: "Wiki" # MT
+      wiki:
+        _self: "Wiki" # MT
+      gdrive:
+        _self: "Google Drive" # MT
+        migration:
+          dashboard:
+            status: "Status" # MT
+            owners: "Ägare" # MT
+            files: "Filer" # MT
+            logs: "Loggar" # MT
+    work:
+      _self: "Arbete" # MT
+      signups: "Anmälningar" # MT
+      report: "Rapport" # MT
+      jobs: "Uppgifter" # MT
+      periods: "Perioder" # MT
+      settings: "Inställningar" # MT
+    admin:
+      _self: "Admin" # MT
+    billing:
+      _self: "Fakturering" # MT
+      accounts: "Konton" # MT
+      templates: "Mallar" # MT
+    personal:
+      profile: "Profil" # MT
+      accounts: "Konton" # MT
+      account: "Konto" # MT
+      calendars: "Kalendrar" # MT
+      change_passwd: "Byt lösenord" # MT
+      notifications: "Aviseringar" # MT
+      sign_out: "Logga ut" # MT

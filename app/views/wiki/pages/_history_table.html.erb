@@ -4,10 +4,10 @@
 
 <table class="index versions">
   <tr>
-    <th>Version</th>
-    <th>Date</th>
-    <th>Author</th>
-    <th>Comment</th>
+    <th><%= t(".version") %></th>
+    <th><%= t(".date") %></th>
+    <th><%= t(".author") %></th>
+    <th><%= t(".comment") %></th>
   </tr>
   <% versions.each do |v| %>
     <tr>
@@ -26,7 +26,7 @@
 </table>
 
 <% if with_form %>
-    <%= submit_tag("Compare Selected", name: nil, class: "btn btn-primary") %>
-    <%= link_to("Return to Page", wiki_page_path(page), class: "btn btn-default") %>
+    <%= submit_tag(t(".compare"), name: nil, class: "btn btn-primary") %>
+    <%= link_to(t(".return"), wiki_page_path(page), class: "btn btn-default") %>
   </form>
 <% end %>

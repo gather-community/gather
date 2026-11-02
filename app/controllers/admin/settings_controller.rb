@@ -14,7 +14,7 @@ module Admin
       # up. Otherwise update bypasses the CustomFields infrastructure altogether.
       @community.settings
       if @community.update(settings_params)
-        flash[:success] = "Settings updated successfully."
+        flash[:success] = t("common.settings_updated")
         redirect_to(admin_settings_path(type: params[:type]))
       else
         render(:edit)

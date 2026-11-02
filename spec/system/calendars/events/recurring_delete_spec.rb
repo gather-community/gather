@@ -7,8 +7,9 @@ require "rails_helper"
 # modal end to end, checking the result on the calendar grid.
 describe "deleting a recurring or multi-calendar event", js: true do
   let(:user) { create(:user) }
-  let!(:calendar) { create(:calendar, name: "Main Hall") }
-  let(:calendar2) { create(:calendar, name: "Guest Room") }
+  # Repeating events need calendars that allow overlaps (Calendar#allows_recurring_events?).
+  let!(:calendar) { create(:calendar, name: "Main Hall", allow_overlap: true) }
+  let(:calendar2) { create(:calendar, name: "Guest Room", allow_overlap: true) }
 
   # Weekly on Mondays at 10am, starting next week, so each occurrence sits in its own week.
   let(:series_start) { Time.current.next_week.midnight + 10.hours }

@@ -23,7 +23,10 @@
 FactoryBot.define do
   factory :event, class: "Calendars::Event" do
     name { "Fun times" }
-    calendar
+    recurrence_rule { nil }
+    # Repeating events need a calendar that allows overlaps (Calendar#allows_recurring_events?), but the
+    # calendar factory defaults to not allowing them, so a repeating event's default calendar does.
+    calendar { association(:calendar, allow_overlap: recurrence_rule.present?) }
     association :creator, factory: :user
     sequence(:starts_at) { |n| Time.current.tomorrow.midnight + n.hours }
     sequence(:ends_at) { starts_at + 55.minutes }

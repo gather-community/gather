@@ -6,7 +6,7 @@ module Calendars
     class FixedEndTimeRule < Rule
       def check(event)
         value.strftime("%T") == event.ends_at.strftime("%T") ||
-          [:ends_at, "Must be #{I18n.l(value, format: :time_only)}"]
+          [:ends_at, I18n.t("calendars.rules.fixed_time", time: I18n.l(value, format: :time_only))]
       end
     end
   end

@@ -1,19 +1,17 @@
 <% if @import.successful? %>
-  <div class="alert alert-success">Your import succeeded!</div>
-  Check out the <%= link_to("meals page", meals_path) %>
-  to see your imported meals.
+  <div class="alert alert-success"><%= t(".succeeded") %></div>
+  <%= t(".check_meals_html", link: link_to(t(".meals_page"), meals_path)) %>
 <% elsif @import.crashed? %>
-  <div class="alert alert-danger">We encountered an unexpected error during import.</div>
-  Please <%= link_to("try again below", "#upload") %>,
-  and contact your administrator if the error persists.
+  <div class="alert alert-danger"><%= t(".crashed") %></div>
+  <%= t(".crashed_try_again_html", link: link_to(t(".try_again_below"), "#upload")) %>
   <%= render("instructions_and_form") %>
 <% else %>
-  <div class="alert alert-danger">There were one or more issues with your meal data.</div>
-  Please resolve the issues below and <%= link_to("try again", "#upload") %>.
+  <div class="alert alert-danger"><%= t(".issues") %></div>
+  <%= t(".resolve_html", link: link_to(t(".try_again"), "#upload")) %>
   <ul>
     <% @import.sorted_errors_by_row.each do |row_number, errors| %>
       <li>
-        <strong>Row <%= row_number %></strong>
+        <strong><%= t(".row", number: row_number) %></strong>
         <ul>
           <% errors.each do |error| %>
             <li><%= error %></li>

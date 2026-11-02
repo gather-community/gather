@@ -27,8 +27,12 @@ module Work
 
     protected
 
-    def send_mail(assignment)
-      WorkMailer.job_reminder(assignment, reminder).deliver_now
+    def notification_kind
+      :job_reminder
+    end
+
+    def send_mail(assignment, user)
+      WorkMailer.with(recipient: user).job_reminder(assignment, reminder).deliver_now
     end
   end
 end

@@ -1,6 +1,6 @@
-<% content_for(:title, "Roles") %>
+<% content_for(:title, t(".title")) %>
 
-<h2>People</h2>
+<h2><%= t(".people") %></h2>
 <div class="flowing-columns-max-4 role-lists">
   <% @roles.each do |role| %>
     <div class="role-list">
@@ -18,13 +18,9 @@
   <% end %>
 </div>
 
-<h2>Legend</h2>
+<h2><%= t(".legend") %></h2>
 <ul>
-  <li><strong>Admin</strong> - All of the other roles combined</li>
-  <li><strong>Biller</strong> - Manages billing transactions, templates, statements, formulas and finalizes meals</li>
-  <li><strong>Photographer</strong> - Can edit anyone's directory photo</li>
-  <li><strong>Calendar Coordinator</strong> - Manages calendars and anyone's calendar events</li>
-  <li><strong>Meals Coordinator</strong> - Manages meals, meal roles, billing formulas, and meal types</li>
-  <li><strong>Wikiist</strong> - Manages specifically protected wiki pages</li>
-  <li><strong>Work Coordinator</strong> - Manages jobs, shifts and work periods</li>
+  <% %i[admin biller photographer calendar_coordinator meals_coordinator wikiist work_coordinator].each do |role| %>
+    <li><%= t(".legend_item_html", role: t("roles.#{role}"), description: t(".descriptions.#{role}")) %></li>
+  <% end %>
 </ul>

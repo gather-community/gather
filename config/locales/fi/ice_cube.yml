@@ -1,0 +1,101 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+# Descriptions of repeating events. The ice_cube gem ships no Finnish, so these mirror its en.yml.
+fi:
+  ice_cube:
+    pieces_connector: " / "
+    not: "ei %{target}" # MT
+    not_on: "ei: %{target}" # MT
+    date:
+      formats:
+        default: "%-d.%-m.%Y"
+    times:
+      other: "%{count} kertaa" # MT
+      one: "%{count} kerran" # MT
+    until: "%{date} asti" # MT
+    days_of_week: "%{segments} %{day}"
+    days_of_month:
+      other: "kuukauden %{segments} päivä" # MT
+      one: "kuukauden %{segments} päivä" # MT
+    days_of_year:
+      other: "vuoden %{segments} päivä" # MT
+      one: "vuoden %{segments} päivä" # MT
+    at_hours_of_the_day:
+      other: "vuorokauden %{segments} tuntina" # MT
+      one: "vuorokauden %{segments} tuntina" # MT
+    on_minutes_of_hour:
+      other: "tunnin %{segments} minuuttina" # MT
+      one: "tunnin %{segments} minuuttina" # MT
+    at_seconds_of_minute:
+      other: "%{segments} sekuntina" # MT
+      one: "%{segments} sekuntina" # MT
+    on_seconds_of_minute:
+      other: "minuutin %{segments} sekuntina" # MT
+      one: "minuutin %{segments} sekuntina" # MT
+    each_second:
+      one: "Joka sekunti" # MT
+      other: "%{count} sekunnin välein" # MT
+    each_minute:
+      one: "Joka minuutti" # MT
+      other: "%{count} minuutin välein" # MT
+    each_hour:
+      one: "Joka tunti" # MT
+      other: "%{count} tunnin välein" # MT
+    each_day:
+      one: "Päivittäin" # MT
+      other: "%{count} päivän välein" # MT
+    each_week:
+      one: "Viikoittain" # MT
+      other: "%{count} viikon välein" # MT
+    each_month:
+      one: "Kuukausittain" # MT
+      other: "%{count} kuukauden välein" # MT
+    each_year:
+      one: "Vuosittain" # MT
+      other: "%{count} vuoden välein" # MT
+    "on": "%{sentence}" # MT
+    in: "%{target}" # MT
+    integer:
+      negative: "%{ordinal} lopusta" # MT
+      literal_ordinals:
+        -1: "viimeinen" # MT
+        -2: "toiseksi viimeinen" # MT
+      ordinal: "%{number}%{ordinal}"
+      ordinals:
+        default: "."
+    on_weekends: "viikonloppuisin" # MT
+    on_weekdays: "arkipäivisin" # MT
+    days_on:
+      - "sunnuntaisin" # MT
+      - "maanantaisin" # MT
+      - "tiistaisin" # MT
+      - "keskiviikkoisin" # MT
+      - "torstaisin" # MT
+      - "perjantaisin" # MT
+      - "lauantaisin" # MT
+    on_days: "%{days}" # MT
+    array:
+      last_word_connector: " ja " # MT
+      two_words_connector: " ja " # MT
+      words_connector: ", "
+    string:
+      format:
+        day: "%{rest} %{current}"
+        day_of_week: "%{rest} %{current}"
+        day_of_month: "%{rest} %{current}"
+        day_of_year: "%{rest} %{current}"
+        hour_of_day: "%{rest} %{current}"
+        minute_of_hour: "%{rest} %{current}"
+        until: "%{rest} %{current}"
+        count: "%{rest} %{current}"
+        default: "%{rest} %{current}"

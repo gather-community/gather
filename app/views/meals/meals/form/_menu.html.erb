@@ -3,14 +3,14 @@
     <% if policy(meal).change_menu? %>
       <%= f.input(attrib, as: attrib == :title ? nil : :markdown) %>
     <% else %>
-      <%= f.input(attrib) do %><%= (a = f.object[attrib]) ? a : "[None]" %><% end %>
+      <%= f.input(attrib) do %><%= (a = f.object[attrib]) ? a : t("common.none_bracketed") %><% end %>
     <% end %>
   <% end %>
 
   <% if policy(meal).change_menu? %>
     <div class="form-group text optional meal_allergens
       <%= meal.errors[:allergens].present? ? "has-error" : "" %>">
-      <label class="text optional col-sm-3 control-label" for="meal_allergens">Allergens</label>
+      <label class="text optional col-sm-3 control-label" for="meal_allergens"><%= t(".allergens") %></label>
       <div class="boxes col-sm-9">
         <% meal.allergen_options.each do |allergen| %>
           <div>

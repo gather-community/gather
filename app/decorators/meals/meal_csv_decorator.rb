@@ -40,7 +40,7 @@ module Meals
     end
 
     def allergens
-      return "None" if object.no_allergens?
+      return h.t("common.none") if object.no_allergens?
       object.allergens.join(SEPARATOR).presence
     end
 

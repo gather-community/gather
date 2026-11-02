@@ -93,7 +93,7 @@ We recommend using [mise](https://mise.jdx.dev/) for managing tool versions and 
 | Tool        | Purpose                                                           |
 | ----------- | ----------------------------------------------------------------- |
 | Docker      | Only required if using the repo's `compose.yml` for data services |
-| Mailcatcher | Email testing (`gem install mailcatcher`)                         |
+| Mailcatcher | Email testing. Runs as a Docker service, and dev mail goes there by default. If you run it locally instead (`gem install mailcatcher`), set `smtp.address: localhost` in `config/settings.local.yml`. |
 | Mailman 3   | Mailing list integration (see below)                              |
 
 ## Setup Stages
@@ -145,8 +145,8 @@ The devcontainer joins a network named `<folder>-network` (e.g. `gather2-network
 ```
 ┌──────────────────────────────── Mac Host ──────────────────────────────────────────────┐
 │                                                                                         │
-│   Browser      :3000 ◄── VS Code (process-detect)    :1080 :8000 ◄── Docker host bind  │
-│                      (one dev env at a time)           (opt-in, one dev env at a time)  │
+│   Browser :3000 :3001 ◄── VS Code (process-detect)   :1080 :8000 ◄── Docker host bind  │
+│             (one port per dev env)                     (opt-in, one dev env at a time)  │
 │                          │                                │      │                       │
 └──────────────────────────┼────────────────────────────────┼──────┼─────────────────── ─ ┘
                            │                                │      │
@@ -163,7 +163,7 @@ The devcontainer joins a network named `<folder>-network` (e.g. `gather2-network
      │                                                                                   │
      │  ┌──────────────────────────────────────┐  ┌──────────┐ ┌─────────────┐         │
      │  │        gather2 devcontainer           │  │mailcatch │ │ mailman-web │         │
-     │  │   Rails :3000    Selenium :4444       │  │:1025/1080│ │    :8000    │         │
+     │  │   Rails :3001    Selenium :4444       │  │:1025/1080│ │    :8000    │         │
      │  └──────────────────────────────────────┘  └──────────┘ └─────────────┘         │
      │  postgres:5432  redis:6379  elasticsearch:9200  mailman-core:8001                │
      └─────────────────────────────────────────────────────────────────────────────────┘
@@ -171,7 +171,7 @@ The devcontainer joins a network named `<folder>-network` (e.g. `gather2-network
 
 All dev envs are symmetrical — no host port bindings for any service. The devcontainer is on the same Docker network, so services are reachable by hostname (`psql -h postgres`, `redis-cli -h redis`, etc.) from the devcontainer terminal without any host bindings.
 
-**Rails on :3000** runs inside the devcontainer. VS Code detects the process binding and forwards it to the host automatically (`remote.autoForwardPortsSource: "process"` in `devcontainer.json`).
+**Rails** runs inside the devcontainer, on port 3000 by default. VS Code detects the process binding and forwards it to the same port on the host automatically (`remote.autoForwardPortsSource: "process"` in `devcontainer.json`).
 
 ### Setting up a secondary instance
 
@@ -188,6 +188,15 @@ Inside the container, run:
 ```
 mise setup
 ```
+
+Then give the instance its own Rails port, so it doesn't clash with the others on the Mac. Pick one no other instance uses (e.g. 3001, 3002) and add it to `config/settings.local.yml`:
+
+```yaml
+url:
+  port: 3001
+```
+
+`bin/dev` starts Thin on that port, and the app uses the same setting to build its URLs (`https://gatherdev.org:3001`). `mise conf` keeps it when it regenerates the file.
 
 ### Tearing down a dev env
 
@@ -207,7 +216,7 @@ This removes:
 
 ### Checking for port conflicts
 
-`bin/dev` checks automatically whether port 3000 is already claimed before starting Rails. If another dev env owns it, you'll see which one and be told to stop it first.
+`bin/dev` checks automatically whether its port is already claimed before starting Rails. If another dev env owns it, you'll see which one and be told to stop it or pick a different port.
 
 ### Exposing sibling container UIs
 
@@ -271,18 +280,10 @@ We use eslint, rubocop, and scss_lint. The CI system enforces these—PRs won't 
 
 ### Elasticsearch 403 Errors
 
-Reset the index:
+Reset and re-populate the index:
 
-```ruby
-rails console -e development
-Work::Shift.__elasticsearch__.create_index!(force: true)
-```
-
-To re-populate after resetting:
-
-```ruby
-ActsAsTenant.current_tenant = Cluster.find(...)
-Work::Shift.find_each { |s| s.__elasticsearch__.index_document }
+```bash
+bin/rails search:reindex
 ```
 
 ## Mailman 3 Setup

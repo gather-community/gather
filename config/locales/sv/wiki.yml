@@ -1,0 +1,92 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+sv:
+  wiki:
+    page_deleted: "Sidan har raderats." # MT
+    page_listing: "Lista över wikisidor" # MT
+    new_page: "Ny wikisida" # MT
+    help: "Hjälp för wikin" # MT
+    editor:
+      autosaved: "Sparades automatiskt: " # MT
+      bold: "Fet" # MT
+      fullscreen: "Helskärm" # MT
+      heading: "Rubrik" # MT
+      image: "Infoga bild" # MT
+      italic: "Kursiv" # MT
+      lines:
+        one: "rader: %{count}" # MT
+        other: "rader: %{count}" # MT
+      link: "Skapa länk" # MT
+      ordered_list: "Numrerad lista" # MT
+      preview: "Förhandsgranska" # MT
+      quote: "Citat" # MT
+      side_by_side: "Sida vid sida" # MT
+      unordered_list: "Punktlista" # MT
+      words:
+        one: "ord: %{count}" # MT
+        other: "ord: %{count}" # MT
+    pages:
+      history_table:
+        version: "Version" # MT
+        date: "Datum" # MT
+        author: "Författare" # MT
+        comment: "Kommentar" # MT
+        compare: "Jämför markerade" # MT
+        return: "Tillbaka till sidan" # MT
+      all:
+        title: "Lista över wikisidor" # MT
+      compare:
+        title: "Wikijämförelse: %{title}" # MT
+        differences: "Skillnader mellan version %{old} och %{new}" # MT
+        versions_between: "Versioner mellan %{old} och %{new}" # MT
+      edit:
+        title: "Redigera wikisida: %{title}" # MT
+      history:
+        title: "Wikihistorik: %{title}" # MT
+      new:
+        title: "Ny wikisida" # MT
+      show:
+        wiki_home: "Wikins startsida" # MT
+    not_found_create: "Det finns ingen wikisida som heter ”%{title}”. Du kan skapa den nedan!" # MT
+    preview_notice: "Det här är en förhandsgranskning. Använd formuläret nedan för att spara sidan eller fortsätta redigera." # MT
+    revision_info: "Sidan ändrades %{time} av %{user}" # MT
+    revision_info_no_by: "Sidan ändrades %{time}" # MT
+    special_pages:
+      home:
+        title: "Wiki" # MT
+        content: |- # MT
+          Det här är **startsidan för din wiki**!
+
+          Ta en titt på [[Exempelsida]] för tips om hur du fyller den med användbar information!
+      sample:
+        title: "Exempelsida" # MT
+        content: |- # MT
+          Det här är en exempelsida i wikin.
+
+          Klicka på **Redigera** ovan för att se hur sidan fungerar! Oroa dig inte, du kan inte förstöra något!
+
+          ## Formatering
+
+          Wikisidor redigeras med **Markdown**, ett enkelt sätt att skapa ren och snygg text utan att behöva lära sig ett särskilt språk. Läs mer om Markdown i [guiden till Markdown-formatering](/about/markdown).
+
+          ## Länkar
+
+          Länkar till andra sidor är väldigt viktiga! Du kan länka till andra **wikisidor** så här: [[Rolig sida]].
+
+          Länken ovan är (förmodligen) röd. Det beror på att sidan inte finns ännu. Om du klickar på länken kan du skapa sidan. Då blir länken blå!
+
+          Om du vill att länktexten ska vara något annat än sidans titel kan du [[Rolig sida|göra så här]].
+
+          Länkar till externa sidor ser ut [så här](http://example.com).
+
+          En webbadress i vanlig text känns igen och blir automatiskt en länk: https://gather.coop

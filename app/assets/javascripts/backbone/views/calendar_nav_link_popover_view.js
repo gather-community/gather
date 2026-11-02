@@ -17,8 +17,8 @@ Gather.Views.CalendarNavLinkPopoverView = Backbone.View.extend({
 
   showPopover($el) {
     $el.popover({
-      content: "<div><b>Reservations</b> is now called <b>Calendars</b>! " +
-        "Check it out!</div><div><a href=\"#dismisspopover\">Dismiss</a></div>",
+      content: `<div>${I18n.t("calendar_nav_popover.message_html")}</div>` +
+        `<div><a href="#dismisspopover">${I18n.t("calendar_nav_popover.dismiss")}</a></div>`,
       html: true,
       placement: "bottom",
       trigger: "manual"

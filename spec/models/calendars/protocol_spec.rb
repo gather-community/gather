@@ -129,4 +129,77 @@ describe Calendars::Protocol do
       end
     end
   end
+
+  # A rule a repeating event can't keep to (Protocol::RECURRENCE_BLOCKING_RULES) can't reach a calendar
+  # with a series still to come, by any route.
+  describe "rules that block repeating events" do
+    let(:calendar) { create(:calendar, name: "Courtyard", allow_overlap: true) }
+    let(:other) { create(:calendar, name: "Office", allow_overlap: true) }
+    let(:community) { calendar.community }
+
+    before do
+      start = 1.day.from_now.change(hour: 18)
+      create(:event, calendar: calendar, recurrence_rule: IceCube::Rule.weekly.to_hash,
+        starts_at: start, ends_at: start + 1.hour)
+    end
+
+    def new_protocol(calendars:, **rules)
+      described_class.new(name: "Rules", community: community, calendar_ids: calendars.map(&:id), **rules)
+    end
+
+    def expect_refused(protocol)
+      expect(protocol.errors[:base].join).to match(/can't apply to Courtyard, which have repeating events/)
+    end
+
+    it "refuses a new one on a calendar with a series" do
+      protocol = new_protocol(calendars: [calendar], max_lead_days: 30)
+      expect(protocol.save).to be(false)
+      expect_refused(protocol)
+    end
+
+    it "refuses a new one that applies to every calendar" do
+      protocol = new_protocol(calendars: [], fixed_start_time: "14:00")
+      expect(protocol.save).to be(false)
+      expect_refused(protocol)
+    end
+
+    it "allows one on a calendar without a series" do
+      expect(new_protocol(calendars: [other], max_lead_days: 30).save).to be(true)
+    end
+
+    it "allows rules that every occurrence keeps the same way" do
+      protocol = new_protocol(calendars: [calendar], max_length_minutes: 120, pre_notice: "Be nice")
+      expect(protocol.save).to be(true)
+    end
+
+    it "refuses adding a blocking rule to an existing protocol" do
+      protocol = new_protocol(calendars: [calendar], max_length_minutes: 120).tap(&:save!)
+      expect(protocol.update(max_minutes_per_year: 600)).to be(false)
+      expect_refused(protocol)
+    end
+
+    it "refuses adding the calendar to a protocol that has one, leaving its calendars as they were" do
+      protocol = new_protocol(calendars: [other], max_lead_days: 30).tap(&:save!)
+
+      expect(protocol.update(calendar_ids: [other.id, calendar.id])).to be(false)
+      expect_refused(protocol)
+      expect(protocol.reload.calendars).to eq([other])
+    end
+
+    it "refuses removing a protocol's last calendar, which would make it apply to every calendar" do
+      protocol = new_protocol(calendars: [other], max_lead_days: 30).tap(&:save!)
+
+      expect(protocol.update(calendar_ids: [])).to be(false)
+      expect_refused(protocol)
+      expect(protocol.reload.calendars).to eq([other])
+    end
+
+    it "ignores a series that has ended" do
+      Calendars::Event.recurring.each do |series|
+        series.update!(recurrence_rule: IceCube::Rule.weekly.until(1.week.ago).to_hash,
+          starts_at: 3.weeks.ago, ends_at: 3.weeks.ago + 1.hour)
+      end
+      expect(new_protocol(calendars: [calendar], max_lead_days: 30).save).to be(true)
+    end
+  end
 end

@@ -1,0 +1,210 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+fi:
+  work:
+    job_created: "Tehtävä luotu." # MT
+    job_updated: "Tehtävä päivitetty." # MT
+    job_synced_from_meals: "Tämä tehtävä on synkronoitu ateriajärjestelmästä, eikä sitä voi muokata suoraan. Se päivittyy automaattisesti, kun aterioita lisätään tai muutetaan." # MT
+    period_created: "Jakso luotu." # MT
+    period_updated: "Jakso päivitetty." # MT
+    period_copied: "Osa tiedoista on kopioitu jaksosta ”%{name}”. Tarkista ja muokkaa niitä alla. Tehtävät kopioidaan, kun tallennat jakson." # MT
+    notices_wrong_phase: "Ilmoituksia ei voi lähettää, koska jakso ei ole vaiheessa ”valmis” tai ”avoin”." # MT
+    notices_no_quota: "Ilmoituksia ei voi lähettää, koska tällä jaksolla ei ole kiintiötä." # MT
+    notices_sent: "Ilmoitukset ovat matkalla!" # MT
+    signed_up: "Ilmoittautuminen onnistui. Hurraa!" # MT
+    signup_removed: "Ilmoittautumisesi poistettiin." # MT
+    # Compact hours, e.g. "3h" on the signup cards.
+    hours_abbr: "%{hours} h" # MT
+    jobs:
+      form:
+        reminders_on_role_html: "Tämän tehtävän muistutukset asetetaan sen ateriaroolin sivulla: %{link}." # MT
+        reminders_on_role: "Tämän tehtävän muistutukset asetetaan sen ateriaroolin sivulla." # MT
+        meal_role_page: "ateriaroolin sivu" # MT
+        shifts: "Vuorot" # MT
+      edit:
+        title: "Muokkaa tehtävää: %{title}" # MT
+      new:
+        title: "Luo tehtävä" # MT
+      index:
+        title: "Tehtävät" # MT
+        title_with_period: "Tehtävät: %{period}" # MT
+        create: "Luo tehtävä" # MT
+      show:
+        jobs: "Tehtävät" # MT
+        hours: "%{hours} tuntia" # MT
+    periods:
+      form:
+        do_not_copy: "Älä kopioi tehtäviä" # MT
+        meal_formula: "Aterioiden hinnoittelukaava" # MT
+        meal_roles_to_sync: "Synkronoitavat ateriaroolit" # MT
+        sync_hint: "Ateriatehtävät synkronoidaan aina, kun jakso muuttuu tai aterioita lisätään, muutetaan tai poistetaan. Ilmoittautumiset synkronoidaan, ilmoittautuipa käyttäjä aterian tai työjärjestelmän kautta. Ateriaroolien muutokset synkronoidaan vain, jos jakso on luonnosvaiheessa." # MT
+        shares: "Osuudet" # MT
+      edit:
+        title: "Muokkaa jaksoa: %{name}" # MT
+      new:
+        title: "Luo jakso" # MT
+      index:
+        title: "Työjaksot" # MT
+        create: "Luo jakso" # MT
+        name: "Nimi" # MT
+        start: "Alku" # MT
+        end: "Loppu" # MT
+        phase: "Vaihe" # MT
+        links: "Linkit" # MT
+        signups: "Ilmoittautumiset" # MT
+        report: "Raportti" # MT
+        jobs: "Tehtävät" # MT
+      review_notices:
+        title: "Ilmoitukset tehtävien valinnasta: %{name}" # MT
+        intro: "Seuraavat ilmoitukset lähetetään:" # MT
+      show:
+        title: "Jakso: %{name}" # MT
+        periods: "Jaksot" # MT
+        date: "Päivämäärä" # MT
+        max_rounds_per_worker:
+          one: "enintään %{count} kierros tekijää kohden" # MT
+          other: "enintään %{count} kierrosta tekijää kohden" # MT
+        workers_per_round:
+          one: "%{count} tekijä kierrosta kohden" # MT
+          other: "%{count} tekijää kierrosta kohden" # MT
+        minutes_per_round:
+          one: "%{count} minuutti kierrosta kohden" # MT
+          other: "%{count} minuuttia kierrosta kohden" # MT
+        shares: "Osuudet" # MT
+      report:
+        title: "Työraportti" # MT
+        title_with_period: "Työraportti: %{period}" # MT
+        overview: "Yleiskatsaus" # MT
+        total_hours: "Tunnit yhteensä" # MT
+        jobs: "Tehtävät" # MT
+        people: "Ihmiset" # MT
+        quota: "Kiintiö" # MT
+        by_person: "Henkilöittäin" # MT
+        by_household: "Kotitalouksittain" # MT
+        regular: "Tavalliset" # MT
+        name: "Nimi" # MT
+    settings:
+      edit:
+        title: "Työn asetukset" # MT
+    shifts:
+      shift:
+        sign_up: "Ilmoittaudu!" # MT
+      shifts:
+        list_label: "Ilmoittautumisten luettelo" # MT
+      index:
+        title: "Tehtäviin ilmoittautuminen" # MT
+      show:
+        signups: "Ilmoittautumiset" # MT
+    no_periods_html: "Käytettävissä olevia jaksoja ei ole. Katso: %{link}." # MT
+    periods_page: "jaksojen sivu" # MT
+    not_setup: "Yhteisösi ei näytä ottaneen käyttöön Gatherin työosuusjärjestelmää.\nKysy lisätietoja Gatherin ylläpitäjältä." # MT
+    choosing_as: "Valitset käyttäjän %{name} puolesta. Kaikki tehtävät, joihin ilmoittaudut, merkitään hänelle." # MT
+    no_signups: "Ei ilmoittautumisia" # MT
+    phase_notices:
+      shifts:
+        draft: "Tämä jakso on luonnosvaiheessa, joten tehtäviin ei voi vielä ilmoittautua." # MT
+        archived: "Tämä jakso on arkistoitu, joten ilmoittautumiset eivät ole sallittuja." # MT
+      jobs:
+        archived: "Tämä jakso on arkistoitu." # MT
+      report:
+        draft: "Tämä jakso on luonnosvaiheessa, joten raportti ei ole vielä näkyvissä." # MT
+        archived: "Tämä jakso on arkistoitu." # MT
+    num_hours: "%{num} tuntia" # MT
+    preassigned: "Tämä paikka on määrätty ennalta." # MT
+    synopsis:
+      done: "Kaikki valmista!" # MT
+      regular: "tavalliset" # MT
+      # %{chunks} is a list like "3/10 regular hours, 2/4 Pitch-In hours and 1/2 Mowing hours".
+      for_user_html: "Ilmoittautumisesi: %{chunks}." # MT
+      for_household_html: "Kotitaloutesi tilanne: %{chunks}." # MT
+      chunk:
+        single_html: "%{fraction} tuntia" # MT
+        multiple_html: "%{fraction} h (%{title})" # MT
+      start_choosing: "Voit aloittaa tehtävien valitsemisen %{at_or_on_time}." # MT
+      round_limit_with_next: "Kierrosrajasi on %{prev} tuntia, ja se nousee %{next} tuntiin %{at_or_on_time}." # MT
+      round_limit_until: "Kierrosrajasi on %{prev} tuntia %{until_time}." # MT
+  work/jobs:
+    shifts: "Vuorot" # MT
+    unlimited: "Rajoittamaton" # MT
+    full_community: "Tämä on koko yhteisön tehtävä" # MT
+    preassignments: "Tähän tehtävään on ennalta määrättyjä tekijöitä" # MT
+    meal_related: "Tämä tehtävä liittyy aterioihin" # MT
+    none_found: "Tehtäviä ei löytynyt." # MT
+  work/period:
+    phase_names:
+      archived: "Arkistoitu" # MT
+      draft: "Luonnos" # MT
+      open: "Avoin" # MT
+      published: "Julkaistu" # MT
+      ready: "Valmis" # MT
+    num_minutes:
+      one: "%{count} minuutti" # MT
+      other: "%{count} minuuttia" # MT
+  work/shares:
+    portion_options:
+      none: "Ei osuutta" # MT
+      one_qtr: "¼ osuus" # MT
+      half: "½ osuus" # MT
+      three_qtr: "¾ osuus" # MT
+      full: "Täysi osuus" # MT
+    intro: "Miten yhteisön työ jaetaan? Useimpien kuuluu saada täysi osuus, mutta joskus poikkeuksia tarvitaan. Puolikas osuus tarkoittaa, että henkilö tekee puolet niin monta tuntia kuin täyden osuuden saanut, ja niin edelleen." # MT
+    priority_hint_html: "Järjestelmä laskee automaattisesti, kuka valitsee ensin tarvittavien tuntien määrän perusteella. Ne, joilla on <i class='fa fa-star'></i>, valitsevat ennen muita." # MT
+    change_warning: "Tämä jakso on parhaillaan käynnissä. Osuuksien tai kiintiötyypin muuttaminen vaikuttaa kiintiölaskelmiin. Ole varovainen!" # MT
+  work/shift:
+    choosing_as: "Valitset käyttäjän %{name} puolesta" # MT
+    slots_exceeded: "Valitettavasti joku ehti ensin!" # MT
+    already_signed_up: "Olet jo ilmoittautunut tähän vuoroon." # MT
+    not_signed_up: "Et ole ilmoittautunut tähän vuoroon." # MT
+    round_limit_exceeded: "Olet ylittänyt kierrosrajasi." # MT
+    slots_open:
+      one: "%{count} paikka vapaana" # MT
+      other: "%{count} paikkaa vapaana" # MT
+  work/job_reminder:
+    absolute: "Ajankohta: %{time}" # MT
+    relative:
+      days_before:
+        one: "%{count} päivä ennen" # MT
+        other: "%{count} päivää ennen" # MT
+      days_after:
+        one: "%{count} päivä jälkeen" # MT
+        other: "%{count} päivää jälkeen" # MT
+      hours_before:
+        one: "%{count} tunti ennen" # MT
+        other: "%{count} tuntia ennen" # MT
+      hours_after:
+        one: "%{count} tunti jälkeen" # MT
+        other: "%{count} tuntia jälkeen" # MT
+  work_mailer:
+    job_reminder:
+      subject: "Tehtävämuistutus: %{title}, %{times}" # MT
+      # The time is left out of the subject when the reminder has a note.
+      subject_with_note: "Tehtävämuistutus: %{title}: %{note}" # MT
+      scheduled: "Muistutus: olet vuorossa tehtävässä ”%{job}” (%{times})." # MT
+      note_intro: "Muistutukseen liittyy seuraava viesti:" # MT
+      see_description: "Tehtävän kuvaus: %{url}." # MT
+      thanks: "Kiitos työstäsi yhteisön hyväksi!" # MT
+    job_choosing_notice:
+      subject: "Tehtävien valinta lähestyy!" # MT
+      coming_up_on: "Tehtävien valinta alkaa %{date}!" # MT
+      coming_up_soon: "Tehtävien valinta alkaa pian!" # MT
+      quota: "Sinulle on määrätty ennalta %{got} tuntia ja kiintiösi on %{quota}, joten sinun täytyy valita %{need} tavallista tuntia." # MT
+      also_choose: "Sinun odotetaan valitsevan myös: %{hours}." # MT
+      full_community_hours: "%{hours} tuntia (%{title})" # MT
+      begin_at: "Voit aloittaa valitsemisen klo %{time}." # MT
+      schedule_intro: "Kierrosaikataulusi on seuraava:" # MT
+      round_with_limit: "* Klo %{time} voit valita enintään %{limit} tuntia." # MT
+      round_finish: "* Klo %{time} voit valita loput." # MT
+      go_to: "Mene osoitteeseen %{url} yllä mainittuina aikoina valitsemaan tehtäväsi. Voit myös käydä aiemmin katsomassa, mitä tehtäviä on tarjolla, ja suunnitella valintasi. Ilmoittautua voit kuitenkin vasta yllä mainittuina aikoina." # MT
+      choosing_begins: "Valinta alkaa klo %{time}." # MT
+      visit: "Lisätietoja: %{url}." # MT
+      thanks: "Kiitos osallistumisestasi!" # MT

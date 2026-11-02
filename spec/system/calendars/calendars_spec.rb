@@ -98,6 +98,22 @@ describe "calendars", js: true do
       expect(page).to have_css("table tr td", text: "Baz Qux")
     end
 
+    scenario "overlaps can't be turned off while the calendar has repeating events" do
+      calendar = calendars.first
+      calendar.update!(allow_overlap: true)
+      start = 1.day.from_now.change(hour: 18)
+      create(:event, calendar: calendar, starts_at: start, ends_at: start + 1.hour,
+        recurrence_rule: IceCube::Rule.weekly.to_hash)
+
+      visit(edit_calendar_path(calendar))
+      uncheck("Events can overlap each other?")
+      click_button("Save")
+
+      expect_validation_error
+      expect(page).to have_content("must stay on while this calendar has repeating events")
+      expect(calendar.reload.allow_overlap).to be(true)
+    end
+
     scenario "deactivate/activate/delete calendar" do
       visit(edit_calendar_path(calendars.first))
       click_on("Deactivate")

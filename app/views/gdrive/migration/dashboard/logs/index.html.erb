@@ -1,21 +1,21 @@
-<% content_for(:title) { "Google Drive Migration" } %>
+<% content_for(:title) { t("gdrive.migration.dashboard.title") } %>
 
 <div class="synopsis gdrive-migration-synopsis">
   <%= render("gdrive/migration/dashboard/synopsis") %>
 </div>
 
-<h2>Logs</h2>
+<h2><%= t(".logs") %></h2>
 
 <% if @logs.empty? %>
   <div class="center-notice">
-    No logs yet.
+    <%= t(".none") %>
   </div>
 <% else %>
   <table class="full-width">
     <tr>
       <th></th>
-      <th>Time</th>
-      <th>Message</th>
+      <th><%= t(".time") %></th>
+      <th><%= t(".message") %></th>
     </tr>
     <% @logs.each do |log| %>
       <tr>

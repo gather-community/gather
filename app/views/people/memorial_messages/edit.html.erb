@@ -1,4 +1,4 @@
-<% content_for(:title, "Edit Memorial Message") %>
+<% content_for(:title, t(".title")) %>
 <%= gather_form_for(@memorial_message) do |f| %>
   <%= f.input :body, label: false, input_html: {class: "longer"} %>
 

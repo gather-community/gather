@@ -1,39 +1,40 @@
 <div id="reimb-form">
   <table>
     <tr>
-      <td>Meal:</td>
+      <td><%= t(".meal") %></td>
       <td>
         <%= meal.title_or_no_title %><br/>
         <% if meal.head_cook %>
-          By <%= meal.head_cook_name %><br/>
+          <%= t(".by_cook", cook: meal.head_cook_name) %><br/>
         <% end %>
-        <%= meal.served_at_datetime %>
         <% if meal.location_name %>
-          at <%= meal.location_name %>
+          <%= t(".time_at_location", time: meal.served_at_datetime, location: meal.location_name) %>
+        <% else %>
+          <%= meal.served_at_datetime %>
         <% end %>
       </td>
     </tr>
     <tr>
-      <td>Amount spent for ingredients:</td>
-      <td>$</td>
+      <td><%= t(".ingredients") %></td>
+      <td><%= t(".amount_blank") %></td>
     </tr>
     <% if meal.formula.pantry_reimbursement? %>
       <tr>
-        <td>Amount spent on pantry/staple items:</td>
-        <td>$</td>
+        <td><%= t(".pantry") %></td>
+        <td><%= t(".amount_blank") %></td>
       </tr>
       <tr>
-        <td>Total amount to be reimbursed:</td>
-        <td>$</td>
+        <td><%= t(".total") %></td>
+        <td><%= t(".amount_blank") %></td>
       </tr>
     <% end %>
     <tr>
-      <td>Reimbursement method:</td>
+      <td><%= t(".method") %></td>
       <td>
-        &#x25a2; Account credit<br/>
-        &#x25a2; Check payable to: <span class="payable-to"></span><br/>
+        &#x25a2; <%= t(".account_credit") %><br/>
+        &#x25a2; <%= t(".check_payable") %> <span class="payable-to"></span><br/>
         <% if current_community.settings.billing.paypal_reimbursement %>
-          &#x25a2; PayPal to email address: <span class="payable-to"></span><br/>
+          &#x25a2; <%= t(".paypal") %> <span class="payable-to"></span><br/>
         <% end %>
       </td>
     </tr>

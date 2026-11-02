@@ -1,21 +1,21 @@
-<% content_for(:title, "Transaction Templates") %>
+<% content_for(:title, t(".title")) %>
 
 <% content_for(:action_links) do %>
-  <%- concat(link_to(icon_tag("plug") << " Apply Templates", "#", class: "btn btn-default btn-apply")) -%>
+  <%- concat(link_to(icon_tag("plug") << " " << t(".apply"), "#", class: "btn btn-default btn-apply")) -%>
   <%- if policy(sample_template).create? -%>
-    <%- concat(link_to(icon_tag("plus") << " Create Template", new_billing_template_path,
+    <%- concat(link_to(icon_tag("plus") << " " << t(".create"), new_billing_template_path,
           class: "btn btn-primary")) -%>
   <%- end -%>
 <% end %>
 
 <p class="subtitle">
   <%= icon_tag("info-circle") %>
-  Transaction templates make it easy to create batches of transactions at once.
+  <%= t(".intro") %>
 </p>
 
 <% if templates.empty? %>
   <div class="center-notice">
-    No templates found.
+    <%= t(".none_found") %>
   </div>
 <% else %>
   <%= form_tag(review_billing_templates_path, class: "index-checkbox") do %>
@@ -23,10 +23,10 @@
       <thead>
         <tr>
           <th class="index-checkbox"><input type="checkbox" /></th>
-          <th>Description</th>
-          <th>Type</th>
-          <th>Member Type(s)</th>
-          <th>Amount</th>
+          <th><%= t(".description") %></th>
+          <th><%= t(".type") %></th>
+          <th><%= t(".member_types") %></th>
+          <th><%= t(".amount") %></th>
         </tr>
       </thead>
       <tbody>
@@ -38,7 +38,7 @@
             </td>
             <td class="type"><%= t("transaction_codes.#{template.code}") %></td>
             <td class="member-types"><%= template.member_type_names %></td>
-            <td class="amount"><%= number_to_currency(template.value) %></td>
+            <td class="amount"><%= format_money(template.value) %></td>
           </tr>
         <% end %>
       </tbody>

@@ -1,3 +1,3 @@
-<% content_for(:title, "Edit Period: #{period.name}") %>
+<% content_for(:title, t(".title", name: period.name)) %>
 <% content_for(:action_links, period.action_links(:edit)) %>
 <%= render("form") %>

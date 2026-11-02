@@ -1,0 +1,370 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+nl:
+  gdrive:
+    config_updated: "Configuratie bijgewerkt." # MT
+    group_added: "Groep toegevoegd." # MT
+    item_created: "Item aangemaakt." # MT
+    old_migration: "Je migratie is meer dan 30 dagen geleden aangemaakt. Overweeg om je migratie af te ronden en te verwijderen." # MT
+    auth_cancelled: "Het lijkt erop dat je het inloggen bij Google hebt geannuleerd." # MT
+    wrong_account: "Je bent bij Google ingelogd met %{signed_in}. Log in plaats daarvan in met %{expected}." # MT
+    authenticated: "Verbinding met Google gemaakt." # MT
+    connection_problem: "Er is een probleem met de verbinding met Google Drive. Neem contact op met de ondersteuning van Gather. (%{code})" # MT
+    view_in_drive: "Bekijken in Google Drive" # MT
+    browse:
+      index:
+        title: "Google Drive" # MT
+        settings: "Instellingen" # MT
+        migration: "Migratie" # MT
+        reconnect: "Je gemeenschap moet opnieuw met Google Drive worden verbonden." # MT
+        authenticate_as_html: "Log bij Google in als %{user}." # MT
+        reconnect_notify_admin: "Je gemeenschap moet opnieuw met Google Drive worden verbonden. Laat het een beheerder van Gather weten." # MT
+        not_connected: "Je gemeenschap is nog niet met Google Drive verbonden." # MT
+        not_connected_get_started_html: "Je gemeenschap is nog niet met Google Drive verbonden. Ga naar de %{link} om te beginnen." # MT
+        settings_page: "instellingenpagina" # MT
+        no_drives_html: "Je gemeenschap heeft geen gekoppelde gedeelde drives. Ga naar de %{link} om een drive te koppelen." # MT
+        not_connected_talk_to_admin: "Je gemeenschap is nog niet met Google Drive verbonden. Neem contact op met een beheerder van Gather." # MT
+        no_files: "Geen bestanden gevonden." # MT
+        migrating_html: "Zoek je iets? Bestanden worden op dit moment naar deze nieuwe drive van de gemeenschap verplaatst. Kun je iets niet vinden, kijk dan op de %{link}." # MT
+        old_location: "oude locatie" # MT
+        file_icon: "Bestandspictogram" # MT
+        no_files_in_folder: "Geen bestanden gevonden in deze map." # MT
+        folder_icon: "Mappictogram" # MT
+      auth_button:
+        authenticate: "Inloggen met Google" # MT
+    items:
+      new:
+        title: "Google Drive-item toevoegen" # MT
+    item_groups:
+      new:
+        title: "Groep toevoegen aan Google Drive-item" # MT
+    config:
+      index:
+        title: "Instellingen Google Drive" # MT
+        migration: "Migratie" # MT
+        migrate_files: "Bestanden migreren" # MT
+        link_item: "Item koppelen" # MT
+        credentials: "Inloggegevens Google Workspace" # MT
+        add_credentials_html: "Je gemeenschap is nog niet met Google Drive verbonden. Voeg je inloggegevens voor Google Workspace toe om verbinding te maken. Zie de %{link} om te beginnen." # MT
+        config_guide: "configuratiehandleiding" # MT
+        authentication: "Authenticatie" # MT
+        update_credentials: "Moet je je inloggegevens voor Google Workspace bijwerken, dan kan dat hier." # MT
+        introduction: "Inleiding" # MT
+        system_user_html: "<strong>Systeemgebruiker:</strong> %{user}" # MT
+        intro_html: "Voeg hieronder items toe om ze aan Gather te koppelen en rechten te synchroniseren. De gedeelde drives hieronder worden getoond op de %{link} in Gather, voor gebruikers met toegang. Mappen en bestanden zijn alleen via de bladerpagina bereikbaar als de gedeelde drive waarin ze staan bereikbaar is." # MT
+        browse_page: "bladerpagina van Google Drive" # MT
+        name: "Naam" # MT
+        status: "Status" # MT
+        groups_permissions: "Groepen en rechten" # MT
+        # e.g. "Viewer (View files)"
+        access_level: "%{level} (%{hint})" # MT
+        add_group: "Groep toevoegen" # MT
+        none_linked:
+          drive: "Er zijn geen gedeelde drives aan Gather gekoppeld." # MT
+          folder: "Er zijn geen mappen aan Gather gekoppeld." # MT
+          file: "Er zijn geen bestanden aan Gather gekoppeld." # MT
+        revoke_html: "Moet je de verbinding met Google verbreken of je inloggegevens voor Google Workspace bijwerken, dan kun je %{link}." # MT
+        revoke: "de autorisatie intrekken" # MT
+        revoke_confirm: "Weet je zeker dat je de autorisatie wilt intrekken? Niemand kan dan de Google Drive-functies voor deze gemeenschap gebruiken totdat de autorisatie opnieuw is ingesteld." # MT
+      guide:
+        title: "Configuratiehandleiding Google Drive" # MT
+        # Markdown, rendered with Gather's Markdown renderer. Google's menu and button names are in quotes
+        # or bold so they can be matched to Google's own (translated) interface.
+        body: |- # MT
+          Deze handleiding helpt je stap voor stap om de inloggegevens te krijgen die nodig zijn om de Google Workspace van je gemeenschap met Gather te verbinden.
+
+          ## Vereisten
+
+          * De gemeenschap moet zich hebben aangemeld voor **Google Workspace**.
+              * Het abonnement Business Starter is voldoende.
+              * Er is maar één gebruikersaccount nodig.
+              * Kies voor het account een naam van de gemeenschap (bijv. workspace.admin@jouwdomein.nl) in plaats van een persoonlijke naam (bijv. jandevries@jouwdomein.nl).
+          * Wie deze instructies volgt, moet bij Google zijn ingelogd als gebruiker in de Google Workspace van de gemeenschap met rechten van **superbeheerder**. Als je maar één account hebt, heeft dat account rechten van superbeheerder.
+
+          ## Hoofdconfiguratie
+
+          ### Een project maken
+
+          1. Ga naar https://console.cloud.google.com
+          2. Zorg dat je bij Google bent ingelogd als de gebruiker met rechten van superbeheerder.
+          3. Accepteer de voorwaarden. Wacht een paar minuten tot de organisatieresource voor je is ingericht.
+          4. Ga naar https://console.cloud.google.com/projectcreate om een project te maken.
+          5. Noem het **Gather Main**.
+          6. Kies de organisatie voor je domein.
+          7. Gebruik de standaardwaarde voor de locatie.
+
+          ### Ingeschakelde API’s
+
+          1. Ga met het nieuwe project geselecteerd naar https://console.cloud.google.com/ → hamburgermenu → API’s en services → Ingeschakelde API’s en services
+          2. Klik op **API’s en services inschakelen**.
+          3. Schakel de **Google Drive API** in.
+
+          ### OAuth-client-ID
+
+          1. Ga met het nieuwe project geselecteerd naar https://console.cloud.google.com/ → hamburgermenu → API’s en services → Ingeschakelde API’s en services → Inloggegevens.
+          2. Klik op **Inloggegevens maken** → **OAuth-client-ID**
+          3. Kies **Webapplicatie**.
+          4. Naam: **Drive OAuth Client ID**.
+          5. Voeg onder **Geautoriseerde JavaScript-bronnen** https://gather.coop toe.
+          6. Voeg onder **Geautoriseerde omleidings-URI’s** https://gather.coop/gdrive/setup/auth/callback toe.
+          7. Kopieer de client-ID en het clientgeheim naar een veilige plek en bewaar ze voor later.
+              1. De client-ID ziet er ongeveer zo uit: `302773344240-7g2n5abcdef8es2cvpc0roj7t.apps.googleusercontent.com`
+              2. Het clientgeheim ziet er ongeveer zo uit: `AIza73uyhc63ehd763ehesysqyhw-hei2asda_2rs`
+
+          ### OAuth-toestemmingsscherm
+
+          1. Ga met het nieuwe project geselecteerd naar https://console.cloud.google.com/ → hamburgermenu → API’s en services → OAuth-toestemmingsscherm.
+          2. Kies **Intern**.
+          3. App-naam: **Gather**.
+          4. E-mailadres voor gebruikersondersteuning: het e-mailadres van de gebruiker met rechten van superbeheerder.
+          5. Geen logo.
+          6. Startpagina van app: https://gather.coop
+          7. Privacybeleid: https://gather.coop/privacy-policy
+          8. Geautoriseerde domeinen:
+              1. gather.coop
+          9. Contactgegevens van ontwikkelaar: support@gather.coop
+          10. Bereiken
+              1. auth/userinfo.email
+              2. auth/drive
+    item_kinds:
+      drive:
+        one: "Gedeelde drive" # MT
+        other: "Gedeelde drives" # MT
+      folder:
+        one: "Map" # MT
+        other: "Mappen" # MT
+      file:
+        one: "Bestand" # MT
+        other: "Bestanden" # MT
+    access_levels:
+      reader: "Kijker" # MT
+      commenter: "Reageerder" # MT
+      writer: "Bijdrager" # MT
+      fileOrganizer: "Contentbeheerder" # MT
+    access_level_hints:
+      reader: "Bestanden bekijken" # MT
+      commenter: "Bestanden bekijken en erop reageren" # MT
+      writer: "Bestanden bekijken, toevoegen en bewerken" # MT
+      fileOrganizer: "Bestanden bekijken, toevoegen, bewerken, verplaatsen, verwijderen en delen" # MT
+    item_error_types:
+      inaccessible: "Niet toegankelijk" # MT
+      not_shareable: "Niet deelbaar" # MT
+    request_statuses:
+      new: "Nieuw" # MT
+      opened: "Geopend" # MT
+      opted_out: "Afgemeld" # MT
+
+    migration:
+      requests_sending: "De verzoeken worden zo meteen verstuurd. Als een eigenaar al een verzoek heeft, wordt er geen nieuw verzoek verstuurd." # MT
+      created: "Migratie aangemaakt. Het scannen van bestanden begint zo meteen." # MT
+      scan_started: "Scan gestart, die begint zo meteen." # MT
+      updated: "Migratie bijgewerkt." # MT
+      deleted: "Bewerking verwijderd. Er wordt niet meer op wijzigingen gelet." # MT
+      # Name of the shared drive created for each person to drop their files into.
+      file_drop_drive_name: "Gather-bestandsinleverdrive %{id}" # MT
+      request_subject: "[Actie vereist] Help %{community} de Google Drive-bestanden opnieuw te ordenen!" # MT
+      request:
+        # Shared by the request pages.
+        title: "Bestanden van %{community} opnieuw ordenen" # MT
+        previous: "< Vorige" # MT
+        next: "Volgende >" # MT
+        troubleshooting: "Problemen oplossen" # MT
+        intro:
+          introduction: "Inleiding" # MT
+          ready: "Ja, ik wil helpen!" # MT
+        what_is_this:
+          using_gather_html: "%{community} gebruikt <a href=\"https://gather.coop\">Gather</a> om de Google Drive-bestanden opnieuw te ordenen." # MT
+          problem: "Op dit moment zijn de bestanden van de gemeenschap eigendom van degene die ze heeft gemaakt. Daardoor kunnen bestanden per ongeluk verloren gaan als iemand de gemeenschap verlaat." # MT
+          solution: "Om dat te voorkomen, zet de gemeenschap al haar bestanden in een gedeelde drive die eigendom is van de gemeenschap." # MT
+          own_many_html: "Je bent eigenaar van ongeveer %{count} bestanden in de %{link} van %{community}. We hebben je toestemming nodig om ze naar de nieuwe drive te verplaatsen." # MT
+          own_one_html: "Je bent eigenaar van minstens één bestand in de %{link} van %{community}. We hebben je toestemming nodig om het naar de nieuwe drive te verplaatsen." # MT
+          old_folder: "oude Google Drive-map" # MT
+          retain_access: "Als je lid bent van de gemeenschap, houd je toegang tot de bestanden." # MT
+          questions_html: "Heb je vragen of zorgen, neem dan contact op met %{contact}, die het opnieuw ordenen coördineert." # MT
+          opt_out_html: "Wil je liever niet meehelpen, dan kun je je %{link}." # MT
+          opt_out: "afmelden" # MT
+        step1:
+          heading: "Stap 1: bestanden waarvan je eigenaar bent" # MT
+          view_files: "Klik hieronder om de bestanden te bekijken waarvan je eigenaar bent in de Google Drive-map van %{community}. Er wordt een nieuw browsertabblad geopend." # MT
+          view_files_button: "Mijn bestanden bekijken" # MT
+          see_something_like: "Je zou ongeveer dit moeten zien:" # MT
+          no_files: "Ik zie geen bestanden" # MT
+          no_files_help_html: "Zie je geen bestanden, controleer dan of je bij Google bent ingelogd met het account %{email}." # MT
+        step2:
+          heading: "Stap 2: bestanden selecteren" # MT
+          select: "Selecteer de bestanden die je wilt overdragen." # MT
+          easiest: "Dat gaat het makkelijkst zo:" # MT
+          click_first: "Klik op het eerste bestand in de lijst." # MT
+          go_to_end: "Ga naar het einde van de lijst." # MT
+          shift_click_html: "<strong>Houd de SHIFT-toets ingedrukt</strong> en klik op het laatste bestand in de lijst." # MT
+          see_something_like: "Daarna zou je ongeveer dit moeten zien:" # MT
+          one_at_a_time: "Ik kan maar één bestand tegelijk selecteren" # MT
+          holding_html: "Zorg dat je de drie stappen hierboven volgt en de SHIFT-toets <strong>ingedrukt houdt</strong> als je op het tweede bestand klikt." # MT
+          shift_explained: "Als je de SHIFT-toets ingedrukt houdt tijdens het klikken, selecteer je ALLE bestanden in de lijst tussen het al geselecteerde bestand en het bestand waarop je klikt." # MT
+        step3:
+          heading: "Stap 3: Organiseren > Verplaatsen" # MT
+          click_sequence: "Klik achtereenvolgens op:" # MT
+          dots: "Pictogram met 3 puntjes" # MT
+          organize: "Organiseren" # MT
+          move: "Verplaatsen" # MT
+        step4:
+          heading: "Stap 4: inleverdrive selecteren" # MT
+          all_locations: "Klik op “Alle locaties”" # MT
+          shared_drives: "Klik op “Gedeelde drives”" # MT
+          next_to_html: "Klik naast %{drive} op “Verplaatsen”" # MT
+          move_button: "Klik op de knop “Verplaatsen”" # MT
+          no_shared_drives: "Ik zie “Gedeelde drives” niet in de lijst “Alle locaties”" # MT
+          signed_in_html: "Controleer of je bij Google bent ingelogd met het account %{email}. Zie je “Gedeelde drives” nog steeds niet, open dan %{link} in een nieuw tabblad en probeer deze stap opnieuw." # MT
+          this_link: "deze link" # MT
+          still_trouble_html: "Lukt het nog steeds niet, vraag dan %{contact} om hulp." # MT
+          unselected: "Ik heb per ongeluk een aantal bestanden gedeselecteerd" # MT
+          go_back_html: "Geen probleem! Ga terug naar %{link}." # MT
+          step2: "stap 2" # MT
+          ownership: "Ik wil het eigendom niet overdragen" # MT
+          ownership_explained: "Alle bestanden in de nieuwe gedeelde drive van %{community} zijn eigendom van de gemeenschap, niet van een persoon. Zo nemen de bestanden geen ruimte in binnen je persoonlijke opslag van Google Drive en kunnen ze niet per ongeluk worden verwijderd." # MT
+          still_access: "Als je lid bent van de gemeenschap, houd je toegang tot de bestanden." # MT
+        step5:
+          heading: "Stap 5: controleren of alle bestanden zijn verplaatst" # MT
+          empty_list: "Je zou nu een lege lijst met bestanden moeten zien, ongeveer zo:" # MT
+          done: "Zo ja, dan ben je klaar!" # MT
+          finish: "Afronden" # MT
+          not_empty: "De lijst met bestanden is niet leeg" # MT
+          head_back_html: "Geen probleem! Ga terug naar %{link}." # MT
+          step2: "stap 2" # MT
+          some_files: "Er zijn bestanden die ik niet wil overdragen" # MT
+          use_opt_out_html: "Gebruik het %{link} om de coördinator te laten weten welke." # MT
+          opt_out_form: "afmeldformulier" # MT
+        finish:
+          heading: "Helemaal klaar!" # MT
+          thanks: "Heel erg bedankt dat je helpt de bestanden van %{community} opnieuw te ordenen!" # MT
+          great_day: "Een fijne dag nog!" # MT
+        opt_out:
+          heading: "Afmelden voor het overdragen van bestanden" # MT
+          not_active: "Het lijkt erop dat je migratieverzoek niet actief is, dus je kunt je niet afmelden." # MT
+          why: "Laat ons weten waarom je je afmeldt." # MT
+          still_own: "Volgens onze gegevens ben je nog eigenaar van de bestanden hieronder. Wil je niet helpen deze bestanden aan de gemeenschap over te dragen, laat ons dan weten waarom je je afmeldt." # MT
+          went_wrong: "Heb je geprobeerd bestanden over te dragen maar ging er iets mis, vertel dan wat er gebeurde." # MT
+          didnt_mean_html: "Wilde je je niet afmelden, dan kun je %{link}." # MT
+          go_back_link: "teruggaan" # MT
+          go_back: "Teruggaan" # MT
+          not_transferred: "Niet overgedragen bestanden" # MT
+          name: "Naam" # MT
+          modified: "Gewijzigd" # MT
+          file_icon: "Bestandspictogram" # MT
+        opted_out:
+          heading: "Afgemeld" # MT
+          opted_out: "Je hebt je afgemeld voor het opnieuw ordenen van de Google Drive-bestanden van %{community}." # MT
+          opt_back_in_html: "Wil je toch weer meedoen, %{link}." # MT
+          clicking_here: "klik dan hier" # MT
+        mobile_warning:
+          thanks: "Bedankt dat je %{community} wilt helpen de Google Drive-bestanden opnieuw te ordenen!" # MT
+          mobile: "Mobiel apparaat?" # MT
+          looks_like_mobile: "Het lijkt erop dat je een mobiel apparaat gebruikt." # MT
+          works_better: "Dit gaat veel beter op een laptop of desktop met een volledig toetsenbord en een muis." # MT
+          proceed_html: "%{link}, maar als je veel bestanden in de oude Google Drive-map hebt, kan het een moeizaam werkje worden." # MT
+          welcome_to_proceed: "Je kunt gerust doorgaan" # MT
+          switch_html: "Wil je overstappen op een laptop of desktop, dan kun je dezelfde %{link} uit je e-mail gebruiken waarmee je hier bent gekomen." # MT
+          link: "link" # MT
+          thanks_again: "Hoe dan ook, nogmaals bedankt!" # MT
+          what_is_this: "Wat is dit?" # MT
+      mailer:
+        migration_request:
+          dear: "Beste %{name}," # MT
+          using_gather: "%{community} gebruikt Gather om de Google Drive-bestanden opnieuw te ordenen." # MT
+          problem: "Op dit moment zijn de bestanden van de gemeenschap eigendom van degene die ze heeft gemaakt. Daardoor kunnen bestanden per ongeluk verloren gaan als iemand de gemeenschap verlaat!" # MT
+          solution: "Om dat te voorkomen, zet de gemeenschap al haar bestanden in een gedeelde drive die eigendom is van de gemeenschap." # MT
+          own_many: "Je Google-account %{email} is eigenaar van ongeveer %{count} bestanden in de oude Google Drive-map van %{community}. We hebben je toestemming nodig om ze naar de nieuwe drive te verplaatsen." # MT
+          own_one: "Je Google-account %{email} is eigenaar van minstens één bestand in de oude Google Drive-map van %{community}. We hebben je toestemming nodig om het naar de nieuwe drive te verplaatsen." # MT
+          go_here: "Ga hierheen om te helpen: %{url}" # MT
+          retain_access: "Als je lid bent van de gemeenschap, houd je toegang tot de bestanden. Heb je vragen of zorgen, neem dan contact op met %{contact} via %{email}, die het opnieuw ordenen coördineert. Wil je liever niet meehelpen, dan kun je je ook afmelden via de URL hierboven." # MT
+          thanks: "Bedankt voor je tijd en aandacht!" # MT
+      dashboard:
+        # Shared by the dashboard pages.
+        title: "Migratie Google Drive" # MT
+        synopsis:
+          not_begun_contact: "Het scannen van bestanden is niet begonnen. Neem contact op met de ondersteuning van Gather." # MT
+          not_begun_wait: "Het scannen van bestanden is niet begonnen. Wacht even en vernieuw dan de pagina." # MT
+          in_progress: "Bestanden worden gescand. Tot nu toe %{count} bestanden gescand." # MT
+          complete: "Het scannen van bestanden is klaar. Er wordt op wijzigingen gelet." # MT
+          auth_error_html: "Het scannen van bestanden is geannuleerd door een autorisatiefout. Zorg dat %{user} <strong>bewerk</strong>rechten heeft voor je %{folder_link}. Klik op “Autorisatie intrekken” en log opnieuw in op de %{home_link}. Probeer de scan daarna opnieuw." # MT
+          source_folder: "bronmap" # MT
+          main_page: "hoofdpagina van Google Drive" # MT
+          too_many_errors: "Het scannen van bestanden is geannuleerd door te veel fouten. Zie de fouten hieronder. Herstel de fouten en probeer de scan daarna opnieuw." # MT
+          cancelled_unknown: "Het scannen van bestanden is om een onbekende reden geannuleerd." # MT
+          unknown_state: "Het scannen van bestanden is in een onbekende toestand." # MT
+        status:
+          show:
+            system_user: "Systeemgebruiker" # MT
+            contact: "Contactpersoon" # MT
+            contact_value: "%{name} <%{email}>" # MT
+            source_folder: "Bronmap" # MT
+            destination_folder: "Doelmap" # MT
+            total_files: "Totaal aantal bestanden" # MT
+            files_by_status:
+              pending: "Bestanden in afwachting" # MT
+              declined: "Bestanden geweigerd" # MT
+              errored: "Bestanden met fout" # MT
+              transferred: "Bestanden overgedragen" # MT
+              copied: "Bestanden gekopieerd" # MT
+              ignored: "Bestanden genegeerd" # MT
+              disappeared: "Bestanden verdwenen" # MT
+        logs:
+          index:
+            logs: "Logboeken" # MT
+            none: "Nog geen logboeken." # MT
+            time: "Tijd" # MT
+            message: "Bericht" # MT
+        files:
+          index:
+            files: "Bestanden" # MT
+            name: "Naam" # MT
+            owner: "Eigenaar" # MT
+            modified: "Gewijzigd" # MT
+            status: "Status" # MT
+            error: "Fout" # MT
+            file_icon: "Bestandspictogram" # MT
+        owners:
+          index:
+            owners: "Eigenaren" # MT
+            files: "Bestanden" # MT
+            request: "Verzoek" # MT
+            owner: "Eigenaar" # MT
+            total: "Totaal" # MT
+            date_sent: "Verzonden op" # MT
+            status: "Status" # MT
+          show:
+            files: "Bestanden" # MT
+            total_files: "Totaal aantal bestanden" # MT
+            request: "Verzoek" # MT
+            date_sent: "Verzonden op" # MT
+            status: "Status" # MT
+            intro_page: "Introductiepagina van het verzoek" # MT
+            link: "Link" # MT
+            opened_note: "Let op: als je op deze link klikt, krijgt het verzoek de status “geopend”." # MT
+            file_drop_drive: "Inleverdrive" # MT
+            opt_out_reason: "Reden van afmelden" # MT
+      operations:
+        form:
+          intro: "Vul hieronder de informatie in om je migratie in te stellen. Er wordt een scan van de bestanden gestart en je wordt doorgestuurd naar het migratiedashboard." # MT
+        new:
+          title: "Migratie aanmaken" # MT
+        edit:
+          title: "Migratie bewerken" # MT
+      # Labels for GDrive::Migration::File#error_type. Keep in sync with the error_type_enum DB constraint.
+      errors:
+        forbidden: "Geen toestemming" # MT
+        not_found: "Niet gevonden" # MT
+        ancestor_inaccessible: "Bovenliggende map niet toegankelijk" # MT
+        client_error_ensuring_tree: "Fout bij het maken van doelmappen" # MT
+        client_error_moving_to_temp_drive: "Fout bij het verplaatsen naar de tijdelijke drive" # MT
+        client_error_moving_to_destination: "Fout bij het verplaatsen naar de bestemming" # MT

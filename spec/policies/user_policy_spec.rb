@@ -250,6 +250,15 @@ describe UserPolicy do
       it_behaves_like "permits self (active or not) and guardians"
     end
 
+    permissions :update_notification_prefs? do
+      it "permits self only" do
+        expect(subject).to permit(user, user)
+        expect(subject).not_to permit(user, other_user)
+        expect(subject).not_to permit(admin, user)
+        expect(subject).not_to permit(guardian, child)
+      end
+    end
+
     # Permission only governs whether the delete button renders; anonymization means shared
     # records (meals, wiki, events) no longer block deletion. Warn-only conditions (balance,
     # guardianship, last admin) live in People::UserDeletion.blockers, not here.

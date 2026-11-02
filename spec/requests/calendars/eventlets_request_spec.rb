@@ -5,7 +5,7 @@ require "rails_helper"
 describe "calendar eventlet show page" do
   let(:community) { create(:community) }
   let!(:user) { create(:user, community: community) }
-  let!(:calendar) { create(:calendar, community: community) }
+  let!(:calendar) { create(:calendar, community: community, allow_overlap: true) }
 
   before do
     use_user_subdomain(user)
@@ -171,6 +171,29 @@ describe "calendar eventlet drag update" do
     expect(response.body).to include("must be after start time")
   end
 
+  # The modal offers "All occurrences" from whatever the grid showed, but the series may have started
+  # by the time the request lands. The server has to catch it either way.
+  context "with a series whose first occurrence has passed" do
+    let(:starts_at) { 6.days.ago.midnight + 12.hours }
+    let(:occurrence) { starts_at + 1.week }
+
+    let!(:deleted_override) do
+      event.update!(recurrence_rule: IceCube::Rule.weekly.to_hash)
+      event.update_columns(created_at: 2.weeks.ago)
+      create(:event_override, event: event, occurrence_start: starts_at + 2.weeks, deleted: true)
+    end
+
+    it "refuses to move all occurrences, changing nothing" do
+      drag(calendar_scope: "all", series_scope: "series", occurrence_start: occurrence.to_i,
+        starts_at: (occurrence + 1.hour).iso8601, ends_at: (occurrence + 2.hours).iso8601)
+
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response.body).to include("Choose “This and following” to change it from this date on")
+      expect(event.reload.starts_at).to eq(starts_at)
+      expect(deleted_override.reload.occurrence_start).to eq(starts_at + 2.weeks)
+    end
+  end
+
   it "denies a user with no rights to the eventlet" do
     other = create(:user, community: create(:community))
     sign_in(other)
@@ -184,7 +207,7 @@ end
 describe "calendar eventlet delete" do
   let(:community) { create(:community) }
   let!(:user) { create(:user, community: community) }
-  let!(:calendar) { create(:calendar, community: community, name: "Main Hall") }
+  let!(:calendar) { create(:calendar, community: community, name: "Main Hall", allow_overlap: true) }
   # Weekly at 6pm. Started two weeks ago and created long ago, so the creator can no longer delete
   # the whole series, only future occurrences.
   let(:series_start) { 2.weeks.ago.midnight + 18.hours }
@@ -252,7 +275,7 @@ describe "calendar eventlet delete" do
   it "shows an error for an invalid choice without deleting anything" do
     delete_eventlet(calendar_scope: "this", series_scope: "series")
 
-    expect(flash[:error]).to eq("This event is only on one calendar")
+    expect(flash[:error]).to eq("This event is only on one calendar.")
     after_request { expect(Calendars::Event.exists?(event.id)).to be(true) }
   end
 
@@ -261,5 +284,77 @@ describe "calendar eventlet delete" do
       delete(calendars_event_path(event))
     end.to raise_error(Pundit::NotAuthorizedError)
     after_request { expect(Calendars::Event.exists?(event.id)).to be(true) }
+  end
+end
+
+describe "calendar eventlet move choices" do
+  let(:community) { create(:community) }
+  let!(:user) { create(:user, community: community) }
+  let!(:calendar) { create(:calendar, community: community, allow_overlap: true) }
+  # A weekly series whose first occurrence has passed, created long enough ago not to be exempt.
+  let(:starts_at) { 6.days.ago.midnight + 12.hours }
+  let!(:event) do
+    create(:event, calendar: calendar, creator: user, starts_at: starts_at, ends_at: starts_at + 1.hour,
+      recurrence_rule: IceCube::Rule.weekly.to_hash).tap do |e|
+      e.update_columns(created_at: 2.weeks.ago)
+      e.eventlets.update_all(created_at: 2.weeks.ago)
+    end
+  end
+  let(:eventlet) { event.eventlets.first }
+
+  before do
+    use_user_subdomain(user)
+    sign_in(user)
+  end
+
+  def move_choices(occurrence_start)
+    get(move_choices_calendars_eventlet_path(eventlet), params: {occurrence_start: occurrence_start.to_i},
+      xhr: true)
+    response.parsed_body
+  end
+
+  it "offers the creator this and following occurrences of a future occurrence" do
+    body = move_choices(starts_at + 1.week)
+
+    expect(response).to have_http_status(:ok)
+    expect(body["choices"]).to eq("this" => [], "all" => %w[occurrence following])
+    expect(body).not_to have_key("refusal_html")
+  end
+
+  it "offers nothing on a past occurrence, and says why" do
+    body = move_choices(starts_at)
+
+    expect(body["choices"]).to eq("this" => [], "all" => [])
+    expect(CGI.unescapeHTML(body["refusal_html"]))
+      .to include("Start Time: can't be changed after event begins")
+  end
+
+  it "offers only the event itself for a plain event" do
+    plain = create(:event, calendar: calendar, creator: user, starts_at: 1.week.from_now,
+      ends_at: 1.week.from_now + 1.hour)
+    get(move_choices_calendars_eventlet_path(plain.eventlets.first), xhr: true)
+
+    expect(response.parsed_body["choices"]).to eq("this" => [], "all" => ["series"])
+  end
+
+  it "offers nothing on a deleted occurrence, and says why" do
+    create(:event_override, event: event, occurrence_start: starts_at + 1.week, deleted: true)
+    body = move_choices(starts_at + 1.week)
+
+    expect(body["choices"]).to eq("this" => [], "all" => [])
+    expect(body["refusal_html"]).to include("This occurrence no longer exists")
+  end
+
+  it "doesn't offer moving on all calendars when another one is read-only to the user" do
+    read_only = create(:calendar, community: create(:community), allow_overlap: true)
+    create(:calendar_protocol, calendars: [read_only], other_communities: "read_only")
+    event.eventlets.create!(calendar: read_only)
+
+    expect(move_choices(starts_at + 1.week)["choices"]).to eq("this" => %w[occurrence following], "all" => [])
+  end
+
+  it "denies a user with no rights to the eventlet" do
+    sign_in(create(:user, community: create(:community)))
+    expect { move_choices(starts_at + 1.week) }.to raise_error(Pundit::NotAuthorizedError)
   end
 end

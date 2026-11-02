@@ -1,9 +1,9 @@
-<% content_for(:title, "Payment") %>
+<% content_for(:title, t(".title")) %>
 <% content_for(:local_javascript, javascript_include_tag("https://js.stripe.com/v3/")) %>
 <% content_for(:local_viewport, "minimum-scale=1") %>
 
 <%= turbo_frame_tag(:payment) do %>
-  <h2>Payment <%= icon_tag("lock") %></h2>
+  <h2><%= t(".title") %> <%= icon_tag("lock") %></h2>
   <div data-controller="payment"
       data-payment-publishable-key-value="<%= Settings.stripe.publishable_key %>"
       data-payment-client-secret-value="<%= subscription.client_secret %>"
@@ -15,8 +15,8 @@
         <% if @acss_debit_mode %>
           <%= f.input(:accountholder_name) %>
           <%= f.input(:payment_method) do %>
-            <strong>Canadian pre-authorized debit</strong><br/>
-            A pop-up window will collect your bank info after you click 'Pay' below.
+            <strong><%= t(".canadian_debit") %></strong><br/>
+            <%= t(".popup_note") %>
           <% end %>
         <% else %>
           <p>

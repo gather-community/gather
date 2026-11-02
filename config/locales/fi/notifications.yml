@@ -1,0 +1,57 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+fi:
+  notifications:
+    preferences:
+      updated: "Ilmoitusasetuksesi on tallennettu." # MT
+      sections:
+        account: "Tili" # MT
+        meals: "Ateriat" # MT
+        work: "Työ" # MT
+        billing: "Laskutus" # MT
+        community: "Yhteisö" # MT
+      kinds:
+        meal_reminder: "Muistutukset aterioista, joille kotitalouteni on ilmoittautunut" # MT
+        meal_role_reminder: "Muistutukset ateriavuoroistani" # MT
+        cook_menu_reminder: "Pääkokin muistutukset ruokalistan julkaisemisesta" # MT
+        meal_worker_change: "Muutokset ateriatiimeihin, joissa olen mukana" # MT
+        job_reminder: "Muistutukset tehtävistäni" # MT
+        job_choosing_notice: "Ilmoitukset tehtävien valinnan avautumisesta" # MT
+        statement_reminder: "Muistutukset, kun maksu erääntyy" # MT
+        account_access: "Salasanan vaihdot, sähköpostiosoitteen vahvistukset ja kirjautumiskutsut" # MT
+        meal_message: "Ateriatiimin viestit ja peruutusilmoitukset" # MT
+        statement_notice: "Tiliotteet" # MT
+        gdrive_migration_request: "Pyynnöt auttaa yhteisöni Google Drive -tiedostojen siirrossa" # MT
+        community_inactivity: "Varoitukset siitä, että yhteisöni saatetaan poistaa käyttämättömyyden vuoksi" # MT
+      show:
+        title: "Ilmoitukset" # MT
+        intro: "Valitse, mitä sähköposteja Gather lähettää sinulle asioista, joihin osallistut. Harmaana näkyvät ovat välttämättömiä, eikä niitä voi kieltää." # MT
+        essential: "Välttämätön, ei voi kieltää" # MT
+        email_lists: "Sähköpostilistat" # MT
+        email_lists_hint: "Olet näillä listoilla ryhmiesi kautta. Jos et halua enää listan sähköposteja, kiellä ne tai eroa ryhmästä sen sivulla." # MT
+        view: "Näytä" # MT
+        no_email_lists: "Et ole millään sähköpostilistalla." # MT
+    unsubscribes:
+      manage_html: "Voit valita saamasi sähköpostit sivulla %{link}. Sinun täytyy kirjautua sisään." # MT
+      manage_link: "Ilmoitukset" # MT
+      show:
+        title: "Peru tilaus" # MT
+        confirm: "Lopetetaanko sähköpostien ”%{kind}” lähettäminen osoitteeseen %{email}?" # MT
+        already_off: "Sähköpostit ”%{kind}” osoitteeseen %{email} on jo poistettu käytöstä." # MT
+        turn_off: "Peru tilaus" # MT
+      create:
+        title: "Tilaus peruttu" # MT
+        done: "Emme enää lähetä sähköposteja ”%{kind}” osoitteeseen %{email}." # MT
+      invalid:
+        title: "Peru tilaus" # MT
+        explanation: "Tämä tilauksen peruutuslinkki ei ole kelvollinen. Se voi olla vanhasta sähköpostista, tai se on kopioitu vajaasti." # MT

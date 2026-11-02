@@ -1,0 +1,125 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+de:
+  groups:
+    created: "Gruppe erstellt." # MT
+    updated: "Gruppe aktualisiert." # MT
+    joined: "Du bist der Gruppe „%{name}“ beigetreten." # MT
+    left: "Du hast die Gruppe „%{name}“ verlassen." # MT
+    list_sync_started: "Listenabgleich gestartet. Bitte warte einen Moment, bis er fertig ist, und lade die Seite neu." # MT
+    # E.g. "Knitting Club (Inactive, Hidden)".
+    name_with_suffixes: "%{name} (%{suffixes})"
+    show_more: "%{count} weitere anzeigen" # MT
+    hide: "Ausblenden" # MT
+    groups:
+      form:
+        email_list: "E-Mail-Liste" # MT
+        no_domains_html: "Du kannst keine E-Mail-Liste anlegen, weil mit dieser Gemeinschaft keine Domains verknüpft sind. %{link}, um das zu ändern." # MT
+        contact_staff: "Wende dich an das Gather-Team" # MT
+        mailman_intro: "E-Mail-Listen werden über die Mailinglisten-Software Mailman bereitgestellt." # MT
+        leave_blank: "Lass diese Felder leer, wenn du für diese Gruppe keine E-Mail-Liste brauchst." # MT
+        name_locked: "Listenname und Domain können nach dem Anlegen der Liste nicht mehr geändert werden. Wenn du sie ändern musst, lösche die Liste und lege sie neu an, oder wende dich an das Gather-Team." # MT
+        admin_panel: "Mailman-Verwaltung" # MT
+        sync_intro: "Die Listenmitglieder werden so mit Gather abgeglichen:" # MT
+        members_html: "<strong>Mitglieder</strong>: Alle Mitglieder dieser Gruppe werden automatisch in die Liste übernommen. Weitere Mitglieder kannst du über die %{link} hinzufügen." # MT
+        moderators_html: "<strong>Moderation</strong>: Die Moderation der Liste wird nach den Einstellungen „Leitung darf Liste moderieren?“ und „Darf alle E-Mail-Listen moderieren?“ oben abgeglichen. Weitere Moderierende kannst du über die %{link} hinzufügen." # MT
+        owners_html: "<strong>Listeninhaber</strong>: Die Inhaber der Liste werden nach den Einstellungen „Leitung darf Liste verwalten?“ und „Darf alle E-Mail-Listen verwalten?“ oben abgeglichen. Weitere Inhaber kannst du über die %{link} hinzufügen." # MT
+        non_members_html: "<strong>Nicht-Mitglieder</strong>: Mit der Mailman-Funktion „Nicht-Mitglieder“ kannst du 1) weiteren Adressen erlauben, an die Liste zu senden, ohne von ihr zu empfangen, und 2) Personen das Senden an die Liste verbieten. Nicht-Mitglieder bekommen keine E-Mails von der Liste. Sie werden nicht aus Gather abgeglichen, können aber über die %{link} hinzugefügt werden. Mehr dazu in der %{docs_link}." # MT
+        mailman_docs: "Mailman-Dokumentation" # MT
+        only_non_users: "Über die Mailman-Verwaltung solltest du nur Adressen ändern, die keiner Person in Gather gehören." # MT
+        overwritten: "Manuelle Änderungen an den Mitgliedschaften von Personen in Gather werden beim Abgleich überschrieben." # MT
+        settings_intro_html: "Die Listeneinstellungen kannst du über die %{link} ändern. Folgende Einstellungen setzt Gather zwangsweise zurück:" # MT
+        index_page_html: "<strong>Liste auf der Übersichtsseite anzeigen</strong>: Listen werden nie öffentlich angezeigt, da dies ein rein privates Mailinglisten-System ist." # MT
+        max_size_html: "<strong>Maximale Nachrichtengröße</strong>: Nachrichten sind auf 5 MiB begrenzt." # MT
+        subscription_policy_html: "<strong>Abonnement-Richtlinie</strong>: Neue Abonnements müssen von der Moderation manuell freigegeben werden. Abonniert wird hauptsächlich über Gather. Abonnements über die Mailman-Seite oder per E-Mail sollten selten sein." # MT
+      edit:
+        title: "Gruppe bearbeiten: %{name}" # MT
+      new:
+        title: "Gruppe erstellen" # MT
+      index:
+        title: "Gruppen" # MT
+        create: "Gruppe erstellen" # MT
+        none_found: "Keine Gruppen gefunden." # MT
+        name: "Name" # MT
+        type: "Art" # MT
+        description: "Beschreibung" # MT
+        members: "Mitglieder" # MT
+      show:
+        groups: "Gruppen" # MT
+        email_list: "E-Mail-Liste" # MT
+        links: "Links" # MT
+        archives: "Listenarchiv" # MT
+        panel: "Listenverwaltung" # MT
+        all_can_send: "Ganze Gemeinschaft darf senden?" # MT
+        additional_members_note: "Alle Gruppenmitglieder oben sind automatisch Mitglieder der Liste. Auch diese Adressen sind Mitglieder." # MT
+        additional_senders_note: "Diese zusätzlichen Absender dürfen an die Liste senden, bekommen aber keine E-Mails von ihr." # MT
+        last_sync_time: "Letzter Abgleich" # MT
+        sync_note: "Änderungen in Gather werden automatisch mit dem Mailinglisten-System abgeglichen, Änderungen in der Listenverwaltung aber nicht." # MT
+        sync_note_additional: "Das gilt auch für die Liste der zusätzlichen Mitglieder und Absender oben." # MT
+        sync_now_html: "%{link}, um die neuesten Informationen zu bekommen." # MT
+        sync_now: "Jetzt abgleichen" # MT
+        no_list: "Mit dieser Gruppe ist keine E-Mail-Liste verknüpft." # MT
+    # Templates that Mailman fetches for list emails. $listname and similar are Mailman placeholders,
+    # which must be kept as is.
+    mailman:
+      templates:
+        footer:
+          list_name: "$listname, eine E-Mail-Liste einer Gather-Gruppe" # MT
+          unsubscribe: "Zum Abbestellen besuche die Gruppenseite und tritt aus oder melde dich ab." # MT
+        list_admin_action_post:
+          body: |- # MT
+            Als Listenverwaltung wirst du gebeten, folgenden Beitrag an die
+            Mailingliste freizugeben:
+
+                Liste:   $listname
+                Von:     $sender_email
+                Betreff: $subject
+
+            Die Nachricht wird zurückgehalten, weil:
+
+            $reasons
+
+            Wenn es dir passt, besuche dein Dashboard, um die Anfrage zu
+            genehmigen oder abzulehnen.
+    availability_hints:
+      single_community:
+        open: "Alle in der Gemeinschaft können diese Gruppe sehen und ihr beitreten." # MT
+        closed: "Alle in der Gemeinschaft können diese Gruppe sehen, aber nur die Admins der Gemeinschaft und die Gruppenleitung können Personen hinzufügen." # MT
+        hidden: "Nur die Admins der Gemeinschaft und die Gruppenleitung können diese Gruppe sehen und Personen hinzufügen." # MT
+        "everybody": "Alle in der Gemeinschaft können diese Gruppe sehen und sind standardmäßig Mitglied. Wer möchte, kann sich abmelden." # MT
+      multi_community:
+        open: "Alle in den oben genannten Gemeinschaften können diese Gruppe sehen und ihr beitreten." # MT
+        closed: "Alle in den oben genannten Gemeinschaften können diese Gruppe sehen, aber nur die Admins und die Gruppenleitung können Personen hinzufügen." # MT
+        hidden: "Nur die Gruppenleitung und die Admins der oben genannten Gemeinschaften können diese Gruppe sehen und Personen hinzufügen." # MT
+        everybody: "Alle in den oben genannten Gemeinschaften können diese Gruppe sehen und sind standardmäßig Mitglied. Wer möchte, kann sich abmelden." # MT
+  domains:
+    created: "Domain angelegt." # MT
+    index:
+      title: "Domains" # MT
+      add: "Domain hinzufügen" # MT
+      intro_html: "Auf diesen Domains kannst du E-Mail-Listen anlegen. Eine Anleitung zum Hinzufügen einer Domain bekommst du, wenn du auf %{link} klickst." # MT
+      none_found: "Keine Domains gefunden." # MT
+    new:
+      title: "Domain hinzufügen" # MT
+      intro: "So fügst du eine Domain zu Gather hinzu:" # MT
+      consider: "Überlege, ob für diese Domain Postfächer, Weiterleitungsadressen oder Mailinglisten eingerichtet sind." # MT
+      mailboxes_html: "<strong>Postfächer:</strong> Wenn für diese Domain Postfächer eingerichtet sind, funktionieren sie nicht mehr, sobald du die Domain auf Gather umleitest. Um das zu vermeiden, kannst du eine Subdomain verwenden, z. B. lists.yourdomain.com statt yourdomain.com." # MT
+      forwarding_html: "<strong>Weiterleitungsadressen:</strong> Wenn für diese Domain Weiterleitungsadressen eingerichtet sind, kannst du sie zu Gather umziehen. Bitte wende dich an %{email}." # MT
+      lists_html: "<strong>Mailinglisten:</strong> Wenn für diese Domain Mailinglisten eingerichtet sind, kannst du sie zu Gather umziehen. Bitte wende dich an %{email}." # MT
+      create: "Lege die Domain unten an, indem du den vollständigen Domainnamen eingibst, z. B. „yourdomain.com“, und auf „Speichern“ klickst." # MT
+      migrating: "Wenn du Weiterleitungsadressen oder Mailinglisten umziehst, sorge dafür, dass sie in Gather eingerichtet sind und E-Mails empfangen können, bevor du die Domain auf Gather umstellst." # MT
+      dns: "Zum Schluss stellst du die Domain auf Gather um. Lege diese drei DNS-Einträge an:" # MT
+    show:
+      domain: "Domain" # MT
+      communities: "Gemeinschaften" # MT
+      lists: "Mailman-Listen" # MT

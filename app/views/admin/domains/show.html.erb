@@ -1,0 +1,165 @@
+<% content_for(:title, @domain.name) %>
+
+<% content_for(:action_links) do %>
+  <% if policy(%i[admin domain]).refresh? %>
+    <%= button_to(refresh_admin_domain_path(@domain), class: "btn btn-primary",
+          form: {style: "display:inline-block"}) do %>
+      <%= icon_tag("refresh") %> <%= t(".recheck") %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<% unless @smtp2go_configured %>
+  <div class="alert alert-warning">
+    <%= t("admin.domains.index.not_configured") %>
+  </div>
+<% end %>
+
+<table class="key-value">
+  <tr>
+    <td><%= t(".cluster") %></td>
+    <td><%= @domain.cluster.name %></td>
+  </tr>
+  <tr>
+    <td><%= t(".communities") %></td>
+    <td>
+      <% @domain.communities.each do |community| %>
+        <div><%= link_to(community.name, admin_community_path(community)) %></div>
+      <% end %>
+    </td>
+  </tr>
+  <tr>
+    <td><%= t(".mailman_lists") %></td>
+    <td>
+      <% if @domain.group_mailman_lists.none? %>
+        <%= t(".no_mailman_lists") %>
+      <% else %>
+        <% @domain.group_mailman_lists.each do |list| %>
+          <div><%= list.fqdn_listname %></div>
+        <% end %>
+      <% end %>
+    </td>
+  </tr>
+  <tr>
+    <td><%= t(".created_at") %></td>
+    <td><%= l(@domain.created_at.to_date) %></td>
+  </tr>
+  <tr>
+    <td><%= t(".last_checked") %></td>
+    <td>
+      <% if @status.checked? %>
+        <%= l(@status.checked_at, format: :long) %>
+      <% else %>
+        <%= t("admin.domains.index.never_checked") %>
+      <% end %>
+    </td>
+  </tr>
+</table>
+
+<% if @status.checked? %>
+  <h2>
+    <%= t(".mx_heading") %>
+    <%= icon_tag(@status.mx_ok? ? "check" : "times",
+          class: @status.mx_ok? ? "text-success" : "text-danger") %>
+  </h2>
+  <table class="key-value key-value-wide">
+    <tr>
+      <td><%= t(".expected") %></td>
+      <td>
+        <% DomainMail::Status::EXPECTED_MX.each do |pref, host| %>
+          <div><code><%= pref %> <%= host %></code></div>
+        <% end %>
+      </td>
+    </tr>
+    <tr>
+      <td><%= t(".found") %></td>
+      <td>
+        <% if @status.mx.empty? %>
+          <%= t(".no_records_found") %>
+        <% else %>
+          <% @status.mx.each do |pref, host| %>
+            <div><code><%= pref %> <%= host %></code></div>
+          <% end %>
+        <% end %>
+      </td>
+    </tr>
+  </table>
+
+  <h2>
+    <%= t(".spf_heading") %>
+    <%= icon_tag(@status.spf_ok? ? "check" : "times",
+          class: @status.spf_ok? ? "text-success" : "text-danger") %>
+  </h2>
+  <p class="hint"><%= t(".spf_rule") %></p>
+  <table class="key-value key-value-wide">
+    <tr>
+      <td><%= t(".required") %></td>
+      <td><code><%= DomainMail::Status::REQUIRED_SPF_INCLUDE %></code></td>
+    </tr>
+    <tr>
+      <td><%= t(".found") %></td>
+      <td>
+        <% if @status.spf.blank? %>
+          <%= t(".no_records_found") %>
+        <% else %>
+          <code><%= @status.spf %></code>
+        <% end %>
+      </td>
+    </tr>
+    <% if @status.spf.present? %>
+      <tr>
+        <td><%= t(".spf_lookups") %></td>
+        <td class="<%= @status.spf_lookups_ok? ? "" : "text-danger" %>">
+          <%= t(".spf_lookups_count", count: @status.spf_lookups,
+                limit: DomainMail::Status::SPF_LOOKUP_LIMIT) %>
+          <%= render("spf_lookup_terms", terms: @status.spf_lookup_terms) %>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+
+  <h2>
+    <%= t(".smtp2go_heading") %>
+    <%= icon_tag(@status.smtp2go_status == :verified ? "check" : "times",
+          class: @status.smtp2go_status == :verified ? "text-success" : "text-danger") %>
+  </h2>
+  <% if @status.validation_records.empty? %>
+    <p><%= t("admin.domains.index.smtp2go_statuses.#{@status.smtp2go_status}") %></p>
+  <% else %>
+    <table class="index">
+      <thead>
+        <tr>
+          <th><%= t(".record") %></th>
+          <th><%= t(".host") %></th>
+          <th><%= t(".expected") %></th>
+          <th><%= t(".found") %></th>
+          <th><%= t(".smtp2go_verified") %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @status.validation_records.each do |record| %>
+          <tr>
+            <td class="<%= {verified: "text-success", in_dns: "text-warning", missing: "text-danger"}[record.state] %>">
+              <%= icon_tag({verified: "check", in_dns: "clock-o", missing: "times"}[record.state]) %>
+              <%= t("admin.domains.index.record_kinds.#{record.kind}") %>
+            </td>
+            <td><code><%= record.host %></code></td>
+            <td><code><%= record.target %></code></td>
+            <td>
+              <% if record.actual.blank? %>
+                <%= t(".no_records_found") %>
+              <% else %>
+                <code><%= record.actual %></code>
+              <% end %>
+            </td>
+            <td><%= record.verified ? t("common.yes") : t("common.no") %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+<% else %>
+  <div class="center-notice">
+    <%= t(".never_checked_notice") %>
+  </div>
+<% end %>

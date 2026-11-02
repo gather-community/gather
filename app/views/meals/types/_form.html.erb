@@ -6,9 +6,9 @@
   <% end %>
 <% end %>
 
-<%= javascript_tag do %>
+<script>
   $(function() {
     new Gather.Views.DirtyChecker({el: '.meals--type-form'});
     new Gather.Views.AjaxSelect2({el: '.meals--type-form'});
   });
-<% end %>
+</script>

@@ -21,11 +21,17 @@ application.register("payment", PaymentController);
 import Wiki__MarkdownEditorController from "./wiki/markdown_editor_controller";
 application.register("wiki--markdown-editor", Wiki__MarkdownEditorController);
 
+import SearchController from "./search_controller";
+application.register("search", SearchController);
+
 import Communities__SignupActionController from "./communities/signup_action_controller";
 application.register("communities--signup-action", Communities__SignupActionController);
 
 import RecordDeleteController from "./record_delete_controller";
 application.register("record-delete", RecordDeleteController);
+
+import FormRefreshController from "./form_refresh_controller";
+application.register("form-refresh", FormRefreshController);
 
 import ModalController from "./modal_controller";
 application.register("modal", ModalController);
@@ -38,3 +44,15 @@ application.register("messaging-topup", MessagingTopupController);
 
 import Calendars__EventletDeleteController from "./calendars/eventlet_delete_controller";
 application.register("calendars--eventlet-delete", Calendars__EventletDeleteController);
+
+import Calendars__EventFormController from "./calendars/event_form_controller";
+application.register("calendars--event-form", Calendars__EventFormController);
+
+import Admin__FeatureFlagFormController from "./admin/feature_flag_form_controller";
+application.register("admin--feature-flag-form", Admin__FeatureFlagFormController);
+
+import LensBarController from "./lens_bar_controller";
+application.register("lens-bar", LensBarController);
+
+import LanguageMenuController from "./language_menu_controller";
+application.register("language-menu", LanguageMenuController);

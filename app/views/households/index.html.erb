@@ -1,21 +1,21 @@
-<% content_for(:title, "Households") %>
+<% content_for(:title, t(".title")) %>
 
 <% content_for(:action_links) do %>
   <% if policy(Household.new(community: current_community)).create? %>
-    <%= link_to(icon_tag("plus") << " Create Household", new_household_path, class: "btn btn-primary") %>
+    <%= link_to(icon_tag("plus") << " " << t(".create"), new_household_path, class: "btn btn-primary") %>
   <% end %>
 <% end %>
 
 <% if @households.empty? %>
   <div class="center-notice">
-    No households found.
+    <%= t(".no_households") %>
   </div>
 <% else %>
   <table class="index part-width">
     <tr>
-      <th>Name</th>
-      <th>Unit #</th>
-      <th>Users</th>
+      <th><%= t(".name") %></th>
+      <th><%= t(".unit") %></th>
+      <th><%= t(".users") %></th>
       <th></th>
     </tr>
     <% @households.each do |household| %>

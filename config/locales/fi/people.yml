@@ -1,0 +1,219 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+fi:
+  people:
+    # The placeholder household and user that a deleted member's records are reassigned to.
+    deleted_placeholder:
+      household: "Poistetut jäsenet" # MT
+      first_name: "Poistettu" # MT
+      last_name: "jäsen" # MT
+    sign_in_invitations:
+      sent:
+        one: "Kutsu lähetetty." # MT
+        other: "Kutsut lähetetty." # MT
+      none_selected: "Et valinnut yhtään käyttäjää." # MT
+      new:
+        title: "Kutsu käyttäjiä kirjautumaan" # MT
+        no_users: "Käyttäjiä ei löytynyt." # MT
+        instructions_html: "Valitse käyttäjät, jotka haluat kutsua. Käyttäjät, joiden nimen vieressä on %{icon}, eivät ole koskaan kirjautuneet." # MT
+        select_no_sign_ins: "Valitse kaikki kirjautumattomat" # MT
+        select_all: "Valitse kaikki" # MT
+        send: "Lähetä kutsut" # MT
+    memorials:
+      created: "Muistosivu luotu." # MT
+      updated: "Muistosivu päivitetty." # MT
+      index:
+        title: "Muistosivut" # MT
+        create: "Luo muistosivu" # MT
+        no_memorials: "Muistosivuja ei löytynyt." # MT
+        photo_of: "Kuva: %{name}" # MT
+      show:
+        memorials: "Muistosivut" # MT
+        photo_of: "Kuva: %{name}" # MT
+        obituary: "Muistokirjoitus" # MT
+        community_memories: "Yhteisön muistoja" # MT
+      new:
+        title: "Luo muistosivu" # MT
+      edit:
+        title: "Muokkaa muistosivua: %{name}" # MT
+    memorial_messages:
+      created: "Kiitos viestistäsi." # MT
+      updated: "Viesti päivitetty." # MT
+      edit:
+        title: "Muokkaa muistoviestiä" # MT
+    member_types:
+      created: "Jäsentyyppi luotu." # MT
+      updated: "Jäsentyyppi päivitetty." # MT
+      index:
+        title: "Jäsentyypit" # MT
+        create: "Luo jäsentyyppi" # MT
+        explanation: "Jäsentyypit liitetään kotitalouksiin, ja niiden avulla voi mukauttaa toistuvia laskutusveloituksia." # MT
+        no_member_types: "Jäsentyyppejä ei löytynyt." # MT
+        name: "Nimi" # MT
+      new:
+        title: "Luo jäsentyyppi" # MT
+      edit:
+        title: "Muokkaa jäsentyyppiä: %{name}" # MT
+    vehicles:
+      index:
+        title: "Ajoneuvot" # MT
+        no_vehicles: "Ajoneuvoja ei löytynyt." # MT
+        vehicle: "Merkki/malli/väri/rekisterinumero" # MT
+        owner: "Omistaja" # MT
+    settings:
+      edit:
+        title: "Ihmisten asetukset" # MT
+    birthdays:
+      index:
+        title: "Syntymäpäivät" # MT
+        no_users: "Käyttäjiä ei löytynyt." # MT
+        # Shown when a user's birthday is unknown.
+        unknown: "?"
+    password_changes:
+      success: "Salasana vaihdettu." # MT
+      show:
+        title: "Vaihda salasana" # MT
+      password_fields:
+        new_password: "Uusi salasana" # MT
+        retype_new_password: "Kirjoita uusi salasana uudelleen" # MT
+        reveal: "Näytä salasanat" # MT
+        mask: "Piilota salasanat" # MT
+    users:
+      confirmations:
+        sign_in_to_use_gather: "Kirjaudu sisään käyttääksesi Gatheria." # MT
+        expired_signed_in: "Vahvistusaika on umpeutunut. Yritä uudelleen alla olevalla linkillä ”Lähetä vahvistusohjeet uudelleen”." # MT
+        expired_signed_out: "Vahvistusaika on umpeutunut. Kirjaudu sisään vanhalla sähköpostiosoitteellasi ja yritä uudelleen." # MT
+      # Each completes Devise's "Could not sign you in from Google because %{reason}." (devise.omniauth_callbacks.failure).
+      omniauth_failure_reasons:
+        no_email: "Google ei antanut sähköpostiosoitetta. Ilmoita asiasta ylläpitäjälle." # MT
+        invitation_expired: "kutsusi on vanhentunut" # MT
+        wrong_google_id: "sinun täytyy kirjautua Google-tunnuksella %{google_id}" # MT
+        google_id_taken: "Google-tunnuksesi %{google_id} on liitetty toiseen käyttäjään" # MT
+        invitation_required: "ensimmäisellä kirjautumiskerralla sinun täytyy käyttää kutsua" # MT
+        google_id_not_found: "Google-tunnustasi %{google_id} ei löytynyt järjestelmästä" # MT
+        cancelled: "kirjautuminen peruttiin" # MT
+        session_expired: "kirjautumisistuntosi vanheni. Yritä uudelleen" # MT
+        unexpected: "tapahtui tuntematon virhe. Ylläpitäjille on ilmoitettu" # MT
+    deletion:
+      blocked_intro: "Tätä ei voi vielä poistaa pysyvästi:" # MT
+      confirmation_mismatch: "Vahvistusteksti ei täsmännyt, joten mitään ei poistettu." # MT
+      self_success: "Tilisi on poistettu pysyvästi." # MT
+      blockers:
+        balance: "Kotitaloudella ”%{name}” on selvittämätön tilin saldo, joka täytyy ensin hoitaa." # MT
+        guardian: "Hän on huoltaja näille: %{names}. Poista nämä jäsenet tai siirrä heidät ensin toiselle huoltajalle." # MT
+        external_ward: "Tämän kotitalouden jäsenet ovat huoltajia näille muiden kotitalouksien jäsenille: %{names}. Poista nämä jäsenet tai siirrä heidät ensin toiselle huoltajalle." # MT
+        last_admin: "Hän on yhteisön ainoa ylläpitäjä. Anna ensin ylläpitäjän rooli toiselle jäsenelle." # MT
+  users:
+    greeting: "Hei %{name}," # MT
+    photo_of: "Kuva: %{name}" # MT
+    confirmation_resent: "Ohjeet lähetetty." # MT
+    email_change_canceled: "Sähköpostiosoitteen vaihto peruttu." # MT
+    created: "Käyttäjä luotu." # MT
+    created_and_invited: "Käyttäjä luotu ja kutsuttu." # MT
+    updated: "Käyttäjä päivitetty." # MT
+    profile_updated: "Profiili päivitetty." # MT
+    confirm_new_email_self: "Sinun täytyy vahvistaa uusi sähköpostiosoitteesi. Tarkista sähköpostisi osoitteessa %{email}." # MT
+    confirm_new_email_other: "Tämän käyttäjän täytyy vahvistaa uusi sähköpostiosoitteensa (%{email})." # MT
+    invitation_invalidated: "Tämä muutos on kuitenkin voinut mitätöidä kirjautumiskutsun. Voit halutessasi lähettää uuden." # MT
+    household_hint:
+      choose_html: "Valitse tälle käyttäjälle olemassa oleva kotitalous. Jos sopivaa ei ole, sinun täytyy %{link}." # MT
+      create_link: "luoda se ensin" # MT
+      child_note: "Järjestelmän rajoituksen vuoksi jokaisen Gatherin käyttäjän täytyy kuulua yhteen kotitalouteen, mutta lapsella voi olla vanhempia tai huoltajia useasta kotitaloudesta. Kaikki lapsiin liittyvät järjestelmän toiminnot kohtelevat kaikkia lapsen vanhempia/huoltajia ja kotitalouksia samalla tavalla." # MT
+    preferred_contact_tooltip: "Toivottu yhteydenottotapa: %{method}" # MT
+    all_users: "Kaikki käyttäjät" # MT
+    index:
+      title: "Jäsenluettelo" # MT
+      print_title: "Jäsenluettelo: %{community}" # MT
+      show_action_menu: "Näytä käyttäjän toimintovalikko" # MT
+      create_adult: "Luo aikuinen" # MT
+      create_child: "Luo lapsi" # MT
+      invite_to_sign_in: "Kutsu kirjautumaan" # MT
+      no_users: "Käyttäjiä ei löytynyt." # MT
+      name: "Nimi" # MT
+      unit: "Asunto" # MT
+      email: "Sähköposti" # MT
+      mobile_phone: "Matkapuhelin" # MT
+      home_phone: "Kotipuhelin" # MT
+      work_phone: "Työpuhelin" # MT
+      preferred_contact: "Toive" # MT
+      download_csv: "Lataa CSV-tiedostona" # MT
+    show:
+      directory: "Jäsenluettelo" # MT
+      email: "Sähköposti" # MT
+      pending_confirmation: "Odottaa vahvistusta: %{email}" # MT
+      resend_confirmation: "Lähetä vahvistusohjeet uudelleen" # MT
+      cancel_change: "Peru muutos" # MT
+      unconfirmed: "* Tätä osoitetta ei ole vielä vahvistettu, käytä harkiten." # MT
+      phone: "Puhelin" # MT
+      preferred_contact: "Toivottu yhteydenottotapa" # MT
+      birthday: "Syntymäpäivä" # MT
+      age: "Ikä" # MT
+      joined_on: "Liittymispäivä" # MT
+      recent_head_cook_meals: "Viimeaikaiset ateriat pääkokkina" # MT
+      date: "Päivämäärä" # MT
+      meal_title: "Otsikko" # MT
+      signups: "Ilmoittautumiset" # MT
+    new:
+      title: "Luo käyttäjä" # MT
+    edit:
+      profile: "Profiili" # MT
+      edit_user: "Muokkaa käyttäjää: %{name}" # MT
+      edit_photo: "Muokkaa kuvaa: %{name}" # MT
+    full_form:
+      hide_photo_from_cluster: "Älä näytä kuvaa näiden yhteisöjen käyttäjille: %{communities}" # MT
+      privacy_hint_html: "Lisätietoja yksityisyysasetuksista: %{link}." # MT
+      privacy_policy: "tietosuojaseloste" # MT
+      household_info: "Kotitalouden tiedot" # MT
+      household_note_named_html: "Alla olevat kentät liittyvät kotitalouteen %{name}. Jos muutat niitä tässä, ne muuttuvat <em>kaikille kotitalouden käyttäjille</em>." # MT
+      household_note_unnamed_html: "Alla olevat kentät liittyvät käyttäjän kotitalouteen. Jos muutat niitä tässä, ne muuttuvat <em>kaikille kotitalouden käyttäjille</em>." # MT
+      move_household_html: "Voit myös %{link}." # MT
+      move_household_link: "siirtää hänet toiseen kotitalouteen" # MT
+  households:
+    greeting: "Hei, kotitalous %{name}," # MT
+    created: "Kotitalous luotu." # MT
+    updated: "Kotitalous päivitetty." # MT
+    emergency_contact: "%{name} (%{relationship})" # MT
+    pets:
+      summary: "%{name} (%{species}, %{color})" # MT
+      vet: "Eläinlääkäri" # MT
+      caregivers: "Hoitajat" # MT
+      health_issues: "Terveysongelmat" # MT
+    # Unit and garage numbers, e.g. "#12".
+    number: "nro %{number}" # MT
+    index:
+      title: "Kotitaloudet" # MT
+      create: "Luo kotitalous" # MT
+      no_households: "Kotitalouksia ei löytynyt." # MT
+      name: "Nimi" # MT
+      unit: "Asunnon nro" # MT
+      users: "Käyttäjät" # MT
+    show:
+      title: "Kotitalous: %{name}" # MT
+      households: "Kotitaloudet" # MT
+      missing_photo: "Käyttäjän kuva puuttuu" # MT
+    new:
+      title: "Luo kotitalous" # MT
+    edit:
+      title: "Muokkaa kotitaloutta: %{name}" # MT
+    attribs:
+      household: "Kotitalous" # MT
+      members: "Jäsenet" # MT
+      vehicles: "Ajoneuvot" # MT
+      garage: "Autotalli" # MT
+      member_type: "Jäsentyyppi" # MT
+      emergency_contacts: "Hätäyhteyshenkilöt" # MT
+      pets: "Lemmikit" # MT
+      keyholders: "Asunnon muut avaimenhaltijat" # MT
+    unit_community:
+      unit: "Asunto" # MT
+      community: "Yhteisö" # MT

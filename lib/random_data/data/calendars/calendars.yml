@@ -56,6 +56,8 @@
   abbrv: Ctyd
   name: Courtyard
   meal_hostable: true
+  # Allows overlaps so the sample weekly series has somewhere to go (Calendar#allows_recurring_events?).
+  allow_overlap: true
   :shared_guideline_ids: []
 - id: 116
   default_calendar_view: week

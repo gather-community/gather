@@ -1,34 +1,35 @@
 <%= @user.greeting %>
 
 <% if @period.auto_open_time %>
-Job choosing is coming up on <%= l(@period.auto_open_time.to_date, format: :wday_no_year) %>!
+<%= t(".coming_up_on", date: l(@period.auto_open_time.to_date, format: :wday_no_year)) %>
 <% else %>
-Job choosing is coming up soon!
+<%= t(".coming_up_soon") %>
 <% end %>
 
-You have <%= @synopsis.user_regular_got %> pre-assigned hours and your quota is <%= @synopsis.user_adjusted_quota %>, so you need to choose <%= @synopsis.user_need %> regular hours.
+<%= t(".quota", got: @synopsis.user_regular_got, quota: @synopsis.user_adjusted_quota, need: @synopsis.user_need) %>
 
 <% if @synopsis.user_full_community_hours.any? %>
-You are also expected to choose <%= @synopsis.user_full_community_hours.map { |job, hours| "#{hours} #{job.title} hours" }.join(", ") %>.
+<%= t(".also_choose", hours: @synopsis.user_full_community_hours.map { |job, hours| t(".full_community_hours", hours: hours, title: job.title) }.join(", ")) %>
 <% end %>
 
 <% if @period.staggered? && @synopsis.user_need > 0 %>
   <% if @synopsis.rounds.one? %>
-You can begin choosing at <%= l(@synopsis.rounds[0][:starts_at], format: :time_only).strip %>.
+<%= t(".begin_at", time: l(@synopsis.rounds[0][:starts_at], format: :time_only).strip) %>
   <% else %>
-Your round schedule is as follows:
+<%= t(".schedule_intro") %>
     <% @synopsis.rounds.each do |round| %>
-* At <%= l(round[:starts_at], format: :time_only).strip %> <%= round[:limit] ? "you can choose up to #{round[:limit]} hours" : "you can finish choosing" %>.
+<% time = l(round[:starts_at], format: :time_only).strip %>
+<%= round[:limit] ? t(".round_with_limit", time: time, limit: round[:limit]) : t(".round_finish", time: time) %>
     <% end %>
   <% end %>
 
-Go to <%= work_period_shifts_url(@period) %> at the time(s) above to choose your jobs. You can also stop by earlier to see what jobs are available and plan your picks. But you won't be able to sign up until the times listed above.
+<%= t(".go_to", url: work_period_shifts_url(@period)) %>
 <% else %>
   <% if @period.auto_open_time %>
-Choosing begins at <%= l(@period.auto_open_time, format: :time_only).strip %>.
+<%= t(".choosing_begins", time: l(@period.auto_open_time, format: :time_only).strip) %>
 
   <% end %>
-Visit <%= work_period_shifts_url(@period) %> for more information.
+<%= t(".visit", url: work_period_shifts_url(@period)) %>
 <% end %>
 
-Thanks for your participation!
+<%= t(".thanks") %>

@@ -30,11 +30,11 @@ module Calendars
 
     def validate_occurrence_in_series
       if occurrence_start.blank?
-        errors.add(:occurrence_start, "is required to change a single occurrence")
+        errors.add(:occurrence_start, :required_for_single)
       elsif !event.recurring?
-        errors.add(:base, "This event is not part of a series")
+        errors.add(:base, :not_recurring)
       elsif !event.schedule.occurs_at?(occurrence_start)
-        errors.add(:occurrence_start, "is not a valid occurrence in this series")
+        errors.add(:occurrence_start, :not_in_series)
       end
     end
 

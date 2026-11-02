@@ -1,0 +1,238 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+nb:
+  transaction_codes:
+    meal: "Måltid" # MT
+    dues: "Medlemskontingent" # MT
+    payment: "Betaling" # MT
+    reimb: "Refusjon" # MT
+    othcrd: "Annen kreditering" # MT
+    othchg: "Annen belastning" # MT
+    late: "Forsinkelsesgebyr" # MT
+    initbal: "Inngående saldo" # MT
+
+  accounts:
+    updated: "Kontoen er oppdatert." # MT
+    late_fees_applied: "Forsinkelsesgebyrene er lagt til." # MT
+    # An amount that is a credit, e.g. "$5.00 CR".
+    credit_amount_html: "%{amount} til gode" # MT
+    # Shown in its own column next to credit amounts on statements.
+    credit_abbr: "Til gode" # MT
+    not_applicable: "I/A" # MT
+    no_credit_limit: "Ingen" # MT
+    no_users_warning: "Husstanden for kontoen har ingen tilknyttede brukere" # MT
+    late_fee_confirm: "Er du sikker? %{count} husstander blir belastet gebyr." # MT
+    late_fee_confirm_with_days: "Er du sikker? %{count} husstander blir belastet gebyr. Gebyrer ble sist lagt til for %{days} dager siden." # MT
+    statement_confirm: "Er du sikker? Kontoutskrifter blir sendt til %{count} husstander." # MT
+    paypal_friend_confirm_html: "<strong>Ikke</strong> velg «Betaler du for varer eller tjenester?» hvis du blir spurt, så slipper du gebyr." # MT
+    details:
+      no_activity: "Det er ingen aktivitet på denne kontoen." # MT
+    other_accounts:
+      looking: "Leter du etter en annen konto?" # MT
+      each_community: "Hvert fellesskap administrerer sine egne kontoer." # MT
+    payment_instructions:
+      how_to_pay: "Slik betaler du" # MT
+      paypal: "PayPal" # MT
+      click_logo: "Klikk på logoen ovenfor for å betale med PayPal." # MT
+      send_paypal_html: "Send PayPal-betalinger til %{email}." # MT
+      choose_friend_html: "Husk å velge %{friend} for å slippe gebyr." # MT
+      sending_to_friend: "sending til en venn" # MT
+      online_bill_pay: "Betaling i nettbanken" # MT
+      bill_pay_intro: "De fleste banker tilbyr betaling i nettbanken, som du kan bruke for å sende en betaling enkelt. Legg til en ny betalingsmottaker og skriv inn følgende:" # MT
+      payee_name_html: "Mottakerens navn: %{payee}" # MT
+      account_number_html: "Kontonummer: %{number}" # MT
+      address: "Adresse:" # MT
+      check: "Sjekk" # MT
+      payable_to_html: "Sjekker utstedes til %{payee}" # MT
+      memo_line_html: "Skriv kontonummeret ditt %{number} i meldingsfeltet." # MT
+      mail_to: "Send sjekker til:" # MT
+      cash: "Kontanter" # MT
+      none_provided: "Det er ikke lagt inn noen betalingsinstruksjoner." # MT
+      go_to_settings_html: "Gå til %{link} for å legge inn noen." # MT
+      settings_page: "innstillingssiden" # MT
+      contact_html: "Kontakt %{email} hvis du har spørsmål om fakturering." # MT
+    statement_list:
+      statements: "Kontoutskrifter" # MT
+      date: "Dato" # MT
+      activity: "Aktivitet" # MT
+      total_due: "Å betale totalt" # MT
+    summary:
+      summary: "Sammendrag" # MT
+      account_number: "Kontonummer" # MT
+      last_statement_date: "Dato for siste kontoutskrift" # MT
+      last_statement_balance: "Saldo på siste kontoutskrift" # MT
+      new_credits: "Nye betalinger/krediteringer" # MT
+      balance_due: "Å betale" # MT
+      due_date: "Forfallsdato" # MT
+      new_charges: "Nye belastninger" # MT
+      current_balance: "Nåværende saldo" # MT
+      credit_limit: "Kredittgrense" # MT
+      balance_due_footnote: "Dette er beløpet du skylder nå. Det er beløpet som forfalt på den siste kontoutskriften, minus betalinger som er mottatt siden da. Hvis du allerede har betalt, men betalingen ikke vises her, kan du se bort fra dette." # MT
+      current_balance_footnote: "Denne saldoen omfatter belastninger og krediteringer siden siste kontoutskrift. Hvis den overstiger kredittgrensen din, kan du ikke melde deg på måltider." # MT
+    synopsis:
+      pay_by: "Betal %{amount} innen %{date}. Takk!" # MT
+      pay: "Betal %{amount}. Takk!" # MT
+      zero: "Du har ingenting å betale. Bra jobbet!" # MT
+      credit: "Du har %{amount} til gode på kontoen din. Du trenger ikke å betale noe!" # MT
+    transaction_export_form:
+      download: "Last ned transaksjoner som CSV" # MT
+      incurred: "Påløpt i perioden …" # MT
+      recorded: "Registrert i perioden …" # MT
+      select_dates: "Velg datoer" # MT
+    edit:
+      title: "Rediger konto: %{household}" # MT
+      no_users: "Denne kontoen har ingen tilknyttede brukere og kan ikke motta kontoutskrifter." # MT
+      cancel: "Avbryt" # MT
+    show:
+      title: "Konto: %{household}" # MT
+    mine:
+      title: "Min konto" # MT
+      title_with_community: "Min konto hos %{community}" # MT
+      no_charges: "Det er ingen belastninger knyttet til husstanden din ennå." # MT
+    index:
+      title: "Kontoer" # MT
+      apply_late_fees: "Legg til forsinkelsesgebyrer" # MT
+      send_statements: "Send kontoutskrifter" # MT
+      no_accounts: "Fant ingen kontoer." # MT
+      num: "Nr." # MT
+      household: "Husstand" # MT
+      last_statement_date: "Siste kontoutskr." # MT
+      due_last_statement: "Å betale, siste kontoutskr." # MT
+      new_credits: "Nye krediteringer" # MT
+      balance_due: "Å betale" # MT
+      new_charges: "Nye belastninger" # MT
+      current_balance: "Nåværende saldo" # MT
+      credit_limit: "Kredittgrense" # MT
+      add_transaction: "Legg til transaksjon" # MT
+      totals: "Totalt" # MT
+      download_accounts: "Last ned kontoer som CSV" # MT
+      summary:
+        one: "Det er %{count} aktiv konto." # MT
+        other: "Det er %{count} aktive kontoer." # MT
+      active_account_definition: "En aktiv konto er en konto som har aktivitet nå eller en nåværende saldo som ikke er null." # MT
+      last_statement_run: "Kontoutskrifter ble sist sendt %{date}." # MT
+      statements_never_run: "Det er aldri sendt ut kontoutskrifter." # MT
+      no_users:
+        one: "Det er %{count} konto uten tilknyttede brukere. Det blir ikke laget kontoutskrift for den kontoen." # MT
+        other: "Det er %{count} kontoer uten tilknyttede brukere. Det blir ikke laget kontoutskrifter for de kontoene." # MT
+      recent_statements:
+        one: "Det er %{count} konto med en kontoutskrift fra de siste 24 timene. Det blir ikke laget en ny kontoutskrift for den kontoen." # MT
+        other: "Det er %{count} kontoer med kontoutskrifter fra de siste 24 timene. Det blir ikke laget kontoutskrifter for de kontoene." # MT
+    others:
+      one_html: "Du har også en Gather-konto hos %{cmty}." # MT
+      multiple_html: "Du har også Gather-kontoer hos %{cmtys}." # MT
+    payment_badge_alt:
+      paypal: "Merke for betaling med PayPal" # MT
+      online_bill_pay: "Merke for betaling i nettbanken" # MT
+      check: "Merke for betaling med sjekk" # MT
+      cash: "Merke for betaling med kontanter" # MT
+
+  statements:
+    generation_started: "Kontoutskriftene blir laget. Prøv å laste inn siden på nytt om et øyeblikk for å se oppdatert status for kontoene." # MT
+    no_users_not_generated: "Disse husstandene har ingen tilknyttede brukere, så det ble ikke laget kontoutskrifter for dem: %{households}. Prøv å sende kontoutskrifter igjen når husstandene har tilknyttede brukere." # MT
+    account_info:
+      account_community: "Kontoens fellesskap" # MT
+      account_number: "Kontonummer" # MT
+      household: "Husstand" # MT
+    link_to_accounts_page:
+      notice_html: "For den mest oppdaterte kontoinformasjonen kan du %{link}." # MT
+      link: "gå til kontosiden din" # MT
+    statement_rows:
+      load_more: "Last inn flere …" # MT
+      loading: "Laster inn …" # MT
+    show:
+      title: "Kontoutskrift nr. %{number}" # MT
+      statement_date: "Dato for kontoutskrift" # MT
+      due_date: "Forfallsdato" # MT
+      activity: "Aktivitet" # MT
+      previous_balance: "Forrige saldo" # MT
+      statement_balance: "Saldo på kontoutskriften" # MT
+
+  transactions:
+    added: "Transaksjonen er lagt til." # MT
+    not_added: "Transaksjonen ble ikke lagt til. Du kan redigere den nedenfor og prøve igjen, eller klikke på «Avbryt» nedenfor for å gå tilbake til kontosiden." # MT
+    form:
+      cancel: "Avbryt" # MT
+    txn_rows:
+      no_activity: "Det var ingen aktivitet i denne perioden" # MT
+    txn_table:
+      date: "Dato" # MT
+      type: "Type" # MT
+      description: "Beskrivelse" # MT
+      quantity: "Antall" # MT
+      unit_price: "Enhetspris" # MT
+      amount: "Beløp" # MT
+    confirm:
+      title: "Bekreft transaksjon" # MT
+      intro: "Slik kommer den nye transaksjonen til å se ut på husstandens kontoutskrift. Transaksjoner kan ikke redigeres etter at de er opprettet. Kontroller at opplysningene nedenfor er riktige." # MT
+    index:
+      title: "Nylig aktivitet" # MT
+      title_with_household: "Nylig aktivitet: %{household}" # MT
+      account_community: "Kontoens fellesskap" # MT
+      account_number: "Kontonummer" # MT
+      household: "Husstand" # MT
+      activity: "Aktivitet" # MT
+      no_activity: "Det er ingen aktivitet på denne kontoen." # MT
+      last_statement_balance: "Saldo på siste kontoutskrift" # MT
+      current_balance: "Nåværende saldo" # MT
+    new:
+      title: "Ny transaksjon" # MT
+
+  billing:
+    # Description of the transaction LateFeeApplier creates.
+    late_fee_description: "Gebyr for sen betaling" # MT
+    templates:
+      created: "Malen er opprettet." # MT
+      updated: "Malen er oppdatert." # MT
+      select_one: "Velg minst én mal." # MT
+      applied: "Transaksjonene er opprettet." # MT
+      edit:
+        title: "Rediger faktureringsmal: %{description}" # MT
+      new:
+        title: "Ny transaksjonsmal" # MT
+      index:
+        title: "Transaksjonsmaler" # MT
+        apply: "Bruk maler" # MT
+        create: "Opprett mal" # MT
+        intro: "Med transaksjonsmaler er det enkelt å opprette mange transaksjoner på en gang." # MT
+        none_found: "Fant ingen maler." # MT
+        description: "Beskrivelse" # MT
+        type: "Type" # MT
+        member_types: "Medlemstype(r)" # MT
+        amount: "Beløp" # MT
+      review:
+        title: "Bruk maler" # MT
+        intro: "Du er i ferd med å opprette disse transaksjonene for disse husstandene:" # MT
+        description: "Beskrivelse" # MT
+        type: "Type" # MT
+        amount: "Beløp" # MT
+        households: "Husstander" # MT
+        outdated_warning: "Listen over husstander ovenfor kan bli utdatert hvis husstandenes medlemstyper endres mellom tidspunktet da denne bekreftelsessiden ble lastet inn og tidspunktet da du klikker på «Bruk» nedenfor." # MT
+        cancel: "Avbryt" # MT
+        apply: "Bruk" # MT
+
+  account_mailer:
+    statement_notice:
+      subject: "Ny kontoutskrift fra %{community}" # MT
+      created: "Det er laget en ny kontoutskrift i Gather for kontoen din hos %{community}." # MT
+      amount_due: "Beløpet som skal betales, er %{amount}." # MT
+      credit: "Du har %{amount} til gode. Du trenger ikke å betale noe." # MT
+      see_details: "Gå til lenken nedenfor for å se detaljene:" # MT
+      thanks: "Takk for at du betaler i tide!" # MT
+    statement_reminder:
+      subject: "Betalingspåminnelse for kontoen hos %{community}" # MT
+      due_on: "Dette er en påminnelse om at betalingen for en kontoutskrift i Gather for kontoen din hos %{community} forfaller %{date}." # MT
+      due_soon: "Dette er en påminnelse om at betalingen for en kontoutskrift i Gather for kontoen din hos %{community} snart forfaller." # MT
+      amount_due: "Beløpet som skal betales, er %{amount}. Gå til lenken nedenfor for å se detaljene:" # MT
+      disregard: "Hvis du allerede har betalt, kan du se bort fra denne påminnelsen." # MT
+      thanks: "Takk for at du betaler i tide!" # MT

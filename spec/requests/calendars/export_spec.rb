@@ -76,6 +76,21 @@ describe "calendar exports ICS endpoints" do
         end
         get("/calendars/export.ics?calendars=all&token=#{user_token}&own_only=1")
       end
+
+      it "includes the user's repeating events, but not other people's" do
+        overlap_ok = create(:calendar, name: "Courtyard", community: community, allow_overlap: true)
+        start = Time.zone.parse("2021-01-04 18:00")
+        create(:event, calendar: overlap_ok, creator: user, name: "My series", starts_at: start,
+          ends_at: start + 1.hour, recurrence_rule: IceCube::Rule.weekly.to_hash)
+        someone_else = create(:user, community: community)
+        create(:event, calendar: overlap_ok, creator: someone_else, name: "Their series",
+          starts_at: start, ends_at: start + 1.hour, recurrence_rule: IceCube::Rule.weekly.to_hash)
+
+        get("/calendars/export.ics?calendars=all&token=#{user_token}&own_only=1")
+        expect(response.body).to include("SUMMARY:My series")
+        expect(response.body).to include("RRULE:FREQ=WEEKLY")
+        expect(response.body).not_to include("Their series")
+      end
     end
 
     context "with bad user token" do

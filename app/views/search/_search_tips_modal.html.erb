@@ -1,0 +1,67 @@
+<div id="search-tips-modal" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="search-tips-modal-label">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="<%= t("common.close") %>">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h2 class="modal-title" id="search-tips-modal-label"><%= t(".title") %></h2>
+      </div>
+      <div class="modal-body">
+        <p><%= @drive_available ? t(".intro") : t(".intro_no_drive") %></p>
+
+        <%# The <code> examples are literal query syntax, so they aren't translated (hence the lint disables). %>
+        <h4><%= t(".basic_search") %></h4>
+        <table class="key-value">
+          <tr>
+            <td><code>compost bins</code></td> <%# erb_lint:disable HardCodedText %>
+            <td><%= t(".both_words") %></td>
+          </tr>
+          <tr>
+            <td><code>"compost bins"</code></td> <%# erb_lint:disable HardCodedText %>
+            <td><%= t(".exact_phrase", phrase: "compost bins") %></td>
+          </tr>
+          <tr>
+            <td><code>comp*</code></td> <%# erb_lint:disable HardCodedText %>
+            <td><%= @drive_available ? t(".word_start_drive", start: "comp") : t(".word_start", start: "comp") %></td>
+          </tr>
+        </table>
+
+        <h4><%= t(".special_syntax") %></h4>
+        <table class="key-value">
+          <tr>
+            <td><code>title:compost</code></td> <%# erb_lint:disable HardCodedText %>
+            <td><%= t(".title_only") %></td>
+          </tr>
+          <% if @drive_available %>
+            <tr>
+              <td><code>type:doc</code></td> <%# erb_lint:disable HardCodedText %>
+              <td>
+                <%= t(".drive_type_html",
+                      options: safe_join(%w[doc sheet slide pdf folder].map { |o| tag.code(o) }, ", ")) %>
+              </td>
+            </tr>
+          <% end %>
+        </table>
+
+        <h4><%= t(".combining") %></h4>
+        <table class="key-value">
+          <tr>
+            <td><code>title:minutes 2024</code></td> <%# erb_lint:disable HardCodedText %>
+            <td><%= t(".title_and_word", title: "minutes", word: "2024") %></td>
+          </tr>
+          <% if @drive_available %>
+            <tr>
+              <td><code>"budget report" type:sheet</code></td> <%# erb_lint:disable HardCodedText %>
+              <td><%= t(".sheet_and_phrase", phrase: "budget report") %></td>
+            </tr>
+          <% end %>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal"><%= t("common.close") %></button>
+      </div>
+    </div>
+  </div>
+</div>

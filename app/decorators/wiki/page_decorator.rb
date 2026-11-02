@@ -44,8 +44,8 @@ module Wiki
     def footer_content
       bits = []
       sample_page = Wiki::Page.new(community: h.current_community)
-      bits << h.link_to("Wiki Page Listing", h.all_wiki_pages_path) if h.policy(sample_page).all?
-      bits << h.link_to("New Wiki Page", h.new_wiki_page_path) if h.policy(sample_page).create?
+      bits << h.link_to(t("wiki.page_listing"), h.all_wiki_pages_path) if h.policy(sample_page).all?
+      bits << h.link_to(t("wiki.new_page"), h.new_wiki_page_path) if h.policy(sample_page).create?
       bits << revision_info
       bits.reduce(&sep("&nbsp;&nbsp;&nbsp;"))
     end

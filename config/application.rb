@@ -32,7 +32,7 @@ module Gather
     config.autoload_paths += extra_paths
     config.eager_load_paths += extra_paths
 
-    config.autoload_lib(ignore: %w[assets tasks])
+    config.autoload_lib(ignore: %w[assets rubocop tasks])
 
     config.add_autoload_paths_to_load_path = false
 
@@ -110,7 +110,13 @@ module Gather
 
     config.cache_store = :redis_cache_store, {url: Settings.redis.url}
 
-    # Currently, fr is only available for testing purposes.
-    I18n.available_locales = %i[en fr]
+    # Locales Gather is being translated into. Only en is shown to users for now.
+    # rails-i18n and devise-i18n load data only for these locales.
+    config.i18n.available_locales = %i[en fr fr-CA es de sv nb fi nl it]
+    config.i18n.default_locale = :en
+    # Canadian French only overrides French where Québec usage differs, so it reads the rest from fr.
+    # Production also falls back to English (see production.rb); development and test don't, so that a
+    # missing translation raises.
+    config.i18n.fallbacks = {"fr-CA": :fr}
   end
 end

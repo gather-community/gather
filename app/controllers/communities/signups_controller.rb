@@ -22,7 +22,7 @@ class Communities::SignupsController < ApplicationController
       render(:new) and return
     end
     unless verify_hcaptcha
-      @form.errors.add(:hcaptcha_verified, "Captcha verification failed. Please try again.")
+      @form.errors.add(:hcaptcha_verified, t("communities.signups.captcha_failed"))
       render(:new) and return
     end
     if @form.save
@@ -55,11 +55,11 @@ class Communities::SignupsController < ApplicationController
     when "approve"
       @signup.approve!(current_user, message: @action_form.message)
       Communities::SignupApprovalJob.perform_later(@signup.id)
-      redirect_to(communities_signups_path, notice: "Application approved. Community setup is underway.")
+      redirect_to(communities_signups_path, notice: t("communities.signups.approved"))
     when "deny"
       @signup.deny!(current_user, message: @action_form.message)
       Communities::SignupMailer.application_denied(@signup).deliver_now
-      redirect_to(communities_signups_path, notice: "Application denied.")
+      redirect_to(communities_signups_path, notice: t("communities.signups.denied"))
     end
   end
 

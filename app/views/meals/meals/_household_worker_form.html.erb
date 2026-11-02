@@ -6,7 +6,7 @@
       <ul>
         <% @household_workers.existing.each do |assign| %>
           <li>
-            <%= assign.user.decorate.full_name %> - <%= assign.role_title %>&nbsp;
+            <%= t(".worker_role", name: assign.user.decorate.full_name, role: assign.role_title) %>&nbsp;
             <%= link_to(assign, class: "delete-assign") do %>
               <i class="fa fa-close"></i>
             <% end %>
@@ -18,14 +18,10 @@
   <% if @household_workers.no_open? %>
     <% unless @household_workers.existing? %>
       <%# If nothing was rendered above, show something here to populate the section. %>
-      <p>This meal doesn't need any more workers.</p>
+      <p><%= t(".no_more_workers") %></p>
     <% end %>
   <% else %>
-    <p>
-      This meal still needs
-      <b><%= @household_workers.total_needed %>
-        <%= t("common.worker", count: @household_workers.total_needed) %></b>.
-    </p>
+    <p><%= t(".still_needs_html", count: @household_workers.total_needed) %></p>
 
     <div class="help-out-fields" <%= @expand_help_out_form ? "" : "data-toggle-off=help-out-form" %>>
       <%= f.simple_fields_for(:assignments, @household_workers.open) do |assign_fields| %>
@@ -39,11 +35,11 @@
     </div>
     <% unless @expand_help_out_form %>
       <button class="btn btn-primary" data-toggle="help-out-form" data-toggle-preserve-link="false">
-        Help Out
+        <%= t(".help_out") %>
       </button>
     <% end %>
 
-    <%= javascript_tag do %>
+    <script>
       $(function() {
         new Gather.Views.DirtyChecker({el: '.meals--meal-form'});
         new Gather.Views.Meals.HouseholdWorkerFormView(<%=json(
@@ -51,6 +47,6 @@
           notifyOnWorkerChange: !policy(meal).change_workers_without_notification?
         )%>);
       });
-    <% end %>
+    </script>
   <% end %>
 <% end %>

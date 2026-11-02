@@ -1,0 +1,10 @@
+<% if terms.present? %>
+  <ul class="spf-lookups">
+    <% terms.each do |term| %>
+      <li>
+        <code><%= term["term"] %></code>
+        <%= render("spf_lookup_terms", terms: term["children"] || []) %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

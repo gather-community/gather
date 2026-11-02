@@ -1,3 +1,3 @@
-<% content_for(:title, "Edit Job: #{job.title}") %>
+<% content_for(:title, t(".title", title: job.title)) %>
 <% content_for(:action_links, job.action_links(:edit)) %>
 <%= render("form") %>

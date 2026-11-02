@@ -3,7 +3,7 @@
 require "rails_helper"
 
 describe Calendars::OccurrenceResolver do
-  let(:calendar) { create(:calendar) }
+  let(:calendar) { create(:calendar, allow_overlap: true) }
   let(:base_eventlet) { event.eventlets.first }
   subject(:resolved) { described_class.new(base_eventlet, occurrence_param).resolve }
 

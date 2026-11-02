@@ -56,6 +56,13 @@ Rails.application.routes.draw do
     end
   end
 
+  scope module: :notifications do
+    resource :preferences, path: "notifications", only: %i[show update], as: :notification_preferences
+    # Public, signed List-Unsubscribe URL from notification emails. POST is RFC 8058 one-click unsubscribe.
+    get "notifications/unsubscribe/:token", to: "unsubscribes#show", as: :notification_unsubscribe
+    post "notifications/unsubscribe/:token", to: "unsubscribes#create"
+  end
+
   resources :users do
     collection do
       patch :update_setting, path: "update-setting"
@@ -164,8 +171,16 @@ Rails.application.routes.draw do
   end
 
   namespace :calendars do
-    resources :events
-    resources :eventlets, only: %i[show update destroy]
+    resources :events do
+      # Re-renders the parts of the event form that depend on its other fields. See
+      # EventsController#form_refresh.
+      post :form_refresh, on: :collection
+      post :form_refresh, on: :member
+    end
+    resources :eventlets, only: %i[show update destroy] do
+      # Which scope choices a drag of this eventlet may offer. See EventletsController#move_choices.
+      get :move_choices, on: :member
+    end
     resources :protocols
     resources :groups, only: %i[new edit create update destroy]
 
@@ -191,6 +206,7 @@ Rails.application.routes.draw do
 
     # This is the personalized show action, allowing paths to include the user's calendar token,
     # e.g. /calendars/exports/meals/D7sbPv7YCUhxMs4Pyx9D.
+    # The "your-*" types predate the "My" naming. Existing subscriptions use them, so they stay.
     # The calendar's type gets captured as the :id param, so this is equivalent to
     # /calendars/exports/:type/:token
     get "exports/:type/:token",
@@ -251,7 +267,8 @@ Rails.application.routes.draw do
 
   resources :accounts, only: %i[index show edit update] do
     collection do
-      get :yours
+      get :mine
+      get :yours, to: redirect(path: "/accounts/mine") # Legacy path, linked from old statement emails
       put :apply_late_fees
     end
     resources :transactions, only: %i[index new create]
@@ -274,6 +291,9 @@ Rails.application.routes.draw do
       end
     end
   end
+
+  # Top-level search.
+  get "search", to: "search#index", as: :search
 
   resources :wiki_pages, controller: "wiki/pages", param: :slug, path: "wiki" do
     collection do
@@ -374,6 +394,17 @@ Rails.application.routes.draw do
   namespace :admin do
     get "settings/:type", to: "settings#edit", as: :settings
     patch "settings/:type", to: "settings#update"
+
+    # Operator dashboard for domains (apex domain; spans all clusters).
+    resources :domains, only: %i[index show] do
+      post :refresh, on: :collection
+      post :refresh, on: :member
+    end
+
+    # Operator dashboard for feature flags (apex domain; flags are global, users from any cluster).
+    resources :feature_flags, path: "feature-flags" do
+      get :user_search, path: "user-search", on: :collection, defaults: {format: :json}
+    end
   end
 
   namespace :subscription do

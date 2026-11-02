@@ -9,7 +9,9 @@ Gather.Views.DirtyChecker = Backbone.View.extend({
   events: {
     "cocoon:after-insert": "rescan",
     "cocoon:after-remove": "rescan",
-    "gather:select2inserted": "rescan"
+    "gather:select2inserted": "rescan",
+    // From the form-refresh Stimulus controller, after it re-renders parts of the form.
+    "form-refresh:refreshed": "rescan"
   },
 
   rescan() {
@@ -38,8 +40,12 @@ Gather.Views.DirtyChecker = Backbone.View.extend({
       let dirty = false;
       $node.find(".input-group.datetimepicker").each(function() {
         const orig = moment($(this).find("input").data("initial-value"));
-        const current = $(this).data("DateTimePicker").date();
-        if ((orig && current && !orig.isSame(current)) || (!orig && !current)) {
+        const picker = $(this).data("DateTimePicker");
+        const current = picker.date();
+        // A picker showing only dates, like an all-day event's, holds midnight, while its initial value
+        // can have a time (an all-day event ends at 11:59pm). So it's compared by the day.
+        const unit = /[hH]/.test(picker.format()) ? "minute" : "day";
+        if ((orig && current && !orig.isSame(current, unit)) || (!orig && !current)) {
           if ($.DirtyForms.debug) {
             console.warn("[DirtyFormDateTimePickerHelper] Found dirty picker ", this);
           }

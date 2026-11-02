@@ -1,5 +1,6 @@
+# Dev mail goes to the Mailcatcher Docker service. View it with bin/mailcatcher (http://localhost:1080).
 smtp:
-  address: localhost
+  address: mailcatcher
   port: 1025
 url:
   # gatherdev.org resolves to 127.0.0.1 for all subdomains.

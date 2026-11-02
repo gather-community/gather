@@ -1,0 +1,30 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+fr-CA:
+  custom_fields:
+    labels:
+      community:
+        settings:
+          billing:
+            payment_methods:
+              paypal_email: "PayPal par courriel" # MT
+              show_billing_contact: "Afficher le courriel du contact de facturation avec les informations supplémentaires" # MT
+    hints:
+      community:
+        settings:
+          billing:
+            contact: "Courriel pour les questions de facturation. Il sera indiqué avec les instructions de paiement." # MT
+            payment_methods:
+              paypal_email: "Si vous voulez accepter PayPal sans utiliser PayPal.me, saisissez l'adresse courriel à laquelle les membres doivent envoyer leurs paiements." # MT
+              paypal_friend: "S'applique à PayPal.me et à PayPal par courriel. Cochez si, selon les conditions d'utilisation de PayPal, ces paiements peuvent être considérés comme faits entre proches. Cela évite les frais." # MT
+              show_billing_contact: "Ajouter ou non le courriel du contact de facturation ci-dessus (s'il est indiqué) en bas des instructions de paiement. Décochez et ajoutez-le vous-même dans « Informations supplémentaires » si vous voulez personnaliser sa présentation." # MT

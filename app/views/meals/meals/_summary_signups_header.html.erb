@@ -1,13 +1,13 @@
 <tr>
   <% if multi_community? %>
-    <th class="cmty">Cmty</th>
+    <th class="cmty"><%= t(".community") %></th>
   <% end %>
-  <th class="hhld">Household</th>
+  <th class="hhld"><%= t(".household") %></th>
   <% meal.types.each do |type| %>
     <th class="count"><%= type.name %></th>
   <% end %>
   <% if meal.takeout_allowed? %>
-    <th class="takeout">Takeout</th>
+    <th class="takeout"><%= t(".takeout") %></th>
   <% end %>
-  <th>Comments</th>
+  <th><%= t(".comments") %></th>
 </tr>

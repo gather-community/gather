@@ -18,16 +18,14 @@ describe Meals::MealReminderJob do
   let!(:signup5) { create(:meal_signup, meal: meal1, diner_counts: [2, 1], notified: true) }
   let(:strlen) { "Meal Reminder: Meal X".size }
 
-  it "sends the right number of emails" do
-    expect(MealMailer).to receive(:meal_reminder).exactly(3).times.and_return(mlrdbl)
-    perform_job
-  end
+  before { ActionMailer::Base.deliveries.clear }
 
-  it "sends correct emails" do
-    expect(MealMailer).to receive(:meal_reminder).with(signup1).and_return(mlrdbl)
-    expect(MealMailer).to receive(:meal_reminder).with(signup2).and_return(mlrdbl)
-    expect(MealMailer).to receive(:meal_reminder).with(signup3).and_return(mlrdbl)
+  it "sends each member of the right households their own reminder" do
     perform_job
+    expected = [signup1, signup2, signup3].flat_map { |s| s.household.users.map { |u| [u.email] } }
+    expect(expected.size).to be >= 3
+    expect(ActionMailer::Base.deliveries.map(&:to)).to match_array(expected)
+    expect(ActionMailer::Base.deliveries.map(&:subject)).to all(match(/Meal Reminder: .* - Meal [12]/))
   end
 
   it "sets notified flag" do

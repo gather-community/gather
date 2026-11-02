@@ -65,11 +65,15 @@ module Calendars
         id: params[:id],
         params: {
           origin_page: params[:origin_page],
-          guidelines_ok: "1"
+          guidelines_ok: "1",
+          # Which occurrence of a repeating event the form was opened from. See EventForm.
+          occurrence_start: params[:occurrence]
         }
       )
       @event = @form.event
       authorize(@event)
+      # As the occurrence page does, for an occurrence that isn't in the series or was deleted.
+      raise ActiveRecord::RecordNotFound if @form.series_edit? && !@form.opened_occurrence
 
       prep_form_vars
     end
@@ -91,7 +95,7 @@ module Calendars
 
       authorize(@event)
       if @form.save
-        flash[:success] = "Event created successfully."
+        flash[:success] = t("calendars.event_created")
         redirect_to_form_in_context(@form)
       else
         prep_form_vars
@@ -116,7 +120,7 @@ module Calendars
         if request.xhr?
           head(:ok)
         else
-          flash[:success] = "Event updated successfully."
+          flash[:success] = t("calendars.event_updated")
           redirect_to_form_in_context(@form)
         end
       else
@@ -141,8 +145,26 @@ module Calendars
       @event = @form.event
       authorize(@event)
       @event.destroy
-      flash[:success] = "Event deleted successfully."
+      flash[:success] = t("calendars.event_deleted")
       redirect_to_form_in_context(@form)
+    end
+
+    # Re-renders the parts of the event form that depend on its other fields, for the values it has now,
+    # such as the monthly repeat choices, which are worded from the start date. Called by the
+    # form-refresh Stimulus controller as the form changes. Saves nothing.
+    def form_refresh
+      event_params = params.require(:calendars_event)
+      persisted = params[:id].present?
+      if !persisted && event_params[:calendar_id].blank?
+        skip_authorization
+        return head(:unprocessable_entity)
+      end
+
+      @form = EventForm.new(action: persisted ? :update : :create, current_user: current_user,
+        id: params[:id], params: event_params)
+      @event = @form.event
+      authorize(@event, persisted ? :edit? : :new?)
+      render(formats: :turbo_stream)
     end
 
     protected
@@ -171,7 +193,7 @@ module Calendars
 
       @rule_set = sample_eventlet.rule_set
       if @rule_set.access_level(current_user.community) == "read_only"
-        flash.now[:notice] = "Only #{@calendar.community_name} residents may reserve this calendar."
+        flash.now[:notice] = t("calendars.residents_only", community: @calendar.community_name)
       end
       @rule_set_serializer = build_attribute_serializer(@rule_set, creator_community: Community.first,
         serializer: RuleSetSerializer)
@@ -223,7 +245,7 @@ module Calendars
       @groups = Calendars::EventPolicy::GroupScope.new(current_user, Groups::Group)
         .resolve
         .in_community(current_community)
-        .order(:name)
+        .by_name
     end
 
     def render_choose_calendar_page

@@ -1,15 +1,15 @@
 <% if calendar %>
-  <% content_for(:title, "#{calendar.name}: Create Event") %>
+  <% content_for(:title, t(".title", calendar: calendar.name)) %>
   <%= render("form") %>
   <br/><br/>
 <% elsif calendars.empty? %>
-  <% content_for(:title, "No Calendars") %>
-  Your community does not have any calendars on which you can create an event.
+  <% content_for(:title, t(".no_calendars_title")) %>
+  <%= t(".no_calendars") %>
   <% if @can_create_calendar %>
-    <%= link_to("You can create one.", calendars_calendars_path) %>
+    <%= link_to(t(".create_one"), calendars_calendars_path) %>
   <% end %>
 <% else %>
-  <% content_for(:title, "Select Calendar") %>
+  <% content_for(:title, t(".select_calendar")) %>
   <% calendars.each do |calendar| %>
     <div class="calendar">
       <%= link_to(new_calendar_event_path(calendar, @url_params)) do %>

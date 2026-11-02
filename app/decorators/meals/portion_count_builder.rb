@@ -8,14 +8,12 @@ module Meals
       nil_category_formula_parts = formula_parts_by_category.delete(nil)
       chunks = formula_parts_by_category.map { |c, fp| chunk(c, fp) }
       chunks << chunk(nil, nil_category_formula_parts, only: chunks.empty?) if nil_category_formula_parts
-      ttl_signups = h.content_tag(:strong, "#{signup_count} diners")
+      diners = h.content_tag(:strong, h.t("meals.portion_counts.diners", count: signup_count))
       h.content_tag(:div, class: "portion-counts") do
         if chunks.size == 1
-          safe_str << "This meal has " << ttl_signups << " and will require approximately " <<
-            chunks[0] << ".*"
+          h.t("meals.portion_counts.summary_html", diners: diners, portions: chunks[0])
         else
-          safe_str << "This meal has " << ttl_signups << " and will require approximately: " <<
-            chunks.reduce(&sep(", ")) << ".*"
+          h.t("meals.portion_counts.summary_list_html", diners: diners, portions: chunks.reduce(&sep(", ")))
         end
       end
     end
@@ -24,16 +22,18 @@ module Meals
 
     def chunk(category, formula_parts, only: false)
       formula_parts_by_type = formula_parts.index_by(&:type)
-      h.content_tag(:strong) do
-        total = signups.sum do |signup|
-          signup.parts.sum do |signup_part|
-            matching_formula_part = formula_parts_by_type[signup_part.type]
-            matching_formula_part ? signup_part.count.to_f * matching_formula_part.portion_size : 0
-          end
+      total = signups.sum do |signup|
+        signup.parts.sum do |signup_part|
+          matching_formula_part = formula_parts_by_type[signup_part.type]
+          matching_formula_part ? signup_part.count.to_f * matching_formula_part.portion_size : 0
         end
-        category = "other" if category.nil? && !only
-        [total.ceil, category].compact.join(" ")
-      end << " portions"
+      end
+      category = h.t("meals.portion_counts.other_category") if category.nil? && !only
+      if category
+        h.t("meals.portion_counts.category_portions_html", count: total.ceil, category: category)
+      else
+        h.t("meals.portion_counts.portions_html", count: total.ceil)
+      end
     end
 
     def formula_parts_by_category

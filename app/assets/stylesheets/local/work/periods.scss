@@ -1,4 +1,8 @@
 .work--periods {
+  table.index td.links a:not(:last-child) {
+    margin-right: 10px;
+  }
+
   #meal-job-sync-settings {
     .hint {
       margin-top: 10px;

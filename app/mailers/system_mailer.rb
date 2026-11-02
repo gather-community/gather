@@ -3,6 +3,7 @@
 # System-level mailer for non-tenant-scoped notifications sent to internal addresses.
 # Does not inherit ApplicationMailer to avoid subdomain/community requirements.
 class SystemMailer < ActionMailer::Base # rubocop:disable Rails/ApplicationMailer
+  include RecipientLocale
   default from: Settings.email.from
 
   def inactivity_warning_summary(communities)

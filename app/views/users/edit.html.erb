@@ -1,11 +1,11 @@
 <% content_for(:flashes, inactive_notice(user)) if user.inactive? %>
 <% content_for(:title) do
   if @user == current_user
-    "Profile"
+    t(".profile")
   elsif policy(@user).update_info?
-    "Edit User: #{user.name}"
+    t(".edit_user", name: user.name)
   elsif policy(@user).update_photo?
-    "Edit Photo: #{user.name}"
+    t(".edit_photo", name: user.name)
   end
 end %>
 <% content_for(:action_links, user.action_links(:edit)) %>

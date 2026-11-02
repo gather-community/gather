@@ -1,4 +1,4 @@
-<h2>Upload File<a name="upload"></a></h2>
+<h2><%= t(".upload_file") %><a name="upload"></a></h2>
 
 <div id="import-forms">
   <%= render("shared/dropzone", obj: @new_import, attrib: :file) %>
@@ -11,9 +11,9 @@
   <% end %>
 </div>
 
-<%= javascript_tag do %>
+<script>
   $(function() {
     window.uploadView = new Gather.Views.FileUploadView(<%=json(el: '#import-forms')%>);
     new Gather.Views.DirtyChecker({el: '.import-forms', helpers: [uploadView]});
   });
-<% end %>
+</script>

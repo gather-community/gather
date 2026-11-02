@@ -13,12 +13,12 @@ module Meals
         # Find all households for target meals that have not yet been notified.
         signups = Signup.where(meal_id: meal_ids).where(notified: false).includes(household: :users)
 
-        # Send emails
         signups.each do |signup|
-          with_mail_delivery_resilience(data: {signup_id: signup.id}) do
-            MealMailer.meal_reminder(signup).deliver_now
-            signup.update_attribute(:notified, true)
+          data = {signup_id: signup.id}
+          each_notification_recipient(signup.household, kind: :meal_reminder, data: data) do |user|
+            MealMailer.with(recipient: user).meal_reminder(signup).deliver_now
           end
+          signup.update_attribute(:notified, true)
         end
       end
     end

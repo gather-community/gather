@@ -3,8 +3,13 @@
 module Work
   # Calculates data for synopsis status message.
   class Synopsis
-    # Duck type for Job
-    REGULAR_BUCKET = OpenStruct.new(title: I18n.t("work.synopsis.regular"))
+    # Duck type for Job. The title is looked up on each call rather than when the class loads, so it
+    # follows the current locale.
+    REGULAR_BUCKET = Class.new do
+      def title
+        I18n.t("work.synopsis.regular")
+      end
+    end.new.freeze
 
     attr_accessor :period, :user, :for_user, :for_household, :staggering, :done
     alias done? done

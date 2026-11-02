@@ -4,6 +4,21 @@ shared_context "jobs" do
   # Mailer double to be returned when stubbing mailer.
   let(:mlrdbl) { double(deliver_now: nil) }
 
+  # Stubs `mailer.with(recipient:)` so that calling `action` records [recipient, *args] instead of sending.
+  # Returns the array the calls are recorded in.
+  def record_notifications(mailer, action)
+    calls = []
+    allow(mailer).to receive(:with) do |recipient:|
+      double.tap do |parameterized|
+        allow(parameterized).to receive(action) do |*args|
+          calls << [recipient, *args]
+          mlrdbl
+        end
+      end
+    end
+    calls
+  end
+
   # We instantiate an instance of the job class instead of using perform_later so that we have
   # a reference on which we can stub things.
   # But this means we're not directly using the serialize/deserialize code of ActiveJob.

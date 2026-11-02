@@ -1,0 +1,125 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+it:
+  groups:
+    created: "Gruppo creato." # MT
+    updated: "Gruppo aggiornato." # MT
+    joined: "Ti sei unito al gruppo «%{name}»." # MT
+    left: "Hai lasciato il gruppo «%{name}»." # MT
+    list_sync_started: "Sincronizzazione della lista avviata. Attendi qualche istante che finisca e ricarica la pagina." # MT
+    # E.g. "Knitting Club (Inactive, Hidden)".
+    name_with_suffixes: "%{name} (%{suffixes})"
+    show_more: "Mostra altri %{count}" # MT
+    hide: "Nascondi" # MT
+    groups:
+      form:
+        email_list: "Lista email" # MT
+        no_domains_html: "Non puoi creare una lista email perché a questa comunità non è associato alcun dominio. %{link} per risolvere il problema." # MT
+        contact_staff: "Contatta lo staff di Gather" # MT
+        mailman_intro: "Le liste email sono gestite tramite il software per mailing list Mailman." # MT
+        leave_blank: "Lascia vuoti questi campi se non ti serve una lista email per questo gruppo." # MT
+        name_locked: "Il nome e il dominio della lista non si possono modificare dopo la creazione. Se devi cambiarli, elimina e ricrea la lista oppure contatta lo staff di Gather." # MT
+        admin_panel: "pannello di amministrazione di Mailman" # MT
+        sync_intro: "I membri della lista vengono sincronizzati con Gather in questo modo:" # MT
+        members_html: "<strong>Membri</strong>: tutti i membri di questo gruppo vengono sincronizzati automaticamente con la lista. Puoi aggiungere altri membri a mano tramite il %{link}." # MT
+        moderators_html: "<strong>Moderatori</strong>: i moderatori della lista vengono sincronizzati in base alle impostazioni «I responsabili possono moderare la lista?» e «Può moderare tutte le liste email?» qui sopra. Puoi aggiungere altri moderatori a mano tramite il %{link}." # MT
+        owners_html: "<strong>Proprietari</strong>: i proprietari della lista vengono sincronizzati in base alle impostazioni «I responsabili possono amministrare la lista?» e «Può amministrare tutte le liste email?» qui sopra. Puoi aggiungere altri proprietari a mano tramite il %{link}." # MT
+        non_members_html: "<strong>Non membri</strong>: la funzione «non-member» di Mailman si può usare 1) per consentire ad altri indirizzi di inviare email alla lista senza riceverle e 2) per impedire a qualcuno di scrivere alla lista. I non membri non ricevono le email della lista. I non membri non vengono sincronizzati da Gather, ma si possono aggiungere a mano tramite il %{link}. Per maggiori informazioni consulta la %{docs_link}." # MT
+        mailman_docs: "documentazione di Mailman" # MT
+        only_non_users: "Tramite il pannello di amministrazione di Mailman vanno modificati solo gli indirizzi non associati a utenti di Gather." # MT
+        overwritten: "Qualsiasi modifica manuale alle iscrizioni degli utenti di Gather verrà sovrascritta durante la sincronizzazione." # MT
+        settings_intro_html: "Le impostazioni della lista si possono modificare tramite il %{link}. Gather reimposterà comunque le seguenti impostazioni:" # MT
+        index_page_html: "<strong>Show list on index page</strong>: le liste non verranno mai pubblicizzate, perché questo è solo un sistema di mailing list private." # MT
+        max_size_html: "<strong>Maximum message size</strong>: i messaggi sono limitati a 5 MiB." # MT
+        subscription_policy_html: "<strong>Subscription policy</strong>: i moderatori dovranno autorizzare a mano ogni nuova iscrizione. Il modo principale per iscriversi deve essere tramite Gather. Le iscrizioni dal sito di Mailman o via email dovrebbero essere rare." # MT
+      edit:
+        title: "Modifica gruppo: %{name}" # MT
+      new:
+        title: "Crea gruppo" # MT
+      index:
+        title: "Gruppi" # MT
+        create: "Crea gruppo" # MT
+        none_found: "Nessun gruppo trovato." # MT
+        name: "Nome" # MT
+        type: "Tipo" # MT
+        description: "Descrizione" # MT
+        members: "Membri" # MT
+      show:
+        groups: "Gruppi" # MT
+        email_list: "Lista email" # MT
+        links: "Link" # MT
+        archives: "Archivio della lista" # MT
+        panel: "Pannello della lista" # MT
+        all_can_send: "Tutta la comunità può inviare?" # MT
+        additional_members_note: "Tutti i membri del gruppo qui sopra sono automaticamente membri della lista. Anche questi indirizzi sono membri." # MT
+        additional_senders_note: "Questi mittenti aggiuntivi possono scrivere alla lista ma non ne ricevono le email." # MT
+        last_sync_time: "Ultima sincronizzazione" # MT
+        sync_note: "Le modifiche in Gather si sincronizzano automaticamente con il sistema di mailing list, ma quelle fatte nel pannello della mailing list non si sincronizzano automaticamente." # MT
+        sync_note_additional: "Questo vale anche per l'elenco dei membri e mittenti aggiuntivi qui sopra." # MT
+        sync_now_html: "%{link} per avere le informazioni più aggiornate." # MT
+        sync_now: "Sincronizza ora" # MT
+        no_list: "A questo gruppo non è associata alcuna lista email." # MT
+    # Templates that Mailman fetches for list emails. $listname and similar are Mailman placeholders,
+    # which must be kept as is.
+    mailman:
+      templates:
+        footer:
+          list_name: "$listname, una lista email di un gruppo Gather" # MT
+          unsubscribe: "Per annullare l'iscrizione, visita la pagina del gruppo e lascialo o disattiva l'iscrizione." # MT
+        list_admin_action_post:
+          body: |- # MT
+            In qualità di amministratore della lista, ti chiediamo di
+            autorizzare il seguente messaggio alla mailing list:
+
+                Lista:   $listname
+                Da:      $sender_email
+                Oggetto: $subject
+
+            Il messaggio è trattenuto perché:
+
+            $reasons
+
+            Quando ti è comodo, visita la tua dashboard per approvare o
+            respingere la richiesta.
+    availability_hints:
+      single_community:
+        open: "Chiunque nella comunità può vedere questo gruppo e unirsi." # MT
+        closed: "Chiunque nella comunità può vedere questo gruppo, ma solo gli amministratori della comunità e i responsabili del gruppo possono aggiungervi persone." # MT
+        hidden: "Solo gli amministratori della comunità e i responsabili del gruppo possono vedere questo gruppo e aggiungervi persone." # MT
+        "everybody": "Tutti nella comunità possono vedere questo gruppo e ne sono membri per impostazione predefinita. Chi vuole può disattivare l'iscrizione." # MT
+      multi_community:
+        open: "Chiunque nelle comunità qui sopra può vedere questo gruppo e unirsi." # MT
+        closed: "Chiunque nelle comunità qui sopra può vedere questo gruppo, ma solo gli amministratori e i responsabili del gruppo possono aggiungervi persone." # MT
+        hidden: "Solo i responsabili del gruppo e gli amministratori delle comunità qui sopra possono vedere questo gruppo e aggiungervi persone." # MT
+        everybody: "Tutti nelle comunità qui sopra possono vedere questo gruppo e ne sono membri per impostazione predefinita. Chi vuole può disattivare l'iscrizione." # MT
+  domains:
+    created: "Dominio creato." # MT
+    index:
+      title: "Domini" # MT
+      add: "Aggiungi dominio" # MT
+      intro_html: "Questi sono i domini su cui puoi creare liste email. Per le istruzioni su come aggiungere un dominio, fai clic su %{link}." # MT
+      none_found: "Nessun dominio trovato." # MT
+    new:
+      title: "Aggiungi dominio" # MT
+      intro: "Per aggiungere un dominio a Gather:" # MT
+      consider: "Valuta se per questo dominio sono definite caselle di posta, indirizzi di inoltro o mailing list." # MT
+      mailboxes_html: "<strong>Caselle di posta:</strong> se per questo dominio sono definite caselle di posta, smetteranno di funzionare quando indirizzi il dominio a Gather. Per evitarlo puoi usare un sottodominio, ad es. lists.tuodominio.it invece di tuodominio.it." # MT
+      forwarding_html: "<strong>Indirizzi di inoltro:</strong> se per questo dominio sono definiti indirizzi di inoltro, puoi trasferirli su Gather. Contatta %{email}." # MT
+      lists_html: "<strong>Mailing list:</strong> se per questo dominio sono definite mailing list, puoi trasferirle su Gather. Contatta %{email}." # MT
+      create: "Crea il dominio qui sotto inserendo il nome di dominio completo, ad es. «tuodominio.it», e facendo clic su «Salva»." # MT
+      migrating: "Se stai trasferendo indirizzi di inoltro o mailing list, assicurati che siano configurati su Gather e pronti a ricevere email quando aggiorni il dominio per puntare a Gather." # MT
+      dns: "Infine, aggiorna il dominio perché punti a Gather. Imposta questi tre record DNS:" # MT
+    show:
+      domain: "Dominio" # MT
+      communities: "Comunità" # MT
+      lists: "Liste Mailman" # MT

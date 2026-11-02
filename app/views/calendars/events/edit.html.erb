@@ -1,4 +1,6 @@
-<% content_for(:title, "Edit Event: #{event.name}") %>
-<% content_for(:action_links, event.action_links(:edit)) %>
+<% content_for(:title, t(".title", name: event.name)) %>
+<%# A repeating event is deleted the way its occurrence page does it, asking which occurrences. %>
+<% occurrence = @form.series_edit? && @form.opened_occurrence %>
+<% content_for(:action_links, occurrence ? occurrence.decorate.action_links(:edit) : event.action_links(:edit)) %>
 <%= render("form") %>
 <br/><br/>

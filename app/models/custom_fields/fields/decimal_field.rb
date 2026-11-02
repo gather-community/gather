@@ -13,7 +13,7 @@ module CustomFields
         elsif value.nil? || value.is_a?(String) && value.strip == ""
           nil
         else
-          value.to_f
+          Gather::LocalizedNumber.normalize(value).to_f
         end
       end
     end

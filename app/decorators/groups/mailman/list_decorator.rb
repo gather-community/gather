@@ -48,8 +48,10 @@ module Groups
 
         buttons = if initially_visible && emails.size > initially_visible
           [
-            h.content_tag(:button, "Show #{overflow} more", class: "btn btn-link", "data-action": "partial-list#toggle", "data-partial-list-target": "showButton"),
-            h.content_tag(:button, "Hide", class: "hidden btn btn-link", "data-action": "partial-list#toggle", "data-partial-list-target": "hideButton")
+            h.content_tag(:button, t("groups.show_more", count: overflow), class: "btn btn-link",
+              "data-action": "partial-list#toggle", "data-partial-list-target": "showButton"),
+            h.content_tag(:button, t("groups.hide"), class: "hidden btn btn-link",
+              "data-action": "partial-list#toggle", "data-partial-list-target": "hideButton")
           ]
         else
           []

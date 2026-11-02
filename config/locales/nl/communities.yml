@@ -1,0 +1,151 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+nl:
+  communities:
+    community:
+      statuses:
+        all: "Alle statussen" # MT
+        trial: "Proefperiode" # MT
+        subscribed: "Geabonneerd" # MT
+        problem: "Probleem" # MT
+        warning: "Waarschuwing" # MT
+        deactivated: "Gedeactiveerd" # MT
+    resync_started: "Opnieuw synchroniseren van het abonnement is gestart. Vernieuw de pagina over een minuut om de wijzigingen te zien." # MT
+    incorrect_slug: "Onjuiste slug. De gemeenschap is niet verwijderd." # MT
+    being_deleted: "%{name} wordt verwijderd." # MT
+    admin:
+      id: "ID" # MT
+      name: "Naam" # MT
+      slug: "Slug" # MT
+      abbreviation: "Afkorting" # MT
+      country: "Land" # MT
+      time_zone: "Tijdzone" # MT
+      cluster: "Cluster" # MT
+      cluster_value: "%{name} (ID %{id})" # MT
+      created: "Aangemaakt" # MT
+      status: "Status" # MT
+      subscription: "Abonnement" # MT
+      stripe_id: "Stripe-ID" # MT
+      not_in_stripe: "Abonnement niet gevonden in Stripe" # MT
+      detailed_status: "Gedetailleerde status" # MT
+      last_synced: "Laatst gesynchroniseerd" # MT
+      users: "Gebruikers" # MT
+      price: "Prijs" # MT
+      # E.g. "$5.00/user/month × 12 months (USD)"
+      price_value_html: "%{price}/gebruiker/maand &times; %{months} maanden (%{currency})" # MT
+      discount: "Korting" # MT
+      next_payment: "Volgende betaling" # MT
+      contact: "Contactpersoon" # MT
+      address: "Adres" # MT
+      subscription_intent: "Beoogd abonnement" # MT
+      tier: "Niveau" # MT
+      start_date: "Begindatum" # MT
+    index:
+      title: "Gemeenschappen" # MT
+      view_signups: "Aanvragen bekijken" # MT
+      id: "ID" # MT
+      name: "Naam" # MT
+      created: "Aangemaakt" # MT
+      last_login: "Laatst ingelogd" # MT
+      status: "Status" # MT
+      users: "Gebruikers" # MT
+      meals: "Maaltijden" # MT
+      reservations: "Reserv." # MT
+      jobs: "Taken" # MT
+      transactions: "Trans." # MT
+      subscription: "Abonnement" # MT
+      cluster: "Cluster" # MT
+      never: "Nooit" # MT
+      intent: "Beoogd: %{tier}" # MT
+    signups:
+      captcha_failed: "De captcha-controle is mislukt. Probeer het opnieuw." # MT
+      approved: "Aanvraag goedgekeurd. De gemeenschap wordt ingericht." # MT
+      denied: "Aanvraag afgewezen." # MT
+      index:
+        title: "Aanvragen voor nieuwe gemeenschappen" # MT
+        none_found: "Geen aanvragen gevonden." # MT
+        community_name: "Naam van de gemeenschap" # MT
+        contact: "Contactpersoon" # MT
+        submitted: "Ingediend" # MT
+        status: "Status" # MT
+      new:
+        title: "Aansluiten bij Gather!" # MT
+        intro: "Gather is een platform om gemeenschappen te beheren, voor centraal wonen en andere gemeenschappelijke woonvormen. Vul het formulier hieronder in om een nieuwe gemeenschap aan te vragen. We bekijken je aanvraag en nemen per e-mail contact met je op. We behouden ons het recht voor om aanvragen af te wijzen van gemeenschappen die niet passen bij onze missie." # MT
+        contact_person: "Contactpersoon" # MT
+        contact_hint: "Deze persoon wordt de eerste beheerder van de gemeenschap." # MT
+        community_details: "Gegevens van de gemeenschap" # MT
+        settings: "Instellingen" # MT
+        final_steps: "Laatste stappen" # MT
+        verification: "Verificatie" # MT
+        submit: "Aanvraag indienen" # MT
+      review:
+        title: "Aanvraag beoordelen: %{name}" # MT
+        status: "Status" # MT
+        reviewed: "op %{date} door %{name}" # MT
+        contact_name: "Naam contactpersoon" # MT
+        contact_email: "E-mailadres contactpersoon" # MT
+        submitted: "Ingediend" # MT
+        community_name: "Naam van de gemeenschap" # MT
+        slug: "URL-slug" # MT
+        country: "Land" # MT
+        time_zone: "Tijdzone" # MT
+        sample_data: "Voorbeeldgegevens" # MT
+        about: "Over" # MT
+        approval_message: "Goedkeuringsbericht" # MT
+        internal_notes: "Interne notities" # MT
+        denial_reason: "Reden van afwijzing (wordt niet naar de gebruiker gestuurd)" # MT
+        submit: "Indienen" # MT
+      submitted:
+        title: "Aanvraag ingediend" # MT
+        thanks: "Bedankt voor je aanvraag bij Gather!" # MT
+        review_time_html: "We bekijken aanvragen meestal binnen 48 uur. Houd je inbox van %{email} in de gaten voor een update." # MT
+    # The approval email the signup review page pre-fills for the approver to personalize.
+    signup_action:
+      approval_template: |- # MT
+        Beste %{name},
+
+        Goed nieuws! Je aanvraag om met de gemeenschap “%{community}” bij Gather aan te sluiten, is goedgekeurd.
+
+        #######################################
+        SCHRIJF HIER EEN PERSOONLIJKE NOTITIE,
+        NOEM IETS SPECIFIEKS OVER DE GEMEENSCHAP
+        #######################################
+
+        Je gemeenschap is nu klaar voor gebruik!
+
+        Je ontvangt een aparte e-mail met instructies om voor het eerst in te loggen.
+
+        Welkom aan boord!
+
+        %{approver} namens het Gather-team
+    signup_mailer:
+      application_approved:
+        subject: "Je Gather-gemeenschap is goedgekeurd! (Met een bericht van %{approver})" # MT
+      application_denied:
+        subject: "Over je aanvraag voor een Gather-gemeenschap" # MT
+        dear: "Beste %{name}," # MT
+        body: "Bedankt voor je interesse in Gather. Na het bekijken van je aanvraag voor “%{community}” kunnen we op dit moment helaas niet verder met je aanvraag." # MT
+        sign_off: "Met vriendelijke groet," # MT
+        team: "Het Gather-team" # MT
+    inactivity_mailer:
+      warning:
+        subject: "Waarschuwing wegens inactiviteit voor %{community}" # MT
+        subject_final: "[Laatste waarschuwing voor verwijdering] %{community}" # MT
+        intro: "Dit is waarschuwing %{count} van %{max} wegens inactiviteit voor de Gather-gemeenschap “%{community}”." # MT
+        last_login: "Laatst ingelogd: %{date}" # MT
+        never: "Nooit" # MT
+        final: "Niemand in je gemeenschap is in de afgelopen 90 dagen bij Gather ingelogd. Dit is de laatste waarschuwing voordat de gegevens van je gemeenschap definitief worden verwijderd." # MT
+        final_days: "Je gemeenschap wordt over ongeveer 7 dagen verwijderd, tenzij iemand inlogt." # MT
+        not_final: "Niemand in je gemeenschap is in de afgelopen 90 dagen bij Gather ingelogd. Als niemand inlogt, sturen we over 7 dagen nog een waarschuwing. Na 3 waarschuwingen worden de gegevens van je gemeenschap definitief verwijderd." # MT
+        prevent: "Om verwijdering te voorkomen, hoef je alleen maar in te loggen bij je gemeenschap op:" # MT
+        contact: "Denk je dat deze waarschuwing een vergissing is, of heb je hulp nodig? Neem dan contact met ons op via support@gather.coop." # MT

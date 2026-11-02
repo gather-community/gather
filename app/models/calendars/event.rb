@@ -24,6 +24,8 @@
 #
 module Calendars
   class Event < ApplicationRecord
+    include EventSearchConfig
+
     acts_as_tenant :cluster
 
     attr_writer :location
@@ -55,6 +57,11 @@ module Calendars
 
     scope :between, ->(range) { where("starts_at < ? AND ends_at > ?", range.last, range.first) }
     scope :related_to, ->(user) { where(creator: user).or(where(sponsor: user)) }
+    scope :recurring, -> { where.not(recurrence_rule: nil) }
+    # Series with an occurrence on or after the date. One with no end date always has one.
+    scope :recurring_through, lambda { |date|
+      recurring.where("recurrence_end_date IS NULL OR recurrence_end_date >= ?", date)
+    }
 
     # Satisfies ducktype expected by policies. Prefer more explicit variants creator_community
     # and sponsor_community for other uses.
@@ -73,7 +80,11 @@ module Calendars
 
     # Temporary method to dual write Eventlet model
     before_save :sync_eventlet
+    # Must run before compute_recurrence_end_date so the end date is worked out from the shifted UNTIL.
+    before_save :shift_series_dependents
     before_save :compute_recurrence_end_date
+    before_save :assert_calendars_allow_recurrence
+    before_save :assert_starts_on_schedule
 
     before_save lambda { |r| meal&.event_handler&.sync_resourcings(r) }
 
@@ -164,6 +175,67 @@ module Calendars
       return unless all_day?
       self.starts_at = starts_at.midnight
       self.ends_at = ends_at.midnight + 1.day - 1.second
+    end
+
+    # Overrides are keyed by the occurrence's scheduled start, and an UNTIL is a time, so both have to
+    # follow when the series' start moves or they'd stop lining up with the schedule: a deleted
+    # occurrence would come back, a moved one would show twice, and a later-moved series would lose its
+    # last occurrence to the old UNTIL. Applies to every writer, which is why it's here and not on a form.
+    #
+    # An override keeps its own starts_at/ends_at: an occurrence someone moved stays where they put it.
+    # Calendar-only overrides need nothing, since their offsets are relative to the occurrence.
+    def shift_series_dependents
+      return unless persisted? && recurring? && will_save_change_to_starts_at?
+      shift = WallClockShift.new(starts_at_was, starts_at)
+      return if shift.zero?
+      # A caller that sets the rule in the same save has decided on its UNTIL itself.
+      shift_recurrence_until(shift) unless will_save_change_to_recurrence_rule?
+      rekey_event_overrides(shift)
+    end
+
+    def shift_recurrence_until(shift)
+      rule = IceCube::Rule.from_hash(recurrence_rule)
+      return unless rule.until_time
+      rule.until(shift.apply(rule.until_time))
+      self.recurrence_rule = rule.to_hash
+    end
+
+    # Rows are rewritten in the shift's direction (latest first when moving later) so no intermediate
+    # key collides with the unique index on [event_id, occurrence_start]. update_columns skips the
+    # override's own in-series validation, so the result is checked against the new schedule after.
+    # Works on the association's records so any already loaded by a caller are updated in place.
+    def rekey_event_overrides(shift)
+      overrides = event_overrides.sort_by(&:occurrence_start)
+      overrides.reverse! if starts_at > starts_at_was
+      overrides.each { |o| o.update_columns(occurrence_start: shift.apply(o.occurrence_start)) }
+
+      new_schedule = schedule
+      stranded = overrides.map(&:occurrence_start).reject { |t| new_schedule.occurs_at?(t) }
+      return if stranded.empty?
+      raise "Moving event #{id} would leave overrides off its schedule at #{stranded.join(", ")}"
+    end
+
+    # Repeating events are only allowed on calendars that allow them (Calendar#allows_recurring_events?).
+    # The forms explain this to the user before saving. This catches any other writer, since a series
+    # on such a calendar would break its overlap or protocol rules on occurrences nothing checks.
+    # Eventlet#assert_calendar_allows_recurrence covers adding a calendar to an existing series.
+    def assert_calendars_allow_recurrence
+      return unless recurring? && will_save_change_to_recurrence_rule?
+      blocked = eventlets.map(&:calendar).compact.reject(&:allows_recurring_events?)
+      return if blocked.empty?
+      raise "Repeating event #{id || "(new)"} can't be on calendar(s) #{blocked.map(&:id).join(", ")}, " \
+        "which don't allow repeating events"
+    end
+
+    # A series' start is its first occurrence: overrides, splits and drags all count occurrences from
+    # it. A rule that skips the start, such as weekly on Tuesdays from a Monday, would silently drop
+    # that first occurrence. The forms prevent this (RecurrencePattern always includes the start's day,
+    # and drags check EventletForm#series_pattern_allows_move); this catches any other writer.
+    def assert_starts_on_schedule
+      return unless recurring?
+      return unless will_save_change_to_starts_at? || will_save_change_to_recurrence_rule?
+      return if schedule.occurs_at?(starts_at)
+      raise "Repeating event #{id || "(new)"} starts at #{starts_at}, which its rule doesn't include"
     end
 
     def compute_recurrence_end_date

@@ -90,13 +90,18 @@ describe Community do
     end
   end
 
-  describe "#default_currency" do
-    it "maps a supported country code to its currency" do
-      expect(build(:community, country_code: "CA").default_currency).to eq("cad")
+  describe "#currency" do
+    it "is set from the country on save" do
+      expect(create(:community, country_code: "ca").currency).to eq("cad")
+      expect(create(:community, country_code: "NG").currency).to eq("ngn")
     end
 
-    it "is nil for an unsupported country code" do
-      expect(build(:community, country_code: "ZZ").default_currency).to be_nil
+    it "keeps an explicit currency" do
+      expect(create(:community, country_code: "CA", currency: "usd").currency).to eq("usd")
+    end
+
+    it "fails loudly for a country with no currency" do
+      expect { create(:community, country_code: "ZZ") }.to raise_error(ActiveRecord::NotNullViolation)
     end
   end
 

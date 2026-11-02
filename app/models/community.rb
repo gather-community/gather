@@ -10,6 +10,7 @@
 #  cluster_id     :integer          not null
 #  country_code   :string(2)        default("US"), not null
 #  created_at     :datetime         not null
+#  currency       :string(3)        not null
 #  name           :string(20)       not null
 #  settings       :jsonb
 #  slug           :string           not null
@@ -25,22 +26,6 @@ class Community < ApplicationRecord
   SLUG_REGEX = /[a-z][a-z-]*/
   SLUG_MAX_LENGTH = 63
   STATUSES = %i[trial subscribed problem warning deactivated].freeze
-
-  # Maps an ISO 3166-1 alpha-2 country code (uppercase) to its default ISO 4217 currency
-  # (lowercase, to match Stripe and the money gem). Covers Stripe-supported countries;
-  # extend as Stripe adds markets. Source: https://stripe.com/global
-  COUNTRY_CURRENCIES = {
-    "AE" => "aed", "AT" => "eur", "AU" => "aud", "BE" => "eur", "BG" => "bgn",
-    "BR" => "brl", "CA" => "cad", "CH" => "chf", "CY" => "eur", "CZ" => "czk",
-    "DE" => "eur", "DK" => "dkk", "EE" => "eur", "ES" => "eur", "FI" => "eur",
-    "FR" => "eur", "GB" => "gbp", "GI" => "gbp", "GR" => "eur", "HK" => "hkd",
-    "HR" => "eur", "HU" => "huf", "ID" => "idr", "IE" => "eur", "IN" => "inr",
-    "IT" => "eur", "JP" => "jpy", "LI" => "chf", "LT" => "eur", "LU" => "eur",
-    "LV" => "eur", "MT" => "eur", "MX" => "mxn", "MY" => "myr", "NL" => "eur",
-    "NO" => "nok", "NZ" => "nzd", "PL" => "pln", "PT" => "eur", "RO" => "ron",
-    "SE" => "sek", "SG" => "sgd", "SI" => "eur", "SK" => "eur", "TH" => "thb",
-    "US" => "usd"
-  }.freeze
 
   acts_as_tenant :cluster
   resourcify
@@ -84,7 +69,7 @@ class Community < ApplicationRecord
     dependent: :destroy
   has_many :restrictions, class_name: "Meals::Restriction", inverse_of: :community, dependent: :destroy
 
-  scope :by_name, -> { order(:name) }
+  scope :by_name, -> { alpha_order(:name) }
   scope :by_one_cmty_first, ->(c) { order(arel_table[:id].not_eq(c.id)) }
   scope :by_name_with_first, ->(c) { by_one_cmty_first(c).by_name }
 
@@ -99,6 +84,7 @@ class Community < ApplicationRecord
   # Country codes are ISO 3166-1 alpha-2 and must be stored uppercase so lookups
   # (e.g. Messaging::Account currency selection) are reliable.
   before_validation { self.country_code = country_code&.upcase }
+  before_validation { self.currency ||= ISO3166::Country.new(country_code)&.currency_code&.downcase }
 
   before_create :generate_calendar_token
   before_create :generate_sso_secret
@@ -121,7 +107,10 @@ class Community < ApplicationRecord
       ]},
       {key: :meals, type: :group, fields: [
         {key: :reimb_instructions, type: :markdown},
+        # A starter-content default, translated with the other starter content (see the i18n plan).
+        # rubocop:disable Gather/HardCodedString
         {key: :allergens, type: :text, required: true, default: "Dairy, Shellfish, Soy, Nuts"},
+        # rubocop:enable Gather/HardCodedString
         {key: :default_capacity, type: :integer, required: true, default: 50},
         {key: :show_reimb_form, type: :boolean, default: false},
         {key: :cooks_can_finalize, type: :boolean, default: false},
@@ -205,11 +194,6 @@ class Community < ApplicationRecord
     abbrv.downcase
   end
 
-  # The default currency for the community's country, or nil if unsupported.
-  def default_currency
-    COUNTRY_CURRENCIES[country_code]
-  end
-
   # The community's single messaging wallet, or nil if it has never been funded. There is at most
   # one (unique index on messaging_accounts.community_id).
   def messaging_account
@@ -279,9 +263,11 @@ class Community < ApplicationRecord
   # Deactivated ⇒ email is not required and it's excluded from active-scoped lists for free.
   # Rescues a unique-index race (two concurrent deletions) by re-reading the winner's row.
   def create_deleted_member
-    household = households.create!(name: "Deleted Members", deleted_placeholder: true)
-    household.users.create!(deleted_placeholder: true, first_name: "Deleted", last_name: "Member",
-      child: false, deactivated_at: Time.current)
+    household = households.create!(deleted_placeholder: true,
+      name: I18n.t("people.deleted_placeholder.household"))
+    household.users.create!(deleted_placeholder: true, child: false, deactivated_at: Time.current,
+      first_name: I18n.t("people.deleted_placeholder.first_name"),
+      last_name: I18n.t("people.deleted_placeholder.last_name"))
   rescue ActiveRecord::RecordNotUnique
     households.find_by(deleted_placeholder: true).users.first
   end

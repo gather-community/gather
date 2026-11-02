@@ -1,8 +1,15 @@
 name: RSpec & JS Tests
-on: [push]
+# `push` only fires for branches in this repo, so PRs from forks also need `pull_request`.
+on:
+  push:
+  pull_request:
 jobs:
   tests:
     name: Tests
+    # Branches in this repo already run on `push`, so skip their `pull_request` run to avoid running
+    # the suite twice. Fork PRs run on `pull_request` with a read-only token and no secrets, which is
+    # fine because the suite doesn't use any.
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
     runs-on: ubuntu-24.04
     env:
       CI: true
@@ -11,6 +18,9 @@ jobs:
       POSTGRES_PASSWORD: postgres
       POSTGRES_HOST: localhost
       RUBYOPT: -W:deprecated # Turn on deprecated warnings so we can move toward ruby 3
+      SETTINGS__ACTIVE_RECORD_ENCRYPTION__PRIMARY_KEY: bSmPiBY7txA3M+/pwJEbJkK2KkjgOhhvPWzDyiT1yuY=
+      SETTINGS__ACTIVE_RECORD_ENCRYPTION__DETERMINISTIC_KEY: 2owOM6yqhEXNEnAS/0benxgeUlpkkJgMbhOow9F5yLc=
+      SETTINGS__ACTIVE_RECORD_ENCRYPTION__KEY_DERIVATION_SALT: SBp2RtTby8BAWMKD4j06D0nwkJc=
     services:
       postgres:
         image: postgres:11

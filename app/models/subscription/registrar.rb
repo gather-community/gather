@@ -30,6 +30,8 @@ module Subscription
       match || create_product
     end
 
+    # Stripe catalog objects are shared by every community, so their names aren't translated.
+    # rubocop:disable Gather/HardCodedString
     def create_product
       months = intent.months_per_period == 1 ? "1 month" : "#{intent.months_per_period} months"
       Stripe::Product.create(
@@ -101,6 +103,7 @@ module Subscription
         name: "Discount"
       )
     end
+    # rubocop:enable Gather/HardCodedString
 
     def create_subscription
       Stripe::Subscription.create(

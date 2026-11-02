@@ -86,16 +86,18 @@ describe User do
       ]
     end
 
-    it "matches partial first_name" do
-      expect(User.matching("don")).to contain_exactly(users[0])
+    it "matches the start of the first name, not the middle" do
+      expect(User.matching("Gor")).to contain_exactly(users[0])
+      expect(User.matching("don")).to be_empty
     end
 
     it "matches full first_name" do
       expect(User.matching("gordon")).to contain_exactly(users[0])
     end
 
-    it "matches partial last_name" do
+    it "matches the start of the last name, not the middle" do
       expect(User.matching("Dru")).to contain_exactly(users[0], users[1])
+      expect(User.matching("ruck")).to be_empty
     end
 
     it "matches full last_name" do
@@ -106,6 +108,24 @@ describe User do
       expect(User.matching("Gordon Druck")).to contain_exactly(users[0])
     end
 
+    it "requires every word to start a word of the name, in any order" do
+      expect(User.matching("go dr")).to contain_exactly(users[0])
+      expect(User.matching("dr go")).to contain_exactly(users[0])
+      expect(User.matching("go zo")).to be_empty
+    end
+
+    it "matches with or without accents, like the work shift search" do
+      zoe = create(:user, first_name: "Zoë", last_name: "Lefèvre")
+      expect(User.matching("zoe lef")).to contain_exactly(zoe)
+      expect(User.matching("Zoë")).to contain_exactly(zoe)
+    end
+
+    it "treats hyphens as word breaks" do
+      hyphenated = create(:user, first_name: "Ana", last_name: "Nader-Jenkins")
+      expect(User.matching("jen")).to contain_exactly(hyphenated)
+      expect(User.matching("Nader-Jen")).to contain_exactly(hyphenated)
+    end
+
     it "matches exact unit number with suffix with or without -, or exact unit number" do
       expect(User.matching("10")).to be_empty
       expect(User.matching("99B")).to contain_exactly(users[0])
@@ -113,7 +133,7 @@ describe User do
       expect(User.matching("99")).to contain_exactly(users[0], users[1], users[2], users[3])
       expect(User.matching("99X")).to contain_exactly(users[2], users[3])
       expect(User.matching("99-X")).to contain_exactly(users[2], users[3])
-      expect(User.matching("x")).to contain_exactly(users[1], users[5])
+      expect(User.matching("x")).to contain_exactly(users[5]) # Not Soox, since x is mid-word
     end
   end
 
@@ -581,6 +601,38 @@ describe User do
   # - For fake users and households, destruction may happen when associations are present that would
   #   normally forbid it, but the deletion script can be ordered in such a way as to avoid problems by
   #   deleting dependent objects first, and then users and households.
+  describe "notification preferences" do
+    let(:user) { build(:user) }
+
+    it "defaults configurable kinds to on" do
+      expect(user.notification_enabled?(:meal_reminder)).to be(true)
+    end
+
+    it "stores only the overrides" do
+      user.set_notification_pref(:meal_reminder, false)
+      expect(user.notification_prefs).to eq("meal_reminder" => {"email" => false})
+      expect(user.notification_enabled?(:meal_reminder)).to be(false)
+      expect(user.notification_enabled?(:job_reminder)).to be(true)
+
+      user.set_notification_pref(:meal_reminder, true)
+      expect(user.notification_prefs).to eq({})
+      expect(user.notification_enabled?(:meal_reminder)).to be(true)
+    end
+
+    it "treats required kinds as always on, even if something is stored" do
+      user.notification_prefs = {"meal_message" => {"email" => false}}
+      expect(user.notification_enabled?(:meal_message)).to be(true)
+    end
+
+    it "refuses to turn off a required kind" do
+      expect { user.set_notification_pref(:meal_message, false) }.to raise_error(ArgumentError)
+    end
+
+    it "raises for an unknown kind" do
+      expect { user.notification_enabled?(:nope) }.to raise_error(ArgumentError)
+    end
+  end
+
   describe "destruction" do
     let!(:user) { create(:user) }
 

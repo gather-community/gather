@@ -6,7 +6,7 @@
       </td>
       <td>
         <div class="hours" title="<%= I18n.t("work.num_hours", num: shift.hours_formatted) %>">
-          <%= shift.hours_formatted %>h
+          <%= t("work.hours_abbr", hours: shift.hours_formatted) %>
         </div>
       </td>
     </tr>
@@ -45,7 +45,7 @@
         <% end %>
         <% if shift_policy(shift).signup? %>
           <div class="signup-link">
-            <a href="#"><%= icon_tag("bolt") %> Sign Up!</a>
+            <a href="#"><%= icon_tag("bolt") %> <%= t(".sign_up") %></a>
             <%= inline_loading_indicator %>
           </div>
         <% end %>

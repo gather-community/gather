@@ -1,33 +1,31 @@
-<% content_for(:title, "Joining Gather!") %>
+<% content_for(:title, t(".title")) %>
 
 <p class="intro">
-  Gather is a community management platform for cohousing and other collaborative living communities.
-  To request a new community, fill out the form below. We'll review your application and follow up via email.
-  We reserve the right to decline new signups for communities that don't align with our mission.
+  <%= t(".intro") %>
 </p>
 
 <%= gather_form_for(@form, url: communities_signups_path, width: :full) do |f| %>
-  <h3 class="form-section-header">Contact Person</h3>
-  <p class="hint">This person will become the community's first Admin user.</p>
+  <h3 class="form-section-header"><%= t(".contact_person") %></h3>
+  <p class="hint"><%= t(".contact_hint") %></p>
 
   <%= f.input :contact_first_name, maxlength: Communities::Signup::CONTACT_NAME_MAX_LENGTH %>
   <%= f.input :contact_last_name, maxlength: Communities::Signup::CONTACT_NAME_MAX_LENGTH %>
   <%= f.input :contact_email, maxlength: Communities::Signup::CONTACT_EMAIL_MAX_LENGTH %>
 
-  <h3 class="form-section-header">Community Details</h3>
+  <h3 class="form-section-header"><%= t(".community_details") %></h3>
 
   <%= f.input :community_name, maxlength: Communities::Signup::COMMUNITY_NAME_MAX_LENGTH %>
   <%= f.input :slug do %>
     <div class="input-group" style="max-width: 28em">
-      <span class="input-group-addon">https://</span>
+      <span class="input-group-addon"><%= "https://" %></span>
       <%= f.input_field :slug, class: "form-control", maxlength: Communities::Signup::SLUG_MAX_LENGTH, autocomplete: "off" %>
-      <span class="input-group-addon">.gather.coop</span>
+      <span class="input-group-addon"><%= ".gather.coop" %></span>
     </div>
   <% end %>
   <%= f.input :introduction, as: :text, rows: 18,
         input_html: {maxlength: Communities::Signup::INTRODUCTION_MAX_LENGTH} %>
 
-  <h3 class="form-section-header">Settings</h3>
+  <h3 class="form-section-header"><%= t(".settings") %></h3>
 
   <%= f.input :country_code, as: :country %>
   <%= f.input :time_zone, as: :time_zone %>
@@ -35,13 +33,13 @@
         collection: Communities::Signup::WANT_SAMPLE_DATA_OPTIONS,
         include_blank: false %>
 
-  <h3 class="form-section-header">Final Steps</h3>
+  <h3 class="form-section-header"><%= t(".final_steps") %></h3>
 
-  <%= f.input :hcaptcha_verified, label: "Verification", required: true do %>
+  <%= f.input :hcaptcha_verified, label: t(".verification"), required: true do %>
     <%= hcaptcha_tags %>
   <% end %>
 
   <%= form_actions do %>
-    <%= f.button :primary, "Submit Application" %>
+    <%= f.button :primary, t(".submit") %>
   <% end %>
 <% end %>

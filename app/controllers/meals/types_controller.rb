@@ -38,7 +38,7 @@ module Meals
       @type.assign_attributes(type_params.merge(community_id: current_community.id))
       authorize(@type)
       if @type.save
-        flash[:success] = "Type created successfully."
+        flash[:success] = t("meals.type_created")
         redirect_to(meals_types_path)
       else
         render(:new)
@@ -49,7 +49,7 @@ module Meals
       @type = Meals::Type.find(params[:id])
       authorize(@type)
       if @type.update(type_params)
-        flash[:success] = "Type updated successfully."
+        flash[:success] = t("meals.type_updated")
         redirect_to(meals_types_path)
       else
         render(:edit)

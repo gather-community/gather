@@ -13,7 +13,7 @@ module People
 
     def guardian_names
       return nil if guardians.none?
-      guardians.active.decorate.map(&:full_name).sort.join(", ")
+      Gather::Collation.sort(guardians.active.decorate.map(&:full_name)).join(", ")
     end
 
     def joined_on
@@ -33,7 +33,8 @@ module People
     end
 
     def vehicles
-      (adult? && household.vehicles.any?) ? household.vehicles.map(&:to_s).sort.join("; ") : nil
+      return nil unless adult? && household.vehicles.any?
+      Gather::Collation.sort(household.vehicles.map(&:to_s)).join("; ")
     end
 
     def emergency_contacts
@@ -42,7 +43,7 @@ module People
         ["#{contact.name} (#{contact.relationship})", contact.location, contact.phone(:main).formatted,
           contact.phone(:alt).formatted, contact.email].compact.join(", ")
       end
-      chunks.sort.join("; ")
+      Gather::Collation.sort(chunks).join("; ")
     end
 
     def pets
@@ -50,7 +51,7 @@ module People
       chunks = household.pets.map do |pet|
         "#{pet.name} (#{pet.color} #{pet.species})"
       end
-      chunks.sort.join("; ")
+      Gather::Collation.sort(chunks).join("; ")
     end
   end
 end

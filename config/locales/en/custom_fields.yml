@@ -95,7 +95,7 @@ en:
             statement_reminder_lead_time: "The number of days in advance of the due date that the statement payment reminder will be sent. Reminders won't be sent if statements don't have due dates or the balance has been paid."
             paypal_reimbursement: "Allow cooks to request meal reimbursements be sent via PayPal. PayPal payments must be made manually (not automated)."
             payment_methods:
-              _self: "Instructions or information for various payment methods. Leave blank if method not accepted. Visit your <a href='/accounts/yours'>accounts page</a> to see how the instructions look."
+              _self: "Instructions or information for various payment methods. Leave blank if method not accepted. Visit your <a href='/accounts/mine'>accounts page</a> to see how the instructions look."
               paypal_me: "Enter your <a href='https://paypal.me'>PayPal.me link</a>. This is the easiest way for members to pay with PayPal. Note that there is no way to avoid paying a fee with this method if you have a business PayPal account."
               paypal_email: "If you want to accept PayPal but don't want to use PayPal.me, enter the email address to which members should send payments."
               paypal_friend: "Applies to either PayPal.me or PayPal via Email. Select if you can justify payments as being between friends according to PayPal's terms of use. Sending in this manner avoids fees."

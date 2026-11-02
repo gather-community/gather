@@ -10,11 +10,13 @@ class WorkMailer < ApplicationMailer
     @community = @shift.community
 
     # We don't display the time in the subject if there is a note.
-    times_str = @reminder.note? ? "" : ", #{@shift.times}"
-    note_str = @reminder.note? ? ": #{@reminder.note}" : ""
-    subject = default_i18n_subject(title: @shift.job_title, times: times_str, note: note_str)
+    subject = if @reminder.note?
+      t("work_mailer.job_reminder.subject_with_note", title: @shift.job_title, note: @reminder.note)
+    else
+      default_i18n_subject(title: @shift.job_title, times: @shift.times)
+    end
 
-    mail(to: @user, subject: subject)
+    mail(to: recipient, subject: subject)
   end
 
   def job_choosing_notice(share)
@@ -23,6 +25,6 @@ class WorkMailer < ApplicationMailer
     @community = @period.community
     raise "quota required" if @period.quota_none?
     @synopsis = Work::SynopsisDecorator.new(Work::Synopsis.new(period: @period, user: @user))
-    mail(to: @user)
+    mail(to: recipient)
   end
 end

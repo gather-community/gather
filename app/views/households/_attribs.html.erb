@@ -1,9 +1,9 @@
 <tr>
   <td>
     <% if context == :user %>
-      Household <%= link_to(icon_tag("link"), household, class: "household") %>
+      <%= t(".household") %> <%= link_to(icon_tag("link"), household, class: "household") %>
     <% else %>
-      Members
+      <%= t(".members") %>
     <% end %>
   </td>
   <td>
@@ -14,7 +14,7 @@
   <% if context == :household || !child %>
     <% if household.vehicles.any? %>
       <tr>
-        <td>Vehicles</td>
+        <td><%= t(".vehicles") %></td>
         <td>
           <% household.vehicles.each do |v| %>
             <div><%= v.to_s %></div>
@@ -24,27 +24,27 @@
     <% end %>
     <% if household.garage_nums.present? %>
       <tr>
-        <td>Garage</td>
-        <td>#<%= household.garage_nums %></td>
+        <td><%= t(".garage") %></td>
+        <td><%= t("households.number", number: household.garage_nums) %></td>
       </tr>
     <% end %>
   <% end %>
   <% if household.member_type.present? %>
     <tr>
-      <td>Member Type</td>
+      <td><%= t(".member_type") %></td>
       <td><%= household.member_type.name %></td>
     </tr>
   <% end %>
   <tr>
-    <td>Emergency Contacts</td>
+    <td><%= t(".emergency_contacts") %></td>
     <td><%= household.emergency_contacts_html %></td>
   </tr>
   <tr>
-    <td>Pets</td>
+    <td><%= t(".pets") %></td>
     <td><%= household.pets_html %></td>
   </tr>
   <tr>
-    <td>Extra Unit Keyholders</td>
+    <td><%= t(".keyholders") %></td>
     <td><%= household.keyholders %></td>
   </tr>
 <% end %>

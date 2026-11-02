@@ -18,8 +18,8 @@ class UserDecorator < ApplicationDecorator
   end
 
   def full_name(show_inactive: false)
-    suffix = (active? || !show_inactive) ? "" : " (Inactive)"
-    "#{first_name} #{last_name}#{suffix}"
+    name = "#{first_name} #{last_name}"
+    (active? || !show_inactive) ? name : I18n.t("common.with_inactive", name: name)
   end
 
   def name_with_inactive
@@ -27,7 +27,7 @@ class UserDecorator < ApplicationDecorator
   end
 
   def first_name_with_inactive
-    "#{first_name}#{" (Inactive)" unless active?}"
+    active? ? first_name : I18n.t("common.with_inactive", name: first_name)
   end
 
   def birthday_formatted
@@ -60,12 +60,13 @@ class UserDecorator < ApplicationDecorator
     I18n.t("simple_form.options.user.preferred_contact.#{object.preferred_contact}")
   end
 
-  def unit_num_and_suffix_with_hash
-    unit_num.nil? ? nil : "##{unit_num_and_suffix}"
+  # E.g. "#12" in English, "Nr. 12" in German.
+  def formatted_unit_num
+    unit_num.nil? ? nil : h.t("households.number", number: unit_num_and_suffix)
   end
 
   def unit_link
-    unit_num.nil? ? nil : h.link_to("##{unit_num_and_suffix}", household)
+    unit_num.nil? ? nil : h.link_to(formatted_unit_num, household)
   end
 
   def first_phone_link
@@ -93,15 +94,12 @@ class UserDecorator < ApplicationDecorator
 
     unless user.persisted?
       chunks << safe_str
-      chunks[-1] << "Choose an existing household for this user. If one doesn't exist you must "
-      chunks[-1] << h.link_to("create it first", h.new_household_path) << "."
+      chunks[-1] << h.t("users.household_hint.choose_html",
+        link: h.link_to(h.t("users.household_hint.create_link"), h.new_household_path))
     end
 
     if user.child?
-      chunks << "Due to a system limitation, all Gather users must belong to a single household, " \
-        "but children may have parents or guardians from multiple households. " \
-        "All system functions involving children treat all parents/guardians and " \
-        "all households associated with the child equally."
+      chunks << h.t("users.household_hint.child_note")
     end
 
     h.safe_join(chunks, " ")
@@ -121,7 +119,7 @@ class UserDecorator < ApplicationDecorator
 
   def photo_if_permitted(format)
     image = photo_variant(format, suppress: !h.policy(object).show_photo?)
-    h.image_tag(image, class: "photo", alt: "Photo of #{full_name}")
+    h.image_tag(image, class: "photo", alt: h.t("users.photo_of", name: full_name))
   end
 
   def photo_variant(format, suppress: false)

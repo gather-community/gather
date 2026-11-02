@@ -6,7 +6,7 @@ module Calendars
     class MaxLeadDaysRule < Rule
       def check(event)
         event.starts_at.to_date - Time.zone.today <= value ||
-          [:starts_at, "Can be at most #{value} days in the future"]
+          [:starts_at, I18n.t("calendars.rules.max_lead_days", count: value)]
       end
     end
   end

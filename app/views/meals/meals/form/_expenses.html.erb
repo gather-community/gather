@@ -16,7 +16,7 @@
               <div>
                 <div><%= t("simple_form.options.meals_meal.cost.payment_method.check") %></div>
                 <div class="hint">
-                  Reimbursee will receive a check for the ingredient cost.
+                  <%= t(".check_hint") %>
                 </div>
               </div>
             </label>
@@ -29,8 +29,7 @@
               <div>
                 <div><%= t("simple_form.options.meals_meal.cost.payment_method.credit") %></div>
                 <div class="hint">
-                  Reimbursee will receive a credit to their Gather
-                  account in the amount of the ingredient cost.
+                  <%= t(".credit_hint") %>
                 </div>
               </div>
             </label>
@@ -46,8 +45,7 @@
                     <%= cost.payment_method_formatted_with_details("paypal") %>
                   </div>
                   <div class="hint">
-                    Reimbursee will receive a PayPal payment in the amount of the ingredient cost.
-                    Users can change their PayPal email address by editing their profile.
+                    <%= t(".paypal_hint") %>
                   </div>
               </label>
             </li>
@@ -57,12 +55,12 @@
     <% end %>
   <% end %>
 
-  <%= javascript_tag do %>
+  <script>
     $(function() {
       new Gather.Views.Meals.ReimburseeChangeView(<%=json(
         el: ".finalize-form, .meals--meal-form",
         paypalEmailUrl: reimbursee_paypal_email_meals_path
       )%>);
     });
-  <% end %>
+  </script>
 <% end %>

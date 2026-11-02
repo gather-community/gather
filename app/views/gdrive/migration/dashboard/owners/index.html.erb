@@ -1,10 +1,10 @@
-<% content_for(:title) { "Google Drive Migration" } %>
+<% content_for(:title) { t("gdrive.migration.dashboard.title") } %>
 
 <div class="synopsis gdrive-migration-synopsis">
   <%= render("gdrive/migration/dashboard/synopsis") %>
 </div>
 
-<h2>Owners</h2>
+<h2><%= t(".owners") %></h2>
 
 <%= form_tag({}, method: "post", "data-controller": "batchable-table") do %>
   <div class="batchable-table-actions">
@@ -20,10 +20,10 @@
       <th></th>
       <th></th>
       <th colspan="8" class="superheader-cell">
-        <div>Files</div>
+        <div><%= t(".files") %></div>
       </th>
       <th colspan="2" class="superheader-cell">
-        <div>Request</div>
+        <div><%= t(".request") %></div>
       </th>
     </tr>
     <tr>
@@ -31,17 +31,17 @@
         <%= check_box_tag("b_select_all", "1", false, "data-action": "batchable-table#allSelectedClicked",
               "data-batchable-table-target": "allSelected") %>
       </th>
-      <th>Owner</th>
-      <th>Total</th>
-      <th>Pending</th>
-      <th>Declined</th>
-      <th>Errored</th>
-      <th>Transferred</th>
-      <th>Copied</th>
-      <th>Ignored</th>
-      <th>Disappeared</th>
-      <th>Date Sent</th>
-      <th>Status</th>
+      <th><%= t(".owner") %></th>
+      <th><%= t(".total") %></th>
+      <th><%= t("simple_form.options.gdrive_migration.status.pending") %></th>
+      <th><%= t("simple_form.options.gdrive_migration.status.declined") %></th>
+      <th><%= t("simple_form.options.gdrive_migration.status.errored") %></th>
+      <th><%= t("simple_form.options.gdrive_migration.status.transferred") %></th>
+      <th><%= t("simple_form.options.gdrive_migration.status.copied") %></th>
+      <th><%= t("simple_form.options.gdrive_migration.status.ignored") %></th>
+      <th><%= t("simple_form.options.gdrive_migration.status.disappeared") %></th>
+      <th><%= t(".date_sent") %></th>
+      <th><%= t(".status") %></th>
     </tr>
     <% @stats.owners.each do |owner| %>
       <tr>

@@ -1,0 +1,238 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+sv:
+  transaction_codes:
+    meal: "Måltid" # MT
+    dues: "Medlemsavgift" # MT
+    payment: "Betalning" # MT
+    reimb: "Ersättning" # MT
+    othcrd: "Övrig kreditering" # MT
+    othchg: "Övrig debitering" # MT
+    late: "Förseningsavgift" # MT
+    initbal: "Ingående saldo" # MT
+
+  accounts:
+    updated: "Kontot har uppdaterats." # MT
+    late_fees_applied: "Förseningsavgifter har tagits ut." # MT
+    # An amount that is a credit, e.g. "$5.00 CR".
+    credit_amount_html: "%{amount} tillgodo" # MT
+    # Shown in its own column next to credit amounts on statements.
+    credit_abbr: "Tillgodo" # MT
+    not_applicable: "Ej tillämpligt" # MT
+    no_credit_limit: "Ingen" # MT
+    no_users_warning: "Kontots hushåll har inga kopplade personer" # MT
+    late_fee_confirm: "Är du säker? Avgifter tas ut av %{count} hushåll." # MT
+    late_fee_confirm_with_days: "Är du säker? Avgifter tas ut av %{count} hushåll. Avgifter togs senast ut för %{days} dagar sedan." # MT
+    statement_confirm: "Är du säker? Kontoutdrag skickas till %{count} hushåll." # MT
+    paypal_friend_confirm_html: "Välj <strong>inte</strong> ”Betalar du för varor eller tjänster?” om du får frågan, så slipper du en avgift." # MT
+    details:
+      no_activity: "Det finns ingen aktivitet på kontot." # MT
+    other_accounts:
+      looking: "Letar du efter ett annat konto?" # MT
+      each_community: "Varje gemenskap sköter sina egna konton." # MT
+    payment_instructions:
+      how_to_pay: "Så betalar du" # MT
+      paypal: "PayPal" # MT
+      click_logo: "Klicka på logotypen ovan för att betala med PayPal." # MT
+      send_paypal_html: "Skicka PayPal-betalningar till %{email}." # MT
+      choose_friend_html: "Se till att välja %{friend} så slipper du en avgift." # MT
+      sending_to_friend: "skicka till en vän" # MT
+      online_bill_pay: "Betalning via internetbanken" # MT
+      bill_pay_intro: "De flesta banker erbjuder betalning via internetbanken, som du kan använda för att enkelt betala online. Lägg till en ny mottagare och ange följande:" # MT
+      payee_name_html: "Mottagarens namn: %{payee}" # MT
+      account_number_html: "Kontonummer: %{number}" # MT
+      address: "Adress:" # MT
+      check: "Check" # MT
+      payable_to_html: "Ställ ut checkar till %{payee}" # MT
+      memo_line_html: "Skriv ditt kontonummer %{number} som meddelande." # MT
+      mail_to: "Skicka checkar till:" # MT
+      cash: "Kontanter" # MT
+      none_provided: "Inga betalningsinstruktioner har angetts." # MT
+      go_to_settings_html: "Gå till %{link} för att lägga till några." # MT
+      settings_page: "inställningssidan" # MT
+      contact_html: "Kontakta %{email} om du har frågor om fakturering." # MT
+    statement_list:
+      statements: "Kontoutdrag" # MT
+      date: "Datum" # MT
+      activity: "Aktivitet" # MT
+      total_due: "Att betala totalt" # MT
+    summary:
+      summary: "Sammanfattning" # MT
+      account_number: "Kontonummer" # MT
+      last_statement_date: "Datum för senaste kontoutdrag" # MT
+      last_statement_balance: "Saldo på senaste kontoutdrag" # MT
+      new_credits: "Nya betalningar/krediteringar" # MT
+      balance_due: "Att betala" # MT
+      due_date: "Förfallodatum" # MT
+      new_charges: "Nya debiteringar" # MT
+      current_balance: "Aktuellt saldo" # MT
+      credit_limit: "Kreditgräns" # MT
+      balance_due_footnote: "Det här är beloppet du är skyldig just nu: beloppet att betala på ditt senaste kontoutdrag minus betalningar som kommit in sedan dess. Om du redan har betalat men betalningen inte syns här kan du bortse från detta." # MT
+      current_balance_footnote: "Saldot omfattar debiteringar och krediteringar sedan ditt senaste kontoutdrag. Om det överstiger din kreditgräns kan du inte anmäla dig till måltider." # MT
+    synopsis:
+      pay_by: "Betala %{amount} senast %{date}. Tack!" # MT
+      pay: "Betala %{amount}. Tack!" # MT
+      zero: "Du har inget att betala. Bra jobbat!" # MT
+      credit: "Ditt konto har ett tillgodohavande på %{amount}. Ingen betalning behövs!" # MT
+    transaction_export_form:
+      download: "Ladda ner transaktioner som CSV" # MT
+      incurred: "Uppkomna inom …" # MT
+      recorded: "Registrerade inom …" # MT
+      select_dates: "Välj datum" # MT
+    edit:
+      title: "Redigera konto: %{household}" # MT
+      no_users: "Kontot har inga kopplade personer och kan inte få kontoutdrag." # MT
+      cancel: "Avbryt" # MT
+    show:
+      title: "Konto: %{household}" # MT
+    mine:
+      title: "Mitt konto" # MT
+      title_with_community: "Mitt konto i %{community}" # MT
+      no_charges: "Det finns inga debiteringar för ditt hushåll än." # MT
+    index:
+      title: "Konton" # MT
+      apply_late_fees: "Ta ut förseningsavgifter" # MT
+      send_statements: "Skicka kontoutdrag" # MT
+      no_accounts: "Inga konton hittades." # MT
+      num: "Nr" # MT
+      household: "Hushåll" # MT
+      last_statement_date: "Senaste utdrag" # MT
+      due_last_statement: "Att betala enl. utdrag" # MT
+      new_credits: "Nya krediteringar" # MT
+      balance_due: "Att betala" # MT
+      new_charges: "Nya debiteringar" # MT
+      current_balance: "Aktuellt saldo" # MT
+      credit_limit: "Kreditgräns" # MT
+      add_transaction: "Lägg till transaktion" # MT
+      totals: "Summor" # MT
+      download_accounts: "Ladda ner konton som CSV" # MT
+      summary:
+        one: "Det finns %{count} aktivt konto." # MT
+        other: "Det finns %{count} aktiva konton." # MT
+      active_account_definition: "Ett aktivt konto har aktuell aktivitet eller ett aktuellt saldo som inte är noll." # MT
+      last_statement_run: "Kontoutdrag skickades senast %{date}." # MT
+      statements_never_run: "Inga kontoutdrag har skickats än." # MT
+      no_users:
+        one: "Det finns %{count} konto utan kopplade personer. Inget kontoutdrag skapas för det kontot." # MT
+        other: "Det finns %{count} konton utan kopplade personer. Inga kontoutdrag skapas för de kontona." # MT
+      recent_statements:
+        one: "Det finns %{count} konto med ett kontoutdrag från de senaste 24 timmarna. Inget nytt kontoutdrag skapas för det kontot." # MT
+        other: "Det finns %{count} konton med kontoutdrag från de senaste 24 timmarna. Inga kontoutdrag skapas för de kontona." # MT
+    others:
+      one_html: "Du har ett annat Gather-konto hos %{cmty}." # MT
+      multiple_html: "Du har också Gather-konton hos %{cmtys}." # MT
+    payment_badge_alt:
+      paypal: "Betalningsmärke för PayPal" # MT
+      online_bill_pay: "Betalningsmärke för internetbanken" # MT
+      check: "Betalningsmärke för check" # MT
+      cash: "Betalningsmärke för kontanter" # MT
+
+  statements:
+    generation_started: "Kontoutdragen skapas. Ladda om sidan om en stund för att se kontonas uppdaterade status." # MT
+    no_users_not_generated: "Följande hushåll har inga kopplade personer, så inga kontoutdrag skapades för dem: %{households}. Skicka kontoutdragen igen när hushållen har kopplade personer." # MT
+    account_info:
+      account_community: "Kontots gemenskap" # MT
+      account_number: "Kontonummer" # MT
+      household: "Hushåll" # MT
+    link_to_accounts_page:
+      notice_html: "Den senaste kontoinformationen hittar du om du %{link}." # MT
+      link: "går till din kontosida" # MT
+    statement_rows:
+      load_more: "Ladda fler …" # MT
+      loading: "Laddar …" # MT
+    show:
+      title: "Kontoutdrag nr %{number}" # MT
+      statement_date: "Datum för kontoutdrag" # MT
+      due_date: "Förfallodatum" # MT
+      activity: "Aktivitet" # MT
+      previous_balance: "Föregående saldo" # MT
+      statement_balance: "Saldo enligt kontoutdrag" # MT
+
+  transactions:
+    added: "Transaktionen har lagts till." # MT
+    not_added: "Transaktionen lades inte till. Du kan redigera den nedan och försöka igen, eller klicka på ”Avbryt” nedan för att gå tillbaka till kontosidan." # MT
+    form:
+      cancel: "Avbryt" # MT
+    txn_rows:
+      no_activity: "Det fanns ingen aktivitet under perioden" # MT
+    txn_table:
+      date: "Datum" # MT
+      type: "Typ" # MT
+      description: "Beskrivning" # MT
+      quantity: "Antal" # MT
+      unit_price: "Styckpris" # MT
+      amount: "Belopp" # MT
+    confirm:
+      title: "Bekräfta transaktion" # MT
+      intro: "Så här kommer den nya transaktionen att se ut på hushållets kontoutdrag. Transaktioner kan inte redigeras när de har skapats. Kontrollera att uppgifterna nedan stämmer." # MT
+    index:
+      title: "Senaste aktivitet" # MT
+      title_with_household: "Senaste aktivitet: %{household}" # MT
+      account_community: "Kontots gemenskap" # MT
+      account_number: "Kontonummer" # MT
+      household: "Hushåll" # MT
+      activity: "Aktivitet" # MT
+      no_activity: "Det finns ingen aktivitet på kontot." # MT
+      last_statement_balance: "Saldo på senaste kontoutdrag" # MT
+      current_balance: "Aktuellt saldo" # MT
+    new:
+      title: "Ny transaktion" # MT
+
+  billing:
+    # Description of the transaction LateFeeApplier creates.
+    late_fee_description: "Förseningsavgift" # MT
+    templates:
+      created: "Mallen har skapats." # MT
+      updated: "Mallen har uppdaterats." # MT
+      select_one: "Välj minst en mall." # MT
+      applied: "Transaktionerna har skapats." # MT
+      edit:
+        title: "Redigera faktureringsmall: %{description}" # MT
+      new:
+        title: "Ny transaktionsmall" # MT
+      index:
+        title: "Transaktionsmallar" # MT
+        apply: "Använd mallar" # MT
+        create: "Skapa mall" # MT
+        intro: "Med transaktionsmallar är det enkelt att skapa många transaktioner på en gång." # MT
+        none_found: "Inga mallar hittades." # MT
+        description: "Beskrivning" # MT
+        type: "Typ" # MT
+        member_types: "Medlemstyp(er)" # MT
+        amount: "Belopp" # MT
+      review:
+        title: "Använd mallar" # MT
+        intro: "Du är på väg att skapa följande transaktioner för följande hushåll:" # MT
+        description: "Beskrivning" # MT
+        type: "Typ" # MT
+        amount: "Belopp" # MT
+        households: "Hushåll" # MT
+        outdated_warning: "Listan över hushåll ovan kan bli inaktuell om hushållens medlemstyper ändras mellan att den här bekräftelsesidan laddades och att du klickar på ”Använd” nedan." # MT
+        cancel: "Avbryt" # MT
+        apply: "Använd" # MT
+
+  account_mailer:
+    statement_notice:
+      subject: "Nytt kontoutdrag för %{community}" # MT
+      created: "Ett nytt kontoutdrag har skapats i Gather för ditt konto i %{community}." # MT
+      amount_due: "Att betala: %{amount}." # MT
+      credit: "Du har ett tillgodohavande på %{amount}. Ingen betalning behövs." # MT
+      see_details: "Gå till länken nedan för att se detaljerna:" # MT
+      thanks: "Tack för att du betalar i tid!" # MT
+    statement_reminder:
+      subject: "Betalningspåminnelse för ditt konto i %{community}" # MT
+      due_on: "Det här är en påminnelse om att betalningen för ett kontoutdrag i Gather för ditt konto i %{community} förfaller %{date}." # MT
+      due_soon: "Det här är en påminnelse om att betalningen för ett kontoutdrag i Gather för ditt konto i %{community} förfaller snart." # MT
+      amount_due: "Att betala: %{amount}. Gå till länken nedan för att se detaljerna:" # MT
+      disregard: "Om du redan har betalat kan du bortse från det här meddelandet." # MT
+      thanks: "Tack för att du betalar i tid!" # MT

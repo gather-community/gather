@@ -1,0 +1,10 @@
+<%= yield.rstrip %>
+<% if Gather::Locales::MACHINE_TRANSLATED.include?(I18n.locale) -%>
+
+<%= t("layouts.mailer.machine_translated") %>
+<% end -%>
+<% if @notification_preferences_url -%>
+
+-- 
+<%= t("layouts.mailer.notification_settings", url: @notification_preferences_url) %>
+<% end -%>

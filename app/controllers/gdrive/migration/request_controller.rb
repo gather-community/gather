@@ -27,7 +27,7 @@ module GDrive
 
       def opt_out
         @untransferred_files = @migration_request.operation.files.where(owner: @migration_request.google_email, status: "pending")
-          .order(:name).page(params[:page])
+          .alpha_order(:name).page(params[:page])
       end
 
       def confirm_opt_out

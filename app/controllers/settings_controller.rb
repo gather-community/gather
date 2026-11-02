@@ -14,7 +14,7 @@ class SettingsController < ApplicationController
     # up. Otherwise update bypasses the CustomFields infrastructure altogether.
     @community.settings
     if @community.update(settings_params)
-      flash[:success] = "Settings updated successfully."
+      flash[:success] = t("common.settings_updated")
       redirect_to(edit_path)
     else
       @settings = sub_settings

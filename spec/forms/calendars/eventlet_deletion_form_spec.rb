@@ -5,8 +5,9 @@ require "rails_helper"
 describe Calendars::EventletDeletionForm do
   let(:admin) { create(:admin) }
   let(:creator) { create(:user) }
-  let(:calendar) { create(:calendar, name: "Main Hall") }
-  let(:calendar2) { create(:calendar, name: "Guest Room") }
+  # Repeating events need calendars that allow overlaps (Calendar#allows_recurring_events?).
+  let(:calendar) { create(:calendar, name: "Main Hall", allow_overlap: true) }
+  let(:calendar2) { create(:calendar, name: "Guest Room", allow_overlap: true) }
 
   # Weekly at 6pm, starting next week so no occurrence is in the past.
   let(:series_start) { Time.zone.now.next_week.midnight + 18.hours }
@@ -146,6 +147,27 @@ describe Calendars::EventletDeletionForm do
           .to eq(["10-21 21:00", "10-28 21:00", "11-04 21:00"])
         expect(event.recurrence_end_date).to eq(Date.new(2030, 11, 4))
       end
+    end
+  end
+
+  describe "a series split off by a drag" do
+    # A "This and following" drag moves week 2 onward an hour later, onto a new series.
+    let!(:split_off) do
+      shift = Calendars::WallClockShift.new(occ(2), occ(2) + 1.hour)
+      Calendars::SeriesSplitter.new(event).split_at(occ(2), start_shift: shift, end_shift: shift)
+    end
+    let(:split_off_eventlet) { split_off.eventlets.first }
+
+    it "deletes this and following from it, leaving the original alone" do
+      expect(build_form(calendar_scope: "all", series_scope: "following", occurrence: occ(4) + 1.hour,
+        target: split_off_eventlet).save).to be(true)
+      expect(visible_starts).to eq([occ(0), occ(1), occ(2) + 1.hour, occ(3) + 1.hour])
+    end
+
+    it "deletes all of it, leaving the original alone" do
+      expect(build_form(calendar_scope: "all", series_scope: "series", target: split_off_eventlet).save)
+        .to be(true)
+      expect(visible_starts).to eq([occ(0), occ(1)])
     end
   end
 
@@ -300,7 +322,7 @@ describe Calendars::EventletDeletionForm do
 
     context "when the event's other calendar is read-only for the creator" do
       let(:other_community) { create(:community) }
-      let(:calendar2) { create(:calendar, community: other_community) }
+      let(:calendar2) { create(:calendar, community: other_community, allow_overlap: true) }
 
       before do
         create(:calendar_protocol, calendars: [calendar2], other_communities: "read_only")

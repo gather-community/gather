@@ -77,7 +77,7 @@ module Work
         if @error
           flash[:error] = @error
         else
-          flash[:success] = "You signed up successfully. Hooray!"
+          flash[:success] = t("work.signed_up")
         end
         redirect_to(work_period_shifts_path(@period))
       end
@@ -98,7 +98,7 @@ module Work
       else
         begin
           @shift.unsignup_user(@choosee)
-          flash[:success] = "Your signup was removed successfully."
+          flash[:success] = t("work.signup_removed")
         rescue NotSignedUpError
           flash[:error] = t("work/shift.not_signed_up")
         end
@@ -212,8 +212,8 @@ module Work
       @shifts =
         case lenses[:shift].value
         when "open" then @shifts.open
-        when "you" then @shifts.with_user(@choosee)
-        when "yourhh" then @shifts.with_user(@choosee.household.users)
+        when "mine" then @shifts.with_user(@choosee)
+        when "myhh" then @shifts.with_user(@choosee.household.users)
         when "notpre" then @shifts.with_non_preassigned_or_empty_slots
         else lenses[:shift].requester_id ? @shifts.from_requester(lenses[:shift].requester_id) : @shifts
         end
@@ -221,23 +221,10 @@ module Work
 
     def apply_search_lens
       return if lenses[:search].blank?
-      search = Work::Shift.search(
-        query: {
-          multi_match: {
-            fields: Work::Shift.indexed_fields,
-            query: lenses[:search].value,
-            type: :cross_fields,
-            operator: :and
-          }
-        },
-        # We set size to 10k because we don't need to worry about restricting the result set here.
-        # It's restricted for us by the other scoping stuff.
-        # TODO: This is a big problem because it doesn't scale. We need to change the above lens application
-        # stuff to use the search fields, at least for period and community
-        size: 10_000
+      @shifts = @shifts.merge(
+        Work::Shift.text_search(lenses[:search].value, community_id: current_community.id,
+          period_id: @period&.id).records.records
       )
-
-      @shifts = @shifts.merge(search.records.records)
     end
 
     def apply_date_range_lens
@@ -262,7 +249,7 @@ module Work
 
     # Cache key for the index page.
     def cache_key
-      chunks = [@choosee.id, @period, @shifts, lenses, params[:page] || 1]
+      chunks = [I18n.locale, @choosee.id, @period, @shifts, lenses, params[:page] || 1]
 
       # Need to include current minutes/5 if staggered because the round limit calculations
       # may change things just with the passage of time. We know things only change this way at 5-minute

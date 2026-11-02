@@ -1,10 +1,9 @@
-<% content_for(:title, "#{@community.name} File Reorganization") %>
+<% content_for(:title, t("gdrive.migration.request.title", community: @community.name)) %>
 
 <div class="simple">
-  <h2>Opted Out</h2>
-  <p>You have opted out of <%= @community.name %>'s effort to reorganize its Google Drive files.</p>
+  <h2><%= t(".heading") %></h2>
+  <p><%= t(".opted_out", community: @community.name) %></p>
   <p>
-    If you'd like to opt back in, you can do so by
-    <%= link_to("clicking here", gdrive_migration_request_un_opt_out_path, method: :patch) %>.
+    <%= t(".opt_back_in_html", link: link_to(t(".clicking_here"), gdrive_migration_request_un_opt_out_path, method: :patch)) %>
   </p>
 </div>

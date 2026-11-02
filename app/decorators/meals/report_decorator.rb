@@ -9,8 +9,12 @@ module Meals
     end
 
     def subhead(current_cmty_only: true)
-      cmty_str = h.multi_community? && current_cmty_only ? ", #{community.name} meals only" : ""
-      h.content_tag(:small, range_formatted << cmty_str)
+      text = if h.multi_community? && current_cmty_only
+        h.t("meals.report.subhead_community", range: range_formatted, community: community.name)
+      else
+        range_formatted
+      end
+      h.content_tag(:small, text)
     end
   end
 end

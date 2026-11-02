@@ -1,0 +1,23 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+# Kaminari's translations for page_entries_info are not customizable enough so I made my own helper.
+nl:
+  pagination:
+    page_entries_info:
+      gdrive/migration/file: "Bestanden %{first}–%{last} van %{total}" # MT
+      gdrive/migration/log: "Logboeken %{first}–%{last} van %{total}" # MT
+      meals/meal: "Maaltijden %{first}–%{last} van %{total}" # MT
+      household: "Huishoudens %{first}–%{last} van %{total}" # MT
+      user: "Gebruikers %{first}–%{last} van %{total}" # MT
+      work/period: "Periodes %{first}–%{last} van %{total}" # MT
+      work/shift: "Diensten %{first}–%{last} van %{total}" # MT

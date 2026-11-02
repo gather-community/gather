@@ -15,13 +15,12 @@ module CustomFields
         begin
           value = YAML.safe_load(value)
         rescue Psych::SyntaxError
-          record.errors.add(attribute, "Invalid YAML")
+          record.errors.add(attribute, :invalid_yaml)
         end
         begin
           CustomFields::Spec.new(value)
         rescue NameError, ArgumentError, NoMethodError
-          record.errors.add(attribute, "This specification is invalid. "\
-            "Please contact Gather support for assistance.")
+          record.errors.add(attribute, :invalid_custom_field_spec)
         end
       end
     end

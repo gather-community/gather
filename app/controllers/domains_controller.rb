@@ -28,7 +28,7 @@ class DomainsController < ApplicationController
     @domain.assign_attributes(domain_params)
     authorize(@domain)
     if @domain.save
-      flash[:success] = "Domain created successfully."
+      flash[:success] = t("domains.created")
       redirect_to(domains_path)
     else
       prep_form_vars

@@ -15,7 +15,7 @@ module Subscription
 
     # e.g. "$5.00/month". Only meaningful when #selected_cents is present.
     def amount_display
-      "#{Money.from_cents(amount_cents, currency).format}/month"
+      t("subscription.per_month", amount: Money.from_cents(amount_cents, currency).format)
     end
 
     # Whether to show the Next Payment Date row. A pending cancellation leaves the status "active",
@@ -28,11 +28,11 @@ module Subscription
     # A short status string shown only when the topup isn't cleanly active, else nil (row hidden).
     def status_display
       if canceling?
-        "Canceling on #{I18n.l(next_bill_date)}"
+        t("subscription.topup_statuses.canceling", date: I18n.l(next_bill_date))
       elsif past_due?
-        "Past due"
+        t("subscription.topup_statuses.past_due")
       elsif payment_processing?
-        "Payment processing"
+        t("subscription.topup_statuses.payment_processing")
       end
     end
   end

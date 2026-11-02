@@ -3,6 +3,7 @@
 class UsersController < ApplicationController
   include Destructible
   include Lensable
+  include UserSelectJson
 
   helper_method :sample_user
 
@@ -45,9 +46,7 @@ class UsersController < ApplicationController
           extra_data: extra_data).resolve
         @users = @users.matching(params[:search])
         @users = @users.in_community(params[:community_id]) if params[:community_id]
-        @users = @users.page(params[:page]).per(20)
-        render(json: @users.decorate, meta: {more: @users.next_page.present?}, root: "results",
-          each_serializer: UserSerializer, hide_inactive_in_name: true)
+        render_user_select_json(@users)
       end
 
       format.csv do
@@ -162,7 +161,7 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     authorize(@user, :update_info?)
     @user.send_confirmation_instructions
-    flash[:success] = "Instructions sent."
+    flash[:success] = t("users.confirmation_resent")
     redirect_to(user_path(@user))
   end
 
@@ -170,7 +169,7 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     authorize(@user, :update_info?)
     @user.update!(unconfirmed_email: nil, confirmation_token: nil)
-    flash[:success] = "Email change canceled."
+    flash[:success] = t("users.email_change_canceled")
     redirect_to(user_path(@user))
   end
 
@@ -352,30 +351,27 @@ class UsersController < ApplicationController
   def send_invite_and_flash_on_create
     if params[:save_and_invite]
       People::SignInInvitationJob.perform_later(current_community.id, [@user.id])
-      flash[:success] = "User created and invited successfully."
+      flash[:success] = t("users.created_and_invited")
     else
-      flash[:success] = "User created successfully."
+      flash[:success] = t("users.created")
     end
   end
 
   def flash_on_update
     # Unlike with create, confirmation instructions are sent automatically by Devise because
     # we didn't opt out of them.
-    msg = (@user == current_user) ? +"Profile updated successfully." : +"User updated successfully."
+    msg = (@user == current_user) ? t("users.profile_updated") : t("users.updated")
     if @user.unconfirmed_email?
-      if @user == current_user
-        msg << " You need to confirm your new email address. "
-        msg << "Please check your email at #{@user.unconfirmed_email}."
+      detail = if @user == current_user
+        t("users.confirm_new_email_self", email: @user.unconfirmed_email)
       else
-        msg << " This user needs to confirm their new email address (#{@user.unconfirmed_email})."
+        t("users.confirm_new_email_other", email: @user.unconfirmed_email)
       end
-      flash[:alert] = msg
+      flash[:alert] = "#{msg} #{detail}"
     # If a user's email address changes, Devise automatically deletes the password reset token for
     # security purposes. So let's let them know that.
     elsif @user.saved_change_to_reset_password_token? && @user.reset_password_token.blank?
-      msg << " However, this change may have invalidated a sign-in invitation.
-        You may want to send a new one."
-      flash[:alert] = msg
+      flash[:alert] = "#{msg} #{t("users.invitation_invalidated")}"
     else
       flash[:success] = msg
     end

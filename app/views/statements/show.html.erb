@@ -1,26 +1,27 @@
-<% content_for(:title, "Statement ##{statement.id.to_s.rjust(5, '0')}") %>
+<% content_for(:title, t(".title", number: statement.id.to_s.rjust(5, "0"))) %>
 
 <table class="key-value key-value-full">
   <%= render("account_info") %>
   <tr>
-    <td>Statement Date</td>
+    <td><%= t(".statement_date") %></td>
     <td><%= l(statement.created_on) %></td>
   </tr>
   <% if statement.due_on %>
     <tr>
-      <td>Due Date</td>
+      <td><%= t(".due_date") %></td>
       <td><%= l(statement.due_on) %></td>
     </tr>
   <% end %>
 </table>
 
-<h2>Activity</h2>
+<h2><%= t(".activity") %></h2>
 
+<%# Full keys below: lazy lookup inside a render(layout:) block resolves against the layout's path. %>
 <%= render(layout: "transactions/txn_table") do %>
   <tr>
     <td><%= l(statement.prev_stmt_on) %></td>
     <td></td>
-    <td>Previous balance</td>
+    <td><%= t("statements.show.previous_balance") %></td>
     <td></td>
     <td></td>
     <td class="num"><%= currency_with_cr_span(statement.prev_balance) %></td>
@@ -29,7 +30,7 @@
   <tr class="total">
     <td><%= l(statement.created_on) %></td>
     <td></td>
-    <td>Statement balance</td>
+    <td><%= t("statements.show.statement_balance") %></td>
     <td></td>
     <td></td>
     <td class="num"><%= currency_with_cr_span(statement.total_due) %></td>

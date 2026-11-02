@@ -164,7 +164,7 @@ describe Calendars::EventletPolicy do
     end
 
     context "system calendar eventlet" do
-      let(:calendar) { create(:your_meals_calendar) }
+      let(:calendar) { create(:my_meals_calendar) }
       let(:eventlet) { build(:eventlet, calendar: calendar) }
 
       permissions :index?, :show? do

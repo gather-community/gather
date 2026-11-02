@@ -5,7 +5,7 @@ module Calendars
     # Rule for ensuring the event kind is entered by the creator.
     class RequiresKindRule < Rule
       def check(event)
-        event.kind.present? || [:kind, "can't be blank"]
+        event.kind.present? || [:kind, I18n.t("errors.messages.blank")]
       end
     end
   end

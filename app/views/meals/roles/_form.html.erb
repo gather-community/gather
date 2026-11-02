@@ -15,9 +15,9 @@
   <% end %>
 <% end %>
 
-<%= javascript_tag do %>
+<script>
   $(function() {
     new Gather.Views.Meals.RoleFormView({el: '.meals--role-form'});
     new Gather.Views.DirtyChecker({el: '.meals--role-form'});
   });
-<% end %>
+</script>

@@ -29,7 +29,7 @@ module Billing
       @template.assign_attributes(template_params)
       authorize(@template)
       if @template.save
-        flash[:success] = "Template created successfully."
+        flash[:success] = t("billing.templates.created")
         redirect_to(billing_templates_path)
       else
         render(:new)
@@ -40,7 +40,7 @@ module Billing
       @template = Template.find(params[:id])
       authorize(@template)
       if @template.update(template_params)
-        flash[:success] = "Template updated successfully."
+        flash[:success] = t("billing.templates.updated")
         redirect_to(billing_templates_path)
       else
         render(:edit)
@@ -51,7 +51,7 @@ module Billing
       authorize(sample_template)
       @templates = Template.where(id: params[:r]&.keys).by_description.to_a
       return if @templates.any?
-      flash[:alert] = "Please select at least one template."
+      flash[:alert] = t("billing.templates.select_one")
       redirect_to(billing_templates_path)
     end
 
@@ -60,10 +60,10 @@ module Billing
       @templates = Template.where(id: params[:ids].split(",")).to_a
       unless params[:cancel]
         if @templates.empty?
-          flash[:alert] = "Please select at least one template."
+          flash[:alert] = t("billing.templates.select_one")
         else
           @templates.each(&:apply)
-          flash[:success] = "Transactions created successfully."
+          flash[:success] = t("billing.templates.applied")
         end
       end
       redirect_to(billing_templates_path)

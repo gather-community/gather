@@ -41,7 +41,7 @@ module Groups
       @group.assign_attributes(group_params)
       authorize(@group)
       if @group.save
-        flash[:success] = "Group created successfully."
+        flash[:success] = t("groups.created")
         redirect_to(groups_groups_path)
       else
         prep_form_vars
@@ -53,7 +53,7 @@ module Groups
       @group = Group.includes(:communities).find(params[:id])
       authorize(@group)
       if @group.update(group_params)
-        flash[:success] = "Group updated successfully."
+        flash[:success] = t("groups.updated")
         redirect_to(groups_groups_path)
       else
         prep_form_vars
@@ -65,7 +65,7 @@ module Groups
       @group = Group.find(params[:id])
       authorize(@group)
       @group.join(current_user)
-      flash[:success] = %(You have successfully joined the group "#{@group.name}".)
+      flash[:success] = t("groups.joined", name: @group.name)
       redirect_to(groups_group_path(@group))
     end
 
@@ -73,7 +73,7 @@ module Groups
       @group = Group.find(params[:id])
       authorize(@group)
       @group.leave(current_user)
-      flash[:success] = %(You have successfully left the group "#{@group.name}".)
+      flash[:success] = t("groups.left", name: @group.name)
       redirect_to(groups_group_path(@group))
     end
 

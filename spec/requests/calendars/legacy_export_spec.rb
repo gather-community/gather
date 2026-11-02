@@ -39,7 +39,7 @@ describe "legacy calendar exports ICS endpoints" do
       create(:meal_signup, meal: meal1, household: user.household, diner_counts: [2])
     end
     let!(:system_calendars) do
-      create(:your_meals_calendar)
+      create(:my_meals_calendar)
       create(:community_meals_calendar)
       create(:other_communities_meals_calendar)
     end
@@ -50,7 +50,7 @@ describe "legacy calendar exports ICS endpoints" do
     let!(:job1) { create(:work_job, period: period, title: "Job 1", time_type: "full_period") }
     let!(:job2) { create(:work_job, period: period, title: "Job 2", time_type: "full_period") }
     let!(:system_calendars) do
-      create(:your_jobs_calendar)
+      create(:my_jobs_calendar)
     end
 
     before do

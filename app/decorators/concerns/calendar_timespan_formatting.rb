@@ -6,9 +6,10 @@ module CalendarTimespanFormatting
   def timespan
     if all_day?
       if single_day?
-        I18n.l(starts_at.to_date)
+        I18n.t("calendars.timespan.all_day", date: I18n.l(starts_at.to_date))
       else
-        I18n.l(starts_at.to_date) << " - " << I18n.l(ends_at.to_date)
+        I18n.t("calendars.timespan.all_day_range", first: I18n.l(starts_at.to_date),
+          last: I18n.l(ends_at.to_date))
       end
     else
       I18n.l(starts_at) << " - " << I18n.l(ends_at, format: single_day? ? :time_only : :default)

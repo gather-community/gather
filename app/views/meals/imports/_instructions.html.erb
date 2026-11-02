@@ -1,76 +1,55 @@
-<h2>Data Format</h2>
+<h2><%= t(".data_format") %></h2>
 
 <p>
-  Construct your import file using the following columns:
+  <%= t(".use_columns") %>
 </p>
 
 <table class="key-value">
   <tr>
-    <td>Date/Time</td>
-    <td>Required. The date and time of the meal. Use an unambiguous format like YYYY-MM-DD HH:MM</td>
+    <td><%= t("csv.headers.meals/meal.served_at") %></td>
+    <td><%= t(".served_at") %></td>
   </tr>
   <tr>
-    <td>Locations</td>
-    <td>
-      Required. The location(s) of the meal.
-      Use exact names or numeric IDs of calendars from the
-      <%= link_to("calendar system", calendars_path) %>.
-    </td>
+    <td><%= t("csv.headers.meals/meal.calendars") %></td>
+    <td><%= t(".calendars_html", link: link_to(t(".calendar_system"), calendars_path)) %></td>
   </tr>
   <tr>
-    <td>Formula</td>
-    <td>
-      Optional. The <%= link_to("formula", meals_formulas_path) %> for the meal.
-      Use the exact formula name or numeric ID.
-      Defaults to the default formula if not given.
-    </td>
+    <td><%= t("csv.headers.meals/meal.formula") %></td>
+    <td><%= t(".formula_html", link: link_to(t(".formula"), meals_formulas_path)) %></td>
   </tr>
   <% if multi_community? %>
     <tr>
-      <td>Communities</td>
-      <td>
-        Optional. Which communities are invited to the meal. Use exact names, abbreviations,
-        or numeric IDs, separated by semicolons. Defaults to all communities if not given.
-      </td>
+      <td><%= t("csv.headers.meals/meal.communities") %></td>
+      <td><%= t(".communities") %></td>
     </tr>
   <% end %>
   <tr>
-    <td>&lt;<em>Role Name</em>&gt; or Role&lt;<em>Role ID</em>&gt;</td>
-    <td>
-      Optional. Specify workers for the meal by adding one
-      column per <%= link_to("meal role", meals_roles_path) %>.
-      Use exact worker names or numeric IDs separated by semicolons.
-    </td>
+    <td><%= t(".role_column_html", role: t("csv.headers.meals/meal.role")) %></td>
+    <td><%= t(".roles_html", link: link_to(t(".meal_role"), meals_roles_path)) %></td>
   </tr>
   <tr>
-    <td>Action</td>
-    <td>
-      Optional. Specify 'create', 'update', or 'destroy'. Defaults to 'create' if not given.
-      If 'update' or 'destroy' is given, matches meal based on ID if given,
-      or date/time and locations otherwise.
-    </td>
+    <td><%= t("csv.headers.meals/meal.action") %></td>
+    <td><%= t(".action") %></td>
   </tr>
   <tr>
-    <td>ID</td>
-    <td>
-      Optional. The ID of the meal to update/destroy. Ignored if action is 'create'.
-    </td>
+    <td><%= t("csv.headers.meals/meal.id") %></td>
+    <td><%= t(".id") %></td>
   </tr>
 </table>
 
-<h2>Example Data</h2>
+<h2><%= t(".example_data") %></h2>
 
 <table id="example-csv">
   <thead>
     <tr>
-      <td>Date/Time</td>
-      <td>Locations</td>
-      <td>Formula</td>
+      <td><%= t("csv.headers.meals/meal.served_at") %></td>
+      <td><%= t("csv.headers.meals/meal.calendars") %></td>
+      <td><%= t("csv.headers.meals/meal.formula") %></td>
       <% if @roles[0] %>
         <td><%= @roles[0].title %></td>
       <% end %>
       <% if @roles[1] %>
-        <td>Role<%= @roles[1].id %></td>
+        <td><%= t("csv.headers.meals/meal.role") %><%= @roles[1].id %></td>
       <% end %>
     </tr>
   </thead>
@@ -80,10 +59,10 @@
       <td><%= @locations.map(&:name).join("; ") %></td>
       <td><%= @formula.name %></td>
       <% if @roles[0] %>
-        <td>Sally Jones</td>
+        <td><%= t(".sample_worker_1") %></td>
       <% end %>
       <% if @roles[1] %>
-        <td>Mohammed Iris; Sundar Premji</td>
+        <td><%= t(".sample_workers_2") %></td>
       <% end %>
     </tr>
     <tr>
@@ -91,10 +70,10 @@
       <td><%= @locations.map(&:id).join("; ") %></td>
       <td><%= @formula.id %></td>
       <% if @roles[0] %>
-        <td>Li Yun</td>
+        <td><%= t(".sample_worker_3") %></td>
       <% end %>
       <% if @roles[1] %>
-        <td>Tamika Johnson; Silvia Rodriguez</td>
+        <td><%= t(".sample_workers_4") %></td>
       <% end %>
     </tr>
   </tbody>

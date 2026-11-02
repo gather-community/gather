@@ -1,0 +1,8 @@
+<%# The parts of the event form that depend on its other fields, for the form-refresh controller. %>
+<% if @form.repeat_settings_editable? %>
+  <%= simple_fields_for(:calendars_event, @form) do |f| %>
+    <%= turbo_stream.replace("calendars_event_repeat_monthly_by_field", method: :morph) do %>
+      <%= render("repeat_monthly_by", f: f) %>
+    <% end %>
+  <% end %>
+<% end %>

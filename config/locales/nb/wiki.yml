@@ -1,0 +1,93 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+nb:
+  wiki:
+    page_deleted: "Siden er slettet." # MT
+    page_listing: "Liste over wikisider" # MT
+    new_page: "Ny wikiside" # MT
+    help: "Hjelp til wikien" # MT
+    # The markdown editor's toolbar buttons and status bar.
+    editor:
+      autosaved: "Lagret automatisk: " # MT
+      bold: "Fet" # MT
+      fullscreen: "Fullskjerm av/på" # MT
+      heading: "Overskrift" # MT
+      image: "Sett inn bilde" # MT
+      italic: "Kursiv" # MT
+      lines:
+        one: "linjer: %{count}" # MT
+        other: "linjer: %{count}" # MT
+      link: "Lag lenke" # MT
+      ordered_list: "Nummerert liste" # MT
+      preview: "Forhåndsvisning av/på" # MT
+      quote: "Sitat" # MT
+      side_by_side: "Side ved side av/på" # MT
+      unordered_list: "Punktliste" # MT
+      words:
+        one: "ord: %{count}" # MT
+        other: "ord: %{count}" # MT
+    pages:
+      history_table:
+        version: "Versjon" # MT
+        date: "Dato" # MT
+        author: "Forfatter" # MT
+        comment: "Kommentar" # MT
+        compare: "Sammenlign valgte" # MT
+        return: "Tilbake til siden" # MT
+      all:
+        title: "Liste over wikisider" # MT
+      compare:
+        title: "Wiki-sammenligning: %{title}" # MT
+        differences: "Forskjeller mellom versjon %{old} og %{new}" # MT
+        versions_between: "Versjoner mellom %{old} og %{new}" # MT
+      edit:
+        title: "Rediger wikiside: %{title}" # MT
+      history:
+        title: "Wiki-historikk: %{title}" # MT
+      new:
+        title: "Ny wikiside" # MT
+      show:
+        wiki_home: "Wikiens startside" # MT
+    not_found_create: "Det finnes ingen wikiside med navnet «%{title}». Du kan opprette den nedenfor!" # MT
+    preview_notice: "Dette er en forhåndsvisning. Bruk skjemaet nedenfor for å lagre eller redigere siden videre." # MT
+    revision_info: "Siden ble endret %{time} av %{user}" # MT
+    revision_info_no_by: "Siden ble endret %{time}" # MT
+    special_pages:
+      home:
+        title: "Wiki" # MT
+        content: |- # MT
+          Dette er **startsiden for wikien din**!
+
+          Se [[Eksempelside]] for tips om hvordan du fyller den med nyttig informasjon!
+      sample:
+        title: "Eksempelside" # MT
+        content: |- # MT
+          Dette er en eksempelside i wikien.
+
+          Klikk på **Rediger** ovenfor for å se hvordan denne siden fungerer! Og ikke vær redd, du kan ikke ødelegge noe!
+
+          ## Formatering
+
+          Wikisider redigeres med **Markdown**, en enkel måte å lage ryddig og pent innhold på uten å måtte lære et eget språk. Les mer om Markdown i [veiledningen til Markdown-formatering](/about/markdown).
+
+          ## Lenker
+
+          Lenker til andre sider er veldig viktige! Du kan lenke til andre **wikisider** slik: [[Morsom side]].
+
+          Lenken ovenfor er (sannsynligvis) rød. Det er fordi siden ikke finnes ennå. Hvis du klikker på lenken, kan du opprette siden. Da blir lenken blå!
+
+          Hvis du vil bruke noe annet enn sidetittelen som lenketekst, kan du [[Morsom side|gjøre det slik]].
+
+          Lenker til eksterne sider ser ut [slik](http://example.com).
+
+          En nettadresse i vanlig tekst blir gjenkjent og gjort om til en lenke automatisk: https://gather.coop

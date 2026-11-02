@@ -2,31 +2,64 @@
   while the footer content maxes out at 1200px. %>
 <div id="global-footer-wrapper">
   <footer id="global-footer" class="hidden-print footer-links">
-    <%= link_to("Privacy Policy", "/about/privacy-policy") %>&nbsp;&nbsp;
-    <%= link_to("Credits", "https://github.com/sassafrastech/gather/blob/master/credits.md") %>
+    <%= link_to(t(".privacy_policy"), "/about/privacy-policy") %>&nbsp;&nbsp;
+    <%= link_to(t(".credits"), "https://github.com/sassafrastech/gather/blob/master/credits.md") %>
     <% if current_user && current_community %>
       <% if policy(current_community).update? %>
         &nbsp;
-        <%= link_to("Settings", admin_settings_url(type: "community")) %>
+        <%= link_to(t(".settings"), admin_settings_url(type: "community")) %>
       <% end %>
       <% if policy(Subscription::Subscription.new(community: current_community)).show? %>
         &nbsp;
-        <%= link_to("Subscription", subscription_url) %>
+        <%= link_to(t(".subscription"), subscription_url) %>
       <% end %>
       <% if policy(Billing::Account.new(community: current_community)).index? %>
         &nbsp;
-        <%= link_to("Billing", accounts_url) %>
+        <%= link_to(t(".billing"), accounts_url) %>
       <% end %>
     <% end %>
 
     <% if current_user && policy(Community.new).index? %>
       &nbsp;
-      <%= link_to("Communities", communities_url(host: Settings.url.host)) %>
+      <%= link_to(t(".communities"), communities_url(host: Settings.url.host)) %>
+      &nbsp;
+      <%= link_to(t(".domains"), admin_domains_url(host: Settings.url.host)) %>
+      <% if policy(%i[admin feature_flag]).index? %>
+        &nbsp;
+        <%= link_to(t(".feature_flags"), admin_feature_flags_url(host: Settings.url.host)) %>
+      <% end %>
       <% if controller_name == "communities" && action_name == "index" %>
         &nbsp;
-        <%= button_to("Resync subscriptions", resync_all_communities_path,
+        <%= button_to(t(".resync_subscriptions"), resync_all_communities_path,
               class: "btn btn-link", form: {style: "display:inline"}) %>
       <% end %>
+    <% end %>
+
+    <%# Checked against the person at the keyboard, like the locale itself (ApplicationControllable::Locale). %>
+    <% if Gather::Locales.enabled?(real_current_user) %>
+      &nbsp;
+      <span class="language-menu" data-controller="language-menu"
+            data-language-menu-cookie-value="<%= Gather::Locales::COOKIE %>"
+            data-language-menu-domain-value="<%= Settings.url.host %>">
+        <%= link_to(t(".change_language"), "#",
+              data: {action: "language-menu#show", language_menu_target: "link"}) %>
+        <%= select_tag(:locale,
+              options_for_select([[t(".browser_default"), ""]] + Gather::Locales.menu_options,
+                Gather::Locales.find(cookies[Gather::Locales::COOKIE]).to_s),
+              id: "language-menu-select", class: "hidden", aria: {label: t(".language")},
+              data: {action: "language-menu#choose", language_menu_target: "select"}) %>
+      </span>
+    <% end %>
+
+    <% if Gather::Locales::MACHINE_TRANSLATED.include?(I18n.locale) %>
+      <p class="machine-translation-notice">
+        <% if Settings.translation_help_url.present? %>
+          <%= t(".machine_translated_with_link_html",
+                link: link_to(t(".help_translate"), Settings.translation_help_url)) %>
+        <% else %>
+          <%= t(".machine_translated") %>
+        <% end %>
+      </p>
     <% end %>
 
     <%# For test purposes only. Security risk otherwise. %>

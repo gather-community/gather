@@ -60,6 +60,23 @@ describe Calendars::EventletSerializer do
     end
   end
 
+  # FullCalendar only lets an event be dragged or resized when this is true.
+  describe "#editable" do
+    let(:eventlet) { create(:eventlet) }
+
+    def editable_for(user)
+      described_class.new(eventlet, scope: user).serializable_hash[:editable]
+    end
+
+    it "is true for the event's creator" do
+      expect(editable_for(eventlet.creator)).to be(true)
+    end
+
+    it "is false for someone who can't edit it" do
+      expect(editable_for(create(:user))).to be(false)
+    end
+  end
+
   describe "drag scope attributes" do
     # These drive the two drag prompts: "this calendar vs. all calendars" (eventlet_count) and
     # "this occurrence vs. the whole series" (recurring + occurrence_start).
@@ -95,7 +112,7 @@ describe Calendars::EventletSerializer do
 
     context "with a transient recurring occurrence" do
       let(:base_eventlet) do
-        create(:eventlet).tap do |e|
+        create(:eventlet, calendar: create(:calendar, allow_overlap: true)).tap do |e|
           e.event.update!(recurrence_rule: IceCube::Rule.weekly.to_hash)
         end
       end

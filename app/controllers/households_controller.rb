@@ -40,7 +40,7 @@ class HouseholdsController < ApplicationController
     @household.assign_attributes(household_attributes)
     authorize(@household)
     if @household.save
-      flash[:success] = "Household created successfully."
+      flash[:success] = t("households.created")
       redirect_to(households_path)
     else
       prepare_household_form
@@ -52,7 +52,7 @@ class HouseholdsController < ApplicationController
     @household = Household.find(params[:id])
     authorize(@household)
     if @household.update(household_attributes)
-      flash[:success] = "Household updated successfully."
+      flash[:success] = t("households.updated")
       redirect_to(households_path)
     else
       prepare_household_form

@@ -1,26 +1,25 @@
-<% content_for(:title, "#{@community.name} File Reorganization") %>
+<% content_for(:title, t("gdrive.migration.request.title", community: @community.name)) %>
 
 <div class="simple">
-  <h2>Step 5: Ensure All Files Moved</h2>
-  <p>You should now see an empty list of files, something like this:</p>
+  <h2><%= t(".heading") %></h2>
+  <p><%= t(".empty_list") %></p>
   <p>
     <%= image_tag("gdrive/migration/request/step5-1.png", class: "screenshot") %>
   </p>
   <p>
-    If so, you are done!
+    <%= t(".done") %>
   </p>
   <p class="wizard-buttons">
-    <%= link_to("< Previous", gdrive_migration_request_step4_path, class: "btn btn-default") %>
-    <%= link_to("Finish", gdrive_migration_request_finish_path, class: "btn btn-primary") %>
+    <%= link_to(t("gdrive.migration.request.previous"), gdrive_migration_request_step4_path, class: "btn btn-default") %>
+    <%= link_to(t(".finish"), gdrive_migration_request_finish_path, class: "btn btn-primary") %>
   </p>
-  <h2 class="troubleshooting">Troubleshooting</h2>
-  <h3>The list of files is not empty</h3>
+  <h2 class="troubleshooting"><%= t("gdrive.migration.request.troubleshooting") %></h2>
+  <h3><%= t(".not_empty") %></h3>
   <p>
-    No problem! Head back to <%= link_to("Step 2", gdrive_migration_request_step2_path) %>.
+    <%= t(".head_back_html", link: link_to(t(".step2"), gdrive_migration_request_step2_path)) %>
   </p>
-  <h3>There are some files I don't want to transfer</h3>
+  <h3><%= t(".some_files") %></h3>
   <p>
-    Please use the <%= link_to("opt-out form", gdrive_migration_request_opt_out_path) %>
-    to notify the coordinator.
+    <%= t(".use_opt_out_html", link: link_to(t(".opt_out_form"), gdrive_migration_request_opt_out_path)) %>
   </p>
 </div>

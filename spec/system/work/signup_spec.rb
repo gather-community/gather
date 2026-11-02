@@ -66,16 +66,22 @@ describe "signups", js: true do
         fill_in_lens(:search, "fruct")
         expect_jobs(jobs[1])
 
+        # Matches the start of any word, like the people search, but not the middle of one.
+        fill_in_lens(:search, "coord")
+        expect_jobs(jobs[1])
+        fill_in_lens(:search, "rdinator")
+        expect_jobs
+
         clear_lenses
         expect_jobs(*jobs[0..3])
 
         select_lens(:shift, "Open Jobs")
         expect_jobs(*jobs[1..3])
 
-        select_lens(:shift, "Your Jobs")
+        select_lens(:shift, "My Jobs")
         expect_jobs(*jobs[1..2])
 
-        select_lens(:shift, "Your Household")
+        select_lens(:shift, "My Household")
         expect_jobs(*jobs[0..2])
 
         select_lens(:shift, "Not Preassigned")
@@ -143,6 +149,27 @@ describe "signups", js: true do
           jobs[2].shifts[0].signup_user(users[0])
           expect(page).to have_content(users[0].name)
         end
+      end
+    end
+
+    describe "autorefresh with more than one page of shifts" do
+      # The page shows 48 shifts at a time, so 49 gives it a second page.
+      let!(:big_job) { create(:work_job, period: periods[0], title: "Weeder", shift_count: 49) }
+
+      before { periods[0].update!(phase: "open") }
+
+      scenario "keeps a single set of page links" do
+        visit(page_path)
+        expect(page).to have_css(".pagination-wrapper", count: 1)
+
+        # Autorefresh fires every second in test mode, so this lets a few refreshes land.
+        sleep(3.5)
+        stop_all_timers
+        wait_for_ajax
+
+        expect(page).to have_css(".pagination-wrapper", count: 1)
+        expect(page).to have_css(".page-entries-info", count: 1)
+        expect(page).to have_css("ul.pagination", count: 1)
       end
     end
 

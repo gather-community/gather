@@ -1,6 +1,8 @@
 require:
   - rubocop-rails
   - standard
+  - ./lib/rubocop/cop/gather/hard_coded_string.rb
+  - ./lib/rubocop/cop/gather/number_to_currency.rb
 
 inherit_gem:
   standard:
@@ -84,3 +86,25 @@ Bundler:
 
 Rails:
   Enabled: true
+
+# Flags hard-coded user-facing strings (see "User-Facing Strings" in CLAUDE.md). Enabled only for files whose
+# strings have been moved to locale files: add paths here as modules are converted, and disable inline (with a
+# reason) for strings that aren't user-facing. ERB files are covered by .erb_lint.yml.
+# spec/lint/i18n_linters_spec.rb runs this in CI.
+Gather/HardCodedString:
+  Enabled: true
+  Include:
+    - app/**/*.rb
+  Exclude:
+    # Starter content for new communities, translated in the release phase of the i18n plan.
+    - app/models/utils/generators/**/*.rb
+    # Mail that only goes to Gather staff (exempt per CLAUDE.md).
+    - app/mailers/system_mailer.rb
+    - app/mailers/test_mailer.rb
+    # A client for Mailman's REST API: its strings are HTTP headers and protocol, not user-facing text.
+    - app/models/groups/mailman/api.rb
+
+Gather/NumberToCurrency:
+  Enabled: true
+  Include:
+    - app/**/*.rb

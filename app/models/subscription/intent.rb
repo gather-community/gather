@@ -33,11 +33,9 @@ module Subscription
 
     delegate :name, to: :community, prefix: true
 
-    # Currency is derived from the community's country. Kept as `currency` so that
-    # SubscriptionDecorator can treat Intent and Subscription polymorphically.
-    def currency
-      community.default_currency
-    end
+    # The community's currency. Kept as `currency` so that SubscriptionDecorator can treat Intent and
+    # Subscription polymorphically.
+    delegate :currency, to: :community
 
     def registered?
       false

@@ -34,7 +34,7 @@ module People
       @member_type.community = current_community
       authorize(@member_type)
       if @member_type.save
-        flash[:success] = "Member type created successfully."
+        flash[:success] = t("people.member_types.created")
         redirect_to(people_member_types_path)
       else
         render(:new)
@@ -45,7 +45,7 @@ module People
       @member_type = MemberType.find(params[:id])
       authorize(@member_type)
       if @member_type.update(member_type_params)
-        flash[:success] = "Member type updated successfully."
+        flash[:success] = t("people.member_types.updated")
         redirect_to(people_member_types_path)
       else
         render(:edit)

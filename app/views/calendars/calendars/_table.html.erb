@@ -1,7 +1,7 @@
 <table class="index part-width">
   <tr>
-    <th colspan="2">Name</th>
-    <th>Events</th>
+    <th colspan="2"><%= t(".name") %></th>
+    <th><%= t(".events") %></th>
     <th><%= icon_tag("camera") %></th>
   </tr>
   <% @calendar_nodes.each do |node, children| %>

@@ -1,14 +1,14 @@
 <%= @user.greeting %>
 
-This is a reminder that you are scheduled as '<%= @shift.job_title %>' for <%= @shift.times %>.
+<%= t(".scheduled", job: @shift.job_title, times: @shift.times) %>
 <% if @reminder.note? %>
 
-This reminder includes the following note:
+<%= t(".note_intro") %>
 --------------
 <%= @reminder.note %>
 --------------
 <% end %>
 
-See the job description here: <%= work_period_shift_url(@shift.job.period, @shift) %>.
+<%= t(".see_description", url: work_period_shift_url(@shift.job.period, @shift)) %>
 
-Thanks for your service to the community!
+<%= t(".thanks") %>

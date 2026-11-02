@@ -1,24 +1,24 @@
-<% content_for(:title) { "Google Drive Migration" } %>
+<% content_for(:title) { t("gdrive.migration.dashboard.title") } %>
 
 <div class="synopsis gdrive-migration-synopsis">
   <%= render("gdrive/migration/dashboard/synopsis") %>
 </div>
 
-<h2>Files</h2>
+<h2><%= t(".files") %></h2>
 <table class="full-width">
   <tr>
-    <th>Name</th>
-    <th>Owner</th>
-    <th>Modified</th>
-    <th>Status</th>
+    <th><%= t(".name") %></th>
+    <th><%= t(".owner") %></th>
+    <th><%= t(".modified") %></th>
+    <th><%= t(".status") %></th>
     <% if @any_errors %>
-      <th>Error</th>
+      <th><%= t(".error") %></th>
     <% end %>
   </tr>
   <% @files.each do |file| %>
     <tr>
       <td>
-        <%= image_tag(file.icon_link, class: "file-icon", alt: "File icon") %>
+        <%= image_tag(file.icon_link, class: "file-icon", alt: t(".file_icon")) %>
         <%= link_to(file.name, file.web_view_link, target: "_blank") %>
       </td>
       <td><%= link_to(file.owner, gdrive_migration_dashboard_owner_path(id: file.owner)) %></td>

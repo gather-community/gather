@@ -5,7 +5,7 @@ module Meals
     delegate_all
 
     def title_or_no_title
-      title || "[No Menu]"
+      title || I18n.t("meals.no_menu_title")
     end
 
     def link(*url_args)
@@ -37,7 +37,7 @@ module Meals
 
     def closing_soon_pill
       safe_str << nbsp <<
-        h.link_to("Closes Soon!", h.meal_path(object), class: "pill pill-emphasis pill-small")
+        h.link_to(h.t("meals.closes_soon"), h.meal_path(object), class: "pill pill-emphasis pill-small")
     end
 
     def nonempty_menu_items
@@ -52,10 +52,6 @@ module Meals
     def location_name
       return @location_name if defined?(@location_name)
       @location_name = calendars.first&.decorate&.name_with_prefix
-    end
-
-    def location_name_with_at
-      location_name.nil? ? nil : " at #{location_name}"
     end
 
     def location_abbrv
@@ -94,13 +90,13 @@ module Meals
     end
 
     def allergen_options
-      (community.settings.meals.allergens.split(/\s*,\s*/) + allergens).uniq.sort
+      Gather::Collation.sort((community.settings.meals.allergens.split(/\s*,\s*/) + allergens).uniq)
     end
 
     def worker_links_for_role(role)
       assignments = assignments_by_role[role] || []
       links = assignments.map { |a| a.user.decorate.link(highlight: h.lenses[:user].value) }
-      links.present? ? h.safe_join(links, ", ") : h.content_tag(:span, "[None]", class: "weak")
+      links.present? ? h.safe_join(links, ", ") : h.content_tag(:span, h.t("common.none_bracketed"), class: "weak")
     end
 
     def takeout_allowed?

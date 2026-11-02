@@ -135,7 +135,8 @@ describe "meal create, show, update, delete", js: true do
     end
   end
 
-  context "as regular user" do
+  # perform_jobs runs Meals::WorkerChangeNoticeJob, which sends the change notices.
+  context "as regular user", perform_jobs: true do
     let!(:actor) { create(:user) }
 
     shared_examples_for "allows show, summary, and edit to workers" do
@@ -152,11 +153,15 @@ describe "meal create, show, update, delete", js: true do
         expect_modal(text: /If you change meal workers/)
         click_modal_button
 
+        # The change notice is configurable, so each recipient gets their own message.
+        # Coordinators would get one too, but there aren't any in this spec.
         expect do
           click_button("Save")
           expect_success
-        end.to change { ActionMailer::Base.deliveries.size }.by(1)
-        expect(ActionMailer::Base.deliveries.last.subject).to eq("Meal Job Assignment Change Notice")
+        end.to change { ActionMailer::Base.deliveries.size }.by(2)
+        notices = ActionMailer::Base.deliveries.last(2)
+        expect(notices.map(&:subject).uniq).to eq(["Meal Job Assignment Change Notice"])
+        expect(notices.map(&:to)).to contain_exactly([actor.email], [meals[4].head_cook.email])
 
         # Show
         find("tr", text: meals[4].head_cook.name).find("a", text: meals[4].title || "[No Menu]").click

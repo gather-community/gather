@@ -22,7 +22,7 @@ module GDrive
         authorize(current_community, :setup?, policy_class: SetupPolicy)
 
         if params[:error] == "access_denied"
-          flash[:error] = "It looks like you cancelled the Google authentication flow."
+          flash[:error] = t("gdrive.auth_cancelled")
           redirect_to(gdrive_home_url)
           return
         end
@@ -38,18 +38,17 @@ module GDrive
           authenticated_google_id = fetch_email_of_authenticated_account(credentials)
 
           if config.org_user_id != authenticated_google_id
-            flash[:error] = "You signed into Google with #{authenticated_google_id}. " \
-              "Please sign in with #{config.org_user_id} instead."
+            flash[:error] = t("gdrive.wrong_account", signed_in: authenticated_google_id,
+              expected: config.org_user_id)
             redirect_to(gdrive_home_url)
             return
           end
           wrapper.store_credentials(credentials)
-          flash[:success] = "Authenticated successfully with Google."
+          flash[:success] = t("gdrive.authenticated")
         rescue Signet::AuthorizationError => error
           error_code = SecureRandom.base58(8)
           Rails.logger.error("AuthorizationError in gdrive auth callback", message: error.to_s, community_id: current_community.id, error_code: error_code)
-          flash[:error] = "There is a problem with your Google Drive connection. " \
-            "Please contact Gather support. (#{error_code})"
+          flash[:error] = t("gdrive.connection_problem", code: error_code)
         end
         redirect_to(gdrive_home_url)
       end

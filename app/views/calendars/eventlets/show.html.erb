@@ -2,34 +2,34 @@
 <% calendar = occurrence.calendar.decorate %>
 <% meal = event.meal&.decorate %>
 
-<% content_for(:title, "Event: #{occurrence.name}") %>
+<% content_for(:title, t(".title", name: occurrence.name)) %>
 <% content_for(:action_links, occurrence.action_links(:show)) %>
 
 <% content_for(:mobile_back_link) do %>
-  <%= render partial: "shared/mobile_back_link", locals: {label: "Calendars", path: calendars_events_path } %>
+  <%= render partial: "shared/mobile_back_link", locals: {label: t(".calendars"), path: calendars_events_path } %>
 <% end %>
 
 <table class="key-value key-value-wide">
   <tr>
-    <td>Calendar</td>
+    <td><%= t(".calendar") %></td>
     <td>
       <%= image_tag(calendar.photo_variant(:thumb), alt: calendar.name) %><br/>
       <%= calendar.name %>
     </td>
   </tr>
   <tr>
-    <td>Date/Time</td>
+    <td><%= t(".date_time") %></td>
     <td><strong><%= occurrence.timespan %></strong></td>
   </tr>
   <% if occurrence.recurrence_description %>
     <tr>
-      <td>Repeats</td>
+      <td><%= t(".repeats") %></td>
       <td><span class="hint"><%= occurrence.recurrence_description %></span></td>
     </tr>
   <% end %>
   <% if meal %>
     <tr>
-      <td>Meal</td>
+      <td><%= t(".meal") %></td>
       <td>
         <% if policy(meal).show? %>
           <%= link_to(meal.title_or_no_title, meal_path(meal)) %>
@@ -41,30 +41,30 @@
   <% else %>
     <% if event.group %>
       <tr>
-        <td>Group</td>
+        <td><%= t(".group") %></td>
         <td><%= link_to(event.group.name, event.group) %></td>
       </tr>
     <% end %>
     <tr>
-      <td>Reserved By</td>
+      <td><%= t(".reserved_by") %></td>
       <td><%= event.creator.decorate.link(show_cmty_if_foreign: true) %></td>
     </tr>
   <% end %>
   <% if event.sponsor %>
     <tr>
-      <td>Sponsor</td>
+      <td><%= t(".sponsor") %></td>
       <td><%= event.sponsor.decorate.link(show_cmty_if_foreign: true) %></td>
     </tr>
   <% end %>
   <% if event.displayable_kind? %>
     <tr>
-      <td>Type</td>
+      <td><%= t(".type") %></td>
       <td><%= event.kind %></td>
     </tr>
   <% end %>
   <% if event.note %>
     <tr>
-      <td>Note</td>
+      <td><%= t(".note") %></td>
       <td><%= event.rendered_note %></td>
     </tr>
   <% end %>

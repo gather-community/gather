@@ -106,7 +106,7 @@ module Calendars
 
       def note_for_meal(meal:, signup:)
         lines = []
-        lines << (meal.head_cook.present? ? "By #{meal.head_cook_name}" : nil)
+        lines << (meal.head_cook.present? ? I18n.t("calendars.meal_by_cook", cook: meal.head_cook_name) : nil)
         if signup
           lines << I18n.t("calendar_exports.meals.diner_count", count: signup.total)
           if signup.comments.present?

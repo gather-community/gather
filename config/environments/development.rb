@@ -22,7 +22,6 @@ Rails.application.configure do
   # Allow gatherdev.org for local development.
   config.hosts << "gatherdev.org"
   config.hosts << ".gatherdev.org"
-  config.hosts << ".gatherdev.org:3000"
 
   # Enable/disable Action Controller caching. By default Action Controller caching is disabled.
   # Run rails dev:cache to toggle Action Controller caching.
@@ -68,7 +67,7 @@ Rails.application.configure do
   config.assets.quiet = true
 
   # Raises error for missing translations.
-  # config.i18n.raise_on_missing_translations = true
+  config.i18n.raise_on_missing_translations = true
 
   # Annotate rendered view with file names.
   config.action_view.annotate_rendered_view_with_filenames = true

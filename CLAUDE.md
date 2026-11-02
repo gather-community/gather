@@ -90,14 +90,14 @@ bundle exec thin start -p "$PORT" --ssl --ssl-key-file config/ssl/gatherdev.org.
 
 The port is `url.port` in `config/settings.local.yml` (3000 if unset). Each dev env on the machine has its own, and the app builds its URLs from it, so always use that port — never assume 3000.
 
-Screenshots use the Selenium container (`gather-selenium`) via a Ruby script with `selenium-webdriver`. The container shares `vibrant_borg`'s network namespace; reach it from this container at `172.18.0.3:4444`. The app is at `172.18.0.2`. Use `--host-resolver-rules` to make Chrome resolve both apex and wildcard subdomains to `172.18.0.2`.
+Screenshots use the same Selenium container as the system specs (see [Headless Chrome for System Tests](#headless-chrome-for-system-tests)), driven by a Ruby script with `selenium-webdriver`. That container shares the devcontainer's network namespace, so it's at `localhost:4444` (the `SELENIUM_REMOTE_URL` env var), and the app's dev server is at `127.0.0.1` from Chrome's point of view. Use `--host-resolver-rules` to make Chrome resolve both apex and wildcard subdomains to `127.0.0.1`.
 
 ```ruby
 # tmp/screenshot.rb — adapt as needed
 require 'selenium-webdriver'
 
-SELENIUM_URL  = 'http://172.18.0.3:4444'
-APP_IP        = '172.18.0.2'
+SELENIUM_URL  = ENV.fetch('SELENIUM_REMOTE_URL', 'http://localhost:4444')
+APP_IP        = '127.0.0.1'
 PORT          = 3000                               # url.port from config/settings.local.yml
 APEX_URL      = "https://gatherdev.org:#{PORT}"
 COMMUNITY_URL = "https://foo.gatherdev.org:#{PORT}" # adjust community slug
@@ -156,8 +156,11 @@ GitHub's drag-and-drop uploads go to its `user-attachments` CDN through a browse
 1. Crop the dead space off the full-page screenshot — `vips` is installed:
 
 ```bash
-vips crop tmp/shot.png tmp/pr_shot.png 0 0 1280 680   # args: x y width height
+vipsheader -f width tmp/shot.png                        # usually 1272, not 1280: the scrollbar takes 8px
+vips crop tmp/shot.png tmp/pr_shot.png 0 0 1272 680   # args: x y width height
 ```
+
+The crop area must fit inside the image, or `vips` fails with "bad extract area". Check the size with `vipsheader -f width` / `-f height` first.
 
 2. Commit the image and push. `tmp/` is gitignored, so force-add. Tag the message with `[skip ci]` — this commit is a throwaway that never reaches `develop`, and a full CI run on it wastes ~28 min of runner time:
 
@@ -338,10 +341,10 @@ The dispositions map is a **declaration**, not an assertion — it does not read
 - **Fragment caches** must include `I18n.locale` in the cache key.
 - **Missing translations raise** in development and test (`config.i18n.raise_on_missing_translations`).
 - **Linters enforce this everywhere.** `.erb_lint.yml` checks every view and `.rubocop.yml` (`Gather/HardCodedString`) checks all Ruby under `app/`. Both have a short `exclude` list: staff-only mail and the new-community generators (starter content). [spec/lint/i18n_linters_spec.rb](spec/lint/i18n_linters_spec.rb) runs both in CI. Run them locally with `bundle exec erb_lint --lint-all` and `bundle exec rubocop --only Gather/HardCodedString,Gather/NumberToCurrency`.
-  - Views get three checks: literal text between tags (`HardCodedString`), literal `aria-label`/`alt`/`title`/`placeholder` values ([.erb_linters/hard_coded_attribute.rb](.erb_linters/hard_coded_attribute.rb)), and text-like string literals inside ERB tags.
+  - Views get three checks: literal text between tags (`HardCodedText`), literal `aria-label`/`alt`/`title`/`placeholder` values ([.erb_linters/hard_coded_attribute.rb](.erb_linters/hard_coded_attribute.rb)), and text-like string literals inside ERB tags.
   - The Ruby cop ([lib/rubocop/cop/gather/hard_coded_string.rb](lib/rubocop/cop/gather/hard_coded_string.rb)) flags strings that start with a capitalized word ("Close", "Generated: …"). It skips exception, log and `EventLog` messages, regexps, class names, and strings used as keys or compared against (`headers["Vary"]`, `type == "User"`).
   - The view linter skips inline JS, both in `<script>` tags and in `javascript_tag do` blocks. Strings the JS shows to users still go through `I18n.t`.
-  - For a genuine false positive, disable inline and say why: `# rubocop:disable Gather/HardCodedString` or `<%# erb_lint:disable HardCodedString %>` on the same line.
+  - For a genuine false positive, disable inline and say why: `# rubocop:disable Gather/HardCodedString` or `<%# erb_lint:disable HardCodedText %>` on the same line. The view linter is named `HardCodedText` (see `.erb_lint.yml`); `HardCodedString` is the Ruby cop's name.
 - **Static error pages** (`public/404.html` etc.) are generated from `app/views/error_pages/` by `bundle exec rake error_pages:generate`, one copy per translated locale. Edit the templates and regenerate rather than editing `public/` by hand.
 - **[spec/i18n_spec.rb](spec/i18n_spec.rb) runs in CI** (config in `config/i18n-tasks.yml`). It fails on keys used in code but missing from `en`, on unused keys, on interpolation variables that differ between locales, on a stale JS export, and on stale static error pages. Run `bundle exec i18n-tasks missing -l en` and `bundle exec i18n-tasks unused -l en` locally. When a key is built dynamically (`t("gdrive.item_kinds.#{kind}")`), add a pattern to `ignore_unused` with a comment saying where it's used. Delete keys that are really unused.
 

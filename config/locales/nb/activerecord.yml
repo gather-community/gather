@@ -13,6 +13,21 @@
 nb:
   activemodel:
     attributes:
+      # Messaging::SetupForm, which takes Messaging::Registration's model name.
+      messaging/registration:
+        package_cents: "Månedspakke" # MT
+        legal_name: "Juridisk navn" # MT
+        display_name: "Navnet folk kjenner dere under" # MT
+        entity_type: "Organisasjonstype" # MT
+        ein: "EIN" # MT
+        street: "Gateadresse" # MT
+        city: "By" # MT
+        state: "Delstat" # MT
+        postal_code: "Postnummer (ZIP)" # MT
+        email: "Kontakt-e-post" # MT
+        phone: "Kontakttelefon" # MT
+        website: "Nettsted" # MT
+        accept_fees: "Oppstartsgebyr" # MT
       # EventletForm (drag-and-drop), for its error messages.
       calendars/eventlet:
         starts_at: "Starttid" # MT
@@ -38,6 +53,15 @@ nb:
         repeat_count: "Antall ganger" # MT
     errors:
       models:
+        # Messaging::SetupForm, which takes Messaging::Registration's model name.
+        messaging/registration:
+          attributes:
+            base:
+              payment_failed: "Betalingen din gikk ikke gjennom: %{reason}" # MT
+            ein:
+              invalid: "må være 9 sifre, som 12-3456789" # MT
+            postal_code:
+              invalid: "må være et femsifret postnummer (ZIP)" # MT
         # EventForm, which takes Calendars::Event's model name.
         calendars/event:
           attributes:

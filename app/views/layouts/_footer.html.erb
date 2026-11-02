@@ -17,6 +17,11 @@
         &nbsp;
         <%= link_to(t(".billing"), accounts_url) %>
       <% end %>
+      <% if FeatureFlag.lookup("messaging").on?(current_user) &&
+            Messaging::MessagingPolicy.new(current_user, current_community).administer? %>
+        &nbsp;
+        <%= link_to(t(".texting"), messaging_settings_url) %>
+      <% end %>
     <% end %>
 
     <% if current_user && policy(Community.new).index? %>

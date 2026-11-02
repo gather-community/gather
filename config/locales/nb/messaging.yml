@@ -1,0 +1,82 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+nb:
+  messaging:
+    # Ledger descriptions for the setup fees, debited as Telnyx charges them.
+    fees:
+      brand_registration: "Operatørenes registrering av organisasjonen din" # MT
+      campaign_review: "Operatørenes gjennomgang av SMS-programmet ditt" # MT
+      campaign_prepaid: "Avgift for SMS-programmet, de første 3 månedene" # MT
+    registration_statuses:
+      draft: "Ikke betalt" # MT
+      awaiting_payment: "Venter på betaling" # MT
+      submitting: "Sendes inn" # MT
+      brand_pending: "Bekrefter organisasjonen din" # MT
+      campaign_pending: "Til gjennomgang hos operatørene" # MT
+      approved: "Godkjent" # MT
+      failed: "Avslått" # MT
+    registration_explanations:
+      draft: "Oppstartsbetalingen din gikk ikke gjennom. Prøv å sette opp SMS på nytt." # MT
+      awaiting_payment: "Vi registrerer fellesskapet ditt hos operatørene så snart betalingen din har gått gjennom." # MT
+      submitting: "Betalingen din gikk gjennom, og vi sender registreringen din til operatørene." # MT
+      brand_pending: "Vi har registrert organisasjonen din hos operatørene, og de bekrefter den nå. Dette tar vanligvis noen minutter, men kan ta en dag eller to." # MT
+      campaign_pending: "Operatørene går gjennom SMS-programmet ditt. Dette tar vanligvis 1 til 3 uker. Vi sender deg en e-post når de er ferdige." # MT
+      approved: "Operatørene har godkjent SMS-programmet ditt." # MT
+      failed: "Operatørene godkjente ikke registreringen din. Kontakt Gather-støtte, så kan vi ordne det." # MT
+    settings:
+      show:
+        title: "SMS" # MT
+        status: "Status" # MT
+        failure_reason: "Årsak" # MT
+        organization: "Organisasjon" # MT
+        entity_type: "Type" # MT
+        submitted_on: "Sendt inn" # MT
+        approved_on: "Godkjent" # MT
+        balance: "Meldingssaldo" # MT
+        not_set_up: "Med SMS kan fellesskapet ditt sende meldinger om måltider, vakter og grupper. Det er ikke satt opp ennå." # MT
+        set_up: "Sett opp SMS" # MT
+        unsupported: "SMS er foreløpig bare tilgjengelig for fellesskap i USA." # MT
+        no_subscription_html: "For å sette opp SMS må fellesskapet ditt ha et aktivt Gather-abonnement med en betalingsmåte. Gå til %{link} for å legge til en." # MT
+        topup_exists_html: "Fellesskapet ditt har allerede en månedlig meldingspakke. Fjern den på %{link} før du setter opp SMS, og velg en ny under oppsettet." # MT
+        subscription_page: "abonnementssiden" # MT
+    setups:
+      new:
+        title: "Sett opp SMS" # MT
+        intro: "Amerikanske operatører krever at alle organisasjoner som sender SMS, registrerer seg først. Gather registrerer fellesskapet ditt for deg med opplysningene nedenfor, og belaster betalingsmåten din i Gather for operatørenes avgifter og den første måneden med SMS." # MT
+        costs: "Hva det koster" # MT
+        setup_fee: "Oppstartsgebyr (engangsbeløp)" # MT
+        monthly_fixed: "Faste månedlige kostnader (programavgift og telefonnummer)" # MT
+        per_month: "%{amount}/måned" # MT
+        per_100_texts: "SMS" # MT
+        per_100: "%{amount} per 100 (én SMS til 20 personer teller som 20)" # MT
+        costs_hint: "Dette er avgiftene til operatørene og SMS-leverandøren vår, som vi videreformidler til kostpris. Oppstartsgebyret refunderes ikke, selv om operatørene ikke godkjenner registreringen din." # MT
+        package: "Månedspakke" # MT
+        package_hint: "Pakken din belastes hver måned og legges til meldingssaldoen din. Faste kostnader på %{fixed} trekkes fra den hver måned, og resten betaler for SMS." # MT
+        package_option:
+          one: "%{amount}/måned (omtrent %{count} SMS)" # MT
+          other: "%{amount}/måned (omtrent %{count} SMS)" # MT
+        organization: "Organisasjonen din" # MT
+        organization_hint: "Operatørene sjekker disse opplysningene mot registrene til IRS (de amerikanske skattemyndighetene), så skriv dem inn nøyaktig slik de står i fellesskapets skattedokumenter." # MT
+        campaign: "Hva vi registrerer" # MT
+        campaign_hint: "Dette er SMS-programmet vi registrerer for fellesskapet ditt, med ordlyden operatørene skal vurdere. Gather skriver det, så du trenger ikke endre det." # MT
+        campaign_description: "Beskrivelse" # MT
+        message_flow: "Hvordan medlemmer melder seg på" # MT
+        sample: "Eksempelmelding %{number}" # MT
+        help_reply: "Svar på HELP" # MT
+        opt_out_reply: "Svar på STOP" # MT
+        payment: "Betaling" # MT
+        payment_summary: "I dag belaster vi betalingsmåten din i Gather med %{setup_fee} for oppstart pluss pakken for den første måneden, og deretter pakken din hver måned." # MT
+        accept_fees: "Jeg forstår at oppstartsgebyret på %{setup_fee} ikke refunderes, selv om operatørene ikke godkjenner registreringen." # MT
+        submit: "Sett opp og betal" # MT
+      create:
+        success: "Takk! Vi registrerer fellesskapet ditt hos operatørene. Denne siden viser hvordan det går." # MT

@@ -207,7 +207,17 @@ module Subscription
     # immediately, AND we must actually be able to send SMS to the community's country — there's no
     # point funding a wallet we can never spend. Future-dated subs have no payment method attached
     # yet, so they're excluded.
+    #
+    # Texting has to be set up first (Messaging::SetupForm starts the first package along with the setup
+    # fee), so before that the subscription page links to setup instead.
     def messaging_topup_editable?
+      messaging_chargeable? && community.messaging_registration&.paid? == true
+    end
+
+    # Whether texting can be paid for from this subscription now: a live, invoiceable sub with a saved
+    # payment method we can charge immediately, in a country we can text. Setup checks this; changing the
+    # package afterwards also needs setup to have been paid (see #messaging_topup_editable?).
+    def messaging_chargeable?
       return false unless community.messaging_supported?
       return false unless persisted? && active? && !future?
       default_payment_method_id.present?

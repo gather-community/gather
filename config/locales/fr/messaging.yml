@@ -1,0 +1,82 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+fr:
+  messaging:
+    # Ledger descriptions for the setup fees, debited as Telnyx charges them.
+    fees:
+      brand_registration: "Enregistrement de votre organisation auprès des opérateurs" # MT
+      campaign_review: "Examen de votre programme SMS par les opérateurs" # MT
+      campaign_prepaid: "Frais du programme SMS, 3 premiers mois" # MT
+    registration_statuses:
+      draft: "Non payé" # MT
+      awaiting_payment: "En attente de paiement" # MT
+      submitting: "Envoi en cours" # MT
+      brand_pending: "Vérification de votre organisation" # MT
+      campaign_pending: "En cours d'examen par les opérateurs" # MT
+      approved: "Approuvé" # MT
+      failed: "Refusé" # MT
+    registration_explanations:
+      draft: "Votre paiement de mise en service n'a pas abouti. Essayez à nouveau de configurer les SMS." # MT
+      awaiting_payment: "Nous enregistrerons votre communauté auprès des opérateurs dès que votre paiement sera reçu." # MT
+      submitting: "Votre paiement a abouti et nous envoyons votre enregistrement aux opérateurs." # MT
+      brand_pending: "Nous avons enregistré votre organisation auprès des opérateurs, qui sont en train de la vérifier. Cela prend généralement quelques minutes, mais peut prendre un jour ou deux." # MT
+      campaign_pending: "Les opérateurs examinent votre programme SMS. Cela prend généralement de 1 à 3 semaines. Nous vous enverrons un e-mail une fois l'examen terminé." # MT
+      approved: "Les opérateurs ont approuvé votre programme SMS." # MT
+      failed: "Les opérateurs n'ont pas approuvé votre enregistrement. Veuillez contacter l'assistance Gather afin que nous puissions régler le problème." # MT
+    settings:
+      show:
+        title: "SMS" # MT
+        status: "État" # MT
+        failure_reason: "Motif" # MT
+        organization: "Organisation" # MT
+        entity_type: "Type" # MT
+        submitted_on: "Soumis" # MT
+        approved_on: "Approuvé" # MT
+        balance: "Solde de messagerie" # MT
+        not_set_up: "Les SMS permettent à votre communauté d'envoyer des messages au sujet des repas, des créneaux de travail et des groupes. Ils ne sont pas encore configurés." # MT
+        set_up: "Configurer les SMS" # MT
+        unsupported: "Les SMS ne sont disponibles pour l'instant que pour les communautés situées aux États-Unis." # MT
+        no_subscription_html: "Pour configurer les SMS, votre communauté doit avoir un abonnement Gather actif avec un moyen de paiement. Rendez-vous sur la %{link} pour en ajouter un." # MT
+        topup_exists_html: "Votre communauté a déjà un forfait mensuel de messagerie. Supprimez-le sur la %{link} avant de configurer les SMS, puis choisissez-en un nouveau pendant la configuration." # MT
+        subscription_page: "page Abonnement" # MT
+    setups:
+      new:
+        title: "Configurer les SMS" # MT
+        intro: "Les opérateurs américains exigent que toute organisation qui envoie des SMS s'enregistre au préalable. Gather enregistre votre communauté pour vous à l'aide des informations ci-dessous et débite votre moyen de paiement Gather des frais des opérateurs et de votre premier mois de SMS." # MT
+        costs: "Coûts" # MT
+        setup_fee: "Frais de mise en service (une seule fois)" # MT
+        monthly_fixed: "Coûts mensuels fixes (frais du programme et numéro de téléphone)" # MT
+        per_month: "%{amount}/mois" # MT
+        per_100_texts: "SMS" # MT
+        per_100: "%{amount} les 100 (un SMS envoyé à 20 personnes compte pour 20)" # MT
+        costs_hint: "Il s'agit des frais des opérateurs et de notre fournisseur de SMS, refacturés à prix coûtant. Les frais de mise en service ne sont pas remboursables, même si les opérateurs n'approuvent pas votre enregistrement." # MT
+        package: "Forfait mensuel" # MT
+        package_hint: "Votre forfait est facturé chaque mois et ajouté à votre solde de messagerie. Des coûts fixes de %{fixed} en sont déduits chaque mois, et le reste paie les SMS." # MT
+        package_option:
+          one: "%{amount}/mois (environ %{count} SMS)" # MT
+          other: "%{amount}/mois (environ %{count} SMS)" # MT
+        organization: "Votre organisation" # MT
+        organization_hint: "Les opérateurs comparent ces informations aux registres de l'IRS (le fisc américain) : saisissez-les donc exactement comme elles figurent sur les documents fiscaux de votre communauté." # MT
+        campaign: "Ce que nous enregistrerons" # MT
+        campaign_hint: "Voici le programme SMS que nous enregistrerons pour votre communauté, dans les termes que les opérateurs examineront. Gather le rédige, vous n'avez donc pas besoin de le modifier." # MT
+        campaign_description: "Description" # MT
+        message_flow: "Comment les membres s'inscrivent" # MT
+        sample: "Exemple de message %{number}" # MT
+        help_reply: "Réponse à HELP" # MT
+        opt_out_reply: "Réponse à STOP" # MT
+        payment: "Paiement" # MT
+        payment_summary: "Aujourd'hui, nous débiterons votre moyen de paiement Gather de %{setup_fee} pour la mise en service plus le forfait de votre premier mois, puis de votre forfait chaque mois." # MT
+        accept_fees: "Je comprends que les frais de mise en service de %{setup_fee} ne sont pas remboursables, même si les opérateurs n'approuvent pas l'enregistrement." # MT
+        submit: "Configurer et payer" # MT
+      create:
+        success: "Merci ! Nous enregistrons votre communauté auprès des opérateurs. Cette page indique où en est la démarche." # MT

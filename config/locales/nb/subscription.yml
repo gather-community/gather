@@ -32,6 +32,8 @@ nb:
     messaging_transactions:
       credit: "Månedlig påfylling for meldinger" # MT
       reversal: "Tilbakeføring av påfylling for meldinger som ikke ble betalt" # MT
+      setup_credit: "Oppstartsbetaling for SMS" # MT
+      setup_reversal: "Tilbakeføring av oppstartsbetaling for SMS som ikke ble betalt" # MT
     # e.g. "$5.00/month"
     per_month: "%{amount}/måned" # MT
     every_months:
@@ -94,6 +96,7 @@ nb:
         add: "Legg til" # MT
         next_payment_date: "Neste betalingsdato" # MT
         status: "Status" # MT
+        set_up_texting: "Sett opp SMS" # MT
       messaging_topup_modal:
         title: "Månedlig påfylling for meldinger" # MT
         intro: "Velg hvor mye meldingskreditt som skal legges til saldoen din hver måned. Den lagrede betalingsmåten din blir belastet automatisk." # MT

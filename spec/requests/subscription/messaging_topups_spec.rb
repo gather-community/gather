@@ -30,6 +30,8 @@ describe "messaging topup requests" do
 
   before do
     create(:feature_flag, name: "messaging", status: true)
+    # Changing the package is only possible once texting has been set up.
+    create(:messaging_registration, :paid, community: community)
     use_user_subdomain(actor)
     sign_in(actor)
     allow(Stripe::Subscription).to receive(:retrieve).and_return(fake_main_sub)

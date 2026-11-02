@@ -13,6 +13,21 @@
 nl:
   activemodel:
     attributes:
+      # Messaging::SetupForm, which takes Messaging::Registration's model name.
+      messaging/registration:
+        package_cents: "Maandpakket" # MT
+        legal_name: "Officiële naam" # MT
+        display_name: "Naam waaronder mensen jullie kennen" # MT
+        entity_type: "Soort organisatie" # MT
+        ein: "EIN" # MT
+        street: "Adres" # MT
+        city: "Plaats" # MT
+        state: "Staat" # MT
+        postal_code: "Postcode (ZIP)" # MT
+        email: "Contact-e-mail" # MT
+        phone: "Contacttelefoon" # MT
+        website: "Website" # MT
+        accept_fees: "Instelkosten" # MT
       # EventletForm (drag-and-drop), for its error messages.
       calendars/eventlet:
         starts_at: "Begintijd" # MT
@@ -38,6 +53,15 @@ nl:
         repeat_count: "Aantal keer" # MT
     errors:
       models:
+        # Messaging::SetupForm, which takes Messaging::Registration's model name.
+        messaging/registration:
+          attributes:
+            base:
+              payment_failed: "Je betaling is niet gelukt: %{reason}" # MT
+            ein:
+              invalid: "moet uit 9 cijfers bestaan, zoals 12-3456789" # MT
+            postal_code:
+              invalid: "moet een postcode (ZIP) van 5 cijfers zijn" # MT
         # EventForm, which takes Calendars::Event's model name.
         calendars/event:
           attributes:

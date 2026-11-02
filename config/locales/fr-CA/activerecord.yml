@@ -11,6 +11,10 @@
 # See "Translations" in CLAUDE.md for the rest.
 # ======================================================================================================
 fr-CA:
+  activemodel:
+    attributes:
+      "messaging/registration":
+        email: "Courriel de contact" # MT
   activerecord:
     attributes:
       user:

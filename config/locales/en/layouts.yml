@@ -20,6 +20,7 @@ en:
       settings: "Settings"
       subscription: "Subscription"
       billing: "Billing"
+      texting: "Texting"
       communities: "Communities"
       resync_subscriptions: "Resync subscriptions"
       domains: "Domains"

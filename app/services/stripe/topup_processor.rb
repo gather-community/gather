@@ -81,7 +81,7 @@ module Stripe
     def post_transaction(account, line, delta)
       account.transactions.create!(
         amount_cents: delta,
-        description: I18n.t("subscription.messaging_transactions.#{delta.positive? ? "credit" : "reversal"}"),
+        description: transaction_description(line, delta),
         stripe_invoice_line_item_id: line.id,
         stripe_event_id: event&.id
       )
@@ -91,6 +91,14 @@ module Stripe
         description: delta.positive? ? "Credited messaging topup" : "Clawed back messaging topup",
         amount_cents: delta, line_item: line.id
       )
+    end
+
+    # The texting setup fee is a one-time invoice item on the topup's first invoice (see
+    # MessagingTopupManager#start_with_setup!); every other topup line is the monthly subscription item.
+    def transaction_description(line, delta)
+      parent = line.respond_to?(:parent) ? line.parent : nil
+      prefix = (parent&.type == "invoice_item_details") ? "setup_" : ""
+      I18n.t("subscription.messaging_transactions.#{prefix}#{delta.positive? ? "credit" : "reversal"}")
     end
 
     def topup_lines

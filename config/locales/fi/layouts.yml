@@ -32,6 +32,7 @@ fi:
       settings: "Asetukset" # MT
       subscription: "Tilaus" # MT
       billing: "Laskutus" # MT
+      texting: "Tekstiviestit" # MT
       communities: "Yhteisöt" # MT
       resync_subscriptions: "Synkronoi tilaukset uudelleen" # MT
       domains: "Verkkotunnukset" # MT

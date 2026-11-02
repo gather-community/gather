@@ -1,0 +1,41 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+fr-CA:
+  messaging:
+    fees:
+      campaign_review: "Examen de votre programme de textos par les opérateurs" # MT
+      campaign_prepaid: "Frais du programme de textos, 3 premiers mois" # MT
+    registration_explanations:
+      draft: "Votre paiement de mise en service n'a pas abouti. Essayez à nouveau de configurer les textos." # MT
+      campaign_pending: "Les opérateurs examinent votre programme de textos. Cela prend généralement de 1 à 3 semaines. Nous vous enverrons un courriel une fois l'examen terminé." # MT
+      approved: "Les opérateurs ont approuvé votre programme de textos." # MT
+    settings:
+      show:
+        title: "Textos" # MT
+        not_set_up: "Les textos permettent à votre communauté d'envoyer des messages au sujet des repas, des quarts de travail et des groupes. Ils ne sont pas encore configurés." # MT
+        set_up: "Configurer les textos" # MT
+        unsupported: "Les textos ne sont disponibles pour l'instant que pour les communautés situées aux États-Unis." # MT
+        no_subscription_html: "Pour configurer les textos, votre communauté doit avoir un abonnement Gather actif avec un moyen de paiement. Rendez-vous sur la %{link} pour en ajouter un." # MT
+        topup_exists_html: "Votre communauté a déjà un forfait mensuel de messagerie. Supprimez-le sur la %{link} avant de configurer les textos, puis choisissez-en un nouveau pendant la configuration." # MT
+    setups:
+      new:
+        title: "Configurer les textos" # MT
+        intro: "Les opérateurs américains exigent que toute organisation qui envoie des textos s'enregistre au préalable. Gather enregistre votre communauté pour vous à l'aide des informations ci-dessous et débite votre moyen de paiement Gather des frais des opérateurs et de votre premier mois de textos." # MT
+        per_100_texts: "Textos" # MT
+        per_100: "%{amount} les 100 (un texto envoyé à 20 personnes compte pour 20)" # MT
+        costs_hint: "Il s'agit des frais des opérateurs et de notre fournisseur de textos, refacturés à prix coûtant. Les frais de mise en service ne sont pas remboursables, même si les opérateurs n'approuvent pas votre enregistrement." # MT
+        package_hint: "Votre forfait est facturé chaque mois et ajouté à votre solde de messagerie. Des coûts fixes de %{fixed} en sont déduits chaque mois, et le reste paie les textos." # MT
+        package_option:
+          one: "%{amount}/mois (environ %{count} texto)" # MT
+          other: "%{amount}/mois (environ %{count} textos)" # MT
+        campaign_hint: "Voici le programme de textos que nous enregistrerons pour votre communauté, dans les termes que les opérateurs examineront. Gather le rédige, vous n'avez donc pas besoin de le modifier." # MT

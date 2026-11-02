@@ -147,6 +147,39 @@ describe Subscription::MessagingTopupManager do
     end
   end
 
+  describe "#start_with_setup!" do
+    before do
+      allow(Stripe::Price).to receive(:list).and_return(double(data: []))
+      allow(Stripe::Price).to receive(:create).and_return(price)
+    end
+
+    it "creates the monthly subscription with the setup fee as a one-time item on the first invoice" do
+      invoice = double("invoice", id: "in_setup")
+      expect(Stripe::Subscription).to receive(:create).with(hash_including(
+        items: [{price: "price_1"}],
+        add_invoice_items: [{price_data: {currency: "usd", product: Messaging::Account::PRODUCT_ID,
+                                          unit_amount: 2400}}],
+        payment_behavior: "error_if_incomplete"
+      )).and_return(double(id: "sub_topup_new", latest_invoice: invoice))
+      expect(manager.start_with_setup!(500, setup_cents: 2400)).to eq(invoice)
+      expect(community.reload.messaging_topup.stripe_id).to eq("sub_topup_new")
+    end
+
+    it "doesn't send add_invoice_items at all for a plain topup" do
+      expect(Stripe::Subscription).to receive(:create) do |**params|
+        expect(params).not_to have_key(:add_invoice_items)
+        double(id: "sub_topup_new", latest_invoice: double("invoice", id: "in_x"))
+      end
+      manager.set_amount!(500)
+    end
+
+    it "refuses when the community already has a topup" do
+      create(:messaging_topup, community: community, stripe_id: "sub_old")
+      allow_any_instance_of(Subscription::MessagingTopup).to receive(:reap_if_canceled!).and_return(false)
+      expect { manager.start_with_setup!(500, setup_cents: 2400) }.to raise_error(ArgumentError)
+    end
+  end
+
   describe "#cancel!" do
     it "schedules cancellation at period end" do
       create(:messaging_topup, community: community, stripe_id: "sub_topup_x")

@@ -1,0 +1,81 @@
+# The 10DLC campaign Gather registers for each US community with The Campaign Registry (TCR), through
+# Telnyx. Carrier reviewers read this, in English, whatever language the admin who submits it uses, so it
+# lives here rather than in the locale files. The setup page shows it word for word.
+#
+# Every community runs the same product, so Gather writes this rather than the admin: wording that has
+# passed review once will pass again, and each rejection costs the community another review fee.
+#
+# Placeholders, filled in by Messaging::CampaignTemplate:
+#   %{community}   the community's name, e.g. "Sunny Hill Cohousing"
+#   %{program}     the program name members see when they opt in, e.g. "Sunny Hill Cohousing texts"
+#   %{opt_in_url}  the community's opt-in page
+#   %{screenshot_url}  a public screenshot of the opt-in page (reviewers can't sign in)
+#   %{sample_url}  an example meal link in the community, for the sample messages
+#   %{privacy_url} Gather's Privacy Policy
+#
+# Telnyx limits: samples and help_message at most 255 characters, message_flow at most 2048, and
+# auto-replies at least 20. Messaging::CampaignTemplate checks these when it renders.
+#
+# Changing what this says changes what members consented to. Bump `version` whenever the message types
+# or the opt-in flow described here change; it's recorded with each consent.
+version: 1
+
+usecase: LOW_VOLUME
+
+description: >-
+  %{community} is a residential cooperative community that uses Gather, a community management
+  platform, to organize shared meals, work shifts and community groups. Residents who opt in receive
+  text messages from the community: reminders and updates about meals they've signed up for or are
+  cooking, reminders about work shifts they've signed up for, and short messages that community
+  members send to groups they belong to. Messages go only to residents of %{community} who have opted
+  in, and are never marketing.
+
+message_flow: >-
+  Residents opt in on a page in their community's Gather site (%{opt_in_url}), reached from their
+  notification preferences page or from a group's page. Only signed-in, verified residents of
+  %{community} can reach it. The page explains the program (%{program}), the types of messages sent,
+  that message frequency varies, that message and data rates may apply, that they can reply HELP for
+  help and STOP to cancel, and links to the Privacy Policy (%{privacy_url}). The resident checks an
+  unchecked box agreeing to receive texts and confirms their mobile number, and we text them a code
+  they enter to verify the number. That text also confirms the opt-in. Consent is never a condition of
+  using Gather, and mobile numbers are never shared with third parties for marketing. Screenshot of the
+  opt-in page: %{screenshot_url}
+
+samples:
+  - >-
+    %{program}: Reminder: you're signed up for the community dinner tonight at 6:30pm. Reply STOP to
+    opt out. Details: %{sample_url}
+  - >-
+    %{program}: Reminder: your work shift "Kitchen cleanup" starts tomorrow at 10:00am. Reply STOP
+    to opt out.
+  - >-
+    %{program} (Garden Group, from Pat Lee): Seedlings arrived! Please pick yours up from the
+    greenhouse by Saturday.
+
+# Telnyx sends this automatically when someone texts START. (The verification code sent from the
+# opt-in page is a separate text, written in Gather, that carries the same disclosures.)
+opt_in_message: >-
+  %{program}: You're subscribed to texts about meals, work shifts and community groups. Msg
+  frequency varies. Msg & data rates may apply. Reply HELP for help, STOP to cancel.
+
+# No community URL here: with the longest slug it would push this past Telnyx's 255 characters.
+help_message: >-
+  %{program}: Texts about meals, work shifts and groups from your community on Gather. Help:
+  info@gather.coop. Msg & data rates may apply. Reply STOP to cancel.
+
+opt_out_message: >-
+  %{program}: You're unsubscribed and won't get any more texts. Reply START to resubscribe.
+
+opt_in_keywords: START
+opt_out_keywords: STOP,UNSUBSCRIBE,CANCEL,END,QUIT,STOPALL
+help_keywords: HELP,INFO
+
+embedded_link: true
+embedded_phone: false
+number_pool: false
+age_gated: false
+direct_lending: false
+terms_and_conditions: true
+subscriber_opt_in: true
+subscriber_opt_out: true
+subscriber_help: true

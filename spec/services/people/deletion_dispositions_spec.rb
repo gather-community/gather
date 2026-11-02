@@ -113,6 +113,7 @@ describe "deletion dispositions", :without_tenant do
     "Meals::SignupPart" => :none,
     "Meals::Type" => :none,
     "Messaging::Account" => :none,
+    "Messaging::Registration" => :none,
     "Messaging::Transaction" => {creator_id: :nullify},
     "People::EmergencyContact" => :none,
     "People::Guardianship" => :destroy,

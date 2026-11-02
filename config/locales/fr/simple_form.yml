@@ -82,6 +82,12 @@ fr:
       wiki_page:
         comment: "Un commentaire sur cette modification." # MT
     hints:
+      messaging_registration:
+        legal_name: "Exactement comme enregistré auprès de l'IRS." # MT
+        display_name: "Le nom sous lequel votre communauté est connue, s'il diffère de la raison sociale." # MT
+        ein: "Le numéro d'identification d'employeur (Employer Identification Number) à 9 chiffres de votre communauté, attribué par l'IRS (le fisc américain)." # MT
+        email: "Les opérateurs peuvent contacter cette adresse au sujet de l'enregistrement." # MT
+        website: "Le site web de votre communauté, ou son adresse Gather." # MT
       markdown_suffix_html: "Vous pouvez utiliser une <a href='/about/markdown' target='_new'>mise en forme enrichie</a>." # MT
       communities_signup:
         community_name: "20 caractères maximum." # MT
@@ -206,6 +212,11 @@ fr:
         round_duration: "Quelle doit être la durée de chaque tour ? Il faut juste assez de temps pour qu'une personne moyenne choisisse tranquillement." # MT
         job_copy_source_id: "Si vous le souhaitez, choisissez une période dont les tâches seront copiées à la création. Les tâches de repas ne seront pas copiées et doivent plutôt être synchronisées (voir ci-dessous)." # MT
     options:
+      messaging_registration:
+        entity_type:
+          NON_PROFIT: "Organisme à but non lucratif" # MT
+          PRIVATE_PROFIT: "Entreprise privée (y compris les coopératives et les LLC)" # MT
+          GOVERNMENT: "Administration publique" # MT
       calendars_event:
         repeat_frequency:
           none: "Jamais" # MT

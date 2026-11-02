@@ -68,6 +68,9 @@ it:
       settings: "Impostazioni" # MT
     admin:
       _self: "Admin" # MT
+    messaging:
+      _self: "SMS" # MT
+      settings: "Impostazioni" # MT
     billing:
       _self: "Fatturazione" # MT
       accounts: "Conti" # MT

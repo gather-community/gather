@@ -71,6 +71,14 @@ module Nav
         icon: "dollar",
         display: :mobile
       )
+      # Reached from the footer, so never shown in the main menu. Its pages still get a subnav.
+      items << customizer.filter_item(
+        name: :messaging,
+        path: h.messaging_settings_path,
+        permitted: messaging_permitted?,
+        icon: "comment",
+        display: :none
+      )
 
       # Add all the new menu items defined as customizations
       items.concat(customizer.extra_items).compact!
@@ -277,6 +285,16 @@ module Nav
               icon: "copy"
             }
           ]
+        when :messaging
+          [
+            {
+              name: :settings,
+              parents: :messaging,
+              path: h.messaging_settings_path,
+              permitted: messaging_permitted?,
+              icon: "gear"
+            }
+          ]
         when :wiki
           sample_wiki_page = Wiki::Page.new(community: community)
           [
@@ -450,6 +468,13 @@ module Nav
     end
 
     private
+
+    # Texting pages: admins, while the feature is behind its flag.
+    def messaging_permitted?
+      community.present? && h.current_user.present? &&
+        FeatureFlag.lookup("messaging").on?(h.current_user) &&
+        Messaging::MessagingPolicy.new(h.current_user, community).administer?
+    end
 
     def user
       h.current_user

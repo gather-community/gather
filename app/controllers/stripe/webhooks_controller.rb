@@ -37,6 +37,7 @@ module Stripe
       case object.object
       when "invoice"
         reconcile_topup(event, object)
+        ::Messaging::Registration.payment_settled(object.id) if event.type == "invoice.paid"
         enqueue_sync(InvoiceFields.subscription_id(object))
       when "subscription"
         reap_ended_topup(object.id) if event.type == "customer.subscription.deleted"

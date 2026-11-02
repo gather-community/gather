@@ -13,6 +13,21 @@
 sv:
   activemodel:
     attributes:
+      # Messaging::SetupForm, which takes Messaging::Registration's model name.
+      messaging/registration:
+        package_cents: "Månadspaket" # MT
+        legal_name: "Juridiskt namn" # MT
+        display_name: "Namn som folk känner er under" # MT
+        entity_type: "Typ av organisation" # MT
+        ein: "EIN" # MT
+        street: "Gatuadress" # MT
+        city: "Ort" # MT
+        state: "Delstat" # MT
+        postal_code: "Postnummer (ZIP)" # MT
+        email: "Kontakt-e-post" # MT
+        phone: "Kontakttelefon" # MT
+        website: "Webbplats" # MT
+        accept_fees: "Startavgift" # MT
       # EventletForm (drag-and-drop), for its error messages.
       calendars/eventlet:
         starts_at: "Starttid" # MT
@@ -38,6 +53,15 @@ sv:
         repeat_count: "Antal gånger" # MT
     errors:
       models:
+        # Messaging::SetupForm, which takes Messaging::Registration's model name.
+        messaging/registration:
+          attributes:
+            base:
+              payment_failed: "Din betalning gick inte igenom: %{reason}" # MT
+            ein:
+              invalid: "måste vara 9 siffror, till exempel 12-3456789" # MT
+            postal_code:
+              invalid: "måste vara ett femsiffrigt postnummer (ZIP)" # MT
         # EventForm, which takes Calendars::Event's model name.
         calendars/event:
           attributes:

@@ -34,6 +34,7 @@ describe Utils::Generators::MainGenerator, :without_tenant, :perform_jobs do
     Meals::Import
     Meals::Message
     Messaging::Account
+    Messaging::Registration
     Messaging::Transaction
     People::MemberType
     Subscription::Subscription
@@ -49,7 +50,7 @@ describe Utils::Generators::MainGenerator, :without_tenant, :perform_jobs do
   ].freeze
 
   before do
-    FileUtils.rm_rf(Rails.root.join("public", "system", "test"))
+    FileUtils.rm_rf(Rails.public_path.join("system/test"))
   end
 
   it "should run and destroy cleanly with sample data and no photos (runs faster)" do
@@ -84,7 +85,7 @@ describe Utils::Generators::MainGenerator, :without_tenant, :perform_jobs do
   end
 
   it "should generate and destroy photos" do
-    cluster = nil
+    nil
     main = described_class.new(cmty_name: "Foo Community", slug: "foo", sample_data: true, photos: true)
     cluster = main.generate
 

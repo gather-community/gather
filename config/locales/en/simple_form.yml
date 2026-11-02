@@ -76,6 +76,12 @@ en:
       wiki_page:
         comment: "A comment about this change."
     hints:
+      messaging_registration:
+        legal_name: "Exactly as registered with the IRS."
+        display_name: "The name your community goes by, if it's different from the legal name."
+        ein: "Your community's 9-digit Employer Identification Number, from the IRS."
+        email: "The carriers may contact this address about the registration."
+        website: "Your community's website, or its Gather address."
       markdown_suffix_html: "You can use <a href='/about/markdown' target='_new'>rich formatting</a>."
       communities_signup:
         community_name: "Up to 20 characters."
@@ -200,6 +206,11 @@ en:
         round_duration: "How long should each round be? There should be just enough time for an average person to choose comfortably."
         job_copy_source_id: "Choose a period from which to copy jobs upon period creation, if desired. Meal jobs will not be copied and should be sync'd instead (see below)."
     options:
+      messaging_registration:
+        entity_type:
+          NON_PROFIT: "Nonprofit"
+          PRIVATE_PROFIT: "Private company (including co-ops and LLCs)"
+          GOVERNMENT: "Government"
       calendars_event:
         repeat_frequency:
           none: "Never"

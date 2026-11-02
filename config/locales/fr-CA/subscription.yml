@@ -12,8 +12,13 @@
 # ======================================================================================================
 fr-CA:
   subscription:
+    messaging_transactions:
+      setup_credit: "Paiement de mise en service des textos" # MT
+      setup_reversal: "Annulation d'un paiement de mise en service des textos non encaissé" # MT
     subscriptions:
       show:
         check_email: "Consultez vos courriels pour les instructions, puis revenez ici une fois la vérification terminée." # MT
       email_row:
         billing_email: "Courriel de facturation" # MT
+      messaging:
+        set_up_texting: "Configurer les textos" # MT

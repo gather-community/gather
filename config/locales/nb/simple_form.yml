@@ -88,6 +88,12 @@ nb:
       wiki_page:
         comment: "En kommentar om denne endringen." # MT
     hints:
+      messaging_registration:
+        legal_name: "Nøyaktig slik det er registrert hos IRS." # MT
+        display_name: "Navnet fellesskapet ditt er kjent under, hvis det er forskjellig fra det juridiske navnet." # MT
+        ein: "Fellesskapets nisifrede Employer Identification Number (organisasjonsnummer) fra IRS (de amerikanske skattemyndighetene)." # MT
+        email: "Operatørene kan kontakte denne adressen om registreringen." # MT
+        website: "Fellesskapets nettsted, eller Gather-adressen." # MT
       markdown_suffix_html: "Du kan bruke <a href='/about/markdown' target='_new'>formatering</a>." # MT
       communities_signup:
         community_name: "Opptil 20 tegn." # MT
@@ -212,6 +218,11 @@ nb:
         round_duration: "Hvor lang skal hver runde være? Det bør være akkurat nok tid til at en gjennomsnittlig person kan velge i ro og mak." # MT
         job_copy_source_id: "Velg eventuelt en periode du vil kopiere oppgaver fra når perioden opprettes. Måltidsoppgaver blir ikke kopiert og bør synkroniseres i stedet (se nedenfor)." # MT
     options:
+      messaging_registration:
+        entity_type:
+          NON_PROFIT: "Ideell organisasjon" # MT
+          PRIVATE_PROFIT: "Privat selskap (inkludert samvirker og LLC-er)" # MT
+          GOVERNMENT: "Offentlig myndighet" # MT
       calendars_event:
         repeat_frequency:
           none: "Aldri" # MT

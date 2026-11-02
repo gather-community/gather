@@ -22,3 +22,7 @@ email:
 # Fake key so specs exercise the configured path; HTTP is stubbed with WebMock.
 smtp2go:
   api_key: api-testkey00000000000000000000000
+telnyx:
+  api_key: KEYtest00000000000000000000
+messaging:
+  opt_in_screenshot_url: https://example.com/sms-opt-in.png

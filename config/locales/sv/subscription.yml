@@ -31,6 +31,8 @@ sv:
     messaging_transactions:
       credit: "Månatlig påfyllning för meddelanden" # MT
       reversal: "Återföring av en påfyllning för meddelanden som inte betalades" # MT
+      setup_credit: "Startbetalning för sms" # MT
+      setup_reversal: "Återföring av en startbetalning för sms som inte betalades" # MT
     per_month: "%{amount}/månad" # MT
     every_months:
       one: "%{amount} var %{count}:e månad" # MT
@@ -90,6 +92,7 @@ sv:
         add: "Lägg till" # MT
         next_payment_date: "Nästa betalning" # MT
         status: "Status" # MT
+        set_up_texting: "Konfigurera sms" # MT
       messaging_topup_modal:
         title: "Månatlig påfyllning för meddelanden" # MT
         intro: "Välj hur mycket meddelandesaldo som ska fyllas på varje månad. Din sparade betalningsmetod debiteras automatiskt." # MT

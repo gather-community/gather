@@ -1,0 +1,82 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+nl:
+  messaging:
+    # Ledger descriptions for the setup fees, debited as Telnyx charges them.
+    fees:
+      brand_registration: "Registratie van je organisatie bij de providers" # MT
+      campaign_review: "Beoordeling van je sms-programma door de providers" # MT
+      campaign_prepaid: "Kosten sms-programma, eerste 3 maanden" # MT
+    registration_statuses:
+      draft: "Niet betaald" # MT
+      awaiting_payment: "Wacht op betaling" # MT
+      submitting: "Wordt ingediend" # MT
+      brand_pending: "Je organisatie wordt geverifieerd" # MT
+      campaign_pending: "In beoordeling bij de providers" # MT
+      approved: "Goedgekeurd" # MT
+      failed: "Afgewezen" # MT
+    registration_explanations:
+      draft: "Je betaling voor het instellen is niet gelukt. Probeer sms opnieuw in te stellen." # MT
+      awaiting_payment: "We registreren je gemeenschap bij de providers zodra je betaling binnen is." # MT
+      submitting: "Je betaling is gelukt en we sturen je registratie naar de providers." # MT
+      brand_pending: "We hebben je organisatie bij de providers geregistreerd en zij verifiëren die nu. Dit duurt meestal een paar minuten, maar kan een dag of twee duren." # MT
+      campaign_pending: "De providers beoordelen je sms-programma. Dit duurt meestal 1 tot 3 weken. We sturen je een e-mail als ze klaar zijn." # MT
+      approved: "De providers hebben je sms-programma goedgekeurd." # MT
+      failed: "De providers hebben je registratie niet goedgekeurd. Neem contact op met Gather-support, dan lossen we het op." # MT
+    settings:
+      show:
+        title: "Sms" # MT
+        status: "Status" # MT
+        failure_reason: "Reden" # MT
+        organization: "Organisatie" # MT
+        entity_type: "Type" # MT
+        submitted_on: "Ingediend" # MT
+        approved_on: "Goedgekeurd" # MT
+        balance: "Berichtentegoed" # MT
+        not_set_up: "Met sms kan je gemeenschap berichten sturen over maaltijden, diensten en groepen. Het is nog niet ingesteld." # MT
+        set_up: "Sms instellen" # MT
+        unsupported: "Sms is voorlopig alleen beschikbaar voor gemeenschappen in de VS." # MT
+        no_subscription_html: "Om sms in te stellen heeft je gemeenschap een actief Gather-abonnement met een betaalmethode nodig. Ga naar de %{link} om er een toe te voegen." # MT
+        topup_exists_html: "Je gemeenschap heeft al een maandelijks berichtenpakket. Verwijder het op de %{link} voordat je sms instelt, en kies tijdens het instellen een nieuw pakket." # MT
+        subscription_page: "abonnementspagina" # MT
+    setups:
+      new:
+        title: "Sms instellen" # MT
+        intro: "Amerikaanse providers eisen dat elke organisatie die sms'jes verstuurt zich eerst registreert. Gather registreert je gemeenschap voor je met de gegevens hieronder en brengt de kosten van de providers en je eerste maand sms in rekening bij je Gather-betaalmethode." # MT
+        costs: "Wat het kost" # MT
+        setup_fee: "Instelkosten (eenmalig)" # MT
+        monthly_fixed: "Vaste maandelijkse kosten (programmakosten en telefoonnummer)" # MT
+        per_month: "%{amount}/maand" # MT
+        per_100_texts: "Sms" # MT
+        per_100: "%{amount} per 100 (een sms aan 20 personen telt als 20)" # MT
+        costs_hint: "Dit zijn de kosten van de providers en van onze sms-dienst, die we tegen kostprijs doorberekenen. De instelkosten worden niet terugbetaald, ook niet als de providers je registratie niet goedkeuren." # MT
+        package: "Maandpakket" # MT
+        package_hint: "Je pakket wordt elke maand in rekening gebracht en bij je berichtentegoed opgeteld. Elke maand gaat er %{fixed} aan vaste kosten af, en de rest betaalt de sms'jes." # MT
+        package_option:
+          one: "%{amount}/maand (ongeveer %{count} sms)" # MT
+          other: "%{amount}/maand (ongeveer %{count} sms'jes)" # MT
+        organization: "Je organisatie" # MT
+        organization_hint: "De providers controleren deze gegevens aan de hand van de gegevens van de IRS (de Amerikaanse belastingdienst), dus vul ze precies zo in als ze in de belastingdocumenten van je gemeenschap staan." # MT
+        campaign: "Wat we registreren" # MT
+        campaign_hint: "Dit is het sms-programma dat we voor je gemeenschap registreren, in de bewoording die de providers beoordelen. Gather schrijft het, dus je hoeft het niet aan te passen." # MT
+        campaign_description: "Beschrijving" # MT
+        message_flow: "Hoe leden zich aanmelden" # MT
+        sample: "Voorbeeldbericht %{number}" # MT
+        help_reply: "Antwoord op HELP" # MT
+        opt_out_reply: "Antwoord op STOP" # MT
+        payment: "Betaling" # MT
+        payment_summary: "We brengen vandaag %{setup_fee} voor het instellen plus het pakket van je eerste maand in rekening bij je Gather-betaalmethode, en daarna elke maand je pakket." # MT
+        accept_fees: "Ik begrijp dat de instelkosten van %{setup_fee} niet worden terugbetaald, ook niet als de providers de registratie niet goedkeuren." # MT
+        submit: "Instellen en betalen" # MT
+      create:
+        success: "Bedankt! We registreren je gemeenschap bij de providers. Op deze pagina zie je hoe het ervoor staat." # MT

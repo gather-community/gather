@@ -225,7 +225,7 @@ describe Subscription::Subscription do
     end
   end
 
-  describe "#messaging_topup_editable?" do
+  describe "#messaging_chargeable?" do
     let(:sub) { create(:subscription) }
 
     def stub_stripe(default_pm:, customer_pm: nil, status: "active", invoice: double("invoice"))
@@ -236,33 +236,57 @@ describe Subscription::Subscription do
 
     it "is true when the payment method is saved on the subscription itself" do
       stub_stripe(default_pm: "pm_1")
-      expect(sub.messaging_topup_editable?).to be(true)
+      expect(sub.messaging_chargeable?).to be(true)
     end
 
     it "falls back to the customer's invoice-settings default payment method" do
       stub_stripe(default_pm: nil, customer_pm: "pm_2")
-      expect(sub.messaging_topup_editable?).to be(true)
+      expect(sub.messaging_chargeable?).to be(true)
     end
 
     it "is false with no saved payment method anywhere" do
       stub_stripe(default_pm: nil, customer_pm: nil)
-      expect(sub.messaging_topup_editable?).to be(false)
+      expect(sub.messaging_chargeable?).to be(false)
     end
 
     it "is false for a future-dated (no-invoice) subscription" do
       stub_stripe(default_pm: "pm_1", invoice: nil)
-      expect(sub.messaging_topup_editable?).to be(false)
+      expect(sub.messaging_chargeable?).to be(false)
     end
 
     it "is false when the subscription is not active" do
       stub_stripe(default_pm: "pm_1", status: "past_due")
-      expect(sub.messaging_topup_editable?).to be(false)
+      expect(sub.messaging_chargeable?).to be(false)
     end
 
     it "is false when we can't send SMS to the community's country" do
       sub.community.update_column(:country_code, "FR")
       stub_stripe(default_pm: "pm_1")
+      expect(sub.messaging_chargeable?).to be(false)
+    end
+  end
+
+  describe "#messaging_topup_editable?" do
+    let(:sub) { create(:subscription) }
+
+    before do
+      sub.stripe_sub = double("Stripe::Subscription", status: "active", latest_invoice: double("invoice"),
+        default_payment_method: "pm_1",
+        customer: double(invoice_settings: double(default_payment_method: nil)))
+    end
+
+    it "is false until texting has been set up" do
       expect(sub.messaging_topup_editable?).to be(false)
+    end
+
+    it "is false while the setup is unpaid" do
+      create(:messaging_registration, community: sub.community)
+      expect(sub.messaging_topup_editable?).to be(false)
+    end
+
+    it "is true once setup is paid" do
+      create(:messaging_registration, :paid, community: sub.community)
+      expect(sub.messaging_topup_editable?).to be(true)
     end
   end
 end

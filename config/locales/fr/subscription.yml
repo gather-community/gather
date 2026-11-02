@@ -31,6 +31,8 @@ fr:
     messaging_transactions:
       credit: "Recharge mensuelle de messagerie" # MT
       reversal: "Annulation d'une recharge de messagerie non encaissée" # MT
+      setup_credit: "Paiement de mise en service des SMS" # MT
+      setup_reversal: "Annulation d'un paiement de mise en service des SMS non encaissé" # MT
     per_month: "%{amount}/mois" # MT
     every_months:
       one: "%{amount} tous les %{count} mois" # MT
@@ -90,6 +92,7 @@ fr:
         add: "Ajouter" # MT
         next_payment_date: "Date du prochain paiement" # MT
         status: "État" # MT
+        set_up_texting: "Configurer les SMS" # MT
       messaging_topup_modal:
         title: "Recharge mensuelle de messagerie" # MT
         intro: "Choisissez le montant de crédit de messagerie à ajouter à votre solde chaque mois. Votre moyen de paiement enregistré est débité automatiquement." # MT

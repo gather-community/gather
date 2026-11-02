@@ -68,6 +68,9 @@ fi:
       settings: "Asetukset" # MT
     admin:
       _self: "Ylläpito" # MT
+    messaging:
+      _self: "Tekstiviestit" # MT
+      settings: "Asetukset" # MT
     billing:
       _self: "Laskutus" # MT
       accounts: "Tilit" # MT

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_25_180000) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_02_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -902,6 +902,40 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_25_180000) do
     t.index ["community_id"], name: "index_messaging_accounts_on_community_id", unique: true
   end
 
+  create_table "messaging_registrations", force: :cascade do |t|
+    t.bigint "cluster_id", null: false
+    t.bigint "community_id", null: false
+    t.string "status", limit: 20, default: "draft", null: false
+    t.string "legal_name", limit: 100, null: false
+    t.string "display_name", limit: 100, null: false
+    t.string "entity_type", limit: 20, null: false
+    t.string "ein", null: false
+    t.string "street", limit: 100, null: false
+    t.string "city", limit: 100, null: false
+    t.string "state", limit: 2, null: false
+    t.string "postal_code", limit: 10, null: false
+    t.string "email", limit: 100, null: false
+    t.string "phone", limit: 20, null: false
+    t.string "website", limit: 100
+    t.integer "campaign_version"
+    t.string "stripe_invoice_id"
+    t.string "telnyx_brand_id"
+    t.string "telnyx_campaign_id"
+    t.string "brand_identity_status"
+    t.string "campaign_status"
+    t.text "failure_reason"
+    t.datetime "paid_at"
+    t.datetime "submitted_at"
+    t.datetime "approved_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cluster_id"], name: "index_messaging_registrations_on_cluster_id"
+    t.index ["community_id"], name: "index_messaging_registrations_on_community_id", unique: true
+    t.index ["stripe_invoice_id"], name: "index_messaging_registrations_on_stripe_invoice_id", unique: true
+    t.check_constraint "entity_type::text = ANY (ARRAY['PRIVATE_PROFIT'::character varying, 'NON_PROFIT'::character varying, 'GOVERNMENT'::character varying]::text[])", name: "messaging_registrations_entity_type"
+    t.check_constraint "status::text = ANY (ARRAY['draft'::character varying, 'awaiting_payment'::character varying, 'brand_pending'::character varying, 'campaign_pending'::character varying, 'approved'::character varying, 'failed'::character varying]::text[])", name: "messaging_registrations_status"
+  end
+
   create_table "messaging_transactions", force: :cascade do |t|
     t.bigint "cluster_id", null: false
     t.bigint "account_id", null: false
@@ -1518,6 +1552,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_25_180000) do
   add_foreign_key "meals", "users", column: "creator_id"
   add_foreign_key "messaging_accounts", "clusters"
   add_foreign_key "messaging_accounts", "communities"
+  add_foreign_key "messaging_registrations", "clusters"
+  add_foreign_key "messaging_registrations", "communities"
   add_foreign_key "messaging_transactions", "clusters"
   add_foreign_key "messaging_transactions", "messaging_accounts", column: "account_id"
   add_foreign_key "messaging_transactions", "users", column: "creator_id"

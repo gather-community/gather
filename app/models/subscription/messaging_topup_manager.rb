@@ -71,6 +71,23 @@ module Subscription
       invoice
     end
 
+    # Starts the monthly topup at `cents` with a one-time `setup_cents` charge on the same first invoice,
+    # so setting up texting is one charge with one decline path. Both lines are under the messaging
+    # product, so Stripe::TopupProcessor credits both to the wallet; the setup fees are then debited from
+    # it as Telnyx charges them (see Messaging::RegistrationSubmitter), which keeps every fee in the
+    # ledger. Only for a community with no topup yet. Returns the finalized first invoice.
+    def start_with_setup!(cents, setup_cents:)
+      raise ArgumentError, "community already has a messaging topup" if topup
+      price = find_or_create_price(cents, community.currency)
+      setup_item = {price_data: {currency: community.currency, product: Messaging::Account::PRODUCT_ID,
+                                 unit_amount: setup_cents}}
+      invoice = create_subscription(price, add_invoice_items: [setup_item])
+      EventLog.emit(event_name: "topup_set", community_id: community.id,
+        description: "Started monthly messaging topup with setup fee", amount_cents: cents,
+        setup_cents: setup_cents, invoice_id: invoice&.id)
+      invoice
+    end
+
     # Schedules removal at the end of the current paid month. Idempotent-ish: a no-op if none exists.
     def cancel!
       return if topup.nil?
@@ -140,8 +157,8 @@ module Subscription
       )
     end
 
-    def create_subscription(price)
-      stripe_sub = Stripe::Subscription.create(
+    def create_subscription(price, add_invoice_items: [])
+      params = {
         customer: customer.id,
         items: [{price: price.id}],
         default_payment_method: subscription.default_payment_method_id,
@@ -154,7 +171,11 @@ module Subscription
         # Expand the invoice's payments so the synchronous credit can resolve the PaymentIntent
         # (the intent itself is past Stripe's 4-level expansion limit; InvoiceFields fetches it).
         expand: ["latest_invoice.payments"]
-      )
+      }
+      # One-time charges billed on the first invoice only. Left out entirely when empty, since the
+      # stripe gem sends a nil param as an empty string, which Stripe treats as "unset".
+      params[:add_invoice_items] = add_invoice_items if add_invoice_items.any?
+      stripe_sub = Stripe::Subscription.create(**params)
       community.create_messaging_topup!(stripe_id: stripe_sub.id)
       stripe_sub.latest_invoice
     end

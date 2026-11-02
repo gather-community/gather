@@ -63,6 +63,8 @@ class Community < ApplicationRecord
     dependent: :destroy
   has_one :messaging_topup, inverse_of: :community, class_name: "Subscription::MessagingTopup",
     dependent: :destroy
+  has_one :messaging_registration, inverse_of: :community, class_name: "Messaging::Registration",
+    dependent: :destroy
   has_many :work_periods, class_name: "Work::Period", inverse_of: :community, dependent: :destroy
   has_one :gdrive_config, class_name: "GDrive::Config", inverse_of: :community, dependent: :destroy
   has_one :gdrive_migration_operation, class_name: "GDrive::Migration::Operation", inverse_of: :community,
@@ -200,10 +202,14 @@ class Community < ApplicationRecord
     messaging_accounts.first
   end
 
-  # Whether we can send SMS to this community's country, and therefore whether it may buy
-  # messaging bundles. Gate the top-up flow on this — see Messaging::Rates.
+  # Countries where communities can set up texting. Messaging::Rates prices more countries than this,
+  # but only the US setup path (10DLC registration) exists so far.
+  MESSAGING_LAUNCH_COUNTRIES = %w[US].freeze
+
+  # Whether this community can set up texting, and therefore whether it may buy messaging topups.
+  # Gate the setup and top-up flows on this.
   def messaging_supported?
-    Messaging::Rates.supported?(country_code)
+    MESSAGING_LAUNCH_COUNTRIES.include?(country_code) && Messaging::Rates.supported?(country_code)
   end
 
   # Also clears the inactivity warning state. Otherwise InactivityWarningJob would see the maxed-out

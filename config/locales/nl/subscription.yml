@@ -32,6 +32,8 @@ nl:
     messaging_transactions:
       credit: "Maandelijkse opwaardering voor berichten" # MT
       reversal: "Terugboeking van niet-geïnde opwaardering voor berichten" # MT
+      setup_credit: "Betaling voor het instellen van sms" # MT
+      setup_reversal: "Terugboeking van niet-geïnde betaling voor het instellen van sms" # MT
     # e.g. "$5.00/month"
     per_month: "%{amount}/maand" # MT
     every_months:
@@ -94,6 +96,7 @@ nl:
         add: "Toevoegen" # MT
         next_payment_date: "Volgende betaaldatum" # MT
         status: "Status" # MT
+        set_up_texting: "Sms instellen" # MT
       messaging_topup_modal:
         title: "Maandelijkse opwaardering voor berichten" # MT
         intro: "Kies hoeveel berichtentegoed er elke maand bij je tegoed komt. Het bedrag wordt automatisch van je opgeslagen betaalmethode afgeschreven." # MT

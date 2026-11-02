@@ -270,6 +270,10 @@
     "payment": {
       "accountholder_required": "Bitte gib den Namen des Kontoinhabers an."
     },
+    "search": {
+      "count_capped": "%{count}+",
+      "load_error": "Fehler beim Laden der Ergebnisse. Bitte versuche es erneut."
+    },
     "subscription": {
       "topup_notices": {
         "calculating": "Wird berechnet …",
@@ -583,6 +587,10 @@
     },
     "payment": {
       "accountholder_required": "Please specify the accountholder name."
+    },
+    "search": {
+      "count_capped": "%{count}+",
+      "load_error": "Error loading results. Please try again."
     },
     "subscription": {
       "topup_notices": {
@@ -898,6 +906,10 @@
     "payment": {
       "accountholder_required": "Indica el nombre del titular de la cuenta."
     },
+    "search": {
+      "count_capped": "%{count}+",
+      "load_error": "Error al cargar los resultados. Inténtalo de nuevo."
+    },
     "subscription": {
       "topup_notices": {
         "calculating": "Calculando…",
@@ -1212,6 +1224,10 @@
     "payment": {
       "accountholder_required": "Anna tilinhaltijan nimi."
     },
+    "search": {
+      "count_capped": "%{count}+",
+      "load_error": "Tulosten lataaminen epäonnistui. Yritä uudelleen."
+    },
     "subscription": {
       "topup_notices": {
         "calculating": "Lasketaan …",
@@ -1525,6 +1541,10 @@
     },
     "payment": {
       "accountholder_required": "Veuillez indiquer le nom du titulaire du compte."
+    },
+    "search": {
+      "count_capped": "%{count}+",
+      "load_error": "Erreur lors du chargement des résultats. Veuillez réessayer."
     },
     "subscription": {
       "topup_notices": {
@@ -1930,6 +1950,10 @@
     "payment": {
       "accountholder_required": "Indica il nome dell'intestatario del conto."
     },
+    "search": {
+      "count_capped": "%{count}+",
+      "load_error": "Errore durante il caricamento dei risultati. Riprova."
+    },
     "subscription": {
       "topup_notices": {
         "calculating": "Calcolo in corso…",
@@ -2243,6 +2267,10 @@
     },
     "payment": {
       "accountholder_required": "Oppgi navnet på kontoinnehaveren."
+    },
+    "search": {
+      "count_capped": "%{count}+",
+      "load_error": "Kunne ikke laste inn resultatene. Prøv igjen."
     },
     "subscription": {
       "topup_notices": {
@@ -2558,6 +2586,10 @@
     "payment": {
       "accountholder_required": "Vul de naam van de rekeninghouder in."
     },
+    "search": {
+      "count_capped": "%{count}+",
+      "load_error": "Fout bij het laden van de resultaten. Probeer het opnieuw."
+    },
     "subscription": {
       "topup_notices": {
         "calculating": "Berekenen …",
@@ -2871,6 +2903,10 @@
     },
     "payment": {
       "accountholder_required": "Ange kontoinnehavarens namn."
+    },
+    "search": {
+      "count_capped": "%{count}+",
+      "load_error": "Det gick inte att läsa in resultaten. Försök igen."
     },
     "subscription": {
       "topup_notices": {

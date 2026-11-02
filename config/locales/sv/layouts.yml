@@ -20,6 +20,7 @@ sv:
       impersonation_notice: "Du agerar som %{name}. Allt du gör ser ut att ha gjorts av den personen." # MT
       stop_impersonating: "Sluta agera som personen" # MT
       home: "Start" # MT
+      search: "Sök" # MT
       skip_to_content: "Hoppa till innehållet" # MT
       show_menu: "Visa meny" # MT
       toggle_navigation: "Visa/dölj navigering" # MT

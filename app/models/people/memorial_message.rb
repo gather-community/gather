@@ -24,5 +24,8 @@ module People
     normalize_attributes :body
 
     validates :body, presence: true
+
+    after_save    { memorial.__elasticsearch__.index_document }
+    after_destroy { memorial.__elasticsearch__.index_document }
   end
 end

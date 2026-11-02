@@ -16,6 +16,8 @@
 #
 module People
   class Vehicle < ApplicationRecord
+    include VehicleSearchConfig
+
     acts_as_tenant :cluster
 
     belongs_to :household, inverse_of: :vehicles

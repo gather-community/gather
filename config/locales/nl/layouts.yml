@@ -20,6 +20,7 @@ nl:
       impersonation_notice: "Je doet je voor als %{name}. Alles wat je doet, lijkt door deze persoon te zijn gedaan." # MT
       stop_impersonating: "Stoppen met voordoen" # MT
       home: "Start" # MT
+      search: "Zoeken" # MT
       skip_to_content: "Naar de inhoud" # MT
       show_menu: "Menu tonen" # MT
       toggle_navigation: "Navigatie in- of uitklappen" # MT

@@ -20,6 +20,7 @@ fi:
       impersonation_notice: "Toimit käyttäjänä %{name}. Kaikki tekemäsi toimet näyttävät hänen tekemiltään." # MT
       stop_impersonating: "Lopeta toisena käyttäjänä toimiminen" # MT
       home: "Etusivu" # MT
+      search: "Haku" # MT
       skip_to_content: "Siirry sisältöön" # MT
       show_menu: "Näytä valikko" # MT
       toggle_navigation: "Näytä/piilota navigointi" # MT

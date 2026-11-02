@@ -31,26 +31,30 @@ module Work
           indexes :job_title, analyzer: "folded"
           indexes :requester_name, analyzer: "folded"
           indexes :assignee_names, analyzer: "folded"
+          indexes :community_id, type: :integer
+          indexes :period_id, type: :integer
         end
-      end
-
-      def self.indexed_fields
-        mappings.to_hash[:properties].keys
       end
     end
 
     class_methods do
-      # Shifts matching every word of `text` across the indexed fields, as the shifts page's search box
-      # does. The size is 10k because the result isn't restricted here; the page's other scopes restrict it.
-      # TODO: This doesn't scale. The page's other lenses (at least period and community) should become
-      # search filters.
-      def text_search(text)
-        search(
-          query: {
-            multi_match: {fields: indexed_fields, query: text, type: :cross_fields, operator: :and}
-          },
-          size: 10_000
-        )
+      # Explicit list of text fields for multi_match queries.
+      # Does not include integer filter fields (community_id, period_id).
+      def indexed_fields
+        %i[job_title requester_name assignee_names]
+      end
+
+      # Shifts in the community (and period, if given) where each word of `text` starts a word in one of
+      # the indexed fields, as the shifts page's search box does. So "ma" matches Max but "ax" doesn't,
+      # the same as the people search (User.matching). Hyphens count as word breaks. The size is 10k
+      # because the page's other scopes restrict the result further.
+      def text_search(text, community_id:, period_id: nil)
+        filters = [{term: {community_id: community_id}}]
+        filters << {term: {period_id: period_id}} if period_id
+        must = text.to_s.tr("-", " ").split.map do |word|
+          {multi_match: {fields: indexed_fields, query: word, type: :phrase_prefix}}
+        end
+        search(query: {bool: {must: must, filter: filters}}, size: 10_000)
       end
     end
 

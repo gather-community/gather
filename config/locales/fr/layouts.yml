@@ -19,6 +19,7 @@ fr:
       impersonation_notice: "Vous agissez en tant que %{name}. Toutes vos actions sembleront avoir été faites par cette personne." # MT
       stop_impersonating: "Arrêter" # MT
       home: "Accueil" # MT
+      search: "Rechercher" # MT
       skip_to_content: "Aller au contenu" # MT
       show_menu: "Afficher le menu" # MT
       toggle_navigation: "Afficher ou masquer la navigation" # MT

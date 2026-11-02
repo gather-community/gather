@@ -20,6 +20,7 @@ de:
       impersonation_notice: "Du handelst als %{name}. Alles, was du tust, sieht so aus, als hätte diese Person es getan." # MT
       stop_impersonating: "Identität verlassen" # MT
       home: "Startseite" # MT
+      search: "Suche" # MT
       skip_to_content: "Zum Inhalt springen" # MT
       show_menu: "Menü anzeigen" # MT
       toggle_navigation: "Navigation ein-/ausblenden" # MT

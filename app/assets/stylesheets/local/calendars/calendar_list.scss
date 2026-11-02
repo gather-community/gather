@@ -1,4 +1,6 @@
-.calendar-list-wrapper {
+// .checkbox-list and .checkbox-list-wrapper give another checkbox list (e.g. the search type filter)
+// the same look as the calendar list.
+.calendar-list-wrapper, .checkbox-list-wrapper {
   .links {
     a {
       font-size: 13px;
@@ -13,7 +15,7 @@
   }
 }
 
-.calendar-list {
+.calendar-list, .checkbox-list {
   line-height: 3rem;
 
   .group {
@@ -23,7 +25,7 @@
     margin: 0;
   }
 
-  .calendar, .calendar label {
+  .calendar, .calendar label, > li > label {
     display: flex;
     align-items: center;
   }

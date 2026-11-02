@@ -20,6 +20,7 @@ nb:
       impersonation_notice: "Du opptrer som %{name}. Alt du gjør, vil se ut som om denne personen gjorde det." # MT
       stop_impersonating: "Slutt å opptre som en annen" # MT
       home: "Hjem" # MT
+      search: "Søk" # MT
       skip_to_content: "Hopp til innholdet" # MT
       show_menu: "Vis meny" # MT
       toggle_navigation: "Vis/skjul navigasjon" # MT

@@ -19,6 +19,7 @@ es:
       impersonation_notice: "Estás actuando como %{name}. Todo lo que hagas parecerá hecho por esa persona." # MT
       stop_impersonating: "Dejar de actuar como esta persona" # MT
       home: "Inicio" # MT
+      search: "Buscar" # MT
       skip_to_content: "Ir al contenido" # MT
       show_menu: "Mostrar menú" # MT
       toggle_navigation: "Mostrar u ocultar la navegación" # MT

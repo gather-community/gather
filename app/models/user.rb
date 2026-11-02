@@ -84,6 +84,7 @@ class User < ApplicationRecord
   include Deactivatable
   include SemicolonDisallowable
   include CustomFields
+  include UserSearchConfig
 
   ROLES = %i[super_admin cluster_admin admin biller photographer calendar_coordinator
     meals_coordinator wikiist work_coordinator new_community_approver].freeze
@@ -175,9 +176,21 @@ class User < ApplicationRecord
   scope :active_or_assigned_to, lambda { |meal|
     where(arel_table[:deactivated_at].eq(nil).or(arel_table[:id].in(meal.assignments.map(&:user_id))))
   }
+  # Accented letters and the plain letters they fold to when matching names, for Postgres's translate().
+  # Pairs up character by character. Hyphens become spaces, so they count as word breaks.
+  NAME_FOLD_FROM = "-ÀÁÂÃÄÅàáâãäåÇçÈÉÊËèéêëÌÍÎÏìíîïÑñÒÓÔÕÖØòóôõöøÙÚÛÜùúûüÝýÿŠšŽžČčĆćŁłŃńŚśŹźŻżĘęĄąŘřĚěŮů"
+  NAME_FOLD_TO = " AAAAAAaaaaaaCcEEEEeeeeIIIIiiiiNnOOOOOOooooooUUUUuuuuYyySsZzCcCcLlNnSsZzZzEeAaRrEeUu"
+
+  # Each word of the query must start a word of the name, so "ma gre" matches Max Greenfelder but
+  # "ax" doesn't, and accents don't matter, so "zoe" matches Zoë. The same as Work::Shift.text_search.
   scope :matching, lambda { |q|
-    joins(:household)
-      .where("(first_name || ' ' || last_name) ILIKE ?", "%#{q}%")
+    words = I18n.transliterate(q.to_s).tr("-", " ").split
+    name_words = "(' ' || translate(first_name || ' ' || last_name, #{connection.quote(NAME_FOLD_FROM)}, " \
+      "#{connection.quote(NAME_FOLD_TO)}))"
+    by_name = words.reduce(joins(:household)) do |rel, word|
+      rel.where("#{name_words} ILIKE ?", "% #{sanitize_sql_like(word)}%")
+    end
+    by_name
       .or( # Exact unit num without suffix
         joins(:household)
           .where("unit_num::varchar ILIKE ?", q)

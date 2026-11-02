@@ -12,6 +12,7 @@
 # ======================================================================================================
 fr:
   common:
+    language_name: "Français" # MT
     settings: "Paramètres" # MT
     settings_updated: "Paramètres mis à jour." # MT
     open_date_picker: "Ouvrir le sélecteur de date" # MT

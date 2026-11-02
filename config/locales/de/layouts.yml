@@ -20,6 +20,7 @@ de:
       impersonation_notice: "Du handelst als %{name}. Alles, was du tust, sieht so aus, als hätte diese Person es getan." # MT
       stop_impersonating: "Identität verlassen" # MT
       home: "Startseite" # MT
+      search: "Suche" # MT
       skip_to_content: "Zum Inhalt springen" # MT
       show_menu: "Menü anzeigen" # MT
       toggle_navigation: "Navigation ein-/ausblenden" # MT
@@ -39,6 +40,9 @@ de:
       machine_translated: "Diese Seite wurde automatisch übersetzt und kann Fehler enthalten." # MT
       machine_translated_with_link_html: "Diese Seite wurde automatisch übersetzt und kann Fehler enthalten. %{link}" # MT
       help_translate: "Hilf mit, die Übersetzung zu verbessern" # MT
+      change_language: "Sprache ändern" # MT
+      browser_default: "Sprache des Browsers" # MT
+      language: "Sprache" # MT
     head:
       # The browser tab title. The page title is already HTML-escaped, hence _html.
       title_html: "Gather: %{title}" # MT

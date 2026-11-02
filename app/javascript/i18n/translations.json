@@ -104,6 +104,7 @@
       "generated_at": "Erstellt: %{time}",
       "hidden": "Verborgen",
       "inactive": "Inaktiv",
+      "language_name": "Deutsch",
       "loading_indicator": "Ladeanzeige",
       "max": "Max.",
       "no": "Nein",
@@ -269,6 +270,10 @@
     "payment": {
       "accountholder_required": "Bitte gib den Namen des Kontoinhabers an."
     },
+    "search": {
+      "count_capped": "%{count}+",
+      "load_error": "Fehler beim Laden der Ergebnisse. Bitte versuche es erneut."
+    },
     "subscription": {
       "topup_notices": {
         "calculating": "Wird berechnet …",
@@ -417,6 +422,7 @@
       "generated_at": "Generated: %{time}",
       "hidden": "Hidden",
       "inactive": "Inactive",
+      "language_name": "English",
       "loading_indicator": "Loading indicator",
       "max": "Max",
       "no": "No",
@@ -582,6 +588,10 @@
     "payment": {
       "accountholder_required": "Please specify the accountholder name."
     },
+    "search": {
+      "count_capped": "%{count}+",
+      "load_error": "Error loading results. Please try again."
+    },
     "subscription": {
       "topup_notices": {
         "calculating": "Calculating…",
@@ -730,6 +740,7 @@
       "generated_at": "Generado: %{time}",
       "hidden": "Oculto",
       "inactive": "Inactivo",
+      "language_name": "Español",
       "loading_indicator": "Indicador de carga",
       "max": "Máx.",
       "no": "No",
@@ -895,6 +906,10 @@
     "payment": {
       "accountholder_required": "Indica el nombre del titular de la cuenta."
     },
+    "search": {
+      "count_capped": "%{count}+",
+      "load_error": "Error al cargar los resultados. Inténtalo de nuevo."
+    },
     "subscription": {
       "topup_notices": {
         "calculating": "Calculando…",
@@ -1043,6 +1058,7 @@
       "generated_at": "Luotu: %{time}",
       "hidden": "Piilotettu",
       "inactive": "Ei aktiivinen",
+      "language_name": "Suomi",
       "loading_indicator": "Latausilmaisin",
       "max": "Enint.",
       "no": "Ei",
@@ -1208,6 +1224,10 @@
     "payment": {
       "accountholder_required": "Anna tilinhaltijan nimi."
     },
+    "search": {
+      "count_capped": "%{count}+",
+      "load_error": "Tulosten lataaminen epäonnistui. Yritä uudelleen."
+    },
     "subscription": {
       "topup_notices": {
         "calculating": "Lasketaan …",
@@ -1356,6 +1376,7 @@
       "generated_at": "Généré le %{time}",
       "hidden": "Masqué",
       "inactive": "Inactif",
+      "language_name": "Français",
       "loading_indicator": "Indicateur de chargement",
       "max": "Max.",
       "no": "Non",
@@ -1521,6 +1542,10 @@
     "payment": {
       "accountholder_required": "Veuillez indiquer le nom du titulaire du compte."
     },
+    "search": {
+      "count_capped": "%{count}+",
+      "load_error": "Erreur lors du chargement des résultats. Veuillez réessayer."
+    },
     "subscription": {
       "topup_notices": {
         "calculating": "Calcul en cours…",
@@ -1574,6 +1599,9 @@
           }
         }
       }
+    },
+    "common": {
+      "language_name": "Français (Canada)"
     },
     "communities": {
       "signup_action": {
@@ -1756,6 +1784,7 @@
       "generated_at": "Generato: %{time}",
       "hidden": "Nascosto",
       "inactive": "Non attivo",
+      "language_name": "Italiano",
       "loading_indicator": "Indicatore di caricamento",
       "max": "Max",
       "no": "No",
@@ -1921,6 +1950,10 @@
     "payment": {
       "accountholder_required": "Indica il nome dell'intestatario del conto."
     },
+    "search": {
+      "count_capped": "%{count}+",
+      "load_error": "Errore durante il caricamento dei risultati. Riprova."
+    },
     "subscription": {
       "topup_notices": {
         "calculating": "Calcolo in corso…",
@@ -2069,6 +2102,7 @@
       "generated_at": "Generert: %{time}",
       "hidden": "Skjult",
       "inactive": "Inaktiv",
+      "language_name": "Norsk bokmål",
       "loading_indicator": "Lasteindikator",
       "max": "Maks.",
       "no": "Nei",
@@ -2234,6 +2268,10 @@
     "payment": {
       "accountholder_required": "Oppgi navnet på kontoinnehaveren."
     },
+    "search": {
+      "count_capped": "%{count}+",
+      "load_error": "Kunne ikke laste inn resultatene. Prøv igjen."
+    },
     "subscription": {
       "topup_notices": {
         "calculating": "Beregner …",
@@ -2382,6 +2420,7 @@
       "generated_at": "Gemaakt: %{time}",
       "hidden": "Verborgen",
       "inactive": "Inactief",
+      "language_name": "Nederlands",
       "loading_indicator": "Laadindicator",
       "max": "Max.",
       "no": "Nee",
@@ -2547,6 +2586,10 @@
     "payment": {
       "accountholder_required": "Vul de naam van de rekeninghouder in."
     },
+    "search": {
+      "count_capped": "%{count}+",
+      "load_error": "Fout bij het laden van de resultaten. Probeer het opnieuw."
+    },
     "subscription": {
       "topup_notices": {
         "calculating": "Berekenen …",
@@ -2695,6 +2738,7 @@
       "generated_at": "Skapad: %{time}",
       "hidden": "Dold",
       "inactive": "Inaktiv",
+      "language_name": "Svenska",
       "loading_indicator": "Laddningsindikator",
       "max": "Max",
       "no": "Nej",
@@ -2859,6 +2903,10 @@
     },
     "payment": {
       "accountholder_required": "Ange kontoinnehavarens namn."
+    },
+    "search": {
+      "count_capped": "%{count}+",
+      "load_error": "Det gick inte att läsa in resultaten. Försök igen."
     },
     "subscription": {
       "topup_notices": {

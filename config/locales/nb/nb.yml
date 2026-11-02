@@ -12,6 +12,7 @@
 # ======================================================================================================
 nb:
   common:
+    language_name: "Norsk bokmål" # MT
     settings: "Innstillinger" # MT
     settings_updated: "Innstillingene er oppdatert." # MT
     open_date_picker: "Åpne datovelger" # MT

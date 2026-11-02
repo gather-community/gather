@@ -24,6 +24,8 @@
 #
 module Calendars
   class Event < ApplicationRecord
+    include EventSearchConfig
+
     acts_as_tenant :cluster
 
     attr_writer :location

@@ -4,6 +4,8 @@ module Wiki
   class PagesController < ApplicationController
     before_action :find_page, only: %i[history compare edit update destroy]
     before_action -> { nav_context(:wiki, :wiki) }
+    # A search box on wiki pages that opens the global search page with only wiki pages checked.
+    before_action :prepare_search_lens, only: %i[show all]
 
     decorates_assigned :page, :pages, :versions
     helper_method :preview?
@@ -88,6 +90,11 @@ module Wiki
     end
 
     private
+
+    def prepare_search_lens
+      return unless FeatureFlag.lookup("search").on?(current_user)
+      prepare_lenses({search: {form_action: search_path, hidden_params: {types: "wiki_page"}}})
+    end
 
     def home_path
       wiki_page_path(slug: Page.reserved_slug(:home))

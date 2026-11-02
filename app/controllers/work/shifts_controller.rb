@@ -221,7 +221,10 @@ module Work
 
     def apply_search_lens
       return if lenses[:search].blank?
-      @shifts = @shifts.merge(Work::Shift.text_search(lenses[:search].value).records.records)
+      @shifts = @shifts.merge(
+        Work::Shift.text_search(lenses[:search].value, community_id: current_community.id,
+          period_id: @period&.id).records.records
+      )
     end
 
     def apply_date_range_lens

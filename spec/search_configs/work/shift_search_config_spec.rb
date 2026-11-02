@@ -17,13 +17,13 @@ describe Work::ShiftSearchConfig, search: Work::Shift do
     Work::Shift.__elasticsearch__.refresh_index!
   end
 
-  def titles(text)
-    Work::Shift.text_search(text).records.map { |shift| shift.job.title }.uniq.sort
+  def titles(text, community_id: period.community_id)
+    Work::Shift.text_search(text, community_id: community_id).records.map { |shift| shift.job.title }.uniq.sort
   end
 
   it "matches with or without accents" do
-    expect(titles("cafe")).to eq(["Café Cleanup"])
-    expect(titles("Café")).to eq(["Café Cleanup"])
+    expect(titles("cafe clean")).to eq(["Café Cleanup"])
+    expect(titles("Café clean")).to eq(["Café Cleanup"])
     expect(titles("sodergren")).to eq(["Garden Help"])
     expect(titles("Södergren")).to eq(["Garden Help"])
     expect(titles("zoe lefevre")).to eq(["Dishes"])
@@ -34,9 +34,22 @@ describe Work::ShiftSearchConfig, search: Work::Shift do
     expect(titles("garden cafe")).to be_empty
   end
 
-  it "matches whole words, not prefixes" do
-    expect(titles("cafeteria")).to eq(["Cafeteria Setup"])
-    expect(titles("cafet")).to be_empty
+  it "matches the start of words, not the middle, like the people search" do
+    expect(titles("cafet")).to eq(["Cafeteria Setup"])
+    expect(titles("caf")).to eq(["Cafeteria Setup", "Café Cleanup"])
+    expect(titles("eteria")).to be_empty
+  end
+
+  it "limits results to the community and, if given, the period" do
+    other_period = create(:work_period)
+    create(:work_job, period: other_period, title: "Café Elsewhere")
+    Work::Shift.__elasticsearch__.refresh_index!
+    in_period = lambda do |p|
+      Work::Shift.text_search("cafe", community_id: period.community_id, period_id: p.id)
+        .records.map { |shift| shift.job.title }.sort
+    end
+    expect(in_period.call(period)).to eq(["Cafeteria Setup", "Café Cleanup"]) # Byte order, as sort gives
+    expect(in_period.call(other_period)).to eq(["Café Elsewhere"])
   end
 
   describe "rebuilding the index" do
@@ -50,7 +63,6 @@ describe Work::ShiftSearchConfig, search: Work::Shift do
 
       expect(count).to eq(ActsAsTenant.without_tenant { Work::Shift.count })
       expect(Work::Shift.search("*").results.total).to eq(count)
-      ActsAsTenant.without_tenant { expect(titles("cafe")).to eq(["Café Cleanup", "Café Elsewhere"]) }
     end
   end
 end

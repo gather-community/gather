@@ -21,6 +21,9 @@ application.register("payment", PaymentController);
 import Wiki__MarkdownEditorController from "./wiki/markdown_editor_controller";
 application.register("wiki--markdown-editor", Wiki__MarkdownEditorController);
 
+import SearchController from "./search_controller";
+application.register("search", SearchController);
+
 import Communities__SignupActionController from "./communities/signup_action_controller";
 application.register("communities--signup-action", Communities__SignupActionController);
 
@@ -47,3 +50,9 @@ application.register("calendars--event-form", Calendars__EventFormController);
 
 import Admin__FeatureFlagFormController from "./admin/feature_flag_form_controller";
 application.register("admin--feature-flag-form", Admin__FeatureFlagFormController);
+
+import LensBarController from "./lens_bar_controller";
+application.register("lens-bar", LensBarController);
+
+import LanguageMenuController from "./language_menu_controller";
+application.register("language-menu", LanguageMenuController);

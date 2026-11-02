@@ -21,6 +21,8 @@ module People
   # from the user when the memorial is created (or repointed) so that nothing here reads through
   # `user` — hard-deleting the account just nullifies user_id and the memorial stands on its own.
   class Memorial < ApplicationRecord
+    include MemorialSearchConfig
+
     acts_as_tenant :cluster
 
     belongs_to :user, inverse_of: :memorial, optional: true

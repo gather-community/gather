@@ -66,6 +66,12 @@ describe "signups", js: true do
         fill_in_lens(:search, "fruct")
         expect_jobs(jobs[1])
 
+        # Matches the start of any word, like the people search, but not the middle of one.
+        fill_in_lens(:search, "coord")
+        expect_jobs(jobs[1])
+        fill_in_lens(:search, "rdinator")
+        expect_jobs
+
         clear_lenses
         expect_jobs(*jobs[0..3])
 

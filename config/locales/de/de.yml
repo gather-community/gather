@@ -12,6 +12,7 @@
 # ======================================================================================================
 de:
   common:
+    language_name: "Deutsch" # MT
     settings: "Einstellungen" # MT
     settings_updated: "Einstellungen aktualisiert." # MT
     open_date_picker: "Datumsauswahl öffnen" # MT

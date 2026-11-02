@@ -5,6 +5,7 @@ module GDrive
     include AuthUrlable
 
     before_action -> { nav_context(:wiki, :gdrive) }
+    before_action -> { prepare_lenses({search: {form_action: search_path}}) }
 
     def index
       @browse_decorator = BrowseDecorator.new

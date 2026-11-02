@@ -23,9 +23,10 @@ require "open-uri"
 module Wiki
   # Models a single wiki page.
   class Page < ApplicationRecord
+    include PageSearchConfig
     acts_as_tenant :cluster
 
-    RESERVED_SLUGS = Set.new(%w[new all home sample notfound]).freeze
+    RESERVED_SLUGS = Set.new(%w[new all home sample notfound search]).freeze
     EDITABLE_BY_OPTIONS = %i[everyone wikiist].freeze
 
     attr_accessor :comment

@@ -20,6 +20,7 @@ nl:
       impersonation_notice: "Je doet je voor als %{name}. Alles wat je doet, lijkt door deze persoon te zijn gedaan." # MT
       stop_impersonating: "Stoppen met voordoen" # MT
       home: "Start" # MT
+      search: "Zoeken" # MT
       skip_to_content: "Naar de inhoud" # MT
       show_menu: "Menu tonen" # MT
       toggle_navigation: "Navigatie in- of uitklappen" # MT
@@ -39,6 +40,9 @@ nl:
       machine_translated: "Deze pagina is automatisch vertaald en kan fouten bevatten." # MT
       machine_translated_with_link_html: "Deze pagina is automatisch vertaald en kan fouten bevatten. %{link}" # MT
       help_translate: "Help de vertaling te verbeteren" # MT
+      change_language: "Taal wijzigen" # MT
+      browser_default: "Taal van de browser" # MT
+      language: "Taal" # MT
     head:
       # The browser tab title. The page title is already HTML-escaped, hence _html.
       title_html: "Gather: %{title}" # MT

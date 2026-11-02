@@ -20,6 +20,7 @@ fi:
       impersonation_notice: "Toimit käyttäjänä %{name}. Kaikki tekemäsi toimet näyttävät hänen tekemiltään." # MT
       stop_impersonating: "Lopeta toisena käyttäjänä toimiminen" # MT
       home: "Etusivu" # MT
+      search: "Haku" # MT
       skip_to_content: "Siirry sisältöön" # MT
       show_menu: "Näytä valikko" # MT
       toggle_navigation: "Näytä/piilota navigointi" # MT
@@ -39,6 +40,9 @@ fi:
       machine_translated: "Tämä sivu on käännetty automaattisesti, ja siinä voi olla virheitä." # MT
       machine_translated_with_link_html: "Tämä sivu on käännetty automaattisesti, ja siinä voi olla virheitä. %{link}" # MT
       help_translate: "Auta parantamaan käännöstä" # MT
+      change_language: "Vaihda kieli" # MT
+      browser_default: "Selaimen kieli" # MT
+      language: "Kieli" # MT
     head:
       # The browser tab title. The page title is already HTML-escaped, hence _html.
       title_html: "Gather: %{title}" # MT

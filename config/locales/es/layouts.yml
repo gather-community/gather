@@ -19,6 +19,7 @@ es:
       impersonation_notice: "Estás actuando como %{name}. Todo lo que hagas parecerá hecho por esa persona." # MT
       stop_impersonating: "Dejar de actuar como esta persona" # MT
       home: "Inicio" # MT
+      search: "Buscar" # MT
       skip_to_content: "Ir al contenido" # MT
       show_menu: "Mostrar menú" # MT
       toggle_navigation: "Mostrar u ocultar la navegación" # MT
@@ -37,6 +38,9 @@ es:
       machine_translated: "Esta página se tradujo automáticamente y puede contener errores." # MT
       machine_translated_with_link_html: "Esta página se tradujo automáticamente y puede contener errores. %{link}" # MT
       help_translate: "Ayuda a mejorar la traducción" # MT
+      change_language: "Cambiar idioma" # MT
+      browser_default: "Idioma del navegador" # MT
+      language: "Idioma" # MT
     head:
       title_html: "Gather: %{title}" # MT
     personal_dropdown:

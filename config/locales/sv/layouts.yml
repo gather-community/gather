@@ -20,6 +20,7 @@ sv:
       impersonation_notice: "Du agerar som %{name}. Allt du gör ser ut att ha gjorts av den personen." # MT
       stop_impersonating: "Sluta agera som personen" # MT
       home: "Start" # MT
+      search: "Sök" # MT
       skip_to_content: "Hoppa till innehållet" # MT
       show_menu: "Visa meny" # MT
       toggle_navigation: "Visa/dölj navigering" # MT
@@ -39,6 +40,9 @@ sv:
       machine_translated: "Den här sidan har översatts automatiskt och kan innehålla fel." # MT
       machine_translated_with_link_html: "Den här sidan har översatts automatiskt och kan innehålla fel. %{link}" # MT
       help_translate: "Hjälp till att förbättra översättningen" # MT
+      change_language: "Byt språk" # MT
+      browser_default: "Webbläsarens språk" # MT
+      language: "Språk" # MT
     head:
       # The browser tab title. The page title is already HTML-escaped, hence _html.
       title_html: "Gather: %{title}" # MT

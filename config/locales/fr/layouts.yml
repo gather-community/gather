@@ -19,6 +19,7 @@ fr:
       impersonation_notice: "Vous agissez en tant que %{name}. Toutes vos actions sembleront avoir été faites par cette personne." # MT
       stop_impersonating: "Arrêter" # MT
       home: "Accueil" # MT
+      search: "Rechercher" # MT
       skip_to_content: "Aller au contenu" # MT
       show_menu: "Afficher le menu" # MT
       toggle_navigation: "Afficher ou masquer la navigation" # MT
@@ -37,6 +38,9 @@ fr:
       machine_translated: "Cette page a été traduite automatiquement et peut contenir des erreurs." # MT
       machine_translated_with_link_html: "Cette page a été traduite automatiquement et peut contenir des erreurs. %{link}" # MT
       help_translate: "Aidez à améliorer la traduction" # MT
+      change_language: "Changer de langue" # MT
+      browser_default: "Langue du navigateur" # MT
+      language: "Langue" # MT
     head:
       title_html: "Gather : %{title}" # MT
     personal_dropdown:

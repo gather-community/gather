@@ -82,7 +82,7 @@ en:
         community_name: "Up to 20 characters."
         slug: "Lowercase letters, numbers, and hyphens; must start with a letter. Up to 20 characters."
         introduction: "Tell us a bit about your community and why you think Gather is a good fit. Please include one or more links to publicly accessible webpages (e.g. your community website, social media pages) that establish your community's identity."
-        locale: "The language Gather emails your community's members in, until they choose their own."
+        locale: "The language your community's members start with for emails and calendar feeds. Each member can change it on their profile."
       communities_signup_action:
         message_approve: "The full approval email is shown above. Add a personalized note to the approval email by replacing the placeholder text."
         message_deny: "Record why this application is being denied. This is for internal reference only and will not be sent to the applicant."
@@ -165,7 +165,7 @@ en:
         paypal_email: "The email address on your PayPal account. Used for cook reimbursements. Leave blank to use your main email address shown above."
         full_access: "Children without full access can't sign in to Gather but appear in the directory. Children with full access count as adults for billing purposes."
         certify_13_or_older: "Children must be 13 years or older to sign in to Gather."
-        locale: "Emails and calendar feeds from Gather will be in this language. The website follows your browser, or the language you pick at the bottom of any page."
+        locale: "Emails and calendar feeds from Gather will be in this language. The website follows your browser language setting, or the language you pick at the bottom of any page."
       meals_formula:
         is_default: "If checked, this will be the formula selected by default for new meal creation."
         pantry_fee_formatted: "Diners with a meal cost of $0.00 will not be billed a pantry fee even if the fee amount is fixed."

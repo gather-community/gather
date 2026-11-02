@@ -40,29 +40,21 @@ describe RecipientLocale do
     let(:community) { Defaults.community }
     let(:german) { create(:user, locale: "de") }
     let(:swedish) { create(:user, locale: "sv") }
-    let(:no_preference) { create(:user, locale: nil) }
+    let(:other_swede) { create(:user, locale: "sv") }
 
     def warning_subject(admins)
       Communities::InactivityMailer.with(recipient: admins).warning(community, 1, nil, admins).subject
     end
 
     context "with the i18n feature flag on" do
-      before do
-        create(:feature_flag, name: "i18n", status: true)
-        community.settings.locale = "sv"
-        community.save!
-      end
+      before { create(:feature_flag, name: "i18n", status: true) }
 
-      it "renders mail sent with .with(recipient:) in the recipient's chosen language" do
+      it "renders mail sent with .with(recipient:) in the recipient's language" do
         expect(warning_subject([german])).to eq("Warnung wegen Inaktivität für #{community.name}")
       end
 
-      it "falls back to the community's default for recipients who haven't chosen" do
-        expect(warning_subject([no_preference])).to eq("Varning för inaktivitet i #{community.name}")
-      end
-
       it "renders a group sharing a language in that language" do
-        expect(warning_subject([no_preference, swedish])).to eq("Varning för inaktivitet i #{community.name}")
+        expect(warning_subject([other_swede, swedish])).to eq("Varning för inaktivitet i #{community.name}")
       end
 
       it "uses the default locale for a group that doesn't share one" do

@@ -218,18 +218,21 @@ describe User do
     end
 
     describe "locale" do
-      it "accepts a language Gather is available in" do
-        expect(build(:user, locale: "fr-CA")).to be_valid
+      it "starts as the community's default language" do
+        community = create(:community, settings: {locale: "nb"})
+        user = create(:user, household: create(:household, community: community), locale: nil)
+        expect(user.locale).to eq("nb")
       end
 
-      it "stores a blank choice as nil, meaning the community's default" do
-        user = build(:user, locale: "")
-        expect(user).to be_valid
-        expect(user.locale).to be_nil
+      it "keeps a language that was given" do
+        expect(create(:user, locale: "fr-CA").locale).to eq("fr-CA")
       end
 
-      it "rejects anything else" do
-        user = build(:user, locale: "xx")
+      it "can't be blank or a language Gather isn't available in" do
+        user = create(:user)
+        user.locale = ""
+        expect(user).to be_invalid
+        user.locale = "xx"
         expect(user).to be_invalid
         expect(user.errors[:locale]).to be_present
       end

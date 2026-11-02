@@ -175,7 +175,6 @@ fr:
       household_note_unnamed_html: "Les champs ci-dessous sont associés au foyer de la personne. Les modifier ici les modifiera pour <em>toutes les personnes du foyer</em>." # MT
       move_household_html: "Vous pouvez aussi %{link}." # MT
       move_household_link: "la déplacer dans un autre foyer" # MT
-      community_default_language: "Langue de la communauté (%{language})" # MT
   households:
     greeting: "Bonjour au foyer %{name}," # MT
     created: "Foyer créé." # MT

@@ -103,7 +103,6 @@ describe Gather::Locales do
   describe ".for_user and .for_community" do
     let(:community) { Defaults.community }
     let(:user) { create(:user, locale: "fr") }
-    let(:no_preference) { create(:user, locale: nil) }
 
     before do
       community.settings.locale = "de"
@@ -113,7 +112,6 @@ describe Gather::Locales do
     context "without the feature flag" do
       it "uses the default locale" do
         expect(described_class.for_user(user)).to eq(:en)
-        expect(described_class.for_user(no_preference)).to eq(:en)
         expect(described_class.for_community(community)).to eq(:en)
       end
     end
@@ -121,9 +119,8 @@ describe Gather::Locales do
     context "with the feature flag on for everyone" do
       before { create(:feature_flag, name: "i18n", status: true) }
 
-      it "uses the user's choice, else their community's default" do
+      it "uses the user's language" do
         expect(described_class.for_user(user)).to eq(:fr)
-        expect(described_class.for_user(no_preference)).to eq(:de)
         expect(described_class.for_user(nil)).to eq(:en)
       end
 
@@ -139,7 +136,7 @@ describe Gather::Locales do
 
       it "uses other locales only for those users" do
         expect(described_class.for_user(user)).to eq(:fr)
-        expect(described_class.for_user(no_preference)).to eq(:en)
+        expect(described_class.for_user(create(:user, locale: "fr"))).to eq(:en)
       end
 
       it "uses the default locale for the community, which isn't anyone in particular" do

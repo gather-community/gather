@@ -1223,7 +1223,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_31_120000) do
     t.string "work_phone"
     t.boolean "deleted_placeholder", default: false, null: false
     t.jsonb "notification_prefs", default: {}, null: false
-    t.string "locale", limit: 10
+    t.string "locale", limit: 10, null: false
     t.index ["alternate_id"], name: "index_users_on_alternate_id"
     t.index ["cluster_id"], name: "index_users_on_cluster_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true

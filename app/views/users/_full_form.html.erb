@@ -43,10 +43,10 @@
     <% end %>
     <%= f.input :preferred_contact, collection: User::CONTACT_TYPES, prompt: :translate %>
     <% if Gather::Locales.enabled?(@user) %>
-      <% community_language = t("common.language_name",
-           locale: Gather::Locales.community_default(@user.community || current_community)) %>
-      <%= f.input :locale, collection: Gather::Locales.menu_options,
-                           include_blank: t(".community_default_language", language: community_language) %>
+      <%# A new person starts with their community's language until they're saved. %>
+      <%= f.input :locale, collection: Gather::Locales.menu_options, include_blank: false,
+                           selected: @user.locale ||
+                             Gather::Locales.community_default(@user.community || current_community).to_s %>
     <% end %>
     <%= f.input :pronouns %>
     <%= f.input :birthday_str, as: :string %>

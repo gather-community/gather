@@ -22,7 +22,7 @@ fr-CA:
     hints:
       community:
         settings:
-          locale: "La langue des courriels et des flux de calendrier pour les membres qui n'ont pas choisi la leur. Le site suit le navigateur de chacun, ou la langue choisie en bas de la page." # MT
+          locale: "La langue de départ des courriels et des flux de calendrier pour les nouveaux membres. Chaque membre peut la changer dans son profil. Le site suit la langue du navigateur de chacun, ou la langue choisie en bas de la page." # MT
           billing:
             contact: "Courriel pour les questions de facturation. Il sera indiqué avec les instructions de paiement." # MT
             payment_methods:

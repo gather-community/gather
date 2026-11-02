@@ -178,7 +178,6 @@ it:
       household_note_unnamed_html: "I campi qui sotto sono associati al nucleo dell'utente. Modificarli qui li cambia per <em>tutti gli utenti del nucleo</em>." # MT
       move_household_html: "Puoi anche %{link}." # MT
       move_household_link: "spostarlo in un altro nucleo" # MT
-      community_default_language: "Predefinita della comunità (%{language})" # MT
   households:
     greeting: "Cari membri del nucleo %{name}," # MT
     created: "Nucleo creato." # MT

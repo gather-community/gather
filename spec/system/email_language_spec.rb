@@ -2,8 +2,9 @@
 
 require "rails_helper"
 
-# The settings that decide which language Gather emails people in: a person's own choice on their profile,
-# their community's default, and the language chosen when a community signs up. See Gather::Locales.for_user.
+# The settings that decide which language Gather emails people in: each person's language on their profile,
+# the community's default that new members start with, and the language chosen when a community signs up.
+# See Gather::Locales.for_user.
 describe "email language" do
   let(:community) { Defaults.community }
 
@@ -18,18 +19,13 @@ describe "email language" do
         login_as(user, scope: :user)
       end
 
-      scenario "choosing a language, then going back to the community's" do
+      scenario "changing the language" do
         visit(edit_user_path(user))
-        expect(page).to have_select("Email Language", with_options: ["Community default (English)"])
-        select("Deutsch", from: "Email Language")
+        expect(page).to have_select("Default Language", selected: "English")
+        select("Deutsch", from: "Default Language")
         click_button("Save")
         expect(page).to have_content("Profile updated successfully")
         expect(user.reload.locale).to eq("de")
-
-        visit(edit_user_path(user))
-        select("Community default (English)", from: "Email Language")
-        click_button("Save")
-        expect(user.reload.locale).to be_nil
       end
     end
 
@@ -84,7 +80,7 @@ describe "email language" do
     scenario "no language settings are shown" do
       visit(edit_user_path(user))
       expect(page).to have_field("First Name")
-      expect(page).not_to have_field("Email Language")
+      expect(page).not_to have_field("Default Language")
 
       visit("/admin/settings/community")
       expect(page).to have_field("Time Zone")

@@ -88,7 +88,7 @@ sv:
         community_name: "Högst 20 tecken." # MT
         slug: "Små bokstäver, siffror och bindestreck. Måste börja med en bokstav. Högst 20 tecken." # MT
         introduction: "Berätta lite om er gemenskap och varför ni tror att Gather passar er. Ta med en eller flera länkar till offentliga webbsidor (t.ex. gemenskapens webbplats eller sidor i sociala medier) som visar vilka ni är." # MT
-        locale: "Språket som Gather mejlar medlemmarna i er gemenskap på, tills de väljer sitt eget." # MT
+        locale: "Språket som medlemmarna i er gemenskap börjar med för mejl och kalenderflöden. Var och en kan ändra det i sin profil." # MT
       communities_signup_action:
         message_approve: "Hela mejlet om godkännande visas ovan. Lägg till en personlig hälsning genom att ersätta platshållartexten." # MT
         message_deny: "Ange varför ansökan avslås. Det här är bara för internt bruk och skickas inte till den sökande." # MT
@@ -171,7 +171,7 @@ sv:
         paypal_email: "E-postadressen till ditt PayPal-konto. Används för ersättning till kockar. Lämna tomt för att använda din vanliga e-postadress ovan." # MT
         full_access: "Barn utan full åtkomst kan inte logga in i Gather men syns i medlemsförteckningen. Barn med full åtkomst räknas som vuxna vid fakturering." # MT
         certify_13_or_older: "Barn måste vara minst 13 år för att logga in i Gather." # MT
-        locale: "Mejl och kalenderflöden från Gather kommer på det här språket. Webbplatsen följer din webbläsare, eller språket du väljer längst ner på en sida." # MT
+        locale: "Mejl och kalenderflöden från Gather kommer på det här språket. Webbplatsen följer språkinställningen i din webbläsare, eller språket du väljer längst ner på en sida." # MT
       meals_formula:
         is_default: "Om rutan är markerad blir det här formeln som väljs som standard när nya måltider skapas." # MT
         pantry_fee_formatted: "Matgäster med en måltidskostnad på 0,00 debiteras ingen avgift för baslager, även om avgiften är fast." # MT

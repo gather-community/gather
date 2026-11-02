@@ -94,7 +94,7 @@ nl:
         community_name: "Hoogstens 20 tekens." # MT
         slug: "Kleine letters, cijfers en koppeltekens; moet met een letter beginnen. Hoogstens 20 tekens." # MT
         introduction: "Vertel ons iets over je gemeenschap en waarom Gather volgens jou goed past. Voeg een of meer links toe naar openbare webpagina’s (bijv. de website of socialemediapagina’s van je gemeenschap) waaruit blijkt wie jullie zijn." # MT
-        locale: "De taal waarin Gather de leden van je gemeenschap e-mailt, totdat ze zelf een taal kiezen." # MT
+        locale: "De taal waarmee de leden van je gemeenschap beginnen voor e-mails en agendafeeds. Iedereen kan die in het eigen profiel wijzigen." # MT
       communities_signup_action:
         message_approve: "De volledige goedkeuringsmail staat hierboven. Voeg een persoonlijke notitie toe door de voorbeeldtekst te vervangen." # MT
         message_deny: "Noteer waarom deze aanvraag wordt afgewezen. Dit is alleen voor intern gebruik en wordt niet naar de aanvrager gestuurd." # MT
@@ -177,7 +177,7 @@ nl:
         paypal_email: "Het e-mailadres van je PayPal-account. Wordt gebruikt voor vergoedingen aan koks. Laat leeg om je hoofde-mailadres hierboven te gebruiken." # MT
         full_access: "Kinderen zonder volledige toegang kunnen niet bij Gather inloggen, maar staan wel in de ledenlijst. Kinderen met volledige toegang tellen voor de facturatie als volwassenen." # MT
         certify_13_or_older: "Kinderen moeten 13 jaar of ouder zijn om bij Gather in te loggen." # MT
-        locale: "E-mails en agendafeeds van Gather zijn in deze taal. De website volgt je browser, of de taal die je onderaan een pagina kiest." # MT
+        locale: "E-mails en agendafeeds van Gather zijn in deze taal. De website volgt de taalinstelling van je browser, of de taal die je onderaan een pagina kiest." # MT
       meals_formula:
         is_default: "Als dit is aangevinkt, wordt deze formule standaard gekozen bij het aanmaken van een nieuwe maaltijd." # MT
         pantry_fee_formatted: "Eters met maaltijdkosten van 0,00 betalen geen bijdrage voor de voorraadkast, ook niet als het bedrag vast is." # MT

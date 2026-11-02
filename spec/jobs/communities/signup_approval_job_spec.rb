@@ -29,6 +29,7 @@ describe Communities::SignupApprovalJob do
 
       user = User.find_by(email: signup.contact_email)
       expect(user).to be_present
+      expect(user.locale).to eq("fr")
       expect(user).to have_role(:admin)
     end
   end

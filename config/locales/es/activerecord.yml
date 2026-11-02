@@ -116,7 +116,7 @@ es:
         full_access: "¿Debe tener acceso completo al sistema?" # MT
         certify_13_or_older: "Certifico que esta persona tiene 13 años o más" # MT
         pronouns: "Pronombres" # MT
-        locale: "Idioma de los correos" # MT
+        locale: "Idioma predeterminado" # MT
       household:
         name: "Nombre del hogar" # MT
         community_id: "Comunidad" # MT

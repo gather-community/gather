@@ -79,7 +79,7 @@ sv:
       community:
         settings:
           main_nav_customizations: "Här redigerar du länkarna i huvudmenyn. Ange länkar i Markdown-format. Exempel: [Länknamn](https://example.com). Om länknamnet är samma som en befintlig länk ersätter den standardadressen. En tom webbadress tar bort länken helt. All annan text och formatering ignoreras." # MT
-          locale: "Språket i mejl och kalenderflöden för medlemmar som inte har valt sitt eget. Webbplatsen följer var och ens webbläsare, eller språket man väljer längst ner på sidan." # MT
+          locale: "Språket som nya medlemmar börjar med för mejl och kalenderflöden. Var och en kan ändra sitt i sin profil. Webbplatsen följer språkinställningen i var och ens webbläsare, eller språket man väljer längst ner på sidan." # MT
           people:
             plain_user_selects: "Använd enkla rullgardinslistor i stället för sökrutor. Kan passa bättre för mindre gemenskaper." # MT
             user_custom_fields_spec: "Ange en specifikation i YAML-format för egna fält som visas när man ser och redigerar personer i gemenskapen. Kontakta Gathers support om du behöver hjälp att skriva specifikationen." # MT

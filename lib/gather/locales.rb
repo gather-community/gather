@@ -76,11 +76,11 @@ module Gather
     MAX_LENGTH = 10
 
     # The locale for what Gather sends `user` without their browser involved: emails and calendar feeds. It's
-    # their chosen language, else their community's default, else the app default. Only the app default is
-    # used unless the feature flag is on for them.
+    # the language on their profile, which starts as their community's default. Only the app default is used
+    # unless the feature flag is on for them.
     def self.for_user(user)
       return I18n.default_locale unless user && enabled?(user)
-      find(user.locale) || community_default(user.community)
+      find(user.locale) || I18n.default_locale
     end
 
     # The locale for what Gather sends on behalf of `community` to people who aren't users, or to no one in
@@ -90,7 +90,7 @@ module Gather
       enabled?(nil) ? community_default(community) : I18n.default_locale
     end
 
-    # The language a community chose for members who haven't chosen their own.
+    # The language a community's new members start with (see User#assign_default_locale).
     def self.community_default(community)
       find(community&.settings&.locale) || I18n.default_locale
     end

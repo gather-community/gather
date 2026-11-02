@@ -119,7 +119,7 @@ nl:
         full_access: "Moet de gebruiker volledige toegang tot het systeem hebben?" # MT
         certify_13_or_older: "Ik verklaar dat deze gebruiker 13 jaar of ouder is" # MT
         pronouns: "Voornaamwoorden" # MT
-        locale: "Taal voor e-mails" # MT
+        locale: "Standaardtaal" # MT
       household:
         name: "Naam huishouden" # MT
         community_id: "Gemeenschap" # MT

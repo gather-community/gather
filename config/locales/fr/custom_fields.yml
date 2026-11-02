@@ -79,7 +79,7 @@ fr:
       community:
         settings:
           main_nav_customizations: "Utilisez ce paramètre pour modifier les liens du menu principal. Saisissez les liens au format Markdown. Exemple : [Nom du lien](https://example.com). Si le nom du lien correspond à un lien existant, il remplacera l'URL par défaut. Une URL vide supprime complètement le lien. Tout autre texte ou balisage est ignoré." # MT
-          locale: "La langue des e-mails et des flux de calendrier pour les membres qui n'ont pas choisi la leur. Le site suit le navigateur de chacun, ou la langue choisie en bas de la page." # MT
+          locale: "La langue de départ des e-mails et des flux de calendrier pour les nouveaux membres. Chaque membre peut la changer dans son profil. Le site suit la langue du navigateur de chacun, ou la langue choisie en bas de la page." # MT
           people:
             plain_user_selects: "Utiliser des listes déroulantes simples plutôt que des champs avec recherche. Peut convenir aux petites communautés." # MT
             user_custom_fields_spec: "Saisissez une spécification au format YAML des champs personnalisés qui apparaîtront lors de l'affichage ou de la modification des personnes de cette communauté. Contactez l'assistance Gather si vous avez besoin d'aide pour la rédiger." # MT

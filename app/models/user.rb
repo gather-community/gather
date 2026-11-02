@@ -34,7 +34,7 @@
 #  last_name              :string           not null
 #  last_sign_in_at        :datetime
 #  last_sign_in_ip        :inet
-#  locale                 :string(10)
+#  locale                 :string(10)       not null
 #  medical                :text
 #  mobile_phone           :string
 #  notification_prefs     :jsonb            not null
@@ -233,8 +233,8 @@ class User < ApplicationRecord
   validates :google_email, format: Devise.email_regexp, uniqueness: true,
     unless: ->(u) { u.google_email.blank? }
   validates :first_name, presence: true
-  # Nil means "use the community's default". See Gather::Locales.for_user.
-  validates :locale, inclusion: {in: ->(_) { Gather::Locales.available.map(&:to_s) }}, allow_nil: true
+  # The language for this person's email and calendar feeds. See Gather::Locales.for_user.
+  validates :locale, inclusion: {in: ->(_) { Gather::Locales.available.map(&:to_s) }}
   validates :last_name, presence: true
   validates :up_guardianships, presence: true, if: :child?
   validates :password, presence: true, if: :password_required?
@@ -258,6 +258,9 @@ class User < ApplicationRecord
   accepts_nested_attributes_for :up_guardianships, reject_if: :all_blank, allow_destroy: true
 
   before_validation :normalize
+  # Also before_create, for the few places that save without validating.
+  before_validation :assign_default_locale, on: :create
+  before_create :assign_default_locale
 
   # This is needed for remembering users across sessions because users don't always have passwords.
   before_create { self.remember_token ||= UniqueTokenGenerator.generate(self.class, :remember_token) }
@@ -439,6 +442,11 @@ class User < ApplicationRecord
   end
 
   private
+
+  # New people start with their community's default language and can change it on their profile.
+  def assign_default_locale
+    self.locale ||= Gather::Locales.community_default(household&.community).to_s
+  end
 
   def normalize
     unless child?

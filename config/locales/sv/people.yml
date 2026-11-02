@@ -178,7 +178,6 @@ sv:
       household_note_unnamed_html: "Fälten nedan hör till personens hushåll. Om du ändrar dem här ändras de för <em>alla personer i hushållet</em>." # MT
       move_household_html: "Du kan också %{link}." # MT
       move_household_link: "flytta personen till ett annat hushåll" # MT
-      community_default_language: "Gemenskapens standard (%{language})" # MT
   households:
     greeting: "Hej hushållet %{name}!" # MT
     created: "Hushållet har skapats." # MT

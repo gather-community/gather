@@ -63,15 +63,11 @@ module Subscription
       )
     end
 
-    # The per-period price in the smallest currency unit, computed from the tier/currency/period by
-    # the app's price calculator (inflation-adjusted, localized). A Stripe Price is only ever
-    # touched inside #register, so this is computed only when someone actually subscribes.
+    # The per-period price in the smallest currency unit, from the per-user price entered by hand on the
+    # intent. Subscription::PriceCalculator isn't used here yet: self-serve pricing is still being decided,
+    # and the intent page shows the hand-entered price, so the Stripe price must match it.
     def unit_amount
-      @unit_amount ||= PriceCalculator.new(
-        tier: intent.tier,
-        currency: intent.currency,
-        months_per_period: intent.months_per_period
-      ).unit_amount_cents
+      intent.price_per_user_cents * intent.months_per_period
     end
 
     def find_or_create_customer

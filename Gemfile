@@ -6,7 +6,7 @@ gem "active_model_serializers", "~> 0.10.16"
 gem "acts_as_list", "~> 1.2"
 gem "acts_as_tenant", "~> 0.4"
 gem "attribute_normalizer", "~> 1.2"
-gem "aws-sdk-s3", "~> 1.235", require: false
+gem "aws-sdk-s3", "~> 1.237", require: false
 gem "babosa", "~> 1.0"
 gem "bootsnap", "~> 1.26"
 gem "bootstrap-kaminari-views", "~> 0.0"
@@ -81,7 +81,7 @@ gem "wisper-activerecord", "~> 1.0"
 gem "with_advisory_lock", git: "https://github.com/ClosureTree/with_advisory_lock", branch: "master"
 
 group :development, :test do
-  gem "annotaterb", "~> 4.25"
+  gem "annotaterb", "~> 4.26"
   gem "awesome_print", "~> 1.6"
   gem "bcrypt_pbkdf", ">= 1.0", "< 2.0" # For Capistrano
   gem "byebug", "~> 13.0"

@@ -6,7 +6,7 @@
     "@hotwired/turbo-rails": "^8.0.23",
     "@stripe/stripe-js": "^9.17.0",
     "easymde": "^2.21.0",
-    "i18n-js": "^4.0.0"
+    "i18n-js": "^4.5.4"
   },
   "scripts": {
     "build": "esbuild app/javascript/*.* --bundle --sourcemap --outdir=app/assets/builds --public-path=assets",

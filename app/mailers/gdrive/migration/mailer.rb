@@ -12,11 +12,15 @@ module GDrive
 
         recipients = [user, migration_request.google_email].compact
 
-        mail(
-          to: recipients,
-          reply_to: @operation.contact_email,
-          subject: t("gdrive.migration.request_subject", community: @community.name)
-        )
+        # The Google account may not belong to anyone in Gather, so fall back to the community's language.
+        locale = user ? Gather::Locales.for_user(user) : Gather::Locales.for_community(@community)
+        in_locale_of(locale: locale) do
+          mail(
+            to: recipients,
+            reply_to: @operation.contact_email,
+            subject: t("gdrive.migration.request_subject", community: @community.name)
+          )
+        end
       end
     end
   end

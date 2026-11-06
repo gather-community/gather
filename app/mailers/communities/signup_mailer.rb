@@ -26,13 +26,17 @@ class Communities::SignupMailer < ActionMailer::Base
     @signup = signup
     # reviewed_by is a User, which is tenant-scoped, so look it up without tenant.
     approver_name = ActsAsTenant.without_tenant { signup.reviewed_by.name }
-    mail(to: signup.contact_email,
-      subject: t("communities.signup_mailer.application_approved.subject", approver: approver_name))
+    in_locale_of(locale: applicant_locale(signup)) do
+      mail(to: signup.contact_email,
+        subject: t("communities.signup_mailer.application_approved.subject", approver: approver_name))
+    end
   end
 
   def application_denied(signup)
     @signup = signup
-    mail(to: signup.contact_email, subject: t("communities.signup_mailer.application_denied.subject"))
+    in_locale_of(locale: applicant_locale(signup)) do
+      mail(to: signup.contact_email, subject: t("communities.signup_mailer.application_denied.subject"))
+    end
   end
 
   def approval_created(signup)
@@ -53,5 +57,12 @@ class Communities::SignupMailer < ActionMailer::Base
     # Goes only to Gather staff, so it isn't translated.
     subject = "Community setup FAILED: #{signup.community_name}" # rubocop:disable Gather/HardCodedString
     mail(to: reviewer_email, subject: subject)
+  end
+
+  private
+
+  # The applicant isn't a user yet, so their emails are in the language they chose on the signup form.
+  def applicant_locale(signup)
+    (Gather::Locales.enabled?(nil) && Gather::Locales.find(signup.locale)) || I18n.default_locale
   end
 end

@@ -20,6 +20,7 @@ it:
         settings:
           main_nav_customizations: "Personalizzazioni del menu principale" # MT
           time_zone: "Fuso orario" # MT
+          locale: "Lingua predefinita" # MT
           default_landing_page: "Pagina iniziale predefinita" # MT
           people:
             _self: "Persone" # MT

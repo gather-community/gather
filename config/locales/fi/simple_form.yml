@@ -38,6 +38,7 @@ fi:
         introduction: "Tietoja yhteisöstäsi" # MT
         country_code: "Maa" # MT
         time_zone: "Aikavyöhyke" # MT
+        locale: "Oletuskieli" # MT
         want_sample_data: "Esimerkkiaineisto" # MT
       communities_signup_action:
         decision: "Toiminto" # MT
@@ -178,6 +179,7 @@ fi:
         paypal_email: "PayPal-tilisi sähköpostiosoite. Käytetään kokkien kulukorvauksiin. Jätä tyhjäksi, jos haluat käyttää yllä näkyvää pääsähköpostiosoitettasi." # MT
         full_access: "Lapset, joilla ei ole täysiä käyttöoikeuksia, eivät voi kirjautua Gatheriin, mutta he näkyvät jäsenluettelossa. Lapset, joilla on täydet käyttöoikeudet, lasketaan laskutuksessa aikuisiksi." # MT
         certify_13_or_older: "Lasten täytyy olla vähintään 13-vuotiaita voidakseen kirjautua Gatheriin." # MT
+        locale: "Gatherin sähköpostit ja kalenterisyötteet tulevat tällä kielellä. Sivusto käyttää selaimesi kieliasetusta tai kieltä, jonka valitset sivun alareunasta." # MT
       meals_formula:
         is_default: "Jos valittu, tämä hinnoittelukaava on oletuksena valittuna uusia aterioita luotaessa." # MT
         pantry_fee_formatted: "Ruokailijoilta, joiden aterian hinta on 0,00, ei peritä ruokavarastomaksua, vaikka maksu olisi kiinteä." # MT

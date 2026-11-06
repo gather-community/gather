@@ -89,6 +89,24 @@ class ApplicationJob < ActiveJob::Base
     end
   end
 
+  # For required notifications, which can go to several people on one message (a household's members, a
+  # community's admins): works out who should get one (see Notifications::Recipients) and yields them in
+  # groups that share a locale, so the caller can send each group its own message in its own language. A
+  # delivery error for one group is reported and doesn't stop the others.
+  def each_recipient_locale_group(targets, kind:, data: {})
+    recipient_locale_groups(targets, kind: kind).each do |locale, group|
+      with_mail_delivery_resilience(data: data.merge(locale: locale)) { yield(group) }
+    end
+  end
+
+  # The recipients of a required notification (see Notifications::Recipients), grouped by the locale their
+  # email should be in: {locale => recipients}. Raw addresses get the default locale.
+  def recipient_locale_groups(targets, kind:)
+    Notifications::Recipients.resolve(targets, kind: kind).group_by do |recipient|
+      recipient.is_a?(User) ? Gather::Locales.for_user(recipient) : I18n.default_locale
+    end
+  end
+
   def each_community
     Cluster.all.each do |cluster|
       with_cluster(cluster) do

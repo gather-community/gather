@@ -44,6 +44,10 @@
         <td><%= @signup.time_zone %></td>
       </tr>
       <tr>
+        <td><%= t(".locale") %></td>
+        <td><%= t("common.language_name", locale: @signup.locale) %></td>
+      </tr>
+      <tr>
         <td><%= t(".sample_data") %></td>
         <td><%= @signup.want_sample_data? ? t("common.yes") : t("common.no") %></td>
       </tr>

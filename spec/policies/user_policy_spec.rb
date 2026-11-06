@@ -448,6 +448,14 @@ describe UserPolicy do
           expect(subject).to match_array(normal_user_attribs << {custom_data: %i[foo bar]})
         end
       end
+
+      context "with other languages turned on" do
+        before { create(:feature_flag, name: "i18n", status: true) }
+
+        it "includes the email language" do
+          expect(subject).to match_array(normal_user_attribs << :locale)
+        end
+      end
     end
 
     context "photographer" do

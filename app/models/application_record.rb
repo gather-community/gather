@@ -39,6 +39,13 @@ class ApplicationRecord < ActiveRecord::Base
     false
   end
 
+  # ActsAsTenant checks that each belongs_to points to a record in the current cluster. Associations to
+  # User are exempt because a super admin can act in a cluster other than their own, so the records
+  # they create there (wiki pages, events, meals, messages) point to a user from another cluster.
+  def validate_tenant_association?(reflection)
+    reflection.polymorphic? || !(reflection.klass <= User)
+  end
+
   protected
 
   # Runs the given block inside a transaction with repeatable_read isolation.

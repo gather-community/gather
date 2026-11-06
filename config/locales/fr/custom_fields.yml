@@ -20,6 +20,7 @@ fr:
         settings:
           main_nav_customizations: "Personnalisation du menu principal" # MT
           time_zone: "Fuseau horaire" # MT
+          locale: "Langue par défaut" # MT
           default_landing_page: "Page d'accueil par défaut" # MT
           people:
             _self: "Personnes" # MT

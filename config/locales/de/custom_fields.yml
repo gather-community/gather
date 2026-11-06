@@ -20,6 +20,7 @@ de:
         settings:
           main_nav_customizations: "Anpassungen des Hauptmenüs" # MT
           time_zone: "Zeitzone" # MT
+          locale: "Standardsprache" # MT
           default_landing_page: "Standard-Startseite" # MT
           people:
             _self: "Personen" # MT

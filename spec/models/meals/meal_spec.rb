@@ -125,6 +125,35 @@ describe Meals::Meal do
     end
   end
 
+  describe "cost nested attributes" do
+    let(:meal) { create(:meal) }
+    let(:reimbursee) { create(:user) }
+
+    before do
+      meal.assign_attributes(cost_attributes: attribs.merge(reimbursee_id: reimbursee.id))
+    end
+
+    context "with only a payment method chosen" do
+      let(:attribs) { {ingredient_cost: "", pantry_cost: "", payment_method: "check"} }
+
+      it "ignores the cost and saves the meal" do
+        expect(meal.cost).to be_nil
+        expect(meal.save).to be(true)
+      end
+    end
+
+    context "with a cost amount filled in" do
+      let(:attribs) { {ingredient_cost: "12.50", pantry_cost: "", payment_method: ""} }
+
+      it "builds the cost and validates the rest of it" do
+        expect(meal.cost).not_to be_nil
+        expect(meal).not_to be_valid
+        expect(meal.errors[:"cost.pantry_cost"]).to be_present
+        expect(meal.errors[:"cost.payment_method"]).to be_present
+      end
+    end
+  end
+
   describe "menu_posted_at" do
     it "gets set automatically when menu entered on create" do
       meal = create(:meal, :with_menu)

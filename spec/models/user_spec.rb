@@ -237,6 +237,27 @@ describe User do
       end
     end
 
+    describe "locale" do
+      it "starts as the community's default language" do
+        community = create(:community, settings: {locale: "nb"})
+        user = create(:user, household: create(:household, community: community), locale: nil)
+        expect(user.locale).to eq("nb")
+      end
+
+      it "keeps a language that was given" do
+        expect(create(:user, locale: "fr-CA").locale).to eq("fr-CA")
+      end
+
+      it "can't be blank or a language Gather isn't available in" do
+        user = create(:user)
+        user.locale = ""
+        expect(user).to be_invalid
+        user.locale = "xx"
+        expect(user).to be_invalid
+        expect(user.errors[:locale]).to be_present
+      end
+    end
+
     describe "age certification" do
       context "with full access child" do
         context "with new record" do
@@ -450,7 +471,9 @@ describe User do
 
         context "with email taken in other cluster" do
           let(:other_cmty) { with_tenant(create(:cluster)) { create(:community) } }
-          let!(:other_user) { create(:user, community: other_cmty, email: "a@b.com") }
+          let!(:other_user) do
+            with_tenant(other_cmty.cluster) { create(:user, community: other_cmty, email: "a@b.com") }
+          end
           let(:email) { "a@b.com" }
 
           it do

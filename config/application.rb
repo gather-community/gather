@@ -108,7 +108,8 @@ module Gather
     # Allow enough time for folks to fill in and submit forms with attachments.
     config.active_storage.service_urls_expire_in = 15.minutes
 
-    config.cache_store = :redis_cache_store, {url: Settings.redis.url}
+    # Production Redis predates 6.0, which added the RESP3 protocol that redis-rb 6 uses by default.
+    config.cache_store = :redis_cache_store, {url: Settings.redis.url, protocol: 2}
 
     # Locales Gather is being translated into. Only en is shown to users for now.
     # rails-i18n and devise-i18n load data only for these locales.

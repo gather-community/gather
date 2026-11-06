@@ -102,8 +102,9 @@ module Work
         @error = t("work.notices_no_quota")
       else
         @notices = Work::Share.for_period(period).nonzero.by_user_name.map do |share|
+          # Each notice is shown as its recipient will get it, in their language.
           # .body was sometimes returning an empty String object.
-          body = WorkMailer.job_choosing_notice(share).body
+          body = WorkMailer.with(recipient: share.user).job_choosing_notice(share).body
           body.is_a?(Mail::Body) ? body.encoded : body
         end
       end

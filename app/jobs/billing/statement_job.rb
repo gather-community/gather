@@ -23,12 +23,20 @@ module Billing
               statement = Statement.new(account: account,
                 prev_balance: account.last_statement&.total_due || 0)
               statement.populate!
-              AccountMailer.statement_notice(statement).deliver_now unless options[:no_mail]
+              send_statement_notice(statement) unless options[:no_mail]
             end
           end
         rescue StatementError => e
           Gather::ErrorReporter.instance.report(e, data: {account_id: account.id})
         end
+      end
+    end
+
+    # One message per language the household's members read email in.
+    def send_statement_notice(statement)
+      data = {statement_id: statement.id}
+      each_recipient_locale_group(statement.household, kind: :statement_notice, data: data) do |group|
+        AccountMailer.with(recipient: group).statement_notice(statement).deliver_now
       end
     end
   end

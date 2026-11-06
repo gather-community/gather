@@ -24,7 +24,10 @@ module Admin
     private
 
     def settings_params
-      params.require(:community).permit(@community.settings.permitted)
+      permitted = params.require(:community).permit(@community.settings.permitted)
+      # The default language only matters once other languages are turned on, and isn't shown until then.
+      permitted[:settings]&.delete(:locale) unless Gather::Locales.enabled?(current_user)
+      permitted
     end
   end
 end

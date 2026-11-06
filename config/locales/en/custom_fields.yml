@@ -8,6 +8,7 @@ en:
         settings:
           main_nav_customizations: "Top Menu Customizations"
           time_zone: "Time Zone"
+          locale: "Default Language"
           default_landing_page: "Default Landing Page"
           people:
             _self: "People"

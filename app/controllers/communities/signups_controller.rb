@@ -14,6 +14,8 @@ class Communities::SignupsController < ApplicationController
 
   def new
     @form = Communities::SignupForm.new(action: :new)
+    # Start with the language this page is in, which follows the browser or the footer's language menu.
+    @form.signup.locale = I18n.locale.to_s if Gather::Locales.enabled?(nil)
   end
 
   def create

@@ -38,6 +38,7 @@ nl:
         introduction: "Over je gemeenschap" # MT
         country_code: "Land" # MT
         time_zone: "Tijdzone" # MT
+        locale: "Standaardtaal" # MT
         want_sample_data: "Voorbeeldgegevens" # MT
       communities_signup_action:
         decision: "Actie" # MT
@@ -178,6 +179,7 @@ nl:
         paypal_email: "Het e-mailadres van je PayPal-account. Wordt gebruikt voor vergoedingen aan koks. Laat leeg om je hoofde-mailadres hierboven te gebruiken." # MT
         full_access: "Kinderen zonder volledige toegang kunnen niet bij Gather inloggen, maar staan wel in de ledenlijst. Kinderen met volledige toegang tellen voor de facturatie als volwassenen." # MT
         certify_13_or_older: "Kinderen moeten 13 jaar of ouder zijn om bij Gather in te loggen." # MT
+        locale: "E-mails en agendafeeds van Gather zijn in deze taal. De website volgt de taalinstelling van je browser, of de taal die je onderaan een pagina kiest." # MT
       meals_formula:
         is_default: "Als dit is aangevinkt, wordt deze formule standaard gekozen bij het aanmaken van een nieuwe maaltijd." # MT
         pantry_fee_formatted: "Eters met maaltijdkosten van 0,00 betalen geen bijdrage voor de voorraadkast, ook niet als het bedrag vast is." # MT

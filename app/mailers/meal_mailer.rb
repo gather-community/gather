@@ -48,7 +48,9 @@ class MealMailer < ApplicationMailer
     mail(to: recipient, subject: default_i18n_subject(date: @meal.served_on_no_yr))
   end
 
-  # Required, so a household gets one shared message. See Meals::MessageJob.
+  # Required, so a household gets one shared message, or one per language its members read email in:
+  # Meals::MessageJob passes each group of users with `.with(recipient:)`. Without one, the whole household
+  # gets one message in the default locale. Either way, user_or_household is who the message greets.
   def normal_message(message, user_or_household)
     meal_message(message, user_or_household)
   end
@@ -63,7 +65,7 @@ class MealMailer < ApplicationMailer
     @message = message
     @recipient = user_or_household.decorate
     @meal = @message.meal.decorate
-    mail(to: @recipient, reply_to: [message.sender_email],
+    mail(to: params&.dig(:recipient) || @recipient, reply_to: [message.sender_email],
          subject: default_i18n_subject(datetime: @meal.served_on_no_yr))
   end
 

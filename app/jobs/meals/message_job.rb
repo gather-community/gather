@@ -6,8 +6,10 @@ module Meals
     def perform(message_id)
       with_object_in_cluster_context(klass: Message, id: message_id) do |message|
         message.recipients.each do |recipient|
-          with_mail_delivery_resilience(data: {recipient_id: recipient.id, message_id: message_id}) do
-            MealMailer.send(:"#{message.kind}_message", message, recipient).deliver_now
+          # A household's members get one message per language they read email in.
+          data = {recipient_id: recipient.id, message_id: message_id}
+          each_recipient_locale_group(recipient, kind: :meal_message, data: data) do |group|
+            MealMailer.with(recipient: group).send(:"#{message.kind}_message", message, recipient).deliver_now
           end
         end
       end

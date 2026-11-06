@@ -20,6 +20,7 @@ sv:
         settings:
           main_nav_customizations: "Anpassningar av huvudmenyn" # MT
           time_zone: "Tidszon" # MT
+          locale: "Standardspråk" # MT
           default_landing_page: "Standardstartsida" # MT
           people:
             _self: "Personer" # MT

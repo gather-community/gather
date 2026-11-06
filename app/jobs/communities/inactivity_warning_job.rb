@@ -75,9 +75,18 @@ module Communities
         .maximum(:last_sign_in_at)
     end
 
+    # One message per language the admins read email in. With no admins, Gather support gets it in English.
+    # Delivery errors aren't rescued: the warning only counts as sent if it was.
     def send_warning(community, warning_count, last_login_at)
-      admins = User.with_role(:admin, community).active
-      Communities::InactivityMailer.warning(community, warning_count, last_login_at, admins).deliver_now
+      admins = User.with_role(:admin, community).active.to_a
+      if admins.empty?
+        Communities::InactivityMailer.warning(community, warning_count, last_login_at, []).deliver_now
+        return
+      end
+      recipient_locale_groups(admins, kind: :community_inactivity).each_value do |group|
+        Communities::InactivityMailer.with(recipient: group)
+          .warning(community, warning_count, last_login_at, group).deliver_now
+      end
     end
   end
 end

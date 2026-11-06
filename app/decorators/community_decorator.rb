@@ -11,7 +11,7 @@ class CommunityDecorator < ApplicationDecorator
         btn_class: :danger,
         data: {
           controller: "record-delete",
-          "record-delete-url-value": h.community_path(object),
+          "record-delete-url-value": h.admin_community_path(object),
           "record-delete-confirm-token-value": object.slug,
           "record-delete-kind-value": "community",
           action: "record-delete#confirm"

@@ -23,60 +23,10 @@ es:
     resync_started: "Se inició la resincronización de suscripciones. Actualiza en un minuto para ver los cambios." # MT
     incorrect_slug: "Identificador incorrecto. La comunidad no se eliminó." # MT
     being_deleted: "%{name} se está eliminando." # MT
-    admin:
-      id: "ID" # MT
-      name: "Nombre" # MT
-      slug: "Identificador" # MT
-      abbreviation: "Abreviatura" # MT
-      country: "País" # MT
-      time_zone: "Zona horaria" # MT
-      cluster: "Agrupación" # MT
-      cluster_value: "%{name} (ID %{id})" # MT
-      created: "Creada" # MT
-      status: "Estado" # MT
-      subscription: "Suscripción" # MT
-      stripe_id: "ID de Stripe" # MT
-      not_in_stripe: "No se encontró la suscripción en Stripe" # MT
-      detailed_status: "Estado detallado" # MT
-      last_synced: "Última sincronización" # MT
-      users: "Usuarios" # MT
-      price: "Precio" # MT
-      price_value_html: "%{price}/usuario/mes &times; %{months} meses (%{currency})" # MT
-      discount: "Descuento" # MT
-      next_payment: "Próximo pago" # MT
-      contact: "Contacto" # MT
-      address: "Dirección" # MT
-      subscription_intent: "Intención de suscripción" # MT
-      tier: "Plan" # MT
-      start_date: "Fecha de inicio" # MT
-    index:
-      title: "Comunidades" # MT
-      view_signups: "Ver solicitudes" # MT
-      id: "ID" # MT
-      name: "Nombre" # MT
-      created: "Creada" # MT
-      last_login: "Último acceso" # MT
-      status: "Estado" # MT
-      users: "Usuarios" # MT
-      meals: "Comidas" # MT
-      reservations: "Eventos" # MT
-      jobs: "Tareas" # MT
-      transactions: "Movimientos" # MT
-      subscription: "Suscripción" # MT
-      cluster: "Agrupación" # MT
-      never: "Nunca" # MT
-      intent: "Intención: %{tier}" # MT
     signups:
       captcha_failed: "La verificación captcha falló. Inténtalo de nuevo." # MT
       approved: "Solicitud aprobada. Se está configurando la comunidad." # MT
       denied: "Solicitud rechazada." # MT
-      index:
-        title: "Solicitudes de alta de comunidades" # MT
-        none_found: "No se encontraron solicitudes." # MT
-        community_name: "Nombre de la comunidad" # MT
-        contact: "Contacto" # MT
-        submitted: "Enviada" # MT
-        status: "Estado" # MT
       new:
         title: "¡Únete a Gather!" # MT
         intro: "Gather es una plataforma de gestión comunitaria para cohousing y otras comunidades de vida colaborativa. Para solicitar una comunidad nueva, rellena el formulario de abajo. Revisaremos tu solicitud y te responderemos por correo. Nos reservamos el derecho de rechazar comunidades que no encajen con nuestra misión." # MT
@@ -87,23 +37,6 @@ es:
         final_steps: "Últimos pasos" # MT
         verification: "Verificación" # MT
         submit: "Enviar solicitud" # MT
-      review:
-        title: "Revisar solicitud: %{name}" # MT
-        status: "Estado" # MT
-        reviewed: "el %{date} por %{name}" # MT
-        contact_name: "Nombre del contacto" # MT
-        contact_email: "Correo del contacto" # MT
-        submitted: "Enviada" # MT
-        community_name: "Nombre de la comunidad" # MT
-        slug: "Identificador de URL" # MT
-        country: "País" # MT
-        time_zone: "Zona horaria" # MT
-        sample_data: "Datos de ejemplo" # MT
-        about: "Acerca de" # MT
-        approval_message: "Mensaje de aprobación" # MT
-        internal_notes: "Notas internas" # MT
-        denial_reason: "Motivo del rechazo (no se envía al usuario)" # MT
-        submit: "Enviar" # MT
       submitted:
         title: "Solicitud enviada" # MT
         thanks: "¡Gracias por solicitar unirte a Gather!" # MT

@@ -1,6 +1,10 @@
 <% (@title = yield(:title)) && @title.blank? && (raise "No page title given") %>
 <% (@title_footnote = yield(:title_footnote)) %>
 <% @title_no_html = yield(:title_no_html) %>
+<%# Operator pages have no community but still get their own nav (see AdminController). %>
+<% show_nav = user_signed_in? && (current_community || admin_mode?) %>
+<% logo = image_tag("logo-white.png") %>
+<% logo << content_tag(:span, t(".admin_label"), class: "admin-label") if admin_mode? %>
 <!DOCTYPE html>
 <html lang="<%= I18n.locale %>" dir="ltr">
 <head>
@@ -17,21 +21,21 @@
     <%# DESKTOP/TABLET NAVS %>
     <nav class="navbar navbar-default hidden-xs">
       <div class="nav-wrapper">
-        <div class="logo nav-1 hidden-sm">
-          <%= link_to(image_tag("logo-white.png"), logo_link_url, alt: t(".home")) %>
+        <div class="logo nav-1 hidden-sm <%= "admin-mode" if admin_mode? %>">
+          <%= link_to(logo, logo_link_url, alt: t(".home")) %>
         </div>
         <div class="nav-2-3-4">
           <div class="nav-2-3">
-            <div class="logo nav-2 hidden visible-sm">
-              <%= link_to(image_tag("logo-white.png"), logo_link_url, alt: t(".home")) %>
+            <div class="logo nav-2 hidden visible-sm <%= "admin-mode" if admin_mode? %>">
+              <%= link_to(logo, logo_link_url, alt: t(".home")) %>
             </div>
             <div class="nav-3 personal-nav">
               <%# Hidden until focused, so keyboard and screen reader users still get it. %>
               <a href="#content" id="skip-link" class="sr-only sr-only-focusable">
                 <%= t(".skip_to_content") %>
               </a>
-              <% if user_signed_in? && current_community %>
-                <% if FeatureFlag.lookup("search").on?(current_user) %>
+              <% if show_nav %>
+                <% if current_community && FeatureFlag.lookup("search").on?(current_user) %>
                   <form action="<%= search_path %>" method="get" class="nav-search-form" role="search">
                     <%= icon_tag("search", class: "nav-search-icon") %>
                     <input type="search" name="search" class="nav-search-input"
@@ -45,7 +49,7 @@
             </div>
           </div>
           <div class="main-nav">
-            <% if user_signed_in? && current_community %>
+            <% if show_nav %>
               <ul class="nav">
                 <% nav_builder.main_items(display: :desktop).each do |item| %>
                   <li class="<%= "active" if item[:active] %>">
@@ -81,14 +85,14 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <%= link_to(image_tag("logo-white.png"), logo_link_url, class: "logo", alt: t(".home")) %>
+          <%= link_to(logo, logo_link_url, class: "logo #{"admin-mode" if admin_mode?}", alt: t(".home")) %>
           <% if user_signed_in? && current_community && FeatureFlag.lookup("search").on?(current_user) %>
             <%= link_to(icon_tag("search"), search_path, class: "search-nav-link mobile-search-link",
                         title: t(".search"), aria: {label: t(".search")}) %>
           <% end %>
         </div>
 
-        <% if user_signed_in? && current_community %>
+        <% if show_nav %>
           <div class="collapse navbar-collapse" id="mobile-nav">
             <ul class="nav navbar-nav mobile-nav">
               <% nav_builder.main_items(display: :mobile).each do |item| %>

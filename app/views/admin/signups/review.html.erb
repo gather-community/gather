@@ -65,7 +65,7 @@
           data-communities--signup-action-contact-first-name-value="<%= @signup.contact_first_name %>"
           data-communities--signup-action-community-name-value="<%= @signup.community_name %>"
           data-communities--signup-action-approver-first-name-value="<%= current_user.first_name %>">
-        <%= gather_form_for(@action_form, url: act_communities_signup_path(@signup), method: :post,
+        <%= gather_form_for(@action_form, url: act_admin_signup_path(@signup), method: :post,
               width: :full, layout: :vertical) do |f| %>
           <%= f.input :decision, as: :select,
                 collection: Communities::SignupActionForm::DECISION_OPTIONS,

@@ -29,13 +29,10 @@ fi:
     footer:
       privacy_policy: "Tietosuojaseloste" # MT
       credits: "Tekijät" # MT
+      admin: "Ylläpito" # MT
       settings: "Asetukset" # MT
       subscription: "Tilaus" # MT
       billing: "Laskutus" # MT
-      communities: "Yhteisöt" # MT
-      resync_subscriptions: "Synkronoi tilaukset uudelleen" # MT
-      domains: "Verkkotunnukset" # MT
-      feature_flags: "Ominaisuusliput" # MT
       # Shown on pages in machine-translated locales (Gather::Locales::MACHINE_TRANSLATED).
       machine_translated: "Tämä sivu on käännetty automaattisesti, ja siinä voi olla virheitä." # MT
       machine_translated_with_link_html: "Tämä sivu on käännetty automaattisesti, ja siinä voi olla virheitä. %{link}" # MT

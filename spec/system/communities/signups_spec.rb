@@ -109,14 +109,14 @@ describe "community signups", js: true do
     end
 
     scenario "shows pending applications by default" do
-      visit(communities_signups_path)
+      visit(admin_signups_path)
       expect(page).to have_title("Community Signup Applications")
       expect(page).to have_content(pending_signup.community_name)
       expect(page).not_to have_content(approved_signup.community_name)
     end
 
     scenario "status lens filters applications" do
-      visit(communities_signups_path)
+      visit(admin_signups_path)
       select_lens(:status, "Approved")
       expect(page).not_to have_content(pending_signup.community_name)
       expect(page).to have_content(approved_signup.community_name)
@@ -136,7 +136,7 @@ describe "community signups", js: true do
     end
 
     scenario "approve application", perform_jobs: true do
-      visit(review_communities_signup_path(signup))
+      visit(review_admin_signup_path(signup))
       expect(page).to have_content(signup.community_name)
       expect(page).to have_content(signup.contact_name)
 
@@ -162,7 +162,7 @@ describe "community signups", js: true do
     end
 
     scenario "deny application" do
-      visit(review_communities_signup_path(signup))
+      visit(review_admin_signup_path(signup))
 
       emails = email_sent_by do
         select("Deny", from: "Action")
@@ -190,7 +190,7 @@ describe "community signups", js: true do
     # show_exceptions=false in test mode. Use raise_server_errors: false so the
     # stored server error doesn't interfere, and verify the page is not accessible.
     scenario "plain admin cannot access signups index", raise_server_errors: false do
-      visit(communities_signups_path)
+      visit(admin_signups_path)
       expect(page).not_to have_title("Community Signup Applications")
     end
   end

@@ -23,61 +23,10 @@ fi:
     resync_started: "Tilauksen uudelleensynkronointi aloitettu. Päivitä sivu hetken kuluttua nähdäksesi muutokset." # MT
     incorrect_slug: "Väärä tunniste. Yhteisöä ei poistettu." # MT
     being_deleted: "Poistetaan: %{name}." # MT
-    admin:
-      id: "ID" # MT
-      name: "Nimi" # MT
-      slug: "Tunniste" # MT
-      abbreviation: "Lyhenne" # MT
-      country: "Maa" # MT
-      time_zone: "Aikavyöhyke" # MT
-      cluster: "Yhteisöryhmä" # MT
-      cluster_value: "%{name} (ID %{id})" # MT
-      created: "Luotu" # MT
-      status: "Tila" # MT
-      subscription: "Tilaus" # MT
-      stripe_id: "Stripe-ID" # MT
-      not_in_stripe: "Tilausta ei löytynyt Stripestä" # MT
-      detailed_status: "Tarkka tila" # MT
-      last_synced: "Synkronoitu viimeksi" # MT
-      users: "Käyttäjät" # MT
-      price: "Hinta" # MT
-      # E.g. "$5.00/user/month × 12 months (USD)"
-      price_value_html: "%{price}/käyttäjä/kk &times; %{months} kk (%{currency})" # MT
-      discount: "Alennus" # MT
-      next_payment: "Seuraava maksu" # MT
-      contact: "Yhteyshenkilö" # MT
-      address: "Osoite" # MT
-      subscription_intent: "Aiottu tilaus" # MT
-      tier: "Taso" # MT
-      start_date: "Alkamispäivä" # MT
-    index:
-      title: "Yhteisöt" # MT
-      view_signups: "Näytä hakemukset" # MT
-      id: "ID" # MT
-      name: "Nimi" # MT
-      created: "Luotu" # MT
-      last_login: "Viimeisin kirjautuminen" # MT
-      status: "Tila" # MT
-      users: "Käyttäjät" # MT
-      meals: "Ateriat" # MT
-      reservations: "Varaukset" # MT
-      jobs: "Tehtävät" # MT
-      transactions: "Tap." # MT
-      subscription: "Tilaus" # MT
-      cluster: "Yhteisöryhmä" # MT
-      never: "Ei koskaan" # MT
-      intent: "Aikomus: %{tier}" # MT
     signups:
       captcha_failed: "Captcha-tarkistus epäonnistui. Yritä uudelleen." # MT
       approved: "Hakemus hyväksytty. Yhteisön käyttöönotto on käynnissä." # MT
       denied: "Hakemus hylätty." # MT
-      index:
-        title: "Yhteisöjen liittymishakemukset" # MT
-        none_found: "Hakemuksia ei löytynyt." # MT
-        community_name: "Yhteisön nimi" # MT
-        contact: "Yhteyshenkilö" # MT
-        submitted: "Lähetetty" # MT
-        status: "Tila" # MT
       new:
         title: "Liity Gatheriin!" # MT
         intro: "Gather on yhteisöjen hallintajärjestelmä yhteisöasumiseen ja muihin yhteisöllisiin asumismuotoihin. Pyydä uutta yhteisöä täyttämällä alla oleva lomake. Käsittelemme hakemuksesi ja otamme yhteyttä sähköpostitse. Pidätämme oikeuden hylätä hakemukset yhteisöiltä, jotka eivät sovi tehtäväämme." # MT
@@ -88,23 +37,6 @@ fi:
         final_steps: "Viimeiset vaiheet" # MT
         verification: "Vahvistus" # MT
         submit: "Lähetä hakemus" # MT
-      review:
-        title: "Käsittele hakemus: %{name}" # MT
-        status: "Tila" # MT
-        reviewed: "%{date}, käsittelijä: %{name}" # MT
-        contact_name: "Yhteyshenkilön nimi" # MT
-        contact_email: "Yhteyshenkilön sähköposti" # MT
-        submitted: "Lähetetty" # MT
-        community_name: "Yhteisön nimi" # MT
-        slug: "URL-tunniste" # MT
-        country: "Maa" # MT
-        time_zone: "Aikavyöhyke" # MT
-        sample_data: "Esimerkkiaineisto" # MT
-        about: "Tietoja" # MT
-        approval_message: "Hyväksymisviesti" # MT
-        internal_notes: "Sisäiset muistiinpanot" # MT
-        denial_reason: "Hylkäyksen syy (ei lähetetä käyttäjälle)" # MT
-        submit: "Lähetä" # MT
       submitted:
         title: "Hakemus lähetetty" # MT
         thanks: "Kiitos hakemuksestasi Gatheriin!" # MT

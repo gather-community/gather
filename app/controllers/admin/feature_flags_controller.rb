@@ -6,6 +6,8 @@ module Admin
   class FeatureFlagsController < AdminController
     include UserSelectJson
 
+    before_action -> { nav_context(:flags) }
+
     def index
       authorize(%i[admin feature_flag])
       @flags = policy_scope([:admin, FeatureFlag]).by_name

@@ -23,61 +23,10 @@ sv:
     resync_started: "Synkroniseringen av abonnemang har startat. Ladda om om en minut för att se ändringarna." # MT
     incorrect_slug: "Fel slug. Gemenskapen raderades inte." # MT
     being_deleted: "%{name} raderas." # MT
-    admin:
-      id: "ID" # MT
-      name: "Namn" # MT
-      slug: "Slug" # MT
-      abbreviation: "Förkortning" # MT
-      country: "Land" # MT
-      time_zone: "Tidszon" # MT
-      cluster: "Kluster" # MT
-      cluster_value: "%{name} (ID %{id})" # MT
-      created: "Skapad" # MT
-      status: "Status" # MT
-      subscription: "Abonnemang" # MT
-      stripe_id: "Stripe-ID" # MT
-      not_in_stripe: "Abonnemanget hittades inte i Stripe" # MT
-      detailed_status: "Detaljerad status" # MT
-      last_synced: "Senast synkroniserad" # MT
-      users: "Personer" # MT
-      price: "Pris" # MT
-      # E.g. "$5.00/user/month × 12 months (USD)"
-      price_value_html: "%{price}/person/månad &times; %{months} månader (%{currency})" # MT
-      discount: "Rabatt" # MT
-      next_payment: "Nästa betalning" # MT
-      contact: "Kontakt" # MT
-      address: "Adress" # MT
-      subscription_intent: "Önskat abonnemang" # MT
-      tier: "Nivå" # MT
-      start_date: "Startdatum" # MT
-    index:
-      title: "Gemenskaper" # MT
-      view_signups: "Visa ansökningar" # MT
-      id: "ID" # MT
-      name: "Namn" # MT
-      created: "Skapad" # MT
-      last_login: "Senaste inloggning" # MT
-      status: "Status" # MT
-      users: "Personer" # MT
-      meals: "Måltider" # MT
-      reservations: "Bokn." # MT
-      jobs: "Uppg." # MT
-      transactions: "Trans." # MT
-      subscription: "Abonnemang" # MT
-      cluster: "Kluster" # MT
-      never: "Aldrig" # MT
-      intent: "Önskat: %{tier}" # MT
     signups:
       captcha_failed: "Captcha-kontrollen misslyckades. Försök igen." # MT
       approved: "Ansökan godkänd. Gemenskapen håller på att skapas." # MT
       denied: "Ansökan avslogs." # MT
-      index:
-        title: "Ansökningar från gemenskaper" # MT
-        none_found: "Inga ansökningar hittades." # MT
-        community_name: "Gemenskapens namn" # MT
-        contact: "Kontakt" # MT
-        submitted: "Skickad" # MT
-        status: "Status" # MT
       new:
         title: "Gå med i Gather!" # MT
         intro: "Gather är en plattform för att hantera kollektivhus och andra gemenskaper där man bor tillsammans. Fyll i formuläret nedan för att ansöka om en ny gemenskap. Vi går igenom din ansökan och hör av oss via mejl. Vi förbehåller oss rätten att avslå ansökningar från gemenskaper som inte passar vårt uppdrag." # MT
@@ -88,23 +37,6 @@ sv:
         final_steps: "Sista stegen" # MT
         verification: "Verifiering" # MT
         submit: "Skicka ansökan" # MT
-      review:
-        title: "Granska ansökan: %{name}" # MT
-        status: "Status" # MT
-        reviewed: "%{date} av %{name}" # MT
-        contact_name: "Kontaktpersonens namn" # MT
-        contact_email: "Kontaktpersonens e-post" # MT
-        submitted: "Skickad" # MT
-        community_name: "Gemenskapens namn" # MT
-        slug: "URL-slug" # MT
-        country: "Land" # MT
-        time_zone: "Tidszon" # MT
-        sample_data: "Exempeldata" # MT
-        about: "Om gemenskapen" # MT
-        approval_message: "Meddelande vid godkännande" # MT
-        internal_notes: "Interna anteckningar" # MT
-        denial_reason: "Skäl till avslag (skickas inte till den sökande)" # MT
-        submit: "Skicka" # MT
       submitted:
         title: "Ansökan skickad" # MT
         thanks: "Tack för din ansökan till Gather!" # MT

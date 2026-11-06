@@ -41,7 +41,7 @@ describe "community admin page", js: true do
     click_on("Delete")
     fill_in_modal(target_community.slug)
     click_modal_button
-    expect(page).to have_current_path(communities_path)
+    expect(page).to have_current_path(admin_communities_path)
     expect(page).to have_content("is being deleted")
   end
 end

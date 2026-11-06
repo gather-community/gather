@@ -16,7 +16,8 @@ class ApplicationController < ActionController::Base
 
   attr_accessor :current_community
 
-  helper_method :current_community, :current_cluster, :multi_community?, :own_cluster?, :nav_builder
+  helper_method :current_community, :current_cluster, :multi_community?, :own_cluster?, :nav_builder,
+    :admin_mode?
 
   def current_cluster
     current_tenant
@@ -30,7 +31,12 @@ class ApplicationController < ActionController::Base
 
   def verify_pundit_authorization
     return if devise_controller?
-    action_name == "index" ? verify_policy_scoped : verify_authorized
+    (action_name == "index") ? verify_policy_scoped : verify_authorized
+  end
+
+  # Whether this is an operator page (see AdminController), which gets its own nav, header and footer.
+  def admin_mode?
+    false
   end
 
   def nav_builder

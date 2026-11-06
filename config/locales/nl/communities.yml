@@ -23,61 +23,10 @@ nl:
     resync_started: "Opnieuw synchroniseren van het abonnement is gestart. Vernieuw de pagina over een minuut om de wijzigingen te zien." # MT
     incorrect_slug: "Onjuiste slug. De gemeenschap is niet verwijderd." # MT
     being_deleted: "%{name} wordt verwijderd." # MT
-    admin:
-      id: "ID" # MT
-      name: "Naam" # MT
-      slug: "Slug" # MT
-      abbreviation: "Afkorting" # MT
-      country: "Land" # MT
-      time_zone: "Tijdzone" # MT
-      cluster: "Cluster" # MT
-      cluster_value: "%{name} (ID %{id})" # MT
-      created: "Aangemaakt" # MT
-      status: "Status" # MT
-      subscription: "Abonnement" # MT
-      stripe_id: "Stripe-ID" # MT
-      not_in_stripe: "Abonnement niet gevonden in Stripe" # MT
-      detailed_status: "Gedetailleerde status" # MT
-      last_synced: "Laatst gesynchroniseerd" # MT
-      users: "Gebruikers" # MT
-      price: "Prijs" # MT
-      # E.g. "$5.00/user/month × 12 months (USD)"
-      price_value_html: "%{price}/gebruiker/maand &times; %{months} maanden (%{currency})" # MT
-      discount: "Korting" # MT
-      next_payment: "Volgende betaling" # MT
-      contact: "Contactpersoon" # MT
-      address: "Adres" # MT
-      subscription_intent: "Beoogd abonnement" # MT
-      tier: "Niveau" # MT
-      start_date: "Begindatum" # MT
-    index:
-      title: "Gemeenschappen" # MT
-      view_signups: "Aanvragen bekijken" # MT
-      id: "ID" # MT
-      name: "Naam" # MT
-      created: "Aangemaakt" # MT
-      last_login: "Laatst ingelogd" # MT
-      status: "Status" # MT
-      users: "Gebruikers" # MT
-      meals: "Maaltijden" # MT
-      reservations: "Reserv." # MT
-      jobs: "Taken" # MT
-      transactions: "Trans." # MT
-      subscription: "Abonnement" # MT
-      cluster: "Cluster" # MT
-      never: "Nooit" # MT
-      intent: "Beoogd: %{tier}" # MT
     signups:
       captcha_failed: "De captcha-controle is mislukt. Probeer het opnieuw." # MT
       approved: "Aanvraag goedgekeurd. De gemeenschap wordt ingericht." # MT
       denied: "Aanvraag afgewezen." # MT
-      index:
-        title: "Aanvragen voor nieuwe gemeenschappen" # MT
-        none_found: "Geen aanvragen gevonden." # MT
-        community_name: "Naam van de gemeenschap" # MT
-        contact: "Contactpersoon" # MT
-        submitted: "Ingediend" # MT
-        status: "Status" # MT
       new:
         title: "Aansluiten bij Gather!" # MT
         intro: "Gather is een platform om gemeenschappen te beheren, voor centraal wonen en andere gemeenschappelijke woonvormen. Vul het formulier hieronder in om een nieuwe gemeenschap aan te vragen. We bekijken je aanvraag en nemen per e-mail contact met je op. We behouden ons het recht voor om aanvragen af te wijzen van gemeenschappen die niet passen bij onze missie." # MT
@@ -88,23 +37,6 @@ nl:
         final_steps: "Laatste stappen" # MT
         verification: "Verificatie" # MT
         submit: "Aanvraag indienen" # MT
-      review:
-        title: "Aanvraag beoordelen: %{name}" # MT
-        status: "Status" # MT
-        reviewed: "op %{date} door %{name}" # MT
-        contact_name: "Naam contactpersoon" # MT
-        contact_email: "E-mailadres contactpersoon" # MT
-        submitted: "Ingediend" # MT
-        community_name: "Naam van de gemeenschap" # MT
-        slug: "URL-slug" # MT
-        country: "Land" # MT
-        time_zone: "Tijdzone" # MT
-        sample_data: "Voorbeeldgegevens" # MT
-        about: "Over" # MT
-        approval_message: "Goedkeuringsbericht" # MT
-        internal_notes: "Interne notities" # MT
-        denial_reason: "Reden van afwijzing (wordt niet naar de gebruiker gestuurd)" # MT
-        submit: "Indienen" # MT
       submitted:
         title: "Aanvraag ingediend" # MT
         thanks: "Bedankt voor je aanvraag bij Gather!" # MT

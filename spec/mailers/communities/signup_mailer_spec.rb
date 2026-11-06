@@ -21,7 +21,7 @@ describe Communities::SignupMailer do
       expect(mail.body.encoded).to include(signup.community_name)
       expect(mail.body.encoded).to include(signup.slug)
       expect(mail.body.encoded).to include(signup.contact_email)
-      expect(mail.body.encoded).to contain_apex_url("/communities/signups/#{signup.id}/review")
+      expect(mail.body.encoded).to contain_apex_url("/admin/signups/#{signup.id}/review")
     end
   end
 
@@ -45,7 +45,7 @@ describe Communities::SignupMailer do
       expect(mail.body.encoded).to include(signup.slug)
       expect(mail.body.encoded).to include(signup.contact_email)
       expect(mail.body.encoded).to include("Something went wrong")
-      expect(mail.body.encoded).to contain_apex_url("/communities/signups/#{signup.id}/review")
+      expect(mail.body.encoded).to contain_apex_url("/admin/signups/#{signup.id}/review")
     end
   end
 end

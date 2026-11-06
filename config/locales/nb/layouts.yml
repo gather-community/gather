@@ -29,13 +29,10 @@ nb:
     footer:
       privacy_policy: "Personvernerklæring" # MT
       credits: "Bidragsytere" # MT
+      admin: "Admin" # MT
       settings: "Innstillinger" # MT
       subscription: "Abonnement" # MT
       billing: "Fakturering" # MT
-      communities: "Fellesskap" # MT
-      resync_subscriptions: "Synkroniser abonnementer på nytt" # MT
-      domains: "Domener" # MT
-      feature_flags: "Funksjonsflagg" # MT
       # Shown on pages in machine-translated locales (Gather::Locales::MACHINE_TRANSLATED).
       machine_translated: "Denne siden ble oversatt automatisk og kan inneholde feil." # MT
       machine_translated_with_link_html: "Denne siden ble oversatt automatisk og kan inneholde feil. %{link}" # MT

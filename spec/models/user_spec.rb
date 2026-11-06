@@ -450,7 +450,9 @@ describe User do
 
         context "with email taken in other cluster" do
           let(:other_cmty) { with_tenant(create(:cluster)) { create(:community) } }
-          let!(:other_user) { create(:user, community: other_cmty, email: "a@b.com") }
+          let!(:other_user) do
+            with_tenant(other_cmty.cluster) { create(:user, community: other_cmty, email: "a@b.com") }
+          end
           let(:email) { "a@b.com" }
 
           it do

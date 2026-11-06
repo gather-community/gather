@@ -238,10 +238,10 @@
   resolved "https://registry.yarnpkg.com/@rails/actioncable/-/actioncable-8.1.300.tgz#bfd50813be0225a0403bddb11e8ba9a00b1fb135"
   integrity sha512-zOENQsq3NM2jyBY6Z2qtZa3V/R/6OEqA+LGKixQbBMl7kk/J3FXDRcszPe74LsHNgB01jCl/DXu/xA8sHt4I/g==
 
-"@stripe/stripe-js@^10.0.0":
-  version "10.2.0"
-  resolved "https://registry.yarnpkg.com/@stripe/stripe-js/-/stripe-js-10.2.0.tgz#203868bcd6e8ab2b65c976b7c0c682d7ff025de1"
-  integrity sha512-C0F6LKxvsa9ONtxfJ4JG/vo8XjramVyy7tOZNZvoaZkw0M82OTm9LD3Ifcvw0QMDI7qPA14h+IP3qagkuC3b2Q==
+"@stripe/stripe-js@^10.2.1":
+  version "10.2.1"
+  resolved "https://registry.yarnpkg.com/@stripe/stripe-js/-/stripe-js-10.2.1.tgz#1d626806d04d1db50cbd216c2f733c873279f572"
+  integrity sha512-diHeR1/FeWZZzuFXEvkjRMzydgKEpxUTrKEUxSV8NcpeZY3Kl8C4Gerw/JSMK+3oXsBRJtgkG7ckviQJ651moA==
 
 "@types/codemirror@^5.60.10":
   version "5.60.17"

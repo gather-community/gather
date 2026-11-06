@@ -211,7 +211,7 @@ When upgrading Rails to a new version, always read the official upgrade guide at
 
 ## Tech Stack
 
-- Ruby 3.2.2, Node.js 18.12.1
+- Ruby 3.2.2, Node.js 24.22.2
 - Rails 8.1, PostgreSQL, Redis, Elasticsearch
 - Devise + OmniAuth (Google OAuth2) for auth
 - Delayed Job for background processing

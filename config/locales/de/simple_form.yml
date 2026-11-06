@@ -32,6 +32,7 @@ de:
         introduction: "Über deine Gemeinschaft" # MT
         country_code: "Land" # MT
         time_zone: "Zeitzone" # MT
+        locale: "Standardsprache" # MT
         want_sample_data: "Beispieldaten" # MT
       communities_signup_action:
         decision: "Aktion" # MT
@@ -172,6 +173,7 @@ de:
         paypal_email: "Die E-Mail-Adresse deines PayPal-Kontos. Wird für Rückerstattungen an die Küchenleitung verwendet. Leer lassen, um die Haupt-E-Mail-Adresse oben zu verwenden." # MT
         full_access: "Kinder ohne vollen Zugang können sich nicht bei Gather anmelden, erscheinen aber im Verzeichnis. Kinder mit vollem Zugang zählen bei der Abrechnung als Erwachsene." # MT
         certify_13_or_older: "Kinder müssen mindestens 13 Jahre alt sein, um sich bei Gather anzumelden." # MT
+        locale: "E-Mails und Kalender-Feeds von Gather sind in dieser Sprache. Die Website richtet sich nach der Spracheinstellung deines Browsers oder nach der Sprache, die du unten auf einer Seite wählst." # MT
       meals_formula:
         is_default: "Wenn angehakt, ist diese Preisformel beim Anlegen neuer Mahlzeiten vorausgewählt." # MT
         pantry_fee_formatted: "Essensgästen mit Mahlzeitkosten von 0,00 wird keine Vorratsgebühr berechnet, auch wenn die Gebühr fest ist." # MT

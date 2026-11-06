@@ -20,6 +20,7 @@ fi:
         settings:
           main_nav_customizations: "Ylävalikon mukautukset" # MT
           time_zone: "Aikavyöhyke" # MT
+          locale: "Oletuskieli" # MT
           default_landing_page: "Oletusaloitussivu" # MT
           people:
             _self: "Ihmiset" # MT

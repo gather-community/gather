@@ -97,6 +97,8 @@ class Community < ApplicationRecord
   custom_fields :settings, spec: lambda { |_cmty|
     [
       {key: :time_zone, type: :time_zone, required: true, default: "UTC"},
+      # The language new members start with for emails and calendar feeds. They can change theirs.
+      {key: :locale, type: :locale, required: true, default: "en"},
       {key: :default_landing_page, type: :enum, options: %w[meals directory calendars wiki],
        default: "directory", required: true},
       {key: :main_nav_customizations, type: :text},

@@ -35,3 +35,9 @@ updates:
         update-types:
           - "minor"
           - "patch"
+    ignore:
+      # TypeScript 7 has no JS API yet, and typescript-eslint (which our ESLint config uses) needs it.
+      # Even typescript-eslint 8.72 supports only TypeScript < 6.1. Remove this once it supports 7.
+      - dependency-name: "typescript"
+        update-types:
+          - "version-update:semver-major"

@@ -20,6 +20,7 @@ nl:
         settings:
           main_nav_customizations: "Aanpassingen van het hoofdmenu" # MT
           time_zone: "Tijdzone" # MT
+          locale: "Standaardtaal" # MT
           default_landing_page: "Standaard startpagina" # MT
           people:
             _self: "Mensen" # MT

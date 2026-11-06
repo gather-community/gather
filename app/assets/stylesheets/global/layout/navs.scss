@@ -21,6 +21,13 @@ ul.nav {
 
 // The ADMIN label under the logo on operator pages (see AdminController). The logo shrinks to make room
 // so the header stays the same height.
+//
+// The label lines up with the start of the word GATHER, which in logo-white.png (494x120) begins
+// 137px from the left edge. This gives that offset for a given rendered logo height.
+@function admin-label-offset($logo-height) {
+  @return $logo-height * 137 / 120;
+}
+
 .logo .admin-label {
   display: block;
   color: #fff;
@@ -50,6 +57,7 @@ ul.nav {
 
       .admin-label {
         margin-top: 3px;
+        margin-left: admin-label-offset(40px);
       }
     }
   }
@@ -77,6 +85,7 @@ ul.nav {
 
       .admin-label {
         margin-top: 0;
+        margin-left: admin-label-offset(26px);
       }
     }
   }
@@ -230,8 +239,9 @@ ul.nav {
           padding-bottom: 2px;
         }
 
+        // The image has 10px top and 2px bottom padding inside its 60px height, so the logo is 48px tall.
         .admin-label {
-          padding-left: 10px;
+          padding-left: 10px + admin-label-offset(48px);
         }
       }
     }

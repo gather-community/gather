@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_31_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_07_120100) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -747,6 +747,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_31_120000) do
     t.string "status", default: "queued", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
+    t.string "locale", limit: 10, null: false
     t.index ["cluster_id"], name: "index_meal_imports_on_cluster_id"
     t.index ["community_id"], name: "index_meal_imports_on_community_id"
     t.index ["user_id"], name: "index_meal_imports_on_user_id"
@@ -907,17 +908,20 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_31_120000) do
     t.bigint "cluster_id", null: false
     t.bigint "account_id", null: false
     t.bigint "creator_id"
-    t.string "description", limit: 255, null: false
+    t.string "description", limit: 255
     t.integer "amount_cents", null: false
     t.string "stripe_invoice_line_item_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "stripe_event_id"
+    t.string "kind", limit: 16, null: false
     t.index ["account_id"], name: "index_messaging_transactions_on_account_id"
     t.index ["cluster_id"], name: "index_messaging_transactions_on_cluster_id"
     t.index ["creator_id"], name: "index_messaging_transactions_on_creator_id"
     t.index ["stripe_event_id"], name: "index_messaging_transactions_on_stripe_event_id"
     t.index ["stripe_invoice_line_item_id"], name: "index_messaging_transactions_on_stripe_invoice_line_item_id"
+    t.check_constraint "(kind::text = 'manual'::text) = (description IS NOT NULL)", name: "description_only_if_manual"
+    t.check_constraint "kind::text = ANY (ARRAY['topup_credit'::character varying, 'topup_reversal'::character varying, 'manual'::character varying]::text[])", name: "kind_valid"
   end
 
   create_table "people_emergency_contacts", id: :serial, force: :cascade do |t|

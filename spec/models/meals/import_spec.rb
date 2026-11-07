@@ -81,6 +81,36 @@ describe Meals::Import do
       end
     end
 
+    # The import runs in a job, but in the language of the person who uploaded the file.
+    context "uploaded by someone using French" do
+      let!(:default_formula) { create(:meal_formula, is_default: true) }
+      let!(:calendar) { create(:calendar, name: "Cuisine") }
+      let(:import_object) do
+        I18n.with_locale(:fr) { create(:meal_import, community: community, user: user, csv: csv) }
+      end
+
+      context "with dates written the way the French date picker writes them" do
+        # February, since Ruby's own parser can't read "fév." (it would find "jan" in "jan." by itself).
+        let(:csv) { "Date/Heure,Lieux\n7 fév. 2019 12:00,Cuisine\njeu 7 fév. 2019 18:30,Cuisine\n" }
+
+        it "reads them" do
+          expect(import.locale).to eq("fr")
+          expect(import).to be_successful
+          expect(Meals::Meal.order(:served_at).map(&:served_at))
+            .to eq([Time.zone.parse("2019-02-07 12:00"), Time.zone.parse("2019-02-07 18:30")])
+        end
+      end
+
+      context "with a bad date" do
+        let(:csv) { "Date/Heure,Lieux\nbientôt,Cuisine\n" }
+
+        it "reports the error in French" do
+          expect(import.errors_by_row)
+            .to eq("2" => [I18n.t("csv.errors.meals/meal.invalid_served_at", str: "bientôt", locale: :fr)])
+        end
+      end
+    end
+
     context "with export-only headers" do
       let!(:calendar) { create(:calendar, name: "Dining Room", meal_hostable: true) }
       let!(:formula) { create(:meal_formula, is_default: true, parts_attrs: [{type: "Adult"}]) }

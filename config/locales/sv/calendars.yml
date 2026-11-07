@@ -103,6 +103,9 @@ sv:
         one: "%{count} händelse den här månaden" # MT
         other: "%{count} händelser den här månaden" # MT
       month_calendar: "Månadskalender" # MT
+      month_label: "%{view}. Navigera med piltangenterna" # MT
+      label_with_event_instructions: "%{label}. %{instructions}" # MT
+      event_navigation_instructions: "Tab går igenom händelserna i den aktuella vyn eller lämnar kalendern om det inte finns några. Alt+Ned går igenom händelser för det fokuserade datumet eller klockslaget. Escape återgår från en händelse till dess plats i kalendern" # MT
       day_calendar: "Dagskalender" # MT
       week_calendar: "Veckokalender" # MT
       # %{view} is day_calendar or week_calendar; %{slots} is half_hour_slots or minute_slots.

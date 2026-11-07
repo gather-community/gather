@@ -103,6 +103,9 @@ de:
         one: "%{count} Termin diesen Monat" # MT
         other: "%{count} Termine diesen Monat" # MT
       month_calendar: "Monatskalender" # MT
+      month_label: "%{view}. Mit den Pfeiltasten navigieren" # MT
+      label_with_event_instructions: "%{label}. %{instructions}" # MT
+      event_navigation_instructions: "Tab durchläuft die Ereignisse in der aktuellen Ansicht oder verlässt den Kalender, wenn keine vorhanden sind. Alt+Pfeil nach unten durchläuft die Ereignisse für das fokussierte Datum oder die Uhrzeit. Escape kehrt von einem Ereignis zu dessen Position im Kalender zurück" # MT
       day_calendar: "Tageskalender" # MT
       week_calendar: "Wochenkalender" # MT
       # %{view} is day_calendar or week_calendar; %{slots} is half_hour_slots or minute_slots.

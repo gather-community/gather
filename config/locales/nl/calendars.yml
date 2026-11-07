@@ -103,6 +103,9 @@ nl:
         one: "%{count} afspraak deze maand" # MT
         other: "%{count} afspraken deze maand" # MT
       month_calendar: "Maandagenda" # MT
+      month_label: "%{view}. Gebruik de pijltjestoetsen om te navigeren" # MT
+      label_with_event_instructions: "%{label}. %{instructions}" # MT
+      event_navigation_instructions: "Tab doorloopt de afspraken in de huidige weergave of verlaat de agenda als er geen zijn. Alt+Omlaag doorloopt de afspraken voor de datum of tijd met focus. Escape keert vanuit een afspraak terug naar de bijbehorende plek in de agenda" # MT
       day_calendar: "Dagagenda" # MT
       week_calendar: "Weekagenda" # MT
       # %{view} is day_calendar or week_calendar; %{slots} is half_hour_slots or minute_slots.

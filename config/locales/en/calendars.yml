@@ -91,6 +91,9 @@ en:
         one: "%{count} event this month"
         other: "%{count} events this month"
       month_calendar: "Month calendar"
+      month_label: "%{view}. Use arrow keys to navigate"
+      label_with_event_instructions: "%{label}. %{instructions}"
+      event_navigation_instructions: "Tab reviews events in the current view or leaves the calendar when there are none. Alt+Down reviews events for the focused date or time. Escape returns from an event to its calendar location"
       day_calendar: "Day calendar"
       week_calendar: "Week calendar"
       # %{view} is day_calendar or week_calendar; %{slots} is half_hour_slots or minute_slots.

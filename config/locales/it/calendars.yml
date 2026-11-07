@@ -103,6 +103,9 @@ it:
         one: "%{count} evento questo mese" # MT
         other: "%{count} eventi questo mese" # MT
       month_calendar: "Calendario mensile" # MT
+      month_label: "%{view}. Usa i tasti freccia per spostarti" # MT
+      label_with_event_instructions: "%{label}. %{instructions}" # MT
+      event_navigation_instructions: "Tab scorre gli eventi nella vista corrente o esce dal calendario se non ce ne sono. Alt+Giù scorre gli eventi della data o dell’ora con lo stato attivo. Escape torna da un evento alla sua posizione nel calendario" # MT
       day_calendar: "Calendario giornaliero" # MT
       week_calendar: "Calendario settimanale" # MT
       # %{view} is day_calendar or week_calendar; %{slots} is half_hour_slots or minute_slots.

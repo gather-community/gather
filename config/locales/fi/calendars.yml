@@ -103,6 +103,9 @@ fi:
         one: "%{count} tapahtuma tässä kuussa" # MT
         other: "%{count} tapahtumaa tässä kuussa" # MT
       month_calendar: "Kuukausikalenteri" # MT
+      month_label: "%{view}. Liiku nuolinäppäimillä" # MT
+      label_with_event_instructions: "%{label}. %{instructions}" # MT
+      event_navigation_instructions: "Sarkain käy läpi nykyisen näkymän tapahtumat tai poistuu kalenterista, jos tapahtumia ei ole. Alt+Alanuoli käy läpi kohdistetun päivän tai kellonajan tapahtumat. Escape palaa tapahtumasta sen sijaintiin kalenterissa" # MT
       day_calendar: "Päiväkalenteri" # MT
       week_calendar: "Viikkokalenteri" # MT
       # %{view} is day_calendar or week_calendar; %{slots} is half_hour_slots or minute_slots.

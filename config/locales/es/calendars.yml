@@ -131,6 +131,9 @@ es:
         one: "%{count} evento este mes" # MT
         other: "%{count} eventos este mes" # MT
       month_calendar: "Calendario mensual" # MT
+      month_label: "%{view}. Usa las flechas para moverte" # MT
+      label_with_event_instructions: "%{label}. %{instructions}" # MT
+      event_navigation_instructions: "Tab recorre los eventos de la vista actual o sale del calendario si no hay ninguno. Alt+Abajo recorre los eventos de la fecha u hora enfocada. Escape vuelve desde un evento a su ubicación en el calendario" # MT
       day_calendar: "Calendario diario" # MT
       week_calendar: "Calendario semanal" # MT
       agenda_label: "%{view}. Usa las flechas para moverte" # MT

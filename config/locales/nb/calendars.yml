@@ -103,6 +103,9 @@ nb:
         one: "%{count} hendelse denne måneden" # MT
         other: "%{count} hendelser denne måneden" # MT
       month_calendar: "Månedskalender" # MT
+      month_label: "%{view}. Bruk piltastene for å navigere" # MT
+      label_with_event_instructions: "%{label}. %{instructions}" # MT
+      event_navigation_instructions: "Tab går gjennom hendelsene i gjeldende visning eller forlater kalenderen hvis det ikke finnes noen. Alt+Ned går gjennom hendelser for datoen eller klokkeslettet som har fokus. Escape går tilbake fra en hendelse til plasseringen i kalenderen" # MT
       day_calendar: "Dagskalender" # MT
       week_calendar: "Ukekalender" # MT
       # %{view} is day_calendar or week_calendar; %{slots} is half_hour_slots or minute_slots.

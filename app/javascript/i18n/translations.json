@@ -66,6 +66,7 @@
           "other": "%{count} Termine diese Woche",
           "zero": "Keine Termine diese Woche"
         },
+        "event_navigation_instructions": "Tab durchläuft die Ereignisse in der aktuellen Ansicht oder verlässt den Kalender, wenn keine vorhanden sind. Alt+Pfeil nach unten durchläuft die Ereignisse für das fokussierte Datum oder die Uhrzeit. Escape kehrt von einem Ereignis zu dessen Position im Kalender zurück",
         "half_hour_slots": "halbstündigen Zeitfenstern von %{start} bis %{end}",
         "header": {
           "day_view": "Tagesansicht",
@@ -76,8 +77,10 @@
           "toolbar": "Kalendersteuerung",
           "week_view": "Wochenansicht"
         },
+        "label_with_event_instructions": "%{label}. %{instructions}",
         "minute_slots": "%{minutes}-minütigen Zeitfenstern von %{start} bis %{end}",
         "month_calendar": "Monatskalender",
+        "month_label": "%{view}. Mit den Pfeiltasten navigieren",
         "now_showing": "Kalender zeigt jetzt %{month}",
         "this_week_date": "Diese Woche, %{date}",
         "today_date": "Heute, %{date}",
@@ -384,6 +387,7 @@
           "other": "%{count} events this week",
           "zero": "No events this week"
         },
+        "event_navigation_instructions": "Tab reviews events in the current view or leaves the calendar when there are none. Alt+Down reviews events for the focused date or time. Escape returns from an event to its calendar location",
         "half_hour_slots": "half-hour time slots from %{start} to %{end}",
         "header": {
           "day_view": "Day view",
@@ -394,8 +398,10 @@
           "toolbar": "Calendar controls",
           "week_view": "Week view"
         },
+        "label_with_event_instructions": "%{label}. %{instructions}",
         "minute_slots": "%{minutes}-minute time slots from %{start} to %{end}",
         "month_calendar": "Month calendar",
+        "month_label": "%{view}. Use arrow keys to navigate",
         "now_showing": "Calendar now showing %{month}",
         "this_week_date": "This week, %{date}",
         "today_date": "Today, %{date}",
@@ -702,6 +708,7 @@
           "other": "%{count} eventos esta semana",
           "zero": "Sin eventos esta semana"
         },
+        "event_navigation_instructions": "Tab recorre los eventos de la vista actual o sale del calendario si no hay ninguno. Alt+Abajo recorre los eventos de la fecha u hora enfocada. Escape vuelve desde un evento a su ubicación en el calendario",
         "half_hour_slots": "franjas de media hora de %{start} a %{end}",
         "header": {
           "day_view": "Vista de día",
@@ -712,8 +719,10 @@
           "toolbar": "Controles del calendario",
           "week_view": "Vista de semana"
         },
+        "label_with_event_instructions": "%{label}. %{instructions}",
         "minute_slots": "franjas de %{minutes} minutos de %{start} a %{end}",
         "month_calendar": "Calendario mensual",
+        "month_label": "%{view}. Usa las flechas para moverte",
         "now_showing": "El calendario muestra ahora %{month}",
         "this_week_date": "Esta semana, %{date}",
         "today_date": "Hoy, %{date}",
@@ -1020,6 +1029,7 @@
           "other": "%{count} tapahtumaa tällä viikolla",
           "zero": "Ei tapahtumia tällä viikolla"
         },
+        "event_navigation_instructions": "Sarkain käy läpi nykyisen näkymän tapahtumat tai poistuu kalenterista, jos tapahtumia ei ole. Alt+Alanuoli käy läpi kohdistetun päivän tai kellonajan tapahtumat. Escape palaa tapahtumasta sen sijaintiin kalenterissa",
         "half_hour_slots": "puolen tunnin aikavälit %{start}–%{end}",
         "header": {
           "day_view": "Päivänäkymä",
@@ -1030,8 +1040,10 @@
           "toolbar": "Kalenterin säätimet",
           "week_view": "Viikkonäkymä"
         },
+        "label_with_event_instructions": "%{label}. %{instructions}",
         "minute_slots": "aikavälit (%{minutes} min) %{start}–%{end}",
         "month_calendar": "Kuukausikalenteri",
+        "month_label": "%{view}. Liiku nuolinäppäimillä",
         "now_showing": "Kalenterissa näkyy nyt: %{month}",
         "this_week_date": "Tällä viikolla, %{date}",
         "today_date": "Tänään, %{date}",
@@ -1338,6 +1350,7 @@
           "other": "%{count} événements cette semaine",
           "zero": "Aucun événement cette semaine"
         },
+        "event_navigation_instructions": "Tab parcourt les événements de la vue actuelle ou quitte le calendrier s’il n’y en a aucun. Alt+Bas parcourt les événements de la date ou de l’heure sélectionnée. Échap ramène d’un événement à son emplacement dans le calendrier",
         "half_hour_slots": "créneaux d'une demi-heure de %{start} à %{end}",
         "header": {
           "day_view": "Vue par jour",
@@ -1348,8 +1361,10 @@
           "toolbar": "Commandes du calendrier",
           "week_view": "Vue par semaine"
         },
+        "label_with_event_instructions": "%{label}. %{instructions}",
         "minute_slots": "créneaux de %{minutes} minutes de %{start} à %{end}",
         "month_calendar": "Calendrier mensuel",
+        "month_label": "%{view}. Utilisez les flèches pour naviguer",
         "now_showing": "Le calendrier affiche maintenant %{month}",
         "this_week_date": "Cette semaine, %{date}",
         "today_date": "Aujourd'hui, %{date}",
@@ -1746,6 +1761,7 @@
           "other": "%{count} eventi questa settimana",
           "zero": "Nessun evento questa settimana"
         },
+        "event_navigation_instructions": "Tab scorre gli eventi nella vista corrente o esce dal calendario se non ce ne sono. Alt+Giù scorre gli eventi della data o dell’ora con lo stato attivo. Escape torna da un evento alla sua posizione nel calendario",
         "half_hour_slots": "fasce di mezz'ora da %{start} a %{end}",
         "header": {
           "day_view": "Vista giorno",
@@ -1756,8 +1772,10 @@
           "toolbar": "Controlli del calendario",
           "week_view": "Vista settimana"
         },
+        "label_with_event_instructions": "%{label}. %{instructions}",
         "minute_slots": "fasce di %{minutes} minuti da %{start} a %{end}",
         "month_calendar": "Calendario mensile",
+        "month_label": "%{view}. Usa i tasti freccia per spostarti",
         "now_showing": "Il calendario ora mostra: %{month}",
         "this_week_date": "Questa settimana, %{date}",
         "today_date": "Oggi, %{date}",
@@ -2064,6 +2082,7 @@
           "other": "%{count} hendelser denne uken",
           "zero": "Ingen hendelser denne uken"
         },
+        "event_navigation_instructions": "Tab går gjennom hendelsene i gjeldende visning eller forlater kalenderen hvis det ikke finnes noen. Alt+Ned går gjennom hendelser for datoen eller klokkeslettet som har fokus. Escape går tilbake fra en hendelse til plasseringen i kalenderen",
         "half_hour_slots": "tidsluker på en halvtime fra %{start} til %{end}",
         "header": {
           "day_view": "Dagsvisning",
@@ -2074,8 +2093,10 @@
           "toolbar": "Kalenderkontroller",
           "week_view": "Ukevisning"
         },
+        "label_with_event_instructions": "%{label}. %{instructions}",
         "minute_slots": "tidsluker på %{minutes} minutter fra %{start} til %{end}",
         "month_calendar": "Månedskalender",
+        "month_label": "%{view}. Bruk piltastene for å navigere",
         "now_showing": "Kalenderen viser nå %{month}",
         "this_week_date": "Denne uken, %{date}",
         "today_date": "I dag, %{date}",
@@ -2382,6 +2403,7 @@
           "other": "%{count} afspraken deze week",
           "zero": "Geen afspraken deze week"
         },
+        "event_navigation_instructions": "Tab doorloopt de afspraken in de huidige weergave of verlaat de agenda als er geen zijn. Alt+Omlaag doorloopt de afspraken voor de datum of tijd met focus. Escape keert vanuit een afspraak terug naar de bijbehorende plek in de agenda",
         "half_hour_slots": "tijdvakken van een half uur van %{start} tot %{end}",
         "header": {
           "day_view": "Dagweergave",
@@ -2392,8 +2414,10 @@
           "toolbar": "Agendabediening",
           "week_view": "Weekweergave"
         },
+        "label_with_event_instructions": "%{label}. %{instructions}",
         "minute_slots": "tijdvakken van %{minutes} minuten van %{start} tot %{end}",
         "month_calendar": "Maandagenda",
+        "month_label": "%{view}. Gebruik de pijltjestoetsen om te navigeren",
         "now_showing": "De agenda toont nu %{month}",
         "this_week_date": "Deze week, %{date}",
         "today_date": "Vandaag, %{date}",
@@ -2700,6 +2724,7 @@
           "other": "%{count} händelser den här veckan",
           "zero": "Inga händelser den här veckan"
         },
+        "event_navigation_instructions": "Tab går igenom händelserna i den aktuella vyn eller lämnar kalendern om det inte finns några. Alt+Ned går igenom händelser för det fokuserade datumet eller klockslaget. Escape återgår från en händelse till dess plats i kalendern",
         "half_hour_slots": "halvtimmesintervall från %{start} till %{end}",
         "header": {
           "day_view": "Dagvy",
@@ -2710,8 +2735,10 @@
           "toolbar": "Kalenderkontroller",
           "week_view": "Veckovy"
         },
+        "label_with_event_instructions": "%{label}. %{instructions}",
         "minute_slots": "%{minutes}-minutersintervall från %{start} till %{end}",
         "month_calendar": "Månadskalender",
+        "month_label": "%{view}. Navigera med piltangenterna",
         "now_showing": "Kalendern visar nu %{month}",
         "this_week_date": "Den här veckan, %{date}",
         "today_date": "I dag, %{date}",

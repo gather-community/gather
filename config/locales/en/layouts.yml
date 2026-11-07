@@ -5,6 +5,8 @@ en:
       notification_settings: "Gather notification settings: %{url}"
       machine_translated: "This email was translated automatically and may contain mistakes."
     application:
+      # Shown under the logo on operator pages. Uppercased by CSS. English only, like all operator page strings.
+      admin_label: "Admin"
       impersonation_notice: "You are impersonating %{name}. Any actions you take will appear to have been taken by them."
       stop_impersonating: "Stop Impersonating"
       home: "Home"
@@ -17,13 +19,11 @@ en:
     footer:
       privacy_policy: "Privacy Policy"
       credits: "Credits"
+      admin: "Admin"
+      return_to_main_site: "Return to Main Site"
       settings: "Settings"
       subscription: "Subscription"
       billing: "Billing"
-      communities: "Communities"
-      resync_subscriptions: "Resync subscriptions"
-      domains: "Domains"
-      feature_flags: "Feature Flags"
       # Shown on pages in machine-translated locales (Gather::Locales::MACHINE_TRANSLATED).
       machine_translated: "This page was translated automatically and may contain mistakes."
       machine_translated_with_link_html: "This page was translated automatically and may contain mistakes. %{link}"

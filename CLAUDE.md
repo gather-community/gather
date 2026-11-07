@@ -378,6 +378,7 @@ The dispositions map is a **declaration**, not an assertion — it does not read
 - **Keep the structure:** same `%{placeholders}`, same HTML in `_html` keys, and the plural sub-keys the locale needs (French, for example, uses `one` for 0 and 1).
 - **Canadian French** (`config/locales/fr-CA/`) only holds keys where Québec usage differs from `fr`; everything else falls back to `fr`.
 - **Don't translate** date/time formats (written by hand per locale, see above) or the legal documents, which stay English.
+- **Operator pages aren't translated (for now).** Controllers under `AdminController` (the apex-domain pages under `/admin`) always render in English. Their strings still go in YAML, but only in `en`; add their keys to `ignore_missing` in `config/i18n-tasks.yml` so the other locales aren't expected to have them. This doesn't cover the community-level `Admin::SettingsController`, which is translated as usual.
 
 **How the locale is chosen** ([lib/gather/locales.rb](lib/gather/locales.rb)):
 

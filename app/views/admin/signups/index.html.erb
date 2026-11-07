@@ -17,7 +17,7 @@
     <tbody>
       <% @signups.each do |signup| %>
         <tr>
-          <td><%= link_to(signup.community_name, review_communities_signup_path(signup)) %></td>
+          <td><%= link_to(signup.community_name, review_admin_signup_path(signup)) %></td>
           <td>
             <%= signup.contact_name %><br>
             <small><%= mail_to(signup.contact_email) %></small>

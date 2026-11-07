@@ -12,7 +12,7 @@ class Communities::SignupMailer < ActionMailer::Base
 
   def notify_approvers(signup)
     @signup = signup
-    @review_url = review_communities_signup_url(@signup, host: Settings.url.host)
+    @review_url = review_admin_signup_url(@signup, host: Settings.url.host)
     approver_emails = ActsAsTenant.without_tenant do
       User.with_role(:new_community_approver).pluck(:email).compact
     end
@@ -41,7 +41,7 @@ class Communities::SignupMailer < ActionMailer::Base
 
   def approval_created(signup)
     @signup = signup
-    @signup_url = review_communities_signup_url(signup, host: Settings.url.host)
+    @signup_url = review_admin_signup_url(signup, host: Settings.url.host)
     # reviewed_by is a User, which is tenant-scoped, so look it up without tenant.
     reviewer_email = ActsAsTenant.without_tenant { signup.reviewed_by.email }
     # Goes only to Gather staff, so it isn't translated.
@@ -51,7 +51,7 @@ class Communities::SignupMailer < ActionMailer::Base
 
   def approval_failed(signup)
     @signup = signup
-    @signup_url = review_communities_signup_url(signup, host: Settings.url.host)
+    @signup_url = review_admin_signup_url(signup, host: Settings.url.host)
     # reviewed_by is a User, which is tenant-scoped, so look it up without tenant.
     reviewer_email = ActsAsTenant.without_tenant { signup.reviewed_by.email }
     # Goes only to Gather staff, so it isn't translated.

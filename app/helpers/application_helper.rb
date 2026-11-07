@@ -72,14 +72,15 @@ module ApplicationHelper
     end
   end
 
-  def inactive_notice(object)
+  # Pass activate_path when the activate route isn't the default one for the object's model.
+  def inactive_notice(object, activate_path: nil)
     i18n_key = "activatables.#{object.model_name.i18n_key}"
     html = "".html_safe
     time = l(object.deactivated_at)
     html << t("#{i18n_key}.one_html", time: time)
     if policy(object).activate?
       text = t("#{i18n_key}.three")
-      path = send("activate_#{object.model_name.singular_route_key}_path")
+      path = activate_path || send("activate_#{object.model_name.singular_route_key}_path")
       link = link_to(text, path, method: :put)
       html << " " << t("#{i18n_key}.two_html", link: link)
     end
@@ -92,7 +93,9 @@ module ApplicationHelper
   end
 
   # The logo should take the user back to their home cmty root if they are in a different one.
+  # On operator pages it goes to the operator home page instead.
   def logo_link_url
+    return admin_home_path if admin_mode?
     return home_path if !current_community || !current_user || current_community == current_user.community
     home_url(host: "#{current_user.subdomain}.#{Settings.url.host}")
   end

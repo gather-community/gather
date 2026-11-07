@@ -59,6 +59,13 @@ ignore_missing:
   # Sample names for generated demo data, read by Faker (config/initializers/faker.rb). Demo content is
   # English until new communities get starter content in their own language.
   - "random_data.*"
+  # Operator pages (AdminController) always render in English, so their strings are English-only.
+  - "admin.{communities,signups,feature_flags,domains}.*"
+  - "nav_links.admin.{communities,domains,flags}"
+  - "nav_links.admin.communities.*"
+  - "layouts.application.admin_label"
+  - "layouts.footer.return_to_main_site"
+  - "pagination.page_entries_info.community"
 
 # Keys looked up by frameworks or by dynamically built key strings, which the scanner can't see.
 ignore_unused:

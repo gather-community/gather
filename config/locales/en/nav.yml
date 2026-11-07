@@ -56,6 +56,12 @@ en:
       settings: "Settings"
     admin:
       _self: "Admin"
+      communities:
+        _self: "Communities"
+        communities: "Communities"
+        signups: "Signups"
+      domains: "Domains"
+      flags: "Flags"
     billing:
       _self: "Billing"
       accounts: "Accounts"

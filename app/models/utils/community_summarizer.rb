@@ -3,20 +3,37 @@
 module Utils
   # Executes a complex query to build a report of activity for all communities.
   class CommunitySummarizer
-    def communities(scope)
+    SUBSCRIPTION_COLUMNS = <<~SQL.squish
+      sub.stripe_id AS subscription_stripe_id,
+      sub.stripe_status AS subscription_stripe_status,
+      sub.payment_intent_status AS subscription_payment_intent_status,
+      sub.payment_intent_next_action_type AS subscription_payment_intent_next_action_type,
+      sub.setup_intent_status AS subscription_setup_intent_status,
+      sub.setup_intent_next_action_type AS subscription_setup_intent_next_action_type,
+      sub.synced_at AS subscription_synced_at,
+      si.tier AS subscription_intent_tier
+    SQL
+
+    # The communities in scope with their activity stats, by name. Pass ids to limit the report to
+    # those communities (e.g. one page of results). The stats subqueries are limited too, which is
+    # what makes a page cheaper than the whole report.
+    def communities(scope, ids: nil)
+      @ids = ids&.map { |id| Integer(id) }
+      return [] if @ids && @ids.empty?
       ActsAsTenant.without_tenant do
+        scope = scope.where(id: @ids) if @ids
         scope
           .select("communities.*, user_stats.*, meal_stats.*, rsrv_stats.*, job_stats.*, txn_stats.*,
-                   sub.stripe_id AS subscription_stripe_id,
-                   sub.stripe_status AS subscription_stripe_status,
-                   sub.payment_intent_status AS subscription_payment_intent_status,
-                   sub.payment_intent_next_action_type AS subscription_payment_intent_next_action_type,
-                   sub.setup_intent_status AS subscription_setup_intent_status,
-                   sub.setup_intent_next_action_type AS subscription_setup_intent_next_action_type,
-                   sub.synced_at AS subscription_synced_at,
-                   si.tier AS subscription_intent_tier")
+                   #{SUBSCRIPTION_COLUMNS}")
           .joins(user_join, meal_join, rsrv_join, job_join, txn_join, subscription_join)
           .by_name.to_a
+      end
+    end
+
+    # The communities in scope, by name, with just enough loaded to compute Community#status cheaply.
+    def with_status(scope)
+      ActsAsTenant.without_tenant do
+        scope.select("communities.*, #{SUBSCRIPTION_COLUMNS}").joins(subscription_join).by_name.to_a
       end
     end
 
@@ -30,6 +47,7 @@ module Utils
                h.community_id AS community_id
           FROM users u INNER JOIN households h ON h.id = u.household_id
           WHERE u.fake = 'f'
+          #{ids_condition("h.community_id")}
           GROUP BY h.community_id
         ) AS user_stats ON user_stats.community_id = communities.id"
     end
@@ -41,6 +59,7 @@ module Utils
                m.community_id AS community_id
           FROM meals m INNER JOIN communities c ON c.id = m.community_id
           WHERE m.created_at > c.created_at
+          #{ids_condition("m.community_id")}
           GROUP BY m.community_id
         ) AS meal_stats ON meal_stats.community_id = communities.id"
     end
@@ -53,6 +72,7 @@ module Utils
           FROM calendar_events e INNER JOIN calendar_nodes cn ON cn.id = e.calendar_id
             INNER JOIN communities c ON c.id = cn.community_id
           WHERE e.created_at > c.created_at
+          #{ids_condition("cn.community_id")}
           GROUP BY cn.community_id
         ) AS rsrv_stats ON rsrv_stats.community_id = communities.id"
     end
@@ -66,8 +86,13 @@ module Utils
             INNER JOIN work_periods p ON p.id = j.period_id
             INNER JOIN communities c ON c.id = p.community_id
           WHERE j.created_at > c.created_at
+          #{ids_condition("p.community_id")}
           GROUP BY p.community_id
         ) AS job_stats ON job_stats.community_id = communities.id"
+    end
+
+    def ids_condition(column)
+      @ids ? "AND #{column} IN (#{@ids.join(",")})" : ""
     end
 
     def subscription_join
@@ -85,6 +110,7 @@ module Utils
           FROM transactions t INNER JOIN accounts a ON a.id = t.account_id
             INNER JOIN communities c ON c.id = a.community_id
           WHERE t.created_at > c.created_at
+          #{ids_condition("a.community_id")}
           GROUP BY a.community_id
         ) AS txn_stats ON txn_stats.community_id = communities.id"
     end

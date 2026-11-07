@@ -2,4 +2,46 @@
   .recent {
     font-weight: bold;
   }
+
+  // The table is wide, so the Stats sidebar only goes beside it on large screens.
+  @media screen and (min-width: $screen-lg-min) {
+    .communities-and-stats {
+      display: flex;
+      align-items: flex-start;
+      gap: 30px;
+    }
+
+    .communities-table {
+      flex: 1;
+      min-width: 0;
+    }
+  }
+
+  .stats-sidebar {
+    flex-shrink: 0;
+    width: 220px;
+    margin-top: 20px;
+
+    @media screen and (min-width: $screen-lg-min) {
+      margin-top: 0;
+    }
+
+    h2 {
+      font-size: 20px;
+    }
+
+    h3 {
+      font-size: 15px;
+      margin: 15px 0 5px;
+    }
+
+    .key-value {
+      width: 100%;
+      margin-bottom: 0;
+    }
+
+    p {
+      margin: 15px 0 0;
+    }
+  }
 }

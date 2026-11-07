@@ -11,25 +11,10 @@ Rails.application.routes.draw do
     }
   get "people/users/signed-out", to: "landing#signed_out", as: :user_signed_out
 
-  resources :communities, only: %i[index destroy] do
-    collection do
-      post :resync_all
-    end
-    member do
-      get :admin
-      put :activate
-    end
-  end
-
+  # The public signup form for new communities. Reviewing signups is under /admin.
   namespace :communities do
-    resources :signups, only: %i[index new create] do
-      collection do
-        get :submitted
-      end
-      member do
-        get :review
-        post :act
-      end
+    resources :signups, only: %i[new create] do
+      get :submitted, on: :collection
     end
   end
 
@@ -392,6 +377,22 @@ Rails.application.routes.draw do
   resources :uploads, only: :create
 
   namespace :admin do
+    # Operator pages (apex domain; span all clusters). /admin redirects to the first one the user can see.
+    get "/", to: "home#show", as: :home
+
+    resources :communities, only: %i[index show destroy] do
+      post :resync_all, path: "resync-all", on: :collection
+      put :activate, on: :member
+    end
+
+    # Reviewing signups for new communities. The public form is Communities::SignupsController.
+    resources :signups, only: :index do
+      member do
+        get :review
+        post :act
+      end
+    end
+
     get "settings/:type", to: "settings#edit", as: :settings
     patch "settings/:type", to: "settings#update"
 

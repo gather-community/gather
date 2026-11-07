@@ -10,6 +10,8 @@ module Admin
     REFRESH_OVERHEAD_SECONDS = 5
     REFRESH_SECONDS_PER_DOMAIN = 1
 
+    before_action -> { nav_context(:domains) }
+
     def index
       authorize(%i[admin domain])
       prepare_lenses(:"admin/lists")

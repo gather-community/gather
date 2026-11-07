@@ -1,0 +1,71 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+nl:
+  starter_content:
+    calendars:
+      social_events: "Sociale activiteiten" # MT
+      meetings: "Vergaderingen" # MT
+      birthdays: "Verjaardagen" # MT
+      join_dates: "Toetredingsdatums" # MT
+    calendar_groups:
+      meals: "Maaltijden" # MT
+      work: "Werk" # MT
+      reservations: "Reserveringen" # MT
+    meal_roles:
+      head_cook:
+        title: "Hoofdkok" # MT
+        description: "Plant en leidt de bereiding van de maaltijd." # MT
+      assistant_cook:
+        title: "Hulpkok" # MT
+        description: "Helpt bij de bereiding volgens de aanwijzingen van de hoofdkok." # MT
+      cleaner:
+        title: "Opruimen" # MT
+        description: "Ruimt op na de maaltijd." # MT
+    meal_formula: "Standaardformule" # MT
+    meal_types:
+      adult: "Volwassene" # MT
+      teen: "Tiener" # MT
+      kid: "Kind" # MT
+      little_kid: "Klein kind" # MT
+    restrictions:
+      gluten:
+        contains: "Gluten" # MT
+        absence: "Glutenvrij" # MT
+      meat:
+        contains: "Vlees" # MT
+        absence: "Zonder vlees" # MT
+      tree_nuts:
+        contains: "Boomnoten" # MT
+        absence: "Zonder boomnoten" # MT
+      dairy:
+        contains: "Zuivel" # MT
+        absence: "Zonder zuivel" # MT
+      shellfish:
+        contains: "Schaaldieren" # MT
+        absence: "Zonder schaaldieren" # MT
+      vegan:
+        contains: "Niet veganistisch" # MT
+        absence: "Veganistisch" # MT
+      spicy:
+        contains: "Pittig" # MT
+        absence: "Niet pittig" # MT
+      kid_friendly:
+        contains: "Kindvriendelijk" # MT
+        absence: "Niet kindvriendelijk" # MT
+      peanuts:
+        contains: "Pinda's" # MT
+        absence: "Zonder pinda's" # MT
+    everybody_group:
+      name: "Hele gemeenschap" # MT
+      description: "Algemene groep met alle volwaardige leden van de gemeenschap." # MT
+    allergens: "Zuivel, schaaldieren, soja, noten" # MT

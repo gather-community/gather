@@ -1,0 +1,71 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+nb:
+  starter_content:
+    calendars:
+      social_events: "Sosiale aktiviteter" # MT
+      meetings: "Møter" # MT
+      birthdays: "Bursdager" # MT
+      join_dates: "Innmeldingsdatoer" # MT
+    calendar_groups:
+      meals: "Måltider" # MT
+      work: "Arbeid" # MT
+      reservations: "Reservasjoner" # MT
+    meal_roles:
+      head_cook:
+        title: "Hovedkokk" # MT
+        description: "Planlegger og leder matlagingen." # MT
+      assistant_cook:
+        title: "Kokkeassistent" # MT
+        description: "Hjelper til med matlagingen etter hovedkokkens anvisninger." # MT
+      cleaner:
+        title: "Rydding" # MT
+        description: "Rydder opp etter måltidet." # MT
+    meal_formula: "Standardformel" # MT
+    meal_types:
+      adult: "Voksen" # MT
+      teen: "Tenåring" # MT
+      kid: "Barn" # MT
+      little_kid: "Småbarn" # MT
+    restrictions:
+      gluten:
+        contains: "Gluten" # MT
+        absence: "Glutenfritt" # MT
+      meat:
+        contains: "Kjøtt" # MT
+        absence: "Uten kjøtt" # MT
+      tree_nuts:
+        contains: "Trenøtter" # MT
+        absence: "Uten trenøtter" # MT
+      dairy:
+        contains: "Meieriprodukter" # MT
+        absence: "Uten meieriprodukter" # MT
+      shellfish:
+        contains: "Skalldyr" # MT
+        absence: "Uten skalldyr" # MT
+      vegan:
+        contains: "Ikke vegansk" # MT
+        absence: "Vegansk" # MT
+      spicy:
+        contains: "Sterkt" # MT
+        absence: "Ikke sterkt" # MT
+      kid_friendly:
+        contains: "Barnevennlig" # MT
+        absence: "Ikke barnevennlig" # MT
+      peanuts:
+        contains: "Peanøtter" # MT
+        absence: "Uten peanøtter" # MT
+    everybody_group:
+      name: "Hele fellesskapet" # MT
+      description: "Generell gruppe med alle fullverdige medlemmer i fellesskapet." # MT
+    allergens: "Meieriprodukter, skalldyr, soya, nøtter" # MT

@@ -4,32 +4,38 @@ module Utils
   module Generators
     # Generates fake meal data
     class MealGenerator < Generator
-      attr_accessor :community, :data, :formula, :statement_gen, :locations, :creator, :households, :adults
+      attr_accessor :community, :data, :roles, :formula, :statement_gen, :calendar_map, :locations, :creator,
+        :households, :adults
 
       MONTHS = 5
 
-      def initialize(community:, statement_gen:)
+      # The Kitchen and Dining Room, by their IDs in calendars/calendars.yml (see
+      # CalendarGenerator#calendar_map).
+      MEAL_CALENDAR_IDS = [116, 21].freeze
+
+      def initialize(community:, statement_gen:, calendar_map:)
         self.community = community
         self.statement_gen = statement_gen
+        self.calendar_map = calendar_map
         self.data = load_yaml("meals/meals.yml")
       end
 
       def generate_seed_data
-        roles = [
+        self.roles = [
           Meals::Role.create!(
             community: community,
             count_per_meal: 1,
-            title: "Head Cook",
+            title: I18n.t("starter_content.meal_roles.head_cook.title"),
             special: "head_cook",
-            description: "Plans and supervises meal prep.",
+            description: I18n.t("starter_content.meal_roles.head_cook.description"),
             time_type: "date_only",
             reminders_attributes: [{rel_magnitude: 3, rel_unit_sign: "days_before"}]
           ),
           Meals::Role.create!(
             community: community,
             count_per_meal: 2,
-            title: "Assistant Cook",
-            description: "Helps with meal prep as directed by the head cook.",
+            title: I18n.t("starter_content.meal_roles.assistant_cook.title"),
+            description: I18n.t("starter_content.meal_roles.assistant_cook.description"),
             time_type: "date_time",
             shift_start: -120,
             shift_end: 0,
@@ -38,8 +44,8 @@ module Utils
           Meals::Role.create!(
             community: community,
             count_per_meal: 3,
-            title: "Cleaner",
-            description: "Cleans up after the meal.",
+            title: I18n.t("starter_content.meal_roles.cleaner.title"),
+            description: I18n.t("starter_content.meal_roles.cleaner.description"),
             time_type: "date_time",
             shift_start: 60,
             shift_end: 150,
@@ -47,12 +53,16 @@ module Utils
           )
         ]
         self.formula = create(:meal_formula,
-                              community: community, roles: roles, is_default: true,
-                              name: "Default Formula", meal_calc_type: "share",
-                              parts_attrs: [{type: "Adult", share: "100%", portion: 1},
-                                            {type: "Teen", share: "75%", portion: 0.75},
-                                            {type: "Kid", share: "50%", portion: 0.5},
-                                            {type: "Little Kid", share: "0%", portion: 0.25}])
+          community: community, roles: roles, is_default: true,
+          name: I18n.t("starter_content.meal_formula"), meal_calc_type: "share",
+          parts_attrs: [
+            {type: meal_type(:adult), share: "100%", portion: 1},
+            {type: meal_type(:teen), share: "75%", portion: 0.75},
+            {type: meal_type(:kid), share: "50%", portion: 0.5},
+            {type: meal_type(:little_kid), share: "0%", portion: 0.25}
+          ])
+        community.settings.meals.allergens = I18n.t("starter_content.allergens")
+        community.save!
       end
 
       def generate_samples
@@ -62,14 +72,15 @@ module Utils
 
       private
 
+      def meal_type(key)
+        I18n.t("starter_content.meal_types.#{key}")
+      end
+
       def load_objs
         self.creator = User.adults.sample
         self.households = Household.all
         self.adults = User.adults.active.to_a
-        self.locations = [
-          Calendars::Calendar.find_by(name: "Kitchen"),
-          Calendars::Calendar.find_by(name: "Dining Room")
-        ]
+        self.locations = calendar_map.values_at(*MEAL_CALENDAR_IDS)
       end
 
       def create_meals
@@ -113,14 +124,16 @@ module Utils
             calendars: locations,
             community: community,
             capacity: 80,
-            head_cook: staff[0],
-            asst_cooks: staff[1..2],
-            cleaners: staff[3..4],
+            head_cook: false, # Assigned below, since the factory finds roles by their English titles.
             served_at: served_at,
             creator: creator,
             created_at: community.created_at,
             updated_at: community.updated_at
           ))
+          # Head cook, assistant cooks and cleaners, in the order of `roles`.
+          [staff[0..0], staff[1..2], staff[3..4]].zip(roles).each do |workers, role|
+            workers.each { |user| meal.assignments.build(role: role, user: user) }
+          end
           meal.build_events
           meal.save!
 

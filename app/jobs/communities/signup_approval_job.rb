@@ -10,17 +10,14 @@ module Communities
         country_code: signup.country_code,
         slug: signup.slug,
         sample_data: signup.want_sample_data,
-        photos: true
+        photos: true,
+        locale: signup.locale
       ).generate
 
       ActsAsTenant.with_tenant(cluster) do
         community = cluster.communities.first
         community.settings.time_zone = signup.time_zone
-        community.settings.locale = signup.locale
         community.save!
-        # Sample members were generated before the community had its language, so they start in it now.
-        # The admin, created below, starts in it by default.
-        User.in_community(community).update_all(locale: signup.locale)
       end
 
       Utils::Generators::AdminGenerator.new(

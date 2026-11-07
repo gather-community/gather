@@ -6,9 +6,11 @@ module Billing
     extend ActiveSupport::Concern
 
     TYPES = [
-      OpenStruct.new(code: "meal", effect: :increase, manual?: false),
+      OpenStruct.new(code: "meal", effect: :increase, manual?: true),
       OpenStruct.new(code: "late", effect: :increase, manual?: false),
       OpenStruct.new(code: "dues", effect: :increase, manual?: true),
+      # Money the community pays out to a household, e.g. to refund a credit balance.
+      OpenStruct.new(code: "payout", effect: :increase, manual?: true),
       OpenStruct.new(code: "othchg", effect: :increase, manual?: true),
       OpenStruct.new(code: "payment", effect: :decrease, manual?: true),
       OpenStruct.new(code: "reimb", effect: :decrease, manual?: true),

@@ -20,7 +20,7 @@ describe "billing templates", js: true do
       click_link("Create Template")
       select2("Foo", from: "#billing_template_member_type_ids", multiple: true)
       select2("Bar", from: "#billing_template_member_type_ids", multiple: true)
-      choose("Payment")
+      choose("Payment to community")
       click_button("Save")
 
       expect_validation_error("can't be blank")

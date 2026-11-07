@@ -54,7 +54,7 @@ describe "accounts", js: true do
       page.go_back
 
       click_link("Add Transaction")
-      choose("Payment")
+      choose("Payment to community")
       fill_in("Description", with: "Check #123")
       fill_in("Amount", with: "43.55")
       click_button("Save")

@@ -2,12 +2,13 @@ en:
   transaction_codes:
     meal: "Meal"
     dues: "Membership Dues"
+    payout: "Payout"
     payment: "Payment"
     reimb: "Reimbursement"
     othcrd: "Other Credit"
     othchg: "Other Charge"
     late: "Late Fee"
-    initbal: "Opening Balance"
+    initcrd: "Opening Balance"
 
   accounts:
     updated: "Account updated successfully."
@@ -147,6 +148,10 @@ en:
       statement_balance: "Statement balance"
 
   transactions:
+    core_fields:
+      # Headings over the two columns of transaction types on the transaction and template forms.
+      charges: "Charges"
+      credits: "Credits"
     added: "Transaction added successfully."
     not_added: "The transaction was not added. You can edit it below and try again, or click 'Cancel' below to return to the accounts page."
     form:

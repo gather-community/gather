@@ -1,12 +1,14 @@
 import {Controller} from "@hotwired/stimulus";
 
-const ONE_YEAR_IN_SECONDS = 60 * 60 * 24 * 365;
-
 /*
  * The language menu in the page footer. It starts as a "Change Language" link that reveals the select.
  * Picking a language stores it in a cookie, which the server prefers to the browser's Accept-Language
  * header (see Gather::Locales.for_request), and reloads the page in that language. Picking "Browser
  * Default" deletes the cookie so the browser's language applies again.
+ *
+ * It's a session cookie, with no expiry, so the choice lasts until the browser closes. The server can't
+ * read sessionStorage, so the choice can't be limited to one tab; it applies to every tab while the
+ * browser is open.
  */
 export default class extends Controller<HTMLElement> {
   static targets = ["link", "select"];
@@ -34,7 +36,7 @@ export default class extends Controller<HTMLElement> {
     const attributes = `; domain=${this.domainValue}; path=/; samesite=lax${secure}`;
     if (locale) {
       const value = encodeURIComponent(locale);
-      document.cookie = `${this.cookieValue}=${value}; max-age=${ONE_YEAR_IN_SECONDS}${attributes}`;
+      document.cookie = `${this.cookieValue}=${value}${attributes}`;
     } else {
       document.cookie = `${this.cookieValue}=; max-age=0${attributes}`;
     }

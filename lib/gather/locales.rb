@@ -21,7 +21,8 @@ module Gather
     FEATURE_FLAG = "i18n"
 
     # The cookie holding the locale someone picked from the footer's language menu. It wins over the browser's
-    # Accept-Language header. With no cookie, the header decides.
+    # Accept-Language header. With no cookie, the header decides. It's a session cookie, so the choice lasts
+    # until the browser closes.
     COOKIE = "locale"
 
     def self.available

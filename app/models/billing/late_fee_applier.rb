@@ -21,11 +21,13 @@ module Billing
 
     def apply!
       return unless policy?
+      # Stored, and seen by the whole household, so it's in the community's language, not the admin's.
+      description = I18n.t("billing.late_fee_description", locale: Gather::Locales.community_default(community))
       late_accounts.each do |account|
         account.transactions.create!(
           incurred_on: Time.zone.today,
           code: "late",
-          description: I18n.t("billing.late_fee_description"),
+          description: description,
           value: amount_for(account.balance_due)
         )
       end

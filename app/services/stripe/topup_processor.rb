@@ -81,7 +81,7 @@ module Stripe
     def post_transaction(account, line, delta)
       account.transactions.create!(
         amount_cents: delta,
-        description: I18n.t("subscription.messaging_transactions.#{delta.positive? ? "credit" : "reversal"}"),
+        kind: delta.positive? ? "topup_credit" : "topup_reversal",
         stripe_invoice_line_item_id: line.id,
         stripe_event_id: event&.id
       )

@@ -40,6 +40,23 @@ describe Billing::LateFeeApplier do
       end
     end
 
+    context "in a community whose language isn't the admin's" do
+      let(:policy) { {fee_type: "fixed", threshold: 5, amount: 3} }
+
+      before do
+        community.settings.locale = "fr"
+        community.save!
+      end
+
+      it "describes the fee in the community's language" do
+        accounts
+        described_class.new(community).apply!
+        description = accounts[3].transactions.last.description
+        expect(description).to eq(I18n.t("billing.late_fee_description", locale: :fr))
+        expect(description).not_to eq(I18n.t("billing.late_fee_description"))
+      end
+    end
+
     def expect_fees(*amounts)
       accounts
       described_class.new(community).apply!

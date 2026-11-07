@@ -30,8 +30,8 @@ nl:
       unknown: "Onbekend" # MT
     # Descriptions of the messaging balance transactions a topup creates.
     messaging_transactions:
-      credit: "Maandelijkse opwaardering voor berichten" # MT
-      reversal: "Terugboeking van niet-geïnde opwaardering voor berichten" # MT
+      topup_credit: "Maandelijkse opwaardering voor berichten" # MT
+      topup_reversal: "Terugboeking van niet-geïnde opwaardering voor berichten" # MT
     # e.g. "$5.00/month"
     per_month: "%{amount}/maand" # MT
     every_months:

@@ -29,8 +29,8 @@ fr:
       other: "Inconnu" # MT
       unknown: "Inconnu" # MT
     messaging_transactions:
-      credit: "Recharge mensuelle de messagerie" # MT
-      reversal: "Annulation d'une recharge de messagerie non encaissée" # MT
+      topup_credit: "Recharge mensuelle de messagerie" # MT
+      topup_reversal: "Annulation d'une recharge de messagerie non encaissée" # MT
     per_month: "%{amount}/mois" # MT
     every_months:
       one: "%{amount} tous les %{count} mois" # MT

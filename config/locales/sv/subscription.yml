@@ -29,8 +29,8 @@ sv:
       other: "Okänd" # MT
       unknown: "Okänd" # MT
     messaging_transactions:
-      credit: "Månatlig påfyllning för meddelanden" # MT
-      reversal: "Återföring av en påfyllning för meddelanden som inte betalades" # MT
+      topup_credit: "Månatlig påfyllning för meddelanden" # MT
+      topup_reversal: "Återföring av en påfyllning för meddelanden som inte betalades" # MT
     per_month: "%{amount}/månad" # MT
     every_months:
       one: "%{amount} var %{count}:e månad" # MT

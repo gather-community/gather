@@ -41,7 +41,10 @@ module People
     validates :user_id, uniqueness: true, allow_nil: true
 
     before_validation :copy_user_attributes, if: :user_id_changed?
-    after_save :copy_user_photo, if: :saved_change_to_user_id?
+    # The photo is copied after commit because Active Storage only uploads a file once its transaction
+    # commits. A user created in the same transaction (as in sample data) has no file to copy until then.
+    after_save { @copy_user_photo = true if saved_change_to_user_id? }
+    after_commit :copy_user_photo, on: %i[create update], if: -> { @copy_user_photo }
 
     def name
       "#{first_name} #{last_name}"
@@ -65,6 +68,7 @@ module People
     # Copied as an independent blob: has_one_attached defaults to dependent: :purge_later, so
     # attaching the user's own blob would mean destroying the user purges the memorial's photo too.
     def copy_user_photo
+      @copy_user_photo = false
       return if user.nil? || !user.photo.attached?
       photo.attach(io: StringIO.new(user.photo.download), filename: user.photo.filename.to_s,
         content_type: user.photo.content_type)

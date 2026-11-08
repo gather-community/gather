@@ -240,8 +240,8 @@ fi:
       communities_signup:
         status:
           all: "Kaikki" # MT
-          pending: "Odottaa" # MT
-          approved: "Hyväksytty" # MT
+          new: "Uusi" # MT
+          creating: "Luodaan" # MT
           denied: "Hylätty" # MT
           created: "Luotu" # MT
           failed: "Epäonnistui" # MT

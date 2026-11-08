@@ -8,7 +8,7 @@ describe Communities::SignupPolicy do
 
     let(:approver) { create(:user).tap { |u| u.add_role(:new_community_approver) } }
     let(:failed) { build(:communities_signup, :failed) }
-    let(:approved) { build(:communities_signup, :approved) }
+    let(:creating) { build(:communities_signup, :creating) }
 
     permissions :retry? do
       it "permits approvers and super admins on failed signups" do
@@ -20,7 +20,7 @@ describe Communities::SignupPolicy do
       end
 
       it "forbids retrying a signup that hasn't failed" do
-        expect(subject).not_to permit(approver, approved)
+        expect(subject).not_to permit(approver, creating)
         expect(subject).not_to permit(approver, build(:communities_signup))
         expect(subject).not_to permit(approver, build(:communities_signup, status: "created"))
       end

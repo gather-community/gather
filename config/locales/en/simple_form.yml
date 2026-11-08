@@ -232,8 +232,8 @@ en:
       communities_signup:
         status:
           all: "All"
-          pending: "Pending"
-          approved: "Approved"
+          new: "New"
+          creating: "Creating"
           denied: "Denied"
           created: "Created"
           failed: "Failed"

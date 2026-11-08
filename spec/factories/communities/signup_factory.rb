@@ -11,17 +11,17 @@ FactoryBot.define do
     time_zone { "Eastern Time (US & Canada)" }
     introduction { "We are a cohousing community. https://example.com" }
     want_sample_data { false }
-    status { "pending" }
+    status { "new" }
 
-    trait :approved do
-      status { "approved" }
+    trait :creating do
+      status { "creating" }
       reviewed_by { create(:user) }
       reviewed_at { Time.current }
       message { "Welcome! We're excited to have you on board." }
     end
 
     trait :failed do
-      approved
+      creating
       status { "failed" }
       failure_message { "Validation failed: Users is invalid" }
     end

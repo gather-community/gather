@@ -5,7 +5,7 @@ require "rails_helper"
 describe Communities::SignupApprovalJob do
   include_context "jobs"
 
-  let!(:signup) { create(:communities_signup, :approved, want_sample_data: false, locale: "fr") }
+  let!(:signup) { create(:communities_signup, :creating, want_sample_data: false, locale: "fr") }
 
   subject(:job) { described_class.new(signup.id) }
 

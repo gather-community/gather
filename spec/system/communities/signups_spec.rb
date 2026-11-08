@@ -100,30 +100,30 @@ describe "community signups", js: true do
   end
 
   describe "approver index" do
-    let!(:pending_signup) { create(:communities_signup) }
-    let!(:approved_signup) { create(:communities_signup, :approved) }
+    let!(:new_signup) { create(:communities_signup) }
+    let!(:creating_signup) { create(:communities_signup, :creating) }
 
     before do
       login_as(approver, scope: :user)
       use_user_subdomain(approver)
     end
 
-    scenario "shows pending applications by default" do
+    scenario "shows new applications by default" do
       visit(admin_signups_path)
       expect(page).to have_title("Community Signup Applications")
-      expect(page).to have_content(pending_signup.community_name)
-      expect(page).not_to have_content(approved_signup.community_name)
+      expect(page).to have_content(new_signup.community_name)
+      expect(page).not_to have_content(creating_signup.community_name)
     end
 
     scenario "status lens filters applications" do
       visit(admin_signups_path)
-      select_lens(:status, "Approved")
-      expect(page).not_to have_content(pending_signup.community_name)
-      expect(page).to have_content(approved_signup.community_name)
+      select_lens(:status, "Creating")
+      expect(page).not_to have_content(new_signup.community_name)
+      expect(page).to have_content(creating_signup.community_name)
 
       select_lens(:status, "All")
-      expect(page).to have_content(pending_signup.community_name)
-      expect(page).to have_content(approved_signup.community_name)
+      expect(page).to have_content(new_signup.community_name)
+      expect(page).to have_content(creating_signup.community_name)
     end
   end
 

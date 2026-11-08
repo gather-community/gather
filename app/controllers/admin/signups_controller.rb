@@ -41,6 +41,14 @@ module Admin
       end
     end
 
+    def retry
+      @signup = Communities::Signup.find(params[:id])
+      authorize(@signup)
+      @signup.retry!(current_user)
+      Communities::SignupApprovalJob.perform_later(@signup.id)
+      redirect_to(review_admin_signup_path(@signup), notice: t("admin.signups.retried"))
+    end
+
     private
 
     def status_filter

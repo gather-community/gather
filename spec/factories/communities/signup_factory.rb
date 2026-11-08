@@ -20,6 +20,12 @@ FactoryBot.define do
       message { "Welcome! We're excited to have you on board." }
     end
 
+    trait :failed do
+      approved
+      status { "failed" }
+      failure_message { "Validation failed: Users is invalid" }
+    end
+
     trait :denied do
       status { "denied" }
       reviewed_by { create(:user) }

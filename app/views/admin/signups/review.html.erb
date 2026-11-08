@@ -1,5 +1,15 @@
 <% content_for(:title, t(".title", name: @signup.community_name)) %>
 
+<% content_for(:action_links) do %>
+  <% if policy(@signup).retry? %>
+    <%= link_to(icon_tag("refresh") << " " << t(".retry"), retry_admin_signup_path(@signup),
+          method: :post, class: "btn btn-primary",
+          data: {controller: "confirm", action: "confirm#check",
+                 confirm_message_value: t(".retry_confirm", email: @signup.contact_email),
+                 confirm_confirm_label_value: t(".retry")}) %>
+  <% end %>
+<% end %>
+
 <div class="row">
   <div class="col-md-6">
     <table class="key-value">
@@ -57,8 +67,14 @@
       </tr>
       <% if @signup.message.present? %>
         <tr>
-          <td><%= @signup.approved? ? t(".approval_message") : t(".internal_notes") %></td>
+          <td><%= @signup.denied? ? t(".internal_notes") : t(".approval_message") %></td>
           <td style="white-space: pre-wrap"><%= @signup.message %></td>
+        </tr>
+      <% end %>
+      <% if @signup.failed? && @signup.failure_message.present? %>
+        <tr>
+          <td><%= t(".failure_message") %></td>
+          <td class="text-danger" style="white-space: pre-wrap"><%= @signup.failure_message %></td>
         </tr>
       <% end %>
     </table>

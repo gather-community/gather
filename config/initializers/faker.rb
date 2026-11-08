@@ -2,12 +2,31 @@
 
 module Faker
   class PhoneNumber
-    def self.simple
+    MAX_ATTEMPTS = 1000
+
+    # A random number that passes our phone validation in the given country. Returns nil for the few
+    # places (mostly uninhabited territories) where no random number does.
+    def self.simple(country_code: "US")
+      calling_code = ISO3166::Country[country_code]&.country_code
+      return nil if calling_code.nil?
+      MAX_ATTEMPTS.times do
+        number = (calling_code == "1") ? north_american : "+#{calling_code}#{random_national}"
+        return number if PhonyRails.plausible_number?(number, country_code: country_code)
+      end
+      nil
+    end
+
+    def self.north_american
       +"+1" <<
         (2..8).to_a.sample.to_s <<
         [0, 1].sample.to_s <<
         (2..8).to_a.sample.to_s <<
         7.times.map { (0..9).to_a.sample }.join
+    end
+
+    # National numbers range from 4 digits (some small islands) to 12.
+    def self.random_national
+      rand(1..9).to_s + rand(3..11).times.map { rand(10) }.join
     end
   end
 

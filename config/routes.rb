@@ -390,6 +390,7 @@ Rails.application.routes.draw do
       member do
         get :review
         post :act
+        post :retry
       end
     end
 

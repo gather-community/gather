@@ -120,6 +120,27 @@ describe Utils::Generators::MainGenerator, :without_tenant, :perform_jobs do
     end
   end
 
+  # Sample phone numbers used to be North American only, so they failed validation everywhere else.
+  it "generates sample data for a community outside North America" do
+    cluster = described_class.new(cmty_name: "Foo Community", slug: "foo", country_code: "GB",
+      sample_data: true, photos: false).generate
+
+    ActsAsTenant.with_tenant(cluster) do
+      expect(User.adults.count).to be > 0
+      expect(User.where.not(mobile_phone: nil).pluck(:mobile_phone)).to all(start_with("+44"))
+    end
+  end
+
+  # perform_deliveries is global to the process, so leaving it off after a failure stopped all mail
+  # from the background worker until it was restarted.
+  it "turns mail delivery back on when generation fails" do
+    allow(Utils::Generators::PeopleGenerator).to receive(:new).and_raise(RuntimeError, "boom")
+    main = described_class.new(cmty_name: "Foo Community", slug: "foo", sample_data: true, photos: false)
+    expect { main.generate }.to raise_error(RuntimeError, "boom")
+    expect(ActionMailer::Base.perform_deliveries).to be(true)
+    expect(Cluster.count).to eq(0)
+  end
+
   def check_cmty_and_cluster_creation(cluster)
     expect(Cluster.count).to eq(1)
     expect(cluster.name).to eq("Foo Community")

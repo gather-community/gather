@@ -25,6 +25,10 @@ class Communities::SignupPolicy < ApplicationPolicy
     active_new_community_approver? && record.pending?
   end
 
+  def retry?
+    active_new_community_approver? && record.failed?
+  end
+
   # Defined as a class method so it can be called without instantiating the policy,
   # since the signup form is public and there is no current_user to pass to the constructor.
   def self.permitted_attributes

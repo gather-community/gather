@@ -198,7 +198,7 @@ describe "community signups", js: true do
       emails = email_sent_by do
         click_on("Retry Setup")
         expect_modal(text: signup.contact_email)
-        click_modal_button
+        click_modal_button("Retry Setup")
         expect(page).to have_alert(/Retrying community setup/)
       end
 

@@ -82,7 +82,6 @@ en:
         submit: "Submit"
         failure_message: "Setup Error"
         retry: "Retry Setup"
-        retry_explanation: "Setting up this community failed. Once the cause is fixed, you can try again."
         retry_confirm: "Try setting up this community again? If it works, the approval email goes to %{email}."
     feature_flags:
       created: "Created the '%{name}' flag."

@@ -1,5 +1,15 @@
 <% content_for(:title, t(".title", name: @signup.community_name)) %>
 
+<% content_for(:action_links) do %>
+  <% if policy(@signup).retry? %>
+    <%= link_to(icon_tag("refresh") << " " << t(".retry"), retry_admin_signup_path(@signup),
+          method: :post, class: "btn btn-primary",
+          data: {controller: "confirm", action: "confirm#check",
+                 confirm_message_value: t(".retry_confirm", email: @signup.contact_email),
+                 confirm_confirm_label_value: t(".retry")}) %>
+  <% end %>
+<% end %>
+
 <div class="row">
   <div class="col-md-6">
     <table class="key-value">
@@ -70,13 +80,6 @@
     </table>
   </div>
   <div class="col-md-6">
-    <% if policy(@signup).retry? %>
-      <p><%= t(".retry_explanation") %></p>
-      <%= link_to(icon_tag("refresh") << " " << t(".retry"), retry_admin_signup_path(@signup),
-            method: :post, class: "btn btn-primary",
-            data: {controller: "confirm", action: "confirm#check",
-                   confirm_message_value: t(".retry_confirm", email: @signup.contact_email)}) %>
-    <% end %>
     <% if @signup.pending? %>
       <div data-controller="communities--signup-action"
           data-communities--signup-action-contact-first-name-value="<%= @signup.contact_first_name %>"

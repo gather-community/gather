@@ -178,6 +178,48 @@ describe "community signups", js: true do
     end
   end
 
+  describe "retry failed setup" do
+    let!(:signup) { create(:communities_signup, :failed) }
+
+    before do
+      login_as(approver, scope: :user)
+      use_user_subdomain(approver)
+    end
+
+    scenario "shows the error and sets up the community on retry", perform_jobs: true do
+      visit(review_admin_signup_path(signup))
+      expect(page).to have_content("Failed")
+      expect(page).to have_content("Setup Error")
+      expect(page).to have_content("Validation failed: Users is invalid")
+      # The message was written at approval, so it's still what the applicant will get.
+      expect(page).to have_content("Approval Message")
+      expect(page).not_to have_content("Internal Notes")
+
+      emails = email_sent_by do
+        click_on("Retry Setup")
+        expect_modal(text: signup.contact_email)
+        click_modal_button
+        expect(page).to have_alert(/Retrying community setup/)
+      end
+
+      signup.reload
+      expect(signup).to be_created
+      expect(signup.reviewed_by).to eq(approver)
+      expect(signup.failure_message).to be_nil
+      expect(emails.map(&:subject)).to include(match(/Community setup complete/))
+
+      visit(review_admin_signup_path(signup))
+      expect(page).not_to have_content("Retry Setup")
+      expect(page).not_to have_content("Setup Error")
+    end
+
+    scenario "no retry button for an application that hasn't failed" do
+      signup.update!(status: "created")
+      visit(review_admin_signup_path(signup))
+      expect(page).not_to have_content("Retry Setup")
+    end
+  end
+
   describe "access control" do
     let(:plain_admin) { create(:admin) }
 

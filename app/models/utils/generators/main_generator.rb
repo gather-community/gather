@@ -10,6 +10,9 @@ module Utils
       attr_accessor :cmty_name, :slug, :sample_data, :photos, :cluster, :community, :generators, :country_code
 
       def generate
+        # This setting is global to the process, so it must be restored even if generation fails.
+        # Otherwise a failure leaves the whole background worker unable to send mail.
+        deliveries_were = ActionMailer::Base.perform_deliveries
         ActionMailer::Base.perform_deliveries = false
         self.cluster = Cluster.create!(name: cmty_name)
         # ActsAsTenant has to be outside the transaction because some callbacks run after_commit.
@@ -22,7 +25,6 @@ module Utils
             in_community_timezone { generate_data_and_handle_errors }
           end
         end
-        ActionMailer::Base.perform_deliveries = true
         cluster
       rescue StandardError => ex
         Rails.logger.error("Error generating cluster: #{ex.message}")
@@ -34,6 +36,8 @@ module Utils
           cluster&.destroy
         end
         raise ex
+      ensure
+        ActionMailer::Base.perform_deliveries = deliveries_were
       end
 
       private

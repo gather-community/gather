@@ -54,6 +54,7 @@ en:
         children: "Children"
         years_active: "Years Active: %{years}"
     signups:
+      retried: "Retrying community setup. You'll get an email when it finishes."
       index:
         title: "Community Signup Applications"
         none_found: "No signups found."
@@ -79,6 +80,10 @@ en:
         internal_notes: "Internal Notes"
         denial_reason: "Denial Reason (not sent to user)"
         submit: "Submit"
+        failure_message: "Setup Error"
+        retry: "Retry Setup"
+        retry_explanation: "Setting up this community failed. Once the cause is fixed, you can try again."
+        retry_confirm: "Try setting up this community again? If it works, the approval email goes to %{email}."
     feature_flags:
       created: "Created the '%{name}' flag."
       updated: "Saved the '%{name}' flag."

@@ -56,6 +56,14 @@ module Communities
       update!(status: :approved, reviewed_by: reviewer, reviewed_at: Time.current, message: message)
     end
 
+    # Puts a failed signup back to approved so the approval job can run again. The approval message is
+    # kept, since it's what the applicant will receive. The person retrying becomes the reviewer so the
+    # setup complete/failed email goes to them.
+    def retry!(reviewer)
+      raise ArgumentError, "Only failed signups can be retried (status is #{status})" unless failed?
+      update!(status: :approved, reviewed_by: reviewer, reviewed_at: Time.current, failure_message: nil)
+    end
+
     def mark_created!
       update!(status: :created)
     end

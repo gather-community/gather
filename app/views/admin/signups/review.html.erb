@@ -57,13 +57,26 @@
       </tr>
       <% if @signup.message.present? %>
         <tr>
-          <td><%= @signup.approved? ? t(".approval_message") : t(".internal_notes") %></td>
+          <td><%= @signup.denied? ? t(".internal_notes") : t(".approval_message") %></td>
           <td style="white-space: pre-wrap"><%= @signup.message %></td>
+        </tr>
+      <% end %>
+      <% if @signup.failed? && @signup.failure_message.present? %>
+        <tr>
+          <td><%= t(".failure_message") %></td>
+          <td class="text-danger" style="white-space: pre-wrap"><%= @signup.failure_message %></td>
         </tr>
       <% end %>
     </table>
   </div>
   <div class="col-md-6">
+    <% if policy(@signup).retry? %>
+      <p><%= t(".retry_explanation") %></p>
+      <%= link_to(icon_tag("refresh") << " " << t(".retry"), retry_admin_signup_path(@signup),
+            method: :post, class: "btn btn-primary",
+            data: {controller: "confirm", action: "confirm#check",
+                   confirm_message_value: t(".retry_confirm", email: @signup.contact_email)}) %>
+    <% end %>
     <% if @signup.pending? %>
       <div data-controller="communities--signup-action"
           data-communities--signup-action-contact-first-name-value="<%= @signup.contact_first_name %>"

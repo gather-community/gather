@@ -28,7 +28,9 @@ sv:
         starts_at: "Starttid" # MT
         ends_at: "Sluttid" # MT
         creator: "Skapad av" # MT
+        creator_id: "Skapad av" # MT
         group: "Grupp" # MT
+        group_id: "Grupp" # MT
         all_day: "Heldagshändelse?" # MT
         kind: "Typ" # MT
         note: "Anteckning" # MT

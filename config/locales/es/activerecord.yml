@@ -27,7 +27,9 @@ es:
         starts_at: "Hora de inicio" # MT
         ends_at: "Hora de fin" # MT
         creator: "Creador" # MT
+        creator_id: "Creador" # MT
         group: "Grupo" # MT
+        group_id: "Grupo" # MT
         all_day: "¿Evento de todo el día?" # MT
         kind: "Tipo" # MT
         note: "Nota" # MT

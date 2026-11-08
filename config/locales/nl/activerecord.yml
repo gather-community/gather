@@ -28,7 +28,9 @@ nl:
         starts_at: "Begintijd" # MT
         ends_at: "Eindtijd" # MT
         creator: "Maker" # MT
+        creator_id: "Maker" # MT
         group: "Groep" # MT
+        group_id: "Groep" # MT
         all_day: "Afspraak voor de hele dag?" # MT
         kind: "Type" # MT
         note: "Opmerking" # MT

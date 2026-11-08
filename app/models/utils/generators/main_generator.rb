@@ -8,7 +8,7 @@ module Utils
       include ActiveModel::Model
 
       # `locale` is the community's language (see Gather::Locales.community_default). The starter content
-      # every community gets (calendars, meal roles and so on) is created in it. Sample data stays English.
+      # every community gets (calendars, meal roles and so on) and the optional sample data are created in it.
       attr_accessor :cmty_name, :slug, :sample_data, :photos, :cluster, :community, :generators,
         :country_code, :locale
 
@@ -54,8 +54,8 @@ module Utils
 
         I18n.with_locale(Gather::Locales.community_default(community)) do
           generators.each_value(&:generate_seed_data)
+          generators.each_value(&:generate_samples) if sample_data
         end
-        generators.each_value(&:generate_samples) if sample_data
       rescue StandardError => e
         generators.each_value(&:cleanup_on_error)
         raise e

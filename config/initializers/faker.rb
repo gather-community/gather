@@ -31,14 +31,31 @@ module Faker
   end
 
   class Name
+    # The same list in every language. These names suit anyone, and they're plain ASCII, which sample email
+    # addresses are built from.
     def self.unisex_name
-      I18n.t("random_data.unisex_names").sample
+      I18n.t("random_data.unisex_names", locale: :en).sample
     end
   end
 
+  # The lists below are in sample_data.yml, translated, since sample data is in the community's language.
+
   class Relationship
     def self.relationship
-      I18n.t("random_data.relationships").sample
+      I18n.t("sample_data.relationships").sample
+    end
+  end
+
+  class Pet
+    def self.species
+      I18n.t("sample_data.pet_species").sample
+    end
+  end
+
+  class Color
+    # Faker's own color names are English in several of Gather's languages.
+    def self.common_color_name
+      I18n.t("sample_data.colors").sample
     end
   end
 

@@ -28,6 +28,20 @@ module Utils
         YAML.safe_load_file(resource_path("data/#{path}"), permitted_classes: [Symbol, Time, Date])
       end
 
+      # The text for the sample data row named `key` under `sample_data.<section>` (see sample_data.yml), as
+      # a hash of the given attributes. An attribute the row has no text for is nil.
+      def sample_text(section, key, *attribs)
+        attribs.index_with do |attrib|
+          i18n_key = "sample_data.#{section}.#{key}.#{attrib}"
+          I18n.t(i18n_key) if I18n.exists?(i18n_key)
+        end
+      end
+
+      # A random item from one of the lists in sample_data.yml.
+      def sample_item(list)
+        I18n.t("sample_data.#{list}").sample
+      end
+
       def distrib_rand(*pcts)
         rnd = rand(1..100)
         cum = 0

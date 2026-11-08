@@ -119,7 +119,10 @@ module Utils
           datum = data.pop
           staff = adults.shuffle
 
-          meal = build(:meal, datum.merge(
+          meal = build(:meal,
+            **sample_text(:meals, datum["key"], :title, *Meals::Meal::MENU_ITEMS.map(&:to_sym)),
+            allergens: datum["allergens"].map { |key| I18n.t("sample_data.allergens.#{key}") },
+            no_allergens: datum["allergens"].empty?,
             formula: formula,
             calendars: locations,
             community: community,
@@ -128,8 +131,7 @@ module Utils
             served_at: served_at,
             creator: creator,
             created_at: community.created_at,
-            updated_at: community.updated_at
-          ))
+            updated_at: community.updated_at)
           # Head cook, assistant cooks and cleaners, in the order of `roles`.
           [staff[0..0], staff[1..2], staff[3..4]].zip(roles).each do |workers, role|
             workers.each { |user| meal.assignments.build(role: role, user: user) }

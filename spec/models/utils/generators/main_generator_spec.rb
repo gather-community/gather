@@ -121,7 +121,7 @@ describe Utils::Generators::MainGenerator, :without_tenant, :perform_jobs do
   end
 
   describe "starter content language" do
-    it "creates the starter content in the community's language, with sample members in it too" do
+    it "creates the starter content and sample data in the community's language" do
       cluster = described_class.new(cmty_name: "Foo Community", slug: "foo", sample_data: true, photos: false,
         locale: "fr").generate
 
@@ -135,11 +135,20 @@ describe Utils::Generators::MainGenerator, :without_tenant, :perform_jobs do
         expect(Groups::Group.find_by(availability: "everybody").name).to eq("Toute la communauté")
         expect(Calendars::Node.pluck(:name)).to include("Tous les repas", "Anniversaires", "Réservations")
         expect(community.settings.meals.allergens)
-          .to eq("Produits laitiers, fruits de mer, soja, fruits à coque")
+          .to eq("Produits laitiers, Fruits de mer, Soja, Fruits à coque")
 
-        # Sample data stays English, and sample meals still find their calendars.
-        expect(Calendars::Calendar.pluck(:name)).to include("Kitchen", "Dining Room")
-        expect(Meals::Meal.first.calendars.map(&:name)).to contain_exactly("Kitchen", "Dining Room")
+        # Sample data too, and sample meals still find their calendars.
+        kitchen, dining_room = %i[kitchen dining_room].map do |key|
+          I18n.t("sample_data.calendars.#{key}.name", locale: :fr)
+        end
+        expect(Calendars::Calendar.pluck(:name)).to include(kitchen, dining_room)
+        expect(Meals::Meal.first.calendars.map(&:name)).to contain_exactly(kitchen, dining_room)
+        sample_titles = I18n.t("sample_data.meals", locale: :fr).values.pluck(:title)
+        expect(Meals::Meal.pluck(:title)).to all(be_in(sample_titles))
+        expect(Groups::Group.pluck(:name))
+          .to include(I18n.t("sample_data.groups.knitting_club.name", locale: :fr))
+        expect(Calendars::Event.all.reject(&:meal?).filter_map(&:kind).uniq)
+          .to match_array(I18n.t("sample_data.event_kinds", locale: :fr).values)
         expect(User.distinct.pluck(:locale)).to eq(["fr"])
       end
     end

@@ -21,5 +21,12 @@ describe Utils::Generators::MealGenerator do
     expect(Meals::Formula.all.map(&:name)).to contain_exactly("Default Formula")
     expect(Meals::Role.all.map(&:title)).to contain_exactly("Head Cook", "Assistant Cook", "Cleaner")
     expect(Meals::Meal.all.flat_map(&:calendars).uniq).to contain_exactly(kitchen, dining_room)
+
+    # Menus come from sample_data.yml. The last row in meals.yml is used first.
+    salmon = Meals::Meal.find_by!(title: "Salmon en Papillote")
+    expect(salmon.entrees).to eq("Salmon baked in parchment, seasoned with onion and herbs")
+    expect(salmon.allergens).to be_empty
+    expect(salmon.no_allergens).to be(true)
+    expect(Meals::Meal.find_by!(title: "Soup Bar!").allergens).to eq(["Dairy"])
   end
 end

@@ -1,0 +1,199 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+fr-CA:
+  sample_data:
+    calendars:
+      media_room:
+        guidelines: |- # MT
+          # Consignes de la salle multimédia
+
+          1. Les moins de 13 ans doivent être accompagnés d'un adulte.
+          1. Les émissions classées 16+ et 18+ sont verrouillées sur la télé et sur le terminal.
+          1. La salle peut être réservée pour des événements particuliers ou des émissions de télé. Consultez le calendrier ou écrivez à media@example.com.
+          1. Les télécommandes restent toujours dans la salle, à leur place.
+          1. Merci de ranger la salle multimédia et de la remettre dans son état « neutre » après usage. Attention aux miettes!
+    shared_guidelines:
+      common_house:
+        body: |- # MT
+          # Consignes de la maison commune
+
+          * Bienvenue dans notre maison commune!
+          * Notre maison commune est le cœur de la vie de notre communauté.
+          * Notre communauté repose sur les liens entre ses membres.
+          * Chaque membre de la communauté a son mot à dire, à égalité, sur l'usage de la maison commune.
+          * Nous traitons la maison commune avec autant de respect que la maison d'un voisin. Merci de la laisser comme vous l'avez trouvée, ou mieux!
+
+          Ces consignes équilibrent la liberté, la responsabilité et la sécurité des personnes et du bâtiment.
+
+          ## Accessibilité
+
+          Pour respecter les sensibilités de chacun, nous convenons de ce qui suit :
+
+          * *Sans parfum*, c'est l'objectif dans la maison commune.
+          * *Tabac :* il est interdit de fumer dans la maison commune.
+          * *Animaux :* les animaux de compagnie ne sont pas admis dans la maison commune, sauf les animaux d'assistance. Ils ne doivent pas être laissés seuls aux abords de la maison commune.
+
+          ## Sécurité
+
+          La maison commune est fermée à clé au plus tard à 22 h en semaine et à 23 h les vendredis et samedis, en suivant la liste de fermeture.
+
+          ## Communication
+
+          Les résidents règlent leurs différends directement entre eux dès que possible. Au besoin, le comité de la maison commune est là pour aider.
+
+          ## Entretien
+
+          Signalez tout de suite les installations ou appareils brisés ou défectueux au comité d'entretien, à maintenance@example.com.
+
+          Pour les questions courantes, envoyez un courriel ou laissez un mot dans le cartable de l'entretien.
+
+          Signalez les objets brisés au comité de la maison commune à commonhouse@example.com.
+
+          ## Alcool
+
+          Ne laissez et ne rangez pas d'alcool, ouvert ou non, ni de médicaments dans la maison commune.
+
+          ## Bruit
+
+          Toute personne dérangée par le bruit dans la maison commune peut demander qu'on le baisse. Merci d'être attentif aux personnes qui le demandent.
+
+          La communauté est prévenue à l'avance des grands événements qui risquent d'être plus bruyants que d'habitude ou de dépasser l'heure de fermeture.
+
+          ## Heures de calme
+
+          * En semaine, de 22 h à 8 h
+          * La fin de semaine et les jours fériés, de 23 h à 9 h
+
+          ## À qui s'adresse la maison commune
+
+          La maison commune est destinée aux résidents et à leurs invités.
+
+          * Nous sommes reconnaissants du soutien et de l'hospitalité des communautés voisines.
+          * En accueillant nos voisins, nous comptons régler les éventuels problèmes de façon équitable, dans la réciprocité et la confiance.
+
+          Les membres des communautés voisines sont les bienvenus dans la maison commune et suivent les mêmes procédures pour réserver les salles. Toute autre personne doit être accueillie par un résident adulte, qui est responsable du comportement de ses invités.
+
+          ## Réservation des salles
+
+          Les activités de la communauté sont inscrites au calendrier et ont la priorité sur les autres événements.
+
+          Toutes les consignes sont adoptées par consensus. Les avis de chacun sont les bienvenus pour continuer à les améliorer.
+    payment_description: "Chèque no %{number}" # MT
+    colors:
+      - "Rouge" # MT
+      - "Bleu" # MT
+      - "Vert" # MT
+      - "Noir" # MT
+      - "Blanc" # MT
+      - "Argent" # MT
+      - "Gris" # MT
+      - "Jaune" # MT
+      - "Brun" # MT
+      - "Mauve" # MT
+    event_names:
+      - "Club de lecture" # MT
+      - "Fête d'anniversaire" # MT
+      - "Soirée cinéma" # MT
+      - "Cours de yoga" # MT
+      - "Jeux de société" # MT
+      - "Pratique de chorale" # MT
+      - "Invité pour la nuit" # MT
+      - "Repas-partage" # MT
+      - "Bricolage pour enfants" # MT
+      - "Réunion de comité" # MT
+      - "Journée jardinage" # MT
+      - "Shower de bébé" # MT
+      - "Pratique de musique" # MT
+      - "Thé et jasette" # MT
+      - "Visite de la famille" # MT
+      - "Atelier" # MT
+      - "Soirée de jeux" # MT
+      - "Cours de dessin" # MT
+      - "Méditation" # MT
+      - "Cours de danse" # MT
+      - "Party des Fêtes" # MT
+      - "Réparation de vélos" # MT
+      - "Heure du conte" # MT
+      - "Cercle de couture" # MT
+    allergens:
+      soy: "Soya" # MT
+    meals:
+      meal_01:
+        title: "Poulet aux canneberges et patates douces" # MT
+        entrees: "Poulet aux canneberges (élevé en liberté, d'une ferme du coin) et patates douces" # MT
+        dessert: "Brownies, crème glacée" # MT
+        notes: "Tofu au four sur demande. Je peux faire des patates douces et des canneberges sans poulet, et aussi des brownies sans gluten. Le gluten, le lait et les œufs ne sont que dans le dessert." # MT
+      meal_02:
+        title: "Bar à patates au four" # MT
+        entrees: "Patates au four avec plein de garnitures au choix" # MT
+      meal_03:
+        side: "Légumes, salade, compote de pommes, crème sure, graines" # MT
+      meal_06:
+        title: "Souper d'anniversaire : pâtes (ou riz) au pesto" # MT
+        dessert: "Petits gâteaux et bouchées chocolat-cajou (sans lait et sans gluten)" # MT
+        notes: "Flexible et accommodant. Indiquez vos restrictions alimentaires dans les commentaires. Le souper sera simple pour qu'on puisse se concentrer sur le dessert." # MT
+      meal_07:
+        title: "Crêpes aux bleuets et frittatas aux épinards" # MT
+        entrees: "Crêpes, ordinaires ou sans gluten, et frittatas individuelles aux épinards, au basilic et à la tomate" # MT
+        side: "Saucisses de dinde, fruits et yogourt" # MT
+        kids: "Crêpes sans gluten au lait d'amande" # MT
+      meal_08:
+        dessert: "Biscuits aux pépites de chocolat" # MT
+        notes: "Écrivez-moi un courriel si vous voulez une version sans gluten ou une autre modification." # MT
+      meal_10:
+        title: "Tacos au poulet et à la lime" # MT
+        entrees: "Poulet effiloché dans une sauce chipotle adobo, avec de la lime fraîche (un peu épicé)" # MT
+      meal_11:
+        title: "Tamales pour emporter : lisez les notes!" # MT
+      meal_15:
+        entrees: "Un assortiment de crêpes (nature, au levain, et sans gluten sur demande), avec des garnitures salées (œuf, fromage, légumes, fines herbes et plus) et sucrées (fruits, tartinade au chocolat, confiture, yogourt, ricotta et plus) à garnir vous-même." # MT
+      meal_17:
+        title: "Déjeuner anglais" # MT
+        entrees: "Œufs brouillés, saucisses, champignons, fèves au lard" # MT
+      meal_20:
+        side: "Gâteau crumble aux bleuets sans gluten" # MT
+      meal_21:
+        title: "Chaudrée de poisson à la noix de coco" # MT
+        entrees: "Chaudrée de poisson au lait de coco, avec une version végane sans poisson" # MT
+      meal_22:
+        kids: "Œufs brouillés et yogourt" # MT
+      meal_26:
+        side: "Chou rouge, choucroute, raifort et crème sure" # MT
+        dessert: "Strudel aux pommes et crème glacée" # MT
+      meal_29:
+        side: "Salade caprese, plein de légumes, blé d'Inde en épi" # MT
+        kids: "Blé d'Inde égrené pour les enfants qui ont des broches" # MT
+        dessert: "Crème glacée à la tomate?" # MT
+      meal_30:
+        title: "Chili et repas-partage de desserts aux pommes!" # MT
+        entrees: "Le chili de mon enfance : fèves douces et légumes sur du riz. Bœuf haché pour les carnivores." # MT
+        dessert: "C'est notre repas-partage annuel de desserts aux pommes! Venez aux pommes avec nous la fin de semaine d'avant, puis apportez ce que vous aurez préparé avec ces magnifiques pommes." # MT
+      meal_31:
+        entrees: "Des crêpes avec plein de garnitures, salées pour le souper et sucrées pour le dessert" # MT
+      meal_32:
+        dessert: "Fruits ou crème glacée" # MT
+      meal_33:
+        kids: "Pareil. Écrivez-moi un courriel avant jeudi si vos enfants veulent de la soupe sans curry." # MT
+        dessert: "Biscuits maison aux pépites de chocolat, et fruits" # MT
+        notes: "La soupe est sans gluten, et la soupe aux légumes est aussi sans lait. Si vous voulez du pain sans gluten ou d'autres changements, écrivez-moi un courriel avant jeudi." # MT
+      meal_34:
+        side: "Garnitures sucrées et salées : sucre, confiture maison de fraises et de bleuets, sauce caramel au beurre salé, crème fouettée, fromage, et sans doute des champignons sautés. Apportez les vôtres si vous voulez quelque chose de particulier." # MT
+      meal_35:
+        dessert: "Croustade aux pommes" # MT
+      meal_36:
+        entrees: "Riz vapeur garni de légumes assaisonnés et de bœuf (ou de tofu), avec de la sauce pimentée (et de la sauce soya si vous n'aimez pas épicé), et des œufs au miroir" # MT
+        notes: "Tout est assaisonné avec de la sauce soya sans gluten, de l'ail, de l'huile de sésame et du poivre noir. Ce repas, c'est surtout des légumes, alors ne vous attendez pas à beaucoup de viande." # MT
+      meal_37:
+        notes: "Tomates, laitue, salsa douce et crème sure pour les tacos." # MT
+      meal_38:
+        title: "Pizza déjeuner" # MT

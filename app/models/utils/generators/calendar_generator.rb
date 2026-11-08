@@ -63,7 +63,8 @@ module Utils
       def create_reservation_calendars
         self.calendar_data = load_yaml("calendars/calendars.yml")
         calendar_data.each do |row|
-          calendar = create(:calendar, row.except("id", :shared_guideline_ids).merge(
+          calendar = create(:calendar, row.except("id", "key", :shared_guideline_ids).merge(
+            **sample_text(:calendars, row["key"], :name, :abbrv, :guidelines),
             community: community,
             color: next_color,
             group: reservations_group,
@@ -78,7 +79,8 @@ module Utils
 
       def create_shared_guidelines_and_associate
         load_yaml("calendars/shared_guidelines.yml").each do |row|
-          sg = Calendars::SharedGuidelines.create!(row.except("id").merge(community: community))
+          sg = Calendars::SharedGuidelines.create!(community: community,
+            **sample_text(:shared_guidelines, row["key"], :name, :body))
           calendars_with_shared_guidelines_id(row["id"]).each do |calendar|
             calendar.shared_guidelines << sg
           end

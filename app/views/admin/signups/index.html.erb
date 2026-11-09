@@ -24,7 +24,7 @@
           </td>
           <td><%= l(signup.created_at) %></td>
           <td>
-            <span class="label label-<%= signup.pending? ? "warning" : (signup.approved? ? "success" : "danger") %>">
+            <span class="label label-<%= signup.new? ? "warning" : (signup.creating? ? "success" : "danger") %>">
               <%= t("simple_form.options.communities_signup.status.#{signup.status}") %>
             </span>
           </td>

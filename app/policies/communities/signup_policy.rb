@@ -22,7 +22,7 @@ class Communities::SignupPolicy < ApplicationPolicy
   end
 
   def act?
-    active_new_community_approver? && record.pending?
+    active_new_community_approver? && record.new?
   end
 
   def retry?

@@ -234,8 +234,8 @@ fr:
       communities_signup:
         status:
           all: "Toutes" # MT
-          pending: "En attente" # MT
-          approved: "Approuvée" # MT
+          new: "Nouvelle" # MT
+          creating: "En cours de création" # MT
           denied: "Refusée" # MT
           created: "Créée" # MT
           failed: "Échec" # MT

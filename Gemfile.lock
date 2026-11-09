@@ -1,10 +1,10 @@
 GIT
   remote: https://github.com/ClosureTree/with_advisory_lock
-  revision: 00f1cfe81c231aabf1f8c7c3c2b7be844df031c6
+  revision: 58718b42d78cb2a0d5460da261986687d5a852f8
   branch: master
   specs:
-    with_advisory_lock (5.0.0)
-      activerecord (>= 6.0)
+    with_advisory_lock (7.6.0)
+      activerecord (>= 7.2)
 
 GIT
   remote: https://github.com/derekprior/momentjs-rails
@@ -459,9 +459,9 @@ GEM
     method_source (1.1.0)
     mini_mime (1.1.5)
     mini_portile2 (2.8.9)
-    minitest (6.0.6)
+    minitest (6.1.0)
       drb (~> 2.0)
-      prism (~> 1.5)
+      prism (>= 1.5, < 3)
     money (7.1.1)
       bigdecimal
       i18n (~> 1.9)

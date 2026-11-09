@@ -76,6 +76,18 @@ describe "groups", js: true do
       expect(page).to have_alert(/created successfully/)
     end
 
+    scenario "adding someone who's already a member" do
+      visit(edit_groups_group_path(group1))
+      click_link("Add Member")
+      within(all(".nested-fields").last) do
+        select2(manager1.name, from: find("select.user_select"))
+        select("Member", from: "Kind")
+      end
+      click_button("Save")
+      expect(page).to have_alert(/updated successfully/)
+      expect(group1.reload.memberships.where(user: manager1).pluck(:kind)).to eq(["manager"])
+    end
+
     scenario "deactivate/activate/delete" do
       visit(edit_groups_group_path(group1))
       click_on("Deactivate")

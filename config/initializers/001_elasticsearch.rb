@@ -14,7 +14,13 @@ Rails.application.config.after_initialize do
     People::Memorial, People::EmergencyContact, People::Pet, People::Vehicle,
     Billing::Transaction
   ].each do |model|
-    model.__elasticsearch__.create_index!(force: false)
+    begin
+      model.__elasticsearch__.create_index!(force: false)
+    rescue Elasticsearch::Transport::Transport::Errors::BadRequest => e
+      # create_index! checks for the index and then creates it, so when two servers boot at once
+      # (as in a deploy) both can try. The index existing is all we wanted.
+      raise unless e.message.include?("resource_already_exists_exception")
+    end
   rescue Faraday::Error, Elasticsearch::Transport::Transport::Error => e
     Sentry.capture_exception(e)
     Rails.logger.warn("Could not create ES index for #{model}: #{e.message}")

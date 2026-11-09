@@ -253,7 +253,11 @@ module ApplicationControllable::RequestPreprocessing
   end
 
   def internal_referrer?
-    host = URI.parse(request.referer.to_s).host
+    uri = URI.parse(request.referer.to_s)
+    # Safari gives the service worker as the referrer for requests it passes through, which hides
+    # where the request really came from (often a bookmark or the history).
+    return false if uri.path == "/serviceworker.js"
+    host = uri.host
     host.present? && (host == Settings.url.host || host.end_with?(".#{Settings.url.host}"))
   rescue URI::InvalidURIError
     false

@@ -32,11 +32,12 @@ module Billing
       end
     end
 
-    # One message per language the household's members read email in.
+    # One message per household member, so a bad address only affects that person. On a shared message
+    # the server's rejection of one address stopped the message for everyone else on it.
     def send_statement_notice(statement)
       data = {statement_id: statement.id}
-      each_recipient_locale_group(statement.household, kind: :statement_notice, data: data) do |group|
-        AccountMailer.with(recipient: group).statement_notice(statement).deliver_now
+      each_notification_recipient(statement.household, kind: :statement_notice, data: data) do |user|
+        AccountMailer.with(recipient: user).statement_notice(statement).deliver_now
       end
     end
   end

@@ -34,8 +34,10 @@ module Communities
     MESSAGE_MAX_LENGTH = 5000
     WANT_SAMPLE_DATA_OPTIONS = %i[true false].freeze
 
-    enum :status, {pending: "pending", approved: "approved", denied: "denied",
-                   created: "created", failed: "failed"}
+    # "creating" means approved, with the community being set up in the background.
+    # Scopes are off because a "new" scope would replace Signup.new.
+    enum :status, {new: "new", creating: "creating", denied: "denied",
+                   created: "created", failed: "failed"}, scopes: false
 
     belongs_to :reviewed_by, class_name: "User", optional: true
 
@@ -53,15 +55,15 @@ module Communities
     end
 
     def approve!(reviewer, message:)
-      update!(status: :approved, reviewed_by: reviewer, reviewed_at: Time.current, message: message)
+      update!(status: :creating, reviewed_by: reviewer, reviewed_at: Time.current, message: message)
     end
 
-    # Puts a failed signup back to approved so the approval job can run again. The approval message is
+    # Puts a failed signup back to creating so the approval job can run again. The approval message is
     # kept, since it's what the applicant will receive. The person retrying becomes the reviewer so the
     # setup complete/failed email goes to them.
     def retry!(reviewer)
       raise ArgumentError, "Only failed signups can be retried (status is #{status})" unless failed?
-      update!(status: :approved, reviewed_by: reviewer, reviewed_at: Time.current, failure_message: nil)
+      update!(status: :creating, reviewed_by: reviewer, reviewed_at: Time.current, failure_message: nil)
     end
 
     def mark_created!

@@ -42,7 +42,7 @@ describe "notification settings footer" do
   end
 
   it "isn't on mail that never goes to community members" do
-    signup = create(:communities_signup, :approved, reviewed_by: user)
+    signup = create(:communities_signup, :creating, reviewed_by: user)
     mail = Communities::SignupMailer.application_approved(signup).deliver_now
     expect(mail.body.encoded).not_to include("Gather notification settings")
   end

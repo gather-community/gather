@@ -8,7 +8,7 @@ module Admin
 
     def index
       authorize(Communities::Signup)
-      prepare_lenses({"communities/signup_status": {initial_selection: :pending}})
+      prepare_lenses({"communities/signup_status": {initial_selection: :new}})
       @signups = policy_scope(Communities::Signup)
         .where(status_filter)
         .order(created_at: :desc)

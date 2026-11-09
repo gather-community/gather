@@ -199,11 +199,12 @@ module Calendars
     # Sets up the calendar's timzeone blocks at the top of the file.
     # This is kind of a weird incantation taken from the gem docs.
     # Version 2 of the gem is supposed to have better timezone support, if it ever comes out.
-    # This method may fail with TZInfo::AmbiguousTime during DST transitions. The problem should
-    # go away after a few hours though.
+    # The gem looks up the current period from a local time, which is ambiguous in the hour repeated
+    # when DST ends, so we pass whether that time is in DST. Without it, tzinfo raises AmbiguousTime.
     def set_timezone
       tz = TZInfo::Timezone.get(tzid)
-      cal.add_timezone(tz.ical_timezone(Time.current))
+      now = Time.current
+      cal.add_timezone(tz.ical_timezone(now, now.dst?))
     end
 
     # Current timezone ID in tzinfo format.

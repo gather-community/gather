@@ -21,6 +21,45 @@ describe GDrive::PermissionSyncJob do
     let!(:item) { create(:gdrive_item, gdrive_config: config, external_id: "0AGH_tsBj1z-0Uk9PVA") }
     let!(:user) { create(:user, google_email: "example@gmail.com") }
 
+    describe "deletion refused because the permission is inherited" do
+      let!(:permission) do
+        create(:gdrive_synced_permission, item: item, user: user, access_level: "reader",
+          external_id: "06089445466754982616", inherited_access_level: inherited_access_level)
+      end
+      let(:error) do
+        Google::Apis::ClientError.new("cannotDeletePermission: The authenticated user cannot delete " \
+          "the permission. If the permission is inherited, limited access must be leveraged.")
+      end
+
+      before do
+        permission.access_level = nil
+        allow_any_instance_of(GDrive::Wrapper).to receive(:delete_permission).and_raise(error)
+      end
+
+      def perform
+        TestPermissionSyncJob.perform_now(cluster_id: Defaults.cluster.id,
+          community_id: Defaults.community.id, permission: permission)
+      end
+
+      context "when we know it's inherited" do
+        let(:inherited_access_level) { "reader" }
+
+        it "drops the local record without raising" do
+          expect { perform }.not_to raise_error
+          expect(GDrive::SyncedPermission.exists?(permission.id)).to be(false)
+        end
+      end
+
+      context "when it isn't known to be inherited" do
+        let(:inherited_access_level) { nil }
+
+        it "raises" do
+          expect { perform }.to raise_error(Google::Apis::ClientError, /cannotDeletePermission/)
+          expect(GDrive::SyncedPermission.exists?(permission.id)).to be(true)
+        end
+      end
+    end
+
     describe "creation failure" do
       context "due to item not found" do
         let!(:item) { create(:gdrive_item, gdrive_config: config, external_id: "nonexistent") }

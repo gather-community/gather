@@ -28,7 +28,9 @@ it:
         starts_at: "Ora di inizio" # MT
         ends_at: "Ora di fine" # MT
         creator: "Creato da" # MT
+        creator_id: "Creato da" # MT
         group: "Gruppo" # MT
+        group_id: "Gruppo" # MT
         all_day: "Evento di tutto il giorno?" # MT
         kind: "Tipo" # MT
         note: "Nota" # MT

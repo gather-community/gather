@@ -1,0 +1,532 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+nl:
+  # Demo content for communities created with sample data (Utils::Generators), written in the community's
+  # language like the starter content (starter_content.yml). The rows in lib/random_data/data hold everything
+  # that isn't text, and name their text here by `key`.
+  #
+  # Calendar names (with the starter content's) can be at most 24 characters and must all differ, and
+  # calendar abbreviations at most 6. Event names can be at most 24 characters.
+  sample_data:
+    calendars:
+      media_room:
+        name: "Mediaruimte" # MT
+        guidelines: |- # MT
+          # Richtlijnen mediaruimte
+
+          1. Kinderen onder de 13 moeten onder toezicht van een volwassene staan.
+          1. Programma’s die niet geschikt zijn voor kinderen onder de 12 zijn vergrendeld, zowel op de tv als op de decoder.
+          1. Je kunt de ruimte reserveren voor speciale gelegenheden of tv-programma’s. Kijk in de agenda of mail naar media@example.com.
+          1. De afstandsbedieningen blijven altijd in de ruimte, op hun vaste plek.
+          1. Ruim de mediaruimte na gebruik op en laat hem weer ‘neutraal’ achter. Let op kruimels.
+      multipurpose_room:
+        name: "Multifunctionele ruimte" # MT
+        guidelines: |- # MT
+          # Richtlijnen multifunctionele ruimte
+
+          1. Zoals in de richtlijnen voor activiteiten staat, moet elke gast te gast zijn bij een volwassen lid van de gemeenschap.
+          1. Denk eraan dat deze ruimte, net als het hele gemeenschapshuis, van ons allemaal is.
+          1. Gastheren en gastvrouwen schrijven de naam van hun gast en de data van het verblijf op het whiteboard naast de deur.
+          1. Alle gasten volgen de algemene richtlijnen van het gemeenschapshuis (die op de deur hangen) en de richtlijnen van elke ruimte die ze gebruiken. Let vooral op de richtlijnen over geluid, stilte-uren en ons geurvrije beleid.
+          1. Geen kaarsen of iets anders dat brand of ander gevaar kan veroorzaken. Roken is niet toegestaan in het gemeenschapshuis.
+          1. De ruimte wordt ook voor andere dingen gebruikt, maar logees hebben voorrang. Los planningsconflicten samen onderling op.
+          1. Gasten mogen maximaal 7 dagen blijven, zolang een andere bewoner de ruimte niet voor een andere gast heeft gereserveerd.
+          1. Je bent zelf verantwoordelijk voor je gasten. Als ze vertrokken zijn, maak je de kamer schoon, was je het beddengoed en de lakens en breng je die terug naar het gemeenschapshuis.
+          1. Uitchecken om 12:00 uur.
+          1. De sleutels liggen op een vaste plek in het gemeenschapshuis. Raak je ze kwijt, dan betaal je de nieuwe.
+          1. Gasten kunnen voor hun privacy het bordje ‘Niet storen’ gebruiken.
+      office:
+        name: "Kantoor" # MT
+      sitting_room:
+        name: "Zitkamer" # MT
+      dining_room:
+        name: "Eetzaal" # MT
+        abbrv: "GH" # MT
+      courtyard:
+        name: "Binnenplaats" # MT
+        abbrv: "Binnpl" # MT
+      kitchen:
+        name: "Keuken" # MT
+        abbrv: "GH" # MT
+        guidelines: |- # MT
+          # Richtlijnen keuken
+
+          ## Overzicht
+
+          De keuken van het gemeenschapshuis is een grote investering voor onze gemeenschap, en het kan er ook gevaarlijk zijn. De veiligheid van iedereen in onze gemeenschap, en van onze spullen, staat voorop. Daarom hebben we de volgende richtlijnen.
+
+          We verwachten dat alle leden en hun gasten zorgvuldig en met respect omgaan met de keuken en alles wat erin staat.
+
+          Ouders leren hun kinderen dat:
+
+          * De keuken geen speelplek is.
+          * Het eten in de keuken niet zomaar voor iedereen is, tenzij dat erop staat.
+          * Kinderen alleen in de keuken mogen komen als ze zijn uitgenodigd en er een verantwoordelijke volwassene bij is.
+
+          *Laat de keuken schoner achter dan je hem aantrof.*
+
+          En laten we er vooral plezier in hebben, en samen lekker koken en eten!
+
+          ## Veiligheid
+
+          * Ga je de keuken uit terwijl er iets in de oven of op het vuur staat, waarschuw anderen dan door een afzetting voor de keukeningangen te zetten en een briefje achter te laten.
+          * Zet pannen met heet eten op de achterste pitten, niet op de voorste.
+          * Laat het zuiveringszout bij het fornuis staan. Het staat daar voor als er brand uitbreekt.
+          * Laat scherpe messen nooit onbeheerd liggen en leg ze niet in het sop.
+
+          Moet je weg voordat je klaar bent met opruimen, laat dan een briefje achter met wanneer je terugkomt en je telefoonnummer.
+
+          Schrijf op wat je leent en breng het zo snel mogelijk terug.
+
+          Meld vreemde dingen, zoals rare geluiden, geurtjes of kapotte spullen, bij degene die over reparaties gaat.
+
+          De koelkast in het gemeenschapshuis is voor de basisvoorraad en de gemeenschappelijke maaltijden. Verdeel restjes liever onder elkaar dan ze hier te bewaren.
+
+          De taken van hoofdkoks, hulpkoks en opruimers staan apart beschreven.
+
+          ## Basishygiëne
+
+          1. Denk je dat je ziek wordt, ga dan naar huis en houd de gemeenschap gezond.
+          1. Was vaak je handen, op de ouderwetse manier: met zeep en warm water.
+          1. Dek wondjes helemaal af.
+          1. Gebruik bij het proeven elke lepel maar één keer.
+          1. Voorkom kruisbesmetting (allergenen en bacteriën) door voor verschillende gerechten verschillend keukengerei te gebruiken.
+          1. Alles wat met rauw vlees in aanraking komt, moet je afwassen en desinfecteren voordat je het ergens anders voor gebruikt.
+          1. Gebruik voor elk soort eten de snijplank in de juiste kleur.
+          1. In gootstenen kunnen bacteriën zitten, dus was groente en fruit dat rauw wordt opgediend in een vergiet.
+          1. Eten blijft veilig als het goed gekoeld of goed verhit is.
+
+          ## Basisvoorraad
+
+          De basisvoorraad wordt gekocht voor de maaltijden in het gemeenschapshuis.
+
+          Bij het inkopen letten we erop of iets biologisch, fairtrade en gentechvrij is, en houden we rekening met dieetwensen, houdbaarheid en kosten.
+
+          De basisvoorraad wordt betaald uit een kleine toeslag op de maaltijden in het gemeenschapshuis, waarmee we nieuwe voorraad kopen. Hoofdkoks gebruiken de basisvoorraad. Zo blijft die vers en blijven hun maaltijden goedkoop.
+
+          Gebruik de basisvoorraad dus niet voor jezelf. Moet het echt:
+
+          * Vul aan wat je gebruikt, stuk voor stuk.
+          * Lukt dat niet, doe dan een royale bijdrage in de pot voor de basisvoorraad.
+
+          Zie je dat iets bijna op is, schrijf het dan op het klembord dat daarvoor hangt.
+
+          De keukencoördinator kijkt elke week de lijst en de voorraadkast na en doet boodschappen waar nodig. We doen ons best om de basisvoorraad aan te vullen voordat iets op is.
+
+          Heb je voor een gemeenschappelijke maaltijd iets uit de basisvoorraad nodig en is het op, koop het dan zelf en lever een apart bonnetje in voor een vergoeding.
+
+          De maaltijdcommissie beheert de lijst met de basisvoorraad.
+
+          Al het andere kopen de hoofdkoks zelf, ook kant-en-klare saladedressings.
+    shared_guidelines:
+      common_house:
+        name: "Richtlijnen gemeenschapshuis" # MT
+        body: |- # MT
+          # Richtlijnen gemeenschapshuis
+
+          * Welkom in ons gemeenschapshuis!
+          * Ons gemeenschapshuis is het hart van onze gemeenschap.
+          * Onze gemeenschap is gebouwd op onderlinge relaties.
+          * Elk lid heeft evenveel te zeggen over hoe we ons gemeenschapshuis gebruiken.
+          * We gaan net zo respectvol met het gemeenschapshuis om als met het huis van de buren. Laat het achter zoals je het aantrof, of beter!
+
+          Deze richtlijnen zoeken een balans tussen vrijheid, verantwoordelijkheid en veiligheid, voor mensen en voor het gebouw.
+
+          ## Toegankelijkheid
+
+          Om rekening te houden met gevoeligheden spreken we het volgende af:
+
+          * *Geurvrij* is het doel in het gemeenschapshuis.
+          * *Roken:* in het gemeenschapshuis wordt niet gerookt.
+          * *Dieren:* het gemeenschapshuis is huisdiervrij, behalve voor hulphonden. Laat huisdieren niet onbeheerd achter op het terrein van het gemeenschapshuis.
+
+          ## Beveiliging
+
+          Het gemeenschapshuis gaat doordeweeks om 22:00 uur op slot en op vrijdag en zaterdag om 23:00 uur, volgens de afsluitlijst.
+
+          ## Communicatie
+
+          Bewoners spreken elkaar zo veel mogelijk direct aan als er iets is. Waar nodig helpt de commissie gemeenschapshuis.
+
+          ## Onderhoud
+
+          Meld kapotte of slecht werkende installaties of apparaten meteen bij de onderhoudscommissie, via maintenance@example.com.
+
+          Voor gewone dingen kun je een e-mail sturen of een briefje in de onderhoudsmap leggen.
+
+          Meld kapotte spullen bij de commissie gemeenschapshuis via commonhouse@example.com.
+
+          ## Alcohol
+
+          Laat geen alcohol, open of dicht, en geen medicijnen achter in het gemeenschapshuis en bewaar ze er ook niet.
+
+          ## Geluid
+
+          Heb je last van geluid in het gemeenschapshuis, vraag dan gerust of het wat zachter kan. Houd rekening met anderen als zij het jou vragen.
+
+          Grote activiteiten die luider kunnen zijn dan normaal of na sluitingstijd doorgaan, worden van tevoren aan de gemeenschap gemeld.
+
+          ## Stilte-uren
+
+          * Doordeweeks van 22:00 tot 08:00 uur
+          * In het weekend en op feestdagen van 23:00 tot 09:00 uur
+
+          ## Voor wie het gemeenschapshuis is
+
+          Het gemeenschapshuis is voor bewoners en de gasten die zij uitnodigen.
+
+          * We zijn dankbaar voor de steun en gastvrijheid van de gemeenschappen om ons heen.
+          * We heten onze buren welkom en verwachten dat we eventuele problemen eerlijk oplossen, op basis van wederkerigheid en vertrouwen.
+
+          Leden van naburige gemeenschappen zijn welkom in het gemeenschapshuis en volgen dezelfde regels voor het reserveren van ruimtes. Alle anderen moeten te gast zijn bij een volwassen bewoner, die verantwoordelijk is voor het gedrag van de gasten.
+
+          ## Ruimtes reserveren
+
+          Activiteiten van de gemeenschap komen in de agenda en hebben voorrang op andere afspraken.
+
+          Alle richtlijnen worden bij consensus vastgesteld. Iedereens inbreng is welkom terwijl we ze verder verbeteren.
+    # Kinds of event, e.g. "Official" for a community event.
+    event_kinds:
+      official: "Officieel" # MT
+      personal: "Persoonlijk" # MT
+      special: "Speciaal" # MT
+    weekly_event: "Wekelijkse bijeenkomst" # MT
+    groups:
+      meals_committee:
+        name: "Maaltijdcommissie" # MT
+        description: "Regelt het maaltijdprogramma!" # MT
+      knitting_club:
+        name: "Breiclub" # MT
+        description: "Breien voor beginners tot gevorderden! Elke zondag om 14:00 uur." # MT
+    work:
+      period: "Hoofdperiode" # MT
+      jobs:
+        mow_team: "Lid maaiploeg" # MT
+        closer: "Afsluiter gemeenschapshuis" # MT
+        work_day: "Klusdag voor iedereen" # MT
+    payment_description: "Overboeking, kenmerk %{number}" # MT
+    memorial_message: "%{name} was een ontzettend lief mens en een bevlogen lid van onze gemeenschap. Het gemis is groot." # MT
+    # Lists the generators and factories pick from at random (see config/initializers/faker.rb).
+    relationships:
+      - "Moeder" # MT
+      - "Vader" # MT
+      - "Neef" # MT
+      - "Broer" # MT
+      - "Zus" # MT
+      - "Zoon" # MT
+      - "Dochter" # MT
+      - "Tante" # MT
+      - "Oom" # MT
+      - "Vriend" # MT
+    pet_species:
+      - "Kat" # MT
+      - "Hond" # MT
+      - "Schnauzer" # MT
+      - "Labrador" # MT
+      - "Slang" # MT
+      - "Papegaai" # MT
+      - "Konijn" # MT
+    colors:
+      - "Rood" # MT
+      - "Blauw" # MT
+      - "Groen" # MT
+      - "Zwart" # MT
+      - "Wit" # MT
+      - "Zilver" # MT
+      - "Grijs" # MT
+      - "Geel" # MT
+      - "Bruin" # MT
+      - "Paars" # MT
+    event_names:
+      - "Leesclub" # MT
+      - "Verjaardagsfeest" # MT
+      - "Filmavond" # MT
+      - "Yogales" # MT
+      - "Bordspellen" # MT
+      - "Koorrepetitie" # MT
+      - "Logé blijft slapen" # MT
+      - "Potluck" # MT
+      - "Knutseluurtje kinderen" # MT
+      - "Commissievergadering" # MT
+      - "Tuinklusdag" # MT
+      - "Babyshower" # MT
+      - "Muziekrepetitie" # MT
+      - "Theekransje" # MT
+      - "Familiebezoek" # MT
+      - "Workshop" # MT
+      - "Spelletjesavond" # MT
+      - "Kunstles" # MT
+      - "Meditatie" # MT
+      - "Dansles" # MT
+      - "Eindejaarsfeest" # MT
+      - "Fietsreparatie" # MT
+      - "Voorleesuurtje" # MT
+      - "Naaikransje" # MT
+    # What a sample meal contains, shown in its allergen list.
+    allergens:
+      almonds: "Amandelen" # MT
+      bananas: "Bananen" # MT
+      corn: "Maïs" # MT
+      dairy: "Zuivel" # MT
+      eggs: "Eieren" # MT
+      gluten: "Gluten" # MT
+      peanuts: "Pinda's" # MT
+      pineapple: "Ananas" # MT
+      soy: "Soja" # MT
+      tofu: "Tofu" # MT
+      tree_nuts: "Noten" # MT
+    # Sample meals' menus. Each written by a different cook, so the style varies.
+    meals:
+      meal_01:
+        title: "Cranberrykip met zoete aardappel" # MT
+        entrees: "Kip met cranberry’s (scharrelkip van een boer uit de buurt) met zoete aardappel" # MT
+        side: "Salade, fruit" # MT
+        kids: "De kip vinden kinderen ook lekker" # MT
+        dessert: "Brownies, ijs" # MT
+        notes: "Op verzoek is er gebakken tofu. Ik kan ook wat zoete aardappel en cranberry’s zonder kip maken, en glutenvrije brownies. Gluten, melk en eieren zitten alleen in het toetje." # MT
+      meal_02:
+        title: "Gepofte-aardappelbuffet" # MT
+        entrees: "Gepofte aardappels met allerlei toppings" # MT
+        dessert: "Plaatkoek" # MT
+        notes: "Biologisch waar het kan. Allergenen zijn makkelijk te vermijden." # MT
+      meal_03:
+        title: "Latkes met alles erop en eraan" # MT
+        entrees: "Aardappelkoekjes met of zonder ui of ei (op verzoek), en een paar met mijn favoriete curry" # MT
+        side: "Groente, salade, appelmoes, zure room, zaden" # MT
+        dessert: "Fruit en pure chocola" # MT
+        notes: "Alles biologisch, gentechvrij en glutenvrij. Allergenen kunnen op verzoek worden weggelaten, dus zeg duidelijk wat je wilt (bijvoorbeeld geen ui of geen ei)." # MT
+      meal_04:
+        title: "Soepen van het seizoen" # MT
+        entrees: "Cheddar-biersoep, erwtensoep en open tosti’s" # MT
+        side: "Simpele salade: spinazie, rode paprika, avocado en een sesam-gemberdressing (andere dressings zijn er ook)" # MT
+        dessert: "Aardbeiensemifreddo met zwarte sesam" # MT
+      meal_05:
+        title: "Glutenvrije chili, met rundvlees of tofu" # MT
+        entrees: "Biologische glutenvrije chili voor vleeseters en voor vegetariërs, en een biologische groene salade met allerlei groente. Biologisch glutenvrij maïsbrood met melk en eieren." # MT
+        kids: "Hetzelfde" # MT
+        dessert: "Iets biologisch en glutenvrijs, waar melk en eieren in kunnen zitten" # MT
+      meal_06:
+        title: "Verjaardagsdiner: pasta (of rijst) met pesto" # MT
+        entrees: "Pasta of rijst met pesto, met kip en/of tofu" # MT
+        side: "Geroosterde wortelgroenten en andere dingen uit de voorraadkast" # MT
+        dessert: "Cupcakes en chocolade-cashewbonbons (zonder melk en glutenvrij)" # MT
+        notes: "Flexibel en voor iedereen aan te passen. Zet je dieetwensen in de opmerkingen. Het eten wordt simpel, zodat we ons op het toetje kunnen richten." # MT
+      meal_07:
+        title: "Bosbessenpannenkoekjes en spinaziefrittata’s" # MT
+        entrees: "Pannenkoekjes, gewoon of glutenvrij, en kleine frittata’s met spinazie, basilicum en tomaat" # MT
+        side: "Kalkoenworstjes, fruit en yoghurt" # MT
+        kids: "Glutenvrije pannenkoekjes met amandelmelk" # MT
+      meal_08:
+        title: "Spinazielasagne" # MT
+        entrees: "Lasagne met spinazie, en lasagne met kaas voor wie niet van spinazie houdt" # MT
+        side: "Gestoomde broccoli" # MT
+        kids: "Pasta naturel met parmezaan" # MT
+        dessert: "Chocoladekoekjes" # MT
+        notes: "Mail me als je het glutenvrij wilt of op een andere manier aangepast." # MT
+      meal_09:
+        title: "Glutenvrije aardappelsoep" # MT
+        entrees: "Biologische aardappelsoep met melk, met biologische spekjes erover voor de vleeseters" # MT
+        side: "Biologische groene salade met wat ik verder aan biologische groente kan vinden (tomaat, paprika, wortel). Biologisch glutenvrij maïsbrood met melk en eieren." # MT
+        kids: "Hetzelfde" # MT
+        dessert: "Iets biologisch en glutenvrijs" # MT
+        notes: "Gebakken tofu voor de vegetariërs" # MT
+      meal_10:
+        title: "Taco’s met limoenkip" # MT
+        entrees: "Pulled chicken in chipotle-adobosaus met verse limoen (een beetje pittig)" # MT
+        side: "Refried beans en rijst" # MT
+        kids: "Quesadilla’s met alleen kip en kaas" # MT
+        dessert: "Semifreddo van chocolade en hazelnoot" # MT
+        notes: "Alle allergenen kunnen worden weggelaten." # MT
+      meal_11:
+        title: "Tamales afhalen: lees de opmerkingen" # MT
+        entrees: "Tamales van een restaurant in de buurt. Elke aangemelde volwassene staat voor één tamale, dus meld geen kinderen aan. Wil je twee tamales, meld dan twee volwassenen aan." # MT
+        side: "Curtido (een soort ingelegde kool)" # MT
+        notes: "Zet in de opmerkingen welke tamale je wilt. Ik bestel alleen tamales, dan blijft het simpel." # MT
+      meal_12:
+        title: "Paella met kip en vegetarische paella" # MT
+        entrees: "Rijst met kip, en rijst met groente voor de vegetariërs" # MT
+        side: "Groene salade" # MT
+        dessert: "Crème caramel en fruit" # MT
+      meal_13:
+        title: "Stroganoff van runderborst" # MT
+        entrees: "Stroganoff van runderborst met eiernoedels" # MT
+        side: "Risotto met shiitake en prei, en asperges" # MT
+        kids: "Noedels en risotto naturel" # MT
+        dessert: "Nog niet bekend" # MT
+      meal_14:
+        title: "Tijd voor chili" # MT
+        entrees: "Vegetarische chili" # MT
+        side: "Maïsbrood, salade" # MT
+        kids: "Hetzelfde" # MT
+        dessert: "Ja" # MT
+        notes: "Laat het weten als je het glutenvrij nodig hebt." # MT
+      meal_15:
+        title: "Crêpebuffet" # MT
+        entrees: "Allerlei crêpes (naturel, zuurdesem, en glutenvrij op verzoek), met hartige vullingen (ei, kaas, groente, kruiden en meer) en zoete (fruit, chocopasta, jam, yoghurt, ricotta en meer) om zelf te vullen." # MT
+        notes: "De vullingen pak je zelf. In de crêpes zitten eieren en melk." # MT
+      meal_16:
+        title: "Curry met rijst" # MT
+        entrees: "Kipcurry met rijst, met tofu voor de vegetariërs" # MT
+        side: "Rettichkimchi" # MT
+        kids: "Gebakken dumplings" # MT
+        dessert: "Fruit" # MT
+        notes: "In mijn kerriepoeder zit bloem. Heb je het glutenvrij nodig, dan gebruik ik de glutenvrije kerriepoeder uit de keuken van het gemeenschapshuis." # MT
+      meal_17:
+        title: "Engels ontbijt" # MT
+        entrees: "Roerei, worstjes, champignons, baked beans" # MT
+        side: "Gemengde bessen" # MT
+      meal_18:
+        title: "Tikka masala met kip of groente" # MT
+        entrees: "Tikka masala met kip of groente: vlees of groente gestoofd in een romige kokoscurry, met rijst erbij" # MT
+        side: "Salade, rijst" # MT
+        kids: "Dit vinden ze lekker" # MT
+        dessert: "Fruit" # MT
+        notes: "Beide versies zijn glutenvrij en zonder melk! Zeg even of je veganistisch of vlees wilt. Zo lokaal en biologisch mogelijk." # MT
+      meal_19:
+        title: "Chiliwedstrijd!" # MT
+        entrees: "Chili en nog meer chili, voor een kleine bijdrage per volwassene" # MT
+        side: "Appelmoes, brood en boter" # MT
+        kids: "Chili en nog meer chili. Gratis voor kinderen tot en met 6 jaar." # MT
+        dessert: "Waarschijnlijk wel" # MT
+        notes: "Met onze chiliwedstrijd zamelen we geld in voor nieuwe kunst in de eetzaal. Kom meekoken, meeëten en stemmen! Iedereen heeft één stem, kinderen ook. Doe je mee, breng dan voor 18:00 uur zo’n 4 liter chili mee en zet de allergenen, het vlees en de alcohol erin op het deelnameformulier." # MT
+      meal_20:
+        title: "Cake en ovenschotel" # MT
+        entrees: "Ovenschotel met spek en ei, met geitenkaas en groente" # MT
+        side: "Glutenvrije bosbessencake" # MT
+        kids: "Dit gaan ze heerlijk vinden" # MT
+        notes: "Alles is glutenvrij. De enige melk is de geitenkaas in de ovenschotel." # MT
+      meal_21:
+        title: "Vissoep met kokos" # MT
+        entrees: "Romige vissoep met kokosmelk, met een veganistische versie zonder vis" # MT
+        side: "Versgebakken broodjes" # MT
+        kids: "Rauwe worteltjes en broccoli" # MT
+        dessert: "Fruit" # MT
+        notes: "In de broodjes zit tarwe. De soep zelf is glutenvrij." # MT
+      meal_22:
+        title: "Warme gevulde croissants en fruit" # MT
+        entrees: "Verse en gegrilde groente in warme croissants" # MT
+        side: "Verse fruitsalade, en notenmelk gezoet met dadels" # MT
+        kids: "Roerei en yoghurt" # MT
+      meal_23:
+        title: "Coq au vin" # MT
+        entrees: "Coq au vin" # MT
+        side: "Peterselieaardappeltjes, sperziebonen, salade met mosterdvinaigrette" # MT
+        dessert: "Aardbeien met slagroom" # MT
+      meal_24:
+        title: "Dumplingsoep" # MT
+        entrees: "Dumplings in kippenbouillon (of groentebouillon)" # MT
+        side: "Rijst, rettichkimchi en toppings (reepjes zeewier, gehakte lente-ui)" # MT
+        kids: "De meeste kinderen houden van dumplings" # MT
+        dessert: "Fruit en brownies" # MT
+        notes: "De dumplings zijn met varkensvlees, tenzij je om rundvlees of groente vraagt. Ik doe ei in de bouillon." # MT
+      meal_25:
+        title: "Stel je eigen rijstbowl samen" # MT
+        entrees: "Kip (of gebakken tofu) met naar keuze rijst, krokante noedels, groente, ananas, kokosvlokken, amandelschaafsel, geraspte kaas en andere toppings" # MT
+        kids: "Groente in reepjes, fruit" # MT
+        dessert: "Koekrepen" # MT
+      meal_26:
+        title: "Traditioneel Duits eten" # MT
+        entrees: "Braadworst, eiernoedels en aardappelovenschotel" # MT
+        side: "Rodekool, zuurkool, mierikswortel en zure room" # MT
+        kids: "Nog niet bekend" # MT
+        dessert: "Appelstrudel met ijs" # MT
+      meal_27:
+        title: "Barbecueavond" # MT
+        entrees: "Favorieten van de grill met een Koreaans tintje. Ik hoop dat mijn hulpkoks goede ideeën hebben." # MT
+        side: "Licht gebakken groente van de boerenmarkt of uit onze tuinen" # MT
+        kids: "Misschien zetten we de kinderen aan het werk in de tuin" # MT
+        dessert: "Verse aardbeien, als het seizoen is" # MT
+        notes: "Zo biologisch en lokaal mogelijk. Makkelijk aan te passen aan elk dieet." # MT
+      meal_28:
+        title: "Zelfgemaakte pizza!" # MT
+        entrees: "Pizza met allerlei toppings: kip, groente, kaas, pepperoni. Gewone en glutenvrije bodems." # MT
+        side: "Salade en fruit" # MT
+        kids: "Kinderen zijn hier dol op" # MT
+        dessert: "Misschien..." # MT
+        notes: "Zet hieronder als je glutenvrij nodig hebt, dan kan ik daar rekening mee houden. Bedankt! Biologische en lokale ingrediënten als het kan." # MT
+      meal_29:
+        title: "Tomatenproeverij" # MT
+        entrees: "Een proeverij van tomaten uit de buurt, met gevogelte en vegetarische opties" # MT
+        side: "Caprese, veel groente, maïskolven" # MT
+        kids: "Maïs van de kolf af voor kinderen met een beugel" # MT
+        dessert: "Tomatenijs?" # MT
+        notes: "Lokaal en biologisch als het kan. De maaltijd kan zonder allergenen (maar niet zonder tomaat). Er zitten noten in (amandelen en hazelnoten)." # MT
+      meal_30:
+        title: "Chili en appeltoetjes-potluck!" # MT
+        entrees: "Chili zoals ik die van vroeger ken: milde bonen en groente op rijst. Rundergehakt voor de vleeseters." # MT
+        side: "Gekookte groente, afhankelijk van wat er lokaal is" # MT
+        kids: "Het hoofdgerecht is mild genoeg voor iedereen" # MT
+        dessert: "Het is weer tijd voor onze jaarlijkse appeltoetjes-potluck! Ga het weekend ervoor mee appels plukken en neem dan mee wat je van die prachtige appels maakt." # MT
+        notes: "Zuivel staat apart klaar, maar in het hoofdgerecht zit het niet. De toetjes worden door verschillende mensen gemaakt, dus daar kunnen alle bekende allergenen in zitten." # MT
+      meal_31:
+        title: "Zoete en hartige crêpes" # MT
+        entrees: "Crêpes met veel verschillende vullingen, hartig als hoofdgerecht en zoet als toetje" # MT
+        side: "Gestoomde groente" # MT
+        dessert: "Nog meer crêpes!" # MT
+        notes: "Scharreleieren, melk uit de buurt, biologische bloem. Wil je glutenvrije crêpes, laat het me weten, dan probeer ik het." # MT
+      meal_32:
+        title: "Gimbap" # MT
+        entrees: "Rijst, gekruide groente, rundvlees, en ei of gerookte zalm, opgerold in zeewier" # MT
+        side: "Waterkimchi van rettich" # MT
+        kids: "Het hoofdgerecht zou voor hen ook goed moeten zijn" # MT
+        dessert: "Fruit of ijs" # MT
+        notes: "We zijn twee weken geleden begonnen met het fermenteren van de waterkimchi. Na de maaltijd zijn er potjes om mee naar huis te nemen." # MT
+      meal_33:
+        title: "Spliterwtensoep met kerrie en broodjes" # MT
+        entrees: "Spliterwtensoep met kerrie, kippenbouillon, ham en melk, en een veganistische versie met groentebouillon en kokosmelk" # MT
+        side: "Broodjes tonijnsalade en eiersalade, of neem je eigen beleg mee" # MT
+        kids: "Hetzelfde. Mail me voor donderdag als je kinderen soep zonder kerrie willen." # MT
+        dessert: "Zelfgebakken chocoladekoekjes, en fruit" # MT
+        notes: "De soep is glutenvrij, en de groentesoep is ook zonder melk. Wil je glutenvrij brood of iets anders aangepast, mail me dan voor donderdag." # MT
+      meal_34:
+        title: "Crêpes en lekkere dingen erin" # MT
+        entrees: "Crêpes (ei, bloem, melk). Eigenlijk meer flensjes: dun en soepel." # MT
+        side: "Zoete en hartige vullingen: suiker, zelfgemaakte aardbeien- en bosbessenjam, gezouten karamelsaus, slagroom, kaas, en waarschijnlijk gebakken champignons. Neem zelf iets mee als je iets speciaals wilt." # MT
+        kids: "Hetzelfde" # MT
+        dessert: "Hetzelfde" # MT
+        notes: "Waarschijnlijk niet alles biologisch, maar ik doe mijn best binnen het budget." # MT
+      meal_35:
+        title: "Gehaktbrood" # MT
+        entrees: "Gehaktbrood" # MT
+        side: "Salade, scones, aardappels" # MT
+        dessert: "Appelcrumble" # MT
+      meal_36:
+        title: "Bibimbap" # MT
+        entrees: "Gestoomde rijst met gekruide groente en rundvlees (of tofu), met pittige pepersaus (en sojasaus als je niet van pittig houdt), en gebakken eieren" # MT
+        side: "Zuur en kimchi" # MT
+        kids: "Ze mogen meer rundvlees of tofu dan groente" # MT
+        dessert: "Fruit" # MT
+        notes: "Alles is op smaak gebracht met glutenvrije sojasaus, knoflook, sesamolie en zwarte peper. Deze maaltijd is vooral groente, dus verwacht niet veel vlees." # MT
+      meal_37:
+        title: "Taco’s met kalkoen" # MT
+        entrees: "Taco’s met kalkoengehakt" # MT
+        side: "Refried beans, rijst" # MT
+        notes: "Tomaat, sla, milde salsa en zure room voor op de taco’s." # MT
+      meal_38:
+        title: "Ontbijtpizza" # MT
+        entrees: "De beste pizzabodem ooit, van maar een paar ingrediënten, vooral cassave. Zelfs de lastigste eters vinden hem lekker. Met een soort pestosaus en keuze uit vlees, groente en kaas. Zet je dieetwensen erbij." # MT
+        side: "Roerei" # MT
+      meal_39:
+        title: "Soepbuffet!" # MT
+        entrees: "Een simpele soep met vlees en een simpele groentesoep, plus heel veel toppings om je eigen creatie te maken: zaden, groente, glutenvrije pasta, kaas..." # MT
+        side: "Groente, kaas, pasta" # MT
+        kids: "Kinderen vinden het leuk om hun eigen soep te maken" # MT
+        dessert: "Misschien iets met fruit" # MT
+        notes: "Zo lokaal en biologisch mogelijk." # MT
+      meal_40:
+        title: "Zalm en papillote" # MT
+        entrees: "Zalm gegaard in bakpapier, op smaak gebracht met ui en kruiden" # MT
+        side: "Bladgroente (spinazie of boerenkool) of sperziebonen gebakken met knoflook, geroosterde krieltjes, en vers brood" # MT
+        kids: "Eten je kinderen geen zalm, zet dat dan in de opmerkingen en stel iets anders voor, zoals tonijnsalade of hardgekookte eieren." # MT
+        dessert: "Ja: fruit en iets gebakkens" # MT
+        notes: "Alles is glutenvrij behalve het gebakken toetje. De groente is grotendeels biologisch. Heb je een vegetarische optie nodig, laat het weten, dan wok of bak ik wat tofu." # MT

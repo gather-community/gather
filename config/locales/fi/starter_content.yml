@@ -68,4 +68,4 @@ fi:
     everybody_group:
       name: "Koko yhteisö" # MT
       description: "Yleinen ryhmä, johon kuuluvat kaikki yhteisön täysivaltaiset jäsenet." # MT
-    allergens: "Maitotuotteet, äyriäiset, soija, pähkinät" # MT
+    allergens: "Maitotuotteet, Äyriäiset, Soija, Pähkinät" # MT

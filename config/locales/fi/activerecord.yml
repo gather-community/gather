@@ -28,7 +28,9 @@ fi:
         starts_at: "Alkamisaika" # MT
         ends_at: "Päättymisaika" # MT
         creator: "Luoja" # MT
+        creator_id: "Luoja" # MT
         group: "Ryhmä" # MT
+        group_id: "Ryhmä" # MT
         all_day: "Koko päivän tapahtuma?" # MT
         kind: "Tyyppi" # MT
         note: "Huomautus" # MT

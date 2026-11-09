@@ -28,7 +28,9 @@ nb:
         starts_at: "Starttid" # MT
         ends_at: "Sluttid" # MT
         creator: "Opprettet av" # MT
+        creator_id: "Opprettet av" # MT
         group: "Gruppe" # MT
+        group_id: "Gruppe" # MT
         all_day: "Heldagshendelse?" # MT
         kind: "Type" # MT
         note: "Merknad" # MT

@@ -28,7 +28,9 @@ de:
         starts_at: "Startzeit" # MT
         ends_at: "Endzeit" # MT
         creator: "Erstellt von" # MT
+        creator_id: "Erstellt von" # MT
         group: "Gruppe" # MT
+        group_id: "Gruppe" # MT
         all_day: "Ganztägiger Termin?" # MT
         kind: "Art" # MT
         note: "Notiz" # MT

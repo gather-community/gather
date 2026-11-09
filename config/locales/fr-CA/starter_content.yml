@@ -12,6 +12,7 @@
 # ======================================================================================================
 fr-CA:
   starter_content:
+    allergens: "Produits laitiers, Fruits de mer, Soya, Fruits à coque" # MT
     restrictions:
       vegan:
         contains: "Non végane" # MT

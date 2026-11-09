@@ -27,7 +27,9 @@ fr:
         starts_at: "Heure de début" # MT
         ends_at: "Heure de fin" # MT
         creator: "Créateur" # MT
+        creator_id: "Créateur" # MT
         group: "Groupe" # MT
+        group_id: "Groupe" # MT
         all_day: "Toute la journée ?" # MT
         kind: "Type" # MT
         note: "Note" # MT

@@ -19,12 +19,13 @@
 #
 FactoryBot.define do
   factory :emergency_contact, class: "People::EmergencyContact" do
-    alt_phone { rand(3) > 1 ? Faker::PhoneNumber.simple : nil }
+    alt_phone { rand(3) > 1 ? Faker::PhoneNumber.simple(country_code: country_code) : nil }
     email { rand(10) > 2 ? Faker::Internet.email : nil }
     location { Faker::Address.city }
-    main_phone { Faker::PhoneNumber.simple }
+    main_phone { Faker::PhoneNumber.simple(country_code: country_code) }
     name { Faker::Name.name }
     relationship { Faker::Relationship.relationship }
-    country_code { "US" }
+    # The household's country, so sample data for a community outside North America has local numbers.
+    country_code { household&.community&.country_code || "US" }
   end
 end

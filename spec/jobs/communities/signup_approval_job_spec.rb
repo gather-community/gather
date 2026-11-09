@@ -26,6 +26,7 @@ describe Communities::SignupApprovalJob do
       expect(community.slug).to eq(signup.slug)
       expect(community.settings.time_zone).to eq(signup.time_zone)
       expect(community.settings.locale).to eq("fr")
+      expect(Meals::Role.pluck(:title)).to include("Chef cuisinier")
 
       user = User.find_by(email: signup.contact_email)
       expect(user).to be_present

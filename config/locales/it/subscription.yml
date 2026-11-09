@@ -30,8 +30,8 @@ it:
       unknown: "Sconosciuto" # MT
     # Descriptions of the messaging balance transactions a topup creates.
     messaging_transactions:
-      credit: "Ricarica mensile messaggistica" # MT
-      reversal: "Storno della ricarica messaggistica non riscossa" # MT
+      topup_credit: "Ricarica mensile messaggistica" # MT
+      topup_reversal: "Storno della ricarica messaggistica non riscossa" # MT
     # e.g. "$5.00/month"
     per_month: "%{amount}/mese" # MT
     every_months:

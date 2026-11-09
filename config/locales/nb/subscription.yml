@@ -30,8 +30,8 @@ nb:
       unknown: "Ukjent" # MT
     # Descriptions of the messaging balance transactions a topup creates.
     messaging_transactions:
-      credit: "Månedlig påfylling for meldinger" # MT
-      reversal: "Tilbakeføring av påfylling for meldinger som ikke ble betalt" # MT
+      topup_credit: "Månedlig påfylling for meldinger" # MT
+      topup_reversal: "Tilbakeføring av påfylling for meldinger som ikke ble betalt" # MT
     # e.g. "$5.00/month"
     per_month: "%{amount}/måned" # MT
     every_months:

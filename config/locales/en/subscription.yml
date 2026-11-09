@@ -16,10 +16,10 @@ en:
       canceled: "Canceled"
       other: "Unknown"
       unknown: "Unknown"
-    # Descriptions of the messaging balance transactions a topup creates.
+    # Descriptions of the messaging balance transactions a topup creates, by Messaging::Transaction kind.
     messaging_transactions:
-      credit: "Monthly messaging topup"
-      reversal: "Reversal of uncollected messaging topup"
+      topup_credit: "Monthly messaging topup"
+      topup_reversal: "Reversal of uncollected messaging topup"
     # e.g. "$5.00/month"
     per_month: "%{amount}/month"
     every_months:

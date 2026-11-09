@@ -57,12 +57,15 @@ module Wiki
       role.to_s
     end
 
+    # Created on the first visit to the wiki, in the community's language rather than that visitor's, since
+    # everyone will see it.
     def self.create_special_page(role, community:)
+      locale = Gather::Locales.community_default(community)
       create!(
         community: community,
-        content: I18n.t("wiki.special_pages.#{role}.content"),
+        content: I18n.t("wiki.special_pages.#{role}.content", locale: locale),
         role: role,
-        title: I18n.t("wiki.special_pages.#{role}.title"),
+        title: I18n.t("wiki.special_pages.#{role}.title", locale: locale),
         slug: reserved_slug(role)
       )
     end

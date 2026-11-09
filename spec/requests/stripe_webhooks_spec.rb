@@ -32,6 +32,8 @@ describe "Stripe webhooks" do
           expect(account.balance_cents).to eq(1500)
           txn = account.transactions.first
           expect(txn.amount_cents).to eq(1500)
+          expect(txn.kind).to eq("topup_credit")
+          expect(txn.description).to be_nil
           expect(txn.stripe_event_id).to eq("evt_test")
           expect(txn.stripe_invoice_line_item_id).to eq("il_test1")
         end
@@ -112,6 +114,7 @@ describe "Stripe webhooks" do
           expect(account.balance_cents).to eq(0)
           expect(account.transactions.count).to eq(2) # credit + offsetting claw-back
           expect(account.transactions.order(:id).last.amount_cents).to eq(-1500)
+          expect(account.transactions.order(:id).last.kind).to eq("topup_reversal")
         end
       end
     end

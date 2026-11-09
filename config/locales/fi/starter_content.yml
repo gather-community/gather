@@ -1,0 +1,71 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+fi:
+  starter_content:
+    calendars:
+      social_events: "Yhteiset tapahtumat" # MT
+      meetings: "Kokoukset" # MT
+      birthdays: "Syntymäpäivät" # MT
+      join_dates: "Liittymispäivät" # MT
+    calendar_groups:
+      meals: "Ateriat" # MT
+      work: "Työ" # MT
+      reservations: "Varaukset" # MT
+    meal_roles:
+      head_cook:
+        title: "Pääkokki" # MT
+        description: "Suunnittelee ja johtaa aterian valmistusta." # MT
+      assistant_cook:
+        title: "Apukokki" # MT
+        description: "Auttaa aterian valmistuksessa pääkokin ohjeiden mukaan." # MT
+      cleaner:
+        title: "Siivous" # MT
+        description: "Siivoaa aterian jälkeen." # MT
+    meal_formula: "Oletushinnoittelukaava" # MT
+    meal_types:
+      adult: "Aikuinen" # MT
+      teen: "Nuori" # MT
+      kid: "Lapsi" # MT
+      little_kid: "Pieni lapsi" # MT
+    restrictions:
+      gluten:
+        contains: "Gluteeni" # MT
+        absence: "Gluteeniton" # MT
+      meat:
+        contains: "Liha" # MT
+        absence: "Lihaton" # MT
+      tree_nuts:
+        contains: "Puupähkinät" # MT
+        absence: "Ei puupähkinöitä" # MT
+      dairy:
+        contains: "Maitotuotteet" # MT
+        absence: "Maidoton" # MT
+      shellfish:
+        contains: "Äyriäiset" # MT
+        absence: "Ei äyriäisiä" # MT
+      vegan:
+        contains: "Ei vegaaninen" # MT
+        absence: "Vegaaninen" # MT
+      spicy:
+        contains: "Tulinen" # MT
+        absence: "Mieto" # MT
+      kid_friendly:
+        contains: "Lapsiystävällinen" # MT
+        absence: "Ei lapsiystävällinen" # MT
+      peanuts:
+        contains: "Maapähkinät" # MT
+        absence: "Ei maapähkinöitä" # MT
+    everybody_group:
+      name: "Koko yhteisö" # MT
+      description: "Yleinen ryhmä, johon kuuluvat kaikki yhteisön täysivaltaiset jäsenet." # MT
+    allergens: "Maitotuotteet, äyriäiset, soija, pähkinät" # MT

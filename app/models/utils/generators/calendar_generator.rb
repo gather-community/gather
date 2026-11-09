@@ -14,7 +14,7 @@ module Utils
       def generate_seed_data
         create_main_calendars
         create_system_calendars
-        self.reservations_group = create(:calendar_group, community: community, name: "Reservations")
+        self.reservations_group = create(:calendar_group, community: community, name: starter(:reservations))
       end
 
       def generate_samples
@@ -34,23 +34,30 @@ module Utils
       private
 
       def create_main_calendars
-        create(:calendar, name: "Social Events", color: next_color, abbrv: nil,
-                          community: community, selected_by_default: true)
-        create(:calendar, name: "Meetings", color: next_color, abbrv: nil,
-                          community: community, selected_by_default: true)
+        %i[social_events meetings].each do |key|
+          create(:calendar, name: I18n.t("starter_content.calendars.#{key}"), color: next_color, abbrv: nil,
+            community: community, selected_by_default: true)
+        end
       end
 
       def create_system_calendars
-        group = create(:calendar_group, community: community, name: "Meals")
-        create(:community_meals_calendar, name: "All Meals", community: community, group: group,
-                                          color: next_color, selected_by_default: true)
-        create(:my_meals_calendar, name: "My Meals", community: community, group: group,
-                                     color: next_color)
-        group = create(:calendar_group, community: community, name: "Work")
-        create(:my_jobs_calendar, name: "My Jobs", community: community, group: group,
-                                    color: next_color)
-        create(:birthdays_calendar, name: "Birthdays", community: community, color: next_color)
-        create(:join_dates_calendar, name: "Join Dates", community: community, color: next_color)
+        group = create(:calendar_group, community: community, name: starter(:meals))
+        create(:community_meals_calendar, name: I18n.t("calendars.all_meals"), community: community,
+          group: group, color: next_color, selected_by_default: true)
+        create(:my_meals_calendar, name: I18n.t("calendars.my_meals"), community: community, group: group,
+          color: next_color)
+        group = create(:calendar_group, community: community, name: starter(:work))
+        create(:my_jobs_calendar, name: I18n.t("calendars.my_jobs"), community: community, group: group,
+          color: next_color)
+        create(:birthdays_calendar, name: I18n.t("starter_content.calendars.birthdays"), community: community,
+          color: next_color)
+        create(:join_dates_calendar, name: I18n.t("starter_content.calendars.join_dates"),
+          community: community, color: next_color)
+      end
+
+      # The name of one of the starter calendar groups.
+      def starter(group_key)
+        I18n.t("starter_content.calendar_groups.#{group_key}")
       end
 
       def create_reservation_calendars

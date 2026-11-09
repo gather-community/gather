@@ -56,8 +56,8 @@ ignore_missing:
   # default_i18n_subject runs in the protected meal_message helper, but action_name is the public
   # normal_message/cancellation_message action that called it, and those keys exist.
   - meal_mailer.meal_message.subject
-  # Sample names for generated demo data, read by Faker (config/initializers/faker.rb). Demo content is
-  # English until new communities get starter content in their own language.
+  # Sample names for generated demo data, read by Faker (config/initializers/faker.rb). Sample data stays
+  # English; only the starter content new communities get is translated (starter_content.*).
   - "random_data.*"
   # Operator pages (AdminController) always render in English, so their strings are English-only.
   - "admin.{communities,signups,feature_flags,domains}.*"
@@ -89,7 +89,7 @@ ignore_unused:
   - "calendars.{all,community,my}_*"      # system calendar names
   - "calendars/protocol.durations.*"
   - "roles.index.descriptions.*"  # roles/index.html.erb, by role
-  - "subscription.messaging_transactions.*"  # Stripe::TopupProcessor, by direction
+  - "subscription.messaging_transactions.*"  # Messaging::Transaction#display_description, by kind
   - "calendars.drag.{confirm,confirm_occurrence}"  # calendar_view.js#confirmMove, by series scope
   - "calendars.drag.series.{occurrence,following,series}"  # calendar_view.js#promptForSeriesScope
   - "search.kinds.*"               # SearchHelper#search_result_kind_label, by result kind

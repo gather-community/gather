@@ -30,8 +30,8 @@ fi:
       unknown: "Tuntematon" # MT
     # Descriptions of the messaging balance transactions a topup creates.
     messaging_transactions:
-      credit: "Kuukausittainen viestintäsaldon täydennys" # MT
-      reversal: "Perimättä jääneen viestintäsaldon täydennyksen peruutus" # MT
+      topup_credit: "Kuukausittainen viestintäsaldon täydennys" # MT
+      topup_reversal: "Perimättä jääneen viestintäsaldon täydennyksen peruutus" # MT
     # e.g. "$5.00/month"
     per_month: "%{amount}/kk" # MT
     every_months:

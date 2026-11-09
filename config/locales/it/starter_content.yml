@@ -1,0 +1,71 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+it:
+  starter_content:
+    calendars:
+      social_events: "Attività sociali" # MT
+      meetings: "Riunioni" # MT
+      birthdays: "Compleanni" # MT
+      join_dates: "Date di ingresso" # MT
+    calendar_groups:
+      meals: "Pasti" # MT
+      work: "Lavoro" # MT
+      reservations: "Prenotazioni" # MT
+    meal_roles:
+      head_cook:
+        title: "Capocuoco" # MT
+        description: "Pianifica e coordina la preparazione del pasto." # MT
+      assistant_cook:
+        title: "Aiuto cuoco" # MT
+        description: "Aiuta a preparare il pasto seguendo le indicazioni del capocuoco." # MT
+      cleaner:
+        title: "Pulizie" # MT
+        description: "Pulisce dopo il pasto." # MT
+    meal_formula: "Formula predefinita" # MT
+    meal_types:
+      adult: "Adulto" # MT
+      teen: "Adolescente" # MT
+      kid: "Bambino" # MT
+      little_kid: "Bambino piccolo" # MT
+    restrictions:
+      gluten:
+        contains: "Glutine" # MT
+        absence: "Senza glutine" # MT
+      meat:
+        contains: "Carne" # MT
+        absence: "Senza carne" # MT
+      tree_nuts:
+        contains: "Frutta a guscio" # MT
+        absence: "Senza frutta a guscio" # MT
+      dairy:
+        contains: "Latticini" # MT
+        absence: "Senza latticini" # MT
+      shellfish:
+        contains: "Crostacei" # MT
+        absence: "Senza crostacei" # MT
+      vegan:
+        contains: "Non vegano" # MT
+        absence: "Vegano" # MT
+      spicy:
+        contains: "Piccante" # MT
+        absence: "Non piccante" # MT
+      kid_friendly:
+        contains: "Adatto ai bambini" # MT
+        absence: "Non adatto ai bambini" # MT
+      peanuts:
+        contains: "Arachidi" # MT
+        absence: "Senza arachidi" # MT
+    everybody_group:
+      name: "Tutta la comunità" # MT
+      description: "Gruppo generale con tutti i membri effettivi della comunità." # MT
+    allergens: "Latticini, crostacei, soia, frutta a guscio" # MT

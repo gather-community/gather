@@ -26,9 +26,9 @@ module Utils
       private
 
       def generate_everybody_group
-        create(:group, communities: [community], availability: "everybody",
-                       name: "Full Community", kind: "group",
-                       description: "General group containing all full users in the community.")
+        create(:group, communities: [community], availability: "everybody", kind: "group",
+          name: I18n.t("starter_content.everybody_group.name"),
+          description: I18n.t("starter_content.everybody_group.description"))
       end
 
       def generate_gather_coop_domain

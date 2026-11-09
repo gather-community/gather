@@ -10,15 +10,23 @@
 #  cluster_id                  :bigint           not null
 #  created_at                  :datetime         not null
 #  creator_id                  :bigint
-#  description                 :string(255)      not null
+#  description                 :string(255)
+#  kind                        :string(16)       not null
 #  stripe_invoice_line_item_id :string
 #  updated_at                  :datetime         not null
 #
 FactoryBot.define do
   factory :messaging_transaction, class: "Messaging::Transaction" do
     account factory: :messaging_account
-    description { "Messaging bundle top-up" }
+    kind { "topup_credit" }
     amount_cents { 1000 }
     sequence(:stripe_invoice_line_item_id) { |n| "il_test#{n}" }
+
+    trait :manual do
+      kind { "manual" }
+      description { "Goodwill credit" }
+      creator factory: :user
+      stripe_invoice_line_item_id { nil }
+    end
   end
 end

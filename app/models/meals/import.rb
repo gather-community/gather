@@ -9,6 +9,7 @@
 #  community_id  :bigint           not null
 #  created_at    :datetime         not null
 #  errors_by_row :jsonb
+#  locale        :string(10)       not null
 #  status        :string           default("queued"), not null
 #  updated_at    :datetime         not null
 #  user_id       :bigint           not null
@@ -43,12 +44,17 @@ module Meals
     accepts_attachment_via_form :file
     validates :file, presence: true, content_type: {in: %w[text/plain text/csv]}
 
+    # The uploader's language. The import runs later in a job, but reads dates and writes its errors in it.
+    attribute :locale, :string, default: -> { I18n.locale.to_s }
+
     def import
-      update!(status: "running")
-      self.row_pointer = 0
-      self.errors_by_row ||= {}
-      process
-      update!(status: "finished")
+      I18n.with_locale(Gather::Locales.find(locale) || I18n.default_locale) do
+        update!(status: "running")
+        self.row_pointer = 0
+        self.errors_by_row ||= {}
+        process
+        update!(status: "finished")
+      end
     end
 
     # crashed status indicates an unexpected error
@@ -278,7 +284,7 @@ module Meals
 
     def parse_served_at(str)
       return add_error(I18n.t("csv.errors.meals/meal.served_at_required")) if str.blank?
-      new_meal.served_at = Time.zone.parse(str)
+      new_meal.served_at = Time.zone.parse(Gather::LocalizedDate.normalize(str))
       raise ArgumentError if new_meal.served_at.nil?
     rescue ArgumentError, TypeError
       add_error(I18n.t("csv.errors.meals/meal.invalid_served_at", str: str))

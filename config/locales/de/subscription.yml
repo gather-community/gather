@@ -29,8 +29,8 @@ de:
       other: "Unbekannt" # MT
       unknown: "Unbekannt" # MT
     messaging_transactions:
-      credit: "Monatliche Aufladung für Nachrichten" # MT
-      reversal: "Storno einer nicht eingezogenen Aufladung für Nachrichten" # MT
+      topup_credit: "Monatliche Aufladung für Nachrichten" # MT
+      topup_reversal: "Storno einer nicht eingezogenen Aufladung für Nachrichten" # MT
     per_month: "%{amount}/Monat" # MT
     every_months:
       one: "%{amount} alle %{count} Monat" # MT

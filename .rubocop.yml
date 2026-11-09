@@ -96,7 +96,8 @@ Gather/HardCodedString:
   Include:
     - app/**/*.rb
   Exclude:
-    # Starter content for new communities, translated in the release phase of the i18n plan.
+    # Sample data for demo communities, which stays English. The starter content every new community gets
+    # goes through I18n (config/locales/*/starter_content.yml).
     - app/models/utils/generators/**/*.rb
     # Mail that only goes to Gather staff (exempt per CLAUDE.md).
     - app/mailers/system_mailer.rb

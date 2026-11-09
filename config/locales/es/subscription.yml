@@ -29,8 +29,8 @@ es:
       other: "Desconocido" # MT
       unknown: "Desconocido" # MT
     messaging_transactions:
-      credit: "Recarga mensual de mensajería" # MT
-      reversal: "Anulación de una recarga de mensajería no cobrada" # MT
+      topup_credit: "Recarga mensual de mensajería" # MT
+      topup_reversal: "Anulación de una recarga de mensajería no cobrada" # MT
     per_month: "%{amount}/mes" # MT
     every_months:
       one: "%{amount} cada %{count} mes" # MT

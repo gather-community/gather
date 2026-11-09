@@ -120,6 +120,47 @@ describe Utils::Generators::MainGenerator, :without_tenant, :perform_jobs do
     end
   end
 
+  describe "starter content language" do
+    it "creates the starter content in the community's language, with sample members in it too" do
+      cluster = described_class.new(cmty_name: "Foo Community", slug: "foo", sample_data: true, photos: false,
+        locale: "fr").generate
+
+      ActsAsTenant.with_tenant(cluster) do
+        community = cluster.communities[0]
+        expect(community.settings.locale).to eq("fr")
+        expect(Meals::Role.pluck(:title)).to contain_exactly("Chef cuisinier", "Aide-cuisinier", "Nettoyage")
+        expect(Meals::Formula.find_by(is_default: true).name).to eq("Formule par défaut")
+        expect(Meals::Type.pluck(:name)).to contain_exactly("Adulte", "Ado", "Enfant", "Jeune enfant")
+        expect(Meals::Restriction.pluck(:absence)).to include("Sans gluten", "Végan")
+        expect(Groups::Group.find_by(availability: "everybody").name).to eq("Toute la communauté")
+        expect(Calendars::Node.pluck(:name)).to include("Tous les repas", "Anniversaires", "Réservations")
+        expect(community.settings.meals.allergens)
+          .to eq("Produits laitiers, fruits de mer, soja, fruits à coque")
+
+        # Sample data stays English, and sample meals still find their calendars.
+        expect(Calendars::Calendar.pluck(:name)).to include("Kitchen", "Dining Room")
+        expect(Meals::Meal.first.calendars.map(&:name)).to contain_exactly("Kitchen", "Dining Room")
+        expect(User.distinct.pluck(:locale)).to eq(["fr"])
+      end
+    end
+
+    # Calendar names are unique per community and at most 24 characters, so each locale's must fit.
+    Gather::Locales::TRANSLATED.each do |locale|
+      it "generates cleanly in #{locale}" do
+        cluster = described_class.new(cmty_name: "Foo Community", slug: "foo", sample_data: false,
+          locale: locale).generate
+
+        ActsAsTenant.with_tenant(cluster) do
+          expect(Calendars::Node.count).to eq(10)
+          expect(Meals::Role.find_by(special: "head_cook").title)
+            .to eq(I18n.t("starter_content.meal_roles.head_cook.title", locale: locale))
+          expect(Meals::Restriction.pluck(:contains))
+            .to include(I18n.t("starter_content.restrictions.vegan.contains", locale: locale))
+        end
+      end
+    end
+  end
+
   # Sample phone numbers used to be North American only, so they failed validation everywhere else.
   it "generates sample data for a community outside North America" do
     cluster = described_class.new(cmty_name: "Foo Community", slug: "foo", country_code: "GB",

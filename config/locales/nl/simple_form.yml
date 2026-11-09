@@ -240,8 +240,8 @@ nl:
       communities_signup:
         status:
           all: "Alle" # MT
-          pending: "In behandeling" # MT
-          approved: "Goedgekeurd" # MT
+          new: "Nieuw" # MT
+          creating: "Wordt aangemaakt" # MT
           denied: "Afgewezen" # MT
           created: "Aangemaakt" # MT
           failed: "Mislukt" # MT

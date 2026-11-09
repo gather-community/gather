@@ -4,7 +4,7 @@ require "rails_helper"
 
 describe Communities::SignupMailer do
   let(:reviewer) { create(:user) }
-  let(:signup) { create(:communities_signup, :approved, reviewed_by: reviewer) }
+  let(:signup) { create(:communities_signup, :creating, reviewed_by: reviewer) }
 
   describe "approval_created" do
     subject(:mail) { described_class.approval_created(signup).deliver_now }
@@ -27,7 +27,7 @@ describe Communities::SignupMailer do
 
   describe "approval_failed" do
     let(:signup) do
-      create(:communities_signup, :approved, reviewed_by: reviewer, failure_message: "Something went wrong")
+      create(:communities_signup, :creating, reviewed_by: reviewer, failure_message: "Something went wrong")
     end
 
     subject(:mail) { described_class.approval_failed(signup).deliver_now }
@@ -50,7 +50,7 @@ describe Communities::SignupMailer do
   end
 
   describe "application_denied" do
-    let(:signup) { create(:communities_signup, :approved, reviewed_by: reviewer, locale: "de") }
+    let(:signup) { create(:communities_signup, :creating, reviewed_by: reviewer, locale: "de") }
     subject(:mail) { described_class.application_denied(signup).deliver_now }
 
     it "is in English while other languages are off" do

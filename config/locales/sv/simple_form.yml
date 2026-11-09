@@ -234,8 +234,8 @@ sv:
       communities_signup:
         status:
           all: "Alla" # MT
-          pending: "Väntande" # MT
-          approved: "Godkänd" # MT
+          new: "Ny" # MT
+          creating: "Skapas" # MT
           denied: "Avslagen" # MT
           created: "Skapad" # MT
           failed: "Misslyckad" # MT

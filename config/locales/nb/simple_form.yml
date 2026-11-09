@@ -240,8 +240,8 @@ nb:
       communities_signup:
         status:
           all: "Alle" # MT
-          pending: "Venter" # MT
-          approved: "Godkjent" # MT
+          new: "Ny" # MT
+          creating: "Opprettes" # MT
           denied: "Avslått" # MT
           created: "Opprettet" # MT
           failed: "Mislyktes" # MT

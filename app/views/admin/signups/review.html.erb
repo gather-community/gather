@@ -16,7 +16,7 @@
       <tr>
         <td><%= t(".status") %></td>
         <td>
-          <span class="label label-<%= @signup.pending? ? "warning" : (@signup.approved? ? "success" : "danger") %>">
+          <span class="label label-<%= @signup.new? ? "warning" : (@signup.creating? ? "success" : "danger") %>">
             <%= t("simple_form.options.communities_signup.status.#{@signup.status}") %>
           </span>
           <% if @signup.reviewed_at %>
@@ -80,7 +80,7 @@
     </table>
   </div>
   <div class="col-md-6">
-    <% if @signup.pending? %>
+    <% if @signup.new? %>
       <div data-controller="communities--signup-action"
           data-communities--signup-action-contact-first-name-value="<%= @signup.contact_first_name %>"
           data-communities--signup-action-community-name-value="<%= @signup.community_name %>"

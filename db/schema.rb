@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_07_120100) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_08_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -281,7 +281,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_07_120100) do
     t.datetime "reviewed_at"
     t.bigint "reviewed_by_id"
     t.string "slug", limit: 20, null: false
-    t.string "status", default: "pending", null: false
+    t.string "status", default: "new", null: false
     t.string "time_zone", limit: 64, default: "UTC", null: false
     t.datetime "updated_at", null: false
     t.boolean "want_sample_data", default: false, null: false
@@ -536,7 +536,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_07_120100) do
     t.index ["gdrive_config_id"], name: "index_gdrive_synced_permissions_on_gdrive_config_id"
     t.index ["item_id"], name: "index_gdrive_synced_permissions_on_item_id"
     t.index ["user_id"], name: "index_gdrive_synced_permissions_on_user_id"
-    t.check_constraint "access_level::text = ANY (ARRAY['reader'::character varying, 'commenter'::character varying, 'writer'::character varying, 'fileOrganizer'::character varying, 'organizer'::character varying, 'owner'::character varying]::text[])", name: "access_level_enum"
+    t.check_constraint "access_level::text = ANY (ARRAY['reader'::character varying::text, 'commenter'::character varying::text, 'writer'::character varying::text, 'fileOrganizer'::character varying::text, 'organizer'::character varying::text, 'owner'::character varying::text])", name: "access_level_enum"
   end
 
   create_table "gdrive_tokens", force: :cascade do |t|

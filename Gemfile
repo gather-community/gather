@@ -7,7 +7,7 @@ gem "acts_as_list", "~> 1.2"
 gem "acts_as_tenant", "~> 2.2"
 gem "attribute_normalizer", "~> 1.2"
 gem "aws-sdk-s3", "~> 1.235", require: false
-gem "babosa", "~> 1.0"
+gem "babosa", "~> 2.1"
 gem "bootsnap", "~> 1.26"
 gem "bootstrap-kaminari-views", "~> 0.0"
 gem "bootstrap-sass", "~> 3.4"

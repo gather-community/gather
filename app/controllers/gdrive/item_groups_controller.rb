@@ -7,15 +7,9 @@ module GDrive
     before_action -> { nav_context(:wiki, :gdrive) }
 
     def new
-      @item = Item.find(params[:item_id])
-      @item_group = ItemGroup.new(item: @item)
-      @access_levels = ItemGroup::ACCESS_LEVELS
-
-      # We don't exclude hidden groups because they are useful here and only
-      # admins can see this page.
-      @groups = Groups::Group.in_communities([current_community]).by_name
-
+      @item_group = ItemGroup.new(item: Item.find(params[:item_id]))
       authorize(@item_group)
+      prep_form_vars
     end
 
     def create
@@ -30,6 +24,7 @@ module GDrive
         flash[:success] = t("gdrive.group_added")
         redirect_to(gdrive_config_path)
       else
+        prep_form_vars
         render(:new)
       end
     end
@@ -45,6 +40,16 @@ module GDrive
     end
 
     private
+
+    def prep_form_vars
+      @item = @item_group.item
+      @access_levels = ItemGroup::ACCESS_LEVELS
+
+      # We don't exclude hidden groups because they are useful here and only
+      # admins can see this page. We do exclude groups that already have access to the item.
+      @groups = Groups::Group.in_communities([current_community])
+        .where.not(id: ItemGroup.where(item: @item).select(:group_id)).by_name
+    end
 
     # Pundit built-in helper doesn't work due to namespacing
     def item_group_params

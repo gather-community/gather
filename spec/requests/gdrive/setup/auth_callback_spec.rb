@@ -103,4 +103,22 @@ describe "gdrive auth callback" do
       expect(flash[:error]).to eq("It looks like you cancelled the Google authentication flow.")
     end
   end
+
+  # Bots probe the callback URL without the state Google sends.
+  describe "requests without a valid state" do
+    it "returns 404 when state is missing" do
+      get("/gdrive/setup/auth/callback")
+      expect(response).to have_http_status(:not_found)
+    end
+
+    it "returns 404 when state isn't JSON" do
+      get("/gdrive/setup/auth/callback", params: {state: "junk"})
+      expect(response).to have_http_status(:not_found)
+    end
+
+    it "returns 404 when state has no community" do
+      get("/gdrive/setup/auth/callback", params: {state: "[1]"})
+      expect(response).to have_http_status(:not_found)
+    end
+  end
 end

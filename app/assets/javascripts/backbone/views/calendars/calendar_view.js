@@ -40,7 +40,7 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
     this._calendarLiveRegionText = null;
     this._renderedEventDateKeys = {};
     this._renderedEventRangesByKey = {};
-    this.showAppropriateEarlyLink();
+    this.updateEarlyHoursButton();
     this.initCalendar();
   },
 
@@ -2018,7 +2018,7 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
   showHideEarly(e) {
     e.preventDefault();
     this.viewParams.earlyMorning = !this.viewParams.earlyMorning;
-    this.showAppropriateEarlyLink();
+    this.updateEarlyHoursButton();
     this.calendar.fullCalendar("option", "minTime", this.minTime());
     // Explicitly rebuild a11y slots and notify the link manager; minTime changes don't
     // always re-fire eventAfterAllRender since FullCalendar may skip that pipeline.
@@ -2031,13 +2031,11 @@ Gather.Views.Calendars.CalendarView = Backbone.View.extend({
     this.$el.trigger("viewRender");
   },
 
-  showAppropriateEarlyLink() {
-    this.$("#hide-early").css({
-      display: this.viewParams.earlyMorning ? "inline" : "none",
-    });
-    this.$("#show-early").css({
-      display: this.viewParams.earlyMorning ? "none" : "inline",
-    });
+  updateEarlyHoursButton() {
+    const button = this.$("#early-hours-toggle");
+    const expanded = !!this.viewParams.earlyMorning;
+    button.attr("aria-expanded", String(expanded));
+    button.text(button.data(expanded ? "hide-label" : "show-label"));
   },
 
 });

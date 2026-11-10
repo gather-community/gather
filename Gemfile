@@ -6,7 +6,7 @@ gem "active_model_serializers", "~> 0.10.16"
 gem "acts_as_list", "~> 1.2"
 gem "acts_as_tenant", "~> 2.2"
 gem "attribute_normalizer", "~> 1.2"
-gem "aws-sdk-s3", "~> 1.235", require: false
+gem "aws-sdk-s3", "~> 1.239", require: false
 gem "babosa", "~> 1.0"
 gem "bootsnap", "~> 1.26"
 gem "bootstrap-kaminari-views", "~> 0.0"
@@ -100,7 +100,7 @@ group :development, :test do
   gem "pry-nav", "~> 1.0"
   gem "pry-rails", "~> 0.3"
   gem "pry", "~> 0.14"
-  gem "rspec-rails", "~> 8.0"
+  gem "rspec-rails", "~> 8.1"
   gem "rubocop-rails", "2.38.0"
   gem "rubocop", "~> 1.87"
   gem "selenium-webdriver", "~> 4.44"
@@ -132,4 +132,4 @@ gem "turbo-rails", "~> 2.0"
 
 gem "money", "~> 7.1"
 
-gem "logtail-rails", "~> 0.3.0"
+gem "logtail-rails", "~> 0.3.1"

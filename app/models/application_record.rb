@@ -26,10 +26,6 @@ class ApplicationRecord < ActiveRecord::Base
     order(Arel.sql(cols.join(", ")))
   end
 
-  def self.txn_id
-    connection.execute("SELECT txid_current()").to_a[0]["txid_current"]
-  end
-
   def self.test_mock?
     false
   end

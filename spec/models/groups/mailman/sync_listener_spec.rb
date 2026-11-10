@@ -192,10 +192,6 @@ describe Groups::Mailman::SyncListener do
     let!(:other_list2) { create(:group_mailman_list) }
     let!(:group) { create(:group, can_administer_email_lists: can_admin) }
 
-    before do
-      Groups::Mailman::SyncListener.instance.reset_duplicate_tracking!
-    end
-
     context "with admin/mod attrib" do
       let(:can_admin) { true }
 
@@ -243,10 +239,6 @@ describe Groups::Mailman::SyncListener do
   describe "create/update/destroy group membership" do
     let!(:group) { create(:group) }
 
-    before do
-      Groups::Mailman::SyncListener.instance.reset_duplicate_tracking!
-    end
-
     context "with attached list" do
       let!(:list) { create(:group_mailman_list, group: group, remote_id: "foo.bar.com") }
 
@@ -280,10 +272,6 @@ describe Groups::Mailman::SyncListener do
   # We only test create here b/c we are using Wisper's _committed callback so we trust it to handle all 2.
   describe "create/destroy group affilitation" do
     let!(:group) { create(:group) }
-
-    before do
-      Groups::Mailman::SyncListener.instance.reset_duplicate_tracking!
-    end
 
     context "with attached list" do
       let!(:list) { create(:group_mailman_list, group: group, remote_id: "foo.bar.com") }
@@ -332,6 +320,38 @@ describe Groups::Mailman::SyncListener do
         expect(params[:mm_user_attribs][:cluster_id]).not_to be_nil
         expect(params[:destroyed]).to be(true)
       end
+  end
+
+  # In production a save commits a real transaction and the listener runs after it. In specs the save is
+  # a savepoint inside the test transaction, which hid a bug: the listener's old duplicate check worked
+  # here but never in production, so one group save queued every list's sync once per record saved.
+  describe "several records saved in one transaction", clean_with_transaction: false do
+    let!(:list1) { create(:group_mailman_list, remote_id: "list1.example.com") }
+    let!(:list2) { create(:group_mailman_list, remote_id: "list2.example.com") }
+
+    context "with an admin group and several members" do
+      let!(:users) { create_list(:user, 3) }
+
+      it "queues each list's membership sync once" do
+        expect { create(:group, can_administer_email_lists: true, joiners: users) }
+          .to have_enqueued_membership_sync_job.with("Groups::Mailman::List", list1.id).once
+          .and have_enqueued_membership_sync_job.with("Groups::Mailman::List", list2.id).once
+      end
+    end
+
+    context "with members added to two groups' lists" do
+      let!(:users) { create_list(:user, 2) }
+
+      it "queues both lists' membership syncs" do
+        expect do
+          ActiveRecord::Base.transaction do
+            list1.group.memberships.create!(user: users[0])
+            list2.group.memberships.create!(user: users[1])
+          end
+        end.to have_enqueued_membership_sync_job.with("Groups::Mailman::List", list1.id).once
+          .and have_enqueued_membership_sync_job.with("Groups::Mailman::List", list2.id).once
+      end
+    end
   end
 
   def have_enqueued_list_sync_job

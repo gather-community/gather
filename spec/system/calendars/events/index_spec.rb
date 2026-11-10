@@ -157,24 +157,53 @@ describe "event calendar", js: true do
       expect(page).to have_css(".fc-header-toolbar h2", text: time2_my)
     end
 
+    %w[week day].each do |view|
+      scenario "early morning hours toggle retains focus and exposes state in #{view} view" do
+        visit(calendar_events_path(calendar1, view: view))
+        expect(page).to have_css(".fc-agenda#{view.capitalize}-view")
+
+        button = find_button("Show early morning hours")
+        expect(button["aria-expanded"]).to eq("false")
+        expect(button["aria-controls"]).to eq("calendar")
+        page.execute_script("arguments[0].focus()", button)
+        button.send_keys(:enter)
+        expect(page).to have_css(".early[aria-expanded=true]", text: "Hide early morning hours")
+        expect(page).to have_css(".fc-time-grid .fc-slats tr[data-time='00:00:00']")
+        expect(page.evaluate_script("document.activeElement.id")).to eq("early-hours-toggle")
+
+        find_button("Hide early morning hours").send_keys(:space)
+        expect(page).to have_css(".early[aria-expanded=false]", text: "Show early morning hours")
+        expect(page).to have_no_css(".fc-time-grid .fc-slats tr[data-time='00:00:00']")
+        expect(page.evaluate_script("document.activeElement.id")).to eq("early-hours-toggle")
+
+        # Repeated activation keeps the same native button and focus.
+        find_button("Show early morning hours").send_keys(:space)
+        expect(page).to have_css(".early[aria-expanded=true]", text: "Hide early morning hours")
+        expect(page.evaluate_script("document.activeElement.id")).to eq("early-hours-toggle")
+        find_button("Hide early morning hours").send_keys(:enter)
+        expect(page).to have_css(".early[aria-expanded=false]", text: "Show early morning hours")
+        expect(page.evaluate_script("document.activeElement.id")).to eq("early-hours-toggle")
+      end
+    end
+
     scenario "early morning toggle updates URL and carries through sidebar links" do
       visit(calendar_events_path(calendar1))
       expect(page).to have_css(".fc-agendaWeek-button.fc-state-active")
 
-      find("#show-early").click
+      find("#early-hours-toggle").click
       expect(page).to have_current_path(/[?&]early=true/)
 
       # Toggling off removes the param.
-      find("#hide-early").click
+      find("#early-hours-toggle").click
       expect(current_url).not_to match(/[?&]early=/)
 
       # Sidebar links carry the early param to the destination calendar.
-      find("#show-early").click
+      find("#early-hours-toggle").click
       expect(page).to have_current_path(/[?&]early=true/)
       click_link("Bar Room")
       expect(page).to have_css(".fc-agendaWeek-button.fc-state-active") # calendar loaded
       expect(current_url).to match(/[?&]early=true/)
-      expect(page).to have_css("#hide-early", visible: true) # early morning is active
+      expect(page).to have_css(".early[aria-expanded=true]", text: "Hide early morning hours")
     end
 
     scenario "back button restores previous calendar position" do
@@ -838,7 +867,7 @@ describe "event calendar", js: true do
       find(day_all_day_selector).send_keys(:arrow_down)
       expect_active_gridcell("#{day_first_slot_selector}[tabindex='0']")
 
-      find("#show-early").click
+      find("#early-hours-toggle").click
       midnight_slot_selector =
         ".fc-agendaDay-view .fc-gather-time-slot[data-date='#{today_date}'][data-time='00:00:00']"
       expect(page).to have_css(".fc-agendaDay-view .fc-divider[aria-hidden='true']", visible: false)

@@ -10,8 +10,14 @@
         font-size: 11px;
       }
 
-      a.early {
-        display: none;
+      button.early {
+        background: none;
+        border: 0;
+        padding: 0;
+        color: $text-muted;
+        font-size: 11px;
+        text-decoration: underline;
+        cursor: pointer;
       }
     }
 

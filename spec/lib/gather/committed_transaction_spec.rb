@@ -3,24 +3,26 @@
 require "rails_helper"
 
 describe Gather::CommittedTransaction do
-  # A model whose after_commit callback runs whatever the example gives it, as a listener would.
-  let(:model) do
-    Class.new(ApplicationRecord) do
-      self.table_name = "feature_flags"
-
-      def self.name
-        "CommittedTransactionSpecRecord"
+  # Stands in for a listener: when a record commits, runs the block the example gave it. Uses an existing
+  # model because a model class defined here would stay in ApplicationRecord.descendants and trip the
+  # specs that check every model.
+  let(:listener) do
+    Class.new do
+      def after_commit(record)
+        record.on_commit.call if record.respond_to?(:on_commit)
       end
-
-      attr_accessor :on_commit
-
-      after_commit { on_commit&.call }
-    end
+    end.new
   end
   let(:runs) { [] }
 
+  around do |example|
+    Wisper.subscribe(listener, scope: "Work::Period") { example.run }
+  end
+
   def save_record(&on_commit)
-    model.create!(name: SecureRandom.hex(8), on_commit: on_commit)
+    period = build(:work_period)
+    period.define_singleton_method(:on_commit) { on_commit }
+    period.save!
   end
 
   def once(key)

@@ -99,7 +99,6 @@ describe "mailman integration" do
   end
 
   def step(name)
-    Groups::Mailman::SyncListener.instance.reset_duplicate_tracking!
     [user1, user2, user3, user4].each { |o| o.reload unless o.destroyed? }
     VCR.use_cassette("groups/mailman/integration/#{context_name}/#{name}") { yield }
   end

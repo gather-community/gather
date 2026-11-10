@@ -2,6 +2,12 @@
 
 # Miscellaneous things that need to run after each spec.
 RSpec.configure do |config|
+  # A spec whose after_commit callback raises leaves its transaction's set behind. Don't let it
+  # affect the next example.
+  config.after do
+    Gather::CommittedTransaction.reset
+  end
+
   config.after(type: :system) do
     # Clear these again after example so we don't leave junk in there after the suite is run.
     clear_downloads

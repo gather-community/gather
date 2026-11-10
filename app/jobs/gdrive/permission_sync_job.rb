@@ -140,19 +140,27 @@ module GDrive
         supports_all_drives: true)
       permission.destroy
     rescue Google::Apis::ClientError => error
+      raise unless nothing_to_delete?(error, permission)
+      permission.destroy
+    end
+
+    # Errors from a delete that mean there's nothing for us to remove on this item, so we can just
+    # drop the local record to match.
+    def nothing_to_delete?(error, permission)
       if error.message.match?(/notFound: Permission not found/)
-        # If the permission was not found, no problem!
-        # Just go ahead and destroy the permission to match.
         log("Permission not found, skipping delete", permission)
-        permission.destroy
       elsif error.message.match?(/cannotModifyInheritedTeamDrivePermission/)
-        # It is ok to swallow these if we are destroying because it just means the supplemental
-        # permission was already destroyed, so it's kind of like the "not found" case
+        # The supplemental permission was already destroyed, so it's kind of like the "not found" case.
         log("Swallowing cannotModifyInheritedTeamDrivePermission", permission)
-        permission.destroy
+      elsif error.message.match?(/cannotDeletePermission/) && permission.inherited_access_level.present?
+        # Google won't delete access that comes from a parent folder. It has to be removed there,
+        # and the next refresh records whatever access remains. We only swallow it when we know the
+        # permission is inherited, since Google gives the same error when we just lack the right to delete.
+        log("Swallowing cannotDeletePermission for inherited permission", permission)
       else
-        raise
+        return false
       end
+      true
     end
 
     def log(message, permission)
@@ -163,6 +171,7 @@ module GDrive
         google_email: permission.google_email,
         item_external_id: permission.item_external_id,
         item_id: permission.item_id,
+        inherited_access_level: permission.inherited_access_level,
         user_id: permission.user_id,
       )
     end

@@ -136,8 +136,10 @@ describe GDrive::Migration::FullScanJob do
     let!(:scan_task) { scan.scan_tasks.create!(folder_id: folder_b_id) }
     subject!(:job) { described_class.new(cluster_id: Defaults.cluster.id, scan_task_id: scan_task.id) }
 
-    it "marks operation complete and registers webhook" do
+    it "marks operation complete, stops the existing webhook channel, and registers a new one" do
       time = Time.zone.parse("2024-01-10 12:00:00")
+      expect(GDrive::Migration::WebhookRegistrar).to receive(:stop).ordered
+      expect(GDrive::Migration::WebhookRegistrar).to receive(:register).ordered.and_call_original
       Timecop.freeze(time) do
         VCR.use_cassette("gdrive/migration/scan_job/full/no_more_tasks") do
           expect { perform_job }.to have_enqueued_job(GDrive::Migration::ChangesScanJob)
@@ -156,6 +158,20 @@ describe GDrive::Migration::FullScanJob do
         expect(operation.webhook_secret).not_to be_nil
         expect(operation.webhook_resource_id).to eq("030dP89w23Mzw28mQBrIu00iMXg")
         expect(operation.webhook_expires_at).to eq(time + 7.days)
+      end
+    end
+
+    context "when no webhook channel was registered yet" do
+      before { operation.update!(webhook_resource_id: nil) }
+
+      it "registers without stopping anything" do
+        expect(GDrive::Migration::WebhookRegistrar).not_to receive(:stop)
+        Timecop.freeze(Time.zone.parse("2024-01-10 12:00:00")) do
+          VCR.use_cassette("gdrive/migration/scan_job/full/no_more_tasks") do
+            perform_job
+          end
+        end
+        expect(operation.reload.webhook_resource_id).to eq("030dP89w23Mzw28mQBrIu00iMXg")
       end
     end
 

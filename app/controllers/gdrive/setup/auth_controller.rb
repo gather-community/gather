@@ -70,12 +70,22 @@ module GDrive
       end
 
       def set_current_community_from_callback_state
+        # Google always sends a JSON state with the community ID. Requests without one come from bots
+        # probing the URL. This runs before authentication, so nothing else has turned them away yet.
+        community_id = callback_state_community_id
+        return render_not_found if community_id.nil?
         @callback_state, = Google::Auth::WebUserAuthorizer.extract_callback_state(request)
-        community_id = JSON.parse(params[:state])["community_id"]
         self.current_community = Community.find(community_id)
         # We don't call validate_callback_state here because it will fail if the user has
         # cancelled the oauth request. We check for that in the main callback method body and then
         # we call validate right after. The purpose of this before_action is just to set the current_community.
+      end
+
+      def callback_state_community_id
+        state = JSON.parse(params[:state].to_s)
+        state["community_id"] if state.is_a?(Hash)
+      rescue JSON::ParserError
+        nil
       end
 
       def fetch_credentials_from_callback_request(wrapper, request)

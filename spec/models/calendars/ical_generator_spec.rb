@@ -57,6 +57,37 @@ describe Calendars::IcalGenerator do
     end
   end
 
+  # The hour from 1am to 2am happens twice when DST ends (2026-11-01 in America/New_York).
+  # tzinfo can't tell which one a bare local time means.
+  describe "timezone block during the hour repeated when DST ends" do
+    subject(:ical) do
+      Time.use_zone("America/New_York") do
+        Timecop.freeze(Time.utc(2026, 11, 1, utc_hour, 30)) do
+          described_class.new(calendar_name: calendar_name, eventlets: eventlets,
+            url_options: {host: "foo.com", protocol: "https", port: 443}).generate
+        end
+      end
+    end
+
+    context "in the first 1:30am, still on daylight time" do
+      let(:utc_hour) { 5 }
+
+      it "generates the calendar" do
+        is_expected.to include_line("TZID:America/New_York")
+        is_expected.to include_line("TZOFFSETTO:-0400")
+      end
+    end
+
+    context "in the second 1:30am, back on standard time" do
+      let(:utc_hour) { 6 }
+
+      it "generates the calendar" do
+        is_expected.to include_line("TZID:America/New_York")
+        is_expected.to include_line("TZOFFSETTO:-0500")
+      end
+    end
+  end
+
   context "with all day event" do
     let(:eventlets) do
       [create(:eventlet, name: "Some Event",

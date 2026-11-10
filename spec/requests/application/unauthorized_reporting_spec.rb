@@ -30,6 +30,11 @@ describe "reporting of unauthorized requests" do
     request_forbidden_page("https://evil.#{Settings.url.host}.example.com/")
   end
 
+  it "doesn't report when the referrer is the service worker" do
+    expect(Gather::ErrorReporter.instance).not_to receive(:report)
+    request_forbidden_page("https://#{user.subdomain}.#{Settings.url.host}/serviceworker.js")
+  end
+
   it "doesn't report when there is no referrer" do
     expect(Gather::ErrorReporter.instance).not_to receive(:report)
     request_forbidden_page(nil)

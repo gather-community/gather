@@ -114,6 +114,35 @@ describe Groups::Group do
       end
     end
 
+    describe "people listed more than once" do
+      let(:user) { create(:user) }
+      let!(:group) { create(:group) }
+      let!(:membership) { create(:group_membership, group: group, user: user, kind: "joiner") }
+
+      it "keeps the existing row and drops a new one for the same person" do
+        group.reload.update!(memberships_attributes: {"0" => {user_id: user.id, kind: "manager"}})
+        expect(group.reload.memberships.map { |m| [m.id, m.kind] }).to eq([[membership.id, "joiner"]])
+      end
+
+      it "keeps only the first of two new rows for the same person" do
+        other = create(:user)
+        group.reload.update!(memberships_attributes: {
+          "0" => {user_id: other.id, kind: "manager"},
+          "1" => {user_id: other.id, kind: "joiner"}
+        })
+        expect(group.reload.memberships.find_by(user: other).kind).to eq("manager")
+        expect(group.memberships.count).to eq(2)
+      end
+
+      it "allows removing a person's row and adding them back" do
+        group.reload.update!(memberships_attributes: {
+          "0" => {id: membership.id, _destroy: "1"},
+          "1" => {user_id: user.id, kind: "manager"}
+        })
+        expect(group.reload.memberships.map(&:kind)).to eq(["manager"])
+      end
+    end
+
     describe "length" do
       # Migrations use literal limits, so this catches a column change that forgets the constant.
       it "keeps the max length constants in sync with the database columns" do

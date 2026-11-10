@@ -205,9 +205,20 @@ module Groups
     def normalize
       memberships.delete(memberships.to_a.select(&:joiner?)) if everybody?
       memberships.delete(memberships.to_a.select(&:opt_out?)) unless everybody?
+      drop_duplicate_members
       # Browsers submit textarea line breaks as \r\n but count them as one character for maxlength,
       # so normalize them to keep the length the user saw in line with the length we validate.
       self.description = description.gsub("\r\n", "\n") if description.present?
+    end
+
+    # The form lets someone add a row for a person who already has one, which would hit the unique index
+    # on group and user. We keep the person's existing row (or their first new one) and drop the rest.
+    # Rows marked for destruction don't count, since they're deleted before new rows are inserted.
+    def drop_duplicate_members
+      seen = Set.new
+      kept = memberships.reject(&:marked_for_destruction?).select(&:user_id)
+      dupes = kept.sort_by { |m| m.new_record? ? 1 : 0 }.reject { |m| seen.add?(m.user_id) }
+      memberships.delete(dupes)
     end
 
     def name_unique_in_all_communities

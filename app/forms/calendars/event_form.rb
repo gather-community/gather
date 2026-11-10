@@ -35,7 +35,8 @@ module Calendars
 
     attr_reader :event, :pattern, :occurrence_start
 
-    delegate :creator, to: :event
+    # The user pickers read the associations to show the current selection.
+    delegate :creator, :sponsor, to: :event
     delegate :frequency, :interval, :weekdays, :monthly_by, :ends, :ends_on, :count, to: :pattern,
       prefix: :repeat, allow_nil: true
 

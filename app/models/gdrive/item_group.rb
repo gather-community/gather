@@ -33,6 +33,11 @@ module GDrive
     belongs_to :item, class_name: "GDrive::Item", inverse_of: :item_groups
     belongs_to :group, class_name: "Groups::Group", inverse_of: :gdrive_item_groups
 
+    # Both are picked on the form. A group that already has access can come from a stale form,
+    # so it gets a message rather than hitting the unique index.
+    validates :group_id, :access_level, presence: true # rubocop:disable Rails/RedundantPresenceValidationOnBelongsTo -- belongs_to is optional by default in this app
+    validates :group_id, uniqueness: {scope: :item_id}
+
     delegate :external_id, to: :item, prefix: true
     delegate :community, to: :item
   end

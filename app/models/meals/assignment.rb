@@ -88,7 +88,8 @@ module Meals
     end
 
     def role_matches_formula
-      return if persisted? || meal.nil? || meal.formula.role_ids.include?(role_id)
+      # Without a formula there's nothing to match. The meal's own validation reports the missing formula.
+      return if persisted? || meal&.formula.nil? || meal.formula.role_ids.include?(role_id)
       # We add the error on user_id b/c that's what's shown in the form.
       errors.add(:user_id, :role_not_in_formula, role: role.title)
     end

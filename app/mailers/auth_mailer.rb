@@ -32,7 +32,8 @@ class AuthMailer < Devise::Mailer
     return if user.fake?
     set_notification_preferences_url(user)
     @user = user.decorate
-    in_locale_of(user) { mail(to: @user) }
+    # Devise::Mailer doesn't turn users into addresses like ApplicationMailer#mail does.
+    in_locale_of(user) { mail(to: @user.email) }
   end
 
   def confirmation_instructions(user, token, opts = {})

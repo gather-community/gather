@@ -66,6 +66,31 @@ describe "event form", js: true do
     end
   end
 
+  # Someone from another community booking a calendar whose protocol needs a sponsor from the
+  # calendar's community gets a sponsor picker.
+  describe "sponsor" do
+    let(:other_community) { create(:community) }
+    let!(:sponsor) { create(:user, community: community, first_name: "Spongebob") }
+    let(:user) { create(:user, community: other_community) }
+    let!(:protocol) do
+      create(:calendar_protocol, community: community, calendars: [calendar], other_communities: "sponsor")
+    end
+
+    before do
+      use_subdomain(community.slug)
+    end
+
+    scenario "picking a sponsor" do
+      visit(new_calendar_event_path(calendar))
+      fill_in("Event Name", with: "Stuff")
+      select2("Spongebob", from: "#calendars_event_sponsor_id")
+      check("I agree to the above")
+      click_on("Save")
+      expect_success
+      expect(Calendars::Event.find_by(name: "Stuff").sponsor).to eq(sponsor)
+    end
+  end
+
   describe "all day events" do
     context "with a calendar that supports them" do
       scenario do

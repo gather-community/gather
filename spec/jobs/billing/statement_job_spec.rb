@@ -33,12 +33,36 @@ describe Billing::StatementJob do
         create(:user, household: household, locale: "fr")
       end
 
-      it "sends one statement notice per language, each in that language" do
+      it "sends each member their own statement notice, in their language" do
         emails = email_sent_by { perform_job }
         expect(emails.map(&:subject)).to contain_exactly(
           "Neuer Kontoauszug für #{trans1.community.name}",
           "Nouveau relevé de compte pour #{trans1.community.name}"
         )
+        expect(statement_count).to eq(1)
+      end
+    end
+
+    context "when the mail server rejects one member's address" do
+      let!(:trans1) { create(:transaction) }
+      let(:household) { trans1.account.household }
+      let!(:other_member) { create(:user, household: household) }
+      let(:bad_email) { household.users.detect { |u| u != other_member }.email }
+      subject(:job) { described_class.new(trans1.community_id) }
+
+      before do
+        allow_any_instance_of(Mail::Message).to receive(:deliver).and_wrap_original do |original, *args|
+          if original.receiver.to.include?(bad_email)
+            raise Net::SMTPFatalError, "550 5.1.1 Recipient address rejected"
+          end
+          original.call(*args)
+        end
+      end
+
+      it "still sends the notice to the others and reports the rejection" do
+        expect(Gather::ErrorReporter.instance).to receive(:report).with(Net::SMTPFatalError, anything).once
+        emails = email_sent_by { perform_job }
+        expect(emails.map(&:to)).to eq([[other_member.email]])
         expect(statement_count).to eq(1)
       end
     end

@@ -187,7 +187,7 @@ module Search
     # rubocop:enable Metrics/MethodLength
 
     def escape(term)
-      term.gsub("\\", "\\\\\\\\").gsub("'", "\\\\'")
+      GDrive.escape_query_value(term)
     end
   end
 end

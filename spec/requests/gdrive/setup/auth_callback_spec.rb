@@ -58,6 +58,39 @@ describe "gdrive auth callback" do
     end
   end
 
+  describe "asking Google which account signed in" do
+    let!(:config) { create(:gdrive_config, org_user_id: "bar@gmail.com") }
+    let(:userinfo_uri) { URI("https://www.googleapis.com/oauth2/v2/userinfo") }
+
+    def perform
+      with_env("STUB_SESSION_G_XSRF_TOKEN" => "P5JPu/n1QyYvkdEr3zgyHQ==") do
+        VCR.use_cassette("gdrive/setup/callback/success") do
+          get("/gdrive/setup/auth/callback", params: callback_payload)
+        end
+      end
+    end
+
+    it "sends the token in a header, not the URL" do
+      allow(Net::HTTP).to receive(:get_response).and_call_original
+      perform
+      expect(Net::HTTP).to have_received(:get_response)
+        .with(userinfo_uri, hash_including("Authorization" => start_with("Bearer ")))
+    end
+
+    it "shows a connection problem, reports it and stores nothing when Google refuses" do
+      allow(Net::HTTP).to receive(:get_response).with(userinfo_uri, anything)
+        .and_return(Net::HTTPUnauthorized.new("1.1", "401", "Unauthorized"))
+      expect(Gather::ErrorReporter.instance).to receive(:report)
+        .with(an_instance_of(GDrive::Setup::AuthController::UserinfoError), anything)
+
+      perform
+
+      expect(response).to redirect_to(redirect_url)
+      expect(flash[:error]).to match("There is a problem with your Google Drive connection.")
+      with_default_tenant { expect(GDrive::Token.count).to eq(0) }
+    end
+  end
+
   context "when authenticated google ID does not match stored config" do
     let!(:config) { create(:gdrive_config, org_user_id: "foo@gmail.com") }
 

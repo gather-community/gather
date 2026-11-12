@@ -53,7 +53,7 @@ module GDrive
     end
 
     def reader_filter
-      "'#{@reader_email}' in readers"
+      "'#{GDrive.escape_query_value(@reader_email)}' in readers"
     end
   end
 end

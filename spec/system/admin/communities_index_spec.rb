@@ -103,4 +103,24 @@ describe "communities index" do
     expect(page).to have_content("Default")
     expect(page).to have_content("Other Community")
   end
+
+  scenario "search lens", js: true do
+    create(:community, name: "Maple Grove")
+    communityB.update!(deactivated_at: Time.current)
+
+    visit(admin_communities_path)
+    fill_in_lens_and_wait(:search, "other")
+    expect(page).not_to have_link("Maple Grove")
+    expect(page).to have_link("Other Community")
+    within(".stats-sidebar") { expect(find("tr", text: "Trial")).to have_content("2") }
+
+    # Combines with the status lens.
+    select_lens(:status, "Trial")
+    expect(page).not_to have_link("Other Community")
+    expect(page).to have_content("No communities found.")
+
+    clear_lenses
+    expect(page).to have_link("Maple Grove")
+    expect(page).to have_link("Other Community")
+  end
 end

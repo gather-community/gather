@@ -73,6 +73,14 @@ class Community < ApplicationRecord
   scope :by_one_cmty_first, ->(c) { order(arel_table[:id].not_eq(c.id)) }
   scope :by_name_with_first, ->(c) { by_one_cmty_first(c).by_name }
 
+  # Matches the start of each word of the name (see ApplicationRecord.matching_word_starts), or a
+  # whole slug or ID.
+  scope :matching, lambda { |q|
+    q = q.to_s.strip
+    by_name = matching_word_starts("communities.name", q).or(where(slug: q.downcase))
+    q.match?(/\A\d+\z/) ? by_name.or(where(id: q.to_i)) : by_name
+  }
+
   accepts_nested_attributes_for :restrictions
 
   validates :slug, length: {maximum: SLUG_MAX_LENGTH}

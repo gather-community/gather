@@ -26,6 +26,20 @@ class ApplicationRecord < ActiveRecord::Base
     order(Arel.sql(cols.join(", ")))
   end
 
+  # Gather's standard text search: each word of the query must start a word of the text in
+  # `expression` (a SQL expression, e.g. "households.name"), ignoring case and accents. See
+  # Gather::WordMatch for the rules. A blank query matches everything. A query with no words in it,
+  # such as "%%", matches nothing.
+  #
+  # Use this for every search box, so they all behave the same. To search several fields, OR the
+  # results of separate calls (see Meals::Meal.matching), so each field must match all the words.
+  def self.matching_word_starts(expression, query)
+    words = Gather::WordMatch.words(query)
+    return all if words.empty? && query.blank?
+    return where("1 = 0") if words.empty?
+    words.reduce(all) { |rel, word| rel.where(Gather::WordMatch.condition(expression, word)) }
+  end
+
   def self.txn_id
     connection.execute("SELECT txid_current()").to_a[0]["txid_current"]
   end

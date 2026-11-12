@@ -68,21 +68,25 @@ module GDrive
     # Google's user permissions on the item for people Gather knows, by user ID.
     def actual_permissions
       user_id_by_email = User.where.not(google_email: nil).pluck(:google_email, :id).to_h
-      permissions = {}
+      google_user_permissions.each_with_object({}) do |permission, permissions|
+        user_id = user_id_by_email[permission.email_address&.downcase]
+        permissions[user_id] = permission if user_id
+      end
+    end
+
+    # Every page of the item's permissions that belong to a person (not a group, domain or link).
+    def google_user_permissions
+      all = []
       page_token = nil
       loop do
         result = wrapper.list_permissions(item.external_id,
           fields: "permissions(id,emailAddress,role,type,permissionDetails),nextPageToken",
           supports_all_drives: true, page_size: 100, page_token: page_token)
-        (result.permissions || []).each do |permission|
-          next unless permission.type == "user"
-          user_id = user_id_by_email[permission.email_address&.downcase]
-          permissions[user_id] = permission if user_id
-        end
+        all.concat((result.permissions || []).select { |p| p.type == "user" })
         page_token = result.next_page_token
         break if page_token.nil?
       end
-      permissions
+      all
     end
 
     def index(level)

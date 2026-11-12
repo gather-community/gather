@@ -194,10 +194,12 @@ describe GDrive::PermissionSyncJob do
 
     # Neither user is in a group with access, so the sync removes both permissions, a's first.
     let!(:perm_a) do
-      create(:gdrive_synced_permission, item: item, user: user_a, access_level: "writer", external_id: "permA")
+      create(:gdrive_synced_permission, item: item, user: user_a, access_level: "writer",
+        external_id: "permA")
     end
     let!(:perm_b) do
-      create(:gdrive_synced_permission, item: item, user: user_b, access_level: "writer", external_id: "permB")
+      create(:gdrive_synced_permission, item: item, user: user_b, access_level: "writer",
+        external_id: "permB")
     end
 
     def perform
@@ -207,7 +209,7 @@ describe GDrive::PermissionSyncJob do
 
     it "reports a failing permission and carries on with the rest" do
       error = Google::Apis::ClientError.new("someUnexpectedReason: Google said no")
-      allow_any_instance_of(GDrive::Wrapper).to receive(:delete_permission) do |_wrapper, _item_id, perm_id, **|
+      allow_any_instance_of(GDrive::Wrapper).to receive(:delete_permission) do |_wrapper, _item, perm_id, **|
         raise error if perm_id == "permA"
       end
       expect(Gather::ErrorReporter.instance).to receive(:report)

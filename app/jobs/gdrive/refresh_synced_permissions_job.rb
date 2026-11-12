@@ -84,7 +84,8 @@ module GDrive
       # Repointing the record at the new account would leave the old account's access untracked, so the
       # sync could never remove it. Instead we leave the record alone. The sync then sees the email
       # change, removes the old account's permission and grants the new account.
-      if existing && existing.google_email != permission.email_address && existing.external_id != permission.id
+      if existing && existing.google_email != permission.email_address &&
+          existing.external_id != permission.id
         Rails.logger.info("Leaving synced permission for old google_email alone",
           user_id: user_id, item_external_id: item.external_id,
           old_external_id: existing.external_id, new_external_id: permission.id)

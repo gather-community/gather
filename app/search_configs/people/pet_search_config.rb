@@ -34,7 +34,7 @@ module People
       end
 
       after_save { __elasticsearch__.index_document }
-      after_destroy { __elasticsearch__.delete_document }
+      include SearchDocumentRemoval
     end
     # rubocop:enable Metrics/BlockLength
 

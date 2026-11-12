@@ -92,12 +92,15 @@ Rails.application.routes.draw do
   end
 
   get "/meals/reports", to: redirect("/meals/report") # Legacy path
+  # The signups export used to live here, sharing its URL with the signup form's AJAX POST. Some phones
+  # later reload a page at the POST's URL, which sent members to the export and a 403.
+  get "/meals/signups", to: redirect("/meals", status: 302)
 
   resources :meals, controller: "meals/meals" do
     collection do
       get :jobs
       get :report
-      get :export_signups, path: "signups"
+      get :export_signups, path: "export-signups"
       get :worker_form, path: "worker-form"
       get :reimbursee_paypal_email, path: "reimbursee-paypal-email"
     end

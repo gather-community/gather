@@ -29,15 +29,11 @@ module Groups
       end
 
       after_save :update_search_index
-      after_destroy { __elasticsearch__.delete_document }
+      include SearchDocumentRemoval
 
       def update_search_index
         if deactivated_at.present?
-          begin
-            __elasticsearch__.delete_document
-          rescue
-            nil
-          end
+          remove_search_document
         else
           __elasticsearch__.index_document
         end

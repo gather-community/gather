@@ -28,7 +28,7 @@ describe "meal csv exports" do
     end
 
     it "exports signups" do
-      get("/meals/signups.csv?dates=#{dates}")
+      get("/meals/export-signups.csv?dates=#{dates}")
       expect(response).to be_successful
       expect(response.header["Content-Disposition"])
         .to match(/#{actor.community.slug}-meal-signups-20190101-20191231\.csv/)
@@ -58,7 +58,13 @@ describe "meal csv exports" do
     end
 
     it "forbids the signups export" do
-      expect { get("/meals/signups.csv?dates=#{dates}") }.to raise_error(Pundit::NotAuthorizedError)
+      expect { get("/meals/export-signups.csv?dates=#{dates}") }.to raise_error(Pundit::NotAuthorizedError)
+    end
+
+    # The signup form POSTs to /meals/signups. Some phones later load that URL as a page.
+    it "sends a page load of the signup form's URL to the meals page" do
+      get("/meals/signups")
+      expect(response).to redirect_to("/meals")
     end
   end
 end

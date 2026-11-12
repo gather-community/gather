@@ -59,7 +59,8 @@ module Meals
     def categories
       authorize(sample_type, :index?)
       categories = policy_scope(Meals::Type).in_community(current_community)
-        .where("category ILIKE ?", "%#{params[:search]}%").pluck(:category).uniq
+        .where.not(category: nil)
+        .matching_word_starts("meal_types.category", params[:search]).pluck(:category).uniq
         .map { |c| TypeCategory.new(name: c) }
       render(json: categories, each_serializer: TypeCategorySerializer, root: "results")
     end

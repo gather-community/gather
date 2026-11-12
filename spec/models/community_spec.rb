@@ -90,6 +90,30 @@ describe Community do
     end
   end
 
+  describe ".matching" do
+    let!(:maple) { create(:community, name: "Maple Grove Co", slug: "mgc") }
+    let!(:zoe) { create(:community, name: "Zoë-Ville", slug: "zv") }
+    let!(:other) { create(:community, name: "Oak Commons", slug: "oak") }
+
+    it "matches the start of each word of the name, in any case" do
+      expect(described_class.matching("grove MAP")).to contain_exactly(maple)
+      expect(described_class.matching("rove")).to be_empty
+    end
+
+    it "ignores accents and treats hyphens as word breaks" do
+      expect(described_class.matching("zoe ville")).to contain_exactly(zoe)
+    end
+
+    it "matches a whole slug" do
+      expect(described_class.matching("MGC")).to contain_exactly(maple)
+      expect(described_class.matching("mg")).to be_empty
+    end
+
+    it "matches an ID" do
+      expect(described_class.matching(other.id.to_s)).to contain_exactly(other)
+    end
+  end
+
   describe "#currency" do
     it "is set from the country on save" do
       expect(create(:community, country_code: "ca").currency).to eq("cad")

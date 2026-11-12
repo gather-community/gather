@@ -30,6 +30,6 @@ module Meals
 
     scope :in_community, ->(c) { where(community_id: c.id) }
     scope :by_name, -> { alpha_order(:name) }
-    scope :matching, ->(q) { where("name ILIKE ?", "%#{q}%") }
+    scope :matching, ->(q) { matching_word_starts("meal_types.name", q) }
   end
 end

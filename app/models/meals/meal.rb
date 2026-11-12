@@ -92,6 +92,13 @@ module Meals
       rel = rel.joins(:role).merge(Meals::Role.head_cook) if head_cook_only
       where("? IN (#{rel.to_sql})", user)
     }
+    # Matches the start of each word of the title or of a worker's name
+    # (see ApplicationRecord.matching_word_starts).
+    scope :matching, lambda { |q|
+      worked_by_match = Meals::Assignment.joins(:user)
+        .matching_word_starts("users.first_name || ' ' || users.last_name", q).select(:meal_id)
+      matching_word_starts("meals.title", q).or(where(id: worked_by_match))
+    }
     scope :attended_by, ->(household) { joins(:signups).where(meal_signups: {household_id: household.id}) }
 
     accepts_nested_attributes_for :signups, allow_destroy: true, reject_if: lambda { |a|

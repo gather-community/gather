@@ -9,7 +9,11 @@ require "net/http"
 module GDrive
   module Setup
     class AuthController < ApplicationController
-      USERINFO_URL = "https://www.googleapis.com/oauth2/v2/userinfo?access_token="
+      USERINFO_URL = "https://www.googleapis.com/oauth2/v2/userinfo"
+
+      # Raised when Google won't tell us which account the new token belongs to.
+      class UserinfoError < StandardError
+      end
 
       before_action -> { nav_context(:wiki, :gdrive, :setup, :auth) }
 
@@ -45,9 +49,15 @@ module GDrive
           end
           wrapper.store_credentials(credentials)
           flash[:success] = t("gdrive.authenticated")
-        rescue Signet::AuthorizationError => error
+        rescue Signet::AuthorizationError, UserinfoError => error
           error_code = SecureRandom.base58(8)
-          Rails.logger.error("AuthorizationError in gdrive auth callback", message: error.to_s, community_id: current_community.id, error_code: error_code)
+          Rails.logger.error("#{error.class.name} in gdrive auth callback", message: error.to_s,
+            community_id: current_community.id, error_code: error_code)
+          # A bad client ID or secret is the community's to fix, but a failed userinfo request is unexpected.
+          if error.is_a?(UserinfoError)
+            Gather::ErrorReporter.instance.report(error,
+              data: {community_id: current_community.id, error_code: error_code})
+          end
           flash[:error] = t("gdrive.connection_problem", code: error_code)
         end
         redirect_to(gdrive_home_url)
@@ -97,10 +107,13 @@ module GDrive
         )
       end
 
+      # Sends the token in a header rather than the URL, so it can't end up in logs along the way.
       def fetch_email_of_authenticated_account(credentials)
-        uri = URI("#{USERINFO_URL}#{credentials.access_token}")
-        res = Net::HTTP.get_response(uri)
-        authenticated_google_id = JSON.parse(res.body)["email"]
+        uri = URI(USERINFO_URL)
+        auth_header = "Bearer #{credentials.access_token}" # rubocop:disable Gather/HardCodedString -- HTTP auth scheme
+        res = Net::HTTP.get_response(uri, {"Authorization" => auth_header})
+        raise UserinfoError, "Userinfo request failed with status #{res.code}" unless res.is_a?(Net::HTTPSuccess)
+        JSON.parse(res.body)["email"]
       end
     end
   end

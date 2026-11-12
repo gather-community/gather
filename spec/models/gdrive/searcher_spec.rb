@@ -56,6 +56,16 @@ describe GDrive::Searcher do
         searcher.search
       end
 
+      context "when the reader's email has a quote in it" do
+        let(:reader_email) { "o'brien@example.com" }
+
+        it "escapes it, so it can't change the query" do
+          expect(wrapper).to receive(:list_files)
+            .with(hash_including(q: a_string_including("'o\\'brien@example.com' in readers")))
+          searcher.search
+        end
+      end
+
       it "returns the files the API returns from the community's drives" do
         expect(searcher.search[:files]).to eq([file1])
       end

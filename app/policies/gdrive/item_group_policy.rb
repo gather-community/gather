@@ -7,7 +7,9 @@ module GDrive
     class Scope < Scope
       def resolve
         return scope.none unless user.active? && user.full_access?
-        scope.where(group: Groups::Group.with_user(user).select(:id))
+        # Same rule as the permission sync: active groups the user belongs to, counting only groups
+        # affiliated with the user's community.
+        scope.where(group: Groups::Group.with_user(user).active.select(:id))
       end
     end
 

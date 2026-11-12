@@ -26,13 +26,15 @@ module GDrive
           return render_not_found
         end
 
-        if operation.webhook_secret != request.headers["x-goog-channel-token"]
+        unless ActiveSupport::SecurityUtils.secure_compare(operation.webhook_secret.to_s,
+          request.headers["x-goog-channel-token"].to_s)
           operation.log(:error, "x-goog-channel-token does not match the webhook secret")
           return render_not_found
         end
 
         unless operation.active?
           operation.log(:info, "Operation is inactive, not processing webhook")
+          return head(:no_content)
         end
 
         ChangesScanJob.enqueue(operation)

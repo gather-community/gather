@@ -62,7 +62,7 @@ http_interactions:
   recorded_at: Sun, 29 May 2022 00:54:10 GMT
 - request:
     method: get
-    uri: https://www.googleapis.com/oauth2/v2/userinfo?access_token=xxxxxxxxRrdaM_ejqXa0Fx7v97ybEf1RBGbG4bX215yoktUIOZ01X3VSOs24d5EWxDqYTZCdXDNMmoc5m4qUAX23SoT1LXBHFe2Zw7TJC5uXTk2l4yQE1VNvbQ0LqrAu5I-JTU5Ts95qGYwcaipC5xyGlgMxxxxxxxx
+    uri: https://www.googleapis.com/oauth2/v2/userinfo
     body:
       encoding: US-ASCII
       string: ''

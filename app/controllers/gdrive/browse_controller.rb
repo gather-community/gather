@@ -164,7 +164,7 @@ module GDrive
     # Gets a Google::Apis::DriveV3::Drive object for the given shared drive ID.
     # Updates the stored Item as it does so (using the DriveSyncer).
     def fetch_drive(wrapper, drive_id)
-      item = Item.find_by!(external_id: drive_id)
+      item = @config.items.find_by!(external_id: drive_id)
       DriveSyncer.new(wrapper, item).sync
 
       # Rather than fetch this from the API we can just build it because we have
@@ -182,7 +182,7 @@ module GDrive
     end
 
     def can_read_drive?(drive_id)
-      drive = Item.find_by(external_id: drive_id, kind: "drive")
+      drive = @config.items.drives_only.find_by(external_id: drive_id)
       return false if drive.nil? || drive.error_type.present?
       ItemPolicy.new(current_user, drive).show?
     end

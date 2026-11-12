@@ -109,9 +109,9 @@ nl:
 
           Binnen Google Drive kan het token wel alles wat het account kan. Als het account je **superbeheerder** is (en dat is zo als je Workspace maar één account heeft):
 
-          * Komt het token bij alle bestanden in de Google Drive van je Workspace, en kan een superbeheerder alle gedeelde drives in de Workspace beheren.
+          * Kan het token alles openen wat het account kan openen: elke gedeelde drive waarvan het lid is, de eigen 'Mijn Drive' en alles wat ermee is gedeeld.
           * Kan elke Gather-beheerder in je gemeenschap al die drives, mappen of bestanden aan een Gather-groep koppelen en de groep toegang geven, ook als ze nooit voor Gather bedoeld waren.
-          * Zouden alle bestanden in je Workspace op straat liggen als het token ooit werd gestolen.
+          * Zouden al die bestanden op straat liggen als het token ooit werd gestolen. En omdat een superbeheerder alle gedeelde drives in de Workspace kan beheren, zou een dief er ook die mee kunnen bereiken.
 
           Veiliger is een **apart account dat alleen Gather gebruikt** en dat geen beheerder is. Maak het **Beheerder** van alleen de gedeelde drives die je aan Gather koppelt, bewaar niets in zijn eigen 'Mijn Drive' en zet verificatie in twee stappen aan. Dan komen Gather, en je Gather-beheerders, alleen bij die drives. Dat kost je gemeenschap één Workspace-account extra, niet één per lid.
 

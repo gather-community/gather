@@ -97,9 +97,9 @@ en:
 
           Within Google Drive, though, the token can do anything that account can do. If the account is your **Super Admin** (and if your Workspace has only one account, it is):
 
-          * The token can reach every file in your Workspace's Google Drive, and a Super Admin can manage every shared drive in the Workspace.
+          * The token can open everything the account can: every shared drive it's a member of, its own "My Drive", and anything shared with it.
           * Any Gather Admin in your community can link any of those drives, folders, or files to a Gather group and give that group access, including ones never meant for Gather.
-          * If the token were ever stolen, all of your Workspace's files would be exposed.
+          * If the token were ever stolen, all of those files would be exposed. And because a Super Admin can manage every shared drive in the Workspace, a thief could use it to reach those too.
 
           The safer setup is a **separate account used only by Gather**, which is not an admin. Make it a **Manager** of only the shared drives you link to Gather, keep nothing in its own "My Drive", and turn on 2-Step Verification. Then Gather, and your Gather Admins, can reach only those drives. This costs your community one more Workspace account, not one per member.
 

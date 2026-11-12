@@ -109,9 +109,9 @@ de:
 
           Innerhalb von Google Drive kann das Token aber alles, was das Konto kann. Wenn das Konto dein **Super Admin** ist (und das ist es, wenn dein Workspace nur ein Konto hat):
 
-          * Das Token erreicht alle Dateien im Google Drive deines Workspace, und ein Super Admin kann alle geteilten Ablagen im Workspace verwalten.
+          * Das Token kann alles öffnen, was das Konto öffnen kann: jede geteilte Ablage, in der es Mitglied ist, seine eigene „Meine Ablage“ und alles, was dafür freigegeben wurde.
           * Alle Gather-Admins deiner Gemeinschaft können jede dieser Ablagen, Ordner oder Dateien mit einer Gather-Gruppe verknüpfen und der Gruppe Zugriff geben, auch solche, die nie für Gather gedacht waren.
-          * Würde das Token gestohlen, lägen alle Dateien deines Workspace offen.
+          * Würde das Token gestohlen, lägen alle diese Dateien offen. Und weil ein Super Admin alle geteilten Ablagen im Workspace verwalten kann, könnte ein Dieb damit auch an diese gelangen.
 
           Sicherer ist ein **eigenes Konto nur für Gather**, das kein Admin ist. Mach es zum **Administrator** nur der geteilten Ablagen, die du mit Gather verknüpfst, lege nichts in seiner eigenen „Meine Ablage“ ab und schalte die Bestätigung in zwei Schritten ein. Dann erreichen Gather und deine Gather-Admins nur diese Ablagen. Das kostet deine Gemeinschaft ein Workspace-Konto mehr, nicht eins pro Mitglied.
 

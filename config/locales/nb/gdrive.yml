@@ -109,9 +109,9 @@ nb:
 
           Innenfor Google Drive kan tokenet derimot gjøre alt kontoen kan. Hvis kontoen er superadministratoren deres (og det er den hvis Workspace-en bare har én konto):
 
-          * Tokenet når alle filene i Google Drive i Workspace-en, og en superadministrator kan administrere alle delte disker i Workspace-en.
+          * Tokenet kan åpne alt kontoen kan åpne: alle delte disker den er medlem av, sin egen «Min disk» og alt som er delt med den.
           * Alle Gather-administratorer i fellesskapet kan knytte hvilken som helst av disse diskene, mappene eller filene til en Gather-gruppe og gi gruppen tilgang, også slike som aldri var ment for Gather.
-          * Hvis tokenet ble stjålet, ville alle filene i Workspace-en være eksponert.
+          * Hvis tokenet ble stjålet, ville alle disse filene være eksponert. Og fordi en superadministrator kan administrere alle delte disker i Workspace-en, kunne en tyv bruke det til å nå dem også.
 
           Tryggere er en **egen konto som bare Gather bruker**, og som ikke er administrator. Gjør den til **Administrator** for bare de delte diskene du knytter til Gather, ikke lagre noe i dens egen «Min disk», og slå på totrinnsbekreftelse. Da når Gather, og Gather-administratorene deres, bare de diskene. Det koster fellesskapet én Workspace-konto til, ikke én per medlem.
 

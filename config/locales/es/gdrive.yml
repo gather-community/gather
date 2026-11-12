@@ -106,9 +106,9 @@ es:
 
           Dentro de Google Drive, en cambio, el token puede hacer todo lo que puede hacer esa cuenta. Si la cuenta es tu **superadministrador** (y lo es si tu Workspace solo tiene una cuenta):
 
-          * El token llega a todos los archivos del Google Drive de tu Workspace, y un superadministrador puede gestionar todas las unidades compartidas del Workspace.
+          * El token puede abrir todo lo que puede abrir la cuenta: todas las unidades compartidas de las que es miembro, su propia «Mi unidad» y todo lo que se haya compartido con ella.
           * Cualquier administrador de Gather de tu comunidad puede vincular cualquiera de esas unidades, carpetas o archivos a un grupo de Gather y darle acceso, incluso los que nunca se pensaron para Gather.
-          * Si alguien robara el token, todos los archivos de tu Workspace quedarían expuestos.
+          * Si alguien robara el token, todos esos archivos quedarían expuestos. Y como un superadministrador puede gestionar todas las unidades compartidas del Workspace, el ladrón también podría llegar a ellas.
 
           La opción más segura es una **cuenta aparte, usada solo por Gather**, que no sea administradora. Hazla **Administrador** solo de las unidades compartidas que vinculas a Gather, no guardes nada en su propia «Mi unidad» y activa la verificación en dos pasos. Así Gather, y tus administradores de Gather, solo llegan a esas unidades. Esto le cuesta a tu comunidad una cuenta de Workspace más, no una por miembro.
 

@@ -109,9 +109,9 @@ sv:
 
           Inom Google Drive kan token däremot göra allt som kontot kan. Om kontot är er **superadministratör** (och det är det om ert Workspace bara har ett konto):
 
-          * Token når alla filer i ert Workspace i Google Drive, och en superadministratör kan hantera alla delade enheter i Workspace.
+          * Token kan öppna allt som kontot kan öppna: alla delade enheter som det är medlem i, sin egen ”Min enhet” och allt som har delats med det.
           * Alla Gather-administratörer i er gemenskap kan koppla vilken som helst av de enheterna, mapparna eller filerna till en Gather-grupp och ge gruppen åtkomst, även sådana som aldrig var tänkta för Gather.
-          * Om token skulle stjälas skulle alla filer i ert Workspace exponeras.
+          * Om token skulle stjälas skulle alla de filerna exponeras. Och eftersom en superadministratör kan hantera alla delade enheter i Workspace kunde en tjuv använda den för att nå dem också.
 
           Säkrare är ett **separat konto som bara Gather använder** och som inte är administratör. Gör det till **Administratör** för bara de delade enheter som du kopplar till Gather, spara inget i dess egen ”Min enhet” och aktivera tvåstegsverifiering. Då når Gather, och era Gather-administratörer, bara de enheterna. Det kostar er gemenskap ett Workspace-konto till, inte ett per medlem.
 

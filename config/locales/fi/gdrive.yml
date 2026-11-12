@@ -109,9 +109,9 @@ fi:
 
           Google Driven sisällä tunnus voi kuitenkin tehdä kaiken, mitä tili voi. Jos tili on **pääjärjestelmänvalvojasi** (ja se on, jos Workspacessasi on vain yksi tili):
 
-          * Tunnus ulottuu kaikkiin Workspacesi Google Driven tiedostoihin, ja pääjärjestelmänvalvoja voi hallita kaikkia Workspacen jaettuja Driveja.
+          * Tunnus voi avata kaiken, minkä tili voi avata: jokaisen jaetun Driven, jonka jäsen se on, oman ”Oma Drive” -kansionsa ja kaiken, mitä sille on jaettu.
           * Kuka tahansa yhteisösi Gather-ylläpitäjä voi linkittää minkä tahansa näistä Driveista, kansioista tai tiedostoista Gather-ryhmään ja antaa ryhmälle pääsyn, myös sellaisiin, joita ei koskaan tarkoitettu Gatheriin.
-          * Jos tunnus varastettaisiin, kaikki Workspacesi tiedostot olisivat paljaana.
+          * Jos tunnus varastettaisiin, kaikki nämä tiedostot paljastuisivat. Ja koska pääjärjestelmänvalvoja voi hallita kaikkia Workspacen jaettuja Driveja, varas voisi päästä käsiksi myös niihin.
 
           Turvallisempi ratkaisu on **erillinen tili vain Gatherin käyttöön**, joka ei ole järjestelmänvalvoja. Tee siitä **Ylläpitäjä** vain niihin jaettuihin Driveihin, jotka linkität Gatheriin, älä säilytä mitään sen omassa ”Oma Drive” -kansiossa ja ota käyttöön kaksivaiheinen vahvistus. Silloin Gather ja Gather-ylläpitäjäsi pääsevät vain näihin Driveihin. Tämä maksaa yhteisöllesi yhden Workspace-tilin lisää, ei yhtä jokaista jäsentä kohden.
 

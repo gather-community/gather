@@ -106,9 +106,9 @@ fr:
 
           Dans Google Drive, en revanche, le jeton peut faire tout ce que ce compte peut faire. Si ce compte est votre **Super administrateur** (et c'est le cas si votre Workspace n'a qu'un seul compte) :
 
-          * Le jeton peut atteindre tous les fichiers du Google Drive de votre Workspace, et un Super administrateur peut gérer tous les Drive partagés du Workspace.
+          * Le jeton peut ouvrir tout ce que ce compte peut ouvrir : chaque Drive partagé dont il est membre, son propre « Mon Drive » et tout ce qui a été partagé avec lui.
           * N'importe quel administrateur Gather de votre communauté peut lier n'importe lequel de ces Drive, dossiers ou fichiers à un groupe Gather et lui en donner l'accès, y compris ceux qui n'ont jamais été prévus pour Gather.
-          * Si le jeton était volé, tous les fichiers de votre Workspace seraient exposés.
+          * Si le jeton était volé, tous ces fichiers seraient exposés. Et comme un Super administrateur peut gérer tous les Drive partagés du Workspace, un voleur pourrait aussi s'en servir pour y accéder.
 
           La configuration la plus sûre est un **compte distinct, utilisé seulement par Gather**, qui n'est pas administrateur. Faites-en un **Gestionnaire** des seuls Drive partagés que vous liez à Gather, ne gardez rien dans son propre « Mon Drive » et activez la validation en deux étapes. Gather, et vos administrateurs Gather, n'auront alors accès qu'à ces Drive. Cela coûte à votre communauté un compte Workspace de plus, et non un par membre.
 

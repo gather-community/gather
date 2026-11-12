@@ -48,6 +48,7 @@ nb:
     item_groups:
       new:
         title: "Legg til gruppe for Google Drive-element" # MT
+        group_control_warning: "Den som bestemmer over gruppens medlemmer, bestemmer også hvem som har tilgang til dette elementet i Google Drive. Gruppens ledere kan legge til medlemmer og endre gruppen til «Åpen» eller «Alle», og alle i fellesskapet kan bli med i en «Åpen» gruppe. Sjekk hvordan man kommer inn i gruppen før du legger den til." # MT
     config:
       index:
         title: "Innstillinger for Google Drive" # MT
@@ -56,12 +57,12 @@ nb:
         link_item: "Knytt til element" # MT
         credentials: "Påloggingsinformasjon for Google Workspace" # MT
         add_credentials_html: "Fellesskapet ditt er ikke koblet til Google Drive ennå. Legg inn påloggingsinformasjonen for Google Workspace for å koble til. Se %{link} for å komme i gang." # MT
-        config_guide: "oppsettsveiledningen" # MT
+        setup_guide: "oppsettsveiledningen" # MT
         authentication: "Autentisering" # MT
         update_credentials: "Hvis du må oppdatere påloggingsinformasjonen for Google Workspace, kan du gjøre det her." # MT
         introduction: "Innledning" # MT
         system_user_html: "<strong>Systembruker:</strong> %{user}" # MT
-        intro_html: "Legg til elementer nedenfor for å knytte dem til Gather og synkronisere tillatelser. Delte disker som står nedenfor, vises på %{link} i Gather for brukere som har tillatelse. Mapper og filer er ikke tilgjengelige via oversiktssiden med mindre den delte disken de ligger i, er tilgjengelig." # MT
+        intro_html: "Legg til elementer nedenfor for å knytte dem til Gather og synkronisere tillatelser. Delte disker som står nedenfor, vises på %{link} i Gather for brukere som har tillatelse. Mapper og filer er ikke tilgjengelige via oversiktssiden med mindre den delte disken de ligger i, er tilgjengelig. Les mer i %{guide_link}." # MT
         browse_page: "oversiktssiden for Google Drive" # MT
         name: "Navn" # MT
         status: "Status" # MT
@@ -81,17 +82,62 @@ nb:
         # Markdown, rendered with Gather's Markdown renderer. Google's menu and button names are in quotes
         # or bold so they can be matched to Google's own (translated) interface.
         body: |- # MT
-          Denne veiledningen tar deg gjennom hvordan du skaffer påloggingsinformasjonen som trengs for å koble fellesskapets Google Workspace til Gather.
+          ## Slik fungerer det
 
-          ## Forutsetninger
+          Gather kobler seg til Google Drive gjennom én Google Workspace-konto som tilhører fellesskapet deres. Fellesskapets filer ligger i **delte disker**, som tilhører Workspace-en deres og ikke én bestemt person. Ingenting går tapt når noen flytter.
 
-          * Fellesskapet må ha registrert seg for **Google Workspace**.
-              * Abonnementet Business Starter er nok.
-              * Det trengs bare én brukerkonto.
-              * Velg et navn for fellesskapet til kontoen (f.eks. workspace.admin@dittdomene.no) i stedet for et personnavn (f.eks. ola.nordmann@dittdomene.no).
-          * Den som følger disse instruksjonene, må være logget inn hos Google som en bruker i fellesskapets Google Workspace med rettigheter som **superadministrator**. Hvis dere bare har én konto, har den kontoen rettigheter som superadministrator.
+          Medlemmer trenger ikke egne Workspace-kontoer. I Gather knytter du en delt disk (eller én enkelt mappe eller fil) til én eller flere Gather-grupper og velger et tilgangsnivå for hver gruppe. Gather gir så hvert medlem av gruppene tilgang i Google Drive med sin egen personlige Google-konto, for eksempel en gratis Gmail-konto. Når noen blir med i eller forlater en gruppe, eller forlater fellesskapet, oppdaterer Gather tilgangen.
+
+          De fleste Google Workspace-abonnementer koster per bruker. En egen Workspace-konto til hvert medlem ville betydd en månedsavgift per person. Med Gather betaler fellesskapet for én eller to Workspace-kontoer, uansett hvor mange medlemmer det har.
+
+          ## Google Workspace-abonnementer og tilgangskontroll
+
+          Alle Google Workspace-abonnementer, også **Business Starter**, har delte disker og lar deg legge til personer utenfor Workspace-en. Gather er avhengig av det, fordi medlemmer bruker sine personlige Google-kontoer. Uansett abonnement må tilgang for personer utenfor organisasjonen være slått på.
+
+          Abonnementene skiller seg i hvor mye du kan begrense hva folk gjør når de har tilgang:
+
+          * **Business Starter:** alle delingsinnstillinger for delte disker er låst til «tillat» og kan ikke endres. Det betyr at:
+              * Bidragsytere og innholdsadministratorer kan dele filer med personer som ikke er medlemmer av disken, også med «Alle som har linken». Gather kan verken se eller angre slike delinger.
+              * Lesere og kommentatorer kan alltid laste ned, skrive ut og kopiere filer.
+          * **Business Standard og høyere:** du kan endre delingsinnstillingene for delte disker i Google Administrasjonskonsoll. Hvis du slår av **«Tillat at personer som ikke er medlemmer av den delte disken, legges til i filer»**, kan ikke medlemmer dele filer med noen utenfor disken. Gjør det bare for disker du knytter til Gather i sin helhet. Når du knytter til én enkelt mappe eller fil, gir Gather tilgang bare til det elementet, uten å gjøre personene til medlemmer av disken, og da må innstillingen være slått på.
+
+          Gi grupper nivået **Leser** eller **Kommentator** uansett abonnement, med mindre de må redigere. Gi bare **Bidragsyter** eller **Innholdsadministrator** til grupper du stoler på at deler filer på en ansvarlig måte.
+
+          ## Superadministratorrettigheter og sikkerhet
+
+          Gather logger inn med én Workspace-konto og lagrer et token for den, kryptert. Tokenet lar bare Gather bruke Google Drive og se kontoens e-postadresse. Det kan ikke opprette eller slette brukere, tilbakestille passord eller lese e-post.
+
+          Innenfor Google Drive kan tokenet derimot gjøre alt kontoen kan. Hvis kontoen er superadministratoren deres (og det er den hvis Workspace-en bare har én konto):
+
+          * Tokenet når alle filene i Google Drive i Workspace-en, og en superadministrator kan administrere alle delte disker i Workspace-en.
+          * Alle Gather-administratorer i fellesskapet kan knytte hvilken som helst av disse diskene, mappene eller filene til en Gather-gruppe og gi gruppen tilgang, også slike som aldri var ment for Gather.
+          * Hvis tokenet ble stjålet, ville alle filene i Workspace-en være eksponert.
+
+          Tryggere er en **egen konto som bare Gather bruker**, og som ikke er administrator. Gjør den til **Administrator** for bare de delte diskene du knytter til Gather, ikke lagre noe i dens egen «Min disk», og slå på totrinnsbekreftelse. Da når Gather, og Gather-administratorene deres, bare de diskene. Det koster fellesskapet én Workspace-konto til, ikke én per medlem.
+
+          ## Prisalternativer og avveininger
+
+          Medlemmer trenger aldri Workspace-kontoer, så kostnaden avhenger bare av abonnementet og av om dere legger til en egen konto for Gather.
+
+          | Alternativ | Kontoer | Årsavtale | Fleksibelt abonnement | Avveininger |
+          | --- | --- | --- | --- | --- |
+          | Business Starter, én konto | 1 | 7 USD/mnd. | 8,40 USD/mnd. | Billigst. Delingsinnstillingene kan ikke begrenses. Gather bruker superadministratorkontoen deres. |
+          | Business Starter, egen Gather-konto | 2 | 14 USD/mnd. | 16,80 USD/mnd. | Gather og Gather-administratorer når bare de tilknyttede diskene. Delingsinnstillingene kan fortsatt ikke begrenses. |
+          | Business Standard, én konto | 1 | 14 USD/mnd. | 16,80 USD/mnd. | Delingsinnstillingene kan begrenses. Gather bruker superadministratorkontoen deres. |
+          | Business Standard, egen Gather-konto | 2 | 28 USD/mnd. | 33,60 USD/mnd. | Tryggest. Delingsinnstillingene kan begrenses, og Gather når bare de tilknyttede diskene. |
+
+          *Per 2026. Dette er Googles priser i USA, i amerikanske dollar, per måned for hele fellesskapet. Årsavtalen krever ett års binding; det fleksible abonnementet kan sies opp når som helst. Prisene endres og varierer mellom land, så se [Googles prisside](https://workspace.google.com/pricing) for gjeldende priser.*
 
           ## Hovedoppsett
+
+          ### Sette opp Google Drive i Gather
+
+          Før du begynner:
+
+          * Fellesskapet må ha registrert seg for **Google Workspace**. Se abonnementene og alternativene over.
+          * Bestem hvilken konto Gather skal logge inn med: superadministratorkontoen deres eller en egen konto som bare Gather bruker (anbefales, se over). Gi den et navn for fellesskapet (f.eks. drive@dittdomene.no) i stedet for et personnavn (f.eks. ola.nordmann@dittdomene.no).
+          * Opprett de delte diskene dere vil bruke med Gather. Hvis Gather har en egen konto, legger du den kontoen til på hver disk som **Administrator**.
+          * Den som følger stegene nedenfor, må være logget inn hos Google som en bruker med rettigheter som **superadministrator**, fordi den personen oppretter Google Cloud-prosjektet og påloggingsinformasjonen Gather bruker. Hvis Workspace-en bare har én konto, er den kontoen superadministrator.
 
           ### Opprette et prosjekt
 
@@ -136,6 +182,33 @@ nb:
           10. Tilgangsområder
               1. auth/userinfo.email
               2. auth/drive
+
+          ### Koble til Gather
+
+          1. Gå til siden **Innstillinger for Google Drive** i Gather.
+          2. Under **Påloggingsinformasjon for Google Workspace** skriver du inn e-postadressen til kontoen Gather skal logge inn med, og klient-ID-en og klienthemmeligheten du lagret tidligere. Klikk så på **Lagre**.
+          3. Klikk på **Autentiser med Google**, og logg inn hos Google med kontoen Gather skal bruke. Hvis du logger inn med en annen konto, sier Gather fra og kobler ikke til.
+          4. Knytt til de delte diskene deres som beskrevet nedenfor.
+
+          <a name="linking-items"></a>
+          ## Knytte til elementer
+
+          Når Gather er koblet til, bruker du knappen **Knytt til element** på siden Innstillinger for Google Drive for å knytte til noe fra Google Drive:
+
+          * **Delt disk:** det vanlige valget. Medlemmer av gruppene du legger til, kan bla gjennom disken i Gather og åpne filene.
+          * **Mappe** eller **Fil:** gir gruppene tilgang bare til det elementet. Gathers bla-side starter ved den delte disken, så man kan bare komme til en tilknyttet mappe eller fil i Gather hvis man også ser den delte disken den ligger på. Ellers finner man den i Google Drive under «Delt med meg».
+
+          Du trenger ID-en til elementet, som er siste del av adressen i Google Drive. For https://drive.google.com/drive/folders/0AExZ3_Cu5q7uUk9PVA er ID-en for eksempel `0AExZ3_Cu5q7uUk9PVA`.
+
+          Klikk så på **Legg til gruppe** ved siden av elementet, og velg en Gather-gruppe og et tilgangsnivå. Gather gir hvert medlem av gruppen tilgang i Google Drive og fjerner den når personen forlater gruppen. En mappe eller fil kan ikke få et lavere nivå enn gruppen allerede har på den delte disken.
+
+          **Den som bestemmer over en gruppes medlemmer, bestemmer hvem som får tilgang.** Før du legger til en gruppe, sjekk hvordan man kommer inn i den:
+
+          * Gruppens ledere kan legge til medlemmer og endre gruppen til «Åpen» eller «Alle».
+          * Alle i fellesskapet kan bli med i en «Åpen» gruppe.
+          * En «Alle»-gruppe omfatter alle voksne i fellesskapet.
+
+          Bruk en «Lukket» gruppe som bare administreres av personer du stoler på, for sensitive filer.
     item_kinds:
       drive:
         one: "Delt disk" # MT

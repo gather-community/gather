@@ -48,6 +48,7 @@ it:
     item_groups:
       new:
         title: "Aggiungi gruppo all'elemento di Google Drive" # MT
+        group_control_warning: "Chi decide i membri di questo gruppo decide anche chi può accedere a questo elemento in Google Drive. I responsabili del gruppo possono aggiungere membri e impostare il gruppo su «Aperto» o «Tutti», e chiunque nella comunità può unirsi a un gruppo «Aperto». Controlla come si entra in questo gruppo prima di aggiungerlo." # MT
     config:
       index:
         title: "Impostazioni di Google Drive" # MT
@@ -56,12 +57,12 @@ it:
         link_item: "Collega elemento" # MT
         credentials: "Credenziali di Google Workspace" # MT
         add_credentials_html: "La tua comunità non è ancora collegata a Google Drive. Aggiungi le credenziali di Google Workspace per collegarla. Per iniziare, consulta la %{link}." # MT
-        config_guide: "guida alla configurazione" # MT
+        setup_guide: "guida all'installazione" # MT
         authentication: "Autenticazione" # MT
         update_credentials: "Se devi aggiornare le credenziali di Google Workspace, puoi farlo qui." # MT
         introduction: "Introduzione" # MT
         system_user_html: "<strong>Utente di sistema:</strong> %{user}" # MT
-        intro_html: "Aggiungi elementi qui sotto per collegarli a Gather e sincronizzarne i permessi. I Drive condivisi elencati qui sotto vengono mostrati nella %{link} di Gather agli utenti che hanno il permesso. Cartelle e file non sono accessibili dalla pagina di consultazione se il Drive condiviso che li contiene non è accessibile." # MT
+        intro_html: "Aggiungi elementi qui sotto per collegarli a Gather e sincronizzarne i permessi. I Drive condivisi elencati qui sotto vengono mostrati nella %{link} di Gather agli utenti che hanno il permesso. Cartelle e file non sono accessibili dalla pagina di consultazione se il Drive condiviso che li contiene non è accessibile. Per saperne di più, consulta la %{guide_link}." # MT
         browse_page: "pagina di consultazione di Google Drive" # MT
         name: "Nome" # MT
         status: "Stato" # MT
@@ -77,21 +78,66 @@ it:
         revoke: "revocare l'autorizzazione" # MT
         revoke_confirm: "Vuoi davvero revocare l'autorizzazione? Nessuno potrà usare le funzioni di Google Drive per questa comunità finché l'autorizzazione non verrà ripristinata." # MT
       guide:
-        title: "Guida alla configurazione di Google Drive" # MT
+        title: "Guida all'installazione di Google Drive" # MT
         # Markdown, rendered with Gather's Markdown renderer. Google's menu and button names are in quotes
         # or bold so they can be matched to Google's own (translated) interface.
         body: |- # MT
-          Questa guida ti accompagna passo passo per ottenere le credenziali necessarie a collegare il Google Workspace della tua comunità a Gather.
+          ## Come funziona
 
-          ## Prerequisiti
+          Gather si collega a Google Drive tramite un solo account Google Workspace che appartiene alla tua comunità. I file della comunità si trovano in **Drive condivisi**, che appartengono al tuo Workspace e non a una singola persona: così non si perde nulla quando qualcuno trasloca.
 
-          * La comunità deve essersi iscritta a **Google Workspace**.
-              * Il piano Business Starter è sufficiente.
-              * Serve un solo account utente.
-              * Per l'account scegli un nome della comunità (ad es. workspace.admin@tuodominio.it) invece di un nome personale (ad es. mario.rossi@tuodominio.it).
-          * Chi segue queste istruzioni deve aver effettuato l'accesso a Google come utente del Google Workspace della comunità con privilegi di **Super amministratore**. Se hai un solo account, quell'account avrà i privilegi di Super amministratore.
+          I membri non hanno bisogno di un account Workspace proprio. In Gather colleghi un Drive condiviso (o una singola cartella o un singolo file) a uno o più gruppi di Gather e scegli un livello di accesso per ogni gruppo. Gather dà poi accesso in Google Drive a ogni membro di quei gruppi con il suo account Google personale, per esempio un account Gmail gratuito. Quando qualcuno entra in un gruppo o ne esce, o lascia la comunità, Gather aggiorna il suo accesso.
+
+          La maggior parte dei piani Google Workspace si paga per utente. Dare a ogni membro un account Workspace proprio significherebbe un costo mensile per ogni persona. Con Gather la tua comunità paga uno o due account Workspace, a prescindere da quanti membri abbia.
+
+          ## Piani Google Workspace e controllo degli accessi
+
+          Tutti i piani Google Workspace, compreso **Business Starter**, includono i Drive condivisi e permettono di aggiungere persone esterne al tuo Workspace. Gather ne ha bisogno, perché i membri usano i loro account Google personali. Qualunque piano tu scelga, lascia attivo l'accesso per le persone esterne all'organizzazione.
+
+          I piani si differenziano per quanto puoi limitare ciò che le persone fanno una volta che hanno accesso:
+
+          * **Business Starter:** tutte le impostazioni di condivisione dei Drive condivisi sono bloccate su «consenti» e non si possono cambiare. Quindi:
+              * Collaboratori e gestori dei contenuti possono condividere file con persone che non sono membri del Drive, anche con «Chiunque abbia il link». Gather non può vedere né annullare queste condivisioni.
+              * Visualizzatori e commentatori possono sempre scaricare, stampare e copiare i file.
+          * **Business Standard e piani superiori:** puoi cambiare le impostazioni di condivisione dei Drive condivisi nella Console di amministrazione Google. Disattivando **«Consenti l'aggiunta ai file di persone che non sono membri del Drive condiviso»**, i membri non possono più condividere file con nessuno al di fuori del Drive. Fallo solo per i Drive che colleghi a Gather per intero. Quando colleghi una singola cartella o un singolo file, Gather dà accesso solo a quell'elemento senza rendere le persone membri del Drive, e per questo l'impostazione deve restare attiva.
+
+          Con qualsiasi piano, dai ai gruppi il livello **Visualizzatore** o **Commentatore**, a meno che non debbano modificare. Dai **Collaboratore** o **Gestore dei contenuti** solo ai gruppi di cui ti fidi per condividere i file in modo responsabile.
+
+          ## Privilegi di Super amministratore e sicurezza
+
+          Gather accede con un solo account Workspace e conserva per esso un token, cifrato. Il token permette a Gather solo di usare Google Drive e di vedere l'indirizzo email dell'account. Non può creare o eliminare utenti, reimpostare password né leggere le email.
+
+          All'interno di Google Drive, però, il token può fare tutto ciò che può fare l'account. Se l'account è il tuo **Super amministratore** (e lo è se il tuo Workspace ha un solo account):
+
+          * Il token raggiunge tutti i file del Google Drive del tuo Workspace, e un Super amministratore può gestire tutti i Drive condivisi del Workspace.
+          * Qualsiasi amministratore di Gather della tua comunità può collegare uno qualsiasi di questi Drive, cartelle o file a un gruppo di Gather e dare accesso al gruppo, anche se non erano mai stati pensati per Gather.
+          * Se il token venisse rubato, tutti i file del tuo Workspace sarebbero esposti.
+
+          La soluzione più sicura è un **account separato, usato solo da Gather**, che non sia amministratore. Rendilo **Gestore** solo dei Drive condivisi che colleghi a Gather, non tenere nulla nel suo «Il mio Drive» e attiva la verifica in due passaggi. Così Gather, e i tuoi amministratori di Gather, raggiungono solo quei Drive. Alla tua comunità costa un account Workspace in più, non uno per membro.
+
+          ## Opzioni di prezzo e compromessi
+
+          I membri non hanno mai bisogno di un account Workspace, quindi il costo dipende solo dal piano e dal fatto che tu aggiunga o meno un account separato per Gather.
+
+          | Opzione | Account | Piano annuale | Piano flessibile | Compromessi |
+          | --- | --- | --- | --- | --- |
+          | Business Starter, un account | 1 | 7 $/mese | 8,40 $/mese | Il più economico. Le impostazioni di condivisione non si possono limitare. Gather usa il tuo account di Super amministratore. |
+          | Business Starter, account Gather separato | 2 | 14 $/mese | 16,80 $/mese | Gather e gli amministratori di Gather raggiungono solo i Drive collegati. Le impostazioni di condivisione non si possono ancora limitare. |
+          | Business Standard, un account | 1 | 14 $/mese | 16,80 $/mese | Le impostazioni di condivisione si possono limitare. Gather usa il tuo account di Super amministratore. |
+          | Business Standard, account Gather separato | 2 | 28 $/mese | 33,60 $/mese | Il più sicuro. Le impostazioni di condivisione si possono limitare e Gather raggiunge solo i Drive collegati. |
+
+          *Dati 2026. Sono i prezzi di Google negli Stati Uniti, in dollari statunitensi, al mese per l'intera comunità. Il piano annuale richiede un impegno di un anno; il piano flessibile si può disdire in qualsiasi momento. I prezzi cambiano e variano da paese a paese, quindi consulta la [pagina dei prezzi di Google](https://workspace.google.com/pricing) per quelli attuali.*
 
           ## Configurazione principale
+
+          ### Configurare Google Drive in Gather
+
+          Prima di iniziare:
+
+          * La tua comunità deve essersi iscritta a **Google Workspace**. Vedi i piani e le opzioni qui sopra.
+          * Decidi con quale account accederà Gather: il tuo account di Super amministratore o un account separato usato solo da Gather (consigliato, vedi sopra). Dagli un nome della comunità (ad es. drive@tuodominio.it) invece di un nome personale (ad es. mario.rossi@tuodominio.it).
+          * Crea i Drive condivisi che vuoi usare con Gather. Se Gather ha un account proprio, aggiungi quell'account a ciascuno di essi come **Gestore**.
+          * Chi segue i passaggi qui sotto deve aver effettuato l'accesso a Google come utente con privilegi di **Super amministratore**, perché crea il progetto Google Cloud e le credenziali che Gather usa. Se il tuo Workspace ha un solo account, quell'account è il Super amministratore.
 
           ### Creare un progetto
 
@@ -136,6 +182,33 @@ it:
           10. Ambiti
               1. auth/userinfo.email
               2. auth/drive
+
+          ### Collegare Gather
+
+          1. In Gather, vai alla pagina **Impostazioni di Google Drive**.
+          2. In **Credenziali di Google Workspace**, inserisci l'indirizzo email dell'account con cui accederà Gather, insieme all'ID client e al client secret che hai salvato prima. Poi fai clic su **Salva**.
+          3. Fai clic su **Autenticati con Google** e accedi a Google con l'account che userà Gather. Se accedi con un altro account, Gather te lo segnala e non si collega.
+          4. Collega i tuoi Drive condivisi come descritto qui sotto.
+
+          <a name="linking-items"></a>
+          ## Collegare elementi
+
+          Quando Gather è collegato, usa il pulsante **Collega elemento** nella pagina Impostazioni di Google Drive per collegare qualcosa da Google Drive:
+
+          * **Drive condiviso:** la scelta abituale. I membri dei gruppi che aggiungi possono sfogliare il Drive in Gather e aprirne i file.
+          * **Cartella** o **File:** dà ai gruppi accesso solo a quell'elemento. La pagina di navigazione di Gather parte dal Drive condiviso, quindi in Gather si arriva a una cartella o a un file collegato solo se si vede anche il suo Drive condiviso. Altrimenti lo si trova in Google Drive in «Condivisi con me».
+
+          Ti serve l'ID dell'elemento, cioè l'ultima parte del suo indirizzo in Google Drive. Per esempio, per https://drive.google.com/drive/folders/0AExZ3_Cu5q7uUk9PVA l'ID è `0AExZ3_Cu5q7uUk9PVA`.
+
+          Poi fai clic su **Aggiungi gruppo** accanto all'elemento e scegli un gruppo di Gather e un livello di accesso. Gather dà accesso in Google Drive a ogni membro di quel gruppo e lo toglie quando la persona esce dal gruppo. Una cartella o un file non può avere un livello più basso di quello che il gruppo ha già sul suo Drive condiviso.
+
+          **Chi decide i membri di un gruppo decide chi ha accesso.** Prima di aggiungere un gruppo, controlla come ci si entra:
+
+          * I responsabili del gruppo possono aggiungere membri e impostare il gruppo su «Aperto» o «Tutti».
+          * Chiunque nella comunità può unirsi a un gruppo «Aperto».
+          * Un gruppo «Tutti» comprende tutti gli adulti della comunità.
+
+          Per i file riservati, usa un gruppo «Chiuso» gestito solo da persone di cui ti fidi.
     item_kinds:
       drive:
         one: "Drive condiviso" # MT

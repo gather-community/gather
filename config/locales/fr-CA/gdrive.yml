@@ -14,7 +14,134 @@ fr-CA:
   gdrive:
     config:
       guide:
-        body: "Ce guide vous accompagne pour obtenir les identifiants nécessaires à la connexion du Google Workspace de votre communauté à Gather.\n\n## Prérequis\n\n* La communauté doit avoir souscrit à **Google Workspace**.\n    * La formule Business Starter suffit.\n    * Un seul compte utilisateur est nécessaire.\n    * Choisissez un nom de communauté pour le compte (par ex. workspace.admin@votredomaine.com) plutôt qu'un nom de personne (par ex. jean.dupont@votredomaine.com).\n* La personne qui suit ces instructions doit être connectée à Google avec un compte du Google Workspace de la communauté ayant les droits **Super administrateur**. Si vous n'avez qu'un compte, il a ces droits.\n\n## Configuration principale\n\n### Créer un projet\n\n1. Rendez-vous sur https://console.cloud.google.com\n2. Vérifiez que vous êtes connecté à Google avec le compte Super administrateur.\n3. Acceptez les conditions d'utilisation. Attendez quelques minutes que la ressource de votre organisation soit provisionnée.\n4. Rendez-vous sur https://console.cloud.google.com/projectcreate pour créer un projet.\n5. Nommez-le **Gather Main**.\n6. Sélectionnez l'organisation de votre domaine.\n7. Utilisez la valeur par défaut pour l'emplacement.\n\n### API activées\n\n1. Avec le nouveau projet sélectionné, rendez-vous sur https://console.cloud.google.com/ → menu principal → API et services → API et services activés\n2. Cliquez sur **Activer les API et les services**.\n3. Activez l'**API Google Drive**.\n\n### ID client OAuth\n\n1. Avec le nouveau projet sélectionné, rendez-vous sur https://console.cloud.google.com/ → menu principal → API et services → API et services activés → Identifiants.\n2. Cliquez sur **Créer des identifiants** → **ID client OAuth**\n3. Sélectionnez **Application Web**.\n4. Nom : **Drive OAuth Client ID**.\n5. Sous **Origines JavaScript autorisées**, ajoutez https://gather.coop.\n6. Sous **URI de redirection autorisés**, ajoutez https://gather.coop/gdrive/setup/auth/callback.\n7. Copiez l'ID client et le code secret en lieu sûr pour plus tard.\n    1. L'ID client devrait ressembler à `302773344240-7g2n5abcdef8es2cvpc0roj7t.apps.googleusercontent.com`\n    2. Le code secret du client devrait ressembler à `AIza73uyhc63ehd763ehesysqyhw-hei2asda_2rs`\n\n### Écran de consentement OAuth\n\n1. Avec le nouveau projet sélectionné, rendez-vous sur https://console.cloud.google.com/ → menu principal → API et services → Écran de consentement OAuth.\n2. Choisissez **Interne**.\n3. Nom de l'application : **Gather**.\n4. Adresse courriel d'assistance utilisateur : l'adresse courriel du compte Super administrateur.\n5. Pas de logo.\n6. Page d'accueil de l'application : https://gather.coop\n7. Règles de confidentialité : https://gather.coop/privacy-policy\n8. Domaines autorisés :\n    1. gather.coop\n9. Adresse courriel du développeur : support@gather.coop\n10. Champs d'application\n    1. auth/userinfo.email\n    2. auth/drive" # MT
+        body: |- # MT
+          ## Comment ça marche
+
+          Gather se connecte à Google Drive avec un seul compte Google Workspace qui appartient à votre communauté. Les fichiers de votre communauté sont rangés dans des **Drive partagés**, qui appartiennent à votre Workspace et non à une personne en particulier : rien ne se perd quand quelqu'un déménage.
+
+          Les membres n'ont pas besoin de leur propre compte Workspace. Dans Gather, vous liez un Drive partagé (ou un seul dossier ou fichier) à un ou plusieurs groupes Gather, et vous choisissez un niveau d'accès pour chaque groupe. Gather donne alors accès dans Google Drive à chaque membre de ces groupes, avec son propre compte Google personnel, par exemple un compte Gmail gratuit. Quand quelqu'un rejoint ou quitte un groupe, ou quitte la communauté, Gather met son accès à jour.
+
+          La plupart des formules Google Workspace sont facturées par utilisateur. Donner à chaque membre son propre compte Workspace coûterait un abonnement mensuel par personne. Avec Gather, votre communauté paie un ou deux comptes Workspace, quel que soit son nombre de membres.
+
+          ## Formules Google Workspace et contrôle des accès
+
+          Toutes les formules Google Workspace, y compris **Business Starter**, comprennent les Drive partagés et permettent d'y ajouter des personnes extérieures à votre Workspace. Gather en a besoin, car les membres utilisent leur compte Google personnel. Quelle que soit votre formule, laissez activé l'accès pour les personnes extérieures à votre organisation.
+
+          Les formules diffèrent par ce que vous pouvez limiter une fois l'accès donné :
+
+          * **Business Starter :** tous les paramètres de partage des Drive partagés sont bloqués sur « autoriser » et ne peuvent pas être modifiés. Ainsi :
+              * Les contributeurs et les gestionnaires de contenu peuvent partager des fichiers avec des personnes qui ne sont pas membres du Drive, y compris avec « Tous les utilisateurs disposant du lien ». Gather ne peut ni voir ni annuler ces partages.
+              * Les lecteurs et les commentateurs peuvent toujours télécharger, imprimer et copier les fichiers.
+          * **Business Standard et formules supérieures :** vous pouvez modifier les paramètres de partage des Drive partagés dans la console d'administration Google. Désactiver **« Autoriser l'ajout aux fichiers de personnes qui ne sont pas membres du Drive partagé »** empêche les membres de partager des fichiers avec des personnes extérieures au Drive. Ne le faites que pour les Drive que vous liez à Gather en entier. Quand vous liez un seul dossier ou fichier, Gather donne accès à cet élément seulement, sans rendre les personnes membres du Drive : ce paramètre doit alors rester activé.
+
+          Quelle que soit la formule, donnez aux groupes le niveau **Lecteur** ou **Commentateur**, sauf s'ils doivent modifier des fichiers. Ne donnez **Contributeur** ou **Gestionnaire de contenu** qu'aux groupes à qui vous faites confiance pour partager les fichiers de façon responsable.
+
+          ## Droits de Super administrateur et sécurité
+
+          Gather se connecte avec un seul compte Workspace et conserve pour ce compte un jeton, stocké chiffré. Ce jeton permet seulement à Gather d'utiliser Google Drive et de voir l'adresse courriel du compte. Il ne permet pas de créer ou de supprimer des utilisateurs, de réinitialiser des mots de passe ni de lire les courriels.
+
+          Dans Google Drive, en revanche, le jeton peut faire tout ce que ce compte peut faire. Si ce compte est votre **Super administrateur** (et c'est le cas si votre Workspace n'a qu'un seul compte) :
+
+          * Le jeton peut atteindre tous les fichiers du Google Drive de votre Workspace, et un Super administrateur peut gérer tous les Drive partagés du Workspace.
+          * N'importe quel administrateur Gather de votre communauté peut lier n'importe lequel de ces Drive, dossiers ou fichiers à un groupe Gather et lui en donner l'accès, y compris ceux qui n'ont jamais été prévus pour Gather.
+          * Si le jeton était volé, tous les fichiers de votre Workspace seraient exposés.
+
+          La configuration la plus sûre est un **compte distinct, utilisé seulement par Gather**, qui n'est pas administrateur. Faites-en un **Gestionnaire** des seuls Drive partagés que vous liez à Gather, ne gardez rien dans son propre « Mon Drive » et activez la validation en deux étapes. Gather, et vos administrateurs Gather, n'auront alors accès qu'à ces Drive. Cela coûte à votre communauté un compte Workspace de plus, et non un par membre.
+
+          ## Options de prix et compromis
+
+          Les membres n'ont jamais besoin de compte Workspace : votre coût dépend seulement de votre formule et de l'ajout ou non d'un compte distinct pour Gather.
+
+          | Option | Comptes | Formule annuelle | Formule flexible | Compromis |
+          | --- | --- | --- | --- | --- |
+          | Business Starter, un compte | 1 | 7 $/mois | 8,40 $/mois | La moins chère. Les paramètres de partage ne peuvent pas être limités. Gather utilise votre compte Super administrateur. |
+          | Business Starter, compte Gather distinct | 2 | 14 $/mois | 16,80 $/mois | Gather et les administrateurs Gather n'ont accès qu'aux Drive liés. Les paramètres de partage ne peuvent toujours pas être limités. |
+          | Business Standard, un compte | 1 | 14 $/mois | 16,80 $/mois | Les paramètres de partage peuvent être limités. Gather utilise votre compte Super administrateur. |
+          | Business Standard, compte Gather distinct | 2 | 28 $/mois | 33,60 $/mois | La plus sûre. Les paramètres de partage peuvent être limités, et Gather n'a accès qu'aux Drive liés. |
+
+          *En 2026. Ce sont les prix de Google aux États-Unis, en dollars américains, par mois pour toute la communauté. La formule annuelle demande un engagement d'un an ; la formule flexible peut être résiliée à tout moment. Les prix changent et varient selon les pays : consultez la [page des tarifs de Google](https://workspace.google.com/pricing) pour les prix actuels.*
+
+          ## Configuration principale
+
+          ### Configurer Google Drive dans Gather
+
+          Avant de commencer :
+
+          * Votre communauté doit avoir souscrit à **Google Workspace**. Voir les formules et options ci-dessus.
+          * Choisissez le compte avec lequel Gather se connectera : votre compte Super administrateur, ou un compte distinct utilisé seulement par Gather (recommandé, voir ci-dessus). Donnez-lui un nom de communauté (par ex. drive@votredomaine.com) plutôt qu'un nom de personne (par ex. jean.dupont@votredomaine.com).
+          * Créez les Drive partagés que vous voulez utiliser avec Gather. Si Gather a son propre compte, ajoutez ce compte à chacun d'eux comme **Gestionnaire**.
+          * La personne qui suit les étapes ci-dessous doit être connectée à Google avec un compte ayant les droits **Super administrateur**, car elle crée le projet Google Cloud et les identifiants que Gather utilise. Si votre Workspace n'a qu'un seul compte, ce compte est le Super administrateur.
+
+          ### Créer un projet
+
+          1. Rendez-vous sur https://console.cloud.google.com
+          2. Vérifiez que vous êtes connecté à Google avec le compte Super administrateur.
+          3. Acceptez les conditions d'utilisation. Attendez quelques minutes que la ressource de votre organisation soit provisionnée.
+          4. Rendez-vous sur https://console.cloud.google.com/projectcreate pour créer un projet.
+          5. Nommez-le **Gather Main**.
+          6. Sélectionnez l'organisation de votre domaine.
+          7. Utilisez la valeur par défaut pour l'emplacement.
+
+          ### API activées
+
+          1. Avec le nouveau projet sélectionné, rendez-vous sur https://console.cloud.google.com/ → menu principal → API et services → API et services activés
+          2. Cliquez sur **Activer les API et les services**.
+          3. Activez l'**API Google Drive**.
+
+          ### ID client OAuth
+
+          1. Avec le nouveau projet sélectionné, rendez-vous sur https://console.cloud.google.com/ → menu principal → API et services → API et services activés → Identifiants.
+          2. Cliquez sur **Créer des identifiants** → **ID client OAuth**
+          3. Sélectionnez **Application Web**.
+          4. Nom : **Drive OAuth Client ID**.
+          5. Sous **Origines JavaScript autorisées**, ajoutez https://gather.coop.
+          6. Sous **URI de redirection autorisés**, ajoutez https://gather.coop/gdrive/setup/auth/callback.
+          7. Copiez l'ID client et le code secret en lieu sûr pour plus tard.
+              1. L'ID client devrait ressembler à `302773344240-7g2n5abcdef8es2cvpc0roj7t.apps.googleusercontent.com`
+              2. Le code secret du client devrait ressembler à `AIza73uyhc63ehd763ehesysqyhw-hei2asda_2rs`
+
+          ### Écran de consentement OAuth
+
+          1. Avec le nouveau projet sélectionné, rendez-vous sur https://console.cloud.google.com/ → menu principal → API et services → Écran de consentement OAuth.
+          2. Choisissez **Interne**.
+          3. Nom de l'application : **Gather**.
+          4. Adresse courriel d'assistance utilisateur : l'adresse courriel du compte Super administrateur.
+          5. Pas de logo.
+          6. Page d'accueil de l'application : https://gather.coop
+          7. Règles de confidentialité : https://gather.coop/privacy-policy
+          8. Domaines autorisés :
+              1. gather.coop
+          9. Adresse courriel du développeur : support@gather.coop
+          10. Champs d'application
+              1. auth/userinfo.email
+              2. auth/drive
+
+          ### Connecter Gather
+
+          1. Dans Gather, allez sur la page **Paramètres Google Drive**.
+          2. Sous **Identifiants Google Workspace**, saisissez l'adresse courriel du compte avec lequel Gather se connectera, ainsi que l'ID client et le code secret enregistrés plus tôt. Puis cliquez sur **Enregistrer**.
+          3. Cliquez sur **S'authentifier avec Google** et connectez-vous à Google avec le compte que Gather utilisera. Si vous vous connectez avec un autre compte, Gather vous le signalera et ne se connectera pas.
+          4. Liez vos Drive partagés, comme décrit ci-dessous.
+
+          <a name="linking-items"></a>
+          ## Lier des éléments
+
+          Une fois Gather connecté, utilisez le bouton **Lier un élément** de la page Paramètres Google Drive pour lier un élément de Google Drive :
+
+          * **Drive partagé :** le choix habituel. Les membres des groupes que vous ajoutez peuvent parcourir le Drive dans Gather et ouvrir ses fichiers.
+          * **Dossier** ou **Fichier :** donne aux groupes l'accès à cet élément seulement. La page de navigation de Gather commence au Drive partagé : on ne peut donc atteindre un dossier ou un fichier lié dans Gather que si l'on voit aussi son Drive partagé. Sinon, on le trouve dans Google Drive sous « Partagés avec moi ».
+
+          Il vous faut l'ID de l'élément, c'est-à-dire la dernière partie de son adresse dans Google Drive. Par exemple, pour https://drive.google.com/drive/folders/0AExZ3_Cu5q7uUk9PVA l'ID est `0AExZ3_Cu5q7uUk9PVA`.
+
+          Cliquez ensuite sur **Ajouter un groupe** à côté de l'élément, puis choisissez un groupe Gather et un niveau d'accès. Gather donne l'accès dans Google Drive à chaque membre de ce groupe, et le retire quand la personne quitte le groupe. Un dossier ou un fichier ne peut pas recevoir un niveau inférieur à celui que le groupe a déjà sur son Drive partagé.
+
+          **Les personnes qui gèrent les membres d'un groupe décident de qui a accès.** Avant d'ajouter un groupe, vérifiez comment on y entre :
+
+          * Les responsables du groupe peuvent ajouter des membres et passer le groupe en « Ouvert » ou « Tout le monde ».
+          * Toute personne de la communauté peut rejoindre un groupe « Ouvert ».
+          * Un groupe « Tout le monde » comprend tous les adultes de la communauté.
+
+          Pour les fichiers sensibles, utilisez un groupe « Fermé » géré seulement par des personnes de confiance.
     migration:
       request:
         mobile_warning:

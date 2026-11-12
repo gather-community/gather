@@ -36,6 +36,7 @@ en:
     item_groups:
       new:
         title: "Add Group to Google Drive Item"
+        group_control_warning: "Whoever controls this group's membership also controls who can access this item in Google Drive. Group managers can add members and change the group to 'Open' or 'Everybody', and anyone in the community can join an 'Open' group. Check how people get into this group before you add it."
     config:
       index:
         title: "Google Drive Settings"
@@ -44,12 +45,12 @@ en:
         link_item: "Link Item"
         credentials: "Google Workspace Credentials"
         add_credentials_html: "Your community is not yet connected to Google Drive. Add your Google Workspace credentials to connect. See the %{link} for how to get started."
-        config_guide: "config guide"
+        setup_guide: "Setup Guide"
         authentication: "Authentication"
         update_credentials: "If you need to update your Google Workspace credentials, you can do so here."
         introduction: "Introduction"
         system_user_html: "<strong>System User:</strong> %{user}"
-        intro_html: "Add items below to link them to Gather and sync permissions. Shared drives listed below are shown on the Gather %{link} for users that have permission. Folders and files will not be accessible via the browse page unless their parent shared drive is accessible."
+        intro_html: "Add items below to link them to Gather and sync permissions. Shared drives listed below are shown on the Gather %{link} for users that have permission. Folders and files will not be accessible via the browse page unless their parent shared drive is accessible. See the %{guide_link} for more info."
         browse_page: "Google Drive browse page"
         name: "Name"
         status: "Status"
@@ -65,21 +66,66 @@ en:
         revoke: "revoke authorization"
         revoke_confirm: "Are you sure you want to revoke authorization? Nobody will be able to use Google Drive features for this community until authorization is re-established."
       guide:
-        title: "Google Drive Config Guide"
+        title: "Google Drive Setup Guide"
         # Markdown, rendered with Gather's Markdown renderer. Google's menu and button names are in quotes
         # or bold so they can be matched to Google's own (translated) interface.
         body: |-
-          This guide will walk you through the process of obtaining the credentials needed to connect your community's Google Workspace to Gather.
+          ## How it works
 
-          ## Prerequisites
+          Gather connects to Google Drive through one Google Workspace account that belongs to your community. Your community's files live in **shared drives**, which belong to your Workspace rather than to any one person, so nothing is lost when someone moves out.
 
-          * The community must have signed up for **Google Workspace**.
-              * The Business Starter plan is sufficient.
-              * Only one user account is needed.
-              * Choose a community name for the account (e.g. workspace.admin@yourdomain.com) instead of a personal name (e.g. johndoe@yourdomain.com).
-          * Whoever is following these instructions must be logged in to Google as a user in the community's Google Workspace with **Super Admin** privileges. If you only have one account, that account will have Super Admin privileges.
+          Members don't need Workspace accounts of their own. In Gather, you link a shared drive (or a single folder or file) to one or more Gather groups, and pick an access level for each group. Gather then gives each member of those groups access in Google Drive through their own personal Google account, such as a free Gmail account. When someone joins or leaves a group, or leaves the community, Gather updates their access to match.
+
+          Most Google Workspace plans charge per user. Giving every member a Workspace account of their own would mean a monthly fee for every person. With Gather, your community pays for one or two Workspace accounts, however many members it has.
+
+          ## Google Workspace Tiers and Access Controls
+
+          Every Google Workspace plan, including **Business Starter**, has shared drives, and lets you add people from outside your Workspace to them. Gather depends on this, because members use their personal Google accounts. Whatever plan you choose, keep access for people outside your organization turned on.
+
+          The plans differ in how far you can limit what people do once they have access:
+
+          * **Business Starter:** every shared drive sharing setting is locked to "allow" and can't be changed. So:
+              * Contributors and Content managers can share files with people who aren't members of the drive, including with "anyone with the link". Gather can't see or undo those shares.
+              * Viewers and Commenters can always download, print, and copy files.
+          * **Business Standard and higher:** you can change shared drive sharing settings in the Google Admin console. Turning off **"Allow people who aren't shared drive members to be added to files"** stops members from sharing files with anyone outside the drive. Only do this for drives you link to Gather as a whole. When you link a single folder or file, Gather gives people access to just that item, without making them members of the drive, so that needs this setting turned on.
+
+          On any plan, give groups the **Viewer** or **Commenter** level unless they need to edit. Only give **Contributor** or **Content manager** to groups you trust to share files responsibly.
+
+          ## Super Admin Privileges and Security
+
+          Gather signs in as one Workspace account and keeps a token for it, stored encrypted. The token only lets Gather use Google Drive and see the account's email address. It can't create or delete users, reset passwords, or read email.
+
+          Within Google Drive, though, the token can do anything that account can do. If the account is your **Super Admin** (and if your Workspace has only one account, it is):
+
+          * The token can reach every file in your Workspace's Google Drive, and a Super Admin can manage every shared drive in the Workspace.
+          * Any Gather Admin in your community can link any of those drives, folders, or files to a Gather group and give that group access, including ones never meant for Gather.
+          * If the token were ever stolen, all of your Workspace's files would be exposed.
+
+          The safer setup is a **separate account used only by Gather**, which is not an admin. Make it a **Manager** of only the shared drives you link to Gather, keep nothing in its own "My Drive", and turn on 2-Step Verification. Then Gather, and your Gather Admins, can reach only those drives. This costs your community one more Workspace account, not one per member.
+
+          ## Price Options and Tradeoffs
+
+          Members never need Workspace accounts, so your cost depends only on your plan and on whether you add a separate account for Gather.
+
+          | Option | Accounts | Annual plan | Flexible plan | Tradeoffs |
+          | --- | --- | --- | --- | --- |
+          | Business Starter, one account | 1 | $7/month | $8.40/month | Cheapest. Sharing settings can't be limited. Gather uses your Super Admin account. |
+          | Business Starter, separate Gather account | 2 | $14/month | $16.80/month | Gather and Gather Admins can reach only the linked drives. Sharing settings still can't be limited. |
+          | Business Standard, one account | 1 | $14/month | $16.80/month | Sharing settings can be limited. Gather uses your Super Admin account. |
+          | Business Standard, separate Gather account | 2 | $28/month | $33.60/month | Most secure. Sharing settings can be limited, and Gather can reach only the linked drives. |
+
+          *As of 2026. These are Google's US prices in USD, per month for the whole community. The annual plan needs a one-year commitment; the flexible plan can be cancelled at any time. Prices change and vary by country, so check [Google's pricing page](https://workspace.google.com/pricing) for current prices.*
 
           ## Main Config
+
+          ### Setting Up Google Drive in Gather
+
+          Before you start:
+
+          * Your community must have signed up for **Google Workspace**. See the plans and options above.
+          * Decide which account Gather will sign in as: your Super Admin account, or a separate account used only by Gather (recommended, see above). Give it a community name (e.g. drive@yourdomain.com) rather than a personal one (e.g. johndoe@yourdomain.com).
+          * Create the shared drives you want to use with Gather. If Gather has its own account, add that account to each of them as a **Manager**.
+          * Whoever follows the steps below must be signed in to Google as a user with **Super Admin** privileges, because they create the Google Cloud project and credentials that Gather uses. If your Workspace has only one account, that account is the Super Admin.
 
           ### Creating a Project
 
@@ -124,6 +170,33 @@ en:
           10. Scopes
               1. auth/userinfo.email
               2. auth/drive
+
+          ### Connecting Gather
+
+          1. In Gather, go to the **Google Drive Settings** page.
+          2. Under **Google Workspace Credentials**, enter the email address of the account Gather will sign in as, and the Client ID and secret you saved earlier. Then click **Save**.
+          3. Click **Authenticate With Google** and sign in to Google as the account Gather will sign in as. If you sign in as a different account, Gather will tell you and won't connect.
+          4. Link your shared drives, as described below.
+
+          <a name="linking-items"></a>
+          ## Linking Items
+
+          Once Gather is connected, use the **Link Item** button on the Google Drive Settings page to link something from Google Drive:
+
+          * **Shared Drive:** the usual choice. Members of the groups you add can browse the drive in Gather and open its files.
+          * **Folder** or **File:** gives groups access to just that item. Gather's browse page starts at the shared drive, so people can only browse to a linked folder or file in Gather if they can also see its shared drive. Otherwise, they can find it in Google Drive under "Shared with me".
+
+          You'll need the item's ID, which is the last part of its address in Google Drive. For example, for https://drive.google.com/drive/folders/0AExZ3_Cu5q7uUk9PVA the ID is `0AExZ3_Cu5q7uUk9PVA`.
+
+          Then click **Add Group** next to the item, and pick a Gather group and an access level. Gather gives every member of that group access in Google Drive, and takes it away when they leave the group. A folder or file can't be given a lower level than the group already has on its shared drive.
+
+          **Whoever controls a group's membership controls who gets access.** Before you add a group, check how people get into it:
+
+          * Group managers can add members, and can change the group to "Open" or "Everybody".
+          * Anyone in the community can join an "Open" group.
+          * An "Everybody" group includes every adult in the community.
+
+          For sensitive files, use a "Closed" group managed only by people you trust.
     item_kinds:
       drive:
         one: "Shared Drive"

@@ -48,6 +48,7 @@ fi:
     item_groups:
       new:
         title: "Lisää ryhmä Google Drive -kohteeseen" # MT
+        group_control_warning: "Se, joka päättää tämän ryhmän jäsenistä, päättää myös, kuka pääsee tähän kohteeseen Google Drivessa. Ryhmän vastaavat voivat lisätä jäseniä ja muuttaa ryhmän tyypiksi ”Avoin” tai ”Kaikki”, ja kuka tahansa yhteisöstä voi liittyä ”Avoimeen” ryhmään. Tarkista, miten ryhmään pääsee, ennen kuin lisäät sen." # MT
     config:
       index:
         title: "Google Driven asetukset" # MT
@@ -56,12 +57,12 @@ fi:
         link_item: "Linkitä kohde" # MT
         credentials: "Google Workspacen tunnistetiedot" # MT
         add_credentials_html: "Yhteisöäsi ei ole vielä yhdistetty Google Driveen. Yhdistä lisäämällä Google Workspacen tunnistetiedot. Ohjeet alkuun pääsemiseksi: %{link}." # MT
-        config_guide: "määritysopas" # MT
+        setup_guide: "käyttöönotto-oppaasta" # MT
         authentication: "Tunnistautuminen" # MT
         update_credentials: "Jos sinun täytyy päivittää Google Workspacen tunnistetiedot, voit tehdä sen täällä." # MT
         introduction: "Johdanto" # MT
         system_user_html: "<strong>Järjestelmäkäyttäjä:</strong> %{user}" # MT
-        intro_html: "Lisää alle kohteita linkittääksesi ne Gatheriin ja synkronoidaksesi käyttöoikeudet. Alla luetellut jaetut Drivet näytetään Gatherin sivulla %{link} käyttäjille, joilla on oikeus. Kansiot ja tiedostot eivät ole käytettävissä selaussivulla, ellei niiden jaettu Drive ole käytettävissä." # MT
+        intro_html: "Lisää alle kohteita linkittääksesi ne Gatheriin ja synkronoidaksesi käyttöoikeudet. Alla luetellut jaetut Drivet näytetään Gatherin sivulla %{link} käyttäjille, joilla on oikeus. Kansiot ja tiedostot eivät ole käytettävissä selaussivulla, ellei niiden jaettu Drive ole käytettävissä. Lisätietoja saat %{guide_link}." # MT
         browse_page: "Google Driven selaus" # MT
         name: "Nimi" # MT
         status: "Tila" # MT
@@ -77,21 +78,66 @@ fi:
         revoke: "peruuttaa valtuutuksen" # MT
         revoke_confirm: "Haluatko varmasti peruuttaa valtuutuksen? Kukaan ei voi käyttää tämän yhteisön Google Drive -toimintoja, ennen kuin valtuutus on palautettu." # MT
       guide:
-        title: "Google Driven määritysopas" # MT
+        title: "Google Driven käyttöönotto-opas" # MT
         # Markdown, rendered with Gather's Markdown renderer. Google's menu and button names are in quotes
         # or bold so they can be matched to Google's own (translated) interface.
         body: |- # MT
-          Tämä opas neuvoo, miten saat tunnistetiedot, joita tarvitaan yhteisösi Google Workspacen yhdistämiseen Gatheriin.
+          ## Miten se toimii
 
-          ## Edellytykset
+          Gather yhdistää Google Driveen yhden Google Workspace -tilin kautta, joka kuuluu yhteisöllesi. Yhteisön tiedostot ovat **jaetuissa Driveissa**, jotka kuuluvat Workspacellesi eivätkä kenellekään yksittäiselle henkilölle. Mitään ei katoa, kun joku muuttaa pois.
 
-          * Yhteisön täytyy olla rekisteröitynyt **Google Workspaceen**.
-              * Business Starter -paketti riittää.
-              * Tarvitaan vain yksi käyttäjätili.
-              * Valitse tilille yhteisöä kuvaava nimi (esim. workspace.admin@oma-verkkotunnus.fi) henkilön nimen (esim. matti.meikalainen@oma-verkkotunnus.fi) sijaan.
-          * Näitä ohjeita noudattavan henkilön täytyy olla kirjautunut Googleen yhteisön Google Workspacen käyttäjänä, jolla on **pääjärjestelmänvalvojan** oikeudet. Jos sinulla on vain yksi tili, sillä on pääjärjestelmänvalvojan oikeudet.
+          Jäsenet eivät tarvitse omia Workspace-tilejä. Gatherissa linkität jaetun Driven (tai yksittäisen kansion tai tiedoston) yhteen tai useampaan Gather-ryhmään ja valitset jokaiselle ryhmälle käyttöoikeustason. Gather antaa sitten ryhmien jokaiselle jäsenelle pääsyn Google Driveen tämän omalla henkilökohtaisella Google-tilillä, esimerkiksi ilmaisella Gmail-tilillä. Kun joku liittyy ryhmään tai lähtee siitä tai lähtee yhteisöstä, Gather päivittää pääsyn.
+
+          Useimmat Google Workspace -paketit hinnoitellaan käyttäjäkohtaisesti. Oma Workspace-tili jokaiselle jäsenelle tarkoittaisi kuukausimaksua jokaisesta henkilöstä. Gatherin avulla yhteisösi maksaa yhdestä tai kahdesta Workspace-tilistä, olipa jäseniä kuinka monta tahansa.
+
+          ## Google Workspace -paketit ja käyttöoikeuksien hallinta
+
+          Kaikissa Google Workspace -paketeissa, myös **Business Starterissa**, on jaetut Drivet, ja niihin voi lisätä Workspacesi ulkopuolisia henkilöitä. Gather tarvitsee tätä, koska jäsenet käyttävät henkilökohtaisia Google-tilejään. Pidä organisaation ulkopuolisten pääsy päällä, valitsitpa minkä paketin tahansa.
+
+          Paketit eroavat siinä, kuinka paljon voit rajoittaa, mitä ihmiset voivat tehdä saatuaan pääsyn:
+
+          * **Business Starter:** kaikki jaettujen Drivejen jakamisasetukset on lukittu sallituiksi, eikä niitä voi muuttaa. Siksi:
+              * Osallistujat ja sisällönhallitsijat voivat jakaa tiedostoja Driven ulkopuolisille henkilöille, myös asetuksella ”Kaikki, joilla on linkki”. Gather ei näe näitä jakoja eikä voi perua niitä.
+              * Katselijat ja kommentoijat voivat aina ladata, tulostaa ja kopioida tiedostoja.
+          * **Business Standard ja ylemmät:** voit muuttaa jaettujen Drivejen jakamisasetuksia Googlen hallintakonsolissa. Kun poistat käytöstä asetuksen **”Salli jaetun Driven ulkopuolisten henkilöiden lisääminen tiedostoihin”**, jäsenet eivät voi jakaa tiedostoja kenellekään Driven ulkopuolelle. Tee näin vain Driveille, jotka linkität Gatheriin kokonaisina. Kun linkität yksittäisen kansion tai tiedoston, Gather antaa pääsyn vain siihen kohteeseen tekemättä ihmisistä Driven jäseniä, joten asetuksen täytyy silloin olla päällä.
+
+          Anna ryhmille kaikissa paketeissa taso **Katselija** tai **Kommentoija**, elleivät ne tarvitse muokkausoikeutta. Anna **Osallistuja** tai **Sisällönhallitsija** vain ryhmille, joihin luotat jakamaan tiedostoja vastuullisesti.
+
+          ## Pääjärjestelmänvalvojan oikeudet ja tietoturva
+
+          Gather kirjautuu sisään yhdellä Workspace-tilillä ja tallentaa sille tunnuksen salattuna. Tunnuksella Gather voi vain käyttää Google Drivea ja nähdä tilin sähköpostiosoitteen. Sillä ei voi luoda tai poistaa käyttäjiä, nollata salasanoja eikä lukea sähköposteja.
+
+          Google Driven sisällä tunnus voi kuitenkin tehdä kaiken, mitä tili voi. Jos tili on **pääjärjestelmänvalvojasi** (ja se on, jos Workspacessasi on vain yksi tili):
+
+          * Tunnus ulottuu kaikkiin Workspacesi Google Driven tiedostoihin, ja pääjärjestelmänvalvoja voi hallita kaikkia Workspacen jaettuja Driveja.
+          * Kuka tahansa yhteisösi Gather-ylläpitäjä voi linkittää minkä tahansa näistä Driveista, kansioista tai tiedostoista Gather-ryhmään ja antaa ryhmälle pääsyn, myös sellaisiin, joita ei koskaan tarkoitettu Gatheriin.
+          * Jos tunnus varastettaisiin, kaikki Workspacesi tiedostot olisivat paljaana.
+
+          Turvallisempi ratkaisu on **erillinen tili vain Gatherin käyttöön**, joka ei ole järjestelmänvalvoja. Tee siitä **Ylläpitäjä** vain niihin jaettuihin Driveihin, jotka linkität Gatheriin, älä säilytä mitään sen omassa ”Oma Drive” -kansiossa ja ota käyttöön kaksivaiheinen vahvistus. Silloin Gather ja Gather-ylläpitäjäsi pääsevät vain näihin Driveihin. Tämä maksaa yhteisöllesi yhden Workspace-tilin lisää, ei yhtä jokaista jäsentä kohden.
+
+          ## Hintavaihtoehdot ja niiden vaikutukset
+
+          Jäsenet eivät koskaan tarvitse Workspace-tilejä, joten kustannus riippuu vain paketista ja siitä, lisäätkö erillisen tilin Gatherille.
+
+          | Vaihtoehto | Tilejä | Vuosisopimus | Joustava paketti | Vaikutukset |
+          | --- | --- | --- | --- | --- |
+          | Business Starter, yksi tili | 1 | 7 $/kk | 8,40 $/kk | Edullisin. Jakamisasetuksia ei voi rajoittaa. Gather käyttää pääjärjestelmänvalvojan tiliäsi. |
+          | Business Starter, erillinen Gather-tili | 2 | 14 $/kk | 16,80 $/kk | Gather ja Gather-ylläpitäjät pääsevät vain linkitettyihin Driveihin. Jakamisasetuksia ei vieläkään voi rajoittaa. |
+          | Business Standard, yksi tili | 1 | 14 $/kk | 16,80 $/kk | Jakamisasetuksia voi rajoittaa. Gather käyttää pääjärjestelmänvalvojan tiliäsi. |
+          | Business Standard, erillinen Gather-tili | 2 | 28 $/kk | 33,60 $/kk | Turvallisin. Jakamisasetuksia voi rajoittaa, ja Gather pääsee vain linkitettyihin Driveihin. |
+
+          *Vuoden 2026 tilanne. Hinnat ovat Googlen Yhdysvaltain hintoja Yhdysvaltain dollareina, kuukaudessa koko yhteisölle. Vuosisopimus edellyttää vuoden sitoutumista; joustavan paketin voi perua milloin tahansa. Hinnat muuttuvat ja vaihtelevat maittain, joten tarkista ajantasaiset hinnat [Googlen hintasivulta](https://workspace.google.com/pricing).*
 
           ## Päämääritykset
+
+          ### Google Driven käyttöönotto Gatherissa
+
+          Ennen kuin aloitat:
+
+          * Yhteisön täytyy olla rekisteröitynyt **Google Workspaceen**. Katso paketit ja vaihtoehdot yllä.
+          * Päätä, millä tilillä Gather kirjautuu: pääjärjestelmänvalvojan tililläsi vai erillisellä tilillä vain Gatherin käyttöön (suositeltava, katso yllä). Anna tilille yhteisöä kuvaava nimi (esim. drive@oma-verkkotunnus.fi) henkilön nimen (esim. matti.meikalainen@oma-verkkotunnus.fi) sijaan.
+          * Luo jaetut Drivet, joita haluat käyttää Gatherin kanssa. Jos Gatherilla on oma tili, lisää se jokaiseen niistä **Ylläpitäjäksi**.
+          * Alla olevia vaiheita noudattavan henkilön täytyy olla kirjautunut Googleen käyttäjänä, jolla on **pääjärjestelmänvalvojan** oikeudet, koska hän luo Google Cloud -projektin ja tunnistetiedot, joita Gather käyttää. Jos Workspacessasi on vain yksi tili, se on pääjärjestelmänvalvoja.
 
           ### Projektin luominen
 
@@ -136,6 +182,33 @@ fi:
           10. Laajuudet
               1. auth/userinfo.email
               2. auth/drive
+
+          ### Gatherin yhdistäminen
+
+          1. Siirry Gatherissa sivulle **Google Driven asetukset**.
+          2. Kirjoita kohtaan **Google Workspacen tunnistetiedot** sen tilin sähköpostiosoite, jolla Gather kirjautuu, sekä aiemmin tallentamasi asiakastunnus ja asiakassalaisuus. Napsauta sitten **Tallenna**.
+          3. Napsauta **Tunnistaudu Googlella** ja kirjaudu Googleen tilillä, jota Gather käyttää. Jos kirjaudut toisella tilillä, Gather kertoo siitä eikä muodosta yhteyttä.
+          4. Linkitä jaetut Drivesi alla kuvatulla tavalla.
+
+          <a name="linking-items"></a>
+          ## Kohteiden linkittäminen
+
+          Kun Gather on yhdistetty, linkitä jotain Google Drivesta sivun Google Driven asetukset painikkeella **Linkitä kohde**:
+
+          * **Jaettu Drive:** tavallinen valinta. Lisäämiesi ryhmien jäsenet voivat selata Drivea Gatherissa ja avata sen tiedostoja.
+          * **Kansio** tai **Tiedosto:** antaa ryhmille pääsyn vain tähän kohteeseen. Gatherin selaussivu alkaa jaetusta Drivesta, joten linkitettyyn kansioon tai tiedostoon pääsee Gatherissa vain, jos näkee myös sen jaetun Driven. Muuten sen löytää Google Drivesta kohdasta ”Jaettu kanssani”.
+
+          Tarvitset kohteen tunnuksen, joka on sen Google Drive -osoitteen viimeinen osa. Esimerkiksi osoitteessa https://drive.google.com/drive/folders/0AExZ3_Cu5q7uUk9PVA tunnus on `0AExZ3_Cu5q7uUk9PVA`.
+
+          Napsauta sitten kohteen vieressä **Lisää ryhmä** ja valitse Gather-ryhmä ja käyttöoikeustaso. Gather antaa jokaiselle ryhmän jäsenelle pääsyn Google Driveen ja poistaa sen, kun henkilö lähtee ryhmästä. Kansiolle tai tiedostolle ei voi antaa alempaa tasoa kuin ryhmällä jo on sen jaetussa Drivessa.
+
+          **Se, joka päättää ryhmän jäsenistä, päättää, kuka saa pääsyn.** Ennen kuin lisäät ryhmän, tarkista, miten siihen pääsee:
+
+          * Ryhmän vastaavat voivat lisätä jäseniä ja muuttaa ryhmän tyypiksi ”Avoin” tai ”Kaikki”.
+          * Kuka tahansa yhteisöstä voi liittyä ”Avoimeen” ryhmään.
+          * ”Kaikki”-ryhmään kuuluvat kaikki yhteisön aikuiset.
+
+          Käytä arkaluonteisille tiedostoille ”Suljettua” ryhmää, jota hallitsevat vain luotettavat henkilöt.
     item_kinds:
       drive:
         one: "Jaettu Drive" # MT

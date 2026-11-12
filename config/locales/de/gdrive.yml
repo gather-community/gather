@@ -48,6 +48,7 @@ de:
     item_groups:
       new:
         title: "Gruppe zum Google-Drive-Element hinzufügen" # MT
+        group_control_warning: "Wer die Mitglieder dieser Gruppe verwaltet, bestimmt auch, wer in Google Drive auf dieses Element zugreifen kann. Die Gruppenleitung kann Mitglieder hinzufügen und die Gruppe auf „Offen“ oder „Alle“ umstellen, und alle in der Gemeinschaft können einer „Offenen“ Gruppe beitreten. Prüfe, wie man in diese Gruppe kommt, bevor du sie hinzufügst." # MT
     config:
       index:
         title: "Google-Drive-Einstellungen" # MT
@@ -56,12 +57,12 @@ de:
         link_item: "Element verknüpfen" # MT
         credentials: "Google-Workspace-Anmeldedaten" # MT
         add_credentials_html: "Deine Gemeinschaft ist noch nicht mit Google Drive verbunden. Gib deine Google-Workspace-Anmeldedaten ein, um sie zu verbinden. Wie du anfängst, steht in der %{link}." # MT
-        config_guide: "Einrichtungsanleitung" # MT
+        setup_guide: "Einrichtungsanleitung" # MT
         authentication: "Anmeldung" # MT
         update_credentials: "Hier kannst du deine Google-Workspace-Anmeldedaten aktualisieren." # MT
         introduction: "Einführung" # MT
         system_user_html: "<strong>Systemkonto:</strong> %{user}" # MT
-        intro_html: "Füge unten Elemente hinzu, um sie mit Gather zu verknüpfen und die Berechtigungen abzugleichen. Die unten aufgeführten geteilten Ablagen werden auf der %{link} von Gather allen angezeigt, die die Berechtigung dafür haben. Ordner und Dateien sind über die Übersichtsseite nur erreichbar, wenn ihre übergeordnete geteilte Ablage erreichbar ist." # MT
+        intro_html: "Füge unten Elemente hinzu, um sie mit Gather zu verknüpfen und die Berechtigungen abzugleichen. Die unten aufgeführten geteilten Ablagen werden auf der %{link} von Gather allen angezeigt, die die Berechtigung dafür haben. Ordner und Dateien sind über die Übersichtsseite nur erreichbar, wenn ihre übergeordnete geteilte Ablage erreichbar ist. Mehr dazu in der %{guide_link}." # MT
         browse_page: "Google-Drive-Übersichtsseite" # MT
         name: "Name" # MT
         status: "Status" # MT
@@ -81,17 +82,62 @@ de:
         # Markdown, rendered with Gather's Markdown renderer. Google's menu and button names are in quotes
         # or bold so they can be matched to Google's own (translated) interface.
         body: |- # MT
-          Diese Anleitung führt dich durch die Schritte, um die Anmeldedaten zu bekommen, mit denen du den Google Workspace deiner Gemeinschaft mit Gather verbindest.
+          ## So funktioniert es
 
-          ## Voraussetzungen
+          Gather verbindet sich mit Google Drive über ein einziges Google-Workspace-Konto, das deiner Gemeinschaft gehört. Die Dateien deiner Gemeinschaft liegen in **geteilten Ablagen**, die deinem Workspace gehören und nicht einer einzelnen Person. So geht nichts verloren, wenn jemand auszieht.
 
-          * Die Gemeinschaft muss sich für **Google Workspace** registriert haben.
-              * Der Tarif Business Starter reicht aus.
-              * Es wird nur ein Nutzerkonto gebraucht.
-              * Wähle für das Konto einen Namen der Gemeinschaft (z. B. workspace.admin@yourdomain.com) statt eines Personennamens (z. B. maxmustermann@yourdomain.com).
-          * Wer diese Anleitung befolgt, muss bei Google mit einem Konto im Google Workspace der Gemeinschaft angemeldet sein, das **Super Admin**-Rechte hat. Wenn ihr nur ein Konto habt, hat dieses Konto Super-Admin-Rechte.
+          Mitglieder brauchen kein eigenes Workspace-Konto. In Gather verknüpfst du eine geteilte Ablage (oder einen einzelnen Ordner oder eine einzelne Datei) mit einer oder mehreren Gather-Gruppen und wählst für jede Gruppe eine Zugriffsstufe. Gather gibt dann jedem Mitglied dieser Gruppen Zugriff in Google Drive, und zwar über das eigene private Google-Konto, zum Beispiel ein kostenloses Gmail-Konto. Wenn jemand einer Gruppe beitritt, sie verlässt oder die Gemeinschaft verlässt, passt Gather den Zugriff an.
+
+          Die meisten Google-Workspace-Tarife werden pro Nutzer abgerechnet. Ein eigenes Workspace-Konto für jedes Mitglied würde für jede Person eine monatliche Gebühr bedeuten. Mit Gather zahlt deine Gemeinschaft für ein oder zwei Workspace-Konten, egal wie viele Mitglieder sie hat.
+
+          ## Google-Workspace-Tarife und Zugriffskontrolle
+
+          Alle Google-Workspace-Tarife, auch **Business Starter**, haben geteilte Ablagen, und in allen kannst du Personen außerhalb deines Workspace hinzufügen. Gather ist darauf angewiesen, weil Mitglieder ihre privaten Google-Konten nutzen. Lass den Zugriff für Personen außerhalb deiner Organisation in jedem Tarif eingeschaltet.
+
+          Die Tarife unterscheiden sich darin, wie weit du einschränken kannst, was Personen mit ihrem Zugriff tun:
+
+          * **Business Starter:** Alle Freigabeeinstellungen für geteilte Ablagen stehen fest auf „zulassen“ und lassen sich nicht ändern. Das heißt:
+              * Mitbearbeiter und Inhaltsmanager können Dateien für Personen freigeben, die keine Mitglieder der Ablage sind, auch für „Jeder, der über den Link verfügt“. Gather kann diese Freigaben weder sehen noch rückgängig machen.
+              * Betrachter und Kommentatoren können Dateien immer herunterladen, drucken und kopieren.
+          * **Business Standard und höher:** Du kannst die Freigabeeinstellungen für geteilte Ablagen in der Google Admin-Konsole ändern. Wenn du **„Personen, die keine Mitglieder der geteilten Ablage sind, können zu Dateien hinzugefügt werden“** ausschaltest, können Mitglieder keine Dateien mehr für Personen außerhalb der Ablage freigeben. Mach das nur für Ablagen, die du als Ganzes mit Gather verknüpfst. Wenn du einen einzelnen Ordner oder eine einzelne Datei verknüpfst, gibt Gather nur Zugriff auf dieses Element, ohne die Personen zu Mitgliedern der Ablage zu machen. Dafür muss diese Einstellung eingeschaltet bleiben.
+
+          Gib Gruppen in jedem Tarif die Stufe **Betrachter** oder **Kommentator**, wenn sie nicht bearbeiten müssen. Gib **Mitbearbeiter** oder **Inhaltsmanager** nur Gruppen, denen du zutraust, Dateien verantwortungsvoll freizugeben.
+
+          ## Super-Admin-Rechte und Sicherheit
+
+          Gather meldet sich mit einem Workspace-Konto an und speichert dafür ein Token, verschlüsselt. Mit dem Token kann Gather nur Google Drive nutzen und die E-Mail-Adresse des Kontos sehen. Es kann keine Nutzer anlegen oder löschen, keine Passwörter zurücksetzen und keine E-Mails lesen.
+
+          Innerhalb von Google Drive kann das Token aber alles, was das Konto kann. Wenn das Konto dein **Super Admin** ist (und das ist es, wenn dein Workspace nur ein Konto hat):
+
+          * Das Token erreicht alle Dateien im Google Drive deines Workspace, und ein Super Admin kann alle geteilten Ablagen im Workspace verwalten.
+          * Alle Gather-Admins deiner Gemeinschaft können jede dieser Ablagen, Ordner oder Dateien mit einer Gather-Gruppe verknüpfen und der Gruppe Zugriff geben, auch solche, die nie für Gather gedacht waren.
+          * Würde das Token gestohlen, lägen alle Dateien deines Workspace offen.
+
+          Sicherer ist ein **eigenes Konto nur für Gather**, das kein Admin ist. Mach es zum **Administrator** nur der geteilten Ablagen, die du mit Gather verknüpfst, lege nichts in seiner eigenen „Meine Ablage“ ab und schalte die Bestätigung in zwei Schritten ein. Dann erreichen Gather und deine Gather-Admins nur diese Ablagen. Das kostet deine Gemeinschaft ein Workspace-Konto mehr, nicht eins pro Mitglied.
+
+          ## Preise und Abwägungen
+
+          Mitglieder brauchen nie ein Workspace-Konto. Deine Kosten hängen also nur vom Tarif ab und davon, ob du ein eigenes Konto für Gather anlegst.
+
+          | Option | Konten | Jahresvertrag | Flexibler Tarif | Abwägung |
+          | --- | --- | --- | --- | --- |
+          | Business Starter, ein Konto | 1 | 7 $/Monat | 8,40 $/Monat | Am günstigsten. Freigabeeinstellungen lassen sich nicht einschränken. Gather nutzt dein Super-Admin-Konto. |
+          | Business Starter, eigenes Gather-Konto | 2 | 14 $/Monat | 16,80 $/Monat | Gather und Gather-Admins erreichen nur die verknüpften Ablagen. Freigabeeinstellungen lassen sich weiterhin nicht einschränken. |
+          | Business Standard, ein Konto | 1 | 14 $/Monat | 16,80 $/Monat | Freigabeeinstellungen lassen sich einschränken. Gather nutzt dein Super-Admin-Konto. |
+          | Business Standard, eigenes Gather-Konto | 2 | 28 $/Monat | 33,60 $/Monat | Am sichersten. Freigabeeinstellungen lassen sich einschränken, und Gather erreicht nur die verknüpften Ablagen. |
+
+          *Stand 2026. Das sind die US-Preise von Google in US-Dollar, pro Monat für die ganze Gemeinschaft. Der Jahresvertrag bindet dich für ein Jahr; den flexiblen Tarif kannst du jederzeit kündigen. Preise ändern sich und unterscheiden sich je nach Land. Die aktuellen Preise findest du auf [Googles Preisseite](https://workspace.google.com/pricing).*
 
           ## Grundeinrichtung
+
+          ### Google Drive in Gather einrichten
+
+          Bevor du anfängst:
+
+          * Deine Gemeinschaft muss sich für **Google Workspace** registriert haben. Siehe die Tarife und Optionen oben.
+          * Entscheide, mit welchem Konto sich Gather anmeldet: mit deinem Super-Admin-Konto oder mit einem eigenen Konto nur für Gather (empfohlen, siehe oben). Gib ihm einen Namen der Gemeinschaft (z. B. drive@yourdomain.com) statt eines Personennamens (z. B. maxmustermann@yourdomain.com).
+          * Lege die geteilten Ablagen an, die du mit Gather nutzen willst. Wenn Gather ein eigenes Konto hat, füge dieses Konto zu jeder Ablage als **Administrator** hinzu.
+          * Wer die folgenden Schritte ausführt, muss bei Google mit einem Konto mit **Super Admin**-Rechten angemeldet sein, weil dabei das Google-Cloud-Projekt und die Anmeldedaten entstehen, die Gather nutzt. Wenn dein Workspace nur ein Konto hat, ist dieses Konto der Super Admin.
 
           ### Ein Projekt anlegen
 
@@ -136,6 +182,33 @@ de:
           10. Bereiche
               1. auth/userinfo.email
               2. auth/drive
+
+          ### Gather verbinden
+
+          1. Geh in Gather auf die Seite **Google-Drive-Einstellungen**.
+          2. Gib unter **Google-Workspace-Anmeldedaten** die E-Mail-Adresse des Kontos ein, mit dem sich Gather anmeldet, sowie die Client-ID und den Clientschlüssel, die du vorhin gespeichert hast. Klicke dann auf **Speichern**.
+          3. Klicke auf **Bei Google anmelden** und melde dich bei Google mit dem Konto an, das Gather nutzen soll. Wenn du dich mit einem anderen Konto anmeldest, sagt Gather dir das und verbindet sich nicht.
+          4. Verknüpfe deine geteilten Ablagen wie unten beschrieben.
+
+          <a name="linking-items"></a>
+          ## Elemente verknüpfen
+
+          Sobald Gather verbunden ist, verknüpfst du mit der Schaltfläche **Element verknüpfen** auf der Seite Google-Drive-Einstellungen etwas aus Google Drive:
+
+          * **Geteilte Ablage:** die übliche Wahl. Mitglieder der hinzugefügten Gruppen können die Ablage in Gather durchsuchen und ihre Dateien öffnen.
+          * **Ordner** oder **Datei:** gibt Gruppen nur auf dieses Element Zugriff. Die Übersichtsseite von Gather beginnt bei der geteilten Ablage. Einen verknüpften Ordner oder eine verknüpfte Datei erreicht man in Gather daher nur, wenn man auch die zugehörige geteilte Ablage sieht. Sonst findet man das Element in Google Drive unter „Für mich freigegeben“.
+
+          Du brauchst die ID des Elements, also den letzten Teil seiner Adresse in Google Drive. Bei https://drive.google.com/drive/folders/0AExZ3_Cu5q7uUk9PVA ist die ID zum Beispiel `0AExZ3_Cu5q7uUk9PVA`.
+
+          Klicke dann neben dem Element auf **Gruppe hinzufügen** und wähle eine Gather-Gruppe und eine Zugriffsstufe. Gather gibt jedem Mitglied dieser Gruppe Zugriff in Google Drive und nimmt ihn wieder weg, wenn die Person die Gruppe verlässt. Ein Ordner oder eine Datei kann keine niedrigere Stufe bekommen, als die Gruppe auf der zugehörigen geteilten Ablage schon hat.
+
+          **Wer die Mitglieder einer Gruppe verwaltet, bestimmt, wer Zugriff hat.** Bevor du eine Gruppe hinzufügst, prüfe, wie man in sie hineinkommt:
+
+          * Die Gruppenleitung kann Mitglieder hinzufügen und die Gruppe auf „Offen“ oder „Alle“ umstellen.
+          * Alle in der Gemeinschaft können einer „Offenen“ Gruppe beitreten.
+          * Eine Gruppe „Alle“ umfasst alle Erwachsenen der Gemeinschaft.
+
+          Nimm für vertrauliche Dateien eine „Geschlossene“ Gruppe, die nur Personen deines Vertrauens verwalten.
     item_kinds:
       drive:
         one: "Geteilte Ablage" # MT

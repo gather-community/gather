@@ -19,6 +19,7 @@ describe "gdrive item groups", js: true do
 
   scenario "adding a group" do
     visit(new_gdrive_item_group_path(item_id: item.id))
+    expect(page).to have_css(".alert-warning", text: "Group managers can add members")
     expect(page).not_to have_select("Group", with_options: ["Already Linked"])
 
     click_on("Save")

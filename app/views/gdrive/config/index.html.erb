@@ -21,7 +21,7 @@
   <% if @config.new_record? %>
     <h2><%= t(".credentials") %></h2>
     <p>
-      <%= t(".add_credentials_html", link: link_to(t(".config_guide"), gdrive_guide_path)) %>
+      <%= t(".add_credentials_html", link: link_to(t(".setup_guide"), gdrive_guide_path)) %>
     </p>
     <%= render("config_form") %>
   <% else %>
@@ -46,7 +46,8 @@
       <%= t(".system_user_html", user: @config.org_user_id) %>
     </p>
     <p>
-      <%= t(".intro_html", link: link_to(t(".browse_page"), gdrive_home_path)) %>
+      <%= t(".intro_html", link: link_to(t(".browse_page"), gdrive_home_path),
+            guide_link: link_to(t(".setup_guide"), gdrive_guide_path(anchor: "linking-items"))) %>
     </p>
   </section>
 

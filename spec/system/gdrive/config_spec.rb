@@ -37,6 +37,16 @@ describe "gdrive items", js: true do
     expect(page).to have_content("Authenticate With Google")
   end
 
+  scenario "setup guide" do
+    visit(gdrive_config_path)
+    click_on("Setup Guide")
+    expect(page).to have_content("Google Drive Setup Guide")
+    expect(page).to have_css("h2", text: "Super Admin Privileges and Security")
+    expect(page).to have_css("table", text: "Business Starter, one account")
+    expect(page).to have_css("a[name='linking-items']")
+    expect(page).to have_css("h2", text: "Linking Items")
+  end
+
   context "with config" do
     let!(:config) { create(:gdrive_config, org_user_id: "admin@example.com") }
 
@@ -77,6 +87,7 @@ describe "gdrive items", js: true do
         VCR.use_cassette("gdrive/items/happy_path", match_requests_on: %i[method uri host path]) do
           visit(gdrive_config_path)
           expect(page).to have_content("No shared drives linked to Gather")
+          expect(page).to have_link("Setup Guide", href: /#linking-items\z/)
 
           click_on("Link Item")
           select("Drive", from: "Type")

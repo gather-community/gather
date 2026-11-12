@@ -48,6 +48,7 @@ sv:
     item_groups:
       new:
         title: "Lägg till grupp till objekt i Google Drive" # MT
+        group_control_warning: "Den som bestämmer över gruppens medlemmar bestämmer också vem som kommer åt det här objektet i Google Drive. Gruppens ledare kan lägga till medlemmar och ändra gruppen till ”Öppen” eller ”Alla”, och alla i gemenskapen kan gå med i en ”Öppen” grupp. Kontrollera hur man kommer in i gruppen innan du lägger till den." # MT
     config:
       index:
         title: "Inställningar för Google Drive" # MT
@@ -56,12 +57,12 @@ sv:
         link_item: "Koppla objekt" # MT
         credentials: "Inloggningsuppgifter för Google Workspace" # MT
         add_credentials_html: "Din gemenskap är inte ansluten till Google Drive än. Lägg till inloggningsuppgifterna för er Google Workspace för att ansluta. Se %{link} för hur du kommer igång." # MT
-        config_guide: "konfigurationsguiden" # MT
+        setup_guide: "installationsguiden" # MT
         authentication: "Inloggning" # MT
         update_credentials: "Om du behöver uppdatera inloggningsuppgifterna för Google Workspace kan du göra det här." # MT
         introduction: "Introduktion" # MT
         system_user_html: "<strong>Systemanvändare:</strong> %{user}" # MT
-        intro_html: "Lägg till objekt nedan för att koppla dem till Gather och synkronisera behörigheter. Delade enheter som listas nedan visas på Gathers %{link} för dem som har behörighet. Mappar och filer går inte att nå via bläddringssidan om inte den delade enhet de ligger i går att nå." # MT
+        intro_html: "Lägg till objekt nedan för att koppla dem till Gather och synkronisera behörigheter. Delade enheter som listas nedan visas på Gathers %{link} för dem som har behörighet. Mappar och filer går inte att nå via bläddringssidan om inte den delade enhet de ligger i går att nå. Läs mer i %{guide_link}." # MT
         browse_page: "bläddringssida för Google Drive" # MT
         name: "Namn" # MT
         status: "Status" # MT
@@ -77,21 +78,66 @@ sv:
         revoke: "återkalla auktoriseringen" # MT
         revoke_confirm: "Vill du verkligen återkalla auktoriseringen? Ingen kan använda Google Drive-funktionerna för gemenskapen förrän auktoriseringen har återställts." # MT
       guide:
-        title: "Konfigurationsguide för Google Drive" # MT
+        title: "Installationsguide för Google Drive" # MT
         # Markdown, rendered with Gather's Markdown renderer. Google's menu and button names are in quotes
         # or bold so they can be matched to Google's own (translated) interface.
         body: |- # MT
-          Den här guiden visar hur du skaffar de inloggningsuppgifter som behövs för att ansluta gemenskapens Google Workspace till Gather.
+          ## Så fungerar det
 
-          ## Förutsättningar
+          Gather ansluter till Google Drive via ett enda Google Workspace-konto som tillhör er gemenskap. Gemenskapens filer ligger i **delade enheter**, som tillhör ert Workspace och inte någon enskild person. Inget går förlorat när någon flyttar.
 
-          * Gemenskapen måste ha registrerat sig för **Google Workspace**.
-              * Abonnemanget Business Starter räcker.
-              * Det behövs bara ett användarkonto.
-              * Välj ett namn för gemenskapen till kontot (t.ex. workspace.admin@yourdomain.com) i stället för ett personnamn (t.ex. annasvensson@yourdomain.com).
-          * Den som följer instruktionerna måste vara inloggad hos Google som en användare i gemenskapens Google Workspace med **Superadministratör**-behörighet. Om ni bara har ett konto har det kontot superadministratörsbehörighet.
+          Medlemmar behöver inga egna Workspace-konton. I Gather kopplar du en delad enhet (eller en enskild mapp eller fil) till en eller flera Gather-grupper och väljer en åtkomstnivå för varje grupp. Gather ger sedan varje medlem i grupperna åtkomst i Google Drive via sitt eget personliga Google-konto, till exempel ett gratis Gmail-konto. När någon går med i eller lämnar en grupp, eller lämnar gemenskapen, uppdaterar Gather åtkomsten.
+
+          De flesta Google Workspace-abonnemang kostar per användare. Ett eget Workspace-konto till varje medlem skulle innebära en månadsavgift per person. Med Gather betalar er gemenskap för ett eller två Workspace-konton, oavsett hur många medlemmar den har.
+
+          ## Google Workspace-abonnemang och åtkomstkontroll
+
+          Alla Google Workspace-abonnemang, även **Business Starter**, har delade enheter och låter dig lägga till personer utanför ert Workspace. Gather är beroende av det, eftersom medlemmar använder sina personliga Google-konton. Låt åtkomst för personer utanför organisationen vara påslagen, vilket abonnemang ni än väljer.
+
+          Abonnemangen skiljer sig åt i hur mycket du kan begränsa vad personer gör när de har åtkomst:
+
+          * **Business Starter:** alla delningsinställningar för delade enheter är låsta till ”tillåt” och går inte att ändra. Det betyder att:
+              * Bidragsgivare och innehållsansvariga kan dela filer med personer som inte är medlemmar i enheten, även med ”Alla som har länken”. Gather kan varken se eller ångra sådana delningar.
+              * Läsare och kommentatorer kan alltid ladda ned, skriva ut och kopiera filer.
+          * **Business Standard och högre:** du kan ändra delningsinställningarna för delade enheter i Googles administratörskonsol. Om du stänger av **”Tillåt att personer som inte är medlemmar i delade enheter läggs till i filer”** kan medlemmar inte dela filer med någon utanför enheten. Gör det bara för enheter som du kopplar till Gather i sin helhet. När du kopplar en enskild mapp eller fil ger Gather åtkomst till just det objektet utan att göra personerna till medlemmar i enheten, och då måste inställningen vara påslagen.
+
+          Ge grupper nivån **Läsare** eller **Kommentator** i alla abonnemang, om de inte behöver redigera. Ge bara **Bidragsgivare** eller **Innehållsansvarig** till grupper som du litar på att dela filer ansvarsfullt.
+
+          ## Superadministratörsbehörighet och säkerhet
+
+          Gather loggar in med ett Workspace-konto och sparar en token för det, krypterad. Med token kan Gather bara använda Google Drive och se kontots e-postadress. Den kan inte skapa eller ta bort användare, återställa lösenord eller läsa e-post.
+
+          Inom Google Drive kan token däremot göra allt som kontot kan. Om kontot är er **superadministratör** (och det är det om ert Workspace bara har ett konto):
+
+          * Token når alla filer i ert Workspace i Google Drive, och en superadministratör kan hantera alla delade enheter i Workspace.
+          * Alla Gather-administratörer i er gemenskap kan koppla vilken som helst av de enheterna, mapparna eller filerna till en Gather-grupp och ge gruppen åtkomst, även sådana som aldrig var tänkta för Gather.
+          * Om token skulle stjälas skulle alla filer i ert Workspace exponeras.
+
+          Säkrare är ett **separat konto som bara Gather använder** och som inte är administratör. Gör det till **Administratör** för bara de delade enheter som du kopplar till Gather, spara inget i dess egen ”Min enhet” och aktivera tvåstegsverifiering. Då når Gather, och era Gather-administratörer, bara de enheterna. Det kostar er gemenskap ett Workspace-konto till, inte ett per medlem.
+
+          ## Prisalternativ och avvägningar
+
+          Medlemmar behöver aldrig Workspace-konton, så kostnaden beror bara på abonnemanget och på om ni lägger till ett separat konto för Gather.
+
+          | Alternativ | Konton | Årsavtal | Flexibelt abonnemang | Avvägningar |
+          | --- | --- | --- | --- | --- |
+          | Business Starter, ett konto | 1 | 7 USD/mån | 8,40 USD/mån | Billigast. Delningsinställningarna kan inte begränsas. Gather använder ert superadministratörskonto. |
+          | Business Starter, separat Gather-konto | 2 | 14 USD/mån | 16,80 USD/mån | Gather och Gather-administratörer når bara de kopplade enheterna. Delningsinställningarna kan fortfarande inte begränsas. |
+          | Business Standard, ett konto | 1 | 14 USD/mån | 16,80 USD/mån | Delningsinställningarna kan begränsas. Gather använder ert superadministratörskonto. |
+          | Business Standard, separat Gather-konto | 2 | 28 USD/mån | 33,60 USD/mån | Säkrast. Delningsinställningarna kan begränsas, och Gather når bara de kopplade enheterna. |
+
+          *Gäller 2026. Det här är Googles priser i USA, i amerikanska dollar, per månad för hela gemenskapen. Årsavtalet kräver ett års bindning; det flexibla abonnemanget kan sägas upp när som helst. Priserna ändras och skiljer sig mellan länder, så se [Googles prissida](https://workspace.google.com/pricing) för aktuella priser.*
 
           ## Grundkonfiguration
+
+          ### Konfigurera Google Drive i Gather
+
+          Innan du börjar:
+
+          * Er gemenskap måste ha registrerat sig för **Google Workspace**. Se abonnemangen och alternativen ovan.
+          * Bestäm vilket konto Gather ska logga in med: ert superadministratörskonto eller ett separat konto som bara Gather använder (rekommenderas, se ovan). Ge det ett namn för gemenskapen (t.ex. drive@yourdomain.com) i stället för ett personnamn (t.ex. annasvensson@yourdomain.com).
+          * Skapa de delade enheter som ni vill använda med Gather. Om Gather har ett eget konto lägger du till det kontot i varje enhet som **Administratör**.
+          * Den som följer stegen nedan måste vara inloggad hos Google som en användare med **Superadministratör**-behörighet, eftersom den personen skapar Google Cloud-projektet och de inloggningsuppgifter som Gather använder. Om ert Workspace bara har ett konto är det kontot superadministratör.
 
           ### Skapa ett projekt
 
@@ -136,6 +182,33 @@ sv:
           10. Omfattningar
               1. auth/userinfo.email
               2. auth/drive
+
+          ### Ansluta Gather
+
+          1. Gå till sidan **Inställningar för Google Drive** i Gather.
+          2. Under **Inloggningsuppgifter för Google Workspace** anger du e-postadressen till kontot som Gather ska logga in med, och klient-ID:t och klienthemligheten som du sparade tidigare. Klicka sedan på **Spara**.
+          3. Klicka på **Logga in med Google** och logga in hos Google med kontot som Gather ska använda. Om du loggar in med ett annat konto säger Gather till och ansluter inte.
+          4. Koppla era delade enheter enligt beskrivningen nedan.
+
+          <a name="linking-items"></a>
+          ## Koppla objekt
+
+          När Gather är anslutet använder du knappen **Koppla objekt** på sidan Inställningar för Google Drive för att koppla något från Google Drive:
+
+          * **Delad enhet:** det vanliga valet. Medlemmar i grupperna du lägger till kan bläddra i enheten i Gather och öppna dess filer.
+          * **Mapp** eller **Fil:** ger grupperna åtkomst till bara det objektet. Gathers bläddringssida börjar vid den delade enheten, så man kan bara nå en kopplad mapp eller fil i Gather om man också ser dess delade enhet. Annars hittar man den i Google Drive under ”Delas med mig”.
+
+          Du behöver objektets ID, som är sista delen av dess adress i Google Drive. För https://drive.google.com/drive/folders/0AExZ3_Cu5q7uUk9PVA är ID:t till exempel `0AExZ3_Cu5q7uUk9PVA`.
+
+          Klicka sedan på **Lägg till grupp** bredvid objektet och välj en Gather-grupp och en åtkomstnivå. Gather ger varje medlem i gruppen åtkomst i Google Drive och tar bort den när personen lämnar gruppen. En mapp eller fil kan inte få en lägre nivå än den som gruppen redan har på sin delade enhet.
+
+          **Den som bestämmer över en grupps medlemmar bestämmer vem som får åtkomst.** Innan du lägger till en grupp, kontrollera hur man kommer in i den:
+
+          * Gruppens ledare kan lägga till medlemmar och ändra gruppen till ”Öppen” eller ”Alla”.
+          * Alla i gemenskapen kan gå med i en ”Öppen” grupp.
+          * En ”Alla”-grupp omfattar alla vuxna i gemenskapen.
+
+          Använd en ”Stängd” grupp som bara hanteras av personer du litar på för känsliga filer.
     item_kinds:
       drive:
         one: "Delad enhet" # MT

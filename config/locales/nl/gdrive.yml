@@ -48,6 +48,7 @@ nl:
     item_groups:
       new:
         title: "Groep toevoegen aan Google Drive-item" # MT
+        group_control_warning: "Wie bepaalt wie lid is van deze groep, bepaalt ook wie in Google Drive bij dit item kan. Groepsleiders kunnen leden toevoegen en de groep op 'Open' of 'Iedereen' zetten, en iedereen in de gemeenschap kan lid worden van een 'Open' groep. Controleer hoe mensen in deze groep komen voordat je hem toevoegt." # MT
     config:
       index:
         title: "Instellingen Google Drive" # MT
@@ -56,12 +57,12 @@ nl:
         link_item: "Item koppelen" # MT
         credentials: "Inloggegevens Google Workspace" # MT
         add_credentials_html: "Je gemeenschap is nog niet met Google Drive verbonden. Voeg je inloggegevens voor Google Workspace toe om verbinding te maken. Zie de %{link} om te beginnen." # MT
-        config_guide: "configuratiehandleiding" # MT
+        setup_guide: "installatiehandleiding" # MT
         authentication: "Authenticatie" # MT
         update_credentials: "Moet je je inloggegevens voor Google Workspace bijwerken, dan kan dat hier." # MT
         introduction: "Inleiding" # MT
         system_user_html: "<strong>Systeemgebruiker:</strong> %{user}" # MT
-        intro_html: "Voeg hieronder items toe om ze aan Gather te koppelen en rechten te synchroniseren. De gedeelde drives hieronder worden getoond op de %{link} in Gather, voor gebruikers met toegang. Mappen en bestanden zijn alleen via de bladerpagina bereikbaar als de gedeelde drive waarin ze staan bereikbaar is." # MT
+        intro_html: "Voeg hieronder items toe om ze aan Gather te koppelen en rechten te synchroniseren. De gedeelde drives hieronder worden getoond op de %{link} in Gather, voor gebruikers met toegang. Mappen en bestanden zijn alleen via de bladerpagina bereikbaar als de gedeelde drive waarin ze staan bereikbaar is. Zie de %{guide_link} voor meer informatie." # MT
         browse_page: "bladerpagina van Google Drive" # MT
         name: "Naam" # MT
         status: "Status" # MT
@@ -77,21 +78,66 @@ nl:
         revoke: "de autorisatie intrekken" # MT
         revoke_confirm: "Weet je zeker dat je de autorisatie wilt intrekken? Niemand kan dan de Google Drive-functies voor deze gemeenschap gebruiken totdat de autorisatie opnieuw is ingesteld." # MT
       guide:
-        title: "Configuratiehandleiding Google Drive" # MT
+        title: "Installatiehandleiding Google Drive" # MT
         # Markdown, rendered with Gather's Markdown renderer. Google's menu and button names are in quotes
         # or bold so they can be matched to Google's own (translated) interface.
         body: |- # MT
-          Deze handleiding helpt je stap voor stap om de inloggegevens te krijgen die nodig zijn om de Google Workspace van je gemeenschap met Gather te verbinden.
+          ## Hoe het werkt
 
-          ## Vereisten
+          Gather maakt verbinding met Google Drive via één Google Workspace-account dat van je gemeenschap is. De bestanden van je gemeenschap staan in **gedeelde drives**, die van je Workspace zijn en niet van één persoon. Er gaat dus niets verloren als iemand verhuist.
 
-          * De gemeenschap moet zich hebben aangemeld voor **Google Workspace**.
-              * Het abonnement Business Starter is voldoende.
-              * Er is maar één gebruikersaccount nodig.
-              * Kies voor het account een naam van de gemeenschap (bijv. workspace.admin@jouwdomein.nl) in plaats van een persoonlijke naam (bijv. jandevries@jouwdomein.nl).
-          * Wie deze instructies volgt, moet bij Google zijn ingelogd als gebruiker in de Google Workspace van de gemeenschap met rechten van **superbeheerder**. Als je maar één account hebt, heeft dat account rechten van superbeheerder.
+          Leden hebben geen eigen Workspace-account nodig. In Gather koppel je een gedeelde drive (of één map of bestand) aan een of meer Gather-groepen, en kies je per groep een toegangsniveau. Gather geeft dan elk lid van die groepen toegang in Google Drive met hun eigen persoonlijke Google-account, bijvoorbeeld een gratis Gmail-account. Als iemand lid wordt van een groep, een groep verlaat of de gemeenschap verlaat, past Gather de toegang aan.
+
+          De meeste Google Workspace-abonnementen kosten geld per gebruiker. Een eigen Workspace-account voor elk lid zou per persoon een maandbedrag kosten. Met Gather betaalt je gemeenschap voor één of twee Workspace-accounts, hoeveel leden ze ook heeft.
+
+          ## Google Workspace-abonnementen en toegangsbeheer
+
+          Alle Google Workspace-abonnementen, ook **Business Starter**, hebben gedeelde drives en laten je mensen van buiten je Workspace toevoegen. Gather heeft dat nodig, want leden gebruiken hun persoonlijke Google-account. Laat toegang voor mensen buiten je organisatie bij elk abonnement aanstaan.
+
+          De abonnementen verschillen in hoeveel je kunt beperken wat mensen doen als ze toegang hebben:
+
+          * **Business Starter:** alle instellingen voor delen van gedeelde drives staan vast op 'toestaan' en zijn niet te wijzigen. Daardoor:
+              * Kunnen bijdragers en contentbeheerders bestanden delen met mensen die geen lid van de drive zijn, ook met 'Iedereen met de link'. Gather kan die gedeelde toegang niet zien of ongedaan maken.
+              * Kunnen kijkers en reageerders bestanden altijd downloaden, afdrukken en kopiëren.
+          * **Business Standard en hoger:** je kunt de instellingen voor delen van gedeelde drives wijzigen in de Google Beheerdersconsole. Als je **'Toestaan dat mensen die geen lid zijn van de gedeelde drive aan bestanden worden toegevoegd'** uitzet, kunnen leden geen bestanden meer delen met iemand buiten de drive. Doe dat alleen voor drives die je in hun geheel aan Gather koppelt. Als je één map of bestand koppelt, geeft Gather alleen toegang tot dat item zonder mensen lid van de drive te maken, en dan moet deze instelling aanstaan.
+
+          Geef groepen bij elk abonnement het niveau **Kijker** of **Reageerder**, tenzij ze moeten bewerken. Geef **Bijdrager** of **Contentbeheerder** alleen aan groepen die je vertrouwt om verantwoord met delen om te gaan.
+
+          ## Superbeheerdersrechten en beveiliging
+
+          Gather logt in met één Workspace-account en bewaart daarvoor een token, versleuteld. Met dat token kan Gather alleen Google Drive gebruiken en het e-mailadres van het account zien. Het kan geen gebruikers maken of verwijderen, geen wachtwoorden resetten en geen e-mail lezen.
+
+          Binnen Google Drive kan het token wel alles wat het account kan. Als het account je **superbeheerder** is (en dat is zo als je Workspace maar één account heeft):
+
+          * Komt het token bij alle bestanden in de Google Drive van je Workspace, en kan een superbeheerder alle gedeelde drives in de Workspace beheren.
+          * Kan elke Gather-beheerder in je gemeenschap al die drives, mappen of bestanden aan een Gather-groep koppelen en de groep toegang geven, ook als ze nooit voor Gather bedoeld waren.
+          * Zouden alle bestanden in je Workspace op straat liggen als het token ooit werd gestolen.
+
+          Veiliger is een **apart account dat alleen Gather gebruikt** en dat geen beheerder is. Maak het **Beheerder** van alleen de gedeelde drives die je aan Gather koppelt, bewaar niets in zijn eigen 'Mijn Drive' en zet verificatie in twee stappen aan. Dan komen Gather, en je Gather-beheerders, alleen bij die drives. Dat kost je gemeenschap één Workspace-account extra, niet één per lid.
+
+          ## Prijsopties en afwegingen
+
+          Leden hebben nooit een Workspace-account nodig. Je kosten hangen dus alleen af van je abonnement en van of je een apart account voor Gather toevoegt.
+
+          | Optie | Accounts | Jaarabonnement | Flexibel abonnement | Afwegingen |
+          | --- | --- | --- | --- | --- |
+          | Business Starter, één account | 1 | $ 7/maand | $ 8,40/maand | Goedkoopst. Instellingen voor delen zijn niet te beperken. Gather gebruikt je superbeheerdersaccount. |
+          | Business Starter, apart Gather-account | 2 | $ 14/maand | $ 16,80/maand | Gather en Gather-beheerders komen alleen bij de gekoppelde drives. Instellingen voor delen zijn nog steeds niet te beperken. |
+          | Business Standard, één account | 1 | $ 14/maand | $ 16,80/maand | Instellingen voor delen zijn te beperken. Gather gebruikt je superbeheerdersaccount. |
+          | Business Standard, apart Gather-account | 2 | $ 28/maand | $ 33,60/maand | Veiligst. Instellingen voor delen zijn te beperken, en Gather komt alleen bij de gekoppelde drives. |
+
+          *Stand 2026. Dit zijn de prijzen van Google in de VS, in Amerikaanse dollars, per maand voor de hele gemeenschap. Het jaarabonnement vraagt een verbintenis van een jaar; het flexibele abonnement kun je op elk moment opzeggen. Prijzen veranderen en verschillen per land, dus kijk op de [prijspagina van Google](https://workspace.google.com/pricing) voor de actuele prijzen.*
 
           ## Hoofdconfiguratie
+
+          ### Google Drive instellen in Gather
+
+          Voordat je begint:
+
+          * Je gemeenschap moet zich hebben aangemeld voor **Google Workspace**. Zie de abonnementen en opties hierboven.
+          * Bepaal met welk account Gather inlogt: je superbeheerdersaccount of een apart account dat alleen Gather gebruikt (aanbevolen, zie hierboven). Geef het een naam van de gemeenschap (bijv. drive@jouwdomein.nl) in plaats van een persoonlijke naam (bijv. jandevries@jouwdomein.nl).
+          * Maak de gedeelde drives aan die je met Gather wilt gebruiken. Als Gather een eigen account heeft, voeg dat account dan aan elke drive toe als **Beheerder**.
+          * Wie de stappen hieronder volgt, moet bij Google zijn ingelogd als gebruiker met rechten van **superbeheerder**, omdat die het Google Cloud-project en de inloggegevens maakt die Gather gebruikt. Als je Workspace maar één account heeft, is dat account de superbeheerder.
 
           ### Een project maken
 
@@ -136,6 +182,33 @@ nl:
           10. Bereiken
               1. auth/userinfo.email
               2. auth/drive
+
+          ### Gather verbinden
+
+          1. Ga in Gather naar de pagina **Instellingen Google Drive**.
+          2. Vul onder **Inloggegevens Google Workspace** het e-mailadres in van het account waarmee Gather inlogt, en de client-ID en het clientgeheim die je eerder hebt bewaard. Klik dan op **Opslaan**.
+          3. Klik op **Inloggen met Google** en log bij Google in met het account dat Gather gebruikt. Als je met een ander account inlogt, meldt Gather dat en maakt het geen verbinding.
+          4. Koppel je gedeelde drives zoals hieronder beschreven.
+
+          <a name="linking-items"></a>
+          ## Items koppelen
+
+          Zodra Gather verbonden is, koppel je iets uit Google Drive met de knop **Item koppelen** op de pagina Instellingen Google Drive:
+
+          * **Gedeelde drive:** de gebruikelijke keuze. Leden van de groepen die je toevoegt, kunnen de drive in Gather bekijken en de bestanden openen.
+          * **Map** of **Bestand:** geeft groepen alleen toegang tot dat item. De bladerpagina van Gather begint bij de gedeelde drive, dus je komt in Gather alleen bij een gekoppelde map of een gekoppeld bestand als je ook de bijbehorende gedeelde drive ziet. Anders vind je het in Google Drive onder 'Gedeeld met mij'.
+
+          Je hebt de ID van het item nodig: het laatste deel van het adres in Google Drive. Bij https://drive.google.com/drive/folders/0AExZ3_Cu5q7uUk9PVA is de ID bijvoorbeeld `0AExZ3_Cu5q7uUk9PVA`.
+
+          Klik daarna naast het item op **Groep toevoegen** en kies een Gather-groep en een toegangsniveau. Gather geeft elk lid van die groep toegang in Google Drive en haalt die weer weg als iemand de groep verlaat. Een map of bestand kan geen lager niveau krijgen dan de groep al heeft op de bijbehorende gedeelde drive.
+
+          **Wie bepaalt wie lid is van een groep, bepaalt wie er toegang krijgt.** Controleer voordat je een groep toevoegt hoe mensen erin komen:
+
+          * Groepsleiders kunnen leden toevoegen en de groep op 'Open' of 'Iedereen' zetten.
+          * Iedereen in de gemeenschap kan lid worden van een 'Open' groep.
+          * Een groep 'Iedereen' bevat alle volwassenen in de gemeenschap.
+
+          Gebruik voor gevoelige bestanden een 'Gesloten' groep die alleen mensen beheren die je vertrouwt.
     item_kinds:
       drive:
         one: "Gedeelde drive" # MT

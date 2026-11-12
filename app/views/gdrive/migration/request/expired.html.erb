@@ -1,0 +1,10 @@
+<% content_for(:title, t("gdrive.migration.request.title", community: @community.name)) %>
+
+<div class="simple">
+  <h2><%= t(".heading") %></h2>
+  <p><%= t(".expired", count: GDrive::Migration::Request::EXPIRES_AFTER.in_days.to_i) %></p>
+  <p>
+    <%= t(".contact_html", name: @operation.contact_name,
+          email: mail_to(@operation.contact_email)) %>
+  </p>
+</div>

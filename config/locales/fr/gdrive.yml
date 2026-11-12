@@ -256,6 +256,12 @@ fr:
           name: "Nom" # MT
           modified: "Modifié" # MT
           file_icon: "Icône de fichier" # MT
+        expired:
+          heading: "Ce lien a expiré" # MT
+          expired:
+            one: "Les liens pour déplacer des fichiers vers le Drive partagé de la communauté cessent de fonctionner %{count} jour après leur envoi." # MT
+            other: "Les liens pour déplacer des fichiers vers le Drive partagé de la communauté cessent de fonctionner %{count} jours après leur envoi." # MT
+          contact_html: "Si vous avez encore des fichiers à déplacer, veuillez contacter %{name} à l'adresse %{email}." # MT
         opted_out:
           heading: "Refus enregistré" # MT
           opted_out: "Vous avez refusé de participer à la réorganisation des fichiers Google Drive de %{community}." # MT

@@ -261,6 +261,12 @@ de:
           name: "Name" # MT
           modified: "Geändert" # MT
           file_icon: "Dateisymbol" # MT
+        expired:
+          heading: "Dieser Link ist abgelaufen" # MT
+          expired:
+            one: "Links zum Verschieben von Dateien in die geteilte Ablage der Gemeinschaft funktionieren %{count} Tag nach dem Versand nicht mehr." # MT
+            other: "Links zum Verschieben von Dateien in die geteilte Ablage der Gemeinschaft funktionieren %{count} Tage nach dem Versand nicht mehr." # MT
+          contact_html: "Wenn du noch Dateien verschieben möchtest, wende dich bitte an %{name} unter %{email}." # MT
         opted_out:
           heading: "Abgelehnt" # MT
           opted_out: "Du hast abgelehnt, bei der Neuordnung der Google-Drive-Dateien von %{community} zu helfen." # MT

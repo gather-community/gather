@@ -261,6 +261,12 @@ sv:
           name: "Namn" # MT
           modified: "Ändrad" # MT
           file_icon: "Filikon" # MT
+        expired:
+          heading: "Länken har slutat gälla" # MT
+          expired:
+            one: "Länkar för att flytta filer till gemenskapens delade enhet slutar fungera %{count} dag efter att de skickats." # MT
+            other: "Länkar för att flytta filer till gemenskapens delade enhet slutar fungera %{count} dagar efter att de skickats." # MT
+          contact_html: "Om ni fortfarande har filer att flytta, kontakta %{name} på %{email}." # MT
         opted_out:
           heading: "Avböjt" # MT
           opted_out: "Du har avböjt att hjälpa %{community} att ordna sina filer i Google Drive." # MT

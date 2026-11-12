@@ -261,6 +261,12 @@ nl:
           name: "Naam" # MT
           modified: "Gewijzigd" # MT
           file_icon: "Bestandspictogram" # MT
+        expired:
+          heading: "Deze link is verlopen" # MT
+          expired:
+            one: "Links om bestanden naar de gedeelde drive van de gemeenschap te verplaatsen werken %{count} dag na verzending niet meer." # MT
+            other: "Links om bestanden naar de gedeelde drive van de gemeenschap te verplaatsen werken %{count} dagen na verzending niet meer." # MT
+          contact_html: "Heb je nog bestanden om te verplaatsen? Neem dan contact op met %{name} via %{email}." # MT
         opted_out:
           heading: "Afgemeld" # MT
           opted_out: "Je hebt je afgemeld voor het opnieuw ordenen van de Google Drive-bestanden van %{community}." # MT

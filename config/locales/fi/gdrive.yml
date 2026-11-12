@@ -261,6 +261,12 @@ fi:
           name: "Nimi" # MT
           modified: "Muokattu" # MT
           file_icon: "Tiedoston kuvake" # MT
+        expired:
+          heading: "Tämä linkki on vanhentunut" # MT
+          expired:
+            one: "Linkit tiedostojen siirtämiseen yhteisön jaettuun Driveen lakkaavat toimimasta %{count} päivän kuluttua lähettämisestä." # MT
+            other: "Linkit tiedostojen siirtämiseen yhteisön jaettuun Driveen lakkaavat toimimasta %{count} päivän kuluttua lähettämisestä." # MT
+          contact_html: "Jos sinulla on vielä siirrettäviä tiedostoja, ota yhteyttä henkilöön %{name} osoitteessa %{email}." # MT
         opted_out:
           heading: "Kieltäydytty" # MT
           opted_out: "Olet kieltäytynyt osallistumasta yhteisön %{community} Google Drive -tiedostojen uudelleenjärjestelyyn." # MT

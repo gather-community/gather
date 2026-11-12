@@ -256,6 +256,12 @@ es:
           name: "Nombre" # MT
           modified: "Modificado" # MT
           file_icon: "Icono de archivo" # MT
+        expired:
+          heading: "Este enlace ha caducado" # MT
+          expired:
+            one: "Los enlaces para mover archivos a la unidad compartida de la comunidad dejan de funcionar %{count} día después de enviarse." # MT
+            other: "Los enlaces para mover archivos a la unidad compartida de la comunidad dejan de funcionar %{count} días después de enviarse." # MT
+          contact_html: "Si todavía tienes archivos que mover, ponte en contacto con %{name} en %{email}." # MT
         opted_out:
           heading: "Renuncia registrada" # MT
           opted_out: "Renunciaste a participar en la reorganización de los archivos de Google Drive de %{community}." # MT

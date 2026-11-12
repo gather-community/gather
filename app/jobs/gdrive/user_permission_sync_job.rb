@@ -65,9 +65,9 @@ module GDrive
       # We sort by persisted b/c we want to ensure we delete before we create.
       # We sort by item external ID test purposes, so that the order of the permissions is consistent,
       # so that the order of requests is also consistent in order to match the cassette.
-      permissions_by_item_id.values.sort_by { |p| [p.persisted? ? 0 : 1, p.item_external_id] }.each do |perm|
-        apply_permission_changes(perm)
-      end
+      apply_all_permission_changes(
+        permissions_by_item_id.values.sort_by { |p| [p.persisted? ? 0 : 1, p.item_external_id] }
+      )
     end
 
     def process_permissions_for_item_group(item_group)

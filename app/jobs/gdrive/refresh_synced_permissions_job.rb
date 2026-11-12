@@ -74,8 +74,22 @@ module GDrive
     end
 
     def upsert_synced_permission(item, user_id, permission, existing_by_user_id)
-      inherited_level = inherited_access_level_for(permission)
-      direct_level = direct_access_level_for(permission)
+      inherited_level = GooglePermissionLevels.inherited_level(permission)
+      direct_level = GooglePermissionLevels.direct_level(permission)
+      existing = existing_by_user_id[user_id]
+
+      # We match Google's permissions to users by their current google_email. If the user's
+      # google_email has changed since we recorded their permission, the existing record still points
+      # at their old account's permission, and the one we found here belongs to their new account.
+      # Repointing the record at the new account would leave the old account's access untracked, so the
+      # sync could never remove it. Instead we leave the record alone. The sync then sees the email
+      # change, removes the old account's permission and grants the new account.
+      if existing && existing.google_email != permission.email_address && existing.external_id != permission.id
+        Rails.logger.info("Leaving synced permission for old google_email alone",
+          user_id: user_id, item_external_id: item.external_id,
+          old_external_id: existing.external_id, new_external_id: permission.id)
+        return
+      end
 
       # A direct role Gather doesn't manage (e.g. shared drive Manager) is also a floor, so the sync
       # never downgrades or removes it.
@@ -83,11 +97,14 @@ module GDrive
         inherited_level = [inherited_level, direct_level].max_by { |l| SyncedPermission.level_index(l) }
       end
 
-      if (perm = existing_by_user_id[user_id])
+      if existing
         Rails.logger.info("Updating synced permission",
           user_id: user_id, item_external_id: item.external_id,
           inherited_access_level: inherited_level)
-        perm.update!(external_id: permission.id, inherited_access_level: inherited_level)
+        # If the email differs here, it's the same Google account under a new address (the
+        # permission ID is the account's ID), so we just record the new address.
+        existing.update!(external_id: permission.id, google_email: permission.email_address,
+          inherited_access_level: inherited_level)
       else
         # We track inherited-only permissions (no direct level) so that inherited_access_level
         # serves as a floor in the sync algorithm. Without this, a lower-level group grant
@@ -109,25 +126,6 @@ module GDrive
           inherited_access_level: inherited_level
         )
       end
-    end
-
-    def inherited_access_level_for(permission)
-      return nil if permission.permission_details.blank?
-
-      inherited_roles = permission.permission_details.select(&:inherited).map(&:role)
-      return nil if inherited_roles.empty?
-
-      inherited_roles.max_by { |r| SyncedPermission.level_index(r) }
-    end
-
-    def direct_access_level_for(permission)
-      # No permissionDetails means this is a direct permission (not a shared drive file)
-      return permission.role if permission.permission_details.blank?
-
-      direct_roles = permission.permission_details.reject(&:inherited).map(&:role)
-      return nil if direct_roles.empty?
-
-      direct_roles.max_by { |r| SyncedPermission.level_index(r) }
     end
   end
 end

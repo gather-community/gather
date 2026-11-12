@@ -182,4 +182,56 @@ describe GDrive::PermissionSyncJob do
       end
     end
   end
+
+  describe "applying several changes" do
+    include ActiveJob::TestHelper
+
+    let!(:config) { create(:gdrive_config, org_user_id: "drive.admin@example.com") }
+    let!(:token) { create(:gdrive_token, gdrive_config: config, google_user_id: "drive.admin@example.com") }
+    let!(:item) { create(:gdrive_item, gdrive_config: config, external_id: "0AGH_tsBj1z-0Uk9PVA") }
+    let!(:user_a) { create(:user, google_email: "a@example.com") }
+    let!(:user_b) { create(:user, google_email: "b@example.com") }
+
+    # Neither user is in a group with access, so the sync removes both permissions, a's first.
+    let!(:perm_a) do
+      create(:gdrive_synced_permission, item: item, user: user_a, access_level: "writer", external_id: "permA")
+    end
+    let!(:perm_b) do
+      create(:gdrive_synced_permission, item: item, user: user_b, access_level: "writer", external_id: "permB")
+    end
+
+    def perform
+      GDrive::ItemPermissionSyncJob.perform_now(cluster_id: Defaults.cluster.id,
+        community_id: Defaults.community.id, item_id: item.id)
+    end
+
+    it "reports a failing permission and carries on with the rest" do
+      error = Google::Apis::ClientError.new("someUnexpectedReason: Google said no")
+      allow_any_instance_of(GDrive::Wrapper).to receive(:delete_permission) do |_wrapper, _item_id, perm_id, **|
+        raise error if perm_id == "permA"
+      end
+      expect(Gather::ErrorReporter.instance).to receive(:report)
+        .with(error, data: hash_including(item_id: item.id, user_id: user_a.id))
+
+      perform
+
+      expect(GDrive::SyncedPermission.exists?(perm_a.id)).to be(true)
+      expect(GDrive::SyncedPermission.exists?(perm_b.id)).to be(false)
+    end
+
+    it "still stops on a rate limit error so the job is retried" do
+      allow_any_instance_of(GDrive::Wrapper).to receive(:delete_permission)
+        .and_raise(GDrive::Wrapper::RateLimitError, "rate limit exceeded")
+
+      expect { perform }.to have_enqueued_job(GDrive::ItemPermissionSyncJob)
+      expect(GDrive::SyncedPermission.where(id: [perm_a.id, perm_b.id]).count).to eq(2)
+    end
+
+    it "is retried when it can't get its lock" do
+      allow(User).to receive(:with_advisory_lock!)
+        .and_raise(WithAdvisoryLock::FailedToAcquireLock, "gdrive-permission-sync-all-users-cmty-1")
+
+      expect { perform }.to have_enqueued_job(GDrive::ItemPermissionSyncJob)
+    end
+  end
 end

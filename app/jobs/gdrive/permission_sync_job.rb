@@ -3,6 +3,10 @@
 module GDrive
   # Parent class for permission sync jobs.
   class PermissionSyncJob < BaseJob
+    # A sync waits for its advisory locks for up to 120 seconds. When it can't get them, e.g. while a
+    # big group's item sync is running, the sync must still happen later or a removal could be lost.
+    retry_on(WithAdvisoryLock::FailedToAcquireLock, wait: :polynomially_longer)
+
     protected
 
     attr_accessor :community, :wrapper
@@ -32,6 +36,25 @@ module GDrive
 
     def access_level_cmp(level_a, level_b)
       SyncedPermission.level_index(level_a) <=> SyncedPermission.level_index(level_b)
+    end
+
+    # Applies the changes for each permission in turn. One permission failing must not stop the
+    # rest, or every removal after it would be skipped on every run. So a Google client error is
+    # reported and we move on. Rate limit and server errors aren't client errors, so they still
+    # end the job and BaseJob retries it, which starts over from fresh data.
+    def apply_all_permission_changes(permissions)
+      permissions.each do |permission|
+        apply_permission_changes(permission)
+      rescue Google::Apis::ClientError => error
+        Gather::ErrorReporter.instance.report(error, data: {
+          job: self.class.name,
+          item_id: permission.item_id,
+          item_external_id: permission.item_external_id,
+          user_id: permission.user_id,
+          access_level: permission.access_level,
+          inherited_access_level: permission.inherited_access_level
+        })
+      end
     end
 
     def apply_permission_changes(permission)

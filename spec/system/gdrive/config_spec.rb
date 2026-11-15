@@ -43,7 +43,7 @@ describe "gdrive items", js: true do
     expect(page).to have_content("Google Drive Setup Guide")
     expect(page).to have_css("h2", text: "Super Admin Privileges and Security")
     expect(page).to have_css("table", text: "Business Starter, one account")
-    expect(page).to have_css("a[name='linking-items']")
+    expect(page).to have_css("a[name='linking-items']", visible: :all)
     expect(page).to have_css("h2", text: "Linking Items")
   end
 

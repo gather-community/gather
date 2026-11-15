@@ -39,6 +39,27 @@ describe GDrive::ItemPolicy do
       it "forbids users not in either group" do
         expect(subject).not_to permit(out_user, record)
       end
+
+      context "with an everybody group from another community" do
+        let(:group1) { create(:group, availability: "everybody", communities: [communities[1]]) }
+
+        it "forbids users from a community the group isn't for" do
+          expect(subject).not_to permit(out_user, record)
+        end
+      end
+
+      context "with a deactivated group" do
+        let(:group1) { create(:group, :inactive, communities: communities, joiners: [in_user1]) }
+
+        it "forbids its members" do
+          expect(subject).not_to permit(in_user1, record)
+        end
+      end
+
+      it "forbids a member who has been deactivated" do
+        in_user1.deactivate
+        expect(subject).not_to permit(in_user1.reload, record)
+      end
     end
 
     permissions :new?, :create?, :destroy? do

@@ -28,7 +28,7 @@ de:
         job_reminder: "Erinnerungen an meine Aufgaben" # MT
         job_choosing_notice: "Hinweise, dass die Aufgabenwahl beginnt" # MT
         statement_reminder: "Erinnerungen, wenn eine Zahlung fällig ist" # MT
-        account_access: "Passwort-Zurücksetzungen, E-Mail-Bestätigungen und Einladungen zur Anmeldung" # MT
+        account_access: "Passwort-Zurücksetzungen, E-Mail-Bestätigungen, Einladungen zur Anmeldung und Änderungen der Google-ID" # MT
         meal_message: "Nachrichten und Absagen eines Mahlzeiten-Teams" # MT
         statement_notice: "Kontoauszüge" # MT
         gdrive_migration_request: "Bitten um Hilfe beim Verschieben der Google-Drive-Dateien meiner Gemeinschaft" # MT

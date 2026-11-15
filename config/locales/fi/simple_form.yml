@@ -175,7 +175,6 @@ fi:
         joined_on: "Likimääräinen päivämäärä, jolloin liityit yhteisöön" # MT
         job_choosing_proxy_id: "Joku kotitaloutesi ulkopuolelta, joka voi ilmoittautua tehtäviin puolestasi. Kotitaloutesi jäsenet voivat tehdä tämän jo oletuksena." # MT
         email: "Sähköpostiosoite, johon haluat sinuun otettavan yhteyttä. Käytetään myös salasanalla kirjautumiseen." # MT
-        google_email: "Sen Google-tilin sähköpostiosoite, jolla kirjaudut. Ei näy jäsenluettelossa. Pyydä <a href='/roles'>ylläpitäjää</a> muuttamaan tämä tarvittaessa." # MT
         paypal_email: "PayPal-tilisi sähköpostiosoite. Käytetään kokkien kulukorvauksiin. Jätä tyhjäksi, jos haluat käyttää yllä näkyvää pääsähköpostiosoitettasi." # MT
         full_access: "Lapset, joilla ei ole täysiä käyttöoikeuksia, eivät voi kirjautua Gatheriin, mutta he näkyvät jäsenluettelossa. Lapset, joilla on täydet käyttöoikeudet, lasketaan laskutuksessa aikuisiksi." # MT
         certify_13_or_older: "Lasten täytyy olla vähintään 13-vuotiaita voidakseen kirjautua Gatheriin." # MT

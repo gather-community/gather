@@ -28,7 +28,7 @@ sv:
         job_reminder: "Påminnelser om mina uppgifter" # MT
         job_choosing_notice: "Meddelanden om att uppgiftsvalet har öppnat" # MT
         statement_reminder: "Påminnelser när en betalning förfaller" # MT
-        account_access: "Lösenordsåterställningar, bekräftelser av e-postadress och inbjudningar att logga in" # MT
+        account_access: "Lösenordsåterställningar, bekräftelser av e-postadress, inbjudningar att logga in och ändringar av Google-id" # MT
         meal_message: "Meddelanden och inställningsbesked från ett måltidsteam" # MT
         statement_notice: "Kontoutdrag" # MT
         gdrive_migration_request: "Förfrågningar om att hjälpa till att flytta min gemenskaps filer i Google Drive" # MT

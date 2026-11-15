@@ -85,6 +85,15 @@ fi:
     reset_password_instructions:
       use_link: "Saimme pyynnön vaihtaa salasanasi. Voit tehdä sen tällä linkillä:" # MT
       ignore: "Jos et pyytänyt tätä, voit jättää viestin huomiotta, eikä salasanasi muutu." # MT
+    google_id_changed:
+      subject: "Google-tunnuksesi on vaihdettu" # MT
+      changed: "Google-tili, jolla kirjaudut Gatheriin, vaihdettiin tilistä %{old} tiliin %{new}." # MT
+      linked: "Google-tili %{new} on nyt yhdistetty Gather-tiliisi, joten voit kirjautua sillä." # MT
+      not_you: "Jos et tehnyt tätä muutosta, ota yhteyttä yhteisösi ylläpitäjään." # MT
+    google_id_cleared:
+      subject: "Google-tunnuksesi on poistettu" # MT
+      cleared: "Ylläpitäjä poisti Gather-tiliisi yhdistetyn Google-tilin." # MT
+      still_sign_in: "Voit edelleen kirjautua salasanallasi tai yhdistää Google-tilin profiilistasi." # MT
     sign_in_invitation:
       subject: "Ohjeet Gatheriin kirjautumiseen" # MT
       invited: "Sinut on kutsuttu kirjautumaan Gatheriin, yhteisöjärjestelmään, jota yhteisö %{community} käyttää!" # MT

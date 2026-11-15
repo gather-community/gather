@@ -85,6 +85,15 @@ nl:
     reset_password_instructions:
       use_link: "We hebben een verzoek ontvangen om je wachtwoord opnieuw in te stellen. Gebruik daarvoor deze link:" # MT
       ignore: "Heb je dit niet aangevraagd? Negeer deze e-mail dan gewoon; je wachtwoord blijft ongewijzigd." # MT
+    google_id_changed:
+      subject: "Je Google-ID is gewijzigd" # MT
+      changed: "Het Google-account waarmee je bij Gather inlogt, is gewijzigd van %{old} in %{new}." # MT
+      linked: "Het Google-account %{new} is nu aan je Gather-account gekoppeld, dus je kunt ermee inloggen." # MT
+      not_you: "Heb je deze wijziging niet zelf gedaan? Neem dan contact op met een beheerder van je gemeenschap." # MT
+    google_id_cleared:
+      subject: "Je Google-ID is verwijderd" # MT
+      cleared: "Een beheerder heeft het Google-account verwijderd dat aan je Gather-account was gekoppeld." # MT
+      still_sign_in: "Je kunt nog steeds inloggen met je wachtwoord, of vanuit je profiel een Google-account koppelen." # MT
     sign_in_invitation:
       subject: "Instructies om in te loggen bij Gather" # MT
       invited: "Je bent uitgenodigd om in te loggen bij Gather, het systeem dat %{community} gebruikt om de gemeenschap te beheren!" # MT

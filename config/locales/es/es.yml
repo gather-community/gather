@@ -110,6 +110,7 @@ es:
       reopen: "¿Seguro que quieres reabrir esta comida? Se permitirán nuevas inscripciones." # MT
       unfinalize: "¿Seguro que quieres deshacer la finalización de esta comida?" # MT
     user:
+      clear_google_id: "¿Seguro que quieres eliminar el ID de Google de «%{name}»? No podrá iniciar sesión con Google hasta que vuelva a vincular una cuenta." # MT
       destroy: "¿Seguro que quieres eliminar a «%{name}»? Esta acción no se puede deshacer." # MT
       deactivate: "¿Seguro que quieres desactivar a «%{name}»? Se le quitará de todos sus grupos." # MT
       invite: "Se enviará un correo a «%{name}» con instrucciones para iniciar sesión. ¿Continuar?" # MT

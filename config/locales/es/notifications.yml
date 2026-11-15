@@ -28,7 +28,7 @@ es:
         job_reminder: "Recordatorios de mis tareas" # MT
         job_choosing_notice: "Avisos de que se abre la elección de tareas" # MT
         statement_reminder: "Recordatorios cuando vence un pago" # MT
-        account_access: "Restablecimientos de contraseña, confirmaciones de correo e invitaciones para iniciar sesión" # MT
+        account_access: "Restablecimientos de contraseña, confirmaciones de correo, invitaciones para iniciar sesión y cambios de ID de Google" # MT
         meal_message: "Mensajes y avisos de cancelación de un equipo de comida" # MT
         statement_notice: "Estados de cuenta" # MT
         gdrive_migration_request: "Solicitudes de ayuda para mover los archivos de Google Drive de mi comunidad" # MT

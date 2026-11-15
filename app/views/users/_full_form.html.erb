@@ -25,8 +25,11 @@
     </div>
 
     <%= f.input :email, required: @user.email_required? %>
-    <%= f.input :google_email, disabled: !policy(@user).administer?,
-                               wrapper_html: {"data-full-access-only": true} %>
+    <%# Nobody sets the Google ID here. The member changes it via Google sign-in; admins can only clear it. %>
+    <% if @user.persisted? %>
+      <%= f.input :google_email, disabled: true, hint: @user.decorate.google_email_hint,
+                                 wrapper_html: {"data-full-access-only": true} %>
+    <% end %>
     <%= f.input :phone do %>
       <div class="nested-fields subfields">
         <div class="fields-col">

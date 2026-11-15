@@ -104,6 +104,13 @@ nl:
         cancelled: "het inloggen is geannuleerd" # MT
         session_expired: "je inlogsessie is verlopen. Probeer het opnieuw" # MT
         unexpected: "er een onbekende fout is opgetreden. De beheerders zijn op de hoogte gebracht" # MT
+      google_id_change:
+        changed: "Je logt nu bij Gather in met het Google-account %{google_id}." # MT
+        unchanged: "Je gebruikt het Google-account %{google_id} al met Gather." # MT
+        taken: "Het Google-account %{google_id} wordt al door een ander Gather-lid gebruikt, dus je Google-ID is niet gewijzigd." # MT
+        no_email: "Google heeft geen e-mailadres doorgegeven, dus je Google-ID is niet gewijzigd." # MT
+        not_permitted: "Alleen het lid zelf kan de eigen Google-ID wijzigen." # MT
+        not_changed: "Je Google-ID is niet gewijzigd." # MT
     deletion:
       blocked_intro: "Dit kan nog niet definitief worden verwijderd:" # MT
       confirmation_mismatch: "De bevestigingstekst kwam niet overeen, dus er is niets verwijderd." # MT
@@ -118,6 +125,16 @@ nl:
     photo_of: "Foto van %{name}" # MT
     confirmation_resent: "Instructies verstuurd." # MT
     email_change_canceled: "Wijziging van het e-mailadres geannuleerd." # MT
+    google_id_cleared: "Google-ID verwijderd." # MT
+    google_email_hint:
+      base: "Het e-mailadres van het Google-account waarmee je inlogt. Wordt niet in de ledenlijst getoond." # MT
+      base_gdrive: "Het e-mailadres van het Google-account waarmee je inlogt en Google Drive gebruikt. Wordt niet in de ledenlijst getoond." # MT
+      change_html: "Als je een ander Google-account met Gather wilt gebruiken, kun je het %{link}." # MT
+      change_link: "wijzigen" # MT
+      link_html: "Als je een Google-account wilt koppelen, kun je %{link}." # MT
+      link_link: "er een koppelen" # MT
+      clear_html: "Je kunt de Google-ID van dit lid %{link}." # MT
+      clear_link: "verwijderen" # MT
     created: "Gebruiker aangemaakt." # MT
     created_and_invited: "Gebruiker aangemaakt en uitgenodigd." # MT
     updated: "Gebruiker bijgewerkt." # MT

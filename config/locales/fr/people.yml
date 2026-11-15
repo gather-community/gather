@@ -101,6 +101,13 @@ fr:
         cancelled: "la connexion a été annulée" # MT
         session_expired: "votre session de connexion a expiré. Veuillez réessayer" # MT
         unexpected: "une erreur inconnue s'est produite. Les administrateurs ont été prévenus" # MT
+      google_id_change:
+        changed: "Vous vous connecterez désormais à Gather avec le compte Google %{google_id}." # MT
+        unchanged: "Vous utilisez déjà le compte Google %{google_id} avec Gather." # MT
+        taken: "Le compte Google %{google_id} est déjà utilisé par un autre membre de Gather. Votre identifiant Google n'a donc pas été modifié." # MT
+        no_email: "Google n'a pas fourni d'adresse e-mail. Votre identifiant Google n'a donc pas été modifié." # MT
+        not_permitted: "Seul le membre concerné peut modifier son identifiant Google." # MT
+        not_changed: "Votre identifiant Google n'a pas été modifié." # MT
     deletion:
       blocked_intro: "Ceci ne peut pas encore être supprimé définitivement :" # MT
       confirmation_mismatch: "Le texte de confirmation ne correspondait pas, rien n'a donc été supprimé." # MT
@@ -115,6 +122,16 @@ fr:
     photo_of: "Photo de %{name}" # MT
     confirmation_resent: "Instructions envoyées." # MT
     email_change_canceled: "Changement d'adresse e-mail annulé." # MT
+    google_id_cleared: "Identifiant Google supprimé." # MT
+    google_email_hint:
+      base: "L'adresse e-mail liée au compte Google utilisé pour la connexion. Elle n'est pas affichée dans l'annuaire." # MT
+      base_gdrive: "L'adresse e-mail liée au compte Google utilisé pour la connexion et pour Google Drive. Elle n'est pas affichée dans l'annuaire." # MT
+      change_html: "Si vous souhaitez utiliser un autre compte Google avec Gather, vous pouvez %{link}." # MT
+      change_link: "le changer" # MT
+      link_html: "Si vous souhaitez associer un compte Google, vous pouvez %{link}." # MT
+      link_link: "en associer un" # MT
+      clear_html: "Vous pouvez %{link} l'identifiant Google de ce membre." # MT
+      clear_link: "supprimer" # MT
     created: "Personne créée." # MT
     created_and_invited: "Personne créée et invitée." # MT
     updated: "Personne mise à jour." # MT

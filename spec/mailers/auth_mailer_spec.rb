@@ -77,4 +77,49 @@ describe AuthMailer do
       end
     end
   end
+
+  describe "google_id_changed" do
+    let(:mail) { described_class.google_id_changed(user, old_google_email).deliver_now }
+    let(:old_google_email) { "old@gmail.com" }
+
+    it_behaves_like "returns nil with fake user"
+
+    context "with regular user" do
+      let(:user) { create(:user, google_email: "new@gmail.com") }
+
+      it "sends to the main email with the old and new accounts" do
+        expect(mail.to).to eq([user.email])
+        expect(mail.subject).to eq("Your Google ID Was Changed")
+        expect(mail.body.encoded).to include("Dear #{user.name}")
+        expect(mail.body.encoded).to include("was changed from old@gmail.com to new@gmail.com")
+        expect(mail.body.encoded).to include("If you didn't make this change")
+      end
+
+      context "when there was no old account" do
+        let(:old_google_email) { nil }
+
+        it "says the account was linked" do
+          expect(mail.body.encoded).to include("The Google account new@gmail.com is now linked")
+          expect(mail.body.encoded).not_to include("changed from")
+        end
+      end
+    end
+  end
+
+  describe "google_id_cleared" do
+    let(:mail) { described_class.google_id_cleared(user).deliver_now }
+
+    it_behaves_like "returns nil with fake user"
+
+    context "with regular user" do
+      let(:user) { create(:user, google_email: nil) }
+
+      it "says an admin removed it" do
+        expect(mail.to).to eq([user.email])
+        expect(mail.subject).to eq("Your Google ID Was Removed")
+        expect(mail.body.encoded).to include("An administrator removed the Google account")
+        expect(mail.body.encoded).not_to include("If you didn't make this change")
+      end
+    end
+  end
 end

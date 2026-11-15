@@ -104,6 +104,13 @@ nb:
         cancelled: "innloggingen ble avbrutt" # MT
         session_expired: "innloggingsøkten din er utløpt. Prøv igjen" # MT
         unexpected: "det oppstod en ukjent feil. Administratorene har fått beskjed" # MT
+      google_id_change:
+        changed: "Du logger nå inn på Gather med Google-kontoen %{google_id}." # MT
+        unchanged: "Du bruker allerede Google-kontoen %{google_id} med Gather." # MT
+        taken: "Google-kontoen %{google_id} brukes allerede av et annet medlem i Gather, så Google-ID-en din ble ikke endret." # MT
+        no_email: "Google oppga ingen e-postadresse, så Google-ID-en din ble ikke endret." # MT
+        not_permitted: "Bare medlemmet selv kan endre Google-ID-en sin." # MT
+        not_changed: "Google-ID-en din ble ikke endret." # MT
     deletion:
       blocked_intro: "Dette kan ikke slettes for godt ennå:" # MT
       confirmation_mismatch: "Bekreftelsesteksten stemte ikke, så ingenting ble slettet." # MT
@@ -118,6 +125,16 @@ nb:
     photo_of: "Bilde av %{name}" # MT
     confirmation_resent: "Instruksjonene er sendt." # MT
     email_change_canceled: "Endringen av e-postadresse er avbrutt." # MT
+    google_id_cleared: "Google-ID fjernet." # MT
+    google_email_hint:
+      base: "E-postadressen til Google-kontoen som brukes til innlogging. Vises ikke i medlemslisten." # MT
+      base_gdrive: "E-postadressen til Google-kontoen som brukes til innlogging og Google Drive. Vises ikke i medlemslisten." # MT
+      change_html: "Hvis du vil bruke en annen Google-konto med Gather, kan du %{link}." # MT
+      change_link: "endre den" # MT
+      link_html: "Hvis du vil koble til en Google-konto, kan du %{link}." # MT
+      link_link: "koble til en" # MT
+      clear_html: "Du kan %{link} Google-ID-en til dette medlemmet." # MT
+      clear_link: "fjerne" # MT
     created: "Brukeren er opprettet." # MT
     created_and_invited: "Brukeren er opprettet og invitert." # MT
     updated: "Brukeren er oppdatert." # MT

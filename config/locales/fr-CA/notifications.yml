@@ -15,7 +15,7 @@ fr-CA:
     preferences:
       kinds:
         meal_role_reminder: "Rappels pour mes quarts de repas" # MT
-        account_access: "Réinitialisations de mot de passe, confirmations d'adresse courriel et invitations à se connecter" # MT
+        account_access: "Réinitialisations de mot de passe, confirmations d'adresse courriel, invitations à se connecter et changements d'identifiant Google" # MT
       show:
         intro: "Choisissez les courriels que Gather vous envoie au sujet de ce qui vous concerne. Ceux qui sont grisés sont essentiels et ne peuvent pas être désactivés." # MT
         email_lists_hint: "Vous êtes sur ces listes par l'intermédiaire de vos groupes. Pour ne plus recevoir les courriels d'une liste, désabonnez-vous ou quittez le groupe sur sa page." # MT

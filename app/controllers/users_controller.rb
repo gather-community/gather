@@ -173,6 +173,16 @@ class UsersController < ApplicationController
     redirect_to(user_path(@user))
   end
 
+  # Admins can't set someone's Google ID (only the member can, via Google sign-in), but they can remove it.
+  def clear_google_id
+    @user = User.find(params[:id])
+    authorize(@user)
+    @user.clear_google_id!
+    AuthMailer.google_id_cleared(@user).deliver_later
+    flash[:success] = t("users.google_id_cleared")
+    redirect_to(edit_user_path(@user))
+  end
+
   def impersonate
     @user = User.find(params[:id])
     authorize(@user)

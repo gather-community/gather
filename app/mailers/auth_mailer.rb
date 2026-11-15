@@ -51,6 +51,23 @@ class AuthMailer < Devise::Mailer
     in_locale_of(user) { mail(to: @user.email, subject: default_i18n_subject) }
   end
 
+  # Sent to the member's main email whenever the Google account they sign in with changes, since that's
+  # a change to how someone can get into their account.
+  def google_id_changed(user, old_google_email)
+    return if user.fake? || user.email.blank?
+    set_notification_preferences_url(user)
+    @user = user.decorate
+    @old_google_email = old_google_email
+    in_locale_of(user) { mail(to: @user.email, subject: default_i18n_subject) }
+  end
+
+  def google_id_cleared(user)
+    return if user.fake? || user.email.blank?
+    set_notification_preferences_url(user)
+    @user = user.decorate
+    in_locale_of(user) { mail(to: @user.email, subject: default_i18n_subject) }
+  end
+
   private
 
   # Auth links point at the apex domain, but the settings page lives on the user's community subdomain.

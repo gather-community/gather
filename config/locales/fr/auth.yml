@@ -82,6 +82,15 @@ fr:
     reset_password_instructions:
       use_link: "Nous avons reçu une demande de réinitialisation de votre mot de passe. Pour la faire, utilisez ce lien :" # MT
       ignore: "Si vous n'êtes pas à l'origine de cette demande, ignorez simplement cet e-mail et votre mot de passe restera inchangé." # MT
+    google_id_changed:
+      subject: "Votre identifiant Google a été modifié" # MT
+      changed: "Le compte Google que vous utilisez pour vous connecter à Gather est passé de %{old} à %{new}." # MT
+      linked: "Le compte Google %{new} est désormais associé à votre compte Gather. Vous pouvez l'utiliser pour vous connecter." # MT
+      not_you: "Si vous n'êtes pas à l'origine de ce changement, contactez un administrateur de votre communauté." # MT
+    google_id_cleared:
+      subject: "Votre identifiant Google a été supprimé" # MT
+      cleared: "Un administrateur a supprimé le compte Google associé à votre compte Gather." # MT
+      still_sign_in: "Vous pouvez toujours vous connecter avec votre mot de passe, ou associer un compte Google depuis votre profil." # MT
     sign_in_invitation:
       subject: "Instructions pour vous connecter à Gather" # MT
       invited: "Vous êtes invité à vous connecter à Gather, le système de gestion de la communauté %{community} !" # MT

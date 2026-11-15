@@ -114,6 +114,7 @@ de:
       reopen: "Möchtest du diese Mahlzeit wirklich wieder öffnen? Dann sind wieder Anmeldungen möglich." # MT
       unfinalize: "Möchtest du den Abschluss dieser Mahlzeit wirklich aufheben?" # MT
     user:
+      clear_google_id: "Möchtest du die Google-ID von „%{name}“ wirklich entfernen? Die Person kann sich erst wieder mit Google anmelden, wenn sie ein Konto verknüpft." # MT
       destroy: "Möchtest du die Person „%{name}“ wirklich löschen? Das kann nicht rückgängig gemacht werden." # MT
       deactivate: "Möchtest du die Person „%{name}“ wirklich deaktivieren? Sie wird dann aus allen ihren Gruppen entfernt." # MT
       invite: "Dabei wird eine E-Mail mit einer Anleitung zur Anmeldung an „%{name}“ geschickt. Fortfahren?" # MT

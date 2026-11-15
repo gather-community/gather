@@ -114,6 +114,7 @@ fi:
       reopen: "Haluatko varmasti avata tämän aterian uudelleen? Uudet ilmoittautumiset sallitaan." # MT
       unfinalize: "Haluatko varmasti perua tämän aterian viimeistelyn?" # MT
     user:
+      clear_google_id: "Haluatko varmasti poistaa käyttäjän ”%{name}” Google-tunnuksen? Hän ei voi kirjautua Googlella ennen kuin tili yhdistetään uudelleen." # MT
       destroy: "Haluatko varmasti poistaa käyttäjän ”%{name}”? Tätä ei voi kumota." # MT
       deactivate: "Haluatko varmasti poistaa käyttäjän ”%{name}” käytöstä? Hänet poistetaan kaikista ryhmistä, joihin hän kuuluu." # MT
       invite: "Käyttäjälle ”%{name}” lähetetään sähköposti, jossa on kirjautumisohjeet. Jatketaanko?" # MT

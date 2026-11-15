@@ -175,7 +175,6 @@ nl:
         joined_on: "Ongeveer de datum waarop je bij de gemeenschap kwam" # MT
         job_choosing_proxy_id: "Iemand buiten je huishouden die namens jou kan aanmelden voor taken. Leden van je huishouden kunnen dit standaard al." # MT
         email: "Het e-mailadres waarop je het liefst benaderd wordt. Wordt ook gebruikt om met een wachtwoord in te loggen." # MT
-        google_email: "Het e-mailadres van het Google-account waarmee je inlogt. Wordt niet in de ledenlijst getoond. Vraag een <a href='/roles'>beheerder</a> als dit moet worden gewijzigd." # MT
         paypal_email: "Het e-mailadres van je PayPal-account. Wordt gebruikt voor vergoedingen aan koks. Laat leeg om je hoofde-mailadres hierboven te gebruiken." # MT
         full_access: "Kinderen zonder volledige toegang kunnen niet bij Gather inloggen, maar staan wel in de ledenlijst. Kinderen met volledige toegang tellen voor de facturatie als volwassenen." # MT
         certify_13_or_older: "Kinderen moeten 13 jaar of ouder zijn om bij Gather in te loggen." # MT

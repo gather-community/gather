@@ -5,7 +5,7 @@ require "rails_helper"
 describe "tenancy" do
   ALLOWLISTED_TABLES = %w[active_storage_attachments active_storage_blobs active_storage_variant_records
     ar_internal_metadata clusters community_signups delayed_jobs feature_flags feature_flag_users
-    roles schema_migrations users_roles mail_test_runs meal_restrictions_signup_parts
+    roles schema_migrations users_roles mail_test_runs meal_restrictions_signup_parts meal_restrictions_users
     stripe_webhook_events subscription_exchange_rates subscription_inflation_readings].freeze
   ALLOWLISTED_CLASSES = %w[Communities::Signup Role Cluster FeatureFlag FeatureFlagUser MailTestRun
     Stripe::WebhookEvent Subscription::ExchangeRate Subscription::InflationReading].freeze

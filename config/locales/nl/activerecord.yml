@@ -123,6 +123,7 @@ nl:
         paypal_email: "PayPal-e-mailadres" # MT
         school: "School" # MT
         allergies: "Allergieën" # MT
+        meal_restriction_ids: "Dieetwensen" # MT
         doctor: "Gegevens huisarts" # MT
         medical: "Medische gegevens" # MT
         remember_me: "Ingelogd blijven nadat je je browser sluit" # MT

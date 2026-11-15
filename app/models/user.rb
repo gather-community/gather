@@ -149,6 +149,10 @@ class User < ApplicationRecord
   has_many :group_memberships, class_name: "Groups::Membership", inverse_of: :user, dependent: :destroy
   has_one :group_mailman_user, class_name: "Groups::Mailman::User", inverse_of: :user, dependent: :destroy,
     autosave: false
+  # Dietary restrictions chosen on the person's profile. Rows go when either side is deleted (FK cascade).
+  # Includes deactivated restrictions, which are kept but not shown; see active_meal_restrictions.
+  has_and_belongs_to_many :meal_restrictions, class_name: "Meals::Restriction",
+    join_table: :meal_restrictions_users, association_foreign_key: :meal_restriction_id
   has_many :meal_assignments, class_name: "Meals::Assignment", inverse_of: :user, dependent: :destroy
   has_many :meal_costs, class_name: "Meals::Cost", foreign_key: :reimbursee_id,
     inverse_of: :reimbursee, dependent: :nullify
@@ -345,6 +349,17 @@ class User < ApplicationRecord
     settings = {} if settings.blank?
     settings.each { |k, v| settings[k] = ["1", "true", true].include?(v) }
     self[:privacy_settings] = settings
+  end
+
+  # The profile form only offers active restrictions, so it never submits deactivated ones. Keep those
+  # rather than dropping them, so they come back if the restriction is reactivated.
+  def meal_restriction_ids=(ids)
+    kept = persisted? ? meal_restrictions.where(deactivated: true).ids : []
+    super(Array(ids).compact_blank.map(&:to_i) | kept)
+  end
+
+  def active_meal_restrictions
+    meal_restrictions.active
   end
 
   # Whether this user wants the given kind of notification over the given channel.

@@ -123,6 +123,7 @@ nb:
         paypal_email: "PayPal-e-post" # MT
         school: "Skole" # MT
         allergies: "Allergier" # MT
+        meal_restriction_ids: "Kostrestriksjoner" # MT
         doctor: "Lege" # MT
         medical: "Medisinsk informasjon" # MT
         remember_me: "Forbli innlogget etter at du lukker nettleseren" # MT

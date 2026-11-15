@@ -56,6 +56,22 @@
     <%= f.input :paypal_email %>
     <%= f.input :school if @user.child? %>
     <%= f.input :allergies %>
+    <% if FeatureFlag.lookup("restrictions").on?(current_user) && @meal_restrictions.any? %>
+      <%= f.input :meal_restriction_ids do %>
+        <%= hidden_field_tag "user[meal_restriction_ids][]", "" %>
+        <div class="boxes flowing-columns-max-2">
+          <% @meal_restrictions.each do |restriction| %>
+            <div>
+              <label>
+                <%= check_box_tag("user[meal_restriction_ids][]", restriction.id,
+                                  user.meal_restriction_ids.include?(restriction.id)) %>
+                <%= restriction.absence %>
+              </label>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    <% end %>
     <%= f.input :doctor %>
     <%= f.input :medical %>
     <% unless @user.custom_data.undefined? %>

@@ -9,12 +9,12 @@ This document refers to different categories of information as follows. An aster
 * Adults
   * **Contact info**: Name \*, unit number \*, email address \*, phone number, preferred contact method
   * **Profile photo**
-  * **Personal info**: Birthdate (with or without year), gender pronouns, Google account ID, join date, vehicle make, model, and color, garage number, emergency contacts, allergies, doctor info, medical conditions, names of people with keys to unit, pet information
+  * **Personal info**: Birthdate (with or without year), gender pronouns, Google account ID, join date, vehicle make, model, and color, garage number, emergency contacts, allergies, dietary restrictions, doctor info, medical conditions, names of people with keys to unit, pet information
   * **Account info**: Meals charges, late fees, credit limit, account balance
 * Children
   * **Contact info**: Name \*, unit number \*, email address, phone number, preferred contact method
   * **Profile photo**
-  * **Personal info**: Birthdate (with or without year), gender pronouns, join date, school name, allergies, doctor info, medical conditions
+  * **Personal info**: Birthdate (with or without year), gender pronouns, join date, school name, allergies, dietary restrictions, doctor info, medical conditions
 
 #### When do we collect information?
 
@@ -134,4 +134,4 @@ If you have any questions regarding this privacy policy, you may contact us usin
 
 Gather<br/>220 Collingwood St #140<br/>Ann Arbor, MI 48103<br/>USA<br/>support@gather.coop
 
-Last Edited on 2026-11-02
+Last Edited on 2026-11-15

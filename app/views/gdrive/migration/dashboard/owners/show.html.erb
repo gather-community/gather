@@ -46,7 +46,7 @@
     </tr>
     <tr>
       <td class="key"><%= t(".status") %></td>
-      <td class="value"><%= I18n.t("gdrive.request_statuses.#{migration_request.status}") %></td>
+      <td class="value"><%= migration_request.status_label %></td>
     </tr>
     <% if migration_request.active? %>
       <tr>

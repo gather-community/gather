@@ -156,6 +156,7 @@ fr:
     item_error_types:
       inaccessible: "Inaccessible" # MT
       not_shareable: "Non partageable" # MT
+    request_status_expired: "%{status}, lien expiré" # MT
     request_statuses:
       new: "Nouvelle" # MT
       opened: "Ouverte" # MT

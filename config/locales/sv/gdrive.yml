@@ -159,6 +159,7 @@ sv:
     item_error_types:
       inaccessible: "Går inte att nå" # MT
       not_shareable: "Går inte att dela" # MT
+    request_status_expired: "%{status}, länken har slutat gälla" # MT
     request_statuses:
       new: "Ny" # MT
       opened: "Öppnad" # MT

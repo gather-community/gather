@@ -159,6 +159,7 @@ de:
     item_error_types:
       inaccessible: "Nicht erreichbar" # MT
       not_shareable: "Nicht freigebbar" # MT
+    request_status_expired: "%{status}, Link abgelaufen" # MT
     request_statuses:
       new: "Neu" # MT
       opened: "Geöffnet" # MT

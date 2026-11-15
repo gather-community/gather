@@ -159,6 +159,7 @@ nl:
     item_error_types:
       inaccessible: "Niet toegankelijk" # MT
       not_shareable: "Niet deelbaar" # MT
+    request_status_expired: "%{status}, link verlopen" # MT
     request_statuses:
       new: "Nieuw" # MT
       opened: "Geopend" # MT

@@ -156,6 +156,7 @@ es:
     item_error_types:
       inaccessible: "Inaccesible" # MT
       not_shareable: "No se puede compartir" # MT
+    request_status_expired: "%{status}, enlace caducado" # MT
     request_statuses:
       new: "Nueva" # MT
       opened: "Abierta" # MT

@@ -159,6 +159,7 @@ nb:
     item_error_types:
       inaccessible: "Ikke tilgjengelig" # MT
       not_shareable: "Kan ikke deles" # MT
+    request_status_expired: "%{status}, lenken har utløpt" # MT
     request_statuses:
       new: "Ny" # MT
       opened: "Åpnet" # MT

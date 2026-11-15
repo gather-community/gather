@@ -159,6 +159,7 @@ fi:
     item_error_types:
       inaccessible: "Ei käytettävissä" # MT
       not_shareable: "Ei jaettavissa" # MT
+    request_status_expired: "%{status}, linkki vanhentunut" # MT
     request_statuses:
       new: "Uusi" # MT
       opened: "Avattu" # MT

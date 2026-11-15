@@ -147,6 +147,7 @@ en:
     item_error_types:
       inaccessible: "Inaccessible"
       not_shareable: "Not shareable"
+    request_status_expired: "%{status}, link expired"
     request_statuses:
       new: "New"
       opened: "Opened"

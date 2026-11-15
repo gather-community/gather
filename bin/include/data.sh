@@ -358,7 +358,8 @@ _data_set_mailman_admin_password() {
   # The mailman-web image creates the admin with an unusable password.
   # Set it to 'gather-mailman-dev' by writing the hash directly to SQLite.
   local container
-  container=$(docker ps --filter "name=mailman-web" --filter "status=running" --format "{{.Names}}" 2>/dev/null | head -1)
+  # Ask compose, not `docker ps --filter name=`, which would also match other dev envs' containers.
+  container=$(docker compose ps -q --status running mailman-web 2>/dev/null | head -1)
   [[ -z "$container" ]] && return 0
 
   printf "  %-16s " "Mailman admin"

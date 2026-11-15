@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Binds Mailman's web UI port to the Mac host so you can access it in a browser.
+# Starts Mailman's web UI (off by default; it's behind a compose profile) and binds its port to the Mac host.
 # Usage: bin/mailman-web [stop]
 set -euo pipefail
 
@@ -17,8 +17,9 @@ port_owner() {
 
 case "${1:-}" in
   stop)
-    docker compose up -d --force-recreate mailman-web
-    echo "mailman-web host port binding removed."
+    # mailman-web is off by default (it's behind a compose profile), so stopping means removing it.
+    docker compose rm -sf mailman-web
+    echo "mailman-web stopped."
     ;;
   "")
     owner=$(port_owner 8000)
@@ -37,6 +38,7 @@ case "${1:-}" in
     fi
 
     echo "mailman-web exposed at http://localhost:8000"
+    echo "To set the Postorius admin password (admin / gather-mailman-dev), run: mise data"
     echo "To remove: bin/mailman-web stop"
     ;;
   *)

@@ -136,7 +136,7 @@ The `mise data` stage will create an admin user for development. If you need to 
 
 Multiple clones of the repo (e.g. `gather1`, `gather2`) can run simultaneously on the same machine. Each gets its own isolated Docker network and database, named after the workspace folder.
 
-Each new instance adds about 3 GB of memory. Ensure your Docker is configured to allow this.
+Each new instance adds about 3 GB of memory. Ensure your Docker is configured to allow this. Mailman is kept small by default to help with this (see [Mailman 3 Setup](#mailman-3-setup)).
 
 ### How isolation works
 
@@ -220,7 +220,7 @@ This removes:
 
 ### Exposing sibling container UIs
 
-Mailcatcher and the Mailman web UI are sibling containers — VS Code can't port-forward them. When you need to view one in a browser, run:
+Mailcatcher and the Mailman web UI are sibling containers — VS Code can't port-forward them. When you need to view one in a browser, run the command below. `bin/mailman-web` also starts the Mailman web UI, which is off by default.
 
 ```bash
 bin/mailcatcher       # http://localhost:1080  (SMTP: localhost:1025)
@@ -290,11 +290,31 @@ bin/rails search:reindex
 
 Only required if working on mailing list integration.
 
-Mailman runs as two Docker containers (`mailman-core` and `mailman-web`) included in `docker-compose.yml`. Running `mise data` (or `docker compose up -d`) starts them alongside the other services. A Postorius admin account is created automatically with username `admin` and password `gather-mailman-dev`.
+Mailman has two Docker containers in `docker-compose.yml`:
+
+- **`mailman-core`** runs Mailman itself, including the REST API that Gather talks to. `mise data` (or `docker compose up -d`) starts it with the other services.
+- **`mailman-web`** runs the Postorius and HyperKitty web UIs. Gather doesn't need it, so it's behind a compose profile and doesn't start unless you ask for it.
+
+### Keeping Mailman small
+
+Both images are x86-only, so on Apple Silicon they run under emulation, and each Mailman process uses 60–80 MB. A full Mailman uses about 1.15 GB per dev env, which adds up when you run several. So by default:
+
+- **Only the REST API runs in `mailman-core`.** The mail-handling runners (`in`, `out`, `lmtp`, `pipeline`, `archive`, `digest` and so on) are turned off by [docker/mailman-core-rest-only.cfg](docker/mailman-core-rest-only.cfg). This brings `mailman-core` from about 940 MB to about 190 MB. Lists, members and settings all sync as usual. Mail Mailman generates (welcome notices, list posts) waits in its queue instead of being sent, but dev Mailman has no mail server to send it to anyway.
+- **`mailman-web` is off.** That saves another 200 MB or so.
+
+To run the full set of runners, for example to follow a post through Mailman's pipeline:
+
+```bash
+MAILMAN_REST_ONLY=false docker compose up -d --force-recreate mailman-core
+```
+
+Run the same command without `MAILMAN_REST_ONLY=false` to go back.
+
+To start the web UI, use `bin/mailman-web` (which also exposes it on the Mac; see below) or `docker compose --profile mailman-web up -d`. Then run `mise data` to set the Postorius admin password: username `admin`, password `gather-mailman-dev`. Stop it again with `bin/mailman-web stop`.
 
 ### Inspecting list state (Postorius web UI)
 
-Run `bin/mailman-web` first to bind port 8000, then visit [http://localhost:8000/postorius/](http://localhost:8000/postorius/) and log in with the superuser you created above. From here you can browse domains, lists, and memberships.
+Run `bin/mailman-web` first to start the web UI and bind port 8000, then `mise data` if you haven't set the admin password yet. Visit [http://localhost:8000/postorius/](http://localhost:8000/postorius/) and log in as `admin` / `gather-mailman-dev`. From here you can browse domains, lists, and memberships.
 
 ### Inspecting list state (REST API)
 
@@ -339,15 +359,15 @@ curl -u restadmin:restpass -X PATCH http://mailman-core:8001/3.1/lists/list@doma
 ### Viewing logs
 
 ```bash
-docker logs mailman-core        # Mailman core logs (REST API, delivery, errors)
-docker logs mailman-web         # Postorius web UI logs
-docker logs -f mailman-core     # Follow logs in real time
+docker compose logs mailman-core      # Mailman core logs (REST API, delivery, errors)
+docker compose logs mailman-web       # Postorius web UI logs
+docker compose logs -f mailman-core   # Follow logs in real time
 ```
 
 ### Dropping into a shell
 
 ```bash
-docker exec -it mailman-core bash
+docker compose exec mailman-core bash
 ```
 
 ## VS Code

@@ -1,5 +1,9 @@
 <% content_for(:title) { t(".title") } %>
 
+<div class="alert alert-warning">
+  <%= icon_tag("warning") %> <%= t(".group_control_warning") %>
+</div>
+
 <%= gather_form_for(@item_group) do |f| %>
   <%= f.hidden_field(:item_id) %>
   <%= f.input(:item_id) { @item.name } %>

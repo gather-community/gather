@@ -24,7 +24,8 @@ read -r -p "Continue? [y/N] " confirm
 echo ""
 
 echo "==> Stopping compose services and removing volumes..."
-docker compose down -v 2>/dev/null || true
+# --profile "*" so services behind a profile (mailman-web) are removed too.
+docker compose --profile "*" down -v 2>/dev/null || true
 
 echo "==> Removing devcontainer..."
 container_ids=$(docker ps -a --filter "label=devcontainer.local_folder=$ROOT_DIR" -q)

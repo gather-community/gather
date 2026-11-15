@@ -13,8 +13,16 @@ Gather is a Ruby on Rails community management platform for cooperative housing.
 ```bash
 bin/dev                  # Start Rails + JS build + type checking (via foreman/Procfile.dev)
 bin/delayed_job run      # Background jobs (separate terminal)
-docker compose up -d     # Start PostgreSQL, Redis, Elasticsearch, Mailcatcher
+docker compose up -d     # Start PostgreSQL, Redis, Elasticsearch, Mailcatcher, Mailman (REST API only)
 ```
+
+### Mailman in Dev
+
+Several dev envs often run on one machine, and the Mailman images run under x86 emulation, so dev Mailman is cut down by default to save about 1 GB per env (details in the README's "Mailman 3 Setup"):
+
+- **`mailman-core` runs only the REST API**, which is all Gather uses. The mail-handling runners are turned off by `docker/mailman-core-rest-only.cfg`, so mail Mailman generates sits in its queue. To run them all: `MAILMAN_REST_ONLY=false docker compose up -d --force-recreate mailman-core`.
+- **`mailman-web` (Postorius/HyperKitty) is behind the `mailman-web` compose profile**, so `docker compose up -d` doesn't start it. Start it with `bin/mailman-web` only when someone needs the web UI, and stop it with `bin/mailman-web stop` when done.
+- **Look up a compose service's container with `docker compose ps -q <service>`**, not `docker ps --filter name=...`. Name filters also match other dev envs' containers (`gather1-mailman-web-1` and so on).
 
 ### Verifying a Clean Boot Before Deploying
 Development already uses `config.eager_load = true`, so boot errors surface locally. Before deploying a branch that touches gems, initializers, or models, run these three checks:

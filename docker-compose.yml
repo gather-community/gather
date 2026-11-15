@@ -53,7 +53,24 @@ services:
     platform: linux/amd64
     volumes:
       - mailman_core_data:/opt/mailman
+      - ./docker/mailman-core-rest-only.cfg:/gather/mailman-core-rest-only.cfg:ro
+    # The image appends /opt/mailman/mailman-extra.cfg to its config at startup. It also chowns everything
+    # under /opt/mailman, so we copy the file in rather than bind-mounting it there (that would chown the
+    # repo's copy). With MAILMAN_REST_ONLY=true only the REST API runs; see the .cfg file for why.
+    entrypoint:
+      - sh
+      - -c
+      - |
+        if [ "$$MAILMAN_REST_ONLY" = true ]; then
+          cp /gather/mailman-core-rest-only.cfg /opt/mailman/mailman-extra.cfg
+        else
+          rm -f /opt/mailman/mailman-extra.cfg
+        fi
+        exec docker-entrypoint.sh "$$@"
+      - --
+    command: [master, --force]
     environment:
+      - MAILMAN_REST_ONLY=${MAILMAN_REST_ONLY:-true}
       - HYPERKITTY_API_KEY=hyperkittyapikey
       - MTA=null
       - MAILMAN_REST_API_PASS=restpass
@@ -61,9 +78,12 @@ services:
     networks:
       - gather-network
 
+  # The Postorius/HyperKitty web UI. Gather only talks to mailman-core's REST API, so this is off unless
+  # asked for: `docker compose --profile mailman-web up -d`, or `bin/mailman-web` to also expose it.
   mailman-web:
     image: maxking/mailman-web:0.4
     platform: linux/amd64
+    profiles: [mailman-web]
     volumes:
       - mailman_web_data:/opt/mailman-web-data
       - ./docker/mailman-web-uwsgi.ini:/opt/mailman-web/uwsgi.ini

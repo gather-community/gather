@@ -260,6 +260,10 @@
 		// Must be containerEnv (not remoteEnv) so it's available to lifecycle scripts
 		// and terminals opened outside VS Code.
 		"SELENIUM_REMOTE_URL": "http://localhost:4444",
+		// Elasticsearch is reachable only by its service name on the dev env's Docker network (no
+		// host port is published). settings.local.yml covers development, but the config gem doesn't
+		// load it in test, so specs would otherwise look for 127.0.0.1:9200, which is what CI uses.
+		"SETTINGS__ELASTICSEARCH__HOST": "elasticsearch",
 		"GITHUB_APP_ID": "${localEnv:GITHUB_GATHER_AI_APP_ID}",
 		"GITHUB_APP_PRIVATE_KEY_PATH": "/home/${localEnv:USER}/.ssh/github-bot-key.pem"
 	},

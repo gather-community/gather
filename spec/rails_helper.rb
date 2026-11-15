@@ -157,6 +157,9 @@ RSpec.configure do |config|
     c.ignore_hosts("127.0.0.1")
     c.ignore_request { |r| URI(r.uri).then { |u| u.host == "localhost" && u.port == 4444 } }
 
+    # Elasticsearch is 127.0.0.1 on CI but its Docker service name in the devcontainer.
+    c.ignore_hosts(Settings.elasticsearch.host)
+
     c.ignore_hosts("o1375887.ingest.sentry.io")
 
     # Make VCR ignore download of chromedriver by webdrivers gem.

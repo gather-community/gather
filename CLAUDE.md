@@ -718,6 +718,10 @@ The Selenium container is started automatically when the devcontainer starts (vi
 - `*.gatherdev.org` wildcard DNS (configured on the Mac host) resolves to `127.0.0.1` inside Chrome, reaching Capybara's test server
 - VCR already ignores `localhost:4444` (the Selenium WebDriver endpoint)
 
+The node allows three browser sessions (`SE_NODE_MAX_SESSIONS` in `.devcontainer/post-start.sh`), because Capybara keeps one open per driver and specs use up to three (`js`, `desktop`, `mobile`). With one, a run needing a second driver queued until it timed out with `Net::ReadTimeout`. A run that's killed mid-spec can leave its sessions open for up to five minutes; `curl localhost:4444/status` shows the busy slots.
+
+Specs reach Elasticsearch at `elasticsearch:9200` through `SETTINGS__ELASTICSEARCH__HOST` in `containerEnv`, since the config gem doesn't load `settings.local.yml` in test and no host port is published. CI uses the default `127.0.0.1`.
+
 **Why shared network namespace instead of a docker-compose service?** The Mac's wildcard DNS for `*.gatherdev.org` resolves to `127.0.0.1`. In a regular docker-compose service, `127.0.0.1` is that container's own loopback — Capybara's test server isn't there. Sharing the devcontainer's network namespace means Chrome and the test server share the same `127.0.0.1`.
 
 **Why not `selenium-manager` auto-download?** Chrome for Testing publishes `mac-arm64` (macOS) but not `linux-arm64`. The Ruby gem's Linux `selenium-manager` binary is also x86_64-only and downloads the wrong architecture on Apple Silicon devcontainers.

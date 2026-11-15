@@ -296,12 +296,7 @@ module Meals
       end
       @meals = @meals.includes(:calendars, :invitations, assignments: [:role, :user], signups: {parts: :type})
 
-      if params[:search].present?
-        subq = Assignment.select("DISTINCT meal_id").joins(:user)
-          .where("first_name ILIKE ? OR last_name ILIKE ?", "%#{params[:search]}%", "%#{params[:search]}%")
-          .where("meals.id = meal_assignments.meal_id")
-        @meals = @meals.where("title ILIKE ? OR meals.id IN (#{subq.to_sql})", "%#{params[:search]}%")
-      end
+      @meals = @meals.matching(params[:search]) if params[:search].present?
 
       @meals = @meals.page(params[:page])
     end

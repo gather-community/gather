@@ -19,4 +19,14 @@ describe Meals::Type do
   it "has valid factory" do
     create(:meal_type)
   end
+
+  describe ".matching" do
+    let!(:veg) { create(:meal_type, name: "Veg Curry") }
+    let!(:chicken) { create(:meal_type, name: "Chicken") }
+
+    it "matches the start of each word of the name" do
+      expect(described_class.matching("cur")).to contain_exactly(veg)
+      expect(described_class.matching("urry")).to be_empty
+    end
+  end
 end

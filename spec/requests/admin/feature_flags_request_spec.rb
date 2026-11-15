@@ -43,6 +43,12 @@ describe "admin feature flags request" do
       expect(search("jsmith@")["results"].pluck("name")).to eq(["Janet Smith"])
     end
 
+    it "matches the start of a word of the name or email, not the middle" do
+      expect(search("smi")["results"].pluck("name")).to eq(["Janet Smith"])
+      expect(search("example.org")["results"].pluck("name")).to eq(["Jane Far"])
+      expect(search("mith")["results"]).to eq([])
+    end
+
     it "treats LIKE wildcards literally" do
       expect(search("%%")["results"]).to eq([])
     end

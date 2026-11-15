@@ -298,6 +298,7 @@ Existing flags: `messaging`, `gdrive`, `restrictions`, `search` (global search p
 ### Model Conventions
 
 - `ApplicationRecord` provides `alpha_order(*args)` for sorting text the way people expect in the current locale (see Sorting under User-Facing Strings)
+- **Text search uses `matching_word_starts(sql_expression, query)`** (on `ApplicationRecord`, rules in `Gather::WordMatch`): each word of the query must start a word of the text, ignoring case, accents and punctuation. Every search box (lenses and select2 lookups) uses it, so they all behave the same. Don't write `ILIKE "%q%"` searches. To search several fields, OR separate calls (see `Meals::Meal.matching`).
 - `skip_listener_action` transient attribute suppresses Wisper listener side effects (used in factories/tests)
 - Models use `in_community(community)` scopes for community filtering
 - `active` scopes filter deactivated records

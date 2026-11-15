@@ -12,15 +12,21 @@ module Admin
 
     def index
       authorize(sample_community)
-      prepare_lenses(:"communities/status")
+      prepare_lenses(:search, :"communities/status")
       summarizer = Utils::CommunitySummarizer.new
       scope = policy_scope(Community)
 
       # Status is computed in Ruby, so filtering and counting by it needs every community. This uses
       # the cheap query; the expensive activity stats are only computed for the current page.
+      # The stats cover every community, whatever the lenses say.
       all = summarizer.with_status(scope)
       @stats = Utils::CommunityStats.new(communities: all)
-      filtered = lenses[:status].active? ? all.select { |c| c.status == lenses[:status].selection } : all
+      filtered = all
+      if lenses[:search].present?
+        ids = ActsAsTenant.without_tenant { scope.matching(lenses[:search].value).pluck(:id) }.to_set
+        filtered = filtered.select { |c| ids.include?(c.id) }
+      end
+      filtered = filtered.select { |c| c.status == lenses[:status].selection } if lenses[:status].active?
       @page = Kaminari.paginate_array(filtered).page(params[:page]).per(PER_PAGE)
       @communities = summarizer.communities(scope, ids: @page.map(&:id))
     end

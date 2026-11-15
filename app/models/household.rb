@@ -47,7 +47,7 @@ class Household < ApplicationRecord
   scope :ordered_by, ->(col) { (col == "unit") ? by_unit : by_name }
   scope :by_commty_and_name, -> { joins(:community).alpha_order(communities: :abbrv).by_name }
   scope :in_community, ->(c) { where(community_id: c.id) }
-  scope :matching, ->(q) { where("households.name ILIKE ?", "%#{q}%") }
+  scope :matching, ->(q) { matching_word_starts("households.name", q) }
 
   delegate :name, :abbrv, :cluster, to: :community, prefix: true
 

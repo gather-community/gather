@@ -125,6 +125,26 @@ describe Meals::Meal do
     end
   end
 
+  describe ".matching" do
+    let(:lorris) { create(:user, first_name: "Lorris", last_name: "Haddad") }
+    let!(:haggis) { create(:meal, :with_menu, title: "Haggis Night") }
+    let!(:sandwiches) { create(:meal, :with_menu, title: "Sandwiches", head_cook: lorris) }
+
+    it "matches the start of each word of the title" do
+      expect(described_class.matching("hag nig")).to contain_exactly(haggis)
+      expect(described_class.matching("aggis")).to be_empty
+    end
+
+    it "matches the start of each word of a worker's name" do
+      expect(described_class.matching("lor had")).to contain_exactly(sandwiches)
+      expect(described_class.matching("orris")).to be_empty
+    end
+
+    it "doesn't mix words from the title and a worker's name" do
+      expect(described_class.matching("sand lor")).to be_empty
+    end
+  end
+
   describe "cost nested attributes" do
     let(:meal) { create(:meal) }
     let(:reimbursee) { create(:user) }

@@ -65,9 +65,9 @@ module Admin
     # apex domain tenant scoping is off, which is why this can't use /users.json.
     def user_search
       authorize(%i[admin feature_flag])
-      pattern = "%#{User.sanitize_sql_like(params[:search].to_s.strip)}%"
-      users = User.active.non_placeholder
-        .where("(users.first_name || ' ' || users.last_name) ILIKE :p OR users.email ILIKE :p", p: pattern)
+      base = User.active.non_placeholder
+      users = base.matching_word_starts("users.first_name || ' ' || users.last_name", params[:search])
+        .or(base.matching_word_starts("users.email", params[:search]))
         .including_communities.by_name
       render_user_select_json(users, details: true)
     end

@@ -18,6 +18,7 @@ en:
         never: "Never"
         intent: "Intent: %{tier}"
         resync_subscriptions: "Resync subscriptions"
+        none_found: "No communities found."
       show:
         id: "ID"
         name: "Name"

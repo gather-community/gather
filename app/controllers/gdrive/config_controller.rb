@@ -32,7 +32,7 @@ module GDrive
         @items_by_kind[:drive] = []
         @items_by_kind[:folder] = []
         @items_by_kind[:file] = []
-        @config.items.includes(:item_groups).order(:name).each do |item|
+        @config.items.includes(:item_groups).alpha_order(gdrive_items: :name).each do |item|
           @items_by_kind[item.kind.to_sym] << item
         end
       else
@@ -52,7 +52,7 @@ module GDrive
       @config = Config.find_by(community: current_community) || Config.new(community: current_community)
       @config.assign_attributes(config_params)
       if @config.save
-        flash[:success] = "Config updated successfully."
+        flash[:success] = t("gdrive.config_updated")
         redirect_to(gdrive_config_path)
       else
         set_auth_required if @config.new_record?

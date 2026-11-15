@@ -1,0 +1,71 @@
+<% event = occurrence.series_event.decorate %>
+<% calendar = occurrence.calendar.decorate %>
+<% meal = event.meal&.decorate %>
+
+<% content_for(:title, t(".title", name: occurrence.name)) %>
+<% content_for(:action_links, occurrence.action_links(:show)) %>
+
+<% content_for(:mobile_back_link) do %>
+  <%= render partial: "shared/mobile_back_link", locals: {label: t(".calendars"), path: calendars_events_path } %>
+<% end %>
+
+<table class="key-value key-value-wide">
+  <tr>
+    <td><%= t(".calendar") %></td>
+    <td>
+      <%= image_tag(calendar.photo_variant(:thumb), alt: calendar.name) %><br/>
+      <%= calendar.name %>
+    </td>
+  </tr>
+  <tr>
+    <td><%= t(".date_time") %></td>
+    <td><strong><%= occurrence.timespan %></strong></td>
+  </tr>
+  <% if occurrence.recurrence_description %>
+    <tr>
+      <td><%= t(".repeats") %></td>
+      <td><span class="hint"><%= occurrence.recurrence_description %></span></td>
+    </tr>
+  <% end %>
+  <% if meal %>
+    <tr>
+      <td><%= t(".meal") %></td>
+      <td>
+        <% if policy(meal).show? %>
+          <%= link_to(meal.title_or_no_title, meal_path(meal)) %>
+        <% else %>
+          <%= meal.title_or_no_title %>
+        <% end %>
+      </td>
+    </tr>
+  <% else %>
+    <% if event.group %>
+      <tr>
+        <td><%= t(".group") %></td>
+        <td><%= link_to(event.group.name, event.group) %></td>
+      </tr>
+    <% end %>
+    <tr>
+      <td><%= t(".reserved_by") %></td>
+      <td><%= event.creator.decorate.link(show_cmty_if_foreign: true) %></td>
+    </tr>
+  <% end %>
+  <% if event.sponsor %>
+    <tr>
+      <td><%= t(".sponsor") %></td>
+      <td><%= event.sponsor.decorate.link(show_cmty_if_foreign: true) %></td>
+    </tr>
+  <% end %>
+  <% if event.displayable_kind? %>
+    <tr>
+      <td><%= t(".type") %></td>
+      <td><%= event.kind %></td>
+    </tr>
+  <% end %>
+  <% if event.note %>
+    <tr>
+      <td><%= t(".note") %></td>
+      <td><%= event.rendered_note %></td>
+    </tr>
+  <% end %>
+</table>

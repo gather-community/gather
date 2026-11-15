@@ -29,7 +29,7 @@ module Utils
               value: acct.balance_due,
               code: "payment",
               incurred_on: Time.zone.today,
-              description: "Check ##{rand(10_000)}",
+              description: I18n.t("sample_data.payment_description", number: rand(10_000)),
               created_at: community.created_at,
               updated_at: community.updated_at
             )

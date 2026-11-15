@@ -9,7 +9,7 @@ class DomainsController < ApplicationController
 
   def index
     authorize(sample_domain)
-    @domains = policy_scope(Domain).in_community(current_community)
+    @domains = policy_scope(Domain).in_community(current_community).by_name
   end
 
   def show
@@ -28,7 +28,7 @@ class DomainsController < ApplicationController
     @domain.assign_attributes(domain_params)
     authorize(@domain)
     if @domain.save
-      flash[:success] = "Domain created successfully."
+      flash[:success] = t("domains.created")
       redirect_to(domains_path)
     else
       prep_form_vars

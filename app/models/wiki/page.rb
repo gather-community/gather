@@ -23,9 +23,10 @@ require "open-uri"
 module Wiki
   # Models a single wiki page.
   class Page < ApplicationRecord
+    include PageSearchConfig
     acts_as_tenant :cluster
 
-    RESERVED_SLUGS = Set.new(%w[new all home sample notfound]).freeze
+    RESERVED_SLUGS = Set.new(%w[new all home sample notfound search]).freeze
     EDITABLE_BY_OPTIONS = %i[everyone wikiist].freeze
 
     attr_accessor :comment
@@ -56,12 +57,15 @@ module Wiki
       role.to_s
     end
 
+    # Created on the first visit to the wiki, in the community's language rather than that visitor's, since
+    # everyone will see it.
     def self.create_special_page(role, community:)
+      locale = Gather::Locales.community_default(community)
       create!(
         community: community,
-        content: I18n.t("wiki.special_pages.#{role}.content"),
+        content: I18n.t("wiki.special_pages.#{role}.content", locale: locale),
         role: role,
-        title: I18n.t("wiki.special_pages.#{role}.title"),
+        title: I18n.t("wiki.special_pages.#{role}.title", locale: locale),
         slug: reserved_slug(role)
       )
     end

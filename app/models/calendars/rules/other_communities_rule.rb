@@ -13,11 +13,11 @@ module Calendars
         when "forbidden", "read_only"
           event.creator_community == community ||
             # TODO: When I18ning these messages, add kinds when set.
-            [:base, "Residents from other communities may not make events"]
+            [:base, I18n.t("calendars.rules.other_communities_forbidden")]
         when "sponsor"
           event.creator_community == community ||
             event.sponsor_community == community ||
-            [:sponsor_id, "You must have a sponsor from #{community.name}"]
+            [:sponsor_id, I18n.t("calendars.rules.sponsor_required", community: community.name)]
         else
           raise "Unknown value for other_communities rule"
         end

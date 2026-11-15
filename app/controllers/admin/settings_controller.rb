@@ -14,7 +14,7 @@ module Admin
       # up. Otherwise update bypasses the CustomFields infrastructure altogether.
       @community.settings
       if @community.update(settings_params)
-        flash[:success] = "Settings updated successfully."
+        flash[:success] = t("common.settings_updated")
         redirect_to(admin_settings_path(type: params[:type]))
       else
         render(:edit)
@@ -24,7 +24,10 @@ module Admin
     private
 
     def settings_params
-      params.require(:community).permit(@community.settings.permitted)
+      permitted = params.require(:community).permit(@community.settings.permitted)
+      # The default language only matters once other languages are turned on, and isn't shown until then.
+      permitted[:settings]&.delete(:locale) unless Gather::Locales.enabled?(current_user)
+      permitted
     end
   end
 end

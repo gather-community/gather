@@ -6,6 +6,10 @@ module Groups
     class Api
       include Singleton
 
+      # A 5xx response, i.e. the Mailman server is down or overloaded rather than our request
+      # being wrong. Sync jobs retry these. A subclass so existing ApiRequestError rescues still apply.
+      class ServerError < ApiRequestError; end
+
       # Assumes mm_user.remote_id is set.
       def user_exists?(mm_user)
         request("users/#{mm_user.remote_id}")
@@ -255,8 +259,13 @@ module Groups
         res = Net::HTTP.start(url.hostname, url.port, use_ssl: url.scheme == "https") do |http|
           http.request(req)
         end
-        raise ApiRequestError.new(request: req, response: res) unless res.is_a?(Net::HTTPSuccess)
+        raise_request_error(req, res) unless res.is_a?(Net::HTTPSuccess)
         ApiJsonResponse.new(res)
+      end
+
+      def raise_request_error(req, res)
+        error_class = res.is_a?(Net::HTTPServerError) ? ServerError : ApiRequestError
+        raise error_class.new(request: req, response: res)
       end
 
       def stubbed_response

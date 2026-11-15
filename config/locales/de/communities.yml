@@ -1,0 +1,83 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+de:
+  communities:
+    community:
+      statuses:
+        all: "Alle Status" # MT
+        trial: "Test" # MT
+        subscribed: "Abonniert" # MT
+        problem: "Problem" # MT
+        warning: "Warnung" # MT
+        deactivated: "Deaktiviert" # MT
+    resync_started: "Abo-Abgleich gestartet. Lade die Seite in einer Minute neu, um die Änderungen zu sehen." # MT
+    incorrect_slug: "Falscher Slug. Die Gemeinschaft wurde nicht gelöscht." # MT
+    being_deleted: "%{name} wird gelöscht." # MT
+    signups:
+      captcha_failed: "Die Captcha-Prüfung ist fehlgeschlagen. Bitte versuche es noch einmal." # MT
+      approved: "Bewerbung angenommen. Die Gemeinschaft wird eingerichtet." # MT
+      denied: "Bewerbung abgelehnt." # MT
+      new:
+        title: "Bei Gather mitmachen!" # MT
+        intro: "Gather ist eine Plattform zur Verwaltung von Cohousing-Projekten und anderen gemeinschaftlichen Wohnformen. Um eine neue Gemeinschaft anzufragen, fülle das Formular unten aus. Wir prüfen deine Bewerbung und melden uns per E-Mail. Wir behalten uns vor, Gemeinschaften abzulehnen, die nicht zu unserem Auftrag passen." # MT
+        contact_person: "Kontaktperson" # MT
+        contact_hint: "Diese Person wird der erste Admin der Gemeinschaft." # MT
+        community_details: "Angaben zur Gemeinschaft" # MT
+        settings: "Einstellungen" # MT
+        final_steps: "Letzte Schritte" # MT
+        verification: "Prüfung" # MT
+        submit: "Bewerbung absenden" # MT
+      submitted:
+        title: "Bewerbung eingereicht" # MT
+        thanks: "Danke für deine Bewerbung bei Gather!" # MT
+        review_time_html: "Normalerweise prüfen wir Bewerbungen innerhalb von 48 Stunden. Achte auf eine Nachricht an %{email}." # MT
+    # The approval email the signup review page pre-fills for the approver to personalize.
+    signup_action:
+      approval_template: |- # MT
+        Hallo %{name},
+
+        gute Nachrichten! Deine Bewerbung bei Gather für die Gemeinschaft „%{community}“ wurde angenommen.
+
+        #######################################
+        HIER EINE PERSÖNLICHE NOTIZ EINGEBEN,
+        ETWAS KONKRETES ZUR GEMEINSCHAFT NENNEN
+        #######################################
+
+        Deine Gemeinschaft ist jetzt startklar!
+
+        Du bekommst eine separate E-Mail mit einer Anleitung für deine erste Anmeldung.
+
+        Willkommen an Bord!
+
+        %{approver} für das Gather-Team
+    signup_mailer:
+      application_approved:
+        subject: "Deine Gemeinschaft bei Gather wurde angenommen! (Mit einer Nachricht von %{approver})" # MT
+      application_denied:
+        subject: "Zu deiner Bewerbung bei Gather" # MT
+        dear: "Hallo %{name}," # MT
+        body: "Danke für dein Interesse an Gather. Wir haben deine Bewerbung für „%{community}“ geprüft und können deiner Anfrage derzeit leider nicht nachkommen." # MT
+        sign_off: "Viele Grüße" # MT
+        team: "Das Gather-Team" # MT
+    inactivity_mailer:
+      warning:
+        subject: "Warnung wegen Inaktivität für %{community}" # MT
+        subject_final: "[Letzte Warnung vor der Löschung] %{community}" # MT
+        intro: "Dies ist Inaktivitätswarnung %{count} von %{max} für die Gather-Gemeinschaft „%{community}“." # MT
+        last_login: "Letzte Anmeldung: %{date}" # MT
+        never: "Nie" # MT
+        final: "Seit über 90 Tagen hat sich niemand aus deiner Gemeinschaft bei Gather angemeldet. Dies ist die letzte Warnung, bevor die Daten deiner Gemeinschaft endgültig gelöscht werden." # MT
+        final_days: "Deine Gemeinschaft wird in etwa 7 Tagen gelöscht, wenn sich niemand anmeldet." # MT
+        not_final: "Seit über 90 Tagen hat sich niemand aus deiner Gemeinschaft bei Gather angemeldet. Wenn sich niemand anmeldet, kommt in 7 Tagen eine weitere Warnung. Nach 3 Warnungen werden die Daten deiner Gemeinschaft endgültig gelöscht." # MT
+        prevent: "Um die Löschung zu verhindern, melde dich einfach bei deiner Gemeinschaft an:" # MT
+        contact: "Wenn du glaubst, dass diese Warnung ein Fehler ist, oder Hilfe brauchst, schreib uns an support@gather.coop." # MT

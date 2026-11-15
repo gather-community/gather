@@ -8,7 +8,7 @@ module Billing
       active_admin_or?(:biller)
     end
 
-    def yours?
+    def mine?
       true
     end
 

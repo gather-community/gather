@@ -10,6 +10,10 @@ en:
       # html: '<abbr title="required">*</abbr>'
     error_notification:
       default_message: "Please review the problems below:"
+      # FormHelper#error_summary, under the errors that belong to no field.
+      field_errors:
+        one: "There is 1 error on the form below."
+        other: "There are %{count} errors on the form below."
     labels:
       # These labels are here instead of activerecord b/c these are for things that
       # aren't ActiveRecord models.
@@ -22,13 +26,14 @@ en:
         introduction: "About Your Community"
         country_code: "Country"
         time_zone: "Time Zone"
+        locale: "Default Language"
         want_sample_data: "Sample Data"
       communities_signup_action:
         decision: "Action"
         message: "Message"
       calendars_export:
         dont_personalize: "Don't personalize events"
-        own_only: "Include only your events"
+        own_only: "My events only"
       payment:
         accountholder_name: "Accountholder Name"
         payment_method: "Payment Method"
@@ -53,7 +58,6 @@ en:
         org_user_id: "e.g. yourname@yourdomain.com"
       user:
         birthday_str: "e.g. Feb 29 1981 (year optional)"
-      people_memorial:
       people_memorial_message:
         body: "Add your message"
       household:
@@ -73,6 +77,13 @@ en:
       wiki_page:
         comment: "A comment about this change."
     hints:
+      feature_flag:
+        name: >-
+          The name the code looks up, e.g. messaging for FeatureFlag.lookup("messaging"). Lowercase
+          letters, numbers and underscores. It can't be changed later.
+        user_ids: >-
+          Only these users see the feature. Changes take effect when you save. Saving the flag as
+          off or on for everyone removes them.
       markdown_suffix_html: "You can use <a href='/about/markdown' target='_new'>rich formatting</a>."
       communities_signup:
         community_name: "Up to 20 characters."
@@ -130,8 +141,9 @@ en:
           managers_can_moderate: "Whether managers of this group should serve as moderators for this email list."
           _destroy: "Check this box to shut down the email list."
       calendars_event:
+        repeat_ends_on: "The last occurrence is on or before this date."
         all_day: "Check this box if your event doesn't have specific times. It will show at the top of the calendar. Should not be used for booking resources."
-        group_id: "Events with a group can be edited by other members of the group and won't show up in your 'Your events' calendar feed."
+        group_id: "Events with a group can be edited by other members of the group and won't be included when you export 'My events only'."
       calendars_protocol:
         kinds: "Which event types does this protocol apply to? Leave blank to apply to all."
         calendar_ids: "Which calendars does this protocol apply to? Leave blank to apply to all."
@@ -159,6 +171,7 @@ en:
         paypal_email: "The email address on your PayPal account. Used for cook reimbursements. Leave blank to use your main email address shown above."
         full_access: "Children without full access can't sign in to Gather but appear in the directory. Children with full access count as adults for billing purposes."
         certify_13_or_older: "Children must be 13 years or older to sign in to Gather."
+        locale: "Emails and calendar feeds from Gather will be in this language. The website follows your browser language setting, or the language you pick at the bottom of any page."
       meals_formula:
         is_default: "If checked, this will be the formula selected by default for new meal creation."
         pantry_fee_formatted: "Diners with a meal cost of $0.00 will not be billed a pantry fee even if the fee amount is fixed."
@@ -196,6 +209,22 @@ en:
         round_duration: "How long should each round be? There should be just enough time for an average person to choose comfortably."
         job_copy_source_id: "Choose a period from which to copy jobs upon period creation, if desired. Meal jobs will not be copied and should be sync'd instead (see below)."
     options:
+      feature_flag:
+        mode:
+          "off": "Off"
+          selected_users: "On for selected users"
+          everyone: "On for everyone"
+      calendars_event:
+        repeat_frequency:
+          none: "Never"
+          daily: "Daily"
+          weekly: "Weekly"
+          monthly: "Monthly"
+          yearly: "Yearly"
+        repeat_ends:
+          never: "Never"
+          on_date: "On a date"
+          after_count: "After a number of times"
       billing_account:
         active:
           active_only: "Show Active Only"
@@ -203,8 +232,8 @@ en:
       communities_signup:
         status:
           all: "All"
-          pending: "Pending"
-          approved: "Approved"
+          new: "New"
+          creating: "Creating"
           denied: "Denied"
           created: "Created"
           failed: "Failed"
@@ -372,8 +401,8 @@ en:
         lens:
           all: "All Jobs"
           open: "Open Jobs"
-          you: "Your Jobs"
-          yourhh: "Your Household"
+          mine: "My Jobs"
+          myhh: "My Household"
           notpre: "Not Preassigned"
         date_range:
           all: "Past & Future"

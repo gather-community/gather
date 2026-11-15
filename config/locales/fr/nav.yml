@@ -1,0 +1,81 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+fr:
+  nav_links:
+    people:
+      _self: "Personnes" # MT
+      households: "Foyers" # MT
+      directory: "Annuaire" # MT
+      birthdays: "Anniversaires" # MT
+      vehicles: "Véhicules" # MT
+      memorials: "Hommages" # MT
+      settings:
+        _self: "Paramètres" # MT
+        general: "Paramètres généraux" # MT
+        member_types: "Types de membre" # MT
+    groups:
+      _self: "Groupes" # MT
+      groups: "Groupes" # MT
+      roles: "Rôles" # MT
+      domains: "Domaines" # MT
+    meals:
+      _self: "Repas" # MT
+      meals: "Repas" # MT
+      jobs: "Tâches" # MT
+      report: "Rapport" # MT
+      formulas: "Formules" # MT
+      roles: "Rôles" # MT
+      types: "Types" # MT
+      settings:
+        _self: "Paramètres" # MT
+        general: "Généraux" # MT
+        restrictions: "Restrictions alimentaires" # MT
+        reminders: "Rappels" # MT
+    calendars:
+      _self: "Calendriers" # MT
+      events: "Événements" # MT
+      calendars: "Calendriers" # MT
+      protocols: "Règlements" # MT
+    wiki:
+      _self: "Wiki" # MT
+      wiki:
+        _self: "Wiki" # MT
+      gdrive:
+        _self: "Google Drive" # MT
+        migration:
+          dashboard:
+            status: "État" # MT
+            owners: "Propriétaires" # MT
+            files: "Fichiers" # MT
+            logs: "Journaux" # MT
+    work:
+      _self: "Travail" # MT
+      signups: "Inscriptions" # MT
+      report: "Rapport" # MT
+      jobs: "Tâches" # MT
+      periods: "Périodes" # MT
+      settings: "Paramètres" # MT
+    admin:
+      _self: "Administration" # MT
+    billing:
+      _self: "Facturation" # MT
+      accounts: "Comptes" # MT
+      templates: "Modèles" # MT
+    personal:
+      profile: "Profil" # MT
+      accounts: "Comptes" # MT
+      account: "Compte" # MT
+      calendars: "Calendriers" # MT
+      change_passwd: "Changer le mot de passe" # MT
+      notifications: "Notifications" # MT
+      sign_out: "Se déconnecter" # MT

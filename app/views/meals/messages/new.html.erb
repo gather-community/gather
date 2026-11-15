@@ -1,5 +1,5 @@
 <% if @message.cancellation? %>
-  <% content_for(:title, "Cancel Meal") %>
+  <% content_for(:title, t(".cancel_title")) %>
 <% else %>
   <% content_for(:title, I18n.t("titles.meals/messages")) %>
 <% end %>
@@ -19,18 +19,18 @@
 
   <%= form_actions do %>
     <% if @message.cancellation? %>
-      <%= f.button :secondary, "Don't Cancel Meal",
+      <%= f.button :secondary, t(".dont_cancel"),
                    class: "btn btn-default", "data-href": meals_meal_url(@meal),
                    onclick: "window.location.href = $(this).data('href'); return false;" %>
-      <%= f.button :primary, "Send Message and Cancel Meal", class: "btn btn-danger" %>
+      <%= f.button :primary, t(".send_and_cancel"), class: "btn btn-danger" %>
     <% else %>
       <%= f.button :primary %>
     <% end %>
   <% end %>
 
-  <%= javascript_tag do %>
+  <script>
     $(function() {
       new Gather.Views.DirtyChecker({el: '.meals--message-form'});
     });
-  <% end %>
+  </script>
 <% end %>

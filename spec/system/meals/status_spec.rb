@@ -15,7 +15,8 @@ describe "meal status manipulation", js: true do
 
     scenario do
       visit(meal_path(meal))
-      accept_confirm { click_link("Reopen") }
+      click_link("Reopen")
+      click_modal_button
       expect(page).to have_success_alert("Meal reopened successfully")
     end
   end
@@ -25,7 +26,8 @@ describe "meal status manipulation", js: true do
 
     scenario do
       visit(meal_path(meal))
-      accept_confirm { click_link("Reopen") }
+      click_link("Reopen")
+      click_modal_button
       expect(page).to have_alert("You can't reopen this meal because its auto-close time is in the past.")
     end
   end

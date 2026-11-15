@@ -1,4 +1,5 @@
-<%= gather_form_for(job) do |f| %>
+<% job_url = job.new_record? ? work_period_jobs_path(job.period) : work_period_job_path(job.period, job) %>
+<%= gather_form_for(job, url: job_url) do |f| %>
   <%= f.input :period_id do %>
     <strong><%= @job.period_name %></strong>
     <%= f.hidden_field :period_id %>
@@ -14,11 +15,11 @@
 
   <% if job.meal_role? %>
     <%= f.input :reminders do %>
-      Reminders for this job should be set on its
       <% if policy(job.meal_role).edit? %>
-        <%= link_to("meal role page", edit_meals_role_path(job.meal_role)) %>.
+        <%= t(".reminders_on_role_html",
+              link: link_to(t(".meal_role_page"), edit_meals_role_path(job.meal_role))) %>
       <% else %>
-        meal role page.
+        <%= t(".reminders_on_role") %>
       <% end %>
     <% end %>
   <% else %>
@@ -26,7 +27,7 @@
   <% end %>
 
   <div id="shifts">
-    <h2>Shifts</h2>
+    <h2><%= t(".shifts") %></h2>
 
     <%= f.error :shifts %>
 

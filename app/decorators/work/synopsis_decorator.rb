@@ -8,11 +8,13 @@ module Work
     # Converts Synopsis to nice string. See spec for data examples.
     def to_s
       return @to_s if defined?(@to_s)
-      return (@to_s = nil) if empty?
+      # A user with no share has no obligations to report but may still be waiting on a round to
+      # open, and we owe them that explanation.
+      return (@to_s = nil) if empty? && !staggering?
       sentences = %i[for_user for_household].map do |who|
         next unless send(who)
         chunks = send(who).map { |i| chunk_for_item(i) }
-        safe_str << h.t("work.synopsis.#{who}") << " " << join_chunks(chunks)
+        h.t("work.synopsis.#{who}_html", chunks: h.to_sentence(chunks))
       end
       sentences << (done? ? youre_all_set : staggering_plan)
       @to_s = h.safe_join(sentences.compact, " ")
@@ -46,12 +48,6 @@ module Work
       fraction = h.content_tag(item[:ok] ? :i : :b, "#{got}/#{ttl}")
       h.t("work.synopsis.chunk.#{item_count}_html",
           title: h.sanitize(item[:bucket].title), fraction: fraction)
-    end
-
-    def join_chunks(chunks)
-      left = chunks.size > 2 ? h.safe_join(chunks[0..-2], ", ") << "," : chunks[0]
-      right = chunks.size > 1 ? chunks[-1] : nil
-      h.safe_join([left, right].compact, " and ") << "."
     end
 
     def item_count

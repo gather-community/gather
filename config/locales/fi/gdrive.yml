@@ -1,0 +1,370 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+fi:
+  gdrive:
+    config_updated: "Asetukset päivitetty." # MT
+    group_added: "Ryhmä lisätty." # MT
+    item_created: "Kohde luotu." # MT
+    old_migration: "Siirtosi luotiin yli 30 päivää sitten. Harkitse siirron päättämistä ja poistamista." # MT
+    auth_cancelled: "Näyttää siltä, että peruutit Google-tunnistautumisen." # MT
+    wrong_account: "Kirjauduit Googleen tilillä %{signed_in}. Kirjaudu sen sijaan tilillä %{expected}." # MT
+    authenticated: "Tunnistautuminen Googlella onnistui." # MT
+    connection_problem: "Google Drive -yhteydessäsi on ongelma. Ota yhteyttä Gatherin tukeen. (%{code})" # MT
+    view_in_drive: "Näytä Google Drivessa" # MT
+    browse:
+      index:
+        title: "Google Drive" # MT
+        settings: "Asetukset" # MT
+        migration: "Siirto" # MT
+        reconnect: "Yhteisösi täytyy yhdistää uudelleen Google Driveen." # MT
+        authenticate_as_html: "Tunnistaudu Googlella käyttäjänä %{user}." # MT
+        reconnect_notify_admin: "Yhteisösi täytyy yhdistää uudelleen Google Driveen. Ilmoita asiasta Gatherin ylläpitäjälle." # MT
+        not_connected: "Yhteisöäsi ei ole vielä yhdistetty Google Driveen." # MT
+        not_connected_get_started_html: "Yhteisöäsi ei ole vielä yhdistetty Google Driveen. Pääset alkuun täällä: %{link}." # MT
+        settings_page: "asetussivu" # MT
+        no_drives_html: "Yhteisölläsi ei ole linkitettyjä jaettuja Driveja. Voit linkittää Driven täällä: %{link}." # MT
+        not_connected_talk_to_admin: "Yhteisöäsi ei ole vielä yhdistetty Google Driveen. Ota yhteyttä Gatherin ylläpitäjään." # MT
+        no_files: "Tiedostoja ei löytynyt." # MT
+        migrating_html: "Etsitkö jotain? Tiedostoja siirretään parhaillaan tähän uuteen, yhteisön omistamaan Driveen. Jos et löydä jotain, katso täältä: %{link}." # MT
+        old_location: "vanha sijainti" # MT
+        file_icon: "Tiedoston kuvake" # MT
+        no_files_in_folder: "Tästä kansiosta ei löytynyt tiedostoja." # MT
+        folder_icon: "Kansion kuvake" # MT
+      auth_button:
+        authenticate: "Tunnistaudu Googlella" # MT
+    items:
+      new:
+        title: "Lisää Google Drive -kohde" # MT
+    item_groups:
+      new:
+        title: "Lisää ryhmä Google Drive -kohteeseen" # MT
+    config:
+      index:
+        title: "Google Driven asetukset" # MT
+        migration: "Siirto" # MT
+        migrate_files: "Siirrä tiedostot" # MT
+        link_item: "Linkitä kohde" # MT
+        credentials: "Google Workspacen tunnistetiedot" # MT
+        add_credentials_html: "Yhteisöäsi ei ole vielä yhdistetty Google Driveen. Yhdistä lisäämällä Google Workspacen tunnistetiedot. Ohjeet alkuun pääsemiseksi: %{link}." # MT
+        config_guide: "määritysopas" # MT
+        authentication: "Tunnistautuminen" # MT
+        update_credentials: "Jos sinun täytyy päivittää Google Workspacen tunnistetiedot, voit tehdä sen täällä." # MT
+        introduction: "Johdanto" # MT
+        system_user_html: "<strong>Järjestelmäkäyttäjä:</strong> %{user}" # MT
+        intro_html: "Lisää alle kohteita linkittääksesi ne Gatheriin ja synkronoidaksesi käyttöoikeudet. Alla luetellut jaetut Drivet näytetään Gatherin sivulla %{link} käyttäjille, joilla on oikeus. Kansiot ja tiedostot eivät ole käytettävissä selaussivulla, ellei niiden jaettu Drive ole käytettävissä." # MT
+        browse_page: "Google Driven selaus" # MT
+        name: "Nimi" # MT
+        status: "Tila" # MT
+        groups_permissions: "Ryhmät ja käyttöoikeudet" # MT
+        # e.g. "Viewer (View files)"
+        access_level: "%{level} (%{hint})" # MT
+        add_group: "Lisää ryhmä" # MT
+        none_linked:
+          drive: "Gatheriin ei ole linkitetty jaettuja Driveja." # MT
+          folder: "Gatheriin ei ole linkitetty kansioita." # MT
+          file: "Gatheriin ei ole linkitetty tiedostoja." # MT
+        revoke_html: "Jos sinun täytyy katkaista yhteys Googleen tai päivittää Google Workspacen tunnistetiedot, voit %{link}." # MT
+        revoke: "peruuttaa valtuutuksen" # MT
+        revoke_confirm: "Haluatko varmasti peruuttaa valtuutuksen? Kukaan ei voi käyttää tämän yhteisön Google Drive -toimintoja, ennen kuin valtuutus on palautettu." # MT
+      guide:
+        title: "Google Driven määritysopas" # MT
+        # Markdown, rendered with Gather's Markdown renderer. Google's menu and button names are in quotes
+        # or bold so they can be matched to Google's own (translated) interface.
+        body: |- # MT
+          Tämä opas neuvoo, miten saat tunnistetiedot, joita tarvitaan yhteisösi Google Workspacen yhdistämiseen Gatheriin.
+
+          ## Edellytykset
+
+          * Yhteisön täytyy olla rekisteröitynyt **Google Workspaceen**.
+              * Business Starter -paketti riittää.
+              * Tarvitaan vain yksi käyttäjätili.
+              * Valitse tilille yhteisöä kuvaava nimi (esim. workspace.admin@oma-verkkotunnus.fi) henkilön nimen (esim. matti.meikalainen@oma-verkkotunnus.fi) sijaan.
+          * Näitä ohjeita noudattavan henkilön täytyy olla kirjautunut Googleen yhteisön Google Workspacen käyttäjänä, jolla on **pääjärjestelmänvalvojan** oikeudet. Jos sinulla on vain yksi tili, sillä on pääjärjestelmänvalvojan oikeudet.
+
+          ## Päämääritykset
+
+          ### Projektin luominen
+
+          1. Siirry osoitteeseen https://console.cloud.google.com
+          2. Varmista, että olet kirjautunut Googleen käyttäjänä, jolla on pääjärjestelmänvalvojan oikeudet.
+          3. Hyväksy käyttöehdot. Odota muutama minuutti, että organisaatioresurssisi on valmis.
+          4. Luo projekti osoitteessa https://console.cloud.google.com/projectcreate.
+          5. Anna nimeksi **Gather Main**.
+          6. Valitse verkkotunnuksesi organisaatio.
+          7. Käytä sijainnin oletusarvoa.
+
+          ### Käytössä olevat API:t
+
+          1. Kun uusi projekti on valittuna, siirry osoitteeseen https://console.cloud.google.com/ → Navigointivalikko → ”API:t ja palvelut” → ”Käytössä olevat API:t ja palvelut”
+          2. Valitse **Ota API:t ja palvelut käyttöön**.
+          3. Ota käyttöön **Google Drive API**.
+
+          ### OAuth-asiakastunnus
+
+          1. Kun uusi projekti on valittuna, siirry osoitteeseen https://console.cloud.google.com/ → Navigointivalikko → ”API:t ja palvelut” → ”Käytössä olevat API:t ja palvelut” → ”Kirjautumistiedot”.
+          2. Valitse **Luo kirjautumistiedot** → **OAuth-asiakastunnus**
+          3. Valitse **Verkkosovellus**.
+          4. Nimi: **Drive OAuth Client ID**.
+          5. Lisää kohtaan **Valtuutetut JavaScript-lähteet** https://gather.coop.
+          6. Lisää kohtaan **Valtuutetut uudelleenohjauksen URI-osoitteet** https://gather.coop/gdrive/setup/auth/callback.
+          7. Kopioi asiakastunnus ja asiakassalaisuus turvalliseen paikkaan myöhempää käyttöä varten.
+              1. Asiakastunnus näyttää suunnilleen tältä: `302773344240-7g2n5abcdef8es2cvpc0roj7t.apps.googleusercontent.com`
+              2. Asiakassalaisuus näyttää suunnilleen tältä: `AIza73uyhc63ehd763ehesysqyhw-hei2asda_2rs`
+
+          ### OAuth-kirjautumisikkuna
+
+          1. Kun uusi projekti on valittuna, siirry osoitteeseen https://console.cloud.google.com/ → Navigointivalikko → ”API:t ja palvelut” → ”OAuth-kirjautumisikkuna”.
+          2. Valitse **Sisäinen**.
+          3. Sovelluksen nimi: **Gather**.
+          4. Käyttäjätuen sähköposti: sen käyttäjän sähköpostiosoite, jolla on pääjärjestelmänvalvojan oikeudet.
+          5. Ei logoa.
+          6. Sovelluksen etusivu: https://gather.coop
+          7. Tietosuojakäytäntö: https://gather.coop/privacy-policy
+          8. Valtuutetut verkkotunnukset:
+              1. gather.coop
+          9. Kehittäjän yhteystiedot: support@gather.coop
+          10. Laajuudet
+              1. auth/userinfo.email
+              2. auth/drive
+    item_kinds:
+      drive:
+        one: "Jaettu Drive" # MT
+        other: "Jaetut Drivet" # MT
+      folder:
+        one: "Kansio" # MT
+        other: "Kansiot" # MT
+      file:
+        one: "Tiedosto" # MT
+        other: "Tiedostot" # MT
+    access_levels:
+      reader: "Katselija" # MT
+      commenter: "Kommentoija" # MT
+      writer: "Osallistuja" # MT
+      fileOrganizer: "Sisällönhallitsija" # MT
+    access_level_hints:
+      reader: "Tiedostojen katselu" # MT
+      commenter: "Tiedostojen katselu ja kommentointi" # MT
+      writer: "Tiedostojen katselu, lisääminen ja muokkaus" # MT
+      fileOrganizer: "Tiedostojen katselu, lisääminen, muokkaus, siirtäminen, poistaminen ja jakaminen" # MT
+    item_error_types:
+      inaccessible: "Ei käytettävissä" # MT
+      not_shareable: "Ei jaettavissa" # MT
+    request_statuses:
+      new: "Uusi" # MT
+      opened: "Avattu" # MT
+      opted_out: "Kieltäytynyt" # MT
+
+    migration:
+      requests_sending: "Pyynnöt lähetetään hetken kuluttua. Jos omistajalla on jo pyyntö, uutta ei lähetetä." # MT
+      created: "Siirto luotu. Tiedostojen läpikäynti alkaa hetken kuluttua." # MT
+      scan_started: "Läpikäynti valmisteltu, ja se alkaa hetken kuluttua." # MT
+      updated: "Siirto päivitetty." # MT
+      deleted: "Toiminto poistettu. Muutoksia ei enää seurata." # MT
+      # Name of the shared drive created for each person to drop their files into.
+      file_drop_drive_name: "Gatherin tiedostojen palautus %{id}" # MT
+      request_subject: "[Toimia tarvitaan] Auta yhteisöä %{community} järjestämään Google Drive -tiedostonsa uudelleen!" # MT
+      request:
+        # Shared by the request pages.
+        title: "Tiedostojen uudelleenjärjestely: %{community}" # MT
+        previous: "< Edellinen" # MT
+        next: "Seuraava >" # MT
+        troubleshooting: "Vianmääritys" # MT
+        intro:
+          introduction: "Johdanto" # MT
+          ready: "Kyllä, olen valmis auttamaan!" # MT
+        what_is_this:
+          using_gather_html: "Yhteisö %{community} järjestää Google Drive -tiedostojaan uudelleen <a href=\"https://gather.coop\">Gatherin</a> avulla." # MT
+          problem: "Tällä hetkellä yhteisön tiedostot omistaa se, joka on luonut ne. Tämä voi johtaa tiedostojen vahingossa poistumiseen, kun joku lähtee yhteisöstä." # MT
+          solution: "Tämän estämiseksi yhteisö siirtää kaikki tiedostonsa yhteisön omistamaan jaettuun Driveen." # MT
+          own_many_html: "Omistat noin %{count} tiedostoa, jotka ovat yhteisön %{community} kansiossa: %{link}. Tarvitsemme lupasi siirtää ne uuteen Driveen." # MT
+          own_one_html: "Omistat ainakin yhden tiedoston, joka on yhteisön %{community} kansiossa: %{link}. Tarvitsemme lupasi siirtää sen uuteen Driveen." # MT
+          old_folder: "vanha Google Drive -kansio" # MT
+          retain_access: "Pääset tiedostoihin edelleen, jos olet yhteisön jäsen." # MT
+          questions_html: "Jos sinulla on kysyttävää tai huolia, voit ottaa yhteyttä uudelleenjärjestelyä koordinoivaan henkilöön: %{contact}." # MT
+          opt_out_html: "Jos et halua osallistua tähän, voit %{link}." # MT
+          opt_out: "kieltäytyä" # MT
+        step1:
+          heading: "Vaihe 1: Omistamasi tiedostot" # MT
+          view_files: "Napsauta alta nähdäksesi tiedostot, jotka omistat yhteisön %{community} Google Drive -kansiossa. Ne avautuvat uudelle selaimen välilehdelle." # MT
+          view_files_button: "Näytä omistamani tiedostot" # MT
+          see_something_like: "Sinun pitäisi nähdä jotain tällaista:" # MT
+          no_files: "En näe yhtään vastaavaa tiedostoa" # MT
+          no_files_help_html: "Jos et näe vastaavia tiedostoja, varmista, että olet kirjautunut Googleen tilillä %{email}." # MT
+        step2:
+          heading: "Vaihe 2: Valitse tiedostot" # MT
+          select: "Valitse tiedostot, jotka haluat siirtää." # MT
+          easiest: "Helpoin tapa tehdä tämä:" # MT
+          click_first: "Napsauta luettelon ensimmäistä tiedostoa." # MT
+          go_to_end: "Siirry luettelon loppuun." # MT
+          shift_click_html: "<strong>Pidä vaihtonäppäintä (SHIFT) painettuna</strong> ja napsauta luettelon viimeistä tiedostoa." # MT
+          see_something_like: "Sen jälkeen sinun pitäisi nähdä jotain tällaista:" # MT
+          one_at_a_time: "Voin valita vain yhden tiedoston kerrallaan" # MT
+          holding_html: "Varmista, että noudatat yllä olevia kolmea vaihetta ja <strong>pidät</strong> vaihtonäppäintä painettuna, kun napsautat toista tiedostoa." # MT
+          shift_explained: "Kun pidät vaihtonäppäintä painettuna napsauttaessasi, valitset KAIKKI luettelon tiedostot valittuna olevan tiedoston ja napsauttamasi tiedoston väliltä." # MT
+        step3:
+          heading: "Vaihe 3: Järjestä > Siirrä" # MT
+          click_sequence: "Valitse järjestyksessä:" # MT
+          dots: "kolmen pisteen kuvake" # MT
+          organize: "Järjestä" # MT
+          move: "Siirrä" # MT
+        step4:
+          heading: "Vaihe 4: Valitse tiedostojen palautuksen Drive" # MT
+          all_locations: "Valitse ”Kaikki sijainnit”" # MT
+          shared_drives: "Valitse ”Jaetut Drivet”" # MT
+          next_to_html: "Valitse kohteen %{drive} vierestä ”Siirrä”" # MT
+          move_button: "Valitse ”Siirrä”-painike" # MT
+          no_shared_drives: "En näe kohtaa ”Jaetut Drivet” luettelossa ”Kaikki sijainnit”" # MT
+          signed_in_html: "Varmista, että olet kirjautunut Googleen tilillä %{email}. Jos et vieläkään näe kohtaa ”Jaetut Drivet”, kokeile avata %{link} uudessa välilehdessä ja yritä sitten tätä vaihetta uudelleen." # MT
+          this_link: "tämä linkki" # MT
+          still_trouble_html: "Jos ongelmat jatkuvat, pyydä apua: %{contact}." # MT
+          unselected: "Poistin vahingossa joidenkin tiedostojen valinnan" # MT
+          go_back_html: "Ei hätää! Palaa kohtaan %{link}." # MT
+          step2: "Vaihe 2" # MT
+          ownership: "En halua muuttaa omistajuutta" # MT
+          ownership_explained: "Kaikki yhteisön %{community} uuden jaetun Driven tiedostot omistaa yhteisö, ei kukaan yksittäinen henkilö. Näin tiedostot eivät vie tilaa henkilökohtaisesta Google Drive -kiintiöstäsi eivätkä voi poistua vahingossa." # MT
+          still_access: "Pääset tiedostoihin edelleen, jos olet yhteisön nykyinen jäsen." # MT
+        step5:
+          heading: "Vaihe 5: Varmista, että kaikki tiedostot siirtyivät" # MT
+          empty_list: "Sinun pitäisi nyt nähdä tyhjä tiedostoluettelo, suunnilleen tällainen:" # MT
+          done: "Jos näin on, olet valmis!" # MT
+          finish: "Valmis" # MT
+          not_empty: "Tiedostoluettelo ei ole tyhjä" # MT
+          head_back_html: "Ei hätää! Palaa kohtaan %{link}." # MT
+          step2: "Vaihe 2" # MT
+          some_files: "Joitain tiedostoja en halua siirtää" # MT
+          use_opt_out_html: "Ilmoita asiasta koordinaattorille tällä lomakkeella: %{link}." # MT
+          opt_out_form: "kieltäytymislomake" # MT
+        finish:
+          heading: "Valmista!" # MT
+          thanks: "Kiitos paljon, että autoit yhteisöä %{community} järjestämään tiedostonsa uudelleen!" # MT
+          great_day: "Hyvää päivänjatkoa!" # MT
+        opt_out:
+          heading: "Tiedostojen valinnasta kieltäytyminen" # MT
+          not_active: "Siirtopyyntösi ei näytä olevan aktiivinen, joten et voi kieltäytyä." # MT
+          why: "Kerro meille, miksi päätit kieltäytyä." # MT
+          still_own: "Tietojemme mukaan omistat yhä alla olevat tiedostot. Jos et halua auttaa siirtämään niitä yhteisön omistukseen, kerro meille, miksi päätit kieltäytyä." # MT
+          went_wrong: "Jos yritit siirtää tiedostoja mutta jokin meni vikaan, kerro, mitä tapahtui." # MT
+          didnt_mean_html: "Jos et tarkoittanut kieltäytyä, voit %{link}." # MT
+          go_back_link: "palata takaisin" # MT
+          go_back: "Palaa takaisin" # MT
+          not_transferred: "Siirtämättömät tiedostot" # MT
+          name: "Nimi" # MT
+          modified: "Muokattu" # MT
+          file_icon: "Tiedoston kuvake" # MT
+        opted_out:
+          heading: "Kieltäydytty" # MT
+          opted_out: "Olet kieltäytynyt osallistumasta yhteisön %{community} Google Drive -tiedostojen uudelleenjärjestelyyn." # MT
+          opt_back_in_html: "Jos haluat sittenkin osallistua, %{link}." # MT
+          clicking_here: "napsauta tästä" # MT
+        mobile_warning:
+          thanks: "Kiitos, että haluat auttaa yhteisöä %{community} järjestämään Google Drive -tiedostonsa uudelleen!" # MT
+          mobile: "Mobiililaite?" # MT
+          looks_like_mobile: "Näyttää siltä, että käytät mobiililaitetta." # MT
+          works_better: "Tämä toimii paljon paremmin kannettavalla tai pöytäkoneella, jossa on täysi näppäimistö ja hiiri." # MT
+          proceed_html: "%{link}, mutta jos sinulla on paljon tiedostoja vanhassa Google Drive -kansiossa, se voi olla työlästä." # MT
+          welcome_to_proceed: "Voit hyvin jatkaa" # MT
+          switch_html: "Jos haluat vaihtaa kannettavaan tai pöytäkoneeseen, voit käyttää samaa sähköpostissasi ollutta linkkiä, joka toi sinut tänne: %{link}." # MT
+          link: "linkki" # MT
+          thanks_again: "Joka tapauksessa kiitos vielä kerran!" # MT
+          what_is_this: "Mistä on kyse?" # MT
+      mailer:
+        migration_request:
+          dear: "Hei %{name}," # MT
+          using_gather: "Yhteisö %{community} järjestää Google Drive -tiedostojaan uudelleen Gatherin avulla." # MT
+          problem: "Tällä hetkellä yhteisön tiedostot omistaa se, joka on luonut ne. Tämä voi johtaa tiedostojen vahingossa poistumiseen, kun joku lähtee yhteisöstä!" # MT
+          solution: "Tämän estämiseksi yhteisö siirtää kaikki tiedostonsa yhteisön omistamaan jaettuun Driveen." # MT
+          own_many: "Google-tilisi %{email} omistaa noin %{count} tiedostoa yhteisön %{community} vanhassa Google Drive -kansiossa. Tarvitsemme lupasi siirtää ne uuteen Driveen." # MT
+          own_one: "Google-tilisi %{email} omistaa ainakin yhden tiedoston yhteisön %{community} vanhassa Google Drive -kansiossa. Tarvitsemme lupasi siirtää sen uuteen Driveen." # MT
+          go_here: "Auta tästä: %{url}" # MT
+          retain_access: "Pääset tiedostoihin edelleen, jos olet yhteisön jäsen. Jos sinulla on kysyttävää tai huolia, voit ottaa yhteyttä uudelleenjärjestelyä koordinoivaan henkilöön: %{contact} (%{email}). Jos et halua osallistua tähän, voit myös kieltäytyä yllä olevassa osoitteessa." # MT
+          thanks: "Kiitos ajastasi ja huomiostasi!" # MT
+      dashboard:
+        # Shared by the dashboard pages.
+        title: "Google Driven siirto" # MT
+        synopsis:
+          not_begun_contact: "Tiedostojen läpikäynti ei ole alkanut. Ota yhteyttä Gatherin tukeen." # MT
+          not_begun_wait: "Tiedostojen läpikäynti ei ole alkanut. Odota hetki ja päivitä sivu." # MT
+          in_progress: "Tiedostojen läpikäynti käynnissä. Tähän mennessä käyty läpi %{count} tiedostoa." # MT
+          complete: "Tiedostojen läpikäynti on valmis. Muutoksia seurataan." # MT
+          auth_error_html: "Tiedostojen läpikäynti peruttiin valtuutusvirheen vuoksi. Varmista, että käyttäjällä %{user} on <strong>muokkausoikeus</strong> kohteeseen %{folder_link}. Kokeile valita ”Peruuta valtuutus” ja kirjautua uudelleen sivulla %{home_link}. Käynnistä sitten läpikäynti uudelleen." # MT
+          source_folder: "lähdekansio" # MT
+          main_page: "Google Driven pääsivu" # MT
+          too_many_errors: "Tiedostojen läpikäynti peruttiin liian monen virheen vuoksi. Katso virheet alta. Korjaa virheet ja käynnistä läpikäynti uudelleen." # MT
+          cancelled_unknown: "Tiedostojen läpikäynti peruttiin tuntemattomasta syystä." # MT
+          unknown_state: "Tiedostojen läpikäynnin tila on tuntematon." # MT
+        status:
+          show:
+            system_user: "Järjestelmäkäyttäjä" # MT
+            contact: "Yhteyshenkilö" # MT
+            contact_value: "%{name} <%{email}>" # MT
+            source_folder: "Lähdekansio" # MT
+            destination_folder: "Kohdekansio" # MT
+            total_files: "Tiedostoja yhteensä" # MT
+            files_by_status:
+              pending: "Odottavat tiedostot" # MT
+              declined: "Hylätyt tiedostot" # MT
+              errored: "Virheelliset tiedostot" # MT
+              transferred: "Siirretyt tiedostot" # MT
+              copied: "Kopioidut tiedostot" # MT
+              ignored: "Ohitetut tiedostot" # MT
+              disappeared: "Kadonneet tiedostot" # MT
+        logs:
+          index:
+            logs: "Lokit" # MT
+            none: "Ei vielä lokeja." # MT
+            time: "Aika" # MT
+            message: "Viesti" # MT
+        files:
+          index:
+            files: "Tiedostot" # MT
+            name: "Nimi" # MT
+            owner: "Omistaja" # MT
+            modified: "Muokattu" # MT
+            status: "Tila" # MT
+            error: "Virhe" # MT
+            file_icon: "Tiedoston kuvake" # MT
+        owners:
+          index:
+            owners: "Omistajat" # MT
+            files: "Tiedostot" # MT
+            request: "Pyyntö" # MT
+            owner: "Omistaja" # MT
+            total: "Yhteensä" # MT
+            date_sent: "Lähetyspäivä" # MT
+            status: "Tila" # MT
+          show:
+            files: "Tiedostot" # MT
+            total_files: "Tiedostoja yhteensä" # MT
+            request: "Pyyntö" # MT
+            date_sent: "Lähetyspäivä" # MT
+            status: "Tila" # MT
+            intro_page: "Pyynnön johdantosivu" # MT
+            link: "Linkki" # MT
+            opened_note: "Huomaa, että tämän linkin napsauttaminen muuttaa pyynnön tilaksi ”avattu”." # MT
+            file_drop_drive: "Tiedostojen palautuksen Drive" # MT
+            opt_out_reason: "Kieltäytymisen syy" # MT
+      operations:
+        form:
+          intro: "Määritä siirto antamalla alla olevat tiedot. Tiedostojen läpikäynti käynnistetään, ja sinut ohjataan siirron hallintanäkymään." # MT
+        new:
+          title: "Luo siirto" # MT
+        edit:
+          title: "Muokkaa siirtoa" # MT
+      # Labels for GDrive::Migration::File#error_type. Keep in sync with the error_type_enum DB constraint.
+      errors:
+        forbidden: "Ei käyttöoikeutta" # MT
+        not_found: "Ei löytynyt" # MT
+        ancestor_inaccessible: "Yläkansio ei käytettävissä" # MT
+        client_error_ensuring_tree: "Virhe kohdekansioiden luomisessa" # MT
+        client_error_moving_to_temp_drive: "Virhe siirrossa väliaikaiseen Driveen" # MT
+        client_error_moving_to_destination: "Virhe siirrossa kohteeseen" # MT

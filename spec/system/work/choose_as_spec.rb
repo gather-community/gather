@@ -19,7 +19,7 @@ describe "signups", js: true, clean_with_transaction: false do
   end
 
   scenario "choosing as self and other" do
-    visit(work_shifts_path)
+    visit(work_period_shifts_path(periods[0]))
     signup_and_expect_name(actor)
     choose_as(partner)
     signup_and_expect_name(partner)
@@ -29,7 +29,7 @@ describe "signups", js: true, clean_with_transaction: false do
   end
 
   scenario "when actor removed as proxy" do
-    visit(work_shifts_path)
+    visit(work_period_shifts_path(periods[0]))
     choose_as(friend)
 
     # Remove actor as friend's proxy
@@ -42,12 +42,12 @@ describe "signups", js: true, clean_with_transaction: false do
   end
 
   scenario "with legal user_id in query string" do
-    visit(work_shifts_path(choosee: friend.id))
+    visit(work_period_shifts_path(periods[0], choosee: friend.id))
     expect(page).to have_content("You are choosing as #{friend.name}")
   end
 
   scenario "with illegal user_id in query string" do
-    visit(work_shifts_path(choosee: other_user.id))
+    visit(work_period_shifts_path(periods[0], choosee: other_user.id))
     expect(page).not_to have_content(other_user.name)
   end
 

@@ -1,6 +1,6 @@
-Dear <%= @signup.contact_first_name %>,
+<%= t(".dear", name: @signup.contact_first_name) %>
 
-Thank you for your interest in Gather. After reviewing your application for "<%= @signup.community_name %>", we're unable to move forward with your request at this time.
+<%= t(".body", community: @signup.community_name) %>
 
-Best regards,
-The Gather Team
+<%= t(".sign_off") %>
+<%= t(".team") %>

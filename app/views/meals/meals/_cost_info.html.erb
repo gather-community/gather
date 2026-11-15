@@ -1,5 +1,5 @@
 <section class="cost-info">
-  <h2>Cost</h2>
+  <h2><%= t(".cost") %></h2>
   <% if meal.finalized? || formula.fixed_meal? %>
     <div class="row">
       <div class="col-sm-4">
@@ -17,12 +17,11 @@
         <table class="key-value key-value-full">
           <tr>
             <td><%= t("activerecord.attributes.meals/cost.ingredient_cost") %></td>
-            <td><%= cost.present? ? cost.ingredient_cost_formatted : "?" %></td>
+            <td><%= cost.present? ? cost.ingredient_cost_formatted : t(".unknown") %></td>
           </tr>
           <tr>
             <td>
-              <%= t("activerecord.attributes.meals/formula.pantry_fee_formatted") %>
-              (Included)
+              <%= t(".included", label: t("activerecord.attributes.meals/formula.pantry_fee_formatted")) %>
             </td>
             <td><%= formula.pantry_fee_formatted %></td>
           </tr>
@@ -44,6 +43,6 @@
       </div>
     </div>
   <% else %>
-    This meal uses a proportional formula so cost calculations will be performed after the meal has taken place and is finalized.
+    <%= t(".proportional") %>
   <% end %>
 </section>

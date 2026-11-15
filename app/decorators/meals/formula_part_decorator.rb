@@ -8,7 +8,7 @@ module Meals
 
     def share_formatted
       if fixed_meal?
-        h.number_to_currency(share)
+        h.format_money(share)
       else
         decimal_to_percentage(share)
       end

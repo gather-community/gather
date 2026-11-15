@@ -1,0 +1,114 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+# Additional translations at https://github.com/plataformatec/devise/wiki/I18n
+
+it:
+  devise:
+    confirmations:
+      confirmed: "Il tuo indirizzo email è stato confermato." # MT
+      send_instructions: "Tra pochi minuti riceverai un'email con le istruzioni per confermare il tuo indirizzo email." # MT
+      send_paranoid_instructions: "Se il tuo indirizzo email è presente nel nostro database, tra pochi minuti riceverai un'email con le istruzioni per confermarlo." # MT
+    failure:
+      already_authenticated: "Hai già effettuato l'accesso." # MT
+      inactive: "Il tuo account non è ancora attivo." # MT
+      invalid: "%{authentication_keys} o password non validi." # MT
+      locked: "Il tuo account è bloccato." # MT
+      last_attempt: "Hai ancora un tentativo prima che il tuo account venga bloccato." # MT
+      not_found_in_database: "%{authentication_keys} o password non validi." # MT
+      timeout: "La tua sessione è scaduta. Accedi di nuovo per continuare." # MT
+      unauthenticated: "Accedi per vedere quella pagina." # MT
+      unconfirmed: "Il primo accesso va fatto tramite un invito." # MT
+    authentication_keys:
+      email: "Email" # MT
+    mailer:
+      confirmation_instructions:
+        subject: "Conferma il tuo indirizzo email" # MT
+      reset_password_instructions:
+        subject: "Reimpostazione della password" # MT
+      unlock_instructions:
+        subject: "Istruzioni per lo sblocco" # MT
+    omniauth_callbacks:
+      failure: "Impossibile accedere tramite %{kind}. Motivo: %{reason}." # MT
+      success: "Accesso effettuato con l'account %{kind}." # MT
+    passwords:
+      new:
+        title: "Password dimenticata" # MT
+        instructions: "Inserisci il tuo indirizzo email per ricevere le istruzioni via email. Segui le istruzioni nell'email per reimpostare la password. L'email potrebbe impiegare qualche istante ad arrivare." # MT
+      edit:
+        title: "Inserisci una nuova password" # MT
+        instructions: "Inserisci qui sotto una nuova password e accederai a Gather." # MT
+      no_token: "Puoi accedere a questa pagina solo da un'email di reimpostazione della password. Se arrivi da un'email di questo tipo, assicurati di aver usato l'URL completo." # MT
+      send_instructions: "Tra pochi minuti riceverai un'email con le istruzioni per reimpostare la password." # MT
+      send_paranoid_instructions: "Se il tuo indirizzo email è presente nel nostro database, tra pochi minuti riceverai un link per recuperare la password." # MT
+      updated: "La tua password è stata cambiata. Ora hai effettuato l'accesso." # MT
+      updated_not_active: "La tua password è stata cambiata." # MT
+    registrations:
+      destroyed: "Ciao! Il tuo account è stato chiuso. Speriamo di rivederti presto." # MT
+      signed_up: "Benvenuto! La registrazione è andata a buon fine." # MT
+      signed_up_but_inactive: "La registrazione è andata a buon fine, ma non abbiamo potuto farti accedere perché il tuo account non è ancora attivo." # MT
+      signed_up_but_locked: "La registrazione è andata a buon fine, ma non abbiamo potuto farti accedere perché il tuo account è bloccato." # MT
+      signed_up_but_unconfirmed: "Abbiamo inviato al tuo indirizzo email un messaggio con un link di conferma. Segui il link per attivare il tuo account." # MT
+      update_needs_confirmation: "Il tuo account è stato aggiornato, ma dobbiamo verificare il tuo nuovo indirizzo email. Controlla la posta e segui il link di conferma per confermare il nuovo indirizzo." # MT
+      updated: "Il tuo account è stato aggiornato." # MT
+    sessions:
+      new:
+        title: "Accedi" # MT
+      signed_in: "Accesso effettuato." # MT
+      signed_out: "Sei uscito." # MT
+      already_signed_out: "Sei uscito." # MT
+    unlocks:
+      send_instructions: "Tra pochi minuti riceverai un'email con le istruzioni per sbloccare il tuo account." # MT
+      send_paranoid_instructions: "Se il tuo account esiste, tra pochi minuti riceverai un'email con le istruzioni per sbloccarlo." # MT
+      unlocked: "Il tuo account è stato sbloccato. Accedi per continuare." # MT
+    # Overrides devise-i18n's "Forgot your password?" to keep our wording.
+    shared:
+      links:
+        forgot_your_password: "Non conosci la tua password?" # MT
+  auth_mailer:
+    cant_reset_password:
+      request_received: "Abbiamo ricevuto una richiesta di reimpostazione della tua password." # MT
+      no_full_access: "Purtroppo il tuo profilo non ha accesso completo al sistema, quindi non puoi accedere." # MT
+      contact_admin: "Se pensi che si tratti di un errore, contatta l'amministratore di Gather." # MT
+    confirmation_instructions:
+      use_link: "Conferma il tuo nuovo indirizzo email con questo link:" # MT
+      thanks: "Grazie per la collaborazione con questa importante misura di sicurezza!" # MT
+    reset_password_instructions:
+      use_link: "Abbiamo ricevuto una richiesta di reimpostazione della tua password. Per procedere, usa questo link:" # MT
+      ignore: "Se non hai fatto tu questa richiesta, ignora questa email e la tua password resterà invariata." # MT
+    sign_in_invitation:
+      subject: "Istruzioni per accedere a Gather" # MT
+      invited: "Sei stato invitato ad accedere a Gather, il sistema di gestione che usa la comunità %{community}!" # MT
+      click_link: "Fai clic sul link qui sotto per iniziare." # MT
+      choose_method: "Da lì potrai scegliere di accedere con Google o con una password. Se non hai ancora impostato una password, potrai farlo." # MT
+      expiry:
+        one: "Questo link scadrà tra %{count} giorno." # MT
+        other: "Questo link scadrà tra %{count} giorni." # MT
+      see_you: "A presto!" # MT
+  errors:
+    messages:
+      already_confirmed: "è già stata confermata, prova ad accedere" # MT
+      confirmation: "Non corrisponde alla password" # MT
+      confirmation_period_expired: "va confermata entro %{period}, richiedine una nuova" # MT
+      doesnt_match: "Non corrisponde alla password" # MT
+      expired: "è scaduto, richiedine uno nuovo" # MT
+      not_found: "Email non trovata" # MT
+      not_locked: "non era bloccato" # MT
+      not_saved:
+        one: "1 errore ha impedito il salvataggio (%{calendar}):" # MT
+        other: "%{count} errori hanno impedito il salvataggio (%{calendar}):" # MT
+  password:
+    strength:
+      weak: "Troppo debole (punteggio: %{bits})" # MT
+      good: "Buona (punteggio: %{bits})" # MT
+      excellent: "Ottima (punteggio: %{bits})" # MT
+    strength_info: "Usiamo un controllo intelligente della robustezza per assicurarci che la tua password sia sicura e non possa essere facilmente scoperta.\n\nPuoi rendere la tua password più robusta:\n\n  - allungandola\n  - evitando parole presenti nel dizionario\n  - usando un mix di lettere, numeri e simboli" # MT

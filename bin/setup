@@ -17,6 +17,7 @@ source "$SCRIPT_DIR/include/utils.sh"
 source "$SCRIPT_DIR/include/deps.sh"
 source "$SCRIPT_DIR/include/conf.sh"
 source "$SCRIPT_DIR/include/data.sh"
+source "$SCRIPT_DIR/include/dev_port.sh"
 source "$SCRIPT_DIR/include/ssl.sh"
 
 cd "$ROOT_DIR"

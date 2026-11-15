@@ -6,7 +6,7 @@ describe "report", js: true do
   include_context "work"
 
   let(:actor) { create(:user, first_name: "Donnell", last_name: "Corkery") }
-  let(:page_path) { work_report_path(period: periods[0].try(:id)) }
+  let(:page_path) { periods.first ? work_period_report_path(periods.first) : work_report_path }
 
   before do
     use_user_subdomain(actor)
@@ -46,6 +46,16 @@ describe "report", js: true do
         expect(page).to have_title("Work Report: Reckoning")
         expect(page).not_to have_content("Churl Rox")
         expect(page).to have_content("This period is in the draft phase")
+      end
+    end
+
+    context "with no quota" do
+      scenario "index" do
+        visit(page_path)
+        expect(page).to have_content("32 16 0\nTotal Hours Jobs People")
+        expect(page).to have_content("Donnell Corkery 4.0 0.0")
+        expect(page).to have_content("Jane Picard 2.0 2.0")
+        expect(page).not_to have_css("table.stats th", text: "%")
       end
     end
 

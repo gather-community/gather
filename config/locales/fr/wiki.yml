@@ -1,0 +1,92 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+fr:
+  wiki:
+    page_deleted: "Page supprimée." # MT
+    page_listing: "Liste des pages du wiki" # MT
+    new_page: "Nouvelle page wiki" # MT
+    help: "Aide du wiki" # MT
+    editor:
+      autosaved: "Enregistré automatiquement : " # MT
+      bold: "Gras" # MT
+      fullscreen: "Plein écran" # MT
+      heading: "Titre" # MT
+      image: "Insérer une image" # MT
+      italic: "Italique" # MT
+      lines:
+        one: "lignes : %{count}" # MT
+        other: "lignes : %{count}" # MT
+      link: "Créer un lien" # MT
+      ordered_list: "Liste numérotée" # MT
+      preview: "Aperçu" # MT
+      quote: "Citation" # MT
+      side_by_side: "Côte à côte" # MT
+      unordered_list: "Liste à puces" # MT
+      words:
+        one: "mots : %{count}" # MT
+        other: "mots : %{count}" # MT
+    pages:
+      history_table:
+        version: "Version" # MT
+        date: "Date" # MT
+        author: "Auteur" # MT
+        comment: "Commentaire" # MT
+        compare: "Comparer la sélection" # MT
+        return: "Retour à la page" # MT
+      all:
+        title: "Liste des pages du wiki" # MT
+      compare:
+        title: "Comparaison wiki : %{title}" # MT
+        differences: "Différences entre les versions %{old} et %{new}" # MT
+        versions_between: "Versions entre %{old} et %{new}" # MT
+      edit:
+        title: "Modifier la page wiki : %{title}" # MT
+      history:
+        title: "Historique du wiki : %{title}" # MT
+      new:
+        title: "Nouvelle page wiki" # MT
+      show:
+        wiki_home: "Accueil du wiki" # MT
+    not_found_create: "Il n'y a aucune page wiki nommée « %{title} ». Vous pouvez la créer ci-dessous !" # MT
+    preview_notice: "Ceci est un aperçu. Pour enregistrer ou continuer à modifier la page, utilisez le formulaire ci-dessous." # MT
+    revision_info: "Page modifiée le %{time} par %{user}" # MT
+    revision_info_no_by: "Page modifiée le %{time}" # MT
+    special_pages:
+      home:
+        title: "Wiki" # MT
+        content: |- # MT
+          Voici la **page d'accueil de votre wiki** !
+
+          Consultez la [[Page d'exemple]] pour des conseils sur la façon de la remplir d'informations utiles !
+      sample:
+        title: "Page d'exemple" # MT
+        content: |- # MT
+          Ceci est une page wiki d'exemple.
+
+          Cliquez sur **Modifier** ci-dessus pour voir comment cette page fonctionne ! Et pas d'inquiétude, vous ne pouvez rien casser !
+
+          ## Mise en forme
+
+          Pour modifier une page wiki, on utilise **Markdown**, une façon simple de créer un contenu propre et soigné sans apprendre de langage particulier. Pour en savoir plus sur Markdown, consultez le [Guide de mise en forme Markdown](/about/markdown).
+
+          ## Liens
+
+          Les liens vers d'autres pages sont très importants ! Vous pouvez créer un lien vers d'autres **pages wiki** comme ceci : [[Page amusante]].
+
+          Notez que le lien ci-dessus est (probablement) rouge. C'est parce que la page n'existe pas encore. Si vous cliquez sur le lien, vous pourrez créer la page. Le lien deviendra alors bleu !
+
+          Si vous voulez utiliser un autre texte que le titre de la page pour le lien, vous pouvez [[Page amusante|faire ceci]].
+
+          Les liens vers des pages externes ressemblent [à ceci](http://example.com).
+
+          Une URL en texte brut sera automatiquement reconnue et convertie en lien : https://gather.coop

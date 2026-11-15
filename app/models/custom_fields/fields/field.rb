@@ -62,6 +62,11 @@ module CustomFields
         nil
       end
 
+      # The label for an item in the collection. Nil means look it up in custom_fields.options.
+      def option_label(_item)
+        nil
+      end
+
       private
 
       # Sets validations implied by the field type and params

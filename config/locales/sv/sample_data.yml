@@ -1,0 +1,532 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+sv:
+  # Demo content for communities created with sample data (Utils::Generators), written in the community's
+  # language like the starter content (starter_content.yml). The rows in lib/random_data/data hold everything
+  # that isn't text, and name their text here by `key`.
+  #
+  # Calendar names (with the starter content's) can be at most 24 characters and must all differ, and
+  # calendar abbreviations at most 6. Event names can be at most 24 characters.
+  sample_data:
+    calendars:
+      media_room:
+        name: "Medierum" # MT
+        guidelines: |- # MT
+          # Riktlinjer för medierummet
+
+          1. Barn under 13 år måste ha sällskap av en vuxen.
+          1. Program med åldersgräns 15 år och uppåt är spärrade både på tv:n och på tv-boxen.
+          1. Rummet kan bokas för särskilda evenemang eller tv-program. Se kalendern eller kontakta media@example.com.
+          1. Fjärrkontrollerna ska alltid stanna i rummet, på sin bestämda plats.
+          1. Plocka undan i medierummet och ställ tillbaka allt i ”grundläge” när du har använt det. Se upp med smulor.
+      multipurpose_room:
+        name: "Allaktivitetsrum" # MT
+        guidelines: |- # MT
+          # Riktlinjer för allaktivitetsrummet
+
+          1. Som det står i riktlinjerna för händelser måste alla gäster ha en vuxen medlem i gemenskapen som värd.
+          1. Tänk på att det här rummet, precis som resten av gemensamhetshuset, är en gemensam resurs.
+          1. Värden skriver gästens namn och vistelsedatum på whiteboarden utanför dörren.
+          1. Alla gäster följer de allmänna riktlinjerna för gemensamhetshuset (uppsatta på dörren) och riktlinjerna för varje rum de använder. Var särskilt uppmärksam på riktlinjerna om ljud, tysta timmar och vår doftfria policy.
+          1. Inga levande ljus eller annat som kan orsaka brand eller annan fara. Ingen rökning i gemensamhetshuset.
+          1. Rummet används till annat också, men övernattande gäster går före. Lös krockar i bokningen direkt med varandra.
+          1. Gäster får stanna i upp till 7 dagar, så länge ingen annan boende har bokat rummet för en annan gäst.
+          1. Värden ansvarar för sina gäster. När gästerna har åkt städar värden rummet, tvättar lakan och sängkläder och lämnar tillbaka dem till gemensamhetshuset.
+          1. Utcheckning senast kl. 12:00.
+          1. Nycklarna lämnas på en bestämd plats i gemensamhetshuset. Om nycklarna kommer bort får värden betala för nya.
+          1. Gäster får använda skylten ”Stör ej” som finns i rummet, för att få vara ifred.
+      office:
+        name: "Kontor" # MT
+      sitting_room:
+        name: "Sällskapsrum" # MT
+      dining_room:
+        name: "Matsal" # MT
+        abbrv: "GH" # MT
+      courtyard:
+        name: "Gården" # MT
+        abbrv: "Gård" # MT
+      kitchen:
+        name: "Kök" # MT
+        abbrv: "GH" # MT
+        guidelines: |- # MT
+          # Riktlinjer för köket
+
+          ## Översikt
+
+          Köket i gemensamhetshuset är en stor investering för vår gemenskap, och det kan också vara en farlig plats. Eftersom det viktigaste för oss är att alla i gemenskapen, och vår utrustning, är säkra har vi följande riktlinjer.
+
+          Vi förväntar oss att alla medlemmar och deras gäster behandlar utrustningen och lokalen varsamt och med respekt.
+
+          Föräldrar ansvarar för att lära sina barn att:
+
+          * Köket är ingen lekplats.
+          * Maten i köket är inte till för vem som helst att äta, om det inte står så på den.
+          * Barn får bara vara i köket om de är inbjudna och har en ansvarig vuxen med sig.
+
+          *Lämna köket renare än du hittade det.*
+
+          Och låt oss ha roligt och laga och äta god mat tillsammans!
+
+          ## Säkerhet
+
+          * Om du lämnar köket medan något står i ugnen eller på spisen, varna andra genom att spärra av ingångarna till köket och lämna en lapp.
+          * Ställ kastruller med varm mat på de bakre plattorna, inte de främre.
+          * Flytta inte bikarbonatet från spisen. Det står där ifall det börjar brinna.
+          * Lämna aldrig vassa knivar obevakade och lägg dem inte i diskvattnet.
+
+          Om du måste gå innan du har städat klart, lämna en lapp om när du kommer tillbaka, med ditt telefonnummer.
+
+          Skriv upp allt du lånar och lämna tillbaka det så snart du kan.
+
+          Rapportera allt som verkar konstigt, som märkliga ljud, lukter eller trasiga saker, till den som ansvarar för reparationer.
+
+          Kylskåpet i gemensamhetshuset är till för baslivsmedel och gemensamma måltider. Dela hellre ut rester än förvarar dem här.
+
+          Vad huvudkockar, kockassistenter och städare ska göra beskrivs separat.
+
+          ## Grundläggande hygien
+
+          1. Om du kan vara sjuk, håll gemenskapen frisk genom att gå hem.
+          1. Tvätta händerna ofta, på gammaldags vis: med tvål och varmt vatten.
+          1. Täck alla sår ordentligt.
+          1. Använd varje sked bara en gång när du smakar av.
+          1. Undvik korskontaminering (allergener och bakterier) genom att använda olika redskap till olika livsmedel.
+          1. Allt som har kommit i kontakt med rått kött måste diskas och desinficeras innan det används till något annat.
+          1. Använd skärbräda i rätt färg för varje sorts livsmedel.
+          1. Diskhoar kan hysa bakterier, så använd ett durkslag när du sköljer grönsaker och frukt som ska serveras råa.
+          1. Maten är säker när den är ordentligt nedkyld eller ordentligt genomvarm.
+
+          ## Baslivsmedel
+
+          Baslivsmedel köps in till måltiderna i gemensamhetshuset.
+
+          När vi köper baslivsmedel tänker vi på om de är ekologiska, rättvisemärkta och GMO-fria, och på kostpreferenser, hållbarhet och pris.
+
+          Baslivsmedlen betalas med en extra avgift på måltiderna i gemensamhetshuset, som används till att fylla på förrådet. Huvudkockarna förväntas använda baslivsmedlen, så att förrådet hålls färskt och kostnaden för deras måltider hålls nere.
+
+          Använd alltså inte baslivsmedlen privat. Om du verkligen måste:
+
+          * Ersätt det du använder, vara för vara.
+          * Om du inte kan det, bidra generöst till kökets kassa för baslivsmedel.
+
+          Om du märker att något börjar ta slut, skriv upp det på listan på skrivplattan som finns för det.
+
+          Köksansvarig går igenom listan och skafferiet varje vecka och handlar vid behov. Vi gör vårt bästa för att fylla på baslivsmedel när de tar slut.
+
+          Om du behöver ett baslivsmedel för att laga en gemensam måltid och det saknas, köp det och lämna in ett separat kvitto för ersättning.
+
+          Matgruppen har hand om listan över baslivsmedel.
+
+          Huvudkockarna köper allt annat, även färdiga salladsdressingar.
+    shared_guidelines:
+      common_house:
+        name: "Riktlinjer för gemensamhetshuset" # MT
+        body: |- # MT
+          # Riktlinjer för gemensamhetshuset
+
+          * Välkommen till vårt gemensamhetshus!
+          * Vårt gemensamhetshus är hjärtat i vår gemenskap.
+          * Relationer är det som vår gemenskap bygger på.
+          * Alla medlemmar har lika mycket att säga till om när det gäller hur vi använder gemensamhetshuset.
+          * Vi behandlar gemensamhetshuset med samma respekt som en grannes hus. Lämna det som du hittade det, eller bättre!
+
+          De här riktlinjerna väger frihet, ansvar och säkerhet för människor och byggnad mot varandra.
+
+          ## Tillgänglighet
+
+          För att ta hänsyn till känsligheter är vi överens om följande:
+
+          * *Doftfritt* är målet i gemensamhetshuset.
+          * *Rökning:* det är rökfritt i gemensamhetshuset.
+          * *Djur:* gemensamhetshuset är fritt från husdjur, utom assistanshundar. Husdjur får inte lämnas ensamma på gemensamhetshusets tomt.
+
+          ## Säkerhet
+
+          Gemensamhetshuset låses senast kl. 22:00 på vardagar och senast kl. 23:00 på fredagar och lördagar, enligt checklistan för stängning.
+
+          ## Kommunikation
+
+          De boende tar upp problem direkt med varandra när det går. Vid behov finns gruppen för gemensamhetshuset till hands och hjälper till.
+
+          ## Underhåll
+
+          Rapportera trasiga eller felaktiga system och apparater till underhållsgruppen direkt, på maintenance@example.com.
+
+          För vardagliga saker, skicka ett mejl eller lägg en lapp i underhållsmappen.
+
+          Rapportera trasiga saker till gruppen för gemensamhetshuset på commonhouse@example.com.
+
+          ## Alkohol
+
+          Lämna eller förvara inte alkohol, öppnad eller oöppnad, eller några läkemedel i gemensamhetshuset.
+
+          ## Ljud
+
+          Alla som störs av ljud i gemensamhetshuset får gärna be om att det sänks. Visa hänsyn när någon ber dig om det.
+
+          Gemenskapen får veta i förväg om större evenemang som kan bli högljuddare än vanligt eller hålla på efter stängningsdags.
+
+          ## Tysta timmar
+
+          * Vardagar, kl. 22:00–08:00
+          * Helger och helgdagar, kl. 23:00–09:00
+
+          ## Vem gemensamhetshuset är till för
+
+          Gemensamhetshuset är till för de boende och deras inbjudna gäster.
+
+          * Vi är tacksamma för stödet och gästfriheten från gemenskaperna i grannskapet.
+          * När vi välkomnar våra grannar räknar vi med att lösa eventuella problem på ett rättvist sätt, med ömsesidighet och tillit som grund.
+
+          Medlemmar i gemenskaper i grannskapet är välkomna i gemensamhetshuset och följer samma rutiner för att boka rum. Alla andra måste ha en vuxen boende som värd, som ansvarar för sina gästers uppförande.
+
+          ## Boka rum
+
+          Gemenskapens aktiviteter läggs in i kalendern och går före andra händelser.
+
+          Alla riktlinjer beslutas i konsensus. Allas synpunkter är välkomna medan vi fortsätter att förbättra dem.
+    # Kinds of event, e.g. "Official" for a community event.
+    event_kinds:
+      official: "Officiell" # MT
+      personal: "Privat" # MT
+      special: "Särskild" # MT
+    weekly_event: "Veckoträff" # MT
+    groups:
+      meals_committee:
+        name: "Matgruppen" # MT
+        description: "Driver måltidsverksamheten!" # MT
+      knitting_club:
+        name: "Stickklubben" # MT
+        description: "Stickning för alla, från nybörjare till proffs! Vi ses på söndagar kl. 14." # MT
+    work:
+      period: "Huvudperiod" # MT
+      jobs:
+        mow_team: "Med i gräsklipparlaget" # MT
+        closer: "Stänger gemensamhetshuset" # MT
+        work_day: "Gemensam arbetsdag" # MT
+    payment_description: "Banköverföring, ref. %{number}" # MT
+    memorial_message: "%{name} var en så vänlig människa och en engagerad medlem i vår gemenskap. Saknaden är stor." # MT
+    # Lists the generators and factories pick from at random (see config/initializers/faker.rb).
+    relationships:
+      - "Mamma" # MT
+      - "Pappa" # MT
+      - "Kusin" # MT
+      - "Bror" # MT
+      - "Syster" # MT
+      - "Son" # MT
+      - "Dotter" # MT
+      - "Moster" # MT
+      - "Farbror" # MT
+      - "Vän" # MT
+    pet_species:
+      - "Katt" # MT
+      - "Hund" # MT
+      - "Schnauzer" # MT
+      - "Labrador" # MT
+      - "Orm" # MT
+      - "Papegoja" # MT
+      - "Kanin" # MT
+    colors:
+      - "Röd" # MT
+      - "Blå" # MT
+      - "Grön" # MT
+      - "Svart" # MT
+      - "Vit" # MT
+      - "Silver" # MT
+      - "Grå" # MT
+      - "Gul" # MT
+      - "Brun" # MT
+      - "Lila" # MT
+    event_names:
+      - "Bokcirkel" # MT
+      - "Födelsedagskalas" # MT
+      - "Filmkväll" # MT
+      - "Yogapass" # MT
+      - "Brädspel" # MT
+      - "Körövning" # MT
+      - "Övernattande gäst" # MT
+      - "Knytkalas" # MT
+      - "Pysseltimme för barn" # MT
+      - "Kommittémöte" # MT
+      - "Arbetsdag i trädgården" # MT
+      - "Babyshower" # MT
+      - "Musikövning" # MT
+      - "Fika och prat" # MT
+      - "Släktbesök" # MT
+      - "Workshop" # MT
+      - "Spelkväll" # MT
+      - "Konstkurs" # MT
+      - "Meditation" # MT
+      - "Danskurs" # MT
+      - "Julfest" # MT
+      - "Cykelverkstad" # MT
+      - "Sagostund" # MT
+      - "Syjunta" # MT
+    # What a sample meal contains, shown in its allergen list.
+    allergens:
+      almonds: "Mandel" # MT
+      bananas: "Banan" # MT
+      corn: "Majs" # MT
+      dairy: "Mejeriprodukter" # MT
+      eggs: "Ägg" # MT
+      gluten: "Gluten" # MT
+      peanuts: "Jordnötter" # MT
+      pineapple: "Ananas" # MT
+      soy: "Soja" # MT
+      tofu: "Tofu" # MT
+      tree_nuts: "Nötter" # MT
+    # Sample meals' menus. Each written by a different cook, so the style varies.
+    meals:
+      meal_01:
+        title: "Tranbärskyckling med sötpotatis" # MT
+        entrees: "Tranbärskyckling (frigående, från en gård i närheten) med sötpotatis" # MT
+        side: "Sallad, frukt" # MT
+        kids: "Kycklingen brukar barnen gilla" # MT
+        dessert: "Brownies, glass" # MT
+        notes: "Ugnsbakad tofu finns om du ber om det. Jag kan göra lite sötpotatis och tranbär utan kyckling, och glutenfria brownies också. Gluten, mjölk och ägg finns bara i efterrätten." # MT
+      meal_02:
+        title: "Bakpotatisbuffé" # MT
+        entrees: "Bakad potatis med massor av olika tillbehör" # MT
+        dessert: "Kakrutor från långpanna" # MT
+        notes: "Ekologiskt där det går. Lätt att undvika allergener." # MT
+      meal_03:
+        title: "Latkes med tillbehör" # MT
+        entrees: "Rårakor med eller utan lök eller ägg (säg till), och några med min favoritcurry" # MT
+        side: "Grönsaker, sallad, äppelmos, gräddfil, frön" # MT
+        dessert: "Frukt och mörk choklad" # MT
+        notes: "Allt är ekologiskt, GMO-fritt och glutenfritt. Allergener kan undvikas om du ber om det, så var tydlig med vad du vill ha (t.ex. ingen lök eller inga ägg)." # MT
+      meal_04:
+        title: "Säsongens soppor" # MT
+        entrees: "Cheddarsoppa med öl, ärtsoppa och öppna varma ostmackor" # MT
+        side: "Enkel sallad: spenat, röd paprika, avokado och sesam- och ingefärsdressing (och andra dressingar)" # MT
+        dessert: "Jordgubbssemifreddo med svart sesam" # MT
+      meal_05:
+        title: "Glutenfri chili, med nötkött eller tofu" # MT
+        entrees: "Ekologisk glutenfri chili för köttätare och för vegetarianer, och en ekologisk grönsallad med blandade grönsaker. Ekologiskt glutenfritt majsbröd med mjölk och ägg." # MT
+        kids: "Samma" # MT
+        dessert: "Något ekologiskt och glutenfritt, som kan innehålla mjölk och ägg" # MT
+      meal_06:
+        title: "Födelsedagsmiddag: pesto och pasta (eller ris)" # MT
+        entrees: "Pestopasta eller ris, med kyckling och/eller tofu" # MT
+        side: "Ugnsrostade rotfrukter och annat från skafferiet" # MT
+        dessert: "Cupcakes och chokladbitar med cashew (mjölkfria och glutenfria)" # MT
+        notes: "Flexibelt och lätt att anpassa. Skriv dina kostbehov i kommentarerna. Middagen blir enkel så att vi kan satsa på efterrätten." # MT
+      meal_07:
+        title: "Blåbärspannkakor och spenatfrittata" # MT
+        entrees: "Amerikanska pannkakor, vanliga eller glutenfria, och små portionsfrittator med spenat, basilika och tomat" # MT
+        side: "Kalkonkorv, frukt och yoghurt" # MT
+        kids: "Glutenfria pannkakor gjorda på mandelmjölk" # MT
+      meal_08:
+        title: "Spenatlasagne" # MT
+        entrees: "Spenatlasagne, och ostlasagne för den som inte gillar spenat" # MT
+        side: "Ångkokt broccoli" # MT
+        kids: "Pasta med bara parmesan" # MT
+        dessert: "Kakor med chokladbitar" # MT
+        notes: "Mejla mig om du vill ha den glutenfri eller ändrad på något annat sätt." # MT
+      meal_09:
+        title: "Glutenfri potatissoppa" # MT
+        entrees: "Ekologisk potatissoppa med mjölk, och ekologiskt bacon att strö över för köttätare" # MT
+        side: "Ekologisk grönsallad med de ekologiska grönsaker jag hittar (tomater, paprika, morötter). Ekologiskt glutenfritt majsbröd med mjölk och ägg." # MT
+        kids: "Samma" # MT
+        dessert: "Något ekologiskt och glutenfritt" # MT
+        notes: "Ugnsbakad tofu för vegetarianer" # MT
+      meal_10:
+        title: "Tacos med limekyckling" # MT
+        entrees: "Strimlad kyckling i chipotle adobo-sås med färsk lime (lite stark)" # MT
+        side: "Bönröra (refried beans) och ris" # MT
+        kids: "Quesadillas med bara kyckling och ost" # MT
+        dessert: "Semifreddo med choklad och hasselnöt" # MT
+        notes: "Alla allergener kan undvikas." # MT
+      meal_11:
+        title: "Tamales att ta med: läs anteckningarna!" # MT
+        entrees: "Tamales från en restaurang här i närheten. Varje anmäld vuxen betyder en tamal, så anmäl inte barn. Vill du ha två tamales anmäler du två vuxna." # MT
+        side: "Curtido (en sorts inlagd kål)" # MT
+        notes: "Skriv vilken sorts tamal du vill ha i anteckningarna. Jag beställer bara tamales, för att hålla det enkelt." # MT
+      meal_12:
+        title: "Paella med kyckling och med grönsaker" # MT
+        entrees: "Ris med kyckling, och ris med grönsaker för vegetarianer" # MT
+        side: "Grönsallad" # MT
+        dessert: "Crème caramel och frukt" # MT
+      meal_13:
+        title: "Stroganoff på oxbringa" # MT
+        entrees: "Stroganoff på oxbringa med äggnudlar" # MT
+        side: "Risotto med shiitake och purjolök, och sparris" # MT
+        kids: "Nudlar och risotto utan något till" # MT
+        dessert: "Bestäms senare" # MT
+      meal_14:
+        title: "Dags för chili" # MT
+        entrees: "Vegetarisk chili" # MT
+        side: "Majsbröd, sallad" # MT
+        kids: "Samma" # MT
+        dessert: "Ja" # MT
+        notes: "Säg till om du behöver den glutenfri." # MT
+      meal_15:
+        title: "Crêpesbuffé" # MT
+        entrees: "Ett urval crêpes (vanliga, med surdeg, och glutenfria om du ber om det), med salta fyllningar (ägg, ost, grönsaker, örter med mera) och söta (frukt, chokladkräm, sylt, yoghurt, ricotta med mera) att fylla själv." # MT
+        notes: "Fyllningarna tar du själv. Crêpesen innehåller ägg och mjölk." # MT
+      meal_16:
+        title: "Curry och ris" # MT
+        entrees: "Kycklingcurry med ris, och tofu för vegetarianer" # MT
+        side: "Rädiskimchi" # MT
+        kids: "Friterade dumplings" # MT
+        dessert: "Frukt" # MT
+        notes: "Mitt currypulver innehåller mjöl. Behöver du glutenfritt tar jag det glutenfria currypulvret i köket i gemensamhetshuset." # MT
+      meal_17:
+        title: "Engelsk frukost" # MT
+        entrees: "Äggröra, korv, svamp, bakade bönor" # MT
+        side: "Blandade bär" # MT
+      meal_18:
+        title: "Tikka masala med kyckling eller grönsaker" # MT
+        entrees: "Tikka masala med kyckling eller grönsaker: kött eller grönsaker som har puttrat i en fyllig kokoscurry, med ris till" # MT
+        side: "Sallad, ris" # MT
+        kids: "De kommer att gilla det" # MT
+        dessert: "Frukt" # MT
+        notes: "Båda varianterna är glutenfria och mjölkfria! Säg om du vill ha veganskt eller kött. Så närproducerat och ekologiskt som möjligt." # MT
+      meal_19:
+        title: "Chilitävling!" # MT
+        entrees: "Chili och mer chili, en liten avgift per vuxen" # MT
+        side: "Äppelmos, bröd och smör" # MT
+        kids: "Chili och mer chili. Gratis för barn upp till 6 år." # MT
+        dessert: "Antagligen" # MT
+        notes: "Vår chilitävling samlar in pengar till ny konst i matsalen. Kom och laga, ät och rösta! Alla får en röst, barnen också. Vill du tävla tar du med 4 liter chili senast kl. 18 och skriver allergener, kött och alkohol på anmälningslappen." # MT
+      meal_20:
+        title: "Kaffekaka och frukostgratäng" # MT
+        entrees: "Gratäng med bacon och ägg, getost och grönsaker" # MT
+        side: "Glutenfri blåbärskaka till kaffet" # MT
+        kids: "De kommer att älska det" # MT
+        notes: "Allt är glutenfritt. Den enda mjölkprodukten är getosten i gratängen." # MT
+      meal_21:
+        title: "Fisksoppa med kokos" # MT
+        entrees: "Fisksoppa på kokosmjölk, med ett veganskt alternativ utan fisk" # MT
+        side: "Nybakade frallor" # MT
+        kids: "Råa morotsstavar och broccoli" # MT
+        dessert: "Frukt" # MT
+        notes: "Frallorna innehåller vete. Själva soppan är glutenfri." # MT
+      meal_22:
+        title: "Varma fyllda croissanter och frukt" # MT
+        entrees: "Färska och grillade grönsaker i varma croissanter" # MT
+        side: "Färsk fruktsallad, och nötmjölk sötad med dadlar" # MT
+        kids: "Äggröra och yoghurt" # MT
+      meal_23:
+        title: "Coq au vin" # MT
+        entrees: "Coq au vin" # MT
+        side: "Persiljepotatis, haricots verts, sallad med senapsvinägrett" # MT
+        dessert: "Jordgubbar med grädde" # MT
+      meal_24:
+        title: "Dumplingsoppa" # MT
+        entrees: "Dumplings i kycklingbuljong (eller grönsaksbuljong)" # MT
+        side: "Ris, rädiskimchi och tillbehör (strimlad tång, hackad salladslök)" # MT
+        kids: "De flesta barn gillar dumplings" # MT
+        dessert: "Frukt och brownies" # MT
+        notes: "Dumplingsen är med fläskkött om du inte ber om nötkött eller vegetariska. Jag har i ägg i buljongen." # MT
+      meal_25:
+        title: "Bygg din egen risskål" # MT
+        entrees: "Kyckling (eller ugnsbakad tofu) med valfritt ris, krispiga nudlar, grönsaker, ananas, kokosflingor, mandelspån, riven ost och andra tillbehör" # MT
+        kids: "Skivade grönsaker, frukt" # MT
+        dessert: "Kakrutor" # MT
+      meal_26:
+        title: "Traditionell tysk mat" # MT
+        entrees: "Bratwurst, äggnudlar och potatisgratäng" # MT
+        side: "Rödkål, surkål, pepparrot och gräddfil" # MT
+        kids: "Bestäms senare" # MT
+        dessert: "Äppelstrudel med glass" # MT
+      meal_27:
+        title: "Grillkväll" # MT
+        entrees: "Grillfavoriter med koreansk touch. Jag hoppas att mina assistenter har några bra idéer." # MT
+        side: "Lätt sauterade grönsaker från bondens marknad eller våra odlingar" # MT
+        kids: "Barnen kanske får hjälpa till i trädgården" # MT
+        dessert: "Färska jordgubbar, om det är säsong" # MT
+        notes: "Så ekologiskt och närproducerat som möjligt. Lätt att anpassa till alla kostbehov." # MT
+      meal_28:
+        title: "Hemgjord pizza!" # MT
+        entrees: "Pizza med olika fyllningar: kyckling, grönsaker, ost, pepperoni. Vanlig och glutenfri botten." # MT
+        side: "Sallad och frukt" # MT
+        kids: "Barn gillar sånt här" # MT
+        dessert: "Kanske..." # MT
+        notes: "Skriv nedan om du behöver glutenfritt så att jag kan planera. Tack! Ekologiska och närproducerade råvaror när det går." # MT
+      meal_29:
+        title: "Tomatprovning" # MT
+        entrees: "Ett urval tomater från trakten, med fågel och vegetariska alternativ" # MT
+        side: "Caprese, massor av grönsaker, majskolvar" # MT
+        kids: "Majs skuren från kolven för barn med tandställning" # MT
+        dessert: "Tomatglass?" # MT
+        notes: "Närproducerat och ekologiskt när det går. Maten kan göras allergenfri (men inte tomatfri). Det blir nötter (mandel och hasselnötter)." # MT
+      meal_30:
+        title: "Chili och knytkalas med äppelefterrätter!" # MT
+        entrees: "Chili som jag minns den från barndomen: milda bönor och grönsaker på ris. Köttfärs för köttätare." # MT
+        side: "Kokta grönsaker, beroende på vad som finns från trakten" # MT
+        kids: "Huvudrätten är mild nog för alla" # MT
+        dessert: "Det är vårt årliga knytkalas med äppelefterrätter! Följ med och plocka äpplen helgen innan, och ta sedan med det du gör av de underbara äpplena." # MT
+        notes: "Mjölkprodukter finns vid sidan av, men huvudrätten innehåller inga. Efterrätterna görs av olika personer, så de kan innehålla vilka som helst av de vanliga allergenerna." # MT
+      meal_31:
+        title: "Söta och salta crêpes" # MT
+        entrees: "Crêpes med massor av fyllningar, salta till middag och söta till efterrätt" # MT
+        side: "Ångkokta grönsaker" # MT
+        dessert: "Fler crêpes!" # MT
+        notes: "Ägg från frigående höns, närproducerad mjölk, ekologiskt mjöl. Vill du ha glutenfria crêpes så säg till, så gör jag ett försök." # MT
+      meal_32:
+        title: "Gimbap" # MT
+        entrees: "Ris, kryddade grönsaker, nötkött och ägg eller rökt lax, rullat i sjögräs" # MT
+        side: "Vattenkimchi på rädisa" # MT
+        kids: "Huvudrätten borde funka för dem" # MT
+        dessert: "Frukt eller glass" # MT
+        notes: "Vi började fermentera vattenkimchin för två veckor sedan. Det blir burkar att ta med hem efter måltiden." # MT
+      meal_33:
+        title: "Ärtsoppa med curry och smörgåsar" # MT
+        entrees: "Currykryddad soppa på gula ärter med kycklingbuljong, skinka och mjölk, och en vegansk variant med grönsaksbuljong och kokosmjölk" # MT
+        side: "Smörgåsar med tonfisksallad och äggsallad, eller ta med eget pålägg till brödet" # MT
+        kids: "Samma. Mejla mig före torsdag om dina barn vill ha soppa utan curry." # MT
+        dessert: "Hembakade kakor med chokladbitar, och frukt" # MT
+        notes: "Soppan är glutenfri, och grönsakssoppan är mjölkfri också. Vill du ha glutenfritt bröd eller andra ändringar, mejla mig före torsdag." # MT
+      meal_34:
+        title: "Crêpes och goda saker att fylla dem med" # MT
+        entrees: "Crêpes (ägg, mjöl, mjölk). Egentligen mest som vanliga svenska pannkakor: tunna och mjuka." # MT
+        side: "Söta och salta fyllningar: socker, hemkokt jordgubbs- och blåbärssylt, saltkolasås, vispgrädde, ost och antagligen stekt svamp. Ta med eget om du vill ha något särskilt." # MT
+        kids: "Samma" # MT
+        dessert: "Samma" # MT
+        notes: "Antagligen inte allt ekologiskt, men jag gör mitt bästa inom budgeten." # MT
+      meal_35:
+        title: "Köttfärslimpa" # MT
+        entrees: "Köttfärslimpa" # MT
+        side: "Sallad, scones, potatis" # MT
+        dessert: "Äppelsmulpaj" # MT
+      meal_36:
+        title: "Bibimbap" # MT
+        entrees: "Ångkokt ris toppat med kryddade grönsaker och nötkött (eller tofu), med stark chilisås (och soja om du inte gillar starkt), och stekta ägg" # MT
+        side: "Inlagda grönsaker och kimchi" # MT
+        kids: "De kan få mer nötkött eller tofu än grönsaker" # MT
+        dessert: "Frukt" # MT
+        notes: "Allt är kryddat med glutenfri soja, vitlök, sesamolja och svartpeppar. Det här är mest grönsaker, så räkna inte med så mycket kött." # MT
+      meal_37:
+        title: "Kalkontacos" # MT
+        entrees: "Tacos med kalkonfärs" # MT
+        side: "Bönröra, ris" # MT
+        notes: "Tomat, sallad, mild salsa och gräddfil till tacosen." # MT
+      meal_38:
+        title: "Frukostpizza" # MT
+        entrees: "Världens bästa pizzabotten, gjord på bara några få ingredienser, mest kassava. Till och med de mest kräsna älskar den. Med en pestoliknande sås och valfritt kött, grönsaker och ostar. Skriv eventuella kostbehov." # MT
+        side: "Äggröra" # MT
+      meal_39:
+        title: "Soppbuffé!" # MT
+        entrees: "En enkel köttsoppa och en enkel grönsakssoppa, plus massor av tillbehör så att du kan skapa din egen variant: frön, grönsaker, glutenfri pasta, ost..." # MT
+        side: "Grönsaker, ost, pasta" # MT
+        kids: "Barnen kommer att tycka att det är kul att göra sin egen" # MT
+        dessert: "Kanske något med frukt" # MT
+        notes: "Så närproducerat och ekologiskt som möjligt." # MT
+      meal_40:
+        title: "Lax en papillote" # MT
+        entrees: "Lax bakad i bakplåtspapper, kryddad med lök och örter" # MT
+        side: "Bladgrönt (spenat eller grönkål) eller haricots verts sauterade med vitlök, ugnsrostad färskpotatis och nybakat bröd" # MT
+        kids: "Skriv en kommentar om dina barn inte äter lax och föreslå något annat, som tonfisksallad eller hårdkokta ägg." # MT
+        dessert: "Ja: frukt och något bakat" # MT
+        notes: "Allt är glutenfritt utom den bakade efterrätten. Grönsakerna blir mest ekologiska. Säg till om du behöver ett vegetariskt alternativ; jag kan woka eller ugnsbaka lite tofu." # MT

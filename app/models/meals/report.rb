@@ -4,7 +4,7 @@ module Meals
   # Calculates a bunch of statistics about the meals system.
   class Report # rubocop:disable Metrics/ClassLength
     attr_accessor :type_map, :community, :range
-    SUNDAY = Date.parse("Sunday")
+    SUNDAY = Date.parse("Sunday") # rubocop:disable Gather/HardCodedString -- parsed, not displayed
 
     def initialize(community, range: nil)
       self.community = community
@@ -69,27 +69,27 @@ module Meals
       @chart_data ||= {
         servings_by_month: [
           by_month_no_totals_or_gaps.each_with_index.map do |k_v, i|
-            {x: i, y: k_v[1]["avg_servings"] || 0, l: k_v[0].strftime("%b")}
+            {x: i, y: k_v[1]["avg_servings"] || 0, l: I18n.l(k_v[0], format: :month)}
           end
         ],
         cost_by_month: [
           by_month_no_totals_or_gaps.each_with_index.map do |k_v, i|
-            {x: i, y: k_v[1]["avg_max_cost"] || 0, l: k_v[0].strftime("%b")}
+            {x: i, y: k_v[1]["avg_max_cost"] || 0, l: I18n.l(k_v[0], format: :month)}
           end
         ],
         meals_by_month: [
           by_month_no_totals_or_gaps.each_with_index.map do |k_v, i|
-            {x: i, y: k_v[1]["ttl_meals"] || 0, l: k_v[0].strftime("%b")}
+            {x: i, y: k_v[1]["ttl_meals"] || 0, l: I18n.l(k_v[0], format: :month)}
           end
         ],
         servings_by_weekday: [
           (by_weekday || {}).each_with_index.map do |k_v, i|
-            {x: i, y: k_v[1]["avg_servings"], l: k_v[0].strftime("%a")}
+            {x: i, y: k_v[1]["avg_servings"], l: I18n.l(k_v[0], format: :wday)}
           end
         ],
         cost_by_weekday: [
           (by_weekday || {}).each_with_index.map do |k_v, i|
-            {x: i, y: k_v[1]["avg_max_cost"], l: k_v[0].strftime("%a")}
+            {x: i, y: k_v[1]["avg_max_cost"], l: I18n.l(k_v[0], format: :wday)}
           end
         ],
         meal_types: (by_type || {}).map do |k_v|

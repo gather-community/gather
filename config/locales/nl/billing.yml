@@ -1,0 +1,238 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+nl:
+  transaction_codes:
+    meal: "Maaltijd" # MT
+    dues: "Contributie" # MT
+    payment: "Betaling" # MT
+    reimb: "Vergoeding" # MT
+    othcrd: "Ander tegoed" # MT
+    othchg: "Andere afschrijving" # MT
+    late: "Boete voor late betaling" # MT
+    initbal: "Beginsaldo" # MT
+
+  accounts:
+    updated: "Rekening bijgewerkt." # MT
+    late_fees_applied: "Boetes voor late betaling toegepast." # MT
+    # An amount that is a credit, e.g. "$5.00 CR".
+    credit_amount_html: "%{amount} tegoed" # MT
+    # Shown in its own column next to credit amounts on statements.
+    credit_abbr: "tegoed" # MT
+    not_applicable: "n.v.t." # MT
+    no_credit_limit: "Geen" # MT
+    no_users_warning: "Het huishouden van deze rekening heeft geen gekoppelde gebruikers" # MT
+    late_fee_confirm: "Weet je het zeker? Er worden boetes in rekening gebracht bij %{count} huishoudens." # MT
+    late_fee_confirm_with_days: "Weet je het zeker? Er worden boetes in rekening gebracht bij %{count} huishoudens. De laatste keer dat boetes werden toegepast, was %{days} dagen geleden." # MT
+    statement_confirm: "Weet je het zeker? Er worden afschriften verstuurd naar %{count} huishoudens." # MT
+    paypal_friend_confirm_html: "Kies <strong>niet</strong> “Betaal je voor goederen of een dienst?” als daarom gevraagd wordt, anders betaal je transactiekosten." # MT
+    details:
+      no_activity: "Er is geen activiteit op deze rekening." # MT
+    other_accounts:
+      looking: "Zoek je een andere rekening?" # MT
+      each_community: "Elke gemeenschap beheert haar eigen rekeningen." # MT
+    payment_instructions:
+      how_to_pay: "Zo betaal je" # MT
+      paypal: "PayPal" # MT
+      click_logo: "Klik op het logo hierboven om met PayPal te betalen." # MT
+      send_paypal_html: "Stuur PayPal-betalingen naar %{email}." # MT
+      choose_friend_html: "Kies zeker de optie %{friend}, zodat je geen transactiekosten betaalt." # MT
+      sending_to_friend: "Vrienden en familie" # MT
+      online_bill_pay: "Online bankieren" # MT
+      bill_pay_intro: "Bij de meeste banken kun je via online bankieren eenvoudig een betaling overmaken. Voeg een nieuwe begunstigde toe en vul het volgende in:" # MT
+      payee_name_html: "Naam begunstigde: %{payee}" # MT
+      account_number_html: "Rekeningnummer: %{number}" # MT
+      address: "Adres:" # MT
+      check: "Cheque" # MT
+      payable_to_html: "Schrijf cheques uit op naam van %{payee}" # MT
+      memo_line_html: "Vermeld je rekeningnummer %{number} in de omschrijving." # MT
+      mail_to: "Stuur cheques naar:" # MT
+      cash: "Contant" # MT
+      none_provided: "Er zijn geen betaalinstructies opgegeven." # MT
+      go_to_settings_html: "Vul ze in op de %{link}." # MT
+      settings_page: "instellingenpagina" # MT
+      contact_html: "Neem voor vragen over facturatie contact op met %{email}." # MT
+    statement_list:
+      statements: "Afschriften" # MT
+      date: "Datum" # MT
+      activity: "Activiteit" # MT
+      total_due: "Totaal te betalen" # MT
+    summary:
+      summary: "Overzicht" # MT
+      account_number: "Rekeningnummer" # MT
+      last_statement_date: "Datum laatste afschrift" # MT
+      last_statement_balance: "Saldo laatste afschrift" # MT
+      new_credits: "Nieuwe betalingen/tegoeden" # MT
+      balance_due: "Te betalen" # MT
+      due_date: "Uiterste betaaldatum" # MT
+      new_charges: "Nieuwe afschrijvingen" # MT
+      current_balance: "Huidig saldo" # MT
+      credit_limit: "Kredietlimiet" # MT
+      balance_due_footnote: "Dit is het bedrag dat je nu verschuldigd bent: het bedrag op je laatste afschrift min de betalingen die sindsdien zijn ontvangen. Heb je al betaald maar zie je dat hier nog niet, dan kun je dit negeren." # MT
+      current_balance_footnote: "Dit saldo omvat afschrijvingen en tegoeden sinds je laatste afschrift. Als het hoger is dan je kredietlimiet, kun je je niet aanmelden voor maaltijden." # MT
+    synopsis:
+      pay_by: "Betaal %{amount} uiterlijk op %{date}. Bedankt!" # MT
+      pay: "Betaal %{amount}. Bedankt!" # MT
+      zero: "Je hoeft niets te betalen. Goed gedaan!" # MT
+      credit: "Je rekening heeft een tegoed van %{amount}. Je hoeft niets te betalen!" # MT
+    transaction_export_form:
+      download: "Transacties downloaden als CSV" # MT
+      incurred: "Ontstaan binnen …" # MT
+      recorded: "Geboekt binnen …" # MT
+      select_dates: "Kies data" # MT
+    edit:
+      title: "Rekening bewerken: %{household}" # MT
+      no_users: "Aan deze rekening zijn geen gebruikers gekoppeld, dus er kunnen geen afschriften voor worden ontvangen." # MT
+      cancel: "Annuleren" # MT
+    show:
+      title: "Rekening: %{household}" # MT
+    mine:
+      title: "Mijn rekening" # MT
+      title_with_community: "Mijn rekening bij %{community}" # MT
+      no_charges: "Er zijn nog geen afschrijvingen voor je huishouden." # MT
+    index:
+      title: "Rekeningen" # MT
+      apply_late_fees: "Boetes voor late betaling toepassen" # MT
+      send_statements: "Afschriften versturen" # MT
+      no_accounts: "Geen rekeningen gevonden." # MT
+      num: "Nr." # MT
+      household: "Huishouden" # MT
+      last_statement_date: "Datum laatste afschr." # MT
+      due_last_statement: "Te betalen laatste afschr." # MT
+      new_credits: "Nieuwe tegoeden" # MT
+      balance_due: "Te betalen" # MT
+      new_charges: "Nieuwe afschrijvingen" # MT
+      current_balance: "Huidig saldo" # MT
+      credit_limit: "Kredietlimiet" # MT
+      add_transaction: "Transactie toevoegen" # MT
+      totals: "Totalen" # MT
+      download_accounts: "Rekeningen downloaden als CSV" # MT
+      summary:
+        one: "Er is %{count} actieve rekening." # MT
+        other: "Er zijn %{count} actieve rekeningen." # MT
+      active_account_definition: "Een actieve rekening is een rekening met recente activiteit of een huidig saldo dat niet nul is." # MT
+      last_statement_run: "De laatste afschriften zijn verstuurd op %{date}." # MT
+      statements_never_run: "Er zijn nog nooit afschriften verstuurd." # MT
+      no_users:
+        one: "Er is %{count} rekening zonder gekoppelde gebruikers. Voor die rekening wordt geen afschrift gemaakt." # MT
+        other: "Er zijn %{count} rekeningen zonder gekoppelde gebruikers. Voor die rekeningen worden geen afschriften gemaakt." # MT
+      recent_statements:
+        one: "Er is %{count} rekening met een afschrift in de afgelopen 24 uur. Voor die rekening wordt geen nieuw afschrift gemaakt." # MT
+        other: "Er zijn %{count} rekeningen met afschriften in de afgelopen 24 uur. Voor die rekeningen worden geen afschriften gemaakt." # MT
+    others:
+      one_html: "Je hebt nog een Gather-rekening bij %{cmty}." # MT
+      multiple_html: "Je hebt ook Gather-rekeningen bij %{cmtys}." # MT
+    payment_badge_alt:
+      paypal: "Betaalsymbool PayPal" # MT
+      online_bill_pay: "Betaalsymbool online bankieren" # MT
+      check: "Betaalsymbool cheque" # MT
+      cash: "Betaalsymbool contant" # MT
+
+  statements:
+    generation_started: "Het maken van afschriften is gestart. Vernieuw de pagina zo meteen om de bijgewerkte status van de rekeningen te zien." # MT
+    no_users_not_generated: "De volgende huishoudens hebben geen gekoppelde gebruikers, dus er zijn geen afschriften voor gemaakt: %{households}. Verstuur de afschriften opnieuw zodra deze huishoudens gekoppelde gebruikers hebben." # MT
+    account_info:
+      account_community: "Gemeenschap van de rekening" # MT
+      account_number: "Rekeningnummer" # MT
+      household: "Huishouden" # MT
+    link_to_accounts_page:
+      notice_html: "Voor de meest actuele informatie over je rekening: %{link}." # MT
+      link: "ga naar je rekeningenpagina" # MT
+    statement_rows:
+      load_more: "Meer laden …" # MT
+      loading: "Laden …" # MT
+    show:
+      title: "Afschrift nr. %{number}" # MT
+      statement_date: "Datum afschrift" # MT
+      due_date: "Uiterste betaaldatum" # MT
+      activity: "Activiteit" # MT
+      previous_balance: "Vorig saldo" # MT
+      statement_balance: "Saldo afschrift" # MT
+
+  transactions:
+    added: "Transactie toegevoegd." # MT
+    not_added: "De transactie is niet toegevoegd. Je kunt haar hieronder bewerken en het opnieuw proberen, of hieronder op “Annuleren” klikken om terug te gaan naar de rekeningenpagina." # MT
+    form:
+      cancel: "Annuleren" # MT
+    txn_rows:
+      no_activity: "Er was geen activiteit in deze periode" # MT
+    txn_table:
+      date: "Datum" # MT
+      type: "Type" # MT
+      description: "Omschrijving" # MT
+      quantity: "Aantal" # MT
+      unit_price: "Prijs per stuk" # MT
+      amount: "Bedrag" # MT
+    confirm:
+      title: "Transactie bevestigen" # MT
+      intro: "Hieronder zie je hoe de nieuwe transactie op het afschrift van het huishouden komt te staan. Transacties kunnen na het aanmaken niet meer worden bewerkt. Controleer of de informatie hieronder klopt." # MT
+    index:
+      title: "Recente activiteit" # MT
+      title_with_household: "Recente activiteit: %{household}" # MT
+      account_community: "Gemeenschap van de rekening" # MT
+      account_number: "Rekeningnummer" # MT
+      household: "Huishouden" # MT
+      activity: "Activiteit" # MT
+      no_activity: "Er is geen activiteit op deze rekening." # MT
+      last_statement_balance: "Saldo laatste afschrift" # MT
+      current_balance: "Huidig saldo" # MT
+    new:
+      title: "Nieuwe transactie" # MT
+
+  billing:
+    # Description of the transaction LateFeeApplier creates.
+    late_fee_description: "Boete voor late betaling" # MT
+    templates:
+      created: "Sjabloon aangemaakt." # MT
+      updated: "Sjabloon bijgewerkt." # MT
+      select_one: "Kies minstens één sjabloon." # MT
+      applied: "Transacties aangemaakt." # MT
+      edit:
+        title: "Factuursjabloon bewerken: %{description}" # MT
+      new:
+        title: "Nieuw transactiesjabloon" # MT
+      index:
+        title: "Transactiesjablonen" # MT
+        apply: "Sjablonen toepassen" # MT
+        create: "Sjabloon aanmaken" # MT
+        intro: "Met transactiesjablonen maak je eenvoudig een hele reeks transacties in één keer aan." # MT
+        none_found: "Geen sjablonen gevonden." # MT
+        description: "Omschrijving" # MT
+        type: "Type" # MT
+        member_types: "Lidtype(s)" # MT
+        amount: "Bedrag" # MT
+      review:
+        title: "Sjablonen toepassen" # MT
+        intro: "Je staat op het punt de volgende transacties aan te maken voor de volgende huishoudens:" # MT
+        description: "Omschrijving" # MT
+        type: "Type" # MT
+        amount: "Bedrag" # MT
+        households: "Huishoudens" # MT
+        outdated_warning: "De lijst met huishoudens hierboven kan verouderd raken als de lidtypes van huishoudens worden gewijzigd tussen het laden van deze bevestigingspagina en het klikken op “Toepassen” hieronder." # MT
+        cancel: "Annuleren" # MT
+        apply: "Toepassen" # MT
+
+  account_mailer:
+    statement_notice:
+      subject: "Nieuw afschrift voor %{community}" # MT
+      created: "Er is in Gather een nieuw afschrift gemaakt voor je rekening bij %{community}." # MT
+      amount_due: "Het te betalen bedrag is %{amount}." # MT
+      credit: "Je hebt een tegoed van %{amount}. Je hoeft niets te betalen." # MT
+      see_details: "Ga naar de link hieronder voor de details:" # MT
+      thanks: "Bedankt voor je snelle betaling!" # MT
+    statement_reminder:
+      subject: "Betalingsherinnering voor je rekening bij %{community}" # MT
+      due_on: "Dit is een herinnering dat de betaling voor een Gather-afschrift van je rekening bij %{community} uiterlijk op %{date} moet gebeuren." # MT
+      due_soon: "Dit is een herinnering dat de betaling voor een Gather-afschrift van je rekening bij %{community} binnenkort moet gebeuren." # MT
+      amount_due: "Het te betalen bedrag is %{amount}. Ga naar de link hieronder voor de details:" # MT
+      disregard: "Heb je al betaald, dan kun je dit bericht negeren." # MT
+      thanks: "Bedankt voor je snelle betaling!" # MT

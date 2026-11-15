@@ -30,6 +30,13 @@ module Subscription
       if @subscription.new_record? || @subscription.incomplete_expired?
         @intent = Intent.find_by(community: current_community)
       end
+
+      # The monthly messaging topup is its own Stripe subscription; load it (live) for the Messaging
+      # section rendered on the post-payment view. Skipped (along with its Stripe call) while
+      # messaging is behind its flag.
+      return unless FeatureFlag.lookup("messaging").on?(current_user)
+      @messaging_topup = live_messaging_topup
+      @messaging_account = current_community.messaging_account
     end
 
     def start_payment
@@ -60,6 +67,16 @@ module Subscription
 
     private
 
+    # The community's monthly topup, live from Stripe, or nil when there is none. A row whose Stripe
+    # subscription has already ended is reaped rather than rendered: after cancellation Stripe clears
+    # cancel_at_period_end and leaves the item and price readable, so a stale row reads back as a
+    # healthy active topup and the page would show a dead topup as live. Backstop for a missed
+    # customer.subscription.deleted webhook, so the page is right on the next load either way.
+    def live_messaging_topup
+      topup = current_community.messaging_topup&.tap(&:populate)
+      topup&.reap_if_canceled! ? nil : topup
+    end
+
     def load_auth_and_populate_subscription(or_initialize: false)
       subscription = if or_initialize
                         Subscription.find_or_initialize_by(community: current_community)
@@ -70,7 +87,9 @@ module Subscription
       Sentry.configure_scope do |scope|
         scope.set_context("subscription", stripe_subscription_id: subscription.stripe_id)
       end
-      subscription.populate
+      # sync! fetches live from Stripe (populating stripe_sub for this request) and write-caches the
+      # status locally. New/unpersisted subscriptions short-circuit inside sync! and skip the fetch.
+      subscription.sync!
       subscription
     end
   end

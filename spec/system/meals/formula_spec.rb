@@ -69,7 +69,8 @@ describe "formulas", js: true do
 
   scenario "deactivate/activate/delete" do
     visit(edit_meals_formula_path(formulas.first))
-    accept_confirm { click_on("Deactivate") }
+    click_on("Deactivate")
+    click_modal_button
     expect_success
 
     click_link("Edit")
@@ -78,7 +79,8 @@ describe "formulas", js: true do
 
     expect(page).not_to have_content("#{formulas.first.name} (Inactive)")
     click_link("Edit")
-    accept_confirm { click_on("Delete") }
+    click_on("Delete")
+    click_modal_button
     expect_success
 
     expect(page).not_to have_content(formulas.first.name)

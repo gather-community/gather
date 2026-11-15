@@ -1,6 +1,10 @@
 <%= @recipient.greeting %>
 
-<%= @message.sender_name %> sent the following message in regard to the meal '<%= @meal.title_or_no_title %>' on <%= @meal.served_at_wday_no_year %><%= @meal.location_name_with_at %>.
+<% if @meal.location_name -%>
+<%= t(".intro_at_location", sender: @message.sender_name, title: @meal.title_or_no_title, date: @meal.served_at_wday_no_year, location: @meal.location_name) %>
+<% else -%>
+<%= t(".intro", sender: @message.sender_name, title: @meal.title_or_no_title, date: @meal.served_at_wday_no_year) %>
+<% end -%>
 
 --------------
 <%= @message.body %>

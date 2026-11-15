@@ -1,0 +1,481 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+fi:
+  meals:
+    over_limit_notice_html: "Kotitaloutesi on ylittänyt luottorajan %{limit} (yhteisö %{community}, %{account_link}), joten et voi ilmoittautua yhteisön %{community} järjestämille aterioille. Jos sinulla on kysyttävää, ota yhteyttä yhteisön %{community} ateriatoimikuntaan tai -vastaavaan." # MT
+    cancelled_notice: "Tämä ateria on peruttu." # MT
+    persion_is_helping:
+      one: "Kotitaloudestasi %{count} henkilö auttaa tässä ateriassa" # MT
+      other: "Kotitaloudestasi %{count} henkilöä auttaa tässä ateriassa" # MT
+    menu_posted_at: "Ruokalista julkaistu %{time}." # MT
+    type: "Tyyppi" # MT
+    category: "Luokka" # MT
+    spots_left:
+      one: "%{count} paikka jäljellä" # MT
+      other: "%{count} paikkaa jäljellä" # MT
+    form:
+      sections:
+        label:
+          general: "Yleiset" # MT
+          workers: "Tekijät" # MT
+          menu: "Ruokalista" # MT
+          signups: "Ilmoittautumiset" # MT
+          expenses: "Kulut" # MT
+        edit:
+          general: "Muokkaa yleisiä tietoja" # MT
+          workers: "Muokkaa tekijöitä" # MT
+          menu: "Muokkaa ruokalistaa" # MT
+          signups: "Muokkaa ilmoittautumisia" # MT
+          expenses: "Muokkaa kuluja" # MT
+      summaries:
+        allows: "enintään %{people} henkeä" # MT
+        allows_with_cmtys:
+          one: "enintään %{people} henkeä %{count} yhteisöstä" # MT
+          other: "enintään %{people} henkeä %{count} yhteisöstä" # MT
+        no_workers: "Tekijöitä ei ole kirjattu" # MT
+        no_menu: "Ruokalistaa ei ole julkaistu" # MT
+        no_signups: "Yksikään kotitalous ei ole ilmoittautunut" # MT
+        with_items: "sisältää: %{items}" # MT
+        and_allergen_count:
+          one: "%{count} allergeeni" # MT
+          other: "%{count} allergeenia" # MT
+        expenses:
+          ingredients: "raaka-aineet %{cost}" # MT
+          pantry: "ruokavarasto %{cost}" # MT
+          payment: "maksutapa: %{method}" # MT
+          none: "Kulutietoja ei ole kirjattu" # MT
+        signups:
+          diners:
+            one: "%{count} ruokailija" # MT
+            other: "%{count} ruokailijaa" # MT
+          from_households:
+            one: "%{count} kotitaloudesta" # MT
+            other: "%{count} kotitaloudesta" # MT
+    finalizing:
+      duplicates: "Ilmoittautumisissa on kaksoiskappaleita. Korjaa ne antamalla määrät kullekin ruokailijatyypille." # MT
+      cancelled: "Ateriaa ei viimeistelty. Voit muokata sitä alla ja yrittää uudelleen tai palata aterioiden sivulle valitsemalla alta ”Peruuta”." # MT
+      success: "Ateria viimeistelty" # MT
+      review_and_confirm_html: "<strong>Huomaa:</strong> Tätä ateriaa ei ole vielä viimeistelty. Tarkista ja vahvista alla olevat tiedot. Niitä ei voi muuttaa sen jälkeen, kun tiliotteet on lähetetty, joten ole huolellinen." # MT
+    sign_up: "Ilmoittaudu" # MT
+    closes_soon: "Sulkeutuu pian!" # MT
+    no_menu_title: "[Ei ruokalistaa]" # MT
+    takeout: "Mukaan" # MT
+    created: "Ateria luotu." # MT
+    updated: "Ateria päivitetty." # MT
+    closed: "Ateria suljettu." # MT
+    reopened: "Ateria avattu uudelleen." # MT
+    unfinalized: "Aterian viimeistely peruttu." # MT
+    cant_reopen_past_close: "Et voi avata tätä ateriaa uudelleen, koska sen automaattinen sulkemisaika on mennyt. Muuta tai poista automaattinen sulkemisaika ennen kuin jatkat." # MT
+    not_closed_before_summary: "Huomaa: Tätä ateriaa ei ole vielä suljettu, ja siihen voi yhä ilmoittautua. Sulje ateria ennen kuin tulostat tämän yhteenvedon." # MT
+    formula_created: "Hinnoittelukaava luotu." # MT
+    formula_updated: "Hinnoittelukaava päivitetty." # MT
+    type_created: "Tyyppi luotu." # MT
+    type_updated: "Tyyppi päivitetty." # MT
+    role_created: "Rooli luotu." # MT
+    role_updated: "Rooli päivitetty." # MT
+    restrictions_updated: "Päivitetty." # MT
+    # Name of the calendar event created for a meal.
+    event_name: "Ateria: %{title}" # MT
+    event_errors: "Tämän aterian tapahtuman luomisessa kalenteriin %{calendar} tapahtui seuraavat virheet: %{errors}." # MT
+    event_error: "%{attribute}: %{message}" # MT
+    signup_not_recorded: "Ilmoittautumistasi ei voitu kirjata, koska ateria on täynnä tai ei ole enää avoinna." # MT
+    report:
+      subhead_community: "%{range}, vain yhteisön %{community} ateriat" # MT
+    # Read by Gather.Views.Meals.ReportChartsView (JS). Each title has a variant naming the community,
+    # used when the cluster has more than one.
+    report_charts:
+      avg_servings: "Annoksia keskim." # MT
+      avg_servings_per_meal: "Annoksia keskim. ateriaa kohden" # MT
+      avg_cost: "Hinta keskim." # MT
+      avg_full_meal_price: "Täyden aterian hinta keskim." # MT
+      meals: "Ateriat" # MT
+      number_of_meals: "Aterioiden määrä" # MT
+      weekday: "Viikonpäivä" # MT
+      month: "Kuukausi" # MT
+      titles:
+        servings_by_month: "Annoksia keskimäärin ateriaa kohden kuukausittain" # MT
+        servings_by_month_community: "Annoksia keskimäärin ateriaa kohden kuukausittain (%{community})" # MT
+        cost_by_month: "Täyden aterian keskihinta kuukausittain" # MT
+        cost_by_month_community: "Täyden aterian keskihinta kuukausittain (%{community})" # MT
+        meals_by_month: "Aterioiden määrä kuukausittain" # MT
+        meals_by_month_community: "Aterioiden määrä kuukausittain (%{community})" # MT
+        servings_by_weekday: "Annoksia keskimäärin ateriaa kohden viikonpäivittäin" # MT
+        servings_by_weekday_community: "Annoksia keskimäärin ateriaa kohden viikonpäivittäin (%{community})" # MT
+        cost_by_weekday: "Täyden aterian keskihinta viikonpäivittäin" # MT
+        cost_by_weekday_community: "Täyden aterian keskihinta viikonpäivittäin (%{community})" # MT
+        community_rep: "Yhteisöjen keskimääräinen edustus aterioilla" # MT
+        community_rep_community: "Yhteisöjen keskimääräinen edustus aterioilla (%{community})" # MT
+        meal_types: "Ateriatyyppien keskimääräinen jakauma aterioilla" # MT
+        meal_types_community: "Ateriatyyppien keskimääräinen jakauma aterioilla (%{community})" # MT
+    portion_counts:
+      diners:
+        one: "%{count} ruokailija" # MT
+        other: "%{count} ruokailijaa" # MT
+      portions_html:
+        one: "<strong>%{count}</strong> annos" # MT
+        other: "<strong>%{count}</strong> annosta" # MT
+      category_portions_html:
+        one: "<strong>%{count} annos (%{category})</strong>" # MT
+        other: "<strong>%{count} annosta (%{category})</strong>" # MT
+      # Category label for formula parts with no category, when other parts have one.
+      other_category: "muu" # MT
+      # The * refers to the footnote on the summary page.
+      summary_html: "Tällä aterialla on %{diners}, ja siihen tarvitaan noin %{portions}.*" # MT
+      summary_list_html: "Tällä aterialla on %{diners}, ja siihen tarvitaan noin: %{portions}.*" # MT
+    meals:
+      index:
+        title: "Ateriat" # MT
+        show_action_menu: "Näytä aterian toimintovalikko" # MT
+        create: "Luo ateria" # MT
+        import: "Tuo aterioita" # MT
+        no_meals: "Aterioita ei löytynyt." # MT
+        date_time: "Päivämäärä/aika" # MT
+        location: "Paikka" # MT
+        cook: "Kokki" # MT
+        meal_title: "Otsikko" # MT
+        going: "Tuletko?" # MT
+        signups: "Ilmoittautumiset" # MT
+        full: "[Täynnä]" # MT
+        not_going: "Ei" # MT
+        meal_by_cook_html: "%{meal} (kokki: %{cook})" # MT
+        time_at_location: "%{time}, %{location}" # MT
+        signed_up_html: "Ilmoittautuneita: %{signups}" # MT
+        household_signed_up_html: "Kotitaloudestasi ilmoittautuneita: %{diners}" # MT
+        edit_signup: "(Muokkaa)" # MT
+        download_meals_csv: "Lataa ateriat CSV-tiedostona" # MT
+        download_signups_csv: "Lataa ateriailmoittautumiset CSV-tiedostona" # MT
+      show:
+        untitled: "Nimetön ateria" # MT
+        meals: "Ateriat" # MT
+        previous_meal: "Edellinen ateria" # MT
+        next_meal: "Seuraava ateria" # MT
+        my_order: "Oma tilaus" # MT
+        helping_out: "Auttamassa" # MT
+      new:
+        title: "Luo ateria" # MT
+        missing_prereqs_html: "Ennen kuin voit luoda aterian, tarvitaan: %{items}." # MT
+        formula: "soveltuva hinnoittelukaava" # MT
+        calendar: "vähintään yksi kalenteri, jossa voi järjestää aterioita" # MT
+      edit:
+        title: "Muokkaa ateriaa" # MT
+        title_with_meal: "Muokkaa ateriaa: %{title}" # MT
+      signup_form:
+        account: "tili" # MT
+        closed_not_signed_up: "Et ole ilmoittautunut tälle aterialle, ja ilmoittautuminen on nyt suljettu." # MT
+        full_not_signed_up: "Et ole ilmoittautunut tälle aterialle, ja se on nyt täynnä. Voit tarkistaa myöhemmin, vapautuuko paikkoja." # MT
+        not_signed_up: "Et ole ilmoittautunut tälle aterialle." # MT
+        saved: "Ilmoittautuminen tallennettu" # MT
+        closes_at: "Sulkeutuu %{date} klo %{time}" # MT
+        sign_up: "Ilmoittaudu" # MT
+      household_worker_form:
+        worker_role: "%{name} – %{role}" # MT
+        no_more_workers: "Tähän ateriaan ei tarvita enempää tekijöitä." # MT
+        still_needs_html:
+          one: "Tähän ateriaan tarvitaan vielä <b>%{count} tekijä</b>." # MT
+          other: "Tähän ateriaan tarvitaan vielä <b>%{count} tekijää</b>." # MT
+        help_out: "Auta" # MT
+      summary:
+        untitled: "Nimetön ateria" # MT
+        signups: "Ilmoittautumiset" # MT
+        total: "Yhteensä" # MT
+        late_signups: "Myöhäiset ilmoittautumiset" # MT
+        portion_footnote_html: "* Annokset yhteensä on laskettu annoskokojen perusteella, jotka on määritetty täällä: %{link}." # MT
+        meal_formula: "aterian hinnoittelukaava" # MT
+        grocery_calculator: "Ruokaostoslaskuri" # MT
+        fixed_cost_html: "Aterian kiinteän hinnan perusteella raaka-aineet saavat maksaa enintään %{amount} ilman ruokavarasto- ja perustarvikkeita (katso hyväksytyt perustarvikkeet yhteisösi ateriaohjeista)." # MT
+        proportional_cost: "Aterian kustannustenjakokaavan perusteella alla oleva taulukko näyttää, kuinka paljon raaka-aineisiin voi käyttää halutusta aterian hinnasta riippuen. Rajat eivät sisällä ruokavarasto- ja perustarvikkeita (katso hyväksytyt perustarvikkeet yhteisösi ateriaohjeista)." # MT
+        meal_price: "Aterian hinta" # MT
+        max_ingredient_cost: "Raaka-aineiden enimmäishinta" # MT
+        cook_reimbursement: "Kokin kulukorvaus" # MT
+      summary_signups_header:
+        community: "Yhteisö" # MT
+        household: "Kotitalous" # MT
+        takeout: "Mukaan" # MT
+        comments: "Kommentit" # MT
+      menu:
+        menu: "ruokalista" # MT
+        at_location: "Paikka: %{location}" # MT
+        for_communities: "yhteisöille: %{communities}" # MT
+        allergens: "allergeenit" # MT
+        no_menu: "Ruokalistaa ei ole vielä julkaistu." # MT
+      jobs:
+        title: "Ateriatehtävät" # MT
+        title_for_user: "Ateriatehtävät: %{name}" # MT
+        no_jobs: "Tehtäviä ei löytynyt." # MT
+        meal_at_location_html: "%{meal}, %{location}" # MT
+        role_workers_html: "%{role}: %{workers}" # MT
+      cost_info:
+        cost: "Hinta" # MT
+        unknown: "?"
+        included: "%{label} (sisältyy)" # MT
+        proportional: "Tällä aterialla on suhteellinen hinnoittelukaava, joten hinnat lasketaan, kun ateria on pidetty ja viimeistelty." # MT
+      who_is_going:
+        title: "Ketkä tulevat?" # MT
+        nobody: "Ei vielä kukaan!" # MT
+        household_count: "%{household} (%{count})" # MT
+      time_cook:
+        chefs_hat: "Kokin hattu" # MT
+      signup_read_only:
+        part: "%{type}: %{count}" # MT
+        takeout_requested: "Pyydetty mukaan" # MT
+        quoted_comments: "”%{comments}”" # MT
+      report:
+        title: "Ateriaraportti" # MT
+        no_data: "Ajalta %{range} ei löytynyt vastaavia ateriatietoja. Raportti sisältää vain viimeistellyt ateriat." # MT
+        all_time: "Kaikkien aikojen" # MT
+        community_all_time: "%{community}, kaikkien aikojen" # MT
+        overall_all_time: "Kaikki yhteensä, kaikkien aikojen" # MT
+        meals: "Ateriat" # MT
+        servings: "Annokset" # MT
+        cost: "Hinta" # MT
+        by_month: "Kuukausittain" # MT
+        by_weekday: "Viikonpäivittäin" # MT
+        by_community: "Yhteisöittäin" # MT
+        by_type: "Tyypeittäin" # MT
+        by_category: "Luokittain" # MT
+        footnote:
+          one: "Yllä olevat tilastot sisältävät vain viimeistellyt ateriat, joita ei ole peruttu. Tällä jaksolla peruttiin %{count} ateria." # MT
+          other: "Yllä olevat tilastot sisältävät vain viimeistellyt ateriat, joita ei ole peruttu. Tällä jaksolla peruttiin %{count} ateriaa." # MT
+        footnote_community:
+          one: "Yllä olevat tilastot sisältävät vain viimeistellyt ateriat, joita ei ole peruttu. Tällä jaksolla peruttiin %{count} ateria (yhteisö %{community})." # MT
+          other: "Yllä olevat tilastot sisältävät vain viimeistellyt ateriat, joita ei ole peruttu. Tällä jaksolla peruttiin %{count} ateriaa (yhteisö %{community})." # MT
+      report_main_table:
+        totals: "Yhteensä" # MT
+        general_averages: "Yleiset keskiarvot" # MT
+        community_representation: "Yhteisöjen keskim. edustus" # MT
+        meals: "Ateriat" # MT
+        servings: "Annokset" # MT
+        cost: "Hinta" # MT
+        full_meal_price: "Täyden aterian hinta" # MT
+        total: "Yhteensä" # MT
+      report_type_table:
+        avg_servings: "Annoksia keskim." # MT
+        percent: "Prosentti" # MT
+      export_form:
+        select_dates: "Valitse päivämäärät" # MT
+      reimb_form:
+        meal: "Ateria:" # MT
+        by_cook: "Kokki: %{cook}" # MT
+        time_at_location: "%{time}, %{location}" # MT
+        ingredients: "Raaka-aineisiin käytetty summa:" # MT
+        pantry: "Ruokavarasto- ja perustarvikkeisiin käytetty summa:" # MT
+        total: "Korvattava summa yhteensä:" # MT
+        # Blank for writing in an amount on the printed form.
+        amount_blank: "$"
+        method: "Korvaustapa:" # MT
+        account_credit: "Hyvitys tilille" # MT
+        check_payable: "Shekin saaja:" # MT
+        paypal: "PayPal sähköpostiosoitteeseen:" # MT
+      form:
+        general:
+          communities: "Yhteisöt" # MT
+        expenses:
+          check_hint: "Korvauksen saaja saa raaka-aineiden hinnan shekkinä." # MT
+          credit_hint: "Korvauksen saaja saa raaka-aineiden hinnan hyvityksenä Gather-tililleen." # MT
+          paypal_hint: "Korvauksen saaja saa raaka-aineiden hinnan PayPal-maksuna. Käyttäjät voivat vaihtaa PayPal-sähköpostiosoitteensa muokkaamalla profiiliaan." # MT
+        workers:
+          formula_changed: "Tämän aterian hinnoittelukaavaa on muutettu, minkä vuoksi alla voi olla tarjolla muita rooleja. Nähdäksesi uudet ateriaroolit tallenna ateria ja palaa tälle sivulle. Nykyisiä tekijöiden määräyksiä ei poisteta, vaikka niiden roolit eivät kuuluisi uuteen hinnoittelukaavaan." # MT
+        menu:
+          allergens: "Allergeenit" # MT
+    formulas:
+      index:
+        title: "Hinnoittelukaavat" # MT
+        create: "Luo hinnoittelukaava" # MT
+        explanation: "Hinnoittelukaavoilla voi mukauttaa, miten aterioiden hinnat ja annosmäärät lasketaan." # MT
+        no_formulas: "Hinnoittelukaavoja ei löytynyt." # MT
+        name: "Nimi" # MT
+        meals: "Ateriat" # MT
+        created_on: "Luotu" # MT
+      show:
+        title: "Hinnoittelukaava: %{name}" # MT
+        formulas: "Hinnoittelukaavat" # MT
+        meal_calculations: "Aterialaskelmat" # MT
+        pantry_calculations: "Ruokavarastolaskelmat" # MT
+      new:
+        title: "Uusi hinnoittelukaava" # MT
+      edit:
+        title: "Muokkaa hinnoittelukaavaa: %{name}" # MT
+      form:
+        meal_calculations: "Aterialaskelmat" # MT
+        pantry_calculations: "Ruokavarastolaskelmat" # MT
+    types:
+      index:
+        title: "Ateriatyypit" # MT
+        create: "Luo tyyppi" # MT
+        explanation: "Ateriatyypit antavat ruokailijoille eri vaihtoehtoja ateriaan ilmoittauduttaessa, ja niille voi määrittää hinnoittelukaavoissa eri hinnat ja annoskoot." # MT
+        no_types: "Tyyppejä ei löytynyt." # MT
+      new:
+        title: "Luo ateriatyyppi" # MT
+      edit:
+        title: "Muokkaa ateriatyyppiä: %{name}" # MT
+    roles:
+      index:
+        title: "Ateriaroolit" # MT
+        create: "Luo rooli" # MT
+        explanation: "Ateriaroolit kuvaavat aterian valmistamiseen liittyviä eri tehtäviä." # MT
+        no_roles: "Rooleja ei löytynyt." # MT
+      new:
+        title: "Luo ateriarooli" # MT
+      edit:
+        title: "Muokkaa ateriaroolia: %{title}" # MT
+    restrictions:
+      edit:
+        title: "Aterioiden asetukset: Ruokavaliorajoitukset" # MT
+        restriction: "Rajoitus" # MT
+        opposite: "Vastakohta" # MT
+        deactivated: "Poistettu käytöstä?" # MT
+      restriction_fields:
+        restriction_placeholder: "esim. Gluteeni" # MT
+        opposite_placeholder: "esim. Gluteeniton" # MT
+        restriction: "Rajoitus" # MT
+        opposite: "Vastakohta" # MT
+    imports:
+      # Placeholder names for the example table when the community has no calendars or formula yet.
+      sample_calendar_1: "Ruokasali" # MT
+      sample_calendar_2: "Keittiö" # MT
+      sample_formula: "Pääkaava" # MT
+      new:
+        title: "Tuo aterioita" # MT
+        intro: "Voit tuoda aterioita CSV-muodossa. Taulukko-ohjelmat, kuten Excel tai Google Sheets, voivat viedä tiedot CSV-muotoon, jonka voit sitten tuoda Gatheriin." # MT
+      show:
+        title: "Tuo aterioita" # MT
+      form:
+        upload_file: "Lataa tiedosto" # MT
+      results:
+        succeeded: "Tuonti onnistui!" # MT
+        check_meals_html: "Tuodut ateriat näet täällä: %{link}." # MT
+        meals_page: "aterioiden sivu" # MT
+        crashed: "Tuonnissa tapahtui odottamaton virhe." # MT
+        crashed_try_again_html: "%{link}, ja ota yhteyttä ylläpitäjään, jos virhe toistuu." # MT
+        try_again_below: "Yritä uudelleen alla" # MT
+        issues: "Ateriatiedoissasi oli yksi tai useampi ongelma." # MT
+        resolve_html: "Korjaa alla olevat ongelmat ja %{link}." # MT
+        try_again: "yritä uudelleen" # MT
+        row: "Rivi %{number}" # MT
+      # Column names in these instructions come from csv.headers.meals/meal so they match what the import accepts.
+      instructions:
+        data_format: "Tietomuoto" # MT
+        use_columns: "Laadi tuontitiedosto käyttäen seuraavia sarakkeita:" # MT
+        served_at: "Pakollinen. Aterian päivämäärä ja aika. Käytä yksiselitteistä muotoa, kuten VVVV-KK-PP TT:MM" # MT
+        calendars_html: "Pakollinen. Aterian paikka tai paikat. Käytä kalenterien tarkkoja nimiä tai numeerisia tunnuksia (katso %{link})." # MT
+        calendar_system: "kalenterijärjestelmä" # MT
+        formula_html: "Valinnainen. Aterian %{link}. Käytä hinnoittelukaavan tarkkaa nimeä tai numeerista tunnusta. Jos sitä ei anneta, käytetään oletuskaavaa." # MT
+        formula: "hinnoittelukaava" # MT
+        communities: "Valinnainen. Mitkä yhteisöt kutsutaan aterialle. Käytä tarkkoja nimiä, lyhenteitä tai numeerisia tunnuksia puolipisteillä erotettuina. Jos niitä ei anneta, kutsutaan kaikki yhteisöt." # MT
+        role_column_html: "&lt;<em>Roolin nimi</em>&gt; tai %{role}&lt;<em>Roolin ID</em>&gt;" # MT
+        roles_html: "Valinnainen. Määritä aterian tekijät lisäämällä yksi sarake kutakin roolia kohden (%{link}). Käytä tekijöiden tarkkoja nimiä tai numeerisia tunnuksia puolipisteillä erotettuina." # MT
+        meal_role: "ateriarooli" # MT
+        action: "Valinnainen. Anna ”create”, ”update” tai ”destroy”. Oletus on ”create”. Jos annat ”update” tai ”destroy”, ateria tunnistetaan ID:n perusteella, jos se on annettu, ja muuten päivämäärän/ajan ja paikkojen perusteella." # MT
+        id: "Valinnainen. Päivitettävän tai poistettavan aterian ID. Ohitetaan, jos toiminto on ”create”." # MT
+        example_data: "Esimerkkitiedot" # MT
+        # Sample worker names in the example table.
+        sample_worker_1: "Liisa Virtanen" # MT
+        sample_workers_2: "Mohammed Iris; Aino Korhonen" # MT
+        sample_worker_3: "Li Yun" # MT
+        sample_workers_4: "Tamika Johnson; Mikko Nieminen" # MT
+    messages:
+      sent: "Viesti lähetetty." # MT
+      new:
+        cancel_title: "Peru ateria" # MT
+        dont_cancel: "Älä peru ateriaa" # MT
+        send_and_cancel: "Lähetä viesti ja peru ateria" # MT
+    finalize:
+      title: "Viimeistele ateria: %{title}" # MT
+      untitled: "Nimetön" # MT
+      confirm:
+        household: "Kotitalous" # MT
+        calculated_cost: "Laskettu hinta" # MT
+        cook_reimbursement_request: "Kokin kulukorvauspyyntö" # MT
+      complete:
+        success: "Ateria viimeistelty!" # MT
+        check: "Lähetä nyt shekki henkilölle %{name}, summa %{amount}." # MT
+        credit: "Käyttäjän %{name} Gather-tilille on hyvitetty %{amount}." # MT
+        paypal: "Lähetä nyt %{amount} PayPalilla osoitteeseen %{email}." # MT
+    settings:
+      edit:
+        title: "Aterioiden asetukset: Yleiset" # MT
+  meals/assignments:
+    change_warning: "Huomaa: Jos muutat aterian tekijöitä, ateriatoimikunnalle tai -vastaavalle sekä kaikille nykyisille ja uusille tekijöille lähetetään ilmoitus sähköpostitse." # MT
+  meals/formulas:
+    pantry: "Ruokavarasto" # MT
+    calc_types:
+      fixed: "Kiinteä" # MT
+      share: "Suhteellinen" # MT
+      percent: "Prosentti" # MT
+    hints:
+      meal: "Aterian hinta voidaan laskea kiinteänä tai suhteessa raaka-aineiden hintaan." # MT
+      pantry: "Ruokavarastomaksu veloitetaan jokaiselta ruokailijalta keittiön perustarvikkeiden hankintaan. Se voidaan laskea kiinteänä summana tai prosentteina ruokailijan aterian hinnasta." # MT
+      meal_type:
+        fixed: "Lisää kukin ateriatyyppi, sen hinta ja suhteellinen annoskoko. Annoskokojen avulla kokit osaavat ostaa oikean määrän ruokaa." # MT
+        share: "Lisää kukin ateriatyyppi, sen prosenttiosuus ja suhteellinen annoskoko.\n\nProsenttiosuuksilla määritetään hinta. Jos esimerkiksi ateriatyypille halutaan 1/4 alennus, anna 75 %. 100 % tarkoittaa täyttä, tasaista osuutta raaka-aineiden hinnasta ja 0 % maksuttomuutta.\n\nAnnoskokojen avulla kokit osaavat ostaa oikean määrän ruokaa." # MT
+    cant_edit_notice: "Tämä hinnoittelukaava on liitetty olemassa oleviin aterioihin, joten sen laskelmia ei voi muokata." # MT
+  meals/formula_parts:
+    portion_options:
+      one_qtr: "¼ annos" # MT
+      half: "½ annos" # MT
+      three_qtr: "¾ annos" # MT
+      full: "Täysi annos" # MT
+    portion_short_names:
+      one_qtr: "¼"
+      half: "½"
+      three_qtr: "¾"
+      full: "Täysi" # MT
+  meals/messages:
+    cancel_notice_html: "Aterian perumista ei voi kumota. Lähetä viesti, jossa kerrot, miksi ateria peruttiin. Ateriaa ei peruta ennen kuin viesti on lähetetty." # MT
+  meal_mailer:
+    meal_link:
+      see_more: "Lisätietoja ateriasta: %{url}" # MT
+    meal_reminder:
+      subject: "Ateriamuistutus: %{datetime} – %{title} (paikka: %{location})" # MT
+      reminder: "Muistutus: olet ilmoittautunut ateriaan ”%{title}” (%{date})." # MT
+      reminder_at_location: "Muistutus: olet ilmoittautunut ateriaan ”%{title}” (%{date}, paikka: %{location})." # MT
+      comments_intro: "Ilmoittautumisessasi oli seuraavat kommentit:" # MT
+      staff: "Aterian tekijät:" # MT
+      staff_member: "- %{role}: %{name}" # MT
+      bon_appetit: "Hyvää ruokahalua!" # MT
+      body:
+        diner_count:
+          one: "Kotitaloudestasi on ilmoittautunut %{count} ruokailija." # MT
+          other: "Kotitaloudestasi on ilmoittautunut %{count} ruokailijaa." # MT
+    role_reminder:
+      subject: "Tehtävämuistutus: %{role}, %{datetime} (paikka: %{location})%{note}" # MT
+      scheduled: "Muistutus: olet vuorossa roolissa %{role} ateriassa ”%{title}” (%{date})." # MT
+      shift: "Vuorosi: %{times}. Ateria on tarkoitus tarjoilla klo %{time}." # MT
+      shift_at_location: "Vuorosi: %{times} (paikka: %{location}). Ateria on tarkoitus tarjoilla klo %{time}." # MT
+      note_intro: "Muistutukseen liittyy seuraava viesti:" # MT
+      crucial: "Apusi on tärkeää! Saavu vuoroosi ajoissa!" # MT
+      contacts_intro: "Tässä muiden aterian tekijöiden yhteystietoja:" # MT
+      contact: "%{role}: %{name}, %{email}, %{phones}" # MT
+    worker_change_notice:
+      subject: "Ilmoitus ateriatehtävien muutoksesta" # MT
+      intro: "%{name} teki juuri seuraavat muutokset ateriaan ”%{title}” (%{date})." # MT
+      intro_at_location: "%{name} teki juuri seuraavat muutokset ateriaan ”%{title}” (%{date}, paikka: %{location})." # MT
+      added: "- %{name} lisättiin rooliin %{role}" # MT
+      removed: "- %{name} poistettiin roolista %{role}" # MT
+      thanks: "Kiitos ja hyvää ruokahalua!" # MT
+    cook_menu_reminder:
+      subject: "Ruokalistamuistutus: julkaise ruokalista (%{date})" # MT
+      second_reminder: "** Toinen muistutus **" # MT
+      reminder: "Muistutus: julkaise ruokalista ateriallesi (%{date})." # MT
+      asap: "Julkaise ruokalista mahdollisimman pian, jotta asukkaat voivat suunnitella etukäteen ja osallistujia tulee runsaasti!" # MT
+      post_here: "Voit julkaista ruokalistan täällä:" # MT
+      thanks: "Kiitos!" # MT
+    normal_message:
+      subject: "Viesti ateriasta (%{datetime})" # MT
+      intro: "%{sender} lähetti seuraavan viestin ateriasta ”%{title}” (%{date})." # MT
+      intro_at_location: "%{sender} lähetti seuraavan viestin ateriasta ”%{title}” (%{date}, paikka: %{location})." # MT
+    cancellation_message:
+      subject: "Ateria %{datetime} PERUTTU" # MT
+      regret: "Valitettavasti ateria ”%{title}” (%{date}) on PERUTTU." # MT
+      regret_at_location: "Valitettavasti ateria ”%{title}” (%{date}, paikka: %{location}) on PERUTTU." # MT
+      sender_wrote: "%{sender} lähetti seuraavan viestin perumisesta:" # MT

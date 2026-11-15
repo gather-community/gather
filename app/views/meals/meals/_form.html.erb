@@ -13,7 +13,7 @@
   <% end %>
 <% end %>
 
-<%= javascript_tag do %>
+<script>
   $(function() {
     // DirtyChecker comes first so that it receives events about new fields /after/ AjaxSelect2
     // sets up select2s in them.
@@ -31,4 +31,4 @@
       )%>);
     <% end %>
   });
-<% end %>
+</script>

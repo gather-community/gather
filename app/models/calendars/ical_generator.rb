@@ -6,7 +6,7 @@ require "icalendar/tzinfo"
 module Calendars
   # Generates ICS files for various calendars in the system from a set of Eventlet objects.
   class IcalGenerator
-    include Rails.application.routes.url_helpers
+    include LinkableUrls
 
     UID_SIGNATURE = "91a772a5ae4a"
 
@@ -14,7 +14,7 @@ module Calendars
 
     def initialize(calendar_name:, eventlets:, url_options:)
       self.calendar_name = calendar_name
-      recurring, non_recurring = eventlets.partition { |e| !e.persisted? && e.linkable.is_a?(Event) }
+      recurring, non_recurring = eventlets.partition { |e| !e.persisted? && e.linkable.is_a?(Eventlet) }
       self.grouped_eventlets = non_recurring.group_by do |eventlet|
         [
           eventlet.starts_at,
@@ -44,27 +44,23 @@ module Calendars
     private
 
     def series_context_for(occurrence)
-      parent = occurrence.linkable
-      base_eventlet = @base_eventlets_by_key[[parent.id, occurrence.calendar_id]]
+      # linkable is the persisted base eventlet; the real series event is reached via .event.
+      base_eventlet = occurrence.linkable
+      parent = base_eventlet.event
       event_overrides = @event_overrides_by_event[parent.id] || []
       [parent, base_eventlet, event_overrides]
     end
 
     def load_series_overrides
-      parent_event_ids = recurring_representatives.map { |r| r.linkable.id }.uniq
+      parent_event_ids = recurring_representatives.map { |r| r.linkable.event_id }.uniq
       if parent_event_ids.empty?
         @event_overrides_by_event = {}
-        @base_eventlets_by_key = {}
-        @eventlet_overrides_by_eventlet = {}
         return
       end
 
       @event_overrides_by_event = EventOverride.where(event_id: parent_event_ids)
         .includes(:eventlet_overrides)
         .group_by(&:event_id)
-
-      @base_eventlets_by_key = Eventlet.where(event_id: parent_event_ids)
-        .index_by { |e| [e.event_id, e.calendar_id] }
     end
 
     def add_event_group(group)
@@ -95,7 +91,7 @@ module Calendars
           all_day: occurrence.all_day?)
         e.dtend = date_or_time_value(parent.ends_at + occurrence.end_offset.seconds,
           all_day: occurrence.all_day?, is_end: true)
-        e.rrule = Icalendar::Values::Recur.new(parent.schedule.rrules.first.to_ical)
+        e.rrule = recur_value(parent.schedule.rrules.first, all_day: occurrence.all_day?)
         e.location = occurrence.location
         e.summary = occurrence.name
         e.description = ([occurrence.note] + [url_for_event(occurrence)]).compact.join("\n")
@@ -103,6 +99,15 @@ module Calendars
       end
 
       emit_recurrence_id_vevents(event_overrides, base_eventlet, occurrence)
+    end
+
+    # RFC 5545 requires UNTIL to match DTSTART's value type. An all-day series has a DATE DTSTART,
+    # but ice_cube always writes UNTIL as a UTC timestamp, so rewrite it as the last occurrence's
+    # local date. (until_time is re-zoned to the stored zone, so to_date is the local date.)
+    def recur_value(rule, all_day:)
+      recur = Icalendar::Values::Recur.new(rule.to_ical)
+      recur.until = rule.until_time.to_date.strftime("%Y%m%d") if all_day && rule.until_time
+      recur
     end
 
     # Emits EXDATE lines for occurrences that are suppressed on this calendar.
@@ -137,7 +142,7 @@ module Calendars
 
     def add_override_vevent(occurrence, recurrence_id_time, new_start, new_end)
       cal.event do |e|
-        e.uid = [UID_SIGNATURE, occurrence.linkable.id, occurrence.calendar_id].join("_")
+        e.uid = [UID_SIGNATURE, occurrence.linkable.event_id, occurrence.calendar_id].join("_")
         e.recurrence_id = date_or_time_value(recurrence_id_time, all_day: occurrence.all_day?)
         e.dtstart = date_or_time_value(new_start, all_day: occurrence.all_day?)
         e.dtend = date_or_time_value(new_end, all_day: occurrence.all_day?, is_end: true)
@@ -150,7 +155,7 @@ module Calendars
     # Computes the new DTSTART/DTEND for a RECURRENCE-ID VEVENT, combining any EventOverride
     # time change with any EventletOverride offset change.
     def resolve_override_times(event_override, eventlet_override, base_eventlet, occurrence)
-      parent = occurrence.linkable
+      parent = base_eventlet.event
       duration = parent.ends_at - parent.starts_at
 
       # EventOverride provides new absolute event times; fall back to the occurrence's original time.
@@ -170,10 +175,12 @@ module Calendars
     end
 
     def url_for_event(eventlet)
-      if eventlet.linkable.present?
-        polymorphic_url(eventlet.linkable, **url_options)
+      linkable = eventlet.linkable
+      if linkable.present?
+        # Recurring occurrence → base eventlet → eventlet show page; system calendars → meal/shift/user.
+        linkable_url(linkable, **url_options)
       elsif eventlet.persisted?
-        calendars_event_url(eventlet.event, **url_options)
+        calendars_eventlet_url(eventlet, **url_options)
       else
         raise ArgumentError, "unpersisted events must define linkable"
       end
@@ -192,11 +199,12 @@ module Calendars
     # Sets up the calendar's timzeone blocks at the top of the file.
     # This is kind of a weird incantation taken from the gem docs.
     # Version 2 of the gem is supposed to have better timezone support, if it ever comes out.
-    # This method may fail with TZInfo::AmbiguousTime during DST transitions. The problem should
-    # go away after a few hours though.
+    # The gem looks up the current period from a local time, which is ambiguous in the hour repeated
+    # when DST ends, so we pass whether that time is in DST. Without it, tzinfo raises AmbiguousTime.
     def set_timezone
       tz = TZInfo::Timezone.get(tzid)
-      cal.add_timezone(tz.ical_timezone(Time.current))
+      now = Time.current
+      cal.add_timezone(tz.ical_timezone(now, now.dst?))
     end
 
     # Current timezone ID in tzinfo format.

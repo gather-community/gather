@@ -23,10 +23,9 @@ module Calendars
     belongs_to :eventlet, class_name: "Calendars::Eventlet",
       inverse_of: :eventlet_overrides
 
-    validates :start_offset, inclusion: {in: -Eventlet::MAX_OFFSET_SECONDS..Eventlet::MAX_OFFSET_SECONDS},
-      allow_nil: true
-    validates :end_offset, inclusion: {in: -Eventlet::MAX_OFFSET_SECONDS..Eventlet::MAX_OFFSET_SECONDS},
-      allow_nil: true
+    # The ±MAX_OFFSET_SECONDS offset bound is a data invariant enforced by a DB check constraint (see
+    # the eventlet_override_start/end_offset_within_bounds constraints), the same as on Eventlet, so it
+    # holds for every writer; EventletForm#offsets_within_range supplies the user-facing message.
     validate :eventlet_matches_event
     validate :override_has_purpose
 
@@ -39,13 +38,13 @@ module Calendars
     def eventlet_matches_event
       return unless event_override && eventlet
       return if eventlet.event_id == event_override.event_id
-      errors.add(:eventlet, "must belong to the same event as the override")
+      errors.add(:eventlet, :different_event)
     end
 
     def override_has_purpose
       return if deleted?
       return if !start_offset.nil? || !end_offset.nil?
-      errors.add(:base, "must either delete the occurrence or provide offset changes")
+      errors.add(:base, :no_change)
     end
   end
 end

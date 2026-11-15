@@ -25,5 +25,20 @@ module Calendars
                                      url_options: url_options)
       send_data(generator.generate, filename: "#{export_file_basename}.ics", type: "text/calendar")
     end
+
+    private
+
+    # Calendar apps fetch the feeds without a person's browser behind the request, so a feed isn't in
+    # whatever Accept-Language the calendar app sends. It's in the language of whoever it belongs to: a
+    # personalized feed in its token user's, a community's feed in the community's. Including controllers
+    # use this in place of switch_locale for their feed actions.
+    def with_feed_locale(&block)
+      locale = if action_name == "personalized"
+        Gather::Locales.for_user(current_user)
+      else
+        Gather::Locales.for_community(current_community)
+      end
+      I18n.with_locale(locale, &block)
+    end
   end
 end

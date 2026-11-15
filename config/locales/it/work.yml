@@ -1,0 +1,210 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+it:
+  work:
+    job_created: "Incarico creato." # MT
+    job_updated: "Incarico aggiornato." # MT
+    job_synced_from_meals: "Questo incarico è sincronizzato dal sistema dei pasti e non può essere modificato direttamente. Verrà aggiornato automaticamente in base ai pasti aggiunti o modificati." # MT
+    period_created: "Periodo creato." # MT
+    period_updated: "Periodo aggiornato." # MT
+    period_copied: "Alcuni dati sono stati copiati dal periodo «%{name}». Controllali e modificali qui sotto. Gli incarichi verranno copiati quando salvi il periodo." # MT
+    notices_wrong_phase: "Non è possibile inviare gli avvisi perché il periodo non è nella fase «Pronto» o «Aperto»." # MT
+    notices_no_quota: "Non è possibile inviare gli avvisi perché questo periodo non ha un monte ore." # MT
+    notices_sent: "Gli avvisi sono in arrivo!" # MT
+    signed_up: "Iscrizione fatta. Evviva!" # MT
+    signup_removed: "La tua iscrizione è stata rimossa." # MT
+    # Compact hours, e.g. "3h" on the signup cards.
+    hours_abbr: "%{hours} h" # MT
+    jobs:
+      form:
+        reminders_on_role_html: "I promemoria per questo incarico vanno impostati nella sua %{link}." # MT
+        reminders_on_role: "I promemoria per questo incarico vanno impostati nella pagina del suo ruolo nei pasti." # MT
+        meal_role_page: "pagina del ruolo nei pasti" # MT
+        shifts: "Turni" # MT
+      edit:
+        title: "Modifica incarico: %{title}" # MT
+      new:
+        title: "Crea incarico" # MT
+      index:
+        title: "Incarichi" # MT
+        title_with_period: "Incarichi: %{period}" # MT
+        create: "Crea incarico" # MT
+      show:
+        jobs: "Incarichi" # MT
+        hours: "%{hours} ore" # MT
+    periods:
+      form:
+        do_not_copy: "Non copiare gli incarichi" # MT
+        meal_formula: "Formula dei pasti" # MT
+        meal_roles_to_sync: "Ruoli dei pasti da sincronizzare" # MT
+        sync_hint: "Gli incarichi dei pasti vengono sincronizzati ogni volta che il periodo cambia o che i pasti vengono aggiunti, modificati o rimossi. Le iscrizioni vengono sincronizzate sia che l'utente si iscriva dal sistema dei pasti sia da quello del lavoro. Le modifiche ai ruoli dei pasti causano una sincronizzazione solo se il periodo è in bozza." # MT
+        shares: "Quote" # MT
+      edit:
+        title: "Modifica periodo: %{name}" # MT
+      new:
+        title: "Crea periodo" # MT
+      index:
+        title: "Periodi di lavoro" # MT
+        create: "Crea periodo" # MT
+        name: "Nome" # MT
+        start: "Inizio" # MT
+        end: "Fine" # MT
+        phase: "Fase" # MT
+        links: "Link" # MT
+        signups: "Iscrizioni" # MT
+        report: "Report" # MT
+        jobs: "Incarichi" # MT
+      review_notices:
+        title: "Avvisi di scelta degli incarichi: %{name}" # MT
+        intro: "Verranno inviati i seguenti avvisi:" # MT
+      show:
+        title: "Periodo: %{name}" # MT
+        periods: "Periodi" # MT
+        date: "Data" # MT
+        max_rounds_per_worker:
+          one: "Max. %{count} turno di scelta per persona" # MT
+          other: "Max. %{count} turni di scelta per persona" # MT
+        workers_per_round:
+          one: "%{count} persona per turno di scelta" # MT
+          other: "%{count} persone per turno di scelta" # MT
+        minutes_per_round:
+          one: "%{count} minuto per turno di scelta" # MT
+          other: "%{count} minuti per turno di scelta" # MT
+        shares: "Quote" # MT
+      report:
+        title: "Report del lavoro" # MT
+        title_with_period: "Report del lavoro: %{period}" # MT
+        overview: "Panoramica" # MT
+        total_hours: "Ore totali" # MT
+        jobs: "Incarichi" # MT
+        people: "Persone" # MT
+        quota: "Monte ore" # MT
+        by_person: "Per persona" # MT
+        by_household: "Per nucleo" # MT
+        regular: "Ordinarie" # MT
+        name: "Nome" # MT
+    settings:
+      edit:
+        title: "Impostazioni del lavoro" # MT
+    shifts:
+      shift:
+        sign_up: "Iscriviti!" # MT
+      shifts:
+        list_label: "Elenco delle iscrizioni" # MT
+      index:
+        title: "Iscrizioni agli incarichi" # MT
+      show:
+        signups: "Iscrizioni" # MT
+    no_periods_html: "Non ci sono periodi accessibili. Consulta la %{link}." # MT
+    periods_page: "pagina dei periodi" # MT
+    not_setup: "Sembra che la tua comunità non abbia configurato il sistema di ripartizione del lavoro di Gather.\nParlane con l'amministratore di Gather per maggiori informazioni." # MT
+    choosing_as: "Stai scegliendo per %{name}. Gli incarichi a cui ti iscrivi verranno assegnati a questa persona." # MT
+    no_signups: "Nessuna iscrizione" # MT
+    phase_notices:
+      shifts:
+        draft: "Questo periodo è in bozza, quindi non è ancora possibile iscriversi agli incarichi." # MT
+        archived: "Questo periodo è archiviato, quindi non sono consentite iscrizioni." # MT
+      jobs:
+        archived: "Questo periodo è archiviato." # MT
+      report:
+        draft: "Questo periodo è in bozza, quindi il report non è ancora visibile." # MT
+        archived: "Questo periodo è archiviato." # MT
+    num_hours: "%{num} ore" # MT
+    preassigned: "Questo posto è stato preassegnato." # MT
+    synopsis:
+      done: "Hai finito!" # MT
+      regular: "ordinarie" # MT
+      # %{chunks} is a list like "3/10 regular hours, 2/4 Pitch-In hours and 1/2 Mowing hours".
+      for_user_html: "Ti sei iscritto a %{chunks}." # MT
+      for_household_html: "Il tuo nucleo ha %{chunks}." # MT
+      chunk:
+        single_html: "%{fraction} ore" # MT
+        multiple_html: "%{fraction} ore (%{title})" # MT
+      start_choosing: "Puoi iniziare a scegliere gli incarichi %{at_or_on_time}." # MT
+      round_limit_with_next: "Il tuo limite per questo turno di scelta è di %{prev} ore e salirà a %{next} %{at_or_on_time}." # MT
+      round_limit_until: "Il tuo limite per questo turno di scelta è di %{prev} ore %{until_time}." # MT
+  work/jobs:
+    shifts: "Turni" # MT
+    unlimited: "Illimitato" # MT
+    full_community: "Questo è un incarico per tutta la comunità" # MT
+    preassignments: "Questo incarico ha preassegnazioni" # MT
+    meal_related: "Questo incarico riguarda i pasti" # MT
+    none_found: "Nessun incarico trovato." # MT
+  work/period:
+    phase_names:
+      archived: "Archiviato" # MT
+      draft: "Bozza" # MT
+      open: "Aperto" # MT
+      published: "Pubblicato" # MT
+      ready: "Pronto" # MT
+    num_minutes:
+      one: "%{count} minuto" # MT
+      other: "%{count} minuti" # MT
+  work/shares:
+    portion_options:
+      none: "Nessuna quota" # MT
+      one_qtr: "¼ di quota" # MT
+      half: "½ quota" # MT
+      three_qtr: "¾ di quota" # MT
+      full: "Quota intera" # MT
+    intro: "Come va ripartito il lavoro della comunità? Quasi tutti dovrebbero avere una quota intera, ma in alcuni casi servono eccezioni. Mezza quota significa che la persona farà la metà delle ore di chi ha una quota intera, e così via." # MT
+    priority_hint_html: "Il sistema calcola automaticamente chi sceglie per primo in base al numero di ore necessarie. Le persone con <i class='fa fa-star'></i> scelgono prima di chi non ce l'ha." # MT
+    change_warning: "Questo periodo è attualmente attivo. Cambiare le quote o il tipo di monte ore influirà sul calcolo del monte ore. Procedi con cautela!" # MT
+  work/shift:
+    choosing_as: "Scegli per %{name}" # MT
+    slots_exceeded: "Spiacenti, sembra che qualcuno sia arrivato prima di te!" # MT
+    already_signed_up: "Sei già iscritto a questo turno." # MT
+    not_signed_up: "Non sei iscritto a questo turno." # MT
+    round_limit_exceeded: "Hai superato il tuo limite per questo turno di scelta." # MT
+    slots_open:
+      one: "%{count} posto libero" # MT
+      other: "%{count} posti liberi" # MT
+  work/job_reminder:
+    absolute: "Il %{time}" # MT
+    relative:
+      days_before:
+        one: "%{count} giorno prima" # MT
+        other: "%{count} giorni prima" # MT
+      days_after:
+        one: "%{count} giorno dopo" # MT
+        other: "%{count} giorni dopo" # MT
+      hours_before:
+        one: "%{count} ora prima" # MT
+        other: "%{count} ore prima" # MT
+      hours_after:
+        one: "%{count} ora dopo" # MT
+        other: "%{count} ore dopo" # MT
+  work_mailer:
+    job_reminder:
+      subject: "Promemoria incarico: %{title}, %{times}" # MT
+      # The time is left out of the subject when the reminder has a note.
+      subject_with_note: "Promemoria incarico: %{title}: %{note}" # MT
+      scheduled: "Ti ricordiamo che sei in programma come «%{job}» (%{times})." # MT
+      note_intro: "Questo promemoria contiene la seguente nota:" # MT
+      see_description: "Leggi la descrizione dell'incarico qui: %{url}." # MT
+      thanks: "Grazie per il tuo servizio alla comunità!" # MT
+    job_choosing_notice:
+      subject: "Sta per iniziare la scelta degli incarichi!" # MT
+      coming_up_on: "La scelta degli incarichi inizia il %{date}!" # MT
+      coming_up_soon: "La scelta degli incarichi inizia presto!" # MT
+      quota: "Hai %{got} ore preassegnate e il tuo monte ore è %{quota}, quindi devi scegliere %{need} ore ordinarie." # MT
+      also_choose: "Devi anche scegliere %{hours}." # MT
+      full_community_hours: "%{hours} ore (%{title})" # MT
+      begin_at: "Puoi iniziare a scegliere alle ore %{time}." # MT
+      schedule_intro: "Ecco il calendario dei tuoi turni di scelta:" # MT
+      round_with_limit: "* Alle ore %{time} puoi scegliere fino a %{limit} ore." # MT
+      round_finish: "* Alle ore %{time} puoi finire di scegliere." # MT
+      go_to: "Vai su %{url} all'ora o alle ore indicate sopra per scegliere i tuoi incarichi. Puoi anche passare prima per vedere quali incarichi sono disponibili e pianificare le tue scelte, ma non potrai iscriverti prima degli orari indicati sopra." # MT
+      choosing_begins: "La scelta inizia alle ore %{time}." # MT
+      visit: "Visita %{url} per maggiori informazioni." # MT
+      thanks: "Grazie per la partecipazione!" # MT

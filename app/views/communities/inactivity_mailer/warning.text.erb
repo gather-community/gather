@@ -1,16 +1,16 @@
-This is inactivity warning <%= @warning_count %> of 3 for the Gather community "<%= @community.name %>".
+<%= t(".intro", count: @warning_count, max: Communities::InactivityWarningJob::MAX_WARNINGS, community: @community.name) %>
 
-Last login: <%= @last_login_at ? l(@last_login_at.to_date) : "Never" %>
+<%= t(".last_login", date: @last_login_at ? l(@last_login_at.to_date) : t(".never")) %>
 
 <% if @is_final %>
-No one in your community has logged into Gather in over 90 days. This is the final warning before your community data is permanently deleted.
+<%= t(".final") %>
 
-Your community will be deleted in approximately 7 days unless someone logs in.
+<%= t(".final_days") %>
 <% else %>
-No one in your community has logged into Gather in over 90 days. If no one logs in, another warning will be sent in 7 days. After 3 warnings, your community data will be permanently deleted.
+<%= t(".not_final") %>
 <% end %>
 
-To prevent deletion, simply log into your community at:
+<%= t(".prevent") %>
 <%= root_url %>
 
-If you believe this warning is in error or need help, please contact us at support@gather.coop.
+<%= t(".contact") %>

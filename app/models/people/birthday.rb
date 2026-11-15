@@ -32,7 +32,7 @@ module People
       elsif date.nil?
         nil
       else
-        I18n.l(date, format: full? ? :default : :short_birthday)
+        I18n.l(date, format: full? ? :default : :month_day)
       end
     end
 
@@ -45,8 +45,11 @@ module People
         year = nil
         begin
           # We pretend it's 2000 when we parse to that Feb 29 will parse properly
+          # The form shows the birthday in the locale's format, so it has to read that format back.
+          str = Gather::LocalizedDate.normalize(@str,
+            formats: [I18n.t("date.formats.default"), I18n.t("date.formats.month_day")])
           time = Timecop.freeze(Time.parse("2000-01-01").utc) do
-            Time.parse(@str) { |y| year = y }.utc # rubocop:disable Rails/TimeZone
+            Time.parse(str) { |y| year = y }.utc # rubocop:disable Rails/TimeZone
           end
           if year.nil?
             year = NO_YEAR
@@ -72,7 +75,7 @@ module People
     end
 
     def format
-      full? ? :default : :short_birthday
+      full? ? :default : :month_day
     end
 
     def validate

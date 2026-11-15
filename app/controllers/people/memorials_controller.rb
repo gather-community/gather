@@ -10,7 +10,7 @@ module People
 
     def index
       authorize(sample_memorial)
-      @memorials = policy_scope(Memorial).in_community(current_community).by_user_name
+      @memorials = policy_scope(Memorial).in_community(current_community).by_name
     end
 
     def show
@@ -38,7 +38,7 @@ module People
       @memorial.assign_attributes(memorial_params)
       authorize(@memorial)
       if @memorial.save
-        flash[:success] = "Memorial created successfully."
+        flash[:success] = t("people.memorials.created")
         redirect_to(people_memorials_path)
       else
         prep_form_vars
@@ -50,7 +50,7 @@ module People
       @memorial = Memorial.find(params[:id])
       authorize(@memorial)
       if @memorial.update(memorial_params)
-        flash[:success] = "Memorial updated successfully."
+        flash[:success] = t("people.memorials.updated")
         redirect_to(people_memorials_path)
       else
         prep_form_vars
@@ -72,8 +72,7 @@ module People
     end
 
     def sample_memorial
-      Memorial.new(death_year: Time.current.year,
-                   user: User.new(household: Household.new(community: current_community)))
+      Memorial.new(death_year: Time.current.year, community: current_community)
     end
 
     # Pundit built-in helper doesn't work due to namespacing

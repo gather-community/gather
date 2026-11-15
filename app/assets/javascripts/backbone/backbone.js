@@ -8,11 +8,9 @@
 /* eslint-enable */
 
 window.Gather = {
+  // Machine-readable formats. Formats people see are under moment_formats in the locale files.
   TIME_FORMATS: {
-    fullDatetime: "ddd MMM D YYYY h:mm a",
     machineDatetime: "YYYY-MM-DD HH:mm",
-    regDate: "ddd MMM DD YYYY",
-    regTime: "h:mm a",
     compactDate: "YYYY-MM-DD"
   },
   Models: {},

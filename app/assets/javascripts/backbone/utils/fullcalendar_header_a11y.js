@@ -58,18 +58,18 @@ Gather.Utils.FullCalendarHeaderA11y = (function() {
 
     setIfMissingOrDifferent($header, {
       role: "toolbar",
-      "aria-label": opts.toolbarLabel || "Calendar toolbar"
+      "aria-label": I18n.t("calendars.grid.header.toolbar")
     });
 
     // Prev/Next/Today labels (set even if text exists for SR consistency).
     setIfMissingOrDifferent($header.find(".fc-prev-button, .fc-button-prev").first(), {
-      "aria-label": "Previous"
+      "aria-label": I18n.t("calendars.grid.header.previous")
     });
     setIfMissingOrDifferent($header.find(".fc-next-button, .fc-button-next").first(), {
-      "aria-label": "Next"
+      "aria-label": I18n.t("calendars.grid.header.next")
     });
     setIfMissingOrDifferent($header.find(".fc-today-button, .fc-button-today").first(), {
-      "aria-label": "Today"
+      "aria-label": I18n.t("calendars.grid.header.today")
     });
 
     // View buttons + aria-pressed.
@@ -78,9 +78,9 @@ Gather.Utils.FullCalendarHeaderA11y = (function() {
       if (!$btn.length) return;
 
       const label =
-        view === "agendaDay" ? "Day view" :
-        view === "agendaWeek" ? "Week view" :
-        "Month view";
+        view === "agendaDay" ? I18n.t("calendars.grid.header.day_view") :
+        view === "agendaWeek" ? I18n.t("calendars.grid.header.week_view") :
+        I18n.t("calendars.grid.header.month_view");
 
       setIfMissingOrDifferent($btn, {
         "aria-label": label,

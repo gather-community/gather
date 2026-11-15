@@ -1,11 +1,15 @@
 <%= @household.greeting %>
 
-This is a reminder that payment for a Gather statement for your <%= @community.name %> account is due <%= (d = @statement.due_on) ? "on #{l(d, format: :wday_no_year)}" : "soon" %>.
+<% if (d = @statement.due_on) -%>
+<%= t(".due_on", community: @community.name, date: l(d, format: :wday_no_year)) %>
+<% else -%>
+<%= t(".due_soon", community: @community.name) %>
+<% end -%>
 
-The amount due is <%= number_to_currency(@statement.total_due) %>. Please visit the link below to see the details:
+<%= t(".amount_due", amount: format_money(@statement.total_due)) %>
 
 <%= statement_url(@statement) %>
 
-If you have already sent payment, please disregard this notice.
+<%= t(".disregard") %>
 
-Thanks for your prompt payment!
+<%= t(".thanks") %>

@@ -55,11 +55,8 @@ module GeneralHelpers
     end
   end
 
-  def with_locale(locale)
-    old_locale = I18n.locale
-    I18n.locale = locale
-    yield
-    I18n.locale = old_locale
+  def with_locale(locale, &block)
+    I18n.with_locale(locale, &block)
   end
 
   # Tests for a URL with no subdomain.

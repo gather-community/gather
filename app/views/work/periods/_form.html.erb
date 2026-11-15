@@ -15,7 +15,7 @@
         <%= f.input :round_duration, collection: period.round_duration_options, include_blank: false %>
       </div>
       <% if period.new_record? %>
-        <%= f.input :job_copy_source_id, collection: @periods, include_blank: "Do not copy jobs" %>
+        <%= f.input :job_copy_source_id, collection: @periods, include_blank: t(".do_not_copy") %>
         <%= f.input :copy_preassignments, as: :boolean %>
       <% end %>
 
@@ -27,8 +27,8 @@
             <table>
               <thead>
                 <tr>
-                  <th>Meal Formula</th>
-                  <th>Meal Roles To Sync</th>
+                  <th><%= t(".meal_formula") %></th>
+                  <th><%= t(".meal_roles_to_sync") %></th>
                 </tr>
               </thead>
               <tbody>
@@ -56,9 +56,7 @@
               </tbody>
             </table>
             <div class="hint">
-              Meal jobs will be sync'd whenever the period changes or meals are added/changed/removed.
-              Signups will be sync'd whether user signs up via meal or work system.
-              Changes to meal roles will only cause sync if period is in draft mode.
+              <%= t(".sync_hint") %>
             </div>
           </div>
         <% end %>
@@ -67,7 +65,7 @@
   </div>
 
   <div class="shares hiding">
-    <h2>Shares</h2>
+    <h2><%= t(".shares") %></h2>
     <p class="intro"><%= t("work/shares.intro") %></p>
     <p class="priority-hint"><%= t("work/shares.priority_hint_html") %></p>
 

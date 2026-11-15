@@ -1,0 +1,64 @@
+en:
+  # What every new community starts with, created by Utils::Generators::MainGenerator in the community's
+  # language. Calendar and calendar group names (with calendars.all_meals, my_meals and my_jobs) can be at
+  # most 24 characters and must all differ.
+  starter_content:
+    calendars:
+      social_events: "Social Events"
+      meetings: "Meetings"
+      birthdays: "Birthdays"
+      join_dates: "Join Dates"
+    calendar_groups:
+      meals: "Meals"
+      work: "Work"
+      reservations: "Reservations"
+    meal_roles:
+      head_cook:
+        title: "Head Cook"
+        description: "Plans and supervises meal prep."
+      assistant_cook:
+        title: "Assistant Cook"
+        description: "Helps with meal prep as directed by the head cook."
+      cleaner:
+        title: "Cleaner"
+        description: "Cleans up after the meal."
+    meal_formula: "Default Formula"
+    meal_types:
+      adult: "Adult"
+      teen: "Teen"
+      kid: "Kid"
+      little_kid: "Little Kid"
+    # Each dietary restriction is a pair: what a meal contains, and what a diner can ask for instead.
+    restrictions:
+      gluten:
+        contains: "Gluten"
+        absence: "No Gluten"
+      meat:
+        contains: "Meat"
+        absence: "No Meat"
+      tree_nuts:
+        contains: "Tree Nuts"
+        absence: "No Tree Nuts"
+      dairy:
+        contains: "Dairy"
+        absence: "No Dairy"
+      shellfish:
+        contains: "Shellfish"
+        absence: "No Shellfish"
+      vegan:
+        contains: "Not Vegan"
+        absence: "Vegan"
+      spicy:
+        contains: "Spicy"
+        absence: "Not Spicy"
+      kid_friendly:
+        contains: "Kid Friendly"
+        absence: "Not Kid Friendly"
+      peanuts:
+        contains: "Peanuts"
+        absence: "No Peanuts"
+    everybody_group:
+      name: "Full Community"
+      description: "General group containing all full users in the community."
+    # The meals settings' allergen list, a comma-separated list that admins can edit.
+    allergens: "Dairy, Shellfish, Soy, Nuts"

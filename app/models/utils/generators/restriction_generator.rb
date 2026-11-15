@@ -1,6 +1,10 @@
 module Utils
   module Generators
     class RestrictionGenerator < Generator
+      # Keys under starter_content.restrictions. Each string is looked up on its own, since a locale that
+      # overrides some of them (fr-CA) would otherwise hide the rest, which it inherits.
+      RESTRICTIONS = %i[gluten meat tree_nuts dairy shellfish vegan spicy kid_friendly peanuts].freeze
+
       attr_accessor :community
 
       def initialize(community:)
@@ -8,23 +12,12 @@ module Utils
       end
 
       def generate_seed_data
-        r = [
-          ["Gluten", "No Gluten"],
-          ["Meat", "No Meat"],
-          ["Tree Nuts", "No Treenuts"],
-          ["Dairy", "No Dairy"],
-          ["Shellfish", "No Shellfish"],
-          ["Not Vegan", "Vegan"],
-          ["Spicy", "Not Spicy"],
-          ["Kid Friendly", "Not Kid Friendly"],
-          ["Peanuts", "No Peanuts"]
-        ]
-        r.each do |row|
-          create(:restriction, community: self.community, contains: row[0], absence: row[1])
+        RESTRICTIONS.each do |key|
+          create(:restriction, community: community,
+            contains: I18n.t("starter_content.restrictions.#{key}.contains"),
+            absence: I18n.t("starter_content.restrictions.#{key}.absence"))
         end
-
       end
-
     end
   end
 end

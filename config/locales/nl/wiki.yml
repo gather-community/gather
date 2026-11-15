@@ -1,0 +1,93 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+nl:
+  wiki:
+    page_deleted: "Pagina verwijderd." # MT
+    page_listing: "Overzicht van wikipagina’s" # MT
+    new_page: "Nieuwe wikipagina" # MT
+    help: "Hulp bij de wiki" # MT
+    # The markdown editor's toolbar buttons and status bar.
+    editor:
+      autosaved: "Automatisch opgeslagen: " # MT
+      bold: "Vet" # MT
+      fullscreen: "Volledig scherm aan/uit" # MT
+      heading: "Kop" # MT
+      image: "Afbeelding invoegen" # MT
+      italic: "Cursief" # MT
+      lines:
+        one: "regels: %{count}" # MT
+        other: "regels: %{count}" # MT
+      link: "Link maken" # MT
+      ordered_list: "Genummerde lijst" # MT
+      preview: "Voorbeeld aan/uit" # MT
+      quote: "Citaat" # MT
+      side_by_side: "Naast elkaar aan/uit" # MT
+      unordered_list: "Opsomming" # MT
+      words:
+        one: "woorden: %{count}" # MT
+        other: "woorden: %{count}" # MT
+    pages:
+      history_table:
+        version: "Versie" # MT
+        date: "Datum" # MT
+        author: "Auteur" # MT
+        comment: "Opmerking" # MT
+        compare: "Geselecteerde vergelijken" # MT
+        return: "Terug naar de pagina" # MT
+      all:
+        title: "Lijst van wikipagina’s" # MT
+      compare:
+        title: "Wiki vergelijken: %{title}" # MT
+        differences: "Verschillen tussen versie %{old} en %{new}" # MT
+        versions_between: "Versies tussen %{old} en %{new}" # MT
+      edit:
+        title: "Wikipagina bewerken: %{title}" # MT
+      history:
+        title: "Wikigeschiedenis: %{title}" # MT
+      new:
+        title: "Nieuwe wikipagina" # MT
+      show:
+        wiki_home: "Startpagina van de wiki" # MT
+    not_found_create: "Er is geen wikipagina met de naam “%{title}”. Je kunt haar hieronder aanmaken!" # MT
+    preview_notice: "Dit is een voorbeeld. Gebruik het formulier hieronder om de pagina op te slaan of verder te bewerken." # MT
+    revision_info: "Pagina bewerkt op %{time} door %{user}" # MT
+    revision_info_no_by: "Pagina bewerkt op %{time}" # MT
+    special_pages:
+      home:
+        title: "Wiki" # MT
+        content: |- # MT
+          Dit is de **startpagina van je wiki**!
+
+          Zie de [[Voorbeeldpagina]] voor tips om haar met nuttige informatie te vullen!
+      sample:
+        title: "Voorbeeldpagina" # MT
+        content: |- # MT
+          Dit is een voorbeeld van een wikipagina.
+
+          Klik hierboven op **Bewerken** om te zien hoe deze pagina werkt! En maak je geen zorgen, je kunt niets kapotmaken!
+
+          ## Opmaak
+
+          Om een wikipagina te bewerken, gebruik je **Markdown**, een eenvoudige manier om nette, mooie inhoud te maken zonder dat je een speciale taal hoeft te leren. Meer over Markdown lees je in de [opmaakhandleiding voor Markdown](/about/markdown).
+
+          ## Links
+
+          Links naar andere pagina’s zijn heel belangrijk! Je kunt zo naar andere **wikipagina’s** linken: [[Leuke pagina]].
+
+          De link hierboven is (waarschijnlijk) rood. Dat komt doordat de pagina nog niet bestaat. Als je op de link klikt, kun je de pagina aanmaken. Daarna wordt de link blauw!
+
+          Wil je iets anders dan de titel van de pagina als linktekst gebruiken, dan kun je [[Leuke pagina|dit doen]].
+
+          Links naar externe pagina’s zien er [zo uit](http://example.com).
+
+          Een URL als gewone tekst wordt automatisch herkend en omgezet in een link: https://gather.coop

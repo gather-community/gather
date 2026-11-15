@@ -1,0 +1,60 @@
+<% content_for(:title, t(".title", name: @flag.name)) %>
+
+<% content_for(:action_links) do %>
+  <% if policy(%i[admin feature_flag]).update? %>
+    <%= link_to(icon_tag("pencil") << " " << t("action_labels.common.edit"),
+          edit_admin_feature_flag_path(@flag), class: "btn btn-default") %>
+  <% end %>
+  <% if policy(%i[admin feature_flag]).destroy? %>
+    <%= link_to(icon_tag("trash") << " " << t(".delete"), admin_feature_flag_path(@flag),
+          method: :delete, class: "btn btn-danger",
+          data: {controller: "confirm", action: "confirm#check",
+                 confirm_message_value: t(".delete_confirm", name: @flag.name),
+                 confirm_confirm_label_value: t(".delete"),
+                 confirm_confirm_variant_value: "danger"}) %>
+  <% end %>
+<% end %>
+
+<table class="key-value">
+  <tr>
+    <td><%= t(".state") %></td>
+    <td><%= t("admin.feature_flags.modes.#{@flag.mode}") %></td>
+  </tr>
+  <tr>
+    <td><%= t(".usage") %></td>
+    <%# Ruby code, not prose, so it isn't translated. %>
+    <td><code>FeatureFlag.lookup("<%= @flag.name %>").on?(current_user)</code></td> <%# erb_lint:disable HardCodedText %>
+  </tr>
+  <tr>
+    <td><%= t(".created_at") %></td>
+    <td><%= l(@flag.created_at.to_date) %></td>
+  </tr>
+</table>
+
+<% if @flag.mode == :selected_users %>
+  <h2><%= t(".users_heading") %></h2>
+  <% if @users.empty? %>
+    <div class="center-notice">
+      <%= t(".no_users") %>
+    </div>
+  <% else %>
+    <table class="index">
+      <thead>
+        <tr>
+          <th><%= t(".headers.name") %></th>
+          <th><%= t(".headers.community") %></th>
+          <th><%= t(".headers.email") %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @users.each do |user| %>
+          <tr>
+            <td><%= link_to(user.full_name, user_url(user)) %></td>
+            <td><%= user.community.name %></td>
+            <td><%= user.email %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+<% end %>

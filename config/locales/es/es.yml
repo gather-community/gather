@@ -1,0 +1,539 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+es:
+  common:
+    language_name: "Español" # MT
+    settings: "Ajustes" # MT
+    settings_updated: "Ajustes actualizados." # MT
+    open_date_picker: "Abrir el selector de fecha" # MT
+    select_user: "Elegir persona…" # MT
+    adults: "Adultos" # MT
+    all: "Todos" # MT
+    cancel: "Cancelar" # MT
+    cancelled: "Cancelado" # MT
+    children: "Niños" # MT
+    clearing_the_filter: "quitar los filtros" # MT
+    create_new: "Crear" # MT
+    none_bracketed: "[Ninguno]" # MT
+    with_inactive: "%{name} (inactivo)" # MT
+    close: "Cerrar" # MT
+    print: "Imprimir" # MT
+    loading_indicator: "Indicador de carga" # MT
+    generated_at: "Generado: %{time}" # MT
+    community_count:
+      one: "%{count} comunidad" # MT
+      other: "%{count} comunidades" # MT
+    default: "Predeterminado" # MT
+    edit: "Editar" # MT
+    "false": "Falso" # MT
+    hidden: "Oculto" # MT
+    inactive: "Inactivo" # MT
+    max: "Máx." # MT
+    no_result_clear_filter_link_html: "Puedes probar a %{link}." # MT
+    none: "Ninguno" # MT
+    num_in_total: "%{count} en total" # MT
+    save: "Guardar" # MT
+    "true": "Verdadero" # MT
+    unknown: "Desconocido" # MT
+    unlimited: "Ilimitado" # MT
+    "yes": "Sí" # MT
+    "no": "No" # MT
+    time_with_preposition:
+      "on": "el %{t}" # MT
+      "at": "a las %{t}" # MT
+      "until": "hasta el %{t}" # MT
+    this_year: "Este año" # MT
+    this_quarter: "Este trimestre" # MT
+    this_month: "Este mes" # MT
+    all_time: "Desde siempre" # MT
+
+  helpers:
+    submit:
+      cancel: "Cancelar" # MT
+      confirm: "Confirmar" # MT
+      continue: "Continuar" # MT
+      create: "Guardar" # MT
+      go_back: "Volver" # MT
+      import: "Importar" # MT
+      opt_out: "Darse de baja" # MT
+      update: "Guardar" # MT
+      save_and_invite: "Guardar e invitar" # MT
+      sign_in: "Iniciar sesión" # MT
+      send_reset_instructions: "Enviar instrucciones de restablecimiento" # MT
+      set_password: "Establecer contraseña" # MT
+      meals_message:
+        create: "Enviar mensaje" # MT
+      meals_signup:
+        save_and_next: "Guardar e ir a la comida siguiente" # MT
+      wiki_page:
+        preview: "Vista previa" # MT
+
+  errors:
+    messages:
+      invalid_yaml: "YAML no válido" # MT
+      invalid_custom_field_spec: "Esta especificación no es válida. Contacta con el soporte de Gather para obtener ayuda." # MT
+      no_semicolons: "No se permiten puntos y coma" # MT
+
+  modal:
+    ok: "Aceptar" # MT
+    cancel: "Cancelar" # MT
+    confirm_title: "Confirmar" # MT
+    alert_title: "Aviso" # MT
+
+  payment:
+    accountholder_required: "Indica el nombre del titular de la cuenta." # MT
+
+  confirmations:
+    billing/template:
+      destroy: "¿Seguro que quieres eliminar la plantilla «%{description}» de %{member_types}? Esta acción no se puede deshacer." # MT
+    domain:
+      destroy: "¿Seguro que quieres eliminar el dominio «%{name}»? Esta acción no se puede deshacer." # MT
+    groups/group:
+      destroy: "¿Seguro que quieres eliminar el grupo «%{name}»? Esta acción no se puede deshacer." # MT
+      deactivate: "¿Seguro que quieres desactivar el grupo «%{name}»?" # MT
+    household:
+      destroy: "¿Seguro que quieres eliminar el hogar «%{name}»? Esta acción no se puede deshacer." # MT
+      deactivate: "¿Seguro que quieres desactivar el hogar «%{name}»? Se desactivarán todas las personas del hogar." # MT
+    meals/meal:
+      close: "¿Seguro que quieres cerrar esta comida? No se permitirán más inscripciones." # MT
+      destroy: "¿Seguro que quieres eliminar la comida «%{title}»? Esta acción no se puede deshacer." # MT
+      reopen: "¿Seguro que quieres reabrir esta comida? Se permitirán nuevas inscripciones." # MT
+      unfinalize: "¿Seguro que quieres deshacer la finalización de esta comida?" # MT
+    user:
+      destroy: "¿Seguro que quieres eliminar a «%{name}»? Esta acción no se puede deshacer." # MT
+      deactivate: "¿Seguro que quieres desactivar a «%{name}»? Se le quitará de todos sus grupos." # MT
+      invite: "Se enviará un correo a «%{name}» con instrucciones para iniciar sesión. ¿Continuar?" # MT
+    people/member_type:
+      destroy: "¿Seguro que quieres eliminar el tipo de miembro «%{name}»? Los hogares de este tipo se quedarán sin tipo de miembro. Esta acción no se puede deshacer." # MT
+    people/memorial:
+      destroy: "¿Seguro que quieres eliminar el homenaje a «%{name}»? Esta acción no se puede deshacer." # MT
+    people/memorial_message:
+      destroy: "¿Seguro que quieres eliminar este mensaje del homenaje? Esta acción no se puede deshacer." # MT
+    calendars/protocol:
+      destroy: "¿Seguro que quieres eliminar las normas «%{name}»? Esta acción no se puede deshacer." # MT
+    calendars/calendar:
+      destroy: "¿Seguro que quieres eliminar el calendario «%{name}»? Esta acción no se puede deshacer." # MT
+      deactivate: "¿Seguro que quieres desactivar el calendario «%{name}»?" # MT
+    calendars/event:
+      destroy: "¿Seguro que quieres eliminar el evento «%{name}»? Esta acción no se puede deshacer." # MT
+      destroy_series: "¿Seguro que quieres eliminar todas las repeticiones, pasadas y futuras, del evento periódico «%{name}»? Esta acción no se puede deshacer." # MT
+    calendars/group:
+      destroy: "¿Seguro que quieres eliminar este grupo de calendarios? Esta acción no se puede deshacer." # MT
+    gdrive/item:
+      destroy: "¿Seguro que quieres quitar este elemento? No se eliminará de Google Drive, pero dejará de estar vinculado a Gather." # MT
+    gdrive/item_group:
+      destroy: "¿Seguro que quieres quitar este grupo?" # MT
+    gdrive/migration/operation:
+      destroy: "¿Seguro que quieres eliminar esta migración? Se eliminará toda la información de la migración. No se tocará ningún archivo de Google Drive." # MT
+    meals/formula:
+      destroy: "¿Seguro que quieres eliminar la fórmula «%{name}»? Esta acción no se puede deshacer." # MT
+      deactivate: "¿Seguro que quieres desactivar la fórmula «%{name}»?" # MT
+    meals/role:
+      destroy: "¿Seguro que quieres eliminar el rol «%{title}»? Esta acción no se puede deshacer." # MT
+      deactivate: "¿Seguro que quieres desactivar el rol «%{title}»?" # MT
+    meals/type:
+      destroy: "¿Seguro que quieres eliminar el tipo «%{name}»? Esta acción no se puede deshacer." # MT
+      deactivate: "¿Seguro que quieres desactivar el tipo «%{name}»?" # MT
+    wiki/page:
+      destroy: "¿Seguro que quieres eliminar la página de la wiki «%{title}»? Esta acción no se puede deshacer." # MT
+    work/job:
+      destroy: "¿Seguro que quieres eliminar la tarea «%{title}»? Esta acción no se puede deshacer." # MT
+    work/period:
+      destroy: "¿Seguro que quieres eliminar el período «%{name}»? Esta acción no se puede deshacer." # MT
+    work/shift:
+      unsignup: "¿Seguro que quieres quitar tu nombre de esta tarea?" # MT
+
+  activatables:
+    community:
+      one_html: "Esta comunidad se desactivó el %{time}." # MT
+      two_html: "Puedes %{link}." # MT
+      three: "reactivarla" # MT
+    user:
+      one_html: "Esta persona se marcó como inactiva el %{time}." # MT
+      two_html: "Puedes %{link}." # MT
+      three: "reactivarla" # MT
+    household:
+      one_html: "Este hogar se marcó como inactivo el %{time}." # MT
+      two_html: "Puedes %{link}. <strong>Nota:</strong> tendrás que reactivar por separado a las personas del hogar." # MT
+      three: "reactivarlo" # MT
+    groups/group:
+      one_html: "Este grupo se marcó como inactivo el %{time}." # MT
+      two_html: "Puedes %{link}." # MT
+      three: "reactivarlo" # MT
+    calendars/calendar:
+      one_html: "Este calendario se marcó como inactivo el %{time}." # MT
+      two_html: "Puedes %{link}." # MT
+      three: "reactivarlo" # MT
+    meals/formula:
+      one_html: "Esta fórmula se marcó como inactiva el %{time}." # MT
+      two_html: "Puedes %{link}." # MT
+      three: "reactivarla" # MT
+    meals/role:
+      one_html: "Este rol se marcó como inactivo el %{time}." # MT
+      two_html: "Puedes %{link}." # MT
+      three: "reactivarlo" # MT
+    meals/type:
+      one_html: "Este tipo se marcó como inactivo el %{time}." # MT
+      two_html: "Puedes %{link}." # MT
+      three: "reactivarlo" # MT
+
+  deactivatable:
+    community:
+      success:
+        activate: "Comunidad reactivada." # MT
+    household:
+      success:
+        activate: "Hogar activado." # MT
+        deactivate: "Hogar desactivado." # MT
+        destroy: "Hogar eliminado." # MT
+        hard_destroy: "El hogar y todos sus miembros se eliminaron definitivamente." # MT
+    user:
+      success:
+        activate: "Persona activada." # MT
+        activate_unconfirmed: "Persona activada, pero necesitará una invitación para iniciar sesión. Haz clic en «Invitar» abajo para invitarla." # MT
+        deactivate: "Persona desactivada." # MT
+        destroy: "Persona eliminada." # MT
+        hard_destroy: "La persona se eliminó definitivamente." # MT
+      error:
+        activate: "Error al activar: %{message}" # MT
+        deactivate: "Error al desactivar: %{message}" # MT
+    billing/template:
+      success:
+        destroy: "Plantilla eliminada." # MT
+    domain:
+      success:
+        destroy: "Dominio eliminado." # MT
+    gdrive/item:
+      success:
+        destroy: "Elemento quitado." # MT
+    gdrive/item_group:
+      success:
+        destroy: "Grupo quitado." # MT
+    gdrive/migration/operation:
+      success:
+        destroy: "Operación eliminada." # MT
+    groups/group:
+      success:
+        deactivate: "Grupo desactivado." # MT
+        activate: "Grupo activado." # MT
+        destroy: "Grupo eliminado." # MT
+    calendars/protocol:
+      success:
+        destroy: "Normas eliminadas." # MT
+    calendars/group:
+      success:
+        destroy: "Grupo eliminado." # MT
+    calendars/calendar:
+      success:
+        activate: "Calendario activado." # MT
+        deactivate: "Calendario desactivado." # MT
+        destroy: "Calendario eliminado." # MT
+    meals/meal:
+      success:
+        destroy: "Comida eliminada." # MT
+    meals/formula:
+      success:
+        activate: "Fórmula activada." # MT
+        deactivate: "Fórmula desactivada." # MT
+        destroy: "Fórmula eliminada." # MT
+    meals/role:
+      success:
+        activate: "Rol activado." # MT
+        deactivate: "Rol desactivado." # MT
+        destroy: "Rol eliminado." # MT
+    meals/type:
+      success:
+        activate: "Tipo activado." # MT
+        deactivate: "Tipo desactivado." # MT
+        destroy: "Tipo eliminado." # MT
+    people/member_type:
+      success:
+        destroy: "Tipo de miembro eliminado." # MT
+    people/memorial:
+      success:
+        destroy: "Homenaje eliminado." # MT
+    people/memorial_message:
+      success:
+        destroy: "Mensaje eliminado." # MT
+    work/job:
+      success:
+        destroy: "Tarea eliminada." # MT
+    work/period:
+      success:
+        destroy: "Período eliminado." # MT
+
+  cocoon:
+    add_links:
+      vehicles: "Añadir vehículo" # MT
+      emergency_contacts: "Añadir contacto de emergencia" # MT
+      up_guardianships: "Añadir padre, madre o tutor" # MT
+      pets: "Añadir mascota" # MT
+      shifts: "Añadir turno" # MT
+      assignments: "Añadir persona" # MT
+      reminders: "Añadir recordatorio" # MT
+      restrictions: "Añadir restricción" # MT
+      signups: "Añadir hogar" # MT
+      groups/group:
+        memberships: "Añadir miembro" # MT
+      meals/signup:
+        parts: "Añadir elemento" # MT
+      meals/formula:
+        parts: "Añadir tipo de comida" # MT
+
+  select2:
+    prompts:
+      creator: "Escribe unas letras del nombre del creador." # MT
+      sponsor: "Escribe unas letras del nombre del patrocinador." # MT
+      household: "Escribe unas letras del nombre del hogar." # MT
+      guardian: "Escribe unas letras del nombre del tutor." # MT
+      user: "Escribe unas letras del nombre de la persona." # MT
+      job_choosing_proxy: "Escribe unas letras del nombre de la persona." # MT
+      type: "Escribe unas letras del nombre del tipo de comida, o el nombre completo para añadir uno nuevo." # MT
+      category: "Escribe unas letras de la categoría, o el nombre completo para añadir una nueva." # MT
+      reimbursee: "Escribe unas letras del nombre de la persona reembolsada." # MT
+    placeholders:
+      creator: "Elegir creador…" # MT
+      sponsor: "Elegir patrocinador…" # MT
+      household: "Elegir hogar…" # MT
+      guardian: "Elegir tutor…" # MT
+      user: "Elegir persona…" # MT
+      job_choosing_proxy: "Elegir persona…" # MT
+      type: "Elegir o escribir tipo…" # MT
+      category: "Elegir o escribir categoría…" # MT
+      reimbursee: "Elegir persona reembolsada…" # MT
+
+  csv:
+    headers:
+      user:
+        id: "ID"
+        first_name: "Nombre" # MT
+        last_name: "Apellidos" # MT
+        unit_num: "N.º de vivienda" # MT
+        unit_suffix: "Sufijo de vivienda" # MT
+        birthdate: "Cumpleaños" # MT
+        pronouns: "Pronombres" # MT
+        email: "Correo" # MT
+        google_email: "Correo de Google" # MT
+        paypal_email: "Correo de PayPal" # MT
+        child: "Es niño" # MT
+        full_access: "Acceso completo" # MT
+        household_id: "ID del hogar" # MT
+        household_name: "Nombre del hogar" # MT
+        mobile_phone: "Teléfono móvil" # MT
+        home_phone: "Teléfono de casa" # MT
+        work_phone: "Teléfono del trabajo" # MT
+        joined_on: "Fecha de llegada" # MT
+        deactivated_at: "Fecha de salida" # MT
+        preferred_contact: "Contacto preferido" # MT
+        garage_nums: "N.º de garaje" # MT
+        vehicles: "Vehículos" # MT
+        guardian_names: "Padres/tutores" # MT
+        keyholders: "Personas con llave" # MT
+        emergency_contacts: "Contactos de emergencia" # MT
+        pets: "Mascotas" # MT
+      billing/account:
+        number: "Número" # MT
+        community_id: "ID de la comunidad" # MT
+        community_name: "Comunidad" # MT
+        household_id: "ID del hogar" # MT
+        household_name: "Hogar" # MT
+        balance_due: "Saldo a pagar" # MT
+        current_balance: "Saldo actual" # MT
+        credit_limit: "Límite de crédito" # MT
+        last_statement_id: "ID del último estado de cuenta" # MT
+        last_statement_on: "Fecha del último estado de cuenta" # MT
+        due_last_statement: "A pagar en el último estado de cuenta" # MT
+        total_new_charges: "Total de nuevos cargos" # MT
+        total_new_credits: "Total de nuevos abonos" # MT
+        created_at: "Fecha de creación" # MT
+      billing/transaction:
+        id: "ID"
+        incurred_on: "Fecha en que se produjo" # MT
+        code: "Código" # MT
+        chg_crd: "Tipo" # MT
+        description: "Descripción" # MT
+        household_id: "ID del hogar" # MT
+        household_name: "Hogar" # MT
+        quantity: "Cantidad" # MT
+        unit_price: "Precio unitario" # MT
+        amount: "Importe" # MT
+        created_at: "Fecha de registro" # MT
+        account_id: "ID de la cuenta" # MT
+        statement_id: "ID del estado de cuenta" # MT
+        meal_id: "ID de la comida" # MT
+      meals/meal:
+        served_at: "Fecha/hora" # MT
+        calendars: "Lugares" # MT
+        formula: "Fórmula" # MT
+        communities: "Comunidades" # MT
+        role: "Rol" # MT
+        action: "Acción" # MT
+        id: "ID"
+        title: "Título" # MT
+        entrees: "Plato principal" # MT
+        side: "Acompañamiento" # MT
+        kids: "Niños" # MT
+        dessert: "Postre" # MT
+        notes: "Notas" # MT
+        allergens: "Alérgenos" # MT
+        capacity: "Capacidad" # MT
+        status: "Estado" # MT
+        signup_count: "Total de comensales" # MT
+        spots_left: "Plazas libres" # MT
+        ingredient_cost: "Coste de los ingredientes" # MT
+        pantry_cost: "Coste de despensa" # MT
+        total_cost: "Coste total" # MT
+        payment_method: "Método de pago" # MT
+        reimbursee: "Persona reembolsada" # MT
+        diner_count: "Comensales: %{type}" # MT
+        type_price: "Precio: %{type}" # MT
+      meals/signup:
+        meal_id: "ID de la comida" # MT
+        served_at: "Fecha/hora de la comida" # MT
+        meal_title: "Título de la comida" # MT
+        calendars: "Lugares de la comida" # MT
+        formula: "Fórmula" # MT
+        community_id: "ID de la comunidad" # MT
+        community_name: "Comunidad" # MT
+        household_id: "ID del hogar" # MT
+        household_name: "Hogar" # MT
+        diner_count: "Comensales: %{type}" # MT
+        total: "Total de comensales" # MT
+        takeout: "Para llevar" # MT
+        comments: "Comentarios" # MT
+        created_at: "Hora de inscripción" # MT
+      common:
+        id: "ID"
+        action: "Acción" # MT
+    errors:
+      meals/meal:
+        calendar:
+          bad_id: "No se encontró ningún calendario con el ID %{str}" # MT
+          bad_name: "No se encontró ningún calendario llamado «%{str}»" # MT
+        formula:
+          bad_id: "No se encontró ninguna fórmula de comida con el ID %{str}" # MT
+          bad_name: "No se encontró ninguna fórmula de comida llamada «%{str}»" # MT
+        community:
+          bad_id: "No se encontró ninguna comunidad con el ID %{str}" # MT
+          bad_name: "No se encontró ninguna comunidad llamada «%{str}»" # MT
+        file_empty: "El archivo está vacío" # MT
+        invalid_headers: "Encabezados de columna no válidos: %{headers}" # MT
+        missing_columns: "Faltan columnas: %{columns}" # MT
+        invalid_action: "Acción no válida: %{action}" # MT
+        action_not_permitted: "Acción no permitida (%{action})" # MT
+        served_at_required: "La fecha y la hora son obligatorias" # MT
+        invalid_served_at: "«%{str}» no es una fecha y hora válida" # MT
+        calendars_required: "Los calendarios son obligatorios" # MT
+        meal_id_not_found: "No se encontró ninguna comida con el ID «%{id}»" # MT
+        meal_not_found: "No se encontró ninguna comida servida el %{time} en los lugares: %{locations}" # MT
+        delete_failed: "Error al eliminar la comida %{id}: «%{error}»" # MT
+        user:
+          bad_id: "No se encontró ninguna persona con el ID %{str}" # MT
+          bad_name: "No se encontró ninguna persona llamada «%{str}»" # MT
+
+  action_labels:
+    common:
+      new: "Añadir" # MT
+      edit: "Editar" # MT
+      deactivate: "Desactivar" # MT
+      destroy: "Eliminar" # MT
+      clone: "Duplicar" # MT
+      close: "Cerrar" # MT
+      join: "Unirme" # MT
+      leave: "Salir" # MT
+      opt_out: "Darme de baja" # MT
+      rejoin: "Volver a unirme" # MT
+      reopen: "Reabrir" # MT
+      rescan: "Volver a analizar" # MT
+      summary: "Resumen" # MT
+      finalize: "Finalizar" # MT
+      unfinalize: "Deshacer finalización" # MT
+      cancel: "Cancelar" # MT
+      send_message: "Mensaje" # MT
+    community:
+      visit: "Visitar" # MT
+    billing/account:
+      add_txn: "Añadir movimiento" # MT
+    user:
+      update_info: "Editar perfil" # MT
+      update_photo: "Editar foto" # MT
+      invite: "Invitar" # MT
+      impersonate: "Actuar como" # MT
+      destroy: "Eliminar definitivamente" # MT
+      delete_self: "Eliminar mi cuenta" # MT
+    household:
+      destroy: "Eliminar definitivamente" # MT
+    wiki/page:
+      history: "Historial" # MT
+    work/job:
+      edit: "Editar tarea" # MT
+    work/shift:
+      edit_job: "Editar tarea" # MT
+      signup: "Inscribirme" # MT
+      unsignup: "Quitar inscripción" # MT
+    work/period:
+      review_notices: "Enviar avisos" # MT
+      send_notices: "Enviar avisos" # MT
+
+  dropzone:
+    prompts:
+      default: "Haz clic o arrastra un archivo aquí" # MT
+      models:
+        user: "Haz clic o arrastra una foto aquí" # MT
+        calendars/calendar: "Haz clic o arrastra una foto aquí" # MT
+
+  titles:
+    meals/messages: "Enviar mensaje sobre la comida" # MT
+
+  roles:
+    admin: "Administrador" # MT
+    calendar_coordinator: "Coordinador de calendarios" # MT
+    cluster_admin: "Administrador de agrupación" # MT
+    super_admin: "Superadministrador" # MT
+    biller: "Responsable de facturación" # MT
+    photographer: "Fotógrafo" # MT
+    meals_coordinator: "Coordinador de comidas" # MT
+    wikiist: "Wikista" # MT
+    work_coordinator: "Coordinador de trabajo" # MT
+    new_community_approver: "Aprobador de comunidades nuevas" # MT
+    index:
+      title: "Roles" # MT
+      people: "Personas" # MT
+      legend: "Leyenda" # MT
+      legend_item_html: "<strong>%{role}</strong> - %{description}" # MT
+      descriptions:
+        admin: "Todos los demás roles juntos" # MT
+        biller: "Gestiona movimientos, plantillas, estados de cuenta y fórmulas de facturación, y finaliza comidas" # MT
+        photographer: "Puede editar la foto de directorio de cualquiera" # MT
+        calendar_coordinator: "Gestiona los calendarios y los eventos de cualquiera" # MT
+        meals_coordinator: "Gestiona comidas, roles de comida, fórmulas de facturación y tipos de comida" # MT
+        wikiist: "Gestiona las páginas de la wiki especialmente protegidas" # MT
+        work_coordinator: "Gestiona tareas, turnos y períodos de trabajo" # MT
+
+  phone_types:
+    abbreviations:
+      home: "c" # MT
+      work: "t" # MT
+      mobile: "m" # MT
+
+  date_range_lens:
+    past_12: "Últimos 12 meses" # MT
+
+  community_lens:
+    all: "Todas las comunidades" # MT
+
+  lens_bar:
+    clear_filter: "Quitar filtro" # MT
+
+  search_lens:
+    prompt: "Buscar…" # MT

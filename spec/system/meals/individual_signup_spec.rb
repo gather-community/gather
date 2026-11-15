@@ -32,7 +32,9 @@ describe "meal signups", js: true do
     fill_in("Comments", with: "Extra tasty please")
     click_button("Save")
     expect(page).to have_alert("Signup saved successfully")
-    expect(page).not_to have_css(".alert-success")
+    # The JS removes the alert 2s after render, which is also Capybara's default wait, so the check
+    # would expire right as the node vanished (raising StaleElementReferenceError). Wait longer.
+    expect(page).not_to have_css(".alert-success", wait: 5)
 
     # Edit existing
     all("select[id$=_count]")[0].select("3")

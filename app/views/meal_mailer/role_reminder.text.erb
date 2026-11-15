@@ -1,22 +1,26 @@
 <%= @user.greeting %>
 
-This is a reminder that you are scheduled as <%= @assignment.role_title %> for the meal '<%= @meal.title_or_no_title %>' on <%= @meal.served_on_no_yr %>.
+<%= t(".scheduled", role: @assignment.role_title, title: @meal.title_or_no_title, date: @meal.served_on_no_yr) %>
 
-Your shift is on <%= @assignment.date_or_times %><%= @meal.location_name_with_at %>. The meal is scheduled to be served at <%= @meal.served_at_time_only %>.
+<% if @meal.location_name -%>
+<%= t(".shift_at_location", times: @assignment.date_or_times, location: @meal.location_name, time: @meal.served_at_time_only) %>
+<% else -%>
+<%= t(".shift", times: @assignment.date_or_times, time: @meal.served_at_time_only) %>
+<% end -%>
 <% if @reminder.note? %>
 
-This reminder includes the following note:
+<%= t(".note_intro") %>
 --------------
 <%= @reminder.note %>
 --------------
 <% end %>
 
-Your help is crucial! Please arrive promptly for your shift!
+<%= t(".crucial") %>
 
-Here is some contact information for other workers for the meal:
+<%= t(".contacts_intro") %>
 
 <% @other_assigns.each do |a| -%>
-<%= a.role_title %>: <%= a.user.name %>, <%= a.user.email %>, <%= a.user.phone_list %>
+<%= t(".contact", role: a.role_title, name: a.user.name, email: a.user.email, phones: a.user.phone_list) %>
 <% end %>
 
 <%= render("meal_link") %>

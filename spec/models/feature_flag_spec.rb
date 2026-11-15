@@ -7,7 +7,7 @@
 #  id         :bigint           not null, primary key
 #  created_at :datetime         not null
 #  interface  :string           default("basic"), not null
-#  name       :string           not null
+#  name       :string(64)       not null
 #  status     :boolean
 #  updated_at :datetime         not null
 #
@@ -51,6 +51,37 @@ describe FeatureFlag do
         expect(flag.on?(user)).to be(true)
         expect(flag.on?(user2)).to be(false)
       end
+    end
+  end
+
+  describe "#mode and #mode=" do
+    let(:user) { create(:user) }
+
+    it "reads the mode from interface and status" do
+      expect(build(:feature_flag, interface: "basic", status: false).mode).to eq(:off)
+      expect(build(:feature_flag, interface: "basic", status: nil).mode).to eq(:off)
+      expect(build(:feature_flag, interface: "basic", status: true).mode).to eq(:everyone)
+      expect(build(:feature_flag, interface: "user", status: false).mode).to eq(:selected_users)
+    end
+
+    it "round-trips every mode, accepting strings from params" do
+      flag = create(:feature_flag)
+      FeatureFlag::MODES.each do |mode|
+        flag.update!(mode: mode.to_s)
+        expect(flag.reload.mode).to eq(mode)
+      end
+    end
+
+    it "keeps the user list when switching modes" do
+      flag = create(:feature_flag, interface: "user", users: [user])
+      flag.update!(mode: :off)
+      expect(flag.on?(user)).to be(false)
+      flag.update!(mode: :selected_users)
+      expect(flag.on?(user)).to be(true)
+    end
+
+    it "raises on an unknown mode" do
+      expect { build(:feature_flag).mode = "sometimes" }.to raise_error(ArgumentError)
     end
   end
 end

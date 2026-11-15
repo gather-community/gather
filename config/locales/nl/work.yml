@@ -1,0 +1,210 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+nl:
+  work:
+    job_created: "Taak aangemaakt." # MT
+    job_updated: "Taak bijgewerkt." # MT
+    job_synced_from_meals: "Deze taak is gesynchroniseerd vanuit het maaltijdsysteem en kan niet rechtstreeks worden bewerkt. Ze wordt automatisch bijgewerkt als er maaltijden worden toegevoegd of gewijzigd." # MT
+    period_created: "Periode aangemaakt." # MT
+    period_updated: "Periode bijgewerkt." # MT
+    period_copied: "Er zijn gegevens gekopieerd uit de periode “%{name}”. Controleer ze hieronder en pas ze aan. Taken worden gekopieerd als je de periode opslaat." # MT
+    notices_wrong_phase: "Er kunnen geen berichten worden verstuurd, omdat de periode niet in de fase “gereed” of “open” is." # MT
+    notices_no_quota: "Er kunnen geen berichten worden verstuurd, omdat deze periode geen quotum heeft." # MT
+    notices_sent: "De berichten zijn onderweg!" # MT
+    signed_up: "Je bent aangemeld. Hoera!" # MT
+    signup_removed: "Je aanmelding is verwijderd." # MT
+    # Compact hours, e.g. "3h" on the signup cards.
+    hours_abbr: "%{hours} u" # MT
+    jobs:
+      form:
+        reminders_on_role_html: "Herinneringen voor deze taak stel je in op de %{link}." # MT
+        reminders_on_role: "Herinneringen voor deze taak stel je in op de pagina van de maaltijdrol." # MT
+        meal_role_page: "pagina van de maaltijdrol" # MT
+        shifts: "Diensten" # MT
+      edit:
+        title: "Taak bewerken: %{title}" # MT
+      new:
+        title: "Taak aanmaken" # MT
+      index:
+        title: "Taken" # MT
+        title_with_period: "Taken: %{period}" # MT
+        create: "Taak aanmaken" # MT
+      show:
+        jobs: "Taken" # MT
+        hours: "%{hours} uur" # MT
+    periods:
+      form:
+        do_not_copy: "Taken niet kopiëren" # MT
+        meal_formula: "Maaltijdformule" # MT
+        meal_roles_to_sync: "Te synchroniseren maaltijdrollen" # MT
+        sync_hint: "Maaltijdtaken worden gesynchroniseerd als de periode verandert of als maaltijden worden toegevoegd, gewijzigd of verwijderd. Aanmeldingen worden gesynchroniseerd, of de gebruiker zich nu via het maaltijd- of het werksysteem aanmeldt. Wijzigingen in maaltijdrollen leiden alleen tot synchronisatie als de periode in de conceptfase is." # MT
+        shares: "Aandelen" # MT
+      edit:
+        title: "Periode bewerken: %{name}" # MT
+      new:
+        title: "Periode aanmaken" # MT
+      index:
+        title: "Werkperiodes" # MT
+        create: "Periode aanmaken" # MT
+        name: "Naam" # MT
+        start: "Begin" # MT
+        end: "Einde" # MT
+        phase: "Fase" # MT
+        links: "Links" # MT
+        signups: "Aanmeldingen" # MT
+        report: "Rapport" # MT
+        jobs: "Taken" # MT
+      review_notices:
+        title: "Berichten over het kiezen van taken: %{name}" # MT
+        intro: "De volgende berichten worden verstuurd:" # MT
+      show:
+        title: "Periode: %{name}" # MT
+        periods: "Periodes" # MT
+        date: "Datum" # MT
+        max_rounds_per_worker:
+          one: "max. %{count} ronde per persoon" # MT
+          other: "max. %{count} rondes per persoon" # MT
+        workers_per_round:
+          one: "%{count} persoon per ronde" # MT
+          other: "%{count} personen per ronde" # MT
+        minutes_per_round:
+          one: "%{count} minuut per ronde" # MT
+          other: "%{count} minuten per ronde" # MT
+        shares: "Aandelen" # MT
+      report:
+        title: "Werkrapport" # MT
+        title_with_period: "Werkrapport: %{period}" # MT
+        overview: "Overzicht" # MT
+        total_hours: "Totaal aantal uren" # MT
+        jobs: "Taken" # MT
+        people: "Mensen" # MT
+        quota: "Quotum" # MT
+        by_person: "Per persoon" # MT
+        by_household: "Per huishouden" # MT
+        regular: "Gewoon" # MT
+        name: "Naam" # MT
+    settings:
+      edit:
+        title: "Instellingen voor werk" # MT
+    shifts:
+      shift:
+        sign_up: "Aanmelden!" # MT
+      shifts:
+        list_label: "Lijst met aanmeldingen" # MT
+      index:
+        title: "Aanmelden voor taken" # MT
+      show:
+        signups: "Aanmeldingen" # MT
+    no_periods_html: "Er zijn geen toegankelijke periodes. Zie de %{link}." # MT
+    periods_page: "pagina met periodes" # MT
+    not_setup: "Het lijkt erop dat je gemeenschap het werkverdelingssysteem van Gather niet heeft ingesteld.\nVraag de beheerder van Gather om meer informatie." # MT
+    choosing_as: "Je kiest voor %{name}. Taken waarvoor je je aanmeldt, worden aan deze persoon toegewezen." # MT
+    no_signups: "Geen aanmeldingen" # MT
+    phase_notices:
+      shifts:
+        draft: "Deze periode is in de conceptfase, dus je kunt je nog niet voor taken aanmelden." # MT
+        archived: "Deze periode is gearchiveerd, dus aanmelden is niet mogelijk." # MT
+      jobs:
+        archived: "Deze periode is gearchiveerd." # MT
+      report:
+        draft: "Deze periode is in de conceptfase, dus het rapport is nog niet zichtbaar." # MT
+        archived: "Deze periode is gearchiveerd." # MT
+    num_hours: "%{num} uur" # MT
+    preassigned: "Deze plek is vooraf toegewezen." # MT
+    synopsis:
+      done: "Je bent helemaal klaar!" # MT
+      regular: "gewone" # MT
+      # %{chunks} is a list like "3/10 regular hours, 2/4 Pitch-In hours and 1/2 Mowing hours".
+      for_user_html: "Je hebt je aangemeld voor %{chunks}." # MT
+      for_household_html: "Je huishouden heeft %{chunks}." # MT
+      chunk:
+        single_html: "%{fraction} uur" # MT
+        multiple_html: "%{fraction} uur %{title}" # MT
+      start_choosing: "Je kunt %{at_or_on_time} beginnen met taken kiezen." # MT
+      round_limit_with_next: "Je rondelimiet is %{prev} uur en gaat %{at_or_on_time} omhoog naar %{next}." # MT
+      round_limit_until: "Je rondelimiet is %{prev} uur %{until_time}." # MT
+  work/jobs:
+    shifts: "Diensten" # MT
+    unlimited: "Onbeperkt" # MT
+    full_community: "Dit is een taak voor de hele gemeenschap" # MT
+    preassignments: "Deze taak heeft vooraf toegewezen plekken" # MT
+    meal_related: "Deze taak hoort bij een maaltijd" # MT
+    none_found: "Geen taken gevonden." # MT
+  work/period:
+    phase_names:
+      archived: "Gearchiveerd" # MT
+      draft: "Concept" # MT
+      open: "Open" # MT
+      published: "Gepubliceerd" # MT
+      ready: "Gereed" # MT
+    num_minutes:
+      one: "%{count} minuut" # MT
+      other: "%{count} minuten" # MT
+  work/shares:
+    portion_options:
+      none: "Geen aandeel" # MT
+      one_qtr: "¼ aandeel" # MT
+      half: "½ aandeel" # MT
+      three_qtr: "¾ aandeel" # MT
+      full: "Volledig aandeel" # MT
+    intro: "Hoe moet het werk van de gemeenschap worden verdeeld? De meeste mensen krijgen een volledig aandeel, maar soms zijn uitzonderingen nodig. Een half aandeel betekent dat iemand half zoveel uren werkt als iemand met een volledig aandeel, enzovoort." # MT
+    priority_hint_html: "Het systeem berekent automatisch wie het eerst kiest, op basis van het aantal benodigde uren. Mensen met een <i class='fa fa-star'></i> gaan voor wie er geen heeft." # MT
+    change_warning: "Deze periode is op dit moment actief. Het wijzigen van aandelen of het soort quotum heeft invloed op de berekening van het quotum. Wees voorzichtig!" # MT
+  work/shift:
+    choosing_as: "Kiezen voor %{name}" # MT
+    slots_exceeded: "Sorry, iemand was je net voor!" # MT
+    already_signed_up: "Je hebt je al voor deze dienst aangemeld." # MT
+    not_signed_up: "Je hebt je niet voor deze dienst aangemeld." # MT
+    round_limit_exceeded: "Je hebt je rondelimiet overschreden." # MT
+    slots_open:
+      one: "%{count} plek vrij" # MT
+      other: "%{count} plekken vrij" # MT
+  work/job_reminder:
+    absolute: "Om %{time}" # MT
+    relative:
+      days_before:
+        one: "%{count} dag ervoor" # MT
+        other: "%{count} dagen ervoor" # MT
+      days_after:
+        one: "%{count} dag erna" # MT
+        other: "%{count} dagen erna" # MT
+      hours_before:
+        one: "%{count} uur ervoor" # MT
+        other: "%{count} uur ervoor" # MT
+      hours_after:
+        one: "%{count} uur erna" # MT
+        other: "%{count} uur erna" # MT
+  work_mailer:
+    job_reminder:
+      subject: "Herinnering taak: %{title}, %{times}" # MT
+      # The time is left out of the subject when the reminder has a note.
+      subject_with_note: "Herinnering taak: %{title}: %{note}" # MT
+      scheduled: "Dit is een herinnering dat je bent ingeroosterd als “%{job}” (%{times})." # MT
+      note_intro: "Deze herinnering bevat de volgende opmerking:" # MT
+      see_description: "Bekijk hier de beschrijving van de taak: %{url}." # MT
+      thanks: "Bedankt voor je inzet voor de gemeenschap!" # MT
+    job_choosing_notice:
+      subject: "Binnenkort taken kiezen!" # MT
+      coming_up_on: "Op %{date} kun je taken kiezen!" # MT
+      coming_up_soon: "Binnenkort kun je taken kiezen!" # MT
+      quota: "Je hebt %{got} vooraf toegewezen uren en je quotum is %{quota}, dus je moet %{need} gewone uren kiezen." # MT
+      also_choose: "Er wordt ook van je verwacht dat je %{hours} kiest." # MT
+      full_community_hours: "%{hours} uur %{title}" # MT
+      begin_at: "Je kunt om %{time} beginnen met kiezen." # MT
+      schedule_intro: "Je rondeschema ziet er zo uit:" # MT
+      round_with_limit: "* Om %{time} kun je tot %{limit} uur kiezen." # MT
+      round_finish: "* Om %{time} kun je de rest kiezen." # MT
+      go_to: "Ga op de tijd(en) hierboven naar %{url} om je taken te kiezen. Je kunt ook eerder al kijken welke taken er zijn en je keuzes plannen. Aanmelden kan pas op de tijden hierboven." # MT
+      choosing_begins: "Het kiezen begint om %{time}." # MT
+      visit: "Ga naar %{url} voor meer informatie." # MT
+      thanks: "Bedankt voor je deelname!" # MT

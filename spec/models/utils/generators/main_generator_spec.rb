@@ -13,6 +13,7 @@ describe Utils::Generators::MainGenerator, :without_tenant, :perform_jobs do
     Calendars::System::OtherCommunitiesMealsCalendar
     Domain
     DomainOwnership
+    DomainMail::Check
     FeatureFlag
     FeatureFlagUser
     GDrive::Config
@@ -32,9 +33,15 @@ describe Utils::Generators::MainGenerator, :without_tenant, :perform_jobs do
     MailTestRun
     Meals::Import
     Meals::Message
+    Messaging::Account
+    Messaging::Transaction
     People::MemberType
     Subscription::Subscription
     Subscription::Intent
+    Subscription::MessagingTopup
+    Subscription::ExchangeRate
+    Subscription::InflationReading
+    Stripe::WebhookEvent
     Wiki::Page
     Wiki::PageVersion
     Work::JobReminderDelivery
@@ -111,6 +118,77 @@ describe Utils::Generators::MainGenerator, :without_tenant, :perform_jobs do
       expect(Billing::Statement.count).to eq(0)
       expect(ActiveStorage::Blob.count).to eq(0)
     end
+  end
+
+  describe "starter content language" do
+    it "creates the starter content and sample data in the community's language" do
+      cluster = described_class.new(cmty_name: "Foo Community", slug: "foo", sample_data: true, photos: false,
+        locale: "fr").generate
+
+      ActsAsTenant.with_tenant(cluster) do
+        community = cluster.communities[0]
+        expect(community.settings.locale).to eq("fr")
+        expect(Meals::Role.pluck(:title)).to contain_exactly("Chef cuisinier", "Aide-cuisinier", "Nettoyage")
+        expect(Meals::Formula.find_by(is_default: true).name).to eq("Formule par défaut")
+        expect(Meals::Type.pluck(:name)).to contain_exactly("Adulte", "Ado", "Enfant", "Jeune enfant")
+        expect(Meals::Restriction.pluck(:absence)).to include("Sans gluten", "Végan")
+        expect(Groups::Group.find_by(availability: "everybody").name).to eq("Toute la communauté")
+        expect(Calendars::Node.pluck(:name)).to include("Tous les repas", "Anniversaires", "Réservations")
+        expect(community.settings.meals.allergens)
+          .to eq("Produits laitiers, Fruits de mer, Soja, Fruits à coque")
+
+        # Sample data too, and sample meals still find their calendars.
+        kitchen, dining_room = %i[kitchen dining_room].map do |key|
+          I18n.t("sample_data.calendars.#{key}.name", locale: :fr)
+        end
+        expect(Calendars::Calendar.pluck(:name)).to include(kitchen, dining_room)
+        expect(Meals::Meal.first.calendars.map(&:name)).to contain_exactly(kitchen, dining_room)
+        sample_titles = I18n.t("sample_data.meals", locale: :fr).values.pluck(:title)
+        expect(Meals::Meal.pluck(:title)).to all(be_in(sample_titles))
+        expect(Groups::Group.pluck(:name))
+          .to include(I18n.t("sample_data.groups.knitting_club.name", locale: :fr))
+        expect(Calendars::Event.all.reject(&:meal?).filter_map(&:kind).uniq)
+          .to match_array(I18n.t("sample_data.event_kinds", locale: :fr).values)
+        expect(User.distinct.pluck(:locale)).to eq(["fr"])
+      end
+    end
+
+    # Calendar names are unique per community and at most 24 characters, so each locale's must fit.
+    Gather::Locales::TRANSLATED.each do |locale|
+      it "generates cleanly in #{locale}" do
+        cluster = described_class.new(cmty_name: "Foo Community", slug: "foo", sample_data: false,
+          locale: locale).generate
+
+        ActsAsTenant.with_tenant(cluster) do
+          expect(Calendars::Node.count).to eq(10)
+          expect(Meals::Role.find_by(special: "head_cook").title)
+            .to eq(I18n.t("starter_content.meal_roles.head_cook.title", locale: locale))
+          expect(Meals::Restriction.pluck(:contains))
+            .to include(I18n.t("starter_content.restrictions.vegan.contains", locale: locale))
+        end
+      end
+    end
+  end
+
+  # Sample phone numbers used to be North American only, so they failed validation everywhere else.
+  it "generates sample data for a community outside North America" do
+    cluster = described_class.new(cmty_name: "Foo Community", slug: "foo", country_code: "GB",
+      sample_data: true, photos: false).generate
+
+    ActsAsTenant.with_tenant(cluster) do
+      expect(User.adults.count).to be > 0
+      expect(User.where.not(mobile_phone: nil).pluck(:mobile_phone)).to all(start_with("+44"))
+    end
+  end
+
+  # perform_deliveries is global to the process, so leaving it off after a failure stopped all mail
+  # from the background worker until it was restarted.
+  it "turns mail delivery back on when generation fails" do
+    allow(Utils::Generators::PeopleGenerator).to receive(:new).and_raise(RuntimeError, "boom")
+    main = described_class.new(cmty_name: "Foo Community", slug: "foo", sample_data: true, photos: false)
+    expect { main.generate }.to raise_error(RuntimeError, "boom")
+    expect(ActionMailer::Base.perform_deliveries).to be(true)
+    expect(Cluster.count).to eq(0)
   end
 
   def check_cmty_and_cluster_creation(cluster)

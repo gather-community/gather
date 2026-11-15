@@ -28,6 +28,21 @@ describe Groups::Mailman::List do
     end
   end
 
+  describe "validation" do
+    let(:domain) { create(:domain) }
+    let!(:existing) { create(:group_mailman_list, domain: domain, name: "knitting") }
+
+    it "rejects a duplicate name on the same domain" do
+      list = build(:group_mailman_list, domain: domain, name: "knitting")
+      expect(list).not_to be_valid
+      expect(list.errors[:name]).to eq(["Another list on this domain already uses this name"])
+    end
+
+    it "allows the same name on a different domain" do
+      expect(build(:group_mailman_list, name: "knitting")).to be_valid
+    end
+  end
+
   describe "#enforced_config" do
     it "includes the enforced config settings" do
       expect(build(:group_mailman_list).enforced_config.keys).to include(*Groups::Mailman::List::ENFORCED_SETTINGS)

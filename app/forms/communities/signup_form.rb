@@ -8,7 +8,7 @@ module Communities
     extend AttributeNormalizer::ClassMethods
 
     delegate :contact_first_name, :contact_last_name, :contact_email,
-      :community_name, :slug, :country_code, :time_zone,
+      :community_name, :slug, :country_code, :time_zone, :locale,
       :introduction, :want_sample_data, :contact_name, to: :@signup
 
     delegate :contact_first_name=, :contact_last_name=, :contact_email=,
@@ -44,6 +44,7 @@ module Communities
         message: "only lowercase letters, numbers, and hyphens; must start with a letter"
       },
       allow_blank: true
+    validates :locale, inclusion: {in: ->(_) { Gather::Locales.available.map(&:to_s) }}
     validate :slug_unique
 
     def initialize(action: nil, signup: nil, params: nil)
@@ -56,6 +57,8 @@ module Communities
         end
         @signup.assign_attributes(params.permit(Communities::SignupPolicy.permitted_attributes))
       end
+      # The language only becomes a choice once other languages are turned on for everyone.
+      @signup.locale = I18n.default_locale.to_s unless Gather::Locales.enabled?(nil)
     end
 
     def save

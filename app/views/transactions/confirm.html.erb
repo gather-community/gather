@@ -1,4 +1,4 @@
-<% content_for(:title, "Confirm Transaction") %>
+<% content_for(:title, t(".title")) %>
 
 <%= gather_form_for([account, transaction],
       width: :full, url: account_transactions_path(account)) do |f| %>
@@ -11,9 +11,7 @@
   <%= f.hidden_field :value  %>
 
   <p>
-    Below is how the new transaction will appear on the household's statement.
-    Transactions cannot be edited once they are created.
-    Please verify the information below is correct.
+    <%= t(".intro") %>
   </p>
 
   <table class="key-value key-value-full">

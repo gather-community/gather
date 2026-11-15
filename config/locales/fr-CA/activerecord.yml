@@ -1,0 +1,53 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+fr-CA:
+  activerecord:
+    attributes:
+      user:
+        email: "Adresse courriel" # MT
+        mobile_phone: "Cellulaire" # MT
+        paypal_email: "Courriel PayPal" # MT
+      "meals/formula":
+        takeout: "Autoriser les demandes pour emporter ?" # MT
+      "meals/signup":
+        takeout: "Demander pour emporter" # MT
+      "gdrive/migration/operation":
+        contact_email: "Courriel du contact" # MT
+      "people/emergency_contact":
+        email: "Courriel" # MT
+      "work/job":
+        double_signups_allowed: "La même personne peut s'inscrire plusieurs fois à un quart de cette tâche ?" # MT
+        hours_per_shift: "Heures par quart" # MT
+        shifts: "Quarts" # MT
+    errors:
+      models:
+        "gdrive/config":
+          attributes:
+            org_user_id:
+              invalid: "Doit être une adresse courriel" # MT
+        "gdrive/migration/operation":
+          attributes:
+            contact_email:
+              invalid: "Doit être une adresse courriel" # MT
+        "work/job":
+          attributes:
+            shifts:
+              more_than_one_shift_for_full_single: "Vous ne pouvez ajouter qu'un quart pour les tâches à quart unique." # MT
+              more_than_one_shift_for_full_period: "Vous ne pouvez ajouter qu'un quart pour les tâches couvrant toute la période." # MT
+              duplicate_start_end_times: "Plusieurs quarts ne peuvent pas avoir les mêmes heures de début et de fin." # MT
+              different_length_shifts: "Tous les quarts doivent avoir la même durée." # MT
+        "work/shift":
+          attributes:
+            starts_at:
+              elapsed_doesnt_equal_job: "Le quart doit durer %{hours} heures" # MT
+              elapsed_doesnt_evenly_divide_job: "La durée du quart doit être égale à %{hours} heures ou en être un diviseur exact" # MT

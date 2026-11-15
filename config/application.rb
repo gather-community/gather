@@ -32,7 +32,7 @@ module Gather
     config.autoload_paths += extra_paths
     config.eager_load_paths += extra_paths
 
-    config.autoload_lib(ignore: %w[assets tasks])
+    config.autoload_lib(ignore: %w[assets rubocop tasks])
 
     config.add_autoload_paths_to_load_path = false
 
@@ -83,7 +83,10 @@ module Gather
         authentication: Settings.smtp.authentication.presence&.to_sym,
         user_name: Settings.smtp.user_name.presence,
         password: Settings.smtp.password.presence,
-        enable_starttls_auto: Settings.smtp.enable_starttls_auto
+        enable_starttls_auto: Settings.smtp.enable_starttls_auto,
+        # The mail gem defaults are 5s, which our provider sometimes exceeds when greeting.
+        open_timeout: 10,
+        read_timeout: 30
       }
     end
 
@@ -105,9 +108,16 @@ module Gather
     # Allow enough time for folks to fill in and submit forms with attachments.
     config.active_storage.service_urls_expire_in = 15.minutes
 
-    config.cache_store = :redis_cache_store, {url: Settings.redis.url}
+    # Production Redis predates 6.0, which added the RESP3 protocol that redis-rb 6 uses by default.
+    config.cache_store = :redis_cache_store, {url: Settings.redis.url, protocol: 2}
 
-    # Currently, fr is only available for testing purposes.
-    I18n.available_locales = %i[en fr]
+    # Locales Gather is being translated into. Only en is shown to users for now.
+    # rails-i18n and devise-i18n load data only for these locales.
+    config.i18n.available_locales = %i[en fr fr-CA es de sv nb fi nl it]
+    config.i18n.default_locale = :en
+    # Canadian French only overrides French where Québec usage differs, so it reads the rest from fr.
+    # Production also falls back to English (see production.rb); development and test don't, so that a
+    # missing translation raises.
+    config.i18n.fallbacks = {"fr-CA": :fr}
   end
 end

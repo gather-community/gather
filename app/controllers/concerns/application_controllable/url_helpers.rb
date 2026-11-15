@@ -34,7 +34,7 @@ module ApplicationControllable
       respond_to do |format|
         code = Rack::Utils::SYMBOL_TO_STATUS_CODE[status]&.to_s
         raise "Invalid status #{status}" unless code
-        format.html { render(file: Rails.root.join("public", "#{code}.html"), layout: false, status: status) }
+        format.html { render(file: error_page_file(code), layout: false, status: status) }
         format.any { head(status) }
       end
     end

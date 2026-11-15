@@ -35,8 +35,7 @@ module GDrive
             operation_id: @operation.id,
             google_emails: google_emails
           )
-          flash[:success] = "Requests will be sent momentarily. "\
-            "If owner has an existing request, a new one won't be sent."
+          flash[:success] = t("gdrive.migration.requests_sending")
           redirect_to(gdrive_migration_dashboard_owners_path)
         end
 

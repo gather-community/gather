@@ -1,7 +1,7 @@
-<% content_for(:title, "#{@community.name} File Reorganization") %>
+<% content_for(:title, t("gdrive.migration.request.title", community: @community.name)) %>
 
 <div class="simple">
-  <h2>Introduction</h2>
+  <h2><%= t(".introduction") %></h2>
   <%= render("what_is_this") %>
-  <%= link_to("Yes, I am ready to help!", gdrive_migration_request_step1_path, class: "btn btn-primary") %>
+  <%= link_to(t(".ready"), gdrive_migration_request_step1_path, class: "btn btn-primary") %>
 </div>

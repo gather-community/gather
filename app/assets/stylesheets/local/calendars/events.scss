@@ -21,6 +21,22 @@
     margin-bottom: 0;
   }
 
+  // The interval box with its unit ("weeks") beside it.
+  .repeat-interval {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    input {
+      width: 6em;
+    }
+  }
+
+  // Field labels here have no top padding, so Bootstrap's would put the boxes below the "On" label.
+  .calendars_event_repeat_weekdays .checkbox-inline {
+    padding-top: 0;
+  }
+
   #guidelines {
     height: 200px;
     background-color: #eee;

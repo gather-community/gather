@@ -1,0 +1,36 @@
+.admin--domains {
+  // In these dense tables the chip's vertical padding stacks on every line, so keep chips
+  // text-height here; the global chip style stays as-is in prose contexts like the wiki.
+  code {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  // A long record (e.g. an SPF string) wraps inside one continuous chip rather than breaking
+  // into what looks like separate records on each wrapped line.
+  table.key-value code {
+    display: inline-block;
+    word-break: break-word;
+  }
+
+  ul.spf-lookups {
+    margin: 2px 0 0;
+    padding-left: 18px;
+
+    ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+  }
+
+  td.validation .validation-record {
+    margin-right: 12px;
+    white-space: nowrap;
+  }
+
+  // Highlight rows whose records are all correct. Bootstrap's tr.success only applies to .table,
+  // not our table.index.
+  table.index tr.success td {
+    background-color: #dff0d8; // Bootstrap 3 $state-success-bg
+  }
+}

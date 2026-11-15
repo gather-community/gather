@@ -19,6 +19,7 @@
 #  current_sign_in_ip     :inet
 #  custom_data            :jsonb            not null
 #  deactivated_at         :datetime
+#  deleted_placeholder    :boolean          default(FALSE), not null
 #  doctor                 :string
 #  email                  :string(255)
 #  encrypted_password     :string           default(""), not null
@@ -33,8 +34,10 @@
 #  last_name              :string           not null
 #  last_sign_in_at        :datetime
 #  last_sign_in_ip        :inet
+#  locale                 :string(10)       not null
 #  medical                :text
 #  mobile_phone           :string
+#  notification_prefs     :jsonb            not null
 #  paypal_email           :string(255)
 #  preferred_contact      :string
 #  privacy_settings       :jsonb            not null
@@ -82,6 +85,7 @@ class User < ApplicationRecord
   include Deactivatable
   include SemicolonDisallowable
   include CustomFields
+  include UserSearchConfig
 
   ROLES = %i[super_admin cluster_admin admin biller photographer calendar_coordinator
     meals_coordinator wikiist work_coordinator new_community_approver].freeze
@@ -116,8 +120,15 @@ class User < ApplicationRecord
   has_many :down_guardianships, class_name: "People::Guardianship", foreign_key: :guardian_id,
     dependent: :destroy, inverse_of: :guardian
   has_many :guardians, through: :up_guardianships
-  has_one :memorial, class_name: "People::Memorial", inverse_of: :user, dependent: :destroy
-  has_many :memorial_messages, class_name: "People::MemorialMessage", foreign_key: :author_id, inverse_of: :author, dependent: :destroy
+  # A memorial outlives the account: if someone has one they have died, and the memorial is
+  # community history. It copies the name/community/photo it displays, so nullifying is safe.
+  has_one :memorial, class_name: "People::Memorial", inverse_of: :user, dependent: :nullify
+  # Messages are community history too, and People::UserDeletion reassigns them to the Deleted
+  # Member placeholder before destroying the user — so in that path this cascade finds nothing.
+  # It stays :destroy as the backstop for a raw user.destroy, notably the community teardown
+  # (community → households → users), where the messages should go away with everything else.
+  has_many :memorial_messages, class_name: "People::MemorialMessage", foreign_key: :author_id,
+    inverse_of: :author, dependent: :destroy
   has_many :children, through: :down_guardianships
 
   # Calendar events may be in a different community's calendar (cross-community within a cluster).
@@ -145,6 +156,8 @@ class User < ApplicationRecord
   has_many :work_shares, class_name: "Work::Share", inverse_of: :user, dependent: :destroy
 
   scope :real, -> { where(fake: false) }
+  # Excludes the per-community "Deleted Member" placeholder that anonymized records point to.
+  scope :non_placeholder, -> { where(deleted_placeholder: false) }
   scope :all_in_community_or_adult_in_cluster, lambda { |c|
     joins(household: :community)
       .where("communities.id = ? OR users.child = 'f'", c.id)
@@ -157,16 +170,19 @@ class User < ApplicationRecord
   scope :by_name_adults_first, -> { order(arel_table[:child].eq(true)).by_name }
   scope :inactive_last, -> { order(arel_table[:deactivated_at].not_eq(nil)) }
   scope :including_communities, -> { includes(household: :community) }
-  scope :by_community_and_name, -> { including_communities.order("communities.name").by_name }
+  scope :by_community_and_name, -> { including_communities.alpha_order(communities: :name).by_name }
   scope :by_birthday, lambda {
     order(Arel.sql(%i[month day year].map { |d| "EXTRACT(#{d} FROM birthdate)" }.join(", ")))
   }
   scope :active_or_assigned_to, lambda { |meal|
     where(arel_table[:deactivated_at].eq(nil).or(arel_table[:id].in(meal.assignments.map(&:user_id))))
   }
+  # Matches the start of each word of the name (see ApplicationRecord.matching_word_starts), or an exact
+  # unit number, with or without its suffix.
   scope :matching, lambda { |q|
-    joins(:household)
-      .where("(first_name || ' ' || last_name) ILIKE ?", "%#{q}%")
+    by_name = joins(:household).matching_word_starts("users.first_name || ' ' || users.last_name", q)
+    q = sanitize_sql_like(q.to_s.strip) # The unit number matches are exact, so % and _ are literal.
+    by_name
       .or( # Exact unit num without suffix
         joins(:household)
           .where("unit_num::varchar ILIKE ?", q)
@@ -210,7 +226,7 @@ class User < ApplicationRecord
   delegate :country_code, to: :community, allow_nil: true
 
   normalize_attributes :email, :google_email, :paypal_email, with: :email
-  normalize_attributes :first_name, :last_name, :preferred_contact
+  normalize_attributes :first_name, :last_name, :preferred_contact, :locale
 
   handle_phone_types :mobile, :home, :work # In order of general preference
 
@@ -221,10 +237,13 @@ class User < ApplicationRecord
   validates :google_email, format: Devise.email_regexp, uniqueness: true,
     unless: ->(u) { u.google_email.blank? }
   validates :first_name, presence: true
+  # The language for this person's email and calendar feeds. See Gather::Locales.for_user.
+  validates :locale, inclusion: {in: ->(_) { Gather::Locales.available.map(&:to_s) }}
   validates :last_name, presence: true
   validates :up_guardianships, presence: true, if: :child?
   validates :password, presence: true, if: :password_required?
-  validates :password, password_strength: PASSWORD_STRENGTH_CHECKER_OPTIONS, if: :password_required_and_not_blank?
+  validates :password, password_strength: PASSWORD_STRENGTH_CHECKER_OPTIONS,
+    if: :password_required_and_not_blank?
 
   validates :password, confirmation: true
   validate :certify_13_or_older_if_full_access_child_or_child_becoming_adult
@@ -243,13 +262,15 @@ class User < ApplicationRecord
   accepts_nested_attributes_for :up_guardianships, reject_if: :all_blank, allow_destroy: true
 
   before_validation :normalize
+  # Also before_create, for the few places that save without validating.
+  before_validation :assign_default_locale, on: :create
+  before_create :assign_default_locale
 
   # This is needed for remembering users across sessions because users don't always have passwords.
   before_create { self.remember_token ||= UniqueTokenGenerator.generate(self.class, :remember_token) }
   before_save { raise People::AdultWithGuardianError if adult? && guardians.present? }
+  after_validation :log_errors, if: proc { |m| m.errors }
   before_save :unconfirm_if_no_email
-
-  after_validation :log_errors, if: Proc.new { |m| m.errors }
 
   def log_errors
     Rails.logger.debug("USER-VALIDATION-ERRORS-LINE", errors: errors.full_messages.join(";"))
@@ -300,7 +321,8 @@ class User < ApplicationRecord
   end
 
   def name
-    "#{first_name} #{last_name}#{active? ? nil : " (Inactive)"}"
+    full = "#{first_name} #{last_name}"
+    active? ? full : I18n.t("common.with_inactive", name: full)
   end
 
   def life_stage
@@ -332,6 +354,28 @@ class User < ApplicationRecord
 
   def meal_restrictions
     Meals::Restriction.where(id: meal_restriction_ids)
+  end
+
+  # Whether this user wants the given kind of notification over the given channel.
+  # Required and internal kinds are always on. notification_prefs only stores overrides of the default (on).
+  def notification_enabled?(kind_key, channel: :email)
+    kind = Notifications::Catalog.find(kind_key)
+    return true unless kind.configurable?
+    notification_prefs.dig(kind.key.to_s, channel.to_s) != false
+  end
+
+  # Sets prefs for the given kind and channel, storing only values that differ from the default.
+  def set_notification_pref(kind_key, enabled, channel: :email)
+    kind = Notifications::Catalog.find(kind_key)
+    raise ArgumentError, "#{kind.key} is not configurable" unless kind.configurable?
+    prefs = notification_prefs.deep_dup
+    if enabled
+      prefs[kind.key.to_s]&.delete(channel.to_s)
+      prefs.delete(kind.key.to_s) if prefs[kind.key.to_s].blank?
+    else
+      (prefs[kind.key.to_s] ||= {})[channel.to_s] = false
+    end
+    self.notification_prefs = prefs
   end
 
   def activate
@@ -411,6 +455,11 @@ class User < ApplicationRecord
   end
 
   private
+
+  # New people start with their community's default language and can change it on their profile.
+  def assign_default_locale
+    self.locale ||= Gather::Locales.community_default(household&.community).to_s
+  end
 
   def normalize
     unless child?

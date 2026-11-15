@@ -88,6 +88,16 @@ describe Meals::Assignment do
           let(:role) { create(:meal_role, title: "Foo") }
           it { is_expected.to have_errors(user_id: /Role 'Foo' does not match the selected formula/) }
         end
+
+        context "when the meal has no formula yet" do
+          let(:meal) { build(:meal, formula: nil, head_cook: false) }
+          let(:role) { formula.head_cook_role }
+
+          it "leaves the missing formula to the meal's validation" do
+            expect(assignment).to be_valid
+            expect(meal).to have_errors(formula_id: /can't be blank/)
+          end
+        end
       end
 
       context "on update" do

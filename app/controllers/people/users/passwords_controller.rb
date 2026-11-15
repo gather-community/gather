@@ -6,7 +6,10 @@ module People
     class PasswordsController < Devise::PasswordsController
       def create
         super do |user|
-          AuthMailer.cant_reset_password(user).deliver_later unless user.full_access?
+          next if user.full_access?
+          # This page is on the apex domain, so no tenant is set, and the mail job needs one to load
+          # the user when it runs.
+          ActsAsTenant.with_tenant(user.cluster) { AuthMailer.cant_reset_password(user).deliver_later }
         end
       end
 

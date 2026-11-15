@@ -1,0 +1,45 @@
+en:
+  notifications:
+    preferences:
+      updated: "Your notification preferences have been saved."
+      sections:
+        account: "Account"
+        meals: "Meals"
+        work: "Work"
+        billing: "Billing"
+        community: "Community"
+      kinds:
+        meal_reminder: "Reminders for meals my household signed up for"
+        meal_role_reminder: "Reminders for my meal shifts"
+        cook_menu_reminder: "Head cook reminders to post the menu"
+        meal_worker_change: "Changes to a meal team I'm on"
+        job_reminder: "Reminders for my jobs"
+        job_choosing_notice: "Notices that job choosing is open"
+        statement_reminder: "Reminders when a payment is due"
+        account_access: "Password resets, email confirmations, and sign-in invitations"
+        meal_message: "Messages and cancellation notices from a meal team"
+        statement_notice: "Account statements"
+        gdrive_migration_request: "Requests to help move my community's Google Drive files"
+        community_inactivity: "Warnings that my community may be deleted for inactivity"
+      show:
+        title: "Notifications"
+        intro: "Choose which emails Gather sends you about things you're involved in. Grayed-out ones are essential and can't be opted out of."
+        essential: "Essential and can't be opted out of"
+        email_lists: "Email Lists"
+        email_lists_hint: "You're on these lists through your groups. To stop getting a list's email, opt out of or leave the group on its page."
+        view: "View"
+        no_email_lists: "You're not on any email lists."
+    unsubscribes:
+      manage_html: "You can choose which emails you get on your %{link} page. You'll need to sign in."
+      manage_link: "Notifications"
+      show:
+        title: "Unsubscribe"
+        confirm: "Stop sending “%{kind}” emails to %{email}?"
+        already_off: "“%{kind}” emails to %{email} are already turned off."
+        turn_off: "Unsubscribe"
+      create:
+        title: "Unsubscribed"
+        done: "We won't send “%{kind}” emails to %{email} any more."
+      invalid:
+        title: "Unsubscribe"
+        explanation: "This unsubscribe link isn't valid. It may be from an old email, or it was copied incompletely."

@@ -9,12 +9,18 @@ class ApplicationDecorator < Draper::Decorator
     PaginatingDecorator
   end
 
+  # Names are prefixed with their community's abbreviation in multi-community clusters, e.g. "TA: Smith".
+  # The abbreviation is optional, and without one there's no prefix.
   def cmty_prefix
-    @cmty_prefix ||= multi_community? ? "#{community.abbrv}: " : ""
+    @cmty_prefix ||= show_cmty_prefix? ? "#{community.abbrv}: " : ""
   end
 
   def cmty_prefix_no_colon
-    @cmty_prefix_no_colon ||= multi_community? ? "#{community.abbrv} " : ""
+    @cmty_prefix_no_colon ||= show_cmty_prefix? ? "#{community.abbrv} " : ""
+  end
+
+  def show_cmty_prefix?
+    multi_community? && community.abbrv.present?
   end
 
   # Returns a Proc that inserts the given separator, to be passed to array.reduce.

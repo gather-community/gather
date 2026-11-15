@@ -7,9 +7,15 @@ module Utils
     class MainGenerator < Generator
       include ActiveModel::Model
 
-      attr_accessor :cmty_name, :slug, :sample_data, :photos, :cluster, :community, :generators, :country_code
+      # `locale` is the community's language (see Gather::Locales.community_default). The starter content
+      # every community gets (calendars, meal roles and so on) and the optional sample data are created in it.
+      attr_accessor :cmty_name, :slug, :sample_data, :photos, :cluster, :community, :generators,
+        :country_code, :locale
 
       def generate
+        # This setting is global to the process, so it must be restored even if generation fails.
+        # Otherwise a failure leaves the whole background worker unable to send mail.
+        deliveries_were = ActionMailer::Base.perform_deliveries
         ActionMailer::Base.perform_deliveries = false
         self.cluster = Cluster.create!(name: cmty_name)
         # ActsAsTenant has to be outside the transaction because some callbacks run after_commit.
@@ -18,11 +24,14 @@ module Utils
           ActiveRecord::Base.transaction do
             attribs = {name: cmty_name, slug: slug}
             attribs[:country_code] = country_code if country_code.present?
-            self.community = Community.create!(attribs)
+            self.community = Community.new(attribs)
+            # Set before anything else is generated, so sample members start in it
+            # (User#assign_default_locale).
+            community.settings.locale = locale.to_s if locale.present?
+            community.save!
             in_community_timezone { generate_data_and_handle_errors }
           end
         end
-        ActionMailer::Base.perform_deliveries = true
         cluster
       rescue StandardError => ex
         Rails.logger.error("Error generating cluster: #{ex.message}")
@@ -34,6 +43,8 @@ module Utils
           cluster&.destroy
         end
         raise ex
+      ensure
+        ActionMailer::Base.perform_deliveries = deliveries_were
       end
 
       private
@@ -41,8 +52,10 @@ module Utils
       def generate_data_and_handle_errors
         build_generators
 
-        generators.each_value(&:generate_seed_data)
-        generators.each_value(&:generate_samples) if sample_data
+        I18n.with_locale(Gather::Locales.community_default(community)) do
+          generators.each_value(&:generate_seed_data)
+          generators.each_value(&:generate_samples) if sample_data
+        end
       rescue StandardError => e
         generators.each_value(&:cleanup_on_error)
         raise e
@@ -57,7 +70,8 @@ module Utils
           community: community, calendar_map: generators[:calendars].calendar_map
         )
         generators[:statements] = StatementGenerator.new(community: community)
-        generators[:meals] = MealGenerator.new(community: community, statement_gen: generators[:statements])
+        generators[:meals] = MealGenerator.new(community: community, statement_gen: generators[:statements],
+          calendar_map: generators[:calendars].calendar_map)
         generators[:restrictions] = RestrictionGenerator.new(community: community)
         generators[:work] = WorkGenerator.new(community: community)
       end

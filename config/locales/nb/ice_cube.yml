@@ -1,0 +1,101 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+# Descriptions of repeating events. The ice_cube gem ships no Norwegian, so these mirror its en.yml.
+nb:
+  ice_cube:
+    pieces_connector: " / "
+    not: "ikke %{target}" # MT
+    not_on: "ikke på %{target}" # MT
+    date:
+      formats:
+        default: "%-d. %B %Y"
+    times:
+      other: "%{count} ganger" # MT
+      one: "%{count} gang" # MT
+    until: "til %{date}" # MT
+    days_of_week: "%{segments} %{day}"
+    days_of_month:
+      other: "%{segments} dag i måneden" # MT
+      one: "%{segments} dag i måneden" # MT
+    days_of_year:
+      other: "%{segments} dag i året" # MT
+      one: "%{segments} dag i året" # MT
+    at_hours_of_the_day:
+      other: "i %{segments} time av døgnet" # MT
+      one: "i %{segments} time av døgnet" # MT
+    on_minutes_of_hour:
+      other: "i %{segments} minutt av timen" # MT
+      one: "i %{segments} minutt av timen" # MT
+    at_seconds_of_minute:
+      other: "ved %{segments} sekund" # MT
+      one: "ved %{segments} sekund" # MT
+    on_seconds_of_minute:
+      other: "på %{segments} sekund av minuttet" # MT
+      one: "på %{segments} sekund av minuttet" # MT
+    each_second:
+      one: "Hvert sekund" # MT
+      other: "Hvert %{count}. sekund" # MT
+    each_minute:
+      one: "Hvert minutt" # MT
+      other: "Hvert %{count}. minutt" # MT
+    each_hour:
+      one: "Hver time" # MT
+      other: "Hver %{count}. time" # MT
+    each_day:
+      one: "Daglig" # MT
+      other: "Hver %{count}. dag" # MT
+    each_week:
+      one: "Ukentlig" # MT
+      other: "Hver %{count}. uke" # MT
+    each_month:
+      one: "Månedlig" # MT
+      other: "Hver %{count}. måned" # MT
+    each_year:
+      one: "Årlig" # MT
+      other: "Hvert %{count}. år" # MT
+    "on": "den %{sentence}" # MT
+    in: "i %{target}" # MT
+    integer:
+      negative: "%{ordinal} fra slutten" # MT
+      literal_ordinals:
+        -1: "siste" # MT
+        -2: "nest siste" # MT
+      ordinal: "%{number}%{ordinal}"
+      ordinals:
+        default: "."
+    on_weekends: "i helgene" # MT
+    on_weekdays: "på hverdager" # MT
+    days_on:
+      - "søndager" # MT
+      - "mandager" # MT
+      - "tirsdager" # MT
+      - "onsdager" # MT
+      - "torsdager" # MT
+      - "fredager" # MT
+      - "lørdager" # MT
+    on_days: "på %{days}" # MT
+    array:
+      last_word_connector: " og " # MT
+      two_words_connector: " og " # MT
+      words_connector: ", "
+    string:
+      format:
+        day: "%{rest} %{current}"
+        day_of_week: "%{rest} %{current}"
+        day_of_month: "%{rest} %{current}"
+        day_of_year: "%{rest} %{current}"
+        hour_of_day: "%{rest} %{current}"
+        minute_of_hour: "%{rest} %{current}"
+        until: "%{rest} %{current}"
+        count: "%{rest} %{current}"
+        default: "%{rest} %{current}"

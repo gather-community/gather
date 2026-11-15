@@ -1,10 +1,10 @@
 <tr>
-  <td>Unit</td>
-  <td><%= household.unit_num.nil? ? "[None]" : "##{household.unit_num_and_suffix}" %></td>
+  <td><%= t(".unit") %></td>
+  <td><%= household.unit_num.nil? ? t("common.none_bracketed") : t("households.number", number: household.unit_num_and_suffix) %></td>
 </tr>
 <% if multi_community? %>
   <tr>
-    <td>Community</td>
+    <td><%= t(".community") %></td>
     <td><%= household.community_name %></td>
   </tr>
 <% end %>

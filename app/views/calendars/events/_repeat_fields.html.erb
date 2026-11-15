@@ -1,0 +1,72 @@
+<%# Repeat settings for the event form. See Calendars::EventForm and Calendars::RecurrencePattern. Each
+    detail field's data-repeat-show names when it applies (EventForm#repeat_detail_applies?), and the
+    calendars--event-form controller shows only those as the settings change. %>
+<% unless event.meal? %>
+  <%# Notes go in form rows (f.input with a block) so they line up with the fields. %>
+  <% if @form.series_edit? && !@form.pattern_editable? %>
+    <%= f.input :repeat_frequency do %>
+      <p class="hint">
+        <%= t(".pattern_fixed",
+          description: Calendars::EventletDecorator.new(@form.primary_eventlet).recurrence_description) %>
+      </p>
+    <% end %>
+  <% elsif @form.repeat_settings_editable? %>
+    <% frequencies = Calendars::RecurrencePattern::FREQUENCIES.map(&:to_sym) %>
+    <% frequencies = [:none] + frequencies unless @form.series_edit? %>
+    <% units = Calendars::RecurrencePattern::FREQUENCIES.index_with do |freq|
+         {one: t(".repeat_units.#{freq}", count: 1), other: t(".repeat_units.#{freq}", count: 2)}
+       end %>
+    <% target = "calendars--event-form-target" %>
+    <% action = "calendars--event-form#repeatChanged" %>
+    <% detail = ->(show) { {style: (@form.repeat_detail_applies?(show) ? nil : "display: none"),
+                            data: {target => "repeatDetail", repeat_show: show}} } %>
+    <%= f.input :repeat_frequency, collection: frequencies, include_blank: false,
+      selected: (@form.repeat_frequency.presence || :none).to_sym,
+      input_html: {data: {target => "repeatFrequency", action: action}} %>
+    <%= f.input :repeat_interval, wrapper_html: detail.call("repeats") do %>
+      <div class="repeat-interval">
+        <%= f.input_field :repeat_interval, as: :integer, class: "form-control",
+          min: 1, max: Calendars::RecurrencePattern::MAX_INTERVAL,
+          data: {target => "repeatInterval", action: "input->#{action}", units: units.to_json} %>
+        <span data-<%= target %>="repeatUnit">
+          <%# Only a known frequency, as a submitted one may be anything. %>
+          <% if Calendars::RecurrencePattern::FREQUENCIES.include?(@form.repeat_frequency) %>
+            <%= t(".repeat_units.#{@form.repeat_frequency}", count: @form.repeat_interval) %>
+          <% end %>
+        </span>
+      </div>
+    <% end %>
+    <%# The start's weekday is ticked and can't be unticked; the controller moves it with the start.
+        A disabled box isn't sent, so the server always adds the start's day (EventForm#normalize). %>
+    <%= f.input :repeat_weekdays,
+      wrapper_html: detail.call("weekly").deep_merge(data: {locked_title: t(".start_weekday")}) do %>
+      <%= hidden_field_tag("calendars_event[repeat_weekdays][]", "") %>
+      <% start_wday = @form.starts_at&.wday %>
+      <% (0..6).each do |wday| %>
+        <% locked = wday == start_wday %>
+        <%# Bootstrap greys out a .disabled label. %>
+        <%= tag.label(class: ["checkbox-inline", ("disabled" if locked)], title: (t(".start_weekday") if locked)) do %>
+          <%= check_box_tag("calendars_event[repeat_weekdays][]", wday, @form.repeat_weekdays_shown.include?(wday),
+            id: "calendars_event_repeat_weekdays_#{wday}", disabled: locked,
+            data: {target => "repeatWeekday"}) %>
+          <%= t("date.abbr_day_names")[wday] %>
+        <% end %>
+      <% end %>
+    <% end %>
+    <%= render("repeat_monthly_by", f: f) %>
+    <%= f.input :repeat_ends, collection: Calendars::RecurrencePattern::ENDS.map(&:to_sym),
+      include_blank: false, selected: @form.repeat_ends&.to_sym,
+      input_html: {data: {target => "repeatEnds", action: action}},
+      wrapper_html: detail.call("repeats") %>
+    <%= f.input :repeat_ends_on, as: :date_picker, wrapper_html: detail.call("on_date") %>
+    <%= f.input :repeat_count, as: :integer, input_html: {min: 2, max: Calendars::RecurrencePattern::MAX_COUNT},
+      wrapper_html: detail.call("after_count") %>
+  <% elsif @form.recurrence_blockers.any? %>
+    <%= f.input :repeat_frequency do %>
+      <p class="hint">
+        <%= t(".recurrence_unavailable",
+          reasons: @form.recurrence_blockers.map { |b| t(".recurrence_blockers.#{b}") }.to_sentence) %>
+      </p>
+    <% end %>
+  <% end %>
+<% end %>

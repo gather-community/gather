@@ -15,7 +15,7 @@ describe "restrictions settings", js: true do
 
     click_button("Save")
 
-    expect(page).to have_content("Please review the problems below:")
+    expect(page).to have_content(/errors? on the form below/)
 
     within("#nested-field-table-rows tr:nth-child(1)") do
       find("input[aria-label=Restriction]").set("gluten")

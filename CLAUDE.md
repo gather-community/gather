@@ -54,28 +54,60 @@ bin/rails db:setup       # Create + seed
 CH.tenant(1)  # Must set tenant before querying
 ```
 
+### Writing Plans
+
+Plan files are written to `~/.claude/plans/`, which is outside the VSCode workspace — so they never
+show up in the Explorer and their workspace-relative markdown links don't resolve. Always do both of
+these after writing a plan:
+
+1. Copy it into `tmp/` with a descriptive name (`tmp/` is gitignored, so it stays out of the tree):
+
+```bash
+cp ~/.claude/plans/<generated-name>.md tmp/<descriptive-name>-plan.md
+```
+
+2. Open that copy in the editor — the `code` CLI is on PATH in the devcontainer:
+
+```bash
+code tmp/<descriptive-name>-plan.md
+```
+
+Reference code from plans with workspace-relative markdown links (`[event.rb:183](app/models/calendars/event.rb#L183)`)
+so they're clickable from the `tmp/` copy.
+
 ### Taking Screenshots
+
+This section covers how to take screenshots. For when you must take them (any UI change, by default), see [Screenshotting UI Changes](#screenshotting-ui-changes).
 
 The dev server must be running first (`bin/dev` won't stay up in the background because foreman's esbuild watcher requires stdin). Start just the web server and build JS assets separately:
 
 ```bash
 yarn build                          # One-off JS build (no watch)
-bundle exec thin start --ssl --ssl-key-file config/ssl/gatherdev.org.key \
-  --ssl-cert-file config/ssl/gatherdev.org.crt &   # Rails on https://foo.gatherdev.org:3000
+PORT="$(yq -r '.url.port // 3000' config/settings.local.yml)"
+bundle exec thin start -p "$PORT" --ssl --ssl-key-file config/ssl/gatherdev.org.key \
+  --ssl-cert-file config/ssl/gatherdev.org.crt &   # Rails on https://foo.gatherdev.org:$PORT
 ```
 
-Screenshots use the Selenium container (`gather-selenium`) via a Ruby script with `selenium-webdriver`. The container shares `vibrant_borg`'s network namespace; reach it from this container at `172.18.0.3:4444`. The app is at `172.18.0.2`. Use `--host-resolver-rules` to make Chrome resolve both apex and wildcard subdomains to `172.18.0.2`.
+The port is `url.port` in `config/settings.local.yml` (3000 if unset). Each dev env on the machine has its own, and the app builds its URLs from it, so always use that port — never assume 3000.
+
+**Run only one dev server per dev env.** Before starting one, check whether a server is already running on that port (`pgrep -af thin`). If one is, use it. Don't start a second server on another port, and don't start one from a git worktree. A worktree has no `storage/` directory, because `storage/` is gitignored. It shares the database, though, so pages render normally while every photo and attachment fails with `ActiveStorage::FileNotFoundError`. That looks like broken images, and it confuses whoever is browsing the app. If you need to see a branch in the browser, check it out in the main checkout and use the existing server.
+
+Screenshots use the same Selenium container as the system specs (see [Headless Chrome for System Tests](#headless-chrome-for-system-tests)), driven by a Ruby script with `selenium-webdriver`. That container shares the devcontainer's network namespace, so it's at `localhost:4444` (the `SELENIUM_REMOTE_URL` env var), and the app's dev server is at `127.0.0.1` from Chrome's point of view. Use `--host-resolver-rules` to make Chrome resolve both apex and wildcard subdomains to `127.0.0.1`.
 
 ```ruby
 # tmp/screenshot.rb — adapt as needed
 require 'selenium-webdriver'
+require 'yaml'
 
-SELENIUM_URL  = 'http://172.18.0.3:4444'
-APP_IP        = '172.18.0.2'
-APEX_URL      = 'https://gatherdev.org:3000'
-COMMUNITY_URL = 'https://foo.gatherdev.org:3000'  # adjust community slug
-EMAIL         = 'user@example.com'                 # set a known password first (see below)
-PASSWORD      = 'testtest1'
+SELENIUM_URL  = ENV.fetch('SELENIUM_REMOTE_URL', 'http://localhost:4444')
+APP_IP        = '127.0.0.1'
+PORT          = 3000                               # url.port from config/settings.local.yml
+APEX_URL      = "https://gatherdev.org:#{PORT}"
+COMMUNITY_URL = "https://foo.gatherdev.org:#{PORT}" # adjust community slug
+# Sign in as the user's own dev account (see "Sign-in credentials" below).
+DEV_USER      = YAML.safe_load(File.read('config/settings.local.yml')).fetch('dev_user')
+EMAIL         = DEV_USER.fetch('email')
+PASSWORD      = DEV_USER.fetch('password')
 
 options = Selenium::WebDriver::Chrome::Options.new
 options.add_argument('--ignore-certificate-errors')
@@ -109,7 +141,24 @@ ensure
 end
 ```
 
-To set a known password for any user before running the script:
+#### Sign-in credentials for scripts
+
+Scripts that drive the app sign in with the credentials stored in `config/settings.local.yml`
+under `dev_user` (documented in `config/templates/settings.local.yml`):
+
+```yaml
+dev_user:
+  email: someone@example.com
+  password: "..."
+```
+
+This is the user's own dev account, usually a super admin. **Never overwrite this account's
+password** — that locks the user out of their own dev environment. If `dev_user` is missing from
+the local config, ask the user for their credentials and add the entry; don't reset their
+password to work around it.
+
+When a screenshot needs a different role (a regular member, a biller, etc.), pick a
+**sample-data user** — never the `dev_user` account — and set a known password on it:
 
 ```ruby
 # bundle exec rails runner this snippet
@@ -121,6 +170,45 @@ u.save!(validate: false)
 ```
 
 Run the script with `bundle exec ruby tmp/screenshot.rb`. Output PNGs go in `tmp/` (gitignored).
+
+### Adding Screenshots to a PR
+
+GitHub's drag-and-drop uploads go to its `user-attachments` CDN through a browser-only, session-authenticated endpoint — there is **no public API for it**, so screenshots can't be attached that way from here. Don't ask the user to drag files in; use this instead (the repo is public, so raw URLs render):
+
+1. Crop the dead space off the full-page screenshot — `vips` is installed:
+
+```bash
+vipsheader -f width tmp/shot.png                        # usually 1272, not 1280: the scrollbar takes 8px
+vips crop tmp/shot.png tmp/pr_shot.png 0 0 1272 680   # args: x y width height
+```
+
+The crop area must fit inside the image, or `vips` fails with "bad extract area". Check the size with `vipsheader -f width` / `-f height` first.
+
+2. Commit the image and push. `tmp/` is gitignored, so force-add. Tag the message with `[skip ci]` — this commit is a throwaway that never reaches `develop`, and a full CI run on it wastes ~28 min of runner time:
+
+```bash
+git add -f tmp/pr_shot.png
+git commit -m "Add PR screenshot (temporary) [skip ci]"
+git push
+```
+
+3. Embed it in the PR body using a **SHA-pinned** raw URL with that commit's SHA:
+
+```
+https://raw.githubusercontent.com/gather-community/gather/<SHA>/tmp/pr_shot.png
+```
+
+4. Delete the image in a follow-up commit and push, also with `[skip ci]`:
+
+```bash
+git rm --cached tmp/pr_shot.png
+git commit -m "Remove PR screenshots from the tree [skip ci]"
+git push
+```
+
+The URL keeps rendering after the delete because the blob still exists at the pinned SHA, so the PR shows the images while the merged tree stays clean — only the blobs remain in history (a few hundred KB). **Pin to the SHA, not a branch name**; a branch-based URL breaks the moment the file is deleted.
+
+Both commits change no application code, so skipping CI on them is safe — the last code commit's green run still certifies the code. If you forget `[skip ci]` and a needless run starts, you can't stop it yourself: `gh run cancel` returns `HTTP 403: Resource not accessible by integration`. **Ask the user to cancel it from the GitHub Actions UI.**
 
 ## Architecture
 
@@ -167,6 +255,20 @@ Module namespaces are defined in files like `app/models/meals.rb` which set `tab
 
 **Custom Fields:** JSONB-backed extensible fields defined declaratively on models. Community settings are implemented this way.
 
+**Feature Flags:** Unshipped features are gated by the `FeatureFlag` model (not tenant-scoped; rows are created/toggled manually, e.g. in the console). Call it **directly** from controllers and templates — don't wrap it in a helper:
+
+```ruby
+FeatureFlag.lookup("messaging").on?(current_user)
+```
+
+- Use `lookup(name)`, not `find_by(name:)` — it returns an unsaved, default-**off** flag when the row doesn't exist, so a feature is off everywhere until you explicitly turn it on (and there's no nil to guard).
+- **Always pass `current_user`.** With the default `interface: "basic"` the flag is a global on/off and the user is ignored; switching a flag to `interface: "user"` makes it check per-user membership (`feature_flag_users`), which lets you enable a feature for just yourself in production. Passing the user means that switch needs no code change. (`on?` raises if a `"user"`-interface flag gets no user.)
+- Gate **both** the UI and the endpoints — hiding a link doesn't stop a direct request. Also skip any expensive work (e.g. external API calls) the hidden feature would trigger.
+- Don't gate inbound webhooks/background reconciliation: turning a flag off shouldn't strand data that already exists.
+- Specs that exercise a flagged feature must turn it on: `create(:feature_flag, name: "messaging", status: true)`.
+
+Existing flags: `messaging`, `gdrive`, `restrictions`, `search` (global search page), `i18n` (turns on every locale other than English, for everyone or for chosen users; see below).
+
 ### Controller Conventions
 
 - `ApplicationController` includes concerns from `ApplicationControllable::*` (RequestPreprocessing, Setters, Loaders, UrlHelpers, Users, Csv)
@@ -187,6 +289,7 @@ Module namespaces are defined in files like `app/models/meals.rb` which set `tab
   - **Show pages: use the decorator pattern.** Define `show_action_link_set` in the decorator returning an `ActionLinkSet` of `ActionLink` instances. In the view: `<% content_for(:action_links, resource.action_links(:show)) %>`. `ActionLink` checks the policy automatically (`{action}?`) unless you pass `permitted: true/false`. Pass `html: {target: "_blank"}` for extra link HTML attributes, `data: {key: val}` for Stimulus/data attributes, `btn_class: :danger` for destructive actions. Add labels under `action_labels.{model_i18n_key}.{action}` or `action_labels.common.{action}` in `en.yml`.
   - **One-off action links** (e.g. on index pages): use `concat(link_to(icon_tag("icon") << " Label", path, class: "btn btn-..."))` inside the `content_for` block, wrapped in a policy check.
 - **Key-value table style for detail displays** — use `<table class="key-value">` for showing record details on show/review pages. Variants: `key-value-narrow` (narrow value column), `key-value-wide` (wide value column), `key-value-full` (full width). First `<td>` is styled as a muted label; second `<td>` holds the value.
+- **Empty-state / prompt messages use `<div class="center-notice">`** — use this for "no items found" messages on index pages and for empty-state prompts (e.g. "Enter a search term above…"). Do not use `<p class="text-muted">` for these messages.
 - **No "Back" links on show/review pages** — do not add "Back to list" or similar navigation links; this is not a Gather convention.
 - **Controller method order** — always put `index` first, followed by `show`, `new`, `edit`, `create`, `update`, `destroy`. Custom actions can go in sensible places after the standard ones.
 - **Public controllers must guard shared template policy calls** — when a controller skips `authenticate_user!` (e.g. for a public signup page), shared templates like `_footer.html.erb` and `_nav.html.erb` still render with `current_user = nil`. Any `policy()` call in those templates must be wrapped in `if current_user`, because `ApplicationPolicy#initialize` raises `Pundit::NotAuthorizedError` when user is nil. Always guard: `<% if current_user && policy(Foo.new).action? %>`.
@@ -194,10 +297,97 @@ Module namespaces are defined in files like `app/models/meals.rb` which set `tab
 
 ### Model Conventions
 
-- `ApplicationRecord` provides `alpha_order(*args)` for case-insensitive sorting
+- `ApplicationRecord` provides `alpha_order(*args)` for sorting text the way people expect in the current locale (see Sorting under User-Facing Strings)
+- **Text search uses `matching_word_starts(sql_expression, query)`** (on `ApplicationRecord`, rules in `Gather::WordMatch`): each word of the query must start a word of the text, ignoring case, accents and punctuation. Every search box (lenses and select2 lookups) uses it, so they all behave the same. Don't write `ILIKE "%q%"` searches. To search several fields, OR separate calls (see `Meals::Meal.matching`).
 - `skip_listener_action` transient attribute suppresses Wisper listener side effects (used in factories/tests)
 - Models use `in_community(community)` scopes for community filtering
 - `active` scopes filter deactivated records
+
+### Invariants vs. Validations
+
+`ActiveModel` validations are for **user-facing input a person can correct** — they add an error object that only helps if the message is rendered on a form. They belong on the form model (see the form-model convention above), not scattered on the AR model.
+
+They are the **wrong tool for a data invariant** that no correct caller should ever violate. A validation fails *silently*: if the record is saved by a code path that doesn't surface `errors` (a background job, a sync callback, a console, another model's `autosave`), `save` just returns `false` and the violation passes unnoticed. Enforce invariants loudly instead:
+
+- **Single-row / single-column invariant** → a **DB check constraint** (add it in the migration; it holds for every writer and can never render a cryptic AR message on a form). Example: the `eventlet_*_offset_within_bounds` constraints on `calendar_eventlets`.
+- **Cross-record invariant a constraint can't express** (it depends on another row/table) → a **raising assertion** in a `before_save` (or the method that would produce the bad state), so a violation fails fast and visibly rather than returning `false`. Example: `Calendars::Eventlet#assert_start_before_end`.
+
+Reserve validations for input a user can fix, and keep the friendly message on the form.
+
+### Adding a New Model
+
+When introducing a new model, follow the established conventions:
+
+- **Namespace by feature module.** Put the model under its module namespace (e.g. `app/models/messaging/account.rb`) and add a `app/models/<module>.rb` defining `table_name_prefix` (e.g. `"messaging_"`). Only set `self.table_name = "..."` when overriding the prefix (as `Billing` does).
+- **Tenant scoping is mandatory.** Every model must declare `acts_as_tenant :cluster`, and its migration must add `cluster_id` (`null: false`, foreign key). This is enforced by the wholesome specs below.
+- **Money** is stored as an integer `amount_cents` column (newer models, e.g. `Messaging::Transaction`) or `decimal(10, 2)` (older Billing models) — match the surrounding feature.
+- **Add a factory** under `spec/factories/<module>/` and a model spec.
+- **Decorators/policies** come only when the model becomes user-facing.
+
+**Five "wholesome" specs iterate over every model — a new model must satisfy all five (or be added to the relevant allowlist):**
+
+- [spec/models/tenancy_spec.rb](spec/models/tenancy_spec.rb) — every model must have `acts_as_tenant`. Allowlist (`ALLOWLISTED_CLASSES`) only for genuinely non-tenant models.
+- [spec/models/utils/generators/main_generator_spec.rb](spec/models/utils/generators/main_generator_spec.rb) — every model must get at least one record from sample-data generation, **or** be added to `NO_SAMPLE_DATA_CLASSES` (use this for models created on demand, e.g. via a webhook).
+- [spec/models/community_deletion_spec.rb](spec/models/community_deletion_spec.rb) — every tenant model needs a factory call in the setup and must cascade to zero rows when a community is destroyed (wire `dependent: :destroy` from `Community` and/or its parent), **or** be added to `EXEMPT_MODELS`. Prefer wiring the cascade so deletion is actually tested.
+- [spec/services/people/deletion_dispositions_spec.rb](spec/services/people/deletion_dispositions_spec.rb) — every model must appear in both `USER_DISPOSITIONS` and `HOUSEHOLD_DISPOSITIONS`, declaring what happens to its rows when a user or household is permanently deleted: `:none`, `:destroy`, `:anonymize`, `:nullify`, `:retain`, or `:subject`. There is no allowlist — a new model must be classified. Models declared `:none` are checked by reflection to confirm they really have no association to the deleted record.
+- [spec/models/search_indexing_spec.rb](spec/models/search_indexing_spec.rb) — every model must either be in global search (indexed in Elasticsearch via a search config/serializer and listed in `SearchController::GATHER_MODELS`; STI subclasses of a listed model count) **or** be added to `NOT_SEARCHABLE_MODELS`. Its job is to make you decide whether the model should be searchable. It also fails on allowlisted models that are actually in global search and on stale entries. `Work::Shift` is allowlisted even though it's in Elasticsearch, because it's only searched from its own page.
+
+The dispositions map is a **declaration**, not an assertion — it does not read `People::UserDeletion`'s implementation, so it must be updated alongside that service. Its job is to make you consider deletion when adding a model. Behavior is verified in [user_deletion_spec.rb](spec/services/people/user_deletion_spec.rb) and [household_deletion_spec.rb](spec/services/people/household_deletion_spec.rb).
+
+**Watch for foreign keys with no DB constraint** (e.g. `gdrive_synced_permissions.user_id`, which is deliberately unconstrained so rows outlive the user — see below). A missed reassignment on a constrained column raises at deletion time; on an unconstrained one it silently leaves a dangling id, and the association reads back as `nil`. Assert the association *resolves* (`expect(record.reload.sender).to eq(placeholder)`), not merely that the delete succeeded. Prefer adding the FK constraint when the column isn't deliberately loose — `meal_messages.sender_id` was unconstrained and silently accumulated dangling rows until one was added.
+
+### User-Facing Strings
+
+**Hard-coded user-facing strings are forbidden.** Gather is being translated into several languages, so every piece of text a user can see must go through I18n. That includes page text, headings, labels, buttons, link text, flash messages, validation errors, email subjects and bodies, JS alerts and confirms, `alt`/`title`/`placeholder`/`aria-label` attributes, select options, and CSV headers. This applies to all new and changed code, even in modules whose existing strings haven't been converted yet. (Exempt: logs, exception messages, Rake output, and mail that only goes to Gather operators, such as the exception notifier and `SystemMailer`.)
+
+- **Views:** use lazy lookup (`t(".title")`). The key resolves from the template path (`app/views/meals/meals/show.html.erb` → `meals.meals.show.title`) and lives in that module's YAML file (`meals.yml`). Strings shared across modules go under `common.*`. Decorators use `h.t(...)` with a full key.
+- **Never build a sentence by concatenating fragments**, because word order differs between languages. Use one key with interpolation (`%{name}`). When the sentence contains a link or markup, use an `_html` key and pass the link in as a variable: `t(".notice_html", link: link_to(...))`.
+- **Pluralize with `count:`** and `one`/`other` sub-keys, never `String#pluralize` or `"#{n} things"` on display text.
+- **"My" vs. "your" vs. no pronoun** (from [Your vs. My](https://smart-interface-design-patterns.com/articles/your-vs-my/)):
+  ask who is speaking.
+  - **No pronoun** when the label is clear without one ("Profile", "Calendars", items in the personal menu).
+  - **"My"** when the user is speaking: a label naming something they own, where it has to be told apart
+    from others' or everyone's ("My Jobs" beside "All Jobs"; the "My Meals" calendar; "My Order"), and
+    checkbox/button text the user "says" ("My events only", "Delete My Account").
+  - **"Your"** when Gather is speaking to the user: flash messages, emails, hints, instructions
+    ("Your password has been changed").
+  - Never call the same thing "My X" in one place and "your X" in another. When a sentence refers to a
+    labeled thing, quote the label ("export 'My events only'").
+- **Model and form errors use symbol keys** (`errors.add(:base, :too_many)`) with the message in `activerecord.errors…`/`activemodel.errors…`, not literal strings.
+- **Dates and times** go through `I18n.l` with a named format (see the controller conventions). Each locale's formats are written by hand in `config/locales/<locale>/time_formats.yml`, following CLDR and using 24-hour time outside English. A new format must be added to every locale's file; [spec/lint/time_formats_spec.rb](spec/lint/time_formats_spec.rb) checks they all have the same keys. Don't machine-translate these files: they hold strftime and moment.js patterns, not text.
+- **Dates and times in JS** use moment.js formats from the `moment_formats` keys in those files (e.g. `date.format(I18n.t("moment_formats.full_date"))`), never a hard-coded pattern like `"MMMM D, YYYY"`. Machine-readable formats such as `"YYYY-MM-DD"` are fine. moment.js, the date pickers, FullCalendar and Select2 are put in the page's locale by `app/assets/javascripts/locale_setup.js`, which also gives moment.js the Rails month and day names so date pickers read back what Rails writes.
+- **Date input** in the locale's date picker formats ("5. Okt 2026, 18:30" in German) is handled for every date, datetime and time attribute by `config/initializers/localized_date_casting.rb` (rules in `Gather::LocalizedDate`). Ruby's own parser only knows English and gets some other formats wrong without an error, so don't call `Time.zone.parse` or `Date.parse` on user input.
+- **Money** goes through `format_money(amount)` (in `MoneyHelper`; `h.format_money` in decorators). It takes the currency from `current_community.currency` (a column set from the community's country when it's created) and the separators and symbol position from the locale. `number_to_currency` is forbidden (the `Gather/NumberToCurrency` cop) because it takes the currency from the locale, so a Canadian community viewed in French would see euros. Pass `currency:` for amounts that aren't in the community's currency, such as Stripe prices, and on apex-domain pages, where there's no community and `format_money` raises without it.
+- **Sorting** names, titles and other text people read goes through `alpha_order` in SQL, or `Gather::Collation.sort`/`sort_by` for text already in Ruby. Both use the current locale's ICU collation (`Gather::Locales.collation`), so "Émile" sorts with the Es and Swedish puts å, ä and ö after z. Plain `order(:name)` and Ruby's `sort` compare bytes, which puts accented names after z, because the production database's collation is `C.UTF-8`. Machine values (codes, abbreviations used as keys, dates) can sort normally.
+- **Decimal input** in the locale's style ("12,50" in French) is handled for every decimal attribute by `config/initializers/localized_decimal_casting.rb` (rules in `Gather::LocalizedNumber`), so don't parse numbers by hand with `to_f`/`to_d` on user input; use `Gather::LocalizedNumber.normalize` first if you must.
+- **JS strings:** use `i18n.t("...")` from `app/javascript/utils/i18n.ts` (or `I18n.t` in the legacy Backbone bundle). Add the key's namespace to `config/i18n-js.yml` if it isn't exported yet, then regenerate the bundle: `bundle exec i18n export -c config/i18n-js.yml -r config/environment.rb`.
+- **Fragment caches** must include `I18n.locale` in the cache key.
+- **Missing translations raise** in development and test (`config.i18n.raise_on_missing_translations`).
+- **Linters enforce this everywhere.** `.erb_lint.yml` checks every view and `.rubocop.yml` (`Gather/HardCodedString`) checks all Ruby under `app/`. Both have a short `exclude` list, mostly staff-only mail. The new-community generators are linted too: the starter content every new community gets (calendars, meal roles, restrictions and so on) is in `starter_content.yml`, and the optional sample data's text is in `sample_data.yml`. Both are created in the community's language. [spec/lint/i18n_linters_spec.rb](spec/lint/i18n_linters_spec.rb) runs both in CI. Run them locally with `bundle exec erb_lint --lint-all` and `bundle exec rubocop --only Gather/HardCodedString,Gather/NumberToCurrency`.
+  - Views get three checks: literal text between tags (`HardCodedText`), literal `aria-label`/`alt`/`title`/`placeholder` values ([.erb_linters/hard_coded_attribute.rb](.erb_linters/hard_coded_attribute.rb)), and text-like string literals inside ERB tags.
+  - The Ruby cop ([lib/rubocop/cop/gather/hard_coded_string.rb](lib/rubocop/cop/gather/hard_coded_string.rb)) flags strings that start with a capitalized word ("Close", "Generated: …"). It skips exception, log and `EventLog` messages, regexps, class names, and strings used as keys or compared against (`headers["Vary"]`, `type == "User"`).
+  - The view linter skips inline JS, both in `<script>` tags and in `javascript_tag do` blocks. Strings the JS shows to users still go through `I18n.t`.
+  - For a genuine false positive, disable inline and say why: `# rubocop:disable Gather/HardCodedString` or `<%# erb_lint:disable HardCodedText %>` on the same line. The view linter is named `HardCodedText` (see `.erb_lint.yml`); `HardCodedString` is the Ruby cop's name.
+- **Static error pages** (`public/404.html` etc.) are generated from `app/views/error_pages/` by `bundle exec rake error_pages:generate`, one copy per translated locale. Edit the templates and regenerate rather than editing `public/` by hand.
+- **[spec/i18n_spec.rb](spec/i18n_spec.rb) runs in CI** (config in `config/i18n-tasks.yml`). It fails on keys used in code but missing from `en`, on unused keys, on interpolation variables that differ between locales, on a stale JS export, and on stale static error pages. Run `bundle exec i18n-tasks missing -l en` and `bundle exec i18n-tasks unused -l en` locally. When a key is built dynamically (`t("gdrive.item_kinds.#{kind}")`), add a pattern to `ignore_unused` with a comment saying where it's used. Delete keys that are really unused.
+
+**Translations.** Every key must exist in every locale, not just `en` ([spec/i18n_spec.rb](spec/i18n_spec.rb) checks the locales in `Gather::Locales::TRANSLATED`). When you add a key or change the meaning of its English text, write the other locales' values too, in the same commit:
+
+- **Mark every value you translate** with `# MT` at the end of its line. For a multi-line value, put it after the `|-` on the key's line. People reviewing a language remove the `# MT` once they've checked the string. Count what's left with `grep -c "# MT" config/locales/fr/*.yml`. Every file with `# MT` lines starts with a header comment explaining the marker for reviewers; copy it from an existing file (e.g. `config/locales/fr/nav.yml`) when you create a new locale file.
+- **Changing English text re-marks it.** If you change what a key's English says, rewrite its translations and mark them again, even if a person had verified them.
+- **Use the glossary** ([config/locales/GLOSSARY.md](config/locales/GLOSSARY.md)) for Gather's terms and each language's voice (`vous` in French, `du` in German, and so on), so the same thing has the same name everywhere.
+- **Keep the structure:** same `%{placeholders}`, same HTML in `_html` keys, and the plural sub-keys the locale needs (French, for example, uses `one` for 0 and 1).
+- **Canadian French** (`config/locales/fr-CA/`) only holds keys where Québec usage differs from `fr`; everything else falls back to `fr`.
+- **Don't translate** date/time formats (written by hand per locale, see above) or the legal documents, which stay English.
+- **Operator pages aren't translated (for now).** Controllers under `AdminController` (the apex-domain pages under `/admin`) always render in English. Their strings still go in YAML, but only in `en`; add their keys to `ignore_missing` in `config/i18n-tasks.yml` so the other locales aren't expected to have them. This doesn't cover the community-level `Admin::SettingsController`, which is translated as usual.
+
+**How the locale is chosen** ([lib/gather/locales.rb](lib/gather/locales.rb)):
+
+- **Web requests** get English unless the `i18n` feature flag is on. With the flag on (`"basic"` interface for everyone, `"user"` for chosen users), they get the language picked from the footer's language menu, which is stored in the `locale` session cookie (so it lasts until the browser closes), or else the best match for the browser's `Accept-Language` header. The flag covers every locale at once; there's no per-locale release. This happens in the `ApplicationControllable::Locale` around_action. Everything runs inside `I18n.with_locale`. Never assign `I18n.locale =`, because it leaks across requests.
+- **What Gather sends a person without their browser involved** (email, calendar feeds) uses `Gather::Locales.for_user`: the language on their profile (`users.locale`, never null). A new user starts with their community's default (the `locale` community setting, chosen at signup), and can change it. Changing the community's default only affects new members. Like the website, it's English unless the `i18n` flag is on for that person.
+- **Email** renders in the recipient's locale via the `RecipientLocale` mailer concern, which every mailer must include ([spec](spec/mailers/recipient_locale_spec.rb)). Mail sent with `.with(recipient: user)` gets that user's locale automatically. A mailer whose recipient is an action argument wraps the action in `in_locale_of(user)`. Required notifications that go to several people on one message (a household, a community's admins) are sent once per language: loop with `ApplicationJob#each_recipient_locale_group` and pass each group as the recipient. Don't rely on the ambient locale in mailers: ActiveJob restores the *sender's* locale when delivering.
+- **Calendar feeds** are in their owner's language: a personalized feed in its token user's, a community feed in the community's default (`Calendars::Exportable#with_feed_locale`), not the calendar app's `Accept-Language`.
+- **Jobs** (`ApplicationJob`) run in the default locale. Anything a job sends a person goes through a mailer, which picks the recipient's locale itself.
 
 ### Locale Files
 
@@ -218,11 +408,13 @@ Gather uses several locale files under `config/locales/en/`. Each type of string
 - `simple_form.placeholders.{model}.{field}` — input placeholder text
 - `simple_form.prompts.{model}.{field}` — blank/prompt option for selects
 
+**`layouts.yml`** — the page layout (`layouts.*`), shared partials (`shared.*`) and other app-wide views (`home.*`), mostly via lazy lookup.
+
 **`en.yml`** — application-wide UI strings:
 
 - `helpers.submit.{action}` or `helpers.submit.{model}.{action}` — submit button labels
 - `confirmations.{model}.{action}` — confirm dialog text for destructive actions
-- `common.*` — shared strings used across multiple strings used across multiple modules
+- `common.*` — shared strings used across multiple modules
 - `errors.messages.*` — global custom error messages
 
 **Module-specific files** (`meals.yml`, `work.yml`, `people.yml`, etc.) — flash messages, page titles, section headers, and other strings belonging entirely to one feature module.
@@ -230,13 +422,155 @@ Gather uses several locale files under `config/locales/en/`. Each type of string
 ## Email
 
 - **Text-only mailers** — Gather uses plain text email templates only. Do not create `.html.erb` mailer views.
+- **Every email must be accounted for on the notification preferences page.** When you add a new email, or change who receives an existing one or why, decide where it belongs on that page: a configurable notification (with a sensible default), a required one that is listed but can't be turned off, or neither (mail that never goes to community members, such as `SystemMailer` or the community signup emails). Record it in [Notifications::Catalog](app/models/notifications/catalog.rb), and mention the decision in the PR description. `ApplicationMailer#mail` raises for a mailer action missing from the catalog, and [catalog_spec.rb](spec/models/notifications/catalog_spec.rb) checks every action. Also consider whether the notification should be offered over SMS once the community has SMS turned on. Mailman list traffic is separate: people control it from the groups page.
+- **Configurable notifications go one recipient per message, and the caller loops.** Each carries a one-click unsubscribe link (the `List-Unsubscribe` header) that works for one person. The caller decides who the notification is about, then [Notifications::Recipients](app/models/notifications/recipients.rb) works out who actually gets it (households to members, children to guardians, dropping fake, inactive and opted-out users). In a job, use `each_notification_recipient`, which also keeps one failed delivery from stopping the rest:
+
+  ```ruby
+  each_notification_recipient(signup.household, kind: :meal_reminder, data: {signup_id: signup.id}) do |user|
+    MealMailer.with(recipient: user).meal_reminder(signup).deliver_now
+  end
+  ```
+
+  The mailer action addresses `mail(to: recipient)`. `ApplicationMailer#mail` raises if a configurable message would reach more than one person, and re-checks the recipient's preferences as a safety net. Required notifications can still go to a household on one message.
+
+## Starting New Work
+
+**Trigger:** when the user asks to start on something new (a new feature, fix, or task that isn't a continuation of the current branch's work), run this before writing any code. Don't ask for confirmation on the mechanics — do it, then report which branch you're on.
+
+**Order matters: roll back before switching branches.** Migration files only exist on the branch that added them. Once you `git switch` away, `db:rollback` can't reverse migrations whose files are no longer on disk — so the tables/columns get stranded in your dev DB, and the next `db:migrate` bakes them into `db/schema.rb` as drift you can accidentally commit.
+
+1. **Roll back the current branch's migrations, while still on that branch.** Count them first:
+
+   ```bash
+   git diff --name-only origin/develop...HEAD -- db/migrate/ | wc -l
+   bin/rails db:rollback STEP=<count>   # skip if count is 0
+   ```
+
+   If the branch is already merged to `develop`, skip the rollback — those migrations are permanent now.
+
+2. **Confirm the working tree is clean**, including `db/schema.rb`. A dirty `schema.rb` after the rollback means the DB still has something the branch doesn't declare; sort that out before moving on rather than carrying it forward. Never commit a `schema.rb` whose diff is unrelated to the work at hand.
+
+3. **Pull develop and branch off it:**
+
+   ```bash
+   git fetch origin && git switch develop && git pull
+   git switch -c <new-branch-name>
+   bin/rails db:migrate   # no-op if step 1 was clean; verify schema.rb stays unchanged
+   ```
+
+**Irreversible migrations.** If a rollback fails because a migration has no `down` (or is destructive enough that reversing it loses dev data), stop and tell the user rather than forcing it. The escape hatch is a full reset — `db:drop db:create db:schema:load` then `rake db:new_cluster` — but note there is **no `db/seeds.rb`**, so this regenerates fresh sample data with new emails and IDs, and any hand-built dev state (feature flag rows, Stripe test objects tied to old IDs) has to be rebuilt. Don't reset without asking.
 
 ## Testing
 
 - **All new functionality must have test coverage.** Add specs for new models, jobs, mailers, forms, policies, and controllers. Follow existing spec patterns and directory structure.
+- **Prefer system specs (`js: true`) for anything exercised through the browser** — clicking buttons, opening modals, submitting forms, and asserting the resulting UI. Reach for request/controller specs only when the flow under test is *not* a browser flow (JSON APIs, webhooks, or pure redirect/authorization checks with no UI). Model/service/policy logic still gets its own unit specs.
 - **System tests require headless Chrome.** See the [Selenium Docker service](#headless-chrome-for-system-tests) section below.
 - **Run individual or small numbers of specs locally; use CI for full suite runs.** When fixing a specific failure, run the affected file/line with `bundle exec rspec spec/path/to/spec.rb:42` locally to confirm it passes before pushing — this avoids burning a ~28 min CI cycle on a fix that doesn't work. Only push to CI when you need the full suite run (e.g. after a Rails upgrade or broad refactor). Non-browser specs (model, request, job, mailer) run fine locally; system specs require headless Chrome (see below).
 - **Replicate CI failures locally before iterating.** Add a diagnostic assertion with a descriptive failure message (e.g. `expect(count).to eq(1), "Expected 1, got #{count}. Details: #{things.inspect}"`) to extract values that aren't visible in a normal failure.
+
+**Use system specs (`spec/system/`)** as the ultimate end to end test when the thing being tested involves user interaction with a rendered page — clicking links, filling in forms, seeing content, navigating between pages, or JavaScript behavior. System specs run a real browser (headless Chrome via Selenium) and are the right tool for:
+- Form flows (create/edit/delete with validation feedback)
+- Multi-step user journeys or navigation paths
+- Stimulus/JS-driven interactions (AJAX loading, dynamic UI)
+- Content that depends on the view layer (decorators, partials, lenses)
+- Verifying what a user actually sees on a page
+
+Use `login_as(actor, scope: :user)` (Warden helper) and `visit`/`click_on`/`fill_in`/`have_content` etc. Tag with `js: true` only when the test requires JavaScript execution.
+
+**Use request specs (`spec/requests/`)** when there is no meaningful browser interaction to test — the value is in the HTTP response itself or a server-side side effect. Request specs hit the stack at the Rack level (no browser) and are the right tool for:
+- JSON/API endpoints (asserting on `response.parsed_body`, status codes, headers)
+- Non-HTML responses like ICS calendar exports or webhook receivers
+- OAuth/auth callbacks where the logic is in the redirect and session state
+- Side effects triggered by a request (jobs enqueued, records created) that don't need a rendered view
+- Authorization redirects for unauthenticated access (faster than a full system spec)
+
+Use `sign_in(actor)` (Devise helper) and `get`/`post`/`delete` etc. Mock or stub collaborators where it makes the test clearer (e.g. stubbing ES or Drive calls).
+
+**When a controller has both HTML and JSON responses** (e.g. wiki search), write a system spec for the HTML/interactive flow and a request spec for the JSON endpoint separately.
+
+**Model specs (`spec/models/`)** — test validations, scopes, callbacks, instance methods, and class methods directly on the model. Use `build`/`create` factories. Don't test pure framework behavior (e.g. that `belongs_to` works). Concerns with their own logic get their own spec file under `spec/models/concerns/`.
+
+**Policy specs (`spec/policies/`)** — test each `action?` method against the full set of relevant user roles. Use `include_context "policy permissions"` for the standard role actors (`admin`, `user`, `other_user`, etc.), the `permissions :action? do` block helper, and `it_behaves_like` shared examples. Also test scoping and `permitted_attributes` if the policy defines it.
+
+**Decorator specs (`spec/decorators/`)** — test presentation and formatting logic by calling decorator methods directly (`record.decorate`). Assert on the returned strings or HTML fragments. Do not use a browser; decorators are plain Ruby objects.
+
+**Form specs (`spec/forms/`)** — test form objects (subclasses of the `Calendars::EventForm` pattern) by instantiating them directly with params and calling `save`. Test validation errors, attribute parsing/normalization, and the happy-path save. Don't duplicate model validations that are already covered in model specs.
+
+**Job specs (`spec/jobs/`)** — use `include_context "jobs"` and call `perform_job`. Test which records are acted on, which mailer methods are called (stub the mailer, assert `.with` arguments using `mlrdbl` message doubler), and which side effects occur (records updated, other jobs enqueued). Use `Timecop` where time-sensitivity matters.
+
+**Mailer specs (`spec/mailers/`)** — call the mailer method directly (`described_class.some_action(args).deliver_now`) and assert on `mail.to`, `mail.subject`, and `mail.body.encoded`. All templates are text-only; check text body content, not HTML parts.
+
+**Serializer specs (`spec/serializers/`)** — instantiate the serializer directly (`described_class.new(record).as_json`) and assert on the returned hash keys and values. Useful for Elasticsearch index serializers where field names and types must be exact.
+
+**Lens specs (`spec/lenses/`)** — only write these for lenses with non-trivial selection or defaulting logic. Instantiate the lens with doubles for `context`, `storage`, and `set`. Test `#selection` (which record is chosen by default) and `#render`/`#empty?` behavior. Simple lenses (pure select from param) don't need dedicated specs.
+
+**Validator specs (`spec/validators/`)** — build a model instance that exercises the validator and assert `be_valid` / `have_errors`. Only write a dedicated spec file for a custom validator if it is reused across multiple models; otherwise, cover it in the model spec.
+
+## Handling Dependabot Batches
+
+**Trigger phrase:** when the user says **"combine the dependabot PRs"** (or similar — "batch the dependabot updates", "deal with all the dependabot PRs at once"), run this full procedure end to end: combine the open updates into one branch, open a PR, and poll CI per the section below. Don't ask for confirmation on the mechanics — just do it, then report the result.
+
+Merging dependabot branches one at a time is slow (each merge rebases all the others) and merging them together conflicts on lockfiles. Instead, **rebuild the bumps on top of current `develop` and regenerate the lockfiles** — never merge the dependabot branches themselves, because they're often cut from an older `develop` and carry unrelated drift.
+
+1. **List the open updates:** `gh pr list --author "app/dependabot" --limit 100 --json number,title`.
+2. **Branch from current develop:** `git switch -c combined-dependabot origin/develop` (after `git fetch origin`).
+3. **Decide what to include.** Exclude stale/superseded branches: bumps for a major version line you're no longer on (e.g. Rails 7.0.x security branches when you're on 8.1), and older duplicates when a newer bump for the same package exists (take the newest, let the older PR auto-close). When two branches target the same package, only the newest goes in.
+4. **Get each branch's intended bump** so you apply it faithfully: `git diff origin/develop origin/dependabot/<branch> -- Gemfile` (or `package.json`). Ignore any hunks that are just develop drift (e.g. an unrelated gem being removed/added) — apply only the dependency line the PR is actually about.
+5. **Apply the version bumps directly to the live manifests** (`Gemfile`, `package.json`) on the new branch — edit the constraint lines, do not merge branches.
+6. **Regenerate lockfiles cleanly:** `bundle install` then `yarn install`. For a **transitive** gem bump (one not named in `Gemfile`, e.g. `jwt`), bump it explicitly with `bundle update <gem> --conservative`. Note `~>` constraints may resolve to a newer patch/minor than the dependabot PR named (e.g. `~> 0.81` landing 0.82.0) — that's fine.
+7. **Research breaking changes for every major (and risky minor) bump, then check each against our codebase.** For each bump that crosses a major version (or a 0.x→higher jump that spans many releases), read the gem's official CHANGELOG/release notes and list the breaking changes. Spawn one research agent per gem so they run in parallel. Then verify each potentially-impactful change against our actual code — grep for the affected API, config, or option — rather than assuming it does or doesn't apply. Things to watch for: **dropped transitive dependencies that become soft/optional** (e.g. image_processing 2.0 dropped `mini_magick`/`ruby-vips` from its deps — we use the `:vips` processor, so `ruby-vips` had to be added to the `Gemfile` explicitly or ActiveStorage variants break at runtime), changed default behavior, removed/renamed options, dropped Ruby-version support, and changed bind/env defaults. Apply any required follow-up manifest changes (e.g. adding a now-explicit dependency) and re-run `bundle install`. Summarize the findings and the action taken for each gem in the PR body.
+8. **Sanity-check before pushing** (cheap, catches the worst of major bumps before a ~28 min CI cycle): `RAILS_ENV=development bundle exec rails runner "puts 'ok'"` (boot), `yarn build` (esbuild), and for type-only bumps a `tsc` pass. Type checking is **not** in CI, so it won't gate the build — but still surface any new errors a major `@types/*` bump introduces.
+9. **Verify only the expected files changed** (`Gemfile`, `Gemfile.lock`, `package.json`, `yarn.lock` — plus any deliberate follow-up like an added gem line) via `git status --short` — no drift leaked in.
+10. **Commit, push, open one PR.** In the PR body, list every bump with its PR number and add `Closes #…` for each, plus the breaking-change review from step 7 (per-gem: what changed, whether it affects us, action taken). Dependabot auto-closes its own PRs once it sees the dependency updated on `develop` after merge (including superseded duplicates), so the individual PRs clean themselves up.
+
+## Missing SSH Key When Pushing
+
+The SSH key lives on the Mac host and is forwarded into the devcontainer via VSCode's agent socket — it is not in the container's `~/.ssh`. If a push fails with `Permission denied (publickey)` and `ssh-add -l` reports "The agent has no identities" (typical after the host reboots), **ask the user to run a `git pull` on the host**. That reloads the key into the host's agent, and the forwarded agent picks it up immediately — no container restart needed. Don't work around it by reconfiguring git credential helpers or fiddling with keys in the container.
+
+## Screenshotting UI Changes
+
+**Trigger:** any change a user can see in the browser, such as a new or changed page, form, modal, button, or layout, or any CSS or JS change. Screenshots are part of the work. Take them by default without being asked, and don't report the work as done or open the PR until you have done this.
+
+1. **Screenshot every affected state**, following [Taking Screenshots](#taking-screenshots). Cover more than the happy path: also capture empty states, validation errors, other roles (e.g. admin vs. regular member), and long or unusual data where it matters.
+2. **Scrutinize each screenshot before going further.** Open it with the Read tool and look closely. Ask whether it shows the feature *working*, not just rendering. Check that the right data appears, that nothing is missing or duplicated, that no text is a raw translation key or reads "translation missing", that alignment and spacing match the surrounding UI, and that nothing overflows or overlaps. Passing specs don't settle this. Screenshots have caught many bugs that the specs missed.
+3. **Fix what you find, then re-shoot** until the screenshots look right. Tell the user about anything you couldn't fix.
+4. **Put the final screenshots in the PR description**, following [Adding Screenshots to a PR](#adding-screenshots-to-a-pr), with a sentence on what each one shows.
+
+## Writing PR Descriptions
+
+Write PR descriptions for a reviewer who knows Gather but hasn't followed this work. They should be able to understand the change, and judge the decisions in it, without reading the diff first. #1354 is a good model.
+
+**Language:**
+
+- Short sentences in plain language. Dense lines that pack several facts together with semicolons, arrows, and parentheses are hard to read.
+- Explain a term before you rely on it. If the change depends on how something is stored or keyed, add a short **Background** section that defines those terms first.
+- Use one concrete example throughout (e.g. "a weekly series, Tuesdays 7–8pm"), and describe behavior in terms of it rather than in the abstract.
+- Describe what the user sees, then why it happens. "A deleted occurrence came back" before "overrides are keyed by `occurrence_start`".
+- Give the reason for each decision, not just the decision. A reviewer can't judge a tradeoff they can't see.
+
+**Structure for a feature or bug-fix PR**, scaled to its size. A one-line fix needs a few sentences, not every section.
+
+1. **Opening:** what this PR does in a sentence or two. Mention related PRs and, for a multi-part change, which part this is.
+2. **Background** (only if needed): the concepts the rest of the description depends on.
+3. **What was wrong:** one heading per problem. For each, what the user saw, using the running example, and the cause.
+4. **What happens now:** the new behavior, grouped by what the user does (each choice, each flow), not by file. Say why each rule is the way it is.
+5. **How it works:** one subsection per significant piece (new class, callback, form change, JS). Explain the reasoning for anything a reviewer should look at closely: why it lives where it does, why it raises, ordering constraints, alternatives considered.
+6. **Tests:** grouped by spec file, in plain language. Note any test you confirmed fails without the fix (by temporarily removing the fix).
+7. **Screenshots** (for UI changes): see [Screenshotting UI Changes](#screenshotting-ui-changes).
+8. **Not in this PR:** related work deliberately left out, and where it's planned.
+9. **Privacy Policy / Terms of Use:** the flag described in [Flagging Privacy Policy and Terms of Use Impact](#flagging-privacy-policy-and-terms-of-use-impact), or "No impact" with a one-line reason.
+
+Link files with repo-relative markdown links. End with the attribution line. Dependabot batch PRs keep their own required content (see [Handling Dependabot Batches](#handling-dependabot-batches)), written in the same plain style.
+
+## Polling CI After Opening a PR
+
+**Always poll CI after opening a new PR (or pushing fixes to one), and keep going until the build is green or the only failures are known flappers.** Do not declare success or walk away while checks are pending or red.
+
+- **Poll every 5 minutes.** The Gather suite takes ~28–30 min. Use a background watcher (`gh pr checks <pr> --watch --interval 300`) so you're notified on completion; relaunch it if the watch window lapses while checks are still pending.
+- **On failure, investigate before re-running.** Pull the failed job log (`gh run view --job <id> --log-failed`), identify the failing spec, and reproduce locally (`bundle exec rspec <file>:<line>`, several times for system specs). Fix real failures and push.
+- **Only treat a failure as a flapper with evidence — never assume.** A failure counts as a known flapper only if you can point to prior occurrences: it passes on local re-run **and** there's a documented history of the same flap (git log/blame referencing it, an existing skip/retry annotation, a prior CI run, or a tracking issue). `StaleElementReferenceError` and other Selenium timing errors in system specs are common flap shapes, but the shape alone is not evidence — confirm the specific spec has flapped before. **Do not hallucinate a flapper to dismiss a red build.** If you can't substantiate it, treat the failure as real.
+- **Re-running CI:** the integration token may lack permission to `gh run rerun`/`gh run cancel` (403 "Resource not accessible by integration"). When it does, re-trigger with an empty commit (`git commit --allow-empty`) and tell the user they'll need to cancel runs from the GitHub Actions UI themselves.
+- **Don't modify an unrelated pre-existing flake to make a PR green** — especially on a narrow PR like a dependency bump. Re-run CI and note the flake instead.
 
 ## Code Style
 
@@ -299,6 +633,28 @@ fi
 
 Then embed in the body with `![$TITLE]($IMAGE_URL)`. After the post succeeds, delete the screenshot file from the repo root with `rm`.
 
+## Flagging Privacy Policy and Terms of Use Impact
+
+The Privacy Policy ([config/locales/en/privacy_policy.md](config/locales/en/privacy_policy.md)) and Terms of Use ([config/locales/en/terms_of_use.md](config/locales/en/terms_of_use.md)) describe what Gather actually does. They go stale when the code changes and they don't.
+
+**Whenever the work you're doing may make either document inaccurate or incomplete, say so to the user** — in your summary of the work and in the PR description. Name the document, the section, and the specific reason. Read the current document first so you're flagging a real gap, not a guess.
+
+**Never edit these documents yourself**, even when the needed change seems obvious. Legal text needs a human decision. Your job is only to point out that a review is needed and why.
+
+Typical triggers:
+
+- **New personal data collected or stored** — a new field on users, households, children, or anything that identifies a person (including logs, IP addresses, or uploaded files).
+- **New sharing or visibility** — data becoming visible to a wider audience (e.g. community → cluster, members → public), or a change to privacy settings or roles that can see data.
+- **New third-party service or subprocessor** that receives user data (e.g. a new email, SMS, payment, analytics, logging, storage, or AI provider), or a change in what an existing one receives.
+- **New tracking** — cookies beyond the session cookie, analytics, or anything that monitors activity.
+- **New outbound communication channels** — new kinds of email, SMS, or push notifications, especially anything not strictly tied to community activity.
+- **Data retention or deletion changes** — user/household/community deletion, inactivity handling, backups, exports, or anonymization.
+- **Children** — anything affecting how minors' data is collected, shown, or how they get sign-in access.
+- **Payments and paid features** — new fees, subscription or refund behavior, credits, or anything Gather charges for.
+- **New user-generated content features** or new ways users can interact with or contact each other.
+- **Third-party integrations** that act on users' behalf (e.g. new Google Drive scopes or behavior).
+- **Account and access rules** — who can sign up, sign-in methods, admin powers, suspension.
+
 ## Error Handling
 
 **Never swallow exceptions silently.** If you write a `rescue` block, you must either re-raise or report to Sentry via `Gather::ErrorReporter.instance.report(e, data: {...})`. Always check with the user before suppressing an error without Sentry reporting.
@@ -331,13 +687,13 @@ Active Record Encryption keys follow the same pattern — set them as `SETTINGS_
 
 ## Tech Stack
 
-- Ruby 3.2.2, Node.js 18.12.1
+- Ruby 3.2.2, Node.js 24.22.2
 - Rails 8.1, PostgreSQL, Redis, Elasticsearch
 - Devise + OmniAuth (Google OAuth2) for auth
 - Delayed Job for background processing
 - esbuild for JS bundling, Stimulus for frontend interactivity
 - Bootstrap 3 + Tailwind for CSS
-- Thin with SSL in development (https://gatherdev.org:3000)
+- Thin with SSL in development (https://gatherdev.org:3000, or the `url.port` in `config/settings.local.yml`)
 
 ## Test Organization
 

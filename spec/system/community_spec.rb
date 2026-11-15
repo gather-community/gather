@@ -12,7 +12,7 @@ describe "communities", js: true do
 
   context "with no subdomain" do
     it "works" do
-      visit(communities_path)
+      visit(admin_communities_path)
       expect(page).to have_content("Funton Coho")
     end
   end
@@ -23,7 +23,7 @@ describe "communities", js: true do
     end
 
     it "works" do
-      visit(communities_path)
+      visit(admin_communities_path)
       expect(page).to have_content("Funton Coho")
       expect(page).to have_content("Meals")
     end

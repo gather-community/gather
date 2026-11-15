@@ -1,7 +1,7 @@
-<% content_for(:title, "Work Periods") %>
+<% content_for(:title, t(".title")) %>
 <% content_for(:action_links) do %>
   <% if policy(sample_period).create? %>
-    <%= link_to(icon_tag("plus") << " Create Period",
+    <%= link_to(icon_tag("plus") << " " << t(".create"),
       new_work_period_path, class: "btn btn-primary") %>
   <% end %>
 <% end %>
@@ -12,10 +12,11 @@
   <table class="index part-width">
     <thead>
       <tr>
-        <th>Name</th>
-        <th>Start</th>
-        <th>End</th>
-        <th>Phase</th>
+        <th><%= t(".name") %></th>
+        <th><%= t(".start") %></th>
+        <th><%= t(".end") %></th>
+        <th><%= t(".phase") %></th>
+        <th><%= t(".links") %></th>
       </tr>
     </thead>
     <tbody>
@@ -25,6 +26,11 @@
           <td class="start-date"><%= l(period.starts_on) %></td>
           <td class="end-date"><%= l(period.ends_on) %></td>
           <td class="phase"><%= t("work/period.phase_names.#{period.phase}") %></td>
+          <td class="links">
+            <%= link_to(t(".signups"), work_period_shifts_path(period)) %>
+            <%= link_to(t(".report"), work_period_report_path(period)) %>
+            <%= link_to(t(".jobs"), work_period_jobs_path(period)) %>
+          </td>
         </tr>
       <% end %>
     </tbody>

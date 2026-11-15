@@ -1,7 +1,17 @@
-<p>The following error(s) occurred in trying to save your changes:</p>
-<ul>
-  <% errors.sort_by { |e| e.attribute == :base ? 0 : 1 }.each do |error| %>
-    <% attrib = error.attribute == :base ? nil : Calendars::EventForm.human_attribute_name(error.attribute) %>
-    <li><%= [attrib, error.message].compact.join(": ") %></li>
-  <% end %>
-</ul>
+<%# Rendered into the "Error" modal after a failed drag/resize, so no intro text is needed: a
+    single error shows on its own, several become a bare bulleted list. Base errors sort first. %>
+<%
+  messages = errors.sort_by { |e| e.attribute == :base ? 0 : 1 }.map do |error|
+    attrib = error.attribute == :base ? nil : Calendars::EventForm.human_attribute_name(error.attribute)
+    [attrib, error.message].compact.join(": ")
+  end
+%>
+<% if messages.one? %>
+  <p><%= messages.first %></p>
+<% else %>
+  <ul>
+    <% messages.each do |message| %>
+      <li><%= message %></li>
+    <% end %>
+  </ul>
+<% end %>

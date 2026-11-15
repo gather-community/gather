@@ -6,6 +6,9 @@ class MailTestJob < ApplicationJob
   def perform
     run = MailTestRun.first || MailTestRun.new(mail_sent_at: nil)
     check_mail(run)
+    # Save now because check_mail has deleted the test mail from the inbox. If sending fails, we
+    # would otherwise lose the recorded mail_sent_at and the status check would false-alarm.
+    run.save!
     send_mail(run)
     run.save!
   end

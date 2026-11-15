@@ -1,0 +1,549 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+fi:
+  common:
+    language_name: "Suomi" # MT
+    settings: "Asetukset" # MT
+    settings_updated: "Asetukset päivitetty." # MT
+    open_date_picker: "Avaa päivämäärän valitsin" # MT
+    select_user: "Valitse käyttäjä …" # MT
+    adults: "Aikuiset" # MT
+    all: "Kaikki" # MT
+    cancel: "Peruuta" # MT
+    cancelled: "Peruttu" # MT
+    children: "Lapset" # MT
+    clearing_the_filter: "suodattimien tyhjentämistä" # MT
+    create_new: "Luo uusi" # MT
+    # Placeholder for an empty value in a details table.
+    none_bracketed: "[Ei mitään]" # MT
+    # A person or household name marked as inactive.
+    with_inactive: "%{name} (ei aktiivinen)" # MT
+    close: "Sulje" # MT
+    print: "Tulosta" # MT
+    loading_indicator: "Latausilmaisin" # MT
+    # Timestamp on printed pages.
+    generated_at: "Luotu: %{time}" # MT
+    community_count:
+      one: "%{count} yhteisö" # MT
+      other: "%{count} yhteisöä" # MT
+    default: "Oletus" # MT
+    edit: "Muokkaa" # MT
+    "false": "Epätosi" # MT
+    hidden: "Piilotettu" # MT
+    inactive: "Ei aktiivinen" # MT
+    max: "Enint." # MT
+    no_result_clear_filter_link_html: "Voit kokeilla %{link}." # MT
+    none: "Ei mitään" # MT
+    num_in_total: "yhteensä %{count}" # MT
+    save: "Tallenna" # MT
+    "true": "Tosi" # MT
+    unknown: "Tuntematon" # MT
+    unlimited: "Rajoittamaton" # MT
+    "yes": "Kyllä" # MT
+    "no": "Ei" # MT
+    time_with_preposition:
+      "on": "%{t}" # MT
+      "at": "klo %{t}" # MT
+      "until": "klo %{t} asti" # MT
+    this_year: "Tämä vuosi" # MT
+    this_quarter: "Tämä vuosineljännes" # MT
+    this_month: "Tämä kuukausi" # MT
+    all_time: "Kaikki ajat" # MT
+
+  helpers:
+    submit:
+      cancel: "Peruuta" # MT
+      confirm: "Vahvista" # MT
+      continue: "Jatka" # MT
+      create: "Tallenna" # MT
+      go_back: "Palaa takaisin" # MT
+      import: "Tuo" # MT
+      opt_out: "Kieltäydy" # MT
+      update: "Tallenna" # MT
+      save_and_invite: "Tallenna ja kutsu" # MT
+      sign_in: "Kirjaudu sisään" # MT
+      send_reset_instructions: "Lähetä vaihto-ohjeet" # MT
+      set_password: "Aseta salasana" # MT
+      meals_message:
+        create: "Lähetä viesti" # MT
+      meals_signup:
+        save_and_next: "Tallenna ja siirry seuraavaan ateriaan" # MT
+      wiki_page:
+        preview: "Esikatsele" # MT
+
+  errors:
+    messages:
+      invalid_yaml: "Virheellinen YAML" # MT
+      invalid_custom_field_spec: "Tämä määrittely on virheellinen. Ota yhteyttä Gatherin tukeen saadaksesi apua." # MT
+      no_semicolons: "Puolipisteet eivät ole sallittuja" # MT
+
+  # App modal button labels + default titles (exported to JS via config/i18n-js.yml).
+  modal:
+    ok: "OK" # MT
+    cancel: "Peruuta" # MT
+    confirm_title: "Vahvista" # MT
+    alert_title: "Ilmoitus" # MT
+
+  payment:
+    accountholder_required: "Anna tilinhaltijan nimi." # MT
+
+  confirmations:
+    billing/template:
+      destroy: "Haluatko varmasti poistaa pohjan ”%{description}” (jäsentyypit: %{member_types})? Tätä ei voi kumota." # MT
+    domain:
+      destroy: "Haluatko varmasti poistaa verkkotunnuksen ”%{name}”? Tätä ei voi kumota." # MT
+    groups/group:
+      destroy: "Haluatko varmasti poistaa ryhmän ”%{name}”? Tätä ei voi kumota." # MT
+      deactivate: "Haluatko varmasti poistaa ryhmän ”%{name}” käytöstä?" # MT
+    household:
+      destroy: "Haluatko varmasti poistaa kotitalouden ”%{name}”? Tätä ei voi kumota." # MT
+      deactivate: "Haluatko varmasti poistaa kotitalouden ”%{name}” käytöstä? Tämä poistaa käytöstä kaikki kotitalouden käyttäjät." # MT
+    meals/meal:
+      close: "Haluatko varmasti sulkea tämän aterian? Uusia ilmoittautumisia ei enää sallita." # MT
+      destroy: "Haluatko varmasti poistaa aterian ”%{title}”? Tätä ei voi kumota." # MT
+      reopen: "Haluatko varmasti avata tämän aterian uudelleen? Uudet ilmoittautumiset sallitaan." # MT
+      unfinalize: "Haluatko varmasti perua tämän aterian viimeistelyn?" # MT
+    user:
+      destroy: "Haluatko varmasti poistaa käyttäjän ”%{name}”? Tätä ei voi kumota." # MT
+      deactivate: "Haluatko varmasti poistaa käyttäjän ”%{name}” käytöstä? Hänet poistetaan kaikista ryhmistä, joihin hän kuuluu." # MT
+      invite: "Käyttäjälle ”%{name}” lähetetään sähköposti, jossa on kirjautumisohjeet. Jatketaanko?" # MT
+    people/member_type:
+      destroy: "Haluatko varmasti poistaa jäsentyypin ”%{name}”? Kotitalouksilla, joilla on tämä tyyppi, ei ole enää jäsentyyppiä. Tätä ei voi kumota." # MT
+    people/memorial:
+      destroy: "Haluatko varmasti poistaa muistosivun (%{name})? Tätä ei voi kumota." # MT
+    people/memorial_message:
+      destroy: "Haluatko varmasti poistaa tämän muistoviestin? Tätä ei voi kumota." # MT
+    calendars/protocol:
+      destroy: "Haluatko varmasti poistaa säännöt ”%{name}”? Tätä ei voi kumota." # MT
+    calendars/calendar:
+      destroy: "Haluatko varmasti poistaa kalenterin ”%{name}”? Tätä ei voi kumota." # MT
+      deactivate: "Haluatko varmasti poistaa kalenterin ”%{name}” käytöstä?" # MT
+    calendars/event:
+      destroy: "Haluatko varmasti poistaa tapahtuman ”%{name}”? Tätä ei voi kumota." # MT
+      destroy_series: "Haluatko varmasti poistaa toistuvan tapahtuman ”%{name}” kaikki kerrat, menneet ja tulevat? Tätä ei voi kumota." # MT
+    calendars/group:
+      destroy: "Haluatko varmasti poistaa tämän kalenteriryhmän? Tätä ei voi kumota." # MT
+    gdrive/item:
+      destroy: "Haluatko varmasti poistaa tämän kohteen? Sitä ei poisteta Google Drivesta, mutta sitä ei enää linkitetä Gatheriin." # MT
+    gdrive/item_group:
+      destroy: "Haluatko varmasti poistaa tämän ryhmän?" # MT
+    gdrive/migration/operation:
+      destroy: "Haluatko varmasti poistaa tämän siirron? Kaikki siirron tiedot poistetaan. Tämä ei vaikuta millään tavalla varsinaisiin Google Drive -tiedostoihin." # MT
+    meals/formula:
+      destroy: "Haluatko varmasti poistaa hinnoittelukaavan ”%{name}”? Tätä ei voi kumota." # MT
+      deactivate: "Haluatko varmasti poistaa hinnoittelukaavan ”%{name}” käytöstä?" # MT
+    meals/role:
+      destroy: "Haluatko varmasti poistaa roolin ”%{title}”? Tätä ei voi kumota." # MT
+      deactivate: "Haluatko varmasti poistaa roolin ”%{title}” käytöstä?" # MT
+    meals/type:
+      destroy: "Haluatko varmasti poistaa tyypin ”%{name}”? Tätä ei voi kumota." # MT
+      deactivate: "Haluatko varmasti poistaa tyypin ”%{name}” käytöstä?" # MT
+    wiki/page:
+      destroy: "Haluatko varmasti poistaa wikisivun ”%{title}”? Tätä ei voi kumota." # MT
+    work/job:
+      destroy: "Haluatko varmasti poistaa tehtävän ”%{title}”? Tätä ei voi kumota." # MT
+    work/period:
+      destroy: "Haluatko varmasti poistaa jakson ”%{name}”? Tätä ei voi kumota." # MT
+    work/shift:
+      unsignup: "Haluatko varmasti poistaa nimesi tästä tehtävästä?" # MT
+
+  activatables:
+    community:
+      one_html: "Tämä yhteisö poistettiin käytöstä %{time}." # MT
+      two_html: "Voit %{link}." # MT
+      three: "aktivoida sen uudelleen" # MT
+    user:
+      one_html: "Tämä käyttäjä merkittiin ei-aktiiviseksi %{time}." # MT
+      two_html: "Voit %{link}." # MT
+      three: "aktivoida hänet uudelleen" # MT
+    household:
+      one_html: "Tämä kotitalous merkittiin ei-aktiiviseksi %{time}." # MT
+      two_html: "Voit %{link}. <strong>Huomaa:</strong> Kotitalouden käyttäjät täytyy aktivoida uudelleen erikseen." # MT
+      three: "aktivoida sen uudelleen" # MT
+    groups/group:
+      one_html: "Tämä ryhmä merkittiin ei-aktiiviseksi %{time}." # MT
+      two_html: "Voit %{link}." # MT
+      three: "aktivoida sen uudelleen" # MT
+    calendars/calendar:
+      one_html: "Tämä kalenteri merkittiin ei-aktiiviseksi %{time}." # MT
+      two_html: "Voit %{link}." # MT
+      three: "aktivoida sen uudelleen" # MT
+    meals/formula:
+      one_html: "Tämä hinnoittelukaava merkittiin ei-aktiiviseksi %{time}." # MT
+      two_html: "Voit %{link}." # MT
+      three: "aktivoida sen uudelleen" # MT
+    meals/role:
+      one_html: "Tämä rooli merkittiin ei-aktiiviseksi %{time}." # MT
+      two_html: "Voit %{link}." # MT
+      three: "aktivoida sen uudelleen" # MT
+    meals/type:
+      one_html: "Tämä tyyppi merkittiin ei-aktiiviseksi %{time}." # MT
+      two_html: "Voit %{link}." # MT
+      three: "aktivoida sen uudelleen" # MT
+
+  deactivatable:
+    community:
+      success:
+        activate: "Yhteisö aktivoitu uudelleen." # MT
+    household:
+      success:
+        activate: "Kotitalous aktivoitu." # MT
+        deactivate: "Kotitalous poistettu käytöstä." # MT
+        destroy: "Kotitalous poistettu." # MT
+        hard_destroy: "Kotitalous ja kaikki sen jäsenet poistettiin pysyvästi." # MT
+    user:
+      success:
+        activate: "Käyttäjä aktivoitu." # MT
+        activate_unconfirmed: "Käyttäjä aktivoitu, mutta hän tarvitsee kutsun kirjautuakseen. Kutsu hänet valitsemalla alta ”Kutsu”." # MT
+        deactivate: "Käyttäjä poistettu käytöstä." # MT
+        destroy: "Käyttäjä poistettu." # MT
+        hard_destroy: "Käyttäjä poistettiin pysyvästi." # MT
+      error:
+        activate: "Virhe aktivoinnissa: %{message}" # MT
+        deactivate: "Virhe käytöstä poistamisessa: %{message}" # MT
+    billing/template:
+      success:
+        destroy: "Pohja poistettu." # MT
+    domain:
+      success:
+        destroy: "Verkkotunnus poistettu." # MT
+    gdrive/item:
+      success:
+        destroy: "Kohde poistettu." # MT
+    gdrive/item_group:
+      success:
+        destroy: "Ryhmä poistettu." # MT
+    gdrive/migration/operation:
+      success:
+        destroy: "Toiminto poistettu." # MT
+    groups/group:
+      success:
+        deactivate: "Ryhmä poistettu käytöstä." # MT
+        activate: "Ryhmä aktivoitu." # MT
+        destroy: "Ryhmä poistettu." # MT
+    calendars/protocol:
+      success:
+        destroy: "Säännöt poistettu." # MT
+    calendars/group:
+      success:
+        destroy: "Ryhmä poistettu." # MT
+    calendars/calendar:
+      success:
+        activate: "Kalenteri aktivoitu." # MT
+        deactivate: "Kalenteri poistettu käytöstä." # MT
+        destroy: "Kalenteri poistettu." # MT
+    meals/meal:
+      success:
+        destroy: "Ateria poistettu." # MT
+    meals/formula:
+      success:
+        activate: "Hinnoittelukaava aktivoitu." # MT
+        deactivate: "Hinnoittelukaava poistettu käytöstä." # MT
+        destroy: "Hinnoittelukaava poistettu." # MT
+    meals/role:
+      success:
+        activate: "Rooli aktivoitu." # MT
+        deactivate: "Rooli poistettu käytöstä." # MT
+        destroy: "Rooli poistettu." # MT
+    meals/type:
+      success:
+        activate: "Tyyppi aktivoitu." # MT
+        deactivate: "Tyyppi poistettu käytöstä." # MT
+        destroy: "Tyyppi poistettu." # MT
+    people/member_type:
+      success:
+        destroy: "Jäsentyyppi poistettu." # MT
+    people/memorial:
+      success:
+        destroy: "Muistosivu poistettu." # MT
+    people/memorial_message:
+      success:
+        destroy: "Viesti poistettu." # MT
+    work/job:
+      success:
+        destroy: "Tehtävä poistettu." # MT
+    work/period:
+      success:
+        destroy: "Jakso poistettu." # MT
+
+  cocoon:
+    add_links:
+      vehicles: "Lisää ajoneuvo" # MT
+      emergency_contacts: "Lisää hätäyhteyshenkilö" # MT
+      up_guardianships: "Lisää vanhempi/huoltaja" # MT
+      pets: "Lisää lemmikki" # MT
+      shifts: "Lisää vuoro" # MT
+      assignments: "Lisää tekijä" # MT
+      reminders: "Lisää muistutus" # MT
+      restrictions: "Lisää rajoitus" # MT
+      signups: "Lisää kotitalous" # MT
+      groups/group:
+        memberships: "Lisää jäsen" # MT
+      meals/signup:
+        parts: "Lisää kohta" # MT
+      meals/formula:
+        parts: "Lisää ateriatyyppi" # MT
+
+  select2:
+    prompts:
+      creator: "Kirjoita muutama kirjain luojan nimestä." # MT
+      sponsor: "Kirjoita muutama kirjain vastuuhenkilön nimestä." # MT
+      household: "Kirjoita muutama kirjain kotitalouden nimestä." # MT
+      guardian: "Kirjoita muutama kirjain huoltajan nimestä." # MT
+      user: "Kirjoita muutama kirjain käyttäjän nimestä." # MT
+      job_choosing_proxy: "Kirjoita muutama kirjain käyttäjän nimestä." # MT
+      type: "Kirjoita muutama kirjain ateriatyypin nimestä tai lisää uusi tyyppi kirjoittamalla koko nimi." # MT
+      category: "Kirjoita muutama kirjain luokasta tai lisää uusi luokka kirjoittamalla se kokonaan." # MT
+      reimbursee: "Kirjoita muutama kirjain korvauksen saajan nimestä." # MT
+    placeholders:
+      creator: "Valitse luoja …" # MT
+      sponsor: "Valitse vastuuhenkilö …" # MT
+      household: "Valitse kotitalous …" # MT
+      guardian: "Valitse huoltaja …" # MT
+      user: "Valitse käyttäjä …" # MT
+      job_choosing_proxy: "Valitse käyttäjä …" # MT
+      type: "Valitse tai kirjoita tyyppi …" # MT
+      category: "Valitse tai kirjoita luokka …" # MT
+      reimbursee: "Valitse korvauksen saaja …" # MT
+
+  csv:
+    headers:
+      user:
+        id: "ID" # MT
+        first_name: "Etunimi" # MT
+        last_name: "Sukunimi" # MT
+        unit_num: "Asunnon nro" # MT
+        unit_suffix: "Asunnon tunnus" # MT
+        birthdate: "Syntymäpäivä" # MT
+        pronouns: "Pronominit" # MT
+        email: "Sähköposti" # MT
+        google_email: "Google-sähköposti" # MT
+        paypal_email: "PayPal-sähköposti" # MT
+        child: "Lapsi" # MT
+        full_access: "Täydet käyttöoikeudet" # MT
+        household_id: "Kotitalouden ID" # MT
+        household_name: "Kotitalouden nimi" # MT
+        mobile_phone: "Matkapuhelin" # MT
+        home_phone: "Kotipuhelin" # MT
+        work_phone: "Työpuhelin" # MT
+        joined_on: "Liittymispäivä" # MT
+        deactivated_at: "Lähtöpäivä" # MT
+        preferred_contact: "Toivottu yhteydenottotapa" # MT
+        garage_nums: "Autotallien nrot" # MT
+        vehicles: "Ajoneuvot" # MT
+        guardian_names: "Vanhemmat/huoltajat" # MT
+        keyholders: "Avaimenhaltijat" # MT
+        emergency_contacts: "Hätäyhteyshenkilöt" # MT
+        pets: "Lemmikit" # MT
+      billing/account:
+        number: "Numero" # MT
+        community_id: "Yhteisön ID" # MT
+        community_name: "Yhteisö" # MT
+        household_id: "Kotitalouden ID" # MT
+        household_name: "Kotitalous" # MT
+        balance_due: "Maksettava saldo" # MT
+        current_balance: "Nykyinen saldo" # MT
+        credit_limit: "Luottoraja" # MT
+        last_statement_id: "Viimeisimmän tiliotteen ID" # MT
+        last_statement_on: "Viimeisimmän tiliotteen päivämäärä" # MT
+        due_last_statement: "Viimeisimmällä tiliotteella maksettavaa" # MT
+        total_new_charges: "Uudet veloitukset yhteensä" # MT
+        total_new_credits: "Uudet hyvitykset yhteensä" # MT
+        created_at: "Luontiaika" # MT
+      billing/transaction:
+        id: "ID" # MT
+        incurred_on: "Syntymispäivä" # MT
+        code: "Koodi" # MT
+        chg_crd: "Tyyppi" # MT
+        description: "Kuvaus" # MT
+        household_id: "Kotitalouden ID" # MT
+        household_name: "Kotitalous" # MT
+        quantity: "Määrä" # MT
+        unit_price: "Yksikköhinta" # MT
+        amount: "Summa" # MT
+        created_at: "Kirjauspäivä" # MT
+        account_id: "Tilin ID" # MT
+        statement_id: "Tiliotteen ID" # MT
+        meal_id: "Aterian ID" # MT
+      meals/meal:
+        served_at: "Päivämäärä/aika" # MT
+        calendars: "Paikat" # MT
+        formula: "Hinnoittelukaava" # MT
+        communities: "Yhteisöt" # MT
+        role: "Rooli" # MT
+        # `action` and `id` are duplicated from `common` below so that the exporter, which does a
+        # plain lookup with no fallback, produces headers byte-identical to those Meals::Import
+        # expects (it checks the `meals/meal` scope first and falls back to `common`).
+        action: "Toiminto" # MT
+        id: "ID" # MT
+        title: "Otsikko" # MT
+        entrees: "Pääruoka" # MT
+        side: "Lisuke" # MT
+        kids: "Lapset" # MT
+        dessert: "Jälkiruoka" # MT
+        notes: "Huomautukset" # MT
+        allergens: "Allergeenit" # MT
+        capacity: "Kapasiteetti" # MT
+        status: "Tila" # MT
+        signup_count: "Ruokailijoita yhteensä" # MT
+        spots_left: "Paikkoja jäljellä" # MT
+        ingredient_cost: "Raaka-aineiden hinta" # MT
+        pantry_cost: "Ruokavarastokulut" # MT
+        total_cost: "Kokonaishinta" # MT
+        payment_method: "Maksutapa" # MT
+        reimbursee: "Korvauksen saaja" # MT
+        # The "Diners: "/"Price: " prefixes keep these from colliding with meal role titles,
+        # which Meals::Import matches by exact string.
+        diner_count: "Ruokailijat: %{type}" # MT
+        type_price: "Hinta: %{type}" # MT
+      meals/signup:
+        meal_id: "Aterian ID" # MT
+        served_at: "Aterian päivämäärä/aika" # MT
+        meal_title: "Aterian otsikko" # MT
+        calendars: "Aterian paikat" # MT
+        formula: "Hinnoittelukaava" # MT
+        community_id: "Yhteisön ID" # MT
+        community_name: "Yhteisö" # MT
+        household_id: "Kotitalouden ID" # MT
+        household_name: "Kotitalous" # MT
+        diner_count: "Ruokailijat: %{type}" # MT
+        total: "Ruokailijoita yhteensä" # MT
+        takeout: "Mukaan" # MT
+        comments: "Kommentit" # MT
+        created_at: "Ilmoittautumisaika" # MT
+      common:
+        id: "ID" # MT
+        action: "Toiminto" # MT
+    errors:
+      meals/meal:
+        calendar:
+          bad_id: "Kalenteria, jonka ID on %{str}, ei löytynyt" # MT
+          bad_name: "Kalenteria nimeltä ”%{str}” ei löytynyt" # MT
+        formula:
+          bad_id: "Hinnoittelukaavaa, jonka ID on %{str}, ei löytynyt" # MT
+          bad_name: "Hinnoittelukaavaa nimeltä ”%{str}” ei löytynyt" # MT
+        community:
+          bad_id: "Yhteisöä, jonka ID on %{str}, ei löytynyt" # MT
+          bad_name: "Yhteisöä nimeltä ”%{str}” ei löytynyt" # MT
+        file_empty: "Tiedosto on tyhjä" # MT
+        invalid_headers: "Virheelliset sarakeotsikot: %{headers}" # MT
+        missing_columns: "Puuttuvat sarakkeet: %{columns}" # MT
+        invalid_action: "Virheellinen toiminto: %{action}" # MT
+        action_not_permitted: "Toiminto ei ole sallittu (%{action})" # MT
+        served_at_required: "Päivämäärä/aika on pakollinen" # MT
+        invalid_served_at: "”%{str}” ei ole kelvollinen päivämäärä/aika" # MT
+        calendars_required: "Kalenteri(t) ovat pakollisia" # MT
+        meal_id_not_found: "Ateriaa, jonka ID on ”%{id}”, ei löytynyt" # MT
+        meal_not_found: "Ateriaa ei löytynyt (aika: %{time}, paikat: %{locations})" # MT
+        delete_failed: "Virhe aterian %{id} poistamisessa: ”%{error}”" # MT
+        user:
+          bad_id: "Käyttäjää, jonka ID on %{str}, ei löytynyt" # MT
+          bad_name: "Käyttäjää nimeltä ”%{str}” ei löytynyt" # MT
+
+  action_labels:
+    common:
+      new: "Lisää" # MT
+      edit: "Muokkaa" # MT
+      deactivate: "Poista käytöstä" # MT
+      destroy: "Poista" # MT
+      clone: "Kloonaa" # MT
+      close: "Sulje" # MT
+      join: "Liity" # MT
+      leave: "Eroa" # MT
+      opt_out: "Kieltäydy" # MT
+      rejoin: "Liity uudelleen" # MT
+      reopen: "Avaa uudelleen" # MT
+      rescan: "Käy läpi uudelleen" # MT
+      summary: "Yhteenveto" # MT
+      finalize: "Viimeistele" # MT
+      unfinalize: "Peru viimeistely" # MT
+      cancel: "Peru" # MT
+      send_message: "Viesti" # MT
+    community:
+      visit: "Siirry" # MT
+    billing/account:
+      add_txn: "Lisää tapahtuma" # MT
+    user:
+      update_info: "Muokkaa profiilia" # MT
+      update_photo: "Muokkaa kuvaa" # MT
+      invite: "Kutsu" # MT
+      impersonate: "Toimi käyttäjänä" # MT
+      destroy: "Poista pysyvästi" # MT
+      delete_self: "Poista tilini" # MT
+    household:
+      destroy: "Poista pysyvästi" # MT
+    wiki/page:
+      history: "Historia" # MT
+    work/job:
+      edit: "Muokkaa tehtävää" # MT
+    work/shift:
+      edit_job: "Muokkaa tehtävää" # MT
+      signup: "Ilmoittaudu" # MT
+      unsignup: "Poista ilmoittautuminen" # MT
+    work/period:
+      review_notices: "Lähetä ilmoitukset" # MT
+      send_notices: "Lähetä ilmoitukset" # MT
+
+  dropzone:
+    prompts:
+      default: "Napsauta tai vedä tiedosto tähän" # MT
+      models:
+        user: "Napsauta tai vedä kuva tähän" # MT
+        calendars/calendar: "Napsauta tai vedä kuva tähän" # MT
+
+  titles:
+    meals/messages: "Lähetä ateriaviesti" # MT
+
+  roles:
+    admin: "Ylläpitäjä" # MT
+    calendar_coordinator: "Kalenterivastaava" # MT
+    cluster_admin: "Yhteisöryhmän ylläpitäjä" # MT
+    super_admin: "Pääylläpitäjä" # MT
+    biller: "Laskutusvastaava" # MT
+    photographer: "Valokuvaaja" # MT
+    meals_coordinator: "Ateriakoordinaattori" # MT
+    wikiist: "Wikivastaava" # MT
+    work_coordinator: "Työkoordinaattori" # MT
+    new_community_approver: "Uusien yhteisöjen hyväksyjä" # MT
+    index:
+      title: "Roolit" # MT
+      people: "Ihmiset" # MT
+      legend: "Selite" # MT
+      # Each line is "<role name> - <description>".
+      legend_item_html: "<strong>%{role}</strong> – %{description}" # MT
+      descriptions:
+        admin: "Kaikki muut roolit yhdessä" # MT
+        biller: "Hallinnoi laskutustapahtumia, pohjia, tiliotteita ja hinnoittelukaavoja sekä viimeistelee aterioita" # MT
+        photographer: "Voi muokata kenen tahansa kuvaa jäsenluettelossa" # MT
+        calendar_coordinator: "Hallinnoi kalentereita ja kenen tahansa kalenteritapahtumia" # MT
+        meals_coordinator: "Hallinnoi aterioita, ateriarooleja, hinnoittelukaavoja ja ateriatyyppejä" # MT
+        wikiist: "Hallinnoi erikseen suojattuja wikisivuja" # MT
+        work_coordinator: "Hallinnoi tehtäviä, vuoroja ja työjaksoja" # MT
+
+  phone_types:
+    abbreviations:
+      home: "k" # MT
+      work: "t" # MT
+      mobile: "m" # MT
+
+  date_range_lens:
+    past_12: "Viimeiset 12 kuukautta" # MT
+
+  community_lens:
+    all: "Kaikki yhteisöt" # MT
+
+  lens_bar:
+    clear_filter: "Tyhjennä suodatin" # MT
+
+  search_lens:
+    prompt: "Hae …" # MT

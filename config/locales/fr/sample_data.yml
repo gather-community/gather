@@ -1,0 +1,532 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+fr:
+  # Demo content for communities created with sample data (Utils::Generators), written in the community's
+  # language like the starter content (starter_content.yml). The rows in lib/random_data/data hold everything
+  # that isn't text, and name their text here by `key`.
+  #
+  # Calendar names (with the starter content's) can be at most 24 characters and must all differ, and
+  # calendar abbreviations at most 6. Event names can be at most 24 characters.
+  sample_data:
+    calendars:
+      media_room:
+        name: "Salle multimédia" # MT
+        guidelines: |- # MT
+          # Consignes de la salle multimédia
+
+          1. Les moins de 13 ans doivent être accompagnés d'un adulte.
+          1. Les programmes déconseillés aux moins de 16 ans sont verrouillés sur la télé et sur le décodeur.
+          1. La salle peut être réservée pour des événements particuliers ou des émissions de télé. Consultez le calendrier ou écrivez à media@example.com.
+          1. Les télécommandes restent toujours dans la salle, à leur place.
+          1. Merci de ranger la salle multimédia et de la remettre dans son état « neutre » après usage. Attention aux miettes !
+      multipurpose_room:
+        name: "Salle polyvalente" # MT
+        guidelines: |- # MT
+          # Consignes de la salle polyvalente
+
+          1. Comme le précisent les consignes sur les événements, tout invité doit être accueilli par un membre adulte de la communauté.
+          1. N'oubliez pas que cette salle, comme tous les espaces de la maison commune, est une ressource partagée.
+          1. Les hôtes inscrivent le nom de leur invité et ses dates de séjour sur le tableau blanc à côté de la porte.
+          1. Tous les invités respectent les consignes générales de la maison commune (affichées sur la porte) ainsi que celles de chaque salle qu'ils utilisent. Faites particulièrement attention aux consignes sur le bruit, les heures de calme et notre politique sans parfum.
+          1. Pas de bougies ni de quoi que ce soit qui pourrait provoquer un incendie ou un autre danger. Interdiction de fumer dans la maison commune.
+          1. La salle sert aussi à d'autres usages, mais les invités qui dorment sur place sont prioritaires. Réglez les conflits de réservation directement entre vous.
+          1. Les invités peuvent rester jusqu'à 7 jours, tant qu'un autre résident n'a pas réservé la salle pour un autre invité.
+          1. Les hôtes sont responsables de leurs invités. Après leur départ, les hôtes nettoient la salle, lavent le linge et les draps, et les rapportent à la maison commune.
+          1. Le départ se fait avant midi.
+          1. Les clés sont déposées à un endroit prévu dans la maison commune. En cas de perte, les nouvelles clés sont facturées à l'hôte.
+          1. Les invités peuvent utiliser le panneau « Ne pas déranger » prévu pour préserver leur intimité.
+      office:
+        name: "Bureau" # MT
+      sitting_room:
+        name: "Salon" # MT
+      dining_room:
+        name: "Salle à manger" # MT
+        abbrv: "MC" # MT
+      courtyard:
+        name: "Cour" # MT
+        abbrv: "Cour" # MT
+      kitchen:
+        name: "Cuisine" # MT
+        abbrv: "MC" # MT
+        guidelines: |- # MT
+          # Consignes de la cuisine
+
+          ## Présentation
+
+          La cuisine de la maison commune représente un gros investissement pour notre communauté, et elle peut aussi être un endroit dangereux. Comme notre priorité est la sécurité de tous les membres de la communauté et de notre matériel, nous avons adopté les consignes suivantes.
+
+          Nous attendons de chaque membre de la communauté et de ses invités qu'ils traitent ce matériel et cet espace avec soin et respect.
+
+          Les parents sont responsables d'apprendre à leurs enfants que :
+
+          * La cuisine n'est pas un terrain de jeu.
+          * La nourriture de la cuisine n'est pas à la disposition de tous, sauf si c'est indiqué.
+          * Les enfants ne peuvent entrer dans la cuisine que s'ils y sont invités et surveillés par un adulte responsable.
+
+          *Merci de laisser la cuisine plus propre que vous ne l'avez trouvée.*
+
+          Et amusons-nous à préparer et à manger de bons plats ensemble !
+
+          ## Sécurité
+
+          * Si vous quittez la cuisine alors que quelque chose est au four ou sur le feu, prévenez les autres en barrant les entrées de la cuisine et en laissant un mot.
+          * Mettez les casseroles de plats chauds sur les feux du fond, pas sur ceux de devant.
+          * Ne déplacez pas le bicarbonate de soude qui est près de la cuisinière. Il est là en cas d'incendie.
+          * Ne laissez jamais de couteaux tranchants sans surveillance et ne les mettez pas dans l'eau savonneuse.
+
+          Si vous devez partir avant d'avoir fini de ranger, laissez un mot indiquant quand vous reviendrez, avec votre numéro de téléphone.
+
+          Notez tout ce que vous empruntez et rapportez-le dès que possible.
+
+          Signalez tout ce qui vous semble anormal (bruits ou odeurs bizarres, objets cassés) à la personne chargée des réparations.
+
+          Le réfrigérateur de la maison commune est réservé aux produits de base et aux repas communautaires. Partagez les restes plutôt que de les stocker ici.
+
+          Les tâches des chefs cuisiniers, des aides-cuisiniers et de l'équipe de nettoyage sont décrites à part.
+
+          ## Hygiène de base
+
+          1. Si vous êtes peut-être malade, préservez la santé de la communauté en rentrant chez vous.
+          1. Lavez-vous souvent les mains, à l'ancienne : à l'eau chaude et au savon.
+          1. Couvrez complètement toute coupure.
+          1. Pour goûter, n'utilisez chaque cuillère qu'une seule fois.
+          1. Évitez la contamination croisée (allergènes et bactéries) en utilisant des ustensiles différents pour chaque aliment.
+          1. Tout ce qui a touché de la viande crue doit être lavé et désinfecté avant de servir à autre chose.
+          1. Utilisez la planche à découper de la bonne couleur pour chaque type d'aliment.
+          1. Les éviers peuvent abriter des bactéries : utilisez une passoire pour laver les fruits et légumes servis crus.
+          1. Les aliments restent sains s'ils sont bien froids ou bien chauds.
+
+          ## Produits de base
+
+          Les produits de base sont achetés pour les repas de la maison commune.
+
+          Quand nous achetons des produits de base, nous regardons s'ils sont bio, issus du commerce équitable et sans OGM, et nous tenons compte des préférences alimentaires, de la durée de conservation et du prix.
+
+          Les produits de base sont financés par un supplément sur les repas de la maison commune, qui sert à renouveler le stock. Les chefs cuisiniers sont invités à utiliser les produits de base, ce qui garde le stock frais et réduit le coût de leurs repas.
+
+          Merci donc de ne pas utiliser les produits de base pour un usage personnel. Si vraiment vous devez le faire :
+
+          * Remplacez ce que vous utilisez, produit pour produit.
+          * Sinon, contribuez généreusement à la caisse des produits de base de la cuisine.
+
+          Si vous remarquez qu'un produit commence à manquer, notez-le sur la feuille prévue à cet effet.
+
+          La personne qui coordonne la cuisine vérifie la liste et le garde-manger chaque semaine et fait les courses si besoin. Nous faisons de notre mieux pour remplacer les produits de base dès qu'ils sont épuisés.
+
+          S'il vous manque un produit de base pour préparer un repas communautaire, achetez-le et présentez un ticket de caisse séparé pour être remboursé.
+
+          Le comité repas tient la liste des produits de base.
+
+          Les chefs cuisiniers achètent tout le reste, y compris les vinaigrettes en bouteille.
+    shared_guidelines:
+      common_house:
+        name: "Consignes de la maison commune" # MT
+        body: |- # MT
+          # Consignes de la maison commune
+
+          * Bienvenue dans notre maison commune !
+          * Notre maison commune est le cœur de la vie de notre communauté.
+          * Notre communauté repose sur les liens entre ses membres.
+          * Chaque membre de la communauté a son mot à dire, à égalité, sur l'usage de la maison commune.
+          * Nous traitons la maison commune avec autant de respect que la maison d'un voisin. Merci de la laisser comme vous l'avez trouvée, ou mieux !
+
+          Ces consignes équilibrent la liberté, la responsabilité et la sécurité des personnes et du bâtiment.
+
+          ## Accessibilité
+
+          Pour respecter les sensibilités de chacun, nous convenons de ce qui suit :
+
+          * *Sans parfum*, c'est l'objectif dans la maison commune.
+          * *Tabac :* il est interdit de fumer dans la maison commune.
+          * *Animaux :* les animaux de compagnie ne sont pas admis dans la maison commune, sauf les animaux d'assistance. Ils ne doivent pas être laissés seuls aux abords de la maison commune.
+
+          ## Sécurité
+
+          La maison commune est fermée à clé au plus tard à 22 h en semaine et à 23 h les vendredis et samedis, en suivant la liste de fermeture.
+
+          ## Communication
+
+          Les résidents règlent leurs différends directement entre eux dès que possible. Si besoin, le comité de la maison commune est là pour aider.
+
+          ## Entretien
+
+          Signalez tout de suite les installations ou appareils cassés ou défectueux au comité d'entretien, à maintenance@example.com.
+
+          Pour les questions courantes, envoyez un e-mail ou laissez un mot dans le classeur de l'entretien.
+
+          Signalez les objets cassés au comité de la maison commune à commonhouse@example.com.
+
+          ## Alcool
+
+          Ne laissez et ne stockez pas d'alcool, ouvert ou non, ni de médicaments dans la maison commune.
+
+          ## Bruit
+
+          Toute personne gênée par le bruit dans la maison commune peut demander qu'on le baisse. Merci d'être attentif aux personnes qui le demandent.
+
+          La communauté est prévenue à l'avance des grands événements qui risquent d'être plus bruyants que d'habitude ou de dépasser l'heure de fermeture.
+
+          ## Heures de calme
+
+          * En semaine, de 22 h à 8 h
+          * Le week-end et les jours fériés, de 23 h à 9 h
+
+          ## À qui s'adresse la maison commune
+
+          La maison commune est destinée aux résidents et à leurs invités.
+
+          * Nous sommes reconnaissants du soutien et de l'hospitalité des communautés voisines.
+          * En accueillant nos voisins, nous comptons régler les éventuels problèmes de façon équitable, dans la réciprocité et la confiance.
+
+          Les membres des communautés voisines sont les bienvenus dans la maison commune et suivent les mêmes procédures pour réserver les salles. Toute autre personne doit être accueillie par un résident adulte, qui est responsable du comportement de ses invités.
+
+          ## Réservation des salles
+
+          Les activités de la communauté sont inscrites au calendrier et ont la priorité sur les autres événements.
+
+          Toutes les consignes sont adoptées par consensus. Les avis de chacun sont les bienvenus pour continuer à les améliorer.
+    # Kinds of event, e.g. "Official" for a community event.
+    event_kinds:
+      official: "Officiel" # MT
+      personal: "Personnel" # MT
+      special: "Spécial" # MT
+    weekly_event: "Rencontre hebdomadaire" # MT
+    groups:
+      meals_committee:
+        name: "Comité repas" # MT
+        description: "Gère le programme des repas !" # MT
+      knitting_club:
+        name: "Club de tricot" # MT
+        description: "Du tricot pour débutants comme pour experts ! On se retrouve le dimanche à 14 h." # MT
+    work:
+      period: "Principale" # MT
+      jobs:
+        mow_team: "Équipe de tonte" # MT
+        closer: "Fermeture de la maison commune" # MT
+        work_day: "Grande corvée collective" # MT
+    payment_description: "Chèque n° %{number}" # MT
+    memorial_message: "%{name} était une personne d'une grande gentillesse et un membre passionné de notre communauté. Son absence se fera cruellement sentir." # MT
+    # Lists the generators and factories pick from at random (see config/initializers/faker.rb).
+    relationships:
+      - "Maman" # MT
+      - "Papa" # MT
+      - "Cousin" # MT
+      - "Frère" # MT
+      - "Sœur" # MT
+      - "Fils" # MT
+      - "Fille" # MT
+      - "Tante" # MT
+      - "Oncle" # MT
+      - "Ami" # MT
+    pet_species:
+      - "Chat" # MT
+      - "Chien" # MT
+      - "Schnauzer" # MT
+      - "Labrador" # MT
+      - "Serpent" # MT
+      - "Perroquet" # MT
+      - "Lapin" # MT
+    colors:
+      - "Rouge" # MT
+      - "Bleu" # MT
+      - "Vert" # MT
+      - "Noir" # MT
+      - "Blanc" # MT
+      - "Argent" # MT
+      - "Gris" # MT
+      - "Jaune" # MT
+      - "Marron" # MT
+      - "Violet" # MT
+    event_names:
+      - "Club de lecture" # MT
+      - "Fête d'anniversaire" # MT
+      - "Soirée ciné" # MT
+      - "Cours de yoga" # MT
+      - "Jeux de société" # MT
+      - "Répétition de chorale" # MT
+      - "Invité pour la nuit" # MT
+      - "Repas partagé" # MT
+      - "Bricolage pour enfants" # MT
+      - "Réunion de comité" # MT
+      - "Journée jardinage" # MT
+      - "Baby shower" # MT
+      - "Répétition de musique" # MT
+      - "Thé et papotage" # MT
+      - "Visite de la famille" # MT
+      - "Atelier" # MT
+      - "Soirée jeux" # MT
+      - "Cours de dessin" # MT
+      - "Méditation" # MT
+      - "Cours de danse" # MT
+      - "Fête de fin d'année" # MT
+      - "Réparation de vélos" # MT
+      - "Heure du conte" # MT
+      - "Cercle de couture" # MT
+    # What a sample meal contains, shown in its allergen list.
+    allergens:
+      almonds: "Amandes" # MT
+      bananas: "Bananes" # MT
+      corn: "Maïs" # MT
+      dairy: "Produits laitiers" # MT
+      eggs: "Œufs" # MT
+      gluten: "Gluten" # MT
+      peanuts: "Arachides" # MT
+      pineapple: "Ananas" # MT
+      soy: "Soja" # MT
+      tofu: "Tofu" # MT
+      tree_nuts: "Fruits à coque" # MT
+    # Sample meals' menus. Each written by a different cook, so the style varies.
+    meals:
+      meal_01:
+        title: "Poulet aux cranberries et patates douces" # MT
+        entrees: "Poulet aux cranberries (fermier, d'une ferme du coin) et patates douces" # MT
+        side: "Salade, fruits" # MT
+        kids: "Le poulet plaît aux enfants" # MT
+        dessert: "Brownies, glace" # MT
+        notes: "Tofu au four sur demande. Je peux faire des patates douces et des cranberries sans poulet, et aussi des brownies sans gluten. Le gluten, le lait et les œufs ne sont que dans le dessert." # MT
+      meal_02:
+        title: "Bar à pommes de terre au four" # MT
+        entrees: "Pommes de terre au four avec plein de garnitures au choix" # MT
+        dessert: "Petits carrés sucrés" # MT
+        notes: "Bio autant que possible. Facile d'éviter les allergènes." # MT
+      meal_03:
+        title: "Latkes et garnitures" # MT
+        entrees: "Galettes de pommes de terre avec ou sans oignon ou œufs (sur demande), et quelques-unes avec mon curry préféré" # MT
+        side: "Légumes, salade, compote de pommes, crème fraîche, graines" # MT
+        dessert: "Fruits et chocolat noir" # MT
+        notes: "Tout est bio, sans OGM et sans gluten. On peut éviter les allergènes sur demande, alors précisez bien ce que vous voulez (par ex. sans oignon ou sans œufs)." # MT
+      meal_04:
+        title: "Soupes de saison" # MT
+        entrees: "Soupe au cheddar et à la bière, soupe aux pois, et tartines de fromage gratinées" # MT
+        side: "Salade toute simple : épinards, poivrons rouges, avocat et vinaigrette sésame-gingembre (et d'autres vinaigrettes)" # MT
+        dessert: "Semifreddo à la fraise et au sésame noir" # MT
+      meal_05:
+        title: "Chili sans gluten, au bœuf ou au tofu" # MT
+        entrees: "Chili bio sans gluten pour les carnivores et pour les végétariens, et une salade verte bio avec des légumes variés. Pain de maïs bio sans gluten, avec du lait et des œufs." # MT
+        kids: "Pareil" # MT
+        dessert: "Un dessert bio et sans gluten, qui peut contenir du lait et des œufs" # MT
+      meal_06:
+        title: "Dîner d'anniversaire : pâtes (ou riz) au pesto" # MT
+        entrees: "Pâtes ou riz au pesto, avec du poulet et/ou du tofu" # MT
+        side: "Légumes racines rôtis et d'autres choses du garde-manger" # MT
+        dessert: "Cupcakes et bouchées chocolat-cajou (sans lait et sans gluten)" # MT
+        notes: "Flexible et arrangeant. Indiquez vos restrictions alimentaires dans les commentaires. Le dîner sera simple pour qu'on puisse se concentrer sur le dessert." # MT
+      meal_07:
+        title: "Pancakes aux myrtilles et frittatas aux épinards" # MT
+        entrees: "Pancakes, classiques ou sans gluten, et frittatas individuelles aux épinards, au basilic et à la tomate" # MT
+        side: "Saucisses de dinde, fruits et yaourt" # MT
+        kids: "Pancakes sans gluten au lait d'amande" # MT
+      meal_08:
+        title: "Lasagnes aux épinards" # MT
+        entrees: "Lasagnes aux épinards, et lasagnes au fromage pour ceux qui n'aiment pas les épinards" # MT
+        side: "Brocoli vapeur" # MT
+        kids: "Pâtes nature au parmesan" # MT
+        dessert: "Cookies aux pépites de chocolat" # MT
+        notes: "Envoyez-moi un e-mail si vous voulez une version sans gluten ou une autre modification." # MT
+      meal_09:
+        title: "Soupe de pommes de terre sans gluten" # MT
+        entrees: "Soupe de pommes de terre bio au lait, avec du bacon bio à parsemer dessus pour les carnivores" # MT
+        side: "Salade verte bio avec les autres légumes bio que je trouverai (tomates, poivrons, carottes). Pain de maïs bio sans gluten, avec du lait et des œufs." # MT
+        kids: "Pareil" # MT
+        dessert: "Un dessert bio et sans gluten" # MT
+        notes: "Tofu au four pour les végétariens" # MT
+      meal_10:
+        title: "Tacos au poulet et citron vert" # MT
+        entrees: "Poulet effiloché dans une sauce chipotle adobo, avec du citron vert frais (un peu épicé)" # MT
+        side: "Haricots refrits et riz" # MT
+        kids: "Quesadillas nature au poulet et au fromage" # MT
+        dessert: "Semifreddo chocolat-noisette" # MT
+        notes: "Tous les allergènes peuvent être évités." # MT
+      meal_11:
+        title: "Tamales à emporter : lisez les notes !" # MT
+        entrees: "Tamales d'un restaurant du coin. Chaque adulte inscrit correspond à un tamal, alors n'inscrivez pas les enfants. Si vous voulez deux tamales, inscrivez deux adultes." # MT
+        side: "Curtido (une sorte de chou mariné)" # MT
+        notes: "Indiquez dans les notes le tamal que vous voulez. Je ne commande que des tamales, pour faire simple." # MT
+      meal_12:
+        title: "Paellas au poulet et aux légumes" # MT
+        entrees: "Riz au poulet, et riz aux légumes pour les végétariens" # MT
+        side: "Salade verte" # MT
+        dessert: "Crème caramel et fruits" # MT
+      meal_13:
+        title: "Stroganoff de poitrine de bœuf" # MT
+        entrees: "Stroganoff de poitrine de bœuf avec des nouilles aux œufs" # MT
+        side: "Risotto aux shiitakés et aux poireaux, et asperges" # MT
+        kids: "Nouilles nature et risotto" # MT
+        dessert: "À décider" # MT
+      meal_14:
+        title: "C'est l'heure du chili" # MT
+        entrees: "Chili végétarien" # MT
+        side: "Pain de maïs, salade" # MT
+        kids: "Pareil" # MT
+        dessert: "Oui" # MT
+        notes: "Dites-moi si vous avez besoin d'une version sans gluten." # MT
+      meal_15:
+        title: "Buffet de crêpes" # MT
+        entrees: "Un assortiment de crêpes (nature, au levain, et sans gluten sur demande), avec des garnitures salées (œuf, fromage, légumes, herbes et plus) et sucrées (fruits, pâte à tartiner au chocolat, confiture, yaourt, ricotta et plus) à garnir vous-même." # MT
+        notes: "Les garnitures sont en libre-service. Les crêpes contiennent des œufs et du lait." # MT
+      meal_16:
+        title: "Curry et riz" # MT
+        entrees: "Curry de poulet sur du riz, avec du tofu pour les végétariens" # MT
+        side: "Kimchi de radis" # MT
+        kids: "Raviolis frits" # MT
+        dessert: "Fruits" # MT
+        notes: "Mon curry en poudre contient de la farine. Si vous avez besoin de sans gluten, j'utiliserai le curry sans gluten de la cuisine de la maison commune." # MT
+      meal_17:
+        title: "Petit-déjeuner anglais" # MT
+        entrees: "Œufs brouillés, saucisses, champignons, haricots blancs à la sauce tomate" # MT
+        side: "Fruits rouges" # MT
+      meal_18:
+        title: "Tikka masala au poulet ou aux légumes" # MT
+        entrees: "Tikka masala au poulet ou aux légumes : viande ou légumes mijotés dans un curry onctueux à la noix de coco, avec du riz à côté" # MT
+        side: "Salade, riz" # MT
+        kids: "Ils vont aimer" # MT
+        dessert: "Fruits" # MT
+        notes: "Les deux versions sont sans gluten et sans lait ! Précisez si vous voulez la version végane ou avec viande. Le plus local et bio possible." # MT
+      meal_19:
+        title: "Concours de chili !" # MT
+        entrees: "Du chili et encore du chili, petite participation par adulte" # MT
+        side: "Compote de pommes, pain et beurre" # MT
+        kids: "Du chili et encore du chili. Gratuit pour les enfants de 6 ans et moins." # MT
+        dessert: "Probablement" # MT
+        notes: "Notre concours de chili sert à financer de nouvelles œuvres d'art pour la salle à manger. Venez cuisiner, manger et voter ! Chacun a une voix, enfants compris. Pour participer, apportez 4 litres de chili avant 18 h et indiquez sur le bulletin d'inscription ses allergènes, et s'il contient de la viande ou de l'alcool." # MT
+      meal_20:
+        title: "Gâteau crumble et gratin" # MT
+        entrees: "Gratin au bacon et aux œufs, avec du fromage de chèvre et des légumes" # MT
+        side: "Gâteau crumble aux myrtilles sans gluten" # MT
+        kids: "Ils vont adorer" # MT
+        notes: "Tout est sans gluten. Le seul produit laitier, c'est le chèvre dans le gratin." # MT
+      meal_21:
+        title: "Soupe de poisson au lait de coco" # MT
+        entrees: "Soupe de poisson au lait de coco, avec une version végane sans poisson" # MT
+        side: "Petits pains tout juste sortis du four" # MT
+        kids: "Bâtonnets de carottes crues et brocoli" # MT
+        dessert: "Fruits" # MT
+        notes: "Les petits pains contiennent du blé. La soupe elle-même est sans gluten." # MT
+      meal_22:
+        title: "Croissants chauds garnis et fruits" # MT
+        entrees: "Légumes frais et grillés dans des croissants chauds" # MT
+        side: "Salade de fruits frais, et laits d'oléagineux sucrés aux dattes" # MT
+        kids: "Œufs brouillés et yaourt" # MT
+      meal_23:
+        title: "Coq au vin" # MT
+        entrees: "Coq au vin" # MT
+        side: "Pommes de terre persillées, haricots verts, salade à la vinaigrette moutarde" # MT
+        dessert: "Fraises à la crème" # MT
+      meal_24:
+        title: "Soupe de raviolis" # MT
+        entrees: "Raviolis dans un bouillon de poulet (ou de légumes)" # MT
+        side: "Riz, kimchi de radis et garnitures (algues en lanières, oignons verts hachés)" # MT
+        kids: "La plupart des enfants aiment les raviolis" # MT
+        dessert: "Fruits et brownies" # MT
+        notes: "Les raviolis sont au porc, sauf si vous les demandez au bœuf ou aux légumes. J'ajouterai de l'œuf dans le bouillon." # MT
+      meal_25:
+        title: "Bols de riz à composer" # MT
+        entrees: "Poulet (ou tofu au four) avec au choix du riz, des nouilles croustillantes, des légumes, de l'ananas, de la noix de coco râpée, des amandes effilées, du fromage râpé et d'autres garnitures" # MT
+        kids: "Légumes en tranches, fruits" # MT
+        dessert: "Carrés biscuités" # MT
+      meal_26:
+        title: "Cuisine allemande traditionnelle" # MT
+        entrees: "Bratwurst, nouilles aux œufs et gratin de pommes de terre" # MT
+        side: "Chou rouge, choucroute, raifort et crème fraîche" # MT
+        kids: "À décider" # MT
+        dessert: "Strudel aux pommes et glace" # MT
+      meal_27:
+        title: "Soirée barbecue" # MT
+        entrees: "Les classiques du barbecue, avec une touche coréenne. J'espère que mes aides auront de bonnes idées." # MT
+        side: "Légumes légèrement sautés, du marché ou de nos jardins" # MT
+        kids: "Les enfants seront peut-être mis au travail au jardin" # MT
+        dessert: "Des fraises fraîches, si c'est la saison" # MT
+        notes: "Le plus bio et local possible. Facile de s'adapter à tous les régimes." # MT
+      meal_28:
+        title: "Pizza maison !" # MT
+        entrees: "Pizza avec plein de garnitures : poulet, légumes, fromage, pepperoni. Pâte classique ou sans gluten." # MT
+        side: "Salade et fruits" # MT
+        kids: "Les enfants adorent ça" # MT
+        dessert: "Peut-être..." # MT
+        notes: "Indiquez ci-dessous si vous avez besoin de sans gluten, pour que je puisse m'organiser. Merci ! Ingrédients bio et locaux quand c'est possible." # MT
+      meal_29:
+        title: "Dégustation de tomates" # MT
+        entrees: "Un assortiment de tomates locales, avec des options volaille et végétariennes" # MT
+        side: "Salade caprese, plein de légumes, épis de maïs" # MT
+        kids: "Maïs égrené pour les enfants qui ont un appareil dentaire" # MT
+        dessert: "Glace à la tomate ?" # MT
+        notes: "Local et bio quand c'est possible. Le repas peut être sans allergènes (mais pas sans tomates). Il y aura des fruits à coque (amandes et noisettes)." # MT
+      meal_30:
+        title: "Chili et repas partagé de desserts aux pommes !" # MT
+        entrees: "Le chili comme je l'ai connu enfant : haricots doux et légumes sur du riz. Bœuf haché pour les carnivores." # MT
+        side: "Légumes cuits, selon ce qu'on trouve localement" # MT
+        kids: "Le plat principal est assez doux pour tout le monde" # MT
+        dessert: "C'est notre repas partagé annuel de desserts aux pommes ! Venez cueillir des pommes avec nous le week-end d'avant, puis apportez ce que vous aurez préparé avec ces magnifiques pommes." # MT
+        notes: "Il y a des produits laitiers à part, mais pas dans le plat principal. Les desserts sont faits par différentes personnes, donc ils peuvent contenir n'importe quel allergène courant." # MT
+      meal_31:
+        title: "Crêpes sucrées et salées" # MT
+        entrees: "Des crêpes avec plein de garnitures, salées pour le dîner et sucrées pour le dessert" # MT
+        side: "Légumes vapeur" # MT
+        dessert: "Encore des crêpes !" # MT
+        notes: "Œufs de poules élevées en plein air, lait local, farine bio. Si vous voulez des crêpes sans gluten, dites-le-moi et j'essaierai." # MT
+      meal_32:
+        title: "Gimbap" # MT
+        entrees: "Riz, légumes assaisonnés, bœuf, et œuf ou saumon fumé, roulés dans une feuille d'algue" # MT
+        side: "Kimchi de radis en saumure" # MT
+        kids: "Le plat principal devrait leur convenir" # MT
+        dessert: "Fruits ou glace" # MT
+        notes: "Nous avons mis le kimchi de radis à fermenter il y a deux semaines. Il y aura des bocaux à rapporter chez vous après le repas." # MT
+      meal_33:
+        title: "Soupe de pois cassés au curry et sandwichs" # MT
+        entrees: "Soupe de pois cassés au curry avec bouillon de poulet, jambon et lait, et une version végane avec bouillon de légumes et lait de coco" # MT
+        side: "Sandwichs au thon et aux œufs, ou apportez votre propre garniture pour le pain" # MT
+        kids: "Pareil. Envoyez-moi un e-mail avant jeudi si vos enfants veulent de la soupe sans curry." # MT
+        dessert: "Cookies maison aux pépites de chocolat, et fruits" # MT
+        notes: "La soupe est sans gluten, et la soupe aux légumes est aussi sans lait. Si vous voulez du pain sans gluten ou d'autres changements, envoyez-moi un e-mail avant jeudi." # MT
+      meal_34:
+        title: "Crêpes et bonnes choses à mettre dedans" # MT
+        entrees: "Crêpes (œuf, farine, lait). Fines et souples, un peu comme les crêpes suédoises." # MT
+        side: "Garnitures sucrées et salées : sucre, confiture maison de fraises et de myrtilles, sauce caramel au beurre salé, chantilly, fromage, et sans doute des champignons sautés. Apportez les vôtres si vous voulez quelque chose de particulier." # MT
+        kids: "Pareil" # MT
+        dessert: "Pareil" # MT
+        notes: "Sans doute pas tout bio, mais je ferai de mon mieux avec le budget." # MT
+      meal_35:
+        title: "Soirée pain de viande" # MT
+        entrees: "Pain de viande" # MT
+        side: "Salade, petits pains, pommes de terre" # MT
+        dessert: "Crumble aux pommes" # MT
+      meal_36:
+        title: "Bibimbap" # MT
+        entrees: "Riz vapeur garni de légumes assaisonnés et de bœuf (ou de tofu), avec de la sauce pimentée (et de la sauce soja si vous n'aimez pas épicé), et des œufs au plat" # MT
+        side: "Pickles et kimchi" # MT
+        kids: "Ils peuvent avoir plus de bœuf ou de tofu que de légumes" # MT
+        dessert: "Fruits" # MT
+        notes: "Tout est assaisonné avec de la sauce soja sans gluten, de l'ail, de l'huile de sésame et du poivre noir. Ce repas, c'est surtout des légumes, alors ne vous attendez pas à beaucoup de viande." # MT
+      meal_37:
+        title: "Tacos à la dinde" # MT
+        entrees: "Tacos à la dinde hachée" # MT
+        side: "Haricots refrits, riz" # MT
+        notes: "Tomates, laitue, salsa douce et crème fraîche pour les tacos." # MT
+      meal_38:
+        title: "Pizza du petit-déj" # MT
+        entrees: "La meilleure pâte à pizza du monde, avec juste quelques ingrédients, surtout du manioc. Même les plus difficiles l'adorent. Avec une sauce façon pesto et un choix de viandes, de légumes et de fromages. Indiquez vos restrictions alimentaires." # MT
+        side: "Œufs brouillés" # MT
+      meal_39:
+        title: "Bar à soupes !" # MT
+        entrees: "Une soupe simple à la viande et une soupe simple aux légumes, avec plein de garnitures pour faire votre propre création : graines, légumes, pâtes sans gluten, fromage..." # MT
+        side: "Légumes, fromage, pâtes" # MT
+        kids: "Les enfants vont adorer composer la leur" # MT
+        dessert: "Peut-être quelque chose aux fruits" # MT
+        notes: "Le plus local et bio possible." # MT
+      meal_40:
+        title: "Saumon en papillote" # MT
+        entrees: "Saumon cuit en papillote, assaisonné d'oignon et d'herbes" # MT
+        side: "Légumes verts (épinards ou chou kale) ou haricots verts sautés à l'ail, pommes de terre nouvelles rôties et pain frais" # MT
+        kids: "Mettez un commentaire si vos enfants ne mangent pas de saumon et proposez autre chose, comme une salade de thon ou des œufs durs." # MT
+        dessert: "Oui : des fruits et une pâtisserie maison" # MT
+        notes: "Tout est sans gluten sauf la pâtisserie. Les légumes seront surtout bio. Dites-moi s'il vous faut une option végétarienne ; je peux faire sauter ou cuire du tofu au four." # MT

@@ -300,6 +300,38 @@ describe Work::Shift do
       end
     end
 
+    describe "round limit" do
+      let(:period) do
+        create(:work_period, phase: "open", quota_type: "by_person", quota: 20,
+                             pick_type: "staggered", auto_open_time: Time.current - 1.hour,
+                             round_duration: 5, max_rounds_per_worker: 3, workers_per_round: 10)
+      end
+
+      before do
+        period.shares.create!(user: user2, portion: 1)
+        allow(Work::RoundCalculator).to receive(:new)
+          .and_return(double(prev_limit: prev_limit, next_limit: nil, next_starts_at: nil))
+      end
+
+      context "when the shift fits within the limit" do
+        let(:prev_limit) { 10 }
+
+        it "signs the user up" do
+          shift.signup_user(user2)
+          expect(shift.reload.assignment_for_user(user2)).to be_present
+        end
+      end
+
+      context "when the shift would exceed the limit" do
+        let(:prev_limit) { 1 }
+
+        it "raises and creates nothing" do
+          expect { shift.signup_user(user2) }.to raise_error(Work::RoundLimitExceededError)
+          expect(shift.reload.assignment_for_user(user2)).to be_nil
+        end
+      end
+    end
+
     describe "preassigned attribute" do
       context "with period in draft phase" do
         let(:phase) { "draft" }

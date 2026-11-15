@@ -48,6 +48,14 @@ shared_context "photo uploads" do
         wait_for_dropzone_upload
         expect(page).to have_css(".dz-error-message", text: /File is incorrect type/)
       end
+
+      # Simulates iOS handing back fewer bytes than the file claims to have.
+      scenario "unreadable file", js: true do
+        visit(edit_path)
+        page.execute_script("File.prototype.arrayBuffer = () => Promise.resolve(new ArrayBuffer(0));")
+        drop_in_dropzone(fixture_file_path("cooper.jpg"))
+        expect(page).to have_css(".dz-error-message", text: /Couldn't read this file/)
+      end
     end
   end
 end

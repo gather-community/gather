@@ -66,17 +66,16 @@ class TransactionsController < ApplicationController
                    else
                      transactions.in_community(current_community)
                    end
-    transactions.order(:incurred_on, "households.name", :code, :description)
+    transactions.order(:incurred_on).alpha_order(households: :name).order(:code).alpha_order(:description)
   end
 
   def handle_confirmation_flow
     if params[:confirmed] == "1"
       @transaction.save
-      flash[:success] = "Transaction added successfully."
+      flash[:success] = t("transactions.added")
       redirect_to(accounts_path)
     elsif params[:confirmed] == "0"
-      flash.now[:notice] = "The transaction was not added. You can edit it below and try again, "\
-         "or click 'Cancel' below to return to the accounts page."
+      flash.now[:notice] = t("transactions.not_added")
       render(:new)
     else
       render(:confirm)

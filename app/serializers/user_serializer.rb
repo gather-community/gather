@@ -55,7 +55,15 @@
 class UserSerializer < ApplicationSerializer
   attributes :id, :name
 
+  # A second line for select2 results, e.g. "Foo Community · jane@example.com". Opt-in, since it
+  # includes the email address.
+  attribute :details, if: -> { instance_options[:details] }
+
   def name
     object.full_name(show_inactive: !instance_options[:hide_inactive_in_name])
+  end
+
+  def details
+    [object.community&.name, object.email].compact_blank.join(" · ")
   end
 end

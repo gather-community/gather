@@ -9,6 +9,7 @@
 #  community_id  :bigint           not null
 #  created_at    :datetime         not null
 #  errors_by_row :jsonb
+#  locale        :string(10)       not null
 #  status        :string           default("queued"), not null
 #  updated_at    :datetime         not null
 #  user_id       :bigint           not null

@@ -7,7 +7,7 @@ describe Subscription::SubscriptionPolicy do
     include_context "policy permissions"
     let(:record) { create(:subscription, community: community) }
 
-    permissions :show? do
+    permissions :show?, :update_messaging_topup? do
       it_behaves_like("permits admins or special role but not regular users", :biller)
     end
   end

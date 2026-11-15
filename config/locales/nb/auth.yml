@@ -1,0 +1,114 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+# Additional translations at https://github.com/plataformatec/devise/wiki/I18n
+
+nb:
+  devise:
+    confirmations:
+      confirmed: "E-postadressen din er bekreftet." # MT
+      send_instructions: "Om noen minutter får du en e-post med instruksjoner for hvordan du bekrefter e-postadressen din." # MT
+      send_paranoid_instructions: "Hvis e-postadressen din finnes i databasen vår, får du om noen minutter en e-post med instruksjoner for hvordan du bekrefter den." # MT
+    failure:
+      already_authenticated: "Du er allerede logget inn." # MT
+      inactive: "Kontoen din er ikke aktivert ennå." # MT
+      invalid: "Ugyldig %{authentication_keys} eller passord." # MT
+      locked: "Kontoen din er låst." # MT
+      last_attempt: "Du har ett forsøk igjen før kontoen din blir låst." # MT
+      not_found_in_database: "Ugyldig %{authentication_keys} eller passord." # MT
+      timeout: "Økten din er utløpt. Logg inn igjen for å fortsette." # MT
+      unauthenticated: "Logg inn for å se denne siden." # MT
+      unconfirmed: "Du må bruke en invitasjon første gang du logger inn." # MT
+    authentication_keys:
+      email: "e-postadresse" # MT
+    mailer:
+      confirmation_instructions:
+        subject: "Bekreft e-postadressen din" # MT
+      reset_password_instructions:
+        subject: "Tilbakestill passordet ditt" # MT
+      unlock_instructions:
+        subject: "Instruksjoner for opplåsing" # MT
+    omniauth_callbacks:
+      failure: "Vi kunne ikke logge deg inn via %{kind} fordi %{reason}." # MT
+      success: "Du er logget inn med %{kind}-kontoen din." # MT
+    passwords:
+      new:
+        title: "Glemt passord" # MT
+        instructions: "Skriv inn e-postadressen din, så sender vi deg instruksjoner på e-post. Følg dem for å tilbakestille passordet ditt. Det kan ta litt tid før e-posten kommer fram." # MT
+      edit:
+        title: "Skriv inn nytt passord" # MT
+        instructions: "Skriv inn et nytt passord nedenfor, så blir du logget inn i Gather." # MT
+      no_token: "Du kan bare komme til denne siden fra en e-post om tilbakestilling av passord. Hvis du kom derfra, sjekk at du brukte hele nettadressen." # MT
+      send_instructions: "Om noen minutter får du en e-post med instruksjoner for hvordan du tilbakestiller passordet ditt." # MT
+      send_paranoid_instructions: "Hvis e-postadressen din finnes i databasen vår, får du om noen minutter en lenke for å tilbakestille passordet ditt." # MT
+      updated: "Passordet ditt er endret. Du er nå logget inn." # MT
+      updated_not_active: "Passordet ditt er endret." # MT
+    registrations:
+      destroyed: "Ha det! Kontoen din er avsluttet. Vi håper å se deg igjen snart." # MT
+      signed_up: "Velkommen! Du er registrert." # MT
+      signed_up_but_inactive: "Du er registrert, men vi kunne ikke logge deg inn fordi kontoen din ikke er aktivert ennå." # MT
+      signed_up_but_locked: "Du er registrert, men vi kunne ikke logge deg inn fordi kontoen din er låst." # MT
+      signed_up_but_unconfirmed: "En melding med en bekreftelseslenke er sendt til e-postadressen din. Følg lenken for å aktivere kontoen din." # MT
+      update_needs_confirmation: "Kontoen din er oppdatert, men vi må bekrefte den nye e-postadressen din. Sjekk innboksen din og følg bekreftelseslenken." # MT
+      updated: "Kontoen din er oppdatert." # MT
+    sessions:
+      new:
+        title: "Logg inn" # MT
+      signed_in: "Du er logget inn." # MT
+      signed_out: "Du er logget ut." # MT
+      already_signed_out: "Du er logget ut." # MT
+    unlocks:
+      send_instructions: "Om noen minutter får du en e-post med instruksjoner for hvordan du låser opp kontoen din." # MT
+      send_paranoid_instructions: "Hvis kontoen din finnes, får du om noen minutter en e-post med instruksjoner for hvordan du låser den opp." # MT
+      unlocked: "Kontoen din er låst opp. Logg inn for å fortsette." # MT
+    # Overrides devise-i18n's "Forgot your password?" to keep our wording.
+    shared:
+      links:
+        forgot_your_password: "Vet du ikke passordet ditt?" # MT
+  auth_mailer:
+    cant_reset_password:
+      request_received: "Vi har fått en forespørsel om å tilbakestille passordet ditt." # MT
+      no_full_access: "Dessverre har ikke profilen din full tilgang til systemet, så du kan ikke logge inn." # MT
+      contact_admin: "Hvis du mener at dette er feil, kontakt Gather-administratoren i fellesskapet ditt." # MT
+    confirmation_instructions:
+      use_link: "Bekreft den nye e-postadressen din med denne lenken:" # MT
+      thanks: "Takk for at du hjelper til med dette viktige sikkerhetstiltaket!" # MT
+    reset_password_instructions:
+      use_link: "Vi har fått en forespørsel om å tilbakestille passordet ditt. Bruk denne lenken for å gjøre det:" # MT
+      ignore: "Hvis du ikke har bedt om dette, kan du se bort fra denne e-posten. Passordet ditt blir ikke endret." # MT
+    sign_in_invitation:
+      subject: "Instruksjoner for å logge inn i Gather" # MT
+      invited: "Du er invitert til å logge inn i Gather, systemet som %{community} bruker til å administrere fellesskapet!" # MT
+      click_link: "Klikk på lenken nedenfor for å komme i gang." # MT
+      choose_method: "Der kan du velge å logge inn med Google eller med et passord. Hvis du ikke har laget et passord ennå, kan du gjøre det der." # MT
+      expiry:
+        one: "Lenken utløper om %{count} dag." # MT
+        other: "Lenken utløper om %{count} dager." # MT
+      see_you: "Vi håper å se deg snart!" # MT
+  errors:
+    messages:
+      already_confirmed: "er allerede bekreftet, prøv å logge inn" # MT
+      confirmation: "Samsvarer ikke med passordet" # MT
+      confirmation_period_expired: "må bekreftes innen %{period}, be om en ny" # MT
+      doesnt_match: "Samsvarer ikke med passordet" # MT
+      expired: "er utløpt, be om en ny" # MT
+      not_found: "Fant ikke e-postadressen" # MT
+      not_locked: "var ikke låst" # MT
+      not_saved:
+        one: "Én feil hindret %{calendar} i å bli lagret:" # MT
+        other: "%{count} feil hindret %{calendar} i å bli lagret:" # MT
+  password:
+    strength:
+      weak: "For svakt (poeng: %{bits})" # MT
+      good: "Bra (poeng: %{bits})" # MT
+      excellent: "Utmerket (poeng: %{bits})" # MT
+    strength_info: "Vi bruker en smart sjekk av passordstyrke for å sikre at passordet ditt er trygt og ikke lett kan knekkes.\n\nDu kan gjøre passordet ditt sterkere ved å:\n\n  - gjøre det lengre\n  - unngå ord som står i ordboka\n  - blande bokstaver, tall og symboler" # MT

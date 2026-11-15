@@ -2,6 +2,7 @@
 
 # Sends test emails that are then checked for by the system.
 class TestMailer < ActionMailer::Base
+  include RecipientLocale
   default from: Settings.email.from
 
   SUBJECT = "Gather Mail Reliability Test"

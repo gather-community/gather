@@ -8,7 +8,9 @@ describe WorkMailer do
     let(:user) { create(:user) }
     let(:assignment) { create(:work_assignment, shift: job.shifts.first) }
     let(:reminder) { create(:work_job_reminder, job: job, note: note) }
-    let(:mail) { described_class.job_reminder(assignment, reminder).deliver_now }
+    let(:mail) do
+      described_class.with(recipient: assignment.user).job_reminder(assignment, reminder).deliver_now
+    end
 
     context "with no note" do
       let(:note) { nil }
@@ -49,14 +51,14 @@ describe WorkMailer do
     let(:fc_job) { double(title: "Junk") }
     let(:period) do
       double(id: 123, auto_open_time: Time.zone.parse("2018-08-15 19:00"), staggered?: staggered,
-             community: Defaults.community, quota_none?: false)
+             community: Defaults.community, quota_none?: false, to_param: "period-123")
     end
     let(:synopsis) do
       double(user_regular_got: 5, user_adjusted_quota: 15.5, user_need: 10.5,
              user_full_community_hours: {fc_job => 4}, rounds: rounds)
     end
     let(:share) { double(user: user, period: period) }
-    let(:mail) { described_class.job_choosing_notice(share).deliver_now }
+    let(:mail) { described_class.with(recipient: user).job_choosing_notice(share).deliver_now }
 
     before do
       allow(Work::Synopsis).to receive(:new).and_return(nil)
@@ -101,10 +103,10 @@ describe WorkMailer do
   end
 
   def have_correct_shifts_url(community)
-    contain_community_url(community, "/work/signups?period_id=123")
+    contain_community_url(community, "/work/period-123/signups")
   end
 
   def have_correct_shift_url(shift)
-    contain_community_url(shift.community, "/work/signups/#{shift.id}")
+    contain_community_url(shift.community, "/work/#{shift.job.period.slug}/signups/#{shift.id}")
   end
 end

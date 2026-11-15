@@ -1,17 +1,17 @@
-<% content_for(:title, "Directory") %>
-<% content_for(:print_title) { "#{current_community.name} Directory" } %>
+<% content_for(:title, t(".title")) %>
+<% content_for(:print_title) { t(".print_title", community: current_community.name) } %>
 <% content_for(:action_links) do %>
   <%- concat(print_button) -%>
   <%- if policy(sample_user).create? -%>
 <div class="btn-group">
   <button type="button" class="btn btn-primary dropdown-toggle icon-only" data-toggle="dropdown"
-    aria-haspopup="true" aria-expanded="false" aria-label="Show user action dropdown menu">
+    aria-haspopup="true" aria-expanded="false" aria-label="<%= t(".show_action_menu") %>">
     <%= icon_tag("plus") %></span>
   </button>
   <ul class="dropdown-menu">
-    <li><%= link_to("Create Adult", new_user_path) %></li>
-    <li><%= link_to("Create Child", new_user_path(child: 1)) %></li>
-    <li><%= link_to("Invite To Sign In", new_people_sign_in_invitation_path) %></li>
+    <li><%= link_to(t(".create_adult"), new_user_path) %></li>
+    <li><%= link_to(t(".create_child"), new_user_path(child: 1)) %></li>
+    <li><%= link_to(t(".invite_to_sign_in"), new_people_sign_in_invitation_path) %></li>
   </ul>
 </div>
   <%- end -%>
@@ -19,7 +19,7 @@
 
 <% if users.empty? %>
   <div class="center-notice">
-    No users found. <%= lenses.no_result_clear_filter_link %>
+    <%= t(".no_users") %> <%= lenses.no_result_clear_filter_link %>
   </div>
 <% else %>
   <% if lenses[:view].any_table? %>
@@ -27,13 +27,13 @@
       <table id="directory-table" class="index">
         <thead>
           <tr>
-            <th>Name</th>
-            <th>Unit</th>
-            <th>Email</th>
-            <th>Mobile Phone</th>
-            <th>Home Phone</th>
-            <th>Work Phone</th>
-            <th>Pref</th>
+            <th><%= t(".name") %></th>
+            <th><%= t(".unit") %></th>
+            <th><%= t(".email") %></th>
+            <th><%= t(".mobile_phone") %></th>
+            <th><%= t(".home_phone") %></th>
+            <th><%= t(".work_phone") %></th>
+            <th><%= t(".preferred_contact") %></th>
           </tr>
         </thead>
         <tbody>
@@ -51,7 +51,7 @@
                 <td class="phone"><%= phone_link(user.phone(kind), kind_abbrv: true) %></td>
               <% end %>
               <% if user.preferred_contact.present? %>
-                <td><%= t("simple_form.options.user.preferred_contact.#{user.preferred_contact}") %></td>
+                <td><%= user.preferred_contact %></td>
               <% else %>
                 <td></td>
               <% end %>
@@ -95,14 +95,14 @@
         <div class="visible-print"><%= generated_time %></div>
       </div>
       <div class="footer-links footer-2nd-col col-sm-6 hidden-print">
-        <%= link_to(icon_tag("download") << " Download as CSV", users_path(format: :csv, view: lenses[:view].value)) %>
+        <%= link_to(icon_tag("download") << " " << t(".download_csv"), users_path(format: :csv, view: lenses[:view].value)) %>
       </div>
     </div>
   </footer>
 <% end %>
 
-<%= javascript_tag do %>
+<script>
   $(function() {
     new Gather.Views.People.DirectoryPrintView({viewType: '<%= lenses[:view].value %>'});
   });
-<% end %>
+</script>

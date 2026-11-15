@@ -33,7 +33,7 @@ module Groups
       whens = KINDS.each_with_index.map { |k, i| "WHEN '#{k}' THEN #{i}" }.join(" ")
       joins(:user).order(Arel.sql("CASE kind #{whens} END")).merge(::User.by_name)
     }
-    scope :by_group_name, -> { joins(:group).order("groups.name") }
+    scope :by_group_name, -> { joins(:group).alpha_order(groups: :name) }
 
     normalize_attributes :kind
 

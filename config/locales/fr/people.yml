@@ -1,0 +1,215 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+fr:
+  people:
+    deleted_placeholder:
+      household: "Membres supprimés" # MT
+      first_name: "Membre" # MT
+      last_name: "supprimé" # MT
+    sign_in_invitations:
+      sent:
+        one: "Invitation envoyée." # MT
+        other: "Invitations envoyées." # MT
+      none_selected: "Vous n'avez sélectionné aucune personne." # MT
+      new:
+        title: "Inviter des personnes à se connecter" # MT
+        no_users: "Aucune personne trouvée." # MT
+        instructions_html: "Cochez les personnes que vous voulez inviter. Celles qui ont %{icon} à côté de leur nom ne se sont jamais connectées." # MT
+        select_no_sign_ins: "Sélectionner celles qui ne se sont jamais connectées" # MT
+        select_all: "Tout sélectionner" # MT
+        send: "Envoyer les invitations" # MT
+    memorials:
+      created: "Hommage créé." # MT
+      updated: "Hommage mis à jour." # MT
+      index:
+        title: "Hommages" # MT
+        create: "Créer un hommage" # MT
+        no_memorials: "Aucun hommage trouvé." # MT
+        photo_of: "Photo de %{name}" # MT
+      show:
+        memorials: "Hommages" # MT
+        photo_of: "Photo de %{name}" # MT
+        obituary: "Nécrologie" # MT
+        community_memories: "Souvenirs de la communauté" # MT
+      new:
+        title: "Créer un hommage" # MT
+      edit:
+        title: "Modifier l'hommage : %{name}" # MT
+    memorial_messages:
+      created: "Merci pour votre message." # MT
+      updated: "Message mis à jour." # MT
+      edit:
+        title: "Modifier le message d'hommage" # MT
+    member_types:
+      created: "Type de membre créé." # MT
+      updated: "Type de membre mis à jour." # MT
+      index:
+        title: "Types de membre" # MT
+        create: "Créer un type de membre" # MT
+        explanation: "Les types de membre sont attribués aux foyers et permettent de personnaliser les frais facturés régulièrement." # MT
+        no_member_types: "Aucun type de membre trouvé." # MT
+        name: "Nom" # MT
+      new:
+        title: "Créer un type de membre" # MT
+      edit:
+        title: "Modifier le type de membre : %{name}" # MT
+    vehicles:
+      index:
+        title: "Véhicules" # MT
+        no_vehicles: "Aucun véhicule trouvé." # MT
+        vehicle: "Marque/Modèle/Couleur/Plaque" # MT
+        owner: "Propriétaire" # MT
+    settings:
+      edit:
+        title: "Paramètres des personnes" # MT
+    birthdays:
+      index:
+        title: "Anniversaires" # MT
+        no_users: "Aucune personne trouvée." # MT
+        unknown: "?"
+    password_changes:
+      success: "Mot de passe modifié." # MT
+      show:
+        title: "Changer le mot de passe" # MT
+      password_fields:
+        new_password: "Nouveau mot de passe" # MT
+        retype_new_password: "Confirmer le nouveau mot de passe" # MT
+        reveal: "Afficher les mots de passe" # MT
+        mask: "Masquer les mots de passe" # MT
+    users:
+      confirmations:
+        sign_in_to_use_gather: "Veuillez vous connecter pour utiliser Gather." # MT
+        expired_signed_in: "Le délai de confirmation a expiré. Utilisez le lien « Renvoyer les instructions de confirmation » ci-dessous pour réessayer." # MT
+        expired_signed_out: "Le délai de confirmation a expiré. Connectez-vous avec votre ancienne adresse e-mail et réessayez." # MT
+      omniauth_failure_reasons:
+        no_email: "Google n'a pas fourni d'adresse e-mail. Veuillez prévenir un administrateur" # MT
+        invitation_expired: "votre invitation a expiré" # MT
+        wrong_google_id: "vous devez vous connecter avec l'identifiant Google %{google_id}" # MT
+        google_id_taken: "votre identifiant Google %{google_id} est associé à une autre personne" # MT
+        invitation_required: "vous devez utiliser une invitation pour votre première connexion" # MT
+        google_id_not_found: "votre identifiant Google %{google_id} est introuvable dans le système" # MT
+        cancelled: "la connexion a été annulée" # MT
+        session_expired: "votre session de connexion a expiré. Veuillez réessayer" # MT
+        unexpected: "une erreur inconnue s'est produite. Les administrateurs ont été prévenus" # MT
+    deletion:
+      blocked_intro: "Ceci ne peut pas encore être supprimé définitivement :" # MT
+      confirmation_mismatch: "Le texte de confirmation ne correspondait pas, rien n'a donc été supprimé." # MT
+      self_success: "Votre compte a été définitivement supprimé." # MT
+      blockers:
+        balance: "Le foyer « %{name} » a un solde de compte non réglé qui doit d'abord être résolu." # MT
+        guardian: "Cette personne est tutrice de %{names} ; supprimez ou réattribuez d'abord ces membres." # MT
+        external_ward: "Des membres de ce foyer sont tuteurs de %{names} dans d'autres foyers ; supprimez ou réattribuez d'abord ces membres." # MT
+        last_admin: "Cette personne est la seule administratrice de la communauté ; donnez d'abord le rôle d'administrateur à un autre membre." # MT
+  users:
+    greeting: "Bonjour %{name}," # MT
+    photo_of: "Photo de %{name}" # MT
+    confirmation_resent: "Instructions envoyées." # MT
+    email_change_canceled: "Changement d'adresse e-mail annulé." # MT
+    created: "Personne créée." # MT
+    created_and_invited: "Personne créée et invitée." # MT
+    updated: "Personne mise à jour." # MT
+    profile_updated: "Profil mis à jour." # MT
+    confirm_new_email_self: "Vous devez confirmer votre nouvelle adresse e-mail. Consultez vos e-mails à l'adresse %{email}." # MT
+    confirm_new_email_other: "Cette personne doit confirmer sa nouvelle adresse e-mail (%{email})." # MT
+    invitation_invalidated: "Toutefois, ce changement a peut-être rendu une invitation à se connecter invalide. Vous voudrez peut-être en envoyer une nouvelle." # MT
+    household_hint:
+      choose_html: "Choisissez un foyer existant pour cette personne. S'il n'existe pas, vous devez %{link}." # MT
+      create_link: "le créer d'abord" # MT
+      child_note: "En raison d'une limite du système, chaque personne dans Gather doit appartenir à un seul foyer, mais un enfant peut avoir des parents ou tuteurs dans plusieurs foyers. Toutes les fonctions du système concernant les enfants traitent à égalité tous les parents ou tuteurs et tous les foyers associés à l'enfant." # MT
+    preferred_contact_tooltip: "Préfère être contacté par : %{method}" # MT
+    all_users: "Toutes les personnes" # MT
+    index:
+      title: "Annuaire" # MT
+      print_title: "Annuaire de %{community}" # MT
+      show_action_menu: "Afficher le menu d'actions de la personne" # MT
+      create_adult: "Créer un adulte" # MT
+      create_child: "Créer un enfant" # MT
+      invite_to_sign_in: "Inviter à se connecter" # MT
+      no_users: "Aucune personne trouvée." # MT
+      name: "Nom" # MT
+      unit: "Logement" # MT
+      email: "E-mail" # MT
+      mobile_phone: "Mobile" # MT
+      home_phone: "Domicile" # MT
+      work_phone: "Travail" # MT
+      preferred_contact: "Préf." # MT
+      download_csv: "Télécharger en CSV" # MT
+    show:
+      directory: "Annuaire" # MT
+      email: "E-mail" # MT
+      pending_confirmation: "En attente de confirmation : %{email}" # MT
+      resend_confirmation: "Renvoyer les instructions de confirmation" # MT
+      cancel_change: "Annuler le changement" # MT
+      unconfirmed: "* Cette adresse n'a pas encore été confirmée, utilisez-la avec prudence." # MT
+      phone: "Téléphone" # MT
+      preferred_contact: "Moyen de contact préféré" # MT
+      birthday: "Anniversaire" # MT
+      age: "Âge" # MT
+      joined_on: "Date d'arrivée" # MT
+      recent_head_cook_meals: "Repas récents comme chef cuisinier" # MT
+      date: "Date" # MT
+      meal_title: "Titre" # MT
+      signups: "Inscriptions" # MT
+    new:
+      title: "Créer une personne" # MT
+    edit:
+      profile: "Profil" # MT
+      edit_user: "Modifier la personne : %{name}" # MT
+      edit_photo: "Modifier la photo : %{name}" # MT
+    full_form:
+      hide_photo_from_cluster: "Ne pas montrer la photo aux personnes de %{communities}" # MT
+      privacy_hint_html: "Pour en savoir plus sur les paramètres de confidentialité, consultez la %{link}." # MT
+      privacy_policy: "politique de confidentialité" # MT
+      household_info: "Informations sur le foyer" # MT
+      household_note_named_html: "Les champs ci-dessous sont associés au foyer %{name}. Les modifier ici les modifiera pour <em>toutes les personnes du foyer</em>." # MT
+      household_note_unnamed_html: "Les champs ci-dessous sont associés au foyer de la personne. Les modifier ici les modifiera pour <em>toutes les personnes du foyer</em>." # MT
+      move_household_html: "Vous pouvez aussi %{link}." # MT
+      move_household_link: "la déplacer dans un autre foyer" # MT
+  households:
+    greeting: "Bonjour au foyer %{name}," # MT
+    created: "Foyer créé." # MT
+    updated: "Foyer mis à jour." # MT
+    emergency_contact: "%{name} (%{relationship})" # MT
+    pets:
+      summary: "%{name} (%{species}, %{color})" # MT
+      vet: "Vétérinaire" # MT
+      caregivers: "Personnes qui s'en occupent" # MT
+      health_issues: "Problèmes de santé" # MT
+    number: "n° %{number}" # MT
+    index:
+      title: "Foyers" # MT
+      create: "Créer un foyer" # MT
+      no_households: "Aucun foyer trouvé." # MT
+      name: "Nom" # MT
+      unit: "N° de logement" # MT
+      users: "Personnes" # MT
+    show:
+      title: "Foyer : %{name}" # MT
+      households: "Foyers" # MT
+      missing_photo: "Photo manquante" # MT
+    new:
+      title: "Créer un foyer" # MT
+    edit:
+      title: "Modifier le foyer : %{name}" # MT
+    attribs:
+      household: "Foyer" # MT
+      members: "Membres" # MT
+      vehicles: "Véhicules" # MT
+      garage: "Garage" # MT
+      member_type: "Type de membre" # MT
+      emergency_contacts: "Contacts d'urgence" # MT
+      pets: "Animaux" # MT
+      keyholders: "Autres détenteurs de clés du logement" # MT
+    unit_community:
+      unit: "Logement" # MT
+      community: "Communauté" # MT

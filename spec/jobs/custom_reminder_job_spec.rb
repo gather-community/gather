@@ -9,15 +9,15 @@ describe CustomReminderJob do
   let(:time) { "2018-01-01 6:01" }
   let(:time_offset) { 0 }
 
-  # Create periods and users in two clusters.
-  let(:clusterA) { create(:cluster) }
+  # Create periods and users in two clusters. Cluster A is the default tenant, so its records can be
+  # created directly. Cluster B's records must be created inside in_cluster_b.
   let(:clusterB) { create(:cluster) }
-  let(:cmtyA) { create(:community, cluster: clusterA) }
-  let(:cmtyB) { create(:community, cluster: clusterB) }
+  let(:cmtyA) { create(:community) }
+  let(:cmtyB) { in_cluster_b { create(:community) } }
   let(:userA1) { create(:user, community: cmtyA) }
   let(:userA2) { create(:user, community: cmtyA) }
-  let(:userB1) { create(:user, community: cmtyB) }
-  let(:userB2) { create(:user, community: cmtyB) }
+  let(:userB1) { in_cluster_b { create(:user, community: cmtyB) } }
+  let(:userB2) { in_cluster_b { create(:user, community: cmtyB) } }
 
   # Set the time to a known value.
   around do |example|
@@ -28,8 +28,9 @@ describe CustomReminderJob do
 
   shared_examples_for "sends correct number of emails" do |num|
     it do
-      expect(WorkMailer).to receive(:job_reminder).exactly(num).times.and_return(mlrdbl)
+      calls = record_notifications(WorkMailer, :job_reminder)
       perform_job
+      expect(calls.size).to eq(num)
     end
   end
 
@@ -37,30 +38,38 @@ describe CustomReminderJob do
   # A later block covers correct hookup of other reminder types.
   describe "work job reminders" do
     let(:periodA) { create(:work_period, community: cmtyA) }
-    let(:periodB) { create(:work_period, community: cmtyB) }
+    let(:periodB) { in_cluster_b { create(:work_period, community: cmtyB) } }
 
     context "with multiple matching reminders in different clusters" do
       let(:work_jobA) { create(:work_job, period: periodA, shift_starts: ["2018-01-01 11:30"], shift_slots: 3) }
-      let(:work_jobB1) { create(:work_job, period: periodB, shift_starts: ["2018-01-02 12:00"], shift_slots: 1) }
-      let(:work_jobB2) { create(:work_job, period: periodB, shift_starts: ["2018-01-03 12:00"], shift_slots: 1) }
+      let(:work_jobB1) do
+        in_cluster_b do
+          create(:work_job, period: periodB, shift_starts: ["2018-01-02 12:00"], shift_slots: 1)
+        end
+      end
+      let(:work_jobB2) do
+        in_cluster_b do
+          create(:work_job, period: periodB, shift_starts: ["2018-01-03 12:00"], shift_slots: 1)
+        end
+      end
       let!(:assignA1) { work_jobA.shifts[0].assignments.create!(user: userA1) }
       let!(:assignA2) { work_jobA.shifts[0].assignments.create!(user: userA2) }
-      let!(:assignB1) { work_jobB1.shifts[0].assignments.create!(user: userB1) }
-      let!(:assignB2) { work_jobB2.shifts[0].assignments.create!(user: userB1) }
+      let!(:assignB1) { in_cluster_b { work_jobB1.shifts[0].assignments.create!(user: userB1) } }
+      let!(:assignB2) { in_cluster_b { work_jobB2.shifts[0].assignments.create!(user: userB1) } }
       let!(:reminderA1) { create_work_job_reminder(work_jobA, "2018-01-01 6:00") }
-      let!(:reminderB1) { create_work_job_reminder(work_jobB1, "2018-01-01 6:00") }
-      let!(:reminderB2) { create_work_job_reminder(work_jobB2, "2018-01-01 6:00") }
-      let!(:decoy) { create_work_job_reminder(work_jobB1, "2018-01-01 10:00") }
-      let!(:other_reminder) { create_work_job_reminder(work_jobB1, "2018-01-01 8:00") }
+      let!(:reminderB1) { in_cluster_b { create_work_job_reminder(work_jobB1, "2018-01-01 6:00") } }
+      let!(:reminderB2) { in_cluster_b { create_work_job_reminder(work_jobB2, "2018-01-01 6:00") } }
+      let!(:decoy) { in_cluster_b { create_work_job_reminder(work_jobB1, "2018-01-01 10:00") } }
+      let!(:other_reminder) { in_cluster_b { create_work_job_reminder(work_jobB1, "2018-01-01 8:00") } }
       let!(:old_stray_delivery) do
-        other_reminder.deliveries[0].tap { |d| d.update!(deliver_at: 1.day.ago) }
+        in_cluster_b { other_reminder.deliveries[0].tap { |d| d.update!(deliver_at: 1.day.ago) } }
       end
 
       context "slightly earlier" do
         let(:time_offset) { -2.minutes }
 
         it "should send nothing but delete old delivery" do
-          expect(WorkMailer).not_to receive(:job_reminder)
+          expect(WorkMailer).not_to receive(:with)
           perform_job
           expect { old_stray_delivery.reload }.to raise_error(ActiveRecord::RecordNotFound)
         end
@@ -80,17 +89,35 @@ describe CustomReminderJob do
       end
     end
 
+    context "when delivery to one recipient fails" do
+      let(:work_job) do
+        create(:work_job, period: periodA, shift_starts: ["2018-01-01 11:30"], shift_slots: 2)
+      end
+      let!(:assign1) { work_job.shifts[0].assignments.create!(user: userA1) }
+      let!(:assign2) { work_job.shifts[0].assignments.create!(user: userA2) }
+      let!(:reminder) { create_work_job_reminder(work_job, "2018-01-01 6:00") }
+
+      it "reports the error, still sends to the others, and doesn't redeliver" do
+        failing = double.tap { |d| allow(d).to receive(:deliver_now).and_raise(Net::ReadTimeout) }
+        expect(WorkMailer).to receive(:with).twice
+          .and_return(double(job_reminder: failing), double(job_reminder: mlrdbl))
+        expect(Gather::ErrorReporter.instance).to receive(:report).once
+        perform_job
+        expect(ReminderDelivery.count).to eq(0)
+      end
+    end
+
     context "with one reminder already sent and one too far in past" do
       let(:work_job1) do
-        create(:work_job, period: periodB, shift_starts: ["2018-01-02 12:00"], shift_slots: 1)
+        create(:work_job, period: periodA, shift_starts: ["2018-01-02 12:00"], shift_slots: 1)
       end
       let(:work_job2) do
-        create(:work_job, period: periodB, shift_starts: ["2018-01-03 12:00", "2018-01-03 13:00"],
+        create(:work_job, period: periodA, shift_starts: ["2018-01-03 12:00", "2018-01-03 13:00"],
                           shift_count: 2, shift_slots: 1)
       end
-      let!(:assign1) { work_job1.shifts[0].assignments.create!(user: userB1) }
-      let!(:assign2) { work_job2.shifts[0].assignments.create!(user: userB1) }
-      let!(:assign3) { work_job2.shifts[-1].assignments.create!(user: userB1) }
+      let!(:assign1) { work_job1.shifts[0].assignments.create!(user: userA1) }
+      let!(:assign2) { work_job2.shifts[0].assignments.create!(user: userA1) }
+      let!(:assign3) { work_job2.shifts[-1].assignments.create!(user: userA1) }
       let!(:reminder1) { create_work_job_reminder(work_job1, "2018-01-01 6:00") }
       let!(:reminder2) { create_work_job_reminder(work_job2, "2018-01-01 6:00") }
       let!(:reminder3) { create_work_job_reminder(work_job1, "2018-01-01 5:30") }
@@ -113,10 +140,12 @@ describe CustomReminderJob do
   end
 
   describe "multiple reminder types" do
-    let(:period) { create(:work_period, community: cmtyB) }
-    let(:work_job) { create(:work_job, period: period, shift_starts: ["2018-01-02 12:00"], shift_slots: 1) }
-    let!(:shift_assignment) { work_job.shifts[0].assignments.create!(user: userB1) }
-    let!(:job_reminder) { create_work_job_reminder(work_job, "2018-01-01 6:00") }
+    let(:period) { in_cluster_b { create(:work_period, community: cmtyB) } }
+    let(:work_job) do
+      in_cluster_b { create(:work_job, period: period, shift_starts: ["2018-01-02 12:00"], shift_slots: 1) }
+    end
+    let!(:shift_assignment) { in_cluster_b { work_job.shifts[0].assignments.create!(user: userB1) } }
+    let!(:job_reminder) { in_cluster_b { create_work_job_reminder(work_job, "2018-01-01 6:00") } }
 
     let(:role) { create(:meal_role, :head_cook, community: cmtyA) }
     let(:formula) { create(:meal_formula, community: cmtyA, roles: [role]) }
@@ -127,20 +156,24 @@ describe CustomReminderJob do
     let!(:role_reminder) { create_meal_role_reminder(role, 2, "days_before") }
 
     it "calls appropriate mailers" do
-      expect(WorkMailer).to receive(:job_reminder).with(shift_assignment, job_reminder).and_return(mlrdbl)
-      expect(MealMailer).to receive(:role_reminder).with(meal_assignment, role_reminder).and_return(mlrdbl)
+      work_calls = record_notifications(WorkMailer, :job_reminder)
+      meal_calls = record_notifications(MealMailer, :role_reminder)
       perform_job
+      expect(work_calls).to eq([[userB1, shift_assignment, job_reminder]])
+      expect(meal_calls).to eq([[userA1, meal_assignment, role_reminder]])
     end
   end
 
+  def in_cluster_b(&block)
+    ActsAsTenant.with_tenant(clusterB, &block)
+  end
+
   def expect_delivery_to_pairs(*pairs)
-    pairs.each do |pair|
-      expect(WorkMailer).to receive(:job_reminder).with(*pair).and_return(mlrdbl)
-    end
+    calls = record_notifications(WorkMailer, :job_reminder)
     perform_job
+    expect(calls).to match_array(pairs.map { |assignment, reminder| [assignment.user, assignment, reminder] })
 
     # Run job a second time, ensure nothing goes out.
-    expect(WorkMailer).not_to receive(:job_reminder)
-    perform_job
+    expect { perform_job }.not_to(change { calls.size })
   end
 end

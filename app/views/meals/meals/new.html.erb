@@ -1,25 +1,25 @@
-<% content_for(:title, "Create Meal") %>
+<% content_for(:title, t(".title")) %>
 
 <% @formula_options.inspect %>
 
 <% missing = [] %>
 <% if @formula_options.empty? %>
-  <% str = "an applicable cost formula" %>
+  <% str = t(".formula") %>
   <% missing << (policy(@sample_formula).create? ? link_to(str, new_meals_formula_path) : str) %>
 <% end %>
 <% if @calendar_options.empty? %>
-  <% str = "at least one meal-hostable calendar" %>
+  <% str = t(".calendar") %>
   <% missing << (policy(@sample_calendar).create? ? link_to(str, new_calendar_path) : str) %>
 <% end %>
 
 <% if missing.any? %>
   <div class="center-notice">
-    Before you can create a meal, there must be
-    <% if missing.size == 1 %>
-      <%= missing.first %>.
-    <% else %>
-      <%= missing.each_with_index.map { |m, i| "#{i + 1}) ".html_safe << m }.reduce(&sep(", ")) %>.
-    <% end %>
+    <% items = if missing.size == 1
+         missing.first
+       else
+         missing.each_with_index.map { |m, i| "#{i + 1}) ".html_safe << m }.reduce(&sep(", "))
+       end %>
+    <%= t(".missing_prereqs_html", items: items) %>
   </div>
 <% else %>
   <%= render("form") %>

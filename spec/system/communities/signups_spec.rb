@@ -100,30 +100,30 @@ describe "community signups", js: true do
   end
 
   describe "approver index" do
-    let!(:pending_signup) { create(:communities_signup) }
-    let!(:approved_signup) { create(:communities_signup, :approved) }
+    let!(:new_signup) { create(:communities_signup) }
+    let!(:creating_signup) { create(:communities_signup, :creating) }
 
     before do
       login_as(approver, scope: :user)
       use_user_subdomain(approver)
     end
 
-    scenario "shows pending applications by default" do
-      visit(communities_signups_path)
+    scenario "shows new applications by default" do
+      visit(admin_signups_path)
       expect(page).to have_title("Community Signup Applications")
-      expect(page).to have_content(pending_signup.community_name)
-      expect(page).not_to have_content(approved_signup.community_name)
+      expect(page).to have_content(new_signup.community_name)
+      expect(page).not_to have_content(creating_signup.community_name)
     end
 
     scenario "status lens filters applications" do
-      visit(communities_signups_path)
-      select_lens(:status, "Approved")
-      expect(page).not_to have_content(pending_signup.community_name)
-      expect(page).to have_content(approved_signup.community_name)
+      visit(admin_signups_path)
+      select_lens(:status, "Creating")
+      expect(page).not_to have_content(new_signup.community_name)
+      expect(page).to have_content(creating_signup.community_name)
 
       select_lens(:status, "All")
-      expect(page).to have_content(pending_signup.community_name)
-      expect(page).to have_content(approved_signup.community_name)
+      expect(page).to have_content(new_signup.community_name)
+      expect(page).to have_content(creating_signup.community_name)
     end
   end
 
@@ -136,7 +136,7 @@ describe "community signups", js: true do
     end
 
     scenario "approve application", perform_jobs: true do
-      visit(review_communities_signup_path(signup))
+      visit(review_admin_signup_path(signup))
       expect(page).to have_content(signup.community_name)
       expect(page).to have_content(signup.contact_name)
 
@@ -162,7 +162,7 @@ describe "community signups", js: true do
     end
 
     scenario "deny application" do
-      visit(review_communities_signup_path(signup))
+      visit(review_admin_signup_path(signup))
 
       emails = email_sent_by do
         select("Deny", from: "Action")
@@ -178,6 +178,48 @@ describe "community signups", js: true do
     end
   end
 
+  describe "retry failed setup" do
+    let!(:signup) { create(:communities_signup, :failed) }
+
+    before do
+      login_as(approver, scope: :user)
+      use_user_subdomain(approver)
+    end
+
+    scenario "shows the error and sets up the community on retry", perform_jobs: true do
+      visit(review_admin_signup_path(signup))
+      expect(page).to have_content("Failed")
+      expect(page).to have_content("Setup Error")
+      expect(page).to have_content("Validation failed: Users is invalid")
+      # The message was written at approval, so it's still what the applicant will get.
+      expect(page).to have_content("Approval Message")
+      expect(page).not_to have_content("Internal Notes")
+
+      emails = email_sent_by do
+        click_on("Retry Setup")
+        expect_modal(text: signup.contact_email)
+        click_modal_button("Retry Setup")
+        expect(page).to have_alert(/Retrying community setup/)
+      end
+
+      signup.reload
+      expect(signup).to be_created
+      expect(signup.reviewed_by).to eq(approver)
+      expect(signup.failure_message).to be_nil
+      expect(emails.map(&:subject)).to include(match(/Community setup complete/))
+
+      visit(review_admin_signup_path(signup))
+      expect(page).not_to have_content("Retry Setup")
+      expect(page).not_to have_content("Setup Error")
+    end
+
+    scenario "no retry button for an application that hasn't failed" do
+      signup.update!(status: "created")
+      visit(review_admin_signup_path(signup))
+      expect(page).not_to have_content("Retry Setup")
+    end
+  end
+
   describe "access control" do
     let(:plain_admin) { create(:admin) }
 
@@ -190,7 +232,7 @@ describe "community signups", js: true do
     # show_exceptions=false in test mode. Use raise_server_errors: false so the
     # stored server error doesn't interfere, and verify the page is not accessible.
     scenario "plain admin cannot access signups index", raise_server_errors: false do
-      visit(communities_signups_path)
+      visit(admin_signups_path)
       expect(page).not_to have_title("Community Signup Applications")
     end
   end

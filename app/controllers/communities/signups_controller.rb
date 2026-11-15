@@ -1,19 +1,14 @@
 # frozen_string_literal: true
 
+# The public application form for new communities. Reviewing applications is Admin::SignupsController.
 class Communities::SignupsController < ApplicationController
-  skip_before_action :authenticate_user!, only: %i[new create submitted]
-  skip_after_action :verify_pundit_authorization, only: %i[new create submitted]
-
-  def index
-    authorize(Communities::Signup)
-    prepare_lenses({:"communities/signup_status" => {initial_selection: :pending}})
-    @signups = policy_scope(Communities::Signup)
-      .where(status_filter)
-      .order(created_at: :desc)
-  end
+  skip_before_action :authenticate_user!
+  skip_after_action :verify_pundit_authorization
 
   def new
     @form = Communities::SignupForm.new(action: :new)
+    # Start with the language this page is in, which follows the browser or the footer's language menu.
+    @form.signup.locale = I18n.locale.to_s if Gather::Locales.enabled?(nil)
   end
 
   def create
@@ -22,7 +17,7 @@ class Communities::SignupsController < ApplicationController
       render(:new) and return
     end
     unless verify_hcaptcha
-      @form.errors.add(:hcaptcha_verified, "Captcha verification failed. Please try again.")
+      @form.errors.add(:hcaptcha_verified, t("communities.signups.captcha_failed"))
       render(:new) and return
     end
     if @form.save
@@ -36,43 +31,9 @@ class Communities::SignupsController < ApplicationController
   def submitted
   end
 
-  def review
-    @signup = Communities::Signup.find(params[:id])
-    authorize(@signup)
-    @action_form = Communities::SignupActionForm.new
-  end
-
-  def act
-    @signup = Communities::Signup.find(params[:id])
-    authorize(@signup, :act?)
-    @action_form = Communities::SignupActionForm.new(
-      params.require(:communities_signup_action).permit(:decision, :message)
-    )
-    unless @action_form.valid?
-      render(:review) and return
-    end
-    case @action_form.decision
-    when "approve"
-      @signup.approve!(current_user, message: @action_form.message)
-      Communities::SignupApprovalJob.perform_later(@signup.id)
-      redirect_to(communities_signups_path, notice: "Application approved. Community setup is underway.")
-    when "deny"
-      @signup.deny!(current_user, message: @action_form.message)
-      Communities::SignupMailer.application_denied(@signup).deliver_now
-      redirect_to(communities_signups_path, notice: "Application denied.")
-    end
-  end
-
   protected
 
   def apex_domain_only
     true
-  end
-
-  private
-
-  def status_filter
-    status = lenses[:status].selection
-    status == :all ? {} : {status: status}
   end
 end

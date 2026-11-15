@@ -1,0 +1,139 @@
+<% content_for(:flashes, inactive_notice(community, activate_path: activate_admin_community_path(community))) if community.inactive? %>
+<% content_for(:title, community.name) %>
+<% content_for(:action_links, community.action_links(:admin)) %>
+
+<table class="key-value">
+  <tr>
+    <td><%= t(".id") %></td>
+    <td><%= community.id %></td>
+  </tr>
+  <tr>
+    <td><%= t(".name") %></td>
+    <td><%= community.name %></td>
+  </tr>
+  <tr>
+    <td><%= t(".slug") %></td>
+    <td><%= community.slug %></td>
+  </tr>
+  <tr>
+    <td><%= t(".abbreviation") %></td>
+    <td><%= community.abbrv %></td>
+  </tr>
+  <tr>
+    <td><%= t(".country") %></td>
+    <td><%= community.country_name %></td>
+  </tr>
+  <tr>
+    <td><%= t(".time_zone") %></td>
+    <td><%= community.settings.time_zone %></td>
+  </tr>
+  <tr>
+    <td><%= t(".cluster") %></td>
+    <td><%= t(".cluster_value", name: community.cluster.name, id: community.cluster_id) %></td>
+  </tr>
+  <tr>
+    <td><%= t(".created") %></td>
+    <td><%= l(community.created_at, format: :long) %></td>
+  </tr>
+  <tr>
+    <td><%= t(".status") %></td>
+    <td><%= t("communities.community.statuses.#{community.status}") %></td>
+  </tr>
+</table>
+
+<% if (sub = community.subscription) %>
+  <h2><%= t(".subscription") %></h2>
+  <table class="key-value">
+    <tr>
+      <td><%= t(".stripe_id") %></td>
+      <td><%= sub.stripe_id %></td>
+    </tr>
+    <% if @subscription_stripe_error %>
+      <tr>
+        <td><%= t(".status") %></td>
+        <td class="text-muted"><%= t(".not_in_stripe") %></td>
+      </tr>
+    <% elsif sub.stripe_sub %>
+      <tr>
+        <td><%= t(".status") %></td>
+        <td><%= sub.status&.humanize %></td>
+      </tr>
+      <tr>
+        <td><%= t(".detailed_status") %></td>
+        <td><%= t("subscription.detailed_statuses.#{sub.detailed_status}") %></td>
+      </tr>
+      <tr>
+        <td><%= t(".last_synced") %></td>
+        <td><%= l(sub.synced_at, format: :long) if sub.synced_at %></td>
+      </tr>
+      <tr>
+        <td><%= t(".users") %></td>
+        <td><%= sub.quantity %></td>
+      </tr>
+      <tr>
+        <td><%= t(".price") %></td>
+        <td><%= t(".price_value_html", price: format_money(sub.price_per_user_cents / 100.0, currency: sub.currency),
+                  months: sub.months_per_period, currency: sub.currency&.upcase) %></td>
+      </tr>
+      <% if sub.discount_percent %>
+        <tr>
+          <td><%= t(".discount") %></td>
+          <td><%= sub.discount_percent %>%</td>
+        </tr>
+      <% end %>
+      <tr>
+        <td><%= t(".next_payment") %></td>
+        <td><%= l(sub.next_payment_date, format: :long) if sub.next_payment_date %></td>
+      </tr>
+      <tr>
+        <td><%= t(".contact") %></td>
+        <td><%= sub.contact_email %></td>
+      </tr>
+      <tr>
+        <td><%= t(".address") %></td>
+        <td>
+          <%= sub.address_line1 %><% if sub.address_line2 %>, <%= sub.address_line2 %><% end %><br>
+          <%= sub.address_city %><% if sub.address_state %>, <%= sub.address_state %><% end %>
+          <%= sub.address_postal_code %><br>
+          <%= sub.address_country %>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+<% elsif (intent = community.subscription_intent) %>
+  <h2><%= t(".subscription_intent") %></h2>
+  <table class="key-value">
+    <tr>
+      <td><%= t(".tier") %></td>
+      <td><%= intent.tier&.humanize %></td>
+    </tr>
+    <tr>
+      <td><%= t(".users") %></td>
+      <td><%= intent.quantity %></td>
+    </tr>
+    <tr>
+      <td><%= t(".price") %></td>
+      <td><%= t(".price_value_html", price: format_money(intent.price_per_user_cents / 100.0, currency: intent.currency),
+                  months: intent.months_per_period, currency: intent.currency&.upcase) %></td>
+    </tr>
+    <% if intent.start_date %>
+      <tr>
+        <td><%= t(".start_date") %></td>
+        <td><%= l(intent.start_date, format: :long) %></td>
+      </tr>
+    <% end %>
+    <tr>
+      <td><%= t(".contact") %></td>
+      <td><%= intent.contact_email %></td>
+    </tr>
+    <tr>
+      <td><%= t(".address") %></td>
+      <td>
+        <%= intent.address_line1 %><% if intent.address_line2 %>, <%= intent.address_line2 %><% end %><br>
+        <%= intent.address_city %><% if intent.address_state %>, <%= intent.address_state %><% end %>
+        <%= intent.address_postal_code %><br>
+        <%= intent.address_country %>
+      </td>
+    </tr>
+  </table>
+<% end %>

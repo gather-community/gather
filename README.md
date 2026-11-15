@@ -27,6 +27,55 @@ The easiest way to get started is with VS Code and Dev Containers:
    mise setup
    ```
 
+## Host Setup for Claude Code & GitHub (Dev Container)
+
+The dev container wires up the Claude Code extension and the `gh` CLI using credentials and environment variables that live on your **host** machine, forwarded in via `devcontainer.json`. Docker reads these when the container is built or started, so set them up _before_ you "Reopen in Container" — otherwise the build fails on a missing bind-mount source, or the integration comes up silently unauthenticated.
+
+This is the only manual host setup required. SSL certificate trust and the Docker network are configured automatically by `.devcontainer/setup.sh` (it runs on the host as `initializeCommand`), and `*.gatherdev.org` resolves to `127.0.0.1` via public DNS — none of that needs your attention. Skip this whole section if you don't use Claude Code or `gh` inside the container; the app itself runs without any of it.
+
+### Claude Code
+
+| Host item                                          | Purpose                                                                                                                                                                                                                |
+| -------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `~/.claude/.gather-devcontainer.credentials.json`  | Claude credentials for this dev container, kept separate from your host `~/.claude/.credentials.json`. **The file must exist before the first container start** — Docker creates a _directory_ in its place if it's missing, which breaks Claude Code. |
+| `~/.claude/projects` (directory)                   | Persists Claude conversation memory per project across container rebuilds.                                                                                                                                              |
+
+Create the placeholder file and directory once (Claude Code populates the credentials on first login):
+
+```bash
+mkdir -p ~/.claude/projects
+touch ~/.claude/.gather-devcontainer.credentials.json
+```
+
+### GitHub (`gh` CLI via GitHub App)
+
+Inside the container, `gh` authenticates with a short-lived GitHub App installation token (minted by `bin/gh-token`, wired into a shell wrapper by `.devcontainer/post-create.sh`). It needs the App's ID and private key from the host:
+
+| Host env var                     | Purpose                                                                                                                                                          |
+| -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GITHUB_GATHER_AI_APP_ID`        | The GitHub App's numeric ID (exposed in the container as `GITHUB_APP_ID`).                                                                                        |
+| `GITHUB_GATHER_AI_APP_KEY_PATH`  | Absolute path to the App's private-key `.pem` file on the host; bind-mounted to `~/.ssh/github-bot-key.pem`. **The file must exist** or the container build fails on the missing mount source. |
+
+Add to your host shell profile (e.g. `~/.zshrc`):
+
+```bash
+export GITHUB_GATHER_AI_APP_ID=123456
+export GITHUB_GATHER_AI_APP_KEY_PATH="$HOME/.ssh/gather-github-app.pem"
+```
+
+Get the App ID and download a private key from the GitHub App's settings page (ask a maintainer for access). After exporting these and rebuilding the container, `gh` commands authenticate automatically.
+
+### Optional: Discourse (forum announcements)
+
+Only needed if you use `bin/post_announcement` to post to the support forum. These host env vars are forwarded into the container — set them in your host shell profile if you need them:
+
+```bash
+export DISCOURSE_BASE_URL=https://support.forum.gather.coop
+export DISCOURSE_BOT_API_KEY=...
+export DISCOURSE_BOT_USERNAME=Gather_Bot
+export DISCOURSE_ANNOUNCEMENTS_CATEGORY_ID=...
+```
+
 ## System Dependencies
 
 We recommend using [mise](https://mise.jdx.dev/) for managing tool versions and running configuration tasks. The project includes a `mise.toml` that installs Ruby, Node.js, and other required tools automatically.
@@ -44,7 +93,7 @@ We recommend using [mise](https://mise.jdx.dev/) for managing tool versions and 
 | Tool        | Purpose                                                           |
 | ----------- | ----------------------------------------------------------------- |
 | Docker      | Only required if using the repo's `compose.yml` for data services |
-| Mailcatcher | Email testing (`gem install mailcatcher`)                         |
+| Mailcatcher | Email testing. Runs as a Docker service, and dev mail goes there by default. If you run it locally instead (`gem install mailcatcher`), set `smtp.address: localhost` in `config/settings.local.yml`. |
 | Mailman 3   | Mailing list integration (see below)                              |
 
 ## Setup Stages
@@ -96,8 +145,8 @@ The devcontainer joins a network named `<folder>-network` (e.g. `gather2-network
 ```
 ┌──────────────────────────────── Mac Host ──────────────────────────────────────────────┐
 │                                                                                         │
-│   Browser      :3000 ◄── VS Code (process-detect)    :1080 :8000 ◄── Docker host bind  │
-│                      (one dev env at a time)           (opt-in, one dev env at a time)  │
+│   Browser :3000 :3001 ◄── VS Code (process-detect)   :1080 :8000 ◄── Docker host bind  │
+│             (one port per dev env)                     (opt-in, one dev env at a time)  │
 │                          │                                │      │                       │
 └──────────────────────────┼────────────────────────────────┼──────┼─────────────────── ─ ┘
                            │                                │      │
@@ -114,7 +163,7 @@ The devcontainer joins a network named `<folder>-network` (e.g. `gather2-network
      │                                                                                   │
      │  ┌──────────────────────────────────────┐  ┌──────────┐ ┌─────────────┐         │
      │  │        gather2 devcontainer           │  │mailcatch │ │ mailman-web │         │
-     │  │   Rails :3000    Selenium :4444       │  │:1025/1080│ │    :8000    │         │
+     │  │   Rails :3001    Selenium :4444       │  │:1025/1080│ │    :8000    │         │
      │  └──────────────────────────────────────┘  └──────────┘ └─────────────┘         │
      │  postgres:5432  redis:6379  elasticsearch:9200  mailman-core:8001                │
      └─────────────────────────────────────────────────────────────────────────────────┘
@@ -122,7 +171,7 @@ The devcontainer joins a network named `<folder>-network` (e.g. `gather2-network
 
 All dev envs are symmetrical — no host port bindings for any service. The devcontainer is on the same Docker network, so services are reachable by hostname (`psql -h postgres`, `redis-cli -h redis`, etc.) from the devcontainer terminal without any host bindings.
 
-**Rails on :3000** runs inside the devcontainer. VS Code detects the process binding and forwards it to the host automatically (`remote.autoForwardPortsSource: "process"` in `devcontainer.json`).
+**Rails** runs inside the devcontainer, on port 3000 by default. VS Code detects the process binding and forwards it to the same port on the host automatically (`remote.autoForwardPortsSource: "process"` in `devcontainer.json`).
 
 ### Setting up a secondary instance
 
@@ -139,6 +188,15 @@ Inside the container, run:
 ```
 mise setup
 ```
+
+Then give the instance its own Rails port, so it doesn't clash with the others on the Mac. Pick one no other instance uses (e.g. 3001, 3002) and add it to `config/settings.local.yml`:
+
+```yaml
+url:
+  port: 3001
+```
+
+`bin/dev` starts Thin on that port, and the app uses the same setting to build its URLs (`https://gatherdev.org:3001`). `mise conf` keeps it when it regenerates the file.
 
 ### Tearing down a dev env
 
@@ -158,7 +216,7 @@ This removes:
 
 ### Checking for port conflicts
 
-`bin/dev` checks automatically whether port 3000 is already claimed before starting Rails. If another dev env owns it, you'll see which one and be told to stop it first.
+`bin/dev` checks automatically whether its port is already claimed before starting Rails. If another dev env owns it, you'll see which one and be told to stop it or pick a different port.
 
 ### Exposing sibling container UIs
 
@@ -222,18 +280,10 @@ We use eslint, rubocop, and scss_lint. The CI system enforces these—PRs won't 
 
 ### Elasticsearch 403 Errors
 
-Reset the index:
+Reset and re-populate the index:
 
-```ruby
-rails console -e development
-Work::Shift.__elasticsearch__.create_index!(force: true)
-```
-
-To re-populate after resetting:
-
-```ruby
-ActsAsTenant.current_tenant = Cluster.find(...)
-Work::Shift.find_each { |s| s.__elasticsearch__.index_document }
+```bash
+bin/rails search:reindex
 ```
 
 ## Mailman 3 Setup

@@ -6,7 +6,7 @@ module Meals
 
     %i[ingredient_cost pantry_cost].each do |attrib|
       define_method("#{attrib}_formatted") do
-        (num = self[attrib]).blank? ? "?" : h.number_to_currency(num)
+        (num = self[attrib]).blank? ? "?" : h.format_money(num)
       end
 
       define_method("#{attrib}_decimals") do
@@ -29,7 +29,7 @@ module Meals
     # Calculates price temporarily with given calculator if not yet calculated. Else just looks it up.
     def formatted_price_for_type(type:, calculator:)
       price = blank? ? calculator.price_for(type) : parts_by_type[type]&.value
-      h.number_to_currency(price)
+      h.format_money(price)
     end
 
     private

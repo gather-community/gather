@@ -23,12 +23,21 @@ module Billing
               statement = Statement.new(account: account,
                 prev_balance: account.last_statement&.total_due || 0)
               statement.populate!
-              AccountMailer.statement_notice(statement).deliver_now unless options[:no_mail]
+              send_statement_notice(statement) unless options[:no_mail]
             end
           end
         rescue StatementError => e
           Gather::ErrorReporter.instance.report(e, data: {account_id: account.id})
         end
+      end
+    end
+
+    # One message per household member, so a bad address only affects that person. On a shared message
+    # the server's rejection of one address stopped the message for everyone else on it.
+    def send_statement_notice(statement)
+      data = {statement_id: statement.id}
+      each_notification_recipient(statement.household, kind: :statement_notice, data: data) do |user|
+        AccountMailer.with(recipient: user).statement_notice(statement).deliver_now
       end
     end
   end

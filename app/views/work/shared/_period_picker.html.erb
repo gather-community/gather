@@ -1,0 +1,15 @@
+<%# locals: periods (Array of selectable Work::Period), section (:signups/:jobs/:report) %>
+<div class="period-picker">
+  <% periods.each do |period| %>
+    <% path =
+         case section
+         when :signups then work_period_shifts_path(period)
+         when :jobs then work_period_jobs_path(period)
+         when :report then work_period_report_path(period)
+         end %>
+    <%= link_to(path, class: "period-card") do %>
+      <span class="name"><%= period.name %></span>
+      <span class="dates"><%= period.decorate.date_range %></span>
+    <% end %>
+  <% end %>
+</div>

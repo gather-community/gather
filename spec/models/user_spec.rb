@@ -86,16 +86,18 @@ describe User do
       ]
     end
 
-    it "matches partial first_name" do
-      expect(User.matching("don")).to contain_exactly(users[0])
+    it "matches the start of the first name, not the middle" do
+      expect(User.matching("Gor")).to contain_exactly(users[0])
+      expect(User.matching("don")).to be_empty
     end
 
     it "matches full first_name" do
       expect(User.matching("gordon")).to contain_exactly(users[0])
     end
 
-    it "matches partial last_name" do
+    it "matches the start of the last name, not the middle" do
       expect(User.matching("Dru")).to contain_exactly(users[0], users[1])
+      expect(User.matching("ruck")).to be_empty
     end
 
     it "matches full last_name" do
@@ -106,6 +108,24 @@ describe User do
       expect(User.matching("Gordon Druck")).to contain_exactly(users[0])
     end
 
+    it "requires every word to start a word of the name, in any order" do
+      expect(User.matching("go dr")).to contain_exactly(users[0])
+      expect(User.matching("dr go")).to contain_exactly(users[0])
+      expect(User.matching("go zo")).to be_empty
+    end
+
+    it "matches with or without accents, like the work shift search" do
+      zoe = create(:user, first_name: "Zoë", last_name: "Lefèvre")
+      expect(User.matching("zoe lef")).to contain_exactly(zoe)
+      expect(User.matching("Zoë")).to contain_exactly(zoe)
+    end
+
+    it "treats hyphens as word breaks" do
+      hyphenated = create(:user, first_name: "Ana", last_name: "Nader-Jenkins")
+      expect(User.matching("jen")).to contain_exactly(hyphenated)
+      expect(User.matching("Nader-Jen")).to contain_exactly(hyphenated)
+    end
+
     it "matches exact unit number with suffix with or without -, or exact unit number" do
       expect(User.matching("10")).to be_empty
       expect(User.matching("99B")).to contain_exactly(users[0])
@@ -113,7 +133,7 @@ describe User do
       expect(User.matching("99")).to contain_exactly(users[0], users[1], users[2], users[3])
       expect(User.matching("99X")).to contain_exactly(users[2], users[3])
       expect(User.matching("99-X")).to contain_exactly(users[2], users[3])
-      expect(User.matching("x")).to contain_exactly(users[1], users[5])
+      expect(User.matching("x")).to contain_exactly(users[5]) # Not Soox, since x is mid-word
     end
   end
 
@@ -214,6 +234,27 @@ describe User do
     context "with no data" do
       it "should not error" do
         expect(User.new).to be_invalid
+      end
+    end
+
+    describe "locale" do
+      it "starts as the community's default language" do
+        community = create(:community, settings: {locale: "nb"})
+        user = create(:user, household: create(:household, community: community), locale: nil)
+        expect(user.locale).to eq("nb")
+      end
+
+      it "keeps a language that was given" do
+        expect(create(:user, locale: "fr-CA").locale).to eq("fr-CA")
+      end
+
+      it "can't be blank or a language Gather isn't available in" do
+        user = create(:user)
+        user.locale = ""
+        expect(user).to be_invalid
+        user.locale = "xx"
+        expect(user).to be_invalid
+        expect(user.errors[:locale]).to be_present
       end
     end
 
@@ -430,7 +471,9 @@ describe User do
 
         context "with email taken in other cluster" do
           let(:other_cmty) { with_tenant(create(:cluster)) { create(:community) } }
-          let!(:other_user) { create(:user, community: other_cmty, email: "a@b.com") }
+          let!(:other_user) do
+            with_tenant(other_cmty.cluster) { create(:user, community: other_cmty, email: "a@b.com") }
+          end
           let(:email) { "a@b.com" }
 
           it do
@@ -581,6 +624,38 @@ describe User do
   # - For fake users and households, destruction may happen when associations are present that would
   #   normally forbid it, but the deletion script can be ordered in such a way as to avoid problems by
   #   deleting dependent objects first, and then users and households.
+  describe "notification preferences" do
+    let(:user) { build(:user) }
+
+    it "defaults configurable kinds to on" do
+      expect(user.notification_enabled?(:meal_reminder)).to be(true)
+    end
+
+    it "stores only the overrides" do
+      user.set_notification_pref(:meal_reminder, false)
+      expect(user.notification_prefs).to eq("meal_reminder" => {"email" => false})
+      expect(user.notification_enabled?(:meal_reminder)).to be(false)
+      expect(user.notification_enabled?(:job_reminder)).to be(true)
+
+      user.set_notification_pref(:meal_reminder, true)
+      expect(user.notification_prefs).to eq({})
+      expect(user.notification_enabled?(:meal_reminder)).to be(true)
+    end
+
+    it "treats required kinds as always on, even if something is stored" do
+      user.notification_prefs = {"meal_message" => {"email" => false}}
+      expect(user.notification_enabled?(:meal_message)).to be(true)
+    end
+
+    it "refuses to turn off a required kind" do
+      expect { user.set_notification_pref(:meal_message, false) }.to raise_error(ArgumentError)
+    end
+
+    it "raises for an unknown kind" do
+      expect { user.notification_enabled?(:nope) }.to raise_error(ArgumentError)
+    end
+  end
+
   describe "destruction" do
     let!(:user) { create(:user) }
 
@@ -688,14 +763,23 @@ describe User do
 
     context "with memorial" do
       let!(:memorial) { create(:memorial, user: user) }
-      it "deletes cleanly" do
+
+      # A memorial outlives the account and carries its own copy of the name/community/photo,
+      # so the link is simply nullified. See People::Memorial.
+      it "keeps the memorial and nullifies the link" do
+        name = memorial.name
         user.destroy
-        expect { memorial.reload }.to raise_error(ActiveRecord::RecordNotFound)
+        expect(memorial.reload.user_id).to be_nil
+        expect(memorial.name).to eq(name)
       end
     end
 
     context "with memorial message" do
       let!(:memorial_message) { create(:memorial_message, author: user) }
+
+      # A raw destroy still cascades, which is what keeps community teardown working.
+      # People::UserDeletion reassigns the messages first, so they survive that path —
+      # see the anonymization spec in people/user_deletion_spec.rb.
       it "deletes cleanly" do
         user.destroy
         expect { memorial_message.reload }.to raise_error(ActiveRecord::RecordNotFound)

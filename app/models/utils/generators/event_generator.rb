@@ -22,7 +22,8 @@ module Utils
             ends_at: translate_time(row["ends_at"]),
             creator: adults.sample,
             calendar: calendar_map[row["calendar_id"]],
-            name: Faker::Hipster.words(number: 2).join(" ").capitalize[0..23],
+            kind: I18n.t("sample_data.event_kinds.#{row["kind"]}"),
+            name: sample_item(:event_names),
             created_at: community.created_at,
             updated_at: community.updated_at
           ))
@@ -34,7 +35,9 @@ module Utils
       private
 
       def create_recurring_event_with_overrides(adults)
-        event = create_weekly_event(adults)
+        calendar = calendar_map.values.find(&:allows_recurring_events?)
+        return if calendar.nil?
+        event = create_weekly_event(adults, calendar)
         occ_start = event.occurrences_between(2.weeks.from_now..12.weeks.from_now).first.first
         event_override = Calendars::EventOverride.create!(event: event, occurrence_start: occ_start,
           deleted: true)
@@ -42,10 +45,10 @@ module Utils
           eventlet: event.eventlets.first, deleted: true)
       end
 
-      def create_weekly_event(adults)
+      def create_weekly_event(adults, calendar)
         Calendars::Event.create!(
-          name: "Weekly gathering",
-          calendar: calendar_map.values.first,
+          name: I18n.t("sample_data.weekly_event"),
+          calendar: calendar,
           creator: adults.sample,
           starts_at: 1.week.from_now.beginning_of_week + 10.hours,
           ends_at: 1.week.from_now.beginning_of_week + 11.hours,
@@ -59,7 +62,8 @@ module Utils
       end
 
       def translate_time(datetime)
-        datetime = datetime.in_time_zone("Eastern Time (US & Canada)")
+        # The sample events were exported from a community in this zone. Not user-facing text.
+        datetime = datetime.in_time_zone("Eastern Time (US & Canada)") # rubocop:disable Gather/HardCodedString
         date = datetime.to_date + date_offset
         time = datetime.strftime("%H:%M")
         Time.zone.parse("#{date.to_fs} #{time}")

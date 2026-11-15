@@ -1,0 +1,532 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+fi:
+  # Demo content for communities created with sample data (Utils::Generators), written in the community's
+  # language like the starter content (starter_content.yml). The rows in lib/random_data/data hold everything
+  # that isn't text, and name their text here by `key`.
+  #
+  # Calendar names (with the starter content's) can be at most 24 characters and must all differ, and
+  # calendar abbreviations at most 6. Event names can be at most 24 characters.
+  sample_data:
+    calendars:
+      media_room:
+        name: "Mediahuone" # MT
+        guidelines: |- # MT
+          # Mediahuoneen ohjeet
+
+          1. Alle 13-vuotiaiden on oltava aikuisen valvonnassa.
+          1. K-16- ja K-18-ohjelmat on lukittu sekä televisiosta että digiboksista.
+          1. Huoneen voi varata erityistapahtumia tai tv-ohjelmia varten. Katso kalenteri tai ota yhteyttä: media@example.com.
+          1. Kaukosäätimet pysyvät aina huoneessa, niille varatulla paikalla.
+          1. Siivoa mediahuone käytön jälkeen ja palauta se ”perustilaan”. Varo ruoanmuruja.
+      multipurpose_room:
+        name: "Monitoimihuone" # MT
+        guidelines: |- # MT
+          # Monitoimihuoneen ohjeet
+
+          1. Kuten tapahtumaohjeissa sanotaan, jokaisella vieraalla on oltava isäntänä yhteisön aikuinen jäsen.
+          1. Muista, että tämä huone on kuten kaikki yhteistalon tilat yhteistä omaisuutta.
+          1. Isäntä kirjoittaa vieraansa nimen ja vierailun päivämäärät oven vieressä olevalle valkotaululle.
+          1. Kaikkien vieraiden on noudatettava yhteistalon yleisiä ohjeita (ovessa) sekä jokaisen käyttämänsä huoneen ohjeita. Kiinnitä erityistä huomiota melua, hiljaisia tunteja ja tuoksutonta käytäntöämme koskeviin ohjeisiin.
+          1. Ei kynttilöitä eikä mitään muutakaan, mikä voi aiheuttaa tulipalon tai muun vaaran. Yhteistalossa ei saa tupakoida.
+          1. Huonetta käytetään muuhunkin, mutta yövieraat menevät edelle. Sovi päällekkäisistä varauksista suoraan toisen kanssa.
+          1. Vieras voi yöpyä enintään 7 päivää, kunhan kukaan muu asukas ei ole varannut huonetta omalle vieraalleen.
+          1. Isäntä vastaa vieraistaan. Kun vieraat lähtevät, isäntä siivoaa huoneen, pesee liinavaatteet ja lakanat ja tuo ne takaisin yhteistaloon.
+          1. Huone luovutetaan klo 12 mennessä.
+          1. Avaimet jätetään niille varattuun paikkaan yhteistalossa. Jos avaimet katoavat, uusista laskutetaan isäntää.
+          1. Vieraat voivat käyttää yksityisyytensä turvaamiseksi huoneessa olevaa Älä häiritse -kylttiä.
+      office:
+        name: "Toimisto" # MT
+      sitting_room:
+        name: "Oleskeluhuone" # MT
+      dining_room:
+        name: "Ruokasali" # MT
+        abbrv: "YT" # MT
+      courtyard:
+        name: "Piha" # MT
+        abbrv: "Piha" # MT
+      kitchen:
+        name: "Keittiö" # MT
+        abbrv: "YT" # MT
+        guidelines: |- # MT
+          # Keittiön ohjeet
+
+          ## Yleistä
+
+          Yhteistalon keittiö on yhteisöllemme iso investointi, ja se voi myös olla vaarallinen paikka. Koska tärkeintä meille on kaikkien yhteisön jäsenten ja laitteidemme turvallisuus, olemme sopineet seuraavista ohjeista.
+
+          Odotamme, että jokainen yhteisön jäsen ja hänen vieraansa kohtelevat laitteita ja tilaa huolella ja kunnioittavasti.
+
+          Vanhemmat opettavat lapsilleen, että:
+
+          * Keittiö ei ole leikkipaikka.
+          * Keittiön ruoka ei ole kenen tahansa syötävissä, ellei siinä lue niin.
+          * Lapset saavat olla keittiössä vain, jos heidät on kutsuttu sinne ja vastuullinen aikuinen valvoo heitä.
+
+          *Jätä keittiö siistimmäksi kuin se oli tullessasi.*
+
+          Ja pidetään hauskaa, laitetaan ja syödään herkullista ruokaa yhdessä!
+
+          ## Turvallisuus
+
+          * Jos lähdet keittiöstä, kun jotain on uunissa tai liedellä, varoita muita laittamalla este keittiön oviaukkoihin ja jättämällä lapun.
+          * Laita kattilat, joissa on kuumaa ruokaa, takalevyille eikä etulevyille.
+          * Älä siirrä ruokasoodaa pois lieden luota. Se on siinä tulipalon varalta.
+          * Älä koskaan jätä teräviä veitsiä vartioimatta tai laita niitä tiskiveteen.
+
+          Jos joudut lähtemään ennen kuin olet siivonnut loppuun, jätä lappu, jossa kerrot, milloin palaat, ja puhelinnumerosi.
+
+          Merkitse kaikki lainaamasi tavarat listaan ja palauta ne niin pian kuin voit.
+
+          Ilmoita kaikesta oudosta, kuten oudoista äänistä, hajuista tai rikkinäisistä tavaroista, korjauksista vastaavalle.
+
+          Yhteistalon jääkaappi on perustarvikkeille ja yhteisille aterioille. Jaa tähteet mieluummin muille kuin säilytä niitä täällä.
+
+          Pääkokkien, apukokkien ja siivoojien tehtävät on kuvattu erikseen.
+
+          ## Hygienian perusteet
+
+          1. Jos saatat olla sairas, pidä yhteisö terveenä ja mene kotiin.
+          1. Pese kädet usein, vanhaan malliin: saippualla ja kuumalla vedellä.
+          1. Peitä kaikki haavat huolellisesti.
+          1. Kun maistat, käytä kutakin lusikkaa vain kerran.
+          1. Vältä ristikontaminaatiota (allergeenit ja bakteerit) käyttämällä eri välineitä eri ruoille.
+          1. Kaikki, mikä on koskenut raakaa lihaa, pestään ja desinfioidaan ennen kuin sitä käytetään mihinkään muuhun.
+          1. Käytä kullekin ruoalle oikean väristä leikkuulautaa.
+          1. Altaissa voi olla bakteereja, joten pese raakana tarjottavat kasvikset siivilässä.
+          1. Ruoka pysyy turvallisena, kun se on kunnolla jäähdytetty tai kunnolla kuumennettu.
+
+          ## Perustarvikkeet
+
+          Perustarvikkeet ostetaan yhteistalon aterioita varten.
+
+          Perustarvikkeita ostaessamme mietimme, ovatko ne luomua, reilun kaupan tuotteita ja GMO-vapaita, sekä ruokavalioita, säilyvyyttä ja hintaa.
+
+          Perustarvikkeet maksetaan yhteistalon aterioihin lisättävällä pienellä lisämaksulla, jolla ostetaan uusia. Pääkokkien odotetaan käyttävän perustarvikkeita, jolloin varasto pysyy tuoreena ja aterioiden kustannukset pieninä.
+
+          Älä siis käytä perustarvikkeita omiin tarpeisiisi. Jos on aivan pakko:
+
+          * Korvaa käyttämäsi tuote samanlaisella.
+          * Jos et voi, lahjoita reilusti keittiön perustarvikekassaan.
+
+          Jos huomaat, että jokin on loppumassa, kirjoita se tätä varten olevalle listalle.
+
+          Keittiövastaava käy listan ja ruokakomeron läpi viikoittain ja tekee tarvittavat ostokset. Yritämme parhaamme mukaan täydentää perustarvikkeet sitä mukaa kuin ne loppuvat.
+
+          Jos tarvitset perustarviketta yhteisen aterian valmistukseen ja huomaat sen puuttuvan, osta se ja toimita kuitti erikseen kulukorvausta varten.
+
+          Ateriatoimikunta ylläpitää perustarvikkeiden listaa.
+
+          Pääkokit ostavat kaiken muun, myös valmiit salaatinkastikkeet.
+    shared_guidelines:
+      common_house:
+        name: "Yhteistalon ohjeet" # MT
+        body: |- # MT
+          # Yhteistalon ohjeet
+
+          * Tervetuloa yhteistaloomme!
+          * Yhteistalo on yhteisöelämämme keskus.
+          * Yhteisömme rakentuu ihmisten välisille suhteille.
+          * Jokaisella yhteisön jäsenellä on yhtä suuri sananvalta siihen, miten yhteistaloa käytämme.
+          * Kohtelemme yhteistaloa yhtä kunnioittavasti kuin naapurin kotia. Jätä se sellaiseksi kuin se oli tullessasi, tai vielä paremmaksi!
+
+          Nämä ohjeet tasapainottavat vapautta, vastuuta sekä ihmisten ja rakennuksen turvallisuutta.
+
+          ## Esteettömyys
+
+          Herkkyyksien huomioimiseksi sovimme seuraavaa:
+
+          * *Tuoksuttomuus* on tavoitteemme yhteistalossa.
+          * *Tupakointi:* yhteistalossa ei tupakoida.
+          * *Eläimet:* yhteistaloon ei tuoda lemmikkejä, avustajakoiria lukuun ottamatta. Lemmikkejä ei saa jättää ilman valvontaa yhteistalon pihalle.
+
+          ## Turvallisuus
+
+          Yhteistalo lukitaan arki-iltaisin klo 22 ja perjantaisin ja lauantaisin klo 23 mennessä sulkemislistan mukaisesti.
+
+          ## Viestintä
+
+          Asukkaat ottavat huolensa puheeksi suoraan aina kun mahdollista. Tarvittaessa yhteistalotoimikunta auttaa.
+
+          ## Huolto
+
+          Ilmoita rikkinäisistä tai viallisista järjestelmistä tai laitteista heti huoltotoimikunnalle osoitteeseen maintenance@example.com.
+
+          Tavallisissa asioissa lähetä sähköpostia tai jätä lappu huoltokansioon.
+
+          Ilmoita rikkinäisistä tavaroista yhteistalotoimikunnalle osoitteeseen commonhouse@example.com.
+
+          ## Alkoholi
+
+          Älä jätä tai säilytä yhteistalossa alkoholia, avattua tai avaamatonta, äläkä lääkkeitä.
+
+          ## Melu
+
+          Jos yhteistalon melu häiritsee, voit aina pyytää hiljentämään. Ota huomioon muut, jotka sitä pyytävät.
+
+          Yhteisölle kerrotaan etukäteen isoista tapahtumista, joissa voi olla tavallista äänekkäämpää tai jotka jatkuvat sulkemisajan yli.
+
+          ## Hiljaiset tunnit
+
+          * Arkisin klo 22–8
+          * Viikonloppuisin ja pyhäpäivinä klo 23–9
+
+          ## Kenelle yhteistalo on tarkoitettu
+
+          Yhteistalo on asukkaille ja heidän kutsumilleen vieraille.
+
+          * Olemme kiitollisia naapuriyhteisöjemme tuesta ja vieraanvaraisuudesta.
+          * Kun toivotamme naapurimme tervetulleiksi, ratkomme mahdolliset ongelmat reilusti, vastavuoroisuuden ja luottamuksen pohjalta.
+
+          Naapuriyhteisöjen jäsenet ovat tervetulleita yhteistaloon, ja he varaavat huoneita samalla tavalla kuin me. Muilla on oltava isäntänä aikuinen asukas, joka vastaa vieraidensa käytöksestä.
+
+          ## Huoneiden varaaminen
+
+          Yhteisön toiminta merkitään kalenteriin, ja se menee muiden tapahtumien edelle.
+
+          Kaikki ohjeet hyväksytään yksimielisesti. Kaikkien ehdotukset ovat tervetulleita, kun jatkamme ohjeiden hiomista.
+    # Kinds of event, e.g. "Official" for a community event.
+    event_kinds:
+      official: "Virallinen" # MT
+      personal: "Henkilökohtainen" # MT
+      special: "Erityinen" # MT
+    weekly_event: "Viikkotapaaminen" # MT
+    groups:
+      meals_committee:
+        name: "Ateriatoimikunta" # MT
+        description: "Pitää ateriat pyörimässä!" # MT
+      knitting_club:
+        name: "Neulekerho" # MT
+        description: "Neulontaa aloittelijoista konkareihin! Kokoonnumme sunnuntaisin klo 14." # MT
+    work:
+      period: "Pääjakso" # MT
+      jobs:
+        mow_team: "Ruohonleikkuutiimin jäsen" # MT
+        closer: "Yhteistalon sulkija" # MT
+        work_day: "Yhteiset talkoot" # MT
+    payment_description: "Tilisiirto, viite %{number}" # MT
+    memorial_message: "%{name} oli todella ystävällinen ihminen ja intohimoinen yhteisömme jäsen. Häntä tullaan kaipaamaan suuresti." # MT
+    # Lists the generators and factories pick from at random (see config/initializers/faker.rb).
+    relationships:
+      - "Äiti" # MT
+      - "Isä" # MT
+      - "Serkku" # MT
+      - "Veli" # MT
+      - "Sisko" # MT
+      - "Poika" # MT
+      - "Tytär" # MT
+      - "Täti" # MT
+      - "Setä" # MT
+      - "Ystävä" # MT
+    pet_species:
+      - "Kissa" # MT
+      - "Koira" # MT
+      - "Snautseri" # MT
+      - "Labradori" # MT
+      - "Käärme" # MT
+      - "Papukaija" # MT
+      - "Kani" # MT
+    colors:
+      - "Punainen" # MT
+      - "Sininen" # MT
+      - "Vihreä" # MT
+      - "Musta" # MT
+      - "Valkoinen" # MT
+      - "Hopea" # MT
+      - "Harmaa" # MT
+      - "Keltainen" # MT
+      - "Ruskea" # MT
+      - "Violetti" # MT
+    event_names:
+      - "Lukupiiri" # MT
+      - "Syntymäpäiväjuhlat" # MT
+      - "Leffailta" # MT
+      - "Joogatunti" # MT
+      - "Lautapelit" # MT
+      - "Kuoroharjoitukset" # MT
+      - "Vieras yökylässä" # MT
+      - "Nyyttärit" # MT
+      - "Lasten askartelutuokio" # MT
+      - "Toimikunnan kokous" # MT
+      - "Puutarhatalkoot" # MT
+      - "Vauvajuhlat" # MT
+      - "Soittoharjoitukset" # MT
+      - "Teetä ja jutustelua" # MT
+      - "Sukulaisvierailu" # MT
+      - "Työpaja" # MT
+      - "Peli-ilta" # MT
+      - "Taidekurssi" # MT
+      - "Meditaatio" # MT
+      - "Tanssitunti" # MT
+      - "Pikkujoulut" # MT
+      - "Pyöränkorjaus" # MT
+      - "Satutuokio" # MT
+      - "Ompelupiiri" # MT
+    # What a sample meal contains, shown in its allergen list.
+    allergens:
+      almonds: "Mantelit" # MT
+      bananas: "Banaanit" # MT
+      corn: "Maissi" # MT
+      dairy: "Maitotuotteet" # MT
+      eggs: "Kananmuna" # MT
+      gluten: "Gluteeni" # MT
+      peanuts: "Maapähkinät" # MT
+      pineapple: "Ananas" # MT
+      soy: "Soija" # MT
+      tofu: "Tofu" # MT
+      tree_nuts: "Puupähkinät" # MT
+    # Sample meals' menus. Each written by a different cook, so the style varies.
+    meals:
+      meal_01:
+        title: "Karpalokanaa ja bataattia" # MT
+        entrees: "Karpalokanaa (vapaan kanan, lähitilalta) ja bataattia" # MT
+        side: "Salaattia, hedelmiä" # MT
+        kids: "Kana maistuu lapsillekin" # MT
+        dessert: "Brownieita, jäätelöä" # MT
+        notes: "Uunitofua saa pyynnöstä. Voin tehdä bataattia ja karpaloita myös ilman kanaa, ja gluteenittomia brownieitakin. Gluteenia, maitoa ja kananmunaa on vain jälkiruoassa." # MT
+      meal_02:
+        title: "Uuniperunabaari" # MT
+        entrees: "Uuniperunoita ja monenlaisia täytteitä" # MT
+        dessert: "Pellillinen keksipaloja" # MT
+        notes: "Luomua aina kun mahdollista. Allergeeneja on helppo välttää." # MT
+      meal_03:
+        title: "Latkeja lisukkeineen" # MT
+        entrees: "Perunalättyjä sipulilla tai ilman, kananmunalla tai ilman (pyynnöstä), ja osa lempicurryni kanssa" # MT
+        side: "Kasviksia, salaattia, omenasosetta, kermaviiliä, siemeniä" # MT
+        dessert: "Hedelmiä ja tummaa suklaata" # MT
+        notes: "Kaikki luomua, GMO-vapaata ja gluteenitonta. Allergeenit voi välttää pyynnöstä, joten kerro selvästi, mitä haluat (esim. ei sipulia tai ei kananmunaa)." # MT
+      meal_04:
+        title: "Kauden keittoja" # MT
+        entrees: "Cheddar-olutkeittoa, hernekeittoa ja avoimia lämpimiä juustoleipiä" # MT
+        side: "Yksinkertainen salaatti: pinaattia, punaista paprikaa, avokadoa ja seesami-inkiväärikastiketta (myös muita kastikkeita)" # MT
+        dessert: "Mansikkasemifreddoa mustalla seesamilla" # MT
+      meal_05:
+        title: "Gluteeniton chili, nautaa tai tofua" # MT
+        entrees: "Luomua ja gluteenitonta chiliä lihansyöjille ja kasvissyöjille sekä luomuvihersalaattia ja kasviksia. Gluteenitonta luomumaissileipää, jossa on maitoa ja kananmunaa." # MT
+        kids: "Samaa" # MT
+        dessert: "Jotain luomua ja gluteenitonta, jossa voi olla maitoa ja kananmunaa" # MT
+      meal_06:
+        title: "Synttäri-illallinen: pestoa ja pastaa (tai riisiä)" # MT
+        entrees: "Pestopastaa tai -riisiä, kanan ja/tai tofun kanssa" # MT
+        side: "Uunijuureksia ja muuta ruokakomerosta löytyvää" # MT
+        dessert: "Kuppikakkuja ja suklaa-cashewnameja (maidottomia ja gluteenittomia)" # MT
+        notes: "Joustan ja otan toiveet huomioon. Kirjoita ruokavaliorajoitteesi kommentteihin. Illallinen on yksinkertainen, jotta voimme keskittyä jälkiruokaan." # MT
+      meal_07:
+        title: "Mustikkalättyjä ja pinaattifrittatoja" # MT
+        entrees: "Lättyjä, tavallisia tai gluteenittomia, ja yksittäisiä pinaatti-basilika-tomaattifrittatoja" # MT
+        side: "Kalkkunamakkaraa, hedelmiä ja jogurttia" # MT
+        kids: "Gluteenittomia lättyjä mantelimaidolla" # MT
+      meal_08:
+        title: "Pinaattilasagnea" # MT
+        entrees: "Pinaattilasagnea, ja juustolasagnea niille, jotka eivät pidä pinaatista" # MT
+        side: "Höyrytettyä parsakaalia" # MT
+        kids: "Pelkkää pastaa ja parmesaania" # MT
+        dessert: "Suklaahippukeksejä" # MT
+        notes: "Laita sähköpostia, jos haluat gluteenittoman tai muuten muunnellun version." # MT
+      meal_09:
+        title: "Gluteeniton perunakeitto" # MT
+        entrees: "Luomuperunakeittoa, jossa on maitoa, ja lihansyöjille luomupekonia päälle ripoteltavaksi" # MT
+        side: "Luomuvihersalaattia ja mitä muita luomukasviksia vain löydän (tomaattia, paprikaa, porkkanaa). Gluteenitonta luomumaissileipää, jossa on maitoa ja kananmunaa." # MT
+        kids: "Samaa" # MT
+        dessert: "Jotain luomua ja gluteenitonta" # MT
+        notes: "Kasvissyöjille uunitofua" # MT
+      meal_10:
+        title: "Limettikanatacot" # MT
+        entrees: "Nyhtökanaa chipotle-adobokastikkeessa tuoreen limetin kera (hieman tulista)" # MT
+        side: "Papumuhennosta ja riisiä" # MT
+        kids: "Pelkkiä kana-juustoquesadilloja" # MT
+        dessert: "Suklaa-hasselpähkinäsemifreddoa" # MT
+        notes: "Kaikki allergeenit voi välttää." # MT
+      meal_11:
+        title: "Tamaleja mukaan: lue lisätiedot!" # MT
+        entrees: "Tamaleja paikallisesta ravintolasta. Jokainen ilmoitettu aikuinen tarkoittaa yhtä tamalea, joten älä ilmoita lapsia. Jos haluat kaksi tamalea, ilmoita kaksi aikuista." # MT
+        side: "Curtidoa (eräänlaista hapankaalia)" # MT
+        notes: "Kirjoita kommentteihin, millaisen tamalen haluat. Tilaan pelkkiä tamaleja, niin pysyy yksinkertaisena." # MT
+      meal_12:
+        title: "Kana- ja kasvispaellat" # MT
+        entrees: "Riisiä kanan kanssa, ja kasvissyöjille riisiä kasvisten kanssa" # MT
+        side: "Vihersalaattia" # MT
+        dessert: "Crème caramelia ja hedelmiä" # MT
+      meal_13:
+        title: "Naudanrintastroganoff" # MT
+        entrees: "Naudanrintastroganoffia ja munanuudeleita" # MT
+        side: "Siitake-purjorisottoa ja parsaa" # MT
+        kids: "Pelkkiä nuudeleita ja risottoa" # MT
+        dessert: "Vielä auki" # MT
+      meal_14:
+        title: "Chilin aika" # MT
+        entrees: "Kasvischiliä" # MT
+        side: "Maissileipää, salaattia" # MT
+        kids: "Samaa" # MT
+        dessert: "Kyllä" # MT
+        notes: "Kerro, jos tarvitset gluteenittoman version." # MT
+      meal_15:
+        title: "Kreppibuffet" # MT
+        entrees: "Valikoima kreppejä (tavallisia, juureen tehtyjä ja pyynnöstä gluteenittomia), suolaisia täytteitä (kananmunaa, juustoa, kasviksia, yrttejä ja muuta) ja makeita täytteitä (hedelmiä, suklaalevitettä, hilloa, jogurttia, ricottaa ja muuta), joilla voit täyttää omasi." # MT
+        notes: "Täytteet otetaan itse. Krepeissä on kananmunaa ja maitoa." # MT
+      meal_16:
+        title: "Curry ja riisi" # MT
+        entrees: "Kanacurrya riisin kera, kasvissyöjille tofua" # MT
+        side: "Retiisikimchiä" # MT
+        kids: "Paistettuja dumplingeja" # MT
+        dessert: "Hedelmiä" # MT
+        notes: "Currymausteessani on jauhoja. Jos tarvitset gluteenitonta, käytän yhteistalon keittiön gluteenitonta currymaustetta." # MT
+      meal_17:
+        title: "Englantilainen aamiainen" # MT
+        entrees: "Munakokkelia, makkaroita, sieniä, uunipapuja" # MT
+        side: "Sekamarjoja" # MT
+      meal_18:
+        title: "Kana- tai kasvistikka masala" # MT
+        entrees: "Kana- tai kasvistikka masala: lihaa tai kasviksia haudutettuna täyteläisessä kookoscurryssa, riisi lisukkeena" # MT
+        side: "Salaattia, riisiä" # MT
+        kids: "Tykkäävät varmasti" # MT
+        dessert: "Hedelmiä" # MT
+        notes: "Molemmat versiot ovat gluteenittomia ja maidottomia! Kerro, haluatko vegaanisen vai liha-version. Mahdollisimman paikallista ja luomua." # MT
+      meal_19:
+        title: "Chilikisa!" # MT
+        entrees: "Chiliä ja vielä lisää chiliä, pieni maksu per aikuinen" # MT
+        side: "Omenasosetta, leipää ja voita" # MT
+        kids: "Chiliä ja vielä lisää chiliä. Alle 7-vuotiaille ilmainen." # MT
+        dessert: "Todennäköisesti" # MT
+        notes: "Chilikisan tuotto käytetään uuteen taiteeseen ruokasaliin. Tule kokkaamaan, syömään ja äänestämään! Jokaisella on yksi ääni, myös lapsilla. Osallistu tuomalla 4 litraa chiliä klo 18 mennessä ja merkitse osallistumislomakkeeseen sen allergeenit, liha ja alkoholi." # MT
+      meal_20:
+        title: "Kahvikakkua ja munavuokaa" # MT
+        entrees: "Pekoni-munavuokaa vuohenjuuston ja kasvisten kera" # MT
+        side: "Gluteenitonta mustikkakahvikakkua" # MT
+        kids: "Ihan varmasti maistuu" # MT
+        notes: "Kaikki on gluteenitonta. Ainoa maitotuote on vuoan vuohenjuusto." # MT
+      meal_21:
+        title: "Kookoskalakeitto" # MT
+        entrees: "Kookosmaitoon tehtyä kalakeittoa, ja kalaton vegaaninen vaihtoehto" # MT
+        side: "Vastaleivottuja sämpylöitä" # MT
+        kids: "Raakoja porkkanatikkuja ja parsakaalia" # MT
+        dessert: "Hedelmiä" # MT
+        notes: "Sämpylöissä on vehnää. Itse keitto on gluteeniton." # MT
+      meal_22:
+        title: "Lämpimiä täytettyjä croissanteja ja hedelmiä" # MT
+        entrees: "Tuoreita ja grillattuja kasviksia lämpimissä croissanteissa" # MT
+        side: "Raikasta hedelmäsalaattia ja taateleilla makeutettuja pähkinämaitoja" # MT
+        kids: "Munakokkelia ja jogurttia" # MT
+      meal_23:
+        title: "Coq au vin" # MT
+        entrees: "Coq au vin" # MT
+        side: "Persiljaperunoita, vihreitä papuja, salaattia ja sinappivinegrettiä" # MT
+        dessert: "Mansikoita ja kermaa" # MT
+      meal_24:
+        title: "Dumplingkeitto" # MT
+        entrees: "Dumplingeja kanaliemessä (tai kasvisliemessä)" # MT
+        side: "Riisiä, retiisikimchiä ja lisukkeita (suikaloitua merilevää, hienonnettua kevätsipulia)" # MT
+        kids: "Useimmat lapset tykkäävät dumplingeista" # MT
+        dessert: "Hedelmiä ja brownieita" # MT
+        notes: "Dumplingit ovat possua, ellet pyydä nauta- tai kasvisdumplingeja. Lisään liemeen kananmunaa." # MT
+      meal_25:
+        title: "Kokoa oma riisikulho" # MT
+        entrees: "Kanaa (tai uunitofua) ja valintasi mukaan riisiä, rapeita nuudeleita, kasviksia, ananasta, kookoshiutaleita, mantelilastuja, raastettua juustoa ja muita täytteitä" # MT
+        kids: "Viipaloituja kasviksia, hedelmiä" # MT
+        dessert: "Keksipaloja" # MT
+      meal_26:
+        title: "Perinteistä saksalaista ruokaa" # MT
+        entrees: "Bratwurstia, munanuudeleita ja perunavuokaa" # MT
+        side: "Punakaalia, hapankaalia, piparjuurta ja kermaviiliä" # MT
+        kids: "Vielä auki" # MT
+        dessert: "Omenastrudelia ja jäätelöä" # MT
+      meal_27:
+        title: "Grilli-ilta" # MT
+        entrees: "Grilliherkkuja korealaisella twistillä. Toivottavasti apukokeillani on hyviä ideoita." # MT
+        side: "Kevyesti paistettuja kasviksia torilta tai omista puutarhoistamme" # MT
+        kids: "Lapset saatetaan pistää puutarhatöihin" # MT
+        dessert: "Tuoreita mansikoita, jos on sesonki" # MT
+        notes: "Mahdollisimman luomua ja paikallista. Kaikki ruokavaliot onnistuvat helposti." # MT
+      meal_28:
+        title: "Kotitekoista pizzaa!" # MT
+        entrees: "Pizzaa monilla täytteillä: kanaa, kasviksia, juustoa, pepperonia. Tavallinen ja gluteeniton pohja." # MT
+        side: "Salaattia ja hedelmiä" # MT
+        kids: "Tällaisesta lapset tykkää" # MT
+        dessert: "Ehkä..." # MT
+        notes: "Kerro alla, jos tarvitset gluteenitonta, niin osaan suunnitella. Kiitos! Luomua ja paikallisia raaka-aineita aina kun mahdollista." # MT
+      meal_29:
+        title: "Tomaattimaistiaiset" # MT
+        entrees: "Paikallisten tomaattien maistelua, broileri- ja kasvisvaihtoehdoin" # MT
+        side: "Caprese-salaattia, paljon kasviksia, maissintähkiä" # MT
+        kids: "Tähkästä irrotettua maissia lapsille, joilla on hammasraudat" # MT
+        dessert: "Tomaattijäätelöä?" # MT
+        notes: "Paikallista ja luomua aina kun mahdollista. Ateria onnistuu allergeenittomana (mutta ei tomaatittomana). Tarjolla on puupähkinöitä (manteleita ja hasselpähkinöitä)." # MT
+      meal_30:
+        title: "Chiliä ja omenajälkiruokanyyttärit!" # MT
+        entrees: "Chiliä sellaisena kuin sen lapsena opin: mietoja papuja ja kasviksia riisin päällä. Lihansyöjille jauhelihaa." # MT
+        side: "Kypsennettyjä kasviksia sen mukaan, mitä lähiseudulta saa" # MT
+        kids: "Pääruoka on tarpeeksi mietoa kaikille" # MT
+        dessert: "Vuotuiset omenajälkiruokanyyttärit! Lähde kanssamme omenoita poimimaan edellisenä viikonloppuna ja tuo sitten mitä noista upeista omenoista loihdit." # MT
+        notes: "Maitotuotteita on tarjolla erikseen, mutta pääruoassa niitä ei ole. Jälkiruoat ovat eri ihmisten tekemiä, joten niissä voi olla mitä tahansa yleisistä allergeeneista." # MT
+      meal_31:
+        title: "Suolaisia ja makeita kreppejä" # MT
+        entrees: "Kreppejä monilla täytteillä: suolaisia päivälliseksi ja makeita jälkiruoaksi" # MT
+        side: "Höyrytettyjä kasviksia" # MT
+        dessert: "Lisää kreppejä!" # MT
+        notes: "Vapaiden kanojen munia, paikallista maitoa, luomujauhoja. Jos haluat gluteenittomia kreppejä, kerro, niin kokeilen." # MT
+      meal_32:
+        title: "Gimbap" # MT
+        entrees: "Riisiä, maustettuja kasviksia, naudanlihaa ja kananmunaa tai savulohta merileväarkkiin käärittynä" # MT
+        side: "Retiisivesikimchiä" # MT
+        kids: "Pääruoan pitäisi kelvata heillekin" # MT
+        dessert: "Hedelmiä tai jäätelöä" # MT
+        notes: "Laitoimme retiisivesikimchin käymään kaksi viikkoa sitten. Aterian jälkeen saa ottaa purkin kotiin." # MT
+      meal_33:
+        title: "Curryhernekeittoa ja voileipiä" # MT
+        entrees: "Curryllä maustettua hernekeittoa kanaliemellä, kinkulla ja maidolla, sekä vegaaninen versio kasvisliemellä ja kookosmaidolla" # MT
+        side: "Tonnikala- ja munasalaattileipiä, tai tuo omat leivänpäälliset" # MT
+        kids: "Samaa. Laita sähköpostia ennen torstaita, jos lapsesi haluavat keittoa ilman currya." # MT
+        dessert: "Kotitekoisia suklaahippukeksejä ja hedelmiä" # MT
+        notes: "Keitto on gluteenitonta, ja kasviskeitto myös maidotonta. Jos haluat gluteenitonta leipää tai muita muutoksia, laita sähköpostia ennen torstaita." # MT
+      meal_34:
+        title: "Kreppejä ja herkullisia täytteitä" # MT
+        entrees: "Kreppejä (kananmunaa, jauhoja, maitoa). Oikeastaan lähempänä tavallisia ohukaisia: ohuita ja taipuisia." # MT
+        side: "Makeita ja suolaisia täytteitä: sokeria, kotitekoista mansikka- ja mustikkahilloa, suolakinuskikastiketta, kermavaahtoa, juustoa ja luultavasti paistettuja sieniä. Tuo omasi, jos haluat jotain tiettyä." # MT
+        kids: "Samaa" # MT
+        dessert: "Samaa" # MT
+        notes: "Ehkä ei ihan kaikki luomua, mutta teen parhaani budjetin puitteissa." # MT
+      meal_35:
+        title: "Lihamurekepäivällinen" # MT
+        entrees: "Lihamureketta" # MT
+        side: "Salaattia, sämpylöitä, perunoita" # MT
+        dessert: "Omenapaistosta" # MT
+      meal_36:
+        title: "Bibimbap" # MT
+        entrees: "Höyrytettyä riisiä, jonka päällä maustettuja kasviksia ja naudanlihaa (tai tofua), chilikastiketta (ja soijakastiketta, jos et pidä tulisesta) sekä paistettuja kananmunia" # MT
+        side: "Pikkelssejä ja kimchiä" # MT
+        kids: "Lapsille voi annostella enemmän nautaa tai tofua kuin kasviksia" # MT
+        dessert: "Hedelmiä" # MT
+        notes: "Kaikki on maustettu gluteenittomalla soijakastikkeella, valkosipulilla, seesamiöljyllä ja mustapippurilla. Ateria on enimmäkseen kasviksia, joten paljon lihaa ei kannata odottaa." # MT
+      meal_37:
+        title: "Kalkkunatacot" # MT
+        entrees: "Tacoja kalkkunajauhelihasta" # MT
+        side: "Papumuhennosta, riisiä" # MT
+        notes: "Tacoihin tomaattia, jäävuorisalaattia, mietoa salsaa ja kermaviiliä." # MT
+      meal_38:
+        title: "Aamiaispizza" # MT
+        entrees: "Maailman paras pizzapohja, tehty vain muutamasta raaka-aineesta, lähinnä maniokista. Nirsoimmatkin syöjät rakastavat sitä. Päällä pestotyylinen kastike ja valinnan mukaan lihaa, kasviksia ja juustoja. Kerro ruokavaliorajoitteistasi." # MT
+        side: "Munakokkelia" # MT
+      meal_39:
+        title: "Keittobaari!" # MT
+        entrees: "Yksinkertainen lihakeitto ja yksinkertainen kasviskeitto, ja paljon lisukkeita oman luomuksen tekemiseen: siemeniä, kasviksia, gluteenitonta pastaa, juustoa..." # MT
+        side: "Kasviksia, juustoa, pastaa" # MT
+        kids: "Lapset tykkäävät koota omansa" # MT
+        dessert: "Ehkä jotain hedelmäistä" # MT
+        notes: "Mahdollisimman paikallista ja luomua." # MT
+      meal_40:
+        title: "Lohi en papillote" # MT
+        entrees: "Leivinpaperissa uunissa kypsennettyä lohta, maustettu sipulilla ja yrteillä" # MT
+        side: "Valkosipulilla paistettuja lehtivihanneksia (pinaattia tai lehtikaalia) tai vihreitä papuja, uunissa paahdettuja uusia perunoita ja tuoretta leipää" # MT
+        kids: "Kommentoi, jos lapsesi eivät syö lohta, ja ehdota jotain muuta, vaikka tonnikalasalaattia tai keitettyjä kananmunia." # MT
+        dessert: "Kyllä: hedelmiä ja jotain leivottua" # MT
+        notes: "Kaikki on gluteenitonta paitsi leivottu jälkiruoka. Kasvikset ovat enimmäkseen luomua. Kerro, jos tarvitset kasvisvaihtoehdon; voin paistaa wokissa tai uunissa vähän tofua." # MT

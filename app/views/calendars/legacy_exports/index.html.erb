@@ -1,22 +1,19 @@
-<% content_for(:title, "Calendar Export") %>
+<% content_for(:title, t(".title")) %>
 
 <p>
-  You have reached the old calendar export page. This page has been replaced with a newer, more
-  powerful export system.
+  <%= t(".old_page") %>
 </p>
 
 <p>
-  The new page can be accessed by clicking the 'Export' button on the Calendars main page.
+  <%= t(".new_page") %>
 </p>
 
 <p>
-  Once you click the button below to proceed to the new calendar export page, the links
-  that point to this old page will be removed. If you need to export calendars in the future,
-  just go to the Calendars main page and click 'Export'.
+  <%= t(".links_removed") %>
 </p>
 
 <p>
-  <%= button_to("Got it! Take me to the new calendar export page and remove the old links!",
+  <%= button_to(t(".proceed"),
                 calendars_hide_legacy_export_links_path,
                 method: :put, class: "btn btn-primary") %>
 </p>

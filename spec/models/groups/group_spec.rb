@@ -55,6 +55,15 @@ describe Groups::Group do
         end
       end
     end
+
+    describe "description line breaks" do
+      let(:group) { build(:group, description: "Line one\r\nLine two\r\n") }
+
+      it "converts browser \\r\\n line breaks to \\n" do
+        group.validate
+        expect(group.description).to eq("Line one\nLine two\n")
+      end
+    end
   end
 
   describe "validation" do
@@ -102,6 +111,72 @@ describe Groups::Group do
         end
 
         it { is_expected.to have_errors(base: "Please select at least one community") }
+      end
+    end
+
+    describe "people listed more than once" do
+      let(:user) { create(:user) }
+      let!(:group) { create(:group) }
+      let!(:membership) { create(:group_membership, group: group, user: user, kind: "joiner") }
+
+      it "keeps the existing row and drops a new one for the same person" do
+        group.reload.update!(memberships_attributes: {"0" => {user_id: user.id, kind: "manager"}})
+        expect(group.reload.memberships.map { |m| [m.id, m.kind] }).to eq([[membership.id, "joiner"]])
+      end
+
+      it "keeps only the first of two new rows for the same person" do
+        other = create(:user)
+        group.reload.update!(memberships_attributes: {
+          "0" => {user_id: other.id, kind: "manager"},
+          "1" => {user_id: other.id, kind: "joiner"}
+        })
+        expect(group.reload.memberships.find_by(user: other).kind).to eq("manager")
+        expect(group.memberships.count).to eq(2)
+      end
+
+      it "allows removing a person's row and adding them back" do
+        group.reload.update!(memberships_attributes: {
+          "0" => {id: membership.id, _destroy: "1"},
+          "1" => {user_id: user.id, kind: "manager"}
+        })
+        expect(group.reload.memberships.map(&:kind)).to eq(["manager"])
+      end
+    end
+
+    describe "length" do
+      # Migrations use literal limits, so this catches a column change that forgets the constant.
+      it "keeps the max length constants in sync with the database columns" do
+        columns = described_class.columns_hash
+        expect(described_class::NAME_MAX_LENGTH).to eq(columns["name"].limit)
+        expect(described_class::DESCRIPTION_MAX_LENGTH).to eq(columns["description"].limit)
+      end
+
+      context "with name at max length" do
+        subject(:group) { build(:group, name: "a" * described_class::NAME_MAX_LENGTH) }
+        it { is_expected.to be_valid }
+      end
+
+      context "with name over max length" do
+        subject(:group) { build(:group, name: "a" * (described_class::NAME_MAX_LENGTH + 1)) }
+        it { is_expected.to have_errors(name: /is too long \(maximum is 64 characters\)/) }
+      end
+
+      context "with description at max length" do
+        subject(:group) { build(:group, description: "a" * described_class::DESCRIPTION_MAX_LENGTH) }
+        it { is_expected.to be_valid }
+      end
+
+      context "with description at max length once browser line breaks are normalized" do
+        # Browsers submit textarea line breaks as \r\n but count them as one character for maxlength.
+        subject(:group) do
+          build(:group, description: "a" * (described_class::DESCRIPTION_MAX_LENGTH - 5) + "\r\n" * 5)
+        end
+        it { is_expected.to be_valid }
+      end
+
+      context "with description over max length" do
+        subject(:group) { build(:group, description: "a" * (described_class::DESCRIPTION_MAX_LENGTH + 1)) }
+        it { is_expected.to have_errors(description: /is too long \(maximum is 255 characters\)/) }
       end
     end
 

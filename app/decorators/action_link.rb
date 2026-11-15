@@ -27,13 +27,23 @@ class ActionLink < ApplicationDecorator
         params = {title: label, method: method, class: "btn btn-#{btn_class}"}
         params.merge!(extra_html)
         data_hash = extra_data.dup
-        data_hash[:confirm] = confirm_msg if confirm_msg
+        add_confirm_data(data_hash) if confirm_msg
         params[:data] = data_hash unless data_hash.empty?
         h.link_to(icon_tag << label_tag, path, params)
       end
   end
 
   private
+
+  # Wires the `confirm` Stimulus controller (app/javascript/controllers/confirm_controller.ts) onto
+  # the link so it shows the app modal before proceeding. The link's `method:` is still handled by
+  # jquery_ujs; the controller just gates the click. Merges with any controller/action the caller
+  # already supplied via `data:` (Stimulus allows space-separated lists).
+  def add_confirm_data(data_hash)
+    data_hash[:controller] = [data_hash[:controller], "confirm"].compact.join(" ")
+    data_hash[:action] = [data_hash[:action], "confirm#check"].compact.join(" ")
+    data_hash[:confirm_message_value] = confirm_msg
+  end
 
   def icon_tag
     h.icon_tag(icon)

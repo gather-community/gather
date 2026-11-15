@@ -1,25 +1,25 @@
-<% content_for(:title, "Protocols") %>
+<% content_for(:title, t(".title")) %>
 
 <% content_for(:action_links) do %>
   <% if policy(sample_protocol).create? %>
-    <%= link_to(icon_tag("plus") << " Create Protocol",
+    <%= link_to(icon_tag("plus") << " " << t(".create"),
       new_calendars_protocol_path, class: "btn btn-primary") %>
   <% end %>
 <% end %>
 
 <% if protocols.empty? %>
   <div class="center-notice">
-    No protocols found.
+    <%= t(".no_protocols") %>
   </div>
 <% else %>
   <table class="index">
     <tr>
-      <th>Name</th>
-      <th>Calendars</th>
+      <th><%= t(".name") %></th>
+      <th><%= t(".calendars") %></th>
       <% if @kinds_present %>
-        <th>Types</th>
+        <th><%= t(".types") %></th>
       <% end %>
-      <th>Rules</th>
+      <th><%= t(".rules") %></th>
     </tr>
     <% protocols.each do |protocol| %>
       <tr>

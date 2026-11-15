@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
+import i18n from "../../utils/i18n";
 
 // Toggles labels/hints and manages textarea content (pre-fill + saved values) per decision.
 export default class extends Controller {
@@ -42,24 +43,11 @@ export default class extends Controller {
 
   private defaultValue(decision: string): string {
     if (decision === "approve") {
-      return [
-        `Dear ${this.contactFirstNameValue},`,
-        "",
-        `Great news! Your application to join Gather for the community "${this.communityNameValue}" has been approved.`,
-        "",
-        "#######################################",
-        "ENTER A PERSONALIZED NOTE HERE, MENTION",
-        "SOMETHING SPECIFIC ABOUT THE COMMUNITY",
-        "#######################################",
-        "",
-        "Your community is now ready to go!",
-        "",
-        "You should receive a separate email with instructions to sign in for the first time.",
-        "",
-        "Welcome aboard!",
-        "",
-        `${this.approverFirstNameValue} for the Gather Team`,
-      ].join("\n")
+      return i18n.t("communities.signup_action.approval_template", {
+        name: this.contactFirstNameValue,
+        community: this.communityNameValue,
+        approver: this.approverFirstNameValue,
+      })
     }
     return ""
   }

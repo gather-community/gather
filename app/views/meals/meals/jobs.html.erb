@@ -1,4 +1,4 @@
-<% content_for(:title, ["Meal Jobs", (user.full_name if user)].compact.join(": ")) %>
+<% content_for(:title, user ? t(".title_for_user", name: user.full_name) : t(".title")) %>
 
 <% content_for(:action_links) do %>
   <%= Calendars::ExportDecorator.new(current_community, current_user).legacy_export_link %>
@@ -6,16 +6,16 @@
 
 <% if meals.empty? %>
   <div class="center-notice">
-    No jobs found<% @user ? "for #{@user.name}" : "" %>.
+    <%= t(".no_jobs") %>
   </div>
 <% else %>
   <div class="meals-list">
     <% meals.each do |meal| %>
       <div class="meal <%= meal.css_classes(highlight_signup: false) %>">
         <h4><%= meal.served_at_lens_dependent(lenses[:time]) %></h4>
-        <div><%= meal.link %> at <%= meal.location_abbrv %></div>
+        <div><%= t(".meal_at_location_html", meal: meal.link, location: meal.location_abbrv) %></div>
         <% meal.roles.each do |role| %>
-          <div><%= role.title %>: <%= meal.worker_links_for_role(role) %></div>
+          <div><%= t(".role_workers_html", role: role.title, workers: meal.worker_links_for_role(role)) %></div>
         <% end %>
       </div>
     <% end %>
@@ -23,6 +23,6 @@
   <%= gather_paginate(meals) %>
 <% end %>
 
-<%= javascript_tag do %>
+<script>
   $(function() { new Gather.Views.AjaxSelect2({el: '.lens-bar'}); });
-<% end %>
+</script>

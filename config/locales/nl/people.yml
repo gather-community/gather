@@ -1,0 +1,219 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+nl:
+  people:
+    # The placeholder household and user that a deleted member's records are reassigned to.
+    deleted_placeholder:
+      household: "Verwijderde leden" # MT
+      first_name: "Verwijderd" # MT
+      last_name: "lid" # MT
+    sign_in_invitations:
+      sent:
+        one: "Uitnodiging verstuurd." # MT
+        other: "Uitnodigingen verstuurd." # MT
+      none_selected: "Je hebt geen gebruikers geselecteerd." # MT
+      new:
+        title: "Gebruikers uitnodigen om in te loggen" # MT
+        no_users: "Geen gebruikers gevonden." # MT
+        instructions_html: "Vink de gebruikers aan die je wilt uitnodigen. Gebruikers met %{icon} achter hun naam hebben nog nooit ingelogd." # MT
+        select_no_sign_ins: "Iedereen selecteren die nooit heeft ingelogd" # MT
+        select_all: "Alles selecteren" # MT
+        send: "Uitnodigingen versturen" # MT
+    memorials:
+      created: "Gedenkpagina aangemaakt." # MT
+      updated: "Gedenkpagina bijgewerkt." # MT
+      index:
+        title: "Gedenkpagina’s" # MT
+        create: "Gedenkpagina aanmaken" # MT
+        no_memorials: "Geen gedenkpagina’s gevonden." # MT
+        photo_of: "Foto van %{name}" # MT
+      show:
+        memorials: "Gedenkpagina’s" # MT
+        photo_of: "Foto van %{name}" # MT
+        obituary: "In memoriam" # MT
+        community_memories: "Herinneringen uit de gemeenschap" # MT
+      new:
+        title: "Gedenkpagina aanmaken" # MT
+      edit:
+        title: "Gedenkpagina bewerken: %{name}" # MT
+    memorial_messages:
+      created: "Bedankt voor je bericht." # MT
+      updated: "Bericht bijgewerkt." # MT
+      edit:
+        title: "Bericht op gedenkpagina bewerken" # MT
+    member_types:
+      created: "Lidtype aangemaakt." # MT
+      updated: "Lidtype bijgewerkt." # MT
+      index:
+        title: "Lidtypes" # MT
+        create: "Lidtype aanmaken" # MT
+        explanation: "Lidtypes worden aan huishoudens toegekend en maken het mogelijk terugkerende afschrijvingen aan te passen." # MT
+        no_member_types: "Geen lidtypes gevonden." # MT
+        name: "Naam" # MT
+      new:
+        title: "Lidtype aanmaken" # MT
+      edit:
+        title: "Lidtype bewerken: %{name}" # MT
+    vehicles:
+      index:
+        title: "Voertuigen" # MT
+        no_vehicles: "Geen voertuigen gevonden." # MT
+        vehicle: "Merk/model/kleur/kenteken" # MT
+        owner: "Eigenaar" # MT
+    settings:
+      edit:
+        title: "Instellingen voor mensen" # MT
+    birthdays:
+      index:
+        title: "Verjaardagen" # MT
+        no_users: "Geen gebruikers gevonden." # MT
+        # Shown when a user's birthday is unknown.
+        unknown: "?"
+    password_changes:
+      success: "Wachtwoord gewijzigd." # MT
+      show:
+        title: "Wachtwoord wijzigen" # MT
+      password_fields:
+        new_password: "Nieuw wachtwoord" # MT
+        retype_new_password: "Nieuw wachtwoord herhalen" # MT
+        reveal: "Wachtwoorden tonen" # MT
+        mask: "Wachtwoorden verbergen" # MT
+    users:
+      confirmations:
+        sign_in_to_use_gather: "Log in om Gather te gebruiken." # MT
+        expired_signed_in: "De bevestigingsperiode is verlopen. Gebruik de link “Bevestigingsinstructies opnieuw versturen” hieronder om het opnieuw te proberen." # MT
+        expired_signed_out: "De bevestigingsperiode is verlopen. Log in met je oude e-mailadres en probeer het opnieuw." # MT
+      # Each completes Devise's "Could not sign you in from Google because %{reason}." (devise.omniauth_callbacks.failure).
+      omniauth_failure_reasons:
+        no_email: "Google heeft geen e-mailadres doorgegeven. Laat het een beheerder weten." # MT
+        invitation_expired: "je uitnodiging is verlopen" # MT
+        wrong_google_id: "je met de Google-ID %{google_id} moet inloggen" # MT
+        google_id_taken: "je Google-ID %{google_id} aan een andere gebruiker is gekoppeld" # MT
+        invitation_required: "je de eerste keer met een uitnodiging moet inloggen" # MT
+        google_id_not_found: "je Google-ID %{google_id} niet in het systeem is gevonden" # MT
+        cancelled: "het inloggen is geannuleerd" # MT
+        session_expired: "je inlogsessie is verlopen. Probeer het opnieuw" # MT
+        unexpected: "er een onbekende fout is opgetreden. De beheerders zijn op de hoogte gebracht" # MT
+    deletion:
+      blocked_intro: "Dit kan nog niet definitief worden verwijderd:" # MT
+      confirmation_mismatch: "De bevestigingstekst kwam niet overeen, dus er is niets verwijderd." # MT
+      self_success: "Je account is definitief verwijderd." # MT
+      blockers:
+        balance: "Het huishouden “%{name}” heeft een openstaand saldo dat eerst moet worden vereffend." # MT
+        guardian: "Deze persoon is voogd van %{names}; verwijder die leden eerst of wijs ze iemand anders toe." # MT
+        external_ward: "Leden van dit huishouden zijn voogd van %{names} in andere huishoudens; verwijder die leden eerst of wijs ze iemand anders toe." # MT
+        last_admin: "Deze persoon is de enige beheerder van de gemeenschap; geef eerst een ander lid de rol van beheerder." # MT
+  users:
+    greeting: "Beste %{name}," # MT
+    photo_of: "Foto van %{name}" # MT
+    confirmation_resent: "Instructies verstuurd." # MT
+    email_change_canceled: "Wijziging van het e-mailadres geannuleerd." # MT
+    created: "Gebruiker aangemaakt." # MT
+    created_and_invited: "Gebruiker aangemaakt en uitgenodigd." # MT
+    updated: "Gebruiker bijgewerkt." # MT
+    profile_updated: "Profiel bijgewerkt." # MT
+    confirm_new_email_self: "Je moet je nieuwe e-mailadres bevestigen. Kijk in je e-mail op %{email}." # MT
+    confirm_new_email_other: "Deze gebruiker moet het nieuwe e-mailadres (%{email}) nog bevestigen." # MT
+    invitation_invalidated: "Door deze wijziging is een uitnodiging om in te loggen misschien ongeldig geworden. Je kunt een nieuwe sturen." # MT
+    household_hint:
+      choose_html: "Kies een bestaand huishouden voor deze gebruiker. Bestaat het nog niet, dan moet je %{link}." # MT
+      create_link: "het eerst aanmaken" # MT
+      child_note: "Door een beperking van het systeem moeten alle gebruikers van Gather bij één huishouden horen, maar kinderen kunnen ouders of voogden uit meerdere huishoudens hebben. Alle functies van het systeem die met kinderen te maken hebben, behandelen alle ouders/voogden en alle huishoudens van het kind gelijk." # MT
+    preferred_contact_tooltip: "Wil het liefst benaderd worden via: %{method}" # MT
+    all_users: "Alle gebruikers" # MT
+    index:
+      title: "Ledenlijst" # MT
+      print_title: "Ledenlijst %{community}" # MT
+      show_action_menu: "Actiemenu van de gebruiker tonen" # MT
+      create_adult: "Volwassene aanmaken" # MT
+      create_child: "Kind aanmaken" # MT
+      invite_to_sign_in: "Uitnodigen om in te loggen" # MT
+      no_users: "Geen gebruikers gevonden." # MT
+      name: "Naam" # MT
+      unit: "Woning" # MT
+      email: "E-mail" # MT
+      mobile_phone: "Mobiel" # MT
+      home_phone: "Telefoon thuis" # MT
+      work_phone: "Telefoon werk" # MT
+      preferred_contact: "Voork." # MT
+      download_csv: "Downloaden als CSV" # MT
+    show:
+      directory: "Ledenlijst" # MT
+      email: "E-mail" # MT
+      pending_confirmation: "Wacht op bevestiging: %{email}" # MT
+      resend_confirmation: "Bevestigingsinstructies opnieuw versturen" # MT
+      cancel_change: "Wijziging annuleren" # MT
+      unconfirmed: "* Dit adres is nog niet bevestigd, gebruik het voorzichtig." # MT
+      phone: "Telefoon" # MT
+      preferred_contact: "Voorkeur voor contact" # MT
+      birthday: "Verjaardag" # MT
+      age: "Leeftijd" # MT
+      joined_on: "Lid sinds" # MT
+      recent_head_cook_meals: "Recente maaltijden als hoofdkok" # MT
+      date: "Datum" # MT
+      meal_title: "Titel" # MT
+      signups: "Aanmeldingen" # MT
+    new:
+      title: "Gebruiker aanmaken" # MT
+    edit:
+      profile: "Profiel" # MT
+      edit_user: "Gebruiker bewerken: %{name}" # MT
+      edit_photo: "Foto bewerken: %{name}" # MT
+    full_form:
+      hide_photo_from_cluster: "Foto niet tonen aan gebruikers bij %{communities}" # MT
+      privacy_hint_html: "Zie het %{link} voor meer informatie over privacy-instellingen." # MT
+      privacy_policy: "privacybeleid" # MT
+      household_info: "Gegevens van het huishouden" # MT
+      household_note_named_html: "De velden hieronder horen bij het huishouden %{name}. Als je ze hier wijzigt, wijzig je ze voor <em>alle gebruikers in het huishouden</em>." # MT
+      household_note_unnamed_html: "De velden hieronder horen bij het huishouden van de gebruiker. Als je ze hier wijzigt, wijzig je ze voor <em>alle gebruikers in het huishouden</em>." # MT
+      move_household_html: "Je kunt deze persoon ook %{link}." # MT
+      move_household_link: "naar een ander huishouden verplaatsen" # MT
+  households:
+    greeting: "Beste huishouden %{name}," # MT
+    created: "Huishouden aangemaakt." # MT
+    updated: "Huishouden bijgewerkt." # MT
+    emergency_contact: "%{name} (%{relationship})" # MT
+    pets:
+      summary: "%{name} (%{species}, %{color})" # MT
+      vet: "Dierenarts" # MT
+      caregivers: "Verzorgers" # MT
+      health_issues: "Gezondheidsproblemen" # MT
+    # Unit and garage numbers, e.g. "#12".
+    number: "nr. %{number}" # MT
+    index:
+      title: "Huishoudens" # MT
+      create: "Huishouden aanmaken" # MT
+      no_households: "Geen huishoudens gevonden." # MT
+      name: "Naam" # MT
+      unit: "Woningnr." # MT
+      users: "Gebruikers" # MT
+    show:
+      title: "Huishouden: %{name}" # MT
+      households: "Huishoudens" # MT
+      missing_photo: "Foto van gebruiker ontbreekt" # MT
+    new:
+      title: "Huishouden aanmaken" # MT
+    edit:
+      title: "Huishouden bewerken: %{name}" # MT
+    attribs:
+      household: "Huishouden" # MT
+      members: "Leden" # MT
+      vehicles: "Voertuigen" # MT
+      garage: "Garage" # MT
+      member_type: "Lidtype" # MT
+      emergency_contacts: "Contacten voor noodgevallen" # MT
+      pets: "Huisdieren" # MT
+      keyholders: "Extra sleutelhouders woning" # MT
+    unit_community:
+      unit: "Woning" # MT
+      community: "Gemeenschap" # MT

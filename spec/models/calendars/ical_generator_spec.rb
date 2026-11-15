@@ -47,13 +47,44 @@ describe Calendars::IcalGenerator do
         UID:91a772a5ae4a_#{eventlets[0].id}
         DTSTART;TZID=Etc/UTC:20210101T120000
         DTEND;TZID=Etc/UTC:20220101T130000
-        DESCRIPTION:This is a description\\nhttps://foo.com/calendars/events/#{eventlets[0].event_id}
+        DESCRIPTION:This is a description\\nhttps://foo.com/calendars/eventlets/#{eventlets[0].id}
         LOCATION:A nice place
         SUMMARY:Some Event
         END:VEVENT
         END:VCALENDAR
       ICAL
       expect(ical).to match_ical(expected)
+    end
+  end
+
+  # The hour from 1am to 2am happens twice when DST ends (2026-11-01 in America/New_York).
+  # tzinfo can't tell which one a bare local time means.
+  describe "timezone block during the hour repeated when DST ends" do
+    subject(:ical) do
+      Time.use_zone("America/New_York") do
+        Timecop.freeze(Time.utc(2026, 11, 1, utc_hour, 30)) do
+          described_class.new(calendar_name: calendar_name, eventlets: eventlets,
+            url_options: {host: "foo.com", protocol: "https", port: 443}).generate
+        end
+      end
+    end
+
+    context "in the first 1:30am, still on daylight time" do
+      let(:utc_hour) { 5 }
+
+      it "generates the calendar" do
+        is_expected.to include_line("TZID:America/New_York")
+        is_expected.to include_line("TZOFFSETTO:-0400")
+      end
+    end
+
+    context "in the second 1:30am, back on standard time" do
+      let(:utc_hour) { 6 }
+
+      it "generates the calendar" do
+        is_expected.to include_line("TZID:America/New_York")
+        is_expected.to include_line("TZOFFSETTO:-0500")
+      end
     end
   end
 
@@ -92,12 +123,12 @@ describe Calendars::IcalGenerator do
     let(:eventlets) { [create(:eventlet, note: description)] }
 
     it "splits line properly" do
-      # Per the RFC, the string should actually include the literal string \n for line breaks, which is why
-      # we are checking for `\\n`.
-      expect(ical).to include_line(
-        "DESCRIPTION:fishy fishy fishy fishy fishy fishy fishy fishy fishy fishy fis\r\n" \
-        " hy fishy fishy fishy fishy fishy fishy fishy fishy fishy fishy fishy fishy\r\n" \
-        "  fishy \\nstuff\\nother stuff\\nhttps://foo.com/calendars/events/#{eventlets[0].event_id}"
+      # Per the RFC, real newlines become the literal string \n (hence `\\n`) and long lines are folded
+      # with CRLF + space. We unfold before asserting so the URL length doesn't shift the fold points.
+      unfolded = ical.gsub("\r\n ", "")
+      expect(unfolded).to include(
+        "DESCRIPTION:#{"fishy " * 24}\\nstuff\\nother stuff\\n" \
+        "https://foo.com/calendars/eventlets/#{eventlets[0].id}"
       )
     end
   end
@@ -118,7 +149,7 @@ describe Calendars::IcalGenerator do
 
     it "includes an appropriate url" do
       expect(ical).to include_line(
-        "DESCRIPTION:Stuff\\nhttps://foo.com/calendars/events/#{eventlets[0].event_id}"
+        "DESCRIPTION:Stuff\\nhttps://foo.com/calendars/eventlets/#{eventlets[0].id}"
       )
     end
   end
@@ -131,9 +162,61 @@ describe Calendars::IcalGenerator do
     end
   end
 
+  context "with a recurring series that has an end date" do
+    let(:all_day) { false }
+    let(:start) { Time.zone.parse("2021-01-04 12:00") }
+    let(:event) do
+      create(:event, all_day: all_day, starts_at: start, ends_at: start + 1.hour,
+        recurrence_rule: IceCube::Rule.weekly.until(start + 2.weeks).to_hash)
+    end
+    let(:base_eventlet) { event.eventlets.first }
+    let(:eventlets) do
+      [Calendars::Eventlet.build_occurrence(base_eventlet: base_eventlet, occurrence_start: event.starts_at,
+        starts_at: event.starts_at, ends_at: event.ends_at, start_offset: 0, end_offset: 0)]
+    end
+
+    it "writes UNTIL as a UTC timestamp for a timed series" do
+      expect(ical).to include_line("RRULE:FREQ=WEEKLY;UNTIL=20210118T120000Z")
+    end
+
+    context "when the series is all-day" do
+      let(:all_day) { true }
+
+      it "writes UNTIL as a date, matching the date-only DTSTART" do
+        expect(ical).to include_line("DTSTART;VALUE=DATE:20210104")
+        expect(ical).to include_line("RRULE:FREQ=WEEKLY;UNTIL=20210118")
+      end
+    end
+  end
+
+  context "with a series split in two by a drag" do
+    # Mondays at noon; a "This and following" drag moved the third Monday onward to 1pm.
+    let(:start) { Time.zone.parse("2021-01-04 12:00") }
+    let(:event) do
+      create(:event, starts_at: start, ends_at: start + 1.hour, recurrence_rule: IceCube::Rule.weekly.to_hash)
+    end
+    let!(:split_off) do
+      cut = start + 2.weeks
+      shift = Calendars::WallClockShift.new(cut, cut + 1.hour)
+      Calendars::SeriesSplitter.new(event).split_at(cut, start_shift: shift, end_shift: shift)
+    end
+    let(:eventlets) do
+      range = start..(start + 5.weeks)
+      Calendars::EventFinder.new(range: range, calendars: [event.calendar], user: create(:admin)).eventlets
+    end
+
+    it "exports each series once, the original ending where the new one begins" do
+      expect(ical.scan("BEGIN:VEVENT").size).to eq(2)
+      expect(ical).to include_line("DTSTART;TZID=Etc/UTC:20210104T120000")
+      expect(ical).to include_line("RRULE:FREQ=WEEKLY;UNTIL=20210111T120000Z")
+      expect(ical).to include_line("DTSTART;TZID=Etc/UTC:20210118T130000")
+      expect(ical).to include_line("RRULE:FREQ=WEEKLY")
+    end
+  end
+
   context "with a recurring event" do
     # First occurrence: Monday 2021-01-04. The eventlets represent the second and third Mondays,
-    # built the same way EventFinder builds them (non-persisted, linkable = parent event).
+    # built the same way EventFinder builds them (non-persisted, linkable = base eventlet).
     let(:event) do
       create(:event,
         starts_at: Time.zone.parse("2021-01-04 12:00"),
@@ -141,27 +224,19 @@ describe Calendars::IcalGenerator do
         recurrence_rule: IceCube::Rule.weekly.to_hash)
     end
 
-    def occurrence_eventlet(occ_starts_at, occ_ends_at)
-      transient = Calendars::Event.new(
-        name: event.name, kind: event.kind, note: event.note, all_day: event.all_day,
-        creator: event.creator, calendar: event.calendar,
-        starts_at: occ_starts_at, ends_at: occ_ends_at
-      )
-      transient.uid = "#{event.id}_#{occ_starts_at.to_i}"
-      Calendars::Eventlet.new(event: transient, calendar: event.calendar,
-        start_offset: 0, end_offset: 0)
-        .tap do |e|
-          e.uid = transient.uid
-          e.linkable = event
-          e.location = event.calendar.name
-        end
+    def occurrence_eventlet(base, occ_starts_at, occ_ends_at, start_offset: 0, end_offset: 0)
+      Calendars::Eventlet.build_occurrence(base_eventlet: base, occurrence_start: occ_starts_at,
+        starts_at: occ_starts_at, ends_at: occ_ends_at,
+        start_offset: start_offset, end_offset: end_offset)
     end
 
     let(:second_occ) do
-      occurrence_eventlet(Time.zone.parse("2021-01-11 12:00"), Time.zone.parse("2021-01-11 13:00"))
+      occurrence_eventlet(base_eventlet,
+        Time.zone.parse("2021-01-11 12:00"), Time.zone.parse("2021-01-11 13:00"))
     end
     let(:third_occ) do
-      occurrence_eventlet(Time.zone.parse("2021-01-18 12:00"), Time.zone.parse("2021-01-18 13:00"))
+      occurrence_eventlet(base_eventlet,
+        Time.zone.parse("2021-01-18 12:00"), Time.zone.parse("2021-01-18 13:00"))
     end
 
     context "with a single occurrence eventlet" do
@@ -195,8 +270,8 @@ describe Calendars::IcalGenerator do
         expect(ical).to include_line("SUMMARY:#{event.name}")
       end
 
-      it "includes the event URL in the description" do
-        expect(ical).to include("https://foo.com/calendars/events/#{event.id}")
+      it "includes the eventlet URL in the description" do
+        expect(ical).to include("https://foo.com/calendars/eventlets/#{base_eventlet.id}")
       end
 
       context "when the event has a note" do
@@ -210,7 +285,7 @@ describe Calendars::IcalGenerator do
 
         it "includes the note before the URL in the description" do
           expect(ical).to include_line(
-            "DESCRIPTION:Bring your A-game\\nhttps://foo.com/calendars/events/#{event.id}"
+            "DESCRIPTION:Bring your A-game\\nhttps://foo.com/calendars/eventlets/#{base_eventlet.id}"
           )
         end
       end
@@ -225,21 +300,12 @@ describe Calendars::IcalGenerator do
     end
 
     context "with occurrence eventlets from the same event on different calendars" do
-      let(:other_calendar) { create(:calendar) }
+      let(:other_calendar) { create(:calendar, allow_overlap: true) }
+      let(:other_eventlet) { create(:eventlet, event: event, calendar: other_calendar) }
       let(:second_occ_other_cal) do
-        transient = Calendars::Event.new(
-          name: event.name, all_day: event.all_day, creator: event.creator,
-          calendar: other_calendar,
-          starts_at: Time.zone.parse("2021-01-11 11:45"),
-          ends_at: Time.zone.parse("2021-01-11 12:45")
-        )
-        transient.uid = "#{event.id}_#{Time.zone.parse("2021-01-11 11:45").to_i}"
-        Calendars::Eventlet.new(event: transient, calendar: other_calendar,
+        occurrence_eventlet(other_eventlet,
+          Time.zone.parse("2021-01-11 11:45"), Time.zone.parse("2021-01-11 12:45"),
           start_offset: -900, end_offset: 0)
-          .tap do |e|
-            e.uid = transient.uid
-            e.linkable = event
-          end
       end
       let(:eventlets) { [second_occ, second_occ_other_cal] }
 
@@ -341,18 +407,11 @@ describe Calendars::IcalGenerator do
 
     # (C2) EventletOverride on one calendar must not suppress the occurrence on the other calendar
     context "(C2) EventletOverride deletes an occurrence on one calendar but not another" do
-      let(:other_calendar) { create(:calendar) }
+      let(:other_calendar) { create(:calendar, allow_overlap: true) }
       let(:other_eventlet) { create(:eventlet, event: event, calendar: other_calendar) }
       let(:second_occ_other_cal) do
-        transient = Calendars::Event.new(
-          name: event.name, all_day: event.all_day, creator: event.creator,
-          calendar: other_calendar,
-          starts_at: Time.zone.parse("2021-01-11 12:00"),
-          ends_at: Time.zone.parse("2021-01-11 13:00")
-        )
-        transient.uid = "#{event.id}_#{Time.zone.parse("2021-01-11 12:00").to_i}"
-        Calendars::Eventlet.new(event: transient, calendar: other_calendar, start_offset: 0, end_offset: 0)
-          .tap { |e| e.uid = transient.uid }.tap { |e| e.linkable = event }
+        occurrence_eventlet(other_eventlet,
+          Time.zone.parse("2021-01-11 12:00"), Time.zone.parse("2021-01-11 13:00"))
       end
       let(:eventlets) { [second_occ, second_occ_other_cal] }
 
@@ -444,8 +503,9 @@ describe Calendars::IcalGenerator do
     it "groups first two eventlets" do
       expect(ical.scan("BEGIN:VEVENT").size).to eq(2)
       expect(ical).to include_line("LOCATION:A nice place + Other place")
-      expect(ical).to include_line("DESCRIPTION:This is a description\\nOther description\\n" \
-        "https://foo.com/calen\r\n dars/events/#{eventlets[0].event_id}")
+      # Unfold before asserting so the longer eventlet URL doesn't shift the fold points.
+      expect(ical.gsub("\r\n ", "")).to include("DESCRIPTION:This is a description\\nOther description\\n" \
+        "https://foo.com/calendars/eventlets/#{eventlets[0].id}")
     end
   end
 

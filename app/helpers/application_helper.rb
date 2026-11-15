@@ -11,6 +11,7 @@ module ApplicationHelper
   # `l` without the `I18n.` should be used everywhere possible including decorators, views, controllers.
   # Models, inputs, serializers, and specs can use the I18n version but should be careful that they
   # are not assuming nil checking.
+
   def l(date_or_time, **args)
     return nil if date_or_time.nil?
     I18n.l(date_or_time, **args).gsub("  ", " ").strip
@@ -30,7 +31,8 @@ module ApplicationHelper
 
   def flash_message(type, text)
     content_tag(:div, text, class: "alert #{bootstrap_class_for(type)} fade in") do
-      content_tag(:button, "x", class: "close", "aria-label": "Close", data: {dismiss: "alert"}) << text
+      content_tag(:button, "x", class: "close", "aria-label": t("common.close"),
+        data: {dismiss: "alert"}) << text
     end
   end
 
@@ -60,23 +62,25 @@ module ApplicationHelper
   end
 
   def generated_time
-    content_tag(:div, "Generated: #{l(Time.current)}", id: "gen-time")
+    content_tag(:div, t("common.generated_at", time: l(Time.current)), id: "gen-time")
   end
 
   def print_button
-    button_tag(type: "button", class: "btn btn-default btn-print icon-only", "aria-label": "Print") do
+    button_tag(type: "button", class: "btn btn-default btn-print icon-only",
+      "aria-label": t("common.print")) do
       icon_tag("print")
     end
   end
 
-  def inactive_notice(object)
+  # Pass activate_path when the activate route isn't the default one for the object's model.
+  def inactive_notice(object, activate_path: nil)
     i18n_key = "activatables.#{object.model_name.i18n_key}"
     html = "".html_safe
     time = l(object.deactivated_at)
     html << t("#{i18n_key}.one_html", time: time)
     if policy(object).activate?
       text = t("#{i18n_key}.three")
-      path = send("activate_#{object.model_name.singular_route_key}_path")
+      path = activate_path || send("activate_#{object.model_name.singular_route_key}_path")
       link = link_to(text, path, method: :put)
       html << " " << t("#{i18n_key}.two_html", link: link)
     end
@@ -84,11 +88,14 @@ module ApplicationHelper
   end
 
   def inline_loading_indicator
-    image_tag("load-ind-small.gif", class: "loading-indicator", style: "display: none", alt: "Loading indicator")
+    image_tag("load-ind-small.gif", class: "loading-indicator", style: "display: none",
+      alt: t("common.loading_indicator"))
   end
 
   # The logo should take the user back to their home cmty root if they are in a different one.
+  # On operator pages it goes to the operator home page instead.
   def logo_link_url
+    return admin_home_path if admin_mode?
     return home_path if !current_community || !current_user || current_community == current_user.community
     home_url(host: "#{current_user.subdomain}.#{Settings.url.host}")
   end

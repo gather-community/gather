@@ -1,8 +1,5 @@
-<% content_for(:title, "Import Meals") %>
+<% content_for(:title, t(".title")) %>
 
-<p>
-  You can import meals using CSV format. Spreadsheet applications like Excel or Google Spreadsheets
-  can export to CSV format, which you can then import to Gather.
-</p>
+<p><%= t(".intro") %></p>
 
 <%= render("instructions_and_form") %>

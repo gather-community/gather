@@ -1,36 +1,34 @@
-<% content_for(:title) do
-    suffix = account.household == current_user.household ? "" : ": #{account.household_name}"
-    "Recent Activity#{suffix}"
-  end
-%>
+<% content_for(:title, account.household == current_user.household ? t(".title") :
+                         t(".title_with_household", household: account.household_name)) %>
 
 <table class="key-value key-value-narrow">
   <% if multi_community? %>
     <tr>
-      <td>Account Community</td>
+      <td><%= t(".account_community") %></td>
       <td><%= @community.name %></td>
     </tr>
   <% end %>
   <tr>
-    <td>Account Number</td>
+    <td><%= t(".account_number") %></td>
     <td><%= account.number_padded %></td>
   </tr>
   <tr>
-    <td>Household</td>
+    <td><%= t(".household") %></td>
     <td><%= account.household_name %></td>
   </tr>
 </table>
 
-<h2>Activity</h2>
+<h2><%= t(".activity") %></h2>
 
 <% if transactions.none? && last_statement.nil? %>
-  <div class="center-notice">There is no activity on this account.</div>
+  <div class="center-notice"><%= t(".no_activity") %></div>
 <% else %>
+  <%# Full keys below: lazy lookup inside a render(layout:) block resolves against the layout's path. %>
   <%= render(layout: "txn_table") do %>
     <tr>
       <td><%= l(last_statement&.created_on) %></td>
       <td></td>
-      <td>Last statement balance</td>
+      <td><%= t("transactions.index.last_statement_balance") %></td>
       <td></td>
       <td></td>
       <td class="num"><%= currency_with_cr_span(last_statement&.total_due || 0) %></td>
@@ -41,7 +39,7 @@
     <tr class="total">
       <td></td>
       <td></td>
-      <td>Current balance</td>
+      <td><%= t("transactions.index.current_balance") %></td>
       <td></td>
       <td></td>
       <td class="num"><%= currency_with_cr_span(account.current_balance) %></td>

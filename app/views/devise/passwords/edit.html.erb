@@ -1,11 +1,9 @@
-<% content_for(:title, "Enter a New Password") %>
+<% content_for(:title, t(".title")) %>
 
 <%= gather_form_for(resource, layout: :vertical, width: :narrow, top_error_notification: false,
                               url: password_path(resource_name),
                               as: resource_name, html: {method: :put}) do |f| %>
-  <p>
-    Enter a new password below and you will be signed in to Gather.
-  </p>
+  <p><%= t(".instructions") %></p>
 
   <%= f.input(:reset_password_token, as: :hidden) %>
   <%= f.full_error(:reset_password_token) %>
@@ -13,8 +11,8 @@
   <%= render("people/password_changes/password_fields", f: f) %>
 <% end %>
 
-<%= javascript_tag do %>
+<script>
   $(function() {
     new Gather.Views.People.PasswordFormView({el: '.user-form'});
   });
-<% end %>
+</script>

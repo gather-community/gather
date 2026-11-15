@@ -6,7 +6,7 @@
   <% end %>
 </div>
 
-<%= javascript_tag do %>
+<script>
   $(function() {
     new Gather.Views.AjaxSelect2({el: '.user-form'});
     window.uploadView = new Gather.Views.FileUploadView(<%=json(
@@ -16,4 +16,4 @@
     new Gather.Views.DirtyChecker({el: '.user-form', helpers: [uploadView]});
     new Gather.Views.UserFormView({el: '.user-form'});
   });
-<% end %>
+</script>

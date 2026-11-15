@@ -12,6 +12,7 @@
 #  slug                :string(63)       not null
 #  country_code        :string(2)        default("US"), not null
 #  time_zone           :string           not null, default("UTC")
+#  locale              :string(10)       not null, default("en")
 #  introduction        :text             not null
 #  want_sample_data    :boolean          not null, default(false)
 #  status              :string           not null, default("pending")
@@ -33,10 +34,15 @@ module Communities
     MESSAGE_MAX_LENGTH = 5000
     WANT_SAMPLE_DATA_OPTIONS = %i[true false].freeze
 
-    enum :status, {pending: "pending", approved: "approved", denied: "denied",
-                   created: "created", failed: "failed"}
+    # "creating" means approved, with the community being set up in the background.
+    # Scopes are off because a "new" scope would replace Signup.new.
+    enum :status, {new: "new", creating: "creating", denied: "denied",
+                   created: "created", failed: "failed"}, scopes: false
 
     belongs_to :reviewed_by, class_name: "User", optional: true
+
+    # Country codes are ISO 3166-1 alpha-2 and must be stored uppercase to match Community.
+    before_validation { self.country_code = country_code&.upcase }
 
     validates :slug, uniqueness: true
 
@@ -49,7 +55,15 @@ module Communities
     end
 
     def approve!(reviewer, message:)
-      update!(status: :approved, reviewed_by: reviewer, reviewed_at: Time.current, message: message)
+      update!(status: :creating, reviewed_by: reviewer, reviewed_at: Time.current, message: message)
+    end
+
+    # Puts a failed signup back to creating so the approval job can run again. The approval message is
+    # kept, since it's what the applicant will receive. The person retrying becomes the reviewer so the
+    # setup complete/failed email goes to them.
+    def retry!(reviewer)
+      raise ArgumentError, "Only failed signups can be retried (status is #{status})" unless failed?
+      update!(status: :creating, reviewed_by: reviewer, reviewed_at: Time.current, failure_message: nil)
     end
 
     def mark_created!

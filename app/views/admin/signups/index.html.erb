@@ -1,0 +1,35 @@
+<% content_for(:title, t(".title")) %>
+
+<% if @signups.empty? %>
+  <div class="center-notice">
+    <%= t(".none_found") %> <%= lenses.no_result_clear_filter_link %>
+  </div>
+<% else %>
+  <table class="index">
+    <thead>
+      <tr>
+        <th><%= t(".community_name") %></th>
+        <th><%= t(".contact") %></th>
+        <th><%= t(".submitted") %></th>
+        <th><%= t(".status") %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @signups.each do |signup| %>
+        <tr>
+          <td><%= link_to(signup.community_name, review_admin_signup_path(signup)) %></td>
+          <td>
+            <%= signup.contact_name %><br>
+            <small><%= mail_to(signup.contact_email) %></small>
+          </td>
+          <td><%= l(signup.created_at) %></td>
+          <td>
+            <span class="label label-<%= signup.new? ? "warning" : (signup.creating? ? "success" : "danger") %>">
+              <%= t("simple_form.options.communities_signup.status.#{signup.status}") %>
+            </span>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

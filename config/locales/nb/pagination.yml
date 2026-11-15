@@ -1,0 +1,23 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+# Kaminari's translations for page_entries_info are not customizable enough so I made my own helper.
+nb:
+  pagination:
+    page_entries_info:
+      gdrive/migration/file: "Viser filer %{first}–%{last} av %{total}" # MT
+      gdrive/migration/log: "Viser logger %{first}–%{last} av %{total}" # MT
+      meals/meal: "Viser måltider %{first}–%{last} av %{total}" # MT
+      household: "Viser husstander %{first}–%{last} av %{total}" # MT
+      user: "Viser personer %{first}–%{last} av %{total}" # MT
+      work/period: "Viser perioder %{first}–%{last} av %{total}" # MT
+      work/shift: "Viser vakter %{first}–%{last} av %{total}" # MT

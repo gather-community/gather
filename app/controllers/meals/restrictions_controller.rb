@@ -16,7 +16,7 @@ module Meals
       @community = current_community
       authorize(@community)
       if @community.update(community_params)
-        flash[:success] = "Updated successfully."
+        flash[:success] = t("meals.restrictions_updated")
         redirect_to(edit_meals_restrictions_path)
       else
         render(:edit)

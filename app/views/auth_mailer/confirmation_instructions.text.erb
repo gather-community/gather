@@ -1,7 +1,7 @@
 <%= @user.greeting %>
 
-Please confirm your new email address using this link:
+<%= t(".use_link") %>
 
 <%= confirmation_url(@user, confirmation_token: @token) %>
 
-Thanks for your cooperation with this important security measure!
+<%= t(".thanks") %>

@@ -2,11 +2,21 @@ table {
   tr {
     border-bottom: $light-border;
 
+    // A section heading spanning the table's columns, e.g. <tr class="heading"><th colspan="2"><h3>.
     &.heading {
       border-bottom: none;
 
-      td {
+      td, th {
         padding-bottom: 0;
+      }
+
+      th {
+        font-weight: normal;
+        padding-top: 15px;
+
+        h3 {
+          margin: 0 0 5px 0;
+        }
       }
     }
 

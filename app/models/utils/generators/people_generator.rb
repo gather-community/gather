@@ -56,9 +56,9 @@ module Utils
                   birthdate: bday,
                   email: email,
                   google_email: email,
-                  mobile_phone: Faker::PhoneNumber.simple,
-                  home_phone: bool_prob(50) ? Faker::PhoneNumber.simple : nil,
-                  work_phone: bool_prob(15) ? Faker::PhoneNumber.simple : nil,
+                  mobile_phone: random_phone,
+                  home_phone: bool_prob(50) ? random_phone : nil,
+                  work_phone: bool_prob(15) ? random_phone : nil,
                   joined_on: joined,
                   preferred_contact: %w[phone email text].sample,
                   created_at: community.created_at,
@@ -109,10 +109,14 @@ module Utils
       end
 
       def generate_memorial
-        message = "was such a kind person and a passionate member of our community. "\
-          "They will be dearly missed."
         memorial = create(:memorial, death_year: Time.current.year, user: User.adults.inactive.first)
-        memorial.messages.create!(author: User.adults.sample, body: "#{memorial.user.first_name} #{message}")
+        memorial.messages.create!(author: User.adults.sample,
+          body: I18n.t("sample_data.memorial_message", name: memorial.user.first_name))
+      end
+
+      # Users' phones are validated against the community's country, so sample numbers must be from there.
+      def random_phone
+        Faker::PhoneNumber.simple(country_code: community.country_code)
       end
     end
   end

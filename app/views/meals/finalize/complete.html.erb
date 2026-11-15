@@ -1,14 +1,13 @@
-<% content_for(:title, "Finalize Meal: #{@meal.title || "Untitled"}") %>
+<% content_for(:title, t("meals.finalize.title", title: @meal.title || t("meals.finalize.untitled"))) %>
 
 <div class="center-notice">
-  <p>Meal finalized successfully!</p>
+  <p><%= t(".success") %></p>
   <% case cost.payment_method %>
   <% when "check" %>
-    Please send a check to <%= cost.reimbursee.name %> for <%= cost.ingredient_cost_formatted %> now.
+    <%= t(".check", name: cost.reimbursee.name, amount: cost.ingredient_cost_formatted) %>
   <% when "credit" %>
-    <%= cost.reimbursee.name %>'s Gather account has been credited <%= cost.ingredient_cost_formatted %>.
+    <%= t(".credit", name: cost.reimbursee.name, amount: cost.ingredient_cost_formatted) %>
   <% when "paypal" %>
-    Please send <%= cost.ingredient_cost_formatted %> to
-    <%= cost.reimbursee.paypal_email_or_default %> via PayPal now.
+    <%= t(".paypal", amount: cost.ingredient_cost_formatted, email: cost.reimbursee.paypal_email_or_default) %>
   <% end %>
 </div>

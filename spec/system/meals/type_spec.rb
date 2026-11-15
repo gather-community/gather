@@ -41,7 +41,8 @@ describe "types", js: true do
 
   scenario "deactivate/activate/delete" do
     visit(edit_meals_type_path(types.first))
-    accept_confirm { click_on("Deactivate") }
+    click_on("Deactivate")
+    click_modal_button
 
     expect_success
     click_link("#{types.first.name} (Inactive)")
@@ -51,7 +52,8 @@ describe "types", js: true do
     expect(page).not_to have_content("#{types.first.name} (Inactive)")
     click_link(types.first.name)
 
-    accept_confirm { click_on("Delete") }
+    click_on("Delete")
+    click_modal_button
 
     expect_success
     expect(page).not_to have_content(types.first.name)

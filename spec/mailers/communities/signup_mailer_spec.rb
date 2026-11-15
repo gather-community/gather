@@ -4,7 +4,7 @@ require "rails_helper"
 
 describe Communities::SignupMailer do
   let(:reviewer) { create(:user) }
-  let(:signup) { create(:communities_signup, :approved, reviewed_by: reviewer) }
+  let(:signup) { create(:communities_signup, :creating, reviewed_by: reviewer) }
 
   describe "approval_created" do
     subject(:mail) { described_class.approval_created(signup).deliver_now }
@@ -21,13 +21,13 @@ describe Communities::SignupMailer do
       expect(mail.body.encoded).to include(signup.community_name)
       expect(mail.body.encoded).to include(signup.slug)
       expect(mail.body.encoded).to include(signup.contact_email)
-      expect(mail.body.encoded).to contain_apex_url("/communities/signups/#{signup.id}/review")
+      expect(mail.body.encoded).to contain_apex_url("/admin/signups/#{signup.id}/review")
     end
   end
 
   describe "approval_failed" do
     let(:signup) do
-      create(:communities_signup, :approved, reviewed_by: reviewer, failure_message: "Something went wrong")
+      create(:communities_signup, :creating, reviewed_by: reviewer, failure_message: "Something went wrong")
     end
 
     subject(:mail) { described_class.approval_failed(signup).deliver_now }
@@ -45,7 +45,24 @@ describe Communities::SignupMailer do
       expect(mail.body.encoded).to include(signup.slug)
       expect(mail.body.encoded).to include(signup.contact_email)
       expect(mail.body.encoded).to include("Something went wrong")
-      expect(mail.body.encoded).to contain_apex_url("/communities/signups/#{signup.id}/review")
+      expect(mail.body.encoded).to contain_apex_url("/admin/signups/#{signup.id}/review")
+    end
+  end
+
+  describe "application_denied" do
+    let(:signup) { create(:communities_signup, :creating, reviewed_by: reviewer, locale: "de") }
+    subject(:mail) { described_class.application_denied(signup).deliver_now }
+
+    it "is in English while other languages are off" do
+      expect(mail.subject).to eq("Regarding your Gather community application")
+    end
+
+    context "with the i18n feature flag on for everyone" do
+      before { create(:feature_flag, name: "i18n", status: true) }
+
+      it "is in the language the applicant chose" do
+        expect(mail.subject).to eq("Zu deiner Bewerbung bei Gather")
+      end
     end
   end
 end

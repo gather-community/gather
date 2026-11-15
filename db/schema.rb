@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_07_130000) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_08_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -87,12 +87,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_07_130000) do
 
   create_table "calendar_event_overrides", force: :cascade do |t|
     t.bigint "cluster_id", null: false
-    t.datetime "created_at", null: false
-    t.boolean "deleted", default: false, null: false
-    t.datetime "ends_at"
     t.bigint "event_id", null: false
     t.datetime "occurrence_start", null: false
+    t.boolean "deleted", default: false, null: false
     t.datetime "starts_at"
+    t.datetime "ends_at"
+    t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["cluster_id"], name: "index_calendar_event_overrides_on_cluster_id"
     t.index ["event_id", "occurrence_start"], name: "index_event_overrides_on_event_and_occurrence", unique: true
@@ -101,17 +101,19 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_07_130000) do
 
   create_table "calendar_eventlet_overrides", force: :cascade do |t|
     t.bigint "cluster_id", null: false
-    t.datetime "created_at", null: false
-    t.boolean "deleted", default: false, null: false
-    t.integer "end_offset"
     t.bigint "event_override_id", null: false
     t.bigint "eventlet_id", null: false
+    t.boolean "deleted", default: false, null: false
     t.integer "start_offset"
+    t.integer "end_offset"
+    t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["cluster_id"], name: "index_calendar_eventlet_overrides_on_cluster_id"
     t.index ["event_override_id", "eventlet_id"], name: "index_eventlet_overrides_on_override_and_eventlet", unique: true
     t.index ["event_override_id"], name: "index_calendar_eventlet_overrides_on_event_override_id"
     t.index ["eventlet_id"], name: "index_calendar_eventlet_overrides_on_eventlet_id"
+    t.check_constraint "end_offset >= '-43200'::integer AND end_offset <= 43200", name: "eventlet_override_end_offset_within_bounds"
+    t.check_constraint "start_offset >= '-43200'::integer AND start_offset <= 43200", name: "eventlet_override_start_offset_within_bounds"
   end
 
   create_table "calendar_eventlets", force: :cascade do |t|
@@ -126,6 +128,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_07_130000) do
     t.index ["cluster_id"], name: "index_calendar_eventlets_on_cluster_id"
     t.index ["event_id", "calendar_id"], name: "index_calendar_eventlets_on_event_id_and_calendar_id", unique: true
     t.index ["event_id"], name: "index_calendar_eventlets_on_event_id"
+    t.check_constraint "end_offset >= '-43200'::integer AND end_offset <= 43200", name: "eventlet_end_offset_within_bounds"
+    t.check_constraint "start_offset >= '-43200'::integer AND start_offset <= 43200", name: "eventlet_start_offset_within_bounds"
   end
 
   create_table "calendar_events", id: :serial, force: :cascade do |t|
@@ -140,11 +144,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_07_130000) do
     t.integer "meal_id"
     t.string "name", limit: 24, null: false
     t.text "note"
-    t.date "recurrence_end_date"
-    t.jsonb "recurrence_rule"
     t.integer "sponsor_id"
     t.datetime "starts_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
+    t.jsonb "recurrence_rule"
+    t.date "recurrence_end_date"
     t.index ["calendar_id"], name: "index_calendar_events_on_calendar_id"
     t.index ["cluster_id"], name: "index_calendar_events_on_cluster_id"
     t.index ["creator_id"], name: "index_calendar_events_on_creator_id"
@@ -255,11 +259,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_07_130000) do
     t.string "slug", null: false
     t.string "sso_secret", null: false
     t.datetime "updated_at", precision: nil, null: false
+    t.string "currency", limit: 3, null: false
     t.index ["cluster_id"], name: "index_communities_on_cluster_id"
     t.index ["deactivated_at"], name: "index_communities_on_deactivated_at"
     t.index ["inactivity_warning_count"], name: "index_communities_on_inactivity_warning_count"
     t.index ["inactivity_warning_sent_at"], name: "index_communities_on_inactivity_warning_sent_at"
     t.index ["name"], name: "index_communities_on_name", unique: true
+    t.check_constraint "currency::text ~ '^[a-z]{3}$'::text", name: "currency_format"
   end
 
   create_table "community_signups", force: :cascade do |t|
@@ -275,10 +281,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_07_130000) do
     t.datetime "reviewed_at"
     t.bigint "reviewed_by_id"
     t.string "slug", limit: 20, null: false
-    t.string "status", default: "pending", null: false
+    t.string "status", default: "new", null: false
     t.string "time_zone", limit: 64, default: "UTC", null: false
     t.datetime "updated_at", null: false
     t.boolean "want_sample_data", default: false, null: false
+    t.string "locale", limit: 10, default: "en", null: false
     t.index ["slug"], name: "index_community_signups_on_slug", unique: true
   end
 
@@ -295,6 +302,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_07_130000) do
     t.datetime "run_at", precision: nil
     t.datetime "updated_at", precision: nil
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
+  end
+
+  create_table "domain_mail_checks", force: :cascade do |t|
+    t.bigint "cluster_id", null: false
+    t.bigint "domain_id", null: false
+    t.jsonb "data", default: {}, null: false
+    t.datetime "checked_at", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cluster_id"], name: "index_domain_mail_checks_on_cluster_id"
+    t.index ["domain_id"], name: "index_domain_mail_checks_on_domain_id", unique: true
   end
 
   create_table "domain_ownerships", force: :cascade do |t|
@@ -331,7 +349,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_07_130000) do
   create_table "feature_flags", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "interface", default: "basic", null: false
-    t.string "name", null: false
+    t.string "name", limit: 64, null: false
     t.boolean "status"
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_feature_flags_on_name", unique: true
@@ -518,7 +536,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_07_130000) do
     t.index ["gdrive_config_id"], name: "index_gdrive_synced_permissions_on_gdrive_config_id"
     t.index ["item_id"], name: "index_gdrive_synced_permissions_on_item_id"
     t.index ["user_id"], name: "index_gdrive_synced_permissions_on_user_id"
-    t.check_constraint "access_level::text = ANY (ARRAY['reader'::character varying::text, 'commenter'::character varying::text, 'writer'::character varying::text, 'fileOrganizer'::character varying::text])", name: "access_level_enum"
+    t.check_constraint "access_level::text = ANY (ARRAY['reader'::character varying::text, 'commenter'::character varying::text, 'writer'::character varying::text, 'fileOrganizer'::character varying::text, 'organizer'::character varying::text, 'owner'::character varying::text])", name: "access_level_enum"
   end
 
   create_table "gdrive_tokens", force: :cascade do |t|
@@ -616,9 +634,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_07_130000) do
     t.integer "unit_num"
     t.string "unit_suffix"
     t.datetime "updated_at", precision: nil, null: false
+    t.boolean "deleted_placeholder", default: false, null: false
     t.index ["cluster_id"], name: "index_households_on_cluster_id"
     t.index ["community_id", "name"], name: "index_households_on_community_id_and_name", unique: true
     t.index ["community_id"], name: "index_households_on_community_id"
+    t.index ["community_id"], name: "index_one_placeholder_household_per_community", unique: true, where: "deleted_placeholder"
     t.index ["deactivated_at"], name: "index_households_on_deactivated_at"
     t.index ["member_type_id"], name: "index_households_on_member_type_id"
     t.index ["name"], name: "index_households_on_name"
@@ -727,6 +747,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_07_130000) do
     t.string "status", default: "queued", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
+    t.string "locale", limit: 10, null: false
     t.index ["cluster_id"], name: "index_meal_imports_on_cluster_id"
     t.index ["community_id"], name: "index_meal_imports_on_community_id"
     t.index ["user_id"], name: "index_meal_imports_on_user_id"
@@ -780,13 +801,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_07_130000) do
     t.bigint "meal_signup_part_id", null: false
     t.index ["meal_restriction_id", "meal_signup_part_id"], name: "restriction_signup_part_index"
     t.index ["meal_signup_part_id", "meal_restriction_id"], name: "signup_part_restriction_index"
-  end
-
-  create_table "meal_restrictions_users", id: false, force: :cascade do |t|
-    t.bigint "meal_restriction_id", null: false
-    t.bigint "user_id", null: false
-    t.index ["meal_restriction_id", "user_id"], name: "index_meal_restrictions_users_on_restriction_and_user"
-    t.index ["user_id", "meal_restriction_id"], name: "index_meal_restrictions_users_on_user_and_restriction"
   end
 
   create_table "meal_roles", force: :cascade do |t|
@@ -880,6 +894,36 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_07_130000) do
     t.index ["served_at"], name: "index_meals_on_served_at"
   end
 
+  create_table "messaging_accounts", force: :cascade do |t|
+    t.bigint "cluster_id", null: false
+    t.bigint "community_id", null: false
+    t.string "currency", limit: 3, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cluster_id"], name: "index_messaging_accounts_on_cluster_id"
+    t.index ["community_id"], name: "index_messaging_accounts_on_community_id", unique: true
+  end
+
+  create_table "messaging_transactions", force: :cascade do |t|
+    t.bigint "cluster_id", null: false
+    t.bigint "account_id", null: false
+    t.bigint "creator_id"
+    t.string "description", limit: 255
+    t.integer "amount_cents", null: false
+    t.string "stripe_invoice_line_item_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "stripe_event_id"
+    t.string "kind", limit: 16, null: false
+    t.index ["account_id"], name: "index_messaging_transactions_on_account_id"
+    t.index ["cluster_id"], name: "index_messaging_transactions_on_cluster_id"
+    t.index ["creator_id"], name: "index_messaging_transactions_on_creator_id"
+    t.index ["stripe_event_id"], name: "index_messaging_transactions_on_stripe_event_id"
+    t.index ["stripe_invoice_line_item_id"], name: "index_messaging_transactions_on_stripe_invoice_line_item_id"
+    t.check_constraint "(kind::text = 'manual'::text) = (description IS NOT NULL)", name: "description_only_if_manual"
+    t.check_constraint "kind::text = ANY (ARRAY['topup_credit'::character varying, 'topup_reversal'::character varying, 'manual'::character varying]::text[])", name: "kind_valid"
+  end
+
   create_table "people_emergency_contacts", id: :serial, force: :cascade do |t|
     t.string "alt_phone"
     t.integer "cluster_id", null: false
@@ -938,8 +982,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_07_130000) do
     t.integer "death_year", null: false
     t.text "obituary"
     t.datetime "updated_at", null: false
-    t.bigint "user_id", null: false
+    t.bigint "user_id"
+    t.string "first_name", null: false
+    t.string "last_name", null: false
+    t.bigint "community_id", null: false
     t.index ["cluster_id"], name: "index_people_memorials_on_cluster_id"
+    t.index ["community_id"], name: "index_people_memorials_on_community_id"
     t.index ["user_id"], name: "index_people_memorials_on_user_id", unique: true
   end
 
@@ -1030,6 +1078,33 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_07_130000) do
     t.index ["due_on"], name: "index_statements_on_due_on"
   end
 
+  create_table "stripe_webhook_events", force: :cascade do |t|
+    t.string "event_id", null: false
+    t.string "event_type", null: false
+    t.jsonb "payload", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["event_id"], name: "index_stripe_webhook_events_on_event_id"
+  end
+
+  create_table "subscription_exchange_rates", force: :cascade do |t|
+    t.string "currency", null: false
+    t.decimal "rate", precision: 18, scale: 8, null: false
+    t.datetime "fetched_at", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["currency"], name: "index_subscription_exchange_rates_on_currency", unique: true
+  end
+
+  create_table "subscription_inflation_readings", force: :cascade do |t|
+    t.integer "year", null: false
+    t.decimal "index_value", precision: 12, scale: 4, null: false
+    t.datetime "fetched_at", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["year"], name: "index_subscription_inflation_readings_on_year", unique: true
+  end
+
   create_table "subscription_intents", force: :cascade do |t|
     t.string "address_city", null: false
     t.string "address_country", null: false
@@ -1041,7 +1116,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_07_130000) do
     t.bigint "community_id", null: false
     t.string "contact_email", null: false
     t.datetime "created_at", null: false
-    t.string "currency", null: false
     t.decimal "discount_percent", precision: 6, scale: 2
     t.integer "months_per_period", null: false
     t.jsonb "payment_method_types", null: false
@@ -1054,12 +1128,30 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_07_130000) do
     t.index ["community_id"], name: "index_subscription_intents_on_community_id", unique: true
   end
 
+  create_table "subscription_messaging_topups", force: :cascade do |t|
+    t.bigint "cluster_id", null: false
+    t.bigint "community_id", null: false
+    t.string "stripe_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cluster_id"], name: "index_subscription_messaging_topups_on_cluster_id"
+    t.index ["community_id"], name: "index_subscription_messaging_topups_on_community_id", unique: true
+    t.index ["stripe_id"], name: "index_subscription_messaging_topups_on_stripe_id", unique: true
+  end
+
   create_table "subscriptions", force: :cascade do |t|
     t.bigint "cluster_id", null: false
     t.bigint "community_id", null: false
     t.datetime "created_at", null: false
     t.string "stripe_id", null: false
     t.datetime "updated_at", null: false
+    t.string "stripe_status"
+    t.string "payment_intent_status"
+    t.string "payment_intent_next_action_type"
+    t.string "setup_intent_status"
+    t.string "setup_intent_next_action_type"
+    t.datetime "synced_at"
+    t.string "sync_error"
     t.index ["cluster_id"], name: "index_subscriptions_on_cluster_id"
     t.index ["community_id"], name: "index_subscriptions_on_community_id", unique: true
   end
@@ -1127,7 +1219,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_07_130000) do
     t.string "remember_token"
     t.datetime "reset_password_sent_at", precision: nil
     t.string "reset_password_token"
-    t.jsonb "restrictions", default: "{}"
     t.string "school"
     t.jsonb "settings", default: {}, null: false
     t.integer "sign_in_count", default: 0, null: false
@@ -1135,12 +1226,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_07_130000) do
     t.string "unconfirmed_email", limit: 255
     t.datetime "updated_at", precision: nil, null: false
     t.string "work_phone"
+    t.boolean "deleted_placeholder", default: false, null: false
+    t.jsonb "notification_prefs", default: {}, null: false
+    t.string "locale", limit: 10, null: false
     t.index ["alternate_id"], name: "index_users_on_alternate_id"
     t.index ["cluster_id"], name: "index_users_on_cluster_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["deactivated_at"], name: "index_users_on_deactivated_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["google_email"], name: "index_users_on_google_email", unique: true
+    t.index ["household_id"], name: "index_one_placeholder_user_per_household", unique: true, where: "deleted_placeholder"
     t.index ["household_id"], name: "index_users_on_household_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.check_constraint "email IS NOT NULL OR confirmed_at IS NULL", name: "unconfirmed_if_no_email"
@@ -1148,6 +1243,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_07_130000) do
     t.check_constraint "full_access = true OR confirmed_at IS NULL", name: "full_access_not_confirmed"
     t.check_constraint "full_access = true OR google_email IS NULL", name: "full_access_no_google_email"
     t.check_constraint "full_access = true OR reset_password_token IS NULL", name: "full_access_reset_password_token"
+    t.check_constraint "jsonb_typeof(notification_prefs) = 'object'::text", name: "notification_prefs_object"
   end
 
   create_table "users_roles", id: false, force: :cascade do |t|
@@ -1258,8 +1354,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_07_130000) do
     t.date "starts_on", null: false
     t.datetime "updated_at", precision: nil, null: false
     t.integer "workers_per_round"
+    t.string "slug", null: false
     t.index ["cluster_id"], name: "index_work_periods_on_cluster_id"
     t.index ["community_id", "name"], name: "index_work_periods_on_community_id_and_name", unique: true
+    t.index ["community_id", "slug"], name: "index_work_periods_on_community_id_and_slug", unique: true
     t.index ["community_id"], name: "index_work_periods_on_community_id"
     t.index ["meal_job_requester_id"], name: "index_work_periods_on_meal_job_requester_id"
     t.index ["starts_on", "ends_on"], name: "index_work_periods_on_starts_on_and_ends_on"
@@ -1289,7 +1387,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_07_130000) do
     t.datetime "starts_at", precision: nil
     t.datetime "updated_at", precision: nil, null: false
     t.index ["cluster_id"], name: "index_work_shifts_on_cluster_id"
-    t.index ["job_id", "starts_at", "ends_at"], name: "index_work_shifts_on_job_id_and_starts_at_and_ends_at", unique: true
+    t.index ["job_id", "meal_id"], name: "index_work_shifts_on_job_id_and_meal_id", unique: true, where: "(meal_id IS NOT NULL)"
+    t.index ["job_id", "starts_at", "ends_at"], name: "index_work_shifts_on_job_and_times_without_meal", unique: true, where: "(meal_id IS NULL)"
     t.index ["job_id"], name: "index_work_shifts_on_job_id"
     t.index ["meal_id"], name: "index_work_shifts_on_meal_id"
   end
@@ -1334,6 +1433,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_07_130000) do
   add_foreign_key "calendar_shared_guidelines", "communities"
   add_foreign_key "communities", "clusters"
   add_foreign_key "community_signups", "users", column: "reviewed_by_id"
+  add_foreign_key "domain_mail_checks", "clusters"
+  add_foreign_key "domain_mail_checks", "domains"
   add_foreign_key "domain_ownerships", "clusters"
   add_foreign_key "domain_ownerships", "communities"
   add_foreign_key "domain_ownerships", "domains"
@@ -1402,6 +1503,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_07_130000) do
   add_foreign_key "meal_invitations", "clusters"
   add_foreign_key "meal_invitations", "communities"
   add_foreign_key "meal_invitations", "meals"
+  add_foreign_key "meal_messages", "users", column: "sender_id"
   add_foreign_key "meal_resourcings", "calendar_nodes", column: "calendar_id"
   add_foreign_key "meal_resourcings", "clusters"
   add_foreign_key "meal_resourcings", "meals"
@@ -1421,6 +1523,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_07_130000) do
   add_foreign_key "meals", "communities"
   add_foreign_key "meals", "meal_formulas", column: "formula_id"
   add_foreign_key "meals", "users", column: "creator_id"
+  add_foreign_key "messaging_accounts", "clusters"
+  add_foreign_key "messaging_accounts", "communities"
+  add_foreign_key "messaging_transactions", "clusters"
+  add_foreign_key "messaging_transactions", "messaging_accounts", column: "account_id"
+  add_foreign_key "messaging_transactions", "users", column: "creator_id"
   add_foreign_key "people_emergency_contacts", "clusters"
   add_foreign_key "people_emergency_contacts", "households"
   add_foreign_key "people_guardianships", "clusters"
@@ -1431,6 +1538,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_07_130000) do
   add_foreign_key "people_memorial_messages", "people_memorials", column: "memorial_id"
   add_foreign_key "people_memorial_messages", "users", column: "author_id"
   add_foreign_key "people_memorials", "clusters"
+  add_foreign_key "people_memorials", "communities"
   add_foreign_key "people_memorials", "users"
   add_foreign_key "people_pets", "clusters"
   add_foreign_key "people_pets", "households"
@@ -1447,6 +1555,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_07_130000) do
   add_foreign_key "statements", "clusters"
   add_foreign_key "subscription_intents", "clusters"
   add_foreign_key "subscription_intents", "communities"
+  add_foreign_key "subscription_messaging_topups", "clusters"
+  add_foreign_key "subscription_messaging_topups", "communities"
   add_foreign_key "subscriptions", "clusters"
   add_foreign_key "subscriptions", "communities"
   add_foreign_key "transactions", "accounts"

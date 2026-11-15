@@ -7,7 +7,7 @@ describe "general mailer" do
     let(:statement) { create(:statement, total_due: 9.99) }
     let(:user) { create(:user).tap(&:deactivate) }
     let(:meal) { create(:meal, head_cook: user) }
-    let(:mail) { MealMailer.cook_menu_reminder(meal.assignments[0]).deliver_now }
+    let(:mail) { MealMailer.with(recipient: user).cook_menu_reminder(meal.assignments[0]).deliver_now }
 
     it "doesn't send" do
       expect(mail).to be_nil
@@ -17,21 +17,25 @@ describe "general mailer" do
   describe "mail to child" do
     let(:guardians) { create_list(:user, 2) }
     let(:meal) { create(:meal, head_cook: teen) }
-    let(:mail) { MealMailer.cook_menu_reminder(meal.assignments[0]).deliver_now }
+    # Configurable, so callers resolve recipients and send each their own message.
+    let(:mails) do
+      Notifications::Recipients.resolve(teen, kind: :cook_menu_reminder)
+        .map { |user| MealMailer.with(recipient: user).cook_menu_reminder(meal.assignments[0]).deliver_now }
+    end
 
     context "with email address" do
       let(:teen) { create(:user, :child, guardians: guardians, email: "teen@foo.com") }
 
-      it "sends to guardians" do
-        expect(mail.to).to eq(["teen@foo.com"])
+      it "sends to the teen" do
+        expect(mails.map(&:to)).to eq([["teen@foo.com"]])
       end
     end
 
     context "with no email address" do
       let(:teen) { create(:user, :child, guardians: guardians, email: nil) }
 
-      it "sends to guardians" do
-        expect(mail.to).to match_array(guardians.map(&:email))
+      it "sends each guardian their own message" do
+        expect(mails.map(&:to)).to match_array(guardians.map { |g| [g.email] })
       end
     end
   end
@@ -39,7 +43,7 @@ describe "general mailer" do
   describe "mail with no reply_to" do
     let(:cook) { create(:user) }
     let(:meal) { create(:meal, head_cook: cook) }
-    let(:mail) { MealMailer.cook_menu_reminder(meal.assignments[0]).deliver_now }
+    let(:mail) { MealMailer.with(recipient: cook).cook_menu_reminder(meal.assignments[0]).deliver_now }
 
     it "sets reply_to to from address" do
       from_addr = Settings.email.from.match(/<(.+)>/)[1]

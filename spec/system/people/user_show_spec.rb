@@ -25,6 +25,24 @@ describe "user show" do
     end
   end
 
+  context "with group memberships" do
+    let(:user) { create(:user) }
+    let(:visible_group) { create(:group, name: "Knitters", availability: "open") }
+    let(:hidden_group) { create(:group, name: "Secret Society", availability: "hidden") }
+
+    before do
+      visible_group.memberships.create!(user: user, kind: "joiner")
+      hidden_group.memberships.create!(user: user, kind: "joiner")
+    end
+
+    scenario "links only groups the viewer can see" do
+      visit(user_path(user))
+      expect(page).to have_link("Knitters")
+      expect(page).to have_content("Secret Society")
+      expect(page).not_to have_link("Secret Society")
+    end
+  end
+
   # See the User class for more documentation on email confirmation.
   context "pending reconfirmation" do
     let(:actor) { create(:user, :pending_reconfirmation) }

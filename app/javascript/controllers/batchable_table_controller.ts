@@ -1,39 +1,47 @@
-import { Controller } from "@hotwired/stimulus";
+import {Controller} from "@hotwired/stimulus";
 import i18n from "../utils/i18n";
+import {confirmModal} from "../utils/modal";
 
 export default class extends Controller<HTMLFormElement> {
-  static targets = ['allSelected', 'item'];
+  static targets = ["allSelected", "item"];
 
   declare allSelectedTarget: HTMLFormElement;
   declare itemTargets: Array<HTMLFormElement>;
 
-  actionClicked (event: Event): void {
-    if (event.currentTarget instanceof HTMLElement) {
-      const scope = event.currentTarget.dataset.scope;
-      const key = event.currentTarget.dataset.key;
-      const selectedIds = this.selectedIds();
+  async actionClicked(event: Event): Promise<void> {
+    if (!(event.currentTarget instanceof HTMLElement)) {
+      return;
+    }
 
-      console.log(selectedIds);
+    // The modal is async, so always stop the native submit and re-submit on confirm.
+    event.preventDefault();
 
-      if (selectedIds.length == 0) {
-        event.preventDefault();
-        return
+    const scope = event.currentTarget.dataset.scope;
+    const key = event.currentTarget.dataset.key;
+    const submitUrl = event.currentTarget.dataset.submitUrl;
+    const selectedIds = this.selectedIds();
+
+    if (selectedIds.length === 0) {
+      return;
+    }
+
+    const confirmation = i18n.t(
+      `batchable_tables.confirmations.${scope}.${key}`,
+      {count: selectedIds.length}
+    );
+    if (await confirmModal(confirmation)) {
+      if (submitUrl) {
+        this.element.action = submitUrl;
       }
-
-      const confirmation = i18n.t(`batchable_tables.confirmations.${scope}.${key}`, {count: selectedIds.length});
-      if (confirm(confirmation)) {
-        this.element.action = event.currentTarget.dataset.submitUrl;
-      } else {
-        event.preventDefault();
-      }
+      this.element.submit();
     }
   }
 
-  allSelectedClicked (event: Event): void {
+  allSelectedClicked(event: Event): void {
     this.selectAllItems(this.allSelectedTarget.checked);
   }
 
-  itemClicked (event: Event): void {
+  itemClicked(event: Event): void {
     this.allSelectedTarget.checked = this.allAreSelected();
   }
 

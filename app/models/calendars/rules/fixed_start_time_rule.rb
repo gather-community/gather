@@ -6,7 +6,7 @@ module Calendars
     class FixedStartTimeRule < Rule
       def check(event)
         value.strftime("%T") == event.starts_at.strftime("%T") ||
-          [:starts_at, "Must be #{I18n.l(value, format: :time_only)}"]
+          [:starts_at, I18n.t("calendars.rules.fixed_time", time: I18n.l(value, format: :time_only))]
       end
     end
   end

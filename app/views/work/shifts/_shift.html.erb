@@ -6,7 +6,7 @@
       </td>
       <td>
         <div class="hours" title="<%= I18n.t("work.num_hours", num: shift.hours_formatted) %>">
-          <%= shift.hours_formatted %>h
+          <%= t("work.hours_abbr", hours: shift.hours_formatted) %>
         </div>
       </td>
     </tr>
@@ -31,7 +31,8 @@
             <% if policy(shift).unsignup? && assignment.user == @choosee %>
               <span class="cancel-link">
                 &nbsp;<%= link_to(icon_tag("close", title: I18n.t("common.cancel")), "javascript:void(0)",
-                  "data-confirm": t("confirmations.work/shift.unsignup")) %>
+                  data: {controller: "confirm", action: "confirm#check",
+                         confirm_message_value: t("confirmations.work/shift.unsignup")}) %>
                 <%= inline_loading_indicator %>
               </span>
             <% end %>
@@ -44,7 +45,7 @@
         <% end %>
         <% if shift_policy(shift).signup? %>
           <div class="signup-link">
-            <a href="#"><%= icon_tag("bolt") %> Sign Up!</a>
+            <a href="#"><%= icon_tag("bolt") %> <%= t(".sign_up") %></a>
             <%= inline_loading_indicator %>
           </div>
         <% end %>

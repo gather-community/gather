@@ -1,0 +1,219 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+sv:
+  people:
+    # The placeholder household and user that a deleted member's records are reassigned to.
+    deleted_placeholder:
+      household: "Raderade medlemmar" # MT
+      first_name: "Raderad" # MT
+      last_name: "medlem" # MT
+    sign_in_invitations:
+      sent:
+        one: "Inbjudan har skickats." # MT
+        other: "Inbjudningarna har skickats." # MT
+      none_selected: "Du valde inga personer." # MT
+      new:
+        title: "Bjud in personer att logga in" # MT
+        no_users: "Inga personer hittades." # MT
+        instructions_html: "Markera de personer du vill bjuda in. Personer med %{icon} vid namnet har aldrig loggat in." # MT
+        select_no_sign_ins: "Välj alla som aldrig loggat in" # MT
+        select_all: "Välj alla" # MT
+        send: "Skicka inbjudningar" # MT
+    memorials:
+      created: "Minnessidan har skapats." # MT
+      updated: "Minnessidan har uppdaterats." # MT
+      index:
+        title: "Minnessidor" # MT
+        create: "Skapa minnessida" # MT
+        no_memorials: "Inga minnessidor hittades." # MT
+        photo_of: "Foto av %{name}" # MT
+      show:
+        memorials: "Minnessidor" # MT
+        photo_of: "Foto av %{name}" # MT
+        obituary: "Dödsruna" # MT
+        community_memories: "Minnen från gemenskapen" # MT
+      new:
+        title: "Skapa minnessida" # MT
+      edit:
+        title: "Redigera minnessida: %{name}" # MT
+    memorial_messages:
+      created: "Tack för ditt meddelande." # MT
+      updated: "Meddelandet har uppdaterats." # MT
+      edit:
+        title: "Redigera minnesmeddelande" # MT
+    member_types:
+      created: "Medlemstypen har skapats." # MT
+      updated: "Medlemstypen har uppdaterats." # MT
+      index:
+        title: "Medlemstyper" # MT
+        create: "Skapa medlemstyp" # MT
+        explanation: "Medlemstyper tilldelas hushåll och gör det möjligt att anpassa återkommande debiteringar." # MT
+        no_member_types: "Inga medlemstyper hittades." # MT
+        name: "Namn" # MT
+      new:
+        title: "Skapa medlemstyp" # MT
+      edit:
+        title: "Redigera medlemstyp: %{name}" # MT
+    vehicles:
+      index:
+        title: "Fordon" # MT
+        no_vehicles: "Inga fordon hittades." # MT
+        vehicle: "Märke/modell/färg/registreringsnummer" # MT
+        owner: "Ägare" # MT
+    settings:
+      edit:
+        title: "Inställningar för personer" # MT
+    birthdays:
+      index:
+        title: "Födelsedagar" # MT
+        no_users: "Inga personer hittades." # MT
+        # Shown when a user's birthday is unknown.
+        unknown: "?"
+    password_changes:
+      success: "Lösenordet har ändrats." # MT
+      show:
+        title: "Byt lösenord" # MT
+      password_fields:
+        new_password: "Nytt lösenord" # MT
+        retype_new_password: "Upprepa nytt lösenord" # MT
+        reveal: "Visa lösenord" # MT
+        mask: "Dölj lösenord" # MT
+    users:
+      confirmations:
+        sign_in_to_use_gather: "Logga in för att använda Gather." # MT
+        expired_signed_in: "Tiden för bekräftelse har gått ut. Använd länken ”Skicka bekräftelseinstruktionerna igen” nedan för att försöka igen." # MT
+        expired_signed_out: "Tiden för bekräftelse har gått ut. Logga in med din gamla e-postadress och försök igen." # MT
+      # Each completes Devise's "Could not sign you in from Google because %{reason}." (devise.omniauth_callbacks.failure).
+      omniauth_failure_reasons:
+        no_email: "Google inte gav någon e-postadress. Meddela en administratör" # MT
+        invitation_expired: "din inbjudan har gått ut" # MT
+        wrong_google_id: "du måste logga in med Google-id:t %{google_id}" # MT
+        google_id_taken: "ditt Google-id %{google_id} är kopplat till en annan person" # MT
+        invitation_required: "du måste använda en inbjudan första gången du loggar in" # MT
+        google_id_not_found: "ditt Google-id %{google_id} hittades inte i systemet" # MT
+        cancelled: "inloggningen avbröts" # MT
+        session_expired: "din inloggningssession har gått ut. Försök igen" # MT
+        unexpected: "ett okänt fel inträffade. Administratörerna har meddelats" # MT
+    deletion:
+      blocked_intro: "Det här kan inte raderas permanent än:" # MT
+      confirmation_mismatch: "Bekräftelsetexten stämde inte, så inget raderades." # MT
+      self_success: "Ditt konto har raderats permanent." # MT
+      blockers:
+        balance: "Hushållet ”%{name}” har ett oreglerat kontosaldo som måste lösas först." # MT
+        guardian: "Personen är vårdnadshavare för %{names}. Radera eller flytta de medlemmarna först." # MT
+        external_ward: "Medlemmar i hushållet är vårdnadshavare för %{names} i andra hushåll. Radera eller flytta de medlemmarna först." # MT
+        last_admin: "Personen är gemenskapens enda administratör. Ge en annan medlem administratörsrollen först." # MT
+  users:
+    greeting: "Hej %{name}!" # MT
+    photo_of: "Foto av %{name}" # MT
+    confirmation_resent: "Instruktionerna har skickats." # MT
+    email_change_canceled: "Bytet av e-postadress har avbrutits." # MT
+    created: "Personen har skapats." # MT
+    created_and_invited: "Personen har skapats och bjudits in." # MT
+    updated: "Personen har uppdaterats." # MT
+    profile_updated: "Profilen har uppdaterats." # MT
+    confirm_new_email_self: "Du måste bekräfta din nya e-postadress. Titta i din inkorg för %{email}." # MT
+    confirm_new_email_other: "Personen måste bekräfta sin nya e-postadress (%{email})." # MT
+    invitation_invalidated: "Ändringen kan dock ha gjort en inbjudan att logga in ogiltig. Du kanske vill skicka en ny." # MT
+    household_hint:
+      choose_html: "Välj ett befintligt hushåll för personen. Om det inte finns något måste du %{link}." # MT
+      create_link: "skapa det först" # MT
+      child_note: "På grund av en begränsning i systemet måste alla personer i Gather höra till ett enda hushåll, men barn kan ha föräldrar eller vårdnadshavare från flera hushåll. Alla funktioner som rör barn behandlar alla föräldrar och vårdnadshavare och alla hushåll som är kopplade till barnet lika." # MT
+    preferred_contact_tooltip: "Vill helst kontaktas via: %{method}" # MT
+    all_users: "Alla personer" # MT
+    index:
+      title: "Medlemsförteckning" # MT
+      print_title: "Medlemsförteckning för %{community}" # MT
+      show_action_menu: "Visa åtgärdsmeny för personen" # MT
+      create_adult: "Skapa vuxen" # MT
+      create_child: "Skapa barn" # MT
+      invite_to_sign_in: "Bjud in att logga in" # MT
+      no_users: "Inga personer hittades." # MT
+      name: "Namn" # MT
+      unit: "Lägenhet" # MT
+      email: "E-post" # MT
+      mobile_phone: "Mobil" # MT
+      home_phone: "Hem" # MT
+      work_phone: "Arbete" # MT
+      preferred_contact: "Föredr." # MT
+      download_csv: "Ladda ner som CSV" # MT
+    show:
+      directory: "Medlemsförteckning" # MT
+      email: "E-post" # MT
+      pending_confirmation: "Väntar på bekräftelse: %{email}" # MT
+      resend_confirmation: "Skicka bekräftelseinstruktionerna igen" # MT
+      cancel_change: "Avbryt ändringen" # MT
+      unconfirmed: "* Adressen har inte bekräftats än, använd den med försiktighet." # MT
+      phone: "Telefon" # MT
+      preferred_contact: "Föredraget kontaktsätt" # MT
+      birthday: "Födelsedag" # MT
+      age: "Ålder" # MT
+      joined_on: "Inflyttningsdatum" # MT
+      recent_head_cook_meals: "Senaste måltider som huvudkock" # MT
+      date: "Datum" # MT
+      meal_title: "Titel" # MT
+      signups: "Anmälningar" # MT
+    new:
+      title: "Skapa person" # MT
+    edit:
+      profile: "Profil" # MT
+      edit_user: "Redigera person: %{name}" # MT
+      edit_photo: "Redigera foto: %{name}" # MT
+    full_form:
+      hide_photo_from_cluster: "Visa inte fotot för personer i %{communities}" # MT
+      privacy_hint_html: "Mer om integritetsinställningar finns i %{link}." # MT
+      privacy_policy: "integritetspolicyn" # MT
+      household_info: "Uppgifter om hushållet" # MT
+      household_note_named_html: "Fälten nedan hör till hushållet %{name}. Om du ändrar dem här ändras de för <em>alla personer i hushållet</em>." # MT
+      household_note_unnamed_html: "Fälten nedan hör till personens hushåll. Om du ändrar dem här ändras de för <em>alla personer i hushållet</em>." # MT
+      move_household_html: "Du kan också %{link}." # MT
+      move_household_link: "flytta personen till ett annat hushåll" # MT
+  households:
+    greeting: "Hej hushållet %{name}!" # MT
+    created: "Hushållet har skapats." # MT
+    updated: "Hushållet har uppdaterats." # MT
+    emergency_contact: "%{name} (%{relationship})" # MT
+    pets:
+      summary: "%{name} (%{species}, %{color})" # MT
+      vet: "Veterinär" # MT
+      caregivers: "Skötare" # MT
+      health_issues: "Hälsoproblem" # MT
+    # Unit and garage numbers, e.g. "#12".
+    number: "nr %{number}" # MT
+    index:
+      title: "Hushåll" # MT
+      create: "Skapa hushåll" # MT
+      no_households: "Inga hushåll hittades." # MT
+      name: "Namn" # MT
+      unit: "Lägenhetsnr" # MT
+      users: "Personer" # MT
+    show:
+      title: "Hushåll: %{name}" # MT
+      households: "Hushåll" # MT
+      missing_photo: "Foto saknas" # MT
+    new:
+      title: "Skapa hushåll" # MT
+    edit:
+      title: "Redigera hushåll: %{name}" # MT
+    attribs:
+      household: "Hushåll" # MT
+      members: "Medlemmar" # MT
+      vehicles: "Fordon" # MT
+      garage: "Garage" # MT
+      member_type: "Medlemstyp" # MT
+      emergency_contacts: "Nödkontakter" # MT
+      pets: "Husdjur" # MT
+      keyholders: "Fler nyckelinnehavare" # MT
+    unit_community:
+      unit: "Lägenhet" # MT
+      community: "Gemenskap" # MT

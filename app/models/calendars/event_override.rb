@@ -31,12 +31,12 @@ module Calendars
     def occurrence_must_be_in_series
       return unless occurrence_start && event&.recurring?
       return if event.schedule.occurs_at?(occurrence_start)
-      errors.add(:occurrence_start, "is not a valid occurrence in this series")
+      errors.add(:occurrence_start, :not_in_series)
     end
 
     def time_range_valid
       return unless starts_at && ends_at
-      errors.add(:ends_at, "must be after start time") unless ends_at > starts_at
+      errors.add(:ends_at, :before_start) unless ends_at > starts_at
     end
   end
 end

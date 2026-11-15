@@ -1,0 +1,125 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+fi:
+  search:
+    # Title for a search result with neither a title nor a name.
+    untitled: "(nimetön)" # MT
+    # Singular label shown under each search result, keyed by result kind (SearchHelper::KINDS).
+    kinds:
+      wiki_page: "Wiki" # MT
+      event: "Tapahtuma" # MT
+      calendar: "Kalenteri" # MT
+      group: "Ryhmä" # MT
+      user: "Henkilö" # MT
+      household: "Kotitalous" # MT
+      meal: "Ateria" # MT
+      memorial: "Muistosivu" # MT
+      emergency_contact: "Hätäyhteyshenkilö" # MT
+      pet: "Lemmikki" # MT
+      vehicle: "Ajoneuvo" # MT
+      transaction: "Tapahtuma" # MT
+    # Facts shown after a result's kind label (SearchHelper#search_result_details), joined by separator.
+    details:
+      separator: " · " # MT
+      household: "Kotitalous: %{name}" # MT
+      head_cook: "Pääkokki: %{name}" # MT
+      updated_by: "Päivitetty %{date}, päivittäjä: %{name}" # MT
+      updated: "Päivitetty %{date}" # MT
+      members:
+        one: "%{count} jäsen" # MT
+        other: "%{count} jäsentä" # MT
+      child: "Lapsi" # MT
+      unit: "Asunto %{unit}" # MT
+      years: "%{birth}–%{death}" # MT
+      date_range: "%{first} – %{last}" # MT
+      pet_color_species: "%{species}, väri: %{color}" # MT
+      modified: "Muokattu %{date}" # MT
+      # Google Drive file types, keyed like the type: search syntax (Search::QueryParser::MIME_TYPES).
+      drive_types:
+        doc: "Google Docs -dokumentti" # MT
+        sheet: "Google Sheets -taulukko" # MT
+        slide: "Google Slides -esitys" # MT
+        folder: "Kansio" # MT
+        pdf: "PDF" # MT
+    # Result count when there are more results than are fetched, e.g. "200+".
+    count_capped: "%{count}+" # MT
+    # Shown by search_controller.ts when fetching a section's results fails.
+    load_error: "Tulosten lataaminen epäonnistui. Yritä uudelleen." # MT
+    index:
+      title: "Haku" # MT
+      form_label: "Haku" # MT
+      input_label: "Hae Gatherista" # MT
+      placeholder: "Hae Gatherista ja Google Drivesta…" # MT
+      placeholder_no_drive: "Hae Gatherista…" # MT
+      submit: "Hae" # MT
+      search_tips: "Hakuvinkit" # MT
+      # Section headings and mobile tab names; a result count may follow.
+      gather: "Gather" # MT
+      results: "Tulokset" # MT
+      google_drive: "Google Drive" # MT
+      loading: "Ladataan…" # MT
+      load_more: "Lisää tuloksia" # MT
+      empty_query: "Kirjoita hakusana yllä olevaan kenttään hakeaksesi Gatherista ja Google Drivesta." # MT
+      empty_query_no_drive: "Kirjoita hakusana yllä olevaan kenttään hakeaksesi Gatherista." # MT
+      no_types: "Valitse vähintään yksi haettava tyyppi." # MT
+    results_gather:
+      no_results: "Tuloksia ei löytynyt." # MT
+    results_drive:
+      no_results: "Drivesta ei löytynyt tiedostoja." # MT
+    results_drive_auth_error:
+      reconnect: "Yhteisösi on yhdistettävä uudelleen Google Driveen. Ilmoita asiasta Gatherin ylläpitäjälle." # MT
+    # Checkbox labels in the search sidebar, keyed by the type value sent in the `types` param.
+    type_filters:
+      types:
+        wiki_page: "Wikisivut" # MT
+        event: "Tapahtumat" # MT
+        calendar: "Kalenterit" # MT
+        group: "Ryhmät" # MT
+        user: "Henkilöt" # MT
+        household: "Kotitaloudet" # MT
+        meal: "Ateriat" # MT
+        memorial: "Muistosivut" # MT
+        emergency_contact: "Hätäyhteyshenkilöt" # MT
+        pet: "Lemmikit" # MT
+        vehicle: "Ajoneuvot" # MT
+        transaction: "Tapahtumat" # MT
+        drive_doc: "Google Docs" # MT
+        drive_sheet: "Google Sheets" # MT
+        drive_slide: "Google Slides" # MT
+        drive_pdf: "PDF-tiedostot" # MT
+        drive_folder: "Kansiot" # MT
+        drive_other: "Muut tiedostot" # MT
+      # Section headings. Without Google Drive there's one section, headed "Filter".
+      filter: "Suodata" # MT
+      gather: "Gather" # MT
+      google_drive: "Google Drive" # MT
+      select_all: "Valitse kaikki" # MT
+      deselect_all: "Poista valinnat" # MT
+    # The search tips modal. The search syntax examples (in <code>) are not translated, since they are
+    # literal query syntax; descriptions that mention an example take it as an interpolation.
+    search_tips_modal:
+      title: "Hakuvinkit" # MT
+      intro: "Kirjoita sanoja hakeaksesi Gatherista (wikisivut, tapahtumat, henkilöt, ateriat ja muuta) ja Google Drivesta." # MT
+      intro_no_drive: "Kirjoita sanoja hakeaksesi Gatherista (wikisivut, tapahtumat, henkilöt, ateriat ja muuta)." # MT
+      basic_search: "Perushaku" # MT
+      both_words: "Kohteet, joissa on molemmat sanat" # MT
+      word_start: "Sanat, joiden alku on ”%{start}”" # MT
+      word_start_drive: "Sanat, joiden alku on ”%{start}”. Google Drivessa tämä vastaa vain tiedostonimien alkua, ei tiedostojen sisältöä." # MT
+      exact_phrase: "Tarkka ilmaus ”%{phrase}”" # MT
+      special_syntax: "Erikoissyntaksi" # MT
+      title_only: "Hae vain otsikko- tai nimikentästä" # MT
+      # %{options} is a comma-separated list of file type codes, e.g. doc, sheet.
+      drive_type_html: "Suodata Driven tuloksia tiedostotyypin mukaan. Vaihtoehdot: %{options}" # MT
+      combining: "Yhdistäminen" # MT
+      title_and_word: "Kohteet, joiden nimi on ”%{title}” ja joissa on sana ”%{word}”" # MT
+      sheet_and_phrase: "Google Sheets -taulukot, joissa on ilmaus ”%{phrase}”" # MT

@@ -1,0 +1,57 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+nb:
+  notifications:
+    preferences:
+      updated: "Varselinnstillingene dine er lagret." # MT
+      sections:
+        account: "Konto" # MT
+        meals: "Måltider" # MT
+        work: "Arbeid" # MT
+        billing: "Fakturering" # MT
+        community: "Fellesskap" # MT
+      kinds:
+        meal_reminder: "Påminnelser om måltider husstanden min er påmeldt" # MT
+        meal_role_reminder: "Påminnelser om mine måltidsvakter" # MT
+        cook_menu_reminder: "Påminnelser til hovedkokken om å legge ut menyen" # MT
+        meal_worker_change: "Endringer i et måltidsteam jeg er med i" # MT
+        job_reminder: "Påminnelser om mine oppgaver" # MT
+        job_choosing_notice: "Beskjed om at oppgavevalget har åpnet" # MT
+        statement_reminder: "Påminnelser når en betaling forfaller" # MT
+        account_access: "Tilbakestilling av passord, bekreftelse av e-postadresse og invitasjoner til å logge inn" # MT
+        meal_message: "Meldinger og avlysninger fra et måltidsteam" # MT
+        statement_notice: "Kontoutskrifter" # MT
+        gdrive_migration_request: "Forespørsler om å hjelpe til med å flytte Google Drive-filene til fellesskapet mitt" # MT
+        community_inactivity: "Advarsler om at fellesskapet mitt kan bli slettet på grunn av inaktivitet" # MT
+      show:
+        title: "Varsler" # MT
+        intro: "Velg hvilke e-poster Gather sender deg om ting du er involvert i. De som er nedtonet, er nødvendige og kan ikke velges bort." # MT
+        essential: "Nødvendig og kan ikke velges bort" # MT
+        email_lists: "E-postlister" # MT
+        email_lists_hint: "Du står på disse listene gjennom gruppene dine. Hvis du ikke vil få e-post fra en liste, kan du velge den bort eller forlate gruppen på gruppesiden." # MT
+        view: "Vis" # MT
+        no_email_lists: "Du står ikke på noen e-postlister." # MT
+    unsubscribes:
+      manage_html: "Du kan velge hvilke e-poster du får, på siden %{link}. Du må logge inn." # MT
+      manage_link: "Varsler" # MT
+      show:
+        title: "Meld av" # MT
+        confirm: "Slutte å sende e-poster av typen «%{kind}» til %{email}?" # MT
+        already_off: "E-poster av typen «%{kind}» til %{email} er allerede slått av." # MT
+        turn_off: "Meld av" # MT
+      create:
+        title: "Avmeldt" # MT
+        done: "Vi sender ikke lenger e-poster av typen «%{kind}» til %{email}." # MT
+      invalid:
+        title: "Meld av" # MT
+        explanation: "Denne avmeldingslenken er ugyldig. Den kan være fra en gammel e-post, eller den ble ikke kopiert i sin helhet." # MT

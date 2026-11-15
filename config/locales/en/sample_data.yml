@@ -1,0 +1,520 @@
+en:
+  # Demo content for communities created with sample data (Utils::Generators), written in the community's
+  # language like the starter content (starter_content.yml). The rows in lib/random_data/data hold everything
+  # that isn't text, and name their text here by `key`.
+  #
+  # Calendar names (with the starter content's) can be at most 24 characters and must all differ, and
+  # calendar abbreviations at most 6. Event names can be at most 24 characters.
+  sample_data:
+    calendars:
+      media_room:
+        name: "Media Room"
+        guidelines: |-
+          # Media Room Guidelines
+
+          1. Anyone under 13 must be supervised by an adult.
+          1. Programs rated above PG-13 are locked on both the TV and the cable box.
+          1. The room may be booked for special events or TV programs. See the calendar or contact media@example.com.
+          1. Remotes must stay in the room at all times, in their designated place.
+          1. Please tidy the Media Room and put it back to "room neutral" after using it. Watch out for food crumbs.
+      multipurpose_room:
+        name: "Multipurpose Room"
+        guidelines: |-
+          # Multipurpose Room Guidelines
+
+          1. As the event guidelines say, all guests must be hosted by an adult member of the community.
+          1. Please be aware that this room, like all common house space, is a shared resource.
+          1. Hosts must write their guest's name and dates of stay on the whiteboard outside the door.
+          1. All guests must follow the general common house guidelines (posted on the door) as well as the guidelines for every room they use. Please pay particular attention to the guidelines on noise, quiet hours and our fragrance-free policy.
+          1. No candles or anything else that could cause a fire or other hazard. No smoking in the common house.
+          1. The room is used for other purposes too, but overnight guests take priority. Please sort out scheduling conflicts person to person.
+          1. Guests may stay up to 7 days, as long as another resident hasn't booked the room for another guest.
+          1. Hosts are responsible for their guests. After the guests leave, hosts clean the room, wash the linens and sheets, and bring them back to the common house.
+          1. Check-out time is noon.
+          1. Keys are left in a designated spot in the common house. If keys are lost, the host will be charged for new ones.
+          1. Guests may use the Do Not Disturb sign provided for their privacy.
+      office:
+        name: "Office"
+      sitting_room:
+        name: "Sitting Room"
+      dining_room:
+        name: "Dining Room"
+        abbrv: "CH"
+      courtyard:
+        name: "Courtyard"
+        abbrv: "Ctyd"
+      kitchen:
+        name: "Kitchen"
+        abbrv: "CH"
+        guidelines: |-
+          # Kitchen Guidelines
+
+          ## Overview
+
+          The common house kitchen is a large investment for our community, and it can also be a dangerous place. Since our priority is the safety of everyone in our community, and of our equipment, we have the following guidelines.
+
+          We expect every community member and their guests to treat this equipment and this space with care and respect.
+
+          Parents are responsible for teaching their children that:
+
+          * The kitchen is not a play area.
+          * The food in the kitchen is not for anyone to eat unless it's labeled that way.
+          * Children may only be in the kitchen if they are invited in and supervised by a responsible adult.
+
+          *Please leave the kitchen cleaner than you found it.*
+
+          And let's have fun, and make and eat delicious food together!
+
+          ## Safety
+
+          * If you leave the kitchen while something is in the oven or on a burner, warn others by placing a barrier across the kitchen entrances and leaving a note.
+          * Put pots with hot food on the back burners, not the front ones.
+          * Don't move the baking soda away from the stove. It's there in case of fire.
+          * Never leave sharp knives unattended or put them in soapy water.
+
+          If you have to leave before you've finished cleaning up, please leave a note saying when you'll be back, with your phone number.
+
+          Please sign out anything you borrow and return it as soon as you can.
+
+          Please report anything odd, such as strange noises, smells or broken items, to the person in charge of repairs.
+
+          The common house refrigerator is for staples and community meals. Please share out leftovers rather than storing them here.
+
+          The duties of head cooks, assistant cooks and cleaners are described separately.
+
+          ## Basic Hygiene
+
+          1. If you might be sick, keep the community healthy by going home.
+          1. Wash your hands often, the old-fashioned way: with soap and hot water.
+          1. Cover all cuts completely.
+          1. When tasting, use each spoon only once.
+          1. Avoid cross-contamination (allergens and bacteria) by using different utensils for different foods.
+          1. Anything that touches raw meat must be washed and sanitized before it's used for anything else.
+          1. Use the right colored cutting board for each kind of food.
+          1. Sinks can harbor bacteria, so use a colander to wash produce that will be served raw.
+          1. Food stays safe when it's thoroughly chilled or thoroughly heated.
+
+          ## Staples
+
+          Staples are bought for common house meals.
+
+          When buying staples, we consider whether they are organic, fair trade and free of GMOs, as well as dietary preferences, shelf life and cost.
+
+          Staples are paid for by a surcharge on common house meals, which buys new stock. Head cooks are expected to use the staples, which keeps stock fresh and their meal costs down.
+
+          So please don't use staples for personal use. If you really must:
+
+          * Replace what you use, item for item.
+          * If you can't, please contribute generously to the kitchen staples fund.
+
+          If you notice we're running low on something, please write it on the clipboard kept for this.
+
+          The kitchen coordinator checks the list and the pantry weekly and shops as needed. We do our best to replace staples as they run out.
+
+          If you need a staple to cook a community meal and find it's missing, please buy it and submit a separate receipt for reimbursement.
+
+          The meals committee keeps the list of staples.
+
+          Head cooks buy everything else, including bottled salad dressings.
+    shared_guidelines:
+      common_house:
+        name: "Common House Guidelines"
+        body: |-
+          # Common House Guidelines
+
+          * Welcome to our common house!
+          * Our common house is the center of our community life.
+          * Relationships are what our community is built on.
+          * Every community member has an equal say in how we use our common house.
+          * We treat the common house as respectfully as we would a neighbor's house. Please leave it the way you found it, or better!
+
+          These guidelines balance freedom, responsibility and safety for people and the building.
+
+          ## Accessibility
+
+          To accommodate sensitivities, we agree to the following:
+
+          * *Fragrance free* is the goal in the common house.
+          * *Smoking:* there is no smoking in the common house.
+          * *Animals:* the common house is pet free, except for service animals. Pets must not be left unattended on the common house grounds.
+
+          ## Security
+
+          The common house is locked by 10 PM on weeknights and by 11 PM on Fridays and Saturdays, following the closing checklist.
+
+          ## Communication
+
+          Residents address concerns directly whenever possible. If needed, the common house committee is available to help.
+
+          ## Maintenance
+
+          Report broken or faulty systems or appliances to the maintenance committee right away, at maintenance@example.com.
+
+          For routine matters, send an email or leave a note in the maintenance folder.
+
+          Report broken items to the common house committee at commonhouse@example.com.
+
+          ## Alcohol
+
+          Don't leave or store alcohol, opened or sealed, or any medication in the common house.
+
+          ## Noise
+
+          Anyone bothered by noise in the common house is welcome to ask for it to be lower. Please be considerate of others who ask.
+
+          The community will be told in advance about large events that may be louder than usual or go past closing time.
+
+          ## Quiet Hours
+
+          * Weekdays, 10 PM to 8 AM
+          * Weekends and holidays, 11 PM to 9 AM
+
+          ## Who the Common House Is For
+
+          The common house is for residents and their invited guests.
+
+          * We're grateful for the support and hospitality of our neighboring communities.
+          * As we welcome our neighbors, we expect to resolve any problems fairly, based on reciprocity and trust.
+
+          Members of neighboring communities are welcome in the common house, and follow the same procedures for booking rooms. Anyone else must be hosted by an adult resident, who is responsible for their guests' behavior.
+
+          ## Booking Rooms
+
+          Community activities go on the calendar and take priority over other events.
+
+          All guidelines are approved by consensus. Everyone's input is welcome as we continue to refine them.
+    # Kinds of event, e.g. "Official" for a community event.
+    event_kinds:
+      official: "Official"
+      personal: "Personal"
+      special: "Special"
+    weekly_event: "Weekly gathering"
+    groups:
+      meals_committee:
+        name: "Meals Committee"
+        description: "Runs the meals program!"
+      knitting_club:
+        name: "Knitting Club"
+        description: "Knitting for beginners to experts! Meets Sundays at 2pm."
+    work:
+      period: "Main"
+      jobs:
+        mow_team: "Mow Team Member"
+        closer: "Common House Closer"
+        work_day: "All Hands Work Day"
+    payment_description: "Check #%{number}"
+    memorial_message: "%{name} was such a kind person and a passionate member of our community. They will be dearly missed."
+    # Lists the generators and factories pick from at random (see config/initializers/faker.rb).
+    relationships:
+      - "Mom"
+      - "Dad"
+      - "Cousin"
+      - "Brother"
+      - "Sister"
+      - "Son"
+      - "Daughter"
+      - "Aunt"
+      - "Uncle"
+      - "Friend"
+    pet_species:
+      - "Cat"
+      - "Dog"
+      - "Schnauzer"
+      - "Labrador"
+      - "Snake"
+      - "Parrot"
+      - "Rabbit"
+    colors:
+      - "Red"
+      - "Blue"
+      - "Green"
+      - "Black"
+      - "White"
+      - "Silver"
+      - "Gray"
+      - "Yellow"
+      - "Brown"
+      - "Purple"
+    event_names:
+      - "Book club"
+      - "Birthday party"
+      - "Movie night"
+      - "Yoga class"
+      - "Board games"
+      - "Choir practice"
+      - "Guest staying over"
+      - "Potluck"
+      - "Kids' craft hour"
+      - "Committee meeting"
+      - "Garden work day"
+      - "Baby shower"
+      - "Music practice"
+      - "Tea and chat"
+      - "Family visit"
+      - "Workshop"
+      - "Game night"
+      - "Art class"
+      - "Meditation"
+      - "Dance class"
+      - "Holiday party"
+      - "Bike repair"
+      - "Story time"
+      - "Sewing circle"
+    # What a sample meal contains, shown in its allergen list.
+    allergens:
+      almonds: "Almonds"
+      bananas: "Bananas"
+      corn: "Corn"
+      dairy: "Dairy"
+      eggs: "Eggs"
+      gluten: "Gluten"
+      peanuts: "Peanuts"
+      pineapple: "Pineapple"
+      soy: "Soy"
+      tofu: "Tofu"
+      tree_nuts: "Tree Nuts"
+    # Sample meals' menus. Each written by a different cook, so the style varies.
+    meals:
+      meal_01:
+        title: "Cranberry Chicken with Sweet Potatoes"
+        entrees: "Cranberry chicken (free-range, from a local farm) with sweet potatoes"
+        side: "Salad, fruit"
+        kids: "The chicken is kid-friendly"
+        dessert: "Brownies, ice cream"
+        notes: "Baked tofu available on request. I can make some sweet potatoes and cranberries without chicken, and gluten-free brownies too. Gluten, dairy and eggs are only in the dessert."
+      meal_02:
+        title: "Baked Potato Bar"
+        entrees: "Baked potatoes with a variety of toppings"
+        dessert: "Bar cookies"
+        notes: "Organic where possible. Allergens are easy to avoid."
+      meal_03:
+        title: "Latkes and Fixings"
+        entrees: "Potato pancakes with or without onion or eggs (on request), and some with my favorite curry"
+        side: "Veggies, salad, applesauce, sour cream, seeds"
+        dessert: "Fruit and dark chocolate"
+        notes: "All organic and GMO-free, and gluten-free. Allergens can be avoided on request, so please be clear about what you'd like (e.g. no onions or no eggs)."
+      meal_04:
+        title: "Soups of the Season"
+        entrees: "Cheddar ale soup, pea soup, and open-faced grilled cheese sandwiches"
+        side: "Simple salad: spinach, red peppers, avocado and sesame ginger dressing (other dressings too)"
+        dessert: "Strawberry semifreddo with black sesame"
+      meal_05:
+        title: "Gluten-Free Chili, With Beef or Tofu"
+        entrees: "Organic gluten-free chili for meat-eaters and for vegetarians, and an organic green salad with assorted veggies. Organic gluten-free cornbread made with dairy and eggs."
+        kids: "Same"
+        dessert: "Something organic and gluten-free, which may contain dairy and eggs"
+      meal_06:
+        title: "Birthday Dinner: Pesto and Pasta (or Rice)"
+        entrees: "Pesto pasta or rice, with chicken and/or tofu"
+        side: "Roasted root veggies and other things from the pantry"
+        dessert: "Cupcakes and chocolate cashew drops (dairy-free and gluten-free)"
+        notes: "Flexible and accommodating. Please put your dietary restrictions in the comments. Dinner will be simple so we can focus on dessert."
+      meal_07:
+        title: "Blueberry Pancakes and Spinach Frittatas"
+        entrees: "Pancakes, regular or gluten-free, and individual spinach, basil and tomato frittatas"
+        side: "Turkey sausage, fruit and yogurt"
+        kids: "Gluten-free pancakes made with almond milk"
+      meal_08:
+        title: "Spinach Lasagna"
+        entrees: "Spinach lasagna, and cheese lasagna for people who don't like spinach"
+        side: "Steamed broccoli"
+        kids: "Plain pasta with parmesan"
+        dessert: "Chocolate chip cookies"
+        notes: "Email me if you'd like it gluten-free or changed in some other way."
+      meal_09:
+        title: "Gluten-Free Potato Soup"
+        entrees: "Organic potato soup made with dairy, with organic bacon to sprinkle on top for meat-eaters"
+        side: "Organic green salad with whatever other organic veggies I can find (tomatoes, peppers, carrots). Organic gluten-free cornbread made with dairy and eggs."
+        kids: "Same"
+        dessert: "Something organic and gluten-free"
+        notes: "Baked tofu for vegetarians"
+      meal_10:
+        title: "Lime Chicken Tacos"
+        entrees: "Shredded chicken in a chipotle adobo sauce with fresh lime (slightly spicy)"
+        side: "Refried beans and rice"
+        kids: "Plain chicken and cheese quesadillas"
+        dessert: "Chocolate hazelnut semifreddo"
+        notes: "All allergens can be avoided."
+      meal_11:
+        title: "Tamale Takeout: Please Read the Notes"
+        entrees: "Tamales from a local restaurant. Each adult signed up means one tamale, so don't sign up children. If you want two tamales, sign up two adults."
+        side: "Curtido (a kind of pickled cabbage)"
+        notes: "Put the kind of tamale you want in the notes. I'm only ordering tamales, to keep it simple."
+      meal_12:
+        title: "Chicken and Veggie Paellas"
+        entrees: "Rice with chicken, and rice with veggies for vegetarians"
+        side: "Green salad"
+        dessert: "Crème caramel and fruit"
+      meal_13:
+        title: "Brisket Stroganoff"
+        entrees: "Beef brisket stroganoff with egg noodles"
+        side: "Shiitake and leek risotto, and asparagus"
+        kids: "Plain noodles and risotto"
+        dessert: "To be decided"
+      meal_14:
+        title: "Time for Chili"
+        entrees: "Vegetarian chili"
+        side: "Cornbread, salad"
+        kids: "Same"
+        dessert: "Yes"
+        notes: "Let me know if you need it gluten-free."
+      meal_15:
+        title: "Crêpe Buffet"
+        entrees: "A selection of crêpes (plain, sourdough, and gluten-free on request), with savory fillings (egg, cheese, veggies, herbs and more) and sweet ones (fruit, chocolate spread, jam, yogurt, ricotta and more) to fill yourself."
+        notes: "Fillings are self-serve. The crêpes contain eggs and dairy."
+      meal_16:
+        title: "Curry and Rice"
+        entrees: "Chicken curry over rice, with tofu for vegetarians"
+        side: "Radish kimchi"
+        kids: "Fried dumplings"
+        dessert: "Fruit"
+        notes: "My curry powder contains flour. If you need it gluten-free, I'll use the gluten-free curry powder in the common house kitchen."
+      meal_17:
+        title: "English Breakfast"
+        entrees: "Scrambled eggs, sausages, mushrooms, baked beans"
+        side: "Mixed berries"
+      meal_18:
+        title: "Chicken or Veggie Tikka Masala"
+        entrees: "Chicken or veggie tikka masala: meat or veggies simmered in a rich coconut curry, with rice on the side"
+        side: "Salad, rice"
+        kids: "They'll like it"
+        dessert: "Fruit"
+        notes: "Both versions are gluten-free and dairy-free! Please say whether you want vegan or meat. As local and organic as possible."
+      meal_19:
+        title: "Chili Cook-Off!"
+        entrees: "Chili and more chili, a small fee per adult"
+        side: "Applesauce, bread and butter"
+        kids: "Chili and more chili. Free for kids 6 and under."
+        dessert: "Probably"
+        notes: "Our chili cook-off raises money for new art for the dining room. Join us to cook, eat and vote! Everyone gets one vote, kids included. To enter, bring 4 quarts of chili by 6 pm and list its allergens, meat and alcohol on the entry form."
+      meal_20:
+        title: "Coffee Cake and Casserole"
+        entrees: "Bacon and egg casserole with goat cheese and veggies"
+        side: "Gluten-free blueberry coffee cake"
+        kids: "They'll love it"
+        notes: "Everything is gluten-free. The only dairy is the goat cheese in the casserole."
+      meal_21:
+        title: "Coconut Fish Chowder"
+        entrees: "Coconut milk fish chowder, with a fish-free vegan option"
+        side: "Freshly baked rolls"
+        kids: "Raw carrot sticks and broccoli"
+        dessert: "Fruit"
+        notes: "The rolls contain wheat. The soup itself is gluten-free."
+      meal_22:
+        title: "Warm Stuffed Croissants and Fruit"
+        entrees: "Fresh and grilled veggies in warm croissants"
+        side: "Fresh fruit salad, and nut milks sweetened with dates"
+        kids: "Scrambled eggs and yogurt"
+      meal_23:
+        title: "Coq au Vin"
+        entrees: "Coq au vin"
+        side: "Parsley potatoes, green beans, salad with mustard vinaigrette"
+        dessert: "Strawberries and cream"
+      meal_24:
+        title: "Dumpling Soup"
+        entrees: "Dumplings in chicken broth (or vegetable broth)"
+        side: "Rice, radish kimchi and toppings (sliced seaweed, chopped green onions)"
+        kids: "Most kids like dumplings"
+        dessert: "Fruit and brownies"
+        notes: "The dumplings are pork unless you ask for beef or veggie ones. I'll add egg to the broth."
+      meal_25:
+        title: "Build-Your-Own Rice Bowls"
+        entrees: "Chicken (or baked tofu) with your choice of rice, crispy noodles, vegetables, pineapple, coconut flakes, slivered almonds, grated cheese and other toppings"
+        kids: "Sliced vegetables, fruit"
+        dessert: "Cookie bars"
+      meal_26:
+        title: "Traditional German Food"
+        entrees: "Bratwurst, egg noodles and potato casserole"
+        side: "Red cabbage, sauerkraut, horseradish and sour cream"
+        kids: "To be decided"
+        dessert: "Apple strudel with ice cream"
+      meal_27:
+        title: "Barbecue Night"
+        entrees: "Grilled favorites with a Korean twist. I'm hoping my assistants have some good ideas."
+        side: "Lightly sautéed veggies from the farmers market or our gardens"
+        kids: "Kids might be put to work in the garden"
+        dessert: "Fresh strawberries, if they're in season"
+        notes: "As organic and local as possible. Easy to accommodate any diet."
+      meal_28:
+        title: "Homemade Pizza!"
+        entrees: "Pizza with a variety of toppings: chicken, veggies, cheese, pepperoni. Regular and gluten-free crusts."
+        side: "Salad and fruit"
+        kids: "Kids like this stuff"
+        dessert: "Maybe..."
+        notes: "Please say below if you need gluten-free so I can plan. Thanks! Organic and local ingredients when possible."
+      meal_29:
+        title: "Tomato Tasting"
+        entrees: "A sampling of local tomatoes, with poultry and vegetarian options"
+        side: "Caprese salad, lots of veggies, corn on the cob"
+        kids: "Corn off the cob for kids with braces"
+        dessert: "Tomato ice cream?"
+        notes: "Local and organic when possible. The meal can be made allergen-free (but not tomato-free). There will be tree nuts (almonds and hazelnuts)."
+      meal_30:
+        title: "Chili and Apple Dessert Potluck!"
+        entrees: "Chili the way I knew it growing up: mild beans and veggies over rice. Ground beef for meat-eaters."
+        side: "Cooked veggies, depending on what's local"
+        kids: "The main dish is mild enough for everyone"
+        dessert: "It's our yearly apple dessert potluck! Come apple picking with us the weekend before, then bring what you make with those gorgeous apples."
+        notes: "Dairy is available on the side, but there's none in the main dish. The desserts are made by different people, so they may contain any of the common allergens."
+      meal_31:
+        title: "Sweet and Savory Crêpes"
+        entrees: "Crêpes with lots of fillings, savory for dinner and sweet for dessert"
+        side: "Steamed vegetables"
+        dessert: "More crêpes!"
+        notes: "Free-range eggs, local milk, organic flour. If you'd like gluten-free crêpes, let me know and I'll give it a try."
+      meal_32:
+        title: "Gimbap"
+        entrees: "Rice, seasoned vegetables, beef, and egg or smoked salmon, rolled in seaweed"
+        side: "Radish water kimchi"
+        kids: "The main dish should work for them"
+        dessert: "Fruit or ice cream"
+        notes: "We started fermenting the radish water kimchi two weeks ago. There will be jars to take home after the meal."
+      meal_33:
+        title: "Curried Split Pea Soup and Sandwiches"
+        entrees: "Curried split pea soup with chicken broth, ham and milk, and a vegan version with vegetable broth and coconut milk"
+        side: "Tuna and egg salad sandwiches, or bring your own fillings for the bread"
+        kids: "Same. Please email me before Thursday if your kids want soup without curry."
+        dessert: "Homemade chocolate chip cookies, and fruit"
+        notes: "The soup is gluten-free, and the veggie soup is dairy-free too. If you'd like gluten-free bread or other changes, please email me before Thursday."
+      meal_34:
+        title: "Crêpes and Yummy Things to Put in Them"
+        entrees: "Crêpes (egg, flour, milk). Really more like Swedish pancakes: flat and flexible."
+        side: "Sweet and savory fillings: sugar, homemade strawberry and blueberry jam, salted caramel sauce, whipped cream, cheese, and probably sautéed mushrooms. Bring your own if you want something in particular."
+        kids: "Same"
+        dessert: "Same"
+        notes: "Probably not all organic, but I'll do my best within the budget."
+      meal_35:
+        title: "Meatloaf Dinner"
+        entrees: "Meatloaf"
+        side: "Salad, biscuits, potatoes"
+        dessert: "Apple crisp"
+      meal_36:
+        title: "Bibimbap"
+        entrees: "Steamed rice topped with seasoned vegetables and beef (or tofu), with hot pepper sauce (and soy sauce if you don't like it spicy), and fried eggs"
+        side: "Pickles and kimchi"
+        kids: "They can have more beef or tofu than vegetables"
+        dessert: "Fruit"
+        notes: "Everything is seasoned with gluten-free soy sauce, garlic, sesame oil and black pepper. This meal is mostly vegetables, so don't expect much meat."
+      meal_37:
+        title: "Turkey Tacos"
+        entrees: "Tacos made with ground turkey"
+        side: "Refried beans, rice"
+        notes: "Tomatoes, lettuce, mild salsa and sour cream for the tacos."
+      meal_38:
+        title: "Breakfast Pizza"
+        entrees: "The best pizza crust ever, made from just a few ingredients, mainly cassava. Even the pickiest eaters love it. With a pesto-style sauce and a choice of meats, veggies and cheeses. Please list any dietary restrictions."
+        side: "Scrambled eggs"
+      meal_39:
+        title: "Soup Bar!"
+        entrees: "A simple meat soup and a simple veggie soup, plus lots of toppings to make your own creation: seeds, veggies, gluten-free pasta, cheese..."
+        side: "Veggies, cheese, pasta"
+        kids: "Kids will enjoy making their own"
+        dessert: "Maybe something fruity"
+        notes: "As local and organic as possible."
+      meal_40:
+        title: "Salmon en Papillote"
+        entrees: "Salmon baked in parchment, seasoned with onion and herbs"
+        side: "Greens (spinach or kale) or green beans sautéed with garlic, roasted new potatoes, and fresh bread"
+        kids: "Please comment if your kids won't eat salmon and suggest something else, like tuna salad or hard-boiled eggs."
+        dessert: "Yes: fruit and something baked"
+        notes: "Everything is gluten-free except the baked dessert. The veggies will be mostly organic. Let me know if you need a vegetarian option; I can stir-fry or bake some tofu."

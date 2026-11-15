@@ -1,0 +1,57 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+nl:
+  notifications:
+    preferences:
+      updated: "Je meldingsvoorkeuren zijn opgeslagen." # MT
+      sections:
+        account: "Account" # MT
+        meals: "Maaltijden" # MT
+        work: "Werk" # MT
+        billing: "Facturatie" # MT
+        community: "Gemeenschap" # MT
+      kinds:
+        meal_reminder: "Herinneringen voor maaltijden waarvoor mijn huishouden zich heeft aangemeld" # MT
+        meal_role_reminder: "Herinneringen voor mijn maaltijddiensten" # MT
+        cook_menu_reminder: "Herinneringen voor de hoofdkok om het menu te plaatsen" # MT
+        meal_worker_change: "Wijzigingen in een maaltijdteam waar ik in zit" # MT
+        job_reminder: "Herinneringen voor mijn taken" # MT
+        job_choosing_notice: "Berichten dat het kiezen van taken open is" # MT
+        statement_reminder: "Herinneringen wanneer een betaling verschuldigd is" # MT
+        account_access: "Wachtwoordherstel, e-mailbevestigingen en uitnodigingen om in te loggen" # MT
+        meal_message: "Berichten en annuleringen van een maaltijdteam" # MT
+        statement_notice: "Afschriften" # MT
+        gdrive_migration_request: "Verzoeken om te helpen de Google Drive-bestanden van mijn gemeenschap te verplaatsen" # MT
+        community_inactivity: "Waarschuwingen dat mijn gemeenschap wegens inactiviteit verwijderd kan worden" # MT
+      show:
+        title: "Meldingen" # MT
+        intro: "Kies welke e-mails Gather je stuurt over dingen waar je bij betrokken bent. De grijze zijn essentieel en kun je niet uitzetten." # MT
+        essential: "Essentieel, kan niet worden uitgezet" # MT
+        email_lists: "Mailinglijsten" # MT
+        email_lists_hint: "Je staat op deze lijsten via je groepen. Wil je de e-mail van een lijst niet meer ontvangen, meld je dan af of verlaat de groep op de pagina van de groep." # MT
+        view: "Bekijken" # MT
+        no_email_lists: "Je staat op geen enkele mailinglijst." # MT
+    unsubscribes:
+      manage_html: "Je kunt op de pagina %{link} kiezen welke e-mails je ontvangt. Je moet daarvoor inloggen." # MT
+      manage_link: "Meldingen" # MT
+      show:
+        title: "Afmelden" # MT
+        confirm: "Geen e-mails van het type “%{kind}” meer sturen naar %{email}?" # MT
+        already_off: "E-mails van het type “%{kind}” naar %{email} staan al uit." # MT
+        turn_off: "Afmelden" # MT
+      create:
+        title: "Afgemeld" # MT
+        done: "We sturen geen e-mails van het type “%{kind}” meer naar %{email}." # MT
+      invalid:
+        title: "Afmelden" # MT
+        explanation: "Deze afmeldlink is niet geldig. Hij komt misschien uit een oude e-mail, of is niet volledig gekopieerd." # MT

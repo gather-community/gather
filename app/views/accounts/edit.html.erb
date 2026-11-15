@@ -1,8 +1,8 @@
-<% content_for(:title, "Edit Account: #{account.household_name}") %>
+<% content_for(:title, t(".title", household: account.household_name)) %>
 
 <% if account.household_no_users? %>
   <div class="alert alert-warning">
-    <%= icon_tag("warning") %> This account has no users associated with it and cannot recieve statements.
+    <%= icon_tag("warning") %> <%= t(".no_users") %>
   </div>
 <% end %>
 
@@ -15,7 +15,7 @@
   <%= f.input :credit_limit, input_html: { value: number_with_precision(account.credit_limit, precision: 2) } %>
 
   <%= form_actions do %>
-    <%= link_to("Cancel", accounts_path, class: "btn btn-default") %>
+    <%= link_to(t(".cancel"), accounts_path, class: "btn btn-default") %>
     <%= f.button :primary %>
   <% end %>
 

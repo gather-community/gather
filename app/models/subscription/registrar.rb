@@ -30,6 +30,8 @@ module Subscription
       match || create_product
     end
 
+    # Stripe catalog objects are shared by every community, so their names aren't translated.
+    # rubocop:disable Gather/HardCodedString
     def create_product
       months = intent.months_per_period == 1 ? "1 month" : "#{intent.months_per_period} months"
       Stripe::Product.create(
@@ -44,7 +46,7 @@ module Subscription
     def find_or_create_price
       match = Stripe::Price.list.data.detect do |price|
         price.product == product.id &&
-          price.unit_amount == intent.price_per_user_cents * intent.months_per_period &&
+          price.unit_amount == unit_amount &&
           price.currency == intent.currency &&
           price.recurring.interval == "month" &&
           price.recurring.interval_count == intent.months_per_period
@@ -54,11 +56,18 @@ module Subscription
 
     def create_price
       Stripe::Price.create(
-        unit_amount: intent.price_per_user_cents * intent.months_per_period,
+        unit_amount: unit_amount,
         currency: intent.currency,
         recurring: {interval: "month", interval_count: intent.months_per_period},
         product: product.id
       )
+    end
+
+    # The per-period price in the smallest currency unit, from the per-user price entered by hand on the
+    # intent. Subscription::PriceCalculator isn't used here yet: self-serve pricing is still being decided,
+    # and the intent page shows the hand-entered price, so the Stripe price must match it.
+    def unit_amount
+      intent.price_per_user_cents * intent.months_per_period
     end
 
     def find_or_create_customer
@@ -90,11 +99,13 @@ module Subscription
         name: "Discount"
       )
     end
+    # rubocop:enable Gather/HardCodedString
 
     def create_subscription
       Stripe::Subscription.create(
         customer: customer.id,
-        coupon: coupon&.id,
+        # Basil replaced the top-level `coupon` param with a `discounts` array.
+        discounts: coupon.nil? ? nil : [{coupon: coupon.id}],
         items: [{price: price.id, quantity: intent.quantity}],
         payment_behavior: "default_incomplete",
         backdate_start_date: intent.backdated? ? intent.start_date_to_timestamp : nil,

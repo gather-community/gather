@@ -4,7 +4,7 @@ require "rails_helper"
 
 describe "pages", js: true do
   let(:actor) { create(:user, first_name: "Jane", last_name: "Doe") }
-  let(:other_community) { create(:community, cluster: actor.cluster) }
+  let(:other_community) { create(:community) }
   let!(:decoy_page) { create(:wiki_page, community: other_community, title: "Another Page") }
 
   before do
@@ -71,7 +71,8 @@ describe "pages", js: true do
     expect(page).to have_css("li", text: "Boring Page")
 
     click_on("Boring Page")
-    accept_confirm { click_on("Delete") }
+    click_on("Delete")
+    click_modal_button
     expect_success
     expect(page).to have_content("Here is a link to Another Page")
   end

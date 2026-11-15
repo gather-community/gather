@@ -22,7 +22,7 @@ module GDrive
         authorize(current_community, :setup?, policy_class: SetupPolicy)
 
         if params[:error] == "access_denied"
-          flash[:error] = "It looks like you cancelled the Google authentication flow."
+          flash[:error] = t("gdrive.auth_cancelled")
           redirect_to(gdrive_home_url)
           return
         end
@@ -38,18 +38,17 @@ module GDrive
           authenticated_google_id = fetch_email_of_authenticated_account(credentials)
 
           if config.org_user_id != authenticated_google_id
-            flash[:error] = "You signed into Google with #{authenticated_google_id}. " \
-              "Please sign in with #{config.org_user_id} instead."
+            flash[:error] = t("gdrive.wrong_account", signed_in: authenticated_google_id,
+              expected: config.org_user_id)
             redirect_to(gdrive_home_url)
             return
           end
           wrapper.store_credentials(credentials)
-          flash[:success] = "Authenticated successfully with Google."
+          flash[:success] = t("gdrive.authenticated")
         rescue Signet::AuthorizationError => error
           error_code = SecureRandom.base58(8)
           Rails.logger.error("AuthorizationError in gdrive auth callback", message: error.to_s, community_id: current_community.id, error_code: error_code)
-          flash[:error] = "There is a problem with your Google Drive connection. " \
-            "Please contact Gather support. (#{error_code})"
+          flash[:error] = t("gdrive.connection_problem", code: error_code)
         end
         redirect_to(gdrive_home_url)
       end
@@ -71,12 +70,22 @@ module GDrive
       end
 
       def set_current_community_from_callback_state
+        # Google always sends a JSON state with the community ID. Requests without one come from bots
+        # probing the URL. This runs before authentication, so nothing else has turned them away yet.
+        community_id = callback_state_community_id
+        return render_not_found if community_id.nil?
         @callback_state, = Google::Auth::WebUserAuthorizer.extract_callback_state(request)
-        community_id = JSON.parse(params[:state])["community_id"]
         self.current_community = Community.find(community_id)
         # We don't call validate_callback_state here because it will fail if the user has
         # cancelled the oauth request. We check for that in the main callback method body and then
         # we call validate right after. The purpose of this before_action is just to set the current_community.
+      end
+
+      def callback_state_community_id
+        state = JSON.parse(params[:state].to_s)
+        state["community_id"] if state.is_a?(Hash)
+      rescue JSON::ParserError
+        nil
       end
 
       def fetch_credentials_from_callback_request(wrapper, request)

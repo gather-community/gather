@@ -62,7 +62,8 @@ describe "household worker form", js: true do
       expect(page).to have_content("This meal still needs")
 
       within(find("#household-worker-info")) do
-        accept_confirm { find("a.delete-assign").click }
+        find("a.delete-assign").click
+        click_modal_button
       end
 
       expect(page).not_to have_content("person from your household is helping")

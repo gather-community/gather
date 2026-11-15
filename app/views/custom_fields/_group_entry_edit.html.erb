@@ -11,6 +11,8 @@
       <% group_entry.entries.each do |entry| %>
         <% if entry.group? %>
           <%= render("custom_fields/group_entry_edit", group_entry: entry, f: ff) %>
+        <%# A language setting only matters once other languages are turned on. %>
+        <% elsif entry.field.type == :locale && !Gather::Locales.enabled?(current_user) %>
         <% else %>
           <%= ff.input entry.key, entry.input_params %>
         <% end %>

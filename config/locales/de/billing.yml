@@ -1,0 +1,238 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+de:
+  transaction_codes:
+    meal: "Mahlzeit" # MT
+    dues: "Mitgliedsbeitrag" # MT
+    payment: "Zahlung" # MT
+    reimb: "Rückerstattung" # MT
+    othcrd: "Sonstige Gutschrift" # MT
+    othchg: "Sonstige Belastung" # MT
+    late: "Säumnisgebühr" # MT
+    initbal: "Anfangssaldo" # MT
+
+  accounts:
+    updated: "Konto aktualisiert." # MT
+    late_fees_applied: "Säumnisgebühren erhoben." # MT
+    # An amount that is a credit, e.g. "$5.00 CR".
+    credit_amount_html: "%{amount} H" # MT
+    # Shown in its own column next to credit amounts on statements.
+    credit_abbr: "H" # MT
+    not_applicable: "entf." # MT
+    no_credit_limit: "Keins" # MT
+    no_users_warning: "Mit dem Haushalt dieses Kontos sind keine Personen verknüpft" # MT
+    late_fee_confirm: "Bist du sicher? %{count} Haushalten werden Gebühren berechnet." # MT
+    late_fee_confirm_with_days: "Bist du sicher? %{count} Haushalten werden Gebühren berechnet. Zuletzt wurden vor %{days} Tagen Gebühren erhoben." # MT
+    statement_confirm: "Bist du sicher? An %{count} Haushalte werden Kontoauszüge verschickt." # MT
+    paypal_friend_confirm_html: "Bitte wähle <strong>nicht</strong> „Zahlung für Waren oder Dienstleistungen?“, falls danach gefragt wird, damit keine Gebühr anfällt." # MT
+    details:
+      no_activity: "Auf diesem Konto gibt es keine Bewegungen." # MT
+    other_accounts:
+      looking: "Suchst du ein anderes Konto?" # MT
+      each_community: "Jede Gemeinschaft verwaltet ihre eigenen Konten." # MT
+    payment_instructions:
+      how_to_pay: "So bezahlst du" # MT
+      paypal: "PayPal" # MT
+      click_logo: "Klicke auf das Logo oben, um mit PayPal zu bezahlen." # MT
+      send_paypal_html: "Schicke PayPal-Zahlungen an %{email}." # MT
+      choose_friend_html: "Wähle unbedingt %{friend}, damit keine Gebühr anfällt." # MT
+      sending_to_friend: "an Freunde senden" # MT
+      online_bill_pay: "Online-Überweisung" # MT
+      bill_pay_intro: "Die meisten Banken bieten Online-Überweisungen an, mit denen du ganz einfach online bezahlen kannst. Lege einen neuen Empfänger an und gib Folgendes ein:" # MT
+      payee_name_html: "Name des Empfängers: %{payee}" # MT
+      account_number_html: "Kontonummer: %{number}" # MT
+      address: "Adresse:" # MT
+      check: "Scheck" # MT
+      payable_to_html: "Stelle Schecks aus auf %{payee}" # MT
+      memo_line_html: "Schreib deine Kontonummer %{number} in den Verwendungszweck." # MT
+      mail_to: "Schicke Schecks an:" # MT
+      cash: "Bargeld" # MT
+      none_provided: "Es wurde keine Zahlungsanleitung angegeben." # MT
+      go_to_settings_html: "Bitte trag auf der %{link} eine ein." # MT
+      settings_page: "Einstellungsseite" # MT
+      contact_html: "Bei Fragen zur Abrechnung wende dich bitte an %{email}." # MT
+    statement_list:
+      statements: "Kontoauszüge" # MT
+      date: "Datum" # MT
+      activity: "Bewegungen" # MT
+      total_due: "Fällig gesamt" # MT
+    summary:
+      summary: "Übersicht" # MT
+      account_number: "Kontonummer" # MT
+      last_statement_date: "Datum des letzten Kontoauszugs" # MT
+      last_statement_balance: "Saldo des letzten Kontoauszugs" # MT
+      new_credits: "Neue Zahlungen/Gutschriften" # MT
+      balance_due: "Fälliger Betrag" # MT
+      due_date: "Fälligkeitsdatum" # MT
+      new_charges: "Neue Belastungen" # MT
+      current_balance: "Aktueller Saldo" # MT
+      credit_limit: "Kreditlimit" # MT
+      balance_due_footnote: "Das ist der Betrag, den du gerade schuldest: der fällige Betrag deines letzten Kontoauszugs abzüglich aller seitdem eingegangenen Zahlungen. Wenn du schon bezahlt hast, die Zahlung hier aber noch nicht erscheint, kannst du das ignorieren." # MT
+      current_balance_footnote: "Dieser Saldo enthält die Belastungen und Gutschriften seit deinem letzten Kontoauszug. Wenn er dein Kreditlimit überschreitet, kannst du dich nicht für Mahlzeiten anmelden." # MT
+    synopsis:
+      pay_by: "Bitte bezahle %{amount} bis %{date}. Danke!" # MT
+      pay: "Bitte bezahle %{amount}. Danke!" # MT
+      zero: "Du hast nichts offen. Super!" # MT
+      credit: "Dein Konto hat ein Guthaben von %{amount}. Keine Zahlung nötig!" # MT
+    transaction_export_form:
+      download: "Buchungen als CSV herunterladen" # MT
+      incurred: "Angefallen im Zeitraum …" # MT
+      recorded: "Erfasst im Zeitraum …" # MT
+      select_dates: "Daten auswählen" # MT
+    edit:
+      title: "Konto bearbeiten: %{household}" # MT
+      no_users: "Mit diesem Konto sind keine Personen verknüpft, deshalb kann es keine Kontoauszüge bekommen." # MT
+      cancel: "Abbrechen" # MT
+    show:
+      title: "Konto: %{household}" # MT
+    mine:
+      title: "Mein Konto" # MT
+      title_with_community: "Mein Konto bei %{community}" # MT
+      no_charges: "Für deinen Haushalt gibt es noch keine Belastungen." # MT
+    index:
+      title: "Konten" # MT
+      apply_late_fees: "Säumnisgebühren erheben" # MT
+      send_statements: "Kontoauszüge verschicken" # MT
+      no_accounts: "Keine Konten gefunden." # MT
+      num: "Nr." # MT
+      household: "Haushalt" # MT
+      last_statement_date: "Letzter Auszug" # MT
+      due_last_statement: "Fällig lt. Auszug" # MT
+      new_credits: "Neue Gutschriften" # MT
+      balance_due: "Fälliger Betrag" # MT
+      new_charges: "Neue Belastungen" # MT
+      current_balance: "Aktueller Saldo" # MT
+      credit_limit: "Kreditlimit" # MT
+      add_transaction: "Buchung hinzufügen" # MT
+      totals: "Summen" # MT
+      download_accounts: "Konten als CSV herunterladen" # MT
+      summary:
+        one: "Es gibt %{count} aktives Konto." # MT
+        other: "Es gibt %{count} aktive Konten." # MT
+      active_account_definition: "Ein aktives Konto hat aktuelle Bewegungen oder einen aktuellen Saldo ungleich null." # MT
+      last_statement_run: "Kontoauszüge wurden zuletzt am %{date} verschickt." # MT
+      statements_never_run: "Es wurden noch nie Kontoauszüge verschickt." # MT
+      no_users:
+        one: "Es gibt %{count} Konto ohne verknüpfte Personen. Für dieses Konto wird kein Kontoauszug erstellt." # MT
+        other: "Es gibt %{count} Konten ohne verknüpfte Personen. Für diese Konten werden keine Kontoauszüge erstellt." # MT
+      recent_statements:
+        one: "Es gibt %{count} Konto mit einem Kontoauszug in den letzten 24 Stunden. Für dieses Konto wird kein neuer Kontoauszug erstellt." # MT
+        other: "Es gibt %{count} Konten mit Kontoauszügen in den letzten 24 Stunden. Für diese Konten werden keine Kontoauszüge erstellt." # MT
+    others:
+      one_html: "Du hast noch ein weiteres Gather-Konto bei %{cmty}." # MT
+      multiple_html: "Du hast auch Gather-Konten bei %{cmtys}." # MT
+    payment_badge_alt:
+      paypal: "Zahlungssymbol PayPal" # MT
+      online_bill_pay: "Zahlungssymbol Online-Überweisung" # MT
+      check: "Zahlungssymbol Scheck" # MT
+      cash: "Zahlungssymbol Bargeld" # MT
+
+  statements:
+    generation_started: "Kontoauszüge werden erstellt. Lade die Seite gleich neu, um den aktuellen Stand der Konten zu sehen." # MT
+    no_users_not_generated: "Mit folgenden Haushalten sind keine Personen verknüpft, deshalb wurden für sie keine Kontoauszüge erstellt: %{households}. Verschicke die Kontoauszüge noch einmal, sobald die Haushalte verknüpfte Personen haben." # MT
+    account_info:
+      account_community: "Gemeinschaft des Kontos" # MT
+      account_number: "Kontonummer" # MT
+      household: "Haushalt" # MT
+    link_to_accounts_page:
+      notice_html: "Die aktuellsten Kontoinformationen findest du, wenn du %{link}." # MT
+      link: "deine Kontenseite besuchst" # MT
+    statement_rows:
+      load_more: "Mehr laden …" # MT
+      loading: "Wird geladen …" # MT
+    show:
+      title: "Kontoauszug Nr. %{number}" # MT
+      statement_date: "Datum des Kontoauszugs" # MT
+      due_date: "Fälligkeitsdatum" # MT
+      activity: "Bewegungen" # MT
+      previous_balance: "Vorheriger Saldo" # MT
+      statement_balance: "Saldo laut Kontoauszug" # MT
+
+  transactions:
+    added: "Buchung hinzugefügt." # MT
+    not_added: "Die Buchung wurde nicht hinzugefügt. Du kannst sie unten bearbeiten und es noch einmal versuchen, oder unten auf „Abbrechen“ klicken, um zur Kontenseite zurückzukehren." # MT
+    form:
+      cancel: "Abbrechen" # MT
+    txn_rows:
+      no_activity: "In diesem Zeitraum gab es keine Bewegungen" # MT
+    txn_table:
+      date: "Datum" # MT
+      type: "Art" # MT
+      description: "Beschreibung" # MT
+      quantity: "Menge" # MT
+      unit_price: "Einzelpreis" # MT
+      amount: "Betrag" # MT
+    confirm:
+      title: "Buchung bestätigen" # MT
+      intro: "So erscheint die neue Buchung auf dem Kontoauszug des Haushalts. Buchungen können nach dem Erstellen nicht mehr bearbeitet werden. Bitte prüfe, ob die Angaben unten stimmen." # MT
+    index:
+      title: "Letzte Bewegungen" # MT
+      title_with_household: "Letzte Bewegungen: %{household}" # MT
+      account_community: "Gemeinschaft des Kontos" # MT
+      account_number: "Kontonummer" # MT
+      household: "Haushalt" # MT
+      activity: "Bewegungen" # MT
+      no_activity: "Auf diesem Konto gibt es keine Bewegungen." # MT
+      last_statement_balance: "Saldo des letzten Kontoauszugs" # MT
+      current_balance: "Aktueller Saldo" # MT
+    new:
+      title: "Neue Buchung" # MT
+
+  billing:
+    # Description of the transaction LateFeeApplier creates.
+    late_fee_description: "Säumnisgebühr" # MT
+    templates:
+      created: "Vorlage erstellt." # MT
+      updated: "Vorlage aktualisiert." # MT
+      select_one: "Bitte wähle mindestens eine Vorlage aus." # MT
+      applied: "Buchungen erstellt." # MT
+      edit:
+        title: "Buchungsvorlage bearbeiten: %{description}" # MT
+      new:
+        title: "Neue Buchungsvorlage" # MT
+      index:
+        title: "Buchungsvorlagen" # MT
+        apply: "Vorlagen anwenden" # MT
+        create: "Vorlage erstellen" # MT
+        intro: "Mit Buchungsvorlagen kannst du ganz einfach viele Buchungen auf einmal erstellen." # MT
+        none_found: "Keine Vorlagen gefunden." # MT
+        description: "Beschreibung" # MT
+        type: "Art" # MT
+        member_types: "Mitgliedsart(en)" # MT
+        amount: "Betrag" # MT
+      review:
+        title: "Vorlagen anwenden" # MT
+        intro: "Du erstellst gleich folgende Buchungen für folgende Haushalte:" # MT
+        description: "Beschreibung" # MT
+        type: "Art" # MT
+        amount: "Betrag" # MT
+        households: "Haushalte" # MT
+        outdated_warning: "Die Liste der Haushalte oben kann veralten, wenn sich die Mitgliedsarten von Haushalten ändern, nachdem diese Bestätigungsseite geladen wurde und bevor unten auf „Anwenden“ geklickt wird." # MT
+        cancel: "Abbrechen" # MT
+        apply: "Anwenden" # MT
+
+  account_mailer:
+    statement_notice:
+      subject: "Neuer Kontoauszug für %{community}" # MT
+      created: "In Gather wurde ein neuer Kontoauszug für dein Konto bei %{community} erstellt." # MT
+      amount_due: "Der fällige Betrag ist %{amount}." # MT
+      credit: "Du hast ein Guthaben von %{amount}. Keine Zahlung nötig." # MT
+      see_details: "Die Einzelheiten findest du unter diesem Link:" # MT
+      thanks: "Danke für deine pünktliche Zahlung!" # MT
+    statement_reminder:
+      subject: "Zahlungserinnerung für dein Konto bei %{community}" # MT
+      due_on: "Zur Erinnerung: Die Zahlung für einen Gather-Kontoauszug für dein Konto bei %{community} ist am %{date} fällig." # MT
+      due_soon: "Zur Erinnerung: Die Zahlung für einen Gather-Kontoauszug für dein Konto bei %{community} ist bald fällig." # MT
+      amount_due: "Der fällige Betrag ist %{amount}. Die Einzelheiten findest du unter diesem Link:" # MT
+      disregard: "Wenn du schon bezahlt hast, kannst du diese Nachricht ignorieren." # MT
+      thanks: "Danke für deine pünktliche Zahlung!" # MT

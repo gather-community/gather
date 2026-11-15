@@ -30,7 +30,7 @@ module Calendars
 
       def slug
         # Matches legacy meal calendar exports
-        "Meal"
+        "Meal" # rubocop:disable Gather/HardCodedString -- matches legacy export UIDs, not displayed
       end
 
       private

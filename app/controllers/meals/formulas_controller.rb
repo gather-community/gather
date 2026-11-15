@@ -42,7 +42,7 @@ module Meals
       @formula.assign_attributes(formula_params)
       authorize(@formula)
       if @formula.save
-        flash[:success] = "Formula created successfully."
+        flash[:success] = t("meals.formula_created")
         redirect_to(meals_formulas_path)
       else
         prep_form_vars
@@ -54,7 +54,7 @@ module Meals
       @formula = Formula.find(params[:id])
       authorize(@formula)
       if @formula.update(formula_params)
-        flash[:success] = "Formula updated successfully."
+        flash[:success] = t("meals.formula_updated")
         redirect_to(meals_formulas_path)
       else
         prep_form_vars

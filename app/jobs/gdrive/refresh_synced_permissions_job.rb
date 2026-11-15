@@ -15,7 +15,8 @@ module GDrive
         config = Config.find_by!(community_id: community.id)
         self.wrapper = Wrapper.new(config: config, google_user_id: config.org_user_id)
 
-        items = item_id ? [Item.find_by(id: item_id)].compact : Item.where(gdrive_config: config)
+        items = Item.where(gdrive_config: config).accessible
+        items = items.where(id: item_id) if item_id
 
         # Build a lookup of cluster users by google_email (auto-scoped to current cluster)
         user_id_by_email = User.where.not(google_email: nil).pluck(:google_email, :id).to_h
@@ -30,6 +31,17 @@ module GDrive
     attr_accessor :wrapper
 
     def refresh_item(item, user_id_by_email)
+      refresh_item_permissions(item, user_id_by_email)
+    rescue Google::Apis::ClientError => error
+      raise unless error.message.match?(/notFound: File not found/)
+      # The item (e.g. a shared drive) was deleted or the org user lost access. Mark it like
+      # ItemSyncer/DriveSyncer do and carry on with the other items.
+      Rails.logger.warn("Item not found, marking inaccessible", item_id: item.id,
+        item_external_id: item.external_id)
+      item.update!(error_type: "inaccessible")
+    end
+
+    def refresh_item_permissions(item, user_id_by_email)
       existing_by_user_id = SyncedPermission.where(item_id: item.id).index_by(&:user_id)
       Rails.logger.info("Refreshing item permissions",
         item_external_id: item.external_id, existing_count: existing_by_user_id.size)
@@ -65,6 +77,12 @@ module GDrive
       inherited_level = inherited_access_level_for(permission)
       direct_level = direct_access_level_for(permission)
 
+      # A direct role Gather doesn't manage (e.g. shared drive Manager) is also a floor, so the sync
+      # never downgrades or removes it.
+      if SyncedPermission::UNMANAGED_ACCESS_LEVELS.include?(direct_level)
+        inherited_level = [inherited_level, direct_level].max_by { |l| SyncedPermission.level_index(l) }
+      end
+
       if (perm = existing_by_user_id[user_id])
         Rails.logger.info("Updating synced permission",
           user_id: user_id, item_external_id: item.external_id,
@@ -99,7 +117,7 @@ module GDrive
       inherited_roles = permission.permission_details.select(&:inherited).map(&:role)
       return nil if inherited_roles.empty?
 
-      inherited_roles.max_by { |r| ItemGroup::ACCESS_LEVELS.index(r&.to_sym) || -1 }
+      inherited_roles.max_by { |r| SyncedPermission.level_index(r) }
     end
 
     def direct_access_level_for(permission)
@@ -109,7 +127,7 @@ module GDrive
       direct_roles = permission.permission_details.reject(&:inherited).map(&:role)
       return nil if direct_roles.empty?
 
-      direct_roles.max_by { |r| ItemGroup::ACCESS_LEVELS.index(r&.to_sym) || -1 }
+      direct_roles.max_by { |r| SyncedPermission.level_index(r) }
     end
   end
 end

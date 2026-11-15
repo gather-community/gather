@@ -1,0 +1,115 @@
+<% content_for(:title, t(".title", name: @signup.community_name)) %>
+
+<% content_for(:action_links) do %>
+  <% if policy(@signup).retry? %>
+    <%= link_to(icon_tag("refresh") << " " << t(".retry"), retry_admin_signup_path(@signup),
+          method: :post, class: "btn btn-primary",
+          data: {controller: "confirm", action: "confirm#check",
+                 confirm_message_value: t(".retry_confirm", email: @signup.contact_email),
+                 confirm_confirm_label_value: t(".retry")}) %>
+  <% end %>
+<% end %>
+
+<div class="row">
+  <div class="col-md-6">
+    <table class="key-value">
+      <tr>
+        <td><%= t(".status") %></td>
+        <td>
+          <span class="label label-<%= @signup.new? ? "warning" : (@signup.creating? ? "success" : "danger") %>">
+            <%= t("simple_form.options.communities_signup.status.#{@signup.status}") %>
+          </span>
+          <% if @signup.reviewed_at %>
+            &nbsp; <%= t(".reviewed", date: I18n.l(@signup.reviewed_at, format: :short),
+                         name: @signup.reviewed_by&.name) %>
+          <% end %>
+        </td>
+      </tr>
+      <tr>
+        <td><%= t(".contact_name") %></td>
+        <td><%= @signup.contact_name %></td>
+      </tr>
+      <tr>
+        <td><%= t(".contact_email") %></td>
+        <td><%= mail_to(@signup.contact_email) %></td>
+      </tr>
+      <tr>
+        <td><%= t(".submitted") %></td>
+        <td><%= I18n.l(@signup.created_at, format: :long) %></td>
+      </tr>
+      <tr>
+        <td><%= t(".community_name") %></td>
+        <td><%= @signup.community_name %></td>
+      </tr>
+      <tr>
+        <td><%= t(".slug") %></td>
+        <td><%= @signup.slug %></td>
+      </tr>
+      <tr>
+        <td><%= t(".country") %></td>
+        <td><%= @signup.country_code %></td>
+      </tr>
+      <tr>
+        <td><%= t(".time_zone") %></td>
+        <td><%= @signup.time_zone %></td>
+      </tr>
+      <tr>
+        <td><%= t(".locale") %></td>
+        <td><%= t("common.language_name", locale: @signup.locale) %></td>
+      </tr>
+      <tr>
+        <td><%= t(".sample_data") %></td>
+        <td><%= @signup.want_sample_data? ? t("common.yes") : t("common.no") %></td>
+      </tr>
+      <tr>
+        <td><%= t(".about") %></td>
+        <td style="white-space: pre-wrap"><%= @signup.introduction %></td>
+      </tr>
+      <% if @signup.message.present? %>
+        <tr>
+          <td><%= @signup.denied? ? t(".internal_notes") : t(".approval_message") %></td>
+          <td style="white-space: pre-wrap"><%= @signup.message %></td>
+        </tr>
+      <% end %>
+      <% if @signup.failed? && @signup.failure_message.present? %>
+        <tr>
+          <td><%= t(".failure_message") %></td>
+          <td class="text-danger" style="white-space: pre-wrap"><%= @signup.failure_message %></td>
+        </tr>
+      <% end %>
+    </table>
+  </div>
+  <div class="col-md-6">
+    <% if @signup.new? %>
+      <div data-controller="communities--signup-action"
+          data-communities--signup-action-contact-first-name-value="<%= @signup.contact_first_name %>"
+          data-communities--signup-action-community-name-value="<%= @signup.community_name %>"
+          data-communities--signup-action-approver-first-name-value="<%= current_user.first_name %>">
+        <%= gather_form_for(@action_form, url: act_admin_signup_path(@signup), method: :post,
+              width: :full, layout: :vertical) do |f| %>
+          <%= f.input :decision, as: :select,
+                collection: Communities::SignupActionForm::DECISION_OPTIONS,
+                include_blank: false,
+                input_html: {data: {action: "change->communities--signup-action#update"}} %>
+          <%= f.input :message, as: :text, label: false do %>
+            <label class="control-label" for="communities_signup_action_message"
+                   data-communities--signup-action-target="label" data-decision="approve"><%= t(".approval_message") %></label>
+            <label class="control-label" for="communities_signup_action_message"
+                   data-communities--signup-action-target="label" data-decision="deny" hidden><%= t(".denial_reason") %></label>
+            <%= f.text_area :message, rows: 14, class: "form-control",
+                  maxlength: Communities::Signup::MESSAGE_MAX_LENGTH %>
+            <p class="hint" data-communities--signup-action-target="hint" data-decision="approve">
+              <%= t("simple_form.hints.communities_signup_action.message_approve") %>
+            </p>
+            <p class="hint" data-communities--signup-action-target="hint" data-decision="deny" hidden>
+              <%= t("simple_form.hints.communities_signup_action.message_deny") %>
+            </p>
+          <% end %>
+          <%= form_actions do %>
+            <%= f.button :primary, t(".submit") %>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>

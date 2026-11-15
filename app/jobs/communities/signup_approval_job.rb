@@ -10,7 +10,8 @@ module Communities
         country_code: signup.country_code,
         slug: signup.slug,
         sample_data: signup.want_sample_data,
-        photos: true
+        photos: true,
+        locale: signup.locale
       ).generate
 
       ActsAsTenant.with_tenant(cluster) do

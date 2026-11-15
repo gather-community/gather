@@ -10,7 +10,7 @@
   </script>
 <% end %>
 
-<title>Gather: <%= @title_no_html.presence || @title %></title>
+<title><%= t(".title_html", title: @title_no_html.presence || @title) %></title>
 
 <%# Favicon stuff %>
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -30,7 +30,7 @@
 <%= yield(:local_javascript) %>
 <%= csrf_meta_tags %>
 
-<%= javascript_tag do %>
+<script>
   $(function() { new Gather.Views.ApplicationView(); });
   window._rails_env = "<%= Rails.env %>";
-<% end %>
+</script>

@@ -11,6 +11,6 @@
   <%= render("other_accounts") if accounts %>
 <% else %>
   <div class="center-notice">
-    There is no activity on this account.
+    <%= t(".no_activity") %>
   </div>
 <% end %>

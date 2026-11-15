@@ -26,9 +26,9 @@ module Utils
       private
 
       def generate_everybody_group
-        create(:group, communities: [community], availability: "everybody",
-                       name: "Full Community", kind: "group",
-                       description: "General group containing all full users in the community.")
+        create(:group, communities: [community], availability: "everybody", kind: "group",
+          name: I18n.t("starter_content.everybody_group.name"),
+          description: I18n.t("starter_content.everybody_group.description"))
       end
 
       def generate_gather_coop_domain
@@ -45,8 +45,8 @@ module Utils
       end
 
       def generate_and_populate_closed_group
-        group = create(:group, communities: [community], availability: "closed", name: "Meals Committee",
-                               kind: "committee", description: "Runs the meals program!")
+        group = create(:group, communities: [community], availability: "closed", kind: "committee",
+          **sample_text(:groups, :meals_committee, :name, :description))
         group.memberships.create!(user: users[user_index], kind: "manager")
         group.memberships.create!(user: users[user_index + 1], kind: "joiner")
         group.memberships.create!(user: users[user_index + 2], kind: "joiner")
@@ -55,9 +55,8 @@ module Utils
       end
 
       def generate_and_populate_open_group
-        group = create(:group, communities: [community], availability: "open",
-                               name: "Knitting Club", kind: "club",
-                               description: "Knitting for beginners to experts! Meets Sundays at 2pm.")
+        group = create(:group, communities: [community], availability: "open", kind: "club",
+          **sample_text(:groups, :knitting_club, :name, :description))
         group.memberships.create!(user: users[user_index], kind: "manager")
         group.memberships.create!(user: users[user_index + 1], kind: "manager")
         group.memberships.create!(user: users[user_index + 2], kind: "joiner")

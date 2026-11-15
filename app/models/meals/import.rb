@@ -9,6 +9,7 @@
 #  community_id  :bigint           not null
 #  created_at    :datetime         not null
 #  errors_by_row :jsonb
+#  locale        :string(10)       not null
 #  status        :string           default("queued"), not null
 #  updated_at    :datetime         not null
 #  user_id       :bigint           not null
@@ -22,6 +23,13 @@ module Meals
 
     BASIC_HEADERS = %i[served_at calendars formula communities action id].freeze
     REQUIRED_HEADERS = %i[served_at calendars].freeze
+
+    # Columns that Meals::MealCsvExporter emits but that we don't read. We skip these explicitly,
+    # rather than ignoring all unrecognized headers, so that a typo'd header is still an error.
+    EXPORT_ONLY_HEADERS = %i[title entrees side kids dessert notes allergens capacity status
+      signup_count spots_left ingredient_cost pantry_cost total_cost payment_method
+      reimbursee].freeze
+
     DB_ID_REGEX = /\A\d+\z/
 
     acts_as_tenant :cluster
@@ -36,12 +44,17 @@ module Meals
     accepts_attachment_via_form :file
     validates :file, presence: true, content_type: {in: %w[text/plain text/csv]}
 
+    # The uploader's language. The import runs later in a job, but reads dates and writes its errors in it.
+    attribute :locale, :string, default: -> { I18n.locale.to_s }
+
     def import
-      update!(status: "running")
-      self.row_pointer = 0
-      self.errors_by_row ||= {}
-      process
-      update!(status: "finished")
+      I18n.with_locale(Gather::Locales.find(locale) || I18n.default_locale) do
+        update!(status: "running")
+        self.row_pointer = 0
+        self.errors_by_row ||= {}
+        process
+        update!(status: "finished")
+      end
     end
 
     # crashed status indicates an unexpected error
@@ -68,7 +81,7 @@ module Meals
         # bom|utf-8 is needed to handle Excel-generated CSVs.
         rows = CSV.read(file.path, converters: ->(f) { f&.strip }, encoding: "bom|utf-8")
         if rows.size < 2
-          add_error("File is empty")
+          add_error(I18n.t("csv.errors.meals/meal.file_empty"))
         else
           ActiveRecord::Base.transaction do
             parse_rows(rows)
@@ -104,9 +117,11 @@ module Meals
       return unless target_meal
       target_meal.community = community # May be redundant, needed for permission check
       self.row_policy = Meals::MealPolicy.new(user, target_meal)
-      return add_error("Action not permitted (#{row_action})") unless row_policy.send("#{row_action}?")
+      unless row_policy.send("#{row_action}?")
+        return add_error(I18n.t("csv.errors.meals/meal.action_not_permitted", action: row_action))
+      end
       return destroy_target_meal if row_action == :destroy
-      assign_defaults_to_new_meal
+      assign_defaults_to_new_meal if row_action == :create
       copy_attribs_to_target_meal if row_action == :update
       unless target_meal.save
         target_meal.errors.each do |error|
@@ -128,28 +143,45 @@ module Meals
     def copy_attribs_to_target_meal
       attribs = []
       attribs.concat(%i[served_at calendars]) if row_policy.change_date_loc?
-      attribs.concat(%i[communities]) if row_policy.change_invites?
-      attribs << :formula if row_policy.change_formula?
-      attribs << :assignments if row_policy.change_workers?
+      attribs << :communities if row_policy.change_invites? && new_meal.communities.any?
+      attribs << :formula if row_policy.change_formula? && new_meal.formula.present?
       attribs.each { |attrib| target_meal.send("#{attrib}=", new_meal.send(attrib)) }
+      copy_assignments_to_target_meal if row_policy.change_workers?
+    end
+
+    def copy_assignments_to_target_meal
+      imported = new_meal.assignments.map { |assignment| [assignment.role, assignment.user] }.uniq
+      kept = target_meal.assignments.select do |assignment|
+        imported_roles.exclude?(assignment.role) || imported.include?([assignment.role, assignment.user])
+      end
+      added = (imported - kept.map { |assignment| [assignment.role, assignment.user] }).map do |role, user|
+        Meals::Assignment.new(meal: target_meal, role: role, user: user)
+      end
+      target_meal.assignments = kept + added
+    end
+
+    def imported_roles
+      header_map.values.grep(Meals::Role)
     end
 
     def destroy_target_meal
       target_meal.destroy
     rescue => error
-      add_error("Error deleting meal #{target_meal.id}: '#{error}'")
+      add_error(I18n.t("csv.errors.meals/meal.delete_failed", id: target_meal.id, error: error))
     end
 
     def find_matching_meal
       scope = Meals::MealPolicy::Scope.new(user, Meals::Meal).resolve
       if parsed_id
-        scope.find_by(id: parsed_id) || add_error("Could not find meal with ID '#{parsed_id}'")
+        scope.find_by(id: parsed_id) ||
+          add_error(I18n.t("csv.errors.meals/meal.meal_id_not_found", id: parsed_id))
       else
         candidates = scope.where(served_at: new_meal.served_at)
         meal = candidates.detect { |m| m.calendars.to_set == new_meal.calendars.to_set }
         return meal if meal.present?
-        add_error("Could not find meal served at #{I18n.l(new_meal.served_at).gsub("  ", " ")} at " \
-          "locations: #{new_meal.calendars.map(&:name).join(", ")}")
+        time = I18n.l(new_meal.served_at).gsub("  ", " ")
+        locations = new_meal.calendars.map(&:name).join(", ")
+        add_error(I18n.t("csv.errors.meals/meal.meal_not_found", time: time, locations: locations))
       end
     end
 
@@ -163,35 +195,68 @@ module Meals
       self.header_map = {}
       bad_headers = []
       row.each_with_index do |cell, col_index|
+        # Spreadsheet exports often include blank trailing columns. We ignore them.
+        next if cell.blank?
         if (attrib = untranslate_header(cell) || role_from_header(cell))
           header_map[col_index] = attrib
-        else
+        elsif !export_only_header?(cell)
           bad_headers << cell
         end
       end
-      add_error("Invalid column headers: #{bad_headers.join(", ")}") if bad_headers.any?
+      return if bad_headers.none?
+      add_error(I18n.t("csv.errors.meals/meal.invalid_headers", headers: bad_headers.join(", ")))
     end
 
     def check_for_missing_headers
       missing = REQUIRED_HEADERS - header_map.values
       return true if missing.none?
       names = missing.map { |h| translate_header(h) }.join(", ")
-      add_error("Missing columns: #{names}")
+      add_error(I18n.t("csv.errors.meals/meal.missing_columns", columns: names))
     end
 
     # Looking up a header symbol based on the provided human-readable string.
     def untranslate_header(str)
-      @untranslate_dict ||= BASIC_HEADERS.map { |h| [translate_header(h).downcase, h] }.to_h
+      @untranslate_dict ||= BASIC_HEADERS.each_with_object({}) do |header, dict|
+        header_names(header).each { |name| dict[name.downcase] = header }
+      end
       @untranslate_dict[str.downcase]
     end
 
-    def translate_header(header)
-      I18n.t("csv.headers.meals/meal.#{header}", default: :"csv.headers.common.#{header}")
+    def translate_header(header, **opts)
+      I18n.t("csv.headers.meals/meal.#{header}", default: :"csv.headers.common.#{header}", **opts)
+    end
+
+    # A header's name in every available locale that has one. Files are exported in the exporting user's
+    # language but imported by a background job, so we accept headers in any language.
+    def header_names(header, **opts)
+      I18n.available_locales.filter_map do |locale|
+        key = [:"csv.headers.meals/meal.#{header}", :"csv.headers.common.#{header}"]
+          .detect { |k| I18n.exists?(k, locale) }
+        I18n.t(key, locale: locale, **opts) if key
+      end.uniq
+    end
+
+    # Columns emitted by the exporter that we read past. See EXPORT_ONLY_HEADERS.
+    def export_only_header?(str)
+      @export_only_dict ||= EXPORT_ONLY_HEADERS.flat_map { |h| header_names(h) }.to_set(&:downcase)
+      @export_only_dict.include?(str.downcase) || type_column_header?(str)
+    end
+
+    # The per-Meals::Type diner count and price columns can't be listed statically. We match them
+    # against the community's active type names only, so a typo in one is still an error.
+    def type_column_header?(str)
+      @active_type_names ||= Meals::Type.in_community(community).active.pluck(:name)
+      @active_type_names.any? do |name|
+        %i[diner_count type_price].any? do |key|
+          header_names(key, type: name).any? { |header| header.casecmp?(str) }
+        end
+      end
     end
 
     def role_from_header(cell)
       scope = Meals::RolePolicy::Scope.new(user, Meals::Role).resolve.in_community(community).active
-      if (match_data = cell.match(/\A#{I18n.t("csv.headers.meals/meal.role")}(\d+)\z/))
+      role_prefixes = header_names(:role).map { |prefix| Regexp.escape(prefix) }.join("|")
+      if (match_data = cell.match(/\A(?:#{role_prefixes})(\d+)\z/))
         scope.find_by(id: match_data[1])
       else
         scope.find_by(title: cell)
@@ -211,20 +276,22 @@ module Meals
 
     def parse_action(str)
       return :create if str.blank?
-      return add_error("Invalid action: #{str}") unless %w[create update destroy].include?(str.downcase)
+      unless %w[create update destroy].include?(str.downcase)
+        return add_error(I18n.t("csv.errors.meals/meal.invalid_action", action: str))
+      end
       self.row_action = str.downcase.to_sym
     end
 
     def parse_served_at(str)
-      return add_error("Date/time is required") if str.blank?
-      new_meal.served_at = Time.zone.parse(str)
+      return add_error(I18n.t("csv.errors.meals/meal.served_at_required")) if str.blank?
+      new_meal.served_at = Time.zone.parse(Gather::LocalizedDate.normalize(str))
       raise ArgumentError if new_meal.served_at.nil?
     rescue ArgumentError, TypeError
-      add_error("'#{str}' is not a valid date/time")
+      add_error(I18n.t("csv.errors.meals/meal.invalid_served_at", str: str))
     end
 
     def parse_calendars(str)
-      return add_error("Calendar(s) are required") if str.blank?
+      return add_error(I18n.t("csv.errors.meals/meal.calendars_required")) if str.blank?
       new_meal.calendars = str.split(/\s*;\s*/).map do |substr|
         find_calendar(substr)
       end.compact

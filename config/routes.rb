@@ -11,22 +11,17 @@ Rails.application.routes.draw do
     }
   get "people/users/signed-out", to: "landing#signed_out", as: :user_signed_out
 
-  resources :communities, only: %i[index destroy] do
-    member do
-      get :admin
+  # The public signup form for new communities. Reviewing signups is under /admin.
+  namespace :communities do
+    resources :signups, only: %i[new create] do
+      get :submitted, on: :collection
     end
   end
 
-  namespace :communities do
-    resources :signups, only: %i[index new create] do
-      collection do
-        get :submitted
-      end
-      member do
-        get :review
-        post :act
-      end
-    end
+  # Stripe webhook endpoint. Lives on the apex domain (Stripe posts to a fixed URL) and is
+  # authenticated by signature verification, not by session. See Stripe::WebhooksController.
+  namespace :stripe do
+    post "webhooks", to: "webhooks#create"
   end
 
   resources :domains, only: %i[index show new create destroy]
@@ -44,6 +39,13 @@ Rails.application.routes.draw do
       patch :check
       post :strength
     end
+  end
+
+  scope module: :notifications do
+    resource :preferences, path: "notifications", only: %i[show update], as: :notification_preferences
+    # Public, signed List-Unsubscribe URL from notification emails. POST is RFC 8058 one-click unsubscribe.
+    get "notifications/unsubscribe/:token", to: "unsubscribes#show", as: :notification_unsubscribe
+    post "notifications/unsubscribe/:token", to: "unsubscribes#create"
   end
 
   resources :users do
@@ -95,6 +97,7 @@ Rails.application.routes.draw do
     collection do
       get :jobs
       get :report
+      get :export_signups, path: "signups"
       get :worker_form, path: "worker-form"
       get :reimbursee_paypal_email, path: "reimbursee-paypal-email"
     end
@@ -153,7 +156,16 @@ Rails.application.routes.draw do
   end
 
   namespace :calendars do
-    resources :events
+    resources :events do
+      # Re-renders the parts of the event form that depend on its other fields. See
+      # EventsController#form_refresh.
+      post :form_refresh, on: :collection
+      post :form_refresh, on: :member
+    end
+    resources :eventlets, only: %i[show update destroy] do
+      # Which scope choices a drag of this eventlet may offer. See EventletsController#move_choices.
+      get :move_choices, on: :member
+    end
     resources :protocols
     resources :groups, only: %i[new edit create update destroy]
 
@@ -179,6 +191,7 @@ Rails.application.routes.draw do
 
     # This is the personalized show action, allowing paths to include the user's calendar token,
     # e.g. /calendars/exports/meals/D7sbPv7YCUhxMs4Pyx9D.
+    # The "your-*" types predate the "My" naming. Existing subscriptions use them, so they stay.
     # The calendar's type gets captured as the :id param, so this is equivalent to
     # /calendars/exports/:type/:token
     get "exports/:type/:token",
@@ -239,7 +252,8 @@ Rails.application.routes.draw do
 
   resources :accounts, only: %i[index show edit update] do
     collection do
-      get :yours
+      get :mine
+      get :yours, to: redirect(path: "/accounts/mine") # Legacy path, linked from old statement emails
       put :apply_late_fees
     end
     resources :transactions, only: %i[index new create]
@@ -262,6 +276,9 @@ Rails.application.routes.draw do
       end
     end
   end
+
+  # Top-level search.
+  get "search", to: "search#index", as: :search
 
   resources :wiki_pages, controller: "wiki/pages", param: :slug, path: "wiki" do
     collection do
@@ -328,13 +345,7 @@ Rails.application.routes.draw do
   end
 
   namespace :work do
-    resources :shifts, path: :signups, only: %i[index show] do
-      member do
-        post :signup
-        delete :unsignup
-      end
-    end
-    resources :jobs
+    # Period management (not period-scoped). Period slugs are the :id.
     resources :periods do
       member do
         get :review_notices
@@ -342,15 +353,60 @@ Rails.application.routes.draw do
       end
     end
     resource :settings, only: %i[edit update]
+
+    # Landing pages (no period selected) — show a period picker or redirect to the sole period.
+    get "signups", to: "shifts#index", as: :shifts
+    get "jobs", to: "jobs#index", as: :jobs
     get "report", to: "periods#report", as: :report
+
+    # Period-scoped content pages. The :period_id segment is a period slug.
+    scope ":period_id", as: :period do
+      resources :shifts, path: :signups, only: %i[index show] do
+        member do
+          post :signup
+          delete :unsignup
+        end
+      end
+      resources :jobs
+      get "report", to: "periods#report", as: :report
+    end
+
     get "/", to: redirect("/work/signups")
   end
 
   resources :uploads, only: :create
 
   namespace :admin do
+    # Operator pages (apex domain; span all clusters). /admin redirects to the first one the user can see.
+    get "/", to: "home#show", as: :home
+
+    resources :communities, only: %i[index show destroy] do
+      post :resync_all, path: "resync-all", on: :collection
+      put :activate, on: :member
+    end
+
+    # Reviewing signups for new communities. The public form is Communities::SignupsController.
+    resources :signups, only: :index do
+      member do
+        get :review
+        post :act
+        post :retry
+      end
+    end
+
     get "settings/:type", to: "settings#edit", as: :settings
     patch "settings/:type", to: "settings#update"
+
+    # Operator dashboard for domains (apex domain; spans all clusters).
+    resources :domains, only: %i[index show] do
+      post :refresh, on: :collection
+      post :refresh, on: :member
+    end
+
+    # Operator dashboard for feature flags (apex domain; flags are global, users from any cluster).
+    resources :feature_flags, path: "feature-flags" do
+      get :user_search, path: "user-search", on: :collection, defaults: {format: :json}
+    end
   end
 
   namespace :subscription do
@@ -358,6 +414,9 @@ Rails.application.routes.draw do
     post "/start-payment", to: "subscriptions#start_payment", as: :start_payment
     get "/payment", to: "subscriptions#payment", as: :payment
     get "/success", to: "subscriptions#success", as: :success
+    post "/messaging-topup/preview", to: "messaging_topups#preview", as: :messaging_topup_preview
+    patch "/messaging-topup", to: "messaging_topups#update", as: :messaging_topup
+    delete "/messaging-topup", to: "messaging_topups#destroy"
   end
 
   get "sso", to: "single_sign_on#sign_on"

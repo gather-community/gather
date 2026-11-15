@@ -7,7 +7,8 @@ describe Calendars::EventFinder do
   let(:t0) { Time.current.midnight }
   let(:range) { (t0 + 2.5.hours)..(t0 + 4.5.hours) }
   let(:group) { create(:group) }
-  let!(:cal1) { create(:calendar) }
+  # Allows overlaps so it can hold repeating events (Calendar#allows_recurring_events?).
+  let!(:cal1) { create(:calendar, allow_overlap: true) }
   let!(:cal2) { create(:community_meals_calendar) }
   let!(:cal3) { create(:calendar) }
   let!(:cal4) { create(:other_communities_meals_calendar) }
@@ -165,9 +166,10 @@ describe Calendars::EventFinder do
     end
 
     it "returns a non-persisted occurrence eventlet for the in-range occurrence" do
-      recurring = eventlets.select { |e| !e.persisted? && e.linkable.is_a?(Calendars::Event) }
+      recurring = eventlets.select { |e| !e.persisted? && e.linkable.is_a?(Calendars::Eventlet) }
       expect(recurring.size).to eq(1)
-      expect(recurring.first.linkable).to eq(recurring_event)
+      expect(recurring.first.linkable).to eq(recurring_event.eventlets.first)
+      expect(recurring.first.linkable.event).to eq(recurring_event)
       expect(recurring.first.starts_at).to be_within(1.second).of(anchor + 1.day)
       expect(recurring.first.ends_at).to be_within(1.second).of(anchor + 1.day + 1.hour)
     end
@@ -175,8 +177,8 @@ describe Calendars::EventFinder do
     it "applies the eventlet start/end offsets to each occurrence" do
       eventlet = recurring_event.eventlets.first
       eventlet.update_columns(start_offset: -900, end_offset: 300)
-      occ = eventlets.select { |e| !e.persisted? && e.linkable.is_a?(Calendars::Event) }
-        .find { |o| o.linkable == recurring_event }
+      occ = eventlets.select { |e| !e.persisted? && e.linkable.is_a?(Calendars::Eventlet) }
+        .find { |o| o.linkable.event == recurring_event }
       expect(occ.starts_at).to be_within(1.second).of(anchor + 1.day - 900.seconds)
       expect(occ.ends_at).to be_within(1.second).of(anchor + 1.day + 1.hour + 300.seconds)
     end
@@ -200,7 +202,7 @@ describe Calendars::EventFinder do
       end
 
       it "returns no occurrence eventlets for that event" do
-        recurring = eventlets.select { |e| !e.persisted? && e.linkable.is_a?(Calendars::Event) }
+        recurring = eventlets.select { |e| !e.persisted? && e.linkable.is_a?(Calendars::Eventlet) }
         expect(recurring).to be_empty
       end
     end
@@ -214,7 +216,7 @@ describe Calendars::EventFinder do
       end
 
       it "is excluded from results" do
-        recurring = eventlets.select { |e| !e.persisted? && e.linkable.is_a?(Calendars::Event) }
+        recurring = eventlets.select { |e| !e.persisted? && e.linkable.is_a?(Calendars::Eventlet) }
         expect(recurring).to be_empty
       end
     end
@@ -224,8 +226,21 @@ describe Calendars::EventFinder do
         described_class.new(range: range, calendars: [cal1], user: user, own_only: true).eventlets
       end
 
-      it "excludes recurring occurrences" do
-        recurring = eventlets.select { |e| !e.persisted? && e.linkable.is_a?(Calendars::Event) }
+      def recurring
+        eventlets.select { |e| !e.persisted? && e.linkable.is_a?(Calendars::Eventlet) }
+      end
+
+      it "includes the user's own recurring occurrences" do
+        expect(recurring.map(&:linkable)).to eq([recurring_event.eventlets.first])
+      end
+
+      it "excludes recurring occurrences created by someone else" do
+        recurring_event.update!(creator: create(:user))
+        expect(recurring).to be_empty
+      end
+
+      it "excludes the user's group's recurring occurrences" do
+        recurring_event.update!(group: create(:group))
         expect(recurring).to be_empty
       end
     end
@@ -234,7 +249,7 @@ describe Calendars::EventFinder do
       it "excludes recurring occurrences from filtered-out calendars" do
         null_scope = double(resolve: Calendars::Eventlet.none)
         allow(Calendars::EventletPolicy::Scope).to receive(:new).and_return(null_scope)
-        recurring = eventlets.select { |e| !e.persisted? && e.linkable.is_a?(Calendars::Event) }
+        recurring = eventlets.select { |e| !e.persisted? && e.linkable.is_a?(Calendars::Eventlet) }
         expect(recurring).to be_empty
       end
     end
@@ -245,7 +260,7 @@ describe Calendars::EventFinder do
       let(:base_eventlet) { recurring_event.eventlets.first }
 
       def recurring_occurrences
-        eventlets.select { |e| !e.persisted? && e.linkable.is_a?(Calendars::Event) }
+        eventlets.select { |e| !e.persisted? && e.linkable.is_a?(Calendars::Eventlet) }
       end
 
       def make_event_override(**attrs)
@@ -347,6 +362,34 @@ describe Calendars::EventFinder do
 
         it "returns the regular in-range occurrence alongside it" do
           expect(recurring_occurrences.size).to eq(2)
+        end
+      end
+
+      # Overrides are keyed by scheduled start, so moving the series must carry them along. Before
+      # Event re-keyed them, a deleted occurrence came back and a moved one showed twice.
+      context "after the series moves" do
+        # Half an hour earlier keeps the in-range occurrence (now t0 + 3.5h) inside the range.
+        def move_series
+          recurring_event.update!(starts_at: anchor - 30.minutes, ends_at: anchor + 30.minutes)
+        end
+
+        it "keeps a deleted occurrence deleted" do
+          make_event_override(deleted: true)
+          move_series
+          expect(recurring_occurrences).to be_empty
+        end
+
+        it "shows a moved occurrence once, at its moved time" do
+          make_event_override(starts_at: t0 + 3.hours, ends_at: t0 + 3.25.hours)
+          move_series
+          expect(recurring_occurrences.map(&:starts_at)).to eq([t0 + 3.hours])
+        end
+
+        it "keeps a calendar-only change with its occurrence" do
+          make_eventlet_override(make_event_override, start_offset: 15.minutes.to_i,
+            end_offset: 15.minutes.to_i)
+          move_series
+          expect(recurring_occurrences.map(&:starts_at)).to eq([t0 + 3.75.hours])
         end
       end
     end

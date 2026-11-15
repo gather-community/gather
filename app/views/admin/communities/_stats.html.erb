@@ -1,0 +1,28 @@
+<aside class="callout stats-sidebar">
+  <h2><%= icon_tag("bar-chart") %> <%= t(".title") %></h2>
+  <h3><%= t(".communities") %></h3>
+  <table class="key-value">
+    <% %i[subscribed trial problem].each do |status| %>
+      <tr>
+        <td><%= t("communities.community.statuses.#{status}") %></td>
+        <td><%= stats.status_count(status) %></td>
+      </tr>
+    <% end %>
+  </table>
+  <h3><%= t(".users") %></h3>
+  <table class="key-value">
+    <tr>
+      <td><%= t(".paying") %></td>
+      <td><%= stats.paying_users %></td>
+    </tr>
+    <tr>
+      <td><%= t(".adults") %></td>
+      <td><%= stats.adults %></td>
+    </tr>
+    <tr>
+      <td><%= t(".children") %></td>
+      <td><%= stats.children %></td>
+    </tr>
+  </table>
+  <p><%= t(".years_active", years: stats.years_active) %></p>
+</aside>

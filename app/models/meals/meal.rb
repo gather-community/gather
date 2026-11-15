@@ -33,6 +33,7 @@ module Meals
     include Wisper.model
     include TimeCalculable
     include Statusable
+    include MealSearchConfig
 
     DEFAULT_TIME = 18.hours + 15.minutes
     DEFAULT_CAPACITY = 64
@@ -91,13 +92,19 @@ module Meals
       rel = rel.joins(:role).merge(Meals::Role.head_cook) if head_cook_only
       where("? IN (#{rel.to_sql})", user)
     }
+    # Matches the start of each word of the title or of a worker's name
+    # (see ApplicationRecord.matching_word_starts).
+    scope :matching, lambda { |q|
+      worked_by_match = Meals::Assignment.joins(:user)
+        .matching_word_starts("users.first_name || ' ' || users.last_name", q).select(:meal_id)
+      matching_word_starts("meals.title", q).or(where(id: worked_by_match))
+    }
     scope :attended_by, ->(household) { joins(:signups).where(meal_signups: {household_id: household.id}) }
 
     accepts_nested_attributes_for :signups, allow_destroy: true, reject_if: lambda { |a|
       a["id"].blank? && a["parts_attributes"].values.all? { |v| v["count"] == "0" }
     }
-    accepts_nested_attributes_for :cost,
-      reject_if: ->(a) { a.all? { |k, v| k == "reimbursee_id" || v.blank? } }
+    accepts_nested_attributes_for :cost, reject_if: :new_cost_without_amounts?
     accepts_nested_attributes_for :assignments, reject_if: ->(h) { h["user_id"].blank? }, allow_destroy: true
 
     delegate :cluster, to: :community
@@ -242,34 +249,34 @@ module Meals
 
     def enough_capacity_for_current_signups
       return unless persisted? && !finalized? && capacity && capacity < signup_count
-      errors.add(:capacity, "must be at least #{signup_count} due to current signups")
+      errors.add(:capacity, :below_signups, count: signup_count)
     end
 
     def title_and_entree_if_other_menu_items
       %w[title entrees].each do |attrib|
         next unless self[attrib].blank? && menu_posted?
-        errors.add(attrib, "can't be blank if other menu items entered")
+        errors.add(attrib, :blank_with_menu)
       end
     end
 
     def at_least_one_community
       return unless invitations.reject(&:blank?).empty?
-      errors.add(:invitations, "you must invite at least one community")
+      errors.add(:invitations, :none)
     end
 
     def auto_close_between_now_and_meal_time
       return unless open?
       return if auto_close_time.blank? || served_at.blank?
       return if auto_close_time > Time.current && auto_close_time < served_at
-      errors.add(:auto_close_time, "must be between now and the meal time")
+      errors.add(:auto_close_time, :not_before_meal)
     end
 
     def allergens_specified_appropriately
       return unless menu_posted?
       if !allergens? && !no_allergens?
-        errors.add(:allergens, "at least one box must be checked if menu entered")
+        errors.add(:allergens, :none_checked)
       elsif allergens? && no_allergens?
-        errors.add(:allergens, "'None' can't be selected if other allergens present")
+        errors.add(:allergens, :none_with_others)
       end
     end
 
@@ -279,6 +286,12 @@ module Meals
 
     def main_form_or_import?
       %w[main import].include?(source_form)
+    end
+
+    def new_cost_without_amounts?(attributes)
+      new_cost = attributes["id"].blank?
+      no_amounts = attributes["ingredient_cost"].blank? && attributes["pantry_cost"].blank?
+      new_cost && no_amounts
     end
   end
 end

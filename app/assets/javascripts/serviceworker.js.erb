@@ -46,6 +46,12 @@ function onFetch(event) {
   if (event.request.url.includes("people/users/auth/google_oauth2/callback")) {
     return false;
   }
+  // Only GETs can be served from the cache, so let the browser send everything else itself.
+  // Re-issuing POSTs from here also triggers a WebKit bug (319985, Safari/iOS 26.5+) that sends
+  // file uploads with an empty body.
+  if (event.request.method !== 'GET') {
+    return;
+  }
   // Chrome bug
   if (event.request.cache === 'only-if-cached' && event.request.mode !== 'same-origin') {
     return;

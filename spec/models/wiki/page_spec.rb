@@ -102,6 +102,22 @@ describe Wiki::Page do
     end
   end
 
+  describe ".create_special_page" do
+    let(:community) { Defaults.community }
+
+    before do
+      community.settings.locale = "fr"
+      community.save!
+    end
+
+    it "writes the page in the community's language, not the visitor's" do
+      page = described_class.create_special_page(:home, community: community)
+      expect(page.title).to eq(I18n.t("wiki.special_pages.home.title", locale: :fr))
+      expect(page.content).to eq(I18n.t("wiki.special_pages.home.content", locale: :fr))
+      expect(page.slug).to eq("home")
+    end
+  end
+
   describe "saving versions" do
     let!(:page) { create(:wiki_page) }
 

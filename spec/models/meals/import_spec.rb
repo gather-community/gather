@@ -69,6 +69,102 @@ describe Meals::Import do
       end
     end
 
+    # Files are exported in the exporting user's language, but imports run in a background job.
+    context "with headers in another language" do
+      let!(:default_formula) { create(:meal_formula, is_default: true) }
+      let!(:calendar) { create(:calendar, name: "Cuisine") }
+      let(:csv) { prepare_fixture("meals/import/other_locale.csv") }
+
+      it "recognizes them" do
+        expect(import).to be_successful
+        expect(Meals::Meal.last.calendars).to eq([calendar])
+      end
+    end
+
+    # The import runs in a job, but in the language of the person who uploaded the file.
+    context "uploaded by someone using French" do
+      let!(:default_formula) { create(:meal_formula, is_default: true) }
+      let!(:calendar) { create(:calendar, name: "Cuisine") }
+      let(:import_object) do
+        I18n.with_locale(:fr) { create(:meal_import, community: community, user: user, csv: csv) }
+      end
+
+      context "with dates written the way the French date picker writes them" do
+        # February, since Ruby's own parser can't read "fév." (it would find "jan" in "jan." by itself).
+        let(:csv) { "Date/Heure,Lieux\n7 fév. 2019 12:00,Cuisine\njeu 7 fév. 2019 18:30,Cuisine\n" }
+
+        it "reads them" do
+          expect(import.locale).to eq("fr")
+          expect(import).to be_successful
+          expect(Meals::Meal.order(:served_at).map(&:served_at))
+            .to eq([Time.zone.parse("2019-02-07 12:00"), Time.zone.parse("2019-02-07 18:30")])
+        end
+      end
+
+      context "with a bad date" do
+        let(:csv) { "Date/Heure,Lieux\nbientôt,Cuisine\n" }
+
+        it "reports the error in French" do
+          expect(import.errors_by_row)
+            .to eq("2" => [I18n.t("csv.errors.meals/meal.invalid_served_at", str: "bientôt", locale: :fr)])
+        end
+      end
+    end
+
+    context "with export-only headers" do
+      let!(:calendar) { create(:calendar, name: "Dining Room", meal_hostable: true) }
+      let!(:formula) { create(:meal_formula, is_default: true, parts_attrs: [{type: "Adult"}]) }
+      let(:csv) do
+        prepare_fixture("meals/import/export_only_headers.csv",
+          calendar_name: [calendar.name], type_name: [formula.types.first.name])
+      end
+
+      it "ignores the export-only columns but still reports genuinely bad ones" do
+        expect(import.errors_by_row).to eq(
+          "1" => ["Invalid column headers: Diners: Nonexistent, Junk"]
+        )
+      end
+    end
+
+    context "with a file produced by the meal CSV exporter" do
+      let!(:calendar) { create(:calendar, name: "Dining Room", meal_hostable: true) }
+      let!(:formula) { create(:meal_formula, :with_two_roles, is_default: true) }
+      let!(:asst_cook) { create(:user) }
+      let!(:meals) do
+        [
+          create(:meal, :with_menu, formula: formula, calendars: [calendar], community: community,
+            communities: [community], asst_cooks: [asst_cook], served_at: "2019-01-31 12:00"),
+          create(:meal, formula: formula, calendars: [calendar], community: community,
+            communities: [community, other_community], served_at: "2019-02-05 18:00")
+        ]
+      end
+      let(:csv) do
+        Meals::MealCsvExporter.new(Meals::Meal.hosted_by(community).oldest_first, community: community,
+          policy: Meals::MealPolicy.new(user, Meals::Meal.new(community: community))).to_csv
+      end
+
+      it "round trips with no errors and no new meals" do
+        expect { import }.not_to change(Meals::Meal, :count)
+        expect(import.errors_by_row).to eq({})
+        meals.each(&:reload)
+        expect(meals[0].calendars).to eq([calendar])
+        expect(meals[0].formula).to eq(formula)
+        expect(meals[0].assignments.map(&:user)).to contain_exactly(meals[0].head_cook, asst_cook)
+        expect(meals[1].communities).to contain_exactly(community, other_community)
+      end
+    end
+
+    context "with blank header columns" do
+      let!(:formula) { create(:meal_formula, is_default: true) }
+      let!(:calendar) { create(:calendar, name: "Large") }
+      let(:csv) { "Date/Time,Locations,,Head Cook,\n2019-01-31 12:00,Large,,,\n" }
+
+      it "ignores the blank columns" do
+        expect(import).to be_successful
+        expect(Meals::Meal.count).to eq(1)
+      end
+    end
+
     context "with missing required headers" do
       let!(:formula) { create(:meal_formula, name: "Foo") }
       let(:csv) { prepare_fixture("meals/import/missing_required_headers.csv") }
@@ -275,6 +371,116 @@ describe Meals::Import do
           expect(meal3.formula).to eq(formula)
           expect(meal3.head_cook).to eq(user2)
           expect(meal3.communities).to contain_exactly(community, other_community)
+        end
+      end
+
+      context "with update row that leaves attributes out" do
+        let!(:user1) { create(:user, first_name: "Pol", last_name: "Pum") }
+        let!(:user2) { create(:user, first_name: "Bil", last_name: "Bip") }
+        let!(:meal) do
+          create(:meal, served_at: "2019-02-01 12:00", calendars: [calendars[0]],
+            formula: formula2, head_cook: user1, communities: [community])
+        end
+
+        context "with no communities column" do
+          let(:csv) { "Date/Time,Locations,Head Cook,Action\n2019-02-01 12:00,Foo,Bil Bip,update\n" }
+
+          it "keeps the meal's communities" do
+            expect(import).to be_successful
+            meal.reload
+            expect(meal.head_cook).to eq(user2)
+            expect(meal.communities).to contain_exactly(community)
+          end
+        end
+
+        context "with blank communities cell" do
+          let(:csv) { "Date/Time,Locations,Communities,Action\n2019-02-01 12:00,Foo,,update\n" }
+
+          it "keeps the meal's communities" do
+            expect(import).to be_successful
+            expect(meal.reload.communities).to contain_exactly(community)
+          end
+        end
+
+        context "with no formula column" do
+          let(:csv) { "Date/Time,Locations,Head Cook,Action\n2019-02-01 12:00,Foo,Bil Bip,update\n" }
+
+          it "keeps the meal's formula" do
+            expect(import).to be_successful
+            expect(meal.reload.formula).to eq(formula2)
+          end
+        end
+
+        context "with blank formula cell" do
+          let(:csv) { "Date/Time,Locations,Formula,Action\n2019-02-01 12:00,Foo,,update\n" }
+
+          it "keeps the meal's formula" do
+            expect(import).to be_successful
+            expect(meal.reload.formula).to eq(formula2)
+          end
+        end
+      end
+
+      context "with update row that leaves worker roles out" do
+        let!(:two_role_formula) { create(:meal_formula, :with_two_roles, name: "Duo") }
+        let!(:head_cook) { create(:user, first_name: "Pol", last_name: "Pum") }
+        let!(:new_head_cook) { create(:user, first_name: "Bil", last_name: "Bip") }
+        let!(:asst_cooks) { create_list(:user, 2) }
+        let!(:meal) do
+          create(:meal, served_at: "2019-02-01 12:00", calendars: [calendars[0]],
+            formula: two_role_formula, head_cook: head_cook, asst_cooks: asst_cooks)
+        end
+
+        context "with only a head cook column" do
+          let(:csv) { "Date/Time,Locations,Head Cook,Action\n2019-02-01 12:00,Foo,Bil Bip,update\n" }
+
+          it "replaces the head cook and keeps the assistant cooks" do
+            expect(import).to be_successful
+            meal.reload
+            expect(meal.head_cook).to eq(new_head_cook)
+            expect(meal.assignments.map(&:user)).to match_array([new_head_cook, *asst_cooks])
+          end
+        end
+
+        context "with the current head cook" do
+          let(:csv) { "Date/Time,Locations,Head Cook,Action\n2019-02-01 12:00,Foo,Pol Pum,update\n" }
+
+          it "keeps the existing assignments rather than recreating them" do
+            ids = meal.assignments.map(&:id)
+            expect(import).to be_successful
+            expect(meal.reload.assignments.map(&:id)).to match_array(ids)
+          end
+        end
+
+        context "with blank head cook cell" do
+          let(:csv) { "Date/Time,Locations,Head Cook,Action\n2019-02-01 12:00,Foo,,update\n" }
+
+          it "clears the head cook and keeps the assistant cooks" do
+            expect(import).to be_successful
+            meal.reload
+            expect(meal.head_cook).to be_nil
+            expect(meal.assignments.map(&:user)).to match_array(asst_cooks)
+          end
+        end
+
+        context "with no role columns" do
+          let(:csv) { "Date/Time,Locations,Action\n2019-02-01 12:00,Foo,update\n" }
+
+          it "keeps all assignments" do
+            expect(import).to be_successful
+            expect(meal.reload.assignments.map(&:user)).to match_array([head_cook, *asst_cooks])
+          end
+        end
+
+        context "with a formula change to one lacking a kept role" do
+          let(:csv) { "Date/Time,Locations,Formula,Action\n2019-02-01 12:00,Foo,Pizza,update\n" }
+
+          it "changes the formula and keeps the assignments for the dropped role" do
+            expect(import).to be_successful
+            meal.reload
+            expect(meal.formula).to eq(formula2)
+            expect(meal.assignments.map(&:user)).to match_array([head_cook, *asst_cooks])
+          end
         end
       end
 

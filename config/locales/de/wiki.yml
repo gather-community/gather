@@ -1,0 +1,92 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+de:
+  wiki:
+    page_deleted: "Seite gelöscht." # MT
+    page_listing: "Liste der Wiki-Seiten" # MT
+    new_page: "Neue Wiki-Seite" # MT
+    help: "Wiki-Hilfe" # MT
+    editor:
+      autosaved: "Automatisch gespeichert: " # MT
+      bold: "Fett" # MT
+      fullscreen: "Vollbild" # MT
+      heading: "Überschrift" # MT
+      image: "Bild einfügen" # MT
+      italic: "Kursiv" # MT
+      lines:
+        one: "Zeilen: %{count}" # MT
+        other: "Zeilen: %{count}" # MT
+      link: "Link erstellen" # MT
+      ordered_list: "Nummerierte Liste" # MT
+      preview: "Vorschau" # MT
+      quote: "Zitat" # MT
+      side_by_side: "Nebeneinander" # MT
+      unordered_list: "Aufzählung" # MT
+      words:
+        one: "Wörter: %{count}" # MT
+        other: "Wörter: %{count}" # MT
+    pages:
+      history_table:
+        version: "Version" # MT
+        date: "Datum" # MT
+        author: "Autor" # MT
+        comment: "Kommentar" # MT
+        compare: "Auswahl vergleichen" # MT
+        return: "Zurück zur Seite" # MT
+      all:
+        title: "Liste der Wiki-Seiten" # MT
+      compare:
+        title: "Wiki-Vergleich: %{title}" # MT
+        differences: "Unterschiede zwischen Version %{old} und %{new}" # MT
+        versions_between: "Versionen zwischen %{old} und %{new}" # MT
+      edit:
+        title: "Wiki-Seite bearbeiten: %{title}" # MT
+      history:
+        title: "Wiki-Verlauf: %{title}" # MT
+      new:
+        title: "Neue Wiki-Seite" # MT
+      show:
+        wiki_home: "Wiki-Startseite" # MT
+    not_found_create: "Es gibt keine Wiki-Seite namens „%{title}“. Du kannst sie unten anlegen!" # MT
+    preview_notice: "Dies ist eine Vorschau. Um die Seite zu speichern oder weiter zu bearbeiten, nutze das Formular unten." # MT
+    revision_info: "Seite überarbeitet am %{time} von %{user}" # MT
+    revision_info_no_by: "Seite überarbeitet am %{time}" # MT
+    special_pages:
+      home:
+        title: "Wiki" # MT
+        content: |- # MT
+          Das ist die **Startseite deines Wikis**!
+
+          Auf der [[Beispielseite]] findest du Tipps, wie du sie mit nützlichen Informationen füllst!
+      sample:
+        title: "Beispielseite" # MT
+        content: |- # MT
+          Das ist eine Beispielseite im Wiki.
+
+          Klicke oben auf **Bearbeiten**, um zu sehen, wie diese Seite funktioniert! Keine Sorge, du kannst nichts kaputt machen!
+
+          ## Formatierung
+
+          Wiki-Seiten bearbeitest du mit **Markdown**, einer einfachen Art, saubere und ansprechende Inhalte zu erstellen, ohne eine spezielle Sprache lernen zu müssen. Mehr über Markdown erfährst du in der [Markdown-Formatierungshilfe](/about/markdown).
+
+          ## Links
+
+          Links auf andere Seiten sind sehr wichtig! Du kannst so auf andere **Wiki-Seiten** verlinken: [[Lustige Seite]].
+
+          Der Link oben ist (wahrscheinlich) rot. Das liegt daran, dass die Seite noch nicht existiert. Wenn du auf den Link klickst, kannst du die Seite anlegen. Dann wird der Link blau!
+
+          Wenn du als Linktext etwas anderes als den Seitentitel verwenden willst, kannst du [[Lustige Seite|das hier machen]].
+
+          Links auf externe Seiten sehen [so aus](http://example.com).
+
+          Eine URL als einfacher Text wird automatisch erkannt und in einen Link umgewandelt: https://gather.coop

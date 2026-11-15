@@ -7,6 +7,16 @@
     margin-right: 0;
   }
 
+  // The lower bar has a row to itself, so it can wrap when its lenses don't fit across, which happens
+  // in longer languages.
+  &.lower {
+    white-space: normal;
+
+    .form-control, .select2.select2-container {
+      margin-bottom: 5px;
+    }
+  }
+
   // Tablet and above
   @media screen and (min-width: $screen-sm-min) {
     .form-control, .select2.select2-container {
@@ -45,7 +55,7 @@
 
   // Tablet
   @media screen and (min-width: $screen-sm-min) and (max-width: $screen-sm-max) {
-    margin-bottom: 20px;
+    margin-bottom: 15px; // Plus the 5px under each lens in the lower bar.
 
     &.upper {
       display: none;
@@ -68,5 +78,18 @@
       display: block;
       margin-top: -5px;
     }
+  }
+}
+
+// The lens-bar controller adds .lenses-below when the lenses don't fit beside the page title on a desktop.
+// They then sit on their own row below it, as on a tablet.
+@media screen and (min-width: $screen-md-min) {
+  .title-and-buttons.lenses-below .form-inline.lens-bar.upper {
+    display: none;
+  }
+
+  .title-and-buttons.lenses-below + .form-inline.lens-bar.lower {
+    display: block;
+    margin-left: 0;
   }
 }

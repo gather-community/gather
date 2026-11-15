@@ -19,6 +19,8 @@ module Meals
 
     belongs_to :community, inverse_of: :restrictions
 
+    scope :active, -> { where(deactivated: false) }
+
     validates :contains, :absence, presence: true
 
     def deactivated?

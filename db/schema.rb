@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_15_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_15_120100) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -803,6 +803,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_15_120000) do
     t.index ["meal_signup_part_id", "meal_restriction_id"], name: "signup_part_restriction_index"
   end
 
+  create_table "meal_restrictions_users", id: false, force: :cascade do |t|
+    t.bigint "meal_restriction_id", null: false
+    t.bigint "user_id", null: false
+    t.index ["meal_restriction_id"], name: "index_meal_restrictions_users_on_meal_restriction_id"
+    t.index ["user_id", "meal_restriction_id"], name: "index_meal_restrictions_users_on_user_and_restriction", unique: true
+  end
+
   create_table "meal_roles", force: :cascade do |t|
     t.integer "cluster_id", null: false
     t.integer "community_id", null: false
@@ -1207,7 +1214,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_15_120000) do
     t.string "last_name", null: false
     t.datetime "last_sign_in_at", precision: nil
     t.inet "last_sign_in_ip"
-    t.jsonb "meal_restriction_ids", default: [], null: false
     t.text "medical"
     t.string "mobile_phone"
     t.string "paypal_email", limit: 255
@@ -1509,6 +1515,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_15_120000) do
   add_foreign_key "meal_resourcings", "meals"
   add_foreign_key "meal_restrictions", "clusters"
   add_foreign_key "meal_restrictions", "communities"
+  add_foreign_key "meal_restrictions_users", "meal_restrictions", on_delete: :cascade
+  add_foreign_key "meal_restrictions_users", "users", on_delete: :cascade
   add_foreign_key "meal_roles", "clusters"
   add_foreign_key "meal_roles", "communities"
   add_foreign_key "meal_signup_parts", "clusters"

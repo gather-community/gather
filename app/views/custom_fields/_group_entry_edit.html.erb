@@ -1,4 +1,3 @@
-<% flag = FeatureFlag.find_by(name: "restrictions")&.on? %>
 <div class="custom-fields">
   <% if (title = group_entry.label) && !local_assigns[:hide_title] %>
     <h3 class="form-section-header"><%= title %></h3>

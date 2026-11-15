@@ -387,7 +387,6 @@ describe UserPolicy do
         :photo_new_signed_id, :photo_destroy, :birthday_str, :child, :joined_on, :preferred_contact,
         :job_choosing_proxy_id, :allergies, :doctor, :medical, :school, :household_by_id,
         {privacy_settings: [:hide_photo_from_cluster]},
-        {meal_restriction_ids: []},
         {up_guardianships_attributes: %i[id guardian_id _destroy]}]
     end
     let(:normal_user_attribs) do
@@ -433,6 +432,14 @@ describe UserPolicy do
 
     context "normal user" do
       it_behaves_like "normal user"
+
+      context "with restrictions feature flag on" do
+        let!(:feature_flag) { create(:feature_flag, name: "restrictions", status: true) }
+
+        it "also allows meal restrictions" do
+          expect(subject).to match_array(normal_user_attribs << {meal_restriction_ids: []})
+        end
+      end
 
       context "with custom fields defined on community" do
         let(:community_with_user_custom_fields) do

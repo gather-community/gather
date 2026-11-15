@@ -93,10 +93,11 @@
                 </tr>
               <% end %>
             <% end %>
-            <% if user.meal_restriction_ids.any? %>
+            <% if FeatureFlag.lookup("restrictions").on?(current_user) &&
+                  (restrictions = user.active_meal_restrictions.to_a).any? %>
               <tr>
                 <td><%= User.human_attribute_name(:meal_restriction_ids) %></td>
-                <td><%= Gather::Collation.sort(user.meal_restrictions.map(&:absence)).join(", ") %></td>
+                <td><%= Gather::Collation.sort(restrictions.map(&:absence)).join(", ") %></td>
               </tr>
             <% end %>
             <% unless @user.custom_data.undefined? %>

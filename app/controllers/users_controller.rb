@@ -328,7 +328,7 @@ class UsersController < ApplicationController
     @max_photo_size = User.validators_on(:photo).detect { |v| v.is_a?(FileSizeValidator) }.options[:max]
     @member_types = People::MemberType.in_community(@user.community).by_name
     @meal_restrictions = Meals::Restriction.where(community: @user.community, deactivated: false)
-      .alpha_order(meal_restrictions: :contains)
+      .alpha_order(meal_restrictions: :absence)
   end
 
   def sample_user

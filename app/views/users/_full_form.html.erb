@@ -65,7 +65,7 @@
               <label>
                 <%= check_box_tag("user[meal_restriction_ids][]", restriction.id,
                                   user.meal_restriction_ids.include?(restriction.id)) %>
-                <%= restriction.contains %>
+                <%= restriction.absence %>
               </label>
             </div>
           <% end %>

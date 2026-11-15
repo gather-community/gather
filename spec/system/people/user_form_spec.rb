@@ -178,7 +178,7 @@ describe "user form", js: true, perform_jobs: true do
 
           scenario "selecting and deselecting a meal restriction" do
             visit(edit_path)
-            check("Gluten")
+            check("Gluten-free")
             click_button("Save")
 
             expect_success
@@ -186,8 +186,8 @@ describe "user form", js: true, perform_jobs: true do
             expect(page).to have_content("Gluten-free")
 
             visit(edit_path)
-            expect(page).to have_checked_field("Gluten")
-            uncheck("Gluten")
+            expect(page).to have_checked_field("Gluten-free")
+            uncheck("Gluten-free")
             click_button("Save")
 
             expect_success

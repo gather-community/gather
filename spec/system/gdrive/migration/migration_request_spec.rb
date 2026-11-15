@@ -15,6 +15,18 @@ describe "gdrive migration request" do
     use_subdomain(migration_request.operation.community.slug)
   end
 
+  context "when the link has expired" do
+    before { migration_request.update!(created_at: 31.days.ago) }
+
+    scenario "it says so and doesn't open the request" do
+      visit(gdrive_migration_request_path(token: migration_request.token))
+      expect(page).to have_content("This Link Has Expired")
+      expect(page).to have_content("stop working 30 days after they're sent")
+      expect(page).to have_content(migration_request.operation.contact_name)
+      expect(migration_request.reload.status).to eq("new")
+    end
+  end
+
   scenario "mobile", mobile: true do
     visit(gdrive_migration_request_path(token: migration_request.token))
     expect(page).to have_content("It looks like you're using a mobile device.")

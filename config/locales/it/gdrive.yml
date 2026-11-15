@@ -159,6 +159,7 @@ it:
     item_error_types:
       inaccessible: "Non accessibile" # MT
       not_shareable: "Non condivisibile" # MT
+    request_status_expired: "%{status}, link scaduto" # MT
     request_statuses:
       new: "Nuova" # MT
       opened: "Aperta" # MT
@@ -261,6 +262,12 @@ it:
           name: "Nome" # MT
           modified: "Modificato" # MT
           file_icon: "Icona del file" # MT
+        expired:
+          heading: "Questo link è scaduto" # MT
+          expired:
+            one: "I link per spostare i file nel Drive condiviso della comunità smettono di funzionare %{count} giorno dopo l'invio." # MT
+            other: "I link per spostare i file nel Drive condiviso della comunità smettono di funzionare %{count} giorni dopo l'invio." # MT
+          contact_html: "Se hai ancora file da spostare, contatta %{name} all'indirizzo %{email}." # MT
         opted_out:
           heading: "Hai rinunciato" # MT
           opted_out: "Hai rinunciato a partecipare alla riorganizzazione dei file di Google Drive di %{community}." # MT

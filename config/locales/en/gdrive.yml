@@ -147,6 +147,7 @@ en:
     item_error_types:
       inaccessible: "Inaccessible"
       not_shareable: "Not shareable"
+    request_status_expired: "%{status}, link expired"
     request_statuses:
       new: "New"
       opened: "Opened"
@@ -249,6 +250,12 @@ en:
           name: "Name"
           modified: "Modified"
           file_icon: "File icon"
+        expired:
+          heading: "This Link Has Expired"
+          expired:
+            one: "Links for moving files into the community's shared drive stop working %{count} day after they're sent."
+            other: "Links for moving files into the community's shared drive stop working %{count} days after they're sent."
+          contact_html: "If you still have files to move, please contact %{name} at %{email}."
         opted_out:
           heading: "Opted Out"
           opted_out: "You have opted out of %{community}'s effort to reorganize its Google Drive files."

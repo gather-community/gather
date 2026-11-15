@@ -8,6 +8,7 @@
 #  cluster_id           :bigint           not null
 #  created_at           :datetime         not null
 #  error_count          :integer          default(0), not null
+#  expired_at           :datetime
 #  file_count           :integer          not null
 #  file_drop_drive_id   :string(128)
 #  file_drop_drive_name :string(128)
@@ -21,7 +22,13 @@
 module GDrive
   module Migration
     class Request < ApplicationRecord
+      # A request's link stops working this long after it's sent, and its file drop drive is removed.
+      EXPIRES_AFTER = 30.days
+
       acts_as_tenant :cluster
+
+      # Requests old enough to expire that haven't been cleaned up yet.
+      scope :due_to_expire, -> { where(expired_at: nil).where(created_at: ...EXPIRES_AFTER.ago) }
 
       belongs_to :operation, class_name: "GDrive::Migration::Operation", inverse_of: :requests
 
@@ -30,7 +37,12 @@ module GDrive
       delegate :config, to: :operation
 
       def active?
-        new? || opened?
+        (new? || opened?) && !expired?
+      end
+
+      # True as soon as the link is old enough, even before the nightly job has cleaned up.
+      def expired?
+        expired_at.present? || created_at < EXPIRES_AFTER.ago
       end
 
       def new?

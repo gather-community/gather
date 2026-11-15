@@ -159,6 +159,7 @@ nb:
     item_error_types:
       inaccessible: "Ikke tilgjengelig" # MT
       not_shareable: "Kan ikke deles" # MT
+    request_status_expired: "%{status}, lenken har utløpt" # MT
     request_statuses:
       new: "Ny" # MT
       opened: "Åpnet" # MT
@@ -261,6 +262,12 @@ nb:
           name: "Navn" # MT
           modified: "Endret" # MT
           file_icon: "Filikon" # MT
+        expired:
+          heading: "Denne lenken har utløpt" # MT
+          expired:
+            one: "Lenker for å flytte filer til fellesskapets delte disk slutter å virke %{count} dag etter at de er sendt." # MT
+            other: "Lenker for å flytte filer til fellesskapets delte disk slutter å virke %{count} dager etter at de er sendt." # MT
+          contact_html: "Hvis du fortsatt har filer som skal flyttes, kan du kontakte %{name} på %{email}." # MT
         opted_out:
           heading: "Meldt ut" # MT
           opted_out: "Du har meldt deg ut av arbeidet med å omorganisere Google Drive-filene til %{community}." # MT

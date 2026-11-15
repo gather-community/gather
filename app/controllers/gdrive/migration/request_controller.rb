@@ -46,9 +46,11 @@ module GDrive
 
       def load_and_check_request
         @migration_request = Request.find_by!(token: params[:token])
-        @migration_request.update!(status: "opened") if @migration_request.new?
         @operation = @migration_request.operation
         @community = @operation.community
+        # Rendering here stops the action, so an expired link can't be used to opt out or back in.
+        return render("expired", status: :gone) if @migration_request.expired?
+        @migration_request.update!(status: "opened") if @migration_request.new?
       end
 
       def ensure_community

@@ -8,6 +8,7 @@
 #  cluster_id           :bigint           not null
 #  created_at           :datetime         not null
 #  error_count          :integer          default(0), not null
+#  expired_at           :datetime
 #  file_count           :integer          not null
 #  file_drop_drive_id   :string(128)
 #  file_drop_drive_name :string(128)

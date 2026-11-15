@@ -104,6 +104,13 @@ sv:
         cancelled: "inloggningen avbröts" # MT
         session_expired: "din inloggningssession har gått ut. Försök igen" # MT
         unexpected: "ett okänt fel inträffade. Administratörerna har meddelats" # MT
+      google_id_change:
+        changed: "Du loggar nu in på Gather med Google-kontot %{google_id}." # MT
+        unchanged: "Du använder redan Google-kontot %{google_id} med Gather." # MT
+        taken: "Google-kontot %{google_id} används redan av en annan medlem i Gather, så ditt Google-id ändrades inte." # MT
+        no_email: "Google lämnade ingen e-postadress, så ditt Google-id ändrades inte." # MT
+        not_permitted: "Bara medlemmen själv kan ändra sitt Google-id." # MT
+        not_changed: "Ditt Google-id ändrades inte." # MT
     deletion:
       blocked_intro: "Det här kan inte raderas permanent än:" # MT
       confirmation_mismatch: "Bekräftelsetexten stämde inte, så inget raderades." # MT
@@ -118,6 +125,16 @@ sv:
     photo_of: "Foto av %{name}" # MT
     confirmation_resent: "Instruktionerna har skickats." # MT
     email_change_canceled: "Bytet av e-postadress har avbrutits." # MT
+    google_id_cleared: "Google-id borttaget." # MT
+    google_email_hint:
+      base: "E-postadressen till det Google-konto du loggar in med. Visas inte i medlemsförteckningen." # MT
+      base_gdrive: "E-postadressen till det Google-konto du loggar in och använder Google Drive med. Visas inte i medlemsförteckningen." # MT
+      change_html: "Om du vill använda ett annat Google-konto med Gather kan du %{link}." # MT
+      change_link: "byta det" # MT
+      link_html: "Om du vill koppla ett Google-konto kan du %{link}." # MT
+      link_link: "koppla ett" # MT
+      clear_html: "Du kan %{link} den här medlemmens Google-id." # MT
+      clear_link: "ta bort" # MT
     created: "Personen har skapats." # MT
     created_and_invited: "Personen har skapats och bjudits in." # MT
     updated: "Personen har uppdaterats." # MT

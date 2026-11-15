@@ -28,7 +28,7 @@ nb:
         job_reminder: "Påminnelser om mine oppgaver" # MT
         job_choosing_notice: "Beskjed om at oppgavevalget har åpnet" # MT
         statement_reminder: "Påminnelser når en betaling forfaller" # MT
-        account_access: "Tilbakestilling av passord, bekreftelse av e-postadresse og invitasjoner til å logge inn" # MT
+        account_access: "Tilbakestilling av passord, bekreftelse av e-postadresse, invitasjoner til å logge inn og endringer av Google-ID" # MT
         meal_message: "Meldinger og avlysninger fra et måltidsteam" # MT
         statement_notice: "Kontoutskrifter" # MT
         gdrive_migration_request: "Forespørsler om å hjelpe til med å flytte Google Drive-filene til fellesskapet mitt" # MT

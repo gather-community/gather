@@ -114,6 +114,7 @@ nb:
       reopen: "Er du sikker på at du vil åpne dette måltidet igjen? Det blir mulig å melde seg på." # MT
       unfinalize: "Er du sikker på at du vil oppheve sluttføringen av dette måltidet?" # MT
     user:
+      clear_google_id: "Er du sikker på at du vil fjerne Google-ID-en til «%{name}»? Vedkommende kan ikke logge inn med Google før en konto er koblet til igjen." # MT
       destroy: "Er du sikker på at du vil slette brukeren «%{name}»? Dette kan ikke angres." # MT
       deactivate: "Er du sikker på at du vil deaktivere brukeren «%{name}»? Personen blir da fjernet fra alle grupper hen er med i." # MT
       invite: "Dette sender en e-post til «%{name}» med instruksjoner for hvordan man logger inn. Fortsette?" # MT

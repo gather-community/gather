@@ -101,6 +101,13 @@ es:
         cancelled: "se canceló el inicio de sesión" # MT
         session_expired: "tu sesión de inicio de sesión caducó. Inténtalo de nuevo" # MT
         unexpected: "se produjo un error desconocido. Ya se avisó a los administradores" # MT
+      google_id_change:
+        changed: "A partir de ahora iniciarás sesión en Gather con la cuenta de Google %{google_id}." # MT
+        unchanged: "Ya estás usando la cuenta de Google %{google_id} con Gather." # MT
+        taken: "La cuenta de Google %{google_id} ya la usa otro miembro de Gather, así que tu ID de Google no se ha cambiado." # MT
+        no_email: "Google no proporcionó una dirección de correo, así que tu ID de Google no se ha cambiado." # MT
+        not_permitted: "Solo el propio miembro puede cambiar su ID de Google." # MT
+        not_changed: "Tu ID de Google no se ha cambiado." # MT
     deletion:
       blocked_intro: "Esto aún no se puede eliminar definitivamente:" # MT
       confirmation_mismatch: "El texto de confirmación no coincidía, así que no se eliminó nada." # MT
@@ -115,6 +122,16 @@ es:
     photo_of: "Foto de %{name}" # MT
     confirmation_resent: "Instrucciones enviadas." # MT
     email_change_canceled: "Cambio de correo cancelado." # MT
+    google_id_cleared: "ID de Google eliminado." # MT
+    google_email_hint:
+      base: "La dirección de correo vinculada a la cuenta de Google con la que inicias sesión. No se muestra en el directorio." # MT
+      base_gdrive: "La dirección de correo vinculada a la cuenta de Google con la que inicias sesión y usas Google Drive. No se muestra en el directorio." # MT
+      change_html: "Si quieres usar otra cuenta de Google con Gather, puedes %{link}." # MT
+      change_link: "cambiarla" # MT
+      link_html: "Si quieres vincular una cuenta de Google, puedes %{link}." # MT
+      link_link: "vincular una" # MT
+      clear_html: "Puedes %{link} el ID de Google de este miembro." # MT
+      clear_link: "eliminar" # MT
     created: "Persona creada." # MT
     created_and_invited: "Persona creada e invitada." # MT
     updated: "Persona actualizada." # MT

@@ -85,6 +85,15 @@ it:
     reset_password_instructions:
       use_link: "Abbiamo ricevuto una richiesta di reimpostazione della tua password. Per procedere, usa questo link:" # MT
       ignore: "Se non hai fatto tu questa richiesta, ignora questa email e la tua password resterà invariata." # MT
+    google_id_changed:
+      subject: "Il tuo ID Google è stato cambiato" # MT
+      changed: "L'account Google con cui accedi a Gather è stato cambiato da %{old} a %{new}." # MT
+      linked: "L'account Google %{new} è ora collegato al tuo account Gather, quindi puoi usarlo per accedere." # MT
+      not_you: "Se non hai fatto tu questa modifica, contatta un amministratore della tua comunità." # MT
+    google_id_cleared:
+      subject: "Il tuo ID Google è stato rimosso" # MT
+      cleared: "Un amministratore ha rimosso l'account Google collegato al tuo account Gather." # MT
+      still_sign_in: "Puoi ancora accedere con la tua password, oppure collegare un account Google dal tuo profilo." # MT
     sign_in_invitation:
       subject: "Istruzioni per accedere a Gather" # MT
       invited: "Sei stato invitato ad accedere a Gather, il sistema di gestione che usa la comunità %{community}!" # MT

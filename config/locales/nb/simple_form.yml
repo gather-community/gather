@@ -175,7 +175,6 @@ nb:
         joined_on: "Omtrent når du ble med i fellesskapet" # MT
         job_choosing_proxy_id: "En person utenfor husstanden din som kan melde deg på oppgaver. Medlemmer av husstanden kan allerede gjøre dette som standard." # MT
         email: "E-postadressen du helst vil kontaktes på. Brukes også til å logge inn med passord." # MT
-        google_email: "E-postadressen til Google-kontoen som brukes til innlogging. Vises ikke i medlemslisten. Spør en <a href='/roles'>administrator</a> hvis den må endres." # MT
         paypal_email: "E-postadressen til PayPal-kontoen din. Brukes til refusjoner til kokker. La feltet stå tomt for å bruke hovedadressen din ovenfor." # MT
         full_access: "Barn uten full tilgang kan ikke logge inn i Gather, men vises i medlemslisten. Barn med full tilgang regnes som voksne ved fakturering." # MT
         certify_13_or_older: "Barn må være 13 år eller eldre for å logge inn i Gather." # MT

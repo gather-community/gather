@@ -53,7 +53,8 @@ module Notifications
     KINDS = [
       Kind.new(key: :account_access, type: :required, section: :account,
         mailer_actions: %w[AuthMailer#reset_password_instructions AuthMailer#cant_reset_password
-          AuthMailer#confirmation_instructions AuthMailer#sign_in_invitation]),
+          AuthMailer#confirmation_instructions AuthMailer#sign_in_invitation
+          AuthMailer#google_id_changed AuthMailer#google_id_cleared]),
 
       Kind.new(key: :meal_reminder, type: :configurable, section: :meals,
         mailer_actions: %w[MealMailer#meal_reminder]),

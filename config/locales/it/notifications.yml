@@ -28,7 +28,7 @@ it:
         job_reminder: "Promemoria per i miei incarichi" # MT
         job_choosing_notice: "Avvisi di apertura della scelta degli incarichi" # MT
         statement_reminder: "Promemoria quando un pagamento è in scadenza" # MT
-        account_access: "Reimpostazioni della password, conferme dell'email e inviti ad accedere" # MT
+        account_access: "Reimpostazioni della password, conferme dell'email, inviti ad accedere e modifiche dell'ID Google" # MT
         meal_message: "Messaggi e avvisi di annullamento dalla squadra di un pasto" # MT
         statement_notice: "Estratti conto" # MT
         gdrive_migration_request: "Richieste di aiuto per spostare i file di Google Drive della mia comunità" # MT

@@ -114,6 +114,7 @@ sv:
       reopen: "Vill du verkligen öppna måltiden igen? Nya anmälningar tillåts." # MT
       unfinalize: "Vill du verkligen ångra slutförandet av måltiden?" # MT
     user:
+      clear_google_id: "Vill du verkligen ta bort Google-id:t för ”%{name}”? Personen kan inte logga in med Google förrän ett konto kopplas igen." # MT
       destroy: "Vill du verkligen radera personen ”%{name}”? Det går inte att ångra." # MT
       deactivate: "Vill du verkligen inaktivera personen ”%{name}”? Personen tas bort från alla grupper hen är med i." # MT
       invite: "Ett mejl med instruktioner för att logga in skickas till ”%{name}”. Fortsätta?" # MT

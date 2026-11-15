@@ -73,6 +73,15 @@ en:
     reset_password_instructions:
       use_link: "We received a request to reset your password. To do so, please use this link:"
       ignore: "If you did not make this request, simply ignore this email and your password will remain unchanged."
+    google_id_changed:
+      subject: "Your Google ID Was Changed"
+      changed: "The Google account you use to sign in to Gather was changed from %{old} to %{new}."
+      linked: "The Google account %{new} is now linked to your Gather account, so you can use it to sign in."
+      not_you: "If you didn't make this change, contact a community admin."
+    google_id_cleared:
+      subject: "Your Google ID Was Removed"
+      cleared: "An administrator removed the Google account linked to your Gather account."
+      still_sign_in: "You can still sign in with your password, or link a Google account from your profile."
     sign_in_invitation:
       subject: "Instructions for Signing in to Gather"
       invited: "You have been invited to sign in to Gather, %{community}'s community management system!"

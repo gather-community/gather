@@ -104,6 +104,13 @@ fi:
         cancelled: "kirjautuminen peruttiin" # MT
         session_expired: "kirjautumisistuntosi vanheni. Yritä uudelleen" # MT
         unexpected: "tapahtui tuntematon virhe. Ylläpitäjille on ilmoitettu" # MT
+      google_id_change:
+        changed: "Kirjaudut nyt Gatheriin Google-tilillä %{google_id}." # MT
+        unchanged: "Käytät jo Google-tiliä %{google_id} Gatherissa." # MT
+        taken: "Google-tili %{google_id} on jo toisen Gather-jäsenen käytössä, joten Google-tunnustasi ei vaihdettu." # MT
+        no_email: "Google ei antanut sähköpostiosoitetta, joten Google-tunnustasi ei vaihdettu." # MT
+        not_permitted: "Vain jäsen itse voi vaihtaa Google-tunnuksensa." # MT
+        not_changed: "Google-tunnustasi ei vaihdettu." # MT
     deletion:
       blocked_intro: "Tätä ei voi vielä poistaa pysyvästi:" # MT
       confirmation_mismatch: "Vahvistusteksti ei täsmännyt, joten mitään ei poistettu." # MT
@@ -118,6 +125,16 @@ fi:
     photo_of: "Kuva: %{name}" # MT
     confirmation_resent: "Ohjeet lähetetty." # MT
     email_change_canceled: "Sähköpostiosoitteen vaihto peruttu." # MT
+    google_id_cleared: "Google-tunnus poistettu." # MT
+    google_email_hint:
+      base: "Sen Google-tilin sähköpostiosoite, jolla kirjaudut. Ei näy jäsenluettelossa." # MT
+      base_gdrive: "Sen Google-tilin sähköpostiosoite, jolla kirjaudut ja käytät Google Drivea. Ei näy jäsenluettelossa." # MT
+      change_html: "Jos haluat käyttää Gatherissa toista Google-tiliä, voit %{link}." # MT
+      change_link: "vaihtaa sen" # MT
+      link_html: "Jos haluat yhdistää Google-tilin, voit %{link}." # MT
+      link_link: "yhdistää sellaisen" # MT
+      clear_html: "Voit %{link} tämän jäsenen Google-tunnuksen." # MT
+      clear_link: "poistaa" # MT
     created: "Käyttäjä luotu." # MT
     created_and_invited: "Käyttäjä luotu ja kutsuttu." # MT
     updated: "Käyttäjä päivitetty." # MT

@@ -16,7 +16,7 @@ en:
         job_reminder: "Reminders for my jobs"
         job_choosing_notice: "Notices that job choosing is open"
         statement_reminder: "Reminders when a payment is due"
-        account_access: "Password resets, email confirmations, and sign-in invitations"
+        account_access: "Password resets, email confirmations, sign-in invitations, and Google ID changes"
         meal_message: "Messages and cancellation notices from a meal team"
         statement_notice: "Account statements"
         gdrive_migration_request: "Requests to help move my community's Google Drive files"

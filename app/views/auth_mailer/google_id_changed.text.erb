@@ -1,0 +1,9 @@
+<%= @user.greeting %>
+
+<%- if @old_google_email.present? -%>
+<%= t(".changed", old: @old_google_email, new: @user.google_email) %>
+<%- else -%>
+<%= t(".linked", new: @user.google_email) %>
+<%- end -%>
+
+<%= t(".not_you") %>

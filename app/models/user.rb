@@ -320,6 +320,29 @@ class User < ApplicationRecord
     save(validate: false)
   end
 
+  # Links the user to a different Google account, from a successful Google sign-in.
+  # Skips validations, like update_for_oauth!, so an unrelated problem elsewhere on an old record can't
+  # block it. The unique index on google_email still stops two users sharing an account; callers check
+  # for that first so they can say so.
+  def change_google_id!(auth)
+    self.google_email = auth.info[:email]
+    self.provider = "google_oauth2"
+    self.uid = auth.uid
+    save!(validate: false)
+  end
+
+  def clear_google_id!
+    self.google_email = nil
+    self.provider = nil
+    self.uid = nil
+    save!(validate: false)
+  end
+
+  # Whether a user other than this one is linked to the given Google account, in any cluster.
+  def google_id_taken?(google_email)
+    ActsAsTenant.without_tenant { User.where.not(id: id).exists?(google_email: google_email) }
+  end
+
   def name
     full = "#{first_name} #{last_name}"
     active? ? full : I18n.t("common.with_inactive", name: full)

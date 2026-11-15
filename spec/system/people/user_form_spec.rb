@@ -172,16 +172,27 @@ describe "user form", js: true, perform_jobs: true do
 
         context "with meal restrictions feature enabled" do
           let!(:feature_flag) { create(:feature_flag, name: "restrictions", status: true) }
-          let!(:restriction) { create(:restriction, contains: "Gluten", absence: "Gluten-free",
-                                                    community: user.community) }
+          let!(:restriction) do
+            create(:restriction, contains: "Gluten", absence: "Gluten-free", community: user.community)
+          end
 
-          scenario "selecting a meal restriction and verifying it appears on show page" do
+          scenario "selecting and deselecting a meal restriction" do
             visit(edit_path)
             check("Gluten")
             click_button("Save")
 
             expect_success
+            expect(page).to have_content("Dietary Restrictions")
             expect(page).to have_content("Gluten-free")
+
+            visit(edit_path)
+            expect(page).to have_checked_field("Gluten")
+            uncheck("Gluten")
+            click_button("Save")
+
+            expect_success
+            expect(page).not_to have_content("Dietary Restrictions")
+            expect(page).not_to have_content("Gluten-free")
           end
         end
 

@@ -56,8 +56,8 @@
     <%= f.input :paypal_email %>
     <%= f.input :school if @user.child? %>
     <%= f.input :allergies %>
-    <% if FeatureFlag.find_by(name: "restrictions")&.on? && @meal_restrictions.any? %>
-      <%= f.input :meal_restriction_ids, label: "Meal Restrictions" do %>
+    <% if FeatureFlag.lookup("restrictions").on?(current_user) && @meal_restrictions.any? %>
+      <%= f.input :meal_restriction_ids do %>
         <%= hidden_field_tag "user[meal_restriction_ids][]", "" %>
         <div class="boxes flowing-columns-max-2">
           <% @meal_restrictions.each do |restriction| %>

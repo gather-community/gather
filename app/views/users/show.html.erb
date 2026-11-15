@@ -95,8 +95,8 @@
             <% end %>
             <% if user.meal_restriction_ids.any? %>
               <tr>
-                <td>Meal Restrictions</td>
-                <td><%= user.meal_restrictions.map(&:absence).sort.join(", ") %></td>
+                <td><%= User.human_attribute_name(:meal_restriction_ids) %></td>
+                <td><%= Gather::Collation.sort(user.meal_restrictions.map(&:absence)).join(", ") %></td>
               </tr>
             <% end %>
             <% unless @user.custom_data.undefined? %>

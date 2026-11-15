@@ -123,6 +123,7 @@ fi:
         paypal_email: "PayPal-sähköposti" # MT
         school: "Koulu" # MT
         allergies: "Allergiat" # MT
+        meal_restriction_ids: "Ruokavaliorajoitukset" # MT
         doctor: "Lääkärin tiedot" # MT
         medical: "Terveystiedot" # MT
         remember_me: "Pysy kirjautuneena selaimen sulkemisen jälkeen" # MT

@@ -157,4 +157,42 @@ describe GDrive::RefreshSyncedPermissionsJob do
       end
     end
   end
+
+  context "when a user's google_email has changed since their permission was recorded" do
+    # perm1 was recorded for user1's old address. user1's current address is user1@example.com.
+    let!(:perm1) do
+      create(:gdrive_synced_permission, user: user1, item: item, access_level: "writer",
+        external_id: "oldAccountPermId", google_email: "old-address@example.com")
+    end
+
+    before do
+      list = Google::Apis::DriveV3::PermissionList.new(permissions: [
+        Google::Apis::DriveV3::Permission.new(id: google_permission_id, type: "user",
+          email_address: "user1@example.com", role: "writer")
+      ])
+      allow_any_instance_of(GDrive::Wrapper).to receive(:list_permissions).and_return(list)
+    end
+
+    context "and the permission found belongs to a different Google account" do
+      let(:google_permission_id) { "newAccountPermId" }
+
+      # Repointing the record would leave the old account's access untracked, so the sync could
+      # never remove it.
+      it "leaves the record pointing at the old account's permission" do
+        perform_job
+        expect(perm1.reload).to have_attributes(external_id: "oldAccountPermId",
+          google_email: "old-address@example.com")
+      end
+    end
+
+    context "and the permission found is the same Google account under its new address" do
+      let(:google_permission_id) { "oldAccountPermId" }
+
+      it "records the new address" do
+        perform_job
+        expect(perm1.reload).to have_attributes(external_id: "oldAccountPermId",
+          google_email: "user1@example.com")
+      end
+    end
+  end
 end

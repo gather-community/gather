@@ -52,6 +52,20 @@ describe "gdrive auth callback" do
     end
   end
 
+  context "with inactive operation" do
+    before { operation.update!(active: false) }
+
+    it "accepts the notification but doesn't scan" do
+      expect do
+        post(path, headers: {
+          "x-goog-channel-id" => "12cd",
+          "x-goog-channel-token" => "56ab"
+        })
+        expect(response.status).to eq(204)
+      end.not_to have_enqueued_job(GDrive::Migration::ChangesScanJob)
+    end
+  end
+
   context "with missing operation" do
     it "returns 404" do
       expect do

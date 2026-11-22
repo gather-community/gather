@@ -11,8 +11,11 @@ module GDrive
       end
     end
 
+    # Uses the same rule as the scope, and so the permission sync. Group#member? would be looser: it
+    # counts everyone in an "everybody" group, whatever their community, and ignores whether the
+    # group or the user is active.
     def show?
-      item.groups.any? { |g| g.member?(user) }
+      Scope.new(user, Item).resolve.exists?(id: item.id)
     end
 
     def new?

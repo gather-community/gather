@@ -6,7 +6,7 @@ gem "active_model_serializers", "~> 0.10.16"
 gem "acts_as_list", "~> 1.2"
 gem "acts_as_tenant", "~> 2.2"
 gem "attribute_normalizer", "~> 1.2"
-gem "aws-sdk-s3", "~> 1.235", require: false
+gem "aws-sdk-s3", "~> 1.245", require: false
 gem "babosa", "~> 1.0"
 gem "bootsnap", "~> 1.26"
 gem "bootstrap-kaminari-views", "~> 0.0"
@@ -37,7 +37,7 @@ gem "googleauth", "~> 1.17"
 gem "hcaptcha", "~> 7.1"
 gem "hirb", "~> 0.7"
 gem "i18n-js", "~> 4.2"
-gem "icalendar", "~> 2.13"
+gem "icalendar", "~> 2.14"
 gem "ice_cube", "~> 0.16"
 gem "image_processing", "~> 2.2"
 gem "inline_svg", "~> 1.8"
@@ -52,7 +52,7 @@ gem "omniauth-rails_csrf_protection", "~> 2.0" # Related to CVE 2015 9284
 gem "pg", "~> 1.7"
 gem "phony_rails", "~> 0.12"
 gem "psych", "< 6"
-gem "puma", "~> 8.0"
+gem "puma", "~> 8.1"
 gem "pundit", "~> 2.5"
 gem "rails", "~> 8.1.0"
 gem "rails-backbone", "~> 1.2"
@@ -98,12 +98,12 @@ group :development, :test do
   gem "debug", require: false
   gem "ed25519", ">= 1.2", "< 2.0" # For Capistrano
   gem "erb_lint", "~> 0.9", require: false
-  gem "i18n-tasks", "~> 1.1", require: false
+  gem "i18n-tasks", "~> 1.2", require: false
   gem "launchy", "~> 3.1" # For opening screenshots
   gem "pry-nav", "~> 1.0"
   gem "pry-rails", "~> 0.3"
   gem "pry", "~> 0.14"
-  gem "rspec-rails", "~> 8.0"
+  gem "rspec-rails", "~> 8.1"
   gem "rubocop-rails", "2.38.0"
   gem "rubocop", "~> 1.87"
   gem "selenium-webdriver", "~> 4.44"
@@ -111,7 +111,7 @@ group :development, :test do
   gem "standard", "~> 1.53"
   gem "thin", "~> 2.0"
   gem "vcr", "~> 6.4"
-  gem "webmock", "~> 3.34"
+  gem "webmock", "~> 3.37"
 
   # Great for debugging i18n paths. Uncomment temporarily when neeeded.
   # Adds a lot of junk to the log when not needed, so only uncomment if needed.
@@ -135,4 +135,4 @@ gem "turbo-rails", "~> 2.0"
 
 gem "money", "~> 7.1"
 
-gem "logtail-rails", "~> 0.3.0"
+gem "logtail-rails", "~> 0.3.1"

@@ -259,6 +259,34 @@ describe UserPolicy do
       end
     end
 
+    permissions :change_google_id? do
+      it "permits self only" do
+        expect(subject).to permit(user, user)
+        expect(subject).to permit(admin, admin)
+        expect(subject).not_to permit(user, other_user)
+        expect(subject).not_to permit(admin, user)
+        expect(subject).not_to permit(guardian, full_access_child)
+      end
+
+      it "permits a full access child changing their own" do
+        expect(subject).to permit(full_access_child, full_access_child)
+      end
+    end
+
+    permissions :clear_google_id? do
+      let(:record) { create(:user, google_email: "foo@gmail.com") }
+
+      it_behaves_like "permits admins but not regular users"
+
+      it "forbids self" do
+        expect(subject).not_to permit(record, record)
+      end
+
+      it "forbids admins when there's nothing to clear" do
+        expect(subject).not_to permit(admin, create(:user, google_email: nil))
+      end
+    end
+
     # Permission only governs whether the delete button renders; anonymization means shared
     # records (meals, wiki, events) no longer block deletion. Warn-only conditions (balance,
     # guardianship, last admin) live in People::UserDeletion.blockers, not here.
@@ -398,7 +426,7 @@ describe UserPolicy do
     let(:photographer_attribs) { %i[photo_new_signed_id photo_destroy] }
     let(:admin_attribs) do
       base_attribs + [
-        :google_email, :role_admin, :role_biller, :role_photographer,
+        :role_admin, :role_biller, :role_photographer,
         :role_calendar_coordinator, :role_meals_coordinator, :role_wikiist, :role_work_coordinator,
         {household_attributes: %i[id name garage_nums keyholders unit_num_and_suffix
           old_id old_name member_type_id]
@@ -407,7 +435,7 @@ describe UserPolicy do
     end
     let(:cluster_admin_attribs) do
       base_attribs + [
-        :google_email, :role_cluster_admin, :role_admin, :role_biller, :role_photographer,
+        :role_cluster_admin, :role_admin, :role_biller, :role_photographer,
         :role_calendar_coordinator, :role_meals_coordinator, :role_wikiist, :role_work_coordinator,
         {household_attributes: %i[id name garage_nums keyholders unit_num_and_suffix
           old_id old_name member_type_id]

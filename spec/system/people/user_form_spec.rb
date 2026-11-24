@@ -64,7 +64,7 @@ describe "user form", js: true, perform_jobs: true do
 
         expect(page).to have_field("User is a child?", checked: false)
         expect(page).not_to have_field("User should have full access to the system?")
-        expect_full_access_fields(true)
+        expect_full_access_fields(true, new_record: true)
         expect(page).not_to have_content("Guardians")
 
         expect_no_image_and_drop_file("cooper.jpg")
@@ -95,10 +95,10 @@ describe "user form", js: true, perform_jobs: true do
         click_on("Create Child")
         expect(page).to have_field("User is a child?", checked: true)
         expect(page).to have_field("User should have full access to the system?", checked: false)
-        expect_full_access_fields(false)
+        expect_full_access_fields(false, new_record: true)
         expect(page).to have_content("Guardians")
         check("User should have full access to the system?")
-        expect_full_access_fields(true)
+        expect_full_access_fields(true, new_record: true)
         expect(page).to have_content("Guardians")
       end
 
@@ -363,9 +363,83 @@ describe "user form", js: true, perform_jobs: true do
     end
   end
 
-  def expect_full_access_fields(whether)
+  context "Google ID field" do
+    let(:google_user) { create(:user, google_email: "member@gmail.com") }
+
+    context "as the member themself" do
+      let(:actor) { google_user }
+
+      scenario "is read-only with a link to change it" do
+        visit(edit_user_path(google_user))
+        expect(page).to have_field("Google ID", with: "member@gmail.com", disabled: true)
+        expect(page).to have_content("The email address tied to the Google account used for sign-in. " \
+                                     "Not displayed in the directory.")
+        expect(page).to have_content("If you want to use a different Google account with Gather, " \
+                                     "you can change it.")
+        expect(page).to have_link("change it")
+        expect(page).not_to have_link("clear")
+      end
+
+      context "with Google Drive set up" do
+        before do
+          create(:gdrive_config, community: google_user.community)
+          create(:feature_flag, name: "gdrive", status: true)
+        end
+
+        scenario "mentions Google Drive" do
+          visit(edit_user_path(google_user))
+          expect(page).to have_content("used for sign-in and Google Drive")
+        end
+      end
+    end
+
+    context "as admin" do
+      let(:actor) { admin }
+
+      scenario "clears another member's Google ID" do
+        visit(edit_user_path(google_user))
+        expect(page).to have_field("Google ID", with: "member@gmail.com", disabled: true)
+        expect(page).not_to have_link("change it")
+        expect(page).to have_content("You can clear this member's Google ID.")
+
+        emails = email_sent_by do
+          click_link("clear")
+          click_modal_button
+          expect(page).to have_success_alert("Google ID cleared.")
+        end
+        expect(page).to have_field("Google ID", with: "", disabled: true)
+        expect(page).not_to have_link("clear")
+        expect(google_user.reload.google_email).to be_nil
+        expect(emails.map(&:to)).to eq([[google_user.email]])
+        expect(emails[0].subject).to eq("Your Google ID Was Removed")
+      end
+
+      scenario "can't type in a Google ID" do
+        visit(edit_user_path(google_user))
+        fill_in("First Name", with: "Zorp")
+        click_button("Save")
+        expect_success
+        expect(google_user.reload.google_email).to eq("member@gmail.com")
+      end
+    end
+
+    context "as guardian of a full access child" do
+      let(:actor) { user }
+      let(:child) { create(:user, :full_access_child, guardians: [user], google_email: "kid@gmail.com") }
+
+      scenario "shows the field with no links" do
+        visit(edit_user_path(child))
+        expect(page).to have_field("Google ID", with: "kid@gmail.com", disabled: true)
+        expect(page).not_to have_link("change it")
+        expect(page).not_to have_link("clear")
+      end
+    end
+  end
+
+  # The Google ID field isn't on the new-user form: only the member can set it, via Google sign-in.
+  def expect_full_access_fields(whether, new_record: false)
     if whether
-      expect(page).to have_field("Google ID")
+      expect(page).to have_field("Google ID", disabled: true) unless new_record
       expect(page).to have_field("Admin")
     else
       expect(page).not_to have_field("Google ID")

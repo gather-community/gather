@@ -110,6 +110,7 @@ fr:
       reopen: "Voulez-vous vraiment rouvrir ce repas ? De nouvelles inscriptions seront possibles." # MT
       unfinalize: "Voulez-vous vraiment annuler la finalisation de ce repas ?" # MT
     user:
+      clear_google_id: "Voulez-vous vraiment supprimer l'identifiant Google de « %{name} » ? Ce membre ne pourra plus se connecter avec Google tant qu'il n'aura pas associé un compte." # MT
       destroy: "Voulez-vous vraiment supprimer « %{name} » ? Cette action est irréversible." # MT
       deactivate: "Voulez-vous vraiment désactiver « %{name} » ? La personne sera retirée de tous ses groupes." # MT
       invite: "Un e-mail sera envoyé à « %{name} » avec les instructions pour se connecter. Continuer ?" # MT

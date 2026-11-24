@@ -28,7 +28,7 @@ nl:
         job_reminder: "Herinneringen voor mijn taken" # MT
         job_choosing_notice: "Berichten dat het kiezen van taken open is" # MT
         statement_reminder: "Herinneringen wanneer een betaling verschuldigd is" # MT
-        account_access: "Wachtwoordherstel, e-mailbevestigingen en uitnodigingen om in te loggen" # MT
+        account_access: "Wachtwoordherstel, e-mailbevestigingen, uitnodigingen om in te loggen en wijzigingen van de Google-ID" # MT
         meal_message: "Berichten en annuleringen van een maaltijdteam" # MT
         statement_notice: "Afschriften" # MT
         gdrive_migration_request: "Verzoeken om te helpen de Google Drive-bestanden van mijn gemeenschap te verplaatsen" # MT

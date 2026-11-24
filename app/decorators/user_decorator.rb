@@ -30,6 +30,16 @@ class UserDecorator < ApplicationDecorator
     active? ? first_name : I18n.t("common.with_inactive", name: first_name)
   end
 
+  # Hint for the Google ID field on the user form. The field itself is never editable: the member changes
+  # it through Google sign-in, and an admin can only clear it.
+  def google_email_hint
+    base = gdrive_set_up? ? h.t("users.google_email_hint.base_gdrive") : h.t("users.google_email_hint.base")
+    sentences = [base]
+    sentences << change_google_id_sentence if !h.impersonated_user && h.policy(object).change_google_id?
+    sentences << clear_google_id_sentence if h.policy(object).clear_google_id?
+    h.safe_join(sentences, " ")
+  end
+
   def birthday_formatted
     return nil unless object.birthday?
     l(birthday.date, format: birthday.format)
@@ -160,5 +170,34 @@ class UserDecorator < ApplicationDecorator
           action: "record-delete#confirm"
         })
     )
+  end
+
+  private
+
+  def gdrive_set_up?
+    community.gdrive_config.present? && FeatureFlag.lookup("gdrive").on?(h.current_user)
+  end
+
+  # POSTs straight to Google sign-in on the apex domain, like the landing page's button. The params go in
+  # the query string because OmniAuth only hands query params back to the callback. `select_account`
+  # makes Google show its account picker instead of reusing the account the browser is signed in to.
+  def change_google_id_sentence
+    url = h.user_google_oauth2_omniauth_authorize_url(host: Settings.url.host,
+      intent: People::Users::OmniauthCallbacksController::CHANGE_GOOGLE_ID_INTENT, prompt: "select_account")
+    if google_email.present?
+      link = h.link_to(h.t("users.google_email_hint.change_link"), url, method: :post, id: "change-google-id")
+      h.t("users.google_email_hint.change_html", link: link)
+    else
+      link = h.link_to(h.t("users.google_email_hint.link_link"), url, method: :post, id: "change-google-id")
+      h.t("users.google_email_hint.link_html", link: link)
+    end
+  end
+
+  def clear_google_id_sentence
+    link = h.link_to(h.t("users.google_email_hint.clear_link"), h.clear_google_id_user_path(object),
+      method: :delete, id: "clear-google-id",
+      data: {controller: "confirm", action: "confirm#check",
+             confirm_message_value: h.t("confirmations.user.clear_google_id", name: full_name)})
+    h.t("users.google_email_hint.clear_html", link: link)
   end
 end

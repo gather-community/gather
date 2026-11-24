@@ -28,7 +28,7 @@ fr:
         job_reminder: "Rappels pour mes tâches" # MT
         job_choosing_notice: "Avis d'ouverture du choix des tâches" # MT
         statement_reminder: "Rappels quand un paiement est dû" # MT
-        account_access: "Réinitialisations de mot de passe, confirmations d'adresse e-mail et invitations à se connecter" # MT
+        account_access: "Réinitialisations de mot de passe, confirmations d'adresse e-mail, invitations à se connecter et changements d'identifiant Google" # MT
         meal_message: "Messages et avis d'annulation d'une équipe de repas" # MT
         statement_notice: "Relevés de compte" # MT
         gdrive_migration_request: "Demandes d'aide pour déplacer les fichiers Google Drive de ma communauté" # MT

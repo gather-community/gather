@@ -6,8 +6,14 @@ module People
     class OmniauthCallbacksController < Devise::OmniauthCallbacksController
       skip_after_action :verify_pundit_authorization
 
+      # The intent param the "change it" link on the user form sends, so the callback links the account
+      # to the signed-in user instead of signing someone in.
+      CHANGE_GOOGLE_ID_INTENT = "change_google_id"
+
       def google_oauth2
         auth = request.env["omniauth.auth"]
+        return change_google_id(auth) if changing_google_id?
+
         invite_token = request.env["omniauth.params"]["state"].presence
         by_google_id = User.from_omniauth(auth) # May be nil
 
@@ -43,6 +49,8 @@ module People
       def failure
         error_type = request.env["omniauth.error.type"]
         Rails.logger.info("OAuth failed: #{error_type} #{failure_message}")
+        return google_id_change_failed(error_type) if changing_google_id?
+
         case error_type
         when :access_denied
           # User cancelled on Google's consent screen.
@@ -61,12 +69,59 @@ module People
 
       private
 
-      def report_unexpected_failure(error_type)
+      def changing_google_id?
+        request.env["omniauth.params"]&.dig("intent") == CHANGE_GOOGLE_ID_INTENT
+      end
+
+      # Links the signed-in user to the Google account they just picked. Never signs anyone in.
+      def change_google_id(auth)
+        return fail_with_reason(:session_expired) unless user_signed_in?
+
+        user = current_user
+        new_email = auth.info[:email].to_s.strip.downcase.presence
+        # An admin impersonating a member must not be able to link their own Google account to them.
+        if impersonated_user || !policy(user).change_google_id?
+          google_id_change_result(user, :error, :not_permitted)
+        elsif new_email.nil?
+          google_id_change_result(user, :error, :no_email)
+        elsif new_email == user.google_email
+          google_id_change_result(user, :notice, :unchanged, google_id: new_email)
+        elsif user.google_id_taken?(new_email)
+          google_id_change_result(user, :error, :taken, google_id: new_email)
+        else
+          apply_google_id_change(user, auth)
+          google_id_change_result(user, :success, :changed, google_id: new_email)
+        end
+      end
+
+      # The callback is on the apex domain, where no tenant is set. Sync listeners and the mail job need one.
+      def apply_google_id_change(user, auth)
+        old_email = user.google_email
+        ActsAsTenant.with_tenant(user.cluster) do
+          user.change_google_id!(auth)
+          AuthMailer.google_id_changed(user, old_email).deliver_later
+        end
+      end
+
+      def google_id_change_failed(error_type)
+        return fail_with_reason(:session_expired) unless user_signed_in?
+        # Cancelling on Google's screen or replaying the callback are normal; anything else gets reported.
+        expected = %i[access_denied csrf_detected].include?(error_type)
+        report_unexpected_failure(error_type, redirect: false) unless expected
+        google_id_change_result(current_user, :error, :not_changed)
+      end
+
+      def google_id_change_result(user, flash_type, key, **interpolations)
+        flash[flash_type] = t("people.users.google_id_change.#{key}", **interpolations)
+        redirect_to(url_in_community(user.community, edit_user_path(user)), allow_other_host: true)
+      end
+
+      def report_unexpected_failure(error_type, redirect: true)
         unless browser.bot?
           Gather::ErrorReporter.instance.report(StandardError.new("OAuth failure"),
             data: {error_type: error_type, failure_message: failure_message})
         end
-        fail_with_reason(:unexpected)
+        fail_with_reason(:unexpected) if redirect
       end
 
       def fail_with_reason(key, **interpolations)

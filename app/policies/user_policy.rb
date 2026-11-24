@@ -86,6 +86,17 @@ class UserPolicy < ApplicationPolicy
     update_info?
   end
 
+  # Only users themselves, through Google sign-in, so nobody can link someone else to an account
+  # they don't control. Guardians can't do it for a child because they can't sign in to Google as them.
+  def change_google_id?
+    self? && record.full_access?
+  end
+
+  # Admins can't set a Google ID, but they can remove one (e.g. to stop a compromised account signing in).
+  def clear_google_id?
+    active_admin? && record.google_email.present?
+  end
+
   # Only users themselves, so that a missed reminder can't be traced to someone else's change.
   def update_notification_prefs?
     self?
@@ -143,7 +154,6 @@ class UserPolicy < ApplicationPolicy
     # ID through here is safe.
     permitted << {household_attributes: [:id] + household_permitted}
 
-    permitted << :google_email if active_admin?
     # The email language only matters once other languages are turned on for the person.
     permitted << :locale if Gather::Locales.enabled?(record)
     grantable_roles.each { |r| permitted << :"role_#{r}" }

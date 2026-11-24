@@ -28,7 +28,7 @@ fi:
         job_reminder: "Muistutukset tehtävistäni" # MT
         job_choosing_notice: "Ilmoitukset tehtävien valinnan avautumisesta" # MT
         statement_reminder: "Muistutukset, kun maksu erääntyy" # MT
-        account_access: "Salasanan vaihdot, sähköpostiosoitteen vahvistukset ja kirjautumiskutsut" # MT
+        account_access: "Salasanan vaihdot, sähköpostiosoitteen vahvistukset, kirjautumiskutsut ja Google-tunnuksen muutokset" # MT
         meal_message: "Ateriatiimin viestit ja peruutusilmoitukset" # MT
         statement_notice: "Tiliotteet" # MT
         gdrive_migration_request: "Pyynnöt auttaa yhteisöni Google Drive -tiedostojen siirrossa" # MT

@@ -57,6 +57,7 @@ Rails.application.routes.draw do
       put :deactivate
       put :resend_email_confirmation
       delete :cancel_email_change
+      delete :clear_google_id, path: "clear-google-id"
       post :impersonate
       post :unimpersonate
     end

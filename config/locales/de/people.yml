@@ -104,6 +104,13 @@ de:
         cancelled: "die Anmeldung abgebrochen wurde" # MT
         session_expired: "deine Anmeldesitzung abgelaufen ist. Bitte versuche es noch einmal" # MT
         unexpected: "ein unbekannter Fehler aufgetreten ist. Die Admins wurden benachrichtigt" # MT
+      google_id_change:
+        changed: "Du meldest dich jetzt mit dem Google-Konto %{google_id} bei Gather an." # MT
+        unchanged: "Du verwendest das Google-Konto %{google_id} bereits mit Gather." # MT
+        taken: "Das Google-Konto %{google_id} wird bereits von einem anderen Gather-Mitglied verwendet. Deine Google-ID wurde daher nicht geändert." # MT
+        no_email: "Google hat keine E-Mail-Adresse übermittelt. Deine Google-ID wurde daher nicht geändert." # MT
+        not_permitted: "Nur das Mitglied selbst kann seine Google-ID ändern." # MT
+        not_changed: "Deine Google-ID wurde nicht geändert." # MT
     deletion:
       blocked_intro: "Das kann noch nicht endgültig gelöscht werden:" # MT
       confirmation_mismatch: "Der Bestätigungstext stimmte nicht überein, deshalb wurde nichts gelöscht." # MT
@@ -118,6 +125,16 @@ de:
     photo_of: "Foto von %{name}" # MT
     confirmation_resent: "Anleitung verschickt." # MT
     email_change_canceled: "Änderung der E-Mail-Adresse abgebrochen." # MT
+    google_id_cleared: "Google-ID entfernt." # MT
+    google_email_hint:
+      base: "Die E-Mail-Adresse des Google-Kontos, mit dem du dich anmeldest. Wird nicht im Verzeichnis angezeigt." # MT
+      base_gdrive: "Die E-Mail-Adresse des Google-Kontos, mit dem du dich anmeldest und Google Drive nutzt. Wird nicht im Verzeichnis angezeigt." # MT
+      change_html: "Wenn du ein anderes Google-Konto mit Gather verwenden möchtest, kannst du es %{link}." # MT
+      change_link: "ändern" # MT
+      link_html: "Wenn du ein Google-Konto verknüpfen möchtest, kannst du %{link}." # MT
+      link_link: "eins verknüpfen" # MT
+      clear_html: "Du kannst die Google-ID dieses Mitglieds %{link}." # MT
+      clear_link: "entfernen" # MT
     created: "Person erstellt." # MT
     created_and_invited: "Person erstellt und eingeladen." # MT
     updated: "Person aktualisiert." # MT

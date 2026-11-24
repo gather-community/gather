@@ -82,6 +82,15 @@ sv:
     reset_password_instructions:
       use_link: "Vi har fått en begäran om att återställa ditt lösenord. Använd den här länken för att göra det:" # MT
       ignore: "Om du inte har bett om detta kan du strunta i mejlet. Ditt lösenord ändras inte." # MT
+    google_id_changed:
+      subject: "Ditt Google-id har ändrats" # MT
+      changed: "Google-kontot du loggar in på Gather med har ändrats från %{old} till %{new}." # MT
+      linked: "Google-kontot %{new} är nu kopplat till ditt Gather-konto, så du kan logga in med det." # MT
+      not_you: "Om det inte var du som gjorde ändringen, kontakta en administratör i din gemenskap." # MT
+    google_id_cleared:
+      subject: "Ditt Google-id har tagits bort" # MT
+      cleared: "En administratör har tagit bort Google-kontot som var kopplat till ditt Gather-konto." # MT
+      still_sign_in: "Du kan fortfarande logga in med ditt lösenord, eller koppla ett Google-konto från din profil." # MT
     sign_in_invitation:
       subject: "Instruktioner för att logga in i Gather" # MT
       invited: "Du har bjudits in att logga in i Gather, systemet som %{community} använder för att hantera gemenskapen!" # MT

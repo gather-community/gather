@@ -104,6 +104,13 @@ it:
         cancelled: "l'accesso è stato annullato" # MT
         session_expired: "la tua sessione di accesso è scaduta. Riprova" # MT
         unexpected: "si è verificato un errore non specificato. Gli amministratori sono stati avvisati" # MT
+      google_id_change:
+        changed: "Ora accederai a Gather con l'account Google %{google_id}." # MT
+        unchanged: "Stai già usando l'account Google %{google_id} con Gather." # MT
+        taken: "L'account Google %{google_id} è già usato da un altro membro di Gather, quindi il tuo ID Google non è stato cambiato." # MT
+        no_email: "Google non ha fornito un indirizzo email, quindi il tuo ID Google non è stato cambiato." # MT
+        not_permitted: "Solo il membro stesso può cambiare il proprio ID Google." # MT
+        not_changed: "Il tuo ID Google non è stato cambiato." # MT
     deletion:
       blocked_intro: "Non è ancora possibile eliminarlo definitivamente:" # MT
       confirmation_mismatch: "Il testo di conferma non corrispondeva, quindi non è stato eliminato nulla." # MT
@@ -118,6 +125,16 @@ it:
     photo_of: "Foto di %{name}" # MT
     confirmation_resent: "Istruzioni inviate." # MT
     email_change_canceled: "Cambio di email annullato." # MT
+    google_id_cleared: "ID Google rimosso." # MT
+    google_email_hint:
+      base: "L'indirizzo email legato all'account Google usato per accedere. Non compare nella rubrica." # MT
+      base_gdrive: "L'indirizzo email legato all'account Google usato per accedere e per Google Drive. Non compare nella rubrica." # MT
+      change_html: "Se vuoi usare un altro account Google con Gather, puoi %{link}." # MT
+      change_link: "cambiarlo" # MT
+      link_html: "Se vuoi collegare un account Google, puoi %{link}." # MT
+      link_link: "collegarne uno" # MT
+      clear_html: "Puoi %{link} l'ID Google di questo membro." # MT
+      clear_link: "rimuovere" # MT
     created: "Utente creato." # MT
     created_and_invited: "Utente creato e invitato." # MT
     updated: "Utente aggiornato." # MT

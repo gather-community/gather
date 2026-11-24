@@ -169,7 +169,6 @@ es:
         joined_on: "Fecha aproximada en la que llegaste a la comunidad" # MT
         job_choosing_proxy_id: "Alguien de fuera de tu hogar que puede inscribirse en tareas en tu nombre. Los miembros de tu hogar ya pueden hacerlo por defecto." # MT
         email: "La dirección de correo en la que prefieres que te contacten. También se usa para iniciar sesión con contraseña." # MT
-        google_email: "La dirección de correo vinculada a la cuenta de Google con la que inicias sesión. No se muestra en el directorio. Pide a un <a href='/roles'>administrador</a> que la cambie si lo necesitas." # MT
         paypal_email: "La dirección de correo de tu cuenta de PayPal. Se usa para los reembolsos de los cocineros. Déjalo en blanco para usar tu dirección de correo principal de arriba." # MT
         full_access: "Los niños sin acceso completo no pueden iniciar sesión en Gather, pero aparecen en el directorio. Los niños con acceso completo cuentan como adultos a efectos de facturación." # MT
         certify_13_or_older: "Los niños deben tener 13 años o más para iniciar sesión en Gather." # MT

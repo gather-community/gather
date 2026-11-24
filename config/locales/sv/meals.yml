@@ -89,6 +89,7 @@ sv:
     event_errors: "Följande fel uppstod när en händelse i %{calendar} skulle skapas för måltiden: %{errors}." # MT
     event_error: "%{attribute}: %{message}" # MT
     signup_not_recorded: "Din anmälan kunde inte sparas eftersom måltiden är full eller inte längre öppen." # MT
+    signup_meal_missing: "Din anmälan kunde inte sparas eftersom måltiden inte längre finns." # MT
     report:
       subhead_community: "%{range}, bara måltider i %{community}" # MT
     # Read by Gather.Views.Meals.ReportChartsView (JS). Each title has a variant naming the community,

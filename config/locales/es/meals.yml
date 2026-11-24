@@ -88,6 +88,7 @@ es:
     event_errors: "Se produjeron los siguientes errores al crear un evento de %{calendar} para esta comida: %{errors}." # MT
     event_error: "%{attribute}: %{message}" # MT
     signup_not_recorded: "No se pudo registrar tu inscripción porque la comida está llena o ya no está abierta." # MT
+    signup_meal_missing: "No se pudo registrar tu inscripción porque la comida ya no existe." # MT
     report:
       subhead_community: "%{range}, solo comidas de %{community}" # MT
     report_charts:

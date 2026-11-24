@@ -88,6 +88,7 @@ fr:
     event_errors: "Les erreurs suivantes se sont produites lors de la création d'un événement %{calendar} pour ce repas : %{errors}." # MT
     event_error: "%{attribute} : %{message}" # MT
     signup_not_recorded: "Votre inscription n'a pas pu être enregistrée, car le repas est complet ou n'est plus ouvert." # MT
+    signup_meal_missing: "Votre inscription n'a pas pu être enregistrée, car le repas n'existe plus." # MT
     report:
       subhead_community: "%{range}, repas de %{community} uniquement" # MT
     report_charts:

@@ -89,6 +89,7 @@ nl:
     event_errors: "Bij het maken van een afspraak in %{calendar} voor deze maaltijd zijn de volgende fout(en) opgetreden: %{errors}." # MT
     event_error: "%{attribute}: %{message}" # MT
     signup_not_recorded: "Je aanmelding kon niet worden opgeslagen, omdat de maaltijd vol is of niet meer open is." # MT
+    signup_meal_missing: "Je aanmelding kon niet worden opgeslagen, omdat de maaltijd niet meer bestaat." # MT
     report:
       subhead_community: "%{range}, alleen maaltijden van %{community}" # MT
     # Read by Gather.Views.Meals.ReportChartsView (JS). Each title has a variant naming the community,

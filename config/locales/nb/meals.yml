@@ -89,6 +89,7 @@ nb:
     event_errors: "Følgende feil oppstod da det skulle lages en hendelse i %{calendar} for dette måltidet: %{errors}." # MT
     event_error: "%{attribute}: %{message}" # MT
     signup_not_recorded: "Påmeldingen din kunne ikke registreres fordi måltidet er fullt eller ikke lenger åpent." # MT
+    signup_meal_missing: "Påmeldingen din kunne ikke registreres fordi måltidet ikke finnes lenger." # MT
     report:
       subhead_community: "%{range}, bare måltider i %{community}" # MT
     # Read by Gather.Views.Meals.ReportChartsView (JS). Each title has a variant naming the community,

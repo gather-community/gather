@@ -6,8 +6,8 @@ gem "active_model_serializers", "~> 0.10.16"
 gem "acts_as_list", "~> 1.2"
 gem "acts_as_tenant", "~> 2.2"
 gem "attribute_normalizer", "~> 1.2"
-gem "aws-sdk-s3", "~> 1.235", require: false
-gem "babosa", "~> 1.0"
+gem "aws-sdk-s3", "~> 1.245", require: false
+gem "babosa", "~> 2.1"
 gem "bootsnap", "~> 1.26"
 gem "bootstrap-kaminari-views", "~> 0.0"
 gem "bootstrap-sass", "~> 3.4"
@@ -52,9 +52,9 @@ gem "omniauth-rails_csrf_protection", "~> 2.0" # Related to CVE 2015 9284
 gem "pg", "~> 1.7"
 gem "phony_rails", "~> 0.12"
 gem "psych", "< 6"
-gem "puma", "~> 8.0"
+gem "puma", "~> 8.1"
 gem "pundit", "~> 2.5"
-gem "rails", "~> 8.1.0"
+gem "rails", "~> 8.1.4"
 gem "rails-backbone", "~> 1.2"
 gem "rails-i18n", "~> 8.1"
 gem "redcarpet", "~> 3.6"
@@ -80,8 +80,10 @@ gem "uglifier", ">= 1.3.0"
 gem "whenever", "~> 1.1"
 gem "wisper", "~> 2.0"
 gem "wisper-activerecord", "~> 1.0"
-# Using master branch b/c we want the ! variant of the lock method and disable_query_cache
-gem "with_advisory_lock", git: "https://github.com/ClosureTree/with_advisory_lock", branch: "master"
+# From git b/c we want the ! variant of the lock method and disable_query_cache.
+# Pinned b/c master (7.x) requires Ruby >= 3.3. Unpin once we're on Ruby 3.3.
+gem "with_advisory_lock", git: "https://github.com/ClosureTree/with_advisory_lock",
+  ref: "00f1cfe81c231aabf1f8c7c3c2b7be844df031c6"
 
 group :development, :test do
   gem "annotaterb", "~> 4.25"
@@ -98,12 +100,12 @@ group :development, :test do
   gem "debug", require: false
   gem "ed25519", ">= 1.2", "< 2.0" # For Capistrano
   gem "erb_lint", "~> 0.9", require: false
-  gem "i18n-tasks", "~> 1.1", require: false
+  gem "i18n-tasks", "~> 1.2", require: false
   gem "launchy", "~> 3.1" # For opening screenshots
   gem "pry-nav", "~> 1.0"
   gem "pry-rails", "~> 0.3"
   gem "pry", "~> 0.14"
-  gem "rspec-rails", "~> 8.0"
+  gem "rspec-rails", "~> 8.1"
   gem "rubocop-rails", "2.38.0"
   gem "rubocop", "~> 1.87"
   gem "selenium-webdriver", "~> 4.44"
@@ -111,7 +113,7 @@ group :development, :test do
   gem "standard", "~> 1.53"
   gem "thin", "~> 2.0"
   gem "vcr", "~> 6.4"
-  gem "webmock", "~> 3.34"
+  gem "webmock", "~> 3.36"
 
   # Great for debugging i18n paths. Uncomment temporarily when neeeded.
   # Adds a lot of junk to the log when not needed, so only uncomment if needed.
@@ -126,7 +128,7 @@ group :test do
   gem "rspec-github", require: false
 end
 
-gem "stripe", "~> 19.6"
+gem "stripe", "~> 20.1"
 
 # GSM-7/UCS-2 encoding detection and SMS segment counting, for pricing outbound SMS.
 gem "smstools", "~> 0.2"
@@ -135,4 +137,4 @@ gem "turbo-rails", "~> 2.0"
 
 gem "money", "~> 7.1"
 
-gem "logtail-rails", "~> 0.3.0"
+gem "logtail-rails", "~> 0.3.1"

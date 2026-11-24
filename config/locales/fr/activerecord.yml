@@ -394,7 +394,7 @@ fr:
           negative: "Ne doit pas être négatif" # MT
         meals/signup:
           exceeded_spots:
-            one: "Vu le nombre de places restantes, vous ne pouvez inscrire qu'une personne." # MT
+            one: "Vu le nombre de places restantes, vous ne pouvez inscrire que %{count} personne." # MT
             other: "Vu le nombre de places restantes, vous pouvez inscrire au maximum %{count} personnes." # MT
           nobody_signed_up: "Vous devez inscrire au moins une personne" # MT
           duplicate_types: "Inscrivez chaque type une seule fois" # MT

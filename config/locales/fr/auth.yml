@@ -101,7 +101,7 @@ fr:
       not_found: "Adresse e-mail introuvable" # MT
       not_locked: "n'était pas verrouillé" # MT
       not_saved:
-        one: "Une erreur a empêché l'enregistrement de ce %{calendar} :" # MT
+        one: "%{count} erreur a empêché l'enregistrement de ce %{calendar} :" # MT
         other: "%{count} erreurs ont empêché l'enregistrement de ce %{calendar} :" # MT
   password:
     strength:

@@ -243,6 +243,11 @@ describe Groups::GroupPolicy do
       it { is_expected.to contain_exactly(cmty_group, hidden_group, cluster_group) }
     end
 
+    context "for manager of a different group" do
+      let!(:actor) { create(:group_membership, group: cmty_group, kind: "manager").user }
+      it { is_expected.to contain_exactly(cmty_group, cluster_group) }
+    end
+
     context "for joiner of hidden group" do
       let!(:actor) { create(:group_membership, group: hidden_group, kind: "joiner").user }
       it { is_expected.to contain_exactly(cmty_group, cluster_group) }

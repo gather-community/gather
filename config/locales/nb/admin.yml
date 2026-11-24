@@ -1,0 +1,28 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+nb:
+  admin:
+    sso_secrets:
+      reset_success: "Hemmeligheten for enkel pålogging er tilbakestilt. Apper som bruker den gamle hemmeligheten, trenger den nye." # MT
+      show:
+        title: "Hemmelighet for enkel pålogging" # MT
+        intro: "Apper utenfor Gather kan la medlemmene dine logge inn med Gather-kontoen sin. Gi apputvikleren denne hemmeligheten for å koble den til." # MT
+        secret_label: "Hemmelighet for enkel pålogging" # MT
+        show: "Vis" # MT
+        hide: "Skjul" # MT
+        copy: "Kopier" # MT
+        copied: "Kopiert!" # MT
+        usage_html: "Appen signerer forespørslene sine til %{url} med denne hemmeligheten, etter protokollen Discourse Connect." # MT
+        keep_private: "Hold denne hemmeligheten privat. Den som har den, kan lage en lenke som samler inn navn og e-postadresse fra alle medlemmer som klikker på den mens de er logget inn i Gather." # MT
+        reset: "Tilbakestill hemmelighet" # MT
+        reset_confirm: "Tilbakestille hemmeligheten? Apper som bruker den nåværende hemmeligheten, slutter å logge inn folk til de får den nye." # MT

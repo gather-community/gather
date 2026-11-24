@@ -1,0 +1,40 @@
+<% content_for(:title, t(".title")) %>
+
+<% content_for(:action_links) do %>
+  <% if SettingsPolicy.new(current_user, current_community).reset_sso_secret? %>
+    <%= link_to(icon_tag("refresh") << " " << t(".reset"), reset_admin_sso_secret_path,
+          method: :put, class: "btn btn-danger",
+          data: {controller: "confirm", action: "confirm#check",
+                 confirm_message_value: t(".reset_confirm"),
+                 confirm_confirm_label_value: t(".reset"),
+                 confirm_confirm_variant_value: "danger"}) %>
+  <% end %>
+<% end %>
+
+<div class="sso-secret">
+  <p><%= t(".intro") %></p>
+
+  <div class="sso-secret-field" data-controller="secret-field"
+       data-secret-field-show-label-value="<%= t(".show") %>"
+       data-secret-field-hide-label-value="<%= t(".hide") %>"
+       data-secret-field-copied-label-value="<%= t(".copied") %>">
+    <div class="input-group">
+      <label for="sso-secret-input" class="sr-only"><%= t(".secret_label") %></label>
+      <input type="password" id="sso-secret-input" class="form-control" readonly
+             value="<%= @community.sso_secret %>" autocomplete="off" spellcheck="false"
+             data-secret-field-target="input">
+      <span class="input-group-btn">
+        <button type="button" class="btn btn-default" data-secret-field-target="toggle"
+                data-action="secret-field#toggle" aria-controls="sso-secret-input">
+          <%= icon_tag("eye") %> <span data-secret-field-target="toggleLabel"><%= t(".show") %></span>
+        </button>
+        <button type="button" class="btn btn-default" data-action="secret-field#copy">
+          <%= icon_tag("copy") %> <span data-secret-field-target="copyLabel"><%= t(".copy") %></span>
+        </button>
+      </span>
+    </div>
+  </div>
+
+  <p class="hint"><%= t(".usage_html", url: tag.code(sso_url)) %></p>
+  <p class="hint"><%= t(".keep_private") %></p>
+</div>

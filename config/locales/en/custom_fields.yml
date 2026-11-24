@@ -15,6 +15,7 @@ en:
             default_directory_sort: "Default Directory Sort"
             plain_user_selects: "Plain User Dropdowns"
             user_custom_fields_spec: "User Custom Field Specification"
+            single_sign_on: "Single Sign On"
           meals:
             _self: "Meals"
             reimb_instructions: "Reimbursement Instructions"
@@ -63,6 +64,11 @@ en:
               fee_type: "Fee Type"
               threshold: "Threshold"
               amount: "Amount"
+    link_texts:
+      community:
+        settings:
+          people:
+            single_sign_on: "View/Reset Secret"
     hints:
       community:
         settings:

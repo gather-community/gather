@@ -27,6 +27,7 @@ nl:
             default_directory_sort: "Standaardsortering ledenlijst" # MT
             plain_user_selects: "Eenvoudige keuzelijsten voor gebruikers" # MT
             user_custom_fields_spec: "Specificatie van eigen gebruikersvelden" # MT
+            single_sign_on: "Eenmalige aanmelding" # MT
           meals:
             _self: "Maaltijden" # MT
             reimb_instructions: "Instructies voor vergoedingen" # MT
@@ -75,6 +76,11 @@ nl:
               fee_type: "Soort boete" # MT
               threshold: "Drempel" # MT
               amount: "Bedrag" # MT
+    link_texts:
+      community:
+        settings:
+          people:
+            single_sign_on: "Geheim bekijken/opnieuw instellen" # MT
     hints:
       community:
         settings:

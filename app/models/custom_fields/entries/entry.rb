@@ -20,7 +20,7 @@ module CustomFields
         self.parent = parent
         self.field = field
         self.hash = hash
-        hash[key] = nil if !hash.key?(key) && key != :__root__
+        hash[key] = nil if field.stored? && !hash.key?(key) && key != :__root__
       end
 
       def blank?

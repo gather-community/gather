@@ -8,7 +8,7 @@ describe SettingsPolicy do
 
     let(:record) { community }
 
-    permissions :index?, :show?, :edit?, :update? do
+    permissions :index?, :show?, :edit?, :update?, :show_sso_secret?, :reset_sso_secret? do
       it_behaves_like "permits admins but not regular users"
     end
 

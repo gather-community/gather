@@ -27,6 +27,7 @@ de:
             default_directory_sort: "Standardsortierung im Verzeichnis" # MT
             plain_user_selects: "Einfache Personenauswahl" # MT
             user_custom_fields_spec: "Spezifikation eigener Personenfelder" # MT
+            single_sign_on: "Single Sign-On" # MT
           meals:
             _self: "Mahlzeiten" # MT
             reimb_instructions: "Anleitung zur Rückerstattung" # MT
@@ -75,6 +76,11 @@ de:
               fee_type: "Gebührenart" # MT
               threshold: "Schwellenwert" # MT
               amount: "Betrag" # MT
+    link_texts:
+      community:
+        settings:
+          people:
+            single_sign_on: "Secret anzeigen/zurücksetzen" # MT
     hints:
       community:
         settings:

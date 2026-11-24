@@ -27,6 +27,7 @@ fi:
             default_directory_sort: "Jäsenluettelon oletusjärjestys" # MT
             plain_user_selects: "Tavalliset käyttäjävalikot" # MT
             user_custom_fields_spec: "Käyttäjien omien kenttien määrittely" # MT
+            single_sign_on: "Kertakirjautuminen" # MT
           meals:
             _self: "Ateriat" # MT
             reimb_instructions: "Kulukorvausohjeet" # MT
@@ -75,6 +76,11 @@ fi:
               fee_type: "Maksun tyyppi" # MT
               threshold: "Raja" # MT
               amount: "Määrä" # MT
+    link_texts:
+      community:
+        settings:
+          people:
+            single_sign_on: "Näytä/vaihda salaisuus" # MT
     hints:
       community:
         settings:

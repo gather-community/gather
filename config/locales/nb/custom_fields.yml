@@ -27,6 +27,7 @@ nb:
             default_directory_sort: "Standard sortering i medlemslisten" # MT
             plain_user_selects: "Enkle nedtrekkslister for personer" # MT
             user_custom_fields_spec: "Spesifikasjon av egendefinerte personfelt" # MT
+            single_sign_on: "Enkel pålogging" # MT
           meals:
             _self: "Måltider" # MT
             reimb_instructions: "Instruksjoner for refusjon" # MT
@@ -75,6 +76,11 @@ nb:
               fee_type: "Gebyrtype" # MT
               threshold: "Terskel" # MT
               amount: "Beløp" # MT
+    link_texts:
+      community:
+        settings:
+          people:
+            single_sign_on: "Vis/tilbakestill hemmelighet" # MT
     hints:
       community:
         settings:

@@ -1,0 +1,28 @@
+# ======================================================================================================
+# MACHINE TRANSLATIONS
+#
+# A line ending in "# MT" was translated automatically and hasn't been checked by a person yet.
+#
+# - If you check a line and it's right, or you correct it, delete the "# MT" from the end of the line.
+# - If the English for a key changes, its translation here gets rewritten and marked "# MT" again.
+# - For a multi-line value, the "# MT" is on the line with the key, after the "|-".
+#
+# To see how much of a language is left to check: grep -c "# MT" config/locales/<locale>/*.yml
+# See "Translations" in CLAUDE.md for the rest.
+# ======================================================================================================
+it:
+  admin:
+    sso_secrets:
+      reset_success: "Il segreto per l'accesso unico è stato reimpostato. Le app che usano il vecchio segreto avranno bisogno di quello nuovo." # MT
+      show:
+        title: "Segreto per l'accesso unico" # MT
+        intro: "Le app esterne a Gather possono far accedere i tuoi membri con il loro account Gather. Per collegarne una, dai questo segreto a chi la sviluppa." # MT
+        secret_label: "Segreto per l'accesso unico" # MT
+        show: "Mostra" # MT
+        hide: "Nascondi" # MT
+        copy: "Copia" # MT
+        copied: "Copiato!" # MT
+        usage_html: "L'app firma le sue richieste a %{url} con questo segreto, secondo il protocollo Discourse Connect." # MT
+        keep_private: "Tieni privato questo segreto. Chiunque lo abbia può creare un link che raccoglie il nome e l'indirizzo email di qualsiasi membro che lo clicca mentre ha effettuato l'accesso a Gather." # MT
+        reset: "Reimposta segreto" # MT
+        reset_confirm: "Reimpostare il segreto? Le app che usano il segreto attuale smetteranno di far accedere le persone finché non riceveranno quello nuovo." # MT

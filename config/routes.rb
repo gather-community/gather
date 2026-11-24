@@ -397,6 +397,11 @@ Rails.application.routes.draw do
     get "settings/:type", to: "settings#edit", as: :settings
     patch "settings/:type", to: "settings#update"
 
+    # The community's single sign-on secret, linked from the community settings page.
+    resource :sso_secret, path: "sso-secret", only: :show do
+      put :reset
+    end
+
     # Operator dashboard for domains (apex domain; spans all clusters).
     resources :domains, only: %i[index show] do
       post :refresh, on: :collection

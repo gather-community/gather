@@ -24,8 +24,11 @@
     <div id="calendar"></div>
     <footer>
       <%= link_to(t(".permalink"), @permalink, id: "permalink") %> &nbsp;
-      <a href="#" class="early" id="show-early"><%= t(".show_early") %></a>
-      <a href="#" class="early" id="hide-early"><%= t(".hide_early") %></a>
+      <button type="button" class="early" id="early-hours-toggle" aria-controls="calendar"
+              aria-expanded="<%= params[:early].present? %>"
+              data-show-label="<%= t(".show_early") %>" data-hide-label="<%= t(".hide_early") %>">
+        <%= t(params[:early].present? ? ".hide_early" : ".show_early") %>
+      </button>
     </footer>
     <div id="create-confirm-modal" class="modal fade" tabindex="-1" role="dialog"
          aria-modal="true" aria-labelledby="create-confirm-modal-title"

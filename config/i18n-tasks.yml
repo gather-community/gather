@@ -26,6 +26,9 @@ data:
       line_width: -1
 
 search:
+  # Count keys matched by a dynamic lookup such as t("accounts.payment_badge_alt.#{type}") as used.
+  # i18n-tasks 1.1 always did; since 1.2, unused follows this setting, which defaults to true.
+  strict: false
   paths:
     - app/
     - config/initializers/

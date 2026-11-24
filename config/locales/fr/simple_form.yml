@@ -20,7 +20,7 @@ fr:
     error_notification:
       default_message: "Veuillez corriger les problèmes ci-dessous :" # MT
       field_errors:
-        one: "Il y a 1 erreur dans le formulaire ci-dessous." # MT
+        one: "Il y a %{count} erreur dans le formulaire ci-dessous." # MT
         other: "Il y a %{count} erreurs dans le formulaire ci-dessous." # MT
     labels:
       communities_signup:

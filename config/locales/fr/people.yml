@@ -91,6 +91,8 @@ fr:
         sign_in_to_use_gather: "Veuillez vous connecter pour utiliser Gather." # MT
         expired_signed_in: "Le délai de confirmation a expiré. Utilisez le lien « Renvoyer les instructions de confirmation » ci-dessous pour réessayer." # MT
         expired_signed_out: "Le délai de confirmation a expiré. Connectez-vous avec votre ancienne adresse e-mail et réessayez." # MT
+        invalid_signed_in: "Ce lien de confirmation n'est plus valide, probablement parce qu'un lien plus récent a été envoyé. Utilisez le lien le plus récent ou renvoyez-le depuis votre profil." # MT
+        invalid_signed_out: "Ce lien de confirmation n'est plus valide, probablement parce qu'un lien plus récent a été envoyé. Utilisez le lien le plus récent, ou connectez-vous et renvoyez-le depuis votre profil." # MT
       omniauth_failure_reasons:
         no_email: "Google n'a pas fourni d'adresse e-mail. Veuillez prévenir un administrateur" # MT
         invitation_expired: "votre invitation a expiré" # MT

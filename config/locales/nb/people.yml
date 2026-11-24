@@ -93,6 +93,8 @@ nb:
         sign_in_to_use_gather: "Logg inn for å bruke Gather." # MT
         expired_signed_in: "Bekreftelsesfristen er utløpt. Bruk lenken «Send bekreftelsesinstruksjonene på nytt» nedenfor for å prøve igjen." # MT
         expired_signed_out: "Bekreftelsesfristen er utløpt. Logg inn med den gamle e-postadressen din og prøv igjen." # MT
+        invalid_signed_in: "Denne bekreftelseslenken er ikke lenger gyldig, sannsynligvis fordi en nyere er sendt. Bruk den nyeste lenken, eller send den på nytt fra profilen din." # MT
+        invalid_signed_out: "Denne bekreftelseslenken er ikke lenger gyldig, sannsynligvis fordi en nyere er sendt. Bruk den nyeste lenken, eller logg inn og send den på nytt fra profilen din." # MT
       # Each completes Devise's "Could not sign you in from Google because %{reason}." (devise.omniauth_callbacks.failure).
       omniauth_failure_reasons:
         no_email: "Google ikke oppga noen e-postadresse. Gi beskjed til en administrator." # MT

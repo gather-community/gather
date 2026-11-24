@@ -37,6 +37,15 @@ describe "email reconfirmation", js: true do
         expect(page).not_to have_content("old@example.com")
         expect(page).not_to have_content("Pending confirmation")
       end
+
+      scenario "clicking link in an older email" do
+        old_email = email_sent_by { actor.update!(email: "new@example.com") }.first
+        email_sent_by { actor.update!(email: "newer@example.com") }
+        match_and_visit_url(old_email.body.encoded, %r{https?://.+/?confirmation_token=.+$})
+        expect(page).to have_alert("This confirmation link is no longer valid")
+        expect(page).to have_title(actor.name)
+        expect(page).to have_content("Pending confirmation")
+      end
     end
 
     context "when not signed in" do
@@ -75,6 +84,13 @@ describe "email reconfirmation", js: true do
         expect(page).to have_content("new@example.com")
         expect(page).not_to have_content("old@example.com")
         expect(page).not_to have_content("Pending confirmation")
+      end
+
+      scenario "clicking link in an older email" do
+        old_email = email_sent_by { actor.update!(email: "new@example.com") }.first
+        email_sent_by { actor.update!(email: "newer@example.com") }
+        match_and_visit_url(old_email.body.encoded, %r{https?://.+/?confirmation_token=.+$})
+        expect(page).to have_alert("This confirmation link is no longer valid")
       end
     end
   end

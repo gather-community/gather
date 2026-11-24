@@ -93,6 +93,8 @@ nl:
         sign_in_to_use_gather: "Log in om Gather te gebruiken." # MT
         expired_signed_in: "De bevestigingsperiode is verlopen. Gebruik de link “Bevestigingsinstructies opnieuw versturen” hieronder om het opnieuw te proberen." # MT
         expired_signed_out: "De bevestigingsperiode is verlopen. Log in met je oude e-mailadres en probeer het opnieuw." # MT
+        invalid_signed_in: "Deze bevestigingslink is niet meer geldig, waarschijnlijk omdat er een nieuwere is verstuurd. Gebruik de nieuwste link of verstuur hem opnieuw vanaf je profiel." # MT
+        invalid_signed_out: "Deze bevestigingslink is niet meer geldig, waarschijnlijk omdat er een nieuwere is verstuurd. Gebruik de nieuwste link, of log in en verstuur hem opnieuw vanaf je profiel." # MT
       # Each completes Devise's "Could not sign you in from Google because %{reason}." (devise.omniauth_callbacks.failure).
       omniauth_failure_reasons:
         no_email: "Google heeft geen e-mailadres doorgegeven. Laat het een beheerder weten." # MT

@@ -81,6 +81,8 @@ en:
         sign_in_to_use_gather: "Please sign in to use Gather."
         expired_signed_in: "The confirmation period has expired. Please use the 'Resend confirmation instructions' link below to try again."
         expired_signed_out: "The confirmation period has expired. Please sign in using your old email address and try again."
+        invalid_signed_in: "This confirmation link is no longer valid, probably because a newer one was sent. Please use the newest link, or resend it from your profile."
+        invalid_signed_out: "This confirmation link is no longer valid, probably because a newer one was sent. Please use the newest link, or sign in and resend it from your profile."
       # Each completes Devise's "Could not sign you in from Google because %{reason}." (devise.omniauth_callbacks.failure).
       omniauth_failure_reasons:
         no_email: "Google did not provide an email address. Please notify an administrator."

@@ -93,6 +93,8 @@ sv:
         sign_in_to_use_gather: "Logga in för att använda Gather." # MT
         expired_signed_in: "Tiden för bekräftelse har gått ut. Använd länken ”Skicka bekräftelseinstruktionerna igen” nedan för att försöka igen." # MT
         expired_signed_out: "Tiden för bekräftelse har gått ut. Logga in med din gamla e-postadress och försök igen." # MT
+        invalid_signed_in: "Den här bekräftelselänken är inte längre giltig, troligen för att en nyare har skickats. Använd den senaste länken eller skicka den igen från din profil." # MT
+        invalid_signed_out: "Den här bekräftelselänken är inte längre giltig, troligen för att en nyare har skickats. Använd den senaste länken, eller logga in och skicka den igen från din profil." # MT
       # Each completes Devise's "Could not sign you in from Google because %{reason}." (devise.omniauth_callbacks.failure).
       omniauth_failure_reasons:
         no_email: "Google inte gav någon e-postadress. Meddela en administratör" # MT

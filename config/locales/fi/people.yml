@@ -93,6 +93,8 @@ fi:
         sign_in_to_use_gather: "Kirjaudu sisään käyttääksesi Gatheria." # MT
         expired_signed_in: "Vahvistusaika on umpeutunut. Yritä uudelleen alla olevalla linkillä ”Lähetä vahvistusohjeet uudelleen”." # MT
         expired_signed_out: "Vahvistusaika on umpeutunut. Kirjaudu sisään vanhalla sähköpostiosoitteellasi ja yritä uudelleen." # MT
+        invalid_signed_in: "Tämä vahvistuslinkki ei ole enää voimassa, luultavasti koska uudempi on lähetetty. Käytä uusinta linkkiä tai lähetä se uudelleen profiilistasi." # MT
+        invalid_signed_out: "Tämä vahvistuslinkki ei ole enää voimassa, luultavasti koska uudempi on lähetetty. Käytä uusinta linkkiä tai kirjaudu sisään ja lähetä se uudelleen profiilistasi." # MT
       # Each completes Devise's "Could not sign you in from Google because %{reason}." (devise.omniauth_callbacks.failure).
       omniauth_failure_reasons:
         no_email: "Google ei antanut sähköpostiosoitetta. Ilmoita asiasta ylläpitäjälle." # MT

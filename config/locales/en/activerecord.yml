@@ -112,6 +112,7 @@ en:
         paypal_email: "PayPal Email"
         school: "School"
         allergies: "Allergies"
+        meal_restriction_ids: "Dietary Restrictions"
         doctor: "Doctor Info"
         medical: "Medical Info"
         remember_me: "Stay signed in after you close your browser"

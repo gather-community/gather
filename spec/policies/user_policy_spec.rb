@@ -433,6 +433,14 @@ describe UserPolicy do
     context "normal user" do
       it_behaves_like "normal user"
 
+      context "with restrictions feature flag on" do
+        let!(:feature_flag) { create(:feature_flag, name: "restrictions", status: true) }
+
+        it "also allows meal restrictions" do
+          expect(subject).to match_array(normal_user_attribs << {meal_restriction_ids: []})
+        end
+      end
+
       context "with custom fields defined on community" do
         let(:community_with_user_custom_fields) do
           create(:community, settings: {

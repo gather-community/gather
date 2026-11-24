@@ -123,6 +123,7 @@ de:
         paypal_email: "PayPal-E-Mail" # MT
         school: "Schule" # MT
         allergies: "Allergien" # MT
+        meal_restriction_ids: "Ernährungseinschränkungen" # MT
         doctor: "Arztpraxis" # MT
         medical: "Medizinische Angaben" # MT
         remember_me: "Angemeldet bleiben, wenn du den Browser schließt" # MT

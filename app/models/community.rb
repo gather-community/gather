@@ -133,9 +133,6 @@ class Community < ApplicationRecord
           {key: :late_menu, type: :integer, required: true, default: 5}
         ]}
       ]},
-      {key: :restrictions, type: :group, fields: [
-        {key: :restriction, type: :integer}
-      ]},
       {key: :calendars, type: :group, fields: [
         {key: :kinds, type: :string},
         {key: :meals, type: :group, fields: [

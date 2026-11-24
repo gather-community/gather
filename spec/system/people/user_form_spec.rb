@@ -170,6 +170,66 @@ describe "user form", js: true, perform_jobs: true do
           expect(page).to have_css(%(a.household[href$="/households/#{household2.id}"]))
         end
 
+        context "with meal restrictions feature enabled" do
+          let!(:feature_flag) { create(:feature_flag, name: "restrictions", status: true) }
+          let!(:restriction) do
+            create(:restriction, contains: "Gluten", absence: "Gluten-free", community: user.community)
+          end
+
+          scenario "selecting and deselecting a meal restriction" do
+            visit(edit_path)
+            check("Gluten-free")
+            click_button("Save")
+
+            expect_success
+            expect(page).to have_content("Dietary Restrictions")
+            expect(page).to have_content("Gluten-free")
+
+            visit(edit_path)
+            expect(page).to have_checked_field("Gluten-free")
+            uncheck("Gluten-free")
+            click_button("Save")
+
+            expect_success
+            expect(page).not_to have_content("Dietary Restrictions")
+            expect(page).not_to have_content("Gluten-free")
+          end
+
+          scenario "a deactivated restriction is hidden but kept" do
+            spicy = create(:restriction, contains: "Spicy", absence: "Not Spicy", community: user.community)
+            user.update!(meal_restriction_ids: [restriction.id, spicy.id])
+            spicy.update!(deactivated: true)
+
+            visit(user_path(user))
+            expect(page).to have_content("Gluten-free")
+            expect(page).not_to have_content("Not Spicy")
+
+            visit(edit_path)
+            expect(page).not_to have_field("Not Spicy")
+            click_button("Save")
+
+            expect_success
+            expect(user.reload.meal_restrictions).to contain_exactly(restriction, spicy)
+          end
+        end
+
+        context "with meal restrictions feature disabled" do
+          let!(:restriction) do
+            create(:restriction, contains: "Gluten", absence: "Gluten-free", community: user.community)
+          end
+
+          scenario "stored restrictions aren't shown or offered" do
+            user.update!(meal_restriction_ids: [restriction.id])
+
+            visit(user_path(user))
+            expect(page).not_to have_content("Dietary Restrictions")
+            expect(page).not_to have_content("Gluten-free")
+
+            visit(edit_path)
+            expect(page).not_to have_field("Gluten-free")
+          end
+        end
+
         context "with unconfirmed user" do
           let(:user) { create(:user, :unconfirmed) }
 

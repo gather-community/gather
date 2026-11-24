@@ -656,6 +656,36 @@ describe User do
     end
   end
 
+  describe "meal restrictions" do
+    let(:user) { create(:user) }
+    let!(:gluten) { create(:restriction, contains: "Gluten", absence: "No Gluten") }
+    let!(:nuts) { create(:restriction, contains: "Nuts", absence: "No Nuts") }
+    let!(:spicy) { create(:restriction, contains: "Spicy", absence: "Not Spicy") }
+
+    it "keeps deactivated restrictions when ids are reassigned" do
+      user.update!(meal_restriction_ids: [gluten.id, spicy.id])
+      spicy.update!(deactivated: true)
+
+      # The form doesn't offer spicy any more, so it isn't submitted.
+      user.update!(meal_restriction_ids: ["", nuts.id.to_s])
+
+      expect(user.reload.meal_restrictions).to contain_exactly(nuts, spicy)
+      expect(user.active_meal_restrictions).to contain_exactly(nuts)
+    end
+
+    it "clears active restrictions when none are submitted" do
+      user.update!(meal_restriction_ids: [gluten.id])
+      user.update!(meal_restriction_ids: [""])
+      expect(user.reload.meal_restrictions).to be_empty
+    end
+
+    it "removes the link when a restriction is deleted" do
+      user.update!(meal_restriction_ids: [gluten.id])
+      gluten.destroy
+      expect(user.reload.meal_restrictions).to be_empty
+    end
+  end
+
   describe "destruction" do
     let!(:user) { create(:user) }
 

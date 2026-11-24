@@ -89,6 +89,14 @@ describe "pages", js: true do
     expect(page).not_to have_content("New content")
   end
 
+  scenario "cancelling a new page" do
+    visit("/wiki/new")
+    fill_in("Title", with: "Never Mind")
+    click_on("Cancel")
+    expect(page).to have_content("This is your wiki home page!")
+    expect(Wiki::Page.find_by(title: "Never Mind")).to be_nil
+  end
+
   scenario "validation error" do
     visit("/wiki/new")
 

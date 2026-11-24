@@ -120,7 +120,8 @@ module Wiki
 
     def redirect_on_success_or_rerender_on_error_or_preview(action)
       if params[:cancel]
-        redirect_to(wiki_page_path(@page))
+        # A new page has nowhere of its own to go back to.
+        redirect_to(@page.persisted? ? wiki_page_path(@page) : wiki_pages_path)
       elsif @page.invalid?
         params.delete(:preview)
         render(action)

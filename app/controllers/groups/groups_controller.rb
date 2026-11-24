@@ -61,18 +61,28 @@ module Groups
       end
     end
 
+    # Join and leave do nothing if the user is already in or out of the group. That happens when the
+    # button is clicked again on a page from before the change (e.g. after going back).
     def join
       @group = Group.find(params[:id])
-      authorize(@group)
-      @group.join(current_user)
+      if @group.member?(current_user)
+        authorize(@group, :show?)
+      else
+        authorize(@group)
+        @group.join(current_user)
+      end
       flash[:success] = t("groups.joined", name: @group.name)
       redirect_to(groups_group_path(@group))
     end
 
     def leave
       @group = Group.find(params[:id])
-      authorize(@group)
-      @group.leave(current_user)
+      if @group.member?(current_user)
+        authorize(@group)
+        @group.leave(current_user)
+      else
+        authorize(@group, :show?)
+      end
       flash[:success] = t("groups.left", name: @group.name)
       redirect_to(groups_group_path(@group))
     end

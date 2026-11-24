@@ -12,6 +12,7 @@ module Meals
     def create
       @signup = Signup.new(household_id: current_user.household_id)
       @signup.assign_attributes(signup_params)
+      return handle_missing_meal if @signup.meal.nil?
       authorize(@signup)
       if @signup.save
         render_json_response
@@ -45,6 +46,14 @@ module Meals
       flash[:error] = t("meals.signup_not_recorded")
       render(json: {redirect: meal_path(@signup.meal)})
       true
+    end
+
+    # The meal was deleted while the signup form was open. There's nothing to authorize against,
+    # so tell the person and send them to the meals page.
+    def handle_missing_meal
+      skip_authorization
+      flash[:error] = t("meals.signup_meal_missing")
+      render(json: {redirect: meals_path})
     end
 
     # Pundit built-in helper doesn't work due to namespacing

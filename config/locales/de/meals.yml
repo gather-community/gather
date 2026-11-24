@@ -89,6 +89,7 @@ de:
     event_errors: "Beim Anlegen eines Termins in %{calendar} für diese Mahlzeit sind folgende Fehler aufgetreten: %{errors}." # MT
     event_error: "%{attribute}: %{message}" # MT
     signup_not_recorded: "Deine Anmeldung konnte nicht gespeichert werden, weil die Mahlzeit voll oder nicht mehr offen ist." # MT
+    signup_meal_missing: "Deine Anmeldung konnte nicht gespeichert werden, weil es die Mahlzeit nicht mehr gibt." # MT
     report:
       subhead_community: "%{range}, nur Mahlzeiten von %{community}" # MT
     # Read by Gather.Views.Meals.ReportChartsView (JS). Each title has a variant naming the community,

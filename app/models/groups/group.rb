@@ -56,8 +56,8 @@ module Groups
     scope :can_request_jobs, -> { where(can_request_jobs: true) }
     scope :visible, -> { where.not(availability: "hidden") }
     scope :visible_or_managed_by, lambda { |user|
-      subq = "EXISTS (SELECT id FROM group_memberships WHERE user_id = #{user.id} AND kind = 'manager')"
-      visible.or(where(subq))
+      managed = Membership.managers.where(user_id: user.id).where("group_memberships.group_id = groups.id")
+      visible.or(where(managed.arel.exists))
     }
     scope :hidden_last, -> { order(arel_table[:availability].eq("hidden")) }
     scope :with_member_counts, lambda {

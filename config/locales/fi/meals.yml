@@ -89,6 +89,7 @@ fi:
     event_errors: "Tämän aterian tapahtuman luomisessa kalenteriin %{calendar} tapahtui seuraavat virheet: %{errors}." # MT
     event_error: "%{attribute}: %{message}" # MT
     signup_not_recorded: "Ilmoittautumistasi ei voitu kirjata, koska ateria on täynnä tai ei ole enää avoinna." # MT
+    signup_meal_missing: "Ilmoittautumistasi ei voitu kirjata, koska ateriaa ei ole enää olemassa." # MT
     report:
       subhead_community: "%{range}, vain yhteisön %{community} ateriat" # MT
     # Read by Gather.Views.Meals.ReportChartsView (JS). Each title has a variant naming the community,

@@ -93,6 +93,8 @@ it:
         sign_in_to_use_gather: "Accedi per usare Gather." # MT
         expired_signed_in: "Il periodo di conferma è scaduto. Usa il link «Invia di nuovo le istruzioni di conferma» qui sotto per riprovare." # MT
         expired_signed_out: "Il periodo di conferma è scaduto. Accedi con il tuo vecchio indirizzo email e riprova." # MT
+        invalid_signed_in: "Questo link di conferma non è più valido, probabilmente perché ne è stato inviato uno più recente. Usa il link più recente o invialo di nuovo dal tuo profilo." # MT
+        invalid_signed_out: "Questo link di conferma non è più valido, probabilmente perché ne è stato inviato uno più recente. Usa il link più recente, oppure accedi e invialo di nuovo dal tuo profilo." # MT
       # Each completes Devise's "Could not sign you in from Google because %{reason}." (devise.omniauth_callbacks.failure).
       omniauth_failure_reasons:
         no_email: "Google non ha fornito un indirizzo email. Avvisa un amministratore." # MT

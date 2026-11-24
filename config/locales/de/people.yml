@@ -93,6 +93,8 @@ de:
         sign_in_to_use_gather: "Bitte melde dich an, um Gather zu nutzen." # MT
         expired_signed_in: "Die Bestätigungsfrist ist abgelaufen. Bitte nutze unten den Link „Bestätigungsanleitung erneut senden“, um es noch einmal zu versuchen." # MT
         expired_signed_out: "Die Bestätigungsfrist ist abgelaufen. Bitte melde dich mit deiner alten E-Mail-Adresse an und versuche es noch einmal." # MT
+        invalid_signed_in: "Dieser Bestätigungslink ist nicht mehr gültig, wahrscheinlich weil ein neuerer verschickt wurde. Bitte nutze den neuesten Link oder sende ihn über dein Profil erneut." # MT
+        invalid_signed_out: "Dieser Bestätigungslink ist nicht mehr gültig, wahrscheinlich weil ein neuerer verschickt wurde. Bitte nutze den neuesten Link oder melde dich an und sende ihn über dein Profil erneut." # MT
       # Each completes Devise's "Could not sign you in from Google because %{reason}." (devise.omniauth_callbacks.failure).
       omniauth_failure_reasons:
         no_email: "Google keine E-Mail-Adresse übermittelt hat. Bitte gib einem Admin Bescheid" # MT

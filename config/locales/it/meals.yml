@@ -89,6 +89,7 @@ it:
     event_errors: "Nella creazione di un evento sul calendario %{calendar} per questo pasto si sono verificati i seguenti errori: %{errors}." # MT
     event_error: "%{attribute}: %{message}" # MT
     signup_not_recorded: "Non è stato possibile registrare la tua iscrizione perché il pasto è al completo o non è più aperto." # MT
+    signup_meal_missing: "Non è stato possibile registrare la tua iscrizione perché il pasto non esiste più." # MT
     report:
       subhead_community: "%{range}, solo pasti di %{community}" # MT
     # Read by Gather.Views.Meals.ReportChartsView (JS). Each title has a variant naming the community,

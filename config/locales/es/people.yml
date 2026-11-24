@@ -91,6 +91,8 @@ es:
         sign_in_to_use_gather: "Inicia sesión para usar Gather." # MT
         expired_signed_in: "El plazo de confirmación expiró. Usa el enlace «Reenviar instrucciones de confirmación» de abajo para intentarlo de nuevo." # MT
         expired_signed_out: "El plazo de confirmación expiró. Inicia sesión con tu dirección de correo anterior e inténtalo de nuevo." # MT
+        invalid_signed_in: "Este enlace de confirmación ya no es válido, probablemente porque se envió uno más reciente. Usa el enlace más reciente o reenvíalo desde tu perfil." # MT
+        invalid_signed_out: "Este enlace de confirmación ya no es válido, probablemente porque se envió uno más reciente. Usa el enlace más reciente, o inicia sesión y reenvíalo desde tu perfil." # MT
       omniauth_failure_reasons:
         no_email: "Google no proporcionó una dirección de correo. Avisa a un administrador" # MT
         invitation_expired: "tu invitación caducó" # MT

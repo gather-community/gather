@@ -24,6 +24,8 @@ module People
           handle_success
         elsif resource.errors.details[:email]&.first&.[](:error) == :confirmation_period_expired
           handle_expiry
+        elsif resource.errors.details[:confirmation_token]&.first&.[](:error) == :invalid
+          handle_invalid_token
         else
           raise StandardError, "Unexpected error(s) when confirming email: #{resource.errors.inspect}"
         end
@@ -42,6 +44,18 @@ module People
             flash[:notice] << " #{t("people.users.confirmations.sign_in_to_use_gather")}"
             redirect_to(root_path)
           end
+        end
+      end
+
+      # No user has this token, usually because the link is from an older email: changing the email
+      # address again replaces the token.
+      def handle_invalid_token
+        if signed_in?(resource_name)
+          flash[:alert] = t("people.users.confirmations.invalid_signed_in")
+          redirect_to(user_path(current_user))
+        else
+          flash[:alert] = t("people.users.confirmations.invalid_signed_out")
+          redirect_to(root_path)
         end
       end
 

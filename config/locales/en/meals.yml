@@ -77,6 +77,7 @@ en:
     event_errors: "The following error(s) occurred in making a %{calendar} event for this meal: %{errors}."
     event_error: "%{attribute}: %{message}"
     signup_not_recorded: "Your signup could not be recorded because the meal is full or no longer open."
+    signup_meal_missing: "Your signup could not be recorded because the meal no longer exists."
     report:
       subhead_community: "%{range}, %{community} meals only"
     # Read by Gather.Views.Meals.ReportChartsView (JS). Each title has a variant naming the community,

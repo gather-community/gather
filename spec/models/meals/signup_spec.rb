@@ -178,6 +178,34 @@ describe Meals::Signup do
     end
   end
 
+  describe "swapping part types" do
+    let(:formula) { create(:meal_formula, parts_attrs: [1, 0.5]) }
+    let(:meal) { create(:meal, formula: formula) }
+    let(:types) { formula.types }
+    let!(:signup) do
+      create(:meal_signup, meal: meal, parts_attributes: [{type_id: types[0].id, count: 2},
+        {type_id: types[1].id, count: 1}])
+    end
+
+    it "saves, because uniqueness is checked at commit" do
+      parts = signup.reload.parts
+      signup.update!(parts_attributes: [{id: parts[0].id, type_id: types[1].id},
+        {id: parts[1].id, type_id: types[0].id}])
+      expect(signup.reload.parts.to_h { |p| [p.type_id, p.count] }).to eq(types[0].id => 1, types[1].id => 2)
+    end
+
+    it "still rejects a duplicate type once the constraint is checked" do
+      part = signup.parts.first
+      expect do
+        Meals::SignupPart.transaction(requires_new: true) do
+          Meals::SignupPart.create!(signup: signup, type: part.type, count: 1)
+          # Specs run in a transaction that never commits, so force the deferred check now.
+          Meals::SignupPart.connection.execute("SET CONSTRAINTS ALL IMMEDIATE")
+        end
+      end.to raise_error(ActiveRecord::RecordNotUnique)
+    end
+  end
+
   describe "deletion on zero" do
     let(:formula) { create(:meal_formula, parts_attrs: [1, 0.5]) }
     let(:meal) { create(:meal, formula: formula) }

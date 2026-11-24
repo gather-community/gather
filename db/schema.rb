@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_24_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_24_220000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -836,8 +836,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_24_120000) do
     t.integer "user_id"
     t.index ["cluster_id"], name: "index_meal_signup_parts_on_cluster_id"
     t.index ["signup_id"], name: "index_meal_signup_parts_on_signup_id"
-    t.index ["type_id", "signup_id"], name: "index_meal_signup_parts_on_type_id_and_signup_id", unique: true
     t.index ["type_id"], name: "index_meal_signup_parts_on_type_id"
+    t.unique_constraint ["type_id", "signup_id"], deferrable: :deferred, name: "meal_signup_parts_type_id_signup_id_unique"
   end
 
   create_table "meal_signups", id: :serial, force: :cascade do |t|

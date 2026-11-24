@@ -73,6 +73,9 @@ gem "sprockets-rails", "~> 3.4"
 gem "stimulus-rails", "~> 1.3"
 gem "strong_password", "~> 0.0.6"
 gem "timecop", "~> 0.9"
+# Time zone rules ship with the app rather than coming from the server's OS tzdata package, which can lag
+# behind. 1.2026.2 (tzdata 2026b) is the first with British Columbia's move to permanent UTC-7.
+gem "tzinfo-data", ">= 1.2026.2"
 gem "uglifier", ">= 1.3.0"
 gem "whenever", "~> 1.1"
 gem "wisper", "~> 2.0"

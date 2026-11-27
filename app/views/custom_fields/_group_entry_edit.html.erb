@@ -13,6 +13,11 @@
           <%= render("custom_fields/group_entry_edit", group_entry: entry, f: ff) %>
         <%# A language setting only matters once other languages are turned on. %>
         <% elsif entry.field.type == :locale && !Gather::Locales.enabled?(current_user) %>
+        <% elsif entry.field.type == :link %>
+          <%= ff.input(entry.key, label: entry.label, hint: entry.hint, required: false,
+                                  wrapper_html: {class: "custom-field custom-field-link"}) do %>
+            <p class="form-control-static"><%= link_to(entry.link_text, entry.field.url) %></p>
+          <% end %>
         <% else %>
           <%= ff.input entry.key, entry.input_params %>
         <% end %>

@@ -12,6 +12,20 @@
 # ======================================================================================================
 fr:
   communities:
+    sso_secrets:
+      reset_success: "Le secret d'authentification unique a été réinitialisé. Les applications qui utilisent l'ancien secret auront besoin du nouveau." # MT
+      show:
+        title: "Secret d'authentification unique" # MT
+        intro: "Des applications extérieures à Gather peuvent permettre à vos membres de se connecter avec leur compte Gather. Pour en relier une, donnez ce secret à son développeur." # MT
+        secret_label: "Secret d'authentification unique" # MT
+        show: "Afficher" # MT
+        hide: "Masquer" # MT
+        copy: "Copier" # MT
+        copied: "Copié !" # MT
+        usage_html: "L'application signe ses requêtes vers %{url} avec ce secret, selon le protocole Discourse Connect." # MT
+        keep_private: "Gardez ce secret confidentiel. Toute personne qui le détient peut créer un lien qui recueille le nom et l'adresse e-mail de tout membre qui clique dessus en étant connecté à Gather." # MT
+        reset: "Réinitialiser le secret" # MT
+        reset_confirm: "Réinitialiser le secret ? Les applications qui utilisent le secret actuel ne pourront plus connecter personne tant qu'on ne leur aura pas donné le nouveau." # MT
     community:
       statuses:
         all: "Tous les états" # MT

@@ -12,6 +12,20 @@
 # ======================================================================================================
 nl:
   communities:
+    sso_secrets:
+      reset_success: "Het geheim voor eenmalige aanmelding is opnieuw ingesteld. Apps die het oude geheim gebruiken, hebben het nieuwe nodig." # MT
+      show:
+        title: "Geheim voor eenmalige aanmelding" # MT
+        intro: "Apps buiten Gather kunnen je leden laten inloggen met hun Gather-account. Geef de ontwikkelaar van een app dit geheim om hem te koppelen." # MT
+        secret_label: "Geheim voor eenmalige aanmelding" # MT
+        show: "Tonen" # MT
+        hide: "Verbergen" # MT
+        copy: "Kopiëren" # MT
+        copied: "Gekopieerd!" # MT
+        usage_html: "De app ondertekent zijn verzoeken aan %{url} met dit geheim, volgens het Discourse Connect-protocol." # MT
+        keep_private: "Houd dit geheim privé. Iedereen die het heeft, kan een link maken die de naam en het e-mailadres verzamelt van elk lid dat erop klikt terwijl het bij Gather is ingelogd." # MT
+        reset: "Geheim opnieuw instellen" # MT
+        reset_confirm: "Het geheim opnieuw instellen? Apps die het huidige geheim gebruiken, kunnen niemand meer laten inloggen tot ze het nieuwe krijgen." # MT
     community:
       statuses:
         all: "Alle statussen" # MT

@@ -12,6 +12,20 @@
 # ======================================================================================================
 de:
   communities:
+    sso_secrets:
+      reset_success: "Das Single-Sign-On-Secret wurde zurückgesetzt. Apps, die das alte Secret verwenden, brauchen das neue." # MT
+      show:
+        title: "Single-Sign-On-Secret" # MT
+        intro: "Apps außerhalb von Gather können deine Mitglieder mit ihrem Gather-Konto anmelden. Um eine App zu verbinden, gib dieses Secret der Person, die sie entwickelt." # MT
+        secret_label: "Single-Sign-On-Secret" # MT
+        show: "Anzeigen" # MT
+        hide: "Verbergen" # MT
+        copy: "Kopieren" # MT
+        copied: "Kopiert!" # MT
+        usage_html: "Die App signiert ihre Anfragen an %{url} mit diesem Secret, nach dem Discourse-Connect-Protokoll." # MT
+        keep_private: "Halte dieses Secret geheim. Wer es hat, kann einen Link erstellen, der Name und E-Mail-Adresse jedes Mitglieds sammelt, das ihn anklickt, während es bei Gather angemeldet ist." # MT
+        reset: "Secret zurücksetzen" # MT
+        reset_confirm: "Secret zurücksetzen? Apps, die das aktuelle Secret verwenden, können niemanden mehr anmelden, bis sie das neue bekommen." # MT
     community:
       statuses:
         all: "Alle Status" # MT

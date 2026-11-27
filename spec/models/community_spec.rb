@@ -25,6 +25,15 @@ describe Community do
     expect(community.calendar_token).to match(/\A[0-9a-zA-Z_-]{20}\z/)
   end
 
+  describe "#reset_sso_secret!" do
+    it "replaces the secret with a new one" do
+      old = community.sso_secret
+      community.reset_sso_secret!
+      expect(community.reload.sso_secret).to match(/\A\h{64}\z/)
+      expect(community.sso_secret).not_to eq(old)
+    end
+  end
+
   it "upcases country_code on save" do
     community = create(:community, country_code: "gb")
     expect(community.country_code).to eq("GB")

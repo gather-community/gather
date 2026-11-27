@@ -53,6 +53,12 @@ module CustomFields
         false
       end
 
+      # Whether the field holds a value that's saved with the record. False for fields that only display
+      # something, like a link.
+      def stored?
+        true
+      end
+
       def group?
         false
       end

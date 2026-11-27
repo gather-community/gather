@@ -113,7 +113,8 @@ class Community < ApplicationRecord
       {key: :people, type: :group, fields: [
         {key: :default_directory_sort, type: :enum, options: %w[name unit], default: "name", required: true},
         {key: :plain_user_selects, type: :boolean, default: false},
-        {key: :user_custom_fields_spec, type: :spec}
+        {key: :user_custom_fields_spec, type: :spec},
+        {key: :single_sign_on, type: :link, url: Rails.application.routes.url_helpers.sso_secret_path}
       ]},
       {key: :meals, type: :group, fields: [
         {key: :reimb_instructions, type: :markdown},
@@ -194,6 +195,11 @@ class Community < ApplicationRecord
   # own deactivated placeholder household and is excluded from directories, selects, etc.
   def deleted_member
     households.find_by(deleted_placeholder: true)&.users&.first || create_deleted_member
+  end
+
+  # Gives the community a new single sign-on secret. Apps signed with the old one stop working.
+  def reset_sso_secret!
+    update!(sso_secret: UniqueTokenGenerator.generate(self.class, :sso_secret, type: :hex32))
   end
 
   def subdomain

@@ -21,7 +21,7 @@ describe "time zones" do
   scenario "meal time" do
     visit "/meals"
     expect(page).to have_content("Sun Jan 01 6:00pm")
-    visit "/admin/settings/community"
+    visit "/settings/community"
     select("(GMT-03:30) Newfoundland", from: "Time Zone")
     click_button("Save")
     expect(page).to have_content("Settings updated successfully.")

@@ -7,7 +7,12 @@ module CustomFields
 
       def initialize(field:, hash:, parent: nil)
         super
-        update(default) if value.nil?
+        update(default) if field.stored? && value.nil?
+      end
+
+      # The text of a link field's link.
+      def link_text
+        explicit_or_translated_param_value(:link_text)
       end
 
       # Runs all validations using validates_with on parent GroupEntry
@@ -38,12 +43,13 @@ module CustomFields
       # notify is false by default here because update may be used in other internal cases.
       # We just want to notify the parent when we are explicitly told to.
       def update(value, notify: false)
+        return unless field.stored?
         hash[key] = field.normalize(value)
         parent.notify_of_update if notify
       end
 
       def value
-        hash[key]
+        field.stored? ? hash[key] : nil
       end
 
       # Returns the appropriate params to pass to simple_form's f.input method

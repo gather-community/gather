@@ -56,3 +56,6 @@ application.register("lens-bar", LensBarController);
 
 import LanguageMenuController from "./language_menu_controller";
 application.register("language-menu", LanguageMenuController);
+
+import SecretFieldController from "./secret_field_controller";
+application.register("secret-field", SecretFieldController);

@@ -60,7 +60,7 @@
     <%= t(".none_provided") %>
     <% if policy(methods.community).edit? %>
       <%= t(".go_to_settings_html",
-            link: link_to(t(".settings_page"), admin_settings_path(type: "community"))) %>
+            link: link_to(t(".settings_page"), settings_path(type: "community"))) %>
     <% end %>
   <% end %>
 

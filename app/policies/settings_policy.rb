@@ -16,4 +16,13 @@ class SettingsPolicy < ApplicationPolicy
   def update?
     active_admin?
   end
+
+  # The community's single sign-on secret lets an outside app sign people in with their Gather account.
+  def show_sso_secret?
+    active_admin?
+  end
+
+  def reset_sso_secret?
+    active_admin?
+  end
 end

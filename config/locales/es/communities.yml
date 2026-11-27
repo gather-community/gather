@@ -12,6 +12,20 @@
 # ======================================================================================================
 es:
   communities:
+    sso_secrets:
+      reset_success: "Se restableció el secreto de inicio de sesión único. Las aplicaciones que usan el secreto anterior necesitarán el nuevo." # MT
+      show:
+        title: "Secreto de inicio de sesión único" # MT
+        intro: "Las aplicaciones externas a Gather pueden permitir que tus miembros inicien sesión con su cuenta de Gather. Para conectar una, dale este secreto a quien la desarrolla." # MT
+        secret_label: "Secreto de inicio de sesión único" # MT
+        show: "Mostrar" # MT
+        hide: "Ocultar" # MT
+        copy: "Copiar" # MT
+        copied: "¡Copiado!" # MT
+        usage_html: "La aplicación firma sus solicitudes a %{url} con este secreto, usando el protocolo Discourse Connect." # MT
+        keep_private: "Mantén este secreto en privado. Cualquiera que lo tenga puede crear un enlace que recoja el nombre y el correo electrónico de cualquier miembro que haga clic en él con la sesión iniciada en Gather." # MT
+        reset: "Restablecer secreto" # MT
+        reset_confirm: "¿Restablecer el secreto? Las aplicaciones que usan el secreto actual dejarán de iniciar sesión hasta que se les dé el nuevo." # MT
     community:
       statuses:
         all: "Todos los estados" # MT

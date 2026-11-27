@@ -27,6 +27,7 @@ es:
             default_directory_sort: "Orden predeterminado del directorio" # MT
             plain_user_selects: "Listas desplegables simples de personas" # MT
             user_custom_fields_spec: "Especificación de campos personalizados de personas" # MT
+            single_sign_on: "Inicio de sesión único" # MT
           meals:
             _self: "Comidas" # MT
             reimb_instructions: "Instrucciones de reembolso" # MT
@@ -75,6 +76,11 @@ es:
               fee_type: "Tipo de recargo" # MT
               threshold: "Umbral" # MT
               amount: "Importe" # MT
+    link_texts:
+      community:
+        settings:
+          people:
+            single_sign_on: "Ver/restablecer secreto" # MT
     hints:
       community:
         settings:

@@ -12,6 +12,20 @@
 # ======================================================================================================
 it:
   communities:
+    sso_secrets:
+      reset_success: "Il segreto per l'accesso unico è stato reimpostato. Le app che usano il vecchio segreto avranno bisogno di quello nuovo." # MT
+      show:
+        title: "Segreto per l'accesso unico" # MT
+        intro: "Le app esterne a Gather possono far accedere i tuoi membri con il loro account Gather. Per collegarne una, dai questo segreto a chi la sviluppa." # MT
+        secret_label: "Segreto per l'accesso unico" # MT
+        show: "Mostra" # MT
+        hide: "Nascondi" # MT
+        copy: "Copia" # MT
+        copied: "Copiato!" # MT
+        usage_html: "L'app firma le sue richieste a %{url} con questo segreto, secondo il protocollo Discourse Connect." # MT
+        keep_private: "Tieni privato questo segreto. Chiunque lo abbia può creare un link che raccoglie il nome e l'indirizzo email di qualsiasi membro che lo clicca mentre ha effettuato l'accesso a Gather." # MT
+        reset: "Reimposta segreto" # MT
+        reset_confirm: "Reimpostare il segreto? Le app che usano il segreto attuale smetteranno di far accedere le persone finché non riceveranno quello nuovo." # MT
     community:
       statuses:
         all: "Tutti gli stati" # MT

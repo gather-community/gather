@@ -6,7 +6,7 @@ module CustomFields
     class GroupField < Field
       attr_accessor :fields
 
-      PERMITTED_TYPES = %w[boolean decimal email enum group integer locale markdown
+      PERMITTED_TYPES = %w[boolean decimal email enum group integer link locale markdown
         spec string text time_zone url].freeze
 
       def initialize(key:, fields:)
@@ -38,7 +38,7 @@ module CustomFields
 
       # Returns a list of permitted keys in the form expected by strong params.
       def permitted
-        fields.map { |f| f.group? ? {f.key => f.permitted} : f.key }
+        fields.select(&:stored?).map { |f| f.group? ? {f.key => f.permitted} : f.key }
       end
     end
   end

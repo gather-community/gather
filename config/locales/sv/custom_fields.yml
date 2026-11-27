@@ -27,6 +27,7 @@ sv:
             default_directory_sort: "Standardsortering i medlemsförteckningen" # MT
             plain_user_selects: "Enkla personlistor" # MT
             user_custom_fields_spec: "Specifikation av egna personfält" # MT
+            single_sign_on: "Enkel inloggning" # MT
           meals:
             _self: "Måltider" # MT
             reimb_instructions: "Instruktioner för ersättning" # MT
@@ -75,6 +76,11 @@ sv:
               fee_type: "Avgiftstyp" # MT
               threshold: "Tröskel" # MT
               amount: "Belopp" # MT
+    link_texts:
+      community:
+        settings:
+          people:
+            single_sign_on: "Visa/återställ hemlighet" # MT
     hints:
       community:
         settings:

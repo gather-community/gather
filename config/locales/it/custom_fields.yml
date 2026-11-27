@@ -27,6 +27,7 @@ it:
             default_directory_sort: "Ordinamento predefinito della rubrica" # MT
             plain_user_selects: "Menu a tendina semplici per gli utenti" # MT
             user_custom_fields_spec: "Specifica dei campi personalizzati degli utenti" # MT
+            single_sign_on: "Accesso unico" # MT
           meals:
             _self: "Pasti" # MT
             reimb_instructions: "Istruzioni per i rimborsi" # MT
@@ -75,6 +76,11 @@ it:
               fee_type: "Tipo di penale" # MT
               threshold: "Soglia" # MT
               amount: "Importo" # MT
+    link_texts:
+      community:
+        settings:
+          people:
+            single_sign_on: "Visualizza/reimposta segreto" # MT
     hints:
       community:
         settings:

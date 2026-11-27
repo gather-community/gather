@@ -27,6 +27,7 @@ fr:
             default_directory_sort: "Tri par défaut de l'annuaire" # MT
             plain_user_selects: "Listes déroulantes simples pour les personnes" # MT
             user_custom_fields_spec: "Spécification des champs personnalisés des personnes" # MT
+            single_sign_on: "Authentification unique" # MT
           meals:
             _self: "Repas" # MT
             reimb_instructions: "Instructions de remboursement" # MT
@@ -75,6 +76,11 @@ fr:
               fee_type: "Type de frais" # MT
               threshold: "Seuil" # MT
               amount: "Montant" # MT
+    link_texts:
+      community:
+        settings:
+          people:
+            single_sign_on: "Voir/réinitialiser le secret" # MT
     hints:
       community:
         settings:

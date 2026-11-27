@@ -12,6 +12,20 @@
 # ======================================================================================================
 fi:
   communities:
+    sso_secrets:
+      reset_success: "Kertakirjautumisen salaisuus vaihdettiin. Vanhaa salaisuutta käyttävät sovellukset tarvitsevat uuden." # MT
+      show:
+        title: "Kertakirjautumisen salaisuus" # MT
+        intro: "Gatherin ulkopuoliset sovellukset voivat antaa jäsentesi kirjautua Gather-tilillään. Liittääksesi sovelluksen anna sen kehittäjälle tämä salaisuus." # MT
+        secret_label: "Kertakirjautumisen salaisuus" # MT
+        show: "Näytä" # MT
+        hide: "Piilota" # MT
+        copy: "Kopioi" # MT
+        copied: "Kopioitu!" # MT
+        usage_html: "Sovellus allekirjoittaa pyyntönsä osoitteeseen %{url} tällä salaisuudella Discourse Connect -protokollan mukaisesti." # MT
+        keep_private: "Pidä tämä salaisuus yksityisenä. Kuka tahansa, jolla se on, voi tehdä linkin, joka kerää jokaisen sitä Gatheriin kirjautuneena napsauttavan jäsenen nimen ja sähköpostiosoitteen." # MT
+        reset: "Vaihda salaisuus" # MT
+        reset_confirm: "Vaihdetaanko salaisuus? Nykyistä salaisuutta käyttävät sovellukset eivät kirjaa ketään sisään ennen kuin ne saavat uuden." # MT
     community:
       statuses:
         all: "Kaikki tilat" # MT

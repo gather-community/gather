@@ -12,6 +12,9 @@
 # ======================================================================================================
 fr-CA:
   communities:
+    sso_secrets:
+      show:
+        keep_private: "Gardez ce secret confidentiel. Toute personne qui le détient peut créer un lien qui recueille le nom et l'adresse courriel de tout membre qui clique dessus en étant connecté à Gather." # MT
     signups:
       new:
         intro: "Gather est une plateforme de gestion de communauté pour l'habitat participatif et d'autres communautés de vie collaborative. Pour demander une nouvelle communauté, remplissez le formulaire ci-dessous. Nous examinerons votre demande et vous répondrons par courriel. Nous nous réservons le droit de refuser les communautés dont l'activité ne correspond pas à notre mission." # MT

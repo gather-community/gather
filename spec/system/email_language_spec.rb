@@ -38,7 +38,7 @@ describe "email language" do
       end
 
       scenario "setting the community's default language" do
-        visit("/admin/settings/community")
+        visit("/settings/community")
         expect(page).to have_select("Default Language", selected: "English")
         select("Français (Canada)", from: "Default Language")
         click_button("Save")
@@ -82,14 +82,14 @@ describe "email language" do
       expect(page).to have_field("First Name")
       expect(page).not_to have_field("Default Language")
 
-      visit("/admin/settings/community")
+      visit("/settings/community")
       expect(page).to have_field("Time Zone")
       expect(page).not_to have_field("Default Language")
     end
 
     scenario "the community's default language can't be changed by posting it" do
-      visit("/admin/settings/community")
-      page.driver.submit(:patch, "/admin/settings/community",
+      visit("/settings/community")
+      page.driver.submit(:patch, "/settings/community",
         {community: {settings: {time_zone: "UTC", locale: "de"}}})
       expect(community.reload.settings.locale).to eq("en")
     end

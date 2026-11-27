@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Admin
+module Communities
   class SettingsController < ApplicationController
     def edit
       @community = current_community
@@ -15,7 +15,7 @@ module Admin
       @community.settings
       if @community.update(settings_params)
         flash[:success] = t("common.settings_updated")
-        redirect_to(admin_settings_path(type: params[:type]))
+        redirect_to(settings_path(type: params[:type]))
       else
         render(:edit)
       end

@@ -5,7 +5,7 @@ require "rails_helper"
 describe CustomFields::Fields::LinkField do
   describe "url" do
     it "accepts paths and http(s) URLs" do
-      %w[/admin/sso-secret https://example.com http://example.com/x].each do |url|
+      %w[/settings/sso https://example.com http://example.com/x].each do |url|
         expect(described_class.new(key: "foo", url: url).url).to eq(url)
       end
     end

@@ -114,7 +114,7 @@ class Community < ApplicationRecord
         {key: :default_directory_sort, type: :enum, options: %w[name unit], default: "name", required: true},
         {key: :plain_user_selects, type: :boolean, default: false},
         {key: :user_custom_fields_spec, type: :spec},
-        {key: :single_sign_on, type: :link, url: Rails.application.routes.url_helpers.admin_sso_secret_path}
+        {key: :single_sign_on, type: :link, url: Rails.application.routes.url_helpers.sso_secret_path}
       ]},
       {key: :meals, type: :group, fields: [
         {key: :reimb_instructions, type: :markdown},

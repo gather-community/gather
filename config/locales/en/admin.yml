@@ -207,18 +207,3 @@ en:
           dkim: "DKIM"
           return_path: "Return"
           tracking: "Tracking"
-    # Community-level pages (not AdminController), so these are translated like the rest of the app.
-    sso_secrets:
-      reset_success: "The single sign-on secret was reset. Apps using the old secret will need the new one."
-      show:
-        title: "Single Sign On Secret"
-        intro: "Apps outside Gather can let your members sign in with their Gather account. To connect one, give its developer this secret."
-        secret_label: "Single sign-on secret"
-        show: "Show"
-        hide: "Hide"
-        copy: "Copy"
-        copied: "Copied!"
-        usage_html: "The app signs its requests to %{url} with this secret, using the Discourse Connect protocol."
-        keep_private: "Keep this secret private. Anyone who has it can make a link that collects the name and email address of any member who clicks it while signed in to Gather."
-        reset: "Reset Secret"
-        reset_confirm: "Reset the secret? Apps that use the current secret will stop signing people in until they're given the new one."

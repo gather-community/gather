@@ -15,7 +15,7 @@ describe "single sign-on secret", js: true do
     let(:actor) { create(:admin) }
 
     scenario "view, show/hide, and reset" do
-      visit("/admin/settings/community")
+      visit("/settings/community")
       expect(page).to have_content("Single Sign On")
       click_link("View/Reset Secret")
 

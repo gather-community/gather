@@ -12,7 +12,7 @@
       <% if current_user && current_community %>
         <% if policy(current_community).update? %>
           &nbsp;
-          <%= link_to(t(".settings"), admin_settings_url(type: "community")) %>
+          <%= link_to(t(".settings"), settings_url(type: "community")) %>
         <% end %>
         <% if policy(Subscription::Subscription.new(community: current_community)).show? %>
           &nbsp;

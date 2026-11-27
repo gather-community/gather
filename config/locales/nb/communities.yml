@@ -12,6 +12,20 @@
 # ======================================================================================================
 nb:
   communities:
+    sso_secrets:
+      reset_success: "Hemmeligheten for enkel pålogging er tilbakestilt. Apper som bruker den gamle hemmeligheten, trenger den nye." # MT
+      show:
+        title: "Hemmelighet for enkel pålogging" # MT
+        intro: "Apper utenfor Gather kan la medlemmene dine logge inn med Gather-kontoen sin. Gi apputvikleren denne hemmeligheten for å koble den til." # MT
+        secret_label: "Hemmelighet for enkel pålogging" # MT
+        show: "Vis" # MT
+        hide: "Skjul" # MT
+        copy: "Kopier" # MT
+        copied: "Kopiert!" # MT
+        usage_html: "Appen signerer forespørslene sine til %{url} med denne hemmeligheten, etter protokollen Discourse Connect." # MT
+        keep_private: "Hold denne hemmeligheten privat. Den som har den, kan lage en lenke som samler inn navn og e-postadresse fra alle medlemmer som klikker på den mens de er logget inn i Gather." # MT
+        reset: "Tilbakestill hemmelighet" # MT
+        reset_confirm: "Tilbakestille hemmeligheten? Apper som bruker den nåværende hemmeligheten, slutter å logge inn folk til de får den nye." # MT
     community:
       statuses:
         all: "Alle statuser" # MT

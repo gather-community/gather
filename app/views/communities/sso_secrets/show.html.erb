@@ -2,7 +2,7 @@
 
 <% content_for(:action_links) do %>
   <% if SettingsPolicy.new(current_user, current_community).reset_sso_secret? %>
-    <%= link_to(icon_tag("refresh") << " " << t(".reset"), reset_admin_sso_secret_path,
+    <%= link_to(icon_tag("refresh") << " " << t(".reset"), reset_sso_secret_path,
           method: :put, class: "btn btn-danger",
           data: {controller: "confirm", action: "confirm#check",
                  confirm_message_value: t(".reset_confirm"),

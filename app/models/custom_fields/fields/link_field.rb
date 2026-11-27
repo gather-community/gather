@@ -4,7 +4,7 @@ module CustomFields
   module Fields
     # A link to another page, shown among the fields on a form. It holds no value of its own.
     # Declared with the `url` to link to:
-    #   {key: :single_sign_on, type: :link, url: "/admin/sso-secret"}
+    #   {key: :single_sign_on, type: :link, url: "/settings/sso"}
     # Its label and link text are looked up under `custom_fields.labels` and `custom_fields.link_texts`.
     class LinkField < Field
       # Specs can be written by admins (e.g. user custom fields), so only allow links that can't run script.

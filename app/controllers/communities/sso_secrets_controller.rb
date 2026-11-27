@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Admin
+module Communities
   # Shows and resets the community's single sign-on secret, which outside apps use to sign people in
   # with their Gather account (see SingleSignOnController).
   class SsoSecretsController < ApplicationController
@@ -12,8 +12,8 @@ module Admin
     def reset
       authorize(current_community, :reset_sso_secret?, policy_class: SettingsPolicy)
       current_community.reset_sso_secret!
-      flash[:success] = t("admin.sso_secrets.reset_success")
-      redirect_to(admin_sso_secret_path)
+      flash[:success] = t("communities.sso_secrets.reset_success")
+      redirect_to(sso_secret_path)
     end
   end
 end

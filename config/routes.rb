@@ -376,6 +376,18 @@ Rails.application.routes.draw do
 
   resources :uploads, only: :create
 
+  # Community settings, for community admins. The SSO route must come before settings/:type,
+  # which would otherwise match it.
+  scope module: :communities do
+    # The community's single sign-on secret, linked from the community settings page.
+    resource :sso_secret, path: "settings/sso", only: :show do
+      put :reset
+    end
+
+    get "settings/:type", to: "settings#edit", as: :settings
+    patch "settings/:type", to: "settings#update"
+  end
+
   namespace :admin do
     # Operator pages (apex domain; span all clusters). /admin redirects to the first one the user can see.
     get "/", to: "home#show", as: :home
@@ -394,13 +406,9 @@ Rails.application.routes.draw do
       end
     end
 
-    get "settings/:type", to: "settings#edit", as: :settings
-    patch "settings/:type", to: "settings#update"
-
-    # The community's single sign-on secret, linked from the community settings page.
-    resource :sso_secret, path: "sso-secret", only: :show do
-      put :reset
-    end
+    # Legacy: community settings were here until they moved to /settings (they're for community admins,
+    # not operators). Kept so old links and bookmarks still work.
+    get "settings/:type", to: redirect("/settings/%{type}", status: 301), as: :legacy_settings
 
     # Operator dashboard for domains (apex domain; spans all clusters).
     resources :domains, only: %i[index show] do

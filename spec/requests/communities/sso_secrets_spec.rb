@@ -15,9 +15,9 @@ describe "single sign-on secret" do
     let(:actor) { create(:admin) }
 
     it "links to the secret page from the settings page" do
-      get("/admin/settings/community")
+      get("/settings/community")
       expect(response).to have_http_status(:ok)
-      expect(response.body).to include(admin_sso_secret_path)
+      expect(response.body).to include(sso_secret_path)
     end
   end
 
@@ -25,11 +25,11 @@ describe "single sign-on secret" do
     let(:actor) { create(:user) }
 
     it "forbids viewing the secret" do
-      expect { get(admin_sso_secret_path) }.to raise_error(Pundit::NotAuthorizedError)
+      expect { get(sso_secret_path) }.to raise_error(Pundit::NotAuthorizedError)
     end
 
     it "forbids resetting the secret" do
-      expect { put(reset_admin_sso_secret_path) }.to raise_error(Pundit::NotAuthorizedError)
+      expect { put(reset_sso_secret_path) }.to raise_error(Pundit::NotAuthorizedError)
       expect(community.reload.sso_secret).to eq("oldsecret")
     end
   end
